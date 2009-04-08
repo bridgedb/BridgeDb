@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+
 //import org.pathvisio.debug.Logger;
 
 /**
@@ -36,7 +37,7 @@ public class SimpleGdbFactory
 	/**
 	 * Opens a connection to the Gene Database located in the given file
 	 * @param dbName The file containing the Gene Database. 
-	 * @param connector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
+	 * @param newDbConnector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
 	 * A new instance of DbConnector class is instantiated automatically.
 	 * 
 	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.

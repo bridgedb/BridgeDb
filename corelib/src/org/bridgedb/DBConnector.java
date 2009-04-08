@@ -19,6 +19,7 @@ package org.bridgedb;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+
 /**
  * DBConnector is used by SimpleGex and SimpleGdb
  * to perform operations

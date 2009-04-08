@@ -464,9 +464,9 @@ public class DataSource
 	
 	/**
 	 * returns a filtered subset of available datasources
-	 * @param primary: Filter for specified primary-ness. If null, don't filter on primary-ness.
-	 * @param metabolite: Filter for specified metabolite-ness. If null, don't filter on metabolite-ness.
-	 * @param o: Filter for specified organism. If null, don't filter on organism.
+	 * @param primary Filter for specified primary-ness. If null, don't filter on primary-ness.
+	 * @param metabolite Filter for specified metabolite-ness. If null, don't filter on metabolite-ness.
+	 * @param o Filter for specified organism. If null, don't filter on organism.
 	 */
 	static public Set<DataSource> getFilteredSet (Boolean primary, Boolean metabolite, Organism o)
 	{

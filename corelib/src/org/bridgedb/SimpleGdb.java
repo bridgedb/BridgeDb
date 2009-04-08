@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+
 /**
  * SimpleGdb is the main implementation of the Gdb interface,
  * for dealing with single SQL-based pgdb's.
@@ -74,8 +75,7 @@ public abstract class SimpleGdb implements Gdb
 	final public String getDbName() { return dbName; }
 
 	/**
-	 * @param id The gene id to get the symbol info for
-	 * @param code systemcode of the gene identifier
+	 * @param ref The Xref to get the symbol info for
 	 * @return The gene symbol, or null if the symbol could not be found
 	 * @throws DataException 
 	 */
@@ -100,7 +100,7 @@ public abstract class SimpleGdb implements Gdb
 	 * result to contain only references from database with the given system
 	 * code
 	 * @param idc The id/code pair to get the cross references for
-	 * @return An {@link ArrayList} containing the cross references, or an empty
+	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
 	 */
 	final public List<Xref> getCrossRefs(Xref idc) throws DataException
@@ -113,8 +113,8 @@ public abstract class SimpleGdb implements Gdb
 	 * result to contain only references from database with the given system
 	 * code
 	 * @param idc The id/code pair to get the cross references for
-	 * @param resultCode The system code to restrict the results to
-	 * @return An {@link ArrayList} containing the cross references, or an empty
+	 * @param resultDs The {@link DataSource} to restrict the results to
+	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
 	 */
 	abstract public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws DataException; 
@@ -142,8 +142,7 @@ public abstract class SimpleGdb implements Gdb
 	/**
 	 * Excecutes several SQL statements to create the tables and indexes in the database the given
 	 * connection is connected to
-	 * @param convertCon	The connection to the database the tables are created in
-	 * Note: Official GDB's are created by AP, not with this code.
+	 * Note: Official GDB's are created by Alex Pico's script, not with this code.
 	 * This is just here for testing purposes.
 	 */
 	abstract public void createGdbTables();

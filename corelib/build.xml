@@ -1,14 +1,23 @@
 <?xml version="1.0"?>
 <project name="BridgeDb" default="dist" basedir=".">
 
-  <property name="tgz.name" value="bridgedb.tar.gz"/>
   <property name="jar.name" value="bridgedb.jar"/>
-  
+  <property name="svn.exec.svnversion" value="svnversion"/>
+
   <target name="prepare">
+	<tstamp /> <!-- set ${TODAY} and ${TSTAMP} -->
 	<mkdir dir="build"/>
 	<mkdir dir="doc"/>
+	<exec executable="${svn.exec.svnversion}" outputproperty="subversion_revision" failifexecutionfails="false">
+		<arg line="-n ."/>
+	</exec>
+	<echo file="src/org/bridgedb/BridgeDb.properties"># Version and compilation information
+REVISION=${subversion_revision}
+COMPILE_DATE=${DSTAMP} ${TSTAMP}
+	</echo>  
   </target>
   
+
   <target name="build" depends="prepare">
 	<javac srcdir="src"
 		   includes="**"
@@ -20,11 +29,15 @@
   <target name="jar" depends="build">
 	<jar jarfile="${jar.name}">
 	  <fileset dir="build" includes="**/*.class"/>
+	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
   </target>
   
   <target name="doc" depends="prepare">
-	<javadoc destdir="doc">
+	<javadoc destdir="doc"
+			doctitle="${project.name}"
+			header="Revision ${subversion_revision}"
+			footer="Generated ${TODAY}">
 		<package name="org.bridgedb"/>
 		<sourcepath>			
 			<pathelement location="src"/>
@@ -38,11 +51,11 @@
   </target>
 
   <target name="dist-clean" depends="clean">
-	<delete file="${tar.name}.gz"/>
 	<delete file="${jar.name}"/>
   </target>
 
   <target name="dist" depends="jar">
+    <property name="tgz.name" value="bridgedb-r${subversion_revision}.tar.gz"/>
     <tar tarfile="${tgz.name}" compression="gzip">
 		<tarfileset dir="." includes="src/**/*.java" prefix="bridgedb"/>
 		<tarfileset dir="." includes="${jar.name}" prefix="bridgedb"/>		

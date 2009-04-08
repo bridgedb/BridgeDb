@@ -19,6 +19,7 @@ package org.bridgedb;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 //import org.pathvisio.debug.Logger;
 
 /**

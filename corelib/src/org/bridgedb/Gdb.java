@@ -26,7 +26,7 @@ public interface Gdb
 {
 	/**
 	 * Check whether a connection to the database exists
-	 * @return	true is a connection exists, false if not
+	 * @return true if a connection exists, false if not
 	 * 
 	 * A connection will not exist only 
 	 * after the close() method is called.
@@ -37,20 +37,10 @@ public interface Gdb
 	public boolean isConnected();
 
 	/**
-	 * Gets the name of te currently used gene database
+	 * Gets the name of the currently used gene database
 	 * @return the database name as specified in the connection string
 	 */
 	public String getDbName();
-
-	/**
-	 * <TABLE border='1'><TR><TH>Gene ID:<TH>g4507224_3p_at<TR><TH>Gene Name:<TH>SRY<TR><TH>Description:<TH>Sex-determining region Y protein (Testis-determining factor). [Source:Uniprot/SWISSPROT;Acc:Q05066]<TR><TH>Secondary id:<TH>g4507224_3p_at<TR><TH>Systemcode:<TH>X<TR><TH>System name:<TH>Affymetrix Probe Set ID<TR><TH>Database name (Ensembl):<TH>Affymx Microarray U133</TABLE>
-	 * @param id The gene id to get the symbol info for
-	 * @param code systemcode of the gene identifier
-	 * @return The gene symbol, or null if the symbol could not be found
-	 * @throws DataException 
-	 */
-	@Deprecated // this method is currently unused
-	public String getGeneSymbol(Xref ref) throws DataException;
 
 	/**
 	 * Gets the backpage info for the given gene id for display on BackpagePanel
@@ -71,8 +61,8 @@ public interface Gdb
 	 * result to contain only references from database with the given system
 	 * code
 	 * @param idc The id/code pair to get the cross references for
-	 * @return An {@link ArrayList} containing the cross references, or an empty
-	 * ArrayList when no cross references could be found
+	 * @return A {@link List} containing the cross references, or an empty
+	 * {@link List} when no cross references could be found
 	 */
 	public List<Xref> getCrossRefs(Xref idc) throws DataException;
 
@@ -81,8 +71,8 @@ public interface Gdb
 	 * result to contain only references from database with the given system
 	 * code
 	 * @param idc The id/code pair to get the cross references for
-	 * @param resultCode The system code to restrict the results to
-	 * @return An {@link ArrayList} containing the cross references, or an empty
+	 * @param resultDs The system code to restrict the results to
+	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
 	 */
 	public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws DataException;
@@ -98,7 +88,7 @@ public interface Gdb
 	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws DataException;
 
 	/**
-	 * Closes the {@link Connection} to the Gene Database if possible
+	 * Closes the connection to the Gene Database if possible
 	 * @throws DataException 
 	 */
 	public void close() throws DataException;

@@ -41,13 +41,13 @@ public class DataException extends Exception
 	}
 	
 	/** See Exception (String) */
-	DataException (String msg)
+	public DataException (String msg)
 	{
 		super (msg);
 	}
 	
 	/** See Exception () */
-	DataException ()
+	public DataException ()
 	{
 		super();
 	}
