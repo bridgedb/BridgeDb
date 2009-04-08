@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project name="BridgeDb" default="dist" basedir=".">
+
+  <property name="tgz.name" value="bridgedb.tar.gz"/>
+  <property name="jar.name" value="bridgedb.jar"/>
+  
+  <target name="prepare">
+	<mkdir dir="build"/>
+	<mkdir dir="doc"/>
+  </target>
+  
+  <target name="build" depends="prepare">
+	<javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+	</javac>
+  </target>
+  
+  <target name="jar" depends="build">
+	<jar jarfile="${jar.name}">
+	  <fileset dir="build" includes="**/*.class"/>
+	</jar>
+  </target>
+  
+  <target name="doc" depends="prepare">
+	<javadoc destdir="doc">
+		<package name="org.bridgedb"/>
+		<sourcepath>			
+			<pathelement location="src"/>
+		</sourcepath>
+	</javadoc>
+  </target>
+
+  <target name="clean">
+	<delete dir="build"/>
+	<delete dir="doc"/>
+  </target>
+
+  <target name="dist-clean" depends="clean">
+	<delete file="${tar.name}.gz"/>
+	<delete file="${jar.name}"/>
+  </target>
+
+  <target name="dist" depends="jar">
+    <tar tarfile="${tgz.name}" compression="gzip">
+		<tarfileset dir="." includes="src/**/*.java" prefix="bridgedb"/>
+		<tarfileset dir="." includes="${jar.name}" prefix="bridgedb"/>		
+		<tarfileset dir="." includes="build.xml" prefix="bridgedb"/>		
+	</tar>
+  </target>
+
+</project>
