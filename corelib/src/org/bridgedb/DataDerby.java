@@ -42,8 +42,8 @@ import java.util.zip.ZipOutputStream;
 //TODO: make sure the temp directory is cleaned up also when this is not finalized
 public class DataDerby extends DBConnector
 {
-	static final String DB_FILE_EXT_GDB = "pgdb";
-	static final String DB_FILE_EXT_GEX = "pgex";
+	public static final String DB_FILE_EXT_GDB = "pgdb";
+	public static final String DB_FILE_EXT_GEX = "pgex";
 
 	String getDbExt() {
 		switch(getDbType()) {
