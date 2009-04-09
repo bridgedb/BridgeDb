@@ -32,14 +32,14 @@ import java.util.List;
  * for dealing with single SQL-based pgdb's.
  * It's responsible for creating and querying a single 
  * pgdb relational database through the JDBC interface.
- *  
+ * <p> 
  * It wraps SQL statements in methods, 
  * so the rest of the apps don't need to know the
  * details of the Database schema.
- * 
+ * <p>
  * It delegates dealing with the differences between 
  * various RDBMS's (Derby, Hsqldb etc.)
- * to a DBConnector instance.
+ * to a {@link DBConnector} instance.
  * A correct DBConnector instance needs to be 
  * passed to the constructor of SimpleGdb. 
  * 

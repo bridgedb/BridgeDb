@@ -31,11 +31,10 @@ import java.util.Map;
 /**
  * Utility class that maintains a list of synonym databases and the species they
  * apply to. This list can be read from a configuration file with on each line:
- * 
+ * <pre>
  * species_latin_name[Tab]database_file_location
- * 
+ * </pre>
  * If a database applies to all species (e.g. metabolites), use "*" as species.
- * @author thomas
  */
 public class GdbProvider {
 	Map<Organism, List<Gdb>> organism2gdb = new HashMap<Organism, List<Gdb>>();

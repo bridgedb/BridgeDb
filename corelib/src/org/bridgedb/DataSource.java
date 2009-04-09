@@ -26,13 +26,13 @@ import java.util.Set;
 
 /**
 contains information about a certain DataSource, such as
-
-It's full name ("Ensembl")
-It's system code ("En")
-It's main url ("http://www.ensembl.org")
-Id-specific url's ("http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + id)
-
-The DataSource class uses the Extenisble enum pattern.
+<ul>
+<li>It's full name ("Ensembl")
+<li>It's system code ("En")
+<li>It's main url ("http://www.ensembl.org")
+<li>Id-specific url's ("http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + id)
+</ul>
+The DataSource class uses the extensible enum pattern.
 You can't instantiate DataSources directly, instead you have to use one of
 the constants such as DataSource.ENSEMBL, or 
 the "getBySystemcode" or "getByFullname" methods.
@@ -44,16 +44,17 @@ getBySystemCode twice with the same argument, it is guaranteed
 that you get the same return object. However, there is no way
 to combine a new DataSource with a new FullName unless you use 
 the "register" method.
-
+<p>
 This way any number of pre-defined DataSources can be used, 
 but plugins can define new ones and you can
 handle unknown systemcodes that occur in Gpml in the same 
 way as predefined ones.
-
+<p>
 PathVisio should never have to refer to system codes as Strings, except
-- in low level SQL code dealing with Gdb's, Gex and MAPP's (MAPPFormat.java)
-- in low level GPML code (GPMLFormat.java)
-
+<ul>
+<li>in low level SQL code dealing with Gdb's, Gex and MAPP's (MAPPFormat.java)
+<li>in low level GPML code (GPMLFormat.java)
+</ul>
 The preferred way to refer to a specific database is using a 
 constant defined here, e.g. "DataSource.ENSEMBL"
 */
@@ -346,9 +347,9 @@ public class DataSource
 	 * pointing to the same datbase are really the same.
 	 * 
 	 * @param organisms an array of organisms for which this system code is suitable, or null for any / not applicable
-	 * @param isPrimary: secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
+	 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
 	 * 	but their use in pathways is discouraged 
-	 * @param idExample: an example id from this system
+	 * @param idExample an example id from this system
 	 */
 	private DataSource (String sysCode, String fullName, 
 			UrlMaker urlMaker, String mainUrl,
@@ -392,11 +393,13 @@ public class DataSource
 	/** 
 	 * returns GenMAPP SystemCode, e.g. "En". May return null,
 	 * if only the full name is known.
-	 * Also used as identifier in 
-	 * 1. Gdb databases, 
-	 * 2. Gex databases.
-	 * 3. Imported data
-	 * 4. the Mapp format. 
+	 * Also used as identifier in
+	 * <ol> 
+	 * <li>Gdb databases, 
+	 * <li>Gex databases.
+	 * <li>Imported data
+	 * <li>the Mapp format.
+	 * </ol> 
 	 * We should try not to use the system code anywhere outside
 	 * these 4 uses.
 	 */
@@ -486,7 +489,7 @@ public class DataSource
 	
 	/**
 	 * Get a list of all non-null full names.
-	 * 
+	 * <p>
 	 * Warning: the ordering of this list is undefined.
 	 * Two subsequent calls may give different results.
 	 */

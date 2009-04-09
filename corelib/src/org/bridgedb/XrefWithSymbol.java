@@ -17,9 +17,10 @@
 package org.bridgedb;
 
 /**
- * Stores a combination of DataSource, id and symbol. See also Xref,
- * which only stores DataSource and id.
- * 
+ * Stores a combination of {@link DataSource}, id and symbol. See also {@link Xref},
+ * which only stores DataSource and id. A symbol is a name or biological shorthand
+ * that is not guaranteed to be unique or unambiguous 
+ * <p>
  * Immutable class, thread-safe
  */
 public final class XrefWithSymbol implements Comparable<XrefWithSymbol> 
@@ -50,16 +51,26 @@ public final class XrefWithSymbol implements Comparable<XrefWithSymbol>
 		this (new Xref (id, ds), symbol);
 	}
 
+	/**
+	 * @return symbol part, a name or biological shorthand
+	 * that is not guaranteed to be unique or unambiguous
+	 */
 	public String getSymbol() 
 	{
 		return symbol;
 	}
 	
+	/**
+	 * @return DataSource part, such as 
+	 */
 	public DataSource getDataSource()
 	{
 		return xref.getDataSource();
 	}
 	
+	/**
+	 * @return identifier part, such as "3643" or "ENSG00000001"
+	 */
 	public String getId()
 	{
 		return xref.getId();
@@ -83,7 +94,7 @@ public final class XrefWithSymbol implements Comparable<XrefWithSymbol>
 	}
 	
 	/**
-	 * returns true if id, datasource and systemcode are the same.
+	 * returns true if id, DataSource and symbol are all three the same.
 	 */
 	@Override
 	public boolean equals(Object o) 

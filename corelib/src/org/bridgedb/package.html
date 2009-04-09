@@ -1,5 +1,21 @@
 <html>
 <body>
-Classes related to reading and writing pgex (gene expression) and gdb (gene databases) files
+<b>BridgeDb</b> is a java library intended for dealing with identifiers for
+biological entities such as genes, proteins, metabolites.
+<p>
+In BridgeDb, a {@link org.bridgedb.DataSource} defines an online resource such as Ensembl or Entrez.
+<p>
+An {@link org.bridgedb.Xref} is the combination of an identifier and a particular resource, 
+and thus uniquely defines a single biological entity. It is often possible
+to generate a URL to an online description of this biological entity.
+<p>
+Identifiers are preferably not descriptive. A descriptive name such as INSR (Insulin Receptor) 
+instead of Entrez Gene 3643 can be useful. In BridgeDb we refer to this as a Symbol. Because
+of the ambiguous nature, Symbols are not the primary means for identifying 
+<p>
+Usually, different DataSources describe the same biological entities. Cross references are
+stored in so called Synonym databases. {@link org.bridgedb.Gdb} has facilities for mapping cross-references
+and mapping between different DataSources.
+<p>
 </body>
 </html>

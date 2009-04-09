@@ -27,22 +27,22 @@ import java.util.List;
  * for dealing with single SQL-based pgdb's.
  * It's responsible for creating and querying a single 
  * pgdb relational database through the JDBC interface.
- *  
+ * <p>
  * It wraps SQL statements in methods, 
  * so the rest of the apps don't need to know the
  * details of the Database schema.
- * 
+ * <p>
  * It delegates dealing with the differences between 
  * various RDBMS's (Derby, Hsqldb etc.)
  * to a DBConnector instance.
  * A correct DBConnector instance needs to be 
  * passed to the constructor of SimpleGdb. 
- * 
+ * <p>
  * In the PathVisio GUI environment, use GdbManager
  * to create and connect one or two centralized Gdb's. 
  * This will also automatically
  * find the right DBConnector from the preferences.
- *  
+ * <p>
  * In a head-less or test environment, you can bypass GdbManager
  * and use SimpleGdb directly 
  * to create or connect to one or more pgdb's of any type.

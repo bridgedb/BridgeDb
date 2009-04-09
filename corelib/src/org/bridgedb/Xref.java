@@ -16,11 +16,10 @@
 //
 package org.bridgedb;
 
-
 /**
- * Class to store an id/code combination, which represents
+ * Class to store an id + {@link DataSource} combination, which represents
  * an unique gene product
- * 
+ * <p>
  * Immutable class, thread safe
  */
 public class Xref implements Comparable<Xref> 
