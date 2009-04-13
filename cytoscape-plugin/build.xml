@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<project name="CyBridgeDbPlugin" default="build" basedir=".">
+
+  <!--  You need to modify this line to point to Cytoscape directory.  
+		Or call ant with -Dcytoscape.dir=/path/to/cytoscape
+		-->
+  <property name="tgz.name" value="cy-bridgedb-plugin.tar.gz"/>
+  <property name="jar.name" value="CyBridgedbPlugin.jar"/>
+  <property name="cytoscape.dir" value="../../cytoscape" />
+  <property name="cytoscape.jar" value="${cytoscape.dir}/cytoscape.jar" />
+  <property name="install.dir" value="${cytoscape.dir}/plugins/"/>
+  <property name="plugin.class" value="org.pathvisio.data.cydata.CyPgdbPlugin"/>
+  
+  <path id="project.class.path">
+	<pathelement location="${cytoscape.jar}"/>
+  </path>
+  
+  <target name="prepare">
+	<mkdir dir="build"/>
+	<mkdir dir="doc"/>
+  </target>
+  
+  <target name="build" depends="prepare">
+	<javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+	  <classpath refid="project.class.path"/>
+	</javac>
+  </target>
+  
+  <target name="jar" depends="build">
+	<jar jarfile="${jar.name}">
+	  <manifest>
+		<!-- Let Cytoscape find our class quicker !-->
+		<attribute name="Cytoscape-Plugin"
+                   value="${plugin.class}" />
+      </manifest>
+	  <fileset dir="build" includes="**/*.class"/>
+	  <fileset dir="src" includes="org/pathvisio/data/cydata/plugin.props"/>
+	</jar>
+  </target>
+  
+  <target name="install" depends="jar">
+	<copy file="${jar.name}"
+		  toDir="${install.dir}"/>
+  </target>
+
+  <target name="doc" depends="prepare">
+	<javadoc destdir="doc">
+	</javadoc>
+  </target>
+
+  <target name="clean">
+	<delete dir="build"/>
+	<delete dir="doc"/>
+  </target>
+
+  <target name="dist-clean" depends="clean">
+	<delete file="${tgz.name}.gz"/>
+	<delete file="${jar.name}"/>
+  </target>
+
+  <target name="dist" depends="jar">
+    <tar tarfile="${tgz.name}" compression="gzip">
+		<tarfileset dir="." includes="src/**/*.java" prefix="CyBridgeDbPlugin" />
+		<tarfileset dir="." includes="src/**/plugin.props" prefix="CyBridgeDbPlugin" />
+		<tarfileset dir="." includes="${jar.name}" prefix="CyBridgeDbPlugin" />		
+		<tarfileset dir="." includes="build.xml" prefix="CyBridgeDbPlugin" />		
+	</tar>
+  </target>
+</project>
