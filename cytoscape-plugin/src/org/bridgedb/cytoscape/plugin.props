@@ -6,7 +6,7 @@
 # -- The following properties are REQUIRED -- #
 
 # The plugin name that will be displayed to users, white space within name is not allowed
-pluginName=CyPgdbPlugin
+pluginName=CyBridgeDbPlugin
 
 # Description used to give users information about the plugin such as what it does.
 # Html tags are encouraged for formatting purposes.
@@ -24,11 +24,11 @@ pluginCategory=Network Inference
 # -- The following properties are OPTIONAL -- #
 
 # URL to a website that gives more information about your plugin, Ex. http://my-lab-site.org
-projectURL=http://www.bigcat.unimaas.nl
+projectURL=http://www.bridgedb.org
 
 # List of authors.  Note each author and institution pair are separated by a : (colon)
 # each additional author institution pair must be separated from other pairs bye a ; (semicolon)
-pluginAuthorsInstitutions=Martijn van Iersel;BiGCaT
+pluginAuthorsInstitutions=Martijn van Iersel:BiGCaT;Isaac Ho:UCSF
 
 # Date this plugin/plugin version was released
 releaseDate=Mar 1, 2009
