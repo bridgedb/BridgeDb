@@ -7,6 +7,7 @@
 	
   <property name="jar.name" value="bridgedb.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
+  <property name="checkstyle.output.file" value="warnings.txt"/>
 
   <target name="prepare">
 	<tstamp /> <!-- set ${TODAY} and ${TSTAMP} -->
@@ -66,6 +67,9 @@ COMPILE_DATE=${DSTAMP} ${TSTAMP}
 	</tar>
   </target>
   
+  	<taskdef resource="checkstyletask.properties"
+			 classpath="build-lib/checkstyle-all-5.0-beta01.jar"/>
+			 
 	<target name="test" depends="build">
 		<path id="test.classpath">
 			<pathelement location="build"/>
@@ -89,5 +93,13 @@ COMPILE_DATE=${DSTAMP} ${TSTAMP}
 		</junit>
 	</target>
 
+	<target name="checkstyle">
+		<checkstyle config="checks.xml">
+			<fileset dir="src">
+				<include name="**/*.java"/>
+			</fileset>
+			<formatter toFile="${checkstyle.output.file}"/>
+		</checkstyle>	
+	</target>
 
 </project>
