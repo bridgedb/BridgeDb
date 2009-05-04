@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<project name="bridgedb" default="dist" basedir=".">
+  
+  <property file="corelib/version.props"/>
+  
+  <target name="dist">
+	<antcall target="_allmodules">
+		<param name="allmodules.target" value="dist"/>
+	</antcall>
+	
+	<property name="zipbase" value="bridgedb-${bridgedb.version}"/>
+	<zip destfile="${zipbase}.zip">
+		<zipfileset dir="." prefix="bridgedb-${bridgedb.version}">
+			<include name="idmapper.sh"/>
+			<include name="idmapper.bat"/>
+			<include name="lib/bridgedb.jar"/>
+			<include name="lib/bridgedb-idmapper.jar"/>
+			<include name="lib/derby.jar"/>
+			<include name="LICENSE-2.0.txt"/>
+		</zipfileset>
+	</zip>
+	<tar destfile="${zipbase}.tar.gz" compression="gzip">
+		<zipfileset src="${zipbase}.zip"/>
+	</tar>
+  </target>
+
+  <target name="clean">
+	<antcall target="_allmodules">
+		<param name="allmodules.target" value="clean"/>
+	</antcall>
+  </target>
+
+  <!-- ant "subroutine" that calls all modules -->
+  <target name="_allmodules">
+	<ant dir="corelib" target="${allmodules.target}"/>
+	<ant dir="idmapper" target="${allmodules.target}"/>
+	<ant dir="makeGdb" target="${allmodules.target}"/>
+	<ant dir="cytoscape-plugin" target="${allmodules.target}"/>  
+  </target>
+
+</project>

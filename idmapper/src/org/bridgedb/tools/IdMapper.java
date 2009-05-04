@@ -26,6 +26,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.bridgedb.DataDerby;
 import org.bridgedb.DataException;
@@ -56,6 +57,16 @@ public class IdMapper
 	
 	public void printUsage()
 	{
+		String version = "";
+		try
+		{
+			Properties props = new Properties();
+			props.load (Gdb.class.getResourceAsStream("BridgeDb.properties"));
+			version = props.getProperty("bridgedb.version") + 
+				" (r" + props.getProperty("REVISION") + ")";
+		}
+		catch (IOException ex) { version = ex.getMessage(); } 
+		System.out.println ("IdMapper version " + version);
 		System.out.print (
 				"Usage:\n"+
 				"	mapper \n" +

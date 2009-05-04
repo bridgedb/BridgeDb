@@ -5,10 +5,11 @@
   <property name="ant.build.javac.target" value="1.5"/>
   <property name="ant.build.javac.source" value="1.5"/>
 	
-  <property name="jar.name" value="bridgedb.jar"/>
+  <property name="jar.name" value="../lib/bridgedb.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   <property name="checkstyle.output.file" value="warnings.txt"/>
-
+  <property file="version.props"/>
+  
   <target name="prepare">
 	<tstamp /> <!-- set ${TODAY} and ${TSTAMP} -->
 	<mkdir dir="build"/>
@@ -19,6 +20,8 @@
 	<echo file="src/org/bridgedb/BridgeDb.properties"># Version and compilation information
 REVISION=${subversion_revision}
 COMPILE_DATE=${DSTAMP} ${TSTAMP}
+# copied from version.props
+bridgedb.version=${bridgedb.version}
 	</echo>  
   </target>
 
@@ -32,6 +35,9 @@ COMPILE_DATE=${DSTAMP} ${TSTAMP}
   
   <target name="jar" depends="build">
 	<jar jarfile="${jar.name}">
+	  <manifest>
+		<attribute name="Class-Path" value="derby.jar"/>
+	  </manifest>
 	  <fileset dir="build" includes="**/*.class"/>
 	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
@@ -66,7 +72,7 @@ COMPILE_DATE=${DSTAMP} ${TSTAMP}
 		<tarfileset dir="." includes="build.xml" prefix="bridgedb"/>		
 	</tar>
   </target>
-  
+
   	<taskdef resource="checkstyletask.properties"
 			 classpath="build-lib/checkstyle-all-5.0-beta01.jar"/>
 			 

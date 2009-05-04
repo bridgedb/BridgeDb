@@ -24,7 +24,7 @@
 	</target>
 	
 	<target name="jar" depends="compile">
-		<jar jarfile="../bridgedb-idmapper.jar">
+		<jar jarfile="../lib/bridgedb-idmapper.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.bridgedb.tools.IdMapper"/>
 				<attribute name="Class-Path" value="bridgedb.jar"/>
