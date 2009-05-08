@@ -1,0 +1,16 @@
+*** dbbuilder ***
+
+This collection of perl and bash script is responsible for the building of BridgeDb databases, from the automated download of primary source tables to the production of derby databases ready for WikiPathways. The collection is broken into 3 steps: 
+
+* DOWNLOAD *
+These scripts automate the ftp download of ensemblized genome tables from primary sources (e.g., Ensembl, Gramene, "Ensembl Genomes") and the subsequent installation of the tables into a local mysql database. Provide a list of species you'd like to retrieve from a given resource, run the script, and you're done with step 1. 
+
+* EXTRACT *
+This rather sizeable Perl program does the bulk of the work. It extracts relevant information from ensemblized genome tables (local or remote), transforms it into new data structures useful for BridgeDb, and then loads these into new mysql tables. Run the program, select a species, respond to a few prompts, and you're done with step 2.
+
+* BUILD * 
+These scripts are cobbled together to perform the final transformation of the data into derby databases. Provide a list of species, run the main script, and you're done with step 3.
+
+In the end, you will have local mysql tables of source data, tables ready for Access and Derby production, tables for direct or web service access, backup dumps of all transformed tables and actual Derby databases ready for installation at WikiPathways.
+
+Enjoy! 
