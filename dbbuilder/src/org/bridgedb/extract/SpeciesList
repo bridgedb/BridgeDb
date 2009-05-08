@@ -1,0 +1,45 @@
+*Genus species*	*Common Name*	*TaxID*	*UniGene*	*two-letter code*
+Dasypus novemcinctus	Armadillo			Dn
+Caenorhabditis elegans	Celegans	6239	Cel	Ce
+Gallus gallus	Chicken	9031	Gga	Gg
+Pan troglodytes	Chimp	9598	 	Pt
+Bos Taurus	Cow	9913	Bt	Bt
+Canis familiaris	Dog	9615	Cfa	Cf
+Loxodonta africana	Elephant			La
+Drosophila melanogaster	Fruitfly	7227	Dm	Dm
+Echinops telfairi	Hedgehog			Et
+Equus caballus	Horse			Qc
+Homo sapiens	Human	9606	Hs	Hs
+Oryzias latipes	Medaka Fish			Ol
+Aedes aegypti	Mosquito_Aa 			Aa
+Anopheles gambiae	Mosquito_Ag 	7165	Aga	Ag
+Mus musculus	Mouse	10090	Mm	Mm
+Monodelphis domestica	Opossum	13616	 	Md
+Ornithorhynchus anatinus	Platypus			Oa
+Tetraodon nigroviridis	Pufferfish	99883	 	Tn
+Oryctolagus cuniculus	Rabbit			Oc
+Rattus norvegicus	Rat	10116	Rn	Rn
+Macaca mulatta	Rhesus Monkey			Mmul
+Sorex araneus	Shrew	42254		Sa
+Ciona intestinalis	Sea Squirt 	7719	 	Ci
+Ciona savignyi	Pacific Sea Squirt 		 	Cs
+Gasterosteus aculeatus	Stickleback Fish			Ga
+Takifugu rubripes	Tora Fugu	31033	 	Fr
+Xenopus tropicalis	Xenopus	8364	Str	Xt
+Saccharomyces cerevisiae	Yeast	4932	 	Sc
+Danio rerio	Zebrafish	7955	Dr	Dr
+Arabidopsis thaliana	Arabidopsis	3702	At	At
+Oryza glaberrima	African Rice	4538		Og
+Oryza rufipogon	Red Rice	4529		Or	
+Oryza indica	Indian Rice	39946	Oi	Oi
+Oryza japonica	Japanese Rice	39947		Oj
+Sorghum bicolor	Sorghum	4558	Sbi	Sb
+Vitis vinifera	Wine Grape	29760	Vvi	Vv
+Populus trichocarpa	Western Balsam Poplar	3694	Pth	Pt
+Bacillus subtilis	Bsubtilis			Bs
+Escherichia coli K12	Ecoli K12			Ec
+Mycobacterium collection	Mycobacterium		Mx
+Neisseria collection	Neisseria		Nx
+Pyrococcus collection	Pytococcus		Px
+Staphylococcus collection	Staphylococcus		Sx
+Streptococcus collection	Streptococcus		Tx

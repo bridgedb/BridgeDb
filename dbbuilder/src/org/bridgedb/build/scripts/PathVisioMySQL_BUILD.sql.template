@@ -1,0 +1,142 @@
+## Build a MySQL Database for PathVisio
+## Update species prefix and dates below, and species-specific tables (e.g., RGD)
+## A.Pico 20070817
+
+##Copy Ensembl annotations (Description, Chr) to EntrezGene
+USE XXXXXX_CS_YYYYYY;
+drop index index_id_right on link;
+create index index_id_right on link (ID_Right);
+
+create table gene_temp
+select gene.*, link.ID_Left
+from gene left join link
+on gene.ID = link.ID_Right
+where gene.Code = 'L' and link.Code_Left = 'En' and link.ID_Left is not null group by ID;
+create index index_id_left_temp on gene_temp (ID_Left);
+
+create table gene_temp2
+select gene_temp.ID, gene.Description, gene.Chromosome
+from gene_temp left join gene
+on gene_temp.ID_Left = gene.ID
+where gene.Code = 'En';
+
+update gene, gene_temp2
+set gene.Description = gene_temp2. Description
+where gene.ID = gene_temp2.ID and gene.Code = 'L';
+
+update gene, gene_temp2
+set gene.Chromosome = gene_temp2. Chromosome
+where gene.ID = gene_temp2.ID and gene.Code = 'L';
+
+drop table gene_temp;
+drop table gene_temp2;
+
+##Create database
+DROP DATABASE IF EXISTS XXXXXX_Derby_YYYYYY;
+CREATE DATABASE XXXXXX_Derby_YYYYYY;
+USE XXXXXX_Derby_YYYYYY;
+
+## Create 'datanode'
+CREATE TABLE datanode (
+	id VARCHAR(63) NOT NULL, 
+	code VARCHAR(63) NOT NULL, 
+	backpageText VARCHAR(1023), 
+	PRIMARY KEY (id, code)
+);
+
+## Create 'link'
+CREATE TABLE link (
+	idLeft VARCHAR(63) NOT NULL, 
+	codeLeft VARCHAR(63) NOT NULL, 
+	idRight VARCHAR(63) NOT NULL, 
+	codeRight VARCHAR(63) NOT NULL, 
+	PRIMARY KEY (idLeft, codeLeft, idRight, codeRight)
+);
+
+## Create 'info'
+CREATE TABLE info (
+	buildDate INTEGER,
+	schemaVersion INTEGER
+);
+
+## Ceate 'attribute'
+CREATE TABLE attribute (
+	id VARCHAR(63) NOT NULL, 
+	code VARCHAR(63) NOT NULL, 
+	attrName VARCHAR(63) NOT NULL,
+	attrValue VARCHAR(254) NOT NULL,
+	INDEX (code, attrValue)
+);
+
+
+## Fill 'info'
+INSERT INTO info 
+SELECT XXXXXX_CS_YYYYYY.Info.Version, '2' 
+FROM XXXXXX_CS_YYYYYY.Info;
+
+## Fill 'attribute'
+## From CS Database
+#symbol
+INSERT INTO attribute
+SELECT DISTINCT XXXXXX_CS_YYYYYY.attr.ID, XXXXXX_CS_YYYYYY.attr.Code, 
+XXXXXX_CS_YYYYYY.attr.Name, XXXXXX_CS_YYYYYY.attr.Value
+FROM XXXXXX_CS_YYYYYY.attr;
+
+## Fill 'datanode'
+## From CS Database
+#gene [ID only]
+INSERT INTO datanode
+SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
+CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
+"</TABLE>")
+FROM XXXXXX_CS_YYYYYY.gene
+WHERE XXXXXX_CS_YYYYYY.gene.ID != '' AND XXXXXX_CS_YYYYYY.gene.Code IN ("T","Gm","Pl","Pd","Bg");
+
+#gene [ID, Chip]
+INSERT INTO datanode
+SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
+CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
+"<TR><TH>Chip:<TH>", XXXXXX_CS_YYYYYY.gene.Chip,
+"</TABLE>")
+FROM XXXXXX_CS_YYYYYY.gene
+WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("X","Il","Ag");
+
+#gene [ID, Symbol, Synonyms, Description, Chr]
+INSERT INTO datanode
+SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
+CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
+"<TR><TH>Gene Symbol:<TH>", XXXXXX_CS_YYYYYY.gene.Symbol,
+"<TR><TH>Synonyms:<TH>", XXXXXX_CS_YYYYYY.gene.Synonyms,
+"<TR><TH>Description:<TH>", XXXXXX_CS_YYYYYY.gene.Description,
+"<TR><TH>Chr:<TH>", XXXXXX_CS_YYYYYY.gene.Chromosome,
+"</TABLE>")
+FROM XXXXXX_CS_YYYYYY.gene
+WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("En","L","H","M","R","D","F","Mb","U","Rf","Ip","Z","W",
+"Gg","A","Ti","Ir","N","Uc");
+
+#gene [ID, Symbol, Synonyms, Type, Description]
+INSERT INTO datanode
+SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
+CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
+"<TR><TH>Gene Symbol:<TH>", XXXXXX_CS_YYYYYY.gene.Symbol,
+"<TR><TH>Synonyms:<TH>", XXXXXX_CS_YYYYYY.gene.Synonyms,
+"<TR><TH>Type:<TH>", XXXXXX_CS_YYYYYY.gene.Type,
+"<TR><TH>Description:<TH>", XXXXXX_CS_YYYYYY.gene.Description,
+"</TABLE>")
+FROM XXXXXX_CS_YYYYYY.gene
+WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("S","Q","Om");
+
+## Fill 'link'
+## From CS Databases
+INSERT INTO link
+SELECT DISTINCT *
+FROM XXXXXX_CS_YYYYYY.link
+WHERE XXXXXX_CS_YYYYYY.link.Code_Right IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg");
+
+##Add Ensembl IDs to right side of 'link' table
+INSERT INTO link
+SELECT datanode.id, "En", datanode.id, "En"
+FROM datanode
+WHERE datanode.code = "En";
+
+

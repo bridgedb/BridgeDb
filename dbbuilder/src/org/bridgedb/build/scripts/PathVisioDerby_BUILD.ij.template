@@ -1,0 +1,5 @@
+connect 'jdbc:derby:XXXXXX;create=true';
+run 'YYYYYY/PathVisioDerby_CREATE.sql';
+run 'XXXXXX.db2.sql';  
+run 'YYYYYY/PathVisioDerby_INDEXES.sql'; 
+

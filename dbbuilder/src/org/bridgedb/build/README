@@ -1,0 +1,25 @@
+See scripts/buildPathVisio.sh for protocol for processing of CS databases into Derby databases.
+
+NOTES:
+ * For Sc databases: wget http://downloads.yeastgenome.org/gene_registry/registry.genenames.tab and load the first and last columns
+into MySQL to overwrite SGD primary IDs.  Ensembl only provides the symbol redundantly as both primary_id and display_id. The ETL 
+device has collect both and included symbol in the attribute table. So, by overwriting the primary_id in the 'gene' and 'attr'
+tables, the databases will be fixed.  The proper SGD IDs are important to support the majority of yeast pathways already in WikiPathways.
+<script>
+cd /home/apico/Derby/
+wget http://downloads.yeastgenome.org/gene_registry/registry.genenames.tab
+mysql -u genmapp -pfun4genmapp
+use Sc_CS_YYYYMMDD;
+create table sgd (a varchar(31), b varchar(31), c varchar(31), d varchar(31), e varchar(31), f varchar(31), g varchar(31));
+load data local infile '/home/apico/Derby/registry.genenames.tab' into table sgd fields terminated by '\t' lines terminated by '\n';
+create index i_a on sgd (a);
+update gene,sgd set gene.ID = sgd.g where gene.Symbol = sgd.a and gene.Code = 'D';
+update attr,sgd set attr.ID = sgd.g where attr.Value = sgd.a and attr.Code = 'D';
+alter table link add column (ID_Right2 varchar(31));
+update link set ID_Right2 = ID_Right where Code_Right = 'D';
+update link,sgd set link.ID_Right = sgd.g where link.ID_Right2 = sgd.a and link.Code_Right = 'D';
+alter table link drop column ID_Right2;
+exit
+<process to run build scripts via run.sh>
+
+ 
