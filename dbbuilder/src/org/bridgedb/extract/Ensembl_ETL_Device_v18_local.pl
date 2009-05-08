@@ -896,6 +896,15 @@ while (my $gene = pop(@$genes))
 					     'Description VARCHAR(255) DEFAULT NULL',
                                              'PRIMARY KEY (ID)'
                                              ]);
+        %{$GeneTables{EcoGene}} = ('NAME' => ['EcoGene', 'Ec'],
+                               'SYSTEM' => ["\'EcoGene\'", "\'$year$mon$mday\'",
+                                            "\'ID\|\'", "\'\|$species\|\'", "\'\'",
+                                            "\'http://ecogene.org/geneInfo.php?eg_id=~\'", "\'\'",
+                                            "\'http://ecogene.org\'"],
+                               'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                            'PRIMARY KEY (ID)'
+                                            ]);
+
 
 	## ENSEMBL LINK TABLES
 	# Hash of Hashes of Arrays
@@ -1870,6 +1879,14 @@ sub parse_DBEntries {
                 ++$subcount{UCSC};
             }
         }
+        elsif ($dbe_dbname =~ /^\'EcoGene\'$/){
+            $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{EcoGene}{$dbe_primary_id}}++){
+                $$GeneTables{EcoGene}{$count.$dot.$subcount{EcoGene}} = [$dbe_primary_id];
+                $$Ensembl_GeneTables{EcoGene}{$count.$dot.$subcount{EcoGene}} = [$gene_stable_id, $dbe_primary_id];
+                ++$subcount{EcoGene};
+            }
+        }   
 	else {
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'N\'"; # not collected!
 	}

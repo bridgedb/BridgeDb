@@ -4,7 +4,7 @@
 
 ##Copy Ensembl annotations (Description, Chr) to EntrezGene
 USE XXXXXX_CS_YYYYYY;
-drop index index_id_right on link;
+#drop index index_id_right on link;
 create index index_id_right on link (ID_Right);
 
 create table gene_temp
