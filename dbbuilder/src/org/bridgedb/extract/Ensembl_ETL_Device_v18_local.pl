@@ -904,6 +904,16 @@ while (my $gene = pop(@$genes))
                                'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
                                             'PRIMARY KEY (ID)'
                                             ]);
+        %{$GeneTables{WikiGene}} = ('NAME' => ['WikiGene', 'Wg'],
+                                'SYSTEM' => ["\'WikiGenes\'", "\'$year$mon$mday\'",
+                                             "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+                                             "\'http://www.wikigenes.org/e/gene/e/~.html\'", "\'\'",
+                                             "\'http://www.wikigenes.org\'"],
+                                'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                             'Symbol VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                             'Description VARCHAR(255) DEFAULT NULL',
+                                             'PRIMARY KEY (ID)',
+                                             'INDEX (Symbol)']);
 
 
 	## ENSEMBL LINK TABLES
@@ -1887,6 +1897,16 @@ sub parse_DBEntries {
                 ++$subcount{EcoGene};
             }
         }   
+        elsif ($dbe_dbname =~ /^\'WikiGene\'$/){
+            $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{WikiGene}{$dbe_primary_id}}++){
+                $$GeneTables{WikiGene}{$count.$dot.$subcount{WikiGene}} = [$dbe_primary_id, $dbe_display_id, $dbe_description];
+                $$Ensembl_GeneTables{WikiGene}{$count.$dot.$subcount{WikiGene}} = [$gene_stable_id, $dbe_primary_id];
+                #process Attributes
+                ## SKIP THIS STEP: too much information
+                ++$subcount{WikiGene};
+            }
+        }
 	else {
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'N\'"; # not collected!
 	}
