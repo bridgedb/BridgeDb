@@ -11,14 +11,14 @@ create table gene_temp
 select gene.*, link.ID_Left
 from gene left join link
 on gene.ID = link.ID_Right
-where gene.Code = 'L' and link.Code_Left = 'En' and link.ID_Left is not null group by ID;
+where gene.Code = 'L' and link.Code_Left = 'EnXXXXXX' and link.ID_Left is not null group by ID;
 create index index_id_left_temp on gene_temp (ID_Left);
 
 create table gene_temp2
 select gene_temp.ID, gene.Description, gene.Chromosome
 from gene_temp left join gene
 on gene_temp.ID_Left = gene.ID
-where gene.Code = 'En';
+where gene.Code = 'EnXXXXXX';
 
 update gene, gene_temp2
 set gene.Description = gene_temp2. Description
@@ -90,7 +90,7 @@ SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
 CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
 "</TABLE>")
 FROM XXXXXX_CS_YYYYYY.gene
-WHERE XXXXXX_CS_YYYYYY.gene.ID != '' AND XXXXXX_CS_YYYYYY.gene.Code IN ("T","Gm","Pl","Pd","Bg");
+WHERE XXXXXX_CS_YYYYYY.gene.ID != '' AND XXXXXX_CS_YYYYYY.gene.Code IN ("T","Gm","Pl","Pd","Bg","Ec");
 
 #gene [ID, Chip]
 INSERT INTO datanode
@@ -111,8 +111,8 @@ CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
 "<TR><TH>Chr:<TH>", XXXXXX_CS_YYYYYY.gene.Chromosome,
 "</TABLE>")
 FROM XXXXXX_CS_YYYYYY.gene
-WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("En","L","H","M","R","D","F","Mb","U","Rf","Ip","Z","W",
-"Gg","A","Ti","Ir","N","Uc");
+WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("EnXXXXXX","L","H","M","R","D","F","Mb","U","Rf","Ip","Z","W",
+"Gg","A","Ti","Ir","N","Uc","Wg");
 
 #gene [ID, Symbol, Synonyms, Type, Description]
 INSERT INTO datanode
@@ -131,12 +131,12 @@ WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("S","Q","Om");
 INSERT INTO link
 SELECT DISTINCT *
 FROM XXXXXX_CS_YYYYYY.link
-WHERE XXXXXX_CS_YYYYYY.link.Code_Right IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg");
+WHERE XXXXXX_CS_YYYYYY.link.Code_Right IN ("EnXXXXXX","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg");
 
-##Add Ensembl IDs to right side of 'link' table
+##Add EnXXXXXXsembl IDs to right side of 'link' table
 INSERT INTO link
-SELECT datanode.id, "En", datanode.id, "En"
+SELECT datanode.id, "EnXXXXXX", datanode.id, "EnXXXXXX"
 FROM datanode
-WHERE datanode.code = "En";
+WHERE datanode.code = "EnXXXXXX";
 
 
