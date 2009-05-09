@@ -44,7 +44,7 @@ zip -r -0 ${Database}.pgdb database/
 mv database ${Database}
 
 # report on products (check size > 1.9M)
-ls -lh ${Database}.pgdb
+ls -lh ${Database}.pgdb | echo
 
 # BELOW: Not yet automated
 # - ssh-key authentication not working
