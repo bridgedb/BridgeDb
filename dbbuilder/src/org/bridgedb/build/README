@@ -7,6 +7,7 @@ device has collect both and included symbol in the attribute table. So, by overw
 tables, the databases will be fixed.  The proper SGD IDs are important to support the majority of yeast pathways already in WikiPathways.
 <script>
 cd /home/apico/Derby/
+rm registry.genenames.tab
 wget http://downloads.yeastgenome.org/gene_registry/registry.genenames.tab
 mysql -u genmapp -pfun4genmapp
 use Sc_CS_YYYYMMDD;
