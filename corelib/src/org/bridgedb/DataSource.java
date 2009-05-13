@@ -131,11 +131,102 @@ public class DataSource
 		"Em", "EMBL", 
 		new PrefixUrlMaker ("http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id="), 
 		"http://www.ebi.ac.uk/embl", "AL030996", true, false, null);
+	/** @Deprecated use one of the organism-specific system codes instead */ 
 	public static final DataSource ENSEMBL = new DataSource (
 		"En", "Ensembl", 
 		new PrefixUrlMaker("http://www.ensembl.org/Homo_sapiens/Search/Summary?_q="), 
 		"http://www.ensembl.org", 
-		"ENSG00000139618", true, false, null);
+		"ENSG00000139618", false, false, null);
+	public static final DataSource ENSEMBL_MOSQUITO = new DataSource (
+		"EnAg", "Ensembl Mosquito", 
+		new PrefixUrlMaker("http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q="), 
+		"http://www.ensembl.org", 
+		"AGAP006864", true, false, null);
+	public static final DataSource GRAMENE_ARABIDOPSIS = new DataSource (
+		"EnAt", "Gramene Arabidopsis", 
+		new PrefixUrlMaker("http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?_q="), 
+		"http://www.gramene.org/", 
+		"ATMG01360-TAIR-G", true, false, Organism.ArabidopsisThaliana);
+	public static final DataSource ENSEMBL_BSUBTILIS = new DataSource (
+		"EnBs", "Ensembl B. subtilis", 
+		new PrefixUrlMaker("http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"EBBACG00000000013", true, false, Organism.BacillusSubtilis);
+	public static final DataSource ENSEMBL_COW = new DataSource (
+		"EnBt", "Ensembl Cow", 
+		new PrefixUrlMaker("http://www.ensembl.org/Bos_taurus/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSBTAG00000043548", true, false, Organism.BosTaurus);
+	public static final DataSource ENSEMBL_CELEGANS = new DataSource (
+		"EnCe", "Ensembl C. elegans", 
+		new PrefixUrlMaker("http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"Y42H9B.1", true, false, Organism.CaenorhabditisElegans);
+	public static final DataSource ENSEMBL_DOG = new DataSource (
+		"EnCf", "Ensembl Dog", 
+		new PrefixUrlMaker("http://www.ensembl.org/Canis_familiaris/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSCAFG00000025860", true, false, Organism.CanisFamiliaris);
+	public static final DataSource ENSEMBL_FRUITFLY = new DataSource (
+		"EnDm", "Ensembl Fruitfly", 
+		new PrefixUrlMaker("http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"FBgn0032956", true, false, Organism.DrosophilaMelanogaster);
+	public static final DataSource ENSEMBL_ZEBRAFISH = new DataSource (
+		"EnDr", "Ensembl Zebrafish", 
+		new PrefixUrlMaker("http://www.ensembl.org/Danio_rerio/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSDARG00000024771", true, false, Organism.DanioRero);
+	public static final DataSource ENSEMBL_ECOLI = new DataSource (
+		"EnEc", "Ensembl E. coli", 
+		new PrefixUrlMaker("http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"EBESCG00000000010", true, false, Organism.EscherichiaColi);
+	public static final DataSource ENSEMBL_CHICKEN = new DataSource (
+		"EnGg", "Ensembl Chicken", 
+		new PrefixUrlMaker("http://www.ensembl.org/Gallus_gallus/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSGALG00000021736", true, false, Organism.GallusGallus);
+	public static final DataSource ENSEMBL_HUMAN = new DataSource (
+		"EnHs", "Ensembl Human", 
+		new PrefixUrlMaker("http://www.ensembl.org/Homo_sapiens/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSG00000139618", true, false, Organism.HomoSapiens);
+	public static final DataSource ENSEMBL_MOUSE = new DataSource (
+		"EnMm", "Ensembl Mouse", 
+		new PrefixUrlMaker("http://www.ensembl.org/Mus_musculus/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSMUSG00000017167", true, false, Organism.MusMusculus);
+	public static final DataSource GRAMENE_RICE = new DataSource (
+		"EnOj", "Gramene Rice", 
+		new PrefixUrlMaker("http://www.gramene.org/Oryza_sativa_japonica/Gene/Summary?db=core;g="), 
+		"http://www.gramene.org/", 
+		"osa-MIR171a", true, false, Organism.OryzaSativa);
+	public static final DataSource ENSEMBL_CHIMP = new DataSource (
+		"EnPt", "Ensembl Chimp", 
+		new PrefixUrlMaker("http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSPTRG00000036034", true, false, Organism.PanTroglodytes);
+	public static final DataSource ENSEMBL_HORSE = new DataSource (
+		"EnQc", "Ensembl Horse", 
+		new PrefixUrlMaker("http://www.ensembl.org/Equus_caballus/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSECAG00000026160", true, false, Organism.EquusCaballus);
+	public static final DataSource ENSEMBL_RAT = new DataSource (
+		"EnRn", "Ensembl Rat", 
+		new PrefixUrlMaker("http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSRNOG00000016648", true, false, Organism.RattusNorvegicus);
+	public static final DataSource ENSEMBL_SCEREVISIAE = new DataSource (
+		"EnSc", "Ensembl S. cerevisiae", 
+		new PrefixUrlMaker("http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"YGR147C", true, false, Organism.SaccharomycesCerevisiae);
+	public static final DataSource ENSEMBL_XENOPUS = new DataSource (
+		"EnXt", "Ensembl Xenopus", 
+		new PrefixUrlMaker("http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g="), 
+		"http://www.ensembl.org", 
+		"ENSXETG00000029448", true, false, Organism.XenopusTropicalis);
 	public static final DataSource FLYBASE = new DataSource (
 		"F", "FlyBase", 
 		new PrefixUrlMaker("http://flybase.bio.indiana.edu/.bin/fbidq.html?"), null, 
@@ -168,8 +259,8 @@ public class DataSource
 		"AAH72400", false, false, null);
 	public static final DataSource HUGO = new DataSource (
 		"H", "HUGO", 
-		new PrefixUrlMaker ("http://www.gene.ucl.ac.uk/cgi-bin/nomenclature/get_data.pl?hgnc_id="),
-		"http://www.gene.ucl.ac.uk/nomenclature", 
+		new PrefixUrlMaker ("http://www.genenames.org/data/hgnc_data.php?hgnc_id="),
+		"http://www.genenames.org/", 
 		"25068", true, false, Organism.HomoSapiens);
 	public static final DataSource HSGENE = new DataSource (
 		"Hs", "HsGene", 
@@ -529,4 +620,26 @@ public class DataSource
 			return prefix + id;
 		}
 	}	
+
+	public Xref getExample ()
+	{
+		return new Xref (idExample, this);
+	}
+	
+
+	public boolean isPrimary()
+	{
+		return isPrimary();
+	}
+	
+	public boolean isMetabolite()
+	{
+		return isMetabolite;
+	}
+
+	public Organism getOrganism()
+	{
+		return organism;
+	}
+
 }

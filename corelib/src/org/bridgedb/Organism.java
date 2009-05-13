@@ -30,27 +30,35 @@ import java.util.Map;
  * TODO: make extensible 
  */
 public enum Organism {
-	MusMusculus("Mus musculus", "Mm", "Mouse"),
-	HomoSapiens("Homo sapiens", "Hs", "Human"),
-	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat"),
+
+	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito"),
+	ArabidopsisThaliana("Arabidopsis thaliana", "At"),
 	BosTaurus("Bos taurus", "Bt", "Cow"),
+	BacillusSubtilis("Bacillus subtilis", "Bs"),
 	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm"),
-	GallusGallus("Gallus gallus", "Gg", "Chicken"),
+	CanisFamiliaris("Canis familiaris", "Cf", "Dog"),
 	DanioRero("Danio rerio", "Dr", "Zebra fish"),
 	DrosophilaMelanogaster("Drosophila melanogaster", "Dm", "Fruit fly"),
-	CanisFamiliaris("Canis familiaris", "Cf", "Dog"),
-	XenopusTropicalis("Xenopus tropicalis", "Xt", "Frog"),
-	ArabidopsisThaliana("Arabidopsis thaliana", "At"),
-	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast"),
-	EscherichiaColi("Escherichia coli", "Ec"),
+	EscherichiaColi("Escherichia coli", "Ec"),	
+
+	//NB: two-letter code is Qc to disambiguate from E. coli	
+	EquusCaballus("Equus caballus", "Qc", "Horse"),
+	
+	GallusGallus("Gallus gallus", "Gg", "Chicken"),
+	HomoSapiens("Homo sapiens", "Hs", "Human"),
+	MusMusculus("Mus musculus", "Mm", "Mouse"),
 	OryzaSativa("Oryza sativa", "Os", "Rice"),
+	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee"),
+	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat"),
+	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast"),
 	TriticumAestivum ("Triticum aestivum", "Ta", "Wheat"),
+	XenopusTropicalis("Xenopus tropicalis", "Xt", "Frog"),
 	ZeaMays ("Zea mays", "Zm", "Maize"),
 	;
 	
-	String latinName;
-	String code;
-	String shortName;
+	private String latinName;
+	private String code;
+	private String shortName;
 	
 	Organism(String latinName, String code) {
 		this(latinName, code, latinName);
