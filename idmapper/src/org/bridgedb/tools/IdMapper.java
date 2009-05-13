@@ -69,7 +69,7 @@ public class IdMapper
 		System.out.println ("IdMapper version " + version);
 		System.out.print (
 				"Usage:\n"+
-				"	mapper \n" +
+				"	idmapper \n" +
 				"		[-v|-vv] \n" +
 				"		-g <gene database> \n " +
 				"		-i <input file> \n" +
