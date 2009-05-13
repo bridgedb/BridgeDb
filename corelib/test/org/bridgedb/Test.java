@@ -18,27 +18,19 @@ package org.bridgedb;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.TestCase;
-
-import org.bridgedb.DataDerby;
-import org.bridgedb.DataException;
-import org.bridgedb.DataSource;
-import org.bridgedb.DataSourcePatterns;
-import org.bridgedb.SimpleGdb;
-import org.bridgedb.SimpleGdbFactory;
-import org.bridgedb.Xref;
-import org.bridgedb.XrefWithSymbol;
 
 public class Test extends TestCase 
 {
 	//TODO
 	static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
-		"PathVisio-Data/gene databases/Hs_Derby_20080102.pgdb";
+		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
 	static final String GDB_RAT = 
 		System.getProperty ("user.home") + File.separator + 
-		"PathVisio-Data/gene databases/Rn_Derby_20080102.pgdb";
+		"PathVisio-Data/gene databases/Rn_Derby_20081119.pgdb";
 
 	boolean eventReceived = false;
 	
@@ -48,8 +40,9 @@ public class Test extends TestCase
 		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
 		
 		//symbol must be INSR
-		Xref ref = new Xref ("3643", DataSource.ENTREZ_GENE);				
-		assertEquals ("INSR", gdb.getGeneSymbol(ref));
+		Xref ref = new Xref ("3643", DataSource.ENTREZ_GENE);
+		//TODO: CD220 is just one possible symbol, not the primary one.
+		assertEquals ("CD220", gdb.getGeneSymbol(ref));
 		
 		// test getting backpage
 		assertTrue (gdb.getBpInfo(ref).startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
@@ -100,6 +93,56 @@ public class Test extends TestCase
 		assertTrue (DataSourcePatterns.getDataSourceMatches("HMDB00122").contains(DataSource.HMDB));
 		assertTrue (DataSourcePatterns.getDataSourceMatches("C00031").contains(DataSource.KEGG_COMPOUND));
 		assertTrue (DataSourcePatterns.getDataSourceMatches("CHEBI:17925").contains(DataSource.CHEBI));
+	}
+	
+	public void testDataSource()
+	{
+		DataSource ds = DataSource.ENSEMBL;
+		assertEquals (ds.getFullName(), "Ensembl");
+		assertEquals (ds.getSystemCode(), "En");
+		
+		DataSource.register("@@", "ZiZaZo", null, null, null, false, false, null);
+		
+		DataSource ds2 = DataSource.getBySystemCode ("@@");
+		DataSource ds3 = DataSource.getByFullName ("ZiZaZo");
+		assertEquals (ds2, ds3);
+		
+		// assert that you can refer to 
+		// undeclared systemcodes if necessary.
+		assertNotNull (DataSource.getBySystemCode ("##"));
+		
+		DataSource ds4 = DataSource.getBySystemCode ("En");
+		assertEquals (ds, ds4);
+		
+		DataSource ds5 = DataSource.getByFullName ("Entrez Gene");
+		assertEquals (ds5, DataSource.ENTREZ_GENE);
+	}
+
+	public void testDataSourceFilter ()
+	{
+		// ensembl is primary, affy isn't
+		Set<DataSource> f1 = DataSource.getFilteredSet(true, null, null);
+		assertTrue (f1.contains(DataSource.ENSEMBL_HUMAN));
+		assertTrue (f1.contains(DataSource.HMDB));
+		assertFalse (f1.contains(DataSource.AFFY));
+
+		// wormbase is specific for Ce.
+		Set<DataSource> f2 = DataSource.getFilteredSet(null, null, Organism.CaenorhabditisElegans);
+		assertTrue (f2.contains(DataSource.ENSEMBL_CELEGANS));
+		assertTrue (f2.contains(DataSource.WORMBASE));
+		assertFalse (f2.contains(DataSource.ZFIN));
+
+		// metabolites
+		Set<DataSource> f3 = DataSource.getFilteredSet(null, true, null);
+		assertTrue (f3.contains(DataSource.HMDB));
+		assertFalse (f3.contains(DataSource.WORMBASE));
+		assertFalse (f3.contains(DataSource.ENSEMBL_HUMAN));
+
+		// non-metabolites
+		Set<DataSource> f4 = DataSource.getFilteredSet(null, false, null);
+		assertTrue (f4.contains(DataSource.ENSEMBL_HUMAN));
+		assertTrue (f4.contains(DataSource.WORMBASE));
+		assertFalse (f4.contains(DataSource.HMDB));
 	}
 
 }

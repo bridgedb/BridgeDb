@@ -131,7 +131,7 @@ public class DataSource
 		"Em", "EMBL", 
 		new PrefixUrlMaker ("http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id="), 
 		"http://www.ebi.ac.uk/embl", "AL030996", true, false, null);
-	/** @Deprecated use one of the organism-specific system codes instead */ 
+	/** @deprecated use one of the organism-specific system codes instead */ 
 	public static final DataSource ENSEMBL = new DataSource (
 		"En", "Ensembl", 
 		new PrefixUrlMaker("http://www.ensembl.org/Homo_sapiens/Search/Summary?_q="), 
@@ -141,7 +141,7 @@ public class DataSource
 		"EnAg", "Ensembl Mosquito", 
 		new PrefixUrlMaker("http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q="), 
 		"http://www.ensembl.org", 
-		"AGAP006864", true, false, null);
+		"AGAP006864", true, false, Organism.AnophelesGambiae);
 	public static final DataSource GRAMENE_ARABIDOPSIS = new DataSource (
 		"EnAt", "Gramene Arabidopsis", 
 		new PrefixUrlMaker("http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?_q="), 
