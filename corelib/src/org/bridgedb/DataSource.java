@@ -58,7 +58,7 @@ PathVisio should never have to refer to system codes as Strings, except
 The preferred way to refer to a specific database is using a 
 constant defined here, e.g. "DataSource.ENSEMBL"
 */
-public class DataSource
+public final class DataSource
 {
 	private static Map<String, DataSource> bySysCode = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byFullName = new HashMap<String, DataSource>();
@@ -348,16 +348,16 @@ public class DataSource
 		"Q", "RefSeq", 
 		new UrlMaker() 
 		{ 
-			String pre = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?";
+			private static final String PRE = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?";
 			public String getUrl (String id)
 			{
 				if(id.startsWith("NM")) 
 				{
-					return pre + "db=Nucleotide&cmd=Search&term=" + id;
+					return PRE + "db=Nucleotide&cmd=Search&term=" + id;
 				} 
 				else 
 				{
-					return pre + "db=Protein&cmd=search&term=" + id;
+					return PRE + "db=Protein&cmd=search&term=" + id;
 				}
 			}
 		}
@@ -437,9 +437,14 @@ public class DataSource
 	 * That way we can make sure that two DataSources
 	 * pointing to the same datbase are really the same.
 	 * 
-	 * @param organisms an array of organisms for which this system code is suitable, or null for any / not applicable
+	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
+	 * @param fullName full name used in GPML
+	 * @param urlMaker turns an identifier into a valid link-out.
+	 * @param mainUrl url of homepage 
+	 * @param organism organism for which this system code is suitable, or null for any / not applicable
 	 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
-	 * 	but their use in pathways is discouraged 
+	 * 	but their use in pathways is discouraged
+	 * @param isMetabolite true if this DataSource describes metabolites 
 	 * @param idExample an example id from this system
 	 */
 	private DataSource (String sysCode, String fullName, 
@@ -462,7 +467,11 @@ public class DataSource
 			byFullName.put(fullName, this);
 	}
 	
-	/** turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..." */
+	/** 
+	 * turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
+	 * @param id identifier to use in url
+	 * @return Url
+	 */
 	public String getUrl(String id)
 	{
 		if (urlMaker != null)
@@ -472,9 +481,10 @@ public class DataSource
 	}
 				
 	/** 
-	 * returns full name of datasource e.g. "Ensembl". 
+	 * returns full name of DataSource e.g. "Ensembl". 
 	 * May return null if only the system code is known. 
-	 * Also used as identifier in GPML 
+	 * Also used as identifier in GPML
+	 * @return full name of DataSource 
 	 */
 	public String getFullName()
 	{
@@ -493,6 +503,7 @@ public class DataSource
 	 * </ol> 
 	 * We should try not to use the system code anywhere outside
 	 * these 4 uses.
+	 * @return systemcode, a short unique code.
 	 */
 	public String getSystemCode()
 	{
@@ -505,6 +516,7 @@ public class DataSource
 	 * (e.g. http://www.ensembl.org/)
 	 * 
 	 * May return null in case the main url is unknown.
+	 * @return main url
 	 */
 	public String getMainUrl()
 	{	
@@ -514,6 +526,15 @@ public class DataSource
 	/** 
 	 * so new system codes can be added easily by 
 	 * plugins. url and urlMaker may be null 
+	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
+	 * @param fullName full name used in GPML
+	 * @param urlMaker turns an identifier into a valid link-out.
+	 * @param mainUrl url of homepage 
+	 * @param organism organism for which this system code is suitable, or null for any / not applicable
+	 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
+	 * 	but their use in pathways is discouraged
+	 * @param isMetabolite true if this DataSource describes metabolites 
+	 * @param exampleId an example id from this system
 	 */
 	public static void register(String sysCode, String fullName, UrlMaker urlMaker, String mainUrl, 
 			String exampleId, boolean isPrimary, boolean isMetabolite, Organism organism)
@@ -522,8 +543,9 @@ public class DataSource
 	}
 	
 	/** 
-	 * returns pre-existing 
-	 * DataSource object by system code, if it exists, or creates a new one 
+	 * @param systemCode short unique code to query for
+	 * @return pre-existing DataSource object by system code, 
+	 * 	if it exists, or creates a new one. 
 	 */
 	public static DataSource getBySystemCode(String systemCode)
 	{
@@ -537,7 +559,9 @@ public class DataSource
 	/** 
 	 * returns pre-existing DataSource object by 
 	 * full name, if it exists, 
-	 * or creates a new one 
+	 * or creates a new one. 
+	 * @param fullName full name to query for
+	 * @return DataSource
 	 */
 	public static DataSource getByFullName(String fullName)
 	{
@@ -549,7 +573,8 @@ public class DataSource
 	}
 	
 	/**
-		get all registered datasoures as a set
+		get all registered datasoures as a set.
+		@return set of all registered DataSources
 	*/ 
 	static public Set<DataSource> getDataSources()
 	{
@@ -557,14 +582,15 @@ public class DataSource
 	}
 	
 	/**
-	 * returns a filtered subset of available datasources
+	 * returns a filtered subset of available datasources.
 	 * @param primary Filter for specified primary-ness. If null, don't filter on primary-ness.
 	 * @param metabolite Filter for specified metabolite-ness. If null, don't filter on metabolite-ness.
 	 * @param o Filter for specified organism. If null, don't filter on organism.
+	 * @return filtered set.
 	 */
 	static public Set<DataSource> getFilteredSet (Boolean primary, Boolean metabolite, Organism o)
 	{
-		Set<DataSource> result = new HashSet<DataSource>();
+		final Set<DataSource> result = new HashSet<DataSource>();
 		for (DataSource ds : registry)
 		{
 			if (
@@ -583,37 +609,49 @@ public class DataSource
 	 * <p>
 	 * Warning: the ordering of this list is undefined.
 	 * Two subsequent calls may give different results.
+	 * @return List of full names
 	 */
 	static public List<String> getFullNames()
 	{
-		List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<String>();
 		result.addAll (byFullName.keySet());
 		return result;
 	}
 	/**
 	 * The string representation of a DataSource is equal to
 	 * it's full name. (e.g. "Ensembl")
+	 * @return String representation
 	 */
 	public String toString()
 	{
 		return fullName;
 	}
 	
-	/** an UrlMaker knows how to turn an id into an Url string */
+	/** an UrlMaker knows how to turn an id into an Url string. */
 	public static abstract class UrlMaker
 	{
+		/**
+		 * Generate an Url from an identifier.
+		 * @param id identifier to use in Url 
+		 * @return url based on the identifier */
 		public abstract String getUrl(String id);
 	}
 	
-	/** Implements most common way an Url is made: add Id to a prefix */ 
+	/** Implements most common way an Url is made: add Id to a prefix. */ 
 	public static class PrefixUrlMaker extends UrlMaker
 	{
-		String prefix;
+		private final String prefix;
+		
+		/** @param prefix prefix to use in url */
 		public PrefixUrlMaker(String prefix)
 		{
 			this.prefix = prefix;
 		}
 		
+		/**
+		 * Generate url from identifier.
+		 * @param id identifier to use in url 
+		 * @return Simply returns prefix + id */
 		@Override
 		public String getUrl(String id) 
 		{
@@ -621,22 +659,34 @@ public class DataSource
 		}
 	}	
 
+	/**
+	 * @return example Xref, mostly for testing purposes
+	 */
 	public Xref getExample ()
 	{
 		return new Xref (idExample, this);
 	}
 	
-
+	/**
+	 * @return if this is a primary DataSource or not. Primary DataSources 
+	 * are preferred when annotating models.
+	 */
 	public boolean isPrimary()
 	{
 		return isPrimary();
 	}
 	
+	/**
+	 * @return if this DataSource describes metabolites or not.
+	 */
 	public boolean isMetabolite()
 	{
 		return isMetabolite;
 	}
 
+	/**
+	 * @return Organism that this DataSource describes, or null if multiple / not applicable.
+	 */
 	public Organism getOrganism()
 	{
 		return organism;

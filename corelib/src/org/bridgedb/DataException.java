@@ -28,25 +28,25 @@ package org.bridgedb;
 public class DataException extends Exception
 {
 
-	/** See Exception(Throwable) */
+	/** See Exception(Throwable). */
 	public DataException (Throwable t)
 	{
 		super (t);
 	}
 	
-	/** See Exception(String, Throwable) */
+	/** See Exception(String, Throwable). */
 	public DataException (String msg, Throwable t)
 	{
 		super (msg, t);
 	}
 	
-	/** See Exception (String) */
+	/** See Exception (String). */
 	public DataException (String msg)
 	{
 		super (msg);
 	}
 	
-	/** See Exception () */
+	/** See Exception (). */
 	public DataException ()
 	{
 		super();
