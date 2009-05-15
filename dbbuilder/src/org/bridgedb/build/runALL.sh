@@ -1,4 +1,4 @@
-cat runList2 | while read x y
+cat runList | while read x y
 do
  # check if commented out
  if [[ $x =~ '#' ]]
