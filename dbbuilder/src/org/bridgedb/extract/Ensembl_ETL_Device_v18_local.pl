@@ -1434,7 +1434,7 @@ if ($bkup_std  =~ /(Y|Yes)/i){
 
 ## BACKUP and COPY CS TABLES?
 if ( $mysql_cs_load  =~ /(Y|Yes)/i){
-my $bkup_cs_default = 'No';      # default answer
+my $bkup_cs_default = 'Yes';      # default answer
 
 print "\n\n\tWould you like to backup and copy the CS tables? ($bkup_cs_default) --> ";
 my $bkup_cs = $bkup_cs_default;
