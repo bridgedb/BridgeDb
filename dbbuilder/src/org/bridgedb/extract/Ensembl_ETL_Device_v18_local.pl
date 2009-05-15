@@ -37,6 +37,19 @@ use Bio::EnsEMBL::DBSQL::DBConnection;
 use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
 my $api_path = "/home/apico/src/ensembl/modules";
 
+## Under script control
+my $scriptmode = 0;
+my $speciesArg = 0;
+my $dateArg = 0;
+
+if ($#ARGV == 1) { # if 2 args passed in, then use them
+	$speciesArg = $ARGV[0];
+	$dateArg = $ARGV[1];
+
+	#trigger script mode
+	$scriptmode = 1;
+}
+
 ############################################################################
 ## INTRO, MENUS AND CONTROLS ##
 ###############################
@@ -67,7 +80,9 @@ optimization and stable accessibility.
             *******************************************
 ";
 print "\n\nPress RETURN to continue";
-my $pause = <STDIN>;
+unless ($scriptmode) {
+	my $pause = <STDIN>;
+}
 
 system "clear";
 print "
@@ -121,7 +136,9 @@ print "
             *******************************************
 ";
 print "\n\nPress RETURN to continue";
-my $pause = <STDIN>;
+unless ($scriptmode) {
+	my $pause = <STDIN>;
+}
 
 system "clear";
 print "
@@ -133,6 +150,7 @@ print "
 my %speciesTable = ();                # Hash of Arrays for storing species table in Perl
 my @speciesList = ();                 # list of species names to display in menu
 my $input = "SpeciesList";            # filename of flatfile containing table of species
+my $arrayPick = 'null';		      # menu selection
 
 unless( open( SPECIES, $input)){
     print "Could not open file $input: $!\n";
@@ -145,13 +163,25 @@ foreach (<SPECIES>){
     my @fields = split(/\t/, $line);
     $speciesTable{$fields[1]} = [$fields[0], $fields[4]]; # (KEY:common name, VALUE:[genus species, two-letter code])
     push(@speciesList, "$fields[1]\t($fields[0])");       # (VALUE:common name \t (genus species))
+    if ($scriptmode) {
+        if ($fields[4] =~ /($speciesArg)/){
+                $arrayPick = $fields[1];
+        }
+    }
+
 }
 
 close(SPECIES);
 
 ## MENU OF SUPPORTED SPECIES
-print "\n\nSTEP 1: Please select a species.\n\n";
-my $arrayPick = pickFromArray(@speciesList);                  # menu selection
+unless ($scriptmode) {
+	print "\n\nSTEP 1: Please select a species.\n\n";
+	$arrayPick = pickFromArray(@speciesList);             # menu selection
+}
+if ($arrayPick eq 'null') {
+	print "\n\nSpecies $speciesArg was not found!\n\n";	
+	exit;
+}
 my @splitPick = split(/\t/, $arrayPick);                      # split: [0]=common name, [1]=(genus species)
 my $speciesPick = $splitPick[0];                              # store common name, e.g., Mouse
 my $twoLetterSpecies = $speciesTable{$speciesPick}[1];	      # two-letter code, e.g., Mm
@@ -171,25 +201,27 @@ if ($species eq 'Wacky'){
     $mod_system = 'Something Else';                           # use this loop for custom species-MOD pairs
 }
 
-
 ## CONTROLS FOR PROGRAM
 print "\n\nSTEP 2: Please set the following options. Press Enter for default response.\n";
 
 ## COLLECT SAMPLE OF GENES FROM GENOME?
-my $sample_only_default = 'Yes';      # default answer
+my $sample_only_default = 'No';      # default answer
 my $collect_sample = 0;               # 0=collect all genes
 my $start_count = 1;                  # start counting at 1
 
 print "\n\tWould you like to collect data on only a sample of the genome? ($sample_only_default) --> ";
-my $sample_only = <STDIN>;            # user answer
-chomp $sample_only;
-if ($sample_only eq '') {
-    $sample_only = $sample_only_default;  
-}
-until ( $sample_only =~ /(Y|Yes|N|No)/i ) {
-    print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
-    $sample_only = <STDIN>;
-    chomp $sample_only;
+my $sample_only = $sample_only_default;
+unless ($scriptmode) {
+	$sample_only = <STDIN>;            # user answer
+	chomp $sample_only;
+	if ($sample_only eq '') {
+    	$sample_only = $sample_only_default;  
+	}
+	until ( $sample_only =~ /(Y|Yes|N|No)/i ) {
+    	print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
+    	$sample_only = <STDIN>;
+    	chomp $sample_only;
+	}
 }
 
 ## IF YES, HOW MANY GENES TO COLLECT?
@@ -230,48 +262,57 @@ my $end_count = $start_count + $collect_sample - 1;  # store end boundary of sam
 
 
 ## INSERT DATA INTO MYSQL STD TABLES?
-my $mysql_std_load_default = 'No';      # default answer
+my $mysql_std_load_default = 'Yes';      # default answer
 
 print "\n\n\tWould you like to load data directly into MySQL Std tables? ($mysql_std_load_default) --> ";
-my $mysql_std_load = <STDIN>;           # user answer: Y/N flag
-chomp $mysql_std_load;
-if ($mysql_std_load eq '') {
-    $mysql_std_load = $mysql_std_load_default;  
-}
-until ( $mysql_std_load =~ /(Y|Yes|N|No)/i ) {
-    print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
-    $mysql_std_load = <STDIN>;
-    chomp $mysql_std_load;
+my $mysql_std_load = $mysql_std_load_default;
+unless ($scriptmode) {
+	$mysql_std_load = <STDIN>;           # user answer: Y/N flag
+	chomp $mysql_std_load;
+	if ($mysql_std_load eq '') {
+    		$mysql_std_load = $mysql_std_load_default;  
+	}
+	until ( $mysql_std_load =~ /(Y|Yes|N|No)/i ) {
+    		print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
+    		$mysql_std_load = <STDIN>;
+    		chomp $mysql_std_load;
+	}
 }
 
 ## INSERT DATA INTO MYSQL CS TABLES?
-my $mysql_cs_load_default = 'No';      # default answer
+my $mysql_cs_load_default = 'Yes';      # default answer
 
 print "\n\n\tWould you like to load data directly into MySQL CS tables? ($mysql_cs_load_default) --> ";
-my $mysql_cs_load = <STDIN>;           # user answer: Y/N flag
-chomp $mysql_cs_load;
-if ($mysql_cs_load eq '') {
-    $mysql_cs_load = $mysql_cs_load_default;  
-}
-until ( $mysql_cs_load =~ /(Y|Yes|N|No)/i ) {
-    print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
-    $mysql_cs_load = <STDIN>;
-    chomp $mysql_cs_load;
+my $mysql_cs_load = $mysql_cs_load_default;
+unless ($scriptmode) {
+	$mysql_cs_load = <STDIN>;           # user answer: Y/N flag
+	chomp $mysql_cs_load;
+	if ($mysql_cs_load eq '') {
+    		$mysql_cs_load = $mysql_cs_load_default;  
+	}
+	until ( $mysql_cs_load =~ /(Y|Yes|N|No)/i ) {
+    		print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
+    		$mysql_cs_load = <STDIN>;
+    		chomp $mysql_cs_load;
+	}
 }
 
 ## PRINT DATA TO FLATFILE?
 my $print_tables_default = 'No';      # default answer
 
 print "\n\n\tWould you like to generate a tab-delimited file containing all table data? ($print_tables_default) --> ";
-my $print_tables = <STDIN>;           # user answer: Y/N flag
-chomp $print_tables;
-if ($print_tables eq '') {
-    $print_tables = $print_tables_default;  
-}
-until ( $print_tables =~ /(Y|Yes|N|No)/i ) {
-    print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
-    $print_tables = <STDIN>;
-    chomp $print_tables;
+my $print_tables = $print_tables_default;
+unless ($scriptmode) {
+	$print_tables = <STDIN>;           # user answer: Y/N flag
+	chomp $print_tables;
+	if ($print_tables eq '') {
+    		$print_tables = $print_tables_default;  
+	}
+	until ( $print_tables =~ /(Y|Yes|N|No)/i ) {
+    		print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
+    		$print_tables = <STDIN>;
+    		chomp $print_tables;
+	}
 }
 
 # Warn user about potential file size and cpu time
@@ -296,15 +337,18 @@ if ($print_tables =~ /(Y|Yes)/i && ($collect_sample > 100 || $collect_sample == 
 my $run_now_default = 'Yes';      # default answer
 
 print "\n\n\tAre you ready to run? ($run_now_default) --> ";
-my $run_now = <STDIN>;            # user answer: Y/N flag
-chomp $run_now;
-if ($run_now eq '') {
-    $run_now = $run_now_default;  
-}
-until ( $run_now =~ /(Y|Yes|N|No)/i ) {
-    print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
-    $run_now = <STDIN>;
-    chomp $run_now;
+my $run_now = $run_now_default;
+unless ($scriptmode) {
+	$run_now = <STDIN>;            # user answer: Y/N flag
+	chomp $run_now;
+	if ($run_now eq '') {
+    		$run_now = $run_now_default;  
+	}
+	until ( $run_now =~ /(Y|Yes|N|No)/i ) {
+    		print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
+    		$run_now = <STDIN>;
+    		chomp $run_now;
+	}
 }
 
 if ($run_now =~ /(N|No)/i){
@@ -1343,10 +1387,13 @@ print "\n@Runtime\n";
 
 ## BACKUP AND COPY OPTIONS
 #Variables
+if ($dateArg == 0){
+	$dateArg = $year.$mon.$mday;
+}
 my $current_std = "current_".$genus_species;
-my $new_std = $twoLetterSpecies."_Std_".$year.$mon.$mday;
+my $new_std = $twoLetterSpecies."_Std_".$dateArg;
 my $current_cs = "current_CS_".$genus_species;
-my $new_cs = $twoLetterSpecies."_CS_".$year.$mon.$mday;
+my $new_cs = $twoLetterSpecies."_CS_".$dateArg;
 my $sqlPass = "fun4genmapp";
 my $bkupDir = "/home/apico/EnsemblAPI/DB_Copies/";
 my $mysqldump_cmd = "mysqldump -u genmapp --password=".$sqlPass;
@@ -1354,18 +1401,21 @@ my $mysql_cmd = "mysql -u genmapp --password=".$sqlPass;
 
 ## BACKUP and COPY STD TABLES?
 if ( $mysql_std_load  =~ /(Y|Yes)/i){
-my $bkup_std_default = 'No';      # default answer
+my $bkup_std_default = 'Yes';      # default answer
 
 print "\n\n\tWould you like to backup and copy the Std tables? ($bkup_std_default) --> ";
-my $bkup_std = <STDIN>;           # user answer: Y/N flag
-chomp $bkup_std;
-if ($bkup_std eq '') {
-    $bkup_std = $bkup_std_default;  
-}
-until ( $bkup_std =~ /(Y|Yes|N|No)/i ) {
-    print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
-    $bkup_std = <STDIN>;
-    chomp $bkup_std;
+my $bkup_std = $bkup_std_default;
+unless ($scriptmode) {
+	$bkup_std = <STDIN>;           # user answer: Y/N flag
+	chomp $bkup_std;
+	if ($bkup_std eq '') {
+    		$bkup_std = $bkup_std_default;  
+	}
+	until ( $bkup_std =~ /(Y|Yes|N|No)/i ) {
+    		print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
+    		$bkup_std = <STDIN>;
+    		chomp $bkup_std;
+	}
 }
 
 #If STD
@@ -1387,15 +1437,18 @@ if ( $mysql_cs_load  =~ /(Y|Yes)/i){
 my $bkup_cs_default = 'No';      # default answer
 
 print "\n\n\tWould you like to backup and copy the CS tables? ($bkup_cs_default) --> ";
-my $bkup_cs = <STDIN>;           # user answer: Y/N flag
-chomp $bkup_cs;
-if ($bkup_cs eq '') {
-    $bkup_cs = $bkup_cs_default;
-}
-until ( $bkup_cs =~ /(Y|Yes|N|No)/i ) {
-    print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
-    $bkup_cs = <STDIN>;
-    chomp $bkup_cs;
+my $bkup_cs = $bkup_cs_default;
+unless ($scriptmode) {
+	$bkup_cs = <STDIN>;           # user answer: Y/N flag
+	chomp $bkup_cs;
+	if ($bkup_cs eq '') {
+    		$bkup_cs = $bkup_cs_default;
+	}
+	until ( $bkup_cs =~ /(Y|Yes|N|No)/i ) {
+    		print "\n\nInvalid Entry!!!\nPlease type \"Y\" or \"N\" --> ";
+    		$bkup_cs = <STDIN>;
+    		chomp $bkup_cs;
+	}
 }
 
 #If CS
