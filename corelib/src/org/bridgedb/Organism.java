@@ -27,32 +27,51 @@ import java.util.Map;
  * enum representing organisms understood by PathVisio.
  * Handles conversion from full bionominal name to common name and short code.
  * Still work in progress, currently not used everywhere it could be used.
- * TODO: make extensible 
+ * <p>
+ * TODO: this class will move to the org.bridgedb.bio package in the future.
+ * <p> 
+ * TODO: make extensible
  */
-public enum Organism {
-
+public enum Organism 
+{
 	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito"),
 	ArabidopsisThaliana("Arabidopsis thaliana", "At"),
-	BosTaurus("Bos taurus", "Bt", "Cow"),
 	BacillusSubtilis("Bacillus subtilis", "Bs"),
+	BosTaurus("Bos taurus", "Bt", "Cow"),
 	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm"),
 	CanisFamiliaris("Canis familiaris", "Cf", "Dog"),
-	DanioRero("Danio rerio", "Dr", "Zebra fish"),
+	CionaIntestinalis("Ciona intestinalis", "Ci", "Sea Squirt"),
+	DanioRerio("Danio rerio", "Dr", "Zebra fish"),
+	DasypusNovemcinctus("Dasypus novemcinctus", "Dn", "Armadillo"),
 	DrosophilaMelanogaster("Drosophila melanogaster", "Dm", "Fruit fly"),
 	EscherichiaColi("Escherichia coli", "Ec"),	
+	EchinposTelfairi ("Echinops telfairi", "Et", "Hedgehog"),
 
 	//NB: two-letter code is Qc to disambiguate from E. coli	
 	EquusCaballus("Equus caballus", "Qc", "Horse"),
 	
 	GallusGallus("Gallus gallus", "Gg", "Chicken"),
 	HomoSapiens("Homo sapiens", "Hs", "Human"),
+	LoxodontaAfricana ("Loxodonta africana", "La", "Elephant"),
+	MacacaMulatta ("Macaca mulatta", "Ml", "Rhesus Monkey"),
 	MusMusculus("Mus musculus", "Mm", "Mouse"),
+	MonodelphisDomestica  ("Monodelphis domestica", "Md", "Opossum"),
+	OrnithorhynchusAnatinus	("Ornithorhynchus anatinus", "Oa", "Platypus"),
 	OryzaSativa("Oryza sativa", "Os", "Rice"),
+	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish"),
+	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit"),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee"),
+	
+	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	
+	PopulusTrichocarpa("Populus trichocarpa", "Pi", "Western Balsam Poplar"),
 	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat"),
 	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast"),
+	SorexAraneus ("Sorex araneus", "Sa", "Shrew"),
+	SorghumBicolor ("Sorghum bicolor", "Sb", "Sorghum"),
+	TetraodonNigroviridis ("Tetraodon nigroviridis", "Tn", "Pufferfish"),
 	TriticumAestivum ("Triticum aestivum", "Ta", "Wheat"),
 	XenopusTropicalis("Xenopus tropicalis", "Xt", "Frog"),
+	VitisVinifera ("Vitis vinifera", "Vv", "Wine Grape"),
 	ZeaMays ("Zea mays", "Zm", "Maize"),
 	;
 	

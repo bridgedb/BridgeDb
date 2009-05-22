@@ -57,6 +57,8 @@ PathVisio should never have to refer to system codes as Strings, except
 </ul>
 The preferred way to refer to a specific database is using a 
 constant defined here, e.g. "DataSource.ENSEMBL"
+<p>
+TODO: The definitions for the individual DataSources will move to the org.bridgedb.bio package in the future.
 */
 public final class DataSource
 {
@@ -176,7 +178,7 @@ public final class DataSource
 		"EnDr", "Ensembl Zebrafish", 
 		new PrefixUrlMaker("http://www.ensembl.org/Danio_rerio/Gene/Summary?g="), 
 		"http://www.ensembl.org", 
-		"ENSDARG00000024771", true, false, Organism.DanioRero);
+		"ENSDARG00000024771", true, false, Organism.DanioRerio);
 	public static final DataSource ENSEMBL_ECOLI = new DataSource (
 		"EnEc", "Ensembl E. coli", 
 		new PrefixUrlMaker("http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g="), 
@@ -420,7 +422,7 @@ public final class DataSource
 	public static final DataSource ZFIN = new DataSource (
 		"Z", "ZFIN", 
 		new PrefixUrlMaker ("http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID="),
-		"http://zfin.org", "ZDB-GENE-041118-11", true, false, Organism.DanioRero);
+		"http://zfin.org", "ZDB-GENE-041118-11", true, false, Organism.DanioRerio);
 
 	private String sysCode = null;
 	private String fullName = null;

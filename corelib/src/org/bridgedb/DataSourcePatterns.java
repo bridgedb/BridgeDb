@@ -46,7 +46,8 @@ public class DataSourcePatterns
 			Pattern.compile("S\\d{9}"));
 		patterns.put(
 			DataSource.FLYBASE, 
-			Pattern.compile("FB//w{2}//d{7}"));		
+			Pattern.compile("(C[RG]\\d{4,5}|FBgn\\d{7})")
+		);		
 		//genbank (http://www.ncbi.nlm.nih.gov/Sequin/acc.html)		
 		patterns.put(
 				DataSource.GENBANK, 
@@ -60,15 +61,35 @@ public class DataSourcePatterns
 		//entrez gene
 		patterns.put(
 				DataSource.ENTREZ_GENE, 
-				Pattern.compile("\\d{3,4}")
+				Pattern.compile("\\d+")
 		);
 
 		//MGI
 		patterns.put(
 				DataSource.MGI, 
-				Pattern.compile("MGI://d+")
+				Pattern.compile("MGI:\\d+")
 		);
 
+		patterns.put (
+				DataSource.RFAM,
+				Pattern.compile ("RF\\d+")
+		);
+		patterns.put (
+				DataSource.IPI,
+				Pattern.compile ("IPI\\d+")
+		);
+		patterns.put (
+				DataSource.UCSC,
+				Pattern.compile ("uc\\d{3}[a-z]{3}\\.\\d")
+		);
+		patterns.put (
+				DataSource.ILLUMINA,
+				Pattern.compile ("ILMN_\\d+")
+		);
+		patterns.put (
+				DataSource.MIRBASE,
+				Pattern.compile ("MI\\d+")
+		);
 		//refseq
 		patterns.put(
 				DataSource.REFSEQ, 
@@ -96,7 +117,7 @@ public class DataSourcePatterns
 		//unigene
 		patterns.put(
 				DataSource.UNIGENE, 
-				Pattern.compile("\\w{2}\\.\\d+")
+				Pattern.compile("[A-Z][a-z][a-z]?\\.\\d+")
 		);
 
 		//Wormbase
@@ -113,10 +134,89 @@ public class DataSourcePatterns
 
 		//Ensemble
 		patterns.put(
-				DataSource.ENSEMBL, 
+				DataSource.ENSEMBL_HUMAN, 
 				Pattern.compile("ENSG\\d{11}")
 		);
-
+		patterns.put(
+				DataSource.ENSEMBL_MOUSE, 
+				Pattern.compile("ENSMUSG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_RAT, 
+				Pattern.compile("ENSRNOG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_MOSQUITO, 
+				Pattern.compile("AGAP\\d{6}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_BSUBTILIS, 
+				Pattern.compile("EBBACG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_ECOLI, 
+				Pattern.compile("EBESCG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_CHICKEN, 
+				Pattern.compile("ENSGALG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_HORSE, 
+				Pattern.compile("ENSECAG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_XENOPUS, 
+				Pattern.compile("ENSXETG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_CHIMP, 
+				Pattern.compile("ENSPTRG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_COW, 
+				Pattern.compile("ENSBTAG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_DOG, 
+				Pattern.compile("ENSCAFG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_ZEBRAFISH, 
+				Pattern.compile("ENSDARG\\d{11}")
+		);
+		patterns.put(
+				DataSource.ENSEMBL_FRUITFLY, 
+				Pattern.compile("FBgn\\d{7}")
+		);
+		patterns.put(
+				DataSource.TAIR,
+				Pattern.compile("AT[\\dCM]G\\d{5}")
+				);
+		patterns.put(
+				DataSource.GRAMENE_ARABIDOPSIS,
+				Pattern.compile("AT[\\dCM]G\\d{5}\\-TAIR\\-G")
+		);
+		patterns.put(
+				DataSource.IRGSP_GENE,
+				Pattern.compile("Os\\d{2}g\\d+")
+		);
+		patterns.put(
+				DataSource.GRAMENE_GENES_DB,
+				Pattern.compile("GR:\\d+")
+		);
+		patterns.put(
+				DataSource.BIOGRID,
+				Pattern.compile("\\d+")
+		);
+		patterns.put(
+				DataSource.NASC_GENE,
+				Pattern.compile("AT[\\dCM]G\\d{5}\\-TAIR\\-G")
+		);
+		patterns.put(
+				DataSource.PLANTGDB,
+				Pattern.compile("PUT-[\\w\\d-]+")
+		);
 		//EMBL		
 		patterns.put(
 				DataSource.EMBL,
@@ -124,7 +224,10 @@ public class DataSourcePatterns
 		);
 		
 		//HUGO
-		//not yet found
+		patterns.put(
+				DataSource.HUGO,
+				Pattern.compile("\\d+")
+		);
 		
 		//OMIM (http://www.ncbi.nlm.nih.gov/Omim/omimfaq.html#numbering_system)		
 		patterns.put(
@@ -135,7 +238,7 @@ public class DataSourcePatterns
 		//PDB ( http://www.rcsb.org/robohelp_f/#search_database/query_results.htm )
 		patterns.put(
 				DataSource.PDB, 
-				Pattern.compile("[0-9][a-z,0-9][a-z,0-9][a-z,0-9][a-z,0-9]")
+				Pattern.compile("\\d[A-Z\\d]{3}")
 		);
 
 		//Pfam (http://pfam.sanger.ac.uk/help)
