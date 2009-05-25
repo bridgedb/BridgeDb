@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="IdMapper" default="jar" basedir=".">
+<project name="BatchMapper" default="jar" basedir=".">
 	
 	<path id="project.class.path">
 		<pathelement location="build"/>
@@ -24,9 +24,9 @@
 	</target>
 	
 	<target name="jar" depends="compile">
-		<jar jarfile="../lib/bridgedb-idmapper.jar">
+		<jar jarfile="../lib/bridgedb-batchmapper.jar">
 			<manifest>
-				<attribute name="Main-Class" value="org.bridgedb.tools.IdMapper"/>
+				<attribute name="Main-Class" value="org.bridgedb.tools.BatchMapper"/>
 				<attribute name="Class-Path" value="bridgedb.jar"/>
 			</manifest>
 			<fileset dir="build" includes="**/*.class"/>

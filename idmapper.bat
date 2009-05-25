@@ -1,1 +1,0 @@
-java -jar lib/bridgedb-idmapper.jar %*

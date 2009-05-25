@@ -35,7 +35,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.SimpleGdbFactory;
 import org.bridgedb.Xref;
 
-public class IdMapper 
+public class BatchMapper 
 {
 	private static class Settings
 	{
@@ -51,7 +51,7 @@ public class IdMapper
 	
 	public static void main(String[] args)
 	{
-		IdMapper mapper = new IdMapper();
+		BatchMapper mapper = new BatchMapper();
 		mapper.run(args);
 	}
 	

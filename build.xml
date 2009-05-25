@@ -11,8 +11,8 @@
 	<property name="zipbase" value="bridgedb-${bridgedb.version}"/>
 	<zip destfile="${zipbase}.zip">
 		<zipfileset dir="." prefix="bridgedb-${bridgedb.version}">
-			<include name="idmapper.sh"/>
-			<include name="idmapper.bat"/>
+			<include name="batchmapper.sh"/>
+			<include name="batchmapper.bat"/>
 			<include name="lib/bridgedb.jar"/>
 			<include name="lib/bridgedb-idmapper.jar"/>
 			<include name="lib/derby.jar"/>
@@ -33,7 +33,7 @@
   <!-- ant "subroutine" that calls all modules -->
   <target name="_allmodules">
 	<ant dir="corelib" target="${allmodules.target}"/>
-	<ant dir="idmapper" target="${allmodules.target}"/>
+	<ant dir="batchmapper" target="${allmodules.target}"/>
 	<ant dir="makeGdb" target="${allmodules.target}"/>
 	<ant dir="cytoscape-plugin" target="${allmodules.target}"/>  
   </target>
