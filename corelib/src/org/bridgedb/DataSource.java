@@ -675,7 +675,7 @@ public final class DataSource
 	 */
 	public boolean isPrimary()
 	{
-		return isPrimary();
+		return isPrimary;
 	}
 	
 	/**

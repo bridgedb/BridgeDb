@@ -1,0 +1,32 @@
+Dasypus	novemcinctus	Armadillo	Dn
+Caenorhabditis	elegans	Celegans	Ce
+Gallus	gallus	Chicken	Gg
+Pan	troglodytes	Chimp	Pt
+Bos	Taurus	Cow	Bt
+Canis	familiaris	Dog	Cf
+Loxodonta	africana	Elephant	La
+Drosophila	melanogaster	Fruitfly	Dm
+Echinops	telfairi	Hedgehog	Et
+Equus	caballus	Horse	Qc
+Homo	sapiens	Human	Hs
+Oryzias	latipes	Medaka	Fish	Ol
+Anopheles	gambiae	Mosquito_Ag	Ag
+Mus	musculus	Mouse	Mm
+Monodelphis	domestica	Opossum	Md
+Ornithorhynchus	anatinus	Platypus	Oa
+Tetraodon	nigroviridis	Pufferfish	Tn
+Oryctolagus	cuniculus	Rabbit	Oc
+Rattus	norvegicus	Rat	Rn
+Macaca	mulatta	Rhesus	Monkey	Ml
+Sorex	araneus	Shrew	Sa
+Ciona	intestinalis	Sea	Squirt	Ci
+Xenopus	tropicalis	Xenopus	Xt
+Saccharomyces	cerevisiae	Yeast	Sc
+Danio	rerio	Zebrafish	Dr
+Arabidopsis	thaliana	Arabidopsis	At
+Oryza	sativa	Japanese	Rice	Os
+Sorghum	bicolor	Sorghum	Sb
+Vitis	vinifera	Wine	Grape	Vv
+Populus	trichocarpa	Western	Balsam	Poplar	Pi
+Bacillus	subtilis	Bsubtilis	Bs
+Escherichia	coli	Ecoli	Ec
