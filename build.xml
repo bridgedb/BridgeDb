@@ -34,8 +34,6 @@
   <target name="_allmodules">
 	<ant dir="corelib" target="${allmodules.target}"/>
 	<ant dir="batchmapper" target="${allmodules.target}"/>
-	<ant dir="makeGdb" target="${allmodules.target}"/>
-	<ant dir="cytoscape-plugin" target="${allmodules.target}"/>  
   </target>
 
 </project>
