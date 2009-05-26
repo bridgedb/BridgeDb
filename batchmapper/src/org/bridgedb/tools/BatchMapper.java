@@ -66,10 +66,10 @@ public class BatchMapper
 				" (r" + props.getProperty("REVISION") + ")";
 		}
 		catch (IOException ex) { version = ex.getMessage(); } 
-		System.out.println ("IdMapper version " + version);
+		System.out.println ("BatchMapper version " + version);
 		System.out.print (
 				"Usage:\n"+
-				"	idmapper \n" +
+				"	batchmapper \n" +
 				"		[-v|-vv] \n" +
 				"		-g <gene database> \n " +
 				"		-i <input file> \n" +
