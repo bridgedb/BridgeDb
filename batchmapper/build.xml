@@ -22,7 +22,11 @@
 			<classpath refid="project.class.path"/>
 		</javac>
 	</target>
-	
+
+	<target name="test" depends="compile" description="Test batchmapper">
+		<!-- TODO -->
+	</target>
+
 	<target name="jar" depends="compile">
 		<jar jarfile="../lib/bridgedb-batchmapper.jar">
 			<manifest>

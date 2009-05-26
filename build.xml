@@ -30,6 +30,12 @@
 	</antcall>
   </target>
 
+  <target name="test">
+	<antcall target="_allmodules">
+		<param name="allmodules.target" value="test"/>
+	</antcall>
+  </target>
+
   <!-- ant "subroutine" that calls all modules -->
   <target name="_allmodules">
 	<ant dir="corelib" target="${allmodules.target}"/>
