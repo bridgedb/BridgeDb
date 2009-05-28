@@ -25,21 +25,36 @@ import java.util.Set;
  * Has methods for basic functionality such as looking up cross-references and backpage text.
  */
 public interface IDMapper {
-    
-	/**
+    /**
      * Supports one-to-one mapping and one-to-many mapping.
      * @param srcXrefs source Xref, containing ID and ID type/data source
      * @param tgtDataSources target ID types/data sources
      * @return a map from source Xref to target Xref's
+     * @throws IDMapperException if failed
      */
     public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException;
 
-    // Check whether an Xref exists.
+    /**
+     * Check whether an Xref exists.
+     * @param xref reference to check
+     * @return if the reference exists, false if not
+     * @throws IDMapperException if failed
+     */
     public boolean xrefExists(Xref xref) throws IDMapperException;
 
-    // Free text search
+    /**
+     * free text search for matching symbols or identifiers
+     * @param text text to search
+     * @param limit up limit of number of hits
+     * @return a set of hit references
+     * @throws IDMapperException if failed
+     * @throws UnsupportedOperationException if free search is not supported.
+     */
     public Set<Xref> freeSearch (String text, int limit) throws IDMapperException;
 
-    // returns capacities of the ID mapper
+    /**
+     *
+     * @return capacities of the ID mapper
+     */
     public IDMapperCapabilities getCapabilities();
 }

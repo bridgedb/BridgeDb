@@ -25,14 +25,24 @@ import java.util.Set;
  */
 public interface IDMapperCapabilities {
     // get all supported organisms
-    // TODO: to modify--better to keep the bio concept Organism in a high level
+    //TODO: to modify--better to keep the bio concept Organism in a high level
     //public Set<Organism> getSupportedOrganisms();
 
+    /**
+     *
+     * @return true if free text search is supported, false otherwise.
+     */
     public boolean isFreeSearchSupported();
 
-    // returns supported source ID types
+    /**
+     *
+     * @return supported source ID types
+     */
     public Set<DataSource>  getSupportedSrcDataSources();
 
-    // returns supported target ID types
+    /**
+     *
+     * @return supported target ID types
+     */
     public Set<DataSource> getSupportedTgtDataSources();
 }
