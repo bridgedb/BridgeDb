@@ -21,23 +21,24 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
- * 
+ * Base interface for all id mapping methods.
+ * Has methods for basic functionality such as looking up cross-references and backpage text.
  */
 public interface IDMapper {
-        /**
+    
+	/**
      * Supports one-to-one mapping and one-to-many mapping.
      * @param srcXrefs source Xref, containing ID and ID type/data source
      * @param tgtDataSources target ID types/data sources
      * @return a map from source Xref to target Xref's
      */
-    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources);
+    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException;
 
     // Check whether an Xref exists.
-    public boolean xrefExists(Xref xref);
+    public boolean xrefExists(Xref xref) throws IDMapperException;
 
     // Free text search
-    public Set<Xref> freeSearch (String text, int limit);
+    public Set<Xref> freeSearch (String text, int limit) throws IDMapperException;
 
     // returns capacities of the ID mapper
     public IDMapperCapabilities getCapabilities();

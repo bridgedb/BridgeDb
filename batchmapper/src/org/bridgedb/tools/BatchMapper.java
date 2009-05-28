@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.bridgedb.DataDerby;
-import org.bridgedb.DataException;
-import org.bridgedb.Gdb;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.IDMapperRdb;
 import org.bridgedb.DataSource;
 import org.bridgedb.SimpleGdbFactory;
 import org.bridgedb.Xref;
@@ -61,7 +61,7 @@ public class BatchMapper
 		try
 		{
 			Properties props = new Properties();
-			props.load (Gdb.class.getResourceAsStream("BridgeDb.properties"));
+			props.load (IDMapperRdb.class.getResourceAsStream("BridgeDb.properties"));
 			version = props.getProperty("bridgedb.version") + 
 				" (r" + props.getProperty("REVISION") + ")";
 		}
@@ -170,7 +170,7 @@ public class BatchMapper
 		private int verbose = 0; // 0, 1 or 2
 
 		PrintStream report = System.out;
-		private Gdb gdb;
+		private IDMapperRdb gdb;
 		
 		private List<Xref> missing = new ArrayList<Xref>();
 		private List<Xref> ambiguous = new ArrayList<Xref>();
@@ -189,12 +189,12 @@ public class BatchMapper
 			this.verbose = verbose;
 		}
 		
-		private void connectGdb() throws DataException
+		private void connectGdb() throws IDMapperException
 		{
 			gdb = SimpleGdbFactory.createInstance("" + fGdb, new DataDerby(), 0);
 		}
 		
-		public void writeMapping() throws IOException, DataException
+		public void writeMapping() throws IOException, IDMapperException
 		{
 			LineNumberReader reader = new LineNumberReader(new FileReader (fInput));
 			String line;
@@ -281,7 +281,7 @@ public class BatchMapper
 			{
 				ex.printStackTrace();
 			}
-			catch (DataException ex)
+			catch (IDMapperException ex)
 			{
 				ex.printStackTrace();
 			}

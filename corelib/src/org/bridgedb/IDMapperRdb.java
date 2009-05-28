@@ -16,13 +16,16 @@
 //
 package org.bridgedb;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Interface for all classes that provide Gdb-like functionality,
  * such as looking up cross-references and backpage text.
  */
-public interface Gdb 
+public abstract class IDMapperRdb implements IDMapper
 {
 	/**
 	 * Check whether a connection to the database exists
@@ -34,27 +37,20 @@ public interface Gdb
 	 * the constructor, and throw an exception at that moment
 	 * if a connection is not possible.
 	 */
-	public boolean isConnected();
+	public abstract boolean isConnected();
 
 	/**
 	 * Gets the name of the currently used gene database
 	 * @return the database name as specified in the connection string
 	 */
-	public String getDbName();
+	public abstract String getDbName();
 
 	/**
-	 * Gets the backpage info for the given gene id for display on BackpagePanel
+	 * Gets the backpage info for the given gene id for display on BackpagePanel.
 	 * @param ref The gene to get the backpage info for
 	 * @return String with the backpage info, null if the gene was not found
 	 */
-	public String getBpInfo(Xref ref) throws DataException;
-
-	/**
-	 * Checks whether the given reference exists in the database
-	 * @param xref The reference to check
-	 * @return true if the reference exists, false if not
-	 */
-	public boolean xrefExists(Xref xref) throws DataException;
+	public abstract String getBpInfo(Xref ref) throws IDMapperException;
 	
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
@@ -64,7 +60,7 @@ public interface Gdb
 	 * @return A {@link List} containing the cross references, or an empty
 	 * {@link List} when no cross references could be found
 	 */
-	public List<Xref> getCrossRefs(Xref idc) throws DataException;
+	public abstract List<Xref> getCrossRefs(Xref idc) throws IDMapperException;
 
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
@@ -75,7 +71,7 @@ public interface Gdb
 	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
 	 */
-	public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws DataException;
+	public abstract List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException;
 
 	/**
 	 * Get a list of cross-references for the given attribute name/value pair. This
@@ -85,28 +81,50 @@ public interface Gdb
 	 * @return A list with the cross-references that have this attribute name/value, or an
 	 * empty list if no cross-references could be found for this attribute name/value.
 	 */
-	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws DataException;
+	public abstract List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
 
 	/**
 	 * Closes the connection to the Gene Database if possible
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public void close() throws DataException;
+	public abstract void close() throws IDMapperException;
 
 	/**
 	 * Get up to limit suggestions for a symbol autocompletion
 	 */
-	public List<String> getSymbolSuggestions(String text, int limit) throws DataException;
+	public abstract List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException;
 
 	
 	/**
 	 * Get up to limit suggestions for a identifier autocompletion
 	 */
-	public List<Xref> getIdSuggestions(String text, int limit) throws DataException;
+	public abstract List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException;
 	
 	/**
 	 * free text search for matching symbols or identifiers
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public List<XrefWithSymbol> freeSearch (String text, int limit) throws DataException;
+	public abstract List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException;
+
+	/**
+	 * free text search for matching symbols or identifiers
+	 * @throws IDMapperException 
+	 */
+	public Set<Xref> freeSearch(String text, int limit) throws IDMapperException 
+	{
+		// turn XrefWithSymbol list into Xref list
+		Set<Xref> result = new HashSet<Xref>();
+		for (XrefWithSymbol i : freeSearchWithSymbol(text, limit))
+		{
+			result.add(i.asXref());
+		}
+		return result;
+	}
+	
+	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}	
+
 }

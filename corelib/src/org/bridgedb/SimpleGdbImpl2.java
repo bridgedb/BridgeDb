@@ -21,7 +21,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 
@@ -90,6 +92,9 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 	}
 	
+	final LazyPst pstDatasources = new LazyPst(
+			"SELECT codeRight FROM link GROUP BY codeRight"
+		);
 	final LazyPst pstXrefExists = new LazyPst(
 			"SELECT id FROM " + "datanode" + " WHERE " +
 			"id = ? AND code = ?"
@@ -132,7 +137,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * @param code systemcode of the gene identifier
 	 * @return The gene symbol, or null if the symbol could not be found
 	 */
-	public String getGeneSymbol(Xref ref) throws DataException 
+	public String getGeneSymbol(Xref ref) throws IDMapperException 
 	{
 		try {
 			PreparedStatement pst = pstGeneSymbol.getPreparedStatement();
@@ -145,16 +150,16 @@ class SimpleGdbImpl2 extends SimpleGdb
 				return r.getString(1);
 			}
 		} catch (SQLException e) {
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		return null;
 	}
 	
 	/**
 	 * Simply checks if an xref occurs in the datanode table.
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public boolean xrefExists(Xref xref) throws DataException 
+	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
 		try 
 		{
@@ -170,7 +175,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		} 
 		catch (SQLException e) 
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		return false;
 	}
@@ -180,7 +185,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * @param ref The gene to get the backpage info for
 	 * @return String with the backpage info, null if no info was found
 	 */
-	public String getBpInfo(Xref ref) throws DataException 
+	public String getBpInfo(Xref ref) throws IDMapperException 
 	{
 		try {
 			PreparedStatement pst = pstBackpage.getPreparedStatement();
@@ -193,7 +198,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 				result = r.getString(1);
 			}
 			return result;
-		} catch	(SQLException e) { throw new DataException (e); } //Gene not found
+		} catch	(SQLException e) { throw new IDMapperException (e); } //Gene not found
 	}
 
 	/**
@@ -206,7 +211,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * ArrayList when no cross references could be found
 	 */
 	@Override
-	public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws DataException 
+	public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException 
 	{
 //		Logger.log.trace("Fetching cross references");
 
@@ -239,13 +244,13 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		
 		return refs;
 	}
 
-	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws DataException {
+	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
 //		Logger.log.trace("Fetching cross references by attribute: " + attrName + " = " + attrValue);
 		List<Xref> refs = new ArrayList<Xref>();
 
@@ -259,7 +264,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 				refs.add(ref);
 			}
 		} catch(SQLException e) {
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 //		Logger.log.trace("End fetching cross references by attribute");
 		return refs;
@@ -271,7 +276,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * @param connector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
 	 * A new instance of this class is created automatically.
 	 */
-	public SimpleGdbImpl2(String dbName, DBConnector newDbConnector, int props) throws DataException
+	public SimpleGdbImpl2(String dbName, DBConnector newDbConnector, int props) throws IDMapperException
 	{
 		if(dbName == null) throw new NullPointerException();
 
@@ -283,11 +288,11 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 		catch (InstantiationException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		} 
 		catch (IllegalAccessException e) 
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 
 //		Logger.log.trace("Opening connection to Gene Database " + dbName);
@@ -301,13 +306,13 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			catch (SQLException e)
 			{
-				throw new DataException (e);
+				throw new IDMapperException (e);
 			}
 			checkSchemaVersion();
 		}
 	}
 	
-	private void checkSchemaVersion() throws DataException 
+	private void checkSchemaVersion() throws IDMapperException 
 	{
 		int version = 0;
 		try 
@@ -321,7 +326,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 		if(version != GDB_COMPAT_VERSION) 
 		{
-			throw new DataException ("Implementation and schema version mismatch");
+			throw new IDMapperException ("Implementation and schema version mismatch");
 		}
 	}
 
@@ -409,9 +414,9 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * @param text The text to base the suggestions on
 	 * @param limit The number of results to limit the search to
 	 * 
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public List<String> getSymbolSuggestions(String text, int limit) throws DataException 
+	public List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException 
 	{		
 		List<String> result = new ArrayList<String>();
 		try {
@@ -428,7 +433,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 				result.add(symbol);
 			}
 		} catch (SQLException e) {
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		return result;
 	}
@@ -439,7 +444,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * @param limit The number of results to limit the search to
 	 * @param caseSensitive if true, the search will be case sensitive
 	 */
-	public List<Xref> getIdSuggestions(String text, int limit) throws DataException 
+	public List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException 
 	{		
 		List<Xref> result = new ArrayList<Xref>();
 		try {
@@ -456,7 +461,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 				result.add (ref);
 			}
 		} catch (SQLException e) {
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 //		if(limit > NO_LIMIT && sugg.size() == limit) sugg.add("...results limited to " + limit);
 		return result;
@@ -466,9 +471,9 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * free text search for matching symbols or identifiers
 	 * @param text The text to base the suggestions on
 	 * @param limit The number of results to limit the search to
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public List<XrefWithSymbol> freeSearch (String text, int limit) throws DataException 
+	public List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException 
 	{		
 		List<XrefWithSymbol> result = new ArrayList<XrefWithSymbol>();
 		try {
@@ -522,7 +527,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			
 		} catch (SQLException e) {
-			throw new DataException(e);
+			throw new IDMapperException(e);
 		}
 		return result;
 	}
@@ -594,7 +599,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	   You can call this at any time after creating the tables,
 	   but it is good to do it only after inserting all data.
 	 */
-	public void createGdbIndices() throws DataException 
+	public void createGdbIndices() throws IDMapperException 
 	{
 		try
 		{
@@ -618,14 +623,14 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 	}
 
 	/**
 	   prepare for inserting genes and/or links
 	 */
-	public void preInsert() throws DataException
+	public void preInsert() throws IDMapperException
 	{
 		try
 		{
@@ -650,7 +655,49 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
-	}	
+	}
+
+	private Set<DataSource> getDataSources()
+	{
+		Set<DataSource> result = new HashSet<DataSource>();
+    	try
+    	{
+    	 	PreparedStatement pst = pstDatasources.getPreparedStatement();
+    	 	ResultSet rs = pst.executeQuery();
+    	 	while (rs.next())
+    	 	{
+    	 		DataSource ds = DataSource.getBySystemCode(rs.getString(1)); 
+    	 		System.out.println (ds + "\t" + ds.getSystemCode());
+    	 		result.add (ds);
+    	 	}
+    	}
+    	catch (SQLException ignore)
+    	{
+    		ignore.printStackTrace(); 
+    		// we return an empty list if there was an exception
+    	}
+    	return result;
+	}
+	
+	private final IDMapperCapabilities caps = new IDMapperCapabilities()
+	{
+	    public boolean isFreeSearchSupported() { return true; }
+
+	    public Set<DataSource> getSupportedSrcDataSources()
+	    {
+	    	return getDataSources(); 
+	    }
+
+	    public Set<DataSource> getSupportedTgtDataSources()
+	    {
+	    	return getDataSources(); 
+	    }
+	};
+
+	public IDMapperCapabilities getCapabilities() 
+	{
+		return caps;
+	}
 }

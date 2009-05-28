@@ -42,7 +42,7 @@ public class SimpleGdbFactory
 	 * 
 	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
 	*/
-	public static SimpleGdb createInstance(String dbName, DBConnector newDbConnector, int props) throws DataException
+	public static SimpleGdb createInstance(String dbName, DBConnector newDbConnector, int props) throws IDMapperException
 	{
 		if(dbName == null) throw new NullPointerException();
 		
@@ -56,11 +56,11 @@ public class SimpleGdbFactory
 		}
 		catch (InstantiationException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		} 
 		catch (IllegalAccessException e) 
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 
 //		Logger.log.trace("Opening connection to Gene Database " + dbName);
@@ -101,7 +101,7 @@ public class SimpleGdbFactory
 			return new SimpleGdbImpl2(dbName, newDbConnector, props);
 		//TODO add new schema versions here
 		default:
-			throw new DataException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
+			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
 					"version of this software and databases");
 		}		
 	}

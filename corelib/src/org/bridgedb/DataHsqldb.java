@@ -38,7 +38,7 @@ public class DataHsqldb extends DBConnector
 	static final String[] DB_EXT = new String[] { "*." + DB_FILE_EXT };
 	static final String[] DB_EXT_NAMES = new String[] { "Hsqldb Database" };
 		
-	public Connection createConnection(String dbName, int props) throws DataException 
+	public Connection createConnection(String dbName, int props) throws IDMapperException 
 	{
 		Connection con;
 		try
@@ -65,22 +65,22 @@ public class DataHsqldb extends DBConnector
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		catch (ClassNotFoundException f)
 		{
-			throw new DataException (f);
+			throw new IDMapperException (f);
 		}
 	
 		return con;
 	}
 
-	public void closeConnection(Connection con) throws DataException 
+	public void closeConnection(Connection con) throws IDMapperException 
 	{	
 		closeConnection(con, PROP_NONE);
 	}
 	
-	public void closeConnection(Connection con, int props) throws DataException 
+	public void closeConnection(Connection con, int props) throws IDMapperException 
 	{
 		try
 		{
@@ -94,7 +94,7 @@ public class DataHsqldb extends DBConnector
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 	}
 	
@@ -126,13 +126,13 @@ public class DataHsqldb extends DBConnector
 	}
 
 	Connection newDbCon;
-	public Connection createNewDatabaseConnection(String dbName) throws DataException 
+	public Connection createNewDatabaseConnection(String dbName) throws IDMapperException 
 	{
 		newDbCon = createConnection(dbName, PROP_RECREATE);
 		return newDbCon;
 	}
 
-	public String finalizeNewDatabase(String dbName) throws DataException 
+	public String finalizeNewDatabase(String dbName) throws IDMapperException 
 	{
 		if(newDbCon != null) closeConnection(newDbCon, PROP_FINALIZE);
 		setPropertyReadOnly(dbName, true);

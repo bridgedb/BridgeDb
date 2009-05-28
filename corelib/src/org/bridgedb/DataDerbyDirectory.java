@@ -30,7 +30,7 @@ public class DataDerbyDirectory extends DataDerby
 {	
 	String lastDbName;
 		
-	public String finalizeNewDatabase(String dbName) throws DataException
+	public String finalizeNewDatabase(String dbName) throws IDMapperException
 	{
 		try
 		{
@@ -44,7 +44,7 @@ public class DataDerbyDirectory extends DataDerby
 			    // http://db.apache.org/derby/docs/10.3/getstart/rwwdactivity3.html
 //				Logger.log.info ("Database shudown cleanly");
 			}
-			else throw new DataException (e);
+			else throw new IDMapperException (e);
 		}
 		return dbName;
 	}	

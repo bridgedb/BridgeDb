@@ -17,6 +17,7 @@
 package org.bridgedb;
 
 import java.io.File;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -32,7 +33,7 @@ public class Test extends TestCase
 
 	boolean eventReceived = false;
 	
-	public void testGdbConnect() throws DataException
+	public void testGdbConnect() throws IDMapperException
 	{
 		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense. 
 		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
@@ -50,6 +51,6 @@ public class Test extends TestCase
 		
 		// assert that you can refer to 
 		// undeclared systemcodes if necessary.
-		assertNotNull (DataSource.getBySystemCode ("##"));
+		assertNotNull (DataSource.getBySystemCode ("##"));		
 	}
 }

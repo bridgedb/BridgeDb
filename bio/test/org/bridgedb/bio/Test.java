@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bridgedb.DataDerby;
-import org.bridgedb.DataException;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.SimpleGdb;
@@ -42,12 +42,23 @@ public class Test extends TestCase
 		"PathVisio-Data/gene databases/Rn_Derby_20081119.pgdb";
 
 	boolean eventReceived = false;
+
+	public void setUp()
+	{
+		// cause static initializer to run.
+		//TODO: find better solution
+		System.out.println (BioDataSource.WORMBASE);
+	}
 	
-	public void testGdbConnect() throws DataException
+	public void testGdbConnect() throws IDMapperException
 	{
 		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense. 
 		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
 		
+		Set<DataSource> supported = gdb.getCapabilities().getSupportedSrcDataSources();
+		assertTrue (supported.contains(BioDataSource.ENSEMBL));
+		assertFalse (supported.contains(BioDataSource.WORMBASE));
+
 		//symbol must be INSR
 		Xref ref = new Xref ("3643", BioDataSource.ENTREZ_GENE);
 		//TODO: CD220 is just one possible symbol, not the primary one.
@@ -83,7 +94,7 @@ public class Test extends TestCase
 		assertTrue (crossRefs4.contains(new Xref("207851_s_at", BioDataSource.AFFY)));
 		
 		// check free search
-		List<XrefWithSymbol> result5 = gdb.freeSearch ("Insulin", 100); 
+		List<XrefWithSymbol> result5 = gdb.freeSearchWithSymbol ("Insulin", 100); 
 		
 		Xref nonExistingRef = new Xref ("bla", BioDataSource.OTHER); 
 		assertNull (gdb.getGeneSymbol(nonExistingRef));

@@ -47,7 +47,7 @@ import java.util.List;
  * and use SimpleGdb directly 
  * to create or connect to one or more pgdb's of any type.
  */
-public abstract class SimpleGdb implements Gdb
+public abstract class SimpleGdb extends IDMapperRdb
 {		
 	SimpleGdb()
 	{
@@ -77,23 +77,23 @@ public abstract class SimpleGdb implements Gdb
 	/**
 	 * @param ref The Xref to get the symbol info for
 	 * @return The gene symbol, or null if the symbol could not be found
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	abstract public String getGeneSymbol(Xref ref) throws DataException; 
+	abstract public String getGeneSymbol(Xref ref) throws IDMapperException; 
 		
 	/**
 	 * Simply checks if an xref occurs in the datanode table.
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	abstract public boolean xrefExists(Xref xref) throws DataException; 
+	abstract public boolean xrefExists(Xref xref) throws IDMapperException; 
 
 	/**
 	 * Gets the backpage info for the given gene id for display on BackpagePanel
 	 * @param ref The gene to get the backpage info for
 	 * @return String with the backpage info, null if the gene was not found
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	abstract public String getBpInfo(Xref ref) throws DataException; 
+	abstract public String getBpInfo(Xref ref) throws IDMapperException; 
 
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
@@ -103,7 +103,7 @@ public abstract class SimpleGdb implements Gdb
 	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
 	 */
-	final public List<Xref> getCrossRefs(Xref idc) throws DataException
+	final public List<Xref> getCrossRefs(Xref idc) throws IDMapperException
 	{
 		return getCrossRefs(idc, null);
 	}
@@ -117,16 +117,16 @@ public abstract class SimpleGdb implements Gdb
 	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
 	 */
-	abstract public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws DataException; 
+	abstract public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException; 
 
-	abstract public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws DataException;
+	abstract public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
 	
 	/**
 	 * Closes the {@link Connection} to the Gene Database if possible
 	 */
-	final public void close() throws DataException 
+	final public void close() throws IDMapperException 
 	{
-		if (con == null) throw new DataException("Database connection already closed");
+		if (con == null) throw new IDMapperException("Database connection already closed");
 		dbConnector.closeConnection(con);
 		try
 		{
@@ -134,7 +134,7 @@ public abstract class SimpleGdb implements Gdb
 		}
 		catch (SQLException ex)
 		{
-			throw new DataException (ex);
+			throw new IDMapperException (ex);
 		}
 		con = null;
 	}
@@ -158,9 +158,9 @@ public abstract class SimpleGdb implements Gdb
 	 * @param text The text to base the suggestions on
 	 * @param limit The number of results to limit the search to
 	 * 
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	abstract public List<String> getSymbolSuggestions(String text, int limit) throws DataException;
+	abstract public List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException;
 
 	/**
 	 * Get up to limit suggestions for a identifier autocompletion
@@ -168,17 +168,17 @@ public abstract class SimpleGdb implements Gdb
 	 * 
 	 * @param text The text to base the suggestions on
 	 * @param limit The number of results to limit the search to
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	abstract public List<Xref> getIdSuggestions(String text, int limit) throws DataException; 
+	abstract public List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException; 
 
 	/**
 	 * free text search for matching symbols or identifiers
 	 * @param text The text to base the suggestions on
 	 * @param limit The number of results to limit the search to
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	abstract public List<XrefWithSymbol> freeSearch (String text, int limit) throws DataException; 
+	abstract public List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException; 
 	/**
 	 * Add a gene to the gene database
 	 */
@@ -196,17 +196,17 @@ public abstract class SimpleGdb implements Gdb
 	   You can call this at any time after creating the tables,
 	   but it is good to do it only after inserting all data.
 	 */
-	abstract public void createGdbIndices() throws DataException;
+	abstract public void createGdbIndices() throws IDMapperException;
 
 	/**
 	   prepare for inserting genes and/or links
 	 */
-	abstract public void preInsert() throws DataException;
+	abstract public void preInsert() throws IDMapperException;
 
 	/**
 	   commit inserted data
 	 */
-	final public void commit() throws DataException
+	final public void commit() throws IDMapperException
 	{
 		try
 		{
@@ -214,14 +214,14 @@ public abstract class SimpleGdb implements Gdb
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 	}
 
 	/**
 	   returns number of rows in gene table
 	 */
-	final public int getGeneCount() throws DataException
+	final public int getGeneCount() throws IDMapperException
 	{
 		int result = 0;
 		try
@@ -233,17 +233,17 @@ public abstract class SimpleGdb implements Gdb
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		return result;
 	}
 
-	final public void compact() throws DataException
+	final public void compact() throws IDMapperException
 	{
 		dbConnector.compact(con);
 	}
 	
-	final public void finalize() throws DataException
+	final public void finalize() throws IDMapperException
 	{
 		dbConnector.compact(con);
 		createGdbIndices();

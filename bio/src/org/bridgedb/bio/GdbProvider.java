@@ -27,8 +27,8 @@ import java.util.Map;
 
 import org.bridgedb.DBConnector;
 import org.bridgedb.DataDerby;
-import org.bridgedb.DataException;
-import org.bridgedb.Gdb;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.IDMapperRdb;
 import org.bridgedb.SimpleGdb;
 import org.bridgedb.SimpleGdbFactory;
 
@@ -44,38 +44,38 @@ import org.bridgedb.SimpleGdbFactory;
  * If a database applies to all species (e.g. metabolites), use "*" as species.
  */
 public class GdbProvider {
-	Map<Organism, List<Gdb>> organism2gdb = new HashMap<Organism, List<Gdb>>();
-	List<Gdb> globalGdbs = new ArrayList<Gdb>();
+	Map<Organism, List<IDMapperRdb>> organism2gdb = new HashMap<Organism, List<IDMapperRdb>>();
+	List<IDMapperRdb> globalGdbs = new ArrayList<IDMapperRdb>();
 	
-	public void addOrganismGdb(Organism organism, Gdb gdb) {
-		List<Gdb> l = organism2gdb.get(organism);
+	public void addOrganismGdb(Organism organism, IDMapperRdb gdb) {
+		List<IDMapperRdb> l = organism2gdb.get(organism);
 		if(l == null) {
-			organism2gdb.put(organism, l = new ArrayList<Gdb>());
+			organism2gdb.put(organism, l = new ArrayList<IDMapperRdb>());
 		}
 		if(!l.contains(gdb)) {
 			l.add(gdb);
 		}
 	}
 	
-	public void removeOrganismGdb(Organism organism, Gdb gdb) {
-		List<Gdb> l = organism2gdb.get(organism);
+	public void removeOrganismGdb(Organism organism, IDMapperRdb gdb) {
+		List<IDMapperRdb> l = organism2gdb.get(organism);
 		if(l != null) {
 			l.remove(gdb);
 		}
 	}
 	
-	public void addGlobalGdb(Gdb gdb) {
+	public void addGlobalGdb(IDMapperRdb gdb) {
 		if(!globalGdbs.contains(gdb)) globalGdbs.add(gdb);
 	}
 	
-	public void removeGlobalGdb(Gdb gdb) {
+	public void removeGlobalGdb(IDMapperRdb gdb) {
 		globalGdbs.remove(gdb);
 	}
 	
-	public List<Gdb> getGdbs(Organism organism) {
-		List<Gdb> gdbs = organism2gdb.get(organism);
+	public List<IDMapperRdb> getGdbs(Organism organism) {
+		List<IDMapperRdb> gdbs = organism2gdb.get(organism);
 		if(gdbs == null) {
-			gdbs = new ArrayList<Gdb>();
+			gdbs = new ArrayList<IDMapperRdb>();
 		}
 		gdbs.addAll(globalGdbs);
 		return gdbs;
@@ -83,7 +83,7 @@ public class GdbProvider {
 	
 	static final String DB_GLOBAL = "*";
 	
-	public static GdbProvider fromConfigFile(File f) throws DataException, IOException {
+	public static GdbProvider fromConfigFile(File f) throws IDMapperException, IOException {
 //		Logger.log.info("Parsing gene database configuration: " + f);
 		GdbProvider gdbs = new GdbProvider();
 		BufferedReader in = new BufferedReader(new FileReader(f));

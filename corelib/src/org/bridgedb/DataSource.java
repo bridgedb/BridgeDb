@@ -183,7 +183,36 @@ public final class DataSource
 	public static DataSource register(String sysCode, String fullName, UrlMaker urlMaker, String mainUrl, 
 			String exampleId, boolean isPrimary, boolean isMetabolite, Object organism)
 	{
-		return new DataSource (sysCode, fullName, urlMaker, mainUrl, exampleId, isPrimary, isMetabolite, organism);
+		DataSource current = null;
+		if (byFullName.containsKey(fullName))
+		{
+			current = byFullName.get(fullName);
+		}
+		else if (bySysCode.containsKey(sysCode))
+		{
+			current = bySysCode.get(bySysCode);
+		}
+		
+		if (current == null)
+		{
+			return new DataSource (sysCode, fullName, urlMaker, mainUrl, exampleId, isPrimary, isMetabolite, organism);
+		}
+		else
+		{
+			current.sysCode = sysCode;
+			current.fullName = fullName;
+			current.urlMaker = urlMaker;
+			current.mainUrl = mainUrl;
+			current.idExample = exampleId;
+			current.isPrimary = isPrimary;
+			current.isMetabolite = isMetabolite;
+			current.organism = organism;
+			if (sysCode != null || "".equals(sysCode))
+				bySysCode.put(sysCode, current);
+			if (fullName != null || "".equals(fullName));
+				byFullName.put(fullName, current);
+			return current;
+		}
 	}
 	
 	/** 

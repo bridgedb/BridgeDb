@@ -17,37 +17,40 @@
 package org.bridgedb;
 
 /**
- * for all exceptions thrown by IGdb or IGex interfaces. 
-	
-	Simple wrapper so using classes don't need to deal with implemenation details
-	of the Gdb/Gex. Usually wraps SQLException, ClassNotFoundException, etc.
-
-	Simply use the inherited constructor DataException(Throwable cause)
+ * for all exceptions thrown by IDMapper interface. 
+<p>	
+	Simple wrapper so using classes don't need to deal with implementation details
+	of specific IDMapper implementations. 
+<p>
+	Usually wraps SQLException, ClassNotFoundException, for IDMapperRdb,
+	XmlRpcException for IDMapperWebservice and IOException for IDMapperText
+<p>
+	Simply use the inherited constructor IDMapperException(Throwable cause)
 	to wrap an exception.
 */
-public class DataException extends Exception
+public class IDMapperException extends Exception
 {
 
 	/** See Exception(Throwable). */
-	public DataException (Throwable t)
+	public IDMapperException (Throwable t)
 	{
 		super (t);
 	}
 	
 	/** See Exception(String, Throwable). */
-	public DataException (String msg, Throwable t)
+	public IDMapperException (String msg, Throwable t)
 	{
 		super (msg, t);
 	}
 	
 	/** See Exception (String). */
-	public DataException (String msg)
+	public IDMapperException (String msg)
 	{
 		super (msg);
 	}
 	
 	/** See Exception (). */
-	public DataException ()
+	public IDMapperException ()
 	{
 		super();
 	}

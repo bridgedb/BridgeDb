@@ -47,14 +47,14 @@ public abstract class DBConnector
 	 */
 	public static final int TYPE_GEX = 1;
 
-	public abstract Connection createConnection(String dbName, int props) throws DataException;	
+	public abstract Connection createConnection(String dbName, int props) throws IDMapperException;	
 	
 	/**
 	 * Close the given connection
 	 * @param con The connection to be closed
 	 * @throws Exception
 	 */
-	public void closeConnection(Connection con) throws DataException 
+	public void closeConnection(Connection con) throws IDMapperException 
 	{
 		closeConnection(con, PROP_NONE);
 	}
@@ -65,7 +65,7 @@ public abstract class DBConnector
 	 * @param props Close properties (one of {@link #PROP_NONE}, {@link #PROP_FINALIZE} or {@link #PROP_RECREATE})
 	 * @throws Exception
 	 */
-	public void closeConnection(Connection con, int props) throws DataException 
+	public void closeConnection(Connection con, int props) throws IDMapperException 
 	{
 		try
 		{
@@ -73,7 +73,7 @@ public abstract class DBConnector
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 	}
 	
@@ -103,7 +103,7 @@ public abstract class DBConnector
 	 * @throws Exception
 	 * @return The name of the finalized database
 	 */
-	public abstract String finalizeNewDatabase(String dbName) throws DataException;
+	public abstract String finalizeNewDatabase(String dbName) throws IDMapperException;
 		
 	/**
 	 * This method may be implemented when the database files need to be
@@ -112,7 +112,7 @@ public abstract class DBConnector
 	 * @param con A connection to the database
 	 * @throws SQLException
 	 */
-	public void compact(Connection con) throws DataException
+	public void compact(Connection con) throws IDMapperException
 	{
 		//May be implemented by subclasses
 	}

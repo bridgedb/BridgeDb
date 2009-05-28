@@ -17,11 +17,13 @@
 package org.bridgedb;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
- * combines multiple {@link Gdb}'s in a stack.
+ * combines multiple {@link IDMapperRdb}'s in a stack.
  * To keep the user interface simple, DoubleGdb is limited
  * to a stack of two but there is no reason why this can't be extended further.
  * <p>
@@ -30,7 +32,7 @@ import java.util.List;
  * DoubleGdb won't complain if you try to set two different
  * Gene databases and no metabolite database.
  * <p>
- * The behavior of the {@link Gdb} interface implementations
+ * The behavior of the {@link IDMapperRdb} interface implementations
  * differs per method:
  * if the method returns a single result, usually it is 
  * from the first child database that has a sensible result.
@@ -40,7 +42,7 @@ import java.util.List;
  * If the method returns a list, DoubleGdb joins
  * the result from all connected child databases together.
  */
-public class DoubleGdb implements Gdb
+public class DoubleGdb extends IDMapperRdb
 {
 	private static final int GENE_DB = 0;
 	private static final int METABOLITE_DB = 1;
@@ -60,7 +62,7 @@ public class DoubleGdb implements Gdb
 		{
 			if (gdbs [METABOLITE_DB] != null) gdbs[METABOLITE_DB].close();
 		}
-		catch (DataException e)
+		catch (IDMapperException e)
 		{
 //			Logger.log.error ("Problem closing metabolite database", e);
 			// may be ignored
@@ -80,7 +82,7 @@ public class DoubleGdb implements Gdb
 		{
 			if (gdbs [GENE_DB] != null) gdbs[GENE_DB].close();
 		}
-		catch (DataException e)
+		catch (IDMapperException e)
 		{
 //			Logger.log.error ("Problem closing gene database", e);
 			// may be ignored
@@ -91,7 +93,7 @@ public class DoubleGdb implements Gdb
 	/**
 	 * closes all child databases. 
 	 */
-	public void close() throws DataException 
+	public void close() throws IDMapperException 
 	{
 		for (SimpleGdb child : gdbs)
 		{
@@ -106,9 +108,9 @@ public class DoubleGdb implements Gdb
 	/**
 	 * Check if the reference exists in either one of the 
 	 * child databases
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public boolean xrefExists(Xref xref) throws DataException 
+	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
 		for (SimpleGdb child : gdbs)
 		{
@@ -125,7 +127,7 @@ public class DoubleGdb implements Gdb
 	/**
 	 * Return the aggregate of the child results.
 	 */
-	public List<Xref> getCrossRefs(Xref idc) throws DataException 
+	public List<Xref> getCrossRefs(Xref idc) throws IDMapperException 
 	{	
 		List<Xref> result = new ArrayList<Xref>();
 		
@@ -142,7 +144,7 @@ public class DoubleGdb implements Gdb
 	/**
 	 * Return the aggregate of the child results.
 	 */
-	public List<Xref> getCrossRefs(Xref idc, DataSource resultDs) throws DataException
+	public List<Xref> getCrossRefs(Xref idc, DataSource resultDs) throws IDMapperException
 	{
 		List<Xref> result = new ArrayList<Xref>();
 		
@@ -156,7 +158,7 @@ public class DoubleGdb implements Gdb
 		return result;
 	}
 
-	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws DataException {
+	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
 		List<Xref> result = null;
 		
 		for (SimpleGdb child : gdbs)
@@ -195,9 +197,9 @@ public class DoubleGdb implements Gdb
 	/**
 	 * This implementation iterates over all child databases
 	 * and returns the first one that gives a non-null result.
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public String getGeneSymbol(Xref ref) throws DataException 
+	public String getGeneSymbol(Xref ref) throws IDMapperException 
 	{
 		String result = null;
 		// return the first database with a result.
@@ -231,10 +233,10 @@ public class DoubleGdb implements Gdb
 
 	/**
 	 * returns the aggregate of all child results.
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
 	public List<Xref> getIdSuggestions(String text,
-			int limit) throws DataException 
+			int limit) throws IDMapperException 
 	{
 		List<Xref> result = new ArrayList<Xref>();
 		
@@ -255,10 +257,10 @@ public class DoubleGdb implements Gdb
 
 	/**
 	 * returns the aggregate of all child results.
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
 	public List<String> getSymbolSuggestions(String text,
-			int limit) throws DataException 
+			int limit) throws IDMapperException 
 	{
 		List<String> result = new ArrayList<String>();
 		
@@ -279,9 +281,9 @@ public class DoubleGdb implements Gdb
 
 	/**
 	 * return first non-null child result
-	 * @throws DataException 
+	 * @throws IDMapperException 
 	 */
-	public String getBpInfo(Xref ref) throws DataException 
+	public String getBpInfo(Xref ref) throws IDMapperException 
 	{
 		String result = null;
 		// return the first database with a result.
@@ -297,7 +299,7 @@ public class DoubleGdb implements Gdb
 		return null;
 	}
 
-	public List<XrefWithSymbol> freeSearch(String text, int limit) throws DataException
+	public List<XrefWithSymbol> freeSearchWithSymbol(String text, int limit) throws IDMapperException
 	{
 		List<XrefWithSymbol> result = new ArrayList<XrefWithSymbol>();
 		
@@ -305,11 +307,51 @@ public class DoubleGdb implements Gdb
 		{
 			if (child != null && child.isConnected())
 			{
-				result.addAll (child.freeSearch(text, limit));
+				result.addAll (child.freeSearchWithSymbol(text, limit));
 			}
 			// don't need to continue if we already reached limit.
 			if (result.size() >= limit) break;
 		}
 		return result;
+	}
+
+	private final IDMapperCapabilities caps = new IDMapperCapabilities()
+	{
+		public Set<DataSource> getSupportedSrcDataSources() 
+		{
+			final Set<DataSource> result = new HashSet<DataSource>();
+			for (IDMapper idm : DoubleGdb.this.gdbs)
+			{
+				result.addAll (idm.getCapabilities().getSupportedSrcDataSources());
+			}
+			return result;
+		}
+
+		public Set<DataSource> getSupportedTgtDataSources() 
+		{
+			final Set<DataSource> result = new HashSet<DataSource>();
+			for (IDMapper idm : DoubleGdb.this.gdbs)
+			{
+				result.addAll (idm.getCapabilities().getSupportedTgtDataSources());
+			}
+			return result;
+		}
+
+		public boolean isFreeSearchSupported() 
+		{
+			// returns true if any returns true
+			// TODO: not sure if this is the right logic?
+			for (IDMapper idm : DoubleGdb.this.gdbs)
+			{
+				if (idm.getCapabilities().isFreeSearchSupported())
+					return true;
+			}
+			return false;
+		}
+	};
+	
+	public IDMapperCapabilities getCapabilities() 
+	{
+		return caps;
 	}
 }

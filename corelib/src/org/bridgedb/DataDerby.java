@@ -83,7 +83,7 @@ public class DataDerby extends DBConnector
 	 * dbName is the file that will be produced finally.
 	 * If dbName doesn't end with the right extension, the right extension will be added.
 	 */
-	public Connection createConnection(String dbName, int props) throws DataException 
+	public Connection createConnection(String dbName, int props) throws IDMapperException 
 	{
 		boolean recreate = (props & PROP_RECREATE) != 0;
 
@@ -100,7 +100,7 @@ public class DataDerby extends DBConnector
 			}
 			catch (IOException e)
 			{
-				throw new DataException (e);
+				throw new IDMapperException (e);
 			}
 		}
 		
@@ -114,11 +114,11 @@ public class DataDerby extends DBConnector
 		}
 		catch (ClassNotFoundException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		catch (IOException f)
 		{
-			throw new DataException (f);
+			throw new IDMapperException (f);
 		}
 		Properties prop = new Properties();
 		prop.setProperty("create", Boolean.toString(recreate));
@@ -135,19 +135,19 @@ public class DataDerby extends DBConnector
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e);
+			throw new IDMapperException (e);
 		}
 		
 //		Logger.log.info("Connecting with derby to " + url + ":\t" + timer.stop());		
 		return con;
 	}
 	
-	public Connection createNewDatabaseConnection(String dbName) throws DataException 
+	public Connection createNewDatabaseConnection(String dbName) throws IDMapperException 
 	{
 		return createConnection(FileUtilsGdb.removeExtension(dbName), PROP_RECREATE);
 	}
 	
-	public String finalizeNewDatabase(String dbName) throws DataException 
+	public String finalizeNewDatabase(String dbName) throws IDMapperException 
 	{
 		if (finalized) return finalDbName; // already finalized.
 		
@@ -160,7 +160,7 @@ public class DataDerby extends DBConnector
 		return finalDbName;
 	}
 	
-	public void closeConnection(Connection con) throws DataException 
+	public void closeConnection(Connection con) throws IDMapperException 
 	{
 		closeConnection(con, PROP_NONE);
 	}
@@ -170,7 +170,7 @@ public class DataDerby extends DBConnector
 	 * Passing PROP_FINALIZE for props will cause a full shutdown, which is necessary
 	 * after creating a fresh database.
 	 */
-	public void closeConnection(Connection con, int props) throws DataException 
+	public void closeConnection(Connection con, int props) throws IDMapperException 
 	{
 		if(con != null) 
 		{
@@ -193,7 +193,7 @@ public class DataDerby extends DBConnector
 					{		
 //						Logger.log.info ("Database " + getDbUrl() + " shutdown cleanly");
 					}
-					else throw new DataException (se);
+					else throw new IDMapperException (se);
 				}
 			}
 			try
@@ -203,14 +203,14 @@ public class DataDerby extends DBConnector
 			}
 			catch (SQLException se)
 			{
-				throw new DataException (se);
+				throw new IDMapperException (se);
 			}
 		}
 	}
 	
 	//TODO: I wonder if this is possible for zipped databases...
 	// if not, this can be done together with finalizing.
-	public void compact(Connection con) throws DataException 
+	public void compact(Connection con) throws IDMapperException 
 	{
 		try
 		{
@@ -253,7 +253,7 @@ public class DataDerby extends DBConnector
 		}
 		catch (SQLException e)
 		{
-			throw new DataException (e); 
+			throw new IDMapperException (e); 
 		}
 	}
 		
