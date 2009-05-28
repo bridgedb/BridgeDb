@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 
-package org.bridgedb;
+package org.bridgedb.bio;
 
 import java.util.ArrayList;
 import java.util.Collections;

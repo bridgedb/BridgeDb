@@ -39,6 +39,7 @@
   <!-- ant "subroutine" that calls all modules -->
   <target name="_allmodules">
 	<ant dir="corelib" target="${allmodules.target}"/>
+	<ant dir="bio" target="${allmodules.target}"/>
 	<ant dir="batchmapper" target="${allmodules.target}"/>
   </target>
 

@@ -17,8 +17,6 @@
 package org.bridgedb;
 
 import java.io.File;
-import java.util.List;
-import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -39,68 +37,11 @@ public class Test extends TestCase
 		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense. 
 		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
 		
-		//symbol must be INSR
-		Xref ref = new Xref ("3643", DataSource.ENTREZ_GENE);
-		//TODO: CD220 is just one possible symbol, not the primary one.
-		assertEquals ("CD220", gdb.getGeneSymbol(ref));
-		
-		// test getting backpage
-		assertTrue (gdb.getBpInfo(ref).startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
-		
-		// get all crossrefs
-		List<Xref> crossRefs1 = gdb.getCrossRefs(ref);
-		assertTrue(crossRefs1.contains(new Xref("Hs.465744", DataSource.UNIGENE)));
-		assertTrue(crossRefs1.contains(new Xref("NM_000208", DataSource.REFSEQ)));
-		assertTrue(crossRefs1.contains(new Xref("P06213", DataSource.UNIPROT)));
-		assertTrue(crossRefs1.size() > 10);
-		
-		// get specific crossrefs for specific database
-		List<Xref> crossRefs2 = gdb.getCrossRefs(ref, DataSource.AFFY);		
-		assertTrue(crossRefs2.contains(new Xref("1572_s_at", DataSource.AFFY)));
-		assertTrue(crossRefs2.contains(new Xref("207851_s_at", DataSource.AFFY)));
-		assertTrue(crossRefs2.contains(new Xref("213792_s_at", DataSource.AFFY)));
-		assertTrue(crossRefs1.size() > crossRefs2.size());
-
-		// get crossrefs by attribute
-		List<Xref> crossRefs3 = gdb.getCrossRefsByAttribute("Symbol", "INSR");
-		assertTrue(crossRefs3.contains(ref));
-
-		// check symbol suggestions
-		List<String> symbols1 = gdb.getSymbolSuggestions("INS", 100);
-		assertTrue (symbols1.contains("INSR"));
-
-		// check id suggestions
-		List<Xref> crossRefs4 = gdb.getIdSuggestions("207851_s_", 100);
-		assertTrue (crossRefs4.contains(new Xref("207851_s_at", DataSource.AFFY)));
-		
-		// check free search
-		List<XrefWithSymbol> result5 = gdb.freeSearch ("Insulin", 100); 
-		
-		Xref nonExistingRef = new Xref ("bla", DataSource.OTHER); 
-		assertNull (gdb.getGeneSymbol(nonExistingRef));
-		
-		// should return empty list, not NULL
-		assertEquals (0, gdb.getCrossRefs(nonExistingRef).size());
-		assertEquals (0, gdb.getCrossRefs(nonExistingRef, DataSource.AFFY).size());		
-		
 		gdb.close();
 	}
 	
-	public void testPatterns()
+	public void testRegisterDataSource()
 	{
-		assertTrue (DataSourcePatterns.getDataSourceMatches("1.1.1.1").contains(DataSource.ENZYME_CODE));
-		assertTrue (DataSourcePatterns.getDataSourceMatches("50-99-7").contains(DataSource.CAS));
-		assertTrue (DataSourcePatterns.getDataSourceMatches("HMDB00122").contains(DataSource.HMDB));
-		assertTrue (DataSourcePatterns.getDataSourceMatches("C00031").contains(DataSource.KEGG_COMPOUND));
-		assertTrue (DataSourcePatterns.getDataSourceMatches("CHEBI:17925").contains(DataSource.CHEBI));
-	}
-	
-	public void testDataSource()
-	{
-		DataSource ds = DataSource.ENSEMBL;
-		assertEquals (ds.getFullName(), "Ensembl");
-		assertEquals (ds.getSystemCode(), "En");
-		
 		DataSource.register("@@", "ZiZaZo", null, null, null, false, false, null);
 		
 		DataSource ds2 = DataSource.getBySystemCode ("@@");
@@ -110,39 +51,5 @@ public class Test extends TestCase
 		// assert that you can refer to 
 		// undeclared systemcodes if necessary.
 		assertNotNull (DataSource.getBySystemCode ("##"));
-		
-		DataSource ds4 = DataSource.getBySystemCode ("En");
-		assertEquals (ds, ds4);
-		
-		DataSource ds5 = DataSource.getByFullName ("Entrez Gene");
-		assertEquals (ds5, DataSource.ENTREZ_GENE);
 	}
-
-	public void testDataSourceFilter ()
-	{
-		// ensembl is primary, affy isn't
-		Set<DataSource> f1 = DataSource.getFilteredSet(true, null, null);
-		assertTrue (f1.contains(DataSource.ENSEMBL_HUMAN));
-		assertTrue (f1.contains(DataSource.HMDB));
-		assertFalse (f1.contains(DataSource.AFFY));
-
-		// wormbase is specific for Ce.
-		Set<DataSource> f2 = DataSource.getFilteredSet(null, null, Organism.CaenorhabditisElegans);
-		assertTrue (f2.contains(DataSource.ENSEMBL_CELEGANS));
-		assertTrue (f2.contains(DataSource.WORMBASE));
-		assertFalse (f2.contains(DataSource.ZFIN));
-
-		// metabolites
-		Set<DataSource> f3 = DataSource.getFilteredSet(null, true, null);
-		assertTrue (f3.contains(DataSource.HMDB));
-		assertFalse (f3.contains(DataSource.WORMBASE));
-		assertFalse (f3.contains(DataSource.ENSEMBL_HUMAN));
-
-		// non-metabolites
-		Set<DataSource> f4 = DataSource.getFilteredSet(null, false, null);
-		assertTrue (f4.contains(DataSource.ENSEMBL_HUMAN));
-		assertTrue (f4.contains(DataSource.WORMBASE));
-		assertFalse (f4.contains(DataSource.HMDB));
-	}
-
 }

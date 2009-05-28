@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 //
-package org.bridgedb;
+package org.bridgedb.bio;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,6 +24,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.bridgedb.DBConnector;
+import org.bridgedb.DataDerby;
+import org.bridgedb.DataException;
+import org.bridgedb.Gdb;
+import org.bridgedb.SimpleGdb;
+import org.bridgedb.SimpleGdbFactory;
 
 
 //import org.pathvisio.debug.Logger;
