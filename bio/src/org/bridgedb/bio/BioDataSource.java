@@ -618,4 +618,12 @@ public class BioDataSource
 		);
 	}
 	
+	/** Call this to initialize the BioDataSource.XXX constants. 
+	 * 	You should call this before using any of these constants, 
+	 * 	or they may be undefined.
+	 */
+	// Currently this method is emtpy, but you should still call
+	// it to make sure the static initializer is run.
+	public static void init() {}
+	
 }
