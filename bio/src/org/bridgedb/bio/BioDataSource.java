@@ -163,7 +163,7 @@ public class BioDataSource
 		"http://www.ensembl.org", 
 		"ENSRNOG00000016648", true, false, Organism.RattusNorvegicus);
 	public static final DataSource ENSEMBL_SCEREVISIAE = DataSource.register (
-		"EnSc", "Ensembl S. cerevisiae", 
+		"EnSc", "Ensembl Yeast", 
 		new PrefixUrlMaker("http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g="), 
 		"http://www.ensembl.org", 
 		"YGR147C", true, false, Organism.SaccharomycesCerevisiae);
