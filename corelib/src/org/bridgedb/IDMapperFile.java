@@ -120,11 +120,11 @@ public abstract class IDMapperFile implements IDMapper {
      *
      * @return capacities of the ID mapper
      */
-    public IDMapperCapabilities getCapabilities() {
+    public IDMapperCapabilities getCapabilities() {        
         return cap;
     }
 
-    protected void read() throws IDMapperException {
+    public void read() throws IDMapperException {
         if (mapXrefs==null) {
             reader.read();
             cap.addSrcDataSources(reader.getDataSources());

@@ -19,16 +19,18 @@ package org.bridgedb;
 
 import java.util.Set;
 
+import java.net.URL;
+
 /**
  * Class for mapping ID from delimited text file
  * @author gjj
  */
 public class IDMapperText extends IDMapperFile {
 
-    public IDMapperText(final String filePath,
+    public IDMapperText(final URL url,
             final String[] dataSourceDelimiters,
             final String[] regExIDDelimiter) {
-        super(new IDMappingReaderFromText(filePath,
+        super(new IDMappingReaderFromText(url,
                 dataSourceDelimiters,
                 regExIDDelimiter));
     }

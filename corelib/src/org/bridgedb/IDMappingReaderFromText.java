@@ -21,21 +21,28 @@ import java.util.Set;
 import java.util.HashSet;
 
 import java.io.Reader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.IOException;
+
+import java.net.URLConnection;
+import java.net.URL;
 
 /**
  * Class for reading ID mapping data from delimited text file
  * @author gjj
  */
 public class IDMappingReaderFromText extends IDMappingReaderFromFile {
+    private static int msConnectionTimeout = 2000;
+
     protected final String regExDataSourceDelimiter;
     protected final String regExIDDelimiter;
 
-    public IDMappingReaderFromText(final String filePath,
+    public IDMappingReaderFromText(final URL url,
             final String regExDataSourceDelimiter,
             final String regExIDDelimiter) {
-        super(filePath);
+        super(url);
 
         if (regExDataSourceDelimiter==null || regExIDDelimiter==null) {
             throw new NullPointerException();
@@ -44,15 +51,13 @@ public class IDMappingReaderFromText extends IDMappingReaderFromFile {
         this.regExIDDelimiter = regExIDDelimiter;
     }
 
-    public IDMappingReaderFromText(final String filePath,
+    public IDMappingReaderFromText(final URL url,
             final String[] dataSourceDelimiters,
             final String[] regExIDDelimiter) {
-        super(filePath);
-        this.regExDataSourceDelimiter = strs2regex(dataSourceDelimiters);
-        this.regExIDDelimiter = strs2regex(regExIDDelimiter);
+        this(url, strs2regex(dataSourceDelimiters), strs2regex(regExIDDelimiter));
     }
 
-    private String strs2regex(final String[] strs) {
+    private static String strs2regex(final String[] strs) {
         if (strs==null) {
             throw new NullPointerException();
         }
@@ -75,7 +80,8 @@ public class IDMappingReaderFromText extends IDMappingReaderFromFile {
      */
     public void read() throws IDMapperException {
         try {
-            Reader fin = new FileReader(filePath);
+            InputStream inputStream = getInputStream(url);
+            Reader fin = new InputStreamReader(inputStream);
             BufferedReader bufRd = new BufferedReader(fin);
 
             // add data sources
@@ -128,5 +134,12 @@ public class IDMappingReaderFromText extends IDMappingReaderFromFile {
         } catch(java.io.IOException ex) {
             throw new IDMapperException(ex);
         }
+    }
+
+    private static InputStream getInputStream(URL source) throws IOException {
+		URLConnection uc = source.openConnection();
+		uc.setUseCaches(false); // don't use a cached page
+		uc.setConnectTimeout(msConnectionTimeout); // set timeout for connection
+        return uc.getInputStream();
     }
 }

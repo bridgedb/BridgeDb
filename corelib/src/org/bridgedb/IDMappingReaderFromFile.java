@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 
+import java.net.URL;
+
 
 /**
  * Interface for reading ID mapping data
@@ -30,15 +32,15 @@ import java.util.HashMap;
 public abstract class IDMappingReaderFromFile implements IDMappingReader {
     protected final Set<DataSource> dataSources;
     protected final Map<Xref,Set<Xref>> mapXrefs;
-    protected final String filePath;
+    protected final URL url;
 
-    public IDMappingReaderFromFile(final String filePath) {
-        if (filePath==null) {
+    public IDMappingReaderFromFile(final URL url) {
+        if (url==null) {
             throw new NullPointerException();
         }
         this.dataSources = new HashSet();
         this.mapXrefs = new HashMap();
-        this.filePath = filePath;
+        this.url = url;
     }
 
     /**
