@@ -82,6 +82,7 @@ bridgedb.version=${bridgedb.version}
 			<pathelement location="build"/>
 			<pathelement location="lib/derby.jar"/>
 			<pathelement location="lib/junit.jar"/>
+			<pathelement location="lib/measure.jar"/>
 		</path>
 		<javac srcdir="test" debug="true" 
 					includes="**"
