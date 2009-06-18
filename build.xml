@@ -14,7 +14,8 @@
 			<include name="batchmapper.sh"/>
 			<include name="batchmapper.bat"/>
 			<include name="lib/bridgedb.jar"/>
-			<include name="lib/bridgedb-idmapper.jar"/>
+			<include name="lib/bridgedb-batchmapper.jar"/>
+			<include name="lib/bridgedb-bio.jar"/>
 			<include name="lib/derby.jar"/>
 			<include name="LICENSE-2.0.txt"/>
 		</zipfileset>
