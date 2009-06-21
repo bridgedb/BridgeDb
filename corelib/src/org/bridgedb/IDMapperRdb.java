@@ -28,6 +28,21 @@ import java.util.Set;
  */
 public abstract class IDMapperRdb implements IDMapper
 {
+	static
+	{
+		BridgeDb.register ("idmapper-pgdb", new Driver());
+	}
+	
+	private static class Driver implements org.bridgedb.Driver
+	{
+		private Driver() { } // prevent outside instantiation
+				
+		public IDMapper connect(String location) throws IDMapperException 
+		{
+			return SimpleGdbFactory.createInstance(location, new DataDerby(), 0);
+		}
+	}
+	
 	/**
 	 * Check whether a connection to the database exists.
 	 * @return true if a connection exists, false if not

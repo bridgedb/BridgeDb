@@ -19,14 +19,40 @@ package org.bridgedb;
 
 import java.util.Set;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * Class for mapping ID from delimited text file
  * @author gjj
  */
-public class IDMapperText extends IDMapperFile {
-
+public class IDMapperText extends IDMapperFile 
+{
+	static
+	{
+		BridgeDb.register ("idmapper-text", new Driver());
+	}
+	
+	private static class Driver implements org.bridgedb.Driver
+	{
+		private Driver() {} // prevent outside instantiation;
+		
+		public IDMapper connect(String location) throws IDMapperException
+		{
+			//TODO: parse arguments to determine idsep and dssep
+			try
+			{
+				return new IDMapperText(new URL(location), 
+						new String[] { "\t" }, 
+						new String[] { "," });
+			}
+			catch (MalformedURLException ex)
+			{
+				throw new IDMapperException(ex);
+			}
+		}
+	}
+	
     public IDMapperText(final URL url,
             final String[] dataSourceDelimiters,
             final String[] regExIDDelimiter) {
