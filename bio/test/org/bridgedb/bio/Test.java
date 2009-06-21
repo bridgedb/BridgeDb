@@ -46,8 +46,14 @@ public class Test extends TestCase
 	public void setUp()
 	{
 		// cause static initializer to run.
-		//TODO: find better solution
-		System.out.println (BioDataSource.WORMBASE);
+		BioDataSource.init();
+	}
+	
+	public void testBioDataSources()
+	{
+		assertEquals (BioDataSource.WORMBASE.getOrganism(), Organism.CaenorhabditisElegans);
+		assertEquals (BioDataSource.ENSEMBL_CHICKEN.getOrganism(), Organism.GallusGallus);
+		assertEquals (BioDataSource.CAS.getType(), "metabolite");
 	}
 	
 	public void testGdbConnect() throws IDMapperException

@@ -20,6 +20,9 @@
 			<pathelement location="../lib/bridgedb.jar"/>
 		</classpath>
 	</javac>
+	<copy todir="build/org/bridgedb/bio" flatten="true" verbose="true">
+		<fileset dir="../resources" includes="*.txt"/>
+	</copy>
   </target>
   
   <target name="jar" depends="build">
@@ -27,7 +30,7 @@
 	  <manifest>
 		<attribute name="Class-Path" value="derby.jar bridgedb.jar"/>
 	  </manifest>
-	  <fileset dir="build" includes="**/*.class"/>
+	  <fileset dir="build"/>
 	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
   </target>

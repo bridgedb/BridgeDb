@@ -58,7 +58,7 @@ PathVisio should never have to refer to system codes as Strings, except
 The preferred way to refer to a specific database is using a 
 constant defined here, e.g. "DataSource.ENSEMBL"
 <p>
-TODO: The definitions for the individual DataSources will move to the org.bridgedb.bio package in the future.
+Definitions for common DataSources are defined in {@link org.bridgedb.bio.BioDataSource}.
 */
 public final class DataSource
 {
@@ -69,47 +69,21 @@ public final class DataSource
 	private String sysCode = null;
 	private String fullName = null;
 	private String mainUrl = null;
-	private UrlMaker urlMaker = null;
+	private String prefix = "";
+	private String postfix = "";
 	private Object organism = null;
-	private boolean isPrimary= true;
-	private boolean isMetabolite = false;
 	private String idExample = null;
+	private boolean isPrimary = true;
+	private String type;
 	
 	/**
 	 * Constructor is private, so that we don't
-	 * get any standalone DataSources.
-	 * That way we can make sure that two DataSources
-	 * pointing to the same datbase are really the same.
-	 * 
-	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
-	 * @param fullName full name used in GPML
-	 * @param urlMaker turns an identifier into a valid link-out.
-	 * @param mainUrl url of homepage 
-	 * @param organism organism for which this system code is suitable, or null for any / not applicable
-	 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
-	 * 	but their use in pathways is discouraged
-	 * @param isMetabolite true if this DataSource describes metabolites 
-	 * @param idExample an example id from this system
+	 * get any standalone DataSources. 
+	 * DataSources should be obtained from 
+	 * {@link getByFullName} or {@link getBySystemCode}. Information about
+	 * DataSources can be added with {@link register}
 	 */
-	private DataSource (String sysCode, String fullName, 
-			UrlMaker urlMaker, String mainUrl,
-			String idExample, boolean isPrimary, boolean isMetabolite, Object organism)
-	{
-		this.sysCode = sysCode;
-		this.fullName = fullName;
-		this.mainUrl = mainUrl;
-		this.urlMaker = urlMaker;
-		this.idExample = idExample;
-		this.isPrimary = isPrimary;
-		this.isMetabolite = isMetabolite;
-		this.organism = organism;
-		
-		registry.add (this);
-		if (sysCode != null || "".equals(sysCode))
-			bySysCode.put(sysCode, this);
-		if (fullName != null || "".equals(fullName));
-			byFullName.put(fullName, this);
-	}
+	private DataSource () {}
 	
 	/** 
 	 * turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
@@ -118,10 +92,7 @@ public final class DataSource
 	 */
 	public String getUrl(String id)
 	{
-		if (urlMaker != null)
-			return urlMaker.getUrl(id); 
-		else 
-			return null;
+		return prefix + id + postfix;
 	}
 				
 	/** 
@@ -166,53 +137,161 @@ public final class DataSource
 	{	
 		return mainUrl;
 	}
+
+	public String getType()
+	{
+		return type;
+	}
+	
+	/**
+	 * Uses builder pattern to set optional attributes for a DataSource. For example, this allows you to use the 
+	 * following code:
+	 * <pre>
+	 * DataSource.register("X", "Affymetrix")
+	 *     .mainUrl("http://www.affymetrix.com")
+	 *     .type("probe")
+	 *     .primary(false);
+	 * </pre>
+	 */
+	public static final class Builder
+	{
+		private final DataSource current;
+		
+		/**
+		 * Create a Builder for a DataSource. Note that an existing DataSource is
+		 * modified rather than creating a new one.
+		 * This constructor should only be called by the register method.
+		 * @param current the DataSource to be modified
+		 */
+		private Builder(DataSource current)
+		{
+			this.current = current;
+		}
+		
+		/**
+		 * @return the DataSource under construction
+		 */
+		public DataSource asDataSource()
+		{
+			return current;
+		}
+		
+		/**
+		 * 
+		 * @param urlPattern is a template for generating valid URL's for identifiers. 
+		 * 	The pattern should contain the substring "$ID", which will be replaced by the actual identifier.
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder urlPattern (String urlPattern)
+		{
+			if (urlPattern == null || "".equals (urlPattern))
+			{
+				current.prefix = "";
+				current.postfix = "";
+			}
+			else
+			{
+				int pos = urlPattern.indexOf("$ID");
+				if (pos == -1) throw new IllegalArgumentException("Url maker pattern for " + current + "' should have $ID in it");
+				current.prefix = urlPattern.substring(0, pos);
+				current.postfix = urlPattern.substring(pos + 3);
+			}
+			return this;
+		}
+		
+		/**
+		 * @param mainUrl url of homepage
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder mainUrl (String mainUrl)
+		{
+			current.mainUrl = mainUrl;
+			return this;
+		}
+
+
+		/**
+		 * @param idExample an example id from this system
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder idExample (String idExample)
+		{
+			current.idExample = idExample;
+			return this;
+		}
+		
+		/**
+		 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
+		 * 	but their use in pathways is discouraged
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder primary (boolean isPrimary)
+		{
+			current.isPrimary = isPrimary;
+			return this;
+		}
+		
+		/**
+		 * @param type the type of datasource, for example "protein", "gene", "metabolite" 
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder type (String type)
+		{
+			current.type = type;
+			return this;
+		}
+		
+		/**
+		 * @param organism organism for which this system code is suitable, or null for any / not applicable
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder organism (Object organism)
+		{
+			current.organism = organism;
+			return this;
+		}
+	}
 	
 	/** 
 	 * so new system codes can be added easily by 
 	 * plugins. url and urlMaker may be null 
 	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
-	 * @param fullName full name used in GPML
-	 * @param urlMaker turns an identifier into a valid link-out.
-	 * @param mainUrl url of homepage 
-	 * @param organism organism for which this system code is suitable, or null for any / not applicable
-	 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
-	 * 	but their use in pathways is discouraged
-	 * @param isMetabolite true if this DataSource describes metabolites 
-	 * @param exampleId an example id from this system
+	 * @param fullName full name used in GPML. Must be 20 or less characters
+	 * @return Builder that can be used for setting additional properties
 	 */
-	public static DataSource register(String sysCode, String fullName, UrlMaker urlMaker, String mainUrl, 
-			String exampleId, boolean isPrimary, boolean isMetabolite, Object organism)
+	public static Builder register(String sysCode, String fullName)
 	{
 		DataSource current = null;
-		if (byFullName.containsKey(fullName))
+		if (fullName == null && sysCode == null) throw new NullPointerException();
+//		if (fullName != null && fullName.length() > 20) 
+//		{ 
+//			throw new IllegalArgumentException("full Name '" + fullName + "' must be 20 or less characters"); 
+//		}
+		
+		if (fullName != null && byFullName.containsKey(fullName))
 		{
 			current = byFullName.get(fullName);
 		}
-		else if (bySysCode.containsKey(sysCode))
+		else if (sysCode != null && bySysCode.containsKey(sysCode))
 		{
 			current = bySysCode.get(bySysCode);
 		}
 		
 		if (current == null)
 		{
-			return new DataSource (sysCode, fullName, urlMaker, mainUrl, exampleId, isPrimary, isMetabolite, organism);
+			current = new DataSource ();
+			registry.add (current);
 		}
-		else
-		{
-			current.sysCode = sysCode;
-			current.fullName = fullName;
-			current.urlMaker = urlMaker;
-			current.mainUrl = mainUrl;
-			current.idExample = exampleId;
-			current.isPrimary = isPrimary;
-			current.isMetabolite = isMetabolite;
-			current.organism = organism;
-			if (sysCode != null || "".equals(sysCode))
-				bySysCode.put(sysCode, current);
-			if (fullName != null || "".equals(fullName));
-				byFullName.put(fullName, current);
-			return current;
-		}
+		
+		current.sysCode = sysCode;
+		current.fullName = fullName;
+
+		if (sysCode != null || "".equals(sysCode))
+			bySysCode.put(sysCode, current);
+		if (fullName != null || "".equals(fullName));
+			byFullName.put(fullName, current);
+		
+		return new Builder(current);
 	}
 	
 	/** 
@@ -224,7 +303,7 @@ public final class DataSource
 	{
 		if (!bySysCode.containsKey(systemCode))
 		{
-			register (systemCode, null, null, null, null, false, false, null);
+			register (systemCode, null);
 		}
 		return bySysCode.get(systemCode);
 	}
@@ -240,7 +319,7 @@ public final class DataSource
 	{
 		if (!byFullName.containsKey(fullName))
 		{
-			register (null, fullName, null, null, null, false, false, null);
+			register (null, fullName);
 		}
 		return byFullName.get(fullName);
 	}
@@ -267,8 +346,8 @@ public final class DataSource
 		for (DataSource ds : registry)
 		{
 			if (
-					(primary == null || ds.isPrimary == primary) &&
-					(metabolite == null || ds.isMetabolite == metabolite) &&
+					(primary == null || ds.isPrimary() == primary) &&
+					(metabolite == null || ds.isMetabolite() == metabolite) &&
 					(o == null || ds.organism == null || o == ds.organism))
 			{
 				result.add (ds);
@@ -300,38 +379,6 @@ public final class DataSource
 		return fullName;
 	}
 	
-	/** an UrlMaker knows how to turn an id into an Url string. */
-	public static abstract class UrlMaker
-	{
-		/**
-		 * Generate an Url from an identifier.
-		 * @param id identifier to use in Url 
-		 * @return url based on the identifier */
-		public abstract String getUrl(String id);
-	}
-	
-	/** Implements most common way an Url is made: add Id to a prefix. */ 
-	public static class PrefixUrlMaker extends UrlMaker
-	{
-		private final String prefix;
-		
-		/** @param prefix prefix to use in url */
-		public PrefixUrlMaker(String prefix)
-		{
-			this.prefix = prefix;
-		}
-		
-		/**
-		 * Generate url from identifier.
-		 * @param id identifier to use in url 
-		 * @return Simply returns prefix + id */
-		@Override
-		public String getUrl(String id) 
-		{
-			return prefix + id;
-		}
-	}	
-
 	/**
 	 * @return example Xref, mostly for testing purposes
 	 */
@@ -343,6 +390,10 @@ public final class DataSource
 	/**
 	 * @return if this is a primary DataSource or not. Primary DataSources 
 	 * are preferred when annotating models.
+	 * 
+	 * A DataSource is primary if it is not of type probe, 
+	 * so that means e.g. Affymetrix or Agilent probes are not primary. All
+	 * gene, protein and metabolite identifiers are primary.
 	 */
 	public boolean isPrimary()
 	{
@@ -354,7 +405,7 @@ public final class DataSource
 	 */
 	public boolean isMetabolite()
 	{
-		return isMetabolite;
+		return type.equals ("metabolite");
 	}
 
 	/**

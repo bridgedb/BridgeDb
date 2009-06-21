@@ -16,6 +16,7 @@
 //
 package org.bridgedb;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.Set;
 public abstract class IDMapperRdb implements IDMapper
 {
 	/**
-	 * Check whether a connection to the database exists
+	 * Check whether a connection to the database exists.
 	 * @return true if a connection exists, false if not
 	 * 
 	 * A connection will not exist only 
@@ -40,7 +41,7 @@ public abstract class IDMapperRdb implements IDMapper
 	public abstract boolean isConnected();
 
 	/**
-	 * Gets the name of the currently used gene database
+	 * Gets the name of the currently used gene database.
 	 * @return the database name as specified in the connection string
 	 */
 	public abstract String getDbName();
@@ -49,27 +50,30 @@ public abstract class IDMapperRdb implements IDMapper
 	 * Gets the backpage info for the given gene id for display on BackpagePanel.
 	 * @param ref The gene to get the backpage info for
 	 * @return String with the backpage info, null if the gene was not found
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract String getBpInfo(Xref ref) throws IDMapperException;
 	
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
 	 * result to contain only references from database with the given system
-	 * code
+	 * code.
 	 * @param idc The id/code pair to get the cross references for
 	 * @return A {@link List} containing the cross references, or an empty
 	 * {@link List} when no cross references could be found
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<Xref> getCrossRefs(Xref idc) throws IDMapperException;
 
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
 	 * result to contain only references from database with the given system
-	 * code
+	 * code.
 	 * @param idc The id/code pair to get the cross references for
 	 * @param resultDs The system code to restrict the results to
 	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException;
 
@@ -80,35 +84,42 @@ public abstract class IDMapperRdb implements IDMapper
 	 * @param attrValue	The attribute value (e.g. 'TP53')
 	 * @return A list with the cross-references that have this attribute name/value, or an
 	 * empty list if no cross-references could be found for this attribute name/value.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
 
 	/**
-	 * Closes the connection to the Gene Database if possible
-	 * @throws IDMapperException 
+	 * Closes the connection to the Gene Database if possible.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract void close() throws IDMapperException;
 
 	/**
-	 * Get up to limit suggestions for a symbol autocompletion
+	 * Get up to limit suggestions for a symbol autocompletion.
+	 * @param text text query, prefix of symbol
+	 * @param limit will return up to limit results.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException;
 
 	
 	/**
-	 * Get up to limit suggestions for a identifier autocompletion
+	 * Get up to limit suggestions for a identifier autocompletion.
+	 * @param text text query, prefix of id
+	 * @param limit will return up to limit results.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException;
 	
 	/**
 	 * free text search for matching symbols or identifiers
-	 * @throws IDMapperException 
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException;
 
 	/**
 	 * free text search for matching symbols or identifiers
-	 * @throws IDMapperException 
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable
 	 */
 	public Set<Xref> freeSearch(String text, int limit) throws IDMapperException 
 	{
@@ -121,10 +132,32 @@ public abstract class IDMapperRdb implements IDMapper
 		return result;
 	}
 	
+	/**
+	 * Map a set of Xrefs at once.
+	 * @param tgtDataSources only return xrefs from these DataSources.
+	 * @param srcXrefs the cross-references that should be mapped
+	 * @return Map of source to destination refs. The keys will be a subset of the srcXrefs argument
+	 * Implemented using multiple calls of getCrossRefs().
+	 * May be overridden if there is a more efficient implementation possible.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable
+	 */
 	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		final Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
+		for (Xref src : srcXrefs)
+		{
+			final Set<Xref> refs = new HashSet<Xref>();
+			for (Xref dest : getCrossRefs(src))
+			{
+				if (tgtDataSources.contains(dest.getDataSource()))
+				{
+					refs.add (dest);
+				}
+			}
+			if (refs.size() > 0)
+				result.put (src, refs);
+		}
+		return result;
 	}	
 
 }

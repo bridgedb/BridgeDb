@@ -43,7 +43,7 @@ public class Test extends TestCase
 	
 	public void testRegisterDataSource()
 	{
-		DataSource.register("@@", "ZiZaZo", null, null, null, false, false, null);
+		DataSource.register("@@", "ZiZaZo");
 		
 		DataSource ds2 = DataSource.getBySystemCode ("@@");
 		DataSource ds3 = DataSource.getByFullName ("ZiZaZo");
