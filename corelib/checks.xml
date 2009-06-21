@@ -51,7 +51,6 @@
         <module name="AnonInnerLength"/>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
-        <module name="FinalLocalVariable"/>
         <module name="IllegalCatch"/>
         <module name="ModifiedControlVariable"/>
         <module name="ParameterAssignment"/>
