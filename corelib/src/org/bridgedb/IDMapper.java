@@ -43,7 +43,7 @@ public interface IDMapper {
     public boolean xrefExists(Xref xref) throws IDMapperException;
 
     /**
-     * free text search for matching symbols or identifiers
+     * free text search for matching symbols or identifiers.
      * @param text text to search
      * @param limit up limit of number of hits
      * @return a set of hit references
@@ -57,4 +57,17 @@ public interface IDMapper {
      * @return capacities of the ID mapper
      */
     public IDMapperCapabilities getCapabilities();
+    
+    /**
+     * dispose any resources (such as open database connections) associated
+     * with this IDMapper.
+     * @throws IDMapperException if the associated resources could not be freed.
+     */
+    public void close() throws IDMapperException;
+    
+    /**
+     * Use this method to check if the IDMapper is still valid.
+     * @return false after the close() method is called on this object, true otherwise 
+     */
+    public boolean isConnected();
 }

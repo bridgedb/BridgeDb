@@ -55,8 +55,7 @@ public abstract class IDMapperFile implements IDMapper {
         }
 
         this.reader = reader;
-        cap = new IDMapperFileCapabilities(freeSearch);
-        
+        cap = new IDMapperFileCapabilities(freeSearch);        
     }
 
     /**
@@ -116,6 +115,11 @@ public abstract class IDMapperFile implements IDMapper {
         return mapXrefs.containsKey(xref);
     }
 
+    private boolean isConnected = true;
+    // In the case of IDMapperFile, there is no need to discard associated resources.
+    public void close() throws IDMapperException { isConnected = false; }
+    public boolean isConnected() { return isConnected; }
+    
     /**
      *
      * @return capacities of the ID mapper
@@ -177,5 +181,5 @@ class IDMapperFileCapabilities implements IDMapperCapabilities {
 
     public Set<DataSource> getSupportedTgtDataSources() {
         return tgtDataSources;
-    }
+    }    
 }
