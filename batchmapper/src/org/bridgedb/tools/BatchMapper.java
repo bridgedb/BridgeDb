@@ -25,24 +25,26 @@ import java.io.LineNumberReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
-import org.bridgedb.DataDerby;
+import org.bridgedb.BridgeDb;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperRdb;
 import org.bridgedb.DataSource;
-import org.bridgedb.SimpleGdbFactory;
+import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 
 public class BatchMapper 
 {
 	private static class Settings
 	{
-		File fGdb = null;
 		File fInput = null;
 		File fOutput = null;
 		File fReport = null;
+		List<String> connectStrings = new ArrayList<String>();
 		DataSource is = null;
 		DataSource os = null;
 		int inputColumn = 0; 
@@ -61,7 +63,7 @@ public class BatchMapper
 		try
 		{
 			Properties props = new Properties();
-			props.load (IDMapperRdb.class.getResourceAsStream("BridgeDb.properties"));
+			props.load (BridgeDb.class.getResourceAsStream("BridgeDb.properties"));
 			version = props.getProperty("bridgedb.version") + 
 				" (r" + props.getProperty("REVISION") + ")";
 		}
@@ -71,13 +73,17 @@ public class BatchMapper
 				"Usage:\n"+
 				"	batchmapper \n" +
 				"		[-v|-vv] \n" +
-				"		-g <gene database> \n " +
+				"		[-g <gene database>] \n " +
+				"		[-t <tab-delimited text file>] \n " +
 				"		-i <input file> \n" +
 				"		-is <input system code> \n" +
 				"		-os <output system code> \n" +
-				"		-c <input column, 0-based> \n" +
 				"		-o <output file> \n" +
-				"		[-r <report file>] \n");
+				"		[-c <input column, 0-based>]\n" +
+				"		[-r <report file>] \n" +
+				"\n" +
+				"BatchMapper is a tool for mapping biological identifiers.\n" +
+				"You should specify at least one -g or -t option \n");
 	}
 	
 	public String parseArgs(Settings settings, String[] args)
@@ -96,9 +102,18 @@ public class BatchMapper
 			else if (args[pos].equals("-g"))
 			{
 				pos++;
-				if (pos > args.length) return "File expected after -f";
-				settings.fGdb = new File (args[pos]);
-				if (!settings.fGdb.exists()) return "File " + args[pos] + " does not exist";
+				if (pos > args.length) return "File expected after -g";
+				File f = new File (args[pos]);
+				if (!f.exists()) return "File " + args[pos] + " does not exist";
+				settings.connectStrings.add ("idmapper-pgdb:" + f.getAbsolutePath());
+			}
+			else if (args[pos].equals("-t"))
+			{
+				pos++;
+				if (pos > args.length) return "File expected after -t";
+				File f = new File (args[pos]);
+				if (!f.exists()) return "File " + args[pos] + " does not exist";
+				settings.connectStrings.add ("idmapper-text:" + f.getAbsolutePath());
 			}
 			else if (args[pos].equals("-i"))
 			{
@@ -149,7 +164,7 @@ public class BatchMapper
 			}
 			pos++;
 		}
-		if (settings.fGdb == null) return "Missing -g option";
+		if (settings.connectStrings.size() == 0) return "Missing -t or -g options";
 		if (settings.fOutput == null) return "Missing -o option";
 		if (settings.fInput == null) return "Misisng -i option";
 		if (settings.is == null) return "Missing -is option";
@@ -160,7 +175,7 @@ public class BatchMapper
 	
 	public static class Mapper
 	{
-		private File fGdb = null;
+		private List<String> connections = null;
 		private File fInput = null;
 		private File fOutput = null;
 		private File fReport = null;
@@ -170,16 +185,16 @@ public class BatchMapper
 		private int verbose = 0; // 0, 1 or 2
 
 		PrintStream report = System.out;
-		private IDMapperRdb gdb;
+		private IDMapperStack gdb;
 		
 		private List<Xref> missing = new ArrayList<Xref>();
 		private List<Xref> ambiguous = new ArrayList<Xref>();
 		int totalLines = 0;
 		int okLines = 0;
 
-		public Mapper(File fGdb, File fInput, File fOutput, File fReport, DataSource is, DataSource os, int inputColumn, int verbose)
+		public Mapper(List<String> connections, File fInput, File fOutput, File fReport, DataSource is, DataSource os, int inputColumn, int verbose)
 		{
-			this.fGdb = fGdb;
+			this.connections = connections;
 			this.fInput = fInput;
 			this.fOutput = fOutput;
 			this.fReport = fReport;
@@ -191,7 +206,11 @@ public class BatchMapper
 		
 		private void connectGdb() throws IDMapperException
 		{
-			gdb = SimpleGdbFactory.createInstance("" + fGdb, new DataDerby(), 0);
+			IDMapperStack gdb = new IDMapperStack();
+			for (String connectionString : connections)
+			{
+				gdb.addIDMapper(connectionString);
+			}
 		}
 		
 		public void writeMapping() throws IOException, IDMapperException
@@ -199,13 +218,18 @@ public class BatchMapper
 			LineNumberReader reader = new LineNumberReader(new FileReader (fInput));
 			String line;
 			PrintWriter writer = new PrintWriter (new FileWriter (fOutput));
+			Set<DataSource> dsSet = new HashSet<DataSource>();
+			dsSet.add(os);
 			while ((line = reader.readLine()) != null)
 			{
 				String[] fields = line.split("\t");
 				if (fields.length > inputColumn && fields[inputColumn] != null)
 				{
-					Xref srcRef = new Xref(fields[inputColumn], is); 
-					List<Xref> destRefs = gdb.getCrossRefs(srcRef, os);
+					Xref srcRef = new Xref(fields[inputColumn], is);
+					Set<Xref> srcSet = new HashSet<Xref>();
+					srcSet.add(srcRef);
+					Map<Xref, Set<Xref>> mapresult = gdb.mapID(srcSet, dsSet);
+					Set<Xref> destRefs = mapresult.get (srcSet);
 					if (destRefs.size() == 0)
 					{
 						missing.add (srcRef);
@@ -219,7 +243,7 @@ public class BatchMapper
 					{
 						okLines++;
 						// use first one
-						writer.print(destRefs.get(0).getId());
+						writer.print(destRefs.toArray(new Xref[0])[0].getId());
 					}
 					totalLines++;
 				}
@@ -298,7 +322,18 @@ public class BatchMapper
 			printUsage();
 			System.exit(1);
 		}
-		Mapper mapper = new Mapper(settings.fGdb, 
+		try
+		{
+			Class.forName("org.bridgedb.file.IDMapperText");
+			Class.forName("org.bridgedb.rdb.IDMapperRdb");
+		}
+		catch (ClassNotFoundException ex)
+		{
+			ex.printStackTrace();
+			//TODO: better exception handling
+		}
+		Mapper mapper = new Mapper(
+				settings.connectStrings, 
 				settings.fInput, settings.fOutput, settings.fReport, 
 				settings.is, settings.os, settings.inputColumn, settings.verbose);
 		mapper.run();
