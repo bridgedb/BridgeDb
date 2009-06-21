@@ -15,10 +15,14 @@
 // limitations under the License.
 //
 
-package org.bridgedb;
+package org.bridgedb.file;
 
 import java.util.Set;
 import java.util.Map;
+
+import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 
 
 /**

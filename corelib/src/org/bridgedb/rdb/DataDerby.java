@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 //
-package org.bridgedb;
+package org.bridgedb.rdb;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +29,8 @@ import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import org.bridgedb.IDMapperException;
 
 
 //import org.pathvisio.debug.Logger;

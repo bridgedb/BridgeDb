@@ -19,6 +19,10 @@ package org.bridgedb;
 import java.io.File;
 import java.util.Set;
 
+import org.bridgedb.rdb.DataDerby;
+import org.bridgedb.rdb.SimpleGdb;
+import org.bridgedb.rdb.SimpleGdbFactory;
+
 import junit.framework.TestCase;
 
 public class Test extends TestCase 

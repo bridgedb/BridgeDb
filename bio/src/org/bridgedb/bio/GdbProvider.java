@@ -25,12 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bridgedb.DBConnector;
-import org.bridgedb.DataDerby;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperRdb;
-import org.bridgedb.SimpleGdb;
-import org.bridgedb.SimpleGdbFactory;
+import org.bridgedb.rdb.DBConnector;
+import org.bridgedb.rdb.DataDerby;
+import org.bridgedb.rdb.IDMapperRdb;
+import org.bridgedb.rdb.SimpleGdb;
+import org.bridgedb.rdb.SimpleGdbFactory;
 
 
 //import org.pathvisio.debug.Logger;

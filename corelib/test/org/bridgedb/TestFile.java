@@ -21,6 +21,9 @@ import buildsystem.Measure;
 import java.io.File;
 import java.io.IOException;
 
+import org.bridgedb.file.IDMapperFile;
+import org.bridgedb.file.IDMapperText;
+
 import junit.framework.TestCase;
 
 public class TestFile extends TestCase 

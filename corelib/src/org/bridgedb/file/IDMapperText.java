@@ -15,12 +15,18 @@
 // limitations under the License.
 //
 
-package org.bridgedb;
+package org.bridgedb.file;
 
 import java.util.Set;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.bridgedb.BridgeDb;
+import org.bridgedb.Driver;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 
 /**
  * Class for mapping ID from delimited text file

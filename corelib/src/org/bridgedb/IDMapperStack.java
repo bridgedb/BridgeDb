@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bridgedb.rdb.IDMapperRdb;
+
 
 /**
  * combines multiple {@link IDMapperRdb}'s in a stack.

@@ -14,10 +14,12 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 //
-package org.bridgedb;
+package org.bridgedb.rdb;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import org.bridgedb.IDMapperException;
 
 
 /**

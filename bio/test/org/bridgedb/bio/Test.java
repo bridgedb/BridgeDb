@@ -20,14 +20,14 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-import org.bridgedb.DataDerby;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
-import org.bridgedb.SimpleGdb;
-import org.bridgedb.SimpleGdbFactory;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefWithSymbol;
+import org.bridgedb.rdb.DataDerby;
+import org.bridgedb.rdb.SimpleGdb;
+import org.bridgedb.rdb.SimpleGdbFactory;
 
 import junit.framework.TestCase;
 

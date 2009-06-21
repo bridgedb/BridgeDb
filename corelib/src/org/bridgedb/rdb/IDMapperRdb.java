@@ -14,13 +14,21 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 //
-package org.bridgedb;
+package org.bridgedb.rdb;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.bridgedb.BridgeDb;
+import org.bridgedb.DataSource;
+import org.bridgedb.Driver;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
+import org.bridgedb.XrefWithSymbol;
 
 /**
  * Interface for all classes that provide Gdb-like functionality,

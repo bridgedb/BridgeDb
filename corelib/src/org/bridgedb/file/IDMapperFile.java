@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 
-package org.bridgedb;
+package org.bridgedb.file;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -23,6 +23,12 @@ import java.util.Map;
 import java.util.HashMap;
 
 import java.io.IOException;
+
+import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 
 /**
  * Interface for ID mapping from files

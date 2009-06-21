@@ -14,12 +14,19 @@
 // See the License for the specific language governing permissions and 
 // limitations under the License.
 //
-package org.bridgedb;
+package org.bridgedb.rdb;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
+import org.bridgedb.XrefWithSymbol;
 
 
 /**

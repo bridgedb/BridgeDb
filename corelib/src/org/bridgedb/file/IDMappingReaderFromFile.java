@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 
-package org.bridgedb;
+package org.bridgedb.file;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.HashMap;
 
 import java.net.URL;
+
+import org.bridgedb.DataSource;
+import org.bridgedb.Xref;
 
 
 /**
