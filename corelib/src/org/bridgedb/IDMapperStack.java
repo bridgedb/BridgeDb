@@ -23,20 +23,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bridgedb.rdb.IDMapperRdb;
-
-
 /**
- * combines multiple {@link IDMapperRdb}'s in a stack.
+ * combines multiple {@link IDMapper}'s in a stack.
  * <p>
- * The behavior of the {@link IDMapperRdb} interface implementations
+ * The behavior of the {@link IDMapper} interface implementations
  * differs per method:
  * if the method returns a single result, usually it is 
  * from the first child database that has a sensible result.
  * This also means that the child databases have a definitive
  * ordering: the first one shadows the second one for some results.
  * <p>
- * If the method returns a list, DoubleGdb joins
+ * If the method returns a list, IDMapperStack joins
  * the result from all connected child databases together.
  */
 public class IDMapperStack implements IDMapper

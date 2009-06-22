@@ -31,19 +31,29 @@ package org.bridgedb;
 public class IDMapperException extends Exception
 {
 
-	/** See Exception(Throwable). */
+	/** 
+	 * See Exception(Throwable). 
+	 * @param t cause
+	 */
 	public IDMapperException (Throwable t)
 	{
 		super (t);
 	}
 	
-	/** See Exception(String, Throwable). */
+	/** 
+	 * See Exception(String, Throwable). 
+	 * @param msg a message
+	 * @param t cause
+	 */
 	public IDMapperException (String msg, Throwable t)
 	{
 		super (msg, t);
 	}
 	
-	/** See Exception (String). */
+	/** 
+	 * See Exception (String). 
+	 * @param msg a message
+	 */
 	public IDMapperException (String msg)
 	{
 		super (msg);

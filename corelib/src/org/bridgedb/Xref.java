@@ -17,8 +17,8 @@
 package org.bridgedb;
 
 /**
- * Class to store an id + {@link DataSource} combination, which represents
- * an unique gene product
+ * Stores an id + {@link DataSource} combination, which represents
+ * an unique gene product.
  * <p>
  * Immutable class, thread safe
  */
@@ -30,24 +30,36 @@ public class Xref implements Comparable<Xref>
 	// String representation of this xref
 	final private String rep;
 	
+	/**
+	 * @param id the Id part of this Xref
+	 * @param ds the DataSource part of this Xref.
+	 */
 	public Xref(String id, DataSource ds) {
 		this.id = id;
 		this.ds = ds;
 		rep = (ds == null ? "" : ds.getSystemCode()) + ":" + id; 
 	}
 	
+	/**
+	 * @return the DataSource part of this Xref
+	 */
 	public DataSource getDataSource() { return ds; }
+	
+	/**
+	 * @return the id part of this Xref
+	 */
 	public String getId() { return id; }
 	
 	/**
-	 * @deprecated
-	 * use Xref.toString
+	 * @return short string representation for this Xref, for example En:ENSG000001 or X:1004_at
+	 *   This string representation is not meant to be stored or parsed, it is there mostly for
+	 *   debugging purposes.
 	 */
-	public String getName() { return toString(); }
 	public String toString() { return rep;  }
 	
 	/**
-	 * hashCode calculated from id and datasource combined
+	 * hashCode calculated from id and datasource combined.
+	 * @return the hashCode
 	 */
 	public int hashCode() 
 	{
@@ -55,7 +67,8 @@ public class Xref implements Comparable<Xref>
 	}
 	
 	/**
-	 * Returns true if both the id and the datasource are equal. 
+	 * @return true if both the id and the datasource are equal.
+	 * @param o Object to compare to
 	 */
 	public boolean equals(Object o) 
 	{
@@ -67,27 +80,20 @@ public class Xref implements Comparable<Xref>
 			(ds == null ? ref.ds == null : ds.equals(ref.ds));
 	}
 	
+	/**
+	 * Compares two Xrefs, asciibetically using string representation.
+	 * @param idc Xref to compare to
+	 * @return 0 if equal, positive number if higher, negative number if lower. 
+	 */
 	public int compareTo (Xref idc) 
 	{
 		return rep.compareTo(idc.rep);
 	}
 	
 	/**
-		@deprecated unused
-	*/
-	public boolean valid() 
-	{
-		return ds.getSystemCode().length() > 0 && id.length() > 0;
-	}
-
-	/**
-	 * @deprecated use this.getDataSource().getFullName() instead.
+	 * Uses DataSource.getUrl() to create a valid URL for an online webpage describing this entity.
+	 * @return url as a String.
 	 */
-	public String getDatabaseName() 
-	{
-		return ds.getFullName();
-	}
-	
 	public String getUrl()
 	{
 		return ds.getUrl (id);

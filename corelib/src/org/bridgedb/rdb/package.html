@@ -1,0 +1,12 @@
+<html>
+<body>
+Driver and helper classes for using relational databases as identifier mapping services.
+<p>
+For example, to use a downloadable derby database (pgdb file) as a mapping resource, 
+you can use the following piece of code:  
+<pre>
+	class.forName("org.bridgedb.file.IDMapperRdb");
+	mapper = BridgeDb.connect ("idmapper-pgdb:path/to/file.pgdb");
+</pre>
+</body>
+</html>

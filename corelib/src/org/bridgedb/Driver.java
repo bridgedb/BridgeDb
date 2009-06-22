@@ -25,7 +25,7 @@ package org.bridgedb;
 public interface Driver 
 {
 	/**
-	 * Never call this method directly, use {@link BridgeDb.connect()} instead.
+	 * Never call this method directly, use {@link BridgeDb#connect} instead.
 	 * This method interprets the location part of the connection string and uses
 	 * that to configure an {@link IDMapper}.
 	 * @return a new instance of the correct
