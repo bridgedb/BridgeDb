@@ -59,6 +59,9 @@ public class IDMapperText extends IDMapperFile
             int idx = location.indexOf("@");
             if (idx<=0) {
                 path = location;
+                // defaults if no options are provided:
+                idsep = new char[] { ',' };
+                dssep = new char[] { '\t' };
             } else {
                 // Is an url always contains :/ ?
                 if (idx > location.indexOf(":/")) { //@ is part of the path

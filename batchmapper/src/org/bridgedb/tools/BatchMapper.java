@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -113,7 +114,14 @@ public class BatchMapper
 				if (pos > args.length) return "File expected after -t";
 				File f = new File (args[pos]);
 				if (!f.exists()) return "File " + args[pos] + " does not exist";
-				settings.connectStrings.add ("idmapper-text:" + f.getAbsolutePath());
+				try
+				{
+					settings.connectStrings.add ("idmapper-text:" + f.toURL());
+				}
+				catch (MalformedURLException ex)
+				{
+					return ex.getMessage();
+				}
 			}
 			else if (args[pos].equals("-i"))
 			{
@@ -206,7 +214,7 @@ public class BatchMapper
 		
 		private void connectGdb() throws IDMapperException
 		{
-			IDMapperStack gdb = new IDMapperStack();
+			gdb = new IDMapperStack();
 			for (String connectionString : connections)
 			{
 				gdb.addIDMapper(connectionString);

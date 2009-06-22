@@ -43,7 +43,7 @@ public final class BridgeDb
 	{
 		int pos = connectionString.indexOf(":");
 		if (pos < 0) throw new IllegalArgumentException("connection String must be of the form 'protocol:location'");
-		String protocol = connectionString.substring(0, pos - 1);
+		String protocol = connectionString.substring(0, pos);
 		String location = connectionString.substring(pos + 1);
 		
 		if (drivers.containsKey(protocol))
