@@ -36,16 +36,26 @@ import org.bridgedb.Xref;
  */ 
 public abstract class IDMapperFile implements IDMapper {
     protected final IDMapperFileCapabilities cap;
-    protected Map<Xref,Set<Xref>> mapXrefs; // map from each Xref to all its matched references
     protected final IDMappingReader reader;
+    protected boolean transitivity;
 
     /**
-     * Constuctor from a url. Free search is unsupported by default.
+     * Constuctor from a url. transitivity is unsupported by default.
      * @param url
      * @throws java.io.IOException
      */
     public IDMapperFile(final IDMappingReader reader) {
         this(reader, false);
+    }
+
+    /**
+     * free search is unsupported by default.
+     * @param url
+     * @throws java.io.IOException
+     */
+    public IDMapperFile(final IDMappingReader reader,
+            final boolean transitivity) {
+        this(reader, transitivity, false);
     }
 
     /**
@@ -55,13 +65,24 @@ public abstract class IDMapperFile implements IDMapper {
      * @throws IDMapperException when failed to read
      */
     public IDMapperFile(final IDMappingReader reader,
+            final boolean transitivity,
             final boolean freeSearch) {
         if (reader==null) {
             throw new NullPointerException();
         }
 
         this.reader = reader;
-        cap = new IDMapperFileCapabilities(freeSearch);        
+        cap = new IDMapperFileCapabilities(freeSearch);
+
+        setTransitivity(transitivity);
+    }
+
+    public void setTransitivity(final boolean transitivity) {
+        this.transitivity = transitivity;
+    }
+
+    public boolean getTransitivity() {
+        return transitivity;
     }
 
     /**
@@ -75,15 +96,18 @@ public abstract class IDMapperFile implements IDMapper {
         if (srcXrefs==null || tgtDataSources==null) {
             throw new NullPointerException();
         }
-
-        read();
-
+        
         if (!cap.getSupportedTgtDataSources().containsAll(tgtDataSources)) {
-            // TODO: throw an expeption or just ignore the unsupported data sources?
+            //TODO: throw an expeption or just ignore the unsupported data sources?
             throw new IDMapperException("Unsupported target data sources.");
         }
 
         Map<Xref, Set<Xref>> return_this = new HashMap();
+
+        Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
+        if (mapXrefs==null) {
+            return return_this;
+        }
 
         for (Xref srcXref : srcXrefs) {
             Set<Xref> refs = mapXrefs.get(srcXref);
@@ -116,7 +140,10 @@ public abstract class IDMapperFile implements IDMapper {
             throw new NullPointerException();
         }
 
-        read();
+        Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
+        if (mapXrefs==null) {
+            return false;
+        }
 
         return mapXrefs.containsKey(xref);
     }
@@ -134,58 +161,39 @@ public abstract class IDMapperFile implements IDMapper {
         return cap;
     }
 
-    public void read() throws IDMapperException {
-        if (mapXrefs==null) {
-            reader.read();
-            cap.addSrcDataSources(reader.getDataSources());
-            cap.addTgtDataSources(reader.getDataSources());
-            mapXrefs = reader.getIDMappings();
+    private class IDMapperFileCapabilities implements IDMapperCapabilities {
+        private boolean freeSearch;
+
+        public IDMapperFileCapabilities() {
+            this(false);
+        }
+
+        public IDMapperFileCapabilities(final boolean freeSearch) {
+            this.freeSearch = freeSearch;
+        }
+
+        public void setFreeSearchSupported(final boolean freeSearch) {
+            this.freeSearch = freeSearch;
+        }
+
+        public boolean isFreeSearchSupported() {
+            return freeSearch;
+        }
+
+        public Set<DataSource> getSupportedSrcDataSources() {
+            Set<DataSource> dss = null;
+            try {
+                dss = IDMapperFile.this.reader.getDataSources();
+            } catch (IDMapperException ex) {
+                ex.printStackTrace();
+            }
+            return dss;
+        }
+
+        public Set<DataSource> getSupportedTgtDataSources() {
+            return getSupportedSrcDataSources(); //
         }
     }
+
 }
 
-class IDMapperFileCapabilities implements IDMapperCapabilities {
-    private boolean freeSearch;
-    private final Set<DataSource> srcDataSources;
-    private final Set<DataSource> tgtDataSources;
-
-    public IDMapperFileCapabilities() {
-        this(false);
-    }
-
-    public IDMapperFileCapabilities(final boolean freeSearch) {
-        this.freeSearch = freeSearch;
-        srcDataSources = new HashSet();
-        tgtDataSources = new HashSet();
-    }
-
-    public void setFreeSearchSupported(final boolean freeSearch) {
-        this.freeSearch = freeSearch;
-    }
-
-    public void addSrcDataSources(final Set<DataSource> dataSources) {
-        if (dataSources==null) {
-            throw new NullPointerException();
-        }
-        srcDataSources.addAll(dataSources);
-    }
-
-    public void addTgtDataSources(final Set<DataSource> dataSources) {
-        if (dataSources==null) {
-            throw new NullPointerException();
-        }
-        tgtDataSources.addAll(dataSources);
-    }
-
-    public boolean isFreeSearchSupported() {
-        return freeSearch;
-    }
-
-    public Set<DataSource> getSupportedSrcDataSources() {
-        return srcDataSources;
-    }
-
-    public Set<DataSource> getSupportedTgtDataSources() {
-        return tgtDataSources;
-    }    
-}

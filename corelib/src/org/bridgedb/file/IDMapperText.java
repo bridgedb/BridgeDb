@@ -18,6 +18,10 @@
 package org.bridgedb.file;
 
 import java.util.Set;
+import java.util.HashSet;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,26 +49,106 @@ public class IDMapperText extends IDMapperFile
 		
 		public IDMapper connect(String location) throws IDMapperException
 		{
-			//TODO: parse arguments to determine idsep and dssep
+			// parse arguments to determine idsep and dssep
+            // sample: dssep:\t,idsep:;,idsep:,@file:/localfile.txt
+            // \t represents tab, \@ represents @
+            String  path = null;
+            char[] dssep = null;
+            char[] idsep = null;
+
+            int idx = location.indexOf("@");
+            if (idx<=0) {
+                path = location;
+            } else {
+                // Is an url always contains :/ ?
+                if (idx > location.indexOf(":/")) { //@ is part of the path
+                    path = location;
+                } else {
+                    while (idx>0 && location.charAt(idx-1)=='\\') { //escape \@
+                        idx = location.indexOf(idx+1);
+                    }
+
+                    if (idx==-1) {
+                        throw new IDMapperException("Wrong link formart!");
+                    }
+
+                    if (idx==location.length()-1) {
+                        throw new IDMapperException("Empty address!");
+                    }
+
+                    path = location.substring(idx+1);
+
+                    String config = location.substring(0, idx)+",";
+                    dssep = parseConfig(config, "dssep");
+                    idsep = parseConfig(config, "idsep");
+                }
+            }
+
 			try
 			{
-				return new IDMapperText(new URL(location), 
-						new String[] { "\t" }, 
-						new String[] { "," });
+				return new IDMapperText(new URL(path), dssep, idsep);
 			}
 			catch (MalformedURLException ex)
 			{
 				throw new IDMapperException(ex);
 			}
 		}
+
+        private char[] parseConfig(String config, String head) {
+            Set<Character> delimiters = new HashSet();
+            Pattern p = Pattern.compile(head+":(.|\\t|\\@),", Pattern.CASE_INSENSITIVE);
+            Matcher m = p.matcher(config);
+            while (m.find()) {
+                String sep = m.group(1);
+                if (sep.equalsIgnoreCase("\\t")) {
+                    sep = "\t";
+                } else if (sep.equalsIgnoreCase("\\@")) {
+                    sep = "@";
+                }
+
+                delimiters.add(sep.charAt(0));
+            }
+
+            int nsep = delimiters.size();
+            if (nsep==0) {
+                return null;
+            }
+
+            char[] ret = new char[nsep];
+            int isep = 0;
+            for (char c : delimiters) {
+                ret[isep++] = c;
+            }
+
+            return ret;
+        }
+        
 	}
-	
+
+    public IDMapperText(final URL url) {
+        super(new IDMappingReaderFromText(url));
+    }
+
     public IDMapperText(final URL url,
-            final String[] dataSourceDelimiters,
-            final String[] regExIDDelimiter) {
+            final char[] dataSourceDelimiters) {
+        super(new IDMappingReaderFromText(url,
+                dataSourceDelimiters));
+    }
+
+    public IDMapperText(final URL url,
+            final char[] dataSourceDelimiters,
+            final char[] regExIDDelimiters) {
+        this(url, dataSourceDelimiters, regExIDDelimiters, false);
+    }
+
+    public IDMapperText(final URL url,
+            final char[] dataSourceDelimiters,
+            final char[] regExIDDelimiters,
+            final boolean transitivity) {
         super(new IDMappingReaderFromText(url,
                 dataSourceDelimiters,
-                regExIDDelimiter));
+                regExIDDelimiters),
+              transitivity);
     }
 
     /**
@@ -77,5 +161,11 @@ public class IDMapperText extends IDMapperFile
      */
     public Set<Xref> freeSearch (String text, int limit) throws IDMapperException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setTransitivity(final boolean transitivity) {
+        super.setTransitivity(transitivity);
+        ((IDMappingReaderFromText)reader).setTransitivity(transitivity);
     }
 }

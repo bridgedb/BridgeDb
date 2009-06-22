@@ -33,20 +33,14 @@ public interface IDMappingReader {
 
     /**
      *
-     * @throws IDMapperException if failed
-     */
-    public void read() throws IDMapperException;
-
-    /**
-     *
      * @return data sources
      */
-    public Set<DataSource> getDataSources();
+    public Set<DataSource> getDataSources() throws IDMapperException;
 
     /**
      * 
      * @return ID mappings
      */
-    public Map<Xref,Set<Xref>> getIDMappings();
+    public Map<Xref,Set<Xref>> getIDMappings() throws IDMapperException;
 
 }

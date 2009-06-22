@@ -21,6 +21,10 @@ import buildsystem.Measure;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
 
@@ -40,16 +44,36 @@ public class TestFile extends TestCase
 		assertTrue (f.exists());
 		
 		
-		IDMapperFile idMapper = new IDMapperText (f.toURL(), 
-				new String[] { "\t"} , 
-				new String[] { ","} );
+		IDMapperFile idMapper = new IDMapperText (f.toURL());
+
+//        IDMapperFile idMapper = new IDMapperText (f.toURL(),
+//                new char[] {'\t'},
+//                null,
+//                true);
+
+        DataSource ds = DataSource.getByFullName("Ensembl Gene ID");
+        Xref xref = new Xref("YHR055C",ds);
+        Set<Xref> srcXrefs = new HashSet();
+        srcXrefs.add(xref);
+
+        Set<DataSource> tgtDataSources = new HashSet();
+        tgtDataSources.add(ds);
+        tgtDataSources.add(DataSource.getByFullName("EMBL (Genbank) ID"));
+        tgtDataSources.add(DataSource.getByFullName("EntrezGene ID"));
 		
 		long start = System.currentTimeMillis();
-		idMapper.read();
+        // mapID for the first time will trigger reading
+		Map<Xref, Set<Xref>> mapXrefs = idMapper.mapID(srcXrefs, tgtDataSources);
 		long end = System.currentTimeMillis();
 		long delta = end - start;
 		System.out.println (delta);
 		measure.add ("timing::read yeast id's", "" + delta, "msec");
+        
+        Set<Xref> xrefs = mapXrefs.get(xref);
+        if (xrefs!=null && !xrefs.isEmpty())
+        for (Xref xr : xrefs) {
+            System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
+        }
 		
 	}
 }
