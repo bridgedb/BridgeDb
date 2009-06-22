@@ -51,15 +51,15 @@ public class TestFile extends TestCase
 //                null,
 //                true);
 
-        DataSource ds = DataSource.getByFullName("Ensembl Gene ID");
+        DataSource ds = DataSource.getByFullName("Ensembl Yeast");
         Xref xref = new Xref("YHR055C",ds);
         Set<Xref> srcXrefs = new HashSet();
         srcXrefs.add(xref);
 
         Set<DataSource> tgtDataSources = new HashSet();
         tgtDataSources.add(ds);
-        tgtDataSources.add(DataSource.getByFullName("EMBL (Genbank) ID"));
-        tgtDataSources.add(DataSource.getByFullName("EntrezGene ID"));
+        tgtDataSources.add(DataSource.getByFullName("EMBL"));
+        tgtDataSources.add(DataSource.getByFullName("Entrez Gene"));
 		
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading
