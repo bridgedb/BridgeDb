@@ -56,6 +56,12 @@ public final class BridgeDb
 		}
 	}
 	
+	/**
+	 * Used by {@link Driver} implementations to register themselves and make
+	 * themselves available to the world.
+	 * @param protocol The protocol (part before ":" in connection string) that this Driver is for.
+	 * @param driver An instance of the Driver.
+	 */
 	public static void register(String protocol, Driver driver)
 	{
 		drivers.put(protocol, driver);

@@ -28,18 +28,27 @@ import java.util.regex.Pattern;
  * Can be used to guess the BioDataSource of an identifier
  * of unknown origin.
  */
-public class DataSourcePatterns 
+public final class DataSourcePatterns 
 {
-	protected static Map<DataSource, Pattern> patterns = new HashMap<DataSource, Pattern>();
+	/** private constructor, to prevent instantiation of utility class. */
+	private DataSourcePatterns() {}
 	
+	private static Map<DataSource, Pattern> patterns = new HashMap<DataSource, Pattern>();
+	
+	/**
+	 * Register a regex Pattern for recognizing a DataSource.
+	 * @param key the DataSource that may be recognized.
+	 * @param value the Pattern to look for.
+	 */
 	public static void registerPattern (DataSource key, Pattern value)
 	{
 		patterns.put (key, value);
 	}
 	
 	/**
-	 * Convenience method. 
-	 * Returns a set of patterns which matches the given id.
+	 * Look for all DataSource patterns that match a given input. 
+	 * @param id to compare with registered patterns
+	 * @return set of patterns which matches the given id.
 	 */
 	public static Set<DataSource> getDataSourceMatches (String id)
 	{
@@ -53,11 +62,13 @@ public class DataSourcePatterns
 	}
 	
 	/**
-	 * Return all known data patterns, mapped to
+	 * @return all known data patterns, mapped to
 	 * their BioDataSource.
 	 * For example, this map will contain:
-	 *    BioDataSource.ENSEMBL -> Pattern.compile("ENSG\d+")
-	 *    
+	 * <pre>
+	 *    BioDataSource.ENSEMBL_HUMAN -> Pattern.compile("ENSG\d+")
+	 * </pre>
+	 * <p>
 	 * There is not guaranteed to be a Pattern for every
 	 * BioDataSource constant.
 	 */

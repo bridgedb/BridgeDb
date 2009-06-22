@@ -50,6 +50,8 @@ bridgedb.version=${bridgedb.version}
 			header="Revision ${subversion_revision}"
 			footer="Generated ${TODAY}">
 		<package name="org.bridgedb"/>
+		<package name="org.bridgedb.file"/>
+		<package name="org.bridgedb.rdb"/>
 		<sourcepath>			
 			<pathelement location="src"/>
 		</sourcepath>

@@ -24,5 +24,16 @@ package org.bridgedb;
  */
 public interface Driver 
 {
+	/**
+	 * Never call this method directly, use {@link BridgeDb.connect()} instead.
+	 * This method interprets the location part of the connection string and uses
+	 * that to configure an {@link IDMapper}.
+	 * @return a new instance of the correct
+	 * 	IDMapper implementation every time, configured according to the locationString.
+	 * @param locationString string with all necessary information to configure the resource. 
+	 * 	e.g. this could contain a URL or file location with optional parameters at the end.
+	 * @throws IDMapperException when a connection to the resource could not be created, or
+	 *  the IDMapper implementation could not be instantiated for any reason. 
+	 */
 	IDMapper connect (String locationString) throws IDMapperException;
 }

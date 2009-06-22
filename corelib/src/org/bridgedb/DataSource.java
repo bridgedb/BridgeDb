@@ -34,8 +34,8 @@ contains information about a certain DataSource, such as
 </ul>
 The DataSource class uses the extensible enum pattern.
 You can't instantiate DataSources directly, instead you have to use one of
-the constants such as DataSource.ENSEMBL, or 
-the "getBySystemcode" or "getByFullname" methods.
+the constants from the org.bridgedb.bio module such as BioDataSource.ENSEMBL, 
+or the "getBySystemcode" or "getByFullname" methods.
 These methods return a predefined DataSource object if it exists.
 If a predefined DataSource for a requested SystemCode doesn't exists,
 a new one springs to life automatically. This can be used 
@@ -47,18 +47,10 @@ the "register" method.
 <p>
 This way any number of pre-defined DataSources can be used, 
 but plugins can define new ones and you can
-handle unknown systemcodes that occur in Gpml in the same 
+handle unknown data sources in the same 
 way as predefined ones.
 <p>
-PathVisio should never have to refer to system codes as Strings, except
-<ul>
-<li>in low level SQL code dealing with Gdb's, Gex and MAPP's (MAPPFormat.java)
-<li>in low level GPML code (GPMLFormat.java)
-</ul>
-The preferred way to refer to a specific database is using a 
-constant defined here, e.g. "DataSource.ENSEMBL"
-<p>
-Definitions for common DataSources are defined in {@link org.bridgedb.bio.BioDataSource}.
+Definitions for common DataSources can be found in {@link org.bridgedb.bio.BioDataSource}.
 */
 public final class DataSource
 {
@@ -86,7 +78,7 @@ public final class DataSource
 	private DataSource () {}
 	
 	/** 
-	 * turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
+	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
 	 * @param id identifier to use in url
 	 * @return Url
 	 */
@@ -138,6 +130,10 @@ public final class DataSource
 		return mainUrl;
 	}
 
+	/**
+	 * @return type of entity that this DataSource describes, for example
+	 *   "metabolite", "gene", "protein" or "probe" 
+	 */
 	public String getType()
 	{
 		return type;
@@ -253,11 +249,11 @@ public final class DataSource
 	}
 	
 	/** 
-	 * so new system codes can be added easily by 
-	 * plugins. url and urlMaker may be null 
+	 * Register a new DataSource with (optional) detailed information.
+	 * This can be used by other modules to define new DataSources.
 	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
 	 * @param fullName full name used in GPML. Must be 20 or less characters
-	 * @return Builder that can be used for setting additional properties
+	 * @return Builder that can be used for adding detailed information.
 	 */
 	public static Builder register(String sysCode, String fullName)
 	{
@@ -274,10 +270,9 @@ public final class DataSource
 		}
 		else if (sysCode != null && bySysCode.containsKey(sysCode))
 		{
-			current = bySysCode.get(bySysCode);
+			current = bySysCode.get(sysCode);
 		}
-		
-		if (current == null)
+		else
 		{
 			current = new DataSource ();
 			registry.add (current);
