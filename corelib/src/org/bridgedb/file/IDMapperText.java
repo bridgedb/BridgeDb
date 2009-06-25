@@ -72,7 +72,7 @@ public class IDMapperText extends IDMapperFile
                     }
 
                     if (idx==-1) {
-                        throw new IDMapperException("Wrong link formart!");
+                        throw new IDMapperException("Wrong link format!");
                     }
 
                     if (idx==location.length()-1) {
@@ -128,30 +128,37 @@ public class IDMapperText extends IDMapperFile
         
 	}
 
+    protected final URL url;
+    protected char[] dataSourceDelimiters;
+    protected char[] idDelimiters;
+
+
     public IDMapperText(final URL url) {
-        super(new IDMappingReaderFromText(url));
+        this(url,  new char[] {'\t'}); // default is tab delimited
     }
 
     public IDMapperText(final URL url,
             final char[] dataSourceDelimiters) {
-        super(new IDMappingReaderFromText(url,
-                dataSourceDelimiters));
+        this(url, dataSourceDelimiters, null);
     }
 
     public IDMapperText(final URL url,
             final char[] dataSourceDelimiters,
-            final char[] regExIDDelimiters) {
-        this(url, dataSourceDelimiters, regExIDDelimiters, false);
+            final char[] idDelimiters) {
+        this(url, dataSourceDelimiters, idDelimiters, false);
     }
 
     public IDMapperText(final URL url,
             final char[] dataSourceDelimiters,
-            final char[] regExIDDelimiters,
+            final char[] idDelimiters,
             final boolean transitivity) {
         super(new IDMappingReaderFromText(url,
                 dataSourceDelimiters,
-                regExIDDelimiters),
+                idDelimiters),
               transitivity);
+        this.url = url;
+        this.dataSourceDelimiters = dataSourceDelimiters;
+        this.idDelimiters = idDelimiters;
     }
 
     /**
@@ -170,5 +177,29 @@ public class IDMapperText extends IDMapperFile
     public void setTransitivity(final boolean transitivity) {
         super.setTransitivity(transitivity);
         ((IDMappingReaderFromText)reader).setTransitivity(transitivity);
+    }
+
+    public URL getURL() {
+        return url;
+    }
+
+    public char[] getDataSourceDelimiters() {
+        return dataSourceDelimiters;
+    }
+
+    public char[] getIDDelimiters() {
+        return idDelimiters;
+    }
+
+    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) {
+        this.dataSourceDelimiters = dataSourceDelimiters;
+        ((IDMappingReaderFromText)this.getIDMappingReader()).
+                setDataSourceDelimiters(dataSourceDelimiters);
+    }
+
+    public void setIDDelimiters(final char[] idDelimiters) {
+        this.idDelimiters = idDelimiters;
+        ((IDMappingReaderFromText)this.getIDMappingReader())
+                .setIDDelimiters(idDelimiters);
     }
 }

@@ -161,6 +161,10 @@ public abstract class IDMapperFile implements IDMapper {
         return cap;
     }
 
+    protected IDMappingReader getIDMappingReader() {
+        return reader;
+    }
+
     private class IDMapperFileCapabilities implements IDMapperCapabilities {
         private boolean freeSearch;
 

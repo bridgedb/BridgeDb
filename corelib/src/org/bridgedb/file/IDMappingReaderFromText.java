@@ -51,10 +51,6 @@ public class IDMappingReaderFromText implements IDMappingReader {
 
     protected boolean dsValid, idMappingValid;
 
-    public IDMappingReaderFromText(final URL url) {
-        this(url, new char[] {'\t'}); //tab-delimited as default
-    }
-
     public IDMappingReaderFromText(final URL url,
             final char[] dataSourceDelimiters) {
         this(url, dataSourceDelimiters, null);
