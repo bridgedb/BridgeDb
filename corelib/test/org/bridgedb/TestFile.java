@@ -21,19 +21,24 @@ import buildsystem.Measure;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.Set;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import junit.framework.TestCase;
 
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
 
-import junit.framework.TestCase;
-
+/**
+ * Test identifier mapping using a tab-delimited text file.
+ */
 public class TestFile extends TestCase 
 {
-	Measure measure;
-	public void setUp()
+	private Measure measure;
+	
+	@Override public void setUp()
 	{
 		measure = new Measure("bridgedb_timing.txt");
 	}
@@ -51,15 +56,17 @@ public class TestFile extends TestCase
 //                null,
 //                true);
 
-        DataSource ds = DataSource.getByFullName("Ensembl Yeast");
-        Xref xref = new Xref("YHR055C",ds);
-        Set<Xref> srcXrefs = new HashSet();
+		DataSource ensYeast = DataSource.getByFullName("Ensembl Yeast");
+        Xref xref = new Xref("YHR055C", ensYeast);
+        Set<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(xref);
 
-        Set<DataSource> tgtDataSources = new HashSet();
-        tgtDataSources.add(ds);
-        tgtDataSources.add(DataSource.getByFullName("EMBL"));
-        tgtDataSources.add(DataSource.getByFullName("Entrez Gene"));
+        Set<DataSource> tgtDataSources = new HashSet<DataSource>();
+        tgtDataSources.add(ensYeast);
+        DataSource entrez = DataSource.getByFullName("Entrez Gene");
+        DataSource embl = DataSource.getByFullName("EMBL");
+        tgtDataSources.add(entrez);
+        tgtDataSources.add(embl);
 		
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading
@@ -69,11 +76,23 @@ public class TestFile extends TestCase
 		System.out.println (delta);
 		measure.add ("timing::read yeast id's", "" + delta, "msec");
         
+		Set<Xref> expected = new HashSet<Xref>();
+        expected.addAll (Arrays.asList(
+        		new Xref("YHR055C", ensYeast), 
+        		new Xref("U00061", embl), 
+        		new Xref("K02204", embl),
+        		new Xref("AY558517", embl),
+        		new Xref("AY693077", embl),
+        		new Xref("856452", entrez),
+        		new Xref("856450", entrez)
+        		));
         Set<Xref> xrefs = mapXrefs.get(xref);
+        assertEquals (expected, xrefs);
+        
         if (xrefs!=null && !xrefs.isEmpty())
         for (Xref xr : xrefs) {
             System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
         }
-		
+        
 	}
 }
