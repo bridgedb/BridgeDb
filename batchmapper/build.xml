@@ -4,6 +4,7 @@
 	<path id="project.class.path">
 		<pathelement location="build"/>
 		<pathelement location="../lib/bridgedb.jar"/>
+		<pathelement location="../lib/bridgedb-bio.jar"/>
 		<!--TODO make sure corelib build is called first -->
 	</path>
 
@@ -32,6 +33,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="org.bridgedb.tools.BatchMapper"/>
 				<attribute name="Class-Path" value="bridgedb.jar"/>
+				<attribute name="Class-Path" value="bridgedb-bio.jar"/>
 			</manifest>
 			<fileset dir="build" includes="**/*.class"/>
 		</jar>

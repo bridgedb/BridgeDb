@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -37,6 +38,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
+import org.bridgedb.bio.BioDataSource;
 
 public class BatchMapper 
 {
@@ -76,10 +78,10 @@ public class BatchMapper
 				"		[-v|-vv] \n" +
 				"		[-g <gene database>] \n " +
 				"		[-t <tab-delimited text file>] \n " +
-				"		-i <input file> \n" +
+				"		[-i <input file>] \n" +
 				"		-is <input system code> \n" +
 				"		-os <output system code> \n" +
-				"		-o <output file> \n" +
+				"		[-o <output file>] \n" +
 				"		[-c <input column, 0-based>]\n" +
 				"		[-r <report file>] \n" +
 				"\n" +
@@ -173,8 +175,6 @@ public class BatchMapper
 			pos++;
 		}
 		if (settings.connectStrings.size() == 0) return "Missing -t or -g options";
-		if (settings.fOutput == null) return "Missing -o option";
-		if (settings.fInput == null) return "Misisng -i option";
 		if (settings.is == null) return "Missing -is option";
 		if (settings.os == null) return "Missing -os option";
 		return null;
@@ -223,9 +223,25 @@ public class BatchMapper
 		
 		public void writeMapping() throws IOException, IDMapperException
 		{
-			LineNumberReader reader = new LineNumberReader(new FileReader (fInput));
+			LineNumberReader reader;
+			PrintWriter writer;
+			if (fInput != null)
+			{
+				reader = new LineNumberReader(new FileReader (fInput));
+			}
+			else
+			{
+				reader = new LineNumberReader(new InputStreamReader(System.in));
+			}
 			String line;
-			PrintWriter writer = new PrintWriter (new FileWriter (fOutput));
+			if (fOutput != null)
+			{
+				writer = new PrintWriter (new FileWriter (fOutput));
+			}
+			else
+			{
+				writer = new PrintWriter (System.out);
+			}
 			Set<DataSource> dsSet = new HashSet<DataSource>();
 			dsSet.add(os);
 			while ((line = reader.readLine()) != null)
@@ -238,7 +254,7 @@ public class BatchMapper
 					srcSet.add(srcRef);
 					Map<Xref, Set<Xref>> mapresult = gdb.mapID(srcSet, dsSet);
 					Set<Xref> destRefs = mapresult.get (srcSet);
-					if (destRefs.size() == 0)
+					if (destRefs == null || destRefs.size() == 0)
 					{
 						missing.add (srcRef);
 					}
@@ -247,7 +263,7 @@ public class BatchMapper
 						ambiguous.add (srcRef);
 					}
 					
-					if (destRefs.size() > 0)
+					if (destRefs != null && destRefs.size() > 0)
 					{
 						okLines++;
 						// use first one
@@ -322,6 +338,7 @@ public class BatchMapper
 	
 	public void run(String[] args)
 	{
+		BioDataSource.init();
 		Settings settings = new Settings();
 		String error = parseArgs(settings, args);
 		if (error != null)
