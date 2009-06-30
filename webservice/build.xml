@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project name="BridgeDb-WS" default="dist" basedir=".">
+
+  <!-- always be java 1.5 compatible -->
+  <property name="ant.build.javac.target" value="1.5"/>
+  <property name="ant.build.javac.source" value="1.5"/>
+	
+  <property name="jar.name" value="../bridgedb-webservice.jar"/>
+  
+  <target name="prepare">
+	<mkdir dir="build"/>
+  </target>
+
+  <target name="build" depends="prepare">
+	<javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+		<classpath>
+			<pathelement location="../corelib/lib/derby.jar"/>
+			<pathelement location="../lib/bridgedb.jar"/>
+			<pathelement location="../lib/bridgedb-bio.jar"/>
+			<pathelement location="lib/restlet-2.0m3/org.restlet.jar"/>
+		</classpath>
+	</javac>
+  </target>
+  
+  <target name="jar" depends="build">
+	<jar jarfile="${jar.name}">
+	  <manifest>
+	  	<attribute name="Main-Class" value="org.bridgedb.rest.Server"/>
+		<attribute name="Class-Path" value="lib/derby.jar lib/bridgedb.jar lib/bridgedb-bio.jar lib/org.restlet.jar"/>
+	  </manifest>
+	  <fileset dir="build"/>
+	</jar>
+  </target>
+
+  <target name="dist" depends="jar">
+  	<mkdir dir="dist"/>
+  	<mkdir dir="dist/lib"/>
+  	<copy toDir="dist" file="${jar.name}"/>
+  	<copy toDir="dist/lib" file="lib/restlet-2.0m3/org.restlet.jar"/>
+  	<copy toDir="dist/lib" flatten="true">
+  		<fileset dir="../">
+  			<include name="lib/bridgedb.jar"/>
+  			<include name="lib/bridgedb-bio.jar"/>
+  			<include name="corelib/lib/derby.jar"/>
+  		</fileset>
+  	</copy>
+  	
+
+  </target>
+
+  <target name="clean">
+	<delete dir="build"/>
+  </target>
+
+  <target name="dist-clean" depends="clean">
+	<delete file="${jar.name}"/>
+  	<delete dir="dist"/>
+  </target>
+</project>
