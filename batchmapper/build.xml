@@ -32,8 +32,7 @@
 		<jar jarfile="../lib/bridgedb-batchmapper.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.bridgedb.tools.BatchMapper"/>
-				<attribute name="Class-Path" value="bridgedb.jar"/>
-				<attribute name="Class-Path" value="bridgedb-bio.jar"/>
+				<attribute name="Class-Path" value="bridgedb.jar bridgedb-bio.jar"/>
 			</manifest>
 			<fileset dir="build" includes="**/*.class"/>
 		</jar>
