@@ -114,6 +114,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 			"SELECT backpageText FROM datanode " +
 			" WHERE id = ? AND code = ?"
 		);
+	final LazyPst pstAttribute = new LazyPst(
+			"SELECT attrvalue FROM attribute " +
+			" WHERE id = ? AND code = ? AND attrname = ?"
+		);
 	final LazyPst pstCrossRefs = new LazyPst (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
@@ -705,5 +709,24 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public IDMapperCapabilities getCapabilities() 
 	{
 		return caps;
+	}
+
+	@Override
+	public String getAttribute(Xref ref, String attrname)
+			throws IDMapperException 
+	{
+		try {
+			PreparedStatement pst = pstAttribute.getPreparedStatement();
+			pst.setString (1, ref.getId());
+			pst.setString (2, ref.getDataSource().getSystemCode());
+			pst.setString (3, attrname);
+			ResultSet r = pst.executeQuery();
+			String result = null;
+			if (r.next())
+			{
+				result = r.getString(1);
+			}
+			return result;
+		} catch	(SQLException e) { throw new IDMapperException (e); } // Database unavailable
 	}
 }

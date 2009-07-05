@@ -70,6 +70,15 @@ public abstract class IDMapperRdb implements IDMapper
 	public abstract String getDbName();
 
 	/**
+	 * Get information from the "Attribute" table, such as gene Symbol.
+	 * @param ref the entity to get the attribute for
+	 * @param attrname the attribute to look for.
+	 * @return the attribute, or null if nothing was found
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public abstract String getAttribute(Xref ref, String attrname) throws IDMapperException;
+	
+	/**
 	 * Gets the backpage info for the given gene id for display on BackpagePanel.
 	 * @param ref The gene to get the backpage info for
 	 * @return String with the backpage info, null if the gene was not found

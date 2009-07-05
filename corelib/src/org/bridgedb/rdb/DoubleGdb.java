@@ -361,4 +361,22 @@ public class DoubleGdb extends IDMapperRdb
 	{
 		return caps;
 	}
+
+	@Override
+	public String getAttribute(Xref ref, String attrname)
+			throws IDMapperException 
+	{
+		String result = null;
+		// return the first database with a result.
+		for (SimpleGdb child : gdbs)
+		{
+			if (child != null && child.isConnected())
+			{
+				result = child.getAttribute(ref, attrname);
+				if (result != null) return result;
+			}
+		}
+		// failure
+		return null;
+	}
 }
