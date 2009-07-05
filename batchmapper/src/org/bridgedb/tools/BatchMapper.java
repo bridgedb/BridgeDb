@@ -279,7 +279,7 @@ public class BatchMapper
 					Set<Xref> srcSet = new HashSet<Xref>();
 					srcSet.add(srcRef);
 					Map<Xref, Set<Xref>> mapresult = gdb.mapID(srcSet, dsSet);
-					Set<Xref> destRefs = mapresult.get (srcSet);
+					Set<Xref> destRefs = mapresult.get (srcRef);
 					if (destRefs == null || destRefs.size() == 0)
 					{
 						missing.add (srcRef);
