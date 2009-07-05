@@ -27,6 +27,8 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +54,7 @@ public class BatchMapper
 		DataSource os = null;
 		int inputColumn = 0; 
 		int verbose = 0; // 0, 1 or 2
+		int mode = 0; // 0 or 1
 	}
 	
 	public static void main(String[] args)
@@ -73,11 +76,15 @@ public class BatchMapper
 		catch (IOException ex) { version = ex.getMessage(); } 
 		System.out.println ("BatchMapper version " + version);
 		System.out.print (
+				"BatchMapper is a tool for mapping biological identifiers.\n" +
 				"Usage:\n"+
+				"	batchmapper -ls \n" +
+				"		List system codes \n" +
+				" or\n" +
 				"	batchmapper \n" +
 				"		[-v|-vv] \n" +
 				"		[-g <gene database>] \n " +
-				"		[-t <tab-delimited text file>] \n " +
+				"		[-t <biomart text file>] \n " +
 				"		[-i <input file>] \n" +
 				"		-is <input system code> \n" +
 				"		-os <output system code> \n" +
@@ -85,7 +92,6 @@ public class BatchMapper
 				"		[-c <input column, 0-based>]\n" +
 				"		[-r <report file>] \n" +
 				"\n" +
-				"BatchMapper is a tool for mapping biological identifiers.\n" +
 				"You should specify at least one -g or -t option \n");
 	}
 	
@@ -94,7 +100,11 @@ public class BatchMapper
 		int pos = 0;
 		while (pos < args.length)
 		{
-			if (args[pos].equals ("-v"))
+			if (args[pos].equals ("-ls"))
+			{
+				settings.mode = 1;
+			} 
+			else if (args[pos].equals ("-v"))
 			{
 				settings.verbose = 1;
 			} 
@@ -174,9 +184,25 @@ public class BatchMapper
 			}
 			pos++;
 		}
-		if (settings.connectStrings.size() == 0) return "Missing -t or -g options";
-		if (settings.is == null) return "Missing -is option";
-		if (settings.os == null) return "Missing -os option";
+		if (settings.mode == 1)
+		{
+			if (settings.is != null ||
+				settings.os != null ||
+				settings.connectStrings.size() > 0 ||
+				settings.fInput != null ||
+				settings.fOutput != null ||
+				settings.inputColumn != 0 ||
+				settings.fReport != null)
+			{
+				return "-ls option can't be combined with -g, -t, -i, -is, -os, -o or -r options";
+			}
+		}
+		else
+		{
+			if (settings.connectStrings.size() == 0) return "Missing -t or -g options";
+			if (settings.is == null) return "Missing -is option";
+			if (settings.os == null) return "Missing -os option";
+		}
 		return null;
 	}
 	
@@ -336,6 +362,23 @@ public class BatchMapper
 		}
 	}
 	
+	public void reportSystemCodes()
+	{
+		List<DataSource> sortedList = new ArrayList<DataSource>();
+		sortedList.addAll (DataSource.getDataSources());
+		Collections.sort (sortedList, new Comparator<DataSource>() {
+
+			public int compare(DataSource a, DataSource b) 
+			{
+				return a.getSystemCode().compareTo(b.getSystemCode());
+			}} ); 
+		
+		for (DataSource ds : sortedList)
+		{
+			System.out.printf("%4s %-20s %-40s\n", ds.getSystemCode(), ds.getFullName(), ds.getExample().getId()); 
+		}
+	}
+	
 	public void run(String[] args)
 	{
 		BioDataSource.init();
@@ -357,10 +400,17 @@ public class BatchMapper
 			ex.printStackTrace();
 			//TODO: better exception handling
 		}
-		Mapper mapper = new Mapper(
-				settings.connectStrings, 
-				settings.fInput, settings.fOutput, settings.fReport, 
-				settings.is, settings.os, settings.inputColumn, settings.verbose);
-		mapper.run();
+		if (settings.mode == 0)
+		{			
+			Mapper mapper = new Mapper(
+					settings.connectStrings, 
+					settings.fInput, settings.fOutput, settings.fReport, 
+					settings.is, settings.os, settings.inputColumn, settings.verbose);
+			mapper.run();
+		}
+		else
+		{
+			reportSystemCodes();
+		}
 	}		
 }
