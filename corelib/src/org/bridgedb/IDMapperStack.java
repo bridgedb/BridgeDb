@@ -43,8 +43,15 @@ public class IDMapperStack implements IDMapper
 	public void addIDMapper(String connectionString) throws IDMapperException
 	{
 		IDMapper idMapper = BridgeDb.connect(connectionString);
-		gdbs.add(idMapper);
+		addIDMapper(idMapper);
 	}
+
+        public void addIDMapper(IDMapper idMapper)
+        {
+                if (idMapper!=null) {
+                    gdbs.add(idMapper);
+                }
+        }
 
 	/**
 	 * closes all child databases. 
