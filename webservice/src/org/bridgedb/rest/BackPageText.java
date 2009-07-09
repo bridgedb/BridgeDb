@@ -14,7 +14,7 @@ import org.restlet.resource.ResourceException;
 /**
  * Resource that handles the xref queries
  */
-public class Xrefs extends IDMapperResource {
+public class BackPageText extends IDMapperResource {
 	List<IDMapperRdb> mappers;
 	Xref xref;
 	DataSource targetDs;
@@ -43,34 +43,29 @@ public class Xrefs extends IDMapperResource {
 	}
 
 	@Get
-	public String getXrefs() {
-	   System.out.println( "Xrefs.getXrefs() start" );
-		try {
-			//The result set
-			Set<Xref> xrefs = new HashSet<Xref>();
+	public String getBackPageText() 
+	{
+	  System.out.println( "Xrefs.getBackPageText() start" );
+	  try 
+	  {
+	    //The result set
+	    Set<String> bpInfos = new HashSet<String>();
+	    
+	    for(IDMapperRdb mapper : mappers ) {
+		bpInfos.add( mapper.getBpInfo( xref ) );
+	    }
+	    
+            StringBuilder result = new StringBuilder();
+	    for( String x : bpInfos ) {
+	      result.append( x );
+	    }
 
-			for(IDMapperRdb mapper : mappers) {
-				if(targetDs == null) {
-					xrefs.addAll(mapper.getCrossRefs(xref));
-				} else {
-					xrefs.addAll(mapper.getCrossRefs(xref, targetDs));
-				}
-			}
-					
-			StringBuilder result = new StringBuilder();
-			for(Xref x : xrefs) {
-				result.append(x.getId());
-				result.append("\t");
-				result.append(x.getDataSource().getFullName());
-				result.append("\n");
-			}
-			
-			return result.toString();
-		} catch(Exception e) {
-			e.printStackTrace();
-			setStatus(Status.SERVER_ERROR_INTERNAL);
-			return e.getMessage();
-		}
+	    return( result.toString() );
+          } catch( Exception e ) {
+	    e.printStackTrace();
+	    setStatus( Status.SERVER_ERROR_INTERNAL );
+	    return e.getMessage();
+	  }
 	}
 
 }

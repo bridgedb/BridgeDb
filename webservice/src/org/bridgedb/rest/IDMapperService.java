@@ -17,15 +17,48 @@ public class IDMapperService extends Application {
 	public static final String PAR_ORGANISM = "organism";
 	public static final String PAR_ID = "id";
 	public static final String PAR_SYSTEM = "system";
+        public static final String PAR_SEARCH_STR = "searchStr";
+       
 	public static final String PAR_TARGET_SYSTEM = "dataSource";
-	
+        public static final String PAR_TARGET_ATTR_NAME = "attrName";
+        public static final String PAR_TARGET_ATTR_VALUE = "attrValue";
+        public static final String PAR_TARGET_LIMIT = "limit";
 	/*
 	 * URL pattern for:
-	 * /model/<organism>/<system>/<id>/xrefs[&dataSource=<dsCode>]
+	 * /model/<organism>/<system>/<id>/xrefs[?dataSource=<dsCode>]
 	 */
-	public static final String URL_XREFS = "/model/{" + PAR_SYSTEM + "}/{" + PAR_ORGANISM + "}/{" 
+	public static final String URL_XREFS = "/model/{" + PAR_ORGANISM + "}/{" + PAR_SYSTEM + "}/{" 
 											+ PAR_ID + "}/xrefs";
-	
+        /*
+         * URL pattern for:
+         * /model/<organism>/xrefsByAttr?attrName=<attrName>&attrValue=<attrValue>
+         */
+        public static final String URL_XREFS_BY_ATTR = "/model/{" + PAR_ORGANISM + "}/xrefsByAttr";
+
+        /* 
+         * URL pattern for:
+         * /model/<organism>/<system>/<id>/backPageText
+         */
+        public static final String URL_BACK_PAGE_TEXT = "/model/{" + PAR_ORGANISM + "}/{" + PAR_SYSTEM + "}/{" + 
+            PAR_ID + "}/backPageText";
+
+        /*
+	 * URL pattern for:
+	 * /search/<organism>/symbol/<searchStr>&limit=<limit>
+         */
+        public static final String URL_SEARCH_SYMBOL = "/search/{" + PAR_ORGANISM + "}/symbol/{" + PAR_SEARCH_STR + "}";
+
+        /*
+	 * URL pattern for:
+	 * /search/<organism>/id/<searchStr>&limit=<limit>
+	 */
+    public static final String URL_SEARCH_ID = "/search/{" + PAR_ORGANISM + "}/id/{" + PAR_SEARCH_STR + "}";
+        /*
+	 * URL pattern for:
+	 * /search/symbolOrId/<searchStr>&limit=<limit>
+	 */
+    public static final String URL_SEARCH_SYMBOL_OR_ID = "/search/{" + PAR_ORGANISM + "}/symbolOrId/{" + PAR_SEARCH_STR + "}";
+
 	private GdbProvider gdbProvider;
 	
 	public synchronized void start() throws Exception {
@@ -35,14 +68,33 @@ public class IDMapperService extends Application {
 	}
 	
 	public Restlet createRoot() {
-		Router router = new Router(getContext());
+	        Router router = new Router(getContext());
 		
 		//Register the route for the xrefs url pattern
 		Route xrefsRoute = router.attach(URL_XREFS, Xrefs.class);
 		//Specify that the dataSource parameter needs to be included
 		//in the attributes
 		xrefsRoute.extractQuery(PAR_TARGET_SYSTEM, PAR_TARGET_SYSTEM, true);
+
+		// Register the route for xrefsByAttr
+                Route xrefsByAttrRoute = router.attach( URL_XREFS_BY_ATTR, XrefsByAttr.class );
+                xrefsByAttrRoute.extractQuery(PAR_TARGET_ATTR_NAME,PAR_TARGET_ATTR_NAME, true );
+                xrefsByAttrRoute.extractQuery(PAR_TARGET_ATTR_VALUE,PAR_TARGET_ATTR_VALUE, true );
 		
+		// Register the route for backPageText
+		Route backPageTextRoute = router.attach( URL_BACK_PAGE_TEXT, BackPageText.class );
+	       
+		// Register the route for search-symbol
+		Route searchSymbolRoute = router.attach( URL_SEARCH_SYMBOL, SearchSymbol.class );
+		searchSymbolRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
+
+		// Register the route for search-id
+		Route searchIdRoute = router.attach( URL_SEARCH_ID, SearchId.class );
+	        searchIdRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
+		// Register the route for search-symbol-or-id
+		Route searchSymbolOrIdRoute = router.attach( URL_SEARCH_SYMBOL_OR_ID, SearchSymbolOrId.class );
+		searchSymbolOrIdRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
+
 		return router;
 	}
 	
