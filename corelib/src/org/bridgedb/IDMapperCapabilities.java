@@ -37,11 +37,11 @@ public interface IDMapperCapabilities {
      *
      * @return supported source ID types
      */
-    public Set<DataSource>  getSupportedSrcDataSources();
+    public Set<DataSource>  getSupportedSrcDataSources() throws IDMapperException;
 
     /**
      *
      * @return supported target ID types
      */
-    public Set<DataSource> getSupportedTgtDataSources();
+    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException;
 }

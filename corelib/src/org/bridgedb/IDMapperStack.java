@@ -105,22 +105,40 @@ public class IDMapperStack implements IDMapper
 
 	private final IDMapperCapabilities caps = new IDMapperCapabilities()
 	{
-		public Set<DataSource> getSupportedSrcDataSources() 
+		public Set<DataSource> getSupportedSrcDataSources()
 		{
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : IDMapperStack.this.gdbs)
 			{
-				result.addAll (idm.getCapabilities().getSupportedSrcDataSources());
+                Set<DataSource> dss = null;
+                try {
+                    dss = idm.getCapabilities().getSupportedSrcDataSources();
+                } catch (IDMapperException e) {
+                    e.printStackTrace(); //TODO: is this the correct logic?
+                }
+
+                if (dss!=null) {
+                    result.addAll (dss);
+                }
 			}
 			return result;
 		}
 
-		public Set<DataSource> getSupportedTgtDataSources() 
+		public Set<DataSource> getSupportedTgtDataSources()
 		{
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : IDMapperStack.this.gdbs)
 			{
-				result.addAll (idm.getCapabilities().getSupportedTgtDataSources());
+				Set<DataSource> dss = null;
+                try {
+                    dss = idm.getCapabilities().getSupportedTgtDataSources();
+                } catch (IDMapperException e) {
+                    e.printStackTrace(); //TODO: is this the correct logic?
+                }
+
+                if (dss!=null) {
+                    result.addAll (dss);
+                }
 			}
 			return result;
 		}

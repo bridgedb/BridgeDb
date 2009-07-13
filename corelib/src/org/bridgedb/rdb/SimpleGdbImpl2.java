@@ -669,7 +669,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 	}
 
-	private Set<DataSource> getDataSources()
+	private Set<DataSource> getDataSources() throws IDMapperException
 	{
 		Set<DataSource> result = new HashSet<DataSource>();
     	try
@@ -685,8 +685,7 @@ class SimpleGdbImpl2 extends SimpleGdb
     	}
     	catch (SQLException ignore)
     	{
-    		ignore.printStackTrace(); 
-    		// we return an empty list if there was an exception
+    		throw new IDMapperException(ignore);
     	}
     	return result;
 	}
@@ -695,12 +694,12 @@ class SimpleGdbImpl2 extends SimpleGdb
 	{
 	    public boolean isFreeSearchSupported() { return true; }
 
-	    public Set<DataSource> getSupportedSrcDataSources()
+	    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException
 	    {
 	    	return getDataSources(); 
 	    }
 
-	    public Set<DataSource> getSupportedTgtDataSources()
+	    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException
 	    {
 	    	return getDataSources(); 
 	    }

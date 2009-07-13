@@ -184,17 +184,11 @@ public abstract class IDMapperFile implements IDMapper {
             return freeSearch;
         }
 
-        public Set<DataSource> getSupportedSrcDataSources() {
-            Set<DataSource> dss = null;
-            try {
-                dss = IDMapperFile.this.reader.getDataSources();
-            } catch (IDMapperException ex) {
-                ex.printStackTrace();
-            }
-            return dss;
+        public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
+            return IDMapperFile.this.reader.getDataSources();
         }
 
-        public Set<DataSource> getSupportedTgtDataSources() {
+        public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
             return getSupportedSrcDataSources(); //
         }
     }

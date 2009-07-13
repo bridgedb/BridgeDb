@@ -329,7 +329,16 @@ public class DoubleGdb extends IDMapperRdb
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : DoubleGdb.this.gdbs)
 			{
-				result.addAll (idm.getCapabilities().getSupportedSrcDataSources());
+                Set<DataSource> dss = null;
+                try {
+                    dss = idm.getCapabilities().getSupportedSrcDataSources();
+                } catch (IDMapperException e) {
+                    e.printStackTrace(); //TODO: is this the correct logic?
+                }
+
+                if (dss!=null) {
+                    result.addAll (dss);
+                }
 			}
 			return result;
 		}
@@ -339,7 +348,16 @@ public class DoubleGdb extends IDMapperRdb
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : DoubleGdb.this.gdbs)
 			{
-				result.addAll (idm.getCapabilities().getSupportedTgtDataSources());
+				Set<DataSource> dss = null;
+                try {
+                    dss = idm.getCapabilities().getSupportedTgtDataSources();
+                } catch (IDMapperException e) {
+                    e.printStackTrace(); //TODO: is this the correct logic?
+                }
+
+                if (dss!=null) {
+                    result.addAll (dss);
+                }
 			}
 			return result;
 		}
