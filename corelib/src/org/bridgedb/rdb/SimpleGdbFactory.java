@@ -32,17 +32,23 @@ import org.bridgedb.IDMapperException;
  * based on the schema version.
  * Use this class for creating / connecting to any SimpleGdb database.
  */
-public class SimpleGdbFactory 
+public final class SimpleGdbFactory 
 {
+	/** private constructor prevents instantiation. */
+	private SimpleGdbFactory() {};
+	
 	static final int LATEST_SCHEMA_VERSION = 2;
 
 	/**
-	 * Opens a connection to the Gene Database located in the given file
+	 * Opens a connection to the Gene Database located in the given file.
+	 * <p>
+	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
 	 * @param dbName The file containing the Gene Database. 
 	 * @param newDbConnector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
 	 * A new instance of DbConnector class is instantiated automatically.
-	 * 
-	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
+	 * @param props PROP_RECREATE if you want to create a new database, overwriting any existing ones. Otherwise, PROP_NONE.
+	 * @return a new Gdb
+	 * @throws IDMapperException on failure
 	*/
 	public static SimpleGdb createInstance(String dbName, DBConnector newDbConnector, int props) throws IDMapperException
 	{

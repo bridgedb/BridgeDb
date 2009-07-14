@@ -68,11 +68,12 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * helper class that handles lazy initialization of all prepared statements used by SimpleGdbImpl2
 	 * Non-static, because it needs the con database connection field.
 	 */
-	private class LazyPst
+	private final class LazyPst
 	{
 		/**
 		 * Initialize with given SQL string, but don't create PreparedStatement yet.
 		 * Valid to call before database connection is created.
+		 * @param aSql SQL query
 		 */
 		private LazyPst(String aSql)
 		{
@@ -83,10 +84,11 @@ class SimpleGdbImpl2 extends SimpleGdb
 		private final String sql;
 		
 		/**
-		 * returns a prepared statement for the given query.
-		 * Uses lazy initialization.
-		 * 
+		 * Get a PreparedStatement using lazy initialization.
+		 * <p>
 		 * Assumes SimpleGdbImpl2.con is already valid
+		 * @return a prepared statement for the given query.
+		 * @throws SQLException when a PreparedStatement could not be created
 		 */
 		public PreparedStatement getPreparedStatement() throws SQLException
 		{
@@ -98,56 +100,57 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 	}
 	
-	final LazyPst pstDatasources = new LazyPst(
+	private final LazyPst pstDatasources = new LazyPst(
 			"SELECT codeRight FROM link GROUP BY codeRight"
 		);
-	final LazyPst pstXrefExists = new LazyPst(
+	private final LazyPst pstXrefExists = new LazyPst(
 			"SELECT id FROM " + "datanode" + " WHERE " +
 			"id = ? AND code = ?"
 		);
-	final LazyPst pstGeneSymbol = new LazyPst(
+	private final LazyPst pstGeneSymbol = new LazyPst(
 			"SELECT attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND id = ? " +
 			"AND code = ?"
 		);
-	final LazyPst pstBackpage = new LazyPst(
+	private final LazyPst pstBackpage = new LazyPst(
 			"SELECT backpageText FROM datanode " +
 			" WHERE id = ? AND code = ?"
 		);
-	final LazyPst pstAttribute = new LazyPst(
+	private final LazyPst pstAttribute = new LazyPst(
 			"SELECT attrvalue FROM attribute " +
 			" WHERE id = ? AND code = ? AND attrname = ?"
 		);
-	final LazyPst pstCrossRefs = new LazyPst (
+	private final LazyPst pstCrossRefs = new LazyPst (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
 			"WHERE src.idRight = ? AND src.codeRight = ?"
 		);
-	final LazyPst pstCrossRefsWithCode = new LazyPst (
+	private final LazyPst pstCrossRefsWithCode = new LazyPst (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
 			"WHERE src.idRight = ? AND src.codeRight = ? AND dest.codeRight = ?"
 		);
-	final LazyPst pstRefsByAttribute = new LazyPst (
+	private final LazyPst pstRefsByAttribute = new LazyPst (
 			"SELECT datanode.id, datanode.code FROM datanode " +
 			" LEFT JOIN attribute ON attribute.code = datanode.code AND attribute.id = datanode.id " +
 			"WHERE attrName = ? AND attrValue = ?"
 		);
-	final LazyPst pstIdSuggestions = new LazyPst (
+	private final LazyPst pstIdSuggestions = new LazyPst (
 			"SELECT id, code FROM datanode WHERE " +
 			"LOWER(ID) LIKE ?"
 		);
-	final LazyPst pstSymbolSuggestions = new LazyPst (
+	private final LazyPst pstSymbolSuggestions = new LazyPst (
 			"SELECT attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
 		);
 	
 	/**
-	 * @param id The gene id to get the symbol info for
-	 * @param code systemcode of the gene identifier
+	 * @param ref The reference  to get the symbol info for
 	 * @return The gene symbol, or null if the symbol could not be found
+	 * @throws IDMapperException when the database is unavailable
+	 * @deprecated use getAttribute (ref, "Symbol") instead
 	 */
-	public String getGeneSymbol(Xref ref) throws IDMapperException 
+	@Override public String getGeneSymbol(Xref ref) throws IDMapperException 
 	{
 		try {
 			PreparedStatement pst = pstGeneSymbol.getPreparedStatement();
@@ -165,11 +168,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return null;
 	}
 	
-	/**
-	 * Simply checks if an xref occurs in the datanode table.
-	 * @throws IDMapperException 
-	 */
-	public boolean xrefExists(Xref xref) throws IDMapperException 
+	/** {@inheritDoc} */
+	@Override public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
 		try 
 		{
@@ -190,12 +190,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return false;
 	}
 
-	/**
-	 * Gets the backpage info for the given gene id for display on BackpagePanel
-	 * @param ref The gene to get the backpage info for
-	 * @return String with the backpage info, null if no info was found
-	 */
-	public String getBpInfo(Xref ref) throws IDMapperException 
+	/** {@inheritDoc} */
+	@Override public String getBpInfo(Xref ref) throws IDMapperException 
 	{
 		try {
 			PreparedStatement pst = pstBackpage.getPreparedStatement();
@@ -211,17 +207,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 		} catch	(SQLException e) { throw new IDMapperException (e); } //Gene not found
 	}
 
-	/**
-	 * Get all cross-references for the given id/code pair, restricting the
-	 * result to contain only references from database with the given system
-	 * code
-	 * @param idc The id/code pair to get the cross references for
-	 * @param resultCode The system code to restrict the results to
-	 * @return An {@link ArrayList} containing the cross references, or an empty
-	 * ArrayList when no cross references could be found
-	 */
-	@Override
-	public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException 
+	/** {@inheritDoc} */
+	@Override public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException 
 	{
 //		Logger.log.trace("Fetching cross references");
 
@@ -260,7 +247,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return refs;
 	}
 
-	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
+	/** {@inheritDoc} */
+	@Override public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
 //		Logger.log.trace("Fetching cross references by attribute: " + attrName + " = " + attrValue);
 		List<Xref> refs = new ArrayList<Xref>();
 
@@ -281,7 +269,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/**
-	 * Opens a connection to the Gene Database located in the given file
+	 * Opens a connection to the Gene Database located in the given file.
 	 * @param dbName The file containing the Gene Database. 
 	 * @param connector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
 	 * A new instance of this class is created automatically.
@@ -322,6 +310,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 	}
 	
+	/**
+	 * look at the info table of the current database to determine the schema version.
+	 * @throws IDMapperException when looking up the schema version failed
+	 */
 	private void checkSchemaVersion() throws IDMapperException 
 	{
 		int version = 0;
@@ -343,7 +335,6 @@ class SimpleGdbImpl2 extends SimpleGdb
 	/**
 	 * Excecutes several SQL statements to create the tables and indexes in the database the given
 	 * connection is connected to
-	 * @param convertCon	The connection to the database the tables are created in
 	 * Note: Official GDB's are created by AP, not with this code.
 	 * This is just here for testing purposes.
 	 */
@@ -358,7 +349,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			sh.execute("DROP TABLE datanode");
 			sh.execute("DROP TABLE attribute");
 		} 
-		catch(Exception e) 
+		catch(SQLException e) 
 		{
 //			Logger.log.error("Unable to drop gdb tables (ignoring): " + e.getMessage());
 		}
@@ -406,7 +397,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 					" )										");
 //			Logger.log.info("Attribute table created");
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 //			Logger.log.error("while creating gdb tables: " + e.getMessage(), e);
 		}
@@ -417,16 +408,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public static final int NO_TIMEOUT = 0;
 	public static final int QUERY_TIMEOUT = 20; //seconds
 
-	/**
-	 * Get up to limit suggestions for a symbol autocompletion
-	 * case Insensitive 
-	 * 
-	 * @param text The text to base the suggestions on
-	 * @param limit The number of results to limit the search to
-	 * 
-	 * @throws IDMapperException 
-	 */
-	public List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException 
+	/** {@inheritDoc} */
+	@Override public List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException 
 	{		
 		List<String> result = new ArrayList<String>();
 		try {
@@ -448,13 +431,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return result;
 	}
 	
-	/**
-	 * Get up to limit suggestions for a identifier autocompletion
-	 * @param text The text to base the suggestions on
-	 * @param limit The number of results to limit the search to
-	 * @param caseSensitive if true, the search will be case sensitive
-	 */
-	public List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException 
+	/** {@inheritDoc} */
+	@Override public List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException 
 	{		
 		List<Xref> result = new ArrayList<Xref>();
 		try {
@@ -477,13 +455,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return result;
 	}
 
-	/**
-	 * free text search for matching symbols or identifiers
-	 * @param text The text to base the suggestions on
-	 * @param limit The number of results to limit the search to
-	 * @throws IDMapperException 
-	 */
-	public List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException 
+	/** {@inheritDoc} */
+	@Override public List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException 
 	{		
 		List<XrefWithSymbol> result = new ArrayList<XrefWithSymbol>();
 		try {
@@ -542,13 +515,11 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return result;
 	}
 	
-    PreparedStatement pstGene = null;
-    PreparedStatement pstLink = null;
-    PreparedStatement pstAttr = null;
+    private PreparedStatement pstGene = null;
+    private PreparedStatement pstLink = null;
+    private PreparedStatement pstAttr = null;
 
-	/**
-	 * Add a gene to the gene database
-	 */
+	/** {@inheritDoc} */
 	public int addGene(Xref ref, String bpText) 
 	{
     	if (pstGene == null) throw new NullPointerException();
@@ -559,7 +530,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			pstGene.setString(3, bpText);
 			pstGene.executeUpdate();
 		} 
-		catch (Exception e) 
+		catch (SQLException e) 
 		{ 
 //			Logger.log.error("" + ref, e);
 			return 1;
@@ -567,6 +538,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return 0;
     }
     
+	/** {@inheritDoc} */
     public int addAttribute(Xref ref, String attr, String val)
     {
     	try {
@@ -575,16 +547,14 @@ class SimpleGdbImpl2 extends SimpleGdb
 			pstAttr.setString(3, ref.getId());
 			pstAttr.setString(4, ref.getDataSource().getSystemCode());
 			pstAttr.executeUpdate();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 //			Logger.log.error(attr + "\t" + val + "\t" + ref, e);
 			return 1;
 		}
 		return 0;
     }
 
-    /**
-     * Add a link to the gene database
-     */
+	/** {@inheritDoc} */
     public int addLink(Xref left, Xref right) 
     {
     	if (pstLink == null) throw new NullPointerException();
@@ -596,7 +566,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			pstLink.setString(4, right.getDataSource().getSystemCode());
 			pstLink.executeUpdate();
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 //			Logger.log.error(left + "\t" + right , e);
 			return 1;
@@ -608,6 +578,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	   Create indices on the database
 	   You can call this at any time after creating the tables,
 	   but it is good to do it only after inserting all data.
+	   @throws IDMapperException on failure
 	 */
 	public void createGdbIndices() throws IDMapperException 
 	{
@@ -638,7 +609,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/**
-	   prepare for inserting genes and/or links
+	   prepare for inserting genes and/or links.
+	   @throws IDMapperException on failure
 	 */
 	public void preInsert() throws IDMapperException
 	{
@@ -669,6 +641,9 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 	}
 
+	/**
+	 * @return a list of data sources present in this database. 
+	 */
 	private Set<DataSource> getDataSources() throws IDMapperException
 	{
 		Set<DataSource> result = new HashSet<DataSource>();
@@ -705,13 +680,16 @@ class SimpleGdbImpl2 extends SimpleGdb
 	    }
 	};
 
+	/**
+	 * @return the capabilities of this gene database
+	 */
 	public IDMapperCapabilities getCapabilities() 
 	{
 		return caps;
 	}
 
-	@Override
-	public String getAttribute(Xref ref, String attrname)
+	/** {@inheritDoc} */
+	@Override public String getAttribute(Xref ref, String attrname)
 			throws IDMapperException 
 	{
 		try {

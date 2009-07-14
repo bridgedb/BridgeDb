@@ -24,8 +24,6 @@ import java.util.List;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefWithSymbol;
-
 
 /**
  * SimpleGdb is the main implementation of the Gdb interface,
@@ -52,84 +50,62 @@ import org.bridgedb.XrefWithSymbol;
  * and use SimpleGdb directly 
  * to create or connect to one or more pgdb's of any type.
  */
-public abstract class SimpleGdb extends IDMapperRdb
+public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 {		
-	SimpleGdb()
-	{
-	}
-	
 	/**
-	 * The {@link Connection} to the Gene Database
+	 * The {@link Connection} to the Gene Database.
 	 */
-	// SQL connection
 	protected Connection con = null;
 	// dbConnector, helper class for dealing with RDBMS specifcs.
 	protected DBConnector dbConnector;
 
-	/**
-	 * Check whether a connection to the database exists
-	 * @return	true is a connection exists, false if not
-	 */
-	final public boolean isConnected() { return con != null; }
+	/** {@inheritDoc} */
+	@Override final public boolean isConnected() { return con != null; }
 
 	protected String dbName;
+	
 	/**
-	 * Gets the name of te currently used gene database
+	 * Gets the name of te currently used gene database.
 	 * @return the database name as specified in the connection string
 	 */
 	final public String getDbName() { return dbName; }
 
 	/**
-	 * @param ref The Xref to get the symbol info for
+	 * @param ref The reference  to get the symbol info for
 	 * @return The gene symbol, or null if the symbol could not be found
-	 * @throws IDMapperException 
+	 * @throws IDMapperException when the database is unavailable
+	 * @deprecated use getAttribute (ref, "Symbol") instead
 	 */
 	abstract public String getGeneSymbol(Xref ref) throws IDMapperException; 
 		
-	/**
-	 * Simply checks if an xref occurs in the datanode table.
-	 * @throws IDMapperException 
-	 */
+	/** {@inheritDoc} */
 	abstract public boolean xrefExists(Xref xref) throws IDMapperException; 
 
-	/**
-	 * Gets the backpage info for the given gene id for display on BackpagePanel
-	 * @param ref The gene to get the backpage info for
-	 * @return String with the backpage info, null if the gene was not found
-	 * @throws IDMapperException 
-	 */
+	/** {@inheritDoc} */
 	abstract public String getBpInfo(Xref ref) throws IDMapperException; 
 
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
 	 * result to contain only references from database with the given system
-	 * code
+	 * code.
 	 * @param idc The id/code pair to get the cross references for
 	 * @return An {@link List} containing the cross references, or an empty
 	 * ArrayList when no cross references could be found
+	 * @throws IDMapperException when the database is unavailable
 	 */
 	final public List<Xref> getCrossRefs(Xref idc) throws IDMapperException
 	{
 		return getCrossRefs(idc, null);
 	}
 
-	/**
-	 * Get all cross-references for the given id/code pair, restricting the
-	 * result to contain only references from database with the given system
-	 * code
-	 * @param idc The id/code pair to get the cross references for
-	 * @param resultDs The {@link DataSource} to restrict the results to
-	 * @return An {@link List} containing the cross references, or an empty
-	 * ArrayList when no cross references could be found
-	 */
+	/** {@inheritDoc} */
 	abstract public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException; 
 
+	/** {@inheritDoc} */
 	abstract public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
 	
-	/**
-	 * Closes the {@link Connection} to the Gene Database if possible
-	 */
-	final public void close() throws IDMapperException 
+	/** {@inheritDoc} */
+	@Override final public void close() throws IDMapperException 
 	{
 		if (con == null) throw new IDMapperException("Database connection already closed");
 		dbConnector.closeConnection(con);
@@ -157,59 +133,14 @@ public abstract class SimpleGdb extends IDMapperRdb
 	public static final int QUERY_TIMEOUT = 5; //seconds
 
 	/**
-	 * Get up to limit suggestions for a symbol autocompletion
-	 * case Insensitive 
-	 * 
-	 * @param text The text to base the suggestions on
-	 * @param limit The number of results to limit the search to
-	 * 
-	 * @throws IDMapperException 
-	 */
-	abstract public List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException;
-
-	/**
-	 * Get up to limit suggestions for a identifier autocompletion
-	 * case Insensitive
-	 * 
-	 * @param text The text to base the suggestions on
-	 * @param limit The number of results to limit the search to
-	 * @throws IDMapperException 
-	 */
-	abstract public List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException; 
-
-	/**
-	 * free text search for matching symbols or identifiers
-	 * @param text The text to base the suggestions on
-	 * @param limit The number of results to limit the search to
-	 * @throws IDMapperException 
-	 */
-	abstract public List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException; 
-	/**
-	 * Add a gene to the gene database
-	 */
-	abstract public int addGene(Xref ref, String bpText); 
-    
-    abstract public int addAttribute(Xref ref, String attr, String val);
-
-    /**
-     * Add a link to the gene database
-     */
-    abstract public int addLink(Xref left, Xref right); 
-
-	/**
-	   Create indices on the database
-	   You can call this at any time after creating the tables,
-	   but it is good to do it only after inserting all data.
-	 */
-	abstract public void createGdbIndices() throws IDMapperException;
-
-	/**
-	   prepare for inserting genes and/or links
+	   prepare for inserting genes and/or links.
+	   @throws IDMapperException on failure
 	 */
 	abstract public void preInsert() throws IDMapperException;
 
 	/**
-	   commit inserted data
+	   commit inserted data.
+	   @throws IDMapperException on failure
 	 */
 	final public void commit() throws IDMapperException
 	{
@@ -224,7 +155,8 @@ public abstract class SimpleGdb extends IDMapperRdb
 	}
 
 	/**
-	   returns number of rows in gene table
+	   @return number of rows in gene table.
+	   @throws IDMapperException on failure
 	 */
 	final public int getGeneCount() throws IDMapperException
 	{
@@ -243,11 +175,19 @@ public abstract class SimpleGdb extends IDMapperRdb
 		return result;
 	}
 
+	/**
+	   compact the database.
+	   @throws IDMapperException on failure
+	 */
 	final public void compact() throws IDMapperException
 	{
 		dbConnector.compact(con);
 	}
 	
+	/**
+	   finalize the database.
+	   @throws IDMapperException on failure
+	 */
 	final public void finalize() throws IDMapperException
 	{
 		dbConnector.compact(con);

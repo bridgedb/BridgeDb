@@ -67,6 +67,10 @@ public class DataDerby extends DBConnector
 	
 	private boolean finalized;
 	
+	/**
+	 * Generates a correct JDBC connection string.
+	 * @return the JDBC connection string. 
+	 */
 	private String getDbUrl()
 	{
 		String url = "jdbc:derby:";
@@ -82,8 +86,14 @@ public class DataDerby extends DBConnector
 	}
 	
 	/**
-	 * dbName is the file that will be produced finally.
+	 * @param props one of PROP_NONE or PROP_RECREATE. PROP_NONE will
+	 *   lead to a normal connection, PROP_RECREATE will lead to destroying
+	 *   the old database and creating a clean new one.
+	 * @param dbName is the file that will be produced finally.
 	 * If dbName doesn't end with the right extension, the right extension will be added.
+	 * @return the JDBC database Connection.
+	 * @throws IDMapperException if the database connection could not be made,
+	 * 	or if the Derby driver could not be loaded.
 	 */
 	public Connection createConnection(String dbName, int props) throws IDMapperException 
 	{
@@ -168,9 +178,11 @@ public class DataDerby extends DBConnector
 	}
 	
 	/**
-	 * Close the connection to this database
-	 * Passing PROP_FINALIZE for props will cause a full shutdown, which is necessary
+	 * Close the connection to this database.
+	 * @param con JDBC Connection object
+	 * @param props Passing PROP_FINALIZE for props will cause a full shutdown, which is necessary
 	 * after creating a fresh database.
+	 * @throws IDMapperException if the database could not be closed.
 	 */
 	public void closeConnection(Connection con, int props) throws IDMapperException 
 	{
@@ -261,13 +273,19 @@ public class DataDerby extends DBConnector
 		
 	/**
 	 * create a zip file from a directory.
+	 * @param zipFile output file
+	 * @param dbDir input dir
 	 */
 	private void toZip(File zipFile, File dbDir) 
 	{
 		try {			
 			if(zipFile.exists()) zipFile.delete();
 			
-			zipFiles(zipFile, dbDir);
+			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+			out.setMethod(ZipOutputStream.STORED);
+			for(File f : dbDir.listFiles()) addFiles(f, DB_NAME_IN_ZIP + '/', out);
+			out.closeEntry();
+			out.close();
 			
 			String zipPath = zipFile.getAbsolutePath().replace(File.separatorChar, '/');
 			String url = "jdbc:derby:jar:(" + zipPath + ")" + DB_NAME_IN_ZIP;
@@ -277,15 +295,6 @@ public class DataDerby extends DBConnector
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	void zipFiles(File zipFile, File dir) throws Exception 
-	{
-		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
-		out.setMethod(ZipOutputStream.STORED);
-		for(File f : dir.listFiles()) addFiles(f, DB_NAME_IN_ZIP + '/', out);
-		out.closeEntry();
-		out.close();
 	}
 	
 	byte[] buf = new byte[1024];

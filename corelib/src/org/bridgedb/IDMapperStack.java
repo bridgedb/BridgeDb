@@ -40,6 +40,11 @@ public class IDMapperStack implements IDMapper
 {
 	private List<IDMapper> gdbs = new ArrayList<IDMapper>();
 
+	/**
+	 * Create a fresh IDMapper from a connectionString and add it to the stack.
+	 * @param connectionString connectionString for configuring the new IDMapper
+	 * @throws IDMapperException when the connection failed.
+	 */
 	public void addIDMapper(String connectionString) throws IDMapperException
 	{
 		IDMapper idMapper = BridgeDb.connect(connectionString);
@@ -55,24 +60,34 @@ public class IDMapperStack implements IDMapper
 
 	/**
 	 * closes all child databases. 
+	 * @throws IDMapperException when closing failed for one of the databases. It will still try to 
+	 * 	close all child databases even if one throws an exception. However, only the last exception will be thrown.
 	 */
 	public void close() throws IDMapperException 
 	{
+		IDMapperException postponed = null;
 		for (IDMapper child : gdbs)
 		{
 			if (child != null)
 			{
-				child.close();
-				child = null; // garbage collect
+				try
+				{
+					child.close();
+					child = null; // garbage collect
+				}
+				catch (IDMapperException ex)
+				{
+					postponed = ex;
+				}
 			}
+		}
+		if (postponed != null)
+		{
+			throw postponed;
 		}
 	}
 
-	/**
-	 * Check if the reference exists in either one of the 
-	 * child databases
-	 * @throws IDMapperException 
-	 */
+	/** {@inheritDoc} */
 	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
 		for (IDMapper child : gdbs)
@@ -88,7 +103,7 @@ public class IDMapperStack implements IDMapper
 	}
 	
 	/**
-	 * Returns true if at least one of the child databases
+	 * @return true if at least one of the child services
 	 * are connected.
 	 */
 	public boolean isConnected() 
@@ -103,9 +118,14 @@ public class IDMapperStack implements IDMapper
 		return false;
 	}
 
-	private final IDMapperCapabilities caps = new IDMapperCapabilities()
+	private final IDMapperCapabilities caps = new IDMapperStackCapabilities();
+	
+	private class IDMapperStackCapabilities implements IDMapperCapabilities
 	{
-		public Set<DataSource> getSupportedSrcDataSources()
+		/**
+		 * @return union of DataSources supported by child services
+		 */
+		public Set<DataSource> getSupportedSrcDataSources() 
 		{
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : IDMapperStack.this.gdbs)
@@ -124,7 +144,10 @@ public class IDMapperStack implements IDMapper
 			return result;
 		}
 
-		public Set<DataSource> getSupportedTgtDataSources()
+		/**
+		 * @return union of DataSources supported by child services
+		 */
+		public Set<DataSource> getSupportedTgtDataSources() 
 		{
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : IDMapperStack.this.gdbs)
@@ -143,6 +166,9 @@ public class IDMapperStack implements IDMapper
 			return result;
 		}
 
+		/**
+		 * @return true if free search is supported by one of the children
+		 */
 		public boolean isFreeSearchSupported() 
 		{
 			// returns true if any returns true
@@ -156,11 +182,15 @@ public class IDMapperStack implements IDMapper
 		}
 	};
 	
+	/**
+	 * @return an object describing the capabilities of the combined stack of services.
+	 */
 	public IDMapperCapabilities getCapabilities() 
 	{
 		return caps;
 	}
 
+	/** {@inheritDoc} */
 	public Set<Xref> freeSearch(String text, int limit)
 			throws IDMapperException 
 	{
@@ -176,6 +206,7 @@ public class IDMapperStack implements IDMapper
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
 			Set<DataSource> tgtDataSources) throws IDMapperException 
 	{

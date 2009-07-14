@@ -24,36 +24,46 @@ import java.util.Random;
 
 /**
  * Collection of static utility methods dealing with files.
- * 
+ * <p>
  * Package private class
  */
-class FileUtilsGdb {	
+final class FileUtilsGdb {	
+	
+	/** prevent instantiation of utility class. */
+	private FileUtilsGdb() {}
 	
 	/**
-	 * Think "deltree" or "rm -r"
+	 * Think "deltree" or "rm -r".
+	 * @param file directory to remove recursively
 	 * TODO: duplicate with org.pathvisio.util.FileUtils
 	 */
 	public static void deleteRecursive(File file) {
 		if(file.isDirectory()) {
 			for(File f : file.listFiles()) deleteRecursive(f);
 		}
-		boolean deleted = file.delete();
-//		Logger.log.trace((deleted ? "Deleted " : "Unable to delete ") + "file " + file);
+		file.delete();
 	}
 	
 	/**
-	 * Removes the file extension (everything from the last occurence of '.')
+	 * Removes the file extension (everything from the last occurence of '.').
+	 * @param fname file name
+	 * @return file name without extension
 	 * TODO: duplicate with org.pathvisio.util.FileUtils
 	 */
 	public static String removeExtension(String fname) {
 		int dot = fname.lastIndexOf('.');
-		if(dot > 0) fname = fname.substring(0, dot);
-		return fname;
+		String result = fname;
+		if(dot > 0) result = fname.substring(0, dot);
+		return result;
 	}
 	
 	/**
 	 * Attempts to create a directory in the right temporary directory,
 	 * with a random name that starts with prefix.
+	 * @return a temporary directory
+	 * @param prefix prefix of temp directory name
+	 * @param postfix postfix of temp directory name
+	 * @throws IOException when dir could not be made
 	 */
 	public static File createTempDir(String prefix, String postfix) throws IOException
 	{

@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
-import org.bridgedb.Driver;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -41,10 +40,12 @@ public abstract class IDMapperRdb implements IDMapper
 		BridgeDb.register ("idmapper-pgdb", new Driver());
 	}
 	
-	private static class Driver implements org.bridgedb.Driver
+	private static final class Driver implements org.bridgedb.Driver
 	{
-		private Driver() { } // prevent outside instantiation
-				
+		/** private constructor to prevent instantiation. */
+		private Driver() { } 
+		
+		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException 
 		{
 			return SimpleGdbFactory.createInstance(location, new DataDerby(), 0);
@@ -127,7 +128,8 @@ public abstract class IDMapperRdb implements IDMapper
 	public abstract void close() throws IDMapperException;
 
 	/**
-	 * Get up to limit suggestions for a symbol autocompletion.
+	 * Case insensitive search for a prefix for symbol autocompletion.
+	 * @return up to limit results for autocompletion.
 	 * @param text text query, prefix of symbol
 	 * @param limit will return up to limit results.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
@@ -136,7 +138,8 @@ public abstract class IDMapperRdb implements IDMapper
 
 	
 	/**
-	 * Get up to limit suggestions for a identifier autocompletion.
+	 * Case insensitive search for identifier autocompletion.
+	 * @return up to limit suggestions for identifier autocompletion.
 	 * @param text text query, prefix of id
 	 * @param limit will return up to limit results.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
@@ -144,15 +147,15 @@ public abstract class IDMapperRdb implements IDMapper
 	public abstract List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException;
 	
 	/**
-	 * free text search for matching symbols or identifiers
+	 * free text search for matching symbols or identifiers.
+	 * @return references with symbol that match the query
+	 * @param text The text to base the suggestions on
+	 * @param limit The number of results to limit the search to
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException;
 
-	/**
-	 * free text search for matching symbols or identifiers
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable
-	 */
+	/** {@inheritDoc} */
 	public Set<Xref> freeSearch(String text, int limit) throws IDMapperException 
 	{
 		// turn XrefWithSymbol list into Xref list
