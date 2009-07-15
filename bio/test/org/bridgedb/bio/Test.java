@@ -74,14 +74,14 @@ public class Test extends TestCase
 		assertTrue (gdb.getBpInfo(ref).startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
 		
 		// get all crossrefs
-		List<Xref> crossRefs1 = gdb.getCrossRefs(ref);
+		List<Xref> crossRefs1 = gdb.mapID(ref);
 		assertTrue(crossRefs1.contains(new Xref("Hs.465744", BioDataSource.UNIGENE)));
 		assertTrue(crossRefs1.contains(new Xref("NM_000208", BioDataSource.REFSEQ)));
 		assertTrue(crossRefs1.contains(new Xref("P06213", BioDataSource.UNIPROT)));
 		assertTrue(crossRefs1.size() > 10);
 		
 		// get specific crossrefs for specific database
-		List<Xref> crossRefs2 = gdb.getCrossRefs(ref, BioDataSource.AFFY);		
+		List<Xref> crossRefs2 = gdb.mapID(ref, BioDataSource.AFFY);		
 		assertTrue(crossRefs2.contains(new Xref("1572_s_at", BioDataSource.AFFY)));
 		assertTrue(crossRefs2.contains(new Xref("207851_s_at", BioDataSource.AFFY)));
 		assertTrue(crossRefs2.contains(new Xref("213792_s_at", BioDataSource.AFFY)));
@@ -106,8 +106,8 @@ public class Test extends TestCase
 		assertNull (gdb.getGeneSymbol(nonExistingRef));
 		
 		// should return empty list, not NULL
-		assertEquals (0, gdb.getCrossRefs(nonExistingRef).size());
-		assertEquals (0, gdb.getCrossRefs(nonExistingRef, BioDataSource.AFFY).size());		
+		assertEquals (0, gdb.mapID(nonExistingRef).size());
+		assertEquals (0, gdb.mapID(nonExistingRef, BioDataSource.AFFY).size());		
 		
 		gdb.close();
 	}

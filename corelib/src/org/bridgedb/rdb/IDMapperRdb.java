@@ -53,23 +53,11 @@ public abstract class IDMapperRdb implements IDMapper
 	}
 	
 	/**
-	 * Check whether a connection to the database exists.
-	 * @return true if a connection exists, false if not
-	 * 
-	 * A connection will not exist only 
-	 * after the close() method is called.
-	 * implementing classes should create a connection in
-	 * the constructor, and throw an exception at that moment
-	 * if a connection is not possible.
-	 */
-	public abstract boolean isConnected();
-
-	/**
-	 * Gets the name of the currently used gene database.
+	 * Gets the name of te currently used gene database.
 	 * @return the database name as specified in the connection string
 	 */
 	public abstract String getDbName();
-
+	
 	/**
 	 * Get information from the "Attribute" table, such as gene Symbol.
 	 * @param ref the entity to get the attribute for
@@ -96,7 +84,7 @@ public abstract class IDMapperRdb implements IDMapper
 	 * {@link List} when no cross references could be found
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public abstract List<Xref> getCrossRefs(Xref idc) throws IDMapperException;
+	public abstract List<Xref> mapID(Xref idc) throws IDMapperException;
 
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
@@ -108,7 +96,7 @@ public abstract class IDMapperRdb implements IDMapper
 	 * ArrayList when no cross references could be found
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public abstract List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException;
+	public abstract List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException;
 
 	/**
 	 * Get a list of cross-references for the given attribute name/value pair. This
@@ -120,12 +108,6 @@ public abstract class IDMapperRdb implements IDMapper
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
-
-	/**
-	 * Closes the connection to the Gene Database if possible.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract void close() throws IDMapperException;
 
 	/**
 	 * Case insensitive search for a prefix for symbol autocompletion.
@@ -182,7 +164,7 @@ public abstract class IDMapperRdb implements IDMapper
 		for (Xref src : srcXrefs)
 		{
 			final Set<Xref> refs = new HashSet<Xref>();
-			for (Xref dest : getCrossRefs(src))
+			for (Xref dest : mapID(src))
 			{
 				if (tgtDataSources.contains(dest.getDataSource()))
 				{

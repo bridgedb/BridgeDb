@@ -60,15 +60,12 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	protected DBConnector dbConnector;
 
 	/** {@inheritDoc} */
-	@Override final public boolean isConnected() { return con != null; }
+	final public boolean isConnected() { return con != null; }
 
 	protected String dbName;
 	
-	/**
-	 * Gets the name of te currently used gene database.
-	 * @return the database name as specified in the connection string
-	 */
-	final public String getDbName() { return dbName; }
+	/** {@inheritDoc} */
+	@Override final public String getDbName() { return dbName; }
 
 	/**
 	 * @param ref The reference  to get the symbol info for
@@ -93,19 +90,19 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	 * ArrayList when no cross references could be found
 	 * @throws IDMapperException when the database is unavailable
 	 */
-	final public List<Xref> getCrossRefs(Xref idc) throws IDMapperException
+	final public List<Xref> mapID(Xref idc) throws IDMapperException
 	{
-		return getCrossRefs(idc, null);
+		return mapID(idc, null);
 	}
 
 	/** {@inheritDoc} */
-	abstract public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException; 
+	abstract public List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException; 
 
 	/** {@inheritDoc} */
 	abstract public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
 	
 	/** {@inheritDoc} */
-	@Override final public void close() throws IDMapperException 
+	final public void close() throws IDMapperException 
 	{
 		if (con == null) throw new IDMapperException("Database connection already closed");
 		dbConnector.closeConnection(con);

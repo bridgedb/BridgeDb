@@ -208,7 +208,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/** {@inheritDoc} */
-	@Override public List<Xref> getCrossRefs (Xref idc, DataSource resultDs) throws IDMapperException 
+	@Override public List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException 
 	{
 //		Logger.log.trace("Fetching cross references");
 

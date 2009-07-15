@@ -134,7 +134,7 @@ public class DoubleGdb extends IDMapperRdb
 	/**
 	 * Return the aggregate of the child results.
 	 */
-	public List<Xref> getCrossRefs(Xref idc) throws IDMapperException 
+	public List<Xref> mapID(Xref idc) throws IDMapperException 
 	{	
 		List<Xref> result = new ArrayList<Xref>();
 		
@@ -142,7 +142,7 @@ public class DoubleGdb extends IDMapperRdb
 		{
 			if (child != null && child.isConnected())
 			{
-				result.addAll (child.getCrossRefs (idc));
+				result.addAll (child.mapID (idc));
 			}
 		}
 		return result;
@@ -151,7 +151,7 @@ public class DoubleGdb extends IDMapperRdb
 	/**
 	 * Return the aggregate of the child results.
 	 */
-	public List<Xref> getCrossRefs(Xref idc, DataSource resultDs) throws IDMapperException
+	public List<Xref> mapID(Xref idc, DataSource resultDs) throws IDMapperException
 	{
 		List<Xref> result = new ArrayList<Xref>();
 		
@@ -159,7 +159,7 @@ public class DoubleGdb extends IDMapperRdb
 		{
 			if (child != null && child.isConnected())
 			{
-				result.addAll (child.getCrossRefs (idc, resultDs));
+				result.addAll (child.mapID (idc, resultDs));
 			}
 		}
 		return result;
