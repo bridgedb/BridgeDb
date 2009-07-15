@@ -164,22 +164,6 @@ public class DoubleGdb extends IDMapperRdb
 		}
 		return result;
 	}
-
-	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
-		List<Xref> result = null;
-		
-		for (SimpleGdb child : gdbs)
-		{
-			if (child != null && child.isConnected())
-			{
-				if (result == null)
-					result = child.getCrossRefsByAttribute (attrName, attrValue);
-				else
-					result.addAll (child.getCrossRefsByAttribute (attrName, attrValue));
-			}
-		}
-		return result;
-	}
 	
 	/**
 	 * This implementation concatenates the dbname's of all

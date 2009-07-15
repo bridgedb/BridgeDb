@@ -99,17 +99,6 @@ public abstract class IDMapperRdb implements IDMapper
 	public abstract List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException;
 
 	/**
-	 * Get a list of cross-references for the given attribute name/value pair. This
-	 * can be used to e.g. get the xref for a gene symbol.
-	 * @param attrName	The attribute name (e.g. 'Symbol')
-	 * @param attrValue	The attribute value (e.g. 'TP53')
-	 * @return A list with the cross-references that have this attribute name/value, or an
-	 * empty list if no cross-references could be found for this attribute name/value.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
-
-	/**
 	 * Case insensitive search for a prefix for symbol autocompletion.
 	 * @return up to limit results for autocompletion.
 	 * @param text text query, prefix of symbol
