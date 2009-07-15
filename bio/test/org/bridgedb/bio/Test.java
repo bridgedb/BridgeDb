@@ -71,7 +71,7 @@ public class Test extends TestCase
 		assertEquals ("CD220", gdb.getGeneSymbol(ref));
 		
 		// test getting backpage
-		assertTrue (gdb.getBpInfo(ref).startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
+		assertTrue (gdb.getAttributes(ref, "Backpage").iterator().next().startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
 		
 		// get all crossrefs
 		List<Xref> crossRefs1 = gdb.mapID(ref);

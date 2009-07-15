@@ -78,9 +78,6 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	/** {@inheritDoc} */
 	abstract public boolean xrefExists(Xref xref) throws IDMapperException; 
 
-	/** {@inheritDoc} */
-	abstract public String getBpInfo(Xref ref) throws IDMapperException; 
-
 	/**
 	 * Get all cross-references for the given id/code pair, restricting the
 	 * result to contain only references from database with the given system

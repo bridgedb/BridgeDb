@@ -270,26 +270,6 @@ public class DoubleGdb extends IDMapperRdb
 		return result;
 	}
 
-	/**
-	 * return first non-null child result
-	 * @throws IDMapperException 
-	 */
-	public String getBpInfo(Xref ref) throws IDMapperException 
-	{
-		String result = null;
-		// return the first database with a result.
-		for (SimpleGdb child : gdbs)
-		{
-			if (child != null && child.isConnected())
-			{
-				result = child.getBpInfo(ref);
-				if (result != null) return result;
-			}
-		}
-		// failure
-		return null;
-	}
-
 	public List<XrefWithSymbol> freeSearchWithSymbol(String text, int limit) throws IDMapperException
 	{
 		List<XrefWithSymbol> result = new ArrayList<XrefWithSymbol>();

@@ -190,8 +190,12 @@ class SimpleGdbImpl2 extends SimpleGdb
 		return false;
 	}
 
-	/** {@inheritDoc} */
-	@Override public String getBpInfo(Xref ref) throws IDMapperException 
+	/** 
+	 * get Backpage info. In Schema v2, this was not stored in 
+	 * the attribute table but as a separate column, so this is treated
+	 * as a special case.
+	 */
+	private String getBpInfo(Xref ref) throws IDMapperException 
 	{
 		try {
 			PreparedStatement pst = pstBackpage.getPreparedStatement();
@@ -692,13 +696,20 @@ class SimpleGdbImpl2 extends SimpleGdb
 	@Override public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
 	{
+		Set<String> result = new HashSet<String>();
+		// special case for Backpage attribute, stored in a separate column for schema v2.
+		if (attrname.equals ("Backpage"))
+		{
+			String bpInfo = getBpInfo(ref);
+			if (bpInfo != null) result.add (bpInfo);
+			return result;
+		}
 		try {
 			PreparedStatement pst = pstAttribute.getPreparedStatement();
 			pst.setString (1, ref.getId());
 			pst.setString (2, ref.getDataSource().getSystemCode());
 			pst.setString (3, attrname);
 			ResultSet r = pst.executeQuery();
-			Set<String> result = new HashSet<String>();
 			if (r.next())
 			{
 				result.add (r.getString(1));

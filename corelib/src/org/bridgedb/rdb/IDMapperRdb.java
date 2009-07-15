@@ -68,14 +68,6 @@ public abstract class IDMapperRdb implements IDMapper
 	public abstract Set<String> getAttributes(Xref ref, String attrname) throws IDMapperException;
 	
 	/**
-	 * Gets the backpage info for the given gene id for display on BackpagePanel.
-	 * @param ref The gene to get the backpage info for
-	 * @return String with the backpage info, null if the gene was not found
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract String getBpInfo(Xref ref) throws IDMapperException;
-	
-	/**
 	 * Get all cross-references for the given id/code pair, restricting the
 	 * result to contain only references from database with the given system
 	 * code.
