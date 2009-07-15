@@ -689,7 +689,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/** {@inheritDoc} */
-	@Override public String getAttribute(Xref ref, String attrname)
+	@Override public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
 	{
 		try {
@@ -698,10 +698,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 			pst.setString (2, ref.getDataSource().getSystemCode());
 			pst.setString (3, attrname);
 			ResultSet r = pst.executeQuery();
-			String result = null;
+			Set<String> result = new HashSet<String>();
 			if (r.next())
 			{
-				result = r.getString(1);
+				result.add (r.getString(1));
 			}
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException (e); } // Database unavailable

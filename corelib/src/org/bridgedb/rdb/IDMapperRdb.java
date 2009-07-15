@@ -65,7 +65,7 @@ public abstract class IDMapperRdb implements IDMapper
 	 * @return the attribute, or null if nothing was found
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public abstract String getAttribute(Xref ref, String attrname) throws IDMapperException;
+	public abstract Set<String> getAttributes(Xref ref, String attrname) throws IDMapperException;
 	
 	/**
 	 * Gets the backpage info for the given gene id for display on BackpagePanel.
