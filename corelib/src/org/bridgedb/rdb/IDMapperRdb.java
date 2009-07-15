@@ -158,4 +158,13 @@ public abstract class IDMapperRdb implements IDMapper
 		return result;
 	}	
 
+	/**
+	 * free text search for matching symbols.
+	 * @return references that match the query
+	 * @param query The text to search for
+	 * @param attrType the attribute to look for, e.g. 'Symbol' or 'Description'.
+	 * @param limit The number of results to limit the search to
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public abstract Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException;	
 }

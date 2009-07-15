@@ -23,6 +23,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
@@ -141,6 +142,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 		);
 	private final LazyPst pstSymbolSuggestions = new LazyPst (
 			"SELECT attrvalue FROM attribute WHERE " +
+			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
+		);	
+	private final LazyPst pstAttributeSearch = new LazyPst (
+			"SELECT id, code, attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
 		);
 	
@@ -716,5 +721,37 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException (e); } // Database unavailable
+	}
+
+	/**
+	 * free text search for matching symbols.
+	 * @return references that match the query
+	 * @param query The text to search for
+	 * @param attrType the attribute to look for, e.g. 'Symbol' or 'Description'.
+	 * @param limit The number of results to limit the search to
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	@Override public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
+	{
+		Set<Xref> result = new HashSet<Xref>();
+		try {
+
+			PreparedStatement pst = pstAttributeSearch.getPreparedStatement();
+			pst.setQueryTimeout(QUERY_TIMEOUT);
+			if(limit > NO_LIMIT) pst.setMaxRows(limit);
+			pst.setString(1, "%" + query.toLowerCase() + "%");
+			ResultSet r = pst.executeQuery();
+
+			while(r.next()) 
+			{
+				String id = r.getString("id");
+				String code = r.getString("code");
+//				String symbol = r.getString("attrValue");
+				result.add(new Xref (id, DataSource.getBySystemCode(code)));
+			}
+		} catch (SQLException e) {
+			throw new IDMapperException (e);
+		}
+		return result;		
 	}
 }

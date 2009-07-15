@@ -359,4 +359,26 @@ public class DoubleGdb extends IDMapperRdb
 		}
 		return result;
 	}
+
+	/**
+	 * free text search for matching symbols.
+	 * @return references that match the query
+	 * @param query The text to search for
+	 * @param attrType the attribute to look for, e.g. 'Symbol' or 'Description'.
+	 * @param limit The number of results to limit the search to
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
+	{
+		Set<Xref> result = new HashSet<Xref>();
+		// return the first database with a result.
+		for (SimpleGdb child : gdbs)
+		{
+			if (child != null && child.isConnected())
+			{
+				result.addAll (child.freeAttributeSearch(query, attrType, limit));
+			}
+		}
+		return result;
+	}
 }
