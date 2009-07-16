@@ -51,12 +51,16 @@ public class IDMapperStack implements IDMapper
 		addIDMapper(idMapper);
 	}
 
-        public void addIDMapper(IDMapper idMapper)
-        {
-                if (idMapper!=null) {
-                    gdbs.add(idMapper);
-                }
+	/**
+	 * Add an existing IDMapper to the stack.
+	 * @param idMapper IDMapper to be added.
+	 */
+    public void addIDMapper(IDMapper idMapper)
+    {
+        if (idMapper!=null) {
+            gdbs.add(idMapper);
         }
+    }
 
 	/**
 	 * closes all child databases. 

@@ -264,11 +264,11 @@ public final class DataSource
 //			throw new IllegalArgumentException("full Name '" + fullName + "' must be 20 or less characters"); 
 //		}
 		
-		if (fullName != null && byFullName.containsKey(fullName))
+		if (byFullName.containsKey(fullName))
 		{
 			current = byFullName.get(fullName);
 		}
-		else if (sysCode != null && bySysCode.containsKey(sysCode))
+		else if (bySysCode.containsKey(sysCode))
 		{
 			current = bySysCode.get(sysCode);
 		}
@@ -281,13 +281,25 @@ public final class DataSource
 		current.sysCode = sysCode;
 		current.fullName = fullName;
 
-		if (sysCode != null || "".equals(sysCode))
+		if (isSuitableKey(sysCode))
 			bySysCode.put(sysCode, current);
-		if (fullName != null || "".equals(fullName));
+		if (isSuitableKey(fullName));
 			byFullName.put(fullName, current);
 		
 		return new Builder(current);
 	}
+	
+	/**
+	 * Helper method to determine if a String is allowed as key for bySysCode and byFullname hashes.
+	 * Null values and empty strings are not allowed.
+	 * @param key key to check.
+	 * @return true if the key is allowed
+	 */
+	private static boolean isSuitableKey(String key)
+	{
+		return (key != null && !"".equals(key));
+	}
+	
 	
 	/** 
 	 * @param systemCode short unique code to query for

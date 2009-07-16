@@ -36,12 +36,16 @@ public interface IDMapperCapabilities {
     /**
      *
      * @return supported source ID types
+     * @throws IDMapperException if supported DataSources 
+     * 	could not be determined because of service unavailability.
      */
     public Set<DataSource>  getSupportedSrcDataSources() throws IDMapperException;
 
     /**
      *
      * @return supported target ID types
+     * @throws IDMapperException if supported DataSources 
+     * 	could not be determined because of service unavailability.
      */
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException;
 }
