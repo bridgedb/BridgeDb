@@ -51,9 +51,9 @@ public class Xrefs extends IDMapperResource {
 
 			for(IDMapperRdb mapper : mappers) {
 				if(targetDs == null) {
-					xrefs.addAll(mapper.getCrossRefs(xref));
+					xrefs.addAll(mapper.mapID(xref));
 				} else {
-					xrefs.addAll(mapper.getCrossRefs(xref, targetDs));
+					xrefs.addAll(mapper.mapID(xref, targetDs));
 				}
 			}
 					

@@ -92,11 +92,19 @@ public class Test extends TestCase
 		assertTrue(crossRefs3.contains(ref));
 
 		// check symbol suggestions
-		List<String> symbols1 = gdb.getSymbolSuggestions("INS", 100);
-		assertTrue (symbols1.contains("INSR"));
+		boolean attributeFound = false;
+		for (Xref refi : gdb.freeAttributeSearch("INS", "Symbol", 100))
+		{
+			if (gdb.getAttributes(refi, "Symbol").contains("INSR"))
+			{
+				attributeFound = true;
+				break;
+			}
+		}
+		assertTrue (attributeFound);
 
 		// check id suggestions
-		List<Xref> crossRefs4 = gdb.getIdSuggestions("207851_s_", 100);
+		Set<Xref> crossRefs4 = gdb.freeSearch("207851_s_", 100);
 		assertTrue (crossRefs4.contains(new Xref("207851_s_at", BioDataSource.AFFY)));
 		
 		// check free search

@@ -89,25 +89,6 @@ public abstract class IDMapperRdb implements IDMapper
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException;
-
-	/**
-	 * Case insensitive search for a prefix for symbol autocompletion.
-	 * @return up to limit results for autocompletion.
-	 * @param text text query, prefix of symbol
-	 * @param limit will return up to limit results.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException;
-
-	
-	/**
-	 * Case insensitive search for identifier autocompletion.
-	 * @return up to limit suggestions for identifier autocompletion.
-	 * @param text text query, prefix of id
-	 * @param limit will return up to limit results.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException;
 	
 	/**
 	 * free text search for matching symbols or identifiers.

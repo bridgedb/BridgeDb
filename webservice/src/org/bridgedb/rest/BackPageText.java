@@ -52,7 +52,7 @@ public class BackPageText extends IDMapperResource {
 	    Set<String> bpInfos = new HashSet<String>();
 	    
 	    for(IDMapperRdb mapper : mappers ) {
-		bpInfos.add( mapper.getBpInfo( xref ) );
+		bpInfos.addAll( mapper.getAttributes( xref, "Backpage"));
 	    }
 	    
             StringBuilder result = new StringBuilder();

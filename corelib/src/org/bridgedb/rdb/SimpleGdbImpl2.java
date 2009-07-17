@@ -136,14 +136,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 			" LEFT JOIN attribute ON attribute.code = datanode.code AND attribute.id = datanode.id " +
 			"WHERE attrName = ? AND attrValue = ?"
 		);
-	private final LazyPst pstIdSuggestions = new LazyPst (
+	private final LazyPst pstFreeSearch = new LazyPst (
 			"SELECT id, code FROM datanode WHERE " +
 			"LOWER(ID) LIKE ?"
 		);
-	private final LazyPst pstSymbolSuggestions = new LazyPst (
-			"SELECT attrvalue FROM attribute WHERE " +
-			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
-		);	
 	private final LazyPst pstAttributeSearch = new LazyPst (
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
@@ -416,53 +412,6 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public static final int NO_LIMIT = 0;
 	public static final int NO_TIMEOUT = 0;
 	public static final int QUERY_TIMEOUT = 20; //seconds
-
-	/** {@inheritDoc} */
-	@Override public List<String> getSymbolSuggestions(String text, int limit) throws IDMapperException 
-	{		
-		List<String> result = new ArrayList<String>();
-		try {
-
-			PreparedStatement pst = pstSymbolSuggestions.getPreparedStatement();
-			pst.setQueryTimeout(QUERY_TIMEOUT);
-			if(limit > NO_LIMIT) pst.setMaxRows(limit);
-			pst.setString(1, text.toLowerCase() + "%");
-			ResultSet r = pst.executeQuery();
-
-			while(r.next()) 
-			{
-				String symbol = r.getString("attrValue");
-				result.add(symbol);
-			}
-		} catch (SQLException e) {
-			throw new IDMapperException (e);
-		}
-		return result;
-	}
-	
-	/** {@inheritDoc} */
-	@Override public List<Xref> getIdSuggestions(String text, int limit) throws IDMapperException 
-	{		
-		List<Xref> result = new ArrayList<Xref>();
-		try {
-			PreparedStatement pst = pstIdSuggestions.getPreparedStatement();
-			pst.setQueryTimeout(QUERY_TIMEOUT);
-			if(limit > NO_LIMIT) pst.setMaxRows(limit);
-			pst.setString (1, text.toLowerCase() + "%");
-			ResultSet r = pst.executeQuery();
-
-			while(r.next()) {
-				String id = r.getString(1);
-				DataSource ds = DataSource.getBySystemCode(r.getString(2));
-				Xref ref = new Xref(id, ds);
-				result.add (ref);
-			}
-		} catch (SQLException e) {
-			throw new IDMapperException (e);
-		}
-//		if(limit > NO_LIMIT && sugg.size() == limit) sugg.add("...results limited to " + limit);
-		return result;
-	}
 
 	/** {@inheritDoc} */
 	@Override public List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException 

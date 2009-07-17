@@ -222,54 +222,6 @@ public class DoubleGdb extends IDMapperRdb
 		return false;
 	}
 
-	/**
-	 * returns the aggregate of all child results.
-	 * @throws IDMapperException 
-	 */
-	public List<Xref> getIdSuggestions(String text,
-			int limit) throws IDMapperException 
-	{
-		List<Xref> result = new ArrayList<Xref>();
-		
-		for (SimpleGdb child : gdbs)
-		{
-			if (child != null && child.isConnected())
-			{
-				if (result == null)
-					result = child.getIdSuggestions (text, limit);
-				else
-					result.addAll (child.getIdSuggestions (text, limit));
-			}
-			// don't need to continue if we already reached limit.
-			if (result.size() >= limit) break; 
-		}
-		return result;
-	}
-
-	/**
-	 * returns the aggregate of all child results.
-	 * @throws IDMapperException 
-	 */
-	public List<String> getSymbolSuggestions(String text,
-			int limit) throws IDMapperException 
-	{
-		List<String> result = new ArrayList<String>();
-		
-		for (SimpleGdb child : gdbs)
-		{
-			if (child != null && child.isConnected())
-			{
-				if (result == null)
-					result = child.getSymbolSuggestions (text, limit);
-				else
-					result.addAll (child.getSymbolSuggestions (text, limit));
-			}
-			// don't need to continue if we already reached limit.
-			if (result.size() >= limit) break;
-		}
-		return result;
-	}
-
 	public List<XrefWithSymbol> freeSearchWithSymbol(String text, int limit) throws IDMapperException
 	{
 		List<XrefWithSymbol> result = new ArrayList<XrefWithSymbol>();

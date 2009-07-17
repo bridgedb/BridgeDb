@@ -48,7 +48,7 @@ public class SearchId extends IDMapperResource {
 	    Set<Xref> suggestions = new HashSet<Xref>();
 	    
 	    for(IDMapperRdb mapper : mappers ) {
-		suggestions.addAll( mapper.getIdSuggestions( searchStr, limit ) );
+		suggestions.addAll( mapper.freeSearch( searchStr, limit ) );
 	    }
 	    
             StringBuilder result = new StringBuilder();
