@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
@@ -32,7 +33,7 @@ import org.bridgedb.Xref;
  * Interface for all classes that provide Gdb-like functionality,
  * such as looking up cross-references and backpage text.
  */
-public abstract class IDMapperRdb implements IDMapper
+public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 {
 	static
 	{
@@ -58,29 +59,20 @@ public abstract class IDMapperRdb implements IDMapper
 	public abstract String getDbName();
 	
 	/**
-	 * Get information from the "Attribute" table, such as gene Symbol.
-	 * @param ref the entity to get the attribute for
-	 * @param attrname the attribute to look for.
-	 * @return the attribute, or null if nothing was found
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 * Get all cross-references for the given entity.
+	 * @param idc The entity to get the cross references for
+	 * @return An {@link List} containing the cross references, or an empty
+	 * ArrayList when no cross references could be found
+	 * @throws IDMapperException when the database is unavailable
 	 */
-	public abstract Set<String> getAttributes(Xref ref, String attrname) throws IDMapperException;
-	
-	/**
-	 * Get all cross-references for the given id/code pair, restricting the
-	 * result to contain only references from database with the given system
-	 * code.
-	 * @param idc The id/code pair to get the cross references for
-	 * @return A {@link List} containing the cross references, or an empty
-	 * {@link List} when no cross references could be found
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract List<Xref> mapID(Xref idc) throws IDMapperException;
+	public List<Xref> mapID(Xref idc) throws IDMapperException
+	{
+		return mapID(idc, null);
+	}
 
 	/**
-	 * Get all cross-references for the given id/code pair, restricting the
-	 * result to contain only references from database with the given system
-	 * code.
+	 * Get all cross-references for the given entity, restricting the
+	 * result to contain only references from the given set of data sources.
 	 * @param idc The id/code pair to get the cross references for
 	 * @param resultDs The system code to restrict the results to
 	 * @return An {@link List} containing the cross references, or an empty
@@ -116,14 +108,4 @@ public abstract class IDMapperRdb implements IDMapper
 		}
 		return result;
 	}	
-
-	/**
-	 * free text search for matching symbols.
-	 * @return references that match the query
-	 * @param query The text to search for
-	 * @param attrType the attribute to look for, e.g. 'Symbol' or 'Description'.
-	 * @param limit The number of results to limit the search to
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException;	
 }

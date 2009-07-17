@@ -139,32 +139,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
 		);
 	
-	/**
-	 * @param ref The reference  to get the symbol info for
-	 * @return The gene symbol, or null if the symbol could not be found
-	 * @throws IDMapperException when the database is unavailable
-	 * @deprecated use getAttribute (ref, "Symbol") instead
-	 */
-	@Override public String getGeneSymbol(Xref ref) throws IDMapperException 
-	{
-		try {
-			PreparedStatement pst = pstGeneSymbol.getPreparedStatement();
-			pst.setString(1, ref.getId());
-			pst.setString(2, ref.getDataSource().getSystemCode());
-			ResultSet r = pst.executeQuery();
-
-			while(r.next()) 
-			{
-				return r.getString(1);
-			}
-		} catch (SQLException e) {
-			throw new IDMapperException (e);
-		}
-		return null;
-	}
-	
 	/** {@inheritDoc} */
-	@Override public boolean xrefExists(Xref xref) throws IDMapperException 
+	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
 		try 
 		{
@@ -247,7 +223,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/** {@inheritDoc} */
-	@Override public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
+	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
 //		Logger.log.trace("Fetching cross references by attribute: " + attrName + " = " + attrValue);
 		List<Xref> refs = new ArrayList<Xref>();
 
@@ -609,7 +585,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/** {@inheritDoc} */
-	@Override public Set<String> getAttributes(Xref ref, String attrname)
+	public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
 	{
 		Set<String> result = new HashSet<String>();
@@ -642,7 +618,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * @param limit The number of results to limit the search to
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	@Override public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
+	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
 	{
 		Set<Xref> result = new HashSet<Xref>();
 		try {

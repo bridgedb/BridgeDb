@@ -67,7 +67,7 @@ public class Test extends TestCase
 		//symbol must be INSR
 		Xref ref = new Xref ("3643", BioDataSource.ENTREZ_GENE);
 		//TODO: CD220 is just one possible symbol, not the primary one.
-		assertEquals ("CD220", gdb.getGeneSymbol(ref));
+		assertTrue (gdb.getAttributes(ref, "Symbol").contains("CD220"));
 		
 		// test getting backpage
 		assertTrue (gdb.getAttributes(ref, "Backpage").iterator().next().startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
@@ -87,7 +87,7 @@ public class Test extends TestCase
 		assertTrue(crossRefs1.size() > crossRefs2.size());
 
 		// get crossrefs by attribute
-		List<Xref> crossRefs3 = gdb.getCrossRefsByAttribute("Symbol", "INSR");
+		Set<Xref> crossRefs3 = gdb.freeAttributeSearch("INSR", "Symbol", 100);
 		assertTrue(crossRefs3.contains(ref));
 
 		// check symbol suggestions
@@ -110,7 +110,7 @@ public class Test extends TestCase
 		Set<Xref> result5 = gdb.freeAttributeSearch("Insulin", "Symbol", 100); 
 		
 		Xref nonExistingRef = new Xref ("bla", BioDataSource.OTHER); 
-		assertNull (gdb.getGeneSymbol(nonExistingRef));
+		assertEquals(0, gdb.getAttributes(nonExistingRef, "Symbol").size());
 		
 		// should return empty list, not NULL
 		assertEquals (0, gdb.mapID(nonExistingRef).size());

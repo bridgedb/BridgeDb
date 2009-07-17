@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bridgedb.rdb.SimpleGdb;
+
 /**
  * combines multiple {@link IDMapper}'s in a stack.
  * <p>
@@ -36,7 +38,7 @@ import java.util.Set;
  * If the method returns a list, IDMapperStack joins
  * the result from all connected child databases together.
  */
-public class IDMapperStack implements IDMapper
+public class IDMapperStack implements IDMapper, AttributeMapper
 {
 	private List<IDMapper> gdbs = new ArrayList<IDMapper>();
 
@@ -230,6 +232,37 @@ public class IDMapperStack implements IDMapper
 					}
 					resultSet.addAll (entry.getValue());
 				}
+			}
+		}
+		return result;
+	}
+
+	/** {@inheritDoc} */
+	public Set<String> getAttributes(Xref ref, String attrname)
+			throws IDMapperException 
+	{
+		Set<String> result = new HashSet<String>();
+		// return the first database with a result.
+		for (IDMapper child : gdbs)
+		{
+			if (child != null && child instanceof AttributeMapper && child.isConnected())
+			{
+				result.addAll (((AttributeMapper)child).getAttributes(ref, attrname));
+			}
+		}
+		return result;
+	}
+
+	/** {@inheritDoc} */
+	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
+	{
+		Set<Xref> result = new HashSet<Xref>();
+		// return the first database with a result.
+		for (IDMapper child : gdbs)
+		{
+			if (child != null && child instanceof AttributeMapper && child.isConnected())
+			{
+				result.addAll (((AttributeMapper)child).freeAttributeSearch(query, attrType, limit));
 			}
 		}
 		return result;

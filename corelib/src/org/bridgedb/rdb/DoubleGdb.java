@@ -184,27 +184,6 @@ public class DoubleGdb extends IDMapperRdb
 	}
 
 	/**
-	 * This implementation iterates over all child databases
-	 * and returns the first one that gives a non-null result.
-	 * @throws IDMapperException 
-	 */
-	public String getGeneSymbol(Xref ref) throws IDMapperException 
-	{
-		String result = null;
-		// return the first database with a result.
-		for (SimpleGdb child : gdbs)
-		{
-			if (child != null && child.isConnected())
-			{
-				result = child.getGeneSymbol(ref);
-				if (result != null) return result;
-			}
-		}
-		// failure
-		return null;
-	}
-
-	/**
 	 * Returns true if at least one of the child databases
 	 * are connected.
 	 */
@@ -295,7 +274,7 @@ public class DoubleGdb extends IDMapperRdb
 		return caps;
 	}
 
-	@Override
+	/** {@inheritDoc} */
 	public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
 	{
@@ -311,14 +290,7 @@ public class DoubleGdb extends IDMapperRdb
 		return result;
 	}
 
-	/**
-	 * free text search for matching symbols.
-	 * @return references that match the query
-	 * @param query The text to search for
-	 * @param attrType the attribute to look for, e.g. 'Symbol' or 'Description'.
-	 * @param limit The number of results to limit the search to
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
+	/** {@inheritDoc} */
 	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
 	{
 		Set<Xref> result = new HashSet<Xref>();

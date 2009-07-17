@@ -21,7 +21,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
@@ -66,37 +65,6 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	
 	/** {@inheritDoc} */
 	@Override final public String getDbName() { return dbName; }
-
-	/**
-	 * @param ref The reference  to get the symbol info for
-	 * @return The gene symbol, or null if the symbol could not be found
-	 * @throws IDMapperException when the database is unavailable
-	 * @deprecated use getAttribute (ref, "Symbol") instead
-	 */
-	abstract public String getGeneSymbol(Xref ref) throws IDMapperException; 
-		
-	/** {@inheritDoc} */
-	abstract public boolean xrefExists(Xref xref) throws IDMapperException; 
-
-	/**
-	 * Get all cross-references for the given id/code pair, restricting the
-	 * result to contain only references from database with the given system
-	 * code.
-	 * @param idc The id/code pair to get the cross references for
-	 * @return An {@link List} containing the cross references, or an empty
-	 * ArrayList when no cross references could be found
-	 * @throws IDMapperException when the database is unavailable
-	 */
-	final public List<Xref> mapID(Xref idc) throws IDMapperException
-	{
-		return mapID(idc, null);
-	}
-
-	/** {@inheritDoc} */
-	abstract public List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException; 
-
-	/** {@inheritDoc} */
-	abstract public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException;
 	
 	/** {@inheritDoc} */
 	final public void close() throws IDMapperException 
