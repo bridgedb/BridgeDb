@@ -32,6 +32,8 @@ bridgedb.version=${bridgedb.version}
 		   debug="true"
 		   destdir="build">
 	</javac>
+    <copy file="../resources/filterconversion.txt"
+          todir="build/org/bridgedb/webservice/biomart" />
   </target>
   
   <target name="jar" depends="build">
@@ -40,6 +42,7 @@ bridgedb.version=${bridgedb.version}
 		<attribute name="Class-Path" value="derby.jar"/>
 	  </manifest>
 	  <fileset dir="build" includes="**/*.class"/>
+      <fileset dir="build" includes="**/*.txt"/>
 	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
   </target>
@@ -52,6 +55,8 @@ bridgedb.version=${bridgedb.version}
 		<package name="org.bridgedb"/>
 		<package name="org.bridgedb.file"/>
 		<package name="org.bridgedb.rdb"/>
+        <package name="org.bridgedb.webservice"/>
+        <pachage name="org.bridgedb.webservice.biomart"/>
 		<sourcepath>			
 			<pathelement location="src"/>
 		</sourcepath>

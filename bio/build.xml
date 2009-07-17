@@ -20,9 +20,10 @@
 			<pathelement location="../lib/bridgedb.jar"/>
 		</classpath>
 	</javac>
-	<copy todir="build/org/bridgedb/bio" flatten="true" verbose="true">
-		<fileset dir="../resources" includes="*.txt"/>
-	</copy>
+    <copy file="../resources/datasources.txt"
+          todir="build/org/bridgedb/bio" />
+    <copy file="../resources/organisms.txt"
+          todir="build/org/bridgedb/bio" />
   </target>
   
   <target name="jar" depends="build">

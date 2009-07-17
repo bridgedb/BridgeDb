@@ -1,0 +1,12 @@
+<html>
+<body>
+Driver and helper classes for using web services as identifier mapping services.
+<p>
+For example, to use BioMart as a mapping resource,
+you can use the following piece of code:  
+<pre>
+	class.forName("org.bridgedb.file.IDMapperBiomart");
+	mapper = BridgeDb.connect ("idmapper-biomart:path/to/biomart?dataset=datasetname");
+</pre>
+</body>
+</html>
