@@ -17,11 +17,6 @@
 
 package org.bridgedb.file;
 
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.HashMap;
-
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -31,120 +26,80 @@ import java.io.IOException;
 import java.net.URLConnection;
 import java.net.URL;
 
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
+
 
 /**
  * Class for reading ID mapping data from delimited text file
  * @author gjj
  */
-public class IDMappingReaderFromText implements IDMappingReader {
+public class IDMappingReaderFromText extends IDMappingReaderFromDelimiterBufferedReader {
     private static int msConnectionTimeout = 2000;
 
     protected final URL url;
-    protected boolean transitivity;
-    protected String regExDataSourceDelimiter;
-    protected String regExIDDelimiter;
-    protected Set<DataSource> dataSources;
-    protected Map<Xref,Set<Xref>> mapXrefs;
-
-    protected boolean dsValid, idMappingValid;
 
     public IDMappingReaderFromText(final URL url,
-            final char[] dataSourceDelimiters) {
+            final char[] dataSourceDelimiters) throws IDMapperException {
         this(url, dataSourceDelimiters, null);
     }
 
     public IDMappingReaderFromText(final URL url,
             final char[] dataSourceDelimiters,
-            final char[] regExIDDelimiter) {
+            final char[] regExIDDelimiter) throws IDMapperException {
         this(url, dataSourceDelimiters, regExIDDelimiter, false);
     }
 
     public IDMappingReaderFromText(final URL url,
             final char[] dataSourceDelimiters,
             final char[] regExIDDelimiter,
-            final boolean transitivity) {
+            final boolean transitivity) throws IDMapperException {
         this(url, strs2regex(dataSourceDelimiters), strs2regex(regExIDDelimiter), transitivity);
     }
 
     public IDMappingReaderFromText(final URL url,
-            final String regExDataSourceDelimiter) {
+            final String regExDataSourceDelimiter) throws IDMapperException {
         this(url, regExDataSourceDelimiter, null);
     }
 
     public IDMappingReaderFromText(final URL url,
             final String regExDataSourceDelimiter,
-            final String regExIDDelimiter) {
+            final String regExIDDelimiter) throws IDMapperException {
         this(url, regExDataSourceDelimiter, regExIDDelimiter, false);
     }
 
     public IDMappingReaderFromText(final URL url,
             final String regExDataSourceDelimiter,
             final String regExIDDelimiter,
-            final boolean transitivity) {
-        if (url==null || regExDataSourceDelimiter==null) {
-            throw new NullPointerException();
-        }
+            final boolean transitivity) throws IDMapperException {
+        super(getReader(url), regExDataSourceDelimiter,
+                regExIDDelimiter, transitivity); 
         
         this.url = url;
-        this.regExDataSourceDelimiter = regExDataSourceDelimiter;
-        this.regExIDDelimiter = regExIDDelimiter;
-        this.transitivity = transitivity;
-
-        dsValid = false;
-        idMappingValid = false;
     }
 
-    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) {
+    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) throws IDMapperException {
+        resetReader();
         regExDataSourceDelimiter = strs2regex(dataSourceDelimiters);
         dsValid = false;
         idMappingValid = false;
     }
 
-    public void setIDDelimiters(final char[] idDelimiters) {
+    public void setIDDelimiters(final char[] idDelimiters) throws IDMapperException {
+        resetReader();
         regExIDDelimiter = strs2regex(idDelimiters);
         idMappingValid = false;
     }
 
-    public void setTransitivity(final boolean transitivity) {
-        this.transitivity = transitivity;
+    // reset the stream after changing
+    protected void resetReader() throws IDMapperException {
+        reader = getReader(url);
     }
 
-    public boolean getTransitivity() {
-        return transitivity;
-    }
-
-    /**
-     *
-     * @return data sources
-     */
-    public Set<DataSource> getDataSources() throws IDMapperException {
-        if (!dsValid) {
-            readDataSources();
-        }
-
-        return dataSources;
-    }
-
-    /**
-     *
-     * @return ID mappings
-     */
-    public Map<Xref,Set<Xref>> getIDMappings() throws IDMapperException {
-        if (!idMappingValid) {
-            readIDMappings();
-        }
-
-        return mapXrefs;
-    }
-
-    private static String strs2regex(final char[] chs) {
+    protected static String strs2regex(final char[] chs) {
         if (chs==null || chs.length==0) {
             return null;
         }
-        
+
         StringBuilder regex = new StringBuilder();
         int n = chs.length;
         if (n>0) {
@@ -158,116 +113,13 @@ public class IDMappingReaderFromText implements IDMappingReader {
         return regex.toString();
     }
 
-    /**
-     *
-     * @throws IDMapperException if failed
-     */
-    protected void readDataSources() throws IDMapperException {
-        dataSources = new HashSet();
+    private static BufferedReader getReader(URL url) throws IDMapperException {
         try {
             InputStream inputStream = getInputStream(url);
             Reader fin = new InputStreamReader(inputStream);
-            BufferedReader bufRd = new BufferedReader(fin);
-
-            // add data sources
-            String line = bufRd.readLine();
-            if (line==null) {
-                    System.err.println("Empty file");
-                    return;
-            }
-
-            String[] types = line.split(regExDataSourceDelimiter);
-            int nds = types.length;
-            DataSource[] dss = new DataSource[nds];
-            for (int ids=0; ids<nds; ids++) {
-                String type = types[ids];
-                if (type.length()==0) {//TODO: how to deal with consecutive Delimiters
-                    return;
-                }
-
-                dss[ids] = DataSource.getByFullName(type);
-                dataSources.add(dss[ids]);
-            }
-
-            dsValid = true;
-
-            bufRd.close();
-            fin.close();
-        } catch(java.io.IOException ex) {
-            throw new IDMapperException(ex);
-        }
-    }
-    
-    /**
-     *
-     * @throws IDMapperException if failed
-     */
-    protected void readIDMappings() throws IDMapperException {
-        dataSources = new HashSet();
-        mapXrefs = new HashMap();
-
-        try {
-            InputStream inputStream = getInputStream(url);
-            Reader fin = new InputStreamReader(inputStream);
-            BufferedReader bufRd = new BufferedReader(fin);
-
-            // add data sources
-            String line = bufRd.readLine();
-            if (line==null) {
-                    System.err.println("Empty file");
-                    return;
-            }
-
-            String[] types = line.split(regExDataSourceDelimiter);
-            int nds = types.length;
-            DataSource[] dss = new DataSource[nds];
-            for (int ids=0; ids<nds; ids++) {
-                String type = types[ids];
-                if (type.length()==0) {//TODO: how to deal with consecutive Delimiters
-                    return;
-                }
-
-                dss[ids] = DataSource.getByFullName(type);
-                dataSources.add(dss[ids]);
-            }
-
-            dsValid = true;
-
-            // read each ID mapping (line)
-            int lineCount = 1;
-            while ((line=bufRd.readLine())!=null) {
-                    lineCount++;
-                    String[] strs = line.split(regExDataSourceDelimiter);
-                    if (strs.length>types.length) {
-                            System.err.println("The number of ID is larger than the number of types at row "+lineCount);
-                            //continue;
-                    }
-
-                    int n = Math.min(strs.length, types.length);
-
-                    Set<Xref> xrefs = new HashSet();
-
-                    for (int i=0; i<n; i++) {
-                        String str = strs[i];
-                        if (regExIDDelimiter==null) {
-                            xrefs.add(new Xref(str, dss[i]));
-                        } else {
-                            String[] ids = str.split(regExIDDelimiter);
-                            for (String id : ids) {
-                                xrefs.add(new Xref(id, dss[i]));
-                            }
-                        }
-                    }
-
-                    addIDMapping(xrefs);
-            }
-
-            idMappingValid = true;
-
-            bufRd.close();
-            fin.close();
-        } catch(java.io.IOException ex) {
-            throw new IDMapperException(ex);
+            return new BufferedReader(fin);
+        } catch(IOException e) {
+            throw new IDMapperException(e);
         }
     }
 
@@ -278,42 +130,4 @@ public class IDMappingReaderFromText implements IDMappingReader {
         return uc.getInputStream();
     }
 
-    /**
-     *
-     * @param xrefs matched references
-     */
-    protected void addIDMapping(final Set<Xref> xrefs) {
-        if (xrefs==null) {
-            throw new NullPointerException();
-        }
-
-        if (transitivity) {
-            Set<Xref> newXrefs = new HashSet(xrefs);
-
-            for (Xref xref : xrefs) {
-                Set<Xref> oldXrefs = mapXrefs.get(xref);
-                if (oldXrefs!=null) {
-                    newXrefs.addAll(oldXrefs); // merge
-                }
-            }
-
-            for (Xref xref : newXrefs) {
-                mapXrefs.put(xref, newXrefs);
-            }
-        } else {
-            for (Xref xref : xrefs) {
-                Set<Xref> oldXrefs = mapXrefs.get(xref);
-                if (oldXrefs==null) {
-                    oldXrefs = new HashSet();
-                    mapXrefs.put(xref, oldXrefs);
-                }
-
-                oldXrefs.addAll(xrefs);
-            }
-        }
-
-
-        
-
-    }
 }

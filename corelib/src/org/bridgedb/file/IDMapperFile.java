@@ -94,22 +94,30 @@ public abstract class IDMapperFile implements IDMapper {
      */
     public Map<Xref, Set<Xref>> mapID(final Set<Xref> srcXrefs, final Set<DataSource> tgtDataSources) throws IDMapperException {
         if (srcXrefs==null || tgtDataSources==null) {
-            throw new NullPointerException();
-        }
-        
-        if (!cap.getSupportedTgtDataSources().containsAll(tgtDataSources)) {
-            //TODO: throw an expeption or just ignore the unsupported data sources?
-            throw new IDMapperException("Unsupported target data sources.");
+            throw new java.lang.IllegalArgumentException("srcXrefs or tgtDataSources cannot be null");
         }
 
         Map<Xref, Set<Xref>> return_this = new HashMap();
+
+        // remove unsupported target datasources
+        Set<DataSource> supportedTgtDatasources = cap.getSupportedTgtDataSources();
+        Set<DataSource> tgtDss = new HashSet(tgtDataSources);
+        tgtDss.retainAll(supportedTgtDatasources);
+        if (tgtDss.isEmpty()) {
+            return return_this;
+        }
 
         Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
         if (mapXrefs==null) {
             return return_this;
         }
 
+        Set<DataSource> supportedSrcDatasources = cap.getSupportedSrcDataSources();
         for (Xref srcXref : srcXrefs) {
+            if (!supportedSrcDatasources.contains(srcXref.getDataSource())) {
+                continue;
+            }
+
             Set<Xref> refs = mapXrefs.get(srcXref);
             if (refs==null) continue;
 

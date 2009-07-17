@@ -133,25 +133,25 @@ public class IDMapperText extends IDMapperFile
     protected char[] idDelimiters;
 
 
-    public IDMapperText(final URL url) {
+    public IDMapperText(final URL url) throws IDMapperException {
         this(url,  new char[] {'\t'}); // default is tab delimited
     }
 
     public IDMapperText(final URL url,
-            final char[] dataSourceDelimiters) {
+            final char[] dataSourceDelimiters) throws IDMapperException {
         this(url, dataSourceDelimiters, null);
     }
 
     public IDMapperText(final URL url,
             final char[] dataSourceDelimiters,
-            final char[] idDelimiters) {
+            final char[] idDelimiters) throws IDMapperException {
         this(url, dataSourceDelimiters, idDelimiters, false);
     }
 
     public IDMapperText(final URL url,
             final char[] dataSourceDelimiters,
             final char[] idDelimiters,
-            final boolean transitivity) {
+            final boolean transitivity) throws IDMapperException {
         super(new IDMappingReaderFromText(url,
                 dataSourceDelimiters,
                 idDelimiters),
@@ -191,15 +191,15 @@ public class IDMapperText extends IDMapperFile
         return idDelimiters;
     }
 
-    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) {
-        this.dataSourceDelimiters = dataSourceDelimiters;
+    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) throws IDMapperException {
         ((IDMappingReaderFromText)this.getIDMappingReader()).
                 setDataSourceDelimiters(dataSourceDelimiters);
+        this.dataSourceDelimiters = dataSourceDelimiters;
     }
 
-    public void setIDDelimiters(final char[] idDelimiters) {
-        this.idDelimiters = idDelimiters;
+    public void setIDDelimiters(final char[] idDelimiters) throws IDMapperException {
         ((IDMappingReaderFromText)this.getIDMappingReader())
                 .setIDDelimiters(idDelimiters);
+        this.idDelimiters = idDelimiters;
     }
 }
