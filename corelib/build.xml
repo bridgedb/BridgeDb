@@ -56,7 +56,7 @@ bridgedb.version=${bridgedb.version}
 		<package name="org.bridgedb.file"/>
 		<package name="org.bridgedb.rdb"/>
         <package name="org.bridgedb.webservice"/>
-        <pachage name="org.bridgedb.webservice.biomart"/>
+        <package name="org.bridgedb.webservice.biomart"/>
 		<sourcepath>			
 			<pathelement location="src"/>
 		</sourcepath>
