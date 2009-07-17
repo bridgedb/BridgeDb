@@ -56,7 +56,10 @@ CREATE TABLE link (
 ## Create 'info'
 CREATE TABLE info (
 	buildDate INTEGER,
-	schemaVersion INTEGER
+	schemaVersion INTEGER,
+	ensemblBuild VARCHAR(31) NOT NULL,
+	species VARCHAR(31) NOT NULL,
+	dataType VARCHAR(31) NOT NULL
 );
 
 ## Ceate 'attribute'
@@ -71,7 +74,7 @@ CREATE TABLE attribute (
 
 ## Fill 'info'
 INSERT INTO info 
-SELECT XXXXXX_CS_YYYYYY.Info.Version, '2' 
+SELECT XXXXXX_CS_YYYYYY.Info.Version, '2', XXXXXX_CS_YYYYYY.Info.Notes, XXXXXX_CS_YYYYYY.Info.Species, 'GeneProduct' 
 FROM XXXXXX_CS_YYYYYY.Info;
 
 ## Fill 'attribute'
