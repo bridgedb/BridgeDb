@@ -1,11 +1,13 @@
 package org.bridgedb.rest;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
-import org.bridgedb.XrefWithSymbol;
+import org.bridgedb.Xref;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
@@ -45,17 +47,27 @@ public class SearchSymbolOrId extends IDMapperResource {
 	  try 
 	  {
 	    //The result set
-	    Set<XrefWithSymbol> suggestions = new HashSet<XrefWithSymbol>();
+	    Map<Xref, String> suggestions = new HashMap<Xref, String>();
 	    
 	    for(IDMapperRdb mapper : mappers ) {
-		suggestions.addAll( mapper.freeSearchWithSymbol( searchStr, limit ) );
+	    	Set<Xref> tempset = new HashSet<Xref>();
+	    	tempset.addAll( mapper.freeSearch( searchStr, limit ) );
+	    	tempset.addAll( mapper.freeAttributeSearch( searchStr, "Symbol", limit ) );
+	    	for (Xref x : tempset)
+	    	{
+	    		for (String s : mapper.getAttributes (x, "Symbol"))
+	    		{
+		    		suggestions.put (x, s);
+		    		break; // only put the first
+	    		}
+	    	}
 	    }
 	    
-            StringBuilder result = new StringBuilder();
-	    for( XrefWithSymbol x : suggestions ) {
+        StringBuilder result = new StringBuilder();
+	    for(Xref x : suggestions.keySet()) {
 		result.append( x.getId() );
 		result.append( "\t" );
-		result.append( x.getSymbol() );
+		result.append( suggestions.get(x) );
 		result.append( "\t" );
 		result.append( x.getDataSource().getFullName() );
 		result.append( "\n" );

@@ -23,18 +23,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefWithSymbol;
-
-
-
-//import org.pathvisio.debug.Logger;
 
 /**
  * SimpleGdb is the main implementation of the Gdb interface,
@@ -414,60 +408,28 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public static final int QUERY_TIMEOUT = 20; //seconds
 
 	/** {@inheritDoc} */
-	@Override public List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException 
+	public Set<Xref> freeSearch (String text, int limit) throws IDMapperException 
 	{		
-		List<XrefWithSymbol> result = new ArrayList<XrefWithSymbol>();
+		Set<Xref> result = new HashSet<Xref>();
 		try {
-			PreparedStatement ps1 = con.prepareStatement(
-					"SELECT dn.id, dn.code, attr.attrvalue " +
-					"FROM datanode AS dn LEFT JOIN attribute AS attr ON " +
-					"	dn.id = attr.id AND dn.code = attr.code " +
-					"WHERE " +
-					"		LOWER(dn.id) LIKE ?" +
-					"	AND " +
-					"			(attr.attrname = 'Symbol' " +
-					"	OR attr.attrname IS NULL) "
-					);
+			PreparedStatement ps1 = pstFreeSearch.getPreparedStatement();
 			ps1.setQueryTimeout(QUERY_TIMEOUT);
 			if(limit > NO_LIMIT) 
 			{
 				ps1.setMaxRows(limit);
 			}
 
-			ps1.setString(1, text.toLowerCase() + "%");
+			ps1.setString(1, "%" + text.toLowerCase() + "%");
 			ResultSet r = ps1.executeQuery();
 			while(r.next()) {
 				String id = r.getString(1);
 				DataSource ds = DataSource.getBySystemCode(r.getString(2));
-				String sym = r.getString(3);
-				XrefWithSymbol ref = new XrefWithSymbol (new Xref(id, ds), sym);
+				Xref ref = new Xref (id, ds);
 				result.add (ref);
-			}
-			
-			if (result.size() >= limit)
-			{
-				return result;
-			}
-			
-			PreparedStatement ps2 = con.prepareStatement(
-					"SELECT attr.id, attr.code, attr.attrvalue " +
-					"FROM attribute AS attr " +
-					"WHERE " +
-					"	LOWER(attr.attrvalue) LIKE ?"
-			);
-			ps2.setString(1, "%" + text.toLowerCase() + "%");
-			ps2.setQueryTimeout(QUERY_TIMEOUT);
-			r = ps2.executeQuery();
-
-			while(r.next()) {
-				String id = r.getString(1);
-				DataSource ds = DataSource.getBySystemCode(r.getString(2));
-				String sym = r.getString(3);
-				XrefWithSymbol ref = new XrefWithSymbol (new Xref(id, ds), sym);
-				result.add (ref);
-			}
-			
-		} catch (SQLException e) {
+			}			
+		} 
+		catch (SQLException e) 
+		{
 			throw new IDMapperException(e);
 		}
 		return result;

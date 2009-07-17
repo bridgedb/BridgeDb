@@ -26,8 +26,6 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefWithSymbol;
-
 
 /**
  * combines multiple {@link IDMapperRdb}'s in a stack.
@@ -222,15 +220,16 @@ public class DoubleGdb extends IDMapperRdb
 		return false;
 	}
 
-	public List<XrefWithSymbol> freeSearchWithSymbol(String text, int limit) throws IDMapperException
+	/** {@inheritDoc} */
+	public Set<Xref> freeSearch(String text, int limit) throws IDMapperException
 	{
-		List<XrefWithSymbol> result = new ArrayList<XrefWithSymbol>();
+		Set<Xref> result = new HashSet<Xref>();
 		
 		for (SimpleGdb child : gdbs)
 		{
 			if (child != null && child.isConnected())
 			{
-				result.addAll (child.freeSearchWithSymbol(text, limit));
+				result.addAll (child.freeSearch(text, limit));
 			}
 			// don't need to continue if we already reached limit.
 			if (result.size() >= limit) break;

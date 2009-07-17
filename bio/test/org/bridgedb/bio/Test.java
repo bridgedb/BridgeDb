@@ -24,7 +24,6 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefWithSymbol;
 import org.bridgedb.rdb.DataDerby;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
@@ -108,7 +107,7 @@ public class Test extends TestCase
 		assertTrue (crossRefs4.contains(new Xref("207851_s_at", BioDataSource.AFFY)));
 		
 		// check free search
-		List<XrefWithSymbol> result5 = gdb.freeSearchWithSymbol ("Insulin", 100); 
+		Set<Xref> result5 = gdb.freeAttributeSearch("Insulin", "Symbol", 100); 
 		
 		Xref nonExistingRef = new Xref ("bla", BioDataSource.OTHER); 
 		assertNull (gdb.getGeneSymbol(nonExistingRef));

@@ -27,7 +27,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefWithSymbol;
 
 /**
  * Interface for all classes that provide Gdb-like functionality,
@@ -89,27 +88,6 @@ public abstract class IDMapperRdb implements IDMapper
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
 	public abstract List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException;
-	
-	/**
-	 * free text search for matching symbols or identifiers.
-	 * @return references with symbol that match the query
-	 * @param text The text to base the suggestions on
-	 * @param limit The number of results to limit the search to
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
-	 */
-	public abstract List<XrefWithSymbol> freeSearchWithSymbol (String text, int limit) throws IDMapperException;
-
-	/** {@inheritDoc} */
-	public Set<Xref> freeSearch(String text, int limit) throws IDMapperException 
-	{
-		// turn XrefWithSymbol list into Xref list
-		Set<Xref> result = new HashSet<Xref>();
-		for (XrefWithSymbol i : freeSearchWithSymbol(text, limit))
-		{
-			result.add(i.asXref());
-		}
-		return result;
-	}
 	
 	/**
 	 * Map a set of Xrefs at once.
