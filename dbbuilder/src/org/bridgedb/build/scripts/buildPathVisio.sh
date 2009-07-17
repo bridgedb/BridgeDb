@@ -40,22 +40,22 @@ java org.apache.derby.tools.ij PathVisioDerby_BUILD.ij
 
 # Package it up
 mv ${Database} database
-zip -r -0 ${Database}.pgdb database/
+zip -r -0 ${Database}.bridge database/
 mv database ${Database}
 
 # report on products (check size > 1.9M)
-ls -lh ${Database}.pgdb | echo
+ls -lh ${Database}.bridge | echo
 
 # BELOW: Not yet automated
 # - ssh-key authentication not working
-#scp ${Database}.pgdb genmappftp@conklinwolf.ucsf.edu: (password=genmappftp)
-#scp ${Database}.pgdb jeff@conklinwolf.ucsf.edu:/home2/GenMAPP2_DataTreeRoot/Derby/ (1357jeff)
+#scp ${Database}.bridge genmappftp@conklinwolf.ucsf.edu: (password=genmappftp)
+#scp ${Database}.bridge jeff@conklinwolf.ucsf.edu:/home2/GenMAPP2_DataTreeRoot/Derby/ (1357jeff)
 
 # Install at WikiPathways
-#scp Gramene_Derby_20081109.pgdb wikipathways@www.wikipathways.org:/home/wikipathways/database/Gramene_Derby_20081109.pgdb
+#scp Gramene_Derby_20081109.bridge wikipathways@www.wikipathways.org:/home/wikipathways/database/Gramene_Derby_20081109.bridge
 #ssh wikipathways@www.wikipathways.org
 #cd /home/wikipathways/database
-#unzip Gramene_Derby_20081109.pgdb
+#unzip Gramene_Derby_20081109.bridge
 #mv database Gramene_Derby_20081109
 #rm <symbolic link> (e.g., Homo\ sapiens)
 #ln -s Gramene_Derby_20081109 <symbolic link> (e.g., Homo\ sapiens)
