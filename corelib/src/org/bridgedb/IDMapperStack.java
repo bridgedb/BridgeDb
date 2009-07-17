@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bridgedb.rdb.SimpleGdb;
-
 /**
  * combines multiple {@link IDMapper}'s in a stack.
  * <p>
@@ -130,19 +128,15 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	{
 		/**
 		 * @return union of DataSources supported by child services
+		 * @throws IDMapperException when one of the services was unavailable
 		 */
-		public Set<DataSource> getSupportedSrcDataSources() 
+		public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException
 		{
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : IDMapperStack.this.gdbs)
 			{
                 Set<DataSource> dss = null;
-                try {
-                    dss = idm.getCapabilities().getSupportedSrcDataSources();
-                } catch (IDMapperException e) {
-                    e.printStackTrace(); //TODO: is this the correct logic?
-                }
-
+                dss = idm.getCapabilities().getSupportedSrcDataSources();
                 if (dss!=null) {
                     result.addAll (dss);
                 }
@@ -152,18 +146,15 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 
 		/**
 		 * @return union of DataSources supported by child services
+		 * @throws IDMapperException when one of the services was unavailable
 		 */
-		public Set<DataSource> getSupportedTgtDataSources() 
+		public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException
 		{
 			final Set<DataSource> result = new HashSet<DataSource>();
 			for (IDMapper idm : IDMapperStack.this.gdbs)
 			{
 				Set<DataSource> dss = null;
-                try {
-                    dss = idm.getCapabilities().getSupportedTgtDataSources();
-                } catch (IDMapperException e) {
-                    e.printStackTrace(); //TODO: is this the correct logic?
-                }
+                dss = idm.getCapabilities().getSupportedTgtDataSources();
 
                 if (dss!=null) {
                     result.addAll (dss);
