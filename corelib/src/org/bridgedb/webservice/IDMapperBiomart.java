@@ -27,7 +27,7 @@ import org.bridgedb.webservice.biomart.BiomartStub;
 import org.bridgedb.webservice.biomart.XMLQueryBuilder;
 import org.bridgedb.webservice.biomart.Attribute;
 import org.bridgedb.webservice.biomart.Filter;
-import org.bridgedb.file.IDMappingReaderFromDelimiterBufferedReader;
+import org.bridgedb.file.IDMappingReaderFromDelimitedReader;
 
 import java.util.Vector;
 import java.util.Map;
@@ -208,8 +208,8 @@ public class IDMapperBiomart extends IDMapperWebservice {
                 return return_this;
             }
             
-            IDMappingReaderFromDelimiterBufferedReader reader
-                    = new IDMappingReaderFromDelimiterBufferedReader(result,
+            IDMappingReaderFromDelimitedReader reader
+                    = new IDMappingReaderFromDelimitedReader(result,
                                 "\\t", null, transitivity);
 
             Vector<DataSource> dss = new Vector(tgtDss.size()+1);

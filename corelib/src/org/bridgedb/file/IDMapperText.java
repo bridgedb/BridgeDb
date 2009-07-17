@@ -131,6 +131,7 @@ public class IDMapperText extends IDMapperFile
     protected final URL url;
     protected char[] dataSourceDelimiters;
     protected char[] idDelimiters;
+    protected boolean transitivity;
 
 
     public IDMapperText(final URL url) throws IDMapperException {
@@ -154,11 +155,11 @@ public class IDMapperText extends IDMapperFile
             final boolean transitivity) throws IDMapperException {
         super(new IDMappingReaderFromText(url,
                 dataSourceDelimiters,
-                idDelimiters),
-              transitivity);
+                idDelimiters));
         this.url = url;
         this.dataSourceDelimiters = dataSourceDelimiters;
         this.idDelimiters = idDelimiters;
+        setTransitivity(transitivity);
     }
 
     /**
@@ -173,10 +174,13 @@ public class IDMapperText extends IDMapperFile
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public void setTransitivity(final boolean transitivity) {
-        super.setTransitivity(transitivity);
-        ((IDMappingReaderFromText)reader).setTransitivity(transitivity);
+        this.transitivity = transitivity;
+        ((IDMappingReaderFromText) reader).setTransitivity(transitivity);
+    }
+
+    public boolean getTransitivity() {
+        return transitivity;
     }
 
     public URL getURL() {
@@ -191,13 +195,13 @@ public class IDMapperText extends IDMapperFile
         return idDelimiters;
     }
 
-    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) throws IDMapperException {
+    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) {
         ((IDMappingReaderFromText)this.getIDMappingReader()).
                 setDataSourceDelimiters(dataSourceDelimiters);
         this.dataSourceDelimiters = dataSourceDelimiters;
     }
 
-    public void setIDDelimiters(final char[] idDelimiters) throws IDMapperException {
+    public void setIDDelimiters(final char[] idDelimiters) {
         ((IDMappingReaderFromText)this.getIDMappingReader())
                 .setIDDelimiters(idDelimiters);
         this.idDelimiters = idDelimiters;

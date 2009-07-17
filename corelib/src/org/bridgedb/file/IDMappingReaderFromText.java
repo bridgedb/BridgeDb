@@ -19,7 +19,6 @@ package org.bridgedb.file;
 
 import java.io.Reader;
 import java.io.InputStreamReader;
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.IOException;
 
@@ -33,7 +32,7 @@ import org.bridgedb.IDMapperException;
  * Class for reading ID mapping data from delimited text file
  * @author gjj
  */
-public class IDMappingReaderFromText extends IDMappingReaderFromDelimiterBufferedReader {
+public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader {
     private static int msConnectionTimeout = 2000;
 
     protected final URL url;
@@ -77,22 +76,15 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimiterBuffere
         this.url = url;
     }
 
-    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) throws IDMapperException {
-        resetReader();
-        regExDataSourceDelimiter = strs2regex(dataSourceDelimiters);
+    public void setDataSourceDelimiters(final char[] dataSourceDelimiters) {
         dsValid = false;
         idMappingValid = false;
+        regExDataSourceDelimiter = strs2regex(dataSourceDelimiters);
     }
 
-    public void setIDDelimiters(final char[] idDelimiters) throws IDMapperException {
-        resetReader();
-        regExIDDelimiter = strs2regex(idDelimiters);
+    public void setIDDelimiters(final char[] idDelimiters) {
         idMappingValid = false;
-    }
-
-    // reset the stream after changing
-    protected void resetReader() throws IDMapperException {
-        reader = getReader(url);
+        regExIDDelimiter = strs2regex(idDelimiters);
     }
 
     protected static String strs2regex(final char[] chs) {
@@ -113,11 +105,10 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimiterBuffere
         return regex.toString();
     }
 
-    private static BufferedReader getReader(URL url) throws IDMapperException {
+    private static Reader getReader(URL url) throws IDMapperException {
         try {
             InputStream inputStream = getInputStream(url);
-            Reader fin = new InputStreamReader(inputStream);
-            return new BufferedReader(fin);
+            return new InputStreamReader(inputStream);
         } catch(IOException e) {
             throw new IDMapperException(e);
         }

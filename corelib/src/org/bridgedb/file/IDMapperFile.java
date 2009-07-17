@@ -37,7 +37,6 @@ import org.bridgedb.Xref;
 public abstract class IDMapperFile implements IDMapper {
     protected final IDMapperFileCapabilities cap;
     protected final IDMappingReader reader;
-    protected boolean transitivity;
 
     /**
      * Constuctor from a url. transitivity is unsupported by default.
@@ -49,23 +48,12 @@ public abstract class IDMapperFile implements IDMapper {
     }
 
     /**
-     * free search is unsupported by default.
-     * @param url
-     * @throws java.io.IOException
-     */
-    public IDMapperFile(final IDMappingReader reader,
-            final boolean transitivity) {
-        this(reader, transitivity, false);
-    }
-
-    /**
      *
      * @param url
      * @param freeSearch
      * @throws IDMapperException when failed to read
      */
     public IDMapperFile(final IDMappingReader reader,
-            final boolean transitivity,
             final boolean freeSearch) {
         if (reader==null) {
             throw new NullPointerException();
@@ -73,16 +61,6 @@ public abstract class IDMapperFile implements IDMapper {
 
         this.reader = reader;
         cap = new IDMapperFileCapabilities(freeSearch);
-
-        setTransitivity(transitivity);
-    }
-
-    public void setTransitivity(final boolean transitivity) {
-        this.transitivity = transitivity;
-    }
-
-    public boolean getTransitivity() {
-        return transitivity;
     }
 
     /**

@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 
+import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -34,30 +35,50 @@ import org.bridgedb.Xref;
  * Class for reading ID mapping data from delimited buffered reader
  * @author gjj
  */
-public class IDMappingReaderFromDelimiterBufferedReader implements IDMappingReader {
-    protected BufferedReader reader;
+public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
+    //protected BufferedReader reader;
     protected boolean transitivity;
     protected String regExDataSourceDelimiter;
     protected String regExIDDelimiter;
     protected Vector<DataSource> dataSources;
     protected Map<Xref,Set<Xref>> mapXrefs;
+    protected Vector<String> data;
 
     protected boolean dsValid, idMappingValid;
 
-    public IDMappingReaderFromDelimiterBufferedReader(final BufferedReader reader,
+    public IDMappingReaderFromDelimitedReader(final Reader reader,
             final String regExDataSourceDelimiter,
             final String regExIDDelimiter,
-            final boolean transitivity) {
+            final boolean transitivity) throws IDMapperException {
         if (reader==null || regExDataSourceDelimiter==null) {
             throw new java.lang.IllegalArgumentException("reader and regExDataSourceDelimiter cannot be null");
         }
-        this.reader = reader;
+
+        readData(reader);
         this.regExDataSourceDelimiter = regExDataSourceDelimiter;
         this.regExIDDelimiter = regExIDDelimiter;
         this.transitivity = transitivity;
 
         dsValid = false;
         idMappingValid = false;
+    }
+
+    protected void readData(final Reader reader) throws IDMapperException {
+        data = new Vector();
+        BufferedReader bfdrd = new BufferedReader(reader);
+        try {
+            String line = bfdrd.readLine();
+
+            while (line!=null) {
+                data.add(line);
+                line = bfdrd.readLine();
+            }
+            
+            bfdrd.close();
+            reader.close();
+        } catch(IOException e) {
+            throw new IDMapperException(e);
+        }
     }
 
     public void setTransitivity(final boolean transitivity) {
@@ -113,13 +134,12 @@ public class IDMappingReaderFromDelimiterBufferedReader implements IDMappingRead
         dataSources = new Vector();
 
         // add data sources
-        String line = reader.readLine();
-        if (line==null) {
+        if (data.isEmpty()) {
                 System.err.println("Empty file");
                 return;
         }
 
-        String[] types = line.split(regExDataSourceDelimiter);
+        String[] types = data.get(0).split(regExDataSourceDelimiter);
         int nds = types.length;
         DataSource[] dss = new DataSource[nds];
         for (int ids=0; ids<nds; ids++) {
@@ -140,45 +160,43 @@ public class IDMappingReaderFromDelimiterBufferedReader implements IDMappingRead
      * @throws IDMapperException if failed
      */
     protected void readIDMappings() throws IOException {
-        // add data sources
-        if (!dsValid) {
-            readDataSources();
-        }
-
         mapXrefs = new HashMap();
 
+        int nline = data.size();
+        if (nline<2) {
+                System.err.println("No ID mapping data");
+                return;
+        }
+
         // read each ID mapping (line)
-        String line;
-        int lineCount = 1;
-        while ((line=reader.readLine())!=null) {
-                lineCount++;
-                String[] strs = line.split(regExDataSourceDelimiter);
-                if (strs.length>dataSources.size()) {
-                        System.err.println("The number of ID is larger than the number of types at row "+lineCount);
-                        //continue;
-                }
+        for (int iline=1; iline<nline; iline++) {
+            String line = data.get(iline);
+            String[] strs = line.split(regExDataSourceDelimiter);
+            if (strs.length>dataSources.size()) {
+                    System.err.println("The number of ID is larger than the number of types at row "+iline);
+                    //continue;
+            }
 
-                int n = Math.min(strs.length, dataSources.size());
+            int n = Math.min(strs.length, dataSources.size());
 
-                Set<Xref> xrefs = new HashSet();
+            Set<Xref> xrefs = new HashSet();
 
-                for (int i=0; i<n; i++) {
-                    String str = strs[i];
-                    if (regExIDDelimiter==null) {
-                        xrefs.add(new Xref(str, dataSources.get(i)));
-                    } else {
-                        String[] ids = str.split(regExIDDelimiter);
-                        for (String id : ids) {
-                            xrefs.add(new Xref(id, dataSources.get(i)));
-                        }
+            for (int i=0; i<n; i++) {
+                String str = strs[i];
+                if (regExIDDelimiter==null) {
+                    xrefs.add(new Xref(str, dataSources.get(i)));
+                } else {
+                    String[] ids = str.split(regExIDDelimiter);
+                    for (String id : ids) {
+                        xrefs.add(new Xref(id, dataSources.get(i)));
                     }
                 }
+            }
 
-                addIDMapping(xrefs);
+            addIDMapping(xrefs);
         }
 
         idMappingValid = true;
-        reader.close();
     }
     
     /**
