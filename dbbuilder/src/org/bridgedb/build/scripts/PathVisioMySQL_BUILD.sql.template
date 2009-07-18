@@ -40,7 +40,6 @@ USE XXXXXX_Derby_YYYYYY;
 CREATE TABLE datanode (
 	id VARCHAR(63) NOT NULL, 
 	code VARCHAR(63) NOT NULL, 
-	backpageText VARCHAR(1023), 
 	PRIMARY KEY (id, code)
 );
 
@@ -87,47 +86,11 @@ FROM XXXXXX_CS_YYYYYY.attr;
 
 ## Fill 'datanode'
 ## From CS Database
-#gene [ID only]
 INSERT INTO datanode
 SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
-CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
-"</TABLE>")
 FROM XXXXXX_CS_YYYYYY.gene
-WHERE XXXXXX_CS_YYYYYY.gene.ID != '' AND XXXXXX_CS_YYYYYY.gene.Code IN ("T","Gm","Pl","Pd","Bg","Ec");
-
-#gene [ID, Chip]
-INSERT INTO datanode
-SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
-CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
-"<TR><TH>Chip:<TH>", XXXXXX_CS_YYYYYY.gene.Chip,
-"</TABLE>")
-FROM XXXXXX_CS_YYYYYY.gene
-WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("X","Il","Ag");
-
-#gene [ID, Symbol, Synonyms, Description, Chr]
-INSERT INTO datanode
-SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
-CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
-"<TR><TH>Gene Symbol:<TH>", XXXXXX_CS_YYYYYY.gene.Symbol,
-"<TR><TH>Synonyms:<TH>", XXXXXX_CS_YYYYYY.gene.Synonyms,
-"<TR><TH>Description:<TH>", XXXXXX_CS_YYYYYY.gene.Description,
-"<TR><TH>Chr:<TH>", XXXXXX_CS_YYYYYY.gene.Chromosome,
-"</TABLE>")
-FROM XXXXXX_CS_YYYYYY.gene
-WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("EnXXXXXX","L","H","M","R","D","F","Mb","U","Rf","Ip","Z","W",
-"Gg","A","Ti","Ir","N","Uc","Wg");
-
-#gene [ID, Symbol, Synonyms, Type, Description]
-INSERT INTO datanode
-SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code,
-CONCAT("<TABLE border = 1><TR><TH>Gene ID:<TH>", XXXXXX_CS_YYYYYY.gene.ID,
-"<TR><TH>Gene Symbol:<TH>", XXXXXX_CS_YYYYYY.gene.Symbol,
-"<TR><TH>Synonyms:<TH>", XXXXXX_CS_YYYYYY.gene.Synonyms,
-"<TR><TH>Type:<TH>", XXXXXX_CS_YYYYYY.gene.Type,
-"<TR><TH>Description:<TH>", XXXXXX_CS_YYYYYY.gene.Description,
-"</TABLE>")
-FROM XXXXXX_CS_YYYYYY.gene
-WHERE XXXXXX_CS_YYYYYY.gene.Code IN ("S","Q","Om");
+WHERE XXXXXX_CS_YYYYYY.gene.ID != '' 
+AND XXXXXX_CS_YYYYYY.gene.Code IN ("EnXXXXXX","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg");
 
 ## Fill 'link'
 ## From CS Databases
