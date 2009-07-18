@@ -488,7 +488,7 @@ public class BiomartStub {
 	 */
 	public BufferedReader sendQuery(String xmlQuery) throws IOException {
 		
-		System.out.println("=======Query = " + xmlQuery);
+		//System.out.println("=======Query = " + xmlQuery);
 		
 		URL url = new URL(baseURL);
 		URLConnection uc = url.openConnection();

@@ -79,6 +79,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
     protected String datasetName;
     protected BiomartStub stub;
     protected boolean transitivity;
+    protected boolean idOnlyForTgtDataSource;
 
     protected String baseURL;
 
@@ -88,31 +89,52 @@ public class IDMapperBiomart extends IDMapperWebservice {
     public IDMapperBiomart(String datasetName) throws IDMapperException {
         this(datasetName, null);
     }
-    
-    public IDMapperBiomart(String datasetName, boolean transitivity) throws IDMapperException {
-        this(datasetName, null, transitivity);
+
+    public IDMapperBiomart(String datasetName, boolean idOnlyForTgtDataSource, boolean transitivity) throws IDMapperException {
+        this(datasetName, null, idOnlyForTgtDataSource, transitivity);
     }
 
     public IDMapperBiomart(String datasetName, String baseURL) throws IDMapperException {
-        this(datasetName, baseURL, false);
+        this(datasetName, baseURL, true);
+    }
+
+    public IDMapperBiomart(String datasetName, String baseURL,
+            boolean idOnlyForTgtDataSource) throws IDMapperException {
+        this(datasetName, baseURL, idOnlyForTgtDataSource, false);
     }
     
-    public IDMapperBiomart(String datasetName, String baseURL, boolean transitivity) throws IDMapperException {
+    public IDMapperBiomart(String datasetName, String baseURL, 
+            boolean idOnlyForTgtDataSource, boolean transitivity) throws IDMapperException {
         this.datasetName = datasetName;
         try {
             stub = BiomartStub.getInstance(baseURL);
         } catch (IOException e) {
             throw new IDMapperException(e);
         }
-        setTransitivity(transitivity);
+        
         if (baseURL!=null) {
             this.baseURL = baseURL;
         } else {
             this.baseURL = BiomartStub.defaultBaseURL;
         }
 
+        setIDOnlyForTgtDataSource(idOnlyForTgtDataSource);
+        setTransitivity(transitivity);
+
         mapSrcDSFilter = new HashMap();
         mapSrcDSAttr = new HashMap();
+    }
+
+    /**
+     * Filter target datasource ending with "ID" or "Accession"
+     * @param idOnlyForTgtDataSource
+     */
+    public void setIDOnlyForTgtDataSource(boolean idOnlyForTgtDataSource) {
+        this.idOnlyForTgtDataSource = idOnlyForTgtDataSource;
+    }
+
+    public boolean getIDOnlyForTgtDataSource() {
+        return idOnlyForTgtDataSource;
     }
 
     public void setTransitivity(final boolean transitivity) {
@@ -198,7 +220,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
             BufferedReader result = null;
             try {
                 result = stub.sendQuery(query);
-                if (result.ready() == false)
+                if (!result.ready())
                     throw new IDMapperException("Query failed");
             } catch (IOException e) {
                 throw new IDMapperException(e);
@@ -361,7 +383,17 @@ public class IDMapperBiomart extends IDMapperWebservice {
         Map<String, Attribute> attributeVals = stub.getAttributes(datasetName);
         Set<DataSource> dss = new HashSet();
         for (Attribute attr : attributeVals.values()) {
-            String fullName = attr.getDisplayName() + " ("+attr.getName()+")";
+            String displayName = attr.getDisplayName();
+            String name = attr.getName();
+            if (idOnlyForTgtDataSource) {
+                if (!displayName.endsWith("ID")
+                        && !displayName.endsWith("Accession")
+                        && !name.endsWith("id")
+                        && !name.endsWith("accession")) {
+                    continue;
+                }
+            }
+            String fullName = displayName + " ("+name+")";
             DataSource ds = DataSource.getByFullName(fullName);
             dss.add(ds);
             mapSrcDSAttr.put(ds, attr);
