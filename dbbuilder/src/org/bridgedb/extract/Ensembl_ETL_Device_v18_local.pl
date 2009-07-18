@@ -38,6 +38,7 @@ use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
 my $api_path = "/home/apico/src/ensembl/modules";
 
 ## Under script control
+## E.g., see Derby/runAll.sh and runList
 my $scriptmode = 0;
 my $speciesArg = 0;
 my $dateArg = 0;
@@ -1070,10 +1071,14 @@ while (my $gene = pop(@$genes))
     ## API: COLLECT GENE INFORMATION
     $gene_stable_id = mysql_quotes($gene->stable_id());
     $gene_symbol = mysql_quotes($gene->external_name()); 
-    $Ensembl{$count} = [$gene_stable_id, $gene_symbol, mysql_quotes($gene->description()), mysql_quotes($gene->slice->seq_region_name())];
-    my $subcount = 1; #dummy count to support HoHoA sorting and parsing
-    $Attributes{Ensembl}{$count.$dot.$subcount} = [$gene_stable_id, mysql_quotes($EnSpeciesCode), mysql_quotes('Symbol'), $gene_symbol];
- 
+    $gene_description = mysql_quotes($gene->description());
+    $gene_chr = mysql_quotes($gene->slice->seq_region_name());
+    $Ensembl{$count} = [$gene_stable_id, $gene_symbol, $gene_description, $gene_chr];
+    #note: dummy subcount and subsubcount to support HoHoA sorting and parsing
+    $Attributes{Ensembl}{$count.$dot.1.$dot.1} = [$gene_stable_id, mysql_quotes($EnSpeciesCode), mysql_quotes('Symbol'), $gene_symbol];
+    $Attributes{Ensembl}{$count.$dot.1.$dot.2} = [$gene_stable_id, mysql_quotes($EnSpeciesCode), mysql_quotes('Description'), $gene_description];
+    $Attributes{Ensembl}{$count.$dot.1.$dot.3} = [$gene_stable_id, mysql_quotes($EnSpeciesCode), mysql_quotes('Chromosome'), $gene_chr];
+
     ## PRINT PROGRESS MESSAGE
     print "Processing $gene_stable_id: $count of $total ";
     if ($collect_sample < $total) {
@@ -1558,11 +1563,12 @@ sub parse_AllTranscripts {
 sub parse_DBEntries {
   my ($db_entries, $GeneTables, $Ensembl_GeneTables, $Attributes) = @_;
   my %subcount = ();
-  my %subsubcount = ();
+#  my %subsubcount = ();
   my %seen = ();
 
   foreach my $key ( keys %$GeneTables) {
       $subcount{$key} = 1;
+#      $subsubcount{$key} = 1;
       %{$seen{$key}} = ();
   }
 
@@ -1610,8 +1616,9 @@ sub parse_DBEntries {
 		## SKIP THIS NEXT STEP: too much redundancy and not accurate to link Entrez synonyms to Ensembl IDs
 		#$$Attributes{Ensembl}{$count.$dot.$subcount{EntrezGene}} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Symbol'), @syns, $gene_symbol]; 
 		##process Attributes
-		@syns = (@syns, $dbe_display_id);
-		$$Attributes{EntrezGene}{$count.$dot.$subcount{EntrezGene}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{EntrezGene}{'NAME'}[1]), mysql_quotes('Symbol'), @syns];
+                $$Attributes{EntrezGene}{$count.$dot.$subcount{EntrezGene}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{EntrezGene}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+		#@syns = (@syns, $dbe_display_id);
+		$$Attributes{EntrezGene}{$count.$dot.$subcount{EntrezGene}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{EntrezGene}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
 		++$subcount{EntrezGene};
 	    }
 	}
@@ -1621,9 +1628,12 @@ sub parse_DBEntries {
 		$$GeneTables{UniProt}{$count.$dot.$subcount{UniProt}} = [$dbe_primary_id, $dbe_display_id, $dbe_dbname, $dbe_description, $dbe_syns];
 		$$Ensembl_GeneTables{UniProt}{$count.$dot.$subcount{UniProt}} = [$gene_stable_id, $dbe_primary_id];
                 ##process Attributes
-                ## SKIP THIS STEP: too much information
+	        $$Attributes{UniProt}{$count.$dot.$subcount{UniProt}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{UniProt}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+	
 		#@syns = (@syns, $dbe_display_id);
-                #$$Attributes{UniProt}{$count.$dot.$subcount{UniProt}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{UniProt}{'NAME'}[1]), mysql_quotes('Symbol'), @syns];
+                $$Attributes{UniProt}{$count.$dot.$subcount{UniProt}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{UniProt}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+		$$Attributes{UniProt}{$count.$dot.$subcount{UniProt}.$dot.3} = [$dbe_primary_id, mysql_quotes( $$GeneTables{UniProt}{'NAME'}[1]), mysql_quotes('Type'), $dbe_dbname];
+		$$Attributes{UniProt}{$count.$dot.$subcount{UniProt}.$dot.4} = [$dbe_primary_id, mysql_quotes( $$GeneTables{UniProt}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
 		++$subcount{UniProt};
 	    }
   	}
@@ -1633,7 +1643,9 @@ sub parse_DBEntries {
 		$$GeneTables{RefSeq}{$count.$dot.$subcount{RefSeq}} = [$dbe_primary_id, $dbe_display_id, $dbe_dbname, $dbe_description];
 		$$Ensembl_GeneTables{RefSeq}{$count.$dot.$subcount{RefSeq}} = [$gene_stable_id, $dbe_primary_id];
                 ##process Attributes
-                ## SKIP THIS STEP: too much information
+		$$Attributes{RefSeq}{$count.$dot.$subcount{RefSeq}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{RefSeq}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+		$$Attributes{RefSeq}{$count.$dot.$subcount{RefSeq}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{RefSeq}{'NAME'}[1]), mysql_quotes('Type'), $dbe_dbname];
+		$$Attributes{RefSeq}{$count.$dot.$subcount{RefSeq}.$dot.3} = [$dbe_primary_id, mysql_quotes( $$GeneTables{RefSeq}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
 		++$subcount{RefSeq};
 	    }
   	}
@@ -1715,7 +1727,8 @@ sub parse_DBEntries {
 		$$GeneTables{UniGene}{$count.$dot.$subcount{UniGene}} = [$dbe_primary_id, $dbe_display_id, $dbe_description];
 		$$Ensembl_GeneTables{UniGene}{$count.$dot.$subcount{UniGene}} = [$gene_stable_id, $dbe_primary_id];
                 ##process Attributes
-                ## SKIP THIS STEP: too much information
+                $$Attributes{UniGene}{$count.$dot.$subcount{UniGene}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{UniGene}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                $$Attributes{UniGene}{$count.$dot.$subcount{UniGene}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{UniGene}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
 		++$subcount{UniGene};
 	    }
   	}
@@ -1779,10 +1792,12 @@ sub parse_DBEntries {
 		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_primary_id, $dbe_display_id, $dbe_description, $dbe_syns];
 		$$Ensembl_GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-		##DISPLAY ID ONLY
                 unless ($dbe_primary_id eq $dbe_display_id){
                 	$$Attributes{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
 		}
+                #@syns = (@syns, $dbe_display_id);
+                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
 		++$subcount{HUGO};
 	    }
   	}
@@ -1792,10 +1807,12 @@ sub parse_DBEntries {
 		$$GeneTables{MGI}{$count.$dot.$subcount{MGI}} = [$dbe_primary_id, $dbe_display_id, $dbe_description, $dbe_syns]; 
 		$$Ensembl_GeneTables{MGI}{$count.$dot.$subcount{MGI}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-                ##DISPLAY ID ONLY
                 unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{MGI}{$count.$dot.$subcount{MGI}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{MGI}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                	$$Attributes{MGI}{$count.$dot.$subcount{MGI}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{MGI}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
 		}	
+                #@syns = (@syns, $dbe_display_id);
+                $$Attributes{MGI}{$count.$dot.$subcount{MGI}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{MGI}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{MGI}{$count.$dot.$subcount{MGI}.$dot.3} = [$dbe_primary_id, mysql_quotes( $$GeneTables{MGI}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
 		++$subcount{MGI}; 
 	    }
   	}
@@ -1805,8 +1822,10 @@ sub parse_DBEntries {
 		$$GeneTables{RGD}{$count.$dot.$subcount{RGD}} = [$dbe_primary_id, $dbe_display_id, $dbe_description, $dbe_syns]; 
 		$$Ensembl_GeneTables{RGD}{$count.$dot.$subcount{RGD}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-                ##DISPLAY ID ONLY
-                $$Attributes{RGD}{$count.$dot.$subcount{RGD}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{RGD}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                $$Attributes{RGD}{$count.$dot.$subcount{RGD}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{RGD}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                #@syns = (@syns, $dbe_display_id);
+                $$Attributes{RGD}{$count.$dot.$subcount{RGD}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{RGD}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{RGD}{$count.$dot.$subcount{RGD}.$dot.3} = [$dbe_primary_id, mysql_quotes( $$GeneTables{RGD}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
 		++$subcount{RGD}; 
 	    }
   	}
@@ -1816,11 +1835,13 @@ sub parse_DBEntries {
 		$$GeneTables{SGD}{$count.$dot.$subcount{SGD}} = [$dbe_primary_id, $dbe_display_id, $dbe_description, $dbe_syns]; 
 		$$Ensembl_GeneTables{SGD}{$count.$dot.$subcount{SGD}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-                ##DISPLAY ID ONLY
                 #unless ($dbe_primary_id eq $dbe_display_id){ 
 		#go ahead and collect all symnbols since primary ID will be overwritten with proper SGD IDs in post-processing
-                $$Attributes{SGD}{$count.$dot.$subcount{SGD}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{SGD}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                $$Attributes{SGD}{$count.$dot.$subcount{SGD}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{SGD}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
 		#}
+                #@syns = (@syns, $dbe_display_id);
+                $$Attributes{SGD}{$count.$dot.$subcount{SGD}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{SGD}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{SGD}{$count.$dot.$subcount{SGD}.$dot.3} = [$dbe_primary_id, mysql_quotes( $$GeneTables{SGD}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
 		++$subcount{SGD}; 
 	    }
   	}
@@ -1830,10 +1851,10 @@ sub parse_DBEntries {
 		$$GeneTables{ZFIN}{$count.$dot.$subcount{ZFIN}} = [$dbe_primary_id, $dbe_display_id, $dbe_dbname]; 
 		$$Ensembl_GeneTables{ZFIN}{$count.$dot.$subcount{ZFIN}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-                ##DISPLAY ID ONLY
                 unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{ZFIN}{$count.$dot.$subcount{ZFIN}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{ZFIN}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                	$$Attributes{ZFIN}{$count.$dot.$subcount{ZFIN}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{ZFIN}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
 		}
+                $$Attributes{ZFIN}{$count.$dot.$subcount{ZFIN}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{ZFIN}{'NAME'}[1]), mysql_quotes('Type'), $dbe_dbname];
 		++$subcount{ZFIN}; 
 	    }
   	}
@@ -1843,10 +1864,12 @@ sub parse_DBEntries {
 		$$GeneTables{FlyBase}{$count.$dot.$subcount{FlyBase}} = [$dbe_primary_id, $dbe_display_id, $dbe_dbname, $dbe_syns]; 
 		$$Ensembl_GeneTables{FlyBase}{$count.$dot.$subcount{FlyBase}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-                ##DISPLAY ID ONLY
                 unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{FlyBase}{ $count.$dot.$subcount{FlyBase}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{FlyBase}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                	$$Attributes{FlyBase}{ $count.$dot.$subcount{FlyBase}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{FlyBase}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
 		}
+                #@syns = (@syns, $dbe_display_id);
+                $$Attributes{FlyBase}{$count.$dot.$subcount{FlyBase}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{FlyBase}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{FlyBase}{$count.$dot.$subcount{FlyBase}.$dot.3} = [$dbe_primary_id, mysql_quotes( $$GeneTables{FlyBase}{'NAME'}[1]), mysql_quotes('Type'), $dbe_dbname];
 		++$subcount{FlyBase}; 
 	    }
   	}
@@ -1856,10 +1879,10 @@ sub parse_DBEntries {
 		$$GeneTables{WormBase}{$count.$dot.$subcount{WormBase}} = [$dbe_primary_id, $dbe_display_id, $dbe_description]; 
 		$$Ensembl_GeneTables{WormBase}{$count.$dot.$subcount{WormBase}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-                ##DISPLAY ID ONLY
                 unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{WormBase}{ $count.$dot.$subcount{WormBase}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{WormBase}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                	$$Attributes{WormBase}{ $count.$dot.$subcount{WormBase}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{WormBase}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
 		}
+                $$Attributes{WormBase}{$count.$dot.$subcount{WormBase}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{WormBase}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
 		++$subcount{WormBase}; 
 	    }
   	}
@@ -1907,10 +1930,10 @@ sub parse_DBEntries {
                 $$GeneTables{TAIR}{$count.$dot.$subcount{TAIR}} = [$dbe_primary_id, $dbe_display_id, $dbe_description];
                 $$Ensembl_GeneTables{TAIR}{$count.$dot.$subcount{TAIR}} = [$gene_stable_id, $dbe_primary_id];
                 #process Attributes
-                ##DISPLAY ID ONLY
                 unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{TAIR}{ $count.$dot.$subcount{TAIR}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{TAIR}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                	$$Attributes{TAIR}{ $count.$dot.$subcount{TAIR}.$dot.1} = [$dbe_primary_id, mysql_quotes( $$GeneTables{TAIR}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
 		}
+                $$Attributes{TAIR}{$count.$dot.$subcount{TAIR}.$dot.2} = [$dbe_primary_id, mysql_quotes( $$GeneTables{TAIR}{'NAME'}[1]), mysql_quotes('Description') $dbe_description];
                 ++$subcount{TAIR};
             }
         }
