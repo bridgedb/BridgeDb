@@ -19,6 +19,9 @@ mysql -u genmapp -pfun4genmapp < PathVisioMySQL_BUILD.sql
 #  happen to precede key words (e.g., "negative")
 #mysql -u genmapp -pfun4genmapp -e "update ${Database}.datanode set backpageText =replace(backpageText, \";\", \".\")";  
 
+# remove pipes from around species name in Info table
+mysql -u genmapp -pfun4genmapp -e "update ${Database}.info set species =replace(species, \"|\", \"\")"; 
+
 ## Dump MySQL-PathVisio Database to .sql
 # --net_buffer_length=30K (used to limit size of extended-inserts) 
 # --skip-extended-insert (used to force line-by-line inserts)

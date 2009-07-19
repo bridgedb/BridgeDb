@@ -56,8 +56,8 @@ CREATE TABLE link (
 CREATE TABLE info (
 	buildDate INTEGER,
 	schemaVersion INTEGER,
-	sourceName VARCHAR(31) NOT NULL,
-	sourceVersion VARCHAR(31) NOT NULL,
+	dataSourceName VARCHAR(31) NOT NULL,
+	dataSourceVersion VARCHAR(31) NOT NULL,
 	species VARCHAR(31) NOT NULL,
 	dataType VARCHAR(31) NOT NULL
 );
@@ -83,7 +83,8 @@ FROM XXXXXX_CS_YYYYYY.Info;
 INSERT INTO attribute
 SELECT DISTINCT XXXXXX_CS_YYYYYY.attr.ID, XXXXXX_CS_YYYYYY.attr.Code, 
 XXXXXX_CS_YYYYYY.attr.Name, XXXXXX_CS_YYYYYY.attr.Value
-FROM XXXXXX_CS_YYYYYY.attr;
+FROM XXXXXX_CS_YYYYYY.attr
+WHERE XXXXXX_CS_YYYYYY.attr.Value != '';
 
 ## Fill 'datanode'
 ## From CS Database

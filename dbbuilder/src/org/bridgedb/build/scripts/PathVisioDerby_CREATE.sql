@@ -35,9 +35,9 @@ CREATE TABLE attribute (
 DROP TABLE info;
 CREATE TABLE info (
   buildDate INTEGER,
-  schemaVersion INTEGER
-  sourceName VARCHAR(31) NOT NULL,
-  sourceVersion VARCHAR(31) NOT NULL,
+  schemaVersion INTEGER,
+  dataSourceName VARCHAR(31) NOT NULL,
+  dataSourceVersion VARCHAR(31) NOT NULL,
   species VARCHAR(31) NOT NULL,
   dataType VARCHAR(31) NOT NULL
 );
