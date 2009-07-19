@@ -458,7 +458,7 @@ my %Systems = ('NAME' => ['Systems'],
 # Hash of Arrays
 # Table for user ID systems, used by GenMAPP
 my %Other = ('NAME' => ['Other', 'O'], 
-	    'SYSTEM' => ["\'Other\'", "\'$year$mon$mday\'", 
+	    'SYSTEM' => ["\'Other\'", "\'$dateArg\'", 
 			 "\'ID|SystemCode\\\\BF|Name\\\\BF|Annotations\\\\BF\|\'", "\'\|\|\'", "\'\'",
 			 "\'\'", "\'\|E\|\'", 
 			 "\'\'"],
@@ -500,7 +500,7 @@ my %Info = ('NAME' => ['Info'],
 			 'Notes VARCHAR(255)  NOT NULL DEFAULT \'\'']);
 
 # Populate Info Table
-$Info{1} = ["\'GenMAPP\.org\'", "\'$year$mon$mday\'", "\'$mod_system\'", "\'\|$species\|\'", "\'$year$mon$mday\'", "\'\'", "\'$dbname\'"];
+$Info{1} = ["\'GenMAPP\.org\'", "\'$dateArg\'", "\'$mod_system\'", "\'\|$species\|\'", "\'$dateArg\'", "\'\'", "\'$dbname\'"];
 
 ############################################################################
 ## ALL SYSTEMS GO! ##
@@ -615,7 +615,7 @@ while (my $gene = pop(@$genes))
 	# Add to or Edit these tables to include new ID systems or to make modifications. #
 	###################################################################################
 	%{$GeneTables{EntrezGene}} = ('NAME' => ['EntrezGene', 'L'], 
-				      'SYSTEM' => ["\'Entrez Gene (NCBI)\'", "\'$year$mon$mday\'", 
+				      'SYSTEM' => ["\'Entrez Gene (NCBI)\'", "\'$dateArg\'", 
 						   "\'ID\|Symbol\\\\sBF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						   "\'http://www.ncbi.nlm.nih.gov/sites/entrez?Db=gene&TermToSearch=~\'", "\'\'", 
 						   "\'ftp.ncbi.nlm.nih.gov/gene/DATA/\'"],
@@ -625,7 +625,7 @@ while (my $gene = pop(@$genes))
                                                    'PRIMARY KEY (ID)'                                                 
 					           ]);
 	%{$GeneTables{UniProt}} = ('NAME' => ['UniProt', 'S'], 
-				   'SYSTEM' => ["\'The Universal Protein Resource (EBI, SIB, PIR)\'", "\'$year$mon$mday\'", 
+				   'SYSTEM' => ["\'The Universal Protein Resource (EBI, SIB, PIR)\'", "\'$dateArg\'", 
 						"\'ID|Symbol\\\\sBF|Type\\\\BF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						"\'http://www.uniprot.org/entry/~\'", "\'\'", 
 						"\'http://www.pir.uniprot.org/database/download.shtml\'"],
@@ -637,7 +637,7 @@ while (my $gene = pop(@$genes))
 						'PRIMARY KEY (ID)',
 						'INDEX (Symbol)']);
 	%{$GeneTables{RefSeq}} = ('NAME' => ['RefSeq', 'Q'], 
-				  'SYSTEM' => ["\'RefSeq (NCBI)\'", "\'$year$mon$mday\'", 
+				  'SYSTEM' => ["\'RefSeq (NCBI)\'", "\'$dateArg\'", 
 					       "\'ID|Symbol\\\\sBF|Type\\\\BF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					       "\'http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=~\'", "\'\'", 
 					       "\'ftp://ftp.ncbi.nih.gov/refseq/release/\'"],
@@ -649,7 +649,7 @@ while (my $gene = pop(@$genes))
                                                'INDEX (Symbol)'
 					       ]);
 	%{$GeneTables{GeneOntology}} = ('NAME' => ['GeneOntology', 'T'], 
-					'SYSTEM' => ["\'The Gene Ontology\'", "\'$year$mon$mday\'", 
+					'SYSTEM' => ["\'The Gene Ontology\'", "\'$dateArg\'", 
 						     "\'ID\|\'", "\'\|$species\|\'", "\'\'",
 						     "\'http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=~\'", "\'\|I\|\'", 
 						     "\'ftp://ftp.geneontology.org/pub/go/ontology/\'"],
@@ -657,7 +657,7 @@ while (my $gene = pop(@$genes))
 						     'PRIMARY KEY (ID)'
 						     ]);
 	%{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'], 
-				'SYSTEM' => ["\'Affymetrix\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'Affymetrix\'", "\'$dateArg\'", 
 					     "\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.ensembl.org/".$genus_species."/Search/Summary?q=~\'", "\'\'", 
 					     "\'https://www.affymetrix.com/analysis/downloads/\'"],
@@ -666,7 +666,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)'
 					     ]);
 	%{$GeneTables{Agilent}} = ('NAME' => ['Agilent', 'Ag'], 
-				   'SYSTEM' => ["\'Agilent Technologies\'", "\'$year$mon$mday\'", 
+				   'SYSTEM' => ["\'Agilent Technologies\'", "\'$dateArg\'", 
 						"\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						"\'\'", "\'\'", 
 						"\'http://www.agilent.com/\'"],
@@ -675,7 +675,7 @@ while (my $gene = pop(@$genes))
 						'PRIMARY KEY (ID)'
 						]);
 	%{$GeneTables{Illumina}} = ('NAME' => ['Illumina', 'Il'], 
-				    'SYSTEM' => ["\'Illumina\'", "\'$year$mon$mday\'", 
+				    'SYSTEM' => ["\'Illumina\'", "\'$dateArg\'", 
 						 "\'ID|Chip\\\\BF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						 "\'\'", "\'\'", 
 						 "\'http://www.illumina.com/products/arraysreagents/overview.ilmn\'"],
@@ -685,7 +685,7 @@ while (my $gene = pop(@$genes))
 						 'PRIMARY KEY (ID)'
 						 ]);
 	%{$GeneTables{Cint}} = ('NAME' => ['Cint', 'C'], 
-				    'SYSTEM' => ["\'Custom Microarrays for Ciona\'", "\'$year$mon$mday\'", 
+				    'SYSTEM' => ["\'Custom Microarrays for Ciona\'", "\'$dateArg\'", 
 						 "\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						 "\'\'", "\'\'", 
 						 "\'\'"],
@@ -694,7 +694,7 @@ while (my $gene = pop(@$genes))
 						 'PRIMARY KEY (ID)'
 						 ]);
 	%{$GeneTables{Codelink}} = ('NAME' => ['Codelink', 'Ge'], 
-				    'SYSTEM' => ["\'GE Healthcare Codelink Bioarrays\'", "\'$year$mon$mday\'", 
+				    'SYSTEM' => ["\'GE Healthcare Codelink Bioarrays\'", "\'$dateArg\'", 
 						 "\'ID\|\'", "\'\|$species\|\'", "\'\'",
 						 "\'\'", "\'\'", 
 						 "\'http://www4.amershambiosciences.com/APTRIX/upp01077.nsf/content/codelink_bioarray_system\'"],
@@ -702,7 +702,7 @@ while (my $gene = pop(@$genes))
 						 'PRIMARY KEY (ID)'
 						 ]);
 	%{$GeneTables{CCDS}} = ('NAME' => ['CCDS', 'Cc'], 
-				'SYSTEM' => ["\'Consensus CDS Protein Set (NCBI)\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'Consensus CDS Protein Set (NCBI)\'", "\'$dateArg\'", 
 					     "\'ID\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=~&ORGANISM=".$genus_species."\'", "\'\'", 
 					     "\'ftp://ftp.ncbi.nlm.nih.gov/pub/CCDS/\'"],
@@ -710,7 +710,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)'
 					     ]);
 	%{$GeneTables{IPI}} = ('NAME' => ['IPI', 'Ip'], 
-			       'SYSTEM' => ["\'International Protein Index (EBI)\'", "\'$year$mon$mday\'", 
+			       'SYSTEM' => ["\'International Protein Index (EBI)\'", "\'$dateArg\'", 
 					    "\'ID|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					    "\'http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-newId+\[IPI-AllText:~\]+-lv+30+-view+SeqSimpleView+-page+qResult\'", "\'\'", 
 					    "\'ftp://ftp.ebi.ac.uk/pub/databases/IPI/current/\'"],
@@ -719,7 +719,7 @@ while (my $gene = pop(@$genes))
 					    'PRIMARY KEY (ID)'
 					    ]);
 	%{$GeneTables{EMBL}} = ('NAME' => ['EMBL', 'Em'], 
-				'SYSTEM' => ["\'EMBL-Bank (EBI)\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'EMBL-Bank (EBI)\'", "\'$dateArg\'", 
 					     "\'ID\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id=~\'", "\'\'", 
 					     "\'http://www.ebi.ac.uk/embl/Access/index.html#ftp\'"],
@@ -727,7 +727,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)'
 					     ]);
 	%{$GeneTables{UniGene}} = ('NAME' => ['UniGene', 'U'], 
-				   'SYSTEM' => ["\'UniGene (NCBI)\'", "\'$year$mon$mday\'", 
+				   'SYSTEM' => ["\'UniGene (NCBI)\'", "\'$dateArg\'", 
 						"\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						"\'http://www.ncbi.nlm.nih.gov/sites/entrez?db=unigene&cmd=search&term=~\'", "\'\'", 
 						"\'ftp://ftp.ncbi.nih.gov/repository/UniGene/\'"],
@@ -738,7 +738,7 @@ while (my $gene = pop(@$genes))
 						'INDEX (Symbol)'
 						]);
 	%{$GeneTables{RFAM}} = ('NAME' => ['RFAM', 'Rf'], 
-				'SYSTEM' => ["\'RNA Families Database\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'RNA Families Database\'", "\'$dateArg\'", 
 					     "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?~\'", "\'\|I\|\'", 
 					     "\'http://www.sanger.ac.uk/Software/Rfam/\'"],
@@ -748,7 +748,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)',
 					     'INDEX (Symbol)']);
 	%{$GeneTables{GenPept}} = ('NAME' => ['GenPept', 'Gp'], 
-				   'SYSTEM' => ["\'GenBank Peptide Sequences (NCBI)\'", "\'$year$mon$mday\'", 
+				   'SYSTEM' => ["\'GenBank Peptide Sequences (NCBI)\'", "\'$dateArg\'", 
 						"\'ID\|\'", "\'\|$species\|\'", "\'\'",
 						"\'\'", "\'\'", 
 						"\'\'"],
@@ -756,7 +756,7 @@ while (my $gene = pop(@$genes))
 						'PRIMARY KEY (ID)'
 						]);
 	%{$GeneTables{PDB}} = ('NAME' => ['PDB', 'Pd'], 
-			       'SYSTEM' => ["\'Protein Data Bank\'", "\'$year$mon$mday\'", 
+			       'SYSTEM' => ["\'Protein Data Bank\'", "\'$dateArg\'", 
 					    "\'ID\|\'", "\'\|$species\|\'", "\'\'",
 					    "\'http://www.rcsb.org/pdb/explore/explore.do?structureId=~\'", "\'\'", 
 					    "\'http://www.rcsb.org/pdb/static.do?p=download/ftp/index.html\'"],
@@ -764,7 +764,7 @@ while (my $gene = pop(@$genes))
 					    'PRIMARY KEY (ID)'
 					    ]);
         %{$GeneTables{BioGrid}} = ('NAME' => ['BioGrid', 'Bg'], 
-                               'SYSTEM' => ["\'The Biological General Repository for Interaction Datasets\'", "\'$year$mon$mday\'",
+                               'SYSTEM' => ["\'The Biological General Repository for Interaction Datasets\'", "\'$dateArg\'",
                                             "\'ID\|\'", "\'\|$species\|\'", "\'\'",
                                             "\'http://www.thebiogrid.org/SearchResults/summary/~\'", "\'\'",
                                             "\'http://www.thebiogrid.org\'"],
@@ -772,7 +772,7 @@ while (my $gene = pop(@$genes))
                                             'PRIMARY KEY (ID)'
                                             ]);
 	%{$GeneTables{OMIM}} = ('NAME' => ['OMIM', 'Om'], 
-				'SYSTEM' => ["\'Online Mendelian Inheritance in Man (NCBI)\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'Online Mendelian Inheritance in Man (NCBI)\'", "\'$dateArg\'", 
 					     "\'ID|Type\\\\BF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=~\'", "\'\|I\|\'", 
 					     "\'http://www.ncbi.nlm.nih.gov/Omim/omimfaq.html#download\'"],
@@ -782,7 +782,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)'
 					     ]);
 	%{$GeneTables{miRBase}} = ('NAME' => ['miRBase', 'Mb'], 
-				'SYSTEM' => ["\'miRBase: the home of miRNA data\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'miRBase: the home of miRNA data\'", "\'$dateArg\'", 
 					     "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=~\'", "\'\'", 
 					     "\'http://microrna.sanger.ac.uk/sequences\'"],
@@ -792,7 +792,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)',
 					     'INDEX (Symbol)']);
 	%{$GeneTables{HUGO}} = ('NAME' => ['HUGO','H'], 
-				'SYSTEM' => ["\'The Human Genome Organisation\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'The Human Genome Organisation\'", "\'$dateArg\'", 
 					     "\'ID|Symbol\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.genenames.org/data/hgnc_data.php?hgnc_id=~\'", "\'\'", 
 					     "\'http://www.genenames.org\'"],
@@ -803,7 +803,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)',
 					     'INDEX (Symbol)']);
 	%{$GeneTables{MGI}} = ('NAME' => ['MGI', 'M'], 
-			       'SYSTEM' => ["\'Mouse Genome Informatics\'", "\'$year$mon$mday\'", 
+			       'SYSTEM' => ["\'Mouse Genome Informatics\'", "\'$dateArg\'", 
 					    "\'ID|Symbol\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					    "\'http://www.informatics.jax.org/searches/accession_report.cgi?id=~\'", "\'\'", 
 					    "\'ftp://ftp.informatics.jax.org/pub\'"],
@@ -814,7 +814,7 @@ while (my $gene = pop(@$genes))
 					    'PRIMARY KEY (ID)',
 					    'INDEX (Symbol)']);
 	%{$GeneTables{RGD}} = ('NAME' => ['RGD', 'R'], 
-			       'SYSTEM' => ["\'Rat Genome Database\'", "\'$year$mon$mday\'", 
+			       'SYSTEM' => ["\'Rat Genome Database\'", "\'$dateArg\'", 
 					    "\'ID|Symbol\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					    "\'http://rgd.mcw.edu/query/query.cgi?id=~\'", "\'\'", 
 					    "\'ftp://rgd.mcw.edu/pub/\'"],
@@ -825,7 +825,7 @@ while (my $gene = pop(@$genes))
 					    'PRIMARY KEY (ID)',
 					    'INDEX (Symbol)']);
 	%{$GeneTables{SGD}} = ('NAME' => ['SGD', 'D'], 
-			       'SYSTEM' => ["\'Saccharomyces Genome Database\'", "\'$year$mon$mday\'", 
+			       'SYSTEM' => ["\'Saccharomyces Genome Database\'", "\'$dateArg\'", 
 					    "\'ID|Symbol\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					    "\'http://db.yeastgenome.org/cgi-bin/locus.pl?sgdid=~\'", "\'\'", 
 					    "\'ftp://genome-ftp.stanford.edu/pub/yeast/\'"],
@@ -836,7 +836,7 @@ while (my $gene = pop(@$genes))
 					    'PRIMARY KEY (ID)',
 					    'INDEX (Symbol)']);
 	%{$GeneTables{ZFIN}} = ('NAME' => ['ZFIN', 'Z'], 
-				'SYSTEM' => ["\'Zebrafish Information Network\'", "\'$year$mon$mday\'", 
+				'SYSTEM' => ["\'Zebrafish Information Network\'", "\'$dateArg\'", 
 					     "\'ID|Symbol\\\\sBF|Type\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=~\'", "\'\'", 
 					     "\'http://zfin.org/zf_info/downloads.html\'"],
@@ -846,7 +846,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)',
 					     'INDEX (Symbol)']);
 	%{$GeneTables{FlyBase}} = ('NAME' => ['FlyBase', 'F'], 
-				   'SYSTEM' => ["\'FlyBase\'", "\'$year$mon$mday\'", 
+				   'SYSTEM' => ["\'FlyBase\'", "\'$dateArg\'", 
 						"\'ID|Symbol\\\\sBF|Type\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						"\'http://flybase.bio.indiana.edu/.bin/fbidq.html?~\'", "\'\'", 
 						"\'http://flybase.bio.indiana.edu/static_pages/downloads/bulkdata7.html\'"],
@@ -857,7 +857,7 @@ while (my $gene = pop(@$genes))
 						'PRIMARY KEY (ID)',
 						'INDEX (Symbol)']);
 	%{$GeneTables{WormBase}} = ('NAME' => ['WormBase', 'W'], 
-				    'SYSTEM' => ["\'WormBase\'", "\'$year$mon$mday\'", 
+				    'SYSTEM' => ["\'WormBase\'", "\'$dateArg\'", 
 						 "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						 "\'http://www.wormbase.org/db/seq/protein?name=~;class=Protein\'", "\'\'", 
 						 "\'http://www.wormbase.org/wiki/index.php/Downloads\'"],
@@ -867,7 +867,7 @@ while (my $gene = pop(@$genes))
 						 'PRIMARY KEY (ID)',
 						 'INDEX (Symbol)']);
         %{$GeneTables{GrameneGenes}} = ('NAME' => ['GrameneGenes', 'Gg'],
-                                'SYSTEM' => ["\'Gramene Genes Database\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'Gramene Genes Database\'", "\'$dateArg\'",
                                              "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://www.gramene.org/db/genes/search_gene?acc=~\'", "\'\'",
                                              "\'http://www.gramene.org\'"],
@@ -877,7 +877,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)',
                                              'INDEX (Symbol)']);
         %{$GeneTables{GramenePathway}} = ('NAME' => ['GramenePathway', 'Gm'],
-                                'SYSTEM' => ["\'Gramene Pathway\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'Gramene Pathway\'", "\'$dateArg\'",
                                              "\'ID|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://www.gramene.org/pathway\'", "\'\'",
                                              "\'http://www.gramene.org/pathway\'"],
@@ -886,7 +886,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)'
                                              ]);
         %{$GeneTables{TAIR}} = ('NAME' => ['TAIR', 'A'],
-                                'SYSTEM' => ["\'The Arabidopsis Information Resource\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'The Arabidopsis Information Resource\'", "\'$dateArg\'",
                                              "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://arabidopsis.org/servlets/Search?type=general&search_action=detail&method=1&show_obsolete=F&sub_type=gene&name=~\'", "\'\'",
                                              "\'http://www.arabidopsis.org\'"],
@@ -896,7 +896,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)',
                                              'INDEX (Symbol)']);
         %{$GeneTables{TIGR}} = ('NAME' => ['TIGR', 'Ti'],
-                                'SYSTEM' => ["\'J. Craig Venter Institute (formerly, The Institute for Genomic Research)\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'J. Craig Venter Institute (formerly, The Institute for Genomic Research)\'", "\'$dateArg\'",
                                              "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://www.jcvi.org\'", "\'\'",
                                              "\'http://www.jcvi.org\'"],
@@ -906,7 +906,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)',
                                              'INDEX (Symbol)']);
         %{$GeneTables{IRGSP}} = ('NAME' => ['IRGSP', 'Ir'],
-                                'SYSTEM' => ["\'The International Rice Genome Sequencing Project\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'The International Rice Genome Sequencing Project\'", "\'$dateArg\'",
                                              "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://rgp.dna.affrc.go.jp/IRGSP/\'", "\'\'",
                                              "\'http://rgp.dna.affrc.go.jp/IRGSP/\'"],
@@ -916,7 +916,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)',
                                              'INDEX (Symbol)']);
         %{$GeneTables{PlantGDB}} = ('NAME' => ['PlantGDB', 'Pl'],
-                                'SYSTEM' => ["\'Plant Genome Database\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'Plant Genome Database\'", "\'$dateArg\'",
                                              "\'ID|Symbol\\\\sBF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://www.plantgdb.org\'", "\'\'",
                                              "\'http://www.plantgdb.org\'"],
@@ -925,7 +925,7 @@ while (my $gene = pop(@$genes))
 					     'PRIMARY KEY (ID)',
                                              'INDEX (Symbol)']);
         %{$GeneTables{NASC}} = ('NAME' => ['NASC', 'N'],
-                                'SYSTEM' => ["\'European Arabidopsis Stock Centre\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'European Arabidopsis Stock Centre\'", "\'$dateArg\'",
                                              "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://arabidopsis.info\'", "\'\'",
                                              "\'http://arabidopsis.info\'"],
@@ -935,7 +935,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)',
                                              'INDEX (Symbol)']);
         %{$GeneTables{UCSC}} = ('NAME' => ['UCSC', 'Uc'],
-                                'SYSTEM' => ["\'UCSC Genome Browser\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'UCSC Genome Browser\'", "\'$dateArg\'",
                                              "\'ID|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://genome.ucsc.edu/cgi-bin/hgTracks?position=~\'", "\'\'",
                                              "\'http://genome.ucsc.edu\'"],
@@ -944,7 +944,7 @@ while (my $gene = pop(@$genes))
                                              'PRIMARY KEY (ID)'
                                              ]);
         %{$GeneTables{EcoGene}} = ('NAME' => ['EcoGene', 'Ec'],
-                               'SYSTEM' => ["\'EcoGene\'", "\'$year$mon$mday\'",
+                               'SYSTEM' => ["\'EcoGene\'", "\'$dateArg\'",
                                             "\'ID\|\'", "\'\|$species\|\'", "\'\'",
                                             "\'http://ecogene.org/geneInfo.php?eg_id=~\'", "\'\'",
                                             "\'http://ecogene.org\'"],
@@ -952,7 +952,7 @@ while (my $gene = pop(@$genes))
                                             'PRIMARY KEY (ID)'
                                             ]);
         %{$GeneTables{WikiGene}} = ('NAME' => ['WikiGene', 'Wg'],
-                                'SYSTEM' => ["\'WikiGenes\'", "\'$year$mon$mday\'",
+                                'SYSTEM' => ["\'WikiGenes\'", "\'$dateArg\'",
                                              "\'ID|Symbol\\\\sBF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://www.wikigenes.org/e/gene/e/~.html\'", "\'\'",
                                              "\'http://www.wikigenes.org\'"],
@@ -995,7 +995,7 @@ while (my $gene = pop(@$genes))
 	# but there is no need to use these Hash names as variables as with Gene Tables.  #
 	###################################################################################
 	%Ensembl = ('NAME' => ['Ensembl', "$EnSpeciesCode"], 
-		    'SYSTEM' => ["\'Ensembl (EBI, Sanger)\'", "\'$year$mon$mday\'", 
+		    'SYSTEM' => ["\'Ensembl (EBI, Sanger)\'", "\'$dateArg\'", 
 				 "\'ID|Symbol\\\\sBF|Description\\\\BF|Chromosome\\\\BF\|\'", "\'\|$species\|\'", "\'$species\'", 
 				 "\'http://www.ensembl.org/".$genus_species."/Gene/Summary?g==~\'", "\'\|M\|\'", 
 				 "\'ftp.ensembl.org/pub/current_mart/data/mysql/ensembl_mart_".$build."/".$genus_species_abv."_gene_ensembl__gene__main.txt.table.gz\'"],
@@ -1294,7 +1294,7 @@ while (my $gene = pop(@$genes))
 		$sth = $dbh->prepare($sql_db_log);
 		$sth->execute() or die "\nCould not execute $sql_db_log: $!\n";
 
-		my $sql_insert_log = "INSERT IGNORE INTO log VALUES (\'$year$mon$mday\', \'$hour:$min:$sec\', \'$build_nums\', \'$speciesPick\', \'$genus_species\', \'$total\', \'$collect_sample\', \'$start_count\', \'$displayOrder\')";
+		my $sql_insert_log = "INSERT IGNORE INTO log VALUES (\'$dateArg\', \'$hour:$min:$sec\', \'$build_nums\', \'$speciesPick\', \'$genus_species\', \'$total\', \'$collect_sample\', \'$start_count\', \'$displayOrder\')";
 		$sth = $dbh->prepare($sql_insert_log);
 		$sth->execute() or die "\nCould not execute $sql_insert_log: $!\n";
 
