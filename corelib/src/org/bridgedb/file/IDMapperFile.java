@@ -16,13 +16,10 @@
 //
 package org.bridgedb.file;
 
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.HashMap;
-
-import java.io.IOException;
+import java.util.Set;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
@@ -31,7 +28,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
 /**
- * Interface for ID mapping from files
+ * Interface for ID mapping from files.
  * 
  */ 
 public abstract class IDMapperFile implements IDMapper {
@@ -188,14 +185,17 @@ public abstract class IDMapperFile implements IDMapper {
             this.freeSearch = freeSearch;
         }
 
+        /** {@inheritDoc} */
         public boolean isFreeSearchSupported() {
             return freeSearch;
         }
 
+        /** {@inheritDoc} */
         public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
             return IDMapperFile.this.reader.getDataSources();
         }
 
+        /** {@inheritDoc} */
         public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
             return getSupportedSrcDataSources(); //
         }

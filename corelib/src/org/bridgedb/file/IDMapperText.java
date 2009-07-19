@@ -16,8 +16,8 @@
 //
 package org.bridgedb.file;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,13 +26,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.bridgedb.BridgeDb;
-import org.bridgedb.Driver;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
 /**
- * Class for mapping ID from delimited text file
+ * Class for mapping ID from delimited text file.
  * @author gjj
  */
 public class IDMapperText extends IDMapperFile 

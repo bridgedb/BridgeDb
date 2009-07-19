@@ -16,8 +16,8 @@
 //
 package org.bridgedb.file;
 
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
@@ -25,7 +25,7 @@ import org.bridgedb.Xref;
 
 
 /**
- * Interface for reading ID mapping data
+ * Interface for reading ID mapping data.
  * 
  */
 public interface IDMappingReader {

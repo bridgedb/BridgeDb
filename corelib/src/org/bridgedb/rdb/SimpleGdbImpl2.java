@@ -102,11 +102,6 @@ class SimpleGdbImpl2 extends SimpleGdb
 			"SELECT id FROM " + "datanode" + " WHERE " +
 			"id = ? AND code = ?"
 		);
-	private final LazyPst pstGeneSymbol = new LazyPst(
-			"SELECT attrvalue FROM attribute WHERE " +
-			"attrname = 'Symbol' AND id = ? " +
-			"AND code = ?"
-		);
 	private final LazyPst pstBackpage = new LazyPst(
 			"SELECT backpageText FROM datanode " +
 			" WHERE id = ? AND code = ?"
@@ -164,7 +159,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 	/** 
 	 * get Backpage info. In Schema v2, this was not stored in 
 	 * the attribute table but as a separate column, so this is treated
-	 * as a special case.
+	 * as a special case. This method is called by <pre>getAttribute (ref, "Backpage")</pre>
+	 * @param ref the entity to get backpage info for.
+	 * @return Backpage info as string
+	 * @throws IDMapperException when database is unavailable
 	 */
 	private String getBpInfo(Xref ref) throws IDMapperException 
 	{
@@ -244,9 +242,12 @@ class SimpleGdbImpl2 extends SimpleGdb
 
 	/**
 	 * Opens a connection to the Gene Database located in the given file.
-	 * @param dbName The file containing the Gene Database. 
-	 * @param connector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
 	 * A new instance of this class is created automatically.
+	 * @param dbName The file containing the Gene Database. 
+	 * @param newDbConnector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
+	 * @param props PROP_RECREATE if you want to create a new database (possibly overwriting an existing one) 
+	 * 	or PROP_NONE if you want to connect read-only
+	 * @throws IDMapperException when the database could not be created or connected to
 	 */
 	public SimpleGdbImpl2(String dbName, DBConnector newDbConnector, int props) throws IDMapperException
 	{
@@ -538,6 +539,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 
 	/**
 	 * @return a list of data sources present in this database. 
+	   @throws IDMapperException when the database is unavailable
 	 */
 	private Set<DataSource> getDataSources() throws IDMapperException
 	{

@@ -19,10 +19,8 @@ package org.bridgedb.rdb;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
 
 /**
  * SimpleGdb is the main implementation of the Gdb interface,

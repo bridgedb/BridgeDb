@@ -16,19 +16,19 @@
 //
 package org.bridgedb.file;
 
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
-import java.net.URLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 import org.bridgedb.IDMapperException;
 
 
 /**
- * Class for reading ID mapping data from delimited text file
+ * Class for reading ID mapping data from delimited text file.
  * @author gjj
  */
 public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader {

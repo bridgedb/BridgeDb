@@ -41,20 +41,20 @@ public abstract class DBConnector
 	public static final int PROP_FINALIZE = 8;
 	
 	/**
-	 * Type for gene database
+	 * Type for gene database.
 	 */
 	public static final int TYPE_GDB = 0;
 	/**
-	 * Type for expression database
+	 * Type for expression database.
 	 */
 	public static final int TYPE_GEX = 1;
 
 	public abstract Connection createConnection(String dbName, int props) throws IDMapperException;	
 	
 	/**
-	 * Close the given connection
+	 * Close the given connection.
 	 * @param con The connection to be closed
-	 * @throws Exception
+	 * @throws IDMapperException when there was a database error
 	 */
 	public void closeConnection(Connection con) throws IDMapperException 
 	{
@@ -62,10 +62,10 @@ public abstract class DBConnector
 	}
 	
 	/**
-	 * Close the given connection, and optionally finalize it after creation (using {@link #PROP_FINALIZE})
+	 * Close the given connection, and optionally finalize it after creation (using {@link #PROP_FINALIZE}).
 	 * @param con The connection to be closed
 	 * @param props Close properties (one of {@link #PROP_NONE}, {@link #PROP_FINALIZE} or {@link #PROP_RECREATE})
-	 * @throws Exception
+	 * @throws IDMapperException when there was a database error
 	 */
 	public void closeConnection(Connection con, int props) throws IDMapperException 
 	{
@@ -82,19 +82,17 @@ public abstract class DBConnector
 	private int dbType;
 
 	/**
-	 * Set the database type (one of {@link #TYPE_GDB} or {@link #TYPE_GEX})
+	 * Set the database type (one of {@link #TYPE_GDB} or {@link #TYPE_GEX}).
 	 * @param type The type of the database that will be used for this class
 	 */
 	public void setDbType(int type) { dbType = type; }
 	
 	/**
-	 * Get the database type (one of {@link #TYPE_GDB} or {@link #TYPE_GEX})
-	 * return The type of the database that is used for this class
+	 * Get the database type (one of {@link #TYPE_GDB} or {@link #TYPE_GEX}).
+	 * @return The type of the database that is used for this class
 	 */
 	public int getDbType() { return dbType; }
 	
-
-		
 	/**
 	 * This method is called to finalize the given database after creation
 	 * (e.g. set read-only, archive files). The database name needs to returned, this
@@ -102,8 +100,8 @@ public abstract class DBConnector
 	 * to single file).
 	 * The database connection needs to be closed before running this method.
 	 * @param dbName The name of the database to finalize	
-	 * @throws Exception
 	 * @return The name of the finalized database
+	 * @throws IDMapperException when there was a database error
 	 */
 	public abstract String finalizeNewDatabase(String dbName) throws IDMapperException;
 		
@@ -112,7 +110,7 @@ public abstract class DBConnector
 	 * compacted or defragmented after creation of a new database. It will be called
 	 * after all data is added to the database.
 	 * @param con A connection to the database
-	 * @throws SQLException
+	 * @throws IDMapperException when there was a database error
 	 */
 	public void compact(Connection con) throws IDMapperException
 	{

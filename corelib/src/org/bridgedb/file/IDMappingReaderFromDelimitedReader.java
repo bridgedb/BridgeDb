@@ -16,22 +16,22 @@
 //
 package org.bridgedb.file;
 
-import java.util.Vector;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.HashMap;
-
-import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
 /**
- * Class for reading ID mapping data from delimited buffered reader
+ * Class for reading ID mapping data from delimited buffered reader.
  * @author gjj
  */
 public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
