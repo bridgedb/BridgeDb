@@ -9,7 +9,6 @@ DROP TABLE datanode;
 CREATE TABLE datanode (
 	id VARCHAR(50) NOT NULL, 
 	code VARCHAR(50) NOT NULL, 
-	backpageText VARCHAR(800), 
 	PRIMARY KEY (id, code)
 	);
 
@@ -37,6 +36,10 @@ DROP TABLE info;
 CREATE TABLE info (
   buildDate INTEGER,
   schemaVersion INTEGER
+  sourceName VARCHAR(31) NOT NULL,
+  sourceVersion VARCHAR(31) NOT NULL,
+  species VARCHAR(31) NOT NULL,
+  dataType VARCHAR(31) NOT NULL
 );
 
 

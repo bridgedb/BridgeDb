@@ -17,7 +17,7 @@ mysql -u genmapp -pfun4genmapp < PathVisioMySQL_BUILD.sql
 # Replace semicolons from backpageText fields
 #  Otherwise, derby build will crash when semicolons 
 #  happen to precede key words (e.g., "negative")
-mysql -u genmapp -pfun4genmapp -e "update ${Database}.datanode set backpageText =replace(backpageText, \";\", \".\")";  
+#mysql -u genmapp -pfun4genmapp -e "update ${Database}.datanode set backpageText =replace(backpageText, \";\", \".\")";  
 
 ## Dump MySQL-PathVisio Database to .sql
 # --net_buffer_length=30K (used to limit size of extended-inserts) 
