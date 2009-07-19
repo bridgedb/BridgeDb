@@ -539,10 +539,27 @@ public class BiomartStub {
     }
     
     private static final int msConnectionTimeout = 2000;
+    //TODO: test when IOException is throwed
     protected static InputStream getInputStream(URL source) throws IOException {
-		URLConnection uc = source.openConnection();
-		uc.setUseCaches(false); // don't use a cached page
-		uc.setConnectTimeout(msConnectionTimeout); // set timeout for connection
-        return uc.getInputStream();
+        InputStream stream = null;
+        int expCount = 0;
+        int timeOut = msConnectionTimeout;
+        while (true) { // multiple chances
+            try {
+                URLConnection uc = source.openConnection();
+                uc.setUseCaches(false); // don't use a cached page
+                uc.setConnectTimeout(timeOut); // set timeout for connection
+                stream = uc.getInputStream();
+                break;
+            } catch (IOException e) {
+                if (expCount++==4) {
+                    throw(e);
+                } else {
+                    timeOut *= 2;
+                }
+            }
+        }
+
+        return stream;
     }
 }
