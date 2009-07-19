@@ -433,4 +433,5 @@ public class IDMapperBiomart extends IDMapperWebservice {
     // In the case of IDMapperBioMart, there is no need to discard associated resources.
     public void close() throws IDMapperException { isConnected = false; }
     public boolean isConnected() { return isConnected; }
+
 }

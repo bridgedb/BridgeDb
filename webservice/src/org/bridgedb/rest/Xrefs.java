@@ -51,9 +51,11 @@ public class Xrefs extends IDMapperResource {
 
 			for(IDMapperRdb mapper : mappers) {
 				if(targetDs == null) {
-					xrefs.addAll(mapper.mapID(xref));
+					xrefs.addAll(mapper.mapID(xref, null));
 				} else {
-					xrefs.addAll(mapper.mapID(xref, targetDs));
+					Set<DataSource> tgtSet = new HashSet<DataSource>();
+					tgtSet.add (targetDs);
+					xrefs.addAll(mapper.mapID(xref, tgtSet));
 				}
 			}
 					

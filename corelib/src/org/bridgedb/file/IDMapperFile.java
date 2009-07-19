@@ -17,6 +17,7 @@
 
 package org.bridgedb.file;
 
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
@@ -106,7 +107,8 @@ public abstract class IDMapperFile implements IDMapper {
             }
 
             for (Xref tgtXref : refs) {
-                if (tgtDataSources.contains(tgtXref.getDataSource())) {
+            	if (tgtDataSources == null || tgtDataSources.contains(tgtXref.getDataSource()))
+    			{
                     tgtRefs.add(tgtXref);
                 }
             }
@@ -115,6 +117,27 @@ public abstract class IDMapperFile implements IDMapper {
         return return_this;
     }
 
+    /** {@inheritDoc} */
+	public Set<Xref> mapID(Xref srcXref, Set<DataSource> tgtDataSources) throws IDMapperException
+	{
+        Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
+        
+        Set<Xref> result = new HashSet<Xref>();
+        
+        if (mapXrefs==null) {
+            return result;
+        }
+        
+        for (Xref destRef : mapXrefs.get(srcXref))
+        {
+        	if (tgtDataSources == null || tgtDataSources.contains(destRef.getDataSource()))
+        	{
+        		result.add (destRef);
+        	}
+        }
+        return result;
+	}
+	
     /**
      * Check whether an Xref exists.
      * @param xref reference to check

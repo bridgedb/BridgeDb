@@ -17,12 +17,12 @@
 
 package org.bridgedb.webservice;
 
-import org.bridgedb.IDMapper;
+import org.bridgedb.AbstractIDMapper;
 
 /**
  *
  * @author gjj
  */
-public abstract class IDMapperWebservice implements IDMapper {
+public abstract class IDMapperWebservice extends AbstractIDMapper {
 
 }

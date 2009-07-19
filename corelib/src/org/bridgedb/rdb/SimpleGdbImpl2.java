@@ -183,23 +183,21 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/** {@inheritDoc} */
-	@Override public List<Xref> mapID (Xref idc, DataSource resultDs) throws IDMapperException 
+	public Set<Xref> mapID (Xref idc, Set<DataSource> resultDs) throws IDMapperException
 	{
-//		Logger.log.trace("Fetching cross references");
-
-		List<Xref> refs = new ArrayList<Xref>();
+		Set<Xref> refs = new HashSet<Xref>();
 		
 		try
 		{
 			PreparedStatement pst;
-			if (resultDs == null)
+			if (resultDs == null || resultDs.size() != 1)
 			{
 				pst = pstCrossRefs.getPreparedStatement();
 			}
 			else
 			{
 				pst = pstCrossRefsWithCode.getPreparedStatement();
-				pst.setString(3, resultDs.getSystemCode());
+				pst.setString(3, resultDs.iterator().next().getSystemCode());
 			}
 			
 			pst.setString(1, idc.getId());
@@ -208,10 +206,11 @@ class SimpleGdbImpl2 extends SimpleGdb
 			ResultSet rs = pst.executeQuery();
 			while (rs.next())
 			{
-				refs.add (new Xref (
-						rs.getString(1), 
-						DataSource.getBySystemCode(rs.getString(2))
-					));
+				DataSource ds = DataSource.getBySystemCode(rs.getString(2));
+				if (resultDs == null || resultDs.contains(ds))
+				{
+					refs.add (new Xref (rs.getString(1), ds));
+				}
 			}
 		}
 		catch (SQLException e)

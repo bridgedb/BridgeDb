@@ -17,6 +17,7 @@
 package org.bridgedb.bio;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -73,14 +74,16 @@ public class Test extends TestCase
 		assertTrue (gdb.getAttributes(ref, "Backpage").iterator().next().startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
 		
 		// get all crossrefs
-		List<Xref> crossRefs1 = gdb.mapID(ref);
+		Set<Xref> crossRefs1 = gdb.mapID(ref, null);
 		assertTrue(crossRefs1.contains(new Xref("Hs.465744", BioDataSource.UNIGENE)));
 		assertTrue(crossRefs1.contains(new Xref("NM_000208", BioDataSource.REFSEQ)));
 		assertTrue(crossRefs1.contains(new Xref("P06213", BioDataSource.UNIPROT)));
 		assertTrue(crossRefs1.size() > 10);
 		
 		// get specific crossrefs for specific database
-		List<Xref> crossRefs2 = gdb.mapID(ref, BioDataSource.AFFY);		
+		Set<DataSource> affySet = new HashSet<DataSource>();
+		affySet.add (BioDataSource.AFFY);
+		Set<Xref> crossRefs2 = gdb.mapID(ref, affySet);		
 		assertTrue(crossRefs2.contains(new Xref("1572_s_at", BioDataSource.AFFY)));
 		assertTrue(crossRefs2.contains(new Xref("207851_s_at", BioDataSource.AFFY)));
 		assertTrue(crossRefs2.contains(new Xref("213792_s_at", BioDataSource.AFFY)));
@@ -113,8 +116,8 @@ public class Test extends TestCase
 		assertEquals(0, gdb.getAttributes(nonExistingRef, "Symbol").size());
 		
 		// should return empty list, not NULL
-		assertEquals (0, gdb.mapID(nonExistingRef).size());
-		assertEquals (0, gdb.mapID(nonExistingRef, BioDataSource.AFFY).size());		
+		assertEquals (0, gdb.mapID(nonExistingRef, null).size());
+		assertEquals (0, gdb.mapID(nonExistingRef, affySet).size());		
 		
 		gdb.close();
 	}

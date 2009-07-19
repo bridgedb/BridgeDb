@@ -24,15 +24,33 @@ import java.util.Set;
  * Has methods for basic functionality such as looking up cross-references and backpage text.
  */
 public interface IDMapper {
-    /**
+
+	/**
+	 * Get all cross-references for a set of entities, restricting the
+	 * result to contain only references from the given set of data sources.
      * Supports one-to-one mapping and one-to-many mapping.
      * @param srcXrefs source Xref, containing ID and ID type/data source
-     * @param tgtDataSources target ID types/data sources
-     * @return a map from source Xref to target Xref's
-     * @throws IDMapperException if failed
+     * @param tgtDataSources target ID types/data sources. Set this to null
+     *   if you want to retrieve all results.
+     * @return a map from source Xref to target Xref's. The map is not guaranteed
+     *    to contain a result for each srcXrefs you pass in. This method will never
+     *    return null however.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
     public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException;
 
+	/**
+	 * Get all cross-references for the given entity, restricting the
+	 * result to contain only references from the given set of data sources.
+	 * @param ref the entity to get cross-references for. 
+     * @param tgtDataSources target ID types/data sources. Set this to null if you 
+     *   want to retrieve all results.
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public Set<Xref> mapID (Xref ref, Set<DataSource> tgtDataSources) throws IDMapperException;
+	
     /**
      * Check whether an Xref exists.
      * @param xref reference to check

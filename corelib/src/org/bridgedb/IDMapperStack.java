@@ -43,12 +43,14 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	/**
 	 * Create a fresh IDMapper from a connectionString and add it to the stack.
 	 * @param connectionString connectionString for configuring the new IDMapper
+	 * @return the newly created IDMapper
 	 * @throws IDMapperException when the connection failed.
 	 */
-	public void addIDMapper(String connectionString) throws IDMapperException
+	public IDMapper addIDMapper(String connectionString) throws IDMapperException
 	{
 		IDMapper idMapper = BridgeDb.connect(connectionString);
 		addIDMapper(idMapper);
+		return idMapper;
 	}
 
 	/**
@@ -60,6 +62,15 @@ public class IDMapperStack implements IDMapper, AttributeMapper
         if (idMapper!=null) {
             gdbs.add(idMapper);
         }
+    }
+    
+	/**
+	 * Remove an idMapper from the stack.
+	 * @param idMapper IDMapper to be removed.
+	 */
+    public void removeIDMapper(IDMapper idMapper)
+    {
+    	gdbs.remove(idMapper);
     }
 
 	/**
@@ -233,7 +244,6 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 			throws IDMapperException 
 	{
 		Set<String> result = new HashSet<String>();
-		// return the first database with a result.
 		for (IDMapper child : gdbs)
 		{
 			if (child != null && child instanceof AttributeMapper && child.isConnected())
@@ -248,7 +258,6 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
 	{
 		Set<Xref> result = new HashSet<Xref>();
-		// return the first database with a result.
 		for (IDMapper child : gdbs)
 		{
 			if (child != null && child instanceof AttributeMapper && child.isConnected())
@@ -258,4 +267,48 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
+	
+	/** @return concatenation of toString of each child */
+	@Override public String toString()
+	{
+		String result = "";
+		boolean first = true;
+		for (IDMapper child : gdbs)
+		{
+			if (!first) result += ", "; 
+			first = false;
+			result += child.toString();
+		}
+		return result;
+	}
+	
+	/** @return number of child databases */
+	public int getSize()
+	{
+		return gdbs.size();
+	}
+	
+	/**
+	 * @param index in the range 0 <= index < getSize() 
+	 * @return the IDMapper at the given position */
+	public IDMapper getIDMapperAt(int index)
+	{
+		return gdbs.get(index);
+	}
+
+	/** {@inheritDoc} */
+	public Set<Xref> mapID(Xref ref, Set<DataSource> resultDs) throws IDMapperException 
+	{
+		Set<Xref> result = new HashSet<Xref>();
+		for (IDMapper child : gdbs)
+		{
+			if (child != null && child instanceof AttributeMapper && child.isConnected())
+			{
+				result.addAll (child.mapID(ref, resultDs));
+			}
+		}
+		return result;
+	}
+	
+	
 }

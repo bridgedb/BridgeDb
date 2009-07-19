@@ -132,9 +132,9 @@ public class DoubleGdb extends IDMapperRdb
 	/**
 	 * Return the aggregate of the child results.
 	 */
-	public List<Xref> mapID(Xref idc) throws IDMapperException 
+	public Set<Xref> mapID(Xref idc) throws IDMapperException 
 	{	
-		List<Xref> result = new ArrayList<Xref>();
+		Set<Xref> result = new HashSet<Xref>();
 		
 		for (SimpleGdb child : gdbs)
 		{
@@ -149,9 +149,9 @@ public class DoubleGdb extends IDMapperRdb
 	/**
 	 * Return the aggregate of the child results.
 	 */
-	public List<Xref> mapID(Xref idc, DataSource resultDs) throws IDMapperException
+	public Set<Xref> mapID(Xref idc, DataSource resultDs) throws IDMapperException
 	{
-		List<Xref> result = new ArrayList<Xref>();
+		Set<Xref> result = new HashSet<Xref>();
 		
 		for (SimpleGdb child : gdbs)
 		{
