@@ -30,6 +30,12 @@ do
   ncftpget ${ftp_site} ./${mysql_db_name} /pub/current_mysql/${mysql_db_name}/*.txt.gz
   for q in ./${mysql_db_name}/*.txt.gz
   do
+    # skip huge, unused dna tables
+    if [[ $q =~ 'dna' ]]
+    then
+	echo "Skip!: large, unused dna table: $q"
+	continue
+    fi
     gunzip $q
   done
  
