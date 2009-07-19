@@ -1,6 +1,6 @@
-// PathVisio,
-// a tool for data visualization and analysis using Biological Pathways
-// Copyright 2006-2009 BiGCaT Bioinformatics
+// BridgeDb,
+// An abstraction layer for identifer mapping services, both local and online.
+// Copyright 2006-2009 BridgeDb developers
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
 package org.bridgedb.file;
 
 import java.util.Set;
