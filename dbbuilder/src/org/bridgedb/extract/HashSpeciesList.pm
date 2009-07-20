@@ -9,6 +9,15 @@
 # the routine. USAGE: call this method and assign it to a hash variable. Use the
 # hash to keep track of all the different ways to refer to a species.
 ##
+# RETURNS A HASH OF ARRAYS
+#
+# KEY: common name
+# [0]: genus species
+# [1]: taxonomy ID
+# [2]: three-letter unigene code
+# [3]: two-letter code
+#
+##
 sub getSpeciesTable {
 my $speciesFile = shift;
 if (!$speciesFile) {
@@ -39,7 +48,7 @@ foreach (<SPECIES>){
     if ($line =~ /\*/){next; } # Header line
     chomp $line;
     my @fields = split(/\t/, $line);
-    $speciesTable{$fields[1]} = [$fields[0], $fields[2], $fields[3], $fields[4]]; # (KEY:common name, VALUE:[genus species, taxonomy ID, three-letter unigene code, and two-letter code])
+    $speciesTable{$fields[1]} = [$fields[0], $fields[2], $fields[3], $fields[4]]; 
 }
 
 close(SPECIES);
