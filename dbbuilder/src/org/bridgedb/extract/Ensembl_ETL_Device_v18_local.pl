@@ -29,6 +29,7 @@
 #use Devel::Size qw(total_size);
 use strict;
 use DBI;
+use HashSpeciesList;
 use lib '/home/apico/src/ensembl/modules';
 use lib '/home/apico/src/ensembl-compara/modules';
 use lib '/home/apico/bioperl-live'; 
@@ -150,23 +151,15 @@ print "
 # TODO: store species table in mysql database instead of flatfile
 my %speciesTable = ();                # Hash of Arrays for storing species table in Perl
 my @speciesList = ();                 # list of species names to display in menu
-my $input = "SpeciesList";            # filename of flatfile containing table of species
 my $arrayPick = 'null';		      # menu selection
 
-unless( open( SPECIES, $input)){
-    print "Could not open file $input: $!\n";
-}
+%speciesTable = getSpeciesTable();
 
-foreach (<SPECIES>){
-    my $line = $_;
-    if ($line =~ /\*/){next; } # Header line
-    chomp $line;
-    my @fields = split(/\t/, $line);
-    $speciesTable{$fields[1]} = [$fields[0], $fields[4]]; # (KEY:common name, VALUE:[genus species, two-letter code])
-    push(@speciesList, "$fields[1]\t($fields[0])");       # (VALUE:common name \t (genus species))
+for my $key (keys %speciesTable){
+    push(@speciesList, "$key\t($speciesTable{$key}[0])");       # (VALUE:common name \t (genus species))
     if ($scriptmode) {
-        if ($fields[4] =~ /($speciesArg)/){
-                $arrayPick = $fields[1];
+        if ($speciesTable{$key}[3] =~ /($speciesArg)/){
+                $arrayPick = $key;
         }
     }
 
@@ -185,7 +178,7 @@ if ($arrayPick eq 'null') {
 }
 my @splitPick = split(/\t/, $arrayPick);                      # split: [0]=common name, [1]=(genus species)
 my $speciesPick = $splitPick[0];                              # store common name, e.g., Mouse
-my $twoLetterSpecies = $speciesTable{$speciesPick}[1];	      # two-letter code, e.g., Mm
+my $twoLetterSpecies = $speciesTable{$speciesPick}[3];	      # two-letter code, e.g., Mm
 my $EnSpeciesCode = "En".$twoLetterSpecies;		      # Ensembl species-specific codes, e.g., EnMm
 my $species = $speciesTable{$speciesPick}[0];                 # store genus species, e.g., Mus musculus 
 my @split_species = split(/\s/, $species);   		      # split: [0]=genus, [1]=species, [2]=extra
