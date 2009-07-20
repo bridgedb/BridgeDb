@@ -38,8 +38,8 @@ Vitis vinifera	Wine Grape	29760	Vvi	Vv
 Populus trichocarpa	Western Balsam Poplar	3694	Pth	Pi
 Bacillus subtilis	Bsubtilis			Bs
 Escherichia coli K12	Ecoli K12			Ec
-Mycobacterium collection	Mycobacterium		Mx
-Neisseria collection	Neisseria		Nx
-Pyrococcus collection	Pytococcus		Px
-Staphylococcus collection	Staphylococcus		Sx
-Streptococcus collection	Streptococcus		Tx
+Mycobacterium collection	Mycobacterium			Mx
+Neisseria collection	Neisseria			Nx
+Pyrococcus collection	Pytococcus			Px
+Staphylococcus collection	Staphylococcus			Sx
+Streptococcus collection	Streptococcus			Tx
