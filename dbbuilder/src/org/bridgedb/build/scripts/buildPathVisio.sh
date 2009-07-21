@@ -39,7 +39,7 @@ export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:
 # Run ij Tool
 cat ${ScriptsDir}/PathVisioDerby_BUILD.ij.template | sed "s/XXXXXX/${Database}/g" | perl ${ScriptsDir}/replacePath.pl ${ScriptsDir} > PathVisioDerby_BUILD.ij 
 
-java -XX:MaxPermSize=128m -Xmx512m org.apache.derby.tools.ij PathVisioDerby_BUILD.ij
+java -XX:MaxPermSize=128m -Xmx1024m org.apache.derby.tools.ij PathVisioDerby_BUILD.ij
 
 # Package it up
 mv ${Database} database
