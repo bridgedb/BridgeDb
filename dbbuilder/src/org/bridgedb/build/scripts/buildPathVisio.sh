@@ -4,8 +4,26 @@
 DatabaseSpecies=$1
 DatabaseDate=$2
 Database=$1_Derby_$2
+DatabaseCS=$1_CS_$2
 
 ScriptsDir=/home/apico/Derby/scripts
+
+## Special modification for Yeast database: swapping in SGD identifiers from external file
+if [[ $DatabaseSpecies == Sc ]]; then
+	rm ${ScriptsDir}/registry.genenames.tab
+	wget http://downloads.yeastgenome.org/gene_registry/registry.genenames.tab
+	mv registry.genenames.tab ${ScriptsDir}/.
+	mysql -u genmapp -pfun4genmapp -e "create table ${DatabaseCS}.sgd (a varchar(31), b varchar(31), c varchar(31), d varchar(31), e varchar(31), f varchar(31), g varchar(31))";
+	mysql -u genmapp -pfun4genmapp -e "load data local infile '${ScriptsDir}/registry.genenames.tab' into table ${DatabaseCS}.sgd fields terminated by '\t' lines terminated by '\n'";
+	mysql -u genmapp -pfun4genmapp -e "create index i_a on ${DatabaseCS}.sgd (a)";
+	mysql -u genmapp -pfun4genmapp -e "update ${DatabaseCS}.gene, ${DatabaseCS}.sgd set ${DatabaseCS}.gene.ID = ${DatabaseCS}.sgd.g where ${DatabaseCS}.gene.Symbol = ${DatabaseCS}.sgd.a and ${DatabaseCS}.gene.Code = 'D'";
+	mysql -u genmapp -pfun4genmapp -e "update ${DatabaseCS}.attr, ${DatabaseCS}.sgd set ${DatabaseCS}.attr.ID = ${DatabaseCS}.sgd.g where ${DatabaseCS}.attr.Value = ${DatabaseCS}.sgd.a and ${DatabaseCS}.attr.Code = 'D'";
+	mysql -u genmapp -pfun4genmapp -e "alter table ${DatabaseCS}.link add column (ID_Right2 varchar(31))";
+	mysql -u genmapp -pfun4genmapp -e "update ${DatabaseCS}.link set ID_Right2 = ID_Right where Code_Right = 'D'";
+	mysql -u genmapp -pfun4genmapp -e "update ${DatabaseCS}.link, ${DatabaseCS}.sgd set ${DatabaseCS}.link.ID_Right = ${DatabaseCS}.sgd.g where ${DatabaseCS}.link.ID_Right2 = ${DatabaseCS}.sgd.a and ${DatabaseCS}.link.Code_Right = 'D'";
+	mysql -u genmapp -pfun4genmapp -e "alter table ${DatabaseCS}.link drop column ID_Right2";
+fi
+
 
 cat ${ScriptsDir}/PathVisioMySQL_BUILD.sql.template | sed "s/XXXXXX/$DatabaseSpecies/g" | sed "s/YYYYYY/$DatabaseDate/g" > PathVisioMySQL_BUILD.sql
 
