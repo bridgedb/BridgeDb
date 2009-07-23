@@ -9,3 +9,5 @@ tables, the databases will be fixed.  The proper SGD IDs are important to suppor
 
 * For copying derby files to wikipathways.org, you can use the following command to copy just the last 5 (adapt as necessary) created databases:
  scp `ls -lht *bridge | head -5 | awk '{print $9}'` wikipathways@www.wikipathways.org:database/. 
+
+* For creating symbolic links to the derby databases, use LinkDatabases.pl. It detects all *.bridge files and asks if you want to link them all or run interactively. If you choose to link a particular database it will first remove any preexisting symlink and the folder it was linking to, then unarchive the database and create a new symlink. It uses the HashSpeciesList Perl module (http://svn.bigcat.unimaas.nl/bridgedb/trunk/dbbuilder/src/org/bridgedb/extract/HashSpeciesList.pm), which locates a species list and loads it into a hash.
