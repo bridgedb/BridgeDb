@@ -73,27 +73,28 @@ foreach my $db (@bridgeFiles) {
 			unlink($speciesTable{$key}[0]);
 			# then create new symlinks
 			$linked = symlink($dirName[0], $speciesTable{$key}[0]);;
-		} elsif ($prefix[0] =~ /metabolites/ ){
-		        print "...linking $key\n";
-
-                        #first remove any pre-existing directories
-                        foreach my $ln (@existingLn) {
-                                if ($ln =~ /metabolites -> (.*)/) {
-                                        my @args = ('rm', '-r', $1);
-                                        system(@args);
-                                }
-                        }
-                        #unzip BridgeDb file
-                        my @args = ('/usr/bin/unzip', $db);
-                        system(@args);
-                        #rename directory
-                        rename ("database", $dirName[0]);
-                        #first remove any pre-existing symlinks
-                        unlink("metabolites");
-                        # then create new symlinks
-                        $linked = symlink($dirName[0], "metabolites");;
-		}	
+		}
 	}
+	if ($prefix[0] =~ /metabolites/ ){
+        	print "...linking metabolites\n";
+                        
+                #first remove any pre-existing directories
+                foreach my $ln (@existingLn) {
+                	if ($ln =~ /metabolites -> (.*)/) {
+                                my @args = ('rm', '-r', $1);
+                                system(@args);
+                        }
+                }
+                #unzip BridgeDb file
+                my @args = ('/usr/bin/unzip', $db);
+                system(@args);
+          	#rename directory
+                rename ("database", $dirName[0]);
+                #first remove any pre-existing symlinks
+                unlink("metabolites");
+                # then create new symlinks
+                $linked = symlink($dirName[0], "metabolites");;
+        }
 	if ($linked) {
 		print "\n\n $db successfully linked\n\n";
 	} else {
