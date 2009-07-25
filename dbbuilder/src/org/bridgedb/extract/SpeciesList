@@ -13,13 +13,13 @@ Homo sapiens	Human	9606	hsa	Hs
 Oryzias latipes	Medaka Fish			Ol
 Aedes aegypti	Mosquito_Aa 			Aa
 Anopheles gambiae	Mosquito_Ag 	7165	aga	Ag
-Mus musculus	Mouse	10090	Mm	Mm
+Mus musculus	Mouse	10090	mmu	Mm
 Monodelphis domestica	Opossum	13616	 	Md
 Ornithorhynchus anatinus	Platypus			Oa
 Tetraodon nigroviridis	Pufferfish	99883	 	Tn
 Oryctolagus cuniculus	Rabbit			Oc
 Rattus norvegicus	Rat	10116	rno	Rn
-Macaca mulatta	Rhesus Monkey		mmu	Ml
+Macaca mulatta	Rhesus Monkey		mml	Ml
 Sorex araneus	Shrew	42254		Sa
 Ciona intestinalis	Sea Squirt 	7719	 	Ci
 Ciona savignyi	Pacific Sea Squirt 		 	Cs
@@ -31,11 +31,11 @@ Danio rerio	Zebrafish	7955	dre	Dr
 Arabidopsis thaliana	Arabidopsis	3702	ata	At
 Oryza glaberrima	African Rice	4538		Og
 Oryza rufipogon	Red Rice	4529		Or	
-Oryza indica	Indian Rice	39946	Oi	Oi
+Oryza indica	Indian Rice	39946		Oi
 Oryza japonica	Japanese Rice	39947	osa	Oj
-Sorghum bicolor	Sorghum	4558	Sbi	Sb
-Vitis vinifera	Wine Grape	29760	Vvi	Vv
-Populus trichocarpa	Western Balsam Poplar	3694	Pth	Pi
+Sorghum bicolor	Sorghum	4558	sbi	Sb
+Vitis vinifera	Wine Grape	29760	vvi	Vv
+Populus trichocarpa	Western Balsam Poplar	3694	pth	Pi
 Bacillus subtilis	Bsubtilis	1423	bsu	Bs
 Escherichia coli K12	Ecoli K12	562	eco	Ec
 Mycobacterium collection	Mycobacterium			Mx
