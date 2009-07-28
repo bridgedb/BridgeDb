@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bridgedb.AbstractIDMapper;
 import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
@@ -32,13 +31,14 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.webservice.IDMapperWebservice;
 import org.bridgedb.Xref;
 
 import uk.ac.ebi.demo.picr.business.PICRClient;
 import uk.ac.ebi.demo.picr.soap.CrossReference;
 import uk.ac.ebi.demo.picr.soap.UPEntry;
 
-public class IDMapperPicr extends AbstractIDMapper implements AttributeMapper
+public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 {
     static 
     {
