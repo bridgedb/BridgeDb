@@ -21,9 +21,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.DataSource;
@@ -126,6 +130,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	{
 		Set<Xref> refs = new HashSet<Xref>();
 		
+		if (idc.getDataSource() == null) return refs;
 		try
 		{
 			PreparedStatement pst;
@@ -529,14 +534,29 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
 	{
+		Map<String, String> specialCases = new HashMap<String, String>();
+		specialCases.put ("Chromosome", "<TH>Chr:<TH>([^<]*)<");
+		specialCases.put ("Description", "<TH>Description:<TH>([^<]*)<");
+		specialCases.put ("Synonyms", "<TH>Synonyms:<TH>([^<]*)<");
+		specialCases.put ("Symbol", "<TH>(?:Gene Symbol|Metabolite):<TH>([^<]*)<");
+		specialCases.put ("BrutoFormula", "<TH>Bruto Formula:<TH>([^<]*)<");
+		
 		Set<String> result = new HashSet<String>();
-		// special case for Backpage attribute, stored in a separate column for schema v2.
-		if (attrname.equals ("Backpage"))
+		
+		if (specialCases.containsKey(attrname))
 		{
 			String bpInfo = getBpInfo(ref);
-			if (bpInfo != null) result.add (bpInfo);
-			return result;
+			if (bpInfo != null)
+			{
+				Pattern pat = Pattern.compile(specialCases.get (attrname));
+				Matcher matcher = pat.matcher(bpInfo);
+				if (matcher.find())
+				{
+					result.add (matcher.group(1));
+				}
+			}
 		}
+		
 		try {
 			PreparedStatement pst = pstAttribute.getPreparedStatement();
 			pst.setString (1, ref.getId());
@@ -548,7 +568,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 				result.add (r.getString(1));
 			}
 			return result;
-		} catch	(SQLException e) { throw new IDMapperException (e); } // Database unavailable
+		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref + ", Attribute: " + attrname, e); } // Database unavailable
 	}
 
 	/**

@@ -282,7 +282,7 @@ public final class DataSource
 
 		if (isSuitableKey(sysCode))
 			bySysCode.put(sysCode, current);
-		if (isSuitableKey(fullName));
+		if (isSuitableKey(fullName))
 			byFullName.put(fullName, current);
 		
 		return new Builder(current);
@@ -296,7 +296,7 @@ public final class DataSource
 	 */
 	private static boolean isSuitableKey(String key)
 	{
-		return (key != null && !"".equals(key));
+		return !(key == null || "".equals(key));
 	}
 	
 	

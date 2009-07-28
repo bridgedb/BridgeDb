@@ -45,7 +45,7 @@ import org.bridgedb.IDMapperException;
 //TODO: make sure the temp directory is cleaned up also when this is not finalized
 public class DataDerby extends DBConnector
 {
-	public static final String DB_FILE_EXT_GDB = "pgdb";
+	public static final String DB_FILE_EXT_GDB = "bridge";
 	public static final String DB_FILE_EXT_GEX = "pgex";
 
 	String getDbExt() {
@@ -100,11 +100,12 @@ public class DataDerby extends DBConnector
 		boolean recreate = (props & PROP_RECREATE) != 0;
 
 		// make sure the final Db name ends with the right extension.
-		finalDbName = dbName.endsWith(getDbExt()) ? dbName : dbName + "." + getDbExt();
+		finalDbName = dbName;
 		finalized = !recreate;
 		
 		if(recreate) 
 		{
+			finalDbName = dbName.endsWith(getDbExt()) ? dbName : dbName + "." + getDbExt();
 			try
 			{
 				tempDbParentdir = FileUtilsGdb.createTempDir("derby", ".tmp");

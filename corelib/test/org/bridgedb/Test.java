@@ -17,6 +17,7 @@
 package org.bridgedb;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.rdb.DataDerby;
@@ -31,6 +32,9 @@ public class Test extends TestCase
 	static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
+	static final String GDB_HUMAN_090509 = 
+		System.getProperty ("user.home") + File.separator + 
+		"PathVisio-Data/gene databases/Hs_Derby_20090509.pgdb";
 	static final String GDB_RAT = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Rn_Derby_20081119.pgdb";
@@ -43,6 +47,21 @@ public class Test extends TestCase
 		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
 		
 		gdb.close();
+	}
+	
+	public void testGdbAttributes() throws IDMapperException
+	{
+		// test special attributes that are grabbed from backpage
+		// since this is a Schema v2 database
+		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN_090509, new DataDerby(), 0);
+		Xref ref = new Xref ("26873", DataSource.getBySystemCode("L"));
+		assertTrue (gdb.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZp434H244|OPLA"));
+		assertTrue (gdb.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9)(5-oxo-L-prolinase)(5-OPase)(Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
+		assertTrue (gdb.getAttributes(ref, "Chromosome").contains ("8"));
+		assertTrue (gdb.getAttributes(ref, "Symbol").contains ("OPLAH"));
+		
+		Set<String> allExpectedAttributes = new HashSet<String>();
+		allExpectedAttributes.add ("26873");
 	}
 	
 	public void testRegisterDataSource()
