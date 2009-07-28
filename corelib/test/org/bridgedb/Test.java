@@ -20,11 +20,11 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import org.bridgedb.rdb.DataDerby;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
-
-import junit.framework.TestCase;
 
 public class Test extends TestCase 
 {
@@ -32,14 +32,9 @@ public class Test extends TestCase
 	static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
-	static final String GDB_HUMAN_090509 = 
-		System.getProperty ("user.home") + File.separator + 
-		"PathVisio-Data/gene databases/Hs_Derby_20090509.pgdb";
 	static final String GDB_RAT = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Rn_Derby_20081119.pgdb";
-
-	boolean eventReceived = false;
 	
 	public void testGdbConnect() throws IDMapperException
 	{
@@ -49,14 +44,21 @@ public class Test extends TestCase
 		gdb.close();
 	}
 	
+	/**
+	 * From schema v2 to v3 there was a change in how the backpage was stored.
+	 * In schema v2 there was a backpage column in the datanode table
+	 * In schema v3 the backpage is split in several attributes.
+	 * For backwards compatibility, SimpleGdbImpl2 fakes these new attributes. 
+	 * This is tested here. 
+	 */
 	public void testGdbAttributes() throws IDMapperException
 	{
 		// test special attributes that are grabbed from backpage
 		// since this is a Schema v2 database
-		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN_090509, new DataDerby(), 0);
+		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
 		Xref ref = new Xref ("26873", DataSource.getBySystemCode("L"));
-		assertTrue (gdb.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZp434H244|OPLA"));
-		assertTrue (gdb.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9)(5-oxo-L-prolinase)(5-OPase)(Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
+		assertTrue (gdb.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZP434H244|OPLA"));
+		assertTrue (gdb.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9) (5-oxo-L-prolinase) (5-OPase) (Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
 		assertTrue (gdb.getAttributes(ref, "Chromosome").contains ("8"));
 		assertTrue (gdb.getAttributes(ref, "Symbol").contains ("OPLAH"));
 		
