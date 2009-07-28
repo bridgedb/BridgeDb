@@ -17,6 +17,7 @@
 package org.bridgedb;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -187,6 +188,18 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 					return true;
 			}
 			return false;
+		}
+
+		/** {@inheritDoc} */
+		public Set<String> getKeys() 
+		{
+			return Collections.emptySet();
+		}
+
+		/** {@inheritDoc} */
+		public String getProperty(String key) 
+		{
+			return null;
 		}
 	};
 	

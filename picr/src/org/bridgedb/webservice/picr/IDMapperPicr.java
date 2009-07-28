@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.AbstractIDMapper;
+import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
@@ -93,23 +94,11 @@ public class IDMapperPicr extends AbstractIDMapper implements AttributeMapper
 		throw new UnsupportedOperationException();
 	}
 
-	private class PICRCapabilities implements IDMapperCapabilities
+	private class PICRCapabilities extends AbstractIDMapperCapabilities
 	{
-		public Set<DataSource> getSupportedSrcDataSources()
-				throws IDMapperException		
+		public PICRCapabilities() 
 		{
-			return supportedDatabases;
-		}
-
-		public Set<DataSource> getSupportedTgtDataSources()
-				throws IDMapperException 
-		{
-			return supportedDatabases;
-		}
-
-		public boolean isFreeSearchSupported() 
-		{
-			return false;
+			super (supportedDatabases, false, null);
 		}
 	}
 	

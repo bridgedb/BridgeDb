@@ -17,6 +17,7 @@
 package org.bridgedb.rdb;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -49,6 +50,43 @@ import org.bridgedb.IDMapperException;
  */
 public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 {		
+	
+	/**
+	 * helper class that handles lazy initialization of all prepared statements used by SimpleGdb
+	 * Non-static, because it needs the con database connection field.
+	 */
+	protected final class LazyPst
+	{
+		/**
+		 * Initialize with given SQL string, but don't create PreparedStatement yet.
+		 * Valid to call before database connection is created.
+		 * @param aSql SQL query
+		 */
+		public LazyPst(String aSql)
+		{
+			sql = aSql;
+		}
+		
+		private PreparedStatement pst = null;
+		private final String sql;
+		
+		/**
+		 * Get a PreparedStatement using lazy initialization.
+		 * <p>
+		 * Assumes SimpleGdbImpl2.con is already valid
+		 * @return a prepared statement for the given query.
+		 * @throws SQLException when a PreparedStatement could not be created
+		 */
+		public PreparedStatement getPreparedStatement() throws SQLException
+		{
+			if (pst == null)
+			{
+				pst = con.prepareStatement(sql);
+			}
+			return pst;
+		}
+	}
+
 	/**
 	 * The {@link Connection} to the Gene Database.
 	 */

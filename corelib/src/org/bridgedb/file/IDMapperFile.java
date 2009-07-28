@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
@@ -40,7 +41,8 @@ public abstract class IDMapperFile implements IDMapper {
      * @param url
      * @throws java.io.IOException
      */
-    public IDMapperFile(final IDMappingReader reader) {
+    public IDMapperFile(final IDMappingReader reader) throws IDMapperException
+    {
         this(reader, false);
     }
 
@@ -51,7 +53,8 @@ public abstract class IDMapperFile implements IDMapper {
      * @throws IDMapperException when failed to read
      */
     public IDMapperFile(final IDMappingReader reader,
-            final boolean freeSearch) {
+            final boolean freeSearch) throws IDMapperException
+    {
         if (reader==null) {
             throw new NullPointerException();
         }
@@ -170,35 +173,13 @@ public abstract class IDMapperFile implements IDMapper {
         return reader;
     }
 
-    private class IDMapperFileCapabilities implements IDMapperCapabilities {
-        private boolean freeSearch;
+    private class IDMapperFileCapabilities extends AbstractIDMapperCapabilities {
 
-        public IDMapperFileCapabilities() {
-            this(false);
+        public IDMapperFileCapabilities(final boolean freeSearch) throws IDMapperException
+        {
+            super (IDMapperFile.this.reader.getDataSources(), false, null);
         }
 
-        public IDMapperFileCapabilities(final boolean freeSearch) {
-            this.freeSearch = freeSearch;
-        }
-
-        public void setFreeSearchSupported(final boolean freeSearch) {
-            this.freeSearch = freeSearch;
-        }
-
-        /** {@inheritDoc} */
-        public boolean isFreeSearchSupported() {
-            return freeSearch;
-        }
-
-        /** {@inheritDoc} */
-        public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
-            return IDMapperFile.this.reader.getDataSources();
-        }
-
-        /** {@inheritDoc} */
-        public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
-            return getSupportedSrcDataSources(); //
-        }
     }
 
 }

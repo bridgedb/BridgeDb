@@ -17,6 +17,7 @@
 
 package org.bridgedb.webservice;
 
+import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.IDMapper;
 import org.bridgedb.Xref;
@@ -45,7 +46,7 @@ import java.io.IOException;
 public class IDMapperBiomart extends IDMapperWebservice {
 
     static {
-		BridgeDb.register ("idmapper-pgdb", new Driver());
+		BridgeDb.register ("idmapper-biomart", new Driver());
 	}
 
 	private static class Driver implements org.bridgedb.Driver {
@@ -123,6 +124,8 @@ public class IDMapperBiomart extends IDMapperWebservice {
 
         mapSrcDSFilter = new HashMap();
         mapSrcDSAttr = new HashMap();
+        
+        cap = new BiomartCapabilities();
     }
 
     /**
@@ -401,9 +404,18 @@ public class IDMapperBiomart extends IDMapperWebservice {
         return dss;
     }
 
-    private final IDMapperCapabilities cap = new IDMapperCapabilities() {
-	    public boolean isFreeSearchSupported() { return false; }
+	private final IDMapperCapabilities cap;
 
+	private class BiomartCapabilities extends AbstractIDMapperCapabilities
+	{
+		/** default constructor.
+		 * @throws IDMapperException when database is not available */
+		public BiomartCapabilities() throws IDMapperException 
+		{
+			super (null, false, null);
+		}
+
+	    /** {@inheritDoc} */
 	    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
             try {
                 return IDMapperBiomart.this.getSupportedSrcDataSources();
@@ -412,6 +424,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
             }
 	    }
 
+	    /** {@inheritDoc} */
 	    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
 	    	try {
                 return IDMapperBiomart.this.getSupportedTgtDataSources();
@@ -419,7 +432,8 @@ public class IDMapperBiomart extends IDMapperWebservice {
                 throw new IDMapperException(ex);
             }
 	    }
-	};
+	
+	}
 
     /**
      *

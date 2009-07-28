@@ -20,11 +20,9 @@ import java.util.Set;
 
 /**
  * Describes capabilities of an IDMapper.
+ * Free form key-value properties are used for version info etc.
  */
 public interface IDMapperCapabilities {
-    // get all supported organisms
-    //TODO: to modify--better to keep the bio concept Organism in a high level
-    //public Set<Organism> getSupportedOrganisms();
 
     /**
      *
@@ -47,4 +45,25 @@ public interface IDMapperCapabilities {
      * 	could not be determined because of service unavailability.
      */
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException;
+    
+    /**
+     * Return a value for a property, or null if this property is not defined.
+     * Implementations are free to choose a set of properties. Suggested properties:
+     * <ul>
+     * <li>Version
+     * <li>DateCreated
+     * <li>SourceDatabase
+     * <li>SourceDatabaseVersion
+     * <li>Species
+     * </ul>
+     * @param key key
+     * @return property string
+     */
+    public String getProperty(String key);
+    
+    /**
+     * @return the keys of all properties. 
+     * Implementations may return an empty set but never null.
+     */
+    public Set<String> getKeys();
 }

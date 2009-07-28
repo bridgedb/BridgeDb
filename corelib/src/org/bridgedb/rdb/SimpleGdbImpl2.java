@@ -25,111 +25,52 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
-/**
- * SimpleGdb is the main implementation of the Gdb interface,
- * for dealing with single SQL-based pgdb's.
- * It's responsible for creating and querying a single 
- * pgdb relational database through the JDBC interface.
- * <p> 
- * It wraps SQL statements in methods, 
- * so the rest of the apps don't need to know the
- * details of the Database schema.
- * <p>
- * It delegates dealing with the differences between 
- * various RDBMS's (Derby, Hsqldb etc.)
- * to a {@link DBConnector} instance.
- * A correct DBConnector instance needs to be 
- * passed to the constructor of SimpleGdb. 
- * 
- * In the PathVisio GUI environment, use GdbManager
- * to create and connect one or two centralized Gdb's. 
- * This will also automatically
- * find the right DBConnector from the preferences.
- *  
- * In a head-less or test environment, you can bypass GdbManager
- * and use SimpleGdb directly 
- * to create or connect to one or more pgdb's of any type.
- */
+/** {@inheritDoc} */
 class SimpleGdbImpl2 extends SimpleGdb
 {		
 	private static final int GDB_COMPAT_VERSION = 2; //Preferred schema version
-
-	/**
-	 * helper class that handles lazy initialization of all prepared statements used by SimpleGdbImpl2
-	 * Non-static, because it needs the con database connection field.
-	 */
-	private final class LazyPst
-	{
-		/**
-		 * Initialize with given SQL string, but don't create PreparedStatement yet.
-		 * Valid to call before database connection is created.
-		 * @param aSql SQL query
-		 */
-		private LazyPst(String aSql)
-		{
-			sql = aSql;
-		}
-		
-		private PreparedStatement pst = null;
-		private final String sql;
-		
-		/**
-		 * Get a PreparedStatement using lazy initialization.
-		 * <p>
-		 * Assumes SimpleGdbImpl2.con is already valid
-		 * @return a prepared statement for the given query.
-		 * @throws SQLException when a PreparedStatement could not be created
-		 */
-		public PreparedStatement getPreparedStatement() throws SQLException
-		{
-			if (pst == null)
-			{
-				pst = con.prepareStatement(sql);
-			}
-			return pst;
-		}
-	}
 	
-	private final LazyPst pstDatasources = new LazyPst(
+	private final SimpleGdb.LazyPst pstDatasources = new SimpleGdb.LazyPst(
 			"SELECT codeRight FROM link GROUP BY codeRight"
 		);
-	private final LazyPst pstXrefExists = new LazyPst(
+	private final SimpleGdb.LazyPst pstXrefExists = new SimpleGdb.LazyPst(
 			"SELECT id FROM " + "datanode" + " WHERE " +
 			"id = ? AND code = ?"
 		);
-	private final LazyPst pstBackpage = new LazyPst(
+	private final SimpleGdb.LazyPst pstBackpage = new SimpleGdb.LazyPst(
 			"SELECT backpageText FROM datanode " +
 			" WHERE id = ? AND code = ?"
 		);
-	private final LazyPst pstAttribute = new LazyPst(
+	private final SimpleGdb.LazyPst pstAttribute = new SimpleGdb.LazyPst(
 			"SELECT attrvalue FROM attribute " +
 			" WHERE id = ? AND code = ? AND attrname = ?"
 		);
-	private final LazyPst pstCrossRefs = new LazyPst (
+	private final SimpleGdb.LazyPst pstCrossRefs = new SimpleGdb.LazyPst (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
 			"WHERE src.idRight = ? AND src.codeRight = ?"
 		);
-	private final LazyPst pstCrossRefsWithCode = new LazyPst (
+	private final SimpleGdb.LazyPst pstCrossRefsWithCode = new SimpleGdb.LazyPst (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
 			"WHERE src.idRight = ? AND src.codeRight = ? AND dest.codeRight = ?"
 		);
-	private final LazyPst pstRefsByAttribute = new LazyPst (
+	private final SimpleGdb.LazyPst pstRefsByAttribute = new SimpleGdb.LazyPst (
 			"SELECT datanode.id, datanode.code FROM datanode " +
 			" LEFT JOIN attribute ON attribute.code = datanode.code AND attribute.id = datanode.id " +
 			"WHERE attrName = ? AND attrValue = ?"
 		);
-	private final LazyPst pstFreeSearch = new LazyPst (
+	private final SimpleGdb.LazyPst pstFreeSearch = new SimpleGdb.LazyPst (
 			"SELECT id, code FROM datanode WHERE " +
 			"LOWER(ID) LIKE ?"
 		);
-	private final LazyPst pstAttributeSearch = new LazyPst (
+	private final SimpleGdb.LazyPst pstAttributeSearch = new SimpleGdb.LazyPst (
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
 		);
@@ -283,6 +224,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			checkSchemaVersion();
 		}
+		
+		 caps = new SimpleGdbCapabilities();
 	}
 	
 	/**
@@ -562,21 +505,18 @@ class SimpleGdbImpl2 extends SimpleGdb
     	return result;
 	}
 	
-	private final IDMapperCapabilities caps = new IDMapperCapabilities()
+	private final IDMapperCapabilities caps;
+
+	private class SimpleGdbCapabilities extends AbstractIDMapperCapabilities
 	{
-	    public boolean isFreeSearchSupported() { return true; }
-
-	    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException
-	    {
-	    	return getDataSources(); 
-	    }
-
-	    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException
-	    {
-	    	return getDataSources(); 
-	    }
-	};
-
+		/** default constructor.
+		 * @throws IDMapperException when database is not available */
+		public SimpleGdbCapabilities() throws IDMapperException 
+		{
+			super (SimpleGdbImpl2.this.getDataSources(), true, null);
+		}
+	}
+	
 	/**
 	 * @return the capabilities of this gene database
 	 */

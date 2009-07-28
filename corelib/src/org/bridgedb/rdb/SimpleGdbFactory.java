@@ -37,7 +37,7 @@ public final class SimpleGdbFactory
 	/** private constructor prevents instantiation. */
 	private SimpleGdbFactory() {};
 	
-	static final int LATEST_SCHEMA_VERSION = 2;
+	static final int LATEST_SCHEMA_VERSION = 3;
 
 	/**
 	 * Opens a connection to the Gene Database located in the given file.
@@ -107,6 +107,8 @@ public final class SimpleGdbFactory
 		{
 		case 2:
 			return new SimpleGdbImpl2(dbName, newDbConnector, props);
+		case 3:
+			return new SimpleGdbImpl3(dbName, newDbConnector, props);
 		//TODO add new schema versions here
 		default:
 			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
