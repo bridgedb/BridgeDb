@@ -17,7 +17,6 @@
 package org.bridgedb;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -269,6 +268,10 @@ public final class DataSource
 			return this;
 		}
 		
+		/**
+		 * @param base for urn generation, for example "urn:miriam:uniprot"
+		 * @return the same Builder object so you can chain setters
+		 */
 		public Builder urnBase (String base)
 		{
 			current.urnBase = base;

@@ -50,7 +50,7 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader 
      * Transitivity is unsupported.
      * @param url url {@link URL} of the file
      * @param dataSourceDelimiters delimiters between data sources
-     * @param idDelimiters delimiters between IDs
+     * @param regExIDDelimiter delimiters between IDs
      * @throws IDMapperException if failed to read file
      */
     public IDMappingReaderFromText(final URL url,
@@ -65,7 +65,7 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader 
      * transitivity support.
      * @param url url {@link URL} of the file
      * @param dataSourceDelimiters delimiters between data sources
-     * @param idDelimiters delimiters between IDs
+     * @param regExIDDelimiter delimiters between IDs
      * @param transitivity support transitivity if true
      * @throws IDMapperException if failed to read file
      */
@@ -167,12 +167,12 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader 
         }
     }
 
-    private static final int msConnectionTimeout = 2000;
+    private static final int MS_CONNECTION_TIMEOUT = 2000;
     //TODO: test when IOException is throwed
     protected static InputStream getInputStream(URL source) throws IOException {
         InputStream stream = null;
         int expCount = 0;
-        int timeOut = msConnectionTimeout;
+        int timeOut = MS_CONNECTION_TIMEOUT;
         while (true) { // multiple chances
             try {
                 URLConnection uc = source.openConnection();

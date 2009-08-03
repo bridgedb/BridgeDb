@@ -16,9 +16,6 @@
 //
 package org.bridgedb;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 /**
  * Stores an id + {@link DataSource} combination, which represents
  * an unique gene product.

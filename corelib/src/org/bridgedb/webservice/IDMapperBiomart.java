@@ -19,7 +19,6 @@ package org.bridgedb.webservice;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,8 +31,8 @@ import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.file.IDMappingReaderFromDelimitedReader;
 import org.bridgedb.webservice.biomart.Attribute;
@@ -51,11 +50,13 @@ public class IDMapperBiomart extends IDMapperWebservice {
 		BridgeDb.register ("idmapper-biomart", new Driver());
 	}
 
-	private static class Driver implements org.bridgedb.Driver {
-        private Driver() { } // prevent outside instantiation
+	private final static class Driver implements org.bridgedb.Driver {
+        /** private constructor to prevent outside instantiation. */
+		private Driver() { } 
 
-        private static final String datasetTag = "dataset=";
+        private static final String DATASET_TAG = "dataset=";
 
+        /** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException  {
             // e.g.: dataset=oanatinus_gene_ensembl
 			// e.g.: http://www.biomart.org/biomart/martservice?dataset=oanatinus_gene_ensembl
@@ -67,8 +68,8 @@ public class IDMapperBiomart extends IDMapperWebservice {
                 param = location.substring(idx+1);
             }
 
-            idx = param.indexOf(datasetTag);
-            String datasetName = param.substring(idx+datasetTag.length());
+            idx = param.indexOf(DATASET_TAG);
+            String datasetName = param.substring(idx+DATASET_TAG.length());
 
             idx = datasetName.indexOf("&");
             if (idx>-1) {
@@ -164,8 +165,8 @@ public class IDMapperBiomart extends IDMapperWebservice {
         setIDOnlyForTgtDataSource(idOnlyForTgtDataSource);
         setTransitivity(transitivity);
 
-        mapSrcDSFilter = new HashMap();
-        mapSrcDSAttr = new HashMap();
+        mapSrcDSFilter = new HashMap<DataSource, Filter>();
+        mapSrcDSAttr = new HashMap<DataSource, Attribute>();
         
         cap = new BiomartCapabilities();
     }
@@ -336,7 +337,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
     }
 
     /**
-     * Create filters from the source xrefs
+     * Create filters from the source xrefs.
      * @param srcXrefs
      * @return map from data source to IDs
      */
@@ -421,7 +422,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
     }
 
     /**
-     * free text search is not supported for BioMart-based IDMapper
+     * free text search is not supported for BioMart-based IDMapper.
      */
     public Set<Xref> freeSearch (String text, int limit) throws IDMapperException {
         throw new UnsupportedOperationException();
