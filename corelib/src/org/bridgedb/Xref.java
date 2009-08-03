@@ -16,6 +16,9 @@
 //
 package org.bridgedb;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Stores an id + {@link DataSource} combination, which represents
  * an unique gene product.
@@ -98,4 +101,15 @@ public class Xref implements Comparable<Xref>
 	{
 		return ds.getUrl (id);
 	}
+	
+	/**
+	 * Uses DataSource.getURN() to create a global identifier, such as
+	 * urn:miriam:uniprot:P12345. 
+	 * @return the URN as string 
+	 */
+	public String getURN()
+	{
+		return ds.getURN (id);
+	}
+
 }

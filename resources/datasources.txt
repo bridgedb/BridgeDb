@@ -1,76 +1,76 @@
-TAIR	A	http://www.arabidopsis.org/		AT1G35255	gene	Arabidopsis thaliana	1
-Agilent	Ag			A_24_P98555	probe		0
-BioGrid	Bg	http://www.thebiogrid.org/			probe		0
-Cint	C				probe		0
-CAS	Ca		http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$ID		metabolite		1
-CCDS	Cc		http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$ID	CCDS43989	probe		0
-ChEBI	Ce		http://www.ebi.ac.uk/chebi/searchId=CHEBI:$ID		metabolite		1
-HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$ID	HMDB00001	metabolite		1
-Kegg Compound	Ck		http://www.genome.jp/dbget-bin/www_bget?cpd:$ID		metabolite		1
-PubChem	Cp	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$ID		metabolite		1
-Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$ID.html		metabolite		1
-SGD	D	http://www.yeastgenome.org/	http://db.yeastgenome.org/cgi-bin/locus.pl?locus=$ID	CUP1-2	gene	Saccharomyces cerevisiae	1
-EC Number	E	http://www.brenda-enzymes.info/	http://www.brenda-enzymes.info/php/result_flat.php4?ecno=$ID	2.7.1.71	gene		1
-Ecoli	Ec				gene	Escherichia coli	1
-EMBL	Em	http://www.ebi.ac.uk/embl	http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id=$ID	AL030996	gene		1
-Ensembl	En	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Search/Summary?_q=$ID	ENSG00000139618	gene		0
-Ensembl Mosquito	EnAg	http://www.ensembl.org	http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$ID	AGAP006864	gene	Anopheles gambiae	1
-Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?_q=$ID	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1
-Ensembl B. subtilis	EnBs	http://www.ensembl.org	http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$ID	EBBACG00000000013	gene	Bacillus subtilis	1
-Ensembl Cow	EnBt	http://www.ensembl.org	http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$ID	ENSBTAG00000043548	gene	Bos taurus	1
-Ensembl C. elegans	EnCe	http://www.ensembl.org	http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$ID	Y42H9B.1	gene	Caenorhabditis elegans	1
-Ensembl Dog	EnCf	http://www.ensembl.org	http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=$ID	ENSCAFG00000025860	gene	Canis familiaris	1
-Ensembl Fruitfly	EnDm	http://www.ensembl.org	http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g=$ID	FBgn0032956	gene	Drosophila melanogaster	1
-Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$ID	ENSDARG00000024771	gene	Danio rerio	1
-Ensembl E. coli	EnEc	http://www.ensembl.org	http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=$ID	EBESCG00000000010	gene	Escherichia coli	1
-Ensembl Chicken	EnGg	http://www.ensembl.org	http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$ID	ENSGALG00000021736	gene	Gallus gallus	1
-Ensembl Human	EnHs	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$ID	ENSG00000139618	gene	Homo sapiens	1
-Ensembl Mouse	EnMm	http://www.ensembl.org	http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$ID	ENSMUSG00000017167	gene	Mus musculus	1
-Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa_japonica/Gene/Summary?db=core;g=$ID	osa-MIR171a	gene	Oryza sativa	1
-Ensembl Chimp	EnPt	http://www.ensembl.org	http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$ID	ENSPTRG00000036034	gene	Pan troglodytes	1
-Ensembl Horse	EnQc	http://www.ensembl.org	http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$ID	ENSECAG00000026160	gene	Equus caballus	1
-Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$ID	ENSRNOG00000016648	gene	Rattus norvegicus	1
-Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$ID	YGR147C	gene	Saccharomyces cerevisiae	1
-Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$ID	ENSXETG00000029448	gene	Xenopus tropicalis	1
-FlyBase	F		http://flybase.bio.indiana.edu/.bin/fbidq.html?$ID	FBgn0031208	gene	Drosophila melanogaster	1
-GenBank	G				probe		0
-CodeLink	Ge			GE86325	probe		0
-Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/search_gene?acc=$ID	GR:0060184	gene		1
-Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literature/pub_search?ref_id=$ID	6200	probe		0
-GenPept	Gp			AAH72400	probe		0
-Gramene Pathway	Gp	http://www.gramene.org/pathway		PROTEIN-KINASE-RXN	probe		0
-HUGO	H	http://www.genenames.org/	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$ID	25068	gene	Homo sapiens	1
-HsGene	Hs				gene	Homo sapiens	1
-InterPro	I	http://www.ebi.ac.uk/interpro	http://www.ebi.ac.uk/interpro/IEntry?ac=$ID		domain		0
-Illumina	Il			ILMN_5668	probe		0
-IPI	Ip		http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-e+[IPI-acc:$ID]	IPI00020529	probe		0
-IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/		Os12g0561000	gene		1
-Entrez Gene	L	http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=$ID	1232	gene		1
-MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/searches/accession_report.cgi?id=$ID	MGI:2687328	gene	Mus musculus	1
-miRBase	Mb		http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$ID	MI0000808	gene		1
-MaizeGDB	Mg		http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$ID	acc1	gene	Zea mays	1
-NASC Gene	N			ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1
-NuGO wiki	Nw		http://nugowiki.org/index.php/$ID	HMDB00001	probe		0
-Other	O				gene		1
-Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$ID	468	gene	Oryza sativa	1
-OMIM	Om	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM&cmd=Search&doptcmdl=Detailed&term=?$ID	608981	probe		0
-Rice Ensembl Gene	Os	http://www.gramene.org/Oryza_sativa	http://www.gramene.org/Oryza_sativa/geneview?gene=$ID	LOC_Os04g54800	gene	Oryza sativa	1
-PDB	Pd	http://www.rcsb.org/pdb/home/home.do	http://bip.weizmann.ac.il/oca-bin/ocashort?id=$ID	2Z17	gene		1
-Pfam	Pf	http://www.sanger.ac.uk/Software/Pfam	http://www.sanger.ac.uk//cgi-bin/Pfam/getacc?$ID		gene		1
-PlantGDB	Pl	http://www.plantgdb.org/		PUT-157a-Vitis_vinifera-37378	gene		1
-RefSeq	Q	http://www.ncbi.nlm.nih.gov/RefSeq	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=Protein&cmd=search&term=$ID	NM_001054966	gene		1
-RGD	R	http://rgd.mcw.edu/	http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=$ID	1587276	gene	Rattus norvegicus	1
-Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$ID	RF00066	gene		1
-Uniprot/TrEMBL	S	http://www.expasy.uniprot.org/	http://www.expasy.org/uniprot/$ID	P57770	protein		1
-dbSNP	Sn				gene		1
-GeneOntology	T	http://www.geneontology.org/	http://godatabase.org/cgi-bin/go.cgi?view=details&search_constraint=terms&depth=0&query=$ID	GO:0005634	probe		0
-TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1
-UniGene	U	http://www.ncbi.nlm.nih.gov/sites/entrez?db=unigene	http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$ID	Hs.553708	gene		1
-UCSC Genome Browser	Uc	http://genome.ucsc.edu/	http://genome.ucsc.edu/cgi-bin/hgTracks?position=$ID	uc001tyh.1	gene		1
-WormBase	W	http://www.wormbase.org	http://www.wormbase.org/db/gene/gene?name=$ID	T24D1.1	gene	Caenorhabditis elegans	1
-Wheat gene catalog	Wc	http://wheat.pw.usda.gov/	"http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$ID"	341	gene	Triticum aestivum	1
-Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$ID	Acetate	metabolite		1
-Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$ID	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1
-Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$ID	WGS-95-1333	probe	Triticum aestivum	0
-Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/Homo_sapiens/Search/Summary?species=all;idx=;q=$ID	1851_s_at	probe		0
-ZFIN	Z	http://zfin.org	http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=$ID	ZDB-GENE-041118-11	gene	Danio rerio	1
+TAIR	A	http://www.arabidopsis.org/		AT1G35255	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus
+Agilent	Ag			A_24_P98555	probe		0	urn:bridgedb:agilent
+BioGrid	Bg	http://www.thebiogrid.org/			probe		0	urn:miriam:biogrid
+Cint	C				probe		0	urn:bridgedb:cint
+CAS	Ca		http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$ID		metabolite		1	urn:bridgedb:cas
+CCDS	Cc		http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$ID	CCDS43989	probe		0	urn:bridgedb:ccds
+ChEBI	Ce		http://www.ebi.ac.uk/chebi/searchId=CHEBI:$ID		metabolite		1	urn:miriam:obo.chebi
+HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$ID	HMDB00001	metabolite		1	urn:miriam:hmdb
+Kegg Compound	Ck		http://www.genome.jp/dbget-bin/www_bget?cpd:$ID		metabolite		1	urn:miriam:kegg.compound
+PubChem	Cp	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$ID		metabolite		1	urn:miriam:pubchem.compound
+Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$ID.html		metabolite		1	urn:bridgedb:chemspider
+SGD	D	http://www.yeastgenome.org/	http://db.yeastgenome.org/cgi-bin/locus.pl?locus=$ID	CUP1-2	gene	Saccharomyces cerevisiae	1	urn:miriam:sgd
+EC Number	E	http://www.brenda-enzymes.info/	http://www.brenda-enzymes.info/php/result_flat.php4?ecno=$ID	2.7.1.71	gene		1	urn:miriam:brenda
+Ecoli	Ec				gene	Escherichia coli	1	urn:bridgedb:ecoli
+EMBL	Em	http://www.ebi.ac.uk/embl	http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id=$ID	AL030996	gene		1	urn:bridgedb:embl
+Ensembl	En	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Search/Summary?_q=$ID	ENSG00000139618	gene		0	urn:miriam:ensembl
+Ensembl Mosquito	EnAg	http://www.ensembl.org	http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$ID	AGAP006864	gene	Anopheles gambiae	1	urn:bridgedb:ensembl.mosquito
+Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?_q=$ID	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1	urn:bridgedb:ensembl.arabidopsis
+Ensembl B. subtilis	EnBs	http://www.ensembl.org	http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$ID	EBBACG00000000013	gene	Bacillus subtilis	1	urn:bridgedb:ensembl.bsubtilis
+Ensembl Cow	EnBt	http://www.ensembl.org	http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$ID	ENSBTAG00000043548	gene	Bos taurus	1	urn:bridgedb:ensembl.cow
+Ensembl C. elegans	EnCe	http://www.ensembl.org	http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$ID	Y42H9B.1	gene	Caenorhabditis elegans	1	urn:bridgedb:ensembl.celegans
+Ensembl Dog	EnCf	http://www.ensembl.org	http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=$ID	ENSCAFG00000025860	gene	Canis familiaris	1	urn:bridgedb:ensembl.dog
+Ensembl Fruitfly	EnDm	http://www.ensembl.org	http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g=$ID	FBgn0032956	gene	Drosophila melanogaster	1	urn:bridgedb:ensembl.fruitfly
+Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$ID	ENSDARG00000024771	gene	Danio rerio	1	urn:bridgedb:ensembl.zebrafish
+Ensembl E. coli	EnEc	http://www.ensembl.org	http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=$ID	EBESCG00000000010	gene	Escherichia coli	1	urn:bridgedb:ensembl.ecoli
+Ensembl Chicken	EnGg	http://www.ensembl.org	http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$ID	ENSGALG00000021736	gene	Gallus gallus	1	urn:bridgedb:ensembl.chicken
+Ensembl Human	EnHs	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$ID	ENSG00000139618	gene	Homo sapiens	1	urn:bridgedb:ensembl.human
+Ensembl Mouse	EnMm	http://www.ensembl.org	http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$ID	ENSMUSG00000017167	gene	Mus musculus	1	urn:bridgedb:ensembl.mouse
+Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa_japonica/Gene/Summary?db=core;g=$ID	osa-MIR171a	gene	Oryza sativa	1	urn:bridgedb:ensembl.rice
+Ensembl Chimp	EnPt	http://www.ensembl.org	http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$ID	ENSPTRG00000036034	gene	Pan troglodytes	1	urn:bridgedb:ensembl.chimp
+Ensembl Horse	EnQc	http://www.ensembl.org	http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$ID	ENSECAG00000026160	gene	Equus caballus	1	urn:bridgedb:ensembl.horse
+Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$ID	ENSRNOG00000016648	gene	Rattus norvegicus	1	urn:bridgedb:ensembl.rat
+Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$ID	YGR147C	gene	Saccharomyces cerevisiae	1	urn:bridgedb:ensembl.yeast
+Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$ID	ENSXETG00000029448	gene	Xenopus tropicalis	1	urn:bridgedb:ensembl.frog
+FlyBase	F		http://flybase.bio.indiana.edu/.bin/fbidq.html?$ID	FBgn0031208	gene	Drosophila melanogaster	1	urn:miriam:flybase
+GenBank	G				probe		0	urn:bridgedb:genbank
+CodeLink	Ge			GE86325	probe		0	urn:bridgedb:codelink
+Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/search_gene?acc=$ID	GR:0060184	gene		1	urn:bridgedb:gramene.gene
+Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literature/pub_search?ref_id=$ID	6200	probe		0	urn:bridgedb:gramene.literature
+GenPept	Gp			AAH72400	probe		0	urn:bridgedb:genpept
+Gramene Pathway	Gp	http://www.gramene.org/pathway		PROTEIN-KINASE-RXN	probe		0	urn:bridgedb:gramene.pathway
+HUGO	H	http://www.genenames.org/	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$ID	25068	gene	Homo sapiens	1	urn:bridgedb:hugo
+HsGene	Hs				gene	Homo sapiens	1	urn:bridgedb:hsgene
+InterPro	I	http://www.ebi.ac.uk/interpro	http://www.ebi.ac.uk/interpro/IEntry?ac=$ID		domain		0	urn:miriam:interpro
+Illumina	Il			ILMN_5668	probe		0	urn:bridgedb:illumina
+IPI	Ip		http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-e+[IPI-acc:$ID]	IPI00020529	probe		0	urn:miriam:IPI
+IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/		Os12g0561000	gene		1	urn:bridgedb:irgsp
+Entrez Gene	L	http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=$ID	1232	gene		1	urn:miriam:entrez.gene
+MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/searches/accession_report.cgi?id=$ID	MGI:2687328	gene	Mus musculus	1	urn:miriam:mgd
+miRBase	Mb		http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$ID	MI0000808	gene		1	urn:bridgedb:mirbase
+MaizeGDB	Mg		http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$ID	acc1	gene	Zea mays	1	urn:bridgedb:maizegdb
+NASC Gene	N			ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1	urn:bridgedb:nasc.gene
+NuGO wiki	Nw		http://nugowiki.org/index.php/$ID	HMDB00001	probe		0	urn:bridgedb:nugo.wiki
+Other	O				gene		1	urn:bridgedb:other
+Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$ID	468	gene	Oryza sativa	1	urn:bridgedb:oryzabase
+OMIM	Om	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM&cmd=Search&doptcmdl=Detailed&term=?$ID	608981	probe		0	urn:miriam:OMIM
+Rice Ensembl Gene	Os	http://www.gramene.org/Oryza_sativa	http://www.gramene.org/Oryza_sativa/geneview?gene=$ID	LOC_Os04g54800	gene	Oryza sativa	1	urn:bridgedb:gramene.rice
+PDB	Pd	http://www.rcsb.org/pdb/home/home.do	http://bip.weizmann.ac.il/oca-bin/ocashort?id=$ID	2Z17	gene		1	urn:miriam:pdb
+Pfam	Pf	http://www.sanger.ac.uk/Software/Pfam	http://www.sanger.ac.uk//cgi-bin/Pfam/getacc?$ID		gene		1	urn:miriam:pfam
+PlantGDB	Pl	http://www.plantgdb.org/		PUT-157a-Vitis_vinifera-37378	gene		1	urn:bridgedb:plantgdb
+RefSeq	Q	http://www.ncbi.nlm.nih.gov/RefSeq	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=Protein&cmd=search&term=$ID	NM_001054966	gene		1	urn:miriam:refseq
+RGD	R	http://rgd.mcw.edu/	http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=$ID	1587276	gene	Rattus norvegicus	1	urn:miriam:rgd
+Rfam	Rf		http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$ID	RF00066	gene		1	urn:bridgedb:rfam
+Uniprot/TrEMBL	S	http://www.expasy.uniprot.org/	http://www.expasy.org/uniprot/$ID	P57770	protein		1	urn:miriam:uniprot
+dbSNP	Sn				gene		1	urn:bridgedb:dbsnp
+GeneOntology	T	http://www.geneontology.org/	http://godatabase.org/cgi-bin/go.cgi?view=details&search_constraint=terms&depth=0&query=$ID	GO:0005634	probe		0	urn:miriam:obo.go
+TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	urn:bridgedb:tigr
+UniGene	U	http://www.ncbi.nlm.nih.gov/sites/entrez?db=unigene	http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$ID	Hs.553708	gene		1	urn:bridgedb:unigene
+UCSC Genome Browser	Uc	http://genome.ucsc.edu/	http://genome.ucsc.edu/cgi-bin/hgTracks?position=$ID	uc001tyh.1	gene		1	urn:bridgedb:ucsc
+WormBase	W	http://www.wormbase.org	http://www.wormbase.org/db/gene/gene?name=$ID	T24D1.1	gene	Caenorhabditis elegans	1	urn:miriam:wormbase
+Wheat gene catalog	Wc	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$ID	341	gene	Triticum aestivum	1	urn:bridgedb:wheat.gene.catalog
+Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$ID	Acetate	metabolite		1	urn:bridgedb:wikipedia
+Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$ID	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	urn:bridgedb:wheat.gene.names
+Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$ID	WGS-95-1333	probe	Triticum aestivum	0	urn:bridgedb:wheat.gene.refs
+Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/Homo_sapiens/Search/Summary?species=all;idx=;q=$ID	1851_s_at	probe		0	urn:bridgedb:affymetrix
+ZFIN	Z	http://zfin.org	http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=$ID	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:bridgedb:zfin

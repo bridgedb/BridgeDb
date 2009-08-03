@@ -16,6 +16,9 @@
 //
 package org.bridgedb;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +69,7 @@ public final class DataSource
 	private String idExample = null;
 	private boolean isPrimary = true;
 	private String type;
+	private String urnBase;
 	
 	/**
 	 * Constructor is private, so that we don't
@@ -136,6 +140,25 @@ public final class DataSource
 	public String getType()
 	{
 		return type;
+	}
+	
+	/**
+	 * Creates a global identifier. 
+	 * It uses the MIRIAM data type list
+	 * to create a MIRIAM URI like "urn:miriam:uniprot:P12345", 
+	 * or if this DataSource is not included
+	 * in the MIRIAM data types list, a bridgedb URI.
+	 * @param id Id to generate URN from.
+	 * @return the URN. 
+	 */
+	public String getURN(String id)
+	{
+		String idPart = "";
+		try
+		{
+			idPart = URLEncoder.encode(id, "UTF-8");
+		} catch (UnsupportedEncodingException ex) { idPart = id; }
+		return urnBase + ":" + idPart;
 	}
 	
 	/**
@@ -243,6 +266,12 @@ public final class DataSource
 		public Builder organism (Object organism)
 		{
 			current.organism = organism;
+			return this;
+		}
+		
+		public Builder urnBase (String base)
+		{
+			current.urnBase = base;
 			return this;
 		}
 	}

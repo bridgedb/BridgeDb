@@ -48,7 +48,22 @@ public class Test extends TestCase
 		// cause static initializer to run.
 		BioDataSource.init();
 	}
-	
+
+	public void testURN()
+	{
+		Xref ref = new Xref ("3643", BioDataSource.ENTREZ_GENE);
+		Xref ref2 = new Xref ("GO:00001", BioDataSource.GENE_ONTOLOGY);
+		assertEquals ("urn:miriam:entrez.gene:3643", ref.getURN());
+		assertEquals ("urn:miriam:obo.go:GO%3A00001", ref2.getURN());
+		
+	}
+
+	public void testSpeciesSpecificEnsembl()
+	{
+		assertEquals (BioDataSource.ENSEMBL_COW, BioDataSource.getSpeciesSpecificEnsembl(Organism.BosTaurus));
+		assertEquals (BioDataSource.ENSEMBL_MOSQUITO, BioDataSource.getSpeciesSpecificEnsembl(Organism.AnophelesGambiae));
+	}
+
 	public void testBioDataSources()
 	{
 		assertEquals (BioDataSource.WORMBASE.getOrganism(), Organism.CaenorhabditisElegans);
@@ -70,8 +85,8 @@ public class Test extends TestCase
 		//TODO: CD220 is just one possible symbol, not the primary one.
 		assertTrue (gdb.getAttributes(ref, "Symbol").contains("CD220"));
 		
-		// test getting backpage
-		assertTrue (gdb.getAttributes(ref, "Backpage").iterator().next().startsWith("<TABLE border = 1><TR><TH>Gene ID:<TH>3643<TR>"));
+		// test getting description
+		assertTrue (gdb.getAttributes(ref, "Description").iterator().next().startsWith("Insulin receptor Precursor"));
 		
 		// get all crossrefs
 		Set<Xref> crossRefs1 = gdb.mapID(ref, null);
@@ -170,5 +185,5 @@ public class Test extends TestCase
 		assertTrue (f4.contains(BioDataSource.WORMBASE));
 		assertFalse (f4.contains(BioDataSource.HMDB));
 	}
-
+	
 }

@@ -20,6 +20,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.bridgedb.DataSource;
@@ -187,6 +189,7 @@ public class BioDataSource
 	 * (see, 
 	 * http://www.childrens-mercy.org/stats/model/arrayDataManagement.htm ) 
 	 */	
+	private static final Map<Organism, DataSource> ensemblBySpecies = new HashMap<Organism, DataSource>();
 
 	static {
 		DataSourcePatterns.registerPattern(
@@ -430,6 +433,32 @@ public class BioDataSource
 				BioDataSource.KEGG_COMPOUND,
 				Pattern.compile("C\\d+")
 		);
+		
+		ensemblBySpecies.put (Organism.BacillusSubtilis, ENSEMBL_BSUBTILIS);
+		ensemblBySpecies.put (Organism.CaenorhabditisElegans, ENSEMBL_CELEGANS);
+		ensemblBySpecies.put (Organism.GallusGallus, ENSEMBL_CHICKEN);
+		ensemblBySpecies.put (Organism.PanTroglodytes, ENSEMBL_CHIMP);
+		ensemblBySpecies.put (Organism.BosTaurus, ENSEMBL_COW);
+		ensemblBySpecies.put (Organism.CanisFamiliaris, ENSEMBL_DOG);
+		ensemblBySpecies.put (Organism.EscherichiaColi, ENSEMBL_ECOLI);
+		ensemblBySpecies.put (Organism.DrosophilaMelanogaster, ENSEMBL_FRUITFLY);
+		ensemblBySpecies.put (Organism.EquusCaballus, ENSEMBL_HORSE);
+		ensemblBySpecies.put (Organism.HomoSapiens, ENSEMBL_HUMAN);
+		ensemblBySpecies.put (Organism.AnophelesGambiae, ENSEMBL_MOSQUITO);
+		ensemblBySpecies.put (Organism.MusMusculus, ENSEMBL_MOUSE);
+		ensemblBySpecies.put (Organism.RattusNorvegicus, ENSEMBL_RAT);
+		ensemblBySpecies.put (Organism.SaccharomycesCerevisiae, ENSEMBL_SCEREVISIAE);
+		ensemblBySpecies.put (Organism.XenopusTropicalis, ENSEMBL_XENOPUS);
+		ensemblBySpecies.put (Organism.DanioRerio, ENSEMBL_ZEBRAFISH);		
+	}
+	
+	/**
+	 * @returns the species-specific Ensembl DataSource corresponding to a given organism, or null if there isn't one known.
+	 * @param org an organism
+	 */
+	public static DataSource getSpeciesSpecificEnsembl(Organism org)
+	{
+		return ensemblBySpecies.get(org);
 	}
 	
 	/** Call this to initialize the BioDataSource.XXX constants. 
@@ -455,7 +484,8 @@ public class BioDataSource
 				if (fields.length > 4 && fields[4].length() > 0) builder.idExample(fields[4]);
 				if (fields.length > 5 && fields[5].length() > 0) builder.type(fields[5]);
 				if (fields.length > 6 && fields[6].length() > 0) builder.organism(Organism.fromLatinName(fields[6]));					      
-				if (fields.length > 7) builder.primary (fields[7].equals ("1"));					      
+				if (fields.length > 7 && fields[7].length() > 0) builder.primary (fields[7].equals ("1"));					      
+				if (fields.length > 8) builder.urnBase(fields[8]);
 			}
 		}
 		catch (IOException ex)
