@@ -18,6 +18,7 @@ package org.bridgedb;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -29,12 +30,15 @@ import org.bridgedb.rdb.SimpleGdbFactory;
 public class Test extends TestCase 
 {
 	//TODO
-	static final String GDB_HUMAN = 
+	private static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
-	static final String GDB_RAT = 
+	private static final String GDB_RAT = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Rn_Derby_20081119.pgdb";
+	private static final String GDB_CE_V3 = 
+		System.getProperty ("user.home") + File.separator + 
+		"/PathVisio-Data/gene databases/Ce_Derby_20090720.bridge";
 	
 	public void testGdbConnect() throws IDMapperException
 	{
@@ -50,6 +54,7 @@ public class Test extends TestCase
 	 * In schema v3 the backpage is split in several attributes.
 	 * For backwards compatibility, SimpleGdbImpl2 fakes these new attributes. 
 	 * This is tested here. 
+	 * @throws IDMapperException should be considered a failed test
 	 */
 	public void testGdbAttributes() throws IDMapperException
 	{
@@ -64,6 +69,31 @@ public class Test extends TestCase
 		
 		Set<String> allExpectedAttributes = new HashSet<String>();
 		allExpectedAttributes.add ("26873");
+	}
+	
+	/**
+	 * Tests the capability properties of a Schema v3 database.
+	 * @throws IDMapperException should be considered a failed test
+	 */
+	public void testGdbProperties() throws IDMapperException 
+	{
+		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_CE_V3);
+		for (String key : gdb.getCapabilities().getKeys())
+		{
+			System.out.println (key + " -> " + gdb.getCapabilities().getProperty(key));
+		}
+		assertEquals ("Caenorhabditis elegans", gdb.getCapabilities().getProperty("SPECIES"));
+		assertEquals ("3", gdb.getCapabilities().getProperty("SCHEMAVERSION"));
+		assertEquals ("Ensembl", gdb.getCapabilities().getProperty("DATASOURCENAME"));
+		assertEquals ("20090720", gdb.getCapabilities().getProperty("BUILDDATE"));
+		
+		IDMapper gdb2 = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		for (String key : gdb2.getCapabilities().getKeys())
+		{
+			System.out.println (key + " -> " + gdb2.getCapabilities().getProperty(key));
+		}
+		assertEquals ("2", gdb2.getCapabilities().getProperty("SCHEMAVERSION"));
+		assertEquals ("20081119", gdb2.getCapabilities().getProperty("BUILDDATE"));
 	}
 	
 	public void testRegisterDataSource()

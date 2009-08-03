@@ -18,11 +18,14 @@ package org.bridgedb.rdb;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.AbstractIDMapperCapabilities;
@@ -38,6 +41,9 @@ class SimpleGdbImpl3 extends SimpleGdb
 	
 	private final SimpleGdb.LazyPst pstDatasources = new SimpleGdb.LazyPst(
 			"SELECT codeRight FROM link GROUP BY codeRight"
+		);
+	private final SimpleGdb.LazyPst pstInfo = new SimpleGdb.LazyPst(
+			"SELECT * FROM info"
 		);
 	private final SimpleGdb.LazyPst pstXrefExists = new SimpleGdb.LazyPst(
 			"SELECT id FROM " + "datanode" + " WHERE " +
@@ -451,6 +457,38 @@ class SimpleGdbImpl3 extends SimpleGdb
 	}
 
 	/**
+	 * Read the info table and return as properties.
+	 * @return a map where keys are column names and values are the fields in the first row.
+	 * @throws IDMapperException when the database became unavailable
+	 */
+	private Map<String, String> getInfo() throws IDMapperException
+	{
+		Map<String, String> result = new HashMap<String, String>();
+		try
+		{
+			PreparedStatement pst = pstInfo.getPreparedStatement();
+			ResultSet rs = pst.executeQuery();
+			
+			if (rs.next())
+			{
+				ResultSetMetaData rsmd = rs.getMetaData();
+				for (int i = 1; i <= rsmd.getColumnCount(); ++i)
+				{
+					String key = rsmd.getColumnName(i);
+					String val = rs.getString(i);
+					result.put (key, val);
+				}
+			}
+		}
+		catch (SQLException ex)
+		{
+			throw new IDMapperException (ex);
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * @return a list of data sources present in this database. 
 	   @throws IDMapperException when the database is unavailable
 	 */
@@ -483,7 +521,8 @@ class SimpleGdbImpl3 extends SimpleGdb
 		 * @throws IDMapperException when database is not available */
 		public SimpleGdbCapabilities() throws IDMapperException 
 		{
-			super (SimpleGdbImpl3.this.getDataSources(), true, null);
+			super (SimpleGdbImpl3.this.getDataSources(), true, 
+				SimpleGdbImpl3.this.getInfo());
 		}
 	}
 
