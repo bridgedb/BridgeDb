@@ -31,11 +31,10 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
 /**
- * Class for reading ID mapping data from delimited buffered reader.
+ * Class for reading ID mapping data from delimited reader.
  * @author gjj
  */
 public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
-    //protected BufferedReader reader;
     protected boolean transitivity;
     protected String regExDataSourceDelimiter;
     protected String regExIDDelimiter;
@@ -45,6 +44,15 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
 
     protected boolean dsValid, idMappingValid;
 
+    /**
+     *
+     * @param reader a {@link Reader}
+     * @param regExDataSourceDelimiter regular expression of delimiter between
+     *        data sources
+     * @param regExIDDelimiter regular expression of delimiter between IDs
+     * @param transitivity transitivity support
+     * @throws IDMapperException if failed to read
+     */
     public IDMappingReaderFromDelimitedReader(final Reader reader,
             final String regExDataSourceDelimiter,
             final String regExIDDelimiter,
@@ -62,6 +70,11 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
         idMappingValid = false;
     }
 
+    /**
+     * Read data.
+     * @param reader
+     * @throws IDMapperException
+     */
     protected void readData(final Reader reader) throws IDMapperException {
         data = new Vector();
         BufferedReader bfdrd = new BufferedReader(reader);
@@ -80,22 +93,34 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
         }
     }
 
+    /**
+     * Set transitivity support.
+     * @param transitivity support transitivity if true.
+     */
     public void setTransitivity(final boolean transitivity) {
         this.transitivity = transitivity;
     }
 
+    /**
+     * Get transitivity support.
+     * @return true if support transitivity; false otherwise.
+     */
     public boolean getTransitivity() {
         return transitivity;
     }
 
+    /**
+     * Set {@link DataSource}s. This will override the data sources read from
+     * the delimited reader.
+     * @param dataSources {@link DataSource}s
+     */
     public void setDataSources(Vector<DataSource> dataSources) {
         this.dataSources = dataSources;
         dsValid = dataSources==null;
     }
 
     /**
-     *
-     * @return data sources
+     * {@inheritDoc}
      */
     public Set<DataSource> getDataSources() throws IDMapperException {
         if (!dsValid) {
@@ -110,8 +135,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
     }
 
     /**
-     *
-     * @return ID mappings
+     * {@inheritDoc}
      */
     public Map<Xref,Set<Xref>> getIDMappings() throws IDMapperException {
         if (!idMappingValid) {
@@ -126,7 +150,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
     }
 
     /**
-     *
+     * Read {@link DataSource}s from the reader
      * @throws IDMapperException if failed
      */
     protected void readDataSources() throws IOException {
@@ -155,7 +179,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
     }
     
     /**
-     *
+     * Read ID mappings from the reader.
      * @throws IDMapperException if failed
      */
     protected void readIDMappings() throws IOException {
@@ -199,7 +223,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
     }
     
     /**
-     *
+     * Add matched references.
      * @param xrefs matched references
      */
     protected void addIDMapping(final Set<Xref> xrefs) {

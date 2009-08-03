@@ -1,45 +1,24 @@
-/*
- Copyright (c) 2006, 2007, The Cytoscape Consortium (www.cytoscape.org)
-
- The Cytoscape Consortium is:
- - Institute for Systems Biology
- - University of California San Diego
- - Memorial Sloan-Kettering Cancer Center
- - Institut Pasteur
- - Agilent Technologies
-
- This library is free software; you can redistribute it and/or modify it
- under the terms of the GNU Lesser General Public License as published
- by the Free Software Foundation; either version 2.1 of the License, or
- any later version.
-
- This library is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY, WITHOUT EVEN THE IMPLIED WARRANTY OF
- MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  The software and
- documentation provided hereunder is on an "as is" basis, and the
- Institute for Systems Biology and the Whitehead Institute
- have no obligations to provide maintenance, support,
- updates, enhancements or modifications.  In no event shall the
- Institute for Systems Biology and the Whitehead Institute
- be liable to any party for direct, indirect, special,
- incidental or consequential damages, including lost profits, arising
- out of the use of this software and its documentation, even if the
- Institute for Systems Biology and the Whitehead Institute
- have been advised of the possibility of such damage.  See
- the GNU Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public License
- along with this library; if not, write to the Free Software Foundation,
- Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
-*/
+// BridgeDb,
+// An abstraction layer for identifer mapping services, both local and online.
+// Copyright 2006-2009 BridgeDb developers
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 
 package org.bridgedb.webservice.biomart;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import java.util.Map;
 import java.io.StringWriter;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -52,11 +31,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
  */
-public class XMLQueryBuilder {
+public final class XMLQueryBuilder {
 	private static DocumentBuilderFactory factory;
 	private static DocumentBuilder builder;
 
@@ -71,72 +52,74 @@ public class XMLQueryBuilder {
 		}
 	}
 
+        /**
+         * Prevent from instantializing.
+         */
+        private XMLQueryBuilder() {}
+
 	/**
-	 *  DOCUMENT ME!
-	 *
-	 * @param dataset DOCUMENT ME!
-	 * @param attrs DOCUMENT ME!
-	 * @param filters DOCUMENT ME!
-	 *
-	 * @return  DOCUMENT ME!
-	 */
+         *
+         * @param dataset dataset
+         * @param attrs attributes
+         * @param queryFilters filters
+         * @return quering strings
+         */
 	public static String getQueryString(String dataset, Attribute[] attrs, 
-            Map<String, String> queryFilters) {
-		final Document doc = builder.newDocument();
-		Element query = doc.createElement("Query");
-		query.setAttribute("virtualSchemaName", "default");
-		query.setAttribute("header", "1");
-		query.setAttribute("uniqueRows", "1");
-		query.setAttribute("count", "");
-		query.setAttribute("datasetConfigVersion", "0.6");
-		query.setAttribute("formatter", "TSV");
+                    Map<String, String> queryFilters) {
+            final Document doc = builder.newDocument();
+            Element query = doc.createElement("Query");
+            query.setAttribute("virtualSchemaName", "default");
+            query.setAttribute("header", "1");
+            query.setAttribute("uniqueRows", "1");
+            query.setAttribute("count", "");
+            query.setAttribute("datasetConfigVersion", "0.6");
+            query.setAttribute("formatter", "TSV");
 
-		doc.appendChild(query);
+            doc.appendChild(query);
 
-		Element ds = doc.createElement("Dataset");
-		ds.setAttribute("name", dataset);
-		query.appendChild(ds);
+            Element ds = doc.createElement("Dataset");
+            ds.setAttribute("name", dataset);
+            query.appendChild(ds);
 
-		for (Attribute attr : attrs) {
-			Element at = doc.createElement("Attribute");
-			at.setAttribute("name", attr.getName());
-			ds.appendChild(at);
-		}
+            for (Attribute attr : attrs) {
+                Element at = doc.createElement("Attribute");
+                at.setAttribute("name", attr.getName());
+                ds.appendChild(at);
+            }
 
-		if ((queryFilters != null) && (!queryFilters.isEmpty())) {
-			for (Map.Entry<String, String> filter : queryFilters.entrySet()) {
-				Element ft = doc.createElement("Filter");
-				ft.setAttribute("name", filter.getKey());
-				if(filter.getValue() == null) {
-					ft.setAttribute("excluded", "0");
-				} else 
-					ft.setAttribute("value", filter.getValue());
-				ds.appendChild(ft);
-			}
-		}
+            if ((queryFilters != null) && (!queryFilters.isEmpty())) {
+                for (Map.Entry<String, String> filter : queryFilters.entrySet()) {
+                    Element ft = doc.createElement("Filter");
+                    ft.setAttribute("name", filter.getKey());
+                    if(filter.getValue() == null) {
+                        ft.setAttribute("excluded", "0");
+                    } else {
+                        ft.setAttribute("value", filter.getValue());
+                    }
+                    ds.appendChild(ft);
+                }
+            }
 
-		TransformerFactory tff = TransformerFactory.newInstance();
-		Transformer tf;
-		String result = null;
+            TransformerFactory tff = TransformerFactory.newInstance();
+            Transformer tf;
+            String result = null;
 
-		try {
-			tf = tff.newTransformer();
-			tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            try {
+                tf = tff.newTransformer();
+                tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-			StringWriter strWtr = new StringWriter();
-			StreamResult strResult = new StreamResult(strWtr);
+                StringWriter strWtr = new StringWriter();
+                StreamResult strResult = new StreamResult(strWtr);
 
-			tf.transform(new DOMSource(doc.getDocumentElement()), strResult);
+                tf.transform(new DOMSource(doc.getDocumentElement()), strResult);
 
-			result = strResult.getWriter().toString();
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+                result = strResult.getWriter().toString();
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
 
-		return result;
+            return result;
 	}
 }

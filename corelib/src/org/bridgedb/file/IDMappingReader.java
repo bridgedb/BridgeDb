@@ -31,14 +31,17 @@ import org.bridgedb.Xref;
 public interface IDMappingReader {
 
     /**
-     *
-     * @return data sources
+     * Get {@link DataSource}s from the file.
+     * @return {@link DataSource}s from the file
+     * @throws IDMapperException if failed to read the file
      */
     public Set<DataSource> getDataSources() throws IDMapperException;
 
     /**
-     * 
-     * @return ID mappings
+     * Get {@link Xref}s from the file.
+     * @return Map from a {@link Xref} to the {@link Set} of all its matched
+     * Xref.
+     * @throws IDMapperException if failed to read the file
      */
     public Map<Xref,Set<Xref>> getIDMappings() throws IDMapperException;
 

@@ -35,17 +35,40 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader 
     
     protected final URL url;
 
+    /**
+     * Transitivity is unsupported. No delimiter between IDs.
+     * @param url url {@link URL} of the file
+     * @param dataSourceDelimiters delimiters between data sources
+     * @throws IDMapperException if failed to read file
+     */
     public IDMappingReaderFromText(final URL url,
             final char[] dataSourceDelimiters) throws IDMapperException {
         this(url, dataSourceDelimiters, null);
     }
 
+    /**
+     * Transitivity is unsupported.
+     * @param url url {@link URL} of the file
+     * @param dataSourceDelimiters delimiters between data sources
+     * @param idDelimiters delimiters between IDs
+     * @throws IDMapperException if failed to read file
+     */
     public IDMappingReaderFromText(final URL url,
             final char[] dataSourceDelimiters,
             final char[] regExIDDelimiter) throws IDMapperException {
         this(url, dataSourceDelimiters, regExIDDelimiter, false);
     }
 
+    /**
+     * Constructor from the {@link URL} of a tab-delimited text file,
+     * delimiters to separate between different data sources and IDs and
+     * transitivity support.
+     * @param url url {@link URL} of the file
+     * @param dataSourceDelimiters delimiters between data sources
+     * @param idDelimiters delimiters between IDs
+     * @param transitivity support transitivity if true
+     * @throws IDMapperException if failed to read file
+     */
     public IDMappingReaderFromText(final URL url,
             final char[] dataSourceDelimiters,
             final char[] regExIDDelimiter,
@@ -53,17 +76,41 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader 
         this(url, strs2regex(dataSourceDelimiters), strs2regex(regExIDDelimiter), transitivity);
     }
 
+    /**
+     * Transitivity is unsupported. No delimiters between IDs.
+     * @param url the {@link URL} of the delimited text file
+     * @param regExDataSourceDelimiter regular expression of delimiter between
+     *        data sources
+     * @throws IDMapperException if failed to read
+     */
     public IDMappingReaderFromText(final URL url,
             final String regExDataSourceDelimiter) throws IDMapperException {
         this(url, regExDataSourceDelimiter, null);
     }
 
+    /**
+     * Transitivity is unsupported.
+     * @param url the {@link URL} of the delimited text file
+     * @param regExDataSourceDelimiter regular expression of delimiter between
+     *        data sources
+     * @param regExIDDelimiter regular expression of delimiter between IDs
+     * @throws IDMapperException if failed to read
+     */
     public IDMappingReaderFromText(final URL url,
             final String regExDataSourceDelimiter,
             final String regExIDDelimiter) throws IDMapperException {
         this(url, regExDataSourceDelimiter, regExIDDelimiter, false);
     }
 
+    /**
+     *
+     * @param url the {@link URL} of the delimited text file
+     * @param regExDataSourceDelimiter regular expression of delimiter between
+     *        data sources
+     * @param regExIDDelimiter regular expression of delimiter between IDs
+     * @param transitivity transitivity support
+     * @throws IDMapperException if failed to read
+     */
     public IDMappingReaderFromText(final URL url,
             final String regExDataSourceDelimiter,
             final String regExIDDelimiter,
@@ -74,12 +121,20 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader 
         this.url = url;
     }
 
+    /**
+     * Set delimiters between data sources.
+     * @param dataSourceDelimiters delimiters between data sources
+     */
     public void setDataSourceDelimiters(final char[] dataSourceDelimiters) {
         dsValid = false;
         idMappingValid = false;
         regExDataSourceDelimiter = strs2regex(dataSourceDelimiters);
     }
 
+    /**
+     * Set delimiters between data IDs.
+     * @param idDelimiters delimiters between data IDs
+     */
     public void setIDDelimiters(final char[] idDelimiters) {
         idMappingValid = false;
         regExIDDelimiter = strs2regex(idDelimiters);

@@ -37,9 +37,10 @@ public abstract class IDMapperFile implements IDMapper {
     protected final IDMappingReader reader;
 
     /**
-     * Constuctor from a url. transitivity is unsupported by default.
-     * @param url
-     * @throws java.io.IOException
+     * Constuctor from a {@link IDMappngReader}. transitivity is unsupported
+     * by default.
+     * @param reader ID mapping reader
+     * @throws java.io.IDMapperException when failed to read
      */
     public IDMapperFile(final IDMappingReader reader) throws IDMapperException
     {
@@ -47,16 +48,18 @@ public abstract class IDMapperFile implements IDMapper {
     }
 
     /**
-     *
-     * @param url
-     * @param freeSearch
+     * Constuctor from a {@link IDMappngReader} and user-defined free search
+     * capacity.
+     * @param reader ID mapping reader
+     * @param freeSearch if this IDMapper supports free search
      * @throws IDMapperException when failed to read
+     * @throws IllegalArgumentException if reader is null
      */
     public IDMapperFile(final IDMappingReader reader,
             final boolean freeSearch) throws IDMapperException
     {
         if (reader==null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException("reader cannot be null.");
         }
 
         this.reader = reader;
@@ -64,30 +67,27 @@ public abstract class IDMapperFile implements IDMapper {
     }
 
     /**
-     * Supports one-to-one mapping and one-to-many mapping.
-     * @param srcXrefs source Xref, containing ID and ID type/data source
-     * @param tgtDataSources target ID types/data sources
-     * @return a map from source Xref to target Xref's
-     * @throws IDMapperException if failed
+     * {@inheritDoc}
      */
-    public Map<Xref, Set<Xref>> mapID(final Set<Xref> srcXrefs, final Set<DataSource> tgtDataSources) throws IDMapperException {
+    public Map<Xref, Set<Xref>> mapID(final Set<Xref> srcXrefs,
+                final Set<DataSource> tgtDataSources) throws IDMapperException {
         if (srcXrefs==null || tgtDataSources==null) {
-            throw new java.lang.IllegalArgumentException("srcXrefs or tgtDataSources cannot be null");
+            throw new IllegalArgumentException("srcXrefs or tgtDataSources cannot be null");
         }
 
-        Map<Xref, Set<Xref>> return_this = new HashMap();
+        Map<Xref, Set<Xref>> result = new HashMap();
 
         // remove unsupported target datasources
         Set<DataSource> supportedTgtDatasources = cap.getSupportedTgtDataSources();
         Set<DataSource> tgtDss = new HashSet(tgtDataSources);
         tgtDss.retainAll(supportedTgtDatasources);
         if (tgtDss.isEmpty()) {
-            return return_this;
+            return result;
         }
 
         Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
         if (mapXrefs==null) {
-            return return_this;
+            return result;
         }
 
         Set<DataSource> supportedSrcDatasources = cap.getSupportedSrcDataSources();
@@ -99,10 +99,10 @@ public abstract class IDMapperFile implements IDMapper {
             Set<Xref> refs = mapXrefs.get(srcXref);
             if (refs==null) continue;
 
-            Set<Xref> tgtRefs = return_this.get(srcXref);
+            Set<Xref> tgtRefs = result.get(srcXref);
             if (tgtRefs==null) {
                 tgtRefs = new HashSet();
-                return_this.put(srcXref, tgtRefs);
+                result.put(srcXref, tgtRefs);
             }
 
             for (Xref tgtXref : refs) {
@@ -113,35 +113,30 @@ public abstract class IDMapperFile implements IDMapper {
             }
         }
 
-        return return_this;
+        return result;
     }
 
     /** {@inheritDoc} */
-	public Set<Xref> mapID(Xref srcXref, Set<DataSource> tgtDataSources) throws IDMapperException
-	{
-        Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
-        
+    public Set<Xref> mapID(Xref srcXref, Set<DataSource> tgtDataSources) throws IDMapperException {        Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
         Set<Xref> result = new HashSet<Xref>();
-        
+
         if (mapXrefs==null) {
             return result;
         }
-        
+
         for (Xref destRef : mapXrefs.get(srcXref))
         {
-        	if (tgtDataSources == null || tgtDataSources.contains(destRef.getDataSource()))
-        	{
-        		result.add (destRef);
-        	}
+            if (tgtDataSources == null || tgtDataSources.contains(destRef.getDataSource()))
+            {
+                result.add (destRef);
+            }
         }
+        
         return result;
-	}
+    }
 	
     /**
-     * Check whether an Xref exists.
-     * @param xref reference to check
-     * @return if the reference exists, false if not
-     * @throws IDMapperException if failed
+     * {@inheritDoc}
      */
     public boolean xrefExists(final Xref xref) throws IDMapperException {
         if (xref==null) {
