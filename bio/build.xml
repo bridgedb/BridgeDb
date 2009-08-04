@@ -5,7 +5,7 @@
   <property name="ant.build.javac.target" value="1.5"/>
   <property name="ant.build.javac.source" value="1.5"/>
 	
-  <property name="jar.name" value="../lib/bridgedb-bio.jar"/>
+  <property name="jar.name" value="../dist/bridgedb-bio.jar"/>
   
   <target name="prepare">
 	<mkdir dir="build"/>
@@ -17,7 +17,7 @@
 		   debug="true"
 		   destdir="build">
 		<classpath>
-			<pathelement location="../lib/bridgedb.jar"/>
+			<pathelement location="../dist/bridgedb.jar"/>
 		</classpath>
 	</javac>
     <copy file="../resources/datasources.txt"

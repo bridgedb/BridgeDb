@@ -5,7 +5,7 @@
   <property name="ant.build.javac.target" value="1.5"/>
   <property name="ant.build.javac.source" value="1.5"/>
 	
-  <property name="jar.name" value="../lib/bridgedb.jar"/>
+  <property name="jar.name" value="../dist/bridgedb.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   <property name="checkstyle.output.file" value="warnings.txt"/>
   <property file="version.props"/>
@@ -14,7 +14,7 @@
 	<tstamp /> <!-- set ${TODAY} and ${TSTAMP} -->
 	<mkdir dir="build"/>
 	<mkdir dir="doc"/>
-	<mkdir dir="../lib"/>
+	<mkdir dir="../dist"/>
 	<exec executable="${svn.exec.svnversion}" outputproperty="subversion_revision" failifexecutionfails="false">
 		<arg line="-n ."/>
 	</exec>
@@ -45,22 +45,6 @@ bridgedb.version=${bridgedb.version}
       <fileset dir="build" includes="**/*.txt"/>
 	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
-  </target>
-  
-  <target name="doc" depends="prepare">
-	<javadoc destdir="doc"
-			doctitle="${project.name}"
-			header="Revision ${subversion_revision}"
-			footer="Generated ${TODAY}">
-		<package name="org.bridgedb"/>
-		<package name="org.bridgedb.file"/>
-		<package name="org.bridgedb.rdb"/>
-        <package name="org.bridgedb.webservice"/>
-        <package name="org.bridgedb.webservice.biomart"/>
-		<sourcepath>			
-			<pathelement location="src"/>
-		</sourcepath>
-	</javadoc>
   </target>
 
   <target name="clean">
