@@ -2,6 +2,7 @@
 <project name="bridgedb" default="dist" basedir=".">
   
   <property file="corelib/version.props"/>
+  <property name="svn.exec.svnversion" value="svnversion"/>
   
   <target name="dist" depends="doc">
 	<antcall target="_allmodules">
@@ -66,7 +67,7 @@
 		<arg line="-n ."/>
 	</exec>
 	<javadoc destdir="apidoc"
-			doctitle="${project.name}"
+			doctitle="BridgeDb"
 			header="Revision ${subversion_revision}"
 			footer="Generated ${TODAY}">
 		<package name="org.bridgedb"/>
