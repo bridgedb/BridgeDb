@@ -45,6 +45,8 @@ bridgedb.version=${bridgedb.version}
       <fileset dir="build" includes="**/*.txt"/>
 	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
+    <copy file="lib/derby.jar"
+          todir="../dist" />
   </target>
 
   <target name="clean">
@@ -56,14 +58,7 @@ bridgedb.version=${bridgedb.version}
 	<delete file="${jar.name}"/>
   </target>
 
-  <target name="dist" depends="jar">
-    <property name="tgz.name" value="bridgedb-r${subversion_revision}.tar.gz"/>
-    <tar tarfile="${tgz.name}" compression="gzip">
-		<tarfileset dir="." includes="src/**/*.java" prefix="bridgedb"/>
-		<tarfileset dir="." includes="${jar.name}" prefix="bridgedb"/>		
-		<tarfileset dir="." includes="build.xml" prefix="bridgedb"/>		
-	</tar>
-  </target>
+  <target name="dist" depends="jar"/>
 
   	<taskdef resource="checkstyletask.properties"
 			 classpath="build-lib/checkstyle-all-5.0-beta01.jar"/>

@@ -3,7 +3,7 @@
   
   <property file="corelib/version.props"/>
   
-  <target name="dist">
+  <target name="dist" depends="doc">
 	<antcall target="_allmodules">
 		<param name="allmodules.target" value="dist"/>
 	</antcall>
@@ -22,6 +22,7 @@
 			<include name="lib/derby.jar"/>
 			<include name="LICENSE-2.0.txt"/>
 			<include name="README.txt"/>
+			<include name="apidoc"/>
 			<include name="webservice/gdb.config.template"/>
 			<include name="webservice/contrib/bridgedb-example.pl"/>
 			<include name="webservice/contrib/bridgedb-example.py"/>
@@ -59,8 +60,8 @@
   </target>
   
    <target name="doc">
-     <mkdir dir="doc"/>
-	<javadoc destdir="doc"
+     <mkdir dir="apidoc"/>
+	<javadoc destdir="apidoc"
 			doctitle="${project.name}"
 			header="Revision ${subversion_revision}"
 			footer="Generated ${TODAY}">
