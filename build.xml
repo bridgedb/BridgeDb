@@ -61,11 +61,16 @@
   
    <target name="doc">
      <mkdir dir="apidoc"/>
+	<tstamp /> <!-- set ${TODAY} and ${TSTAMP} -->
+	<exec executable="${svn.exec.svnversion}" outputproperty="subversion_revision" failifexecutionfails="false">
+		<arg line="-n ."/>
+	</exec>
 	<javadoc destdir="apidoc"
 			doctitle="${project.name}"
 			header="Revision ${subversion_revision}"
 			footer="Generated ${TODAY}">
 		<package name="org.bridgedb"/>
+		<package name="org.bridgedb.bio"/>
 		<package name="org.bridgedb.file"/>
 		<package name="org.bridgedb.rdb"/>
         <package name="org.bridgedb.webservice"/>
