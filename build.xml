@@ -13,11 +13,18 @@
 		<zipfileset dir="." prefix="bridgedb-${bridgedb.version}">
 			<include name="batchmapper.sh"/>
 			<include name="batchmapper.bat"/>
+			<include name="start-server.sh"/>
 			<include name="lib/bridgedb.jar"/>
 			<include name="lib/bridgedb-batchmapper.jar"/>
 			<include name="lib/bridgedb-bio.jar"/>
+			<include name="lib/bridgedb-webservice.jar"/>
+			<include name="lib/org.restlet.jar"/>
 			<include name="lib/derby.jar"/>
 			<include name="LICENSE-2.0.txt"/>
+			<include name="README.txt"/>
+			<include name="webservice/gdb.config.template"/>
+			<include name="webservice/contrib/bridgedb-example.pl"/>
+			<include name="webservice/contrib/bridgedb-example.py"/>
 		</zipfileset>
 	</zip>
 	<tar destfile="${zipbase}.tar.gz" compression="gzip">
@@ -42,6 +49,7 @@
 	<ant dir="corelib" target="${allmodules.target}"/>
 	<ant dir="bio" target="${allmodules.target}"/>
 	<ant dir="batchmapper" target="${allmodules.target}"/>
+	<ant dir="webservice" target="${allmodules.target}"/>
   </target>
 
 </project>

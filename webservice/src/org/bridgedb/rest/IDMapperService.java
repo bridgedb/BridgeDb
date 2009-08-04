@@ -39,7 +39,29 @@ public class IDMapperService extends Application {
         public static final String PAR_TARGET_ATTR_NAME = "attrName";
         public static final String PAR_TARGET_ATTR_VALUE = "attrValue";
         public static final String PAR_TARGET_LIMIT = "limit";
-	/*
+	
+    public final File configFile;
+    
+    public IDMapperService(File aConfigFile)
+    {
+    	if (aConfigFile == null)
+    	{
+    		this.configFile = new File (CONF_GDBS);
+    	}
+    	else
+    	{
+    		this.configFile = aConfigFile;
+    	}
+    		
+    	if (!configFile.exists())
+    	{
+    		System.err.println ("Could not find config file " + configFile);
+    		System.err.println ("Please copy webservice/gdb.config.template and adjust it to your needs");
+    		System.exit(1);
+    	}
+    }
+    
+    /*
 	 * URL pattern for:
 	 * /model/<organism>/<system>/<id>/xrefs[?dataSource=<dsCode>]
 	 */
@@ -120,7 +142,7 @@ public class IDMapperService extends Application {
 	
 	private void connectGdbs() throws IDMapperException, IOException {
 		String[] gdbconf = getContext().getParameters().getValuesArray(CONF_GDBS);
-		File gdbFile = new File("gdb.config");
+		File gdbFile = configFile;
 		if(gdbconf.length > 0) {
 			gdbFile = new File(gdbconf[0]);
 		}

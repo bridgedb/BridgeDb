@@ -16,14 +16,31 @@
 //
 package org.bridgedb.rest;
 
+import java.io.File;
+
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 
 public class Server {
-	public static void main(String[] args) {
+		
+	public static void main(String[] args) 
+	{
 		Component component = new Component();
 		component.getServers().add(Protocol.HTTP, 8183);
-		component.getDefaultHost().attach(new IDMapperService());
+		
+		File configFile = null;
+		
+		if (args.length == 1)
+		{
+			configFile = new File(args[0]);
+		}
+		else if (args.length > 1)
+		{
+			System.err.println ("Expected zero or one arguments");
+			System.exit(1);
+		}
+		
+		component.getDefaultHost().attach(new IDMapperService(configFile));
 		
 		try {
 			component.start();

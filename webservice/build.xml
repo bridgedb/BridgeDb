@@ -5,7 +5,7 @@
   <property name="ant.build.javac.target" value="1.5"/>
   <property name="ant.build.javac.source" value="1.5"/>
 	
-  <property name="jar.name" value="../bridgedb-webservice.jar"/>
+  <property name="jar.name" value="../lib/bridgedb-webservice.jar"/>
   
   <target name="prepare">
 	<mkdir dir="build"/>
@@ -29,7 +29,7 @@
 	<jar jarfile="${jar.name}">
 	  <manifest>
 	  	<attribute name="Main-Class" value="org.bridgedb.rest.Server"/>
-		<attribute name="Class-Path" value="lib/derby.jar lib/bridgedb.jar lib/bridgedb-bio.jar lib/org.restlet.jar"/>
+		<attribute name="Class-Path" value="derby.jar bridgedb.jar bridgedb-bio.jar org.restlet.jar"/>
 	  </manifest>
 	  <fileset dir="build"/>
 	</jar>
