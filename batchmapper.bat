@@ -1,1 +1,1 @@
-java -jar lib/bridgedb-batchmapper.jar %*
+java -jar dist/bridgedb-batchmapper.jar %*

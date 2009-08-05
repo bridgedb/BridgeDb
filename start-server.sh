@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -jar lib/bridgedb-webservice.jar "$@"
+java -jar dist/bridgedb-webservice.jar "$@"
