@@ -55,21 +55,82 @@ public class TestBiomart extends TestCase
         }
 
         for (Database db : dbs) {
+        	System.out.println (db.getName());
             Set<Dataset> datasets = new HashSet(biomartStub.getAvailableDatasets(db.getName()));
             int nds = datasets.size();
             for (Dataset ds : datasets) {
+            	System.out.println ("\t" + ds.getName());
                 IDMapperBiomart idMapper = new IDMapperBiomart(ds.getName());
                 IDMapperCapabilities cap = idMapper.getCapabilities();
                 if (cap.getSupportedSrcDataSources().isEmpty()
                         || cap.getSupportedTgtDataSources().isEmpty()) {
-                    System.out.println("ds\t"+ds.getName());
+//                    System.out.println("\tds\t"+ds.getName());
                     nds--;
                 }
+                for (DataSource dsx : cap.getSupportedSrcDataSources())
+                {
+               	 System.out.println ("\t\t" + dsx);
+                }
+                for (DataSource dsx : cap.getSupportedTgtDataSources())
+                {
+               	 System.out.println ("\t\t" + dsx);
+                }
             }
-            if (nds==0) {
-                System.out.println("db\t"+db.getName());
-            }
+//            if (nds==0) {
+//                System.out.println("\tdb\t"+db.getName());
+//            }
         }
     }
-	
+    
+    public void testBioMartConnector() throws IOException, IDMapperException
+    {
+//        BiomartStub biomartStub = BiomartStub.getInstance();
+//        Map<String, Database> reg = null;
+//        try {
+//            reg = biomartStub.getRegistry();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        Set<Database> dbs = new HashSet(reg.size());
+//         for (Database db : reg.values()) {
+//             //if (db.visible()) {
+//                 dbs.add(db);
+//             //}
+//                System.out.println (db.getName());
+//         }
+        BiomartStub biomartStub = BiomartStub.getInstance();
+        
+        Set<Dataset> datasets = new HashSet(biomartStub.getAvailableDatasets("ensembl"));
+        
+         IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
+         for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
+         {
+        	 System.out.println (ds);
+         }
+         for (DataSource ds : mapper.getCapabilities().getSupportedTgtDataSources())
+         {
+        	 System.out.println (ds);
+         }
+    }
+
+    public void testBioMartConnector2() throws IOException, IDMapperException, ClassNotFoundException
+    {
+        BiomartStub biomartStub = BiomartStub.getInstance();
+        
+        Class.forName("org.bridgedb.webservice.IDMapperBiomart");
+        
+        biomartStub.getAvailableDatasets("ensembl");
+        
+         //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
+        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:dataset=hsapiens_gene_ensembl");
+         for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
+         {
+        	 System.out.println (ds);
+         }
+         for (DataSource ds : mapper.getCapabilities().getSupportedTgtDataSources())
+         {
+        	 System.out.println (ds);
+         }
+    }
+
 }

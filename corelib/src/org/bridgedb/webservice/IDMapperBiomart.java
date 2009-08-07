@@ -249,8 +249,8 @@ public class IDMapperBiomart extends IDMapperWebservice {
      * {@inheritDoc}
      */
     public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException {
-        if (srcXrefs==null || tgtDataSources==null) {
-            throw new java.lang.IllegalArgumentException("srcXrefs or tgtDataSources cannot be null");
+        if (srcXrefs==null) {
+            throw new java.lang.IllegalArgumentException("srcXrefs cannot be null");
         }
 
         Map<Xref, Set<Xref>> result = new HashMap();
@@ -271,8 +271,14 @@ public class IDMapperBiomart extends IDMapperWebservice {
 
         // remove unsupported target datasources
         Set<DataSource> supportedTgtDatasources = cap.getSupportedTgtDataSources();
-        Vector<DataSource> tgtDss = new Vector(tgtDataSources);
-        tgtDss.retainAll(supportedTgtDatasources);
+        Vector<DataSource> tgtDss;
+        if (tgtDataSources == null)
+        	tgtDss = new Vector(supportedSrcDatasources);
+        else
+        {
+        	tgtDss = new Vector(tgtDataSources);
+	        tgtDss.retainAll(supportedTgtDatasources);
+        }
         if (tgtDss.isEmpty()) {
             return result;
         }
