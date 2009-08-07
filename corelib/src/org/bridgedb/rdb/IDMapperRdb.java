@@ -35,18 +35,31 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 {
 	static
 	{
-		BridgeDb.register ("idmapper-pgdb", new Driver());
+		BridgeDb.register ("idmapper-pgdb", new DriverPgdb());
+		BridgeDb.register ("idmapper-derbyclient", new DriverClient());
 	}
 	
-	private static final class Driver implements org.bridgedb.Driver
+	private static final class DriverPgdb implements org.bridgedb.Driver
 	{
 		/** private constructor to prevent instantiation. */
-		private Driver() { } 
+		private DriverPgdb() { } 
 		
 		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException 
 		{
 			return SimpleGdbFactory.createInstance(location, new DataDerby(), 0);
+		}
+	}
+	
+	private static final class DriverClient implements org.bridgedb.Driver
+	{
+		/** private constructor to prevent instantiation. */
+		private DriverClient() { } 
+		
+		/** {@inheritDoc} */
+		public IDMapper connect(String location) throws IDMapperException 
+		{
+			return SimpleGdbFactory.createInstance(location, new DBConnectorDerbyServer(), 0);
 		}
 	}
 	
