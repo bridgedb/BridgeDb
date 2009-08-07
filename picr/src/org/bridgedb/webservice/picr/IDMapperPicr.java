@@ -45,12 +45,16 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 		BridgeDb.register ("idmapper-picr", new Driver());
 	}
 
-    private final boolean onlyActive;
+    private boolean onlyActive;
     
     private Set<DataSource> supportedDatabases = new HashSet<DataSource>();
     private PICRClient client;
-    
-    IDMapperPicr(boolean onlyActive)
+
+    /**
+     *
+     * @param onlyActive using only active mappings if true
+     */
+    public IDMapperPicr(boolean onlyActive)
     {
         client = new PICRClient();
         for (String s : client.loadDatabases())
@@ -59,8 +63,24 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
         }
         this.onlyActive = onlyActive;
     }
-    
-	private static class Driver implements org.bridgedb.Driver 
+
+    /**
+     *
+     * @return true if using only active mappings; false otherwise
+     */
+    public boolean getOnlyActive() {
+        return onlyActive;
+    }
+
+    /**
+     *
+     * @param onlyActive using only active mappings if true
+     */
+    public void setOnlyActive(boolean onlyActive) {
+        this.onlyActive = onlyActive;
+    }
+
+    private static class Driver implements org.bridgedb.Driver
 	{
         private Driver() { } // prevent outside instantiation
 
