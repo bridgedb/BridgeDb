@@ -80,12 +80,12 @@ public class IDMapperBiomart extends IDMapperWebservice {
 		}
 	}
 
-    protected String datasetName;
-    protected BiomartStub stub;
-    protected boolean transitivity;
-    protected boolean idOnlyForTgtDataSource;
+    private String datasetName;
+    private BiomartStub stub;
+    private boolean transitivity;
+    private boolean idOnlyForTgtDataSource;
 
-    protected String baseURL;
+    private String baseURL;
 
     private Map<DataSource, Filter> mapSrcDSFilter;
     private Map<DataSource, Attribute> mapSrcDSAttr;
@@ -241,6 +241,10 @@ public class IDMapperBiomart extends IDMapperWebservice {
         return datasetName;
     }
 
+    /**
+     *
+     * @return URL of the dataset
+     */
     public String toString() {
         return getBaseURL()+"?dataset="+getDataset();
     }
@@ -248,15 +252,18 @@ public class IDMapperBiomart extends IDMapperWebservice {
     /**
      * {@inheritDoc}
      */
-    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException {
-        if (srcXrefs==null) {
-            throw new java.lang.IllegalArgumentException("srcXrefs cannot be null");
+    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+                Set<DataSource> tgtDataSources) throws IDMapperException {
+        if (srcXrefs==null || tgtDataSources==null) {
+            throw new java.lang.IllegalArgumentException(
+                        "srcXrefs or tgtDataSources cannot be null");
         }
 
         Map<Xref, Set<Xref>> result = new HashMap();
 
         // remove unsupported source datasources
-        Set<DataSource> supportedSrcDatasources = cap.getSupportedSrcDataSources();
+        Set<DataSource> supportedSrcDatasources
+                    = cap.getSupportedSrcDataSources();
         Map<DataSource, String> queryFilters = getQueryFilters(srcXrefs);
         Iterator<DataSource> it = queryFilters.keySet().iterator();
         while (it.hasNext()) {
@@ -344,7 +351,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
 
     /**
      * Create filters from the source xrefs.
-     * @param srcXrefs
+     * @param srcXrefs source xrefs
      * @return map from data source to IDs
      */
     protected Map<DataSource,String> getQueryFilters(Set<Xref> srcXrefs) {
@@ -381,7 +388,8 @@ public class IDMapperBiomart extends IDMapperWebservice {
 
     /**
      * This code is bollowed from IDMapperClient from Cytoscape.
-     * @param tgtDataSources
+     * @param tgtDataSources target data sources
+     * @param filterName filter name
      * @return attributes
      */
     protected Attribute[] getAttributes(Vector<DataSource> tgtDataSources, 
@@ -434,6 +442,11 @@ public class IDMapperBiomart extends IDMapperWebservice {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Get supported source data sources
+     * @return supported source data sources
+     * @throws IOException if failed to read the filters
+     */
     protected Set<DataSource> getSupportedSrcDataSources() throws IOException {
         Set<DataSource> dss = new HashSet();
         Map<String, Filter> filters = stub.getFilters(datasetName);
@@ -451,6 +464,11 @@ public class IDMapperBiomart extends IDMapperWebservice {
         return dss;
     }
 
+    /**
+     * Get supported target data sources
+     * @return supported target data sources
+     * @throws IOException if failed to read the filters
+     */
     protected Set<DataSource> getSupportedTgtDataSources() throws IOException {
         Map<String, Attribute> attributeVals = stub.getAttributes(datasetName);
         Set<DataSource> dss = new HashSet();
