@@ -205,7 +205,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
 
     /**
      * Set base url of BioMart.
-     * @param baseURL {@link URL} of BioMart.
+     * @param baseURL URL of BioMart.
      * @throws IDMapperException if failed to read local resources.
      */
     public void setBaseURL(final String baseURL) throws IDMapperException {
@@ -219,7 +219,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
 
     /**
      *
-     * @return base {@link URL} of BioMart.
+     * @return base URL of BioMart.
      */
     public String getBaseURL() {
         return baseURL;

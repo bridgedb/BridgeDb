@@ -37,7 +37,7 @@ public abstract class IDMapperFile implements IDMapper {
     protected final IDMappingReader reader;
 
     /**
-     * Constuctor from a {@link IDMappngReader}. transitivity is unsupported
+     * Constuctor from a {@link IDMappingReader}. transitivity is unsupported
      * by default.
      * @param reader ID mapping reader
      * @throws java.io.IDMapperException when failed to read
@@ -48,7 +48,7 @@ public abstract class IDMapperFile implements IDMapper {
     }
 
     /**
-     * Constuctor from a {@link IDMappngReader} and user-defined free search
+     * Constuctor from a {@link IDMappingReader} and user-defined free search
      * capacity.
      * @param reader ID mapping reader
      * @param freeSearch if this IDMapper supports free search
