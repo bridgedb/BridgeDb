@@ -254,7 +254,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
      */
     public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
                 Set<DataSource> tgtDataSources) throws IDMapperException {
-        if (srcXrefs==null || tgtDataSources==null) {
+        if (srcXrefs==null) {
             throw new java.lang.IllegalArgumentException(
                         "srcXrefs or tgtDataSources cannot be null");
         }

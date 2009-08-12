@@ -71,7 +71,7 @@ public abstract class IDMapperFile implements IDMapper {
      */
     public Map<Xref, Set<Xref>> mapID(final Set<Xref> srcXrefs,
                 final Set<DataSource> tgtDataSources) throws IDMapperException {
-        if (srcXrefs==null || tgtDataSources==null) {
+        if (srcXrefs==null) {
             throw new IllegalArgumentException("srcXrefs or tgtDataSources cannot be null");
         }
 
@@ -79,8 +79,14 @@ public abstract class IDMapperFile implements IDMapper {
 
         // remove unsupported target datasources
         Set<DataSource> supportedTgtDatasources = cap.getSupportedTgtDataSources();
-        Set<DataSource> tgtDss = new HashSet(tgtDataSources);
-        tgtDss.retainAll(supportedTgtDatasources);
+        Set<DataSource> tgtDss;
+        if (tgtDataSources==null) {
+            tgtDss = new HashSet(cap.getSupportedTgtDataSources());
+        } else {
+            tgtDss = new HashSet(tgtDataSources);
+            tgtDss.retainAll(supportedTgtDatasources);
+        }
+
         if (tgtDss.isEmpty()) {
             return result;
         }
