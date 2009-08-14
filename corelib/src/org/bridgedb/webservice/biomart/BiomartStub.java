@@ -242,6 +242,10 @@ public final class BiomartStub {
 
         Database database = databases.get(martName);
 
+        if (database==null) {
+            return null;
+        }
+
         Map<String, String> detail = database.getParam();
 
         String urlStr = "http://" + detail.get("host") + ":" + detail.get("port")

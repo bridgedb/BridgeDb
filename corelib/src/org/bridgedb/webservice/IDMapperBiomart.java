@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
@@ -39,6 +41,8 @@ import org.bridgedb.webservice.biomart.Attribute;
 import org.bridgedb.webservice.biomart.BiomartStub;
 import org.bridgedb.webservice.biomart.Filter;
 import org.bridgedb.webservice.biomart.XMLQueryBuilder;
+
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -54,32 +58,86 @@ public class IDMapperBiomart extends IDMapperWebservice {
         /** private constructor to prevent outside instantiation. */
 		private Driver() { } 
 
-        private static final String DATASET_TAG = "dataset=";
-
         /** {@inheritDoc} */
-		public IDMapper connect(String location) throws IDMapperException  {
-            // e.g.: dataset=oanatinus_gene_ensembl
-			// e.g.: http://www.biomart.org/biomart/martservice?dataset=oanatinus_gene_ensembl
+        public IDMapper connect(String location) throws IDMapperException  {
+            // e.g.: transitivity=false,id-type-filter=true@dataset=oanatinus_gene_ensembl
+            // e.g.: http://www.biomart.org/biomart/martservice?dataset=oanatinus_gene_ensembl
             String baseURL = BiomartStub.defaultBaseURL;
-            String param = location;
-            int idx = location.indexOf('?');
-            if (idx>-1) {
-                baseURL = location.substring(0,idx);
-                param = location.substring(idx+1);
+            boolean transitivity = false;
+            boolean idTypeFilter = true;
+            
+            String config = null;
+            String path = location;
+            int idx = location.indexOf("@");
+            if (idx==0) {
+                path =location.substring(idx+1);
+            } else if (idx>0) {
+                config = location.substring(0, idx);
+                path = location.substring(idx+1);
             }
 
-            idx = param.indexOf(DATASET_TAG);
-            String datasetName = param.substring(idx+DATASET_TAG.length());
+            if (config!=null) {
+                String transitivityTag = "transitivity=";
+                idx = config.indexOf(transitivityTag);
+                if (idx!=-1) {
+                    String tran = config.substring(idx+transitivityTag.length());
+                    if (tran.toLowerCase().startsWith("true")) {
+                        transitivity = true;
+                    } else if (tran.toLowerCase().startsWith("false")) {
+                        transitivity = false;
+                    } else {
+                        throw new IDMapperException(
+                                "transivity can only be true or false");
+                    }
+                }
+
+
+                String idTypeFilterTag = "id-type-filter=";
+                idx = config.indexOf(idTypeFilterTag);
+                if (idx!=-1) {
+                    String filter = config.substring(idx+idTypeFilterTag.length());
+                    if (filter.toLowerCase().startsWith("true")) {
+                        idTypeFilter = true;
+                    } else if (filter.toLowerCase().startsWith("false")) {
+                        idTypeFilter = false;
+                    } else {
+                        throw new IDMapperException(
+                                "id-type-filter can only be true or false");
+                    }
+                }
+            }
+
+            String param = path;
+            idx = path.indexOf('?');
+            if (idx>-1) {
+                baseURL = path.substring(0,idx);
+                param = path.substring(idx+1);
+            }
+
+            String martTag = "mart=";
+            idx = param.indexOf(martTag);
+            String martName = param.substring(idx+martTag.length());
+
+            idx = martName.indexOf("&");
+            if (idx>-1) {
+                martName = martName.substring(0,idx);
+            }
+
+            String datasetTag = "dataset=";
+            idx = param.indexOf(datasetTag);
+            String datasetName = param.substring(idx+datasetTag.length());
 
             idx = datasetName.indexOf("&");
             if (idx>-1) {
                 datasetName = datasetName.substring(0,idx);
             }
 
-            return new IDMapperBiomart(datasetName, baseURL);
-		}
-	}
+            return new IDMapperBiomart(martName, datasetName, baseURL, 
+                    idTypeFilter, transitivity);
+        }
+    }
 
+    private String martName;
     private String datasetName;
     private BiomartStub stub;
     private boolean transitivity;
@@ -93,53 +151,58 @@ public class IDMapperBiomart extends IDMapperWebservice {
     /**
      * Transitivity is unsupported.ID only. ID only for target data sources.
      * Use default url of BiMart.
+     * @param martName name of mart
      * @param datasetName name of dataset
      * @throws IDMapperException if failed to link to the dataset
      */
-    public IDMapperBiomart(String datasetName) throws IDMapperException {
-        this(datasetName, null);
+    public IDMapperBiomart(String martName, String datasetName) throws IDMapperException {
+        this(martName, datasetName, null);
     }
 
     /**
      * Use default url of BiMart.
+     * @param martName name of mart
      * @param datasetName name of dataset
      * @param idOnlyForTgtDataSource id-only option, filter data source ends
      *        with 'ID' or 'Accession'.
      * @param transitivity transitivity option
      * @throws IDMapperException if failed to link to the dataset
      */
-    public IDMapperBiomart(String datasetName, boolean idOnlyForTgtDataSource,
+    public IDMapperBiomart(String martName, String datasetName, boolean idOnlyForTgtDataSource,
                 boolean transitivity) throws IDMapperException {
-        this(datasetName, null, idOnlyForTgtDataSource, transitivity);
+        this(martName, datasetName, null, idOnlyForTgtDataSource, transitivity);
     }
 
     /**
      * Transitivity is unsupported.ID only. ID only for target data sources.
+     * @param martName name of mart
      * @param datasetName name of dataset
      * @param baseURL base url of BioMart
      * @throws IDMapperException if failed to link to the dataset
      */
-    public IDMapperBiomart(String datasetName, String baseURL)
+    public IDMapperBiomart(String martName, String datasetName, String baseURL)
                 throws IDMapperException {
-        this(datasetName, baseURL, true);
+        this(martName, datasetName, baseURL, true);
     }
 
     /**
      * Transitivity is unsupported.
+     * @param martName name of mart
      * @param datasetName name of dataset
      * @param baseURL base url of BioMart
      * @param idOnlyForTgtDataSource id-only option, filter data source ends
      *        with 'ID' or 'Accession'.
      * @throws IDMapperException if failed to link to the dataset
      */
-    public IDMapperBiomart(String datasetName, String baseURL,
+    public IDMapperBiomart(String martName, String datasetName, String baseURL,
             boolean idOnlyForTgtDataSource) throws IDMapperException {
-        this(datasetName, baseURL, idOnlyForTgtDataSource, false);
+        this(martName, datasetName, baseURL, idOnlyForTgtDataSource, false);
     }
 
     /**
      * Construct from a dataset, a database, id-only option and transitivity
      * option.
+     * @param martName name of mart
      * @param datasetName name of dataset
      * @param baseURL base url of BioMart
      * @param idOnlyForTgtDataSource id-only option, filter data source ends
@@ -147,8 +210,9 @@ public class IDMapperBiomart extends IDMapperWebservice {
      * @param transitivity transitivity option
      * @throws IDMapperException if failed to link to the dataset
      */
-    public IDMapperBiomart(String datasetName, String baseURL, 
+    public IDMapperBiomart(String martName, String datasetName, String baseURL,
             boolean idOnlyForTgtDataSource, boolean transitivity) throws IDMapperException {
+        this.martName = martName;
         this.datasetName = datasetName;
         if (baseURL!=null) {
             this.baseURL = baseURL;
@@ -159,6 +223,22 @@ public class IDMapperBiomart extends IDMapperWebservice {
         try {
             stub = BiomartStub.getInstance(this.baseURL);
         } catch (IOException e) {
+            throw new IDMapperException(e);
+        }
+
+        try {
+            if (!stub.getRegistry().containsKey(martName)) {
+                throw new IDMapperException("Mart not exist.");
+            }
+
+            if (!stub.getAvailableDatasets(martName).contains(stub.getDataset(datasetName))) {
+                throw new IDMapperException("dataset not exist.");
+            }
+        } catch (IOException e) {
+            throw new IDMapperException(e);
+        } catch (ParserConfigurationException e) {
+            throw new IDMapperException(e);
+        } catch (SAXException e) {
             throw new IDMapperException(e);
         }
         
@@ -223,6 +303,22 @@ public class IDMapperBiomart extends IDMapperWebservice {
      */
     public String getBaseURL() {
         return baseURL;
+    }
+
+    /**
+     *
+     * @param mart mart name
+     */
+    public void setMart(final String mart) {
+        this.martName = mart;
+    }
+
+    /**
+     *
+     * @return mart name
+     */
+    public String getMart() {
+        return martName;
     }
 
     /**

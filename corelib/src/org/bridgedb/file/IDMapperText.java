@@ -48,11 +48,12 @@ public class IDMapperText extends IDMapperFile
             public IDMapper connect(String location) throws IDMapperException
             {
                 // parse arguments to determine idsep and dssep
-                // sample: dssep:\t,idsep:;,idsep:,@file:/localfile.txt
+                // sample: dssep=\t,idsep=;,idsep=,,transitivity=false@file:/localfile.txt
                 // \t represents tab, \@ represents @
                 String  path = null;
                 char[] dssep = null;
                 char[] idsep = null;
+                boolean transitivity = false;
 
                 int idx = location.indexOf("@");
                 if (idx<=0) {
@@ -80,6 +81,18 @@ public class IDMapperText extends IDMapperFile
                         path = location.substring(idx+1);
 
                         String config = location.substring(0, idx)+",";
+                        String prefixTran = "transitivity=";
+                        idx = config.indexOf(prefixTran);
+                        String tran = config.substring(idx+prefixTran.length());
+                        if (tran.toLowerCase().startsWith("true")) {
+                            transitivity = true;
+                        } else if (tran.toLowerCase().startsWith("false")) {
+                            transitivity = false;
+                        } else {
+                            throw new IDMapperException(
+                                    "transivity can only be true or false");
+                        }
+
                         dssep = parseConfig(config, "dssep");
                         idsep = parseConfig(config, "idsep");
                     }
@@ -87,7 +100,8 @@ public class IDMapperText extends IDMapperFile
 
                 try
                 {
-                        return new IDMapperText(new URL(path), dssep, idsep);
+                        return new IDMapperText(new URL(path), dssep, idsep,
+                                transitivity);
                 }
                 catch (MalformedURLException ex)
                 {
@@ -97,7 +111,8 @@ public class IDMapperText extends IDMapperFile
 
             private char[] parseConfig(String config, String head) {
                 Set<Character> delimiters = new HashSet();
-                Pattern p = Pattern.compile(head+":(.|\\t|\\@),", Pattern.CASE_INSENSITIVE);
+                Pattern p = Pattern.compile(head+"=(.|\\t|\\@),",
+                        Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(config);
                 while (m.find()) {
                     String sep = m.group(1);

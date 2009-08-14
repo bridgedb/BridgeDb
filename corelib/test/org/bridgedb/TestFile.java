@@ -56,7 +56,7 @@ public class TestFile extends TestCase
 	}
 	
 	public void testRead() throws IDMapperException, IOException
-	{	
+	{
 		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL());
 
         Set<Xref> srcXrefs = new HashSet<Xref>();
@@ -66,7 +66,7 @@ public class TestFile extends TestCase
         tgtDataSources.add(ENS_YEAST);
         tgtDataSources.add(ENTREZ);
         tgtDataSources.add(EMBL);
-		
+
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading
 		Map<Xref, Set<Xref>> mapXrefs = idMapper.mapID(srcXrefs, tgtDataSources);
@@ -74,11 +74,11 @@ public class TestFile extends TestCase
 		long delta = end - start;
 		System.out.println (delta);
 		measure.add ("timing::text file non-transitive", "" + delta, "msec");
-        
+
 		Set<Xref> expected = new HashSet<Xref>();
         expected.addAll (Arrays.asList(
-        		new Xref("YHR055C", ENS_YEAST), 
-        		new Xref("U00061", EMBL), 
+        		new Xref("YHR055C", ENS_YEAST),
+        		new Xref("U00061", EMBL),
         		new Xref("K02204", EMBL),
         		new Xref("AY558517", EMBL),
         		new Xref("AY693077", EMBL),
@@ -87,20 +87,20 @@ public class TestFile extends TestCase
         		));
         Set<Xref> xrefs = mapXrefs.get(XREF1);
         assertEquals (expected, xrefs);
-        
+
         for (Xref xr : xrefs) {
             System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
         }
-        
+
 	}
 
 	public void testTransitive() throws MalformedURLException, IDMapperException
 	{
-		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL(), 
+		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL(),
 				new char[] { '\t' },
 				new char[] { ',' },
 				true);
-		
+
         Set<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(XREF1);
 
@@ -108,7 +108,7 @@ public class TestFile extends TestCase
         tgtDataSources.add(ENS_YEAST);
         tgtDataSources.add(ENTREZ);
         tgtDataSources.add(EMBL);
-        
+
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading
 		Map<Xref, Set<Xref>> mapXrefs = idMapper.mapID(srcXrefs, tgtDataSources);
@@ -116,10 +116,10 @@ public class TestFile extends TestCase
 		long delta = end - start;
 		System.out.println (delta);
 		measure.add ("timing::text file transitive", "" + delta, "msec");
-		
+
 		System.out.println (mapXrefs);
         Set<Xref> xrefs = mapXrefs.get(XREF1);
-        
+
         for (Xref xr : xrefs) {
             System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
         }
