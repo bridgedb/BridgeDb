@@ -79,6 +79,13 @@ public abstract class AbstractIDMapperCapabilities implements
 		return supportedDataSources;
 	}
 
+        /** {@inheritDoc} */
+        public boolean isMappingSupported(DataSource src, DataSource tgt)
+			throws IDMapperException  {
+            return getSupportedSrcDataSources().contains(src)
+                    && getSupportedTgtDataSources().contains(tgt);
+        }
+
 	/** {@inheritDoc} */
 	public boolean isFreeSearchSupported() 
 	{

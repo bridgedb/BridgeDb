@@ -45,6 +45,14 @@ public interface IDMapperCapabilities {
      * 	could not be determined because of service unavailability.
      */
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException;
+
+    /**
+     *
+     * @param src source data source
+     * @param dest target data source
+     * @return true if mapping is supported from src to des
+     */
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException ;
     
     /**
      * Return a value for a property, or null if this property is not defined.

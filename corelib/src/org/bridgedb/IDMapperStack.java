@@ -175,6 +175,18 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 			return result;
 		}
 
+                /** {@inheritDoc} */
+                public boolean isMappingSupported(DataSource src, DataSource tgt)
+                                throws IDMapperException {
+                    for (IDMapper idm : IDMapperStack.this.gdbs)
+                    {
+                        if (idm.getCapabilities().isMappingSupported(src, tgt)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
 		/**
 		 * @return true if free search is supported by one of the children
 		 */
