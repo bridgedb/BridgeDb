@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<project name="BridgeDb-Synergizer" default="dist" basedir=".">
+
+  <!-- always be java 1.5 compatible -->
+  <property name="ant.build.javac.target" value="1.5"/>
+  <property name="ant.build.javac.source" value="1.5"/>
+	
+  <property name="jar.name" value="../dist/bridgedb-synergizer.jar"/>
+  
+  <target name="prepare">
+	<mkdir dir="build"/>
+  </target>
+
+  <target name="build" depends="prepare">
+	<javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+		<classpath>
+			<pathelement location="../dist/bridgedb.jar"/>
+		</classpath>
+	</javac>
+  </target>
+  
+  <target name="jar" depends="build">
+	<jar jarfile="${jar.name}">
+	  <manifest>
+		<attribute name="Class-Path" value="bridgedb-bio.jar bridgedb.jar"/>
+	  </manifest>
+	  <fileset dir="build"/>
+	  <fileset dir="src" includes="**/*.properties"/>
+	</jar>
+  </target>
+
+  <target name="dist" depends="jar"/>
+
+  <target name="clean">
+	<delete dir="build"/>
+  </target>
+
+  <target name="dist-clean" depends="clean">
+	<delete file="${jar.name}"/>
+  </target>
+
+</project>
