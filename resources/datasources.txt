@@ -12,7 +12,7 @@ Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Stru
 SGD	D	http://www.yeastgenome.org/	http://db.yeastgenome.org/cgi-bin/locus.pl?locus=$ID	CUP1-2	gene	Saccharomyces cerevisiae	1	urn:miriam:sgd
 EC Number	E	http://www.brenda-enzymes.info/	http://www.brenda-enzymes.info/php/result_flat.php4?ecno=$ID	2.7.1.71	gene		1	urn:miriam:brenda
 Ecoli	Ec				gene	Escherichia coli	1	urn:bridgedb:ecoli
-EMBL	Em	http://www.ebi.ac.uk/embl	http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id=$ID	AL030996	gene		1	urn:bridgedb:embl
+EMBL	Em	http://www.ebi.ac.uk/embl	http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id=$ID	AL030996	gene		1	urn:miriam:insdc
 Ensembl	En	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Search/Summary?_q=$ID	ENSG00000139618	gene		0	urn:miriam:ensembl
 Ensembl Mosquito	EnAg	http://www.ensembl.org	http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$ID	AGAP006864	gene	Anopheles gambiae	1	urn:bridgedb:ensembl.mosquito
 Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?_q=$ID	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1	urn:bridgedb:ensembl.arabidopsis
@@ -39,7 +39,7 @@ Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/sear
 Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literature/pub_search?ref_id=$ID	6200	probe		0	urn:bridgedb:gramene.literature
 GenPept	Gp			AAH72400	probe		0	urn:bridgedb:genpept
 Gramene Pathway	Gp	http://www.gramene.org/pathway		PROTEIN-KINASE-RXN	probe		0	urn:bridgedb:gramene.pathway
-HUGO	H	http://www.genenames.org/	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$ID	25068	gene	Homo sapiens	1	urn:bridgedb:hugo
+HUGO	H	http://www.genenames.org/	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$ID	25068	gene	Homo sapiens	1	urn:miriam:hgnc
 HsGene	Hs				gene	Homo sapiens	1	urn:bridgedb:hsgene
 InterPro	I	http://www.ebi.ac.uk/interpro	http://www.ebi.ac.uk/interpro/IEntry?ac=$ID		domain		0	urn:miriam:interpro
 Illumina	Il			ILMN_5668	probe		0	urn:bridgedb:illumina
@@ -73,4 +73,4 @@ Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$ID	Acetate	m
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$ID	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	urn:bridgedb:wheat.gene.names
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$ID	WGS-95-1333	probe	Triticum aestivum	0	urn:bridgedb:wheat.gene.refs
 Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/Homo_sapiens/Search/Summary?species=all;idx=;q=$ID	1851_s_at	probe		0	urn:bridgedb:affymetrix
-ZFIN	Z	http://zfin.org	http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=$ID	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:bridgedb:zfin
+ZFIN	Z	http://zfin.org	http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=$ID	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin
