@@ -65,6 +65,26 @@ public class IDMapperStack implements IDMapper, AttributeMapper
         }
     }
     
+    private boolean isTransitive = false;
+    
+    /**
+     * Set Transitivity mode, where all mappings are combined to infer
+     * second degree mappings.
+     * @param value true or false
+     */
+    public void setTransitive(boolean value)
+    {
+    	isTransitive = value;
+    }
+    
+    /**
+     * @return true if the stack is in transitive mode
+     */
+    public boolean getTransitive()
+    {
+    	return isTransitive;
+    }
+    
 	/**
 	 * Remove an idMapper from the stack.
 	 * @param idMapper IDMapper to be removed.
@@ -243,6 +263,26 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
 			Set<DataSource> tgtDataSources) throws IDMapperException 
 	{
+		if (isTransitive)
+		{
+			return mapIDtransitive(srcXrefs, tgtDataSources);
+		}
+		else
+		{
+			return mapIDnormal(srcXrefs, tgtDataSources);
+		}
+	}
+
+	/**
+	 * helper method to map Id's in non-transitive mode.
+	 * @param srcXrefs mapping source
+	 * @param tgtDataSources target data sources
+	 * @return mapping result
+	 * @throws IDMapperException if one of the children fail
+	 */
+	private Map<Xref, Set<Xref>> mapIDnormal(Set<Xref> srcXrefs,
+			Set<DataSource> tgtDataSources) throws IDMapperException 
+	{
 		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 		
 		for (IDMapper child : gdbs)
@@ -262,6 +302,19 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * helper method to map Id's in transitive mode.
+	 * @param srcXrefs mapping source
+	 * @param tgtDataSources target data sources
+	 * @return mapping result
+	 * @throws IDMapperException if one of the children fail
+	 */
+	private Map<Xref, Set<Xref>> mapIDtransitive(Set<Xref> srcXrefs,
+			Set<DataSource> tgtDataSources) throws IDMapperException 
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	/** {@inheritDoc} */
@@ -324,16 +377,47 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	/** {@inheritDoc} */
 	public Set<Xref> mapID(Xref ref, Set<DataSource> resultDs) throws IDMapperException 
 	{
+		if (isTransitive)
+		{
+			return mapIDtransitive (ref, resultDs);
+		}
+		else
+		{
+			return mapIDnormal (ref, resultDs);
+		}
+	}
+	
+	
+	/**
+	 * helper method to map Id's in transitive mode.
+	 * @param ref Xref to map
+	 * @param resultDs target data sources
+	 * @return mapping result
+	 * @throws IDMapperException if one of the children fail
+	 */
+	private Set<Xref> mapIDtransitive(Xref ref, Set<DataSource> resultDs) throws IDMapperException 
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * helper method to map Id's in transitive mode.
+	 * @param ref Xref to map
+	 * @param resultDs target data sources
+	 * @return mapping result
+	 * @throws IDMapperException if one of the children fail
+	 */
+	private Set<Xref> mapIDnormal(Xref ref, Set<DataSource> resultDs) throws IDMapperException 
+	{
 		Set<Xref> result = new HashSet<Xref>();
 		for (IDMapper child : gdbs)
 		{
-			if (child != null && child instanceof AttributeMapper && child.isConnected())
+			if (child != null && child.isConnected())
 			{
 				result.addAll (child.mapID(ref, resultDs));
 			}
 		}
 		return result;
 	}
-	
 	
 }
