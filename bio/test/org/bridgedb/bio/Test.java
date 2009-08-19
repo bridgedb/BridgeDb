@@ -49,6 +49,16 @@ public class Test extends TestCase
 		BioDataSource.init();
 	}
 
+	public void testInit()
+	{
+		for (DataSource ds : DataSource.getDataSources())
+		{
+			assertNotNull(ds);
+			assertNotNull(ds.getFullName());
+			assertNotNull(ds.getSystemCode());
+		}
+	}
+	
 	public void testURN()
 	{
 		Xref ref = new Xref ("3643", BioDataSource.ENTREZ_GENE);

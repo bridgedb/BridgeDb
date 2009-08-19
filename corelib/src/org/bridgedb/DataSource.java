@@ -339,7 +339,7 @@ public final class DataSource
 	 */
 	public static DataSource getBySystemCode(String systemCode)
 	{
-		if (!bySysCode.containsKey(systemCode))
+		if (!bySysCode.containsKey(systemCode) && isSuitableKey(systemCode))
 		{
 			register (systemCode, null);
 		}
@@ -355,7 +355,7 @@ public final class DataSource
 	 */
 	public static DataSource getByFullName(String fullName)
 	{
-		if (!byFullName.containsKey(fullName))
+		if (!byFullName.containsKey(fullName) && isSuitableKey(fullName))
 		{
 			register (null, fullName);
 		}
