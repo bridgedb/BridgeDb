@@ -139,7 +139,6 @@ public class IDMapperBiomart extends IDMapperWebservice {
      * @param dataset name of dataset
      * @param idOnlyForTgtDataSource id-only option, filter data source ends
      *        with 'ID' or 'Accession'.
-     * @param transitivity transitivity option
      * @throws IDMapperException if failed to link to the dataset
      */
     public IDMapperBiomart(String mart, String dataset,
@@ -167,7 +166,6 @@ public class IDMapperBiomart extends IDMapperWebservice {
      * @param baseURL base url of BioMart
      * @param idOnlyForTgtDataSource id-only option, filter data source ends
      *        with 'ID' or 'Accession'.
-     * @param transitivity transitivity option
      * @throws IDMapperException if failed to link to the dataset
      */
     public IDMapperBiomart(String mart, String dataset, String baseURL,
@@ -334,9 +332,9 @@ public class IDMapperBiomart extends IDMapperWebservice {
     }
 
     /**
-     * Get supported source data sources
+     * Get supported source data sources.
      * @return supported source data sources
-     * @throws IOException if failed to read the filters
+     * @throws IDMapperException if failed to read the filters
      */
     protected Set<DataSource> getSupportedSrcDataSources()
             throws IDMapperException {
@@ -352,9 +350,9 @@ public class IDMapperBiomart extends IDMapperWebservice {
     }
 
     /**
-     * Get supported target data sources
+     * Get supported target data sources.
      * @return supported target data sources
-     * @throws IOException if failed to read the filters
+     * @throws IDMapperException if failed to read the filters
      */
     protected Set<DataSource> getSupportedTgtDataSources() 
             throws IDMapperException {

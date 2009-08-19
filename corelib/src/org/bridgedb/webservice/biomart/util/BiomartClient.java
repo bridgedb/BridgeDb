@@ -126,9 +126,9 @@ public final class BiomartClient {
 
     /**
      *
-     * @param dataset
-     * @param filter
-     * @return
+     * @param dataset dataset name
+     * @param filter filter name
+     * @return Attribute converted from filter
      */
     public Attribute filterToAttribute(String dataset, String filter) {
         Attribute attr;

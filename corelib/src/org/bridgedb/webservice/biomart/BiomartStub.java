@@ -22,17 +22,12 @@ import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
-import org.bridgedb.file.IDMappingReaderFromDelimitedReader;
 import org.bridgedb.webservice.biomart.util.Attribute;
 import org.bridgedb.webservice.biomart.util.BiomartClient;
 import org.bridgedb.webservice.biomart.util.Database;
@@ -43,23 +38,19 @@ import org.bridgedb.webservice.biomart.util.XMLQueryBuilder;
 import org.xml.sax.SAXException;
 
 /**
- * Cache for SynergizerClient
+ * Wrapp-up for BiomartClient.
  * @author gjj
  */
-public class BiomartStub {
+public final class BiomartStub {
     public static final String defaultBaseURL
             = BiomartClient.defaultBaseURL;
-
-    // cache data
-//    private Map<String,Map<String,Map<String,Set<String>>>>
-//            mapAuthSpeciesDomainRange = null;
 
     // one instance per url
     private static Map<String, BiomartStub> instances = new HashMap();
 
     /**
      *
-     * @return SynergizerStub with the default server url
+     * @return BiomartStub with the default server url
      * @throws IOException if failed to connect
      */
     public static BiomartStub getInstance() throws IOException {
@@ -69,7 +60,7 @@ public class BiomartStub {
     /**
      *
      * @param baseUrl server url
-     * @return SynergizerStub from the server
+     * @return BiomartStub from the server
      * @throws IOException if failed to connect
      */
     public static BiomartStub getInstance(String baseUrl) throws IOException {
@@ -128,7 +119,6 @@ public class BiomartStub {
      *
      * @param mart mart name
      * @return mart display name or null if not exist
-     * @throws IDMapperException if failed to connect
      */
     public String martDisplayName(String mart) {
         if (mart==null) {
@@ -141,9 +131,8 @@ public class BiomartStub {
 
     /**
      *
-     * @param authority mart name
+     * @param mart mart name
      * @return available datasets from this mart
-     * @throws IDMapperException if failed
      */
     public Set<String> availableDatasets(String mart)
             throws IDMapperException {
@@ -169,7 +158,6 @@ public class BiomartStub {
      *
      * @param dataset dataset name
      * @return dataset display name or null if not exist
-     * @throws IDMapperException if failed to connect
      */
     public String datasetDisplayName(String dataset) {
         if (dataset==null) {
@@ -210,10 +198,12 @@ public class BiomartStub {
 
     /**
      *
-     * @param mart mart name
-     * @param dataset dataset name
+     * @param mart mart name.
+     * @param dataset dataset name.
+     * @param idOnly filter the attributes ending with "ID" or "Accession"
+     *        if true; no filter otherwise.
      * @return attribute names / target id types of the dataset from this
-     *         mart
+     *         mart.
      * @throws IDMapperException if failed.
      */
     public Set<String> availableAttributes(final String mart,
@@ -238,7 +228,8 @@ public class BiomartStub {
         if (idOnly) {
             result = new HashSet();
             for (String name : attributes.keySet()) {
-                String displayName = client.getAttribute(dataset, name).getDisplayName();
+                String displayName = client.getAttribute(dataset, name)
+                        .getDisplayName();
                 if (displayName.endsWith("ID")
                         || displayName.endsWith("Accession")
                         || name.endsWith("id")
@@ -263,7 +254,7 @@ public class BiomartStub {
      * @return map from source id to target ids
      *         key: source id
      *         value: corresponding target ids
-     * @throws IDMapperException
+     * @throws IDMapperException if failed to connect
      */
     public Map<String,Set<String>[]> translate(final String mart,
             final String dataset, final String filter,
