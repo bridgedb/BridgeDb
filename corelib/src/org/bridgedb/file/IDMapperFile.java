@@ -40,7 +40,7 @@ public abstract class IDMapperFile implements IDMapper {
      * Constuctor from a {@link IDMappingReader}. transitivity is unsupported
      * by default.
      * @param reader ID mapping reader
-     * @throws java.io.IDMapperException when failed to read
+     * @throws IDMapperException when failed to read
      */
     public IDMapperFile(final IDMappingReader reader) throws IDMapperException
     {
@@ -81,9 +81,9 @@ public abstract class IDMapperFile implements IDMapper {
         Set<DataSource> supportedTgtDatasources = cap.getSupportedTgtDataSources();
         Set<DataSource> tgtDss;
         if (tgtDataSources==null) {
-            tgtDss = new HashSet(cap.getSupportedTgtDataSources());
+            tgtDss = new HashSet<DataSource>(cap.getSupportedTgtDataSources());
         } else {
-            tgtDss = new HashSet(tgtDataSources);
+            tgtDss = new HashSet<DataSource>(tgtDataSources);
             tgtDss.retainAll(supportedTgtDatasources);
         }
 
@@ -107,7 +107,7 @@ public abstract class IDMapperFile implements IDMapper {
 
             Set<Xref> tgtRefs = result.get(srcXref);
             if (tgtRefs==null) {
-                tgtRefs = new HashSet();
+                tgtRefs = new HashSet<Xref>();
                 result.put(srcXref, tgtRefs);
             }
 
@@ -159,7 +159,10 @@ public abstract class IDMapperFile implements IDMapper {
 
     private boolean isConnected = true;
     // In the case of IDMapperFile, there is no need to discard associated resources.
+    
+    /** {@inheritDoc} */
     public void close() throws IDMapperException { isConnected = false; }
+    /** {@inheritDoc} */
     public boolean isConnected() { return isConnected; }
     
     /**

@@ -49,10 +49,11 @@ public interface IDMapperCapabilities {
     /**
      *
      * @param src source data source
-     * @param dest target data source
+     * @param tgt target data source
      * @return true if mapping is supported from src to des
+     * @throws IDMapperException if service is unavailable
      */
-    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException ;
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException;
     
     /**
      * Return a value for a property, or null if this property is not defined.

@@ -27,6 +27,12 @@ import java.util.regex.Pattern;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 
+/**
+ * Definition of many common biological DataSources.
+ * Meta data about these Data Sources, such as URL templates,
+ * are read from a bundled text file. Call the init() method
+ * at the start of your program to initialize all meta data.  
+ */
 public class BioDataSource 
 {
 	public static final DataSource TAIR = DataSource.register (
@@ -453,7 +459,7 @@ public class BioDataSource
 	}
 	
 	/**
-	 * @returns the species-specific Ensembl DataSource corresponding to a given organism, or null if there isn't one known.
+	 * @return the species-specific Ensembl DataSource corresponding to a given organism, or null if there isn't one known.
 	 * @param org an organism
 	 */
 	public static DataSource getSpeciesSpecificEnsembl(Organism org)

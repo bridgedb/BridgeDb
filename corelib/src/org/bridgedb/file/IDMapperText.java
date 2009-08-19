@@ -41,10 +41,13 @@ public class IDMapperText extends IDMapperFile
 		BridgeDb.register ("idmapper-text", new Driver());
 	}
 	
-	private static class Driver implements org.bridgedb.Driver
+	/** Knows how to instantiate IDMapperText. */
+	private static final class Driver implements org.bridgedb.Driver
 	{
-            private Driver() {} // prevent outside instantiation;
+			/** prevent outside instantiation. */
+            private Driver() {}
 		
+            /** {@inheritDoc} */
             public IDMapper connect(String location) throws IDMapperException
             {
                 // parse arguments to determine idsep and dssep
@@ -109,8 +112,15 @@ public class IDMapperText extends IDMapperFile
                 }
             }
 
+            /** 
+             * parse the separator list part of the connection string.
+             * \@ or \t will be unescaped.
+             * @param config the connection string to parse
+             * @param head the section to look for, either dssep or idsep
+             * @return separators
+             */
             private char[] parseConfig(String config, String head) {
-                Set<Character> delimiters = new HashSet();
+                Set<Character> delimiters = new HashSet<Character>();
                 Pattern p = Pattern.compile(head+"=(.|\\t|\\@),",
                         Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(config);
@@ -141,10 +151,10 @@ public class IDMapperText extends IDMapperFile
         
 	}
 
-    protected final URL url;
-    protected char[] dataSourceDelimiters;
-    protected char[] idDelimiters;
-    protected boolean transitivity;
+    private final URL url;
+    private char[] dataSourceDelimiters;
+    private char[] idDelimiters;
+    private boolean transitivity;
 
     /**
      * Constructor from the {@link URL} of a tab-delimited text file.
@@ -204,6 +214,11 @@ public class IDMapperText extends IDMapperFile
 
     /**
      * Free search is not supported for delimiter-text file.
+     * This will throw UnsupportedOperationException
+     * @param text ignored
+     * @param limit ignored
+     * @return does not return
+     * @throws IDMapperException will not be thrown
      */
     public Set<Xref> freeSearch (String text, int limit) throws IDMapperException {
         throw new UnsupportedOperationException();

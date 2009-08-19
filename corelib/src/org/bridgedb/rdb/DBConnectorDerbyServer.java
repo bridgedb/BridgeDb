@@ -28,18 +28,18 @@ import javax.naming.OperationNotSupportedException;
 import org.bridgedb.IDMapperException;
 
 /**
- * Database connector that connects to a Derby database server
+ * Database connector that connects to a Derby database server.
  */
 public class DBConnectorDerbyServer extends DBConnector {
 	
 	static private String host;
 	static private int port;
-	static boolean inited = false;
+	static private boolean inited = false;
 	
 	/**
-	 * Initialize global settings that will be shared by all instances of DBConnectorDerbyServer
-	 * @param host	The host on which the database resides
-	 * @param port	The port to create the connection on
+	 * Initialize global settings that will be shared by all instances of DBConnectorDerbyServer.
+	 * @param aHost	The host on which the database resides
+	 * @param aPort	The port to create the connection on
 	 */
 	static public void init (String aHost, int aPort)
 	{
