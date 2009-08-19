@@ -11,26 +11,38 @@
 	<mkdir dir="build"/>
   </target>
 
+  <path id="class.path">
+    <fileset dir="lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="../dist">
+      <include name="bridgedb.jar"/>
+      <include name="bridgedb-bio.jar"/>
+    </fileset>
+  </path>
+
   <target name="build" depends="prepare">
 	<javac srcdir="src"
 		   includes="**"
 		   debug="true"
 		   destdir="build">
-		<classpath>
-			<pathelement location="../dist/bridgedb.jar"/>
-			<pathelement location="../dist/bridgedb-bio.jar"/>
-		</classpath>
+		<classpath refid="class.path"/>
 	</javac>
   </target>
   
   <target name="jar" depends="build">
+    <manifestclasspath property="manifest.cp" jarfile="${jar.name}">
+      <classpath refid="class.path" />
+    </manifestclasspath>
+    <echo>${manifest.cp}</echo>
 	<jar jarfile="${jar.name}">
 	  <manifest>
-		<attribute name="Class-Path" value="bridgedb-bio.jar bridgedb.jar"/>
+		<attribute name="Class-Path" value="${manifest.cp}"/>
 	  </manifest>
 	  <fileset dir="build"/>
 	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
+    <copy toDir="../dist"><path refid="class.path"/></copy>
   </target>
 
   <target name="dist" depends="jar"/>
