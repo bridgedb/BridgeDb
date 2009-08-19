@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 
-package org.bridgedb.webservice.biomart;
+package org.bridgedb.webservice.biomart.util;
 
 /**
  * Class Filter, storing information on filters in BioMart.

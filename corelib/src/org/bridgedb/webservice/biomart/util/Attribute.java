@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 
-package org.bridgedb.webservice.biomart;
+package org.bridgedb.webservice.biomart.util;
 
 /**
  * Attribute, corresponding to attribute in BioMart.

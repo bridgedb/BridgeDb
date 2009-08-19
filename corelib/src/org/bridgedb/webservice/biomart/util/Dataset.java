@@ -15,58 +15,51 @@
 // limitations under the License.
 //
 
-package org.bridgedb.webservice.biomart;
-
-import java.util.Map;
+package org.bridgedb.webservice.biomart.util;
 
 /**
- * Database, corresponding to database/mart in BioMart.
+ * Dataset, corresponding to dataset in BioMart.
  * @author gjj
  */
-public class Database {
-    private String dbname;
-    private Map<String, String> param;
+public class Dataset {
+    private String name;
+    private String displayName;
+    private Database database;
 
     /**
      *
-     * @param dbname database name
-     * @param param database parameters
+     * @param name dataset name
+     * @param displayName dataset display name
+     * @param database database/mart of the dataset
      */
-    public Database(String dbname, Map<String, String> param) {
-        this.dbname = dbname;
-        this.param = param;
+    public Dataset(String name, String displayName, Database database) {
+		this.name = name;
+        this.displayName = displayName;
+        this.database = database;
     }
 
     /**
      *
-     * @return database name
+     * @return dataset name
      */
     public String getName() {
-        return dbname;
+        return name;
     }
 
     /**
      *
-     * @return database parameters
-     */
-    public Map<String, String> getParam() {
-        return param;
-    }
-
-    /**
-     *
-     * @return true if visible; false otherwise
-     */
-    public boolean visible() {
-        return param.get("visible").equals("1");
-    }
-
-    /**
-     *
-     * @return database display name
+     * @return dataset display name
      */
     public String displayName() {
-        return param.get("displayName");
+        return displayName;
+    }
+
+    /**
+     *
+     * @return database/mart which this dataset belongs to
+     */
+    public Database getDatabase() {
+        return database;
     }
 
     /**
@@ -75,4 +68,5 @@ public class Database {
     public String toString() {
         return displayName();
     }
+
 }

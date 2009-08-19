@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 
-package org.bridgedb.webservice.biomart;
+package org.bridgedb.webservice.biomart.util;
 
 import java.io.StringWriter;
 import java.util.Map;

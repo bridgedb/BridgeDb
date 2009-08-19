@@ -15,58 +15,64 @@
 // limitations under the License.
 //
 
-package org.bridgedb.webservice.biomart;
+package org.bridgedb.webservice.biomart.util;
+
+import java.util.Map;
 
 /**
- * Dataset, corresponding to dataset in BioMart.
+ * Database, corresponding to database/mart in BioMart.
  * @author gjj
  */
-public class Dataset {
-    private String name;
-    private String displayName;
-    private Database database;
+public class Database {
+    private String dbname;
+    private Map<String, String> param;
 
     /**
      *
-     * @param name dataset name
-     * @param displayName dataset display name
-     * @param database database/mart of the dataset
+     * @param dbname database name
+     * @param param database parameters
      */
-    public Dataset(String name, String displayName, Database database) {
-		this.name = name;
-        this.displayName = displayName;
-        this.database = database;
+    public Database(String dbname, Map<String, String> param) {
+        this.dbname = dbname;
+        this.param = param;
     }
 
     /**
      *
-     * @return dataset name
+     * @return database name
      */
     public String getName() {
-        return name;
+        return dbname;
     }
 
     /**
      *
-     * @return dataset display name
+     * @return database parameters
      */
-    public String getDisplyName() {
-        return displayName;
+    public Map<String, String> getParam() {
+        return param;
     }
 
     /**
      *
-     * @return database/mart which this dataset belongs to
+     * @return true if visible; false otherwise
      */
-    public Database getDatabase() {
-        return database;
+    public boolean visible() {
+        return param.get("visible").equals("1");
+    }
+
+    /**
+     *
+     * @return database display name
+     */
+    public String displayName() {
+        return param.get("displayName");
     }
 
     /**
      * {@inheritDoc}
      */
     public String toString() {
-        return getDisplyName();
+        return displayName();
     }
-
 }

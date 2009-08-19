@@ -16,6 +16,7 @@
 //
 package org.bridgedb;
 
+import org.bridgedb.webservice.biomart.util.BiomartClient;
 import buildsystem.Measure;
 
 import java.io.File;
@@ -29,7 +30,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.bridgedb.webservice.IDMapperBiomart;
+import org.bridgedb.webservice.biomart.IDMapperBiomart;
 import org.bridgedb.webservice.biomart.*;
 
 /**
@@ -40,27 +41,15 @@ public class TestBiomart extends TestCase
     public void testBiomartStub() throws IOException, IDMapperException {
         BiomartStub biomartStub = BiomartStub.getInstance();
 
-        Map<String, Database> reg = null;
-        try {
-            reg = biomartStub.getRegistry();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Set<String> marts = biomartStub.availableMarts();
 
-        Set<Database> dbs = new HashSet(reg.size());
-        for (Database db : reg.values()) {
-            //if (db.visible()) {
-                dbs.add(db);
-            //}
-        }
-
-        for (Database db : dbs) {
-        	System.out.println (db.getName());
-            Set<Dataset> datasets = new HashSet(biomartStub.getAvailableDatasets(db.getName()));
+        for (String mart : marts) {
+            System.out.println (mart);
+            Set<String> datasets = biomartStub.availableDatasets(mart);
             int nds = datasets.size();
-            for (Dataset ds : datasets) {
-            	System.out.println ("\t" + ds.getName());
-                IDMapperBiomart idMapper = new IDMapperBiomart(db.getName(),ds.getName());
+            for (String ds : datasets) {
+            	System.out.println ("\t" + ds);
+                IDMapperBiomart idMapper = new IDMapperBiomart(mart, ds);
                 //IDMapper idMapper = BridgeDb.connect("idmapper-biomart:dataset="+ds.getName());
                 IDMapperCapabilities cap = idMapper.getCapabilities();
                 if (cap.getSupportedSrcDataSources().isEmpty()
@@ -82,7 +71,7 @@ public class TestBiomart extends TestCase
 //            }
         }
     }
-    
+
     public void testBioMartConnector() throws IOException, IDMapperException
     {
 //        BiomartStub biomartStub = BiomartStub.getInstance();
@@ -100,9 +89,9 @@ public class TestBiomart extends TestCase
 //                System.out.println (db.getName());
 //         }
         //BiomartStub biomartStub = BiomartStub.getInstance();
-        
+
         //Set<Dataset> datasets = new HashSet(biomartStub.getAvailableDatasets("ensembl"));
-        
+
          IDMapperBiomart mapper = new IDMapperBiomart("ensembl", "hsapiens_gene_ensembl");
          System.out.println("\n===Supported source data sources===");
          for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
@@ -119,14 +108,11 @@ public class TestBiomart extends TestCase
 
     public void testBioMartConnector2() throws IOException, IDMapperException, ClassNotFoundException
     {
-        BiomartStub biomartStub = BiomartStub.getInstance();
         
-        Class.forName("org.bridgedb.webservice.IDMapperBiomart");
-        
-        biomartStub.getAvailableDatasets("ensembl");
+        Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
         
          //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
-        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:mart=ensembl&dataset=hsapiens_gene_ensembl");
+        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:id-type-filter=false@http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
         System.out.println("\n===Supported source data sources===");
          for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
          {
