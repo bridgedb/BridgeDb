@@ -17,17 +17,21 @@ import junit.framework.TestCase;
 
 public class TestStack extends TestCase
 {
-
-	static final String GDB_HUMAN = 
+	private static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
-	static final File YEAST_ID_MAPPING = new File ("../test-data/yeast_id_mapping.txt");
+	private static final File YEAST_ID_MAPPING = new File ("../test-data/yeast_id_mapping.txt");
+	private static final File NUGO_CUSTOM_MAPPINGS = new File ("/home/martijn/prg/bridgedb/test-data/Nugo-hs-custom.txt");
 
-	Set<Xref> src = new HashSet<Xref>();
-	Set<DataSource> dsset = new HashSet<DataSource>();
-	static final Xref RAD51 = new Xref ("YER095W", BioDataSource.ENSEMBL_SCEREVISIAE);
-	static final Xref INSR = new Xref ("Hs.705877", BioDataSource.UNIGENE);
-	
+	private Set<Xref> src = new HashSet<Xref>();
+	private Set<DataSource> dsset = new HashSet<DataSource>();
+	private static final Xref RAD51 = new Xref ("YER095W", BioDataSource.ENSEMBL_SCEREVISIAE);
+	private static final Xref INSR = new Xref ("Hs.705877", BioDataSource.UNIGENE);
+
+	private static final Xref NUGO = new Xref ("NuGO_eht0320285_at", BioDataSource.AFFY);
+	private static final Xref ENSEMBL = new Xref ("ENSG00000026652", BioDataSource.ENSEMBL);
+	private static final Xref ENTREZ = new Xref ("56895", BioDataSource.ENTREZ_GENE);
+
 	public void setUp() throws ClassNotFoundException
 	{
 		BioDataSource.init();
@@ -81,5 +85,43 @@ public class TestStack extends TestCase
 		expected.add (new Xref ("856831", BioDataSource.ENTREZ_GENE));
 		assertEquals (expected, refmap.get(RAD51));
 	}
+
+	public void testTransitive() throws IDMapperException, ClassNotFoundException, MalformedURLException
+	{		 
+		IDMapper textMapper = BridgeDb.connect ("idmapper-text:" + NUGO_CUSTOM_MAPPINGS.toURL());
+		IDMapper derbyMapper = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		IDMapperStack stack = new IDMapperStack();
+		stack.addIDMapper(derbyMapper);
+		stack.addIDMapper(textMapper);
 	
+		stack.setTransitive(false);
+		
+		// test the link between NUGO and ENSEMBL that only occurs in text		
+		Set<Xref> result = stack.mapID(NUGO, null);
+		assertTrue(result.contains(ENSEMBL));
+		assertFalse(result.contains(ENTREZ));
+				
+		// test the link between ENTREZ and ENSEMBL that only occurs in pgdb
+		result = stack.mapID(ENTREZ, null);		
+		assertFalse(result.contains(NUGO));
+		assertTrue(result.contains(ENSEMBL));
+		
+		stack.setTransitive(true);
+
+		// test transitive
+		result = stack.mapID(NUGO, null);
+		assertTrue(result.contains(ENTREZ));
+		assertTrue(result.contains(ENSEMBL));
+		
+		// and the other way around
+		result = stack.mapID(ENTREZ, null);
+		assertTrue(result.contains(NUGO));
+		assertTrue(result.contains(ENSEMBL));
+
+		// map multiple IDs
+		Set<Xref> set1 = new HashSet<Xref>();
+		set1.add (ENTREZ);
+		Map<Xref, Set<Xref>> result2 = stack.mapID(set1, null);
+		assertTrue (result2.get(ENTREZ).contains(NUGO));
+	}
 }
