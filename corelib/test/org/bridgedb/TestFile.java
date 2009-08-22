@@ -91,6 +91,10 @@ public class TestFile extends TestCase
         for (Xref xr : xrefs) {
             System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
         }
+        
+        Xref nonsense = new Xref ("Humbug", DataSource.getByFullName("Ebenizer Scrooge"));
+        // non-existent id should just return empty list.
+        assertEquals (0, idMapper.mapID(nonsense, null).size());
 
 	}
 

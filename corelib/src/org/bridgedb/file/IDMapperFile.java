@@ -130,7 +130,8 @@ public abstract class IDMapperFile implements IDMapper {
             return result;
         }
 
-        for (Xref destRef : mapXrefs.get(srcXref))
+        Set<Xref> destRefs = mapXrefs.get(srcXref);
+        if (destRefs != null) for (Xref destRef : mapXrefs.get(srcXref))
         {
             if (tgtDataSources == null || tgtDataSources.contains(destRef.getDataSource()))
             {
