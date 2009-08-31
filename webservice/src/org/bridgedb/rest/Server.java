@@ -25,8 +25,13 @@ public class Server {
 		
 	public static void main(String[] args) 
 	{
+		int port = 8183; // default port
+		if ( args.length > 0 )
+		{
+		  port = new Integer( args[0] ).intValue();
+		}
 		Component component = new Component();
-		component.getServers().add(Protocol.HTTP, 8183);
+		component.getServers().add(Protocol.HTTP, port);
 		
 		File configFile = null;
 		

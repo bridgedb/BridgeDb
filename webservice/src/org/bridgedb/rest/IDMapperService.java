@@ -63,39 +63,39 @@ public class IDMapperService extends Application {
     
     /*
 	 * URL pattern for:
-	 * /model/<organism>/<system>/<id>/xrefs[?dataSource=<dsCode>]
+	 * //<organism>/model/<system>/<id>/xrefs[?dataSource=<dsCode>]
 	 */
-	public static final String URL_XREFS = "/model/{" + PAR_ORGANISM + "}/{" + PAR_SYSTEM + "}/{" 
+	public static final String URL_XREFS = "/{" + PAR_ORGANISM + "}/model/{" + PAR_SYSTEM + "}/{" 
 											+ PAR_ID + "}/xrefs";
         /*
          * URL pattern for:
-         * /model/<organism>/xrefsByAttr?attrName=<attrName>&attrValue=<attrValue>
+         * /<organism>/model/xrefsByAttr?attrName=<attrName>&attrValue=<attrValue>
          */
-        public static final String URL_XREFS_BY_ATTR = "/model/{" + PAR_ORGANISM + "}/xrefsByAttr";
+        public static final String URL_XREFS_BY_ATTR = "/{" + PAR_ORGANISM + "}/model/xrefsByAttr";
 
         /* 
          * URL pattern for:
-         * /model/<organism>/<system>/<id>/backPageText
+         * /<organism>/model/<system>/<id>/backPageText
          */
-        public static final String URL_BACK_PAGE_TEXT = "/model/{" + PAR_ORGANISM + "}/{" + PAR_SYSTEM + "}/{" + 
+        public static final String URL_BACK_PAGE_TEXT = "/{" + PAR_ORGANISM + "}/model/{" + PAR_SYSTEM + "}/{" + 
             PAR_ID + "}/backPageText";
 
         /*
 	 * URL pattern for:
-	 * /search/<organism>/symbol/<searchStr>&limit=<limit>
+	 * /<organism>/search/symbol/<searchStr>&limit=<limit>
          */
-        public static final String URL_SEARCH_SYMBOL = "/search/{" + PAR_ORGANISM + "}/symbol/{" + PAR_SEARCH_STR + "}";
+        public static final String URL_SEARCH_SYMBOL = "/{" + PAR_ORGANISM + "}/search/symbol/{" + PAR_SEARCH_STR + "}";
 
         /*
 	 * URL pattern for:
-	 * /search/<organism>/id/<searchStr>&limit=<limit>
+	 * /<organism>/search/id/<searchStr>&limit=<limit>
 	 */
-    public static final String URL_SEARCH_ID = "/search/{" + PAR_ORGANISM + "}/id/{" + PAR_SEARCH_STR + "}";
+    public static final String URL_SEARCH_ID = "/{" + PAR_ORGANISM + "}/search/id/{" + PAR_SEARCH_STR + "}";
         /*
 	 * URL pattern for:
-	 * /search/symbolOrId/<searchStr>&limit=<limit>
+	 * /<organism>/search/symbolOrId/<searchStr>&limit=<limit>
 	 */
-    public static final String URL_SEARCH_SYMBOL_OR_ID = "/search/{" + PAR_ORGANISM + "}/symbolOrId/{" + PAR_SEARCH_STR + "}";
+    public static final String URL_SEARCH_SYMBOL_OR_ID = "/{" + PAR_ORGANISM + "}/search/symbolOrId/{" + PAR_SEARCH_STR + "}";
 
 	private GdbProvider gdbProvider;
 	
