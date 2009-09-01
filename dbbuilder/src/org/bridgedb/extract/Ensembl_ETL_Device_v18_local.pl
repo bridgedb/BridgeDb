@@ -24,7 +24,11 @@
 #     -	Added INSERT INTO 'attr' tables for Attributes in CS databases
 # v18 - Nov 2008
 #     - Added new systems for plant databases from Gramene
+# SVN Revisions:
+#    Aug 2009
+#	- Added support for GO term names and definitions (release 55+)  
 ###########################################################################
+
 
 #use Devel::Size qw(total_size);
 use strict;
@@ -32,10 +36,14 @@ use DBI;
 use HashSpeciesList;
 use lib '/home/apico/src/ensembl/modules';
 use lib '/home/apico/src/ensembl-compara/modules';
+use lib '/home/apico/src/ensembl-variation/modules';
+use lib '/home/apico/src/ensembl-functgenomics/modules';
 use lib '/home/apico/bioperl-live'; 
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBConnection;
 use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
+use Bio::EnsEMBL::DBSQL::GOTermAdaptor;
+use Bio::EnsEMBL::OntologyTerm;
 my $api_path = "/home/apico/src/ensembl/modules";
 
 ## Under script control
@@ -127,7 +135,8 @@ print "
      password: CVSUSER  (yes, in all caps)
   5) cvs -d :pserver:cvsuser\@cvs.sanger.ac.uk:/cvsroot/CVSmaster co -r branch-ensembl-## ensembl-compara
       (where ## is replaced with the latest release number, e.g., 41)
-  6) Increase region cache size in ensembl/modules/Bio/EnsEMBL/Utils/SeqRegionCache.pm SEQ_REGION_CACHE_SIZE from 40000 to 250000
+  6) repeat as necessary for 'ensembl-variation' and ensembl-functgenomics'
+  7) Increase region cache size in ensembl/modules/Bio/EnsEMBL/Utils/SeqRegionCache.pm SEQ_REGION_CACHE_SIZE from 40000 to 250000
 	to allow for performance enhancement by slice_adaptor->fetch_all(toplevel)
  These steps will update the local copy of the Ensembl API by overwriting the
  folder /home/apico/src/ensembl/ and /home/apico/src/ensembl-compara.
@@ -398,8 +407,9 @@ foreach my $db_adaptor (@db_adaptors) {
 # get gene adaptor to query gene information
 # get slice adaptor to load 'top-level' regions into SeqRegionCache
 # get database adaptors to identify the name of latest species database
-my $gene_adaptor = Bio::EnsEMBL::Registry->get_adaptor($species, "core", "gene");
-my $slice_adaptor = Bio::EnsEMBL::Registry->get_adaptor($species, "core", "slice");
+my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
+my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
+my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
 my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
@@ -643,10 +653,12 @@ while (my $gene = pop(@$genes))
 					       ]);
 	%{$GeneTables{GeneOntology}} = ('NAME' => ['GeneOntology', 'T'], 
 					'SYSTEM' => ["\'The Gene Ontology\'", "\'$dateArg\'", 
-						     "\'ID\|\'", "\'\|$species\|\'", "\'\'",
+						     "\'ID|Name\\\\sBF|Type\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						     "\'http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=~\'", "\'\|I\|\'", 
 						     "\'ftp://ftp.geneontology.org/pub/go/ontology/\'"],
 					'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+						     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+						     'Type VARCHAR(128) NOT NULL DEFAULT \'\'',
 						     'PRIMARY KEY (ID)'
 						     ]);
 	%{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'], 
@@ -1647,7 +1659,13 @@ sub parse_DBEntries {
     	elsif ($dbe_dbname =~ /^\'GO\'$/){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{GeneOntology}{$dbe_primary_id}}++){
-		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id];
+		# Get GO term annotations using $go_adaptor
+		my $acc = $dbe_primary_id;
+		$acc =~ s/\'//g; # strip single quotes to use as variable
+		my $term = $go_adaptor->fetch_by_accession($acc);
+		my $name = mysql_quotes($term->name()); #e.g., plasma membrane
+		my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
+		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $name, $namespace];
 		$$Ensembl_GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$gene_stable_id, $dbe_primary_id];
 		++$subcount{GeneOntology};
 	    }
