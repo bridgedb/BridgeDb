@@ -260,6 +260,15 @@ public final class BiomartStub {
             final String dataset, final String filter,
             final String[] attributes, final Set<String> ids)
             throws IDMapperException {
+        if (mart==null||dataset==null||filter==null||attributes==null||ids==null) {
+            throw new IllegalArgumentException("Null argument.");
+        }
+
+        Attribute tgtAttr = client.filterToAttribute(dataset, filter);
+        if (tgtAttr==null) {
+            return new HashMap();
+        }
+
         int nAttr = attributes.length;
         Attribute[] attrs = new Attribute[nAttr+1];
 
@@ -268,7 +277,7 @@ public final class BiomartStub {
         for (String attr : attributes) {
             attrs[iattr++] = client.getAttribute(dataset, attr);
         }
-        attrs[nAttr] = client.filterToAttribute(dataset, filter);
+        attrs[nAttr] = tgtAttr;
 
         // prepare filters
         StringBuilder sb = new StringBuilder();
