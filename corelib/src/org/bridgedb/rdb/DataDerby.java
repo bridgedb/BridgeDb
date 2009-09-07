@@ -357,7 +357,9 @@ public class DataDerby extends DBConnector
 				new FileInputStream(f), new CRC32());
 		byte[] tempBuf = new byte[128];
 		while (cis.read(tempBuf) >= 0) { }
-		return cis.getChecksum().getValue();
+		long result = cis.getChecksum().getValue();
+		cis.close();
+		return result;
 	}
 	
 }
