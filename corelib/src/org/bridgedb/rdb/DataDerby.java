@@ -293,14 +293,26 @@ public class DataDerby extends DBConnector
 
 			DriverManager.getConnection(url);
 		
-		} catch(Exception e) {
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	byte[] buf = new byte[1024];
+	private byte[] buf = new byte[1024];
 	
-	void addFiles(File file, String dir, ZipOutputStream out) throws Exception 
+	/**
+	 * recursively add files or directory to ZipOutputStream. Skips directories
+	 * named "tmp" or files ending with "lck".
+	 * 
+	 * @param file file or directory to add.
+	 * @param dir base directory inside zip
+	 * @param out target zip output stream.
+	 * @throws IOException on IO error
+	 */
+	private void addFiles(File file, String dir, ZipOutputStream out) throws IOException 
 	{
 		if(file.isDirectory()) 
 		{
@@ -320,6 +332,9 @@ public class DataDerby extends DBConnector
 			
 			setZipEntryAttributes(file, add);
 			
+			// real clever: putNextEntry has to be called before writing to out,
+			// and CRC has to be calculated before putNextEntry
+			// so we end up reading all files twice.
 			out.putNextEntry(add);
 				        
 			FileInputStream in = new FileInputStream(file);
@@ -332,7 +347,19 @@ public class DataDerby extends DBConnector
 		}
 	}
 	
-	void setZipEntryAttributes(File f, ZipEntry z) throws IOException 
+	/**
+	 * Calculates required attributes for ZipEntry.
+	 * <ul>
+	 * <li>method: ZipEntry.STORED (meaning uncompressed)
+	 * <li>crc: calculated
+	 * <li>size: file size
+	 * <li>compressedSize: also file size, since uncompressed
+	 * </ul>
+	 * @param z the ZipEntry to set attributes on
+	 * @param f the file to calculate the attributes for
+	 * @throws IOException when the file couldn't be read  
+	 */
+	private void setZipEntryAttributes(File f, ZipEntry z) throws IOException 
 	{
 		z.setTime(f.lastModified());
 		z.setMethod(ZipEntry.STORED);
@@ -351,7 +378,14 @@ public class DataDerby extends DBConnector
 		}
 	}
 	
-	long computeCheckSum(File f) throws IOException 
+	/**
+	 * Calculate the 32-bit CRC code for a file,
+	 * Suitable for ZipEntry.setCrc.
+	 * @param f file to check
+	 * @throws IOException on file read error
+	 * @return CRC code
+	 */
+	private long computeCheckSum(File f) throws IOException 
 	{
 		CheckedInputStream cis = new CheckedInputStream(
 				new FileInputStream(f), new CRC32());
