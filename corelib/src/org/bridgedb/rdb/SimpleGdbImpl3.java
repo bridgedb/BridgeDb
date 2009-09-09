@@ -502,7 +502,6 @@ class SimpleGdbImpl3 extends SimpleGdb
     	 	while (rs.next())
     	 	{
     	 		DataSource ds = DataSource.getBySystemCode(rs.getString(1)); 
-    	 		System.out.println (ds + "\t" + ds.getSystemCode());
     	 		result.add (ds);
     	 	}
     	}
