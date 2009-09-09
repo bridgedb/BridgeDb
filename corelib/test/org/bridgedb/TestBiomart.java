@@ -38,7 +38,8 @@ import org.bridgedb.webservice.biomart.*;
  */
 public class TestBiomart extends TestCase
 {
-    public void testBiomartStub() throws IOException, IDMapperException {
+	// disabled test, because it takes several minutes to run
+    public void _testBiomartStub() throws IOException, IDMapperException {
         BiomartStub biomartStub = BiomartStub.getInstance();
 
         Set<String> marts = biomartStub.availableMarts();

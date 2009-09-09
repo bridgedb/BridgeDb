@@ -67,8 +67,9 @@ bridgedb.version=${bridgedb.version}
 		<path id="test.classpath">
 			<pathelement location="build"/>
 			<pathelement location="lib/derby.jar"/>
-			<pathelement location="lib/junit.jar"/>
-			<pathelement location="lib/measure.jar"/>
+			<pathelement location="build-lib/junit.jar"/>
+			<pathelement location="build-lib/measure.jar"/>
+			<pathelement location="build-lib/derbyclient.jar"/>
 		</path>
 		<javac srcdir="test" debug="true" 
 					includes="**"
