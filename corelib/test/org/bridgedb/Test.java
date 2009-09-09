@@ -16,9 +16,10 @@
 //
 package org.bridgedb;
 
+import buildsystem.Measure;
+
 import java.io.File;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -40,10 +41,24 @@ public class Test extends TestCase
 		System.getProperty ("user.home") + File.separator + 
 		"/PathVisio-Data/gene databases/Ce_Derby_20090720.bridge";
 	
+	private Measure measure;
+	
+	@Override public void setUp() throws ClassNotFoundException
+	{
+		measure = new Measure("bridgedb_timing.txt");
+		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
+	}
+	
 	public void testGdbConnect() throws IDMapperException
 	{
 		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense. 
-		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
+
+		long start, end, delta;
+		start = System.currentTimeMillis();		
+		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);		
+		end = System.currentTimeMillis();
+		delta = end - start;
+		measure.add ("timing::idmapper-pgdb connect to database", "" + delta, "msec");
 		
 		gdb.close();
 	}
@@ -77,7 +92,7 @@ public class Test extends TestCase
 	 */
 	public void testGdbProperties() throws IDMapperException 
 	{
-		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_CE_V3);
+		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_CE_V3);		
 		for (String key : gdb.getCapabilities().getKeys())
 		{
 			System.out.println (key + " -> " + gdb.getCapabilities().getProperty(key));
