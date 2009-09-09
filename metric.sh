@@ -10,7 +10,7 @@ DATE=`date`;
 VALUE=`stat -c"%s" bridgedb*.tar.gz`
 echo "$DATE\tsize of bridgedb_xxx.tar.gz\t$VALUE\tbytes" >> $LOG
 
-for i in dist/*.jar; 
+for i in dist/bridge*.jar; 
 do 
 	VALUE=`stat -c"%s" $i`;
 	JARNAME=`basename $i`
