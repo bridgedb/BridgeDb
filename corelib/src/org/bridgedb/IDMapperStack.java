@@ -314,7 +314,14 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	private Map<Xref, Set<Xref>> mapIDtransitive(Set<Xref> srcXrefs,
 			Set<DataSource> tgtDataSources) throws IDMapperException 
 	{
-		throw new UnsupportedOperationException();
+		// Current implementation just repeatedly calls mapIDTransitive (Xref, Set<Ds>) 
+		// It may be possible to rearrange loops to optimize for fewer database calls.
+		Map <Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
+		for (Xref ref: srcXrefs)
+		{
+			result.put (ref, mapIDtransitive(ref, tgtDataSources));
+		}
+		return result;
 	}
 
 	/** {@inheritDoc} */
