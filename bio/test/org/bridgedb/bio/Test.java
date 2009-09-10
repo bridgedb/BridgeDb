@@ -19,6 +19,7 @@ package org.bridgedb.bio;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.IDMapperException;
@@ -115,27 +116,20 @@ public class Test extends TestCase
 		assertTrue(crossRefs1.size() > crossRefs2.size());
 
 		// get crossrefs by attribute
-		Set<Xref> crossRefs3 = gdb.freeAttributeSearch("INSR", "Symbol", 100);
-		assertTrue(crossRefs3.contains(ref));
+		Map<Xref, String> crossRefs3 = gdb.freeAttributeSearch("INSR", "Symbol", 100);
+		assertTrue(crossRefs3.containsKey(ref));
 
 		// check symbol suggestions
-		boolean attributeFound = false;
-		for (Xref refi : gdb.freeAttributeSearch("INS", "Symbol", 100))
-		{
-			if (gdb.getAttributes(refi, "Symbol").contains("INSR"))
-			{
-				attributeFound = true;
-				break;
-			}
-		}
-		assertTrue (attributeFound);
+		Map<Xref, String> attrSearchResult = 
+			gdb.freeAttributeSearch("INS", "Symbol", 100);
+		assertTrue (attrSearchResult.containsValue("INSR"));
 
 		// check id suggestions
 		Set<Xref> crossRefs4 = gdb.freeSearch("207851_s_", 100);
 		assertTrue (crossRefs4.contains(new Xref("207851_s_at", BioDataSource.AFFY)));
 		
 		// check free search
-		Set<Xref> result5 = gdb.freeAttributeSearch("Insulin", "Symbol", 100); 
+		Map<Xref, String> result5 = gdb.freeAttributeSearch("Insulin", "Symbol", 100); 
 		
 		Xref nonExistingRef = new Xref ("bla", BioDataSource.OTHER); 
 		assertEquals(0, gdb.getAttributes(nonExistingRef, "Symbol").size());

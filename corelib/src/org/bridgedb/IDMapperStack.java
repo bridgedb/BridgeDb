@@ -340,14 +340,25 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	}
 
 	/** {@inheritDoc} */
-	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
+	public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
 	{
-		Set<Xref> result = new HashSet<Xref>();
+		Map<Xref, String> result = null;
 		for (IDMapper child : gdbs)
 		{
 			if (child != null && child instanceof AttributeMapper && child.isConnected())
 			{
-				result.addAll (((AttributeMapper)child).freeAttributeSearch(query, attrType, limit));
+				Map<Xref, String> childResult = 
+					((AttributeMapper)child).freeAttributeSearch(query, attrType, limit);
+				if (result == null) 
+					result = childResult;
+				else
+				{
+					for (Xref ref : childResult.keySet())
+					{
+						if (!result.containsKey(ref))
+							result.put (ref, childResult.get(ref));
+					}
+				}
 			}
 		}
 		return result;

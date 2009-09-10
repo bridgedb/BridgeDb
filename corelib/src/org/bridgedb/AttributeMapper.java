@@ -16,6 +16,7 @@
 //
 package org.bridgedb;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -34,11 +35,11 @@ public interface AttributeMapper
 	
 	/**
 	 * free text search for matching symbols.
-	 * @return references that match the query
+	 * @return map references and attribute values that match the query
 	 * @param query The text to search for
 	 * @param attrType the attribute to look for, e.g. 'Symbol' or 'Description'.
 	 * @param limit The number of results to limit the search to
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException;	
+	public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException;	
 }

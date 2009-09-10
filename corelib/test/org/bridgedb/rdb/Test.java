@@ -19,6 +19,7 @@ package org.bridgedb.rdb;
 import buildsystem.Measure;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
@@ -61,11 +62,7 @@ public class Test extends TestCase
 		
 		// time the common case of doing a free search and then querying all for symbol
 		start = System.currentTimeMillis();
-		for (Xref ref : attr.freeAttributeSearch("p53", "symbol", 100))
-		{
-			symbols.addAll (attr.getAttributes(ref, "Symbol"));
-			
-		}
+		Map<Xref, String> symbolMap = attr.freeAttributeSearch("p53", "symbol", 100);
 		end = System.currentTimeMillis();
 		delta = end - start;
 		System.out.println (delta);

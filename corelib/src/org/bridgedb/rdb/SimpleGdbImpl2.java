@@ -616,9 +616,9 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * @param limit The number of results to limit the search to
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public Set<Xref> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
+	public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
 	{
-		Set<Xref> result = new HashSet<Xref>();
+		Map<Xref, String> result = new HashMap<Xref, String>();
 		try {
 
 			PreparedStatement pst = pstAttributeSearch.getPreparedStatement();
@@ -631,8 +631,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 			{
 				String id = r.getString("id");
 				String code = r.getString("code");
-//				String symbol = r.getString("attrValue");
-				result.add(new Xref (id, DataSource.getBySystemCode(code)));
+				String symbol = r.getString("attrValue");
+				result.put(new Xref (id, DataSource.getBySystemCode(code)), symbol);
 			}
 		} catch (SQLException e) {
 			throw new IDMapperException (e);

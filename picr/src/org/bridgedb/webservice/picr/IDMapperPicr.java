@@ -187,7 +187,7 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 		return result.size() > 0;
 	}
 
-	public Set<Xref> freeAttributeSearch(String query, String attrType,
+	public Map<Xref, String> freeAttributeSearch(String query, String attrType,
 			int limit) throws IDMapperException 
 	{
 		throw new UnsupportedOperationException();
