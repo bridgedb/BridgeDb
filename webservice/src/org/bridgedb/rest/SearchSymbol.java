@@ -65,10 +65,8 @@ public class SearchSymbol extends IDMapperResource {
 	    Set<String> suggestions = new HashSet<String>();
 	    
 	    for(IDMapperRdb mapper : mappers ) {
-	    	for (Xref ref : mapper.freeAttributeSearch(searchStr, "Symbol", limit))
-	    	{
-	    		suggestions.addAll( mapper.getAttributes( ref, "Symbol") );
-	    	}
+	    	suggestions.addAll 
+	    		(mapper.freeAttributeSearch(searchStr, "Symbol", limit).values());
 	    }
 	    
             StringBuilder result = new StringBuilder();

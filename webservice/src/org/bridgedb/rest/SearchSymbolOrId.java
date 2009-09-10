@@ -66,16 +66,18 @@ public class SearchSymbolOrId extends IDMapperResource {
 	    Map<Xref, String> suggestions = new HashMap<Xref, String>();
 	    
 	    for(IDMapperRdb mapper : mappers ) {
-	    	Set<Xref> tempset = new HashSet<Xref>();
-	    	tempset.addAll( mapper.freeSearch( searchStr, limit ) );
-	    	tempset.addAll( mapper.freeAttributeSearch( searchStr, "Symbol", limit ) );
-	    	for (Xref x : tempset)
+	    	for (Xref x : mapper.freeSearch( searchStr, limit ))
 	    	{
 	    		for (String s : mapper.getAttributes (x, "Symbol"))
 	    		{
 		    		suggestions.put (x, s);
 		    		break; // only put the first
 	    		}
+	    	}
+	    	for (Map.Entry<Xref, String> x : 
+	    		mapper.freeAttributeSearch( searchStr, "Symbol", limit ).entrySet())
+	    	{
+	    		suggestions.put (x.getKey(), x.getValue());
 	    	}
 	    }
 	    

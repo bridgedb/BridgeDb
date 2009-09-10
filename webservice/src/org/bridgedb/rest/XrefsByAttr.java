@@ -67,7 +67,7 @@ public class XrefsByAttr extends IDMapperResource
       for(IDMapperRdb mapper : mappers) 
       {
 	System.out.println( "mapper found" );
-	xrefs.addAll(mapper.freeAttributeSearch(targetAttrValue, targetAttrName, 100));
+	xrefs.addAll(mapper.freeAttributeSearch(targetAttrValue, targetAttrName, 100).keySet());
       }
 					
       StringBuilder result = new StringBuilder();
