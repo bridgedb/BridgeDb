@@ -19,12 +19,16 @@ package org.bridgedb.webservice.bridgerest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
@@ -36,7 +40,7 @@ import org.bridgedb.webservice.IDMapperWebservice;
 /**
  * IDMapper implementation for BridgeRest, the REST interface of BridgeDb itself.
  */
-public class BridgeRest extends IDMapperWebservice
+public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 {
     static {
 		BridgeDb.register ("idmapper-bridgerest", new Driver());
@@ -70,9 +74,23 @@ public class BridgeRest extends IDMapperWebservice
 
 	/** {@inheritDoc} */
 	public Set<Xref> freeSearch(String text, int limit)
-			throws IDMapperException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+			throws IDMapperException 
+	{
+		try
+		{
+			URL url = new URL (baseUrl + "/search/id/" + text);
+			Set<Xref> result = new HashSet<Xref>();
+			result.addAll (parseRefs(url));
+			return result;
+		}
+		catch (MalformedURLException ex)
+		{
+			throw new IDMapperException (ex);
+		} 
+		catch (IOException ex) 
+		{
+			throw new IDMapperException (ex);
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -102,32 +120,62 @@ public class BridgeRest extends IDMapperWebservice
 	public Set<Xref> mapID(Xref src,
 			Set<DataSource> tgtDataSources) throws IDMapperException 
 	{
-		Set<Xref> result = new HashSet<Xref>();
 		try
 		{
 			URL url = new URL(baseUrl + "/model/" + src.getDataSource().getSystemCode() + "/" + src.getId() + "/xrefs");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-			String line;
-			while ((line = reader.readLine()) != null)
+			Set<Xref> result = new HashSet<Xref>();
+			for (Xref dest : parseRefs(url))
 			{
-				String[] fields = line.split("\t");
-				Xref dest = new Xref (fields[0], DataSource.getByFullName(fields[1]));
 				if (tgtDataSources == null ||
 					tgtDataSources.contains(dest.getDataSource()))
 				{
 					result.add (dest);
 				}
 			}
+			return result;
 		}
 		catch (IOException ex)
 		{
 			throw new IDMapperException(ex);
+		}
+	}
+	
+	/** 
+	 * helper, opens url and parses Xrefs.
+	 * Xrefs are expected as one per row, id <tab> system
+	 * @param url URL to open
+	 * @return parsed Xrefs
+	 * @throws IOException */
+	private List<Xref> parseRefs(URL url) throws IOException
+	{
+		List<Xref> result = new ArrayList<Xref>();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		String line;
+		while ((line = reader.readLine()) != null)
+		{
+			String[] fields = line.split("\t");
+			Xref dest = new Xref (fields[0], DataSource.getByFullName(fields[1]));
+			result.add (dest);
 		}
 		return result;
 	}
 
 	/** {@inheritDoc} */
 	public boolean xrefExists(Xref xref) throws IDMapperException {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	/** {@inheritDoc} */
+	public Map<Xref, String> freeAttributeSearch(String query, String attrType,
+			int limit) throws IDMapperException {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	/** {@inheritDoc} */
+	public Set<String> getAttributes(Xref ref, String attrType)
+			throws IDMapperException {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}

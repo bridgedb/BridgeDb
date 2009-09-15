@@ -21,18 +21,30 @@ import java.io.File;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 
-public class Server {
-		
+public class Server 
+{
+	public void run(int port, File configFile)
+	{
+		Component component = new Component();
+		component.getServers().add(Protocol.HTTP, port);
+		component.getDefaultHost().attach(new IDMapperService(configFile));		
+		try {
+			component.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) 
 	{
+		Server server = new Server();
+		
 		int port = 8183; // default port
 		if ( args.length > 0 )
 		{
 		  port = new Integer( args[0] ).intValue();
 		}
-		Component component = new Component();
-		component.getServers().add(Protocol.HTTP, port);
-		
+	
 		File configFile = null;
 		
 		if (args.length == 1)
@@ -45,12 +57,6 @@ public class Server {
 			System.exit(1);
 		}
 		
-		component.getDefaultHost().attach(new IDMapperService(configFile));
-		
-		try {
-			component.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		server.run (port, configFile);
 	}
 }
