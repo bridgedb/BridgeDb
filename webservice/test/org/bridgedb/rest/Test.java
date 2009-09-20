@@ -43,6 +43,12 @@ public class Test extends TestCase
 		Set<Xref> result = mapper.mapID(insr, null);
 		assertTrue (result.contains(affy));
 		
+		Set<DataSource> supported = mapper.getCapabilities().getSupportedSrcDataSources();
+		assertTrue (supported.contains(DataSource.getBySystemCode("L")));
+
+		String val = mapper.getCapabilities().getProperty("SCHEMAVERSION");
+		assertEquals ("2", val);
+
 		result = mapper.freeSearch("1234", 100);
 		System.out.println (result);
 	}

@@ -86,7 +86,12 @@ public class IDMapperService extends Application {
          */
         public static final String URL_SEARCH_SYMBOL = "/{" + PAR_ORGANISM + "}/search/symbol/{" + PAR_SEARCH_STR + "}";
 
-        /*
+        
+    public static final String URL_PROPERTIES = "/{" + PAR_ORGANISM + "}/properties";
+
+    public static final String URL_SUPPORTED_DATASOURCES = "/{" + PAR_ORGANISM + "}/supportedDataSources";
+
+    /*
 	 * URL pattern for:
 	 * /<organism>/search/id/<searchStr>&limit=<limit>
 	 */
@@ -122,6 +127,10 @@ public class IDMapperService extends Application {
 		// Register the route for backPageText
 		Route backPageTextRoute = router.attach( URL_BACK_PAGE_TEXT, BackPageText.class );
 	       
+		Route propertiesRoute = router.attach (URL_PROPERTIES, Properties.class );
+		
+		Route supportedDataSourcesRoute = router.attach (URL_SUPPORTED_DATASOURCES, SupportedDataSources.class );
+		
 		// Register the route for search-symbol
 		Route searchSymbolRoute = router.attach( URL_SEARCH_SYMBOL, SearchSymbol.class );
 		searchSymbolRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
