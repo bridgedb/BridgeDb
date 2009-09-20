@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bridgedb.AbstractIDMapperCapabilities;
 import org.bridgedb.DataSource;
@@ -53,6 +55,13 @@ class SimpleGdbImpl3 extends SimpleGdb
 	private final SimpleGdb.LazyPst pstAttribute = new SimpleGdb.LazyPst(
 			"SELECT attrvalue FROM attribute " +
 			" WHERE id = ? AND code = ? AND attrname = ?"
+		);
+	private final SimpleGdb.LazyPst pstAllAttributes = new SimpleGdb.LazyPst(
+			"SELECT attrname, attrvalue FROM attribute " +
+			" WHERE id = ? AND code = ?"
+		);
+	private final SimpleGdb.LazyPst pstAttributesSet = new SimpleGdb.LazyPst(
+			"SELECT attrname FROM attribute GROUP BY attrname"
 		);
 	private final SimpleGdb.LazyPst pstCrossRefs = new SimpleGdb.LazyPst (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
@@ -555,6 +564,35 @@ class SimpleGdbImpl3 extends SimpleGdb
 		} catch	(SQLException e) { throw new IDMapperException (e); } // Database unavailable
 	}
 
+	/** {@inheritDoc} */
+	public Map<String, Set<String>> getAttributes(Xref ref)
+			throws IDMapperException 
+	{
+		Map<String, Set<String>> result = new HashMap<String, Set<String>>();				
+		try {
+			PreparedStatement pst = pstAllAttributes.getPreparedStatement();
+			pst.setString (1, ref.getId());
+			pst.setString (2, ref.getDataSource().getSystemCode());
+			ResultSet r = pst.executeQuery();
+			if (r.next())
+			{
+				String key = r.getString(1);
+				String value = r.getString(2);
+				if (result.containsKey (key))
+				{
+					result.get(key).add (value);
+				}
+				else
+				{
+					Set<String> valueSet = new HashSet<String>();
+					valueSet.add (value);
+					result.put (key, valueSet);
+				}
+			}
+			return result;
+		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
+	}
+
 	/**
 	 * free text search for matching symbols.
 	 * @return references that match the query
@@ -586,4 +624,25 @@ class SimpleGdbImpl3 extends SimpleGdb
 		}
 		return result;		
 	}
+
+	/** {@inheritDoc} */
+	public Set<String> getAttributeSet() throws IDMapperException 
+	{
+		Set<String> result = new HashSet<String>();
+    	try
+    	{
+    	 	PreparedStatement pst = pstAttributesSet.getPreparedStatement();
+    	 	ResultSet rs = pst.executeQuery();
+    	 	while (rs.next())
+    	 	{
+    	 		result.add (rs.getString(1));
+    	 	}
+    	}
+    	catch (SQLException ignore)
+    	{
+    		throw new IDMapperException(ignore);
+    	}
+    	return result;
+	}
+
 }

@@ -222,4 +222,22 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 		
 		return result;
 	}
+
+	public Set<String> getAttributeSet() throws IDMapperException 
+	{
+		// TODO Not yet implemented
+		throw new UnsupportedOperationException();
+	}
+
+	public Map<String, Set<String>> getAttributes(Xref ref)
+			throws IDMapperException {
+		// TODO Not yet implemented
+		throw new UnsupportedOperationException();
+	}
+
+	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+			DataSource... tgtDataSources) throws IDMapperException {
+		// TODO Not yet implemented
+		throw new UnsupportedOperationException();
+	}
 }

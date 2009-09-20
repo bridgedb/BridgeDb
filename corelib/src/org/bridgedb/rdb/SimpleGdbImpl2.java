@@ -60,6 +60,13 @@ class SimpleGdbImpl2 extends SimpleGdb
 			"SELECT attrvalue FROM attribute " +
 			" WHERE id = ? AND code = ? AND attrname = ?"
 		);
+	private final SimpleGdb.LazyPst pstAllAttributes = new SimpleGdb.LazyPst(
+			"SELECT attrname, attrvalue FROM attribute " +
+			" WHERE id = ? AND code = ?"
+		);
+	private final SimpleGdb.LazyPst pstAttributesSet = new SimpleGdb.LazyPst(
+			"SELECT attrname FROM attribute GROUP BY attrname"
+		);
 	private final SimpleGdb.LazyPst pstCrossRefs = new SimpleGdb.LazyPst (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
@@ -569,26 +576,31 @@ class SimpleGdbImpl2 extends SimpleGdb
 	{
 		return caps;
 	}
+	
+	private static final Map<String, String> ATTRIBUTES_FROM_BACKPAGE;
+	
+	static
+	{
+		ATTRIBUTES_FROM_BACKPAGE = new HashMap<String, String>();
+		ATTRIBUTES_FROM_BACKPAGE.put ("Chromosome", "<TH>Chr:<TH>([^<]*)<");
+		ATTRIBUTES_FROM_BACKPAGE.put ("Description", "<TH>Description:<TH>([^<]*)<");
+		ATTRIBUTES_FROM_BACKPAGE.put ("Synonyms", "<TH>Synonyms:<TH>([^<]*)<");
+		ATTRIBUTES_FROM_BACKPAGE.put ("Symbol", "<TH>(?:Gene Symbol|Metabolite):<TH>([^<]*)<");
+		ATTRIBUTES_FROM_BACKPAGE.put ("BrutoFormula", "<TH>Bruto Formula:<TH>([^<]*)<");
+	}
 
 	/** {@inheritDoc} */
 	public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
 	{
-		Map<String, String> specialCases = new HashMap<String, String>();
-		specialCases.put ("Chromosome", "<TH>Chr:<TH>([^<]*)<");
-		specialCases.put ("Description", "<TH>Description:<TH>([^<]*)<");
-		specialCases.put ("Synonyms", "<TH>Synonyms:<TH>([^<]*)<");
-		specialCases.put ("Symbol", "<TH>(?:Gene Symbol|Metabolite):<TH>([^<]*)<");
-		specialCases.put ("BrutoFormula", "<TH>Bruto Formula:<TH>([^<]*)<");
-		
 		Set<String> result = new HashSet<String>();
 		
-		if (specialCases.containsKey(attrname))
+		if (ATTRIBUTES_FROM_BACKPAGE.containsKey(attrname))
 		{
 			String bpInfo = getBpInfo(ref);
 			if (bpInfo != null)
 			{
-				Pattern pat = Pattern.compile(specialCases.get (attrname));
+				Pattern pat = Pattern.compile(ATTRIBUTES_FROM_BACKPAGE.get (attrname));
 				Matcher matcher = pat.matcher(bpInfo);
 				if (matcher.find())
 				{
@@ -609,6 +621,52 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref + ", Attribute: " + attrname, e); } // Database unavailable
+	}
+
+	/** {@inheritDoc} */
+	public Map<String, Set<String>> getAttributes(Xref ref)
+			throws IDMapperException 
+	{
+		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
+				
+		String bpInfo = getBpInfo(ref);
+		if (bpInfo != null)
+		{
+			for (String attrname : ATTRIBUTES_FROM_BACKPAGE.keySet())
+			{
+				Pattern pat = Pattern.compile(ATTRIBUTES_FROM_BACKPAGE.get (attrname));
+				Matcher matcher = pat.matcher(bpInfo);
+				if (matcher.find())
+				{
+					Set<String> attrSet = new HashSet<String>();
+					attrSet.add (matcher.group(1));
+					result.put (attrname, attrSet);
+				}
+			}
+		}
+		
+		try {
+			PreparedStatement pst = pstAllAttributes.getPreparedStatement();
+			pst.setString (1, ref.getId());
+			pst.setString (2, ref.getDataSource().getSystemCode());
+			ResultSet r = pst.executeQuery();
+			if (r.next())
+			{
+				String key = r.getString(1);
+				String value = r.getString(2);
+				if (result.containsKey (key))
+				{
+					result.get(key).add (value);
+				}
+				else
+				{
+					Set<String> valueSet = new HashSet<String>();
+					valueSet.add (value);
+					result.put (key, valueSet);
+				}
+			}
+			return result;
+		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
 	}
 
 	/**
@@ -641,5 +699,25 @@ class SimpleGdbImpl2 extends SimpleGdb
 			throw new IDMapperException (e);
 		}
 		return result;		
+	}
+
+	/** {@inheritDoc} */
+	public Set<String> getAttributeSet() throws IDMapperException 
+	{
+		Set<String> result = new HashSet<String>();
+    	try
+    	{
+    	 	PreparedStatement pst = pstAttributesSet.getPreparedStatement();
+    	 	ResultSet rs = pst.executeQuery();
+    	 	while (rs.next())
+    	 	{
+    	 		result.add (rs.getString(1));
+    	 	}
+    	}
+    	catch (SQLException ignore)
+    	{
+    		throw new IDMapperException(ignore);
+    	}
+    	return result;
 	}
 }

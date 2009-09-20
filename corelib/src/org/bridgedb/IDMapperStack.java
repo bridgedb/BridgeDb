@@ -456,5 +456,48 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
+
+	/** {@inheritDoc} */
+	public Set<String> getAttributeSet() throws IDMapperException 
+	{
+		Set<String> result = new HashSet<String>();
+		for (IDMapper child : gdbs)
+		{
+			if (child != null && child instanceof AttributeMapper && child.isConnected())
+			{
+				result.addAll (((AttributeMapper)child).getAttributeSet());
+			}
+		}
+		return result;
+	}
+
+	/** {@inheritDoc} */
+	public Map<String, Set<String>> getAttributes(Xref ref)
+			throws IDMapperException 
+	{
+		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
+		for (IDMapper child : gdbs)
+		{
+			if (child != null && child instanceof AttributeMapper && child.isConnected())
+			{
+				for (Map.Entry<String, Set<String>> entry :
+					((AttributeMapper)child).getAttributes(ref).entrySet())
+				{
+					Set<String> thisSet;
+					if (!result.containsKey(entry.getKey()))	
+					{
+						thisSet = new HashSet<String>();
+						result.put (entry.getKey(), thisSet); 
+					}
+					else
+					{
+						thisSet = result.get(entry.getKey());
+					}
+					thisSet.addAll(entry.getValue());
+				}
+			}
+		}
+		return result;
+	}
 	
 }

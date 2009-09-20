@@ -33,6 +33,16 @@ public interface AttributeMapper
 	 */
 	public Set<String> getAttributes(Xref ref, String attrType) throws IDMapperException;
 	
+	
+	/**
+	 * Get all attributes for an entity. 
+	 * Usually this method is more efficient if you want to query several attributes in a sequence.
+	 * @param ref the entity to get the attributes for
+	 * @return a Map where attribute names are the keys and attribute values are the values. 
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public Map<String, Set<String>> getAttributes(Xref ref) throws IDMapperException;
+
 	/**
 	 * free text search for matching symbols.
 	 * @return map references and attribute values that match the query
@@ -41,5 +51,14 @@ public interface AttributeMapper
 	 * @param limit The number of results to limit the search to
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException;	
+	public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException;
+		
+	/**
+	 * Set of attributes provided by this AttributeMapper.
+	 * There is no guarantee that a specific Xref has these attributes.
+	 * @return set of available attributes in this AttributeMapper. 
+	 *    If there are none available, returns an empty set.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public Set<String> getAttributeSet() throws IDMapperException;
 }

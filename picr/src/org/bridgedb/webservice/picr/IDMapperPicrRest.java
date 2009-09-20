@@ -336,4 +336,10 @@ public class IDMapperPicrRest extends IDMapperWebservice
 
         return stream;
     }
+
+	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+			DataSource... tgtDataSources) throws IDMapperException {
+		// TODO Not yet implemented
+		throw new UnsupportedOperationException();
+	}
 }

@@ -182,4 +182,17 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
+
+	/** {@inheritDoc} */
+	public Set<String> getAttributeSet() throws IDMapperException {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
+	/** {@inheritDoc} */
+	public Map<String, Set<String>> getAttributes(Xref ref)
+			throws IDMapperException {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
 }
