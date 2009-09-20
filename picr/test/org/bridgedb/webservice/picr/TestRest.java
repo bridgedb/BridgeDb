@@ -62,10 +62,7 @@ public class TestRest extends TestCase
 
 		Set<Xref> srcRefs = new HashSet<Xref>();
 		srcRefs.add (src1);
-		Set<DataSource> targets = new HashSet<DataSource>();
-		targets.add(SGD);
-		targets.add(PDB);
-		targets.add(ENSEMBL_YEAST);
+		DataSource[] targets = new DataSource[] { SGD, PDB, ENSEMBL_YEAST };
 		Map<Xref, Set<Xref>> result = idmap.mapID(srcRefs, targets);
 
 		/*

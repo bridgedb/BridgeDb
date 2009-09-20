@@ -261,7 +261,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 
 	/** {@inheritDoc} */
 	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
-			Set<DataSource> tgtDataSources) throws IDMapperException 
+			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		if (isTransitive)
 		{
@@ -281,7 +281,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	 * @throws IDMapperException if one of the children fail
 	 */
 	private Map<Xref, Set<Xref>> mapIDnormal(Set<Xref> srcXrefs,
-			Set<DataSource> tgtDataSources) throws IDMapperException 
+			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 		
@@ -312,7 +312,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	 * @throws IDMapperException if one of the children fail
 	 */
 	private Map<Xref, Set<Xref>> mapIDtransitive(Set<Xref> srcXrefs,
-			Set<DataSource> tgtDataSources) throws IDMapperException 
+			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		// Current implementation just repeatedly calls mapIDTransitive (Xref, Set<Ds>) 
 		// It may be possible to rearrange loops to optimize for fewer database calls.
@@ -393,7 +393,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	}
 
 	/** {@inheritDoc} */
-	public Set<Xref> mapID(Xref ref, Set<DataSource> resultDs) throws IDMapperException 
+	public Set<Xref> mapID(Xref ref, DataSource... resultDs) throws IDMapperException 
 	{
 		if (isTransitive)
 		{
@@ -413,7 +413,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	 * @return mapping result
 	 * @throws IDMapperException if one of the children fail
 	 */
-	private Set<Xref> mapIDtransitive(Xref ref, Set<DataSource> resultDs) throws IDMapperException 
+	private Set<Xref> mapIDtransitive(Xref ref, DataSource... resultDs) throws IDMapperException 
 	{
 		// first round
 		Set<Xref> round1 = new HashSet<Xref>();
@@ -421,7 +421,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		{
 			if (child != null && child.isConnected())
 			{
-				round1.addAll (child.mapID(ref, null));
+				round1.addAll (child.mapID(ref));
 			}
 		}
 		// second round
@@ -444,7 +444,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	 * @return mapping result
 	 * @throws IDMapperException if one of the children fail
 	 */
-	private Set<Xref> mapIDnormal(Xref ref, Set<DataSource> resultDs) throws IDMapperException 
+	private Set<Xref> mapIDnormal(Xref ref, DataSource... resultDs) throws IDMapperException 
 	{
 		Set<Xref> result = new HashSet<Xref>();
 		for (IDMapper child : gdbs)

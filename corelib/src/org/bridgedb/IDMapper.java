@@ -37,7 +37,7 @@ public interface IDMapper {
      *    return null however.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
-    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException;
+    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException;
 
 	/**
 	 * Get all cross-references for the given entity, restricting the
@@ -49,7 +49,7 @@ public interface IDMapper {
 	 * Set when no cross references could be found. This method does not return null.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public Set<Xref> mapID (Xref ref, Set<DataSource> tgtDataSources) throws IDMapperException;
+	public Set<Xref> mapID (Xref ref, DataSource... tgtDataSources) throws IDMapperException;
 	
     /**
      * Check whether an Xref exists.

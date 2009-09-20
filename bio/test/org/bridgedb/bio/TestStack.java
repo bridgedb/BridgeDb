@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.BridgeDb;
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
@@ -24,7 +23,6 @@ public class TestStack extends TestCase
 	private static final File NUGO_CUSTOM_MAPPINGS = new File ("/home/martijn/prg/bridgedb/test-data/Nugo-hs-custom.txt");
 
 	private Set<Xref> src = new HashSet<Xref>();
-	private Set<DataSource> dsset = new HashSet<DataSource>();
 	private static final Xref RAD51 = new Xref ("YER095W", BioDataSource.ENSEMBL_SCEREVISIAE);
 	private static final Xref INSR = new Xref ("Hs.705877", BioDataSource.UNIGENE);
 
@@ -49,8 +47,7 @@ public class TestStack extends TestCase
 	{
 		IDMapper mapper = BridgeDb.connect ("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (RAD51);
-		dsset.add (BioDataSource.ENTREZ_GENE);
-		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, dsset);
+		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, BioDataSource.ENTREZ_GENE);
 		Set<Xref> expected = new HashSet<Xref>();
 		expected.add (new Xref ("856831", BioDataSource.ENTREZ_GENE));
 		assertEquals (expected, refmap.get(RAD51));
@@ -62,8 +59,7 @@ public class TestStack extends TestCase
 	{
 		IDMapper mapper = BridgeDb.connect("idmapper-pgdb:" + GDB_HUMAN);
 		src.add (INSR);
-		dsset.add (BioDataSource.ENTREZ_GENE);
-		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, dsset);
+		Map<Xref, Set<Xref>> refmap = mapper.mapID(src, BioDataSource.ENTREZ_GENE);
 		Set<Xref> expected = new HashSet<Xref>();
 		expected.add (new Xref ("3643", BioDataSource.ENTREZ_GENE));
 		assertEquals (expected, refmap.get(INSR));
@@ -76,8 +72,7 @@ public class TestStack extends TestCase
 		stack.addIDMapper("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (INSR);
 		src.add (RAD51);
-		dsset.add (BioDataSource.ENTREZ_GENE);
-		Map<Xref, Set<Xref>> refmap = stack.mapID(src, dsset);
+		Map<Xref, Set<Xref>> refmap = stack.mapID(src, BioDataSource.ENTREZ_GENE);
 		Set<Xref> expected = new HashSet<Xref>();
 		expected.add (new Xref ("3643", BioDataSource.ENTREZ_GENE));
 		assertEquals (expected, refmap.get(INSR));
@@ -97,31 +92,31 @@ public class TestStack extends TestCase
 		stack.setTransitive(false);
 		
 		// test the link between NUGO and ENSEMBL that only occurs in text		
-		Set<Xref> result = stack.mapID(NUGO, null);
+		Set<Xref> result = stack.mapID(NUGO);
 		assertTrue(result.contains(ENSEMBL));
 		assertFalse(result.contains(ENTREZ));
 				
 		// test the link between ENTREZ and ENSEMBL that only occurs in pgdb
-		result = stack.mapID(ENTREZ, null);		
+		result = stack.mapID(ENTREZ);		
 		assertFalse(result.contains(NUGO));
 		assertTrue(result.contains(ENSEMBL));
 		
 		stack.setTransitive(true);
 
 		// test transitive
-		result = stack.mapID(NUGO, null);
+		result = stack.mapID(NUGO);
 		assertTrue(result.contains(ENTREZ));
 		assertTrue(result.contains(ENSEMBL));
 		
 		// and the other way around
-		result = stack.mapID(ENTREZ, null);
+		result = stack.mapID(ENTREZ);
 		assertTrue(result.contains(NUGO));
 		assertTrue(result.contains(ENSEMBL));
 
 		// map multiple IDs
 		Set<Xref> set1 = new HashSet<Xref>();
 		set1.add (ENTREZ);
-		Map<Xref, Set<Xref>> result2 = stack.mapID(set1, null);
+		Map<Xref, Set<Xref>> result2 = stack.mapID(set1);
 		assertTrue (result2.get(ENTREZ).contains(NUGO));
 	}
 }

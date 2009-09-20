@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -106,7 +107,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 	/** {@inheritDoc} */
 	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
-			Set<DataSource> tgtDataSources) throws IDMapperException 
+			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 		for (Xref ref : srcXrefs)
@@ -118,16 +119,18 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 	/** {@inheritDoc} */
 	public Set<Xref> mapID(Xref src,
-			Set<DataSource> tgtDataSources) throws IDMapperException 
+			DataSource... tgtDataSources) throws IDMapperException 
 	{
+		Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(tgtDataSources));
+
 		try
 		{
 			URL url = new URL(baseUrl + "/model/" + src.getDataSource().getSystemCode() + "/" + src.getId() + "/xrefs");
 			Set<Xref> result = new HashSet<Xref>();
 			for (Xref dest : parseRefs(url))
 			{
-				if (tgtDataSources == null ||
-					tgtDataSources.contains(dest.getDataSource()))
+				if (tgtDataSources.length == 0 ||
+					dsFilter.contains(dest.getDataSource()))
 				{
 					result.add (dest);
 				}

@@ -73,7 +73,7 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 	@Override public String toString() { return getDbName(); } 
 	
 	/** {@inheritDoc} */
-	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, Set<DataSource> tgtDataSources) throws IDMapperException 
+	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException 
 	{
 		final Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 		for (Xref src : srcXrefs)

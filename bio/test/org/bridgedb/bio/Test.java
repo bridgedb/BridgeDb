@@ -107,9 +107,7 @@ public class Test extends TestCase
 		assertTrue(crossRefs1.size() > 10);
 		
 		// get specific crossrefs for specific database
-		Set<DataSource> affySet = new HashSet<DataSource>();
-		affySet.add (BioDataSource.AFFY);
-		Set<Xref> crossRefs2 = gdb.mapID(ref, affySet);		
+		Set<Xref> crossRefs2 = gdb.mapID(ref, BioDataSource.AFFY);		
 		assertTrue(crossRefs2.contains(new Xref("1572_s_at", BioDataSource.AFFY)));
 		assertTrue(crossRefs2.contains(new Xref("207851_s_at", BioDataSource.AFFY)));
 		assertTrue(crossRefs2.contains(new Xref("213792_s_at", BioDataSource.AFFY)));
@@ -135,8 +133,8 @@ public class Test extends TestCase
 		assertEquals(0, gdb.getAttributes(nonExistingRef, "Symbol").size());
 		
 		// should return empty list, not NULL
-		assertEquals (0, gdb.mapID(nonExistingRef, null).size());
-		assertEquals (0, gdb.mapID(nonExistingRef, affySet).size());		
+		assertEquals (0, gdb.mapID(nonExistingRef).size());
+		assertEquals (0, gdb.mapID(nonExistingRef, BioDataSource.AFFY).size());		
 		
 		gdb.close();
 	}

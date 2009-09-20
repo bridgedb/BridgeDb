@@ -32,7 +32,7 @@ public abstract class AbstractIDMapper implements IDMapper
 	 * multiple id's with a set containing only a single Xref.
 	 * {@inheritDoc}
 	 */
-	public Set<Xref> mapID (Xref srcRef, Set<DataSource> tgtDataSources) throws IDMapperException
+	public Set<Xref> mapID (Xref srcRef, DataSource... tgtDataSources) throws IDMapperException
 	{
 		Set<Xref> srcXrefs = new HashSet<Xref>();
 		srcXrefs.add(srcRef);

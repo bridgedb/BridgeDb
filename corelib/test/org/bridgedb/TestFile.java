@@ -62,10 +62,7 @@ public class TestFile extends TestCase
         Set<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(XREF1);
 
-        Set<DataSource> tgtDataSources = new HashSet<DataSource>();
-        tgtDataSources.add(ENS_YEAST);
-        tgtDataSources.add(ENTREZ);
-        tgtDataSources.add(EMBL);
+        DataSource[] tgtDataSources = new DataSource[] { ENS_YEAST, ENTREZ, EMBL };
 
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading
@@ -108,10 +105,7 @@ public class TestFile extends TestCase
         Set<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(XREF1);
 
-        Set<DataSource> tgtDataSources = new HashSet<DataSource>();
-        tgtDataSources.add(ENS_YEAST);
-        tgtDataSources.add(ENTREZ);
-        tgtDataSources.add(EMBL);
+        DataSource[] tgtDataSources = new DataSource[] { ENS_YEAST, ENTREZ, EMBL };
 
 		long start = System.currentTimeMillis();
         // mapID for the first time will trigger reading

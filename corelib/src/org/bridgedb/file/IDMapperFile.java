@@ -16,6 +16,7 @@
 //
 package org.bridgedb.file;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -70,7 +71,7 @@ public abstract class IDMapperFile implements IDMapper {
      * {@inheritDoc}
      */
     public Map<Xref, Set<Xref>> mapID(final Set<Xref> srcXrefs,
-                final Set<DataSource> tgtDataSources) throws IDMapperException {
+                final DataSource... tgtDataSources) throws IDMapperException {
         if (srcXrefs==null) {
             throw new IllegalArgumentException("srcXrefs or tgtDataSources cannot be null");
         }
@@ -80,10 +81,10 @@ public abstract class IDMapperFile implements IDMapper {
         // remove unsupported target datasources
         Set<DataSource> supportedTgtDatasources = cap.getSupportedTgtDataSources();
         Set<DataSource> tgtDss;
-        if (tgtDataSources==null) {
+        if (tgtDataSources.length == 0) {
             tgtDss = new HashSet<DataSource>(cap.getSupportedTgtDataSources());
         } else {
-            tgtDss = new HashSet<DataSource>(tgtDataSources);
+            tgtDss = new HashSet<DataSource>(Arrays.asList(tgtDataSources));
             tgtDss.retainAll(supportedTgtDatasources);
         }
 
@@ -112,7 +113,7 @@ public abstract class IDMapperFile implements IDMapper {
             }
 
             for (Xref tgtXref : refs) {
-            	if (tgtDataSources == null || tgtDataSources.contains(tgtXref.getDataSource()))
+            	if (tgtDataSources.length == 0 || tgtDss.contains(tgtXref.getDataSource()))
     			{
                     tgtRefs.add(tgtXref);
                 }
@@ -123,17 +124,18 @@ public abstract class IDMapperFile implements IDMapper {
     }
 
     /** {@inheritDoc} */
-    public Set<Xref> mapID(Xref srcXref, Set<DataSource> tgtDataSources) throws IDMapperException {        Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
+    public Set<Xref> mapID(Xref srcXref, DataSource... tgtDataSources) throws IDMapperException {        Map<Xref,Set<Xref>> mapXrefs = reader.getIDMappings();
         Set<Xref> result = new HashSet<Xref>();
 
         if (mapXrefs==null) {
             return result;
         }
 
+        Set<DataSource> tgtDss = new HashSet<DataSource>(Arrays.asList(tgtDataSources));
         Set<Xref> destRefs = mapXrefs.get(srcXref);
         if (destRefs != null) for (Xref destRef : mapXrefs.get(srcXref))
         {
-            if (tgtDataSources == null || tgtDataSources.contains(destRef.getDataSource()))
+            if (tgtDataSources.length == 0 || tgtDss.contains(destRef.getDataSource()))
             {
                 result.add (destRef);
             }

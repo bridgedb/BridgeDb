@@ -268,8 +268,6 @@ public class BatchMapper
 			{
 				writer = new PrintWriter (System.out);
 			}
-			Set<DataSource> dsSet = new HashSet<DataSource>();
-			dsSet.add(os);
 			while ((line = reader.readLine()) != null)
 			{
 				String[] fields = line.split("\t");
@@ -278,7 +276,7 @@ public class BatchMapper
 					Xref srcRef = new Xref(fields[inputColumn], is);
 					Set<Xref> srcSet = new HashSet<Xref>();
 					srcSet.add(srcRef);
-					Map<Xref, Set<Xref>> mapresult = gdb.mapID(srcSet, dsSet);
+					Map<Xref, Set<Xref>> mapresult = gdb.mapID(srcSet, os);
 					Set<Xref> destRefs = mapresult.get (srcRef);
 					if (destRefs == null || destRefs.size() == 0)
 					{

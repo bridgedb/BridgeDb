@@ -244,7 +244,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
      * {@inheritDoc}
      */
     public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
-                Set<DataSource> tgtDataSources) throws IDMapperException {
+                DataSource... tgtDataSources) throws IDMapperException {
         if (srcXrefs==null) {
             throw new java.lang.IllegalArgumentException(
                         "srcXrefs or tgtDataSources cannot be null.");
@@ -316,10 +316,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
         Set<Xref> srcXrefs = new HashSet(1);
         srcXrefs.add(xref);
 
-        Set<DataSource> tgtDataSources = new HashSet();
-
-        Map<Xref, Set<Xref>> map = mapID(srcXrefs, tgtDataSources);
-        
+        Map<Xref, Set<Xref>> map = mapID(srcXrefs);
         return map.isEmpty();
     }
 

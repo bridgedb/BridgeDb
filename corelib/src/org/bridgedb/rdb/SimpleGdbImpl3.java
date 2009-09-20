@@ -22,6 +22,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -100,31 +101,33 @@ class SimpleGdbImpl3 extends SimpleGdb
 	}
 
 	/** {@inheritDoc} */
-	public Set<Xref> mapID (Xref idc, Set<DataSource> resultDs) throws IDMapperException
+	public Set<Xref> mapID (Xref idc, DataSource... resultDs) throws IDMapperException
 	{
 		Set<Xref> refs = new HashSet<Xref>();
 		
 		try
 		{
 			PreparedStatement pst;
-			if (resultDs == null || resultDs.size() != 1)
+			if (resultDs.length != 1)
 			{
 				pst = pstCrossRefs.getPreparedStatement();
 			}
 			else
 			{
 				pst = pstCrossRefsWithCode.getPreparedStatement();
-				pst.setString(3, resultDs.iterator().next().getSystemCode());
+				pst.setString(3, resultDs[0].getSystemCode());
 			}
 			
 			pst.setString(1, idc.getId());
 			pst.setString(2, idc.getDataSource().getSystemCode());
-			
+
+			Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
+
 			ResultSet rs = pst.executeQuery();
 			while (rs.next())
 			{
 				DataSource ds = DataSource.getBySystemCode(rs.getString(2));
-				if (resultDs == null || resultDs.contains(ds))
+				if (resultDs.length == 0 || dsFilter.contains(ds))
 				{
 					refs.add (new Xref (rs.getString(1), ds));
 				}
