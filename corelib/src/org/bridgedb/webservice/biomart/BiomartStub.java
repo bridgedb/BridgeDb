@@ -176,7 +176,7 @@ public final class BiomartStub {
      *         mart
      * @throws IDMapperException if failed
      */
-    public Set<String> availableFilters(final String mart,
+    public Set<String> availableSrcIDTypes(final String mart,
             final String dataset) throws IDMapperException {
         if (mart==null || dataset==null) {
             return new HashSet(0);
@@ -198,6 +198,30 @@ public final class BiomartStub {
 
     /**
      *
+     * @param mart mart name
+     * @param dataset dataset name
+     * @return available tgt id types
+     * @throws IDMapperException if failed.
+     */
+    public Set<String> availableTgtIDTypes(final String mart,
+            final String dataset) throws IDMapperException {
+        return availableAttributes(mart, dataset, true);
+    }
+
+    /**
+     *
+     * @param mart mart name
+     * @param dataset dataset name
+     * @return availab e tgt attributes (exclude id types)
+     * @throws IDMapperException if failed.
+     */
+    public Set<String> availableTgtAttributes(final String mart,
+            final String dataset) throws IDMapperException {
+        return availableAttributes(mart, dataset, false);
+    }
+
+    /**
+     *
      * @param mart mart name.
      * @param dataset dataset name.
      * @param idOnly filter the attributes ending with "ID" or "Accession"
@@ -206,7 +230,7 @@ public final class BiomartStub {
      *         mart.
      * @throws IDMapperException if failed.
      */
-    public Set<String> availableAttributes(final String mart,
+    private Set<String> availableAttributes(final String mart,
             final String dataset, boolean idOnly) throws IDMapperException {
 
         if (mart==null || dataset==null) {
@@ -224,21 +248,18 @@ public final class BiomartStub {
             throw new IDMapperException(e);
         }
 
-        Set<String> result;
-        if (idOnly) {
-            result = new HashSet();
-            for (String name : attributes.keySet()) {
-                String displayName = client.getAttribute(dataset, name)
-                        .getDisplayName();
-                if (displayName.endsWith("ID")
-                        || displayName.endsWith("Accession")
-                        || name.endsWith("id")
-                        || name.endsWith("accession")) {
-                    result.add(name);
-                }
+        Set<String> result = new HashSet();
+        for (String name : attributes.keySet()) {
+            if (name.trim().length()==0)
+                continue;
+            String displayName = client.getAttribute(dataset, name)
+                    .getDisplayName();
+            if (idOnly == (displayName.endsWith("ID")
+                    || displayName.endsWith("Accession")
+                    || name.endsWith("id")
+                    || name.endsWith("accession"))) {
+                result.add(name);
             }
-        } else {
-            result = new HashSet(attributes.keySet());
         }
 
         return result;
@@ -248,8 +269,8 @@ public final class BiomartStub {
      * 
      * @param mart mart name
      * @param dataset dataset name
-     * @param filter filter name / source id type
-     * @param attributes attribute names / target id types
+     * @param srcType filter name / source id type
+     * @param tgtTypes attribute names / target id types
      * @param ids source ids to be translated
      * @return map from source id to target ids
      *         key: source id
@@ -257,31 +278,31 @@ public final class BiomartStub {
      * @throws IDMapperException if failed to connect
      */
     public Map<String,Set<String>[]> translate(final String mart,
-            final String dataset, final String filter,
-            final String[] attributes, final Set<String> ids)
+            final String dataset, final String srcType,
+            final String[] tgtTypes, final Set<String> srcIds)
             throws IDMapperException {
-        if (mart==null||dataset==null||filter==null||attributes==null||ids==null) {
+        if (mart==null||dataset==null||srcType==null||tgtTypes==null||srcIds==null) {
             throw new IllegalArgumentException("Null argument.");
         }
 
-        Attribute tgtAttr = client.filterToAttribute(dataset, filter);
+        Attribute tgtAttr = client.filterToAttribute(dataset, srcType);
         if (tgtAttr==null) {
             return new HashMap();
         }
 
-        int nAttr = attributes.length;
+        int nAttr = tgtTypes.length;
         Attribute[] attrs = new Attribute[nAttr+1];
 
         // prepare attributes
         int iattr = 0;
-        for (String attr : attributes) {
+        for (String attr : tgtTypes) {
             attrs[iattr++] = client.getAttribute(dataset, attr);
         }
         attrs[nAttr] = tgtAttr;
 
         // prepare filters
         StringBuilder sb = new StringBuilder();
-        for (String str : ids) {
+        for (String str : srcIds) {
             sb.append(str);
             sb.append(",");
         }
@@ -292,7 +313,7 @@ public final class BiomartStub {
         }
 
         Map<String, String> queryFilter = new HashMap(1);
-        queryFilter.put(filter, sb.toString());
+        queryFilter.put(srcType, sb.toString());
 
         // build query string
         String query = XMLQueryBuilder.getQueryString(dataset, attrs, queryFilter);

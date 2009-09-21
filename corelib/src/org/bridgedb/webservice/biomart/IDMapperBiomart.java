@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.AbstractIDMapperCapabilities;
+import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
@@ -38,7 +39,7 @@ import org.bridgedb.webservice.biomart.util.BiomartClient;
  *
  * @author gjj
  */
-public class IDMapperBiomart extends IDMapperWebservice {
+public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapper {
 
     static {
 		BridgeDb.register ("idmapper-biomart", new Driver());
@@ -50,42 +51,15 @@ public class IDMapperBiomart extends IDMapperWebservice {
 
         /** {@inheritDoc} */
         public IDMapper connect(String location) throws IDMapperException  {
-            // e.g.: id-type-filter=true@dataset=oanatinus_gene_ensembl
+            // e.g.: dataset=oanatinus_gene_ensembl
             // e.g.: http://www.biomart.org/biomart/martservice?dataset=oanatinus_gene_ensembl
             String baseURL = BiomartClient.defaultBaseURL;
-            boolean idTypeFilter = true;
-            
-            String config = null;
-            String path = location;
-            int idx = location.indexOf("@");
-            if (idx==0) {
-                path =location.substring(idx+1);
-            } else if (idx>0) {
-                config = location.substring(0, idx);
-                path = location.substring(idx+1);
-            }
 
-            if (config!=null) {
-                String idTypeFilterTag = "id-type-filter=";
-                idx = config.indexOf(idTypeFilterTag);
-                if (idx!=-1) {
-                    String filter = config.substring(idx+idTypeFilterTag.length());
-                    if (filter.toLowerCase().startsWith("true")) {
-                        idTypeFilter = true;
-                    } else if (filter.toLowerCase().startsWith("false")) {
-                        idTypeFilter = false;
-                    } else {
-                        throw new IDMapperException(
-                                "id-type-filter can only be true or false");
-                    }
-                }
-            }
-
-            String param = path;
-            idx = path.indexOf('?');
+            String param = location;
+            int idx = location.indexOf('?');
             if (idx>-1) {
-                baseURL = path.substring(0,idx);
-                param = path.substring(idx+1);
+                baseURL = location.substring(0,idx);
+                param = location.substring(idx+1);
             }
 
             String martTag = "mart=";
@@ -106,15 +80,13 @@ public class IDMapperBiomart extends IDMapperWebservice {
                 dataset = dataset.substring(0,idx);
             }
 
-            return new IDMapperBiomart(mart, dataset, baseURL,
-                    idTypeFilter);
+            return new IDMapperBiomart(mart, dataset, baseURL);
         }
     }
 
     private String mart;
     private String dataset;
     private BiomartStub stub;
-    private boolean idOnlyForTgtDataSource;
 
     private String baseURL;
 
@@ -122,7 +94,6 @@ public class IDMapperBiomart extends IDMapperWebservice {
     private Set<DataSource> supportedTgtDs;
 
     /**
-     * Transitivity is unsupported.ID only. ID only for target data sources.
      * Use default url of BiMart.
      * @param mart name of mart
      * @param dataset name of dataset
@@ -134,42 +105,15 @@ public class IDMapperBiomart extends IDMapperWebservice {
     }
 
     /**
-     * Use default url of BiMart.
-     * @param mart name of mart
-     * @param dataset name of dataset
-     * @param idOnlyForTgtDataSource id-only option, filter data source ends
-     *        with 'ID' or 'Accession'.
-     * @throws IDMapperException if failed to link to the dataset
-     */
-    public IDMapperBiomart(String mart, String dataset,
-            boolean idOnlyForTgtDataSource) throws IDMapperException {
-        this(mart, dataset, null, idOnlyForTgtDataSource);
-    }
-
-    /**
-     * Transitivity is unsupported.ID only. ID only for target data sources.
+     * Construct from a dataset, a database, id-only option and transitivity
+     * option.
      * @param mart name of mart
      * @param dataset name of dataset
      * @param baseURL base url of BioMart
      * @throws IDMapperException if failed to link to the dataset
      */
     public IDMapperBiomart(String mart, String dataset, String baseURL)
-                throws IDMapperException {
-        this(mart, dataset, baseURL, true);
-    }
-
-    /**
-     * Construct from a dataset, a database, id-only option and transitivity
-     * option.
-     * @param mart name of mart
-     * @param dataset name of dataset
-     * @param baseURL base url of BioMart
-     * @param idOnlyForTgtDataSource id-only option, filter data source ends
-     *        with 'ID' or 'Accession'.
-     * @throws IDMapperException if failed to link to the dataset
-     */
-    public IDMapperBiomart(String mart, String dataset, String baseURL,
-            boolean idOnlyForTgtDataSource) throws IDMapperException {
+            throws IDMapperException {
         this.mart = mart;
         this.dataset = dataset;
         if (baseURL!=null) {
@@ -192,20 +136,10 @@ public class IDMapperBiomart extends IDMapperWebservice {
             throw new IDMapperException("dataset not exist.");
         }
 
-        this.idOnlyForTgtDataSource = idOnlyForTgtDataSource;
-
         supportedSrcDs = this.getSupportedSrcDataSources();
         supportedTgtDs = this.getSupportedTgtDataSources();
         
         cap = new BiomartCapabilities();
-    }
-
-    /**
-     *
-     * @return true if ID-only for target data sources.
-     */
-    public boolean getIDOnlyForTgtDataSource() {
-        return idOnlyForTgtDataSource;
     }
 
     /**
@@ -336,7 +270,7 @@ public class IDMapperBiomart extends IDMapperWebservice {
     protected Set<DataSource> getSupportedSrcDataSources()
             throws IDMapperException {
         Set<DataSource> dss = new HashSet();
-        Set<String> filters = stub.availableFilters(mart, dataset);
+        Set<String> filters = stub.availableSrcIDTypes(mart, dataset);
         for (String filter : filters) {
             DataSource ds = DataSource.getByFullName(filter);
             if (ds!=null) {
@@ -354,11 +288,10 @@ public class IDMapperBiomart extends IDMapperWebservice {
     protected Set<DataSource> getSupportedTgtDataSources() 
             throws IDMapperException {
         Set<DataSource> dss = new HashSet();
-        Set<String> attributes = stub.availableAttributes(mart, dataset,
-                idOnlyForTgtDataSource);
+        Set<String> types = stub.availableTgtIDTypes(mart, dataset);
 
-        for (String attr : attributes) {
-            DataSource ds = DataSource.getByFullName(attr);
+        for (String type : types) {
+            DataSource ds = DataSource.getByFullName(type);
             if (ds!=null) {
                 dss.add(ds);
             }
@@ -401,4 +334,52 @@ public class IDMapperBiomart extends IDMapperWebservice {
     public void close() throws IDMapperException { isConnected = false; }
     public boolean isConnected() { return isConnected; }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> getAttributes(Xref ref, String attrType) throws IDMapperException {
+        if (ref==null || attrType==null) {
+            return null;
+        }
+
+        String srcType = ref.getDataSource().getFullName();
+        String[] tgtTypes = new String[]{attrType};
+        Set<String> srcIds = new HashSet(1);
+        srcIds.add(ref.getId());
+
+        Map<String,Set<String>[]> map = stub.translate(mart, dataset, srcType, tgtTypes, srcIds);
+        Set<String>[] sets = map.get(ref.getId());
+        if (sets==null || sets.length==0)
+            return null;
+
+        return sets[0];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException {
+        return null; // unsupported
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> getAttributeSet() throws IDMapperException {
+        return stub.availableTgtAttributes(mart, dataset);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Set<String>> getAttributes(Xref ref) throws IDMapperException {
+        Map<String, Set<String>> map = new HashMap();
+        for (String attr : getAttributeSet()) {
+            Set<String> attrs = getAttributes(ref, attr);
+            if (attrs!=null) {
+                map.put(attr, attrs);
+            }
+        }
+        return map;
+    }
 }

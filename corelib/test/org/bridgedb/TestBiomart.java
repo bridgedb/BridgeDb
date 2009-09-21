@@ -46,7 +46,14 @@ public class TestBiomart extends TestCase
 
         for (String mart : marts) {
             System.out.println (mart);
-            Set<String> datasets = biomartStub.availableDatasets(mart);
+            Set<String> datasets;
+            try {
+                datasets = biomartStub.availableDatasets(mart);
+            } catch (IDMapperException e) {
+                e.printStackTrace();
+                continue;
+            }
+
             int nds = datasets.size();
             for (String ds : datasets) {
             	System.out.println ("\t" + ds);
