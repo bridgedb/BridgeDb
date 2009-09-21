@@ -120,7 +120,7 @@ public class TestBiomart extends TestCase
         Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
         
          //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
-        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:id-type-filter=false@http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
+        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
         System.out.println("\n===Supported source data sources===");
          for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
          {
