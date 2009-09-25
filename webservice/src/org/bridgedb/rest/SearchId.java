@@ -46,8 +46,15 @@ public class SearchId extends IDMapperResource {
 		    searchStr = (String) getRequest().getAttributes().get( IDMapperService.PAR_SEARCH_STR );
 		    System.out.println( "2: " + searchStr );
 	       	    String limitStr = (String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_LIMIT );
-		    System.out.println( "3: " + limitStr );
-	     	    limit = new Integer( limitStr ).intValue();
+		    if ( limitStr != null )
+                    {
+		      System.out.println( "3: " + limitStr );
+	     	      limit = new Integer( limitStr ).intValue();
+	 	    }
+		    else
+	            {
+		      limit = 0;
+		    }
 
 
 		} catch(Exception e) {

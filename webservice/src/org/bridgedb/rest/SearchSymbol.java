@@ -34,7 +34,7 @@ public class SearchSymbol extends IDMapperResource {
 	List<IDMapperRdb> mappers;
 	Xref xref;
 	String searchStr;
-	int limit;
+	int limit = 0;
   	String org;
 	
 	protected void doInit() throws ResourceException {
@@ -47,8 +47,10 @@ public class SearchSymbol extends IDMapperResource {
 		    System.out.println( "2: " + searchStr );
 	       	    String limitStr = (String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_LIMIT );
 
-	     	    limit = new Integer( limitStr ).intValue();
-
+	     	    if ( null != limitStr ) 
+		    {
+			limit = new Integer( limitStr ).intValue();
+		    }
 		    System.out.println( "SearchSymbol.doInit() done" );
 		} catch(Exception e) {
 			throw new ResourceException(e);
