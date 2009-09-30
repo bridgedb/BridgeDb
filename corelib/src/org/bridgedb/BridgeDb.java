@@ -33,8 +33,11 @@ public final class BridgeDb
 	 * Finds the correct implementation of the {@link IDMapper} interface and instantiates it.
 	 * @param connectionString used to configure a mapping resource. The connectionString
 	 *   has the form "protocol:location", where protocol can be e.g. "idmapper-text" or
-	 *   "idmapper-derby", and location is for example an url or a file, depending
-	 *   on the protocol.
+	 *   "idmapper-pgdb", and location is for example an url or a file, depending
+	 *   on the protocol.<BR>
+	 *   Note that you need to load the driver that implements the protocol first by loading its
+	 *   class with Class.forName(). E.g. for idmapper-pgdb, the class "org.bridgedb.rdb.IDMapperRdb" needs
+	 *   to be loaded.
 	 * @return the newly instantiated IDMapper
 	 * @throws IDMapperException when the right IDMapper implementation could not
 	 *   be instantiated 
