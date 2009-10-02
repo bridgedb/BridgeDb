@@ -26,6 +26,7 @@ import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
+import org.restlet.routing.Redirector;
 
 public class IDMapperService extends Application {
 	public static final String CONF_GDBS = "gdb.config";
@@ -61,12 +62,18 @@ public class IDMapperService extends Application {
     	}
     }
     
-    /*
-	 * URL pattern for:
-	 * //<organism>/model/<system>/<id>/xrefs[?dataSource=<dsCode>]
-	 */
-	public static final String URL_XREFS = "/{" + PAR_ORGANISM + "}/model/{" + PAR_SYSTEM + "}/{" 
-											+ PAR_ID + "}/xrefs";
+        /*
+         * URL pattern for:
+         * <blank>  to redirect to home page
+         */
+        public static final String URL_HOME = "/";
+
+        /*
+         * URL pattern for:
+         * //<organism>/model/<system>/<id>/xrefs[?dataSource=<dsCode>]
+         */
+        public static final String URL_XREFS = "/{" + PAR_ORGANISM + "}/model/{" + PAR_SYSTEM + "}/{"
+                                                                                        + PAR_ID + "}/xrefs";
         /*
          * URL pattern for:
          * /<organism>/model/xrefsByAttr?attrName=<attrName>&attrValue=<attrValue>
@@ -113,6 +120,11 @@ public class IDMapperService extends Application {
 	public Restlet createRoot() {
 	        Router router = new Router(getContext());
 		
+                //Register the route for the home page url pattern
+		String target = "http://bridgedb.org/wiki/BridgeWebservice";
+		Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_CLIENT_TEMPORARY);	
+                Route homeRoute = router.attach(URL_HOME, redirector);
+
 		//Register the route for the xrefs url pattern
 		Route xrefsRoute = router.attach(URL_XREFS, Xrefs.class);
 		//Specify that the dataSource parameter needs to be included
