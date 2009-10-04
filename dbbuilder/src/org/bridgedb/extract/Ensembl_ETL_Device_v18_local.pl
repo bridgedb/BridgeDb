@@ -27,6 +27,8 @@
 # SVN Revisions:
 #    Aug 2009
 #	- Added support for GO term names and definitions (release 55+)  
+#    Oct 2009
+#	- Added support for array probe extraction from funcgen database
 ###########################################################################
 
 
@@ -44,6 +46,7 @@ use Bio::EnsEMBL::DBSQL::DBConnection;
 use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::DBSQL::GOTermAdaptor;
 use Bio::EnsEMBL::OntologyTerm;
+use Bio::EnsEMBL::Funcgen::ProbeFeature;
 my $api_path = "/home/apico/src/ensembl/modules";
 
 ## Under script control
@@ -410,6 +413,7 @@ foreach my $db_adaptor (@db_adaptors) {
 my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
 my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
 my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
+my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
 my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
@@ -663,30 +667,32 @@ while (my $gene = pop(@$genes))
 						     ]);
 	%{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'], 
 				'SYSTEM' => ["\'Affymetrix\'", "\'$dateArg\'", 
-					     "\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+					     "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.ensembl.org/".$genus_species."/Search/Summary?q=~\'", "\'\'", 
 					     "\'https://www.affymetrix.com/analysis/downloads/\'"],
 				'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
+					     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
 					     'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
 					     'PRIMARY KEY (ID)'
 					     ]);
 	%{$GeneTables{Agilent}} = ('NAME' => ['Agilent', 'Ag'], 
 				   'SYSTEM' => ["\'Agilent Technologies\'", "\'$dateArg\'", 
-						"\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+						"\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						"\'\'", "\'\'", 
 						"\'http://www.agilent.com/\'"],
 				   'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
+                                                'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
 						'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
 						'PRIMARY KEY (ID)'
 						]);
 	%{$GeneTables{Illumina}} = ('NAME' => ['Illumina', 'Il'], 
 				    'SYSTEM' => ["\'Illumina\'", "\'$dateArg\'", 
-						 "\'ID|Chip\\\\BF|Description\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+						 "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 						 "\'\'", "\'\'", 
 						 "\'http://www.illumina.com/products/arraysreagents/overview.ilmn\'"],
 				    'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
+                                                 'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
 						 'Chip VARCHAR(128) NOT NULL DEFAULT \'\'', 
-						 'Description VARCHAR(255) DEFAULT NULL',
 						 'PRIMARY KEY (ID)'
 						 ]);
 	%{$GeneTables{Cint}} = ('NAME' => ['Cint', 'C'], 
@@ -1106,6 +1112,12 @@ while (my $gene = pop(@$genes))
 		    \%Ensembl_GeneTables,
 		    \%Attributes);  
     
+    ## EXTRACT FUNCGEN INFORMATION
+    parse_ProbeFeatures($gene->get_all_Transcripts(),
+			\%GeneTables,
+			\%Ensembl_GeneTables,
+			\%Attributes);
+
     ## EXTRACT GENE STRUCTURE INFORMATINO
 #    parse_AllTranscripts($gene->get_all_Transcripts(), 
 #			 \%Trans, \%Ensembl_Trans, 
@@ -1670,30 +1682,30 @@ sub parse_DBEntries {
 		++$subcount{GeneOntology};
 	    }
   	}
-    	elsif ($dbe_dbname =~ /^\'AFFY/i){  #catch all types
-	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{Affy}{$dbe_primary_id}}++){
-		$$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$dbe_primary_id, $dbe_dbname];
-		$$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $dbe_primary_id];
-		++$subcount{Affy};
-	    }
-  	}
-    	elsif ($dbe_dbname =~ /^\'Agilent/i){  #catch all types
-	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{Agilent}{$dbe_primary_id}}++){
-		$$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$dbe_primary_id, $dbe_dbname];
-		$$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $dbe_primary_id];
-		++$subcount{Agilent};
-	    }
-  	}
-    	elsif ($dbe_dbname =~ /^\'Illumina/i){ #catch all types  
-	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{Illumina}{$dbe_primary_id}}++){
-		$$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$dbe_primary_id, $dbe_dbname, $dbe_description];
-		$$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $dbe_primary_id];
-		++$subcount{Illumina};
-	    }
-  	}
+# 	elsif ($dbe_dbname =~ /^\'AFFY/i){  #catch all types
+#	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+#	    if (!${$seen{Affy}{$dbe_primary_id}}++){
+#		$$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$dbe_primary_id, $dbe_dbname];
+#		$$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $dbe_primary_id];
+#		++$subcount{Affy};
+#	    }
+#  	}
+#    	elsif ($dbe_dbname =~ /^\'Agilent/i){  #catch all types
+#	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+#	    if (!${$seen{Agilent}{$dbe_primary_id}}++){
+#		$$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$dbe_primary_id, $dbe_dbname];
+#		$$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $dbe_primary_id];
+#		++$subcount{Agilent};
+#	    }
+#  	}
+#    	elsif ($dbe_dbname =~ /^\'Illumina/i){ #catch all types  
+#	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+#	    if (!${$seen{Illumina}{$dbe_primary_id}}++){
+#		$$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$dbe_primary_id, $dbe_dbname, $dbe_description];
+#		$$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $dbe_primary_id];
+#		++$subcount{Illumina};
+#	    }
+#  	}
         elsif ($dbe_dbname =~ /^\'cint\'$/i){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{Cint}{$dbe_primary_id}}++){
@@ -2002,6 +2014,89 @@ sub parse_DBEntries {
 
   } 
 } 
+
+## PARSE FUNCGEN PROBE FEATURES  ################################################################
+# IN: API call for array of probe features, plus references to the main HoHoA data tables
+# OUT: Data tables are modified directly through references, no variables returned
+# Function: To set the values of gene and link tables with identifiers and annotations extracted
+# with API calls. Also to populate ADMIN_Xrefs with sample of every available DB Entry.
+#################################################################################################
+sub parse_ProbeFeatures {
+  my ($all_trans, $GeneTables, $Ensembl_GeneTables, $Attributes) = @_;
+  my %subcount = ();
+  my %seen = ();
+
+  foreach my $key ( keys %$GeneTables) {
+      $subcount{$key} = 1;
+      %{$seen{$key}} = ();
+  }
+
+  foreach my $trans (@$all_trans) {
+    my $trans_stable_id = $trans->stable_id();
+    print "TRANS: $trans_stable_id\n";
+    my $probe_features = $probe_adaptor->fetch_all_by_external_name($trans_stable_id);
+
+    foreach my $pf (@$probe_features) {
+      my $probe = $pf->probe();
+      my $array_list = $probe->get_all_Arrays();
+
+      foreach my $array (@$array_list){
+	if (!$array) {
+		next;
+	}
+	my $pf_dbname = mysql_quotes($array->vendor());
+        my $pf_display_id = mysql_quotes($probe->get_probename($array->name()));
+	if ($pf_dbname =~ /^\'AFFY/i) { # Affy uses probesets
+		$pf_display_id = mysql_quotes($probe->probeset()->name());
+	}
+	my $pf_primary_id = $pf_display_id;
+      	my $pf_description = mysql_quotes($array->description());
+      	my $pf_release = mysql_quotes($array->name());
+      	my $pf_status = mysql_quotes("XREF"); #enum
+      	my $pf_version = mysql_quotes($array->format());
+      	my $pf_info_text = mysql_quotes($array->type());
+      	my $pf_info_type = mysql_quotes("SEQUENCE_MATCH"); #enum
+      	my $pf_synonyms = $probe->get_all_probenames();
+      	my $pf_syns = join("|", @$pf_synonyms);
+      	$pf_syns = mysql_quotes($pf_syns);
+
+        print "PROBE: $pf_primary_id | $pf_dbname | $pf_release \n";
+
+      	$ADMIN_Xrefs{$pf_dbname} = [$pf_dbname, $pf_display_id, $pf_primary_id, $pf_description, $pf_syns,
+                             $pf_release, $pf_status, $pf_version, $pf_info_text, $pf_info_type];
+
+        if ($pf_dbname =~ /^\'AFFY/i){  #catch all types
+            $ADMIN_Xrefs{$pf_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{Affy}{$pf_primary_id}}++){
+                $$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$pf_primary_id, $pf_dbname, $pf_release];
+                $$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $pf_primary_id];
+                ++$subcount{Affy};
+            }
+        }
+        elsif ($pf_dbname =~ /^\'Agilent/i){  #catch all types
+            $ADMIN_Xrefs{$pf_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{Agilent}{$pf_primary_id}}++){
+                $$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$pf_primary_id, $pf_dbname, $pf_release];
+                $$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $pf_primary_id];
+                ++$subcount{Agilent};
+            }
+        }
+        elsif ($pf_dbname =~ /^\'Illumina/i){ #catch all types  
+            $ADMIN_Xrefs{$pf_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{Illumina}{$pf_primary_id}}++){
+                $$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$pf_primary_id, $pf_dbname, $pf_release];
+                $$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $pf_primary_id];
+                ++$subcount{Illumina};
+            }
+        }
+        else {
+            $ADMIN_Xrefs{$pf_dbname}[10] = "\'N\'"; # not collected!
+        }
+
+      }
+    }
+  }
+}
 
 ## FEATURE TO ARRAY #############################################################################
 # IN: An API key to a gene structure feature
