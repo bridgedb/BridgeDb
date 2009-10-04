@@ -10,11 +10,13 @@ Drosophila melanogaster	Fruitfly	7227	dme	Dm
 Echinops telfairi	Hedgehog			Et
 Equus caballus	Horse	9796	eca	Qc
 Homo sapiens	Human	9606	hsa	Hs
+Callithrix jacchus	Marmoset	9483	cja	Cj
 Oryzias latipes	Medaka Fish			Ol
 Aedes aegypti	Mosquito_Aa 			Aa
 Anopheles gambiae	Mosquito_Ag 	7165	aga	Ag
 Mus musculus	Mouse	10090	mmu	Mm
 Monodelphis domestica	Opossum	13616	 	Md
+Sus scrofa	Pig	9823	ssc	Ss
 Ornithorhynchus anatinus	Platypus			Oa
 Tetraodon nigroviridis	Pufferfish	99883	 	Tn
 Oryctolagus cuniculus	Rabbit			Oc
