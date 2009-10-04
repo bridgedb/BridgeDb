@@ -1,11 +1,10 @@
 See scripts/buildPathVisio.sh for protocol for processing of CS databases into Derby databases.
 
 NOTES:
- * For Sc databases: wget http://downloads.yeastgenome.org/gene_registry/registry.genenames.tab and load the first and last columns
+ * For Sc databases: an if statement in buildPathVisio.sh gets http://downloads.yeastgenome.org/gene_registry/registry.genenames.tab and loads the first and last columns
 into MySQL to overwrite SGD primary IDs.  Ensembl only provides the symbol redundantly as both primary_id and display_id. The ETL 
 device has collect both and included symbol in the attribute table. So, by overwriting the primary_id in the 'gene' and 'attr'
 tables, the databases will be fixed.  The proper SGD IDs are important to support the majority of yeast pathways already in WikiPathways.
---> This is handled by an if statement in the buildPathVisio.sh
 
 * For copying derby files to wikipathways.org, you can use the following command to copy just the last 5 (adapt as necessary) created databases:
  scp `ls -lht *bridge | head -5 | awk '{print $9}'` wikipathways@www.wikipathways.org:database/. 
