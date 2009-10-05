@@ -91,11 +91,12 @@ public class TestFile extends TestCase
         
         Xref nonsense = new Xref ("Humbug", DataSource.getByFullName("Ebenizer Scrooge"));
         // non-existent id should just return empty list.
-        assertEquals (0, idMapper.mapID(nonsense, null).size());
+        assertEquals (0, idMapper.mapID(nonsense).size());
 
 	}
 
-	public void testTransitive() throws MalformedURLException, IDMapperException
+	// Test disabled, takes several minutes and produces too much output. 
+	public void _testTransitive() throws MalformedURLException, IDMapperException
 	{
 		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL(),
 				new char[] { '\t' },
