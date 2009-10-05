@@ -65,17 +65,38 @@ public class BackPageText extends IDMapperResource {
 	  try 
 	  {
 	    //The result set
-	    Set<String> bpInfos = new HashSet<String>();
+	    Set<String> bpInfoSym = new HashSet<String>();
+            Set<String> bpInfoDes = new HashSet<String>();
+            Set<String> bpInfoTyp = new HashSet<String>();
+            Set<String> bpInfoChr = new HashSet<String>();
+            Set<String> bpInfoSyn = new HashSet<String>();
 	    
 	    for(IDMapperRdb mapper : mappers ) {
-		bpInfos.addAll( mapper.getAttributes( xref, "Backpage"));
+		bpInfoSym.addAll(mapper.getAttributes( xref, "Symbol"));
+                bpInfoDes.addAll(mapper.getAttributes( xref, "Description"));
+                bpInfoTyp.addAll(mapper.getAttributes( xref, "Type"));
+                bpInfoChr.addAll(mapper.getAttributes( xref, "Chromosome"));
+                bpInfoSyn.addAll(mapper.getAttributes( xref, "Synonyms"));
 	    }
 	    
             StringBuilder result = new StringBuilder();
-	    for( String x : bpInfos ) {
-	      result.append( x );
+	    result.append("<html><body><table>");
+	    for( String x : bpInfoSym ) {
+	      result.append("<tr><td>Symbol</td><td>" + x + "</td></tr>" );
 	    }
-
+            for( String x : bpInfoDes ) {
+              result.append("<tr><td>Description</td><td>" + x + "</td></tr>" );
+            }
+            for( String x : bpInfoTyp ) {
+              result.append("<tr><td>Type</td><td>" + x + "</td></tr>" );
+            }
+            for( String x : bpInfoChr ) {
+              result.append("<tr><td>Chromosome</td><td>" + x + "</td></tr>" );
+            }
+            for( String x : bpInfoSyn ) {
+              result.append("<tr><td>Synonyms</td><td>" + x + "</td></tr>" );
+            }
+	    result.append("</table></body></html>");
 	    return( result.toString() );
           } catch( Exception e ) {
 	    e.printStackTrace();
