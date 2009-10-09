@@ -72,5 +72,5 @@ Wheat gene catalog	Wc	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/sql?sql
 Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$ID	Acetate	metabolite		1	urn:bridgedb:wikipedia
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$ID	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	urn:bridgedb:wheat.gene.names
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$ID	WGS-95-1333	probe	Triticum aestivum	0	urn:bridgedb:wheat.gene.refs
-Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/Homo_sapiens/Search/Summary?species=all;idx=;q=$ID	1851_s_at	probe		0	urn:bridgedb:affymetrix
+Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/Homo_sapiens/Search/Results?species=all;feature=OligoProbe;q=$ID	1851_s_at	probe		0	urn:bridgedb:affymetrix
 ZFIN	Z	http://zfin.org	http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=$ID	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin
