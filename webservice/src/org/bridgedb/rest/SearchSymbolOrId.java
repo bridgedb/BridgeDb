@@ -44,7 +44,7 @@ public class SearchSymbolOrId extends IDMapperResource {
 		    org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
 		    mappers = getIDMappers(org);
 		    System.out.println( "1" );
-		    searchStr = (String) getRequest().getAttributes().get( IDMapperService.PAR_SEARCH_STR );
+		    searchStr = (String) getRequest().getAttributes().get( IDMapperService.PAR_QUERY );
 		    System.out.println( "2: " + searchStr );
 	       	    String limitStr = (String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_LIMIT );
 		    System.out.println( "3: " + limitStr );

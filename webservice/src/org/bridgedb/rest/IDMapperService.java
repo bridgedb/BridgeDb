@@ -19,148 +19,281 @@ package org.bridgedb.rest;
 import java.io.File;
 import java.io.IOException;
 
+import org.bridgedb.AttributeMapper;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.bio.GdbProvider;
 import org.restlet.Application;
 import org.restlet.Restlet;
+import org.restlet.routing.Redirector;
 import org.restlet.routing.Route;
 import org.restlet.routing.Router;
-import org.restlet.routing.Redirector;
 
 public class IDMapperService extends Application {
 	public static final String CONF_GDBS = "gdb.config";
-	
+
 	public static final String PAR_ORGANISM = "organism";
 	public static final String PAR_ID = "id";
 	public static final String PAR_SYSTEM = "system";
-        public static final String PAR_SEARCH_STR = "searchStr";
-       
+	public static final String PAR_QUERY = "query";
+
 	public static final String PAR_TARGET_SYSTEM = "dataSource";
-        public static final String PAR_TARGET_ATTR_NAME = "attrName";
-        public static final String PAR_TARGET_ATTR_VALUE = "attrValue";
-        public static final String PAR_TARGET_LIMIT = "limit";
+	public static final String PAR_TARGET_ATTR_NAME = "attrName";
+	public static final String PAR_TARGET_LIMIT = "limit";
 	
-    public final File configFile;
-    
-    public IDMapperService(File aConfigFile)
-    {
-    	if (aConfigFile == null)
-    	{
-    		this.configFile = new File (CONF_GDBS);
-    	}
-    	else
-    	{
-    		this.configFile = aConfigFile;
-    	}
-    		
-    	if (!configFile.exists())
-    	{
-    		System.err.println ("Could not find config file " + configFile);
-    		System.err.println ("Please copy webservice/gdb.config.template and adjust it to your needs");
-    		System.exit(1);
-    	}
-    }
-    
-        /*
-         * URL pattern for:
-         * <blank>  to redirect to home page
-         */
-        public static final String URL_HOME = "/";
+	public static final String PAR_SOURCE_SYSTEM = "src";
+	public static final String PAR_DEST_SYSTEM = "dest";
+	
+	public final File configFile;
 
-        /*
-         * URL pattern for:
-         * //<organism>/model/<system>/<id>/xrefs[?dataSource=<dsCode>]
-         */
-        public static final String URL_XREFS = "/{" + PAR_ORGANISM + "}/model/{" + PAR_SYSTEM + "}/{"
-                                                                                        + PAR_ID + "}/xrefs";
-        /*
-         * URL pattern for:
-         * /<organism>/model/xrefsByAttr?attrName=<attrName>&attrValue=<attrValue>
-         */
-        public static final String URL_XREFS_BY_ATTR = "/{" + PAR_ORGANISM + "}/model/xrefsByAttr";
+	public IDMapperService(File aConfigFile)
+	{
+		if (aConfigFile == null)
+		{
+			this.configFile = new File (CONF_GDBS);
+		}
+		else
+		{
+			this.configFile = aConfigFile;
+		}
 
-        /* 
-         * URL pattern for:
-         * /<organism>/model/<system>/<id>/backPageText
-         */
-        public static final String URL_BACK_PAGE_TEXT = "/{" + PAR_ORGANISM + "}/model/{" + PAR_SYSTEM + "}/{" + 
-            PAR_ID + "}/backPageText";
+		if (!configFile.exists())
+		{
+			System.err.println ("Could not find config file " + configFile);
+			System.err.println ("Please copy webservice/gdb.config.template and adjust it to your needs");
+			System.exit(1);
+		}
+	}
 
-        /*
-	 * URL pattern for:
-	 * /<organism>/search/symbol/<searchStr>&limit=<limit>
-         */
-        public static final String URL_SEARCH_SYMBOL = "/{" + PAR_ORGANISM + "}/search/symbol/{" + PAR_SEARCH_STR + "}";
-
-        
-    public static final String URL_PROPERTIES = "/{" + PAR_ORGANISM + "}/properties";
-
-    public static final String URL_SUPPORTED_DATASOURCES = "/{" + PAR_ORGANISM + "}/supportedDataSources";
-
-    /*
-	 * URL pattern for:
-	 * /<organism>/search/id/<searchStr>&limit=<limit>
+	/**
+	 * URL pattern to redirect to home page.<BR>
+	 * 
+	 * <code>
+	 * {blank}
+	 * </code>
 	 */
-    public static final String URL_SEARCH_ID = "/{" + PAR_ORGANISM + "}/search/id/{" + PAR_SEARCH_STR + "}";
-        /*
-	 * URL pattern for:
-	 * /<organism>/search/symbolOrId/<searchStr>&limit=<limit>
-	 */
-    public static final String URL_SEARCH_SYMBOL_OR_ID = "/{" + PAR_ORGANISM + "}/search/symbolOrId/{" + PAR_SEARCH_STR + "}";
+	public static final String URL_HOME = "/";
 
+	/**
+	 * URL pattern for mapping xrefs.<BR>
+	 * <code>
+	 * /{organism}/xrefs/{system}/{id}[?dataSource={dsName}]
+	 * </code> 
+	 * @see IDMapper#mapID(org.bridgedb.Xref, org.bridgedb.DataSource...)
+	 */
+	public static final String URL_XREFS = "/{" + PAR_ORGANISM + "}/xrefs/{" + PAR_SYSTEM + "}/{" + 
+		PAR_ID + "}";
+
+	/**
+	 * URL pattern for searching xrefs.<BR>
+	 * <code>
+	 * /{organism}/search/{query}[?limit={limit}]
+	 * </code>
+	 * @see IDMapper#freeSearch(String, int)
+	 */
+	public static final String URL_SEARCH = "/{" + PAR_ORGANISM + "}/search/{" + PAR_QUERY + "}";
+	
+	/**
+	 * URL pattern for finding out if an xref exists in the database.<BR>
+	 * <code>
+	 * /{organism}/xrefExists
+	 * </code>
+	 * @see IDMapper#xrefExists(org.bridgedb.Xref)
+	 */
+	public static final String URL_XREF_EXISTS = "/{" + PAR_ORGANISM + "}/xrefExists/{" + PAR_SYSTEM + "}/{" + PAR_ID + "}";
+
+	/**
+	 * URL pattern for getting IDMapper properties. Returns tab delimited text with a property on each line, 
+	 * where the first column is the property key, the second is the property value.<BR>
+	 * <code>
+	 * /{organism}/properties
+	 * </code>
+	 * @see IDMapperCapabilities#getKeys()
+	 * @see IDMapperCapabilities#getProperty(String)
+	 */
+	public static final String URL_PROPERTIES = "/{" + PAR_ORGANISM + "}/properties";
+
+	/**
+	 * URL pattern for getting the supported source datasources for this database.<BR>
+	 * <code>
+	 * {<organism}/sourceDataSources
+	 * </code>
+	 * @see IDMapperCapabilities#getSupportedSrcDataSources()
+	 */
+	public static final String URL_SUPPORTED_SOURCE_DATASOURCES = "/{" + PAR_ORGANISM + "}/sourceDataSources";
+	
+	/**
+	 * URL pattern for getting the supported target datasources for this database.<BR>
+	 * <code>
+	 * /{organism}/targetDataSources
+	 * </code>
+	 * @see IDMapperCapabilities#getSupportedTgtDataSources()
+	 */
+	public static final String URL_SUPPORTED_TARGET_DATASOURCES = "/{" + PAR_ORGANISM + "}/targetDataSources";
+	
+	/**
+	 * URL pattern for finding out if free search is supported.<BR>
+	 * <code>
+	 * /{organism}/isFreeSearchSupported
+	 * </code>
+	 * @see IDMapperCapabilities#isFreeSearchSupported()
+	 */
+	public static final String URL_IS_FREE_SEARCH_SUPPORTED = "/{" + PAR_ORGANISM + "}/isFreeSearchSupported";
+	
+	/**
+	 * URL pattern to find out if a mapping is supported.<BR>
+	 * <code>
+	 * /{organism}/isMappingSupported/{source_system}/{target_system}
+	 * </code>
+	 * @see IDMapperCapabilities#isMappingSupported(org.bridgedb.DataSource, org.bridgedb.DataSource)
+	 */
+	public static final String URL_IS_MAPPING_SUPPORTED = "/{" + PAR_ORGANISM + "}/isMappingSupported/{" + PAR_SOURCE_SYSTEM + "}/{" + PAR_DEST_SYSTEM + "}";
+
+	/**
+	 * URL pattern for searching by attribute.<BR>
+	 * <code>
+	 * /{organism}/attributeSearch/{query}?[limit={limit}][&attrName={attrName}]
+	 * </code>
+	 * @see AttributeMapper#freeAttributeSearch(String, String, int)
+	 */
+	public static final String URL_ATTRIBUTE_SEARCH = "/{" + PAR_ORGANISM + "}/attributeSearch/{" + PAR_QUERY + "}";
+	
+	/**
+	 * URL pattern for getting attributes of an xref. If attrName is supplied, this method
+	 * returns plain text with an attribute value on each line. If attrName is not supplied, 
+	 * this method returns tab delimited text with an attribute key-value pair on each line.
+	 * <BR>
+	 * /{organism}/attributes/{system}/{id}[?attrName={attrName}]
+	 * 
+	 * @see AttributeMapper#getAttributes(org.bridgedb.Xref, String)
+	 * @see AttributeMapper#getAttributes(org.bridgedb.Xref)
+	 */
+	public static final String URL_ATTRIBUTES = "/{" + PAR_ORGANISM + "}/attributes/{" + PAR_SYSTEM + "}/{" + PAR_ID + "}";
+
+	/**
+	 * URL pattern for getting the supported attribute set.<BR>
+	 * <code>
+	 * /<organism>/attributeSet
+	 * </code>
+	 * @see AttributeMapper#getAttributeSet()
+	 */
+	public static final String URL_ATTRIBUTE_SET = "/{" + PAR_ORGANISM + "}/attributeSet";
+	
+	/**
+	 * URL pattern for getting backpage HTML.<BR>
+	 * URL:<BR>
+	 * /{organism}/backPageText/{system}/{id}
+	 */
+	public static final String URL_BACK_PAGE_TEXT = "/{" + PAR_ORGANISM + "}/backPageText/{" + PAR_SYSTEM + "}/{" + 
+		PAR_ID + "}";
+
+	/**
+	 * URL pattern for searching by symbol.<BR>
+	 * <code>
+	 * /{organism}/search/symbol/{query}&limit={limit}
+	 * </code>
+	 * <BR>
+	 * Note that this is a shortcut method for the url pattern:<BR>
+	 * <code>
+	 * /{organism}/attributeSearch/{query}&attrName=Symbol
+	 * </code>
+	 */
+	public static final String URL_SEARCH_SYMBOL = "/{" + PAR_ORGANISM + "}/search/symbol/{" + PAR_QUERY + "}";
+
+	/**
+	 * URL pattern for searching by identifier.<BR>
+	 * <code>
+	 * /{organism}/search/id/{query}&limit={limit}
+	 * </code>
+	 *
+	 */
+	//TODO: Looking at the implementation, this just calls IDMapper.freeSearch which isn't
+	//specific for identifiers, but also includes symbols!!
+	public static final String URL_SEARCH_ID = "/{" + PAR_ORGANISM + "}/search/id/{" + PAR_QUERY + "}";
+	
+	/**
+	 * URL pattern for searching by identifier or code.<BR>
+	 * <code>
+	 * /{organism}/search/symbolOrId/{query}&limit={limit}
+	 * </code>
+	 */
+	//TODO: Do we need this? It looks to me like this is the same as freeSearch...
+	public static final String URL_SEARCH_SYMBOL_OR_ID = "/{" + PAR_ORGANISM + "}/search/symbolOrId/{" + PAR_QUERY + "}";
+	
 	private GdbProvider gdbProvider;
-	
+
 	public synchronized void start() throws Exception {
 		super.start();
 		BioDataSource.init();
 		connectGdbs();
 	}
-	
+
 	public Restlet createRoot() {
-	        Router router = new Router(getContext());
-		
-                //Register the route for the home page url pattern
+		Router router = new Router(getContext());
+
+		//Register the route for the home page url pattern
 		String target = "http://bridgedb.org/wiki/BridgeWebservice";
 		Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_CLIENT_TEMPORARY);	
-                Route homeRoute = router.attach(URL_HOME, redirector);
+		router.attach(URL_HOME, redirector);
 
+		/* IDMapper methods */
 		//Register the route for the xrefs url pattern
 		Route xrefsRoute = router.attach(URL_XREFS, Xrefs.class);
 		//Specify that the dataSource parameter needs to be included
 		//in the attributes
 		xrefsRoute.extractQuery(PAR_TARGET_SYSTEM, PAR_TARGET_SYSTEM, true);
 
-		// Register the route for xrefsByAttr
-                Route xrefsByAttrRoute = router.attach( URL_XREFS_BY_ATTR, XrefsByAttr.class );
-                xrefsByAttrRoute.extractQuery(PAR_TARGET_ATTR_NAME,PAR_TARGET_ATTR_NAME, true );
-                xrefsByAttrRoute.extractQuery(PAR_TARGET_ATTR_VALUE,PAR_TARGET_ATTR_VALUE, true );
+		Route searchRoute = router.attach( URL_SEARCH, FreeSearch.class );
+		searchRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
 		
-		// Register the route for backPageText
-		Route backPageTextRoute = router.attach( URL_BACK_PAGE_TEXT, BackPageText.class );
-	       
-		Route propertiesRoute = router.attach (URL_PROPERTIES, Properties.class );
+		router.attach(URL_XREF_EXISTS, XrefExists.class);
 		
-		Route supportedDataSourcesRoute = router.attach (URL_SUPPORTED_DATASOURCES, SupportedDataSources.class );
+		/* IDMapperCapabilities methods */
+		router.attach (URL_PROPERTIES, Properties.class );
+
+		router.attach (
+				URL_SUPPORTED_SOURCE_DATASOURCES, SupportedSourceDataSources.class );
+		router.attach (
+				URL_SUPPORTED_TARGET_DATASOURCES, SupportedTargetDataSources.class );
 		
+		router.attach(URL_ATTRIBUTE_SET, AttributeSet.class);
+		
+		router.attach(URL_IS_FREE_SEARCH_SUPPORTED, IsFreeSearchSupported.class);
+		
+		router.attach(URL_IS_MAPPING_SUPPORTED, IsMappingSupported.class);
+		
+		/* AttributeMapper methods */
+		Route attrSearchRoute = router.attach( URL_ATTRIBUTE_SEARCH, AttributeSearch.class );
+		attrSearchRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
+		attrSearchRoute.extractQuery( PAR_TARGET_ATTR_NAME, PAR_TARGET_ATTR_NAME, true );
+		
+		Route attributesRoute = router.attach(URL_ATTRIBUTES, Attributes.class );
+		attributesRoute.extractQuery( PAR_TARGET_ATTR_NAME, PAR_TARGET_ATTR_NAME, true );
+		
+		/* Extra methods */
 		// Register the route for search-symbol
 		Route searchSymbolRoute = router.attach( URL_SEARCH_SYMBOL, SearchSymbol.class );
 		searchSymbolRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
 
 		// Register the route for search-id
 		Route searchIdRoute = router.attach( URL_SEARCH_ID, SearchId.class );
-	        searchIdRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
+		searchIdRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
 		// Register the route for search-symbol-or-id
 		Route searchSymbolOrIdRoute = router.attach( URL_SEARCH_SYMBOL_OR_ID, SearchSymbolOrId.class );
 		searchSymbolOrIdRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
-
+		
+		// Register the route for backPageText
+		router.attach( URL_BACK_PAGE_TEXT, BackPageText.class );
+		
 		return router;
 	}
-	
+
 	public GdbProvider getGdbProvider() {
 		return gdbProvider;
 	}
-	
+
 	private void connectGdbs() throws IDMapperException, IOException {
 		String[] gdbconf = getContext().getParameters().getValuesArray(CONF_GDBS);
 		File gdbFile = configFile;

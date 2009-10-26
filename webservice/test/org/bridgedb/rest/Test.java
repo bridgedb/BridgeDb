@@ -16,41 +16,98 @@
 //
 package org.bridgedb.rest;
 
+import java.util.Map;
 import java.util.Set;
-
-import org.bridgedb.BridgeDb;
-import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
 
 import junit.framework.TestCase;
 
+import org.bridgedb.AttributeMapper;
+import org.bridgedb.BridgeDb;
+import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
+import org.bridgedb.bio.BioDataSource;
+
 public class Test extends TestCase
 {
-	public void testLocalService() throws ClassNotFoundException, IDMapperException
-	{
-		// Start local service
-		Server server = new Server();
-		server.run(8183, null);
+	private IDMapper mapper;
 	
-		// Create a client
-		Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
-		IDMapper mapper = BridgeDb.connect("idmapper-bridgerest:http://localhost:8183/Human");
-		
-		Xref insr = new Xref ("3643", DataSource.getBySystemCode("L"));
-		Xref affy = new Xref ("33162_at", DataSource.getBySystemCode("X"));
-		Set<Xref> result = mapper.mapID(insr, null);
-		assertTrue (result.contains(affy));
-		
-		Set<DataSource> supported = mapper.getCapabilities().getSupportedSrcDataSources();
-		assertTrue (supported.contains(DataSource.getBySystemCode("L")));
+	@Override
+	protected void setUp() throws Exception {
+		if(mapper == null) {
+			// Start local service
+			Server server = new Server();
+			server.run(8183, null);
 
-		String val = mapper.getCapabilities().getProperty("SCHEMAVERSION");
-		assertEquals ("2", val);
+			// Create a client
+			Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
+			mapper = BridgeDb.connect("idmapper-bridgerest:http://localhost:8183/Human");
+		}
+	}
 
-		result = mapper.freeSearch("1234", 100);
-		System.out.println (result);
+	public IDMapper getLocalService() {
+		return mapper;
 	}
 	
+	public void testLocalMapID() throws IDMapperException, ClassNotFoundException {
+		IDMapper mapper = getLocalService();
+		
+		Xref insr = new Xref ("3643", BioDataSource.ENTREZ_GENE);
+		Xref affy = new Xref ("33162_at", BioDataSource.AFFY);
+		Set<Xref> result = mapper.mapID(insr);
+		assertTrue (result.contains(affy));
+		
+		assertTrue(mapper.xrefExists(insr));
+	}
+	
+	public void testLocalCapabilities() throws IDMapperException, ClassNotFoundException {
+		IDMapper mapper = getLocalService();
+		
+		IDMapperCapabilities cap = mapper.getCapabilities();
+		
+		Set<DataSource> supported = cap.getSupportedSrcDataSources();
+		assertTrue (supported.contains(DataSource.getBySystemCode("L")));
+
+		String val = cap.getProperty("SCHEMAVERSION");
+		assertNotNull(val);
+		
+		Set<DataSource> srcDs = cap.getSupportedSrcDataSources();
+		assertTrue(srcDs.size() > 0);
+		
+		assertTrue(cap.isFreeSearchSupported());
+		
+		assertTrue(cap.isMappingSupported(BioDataSource.UNIPROT, BioDataSource.ENTREZ_GENE));
+	}
+	
+	public void testLocalSearch() throws IDMapperException, ClassNotFoundException {
+		IDMapper mapper = getLocalService();
+		
+		Set<Xref> result = mapper.freeSearch("1234", 100);
+		System.out.println(result);
+		assertTrue(result.size() > 0);
+	}
+	
+	public void testLocalAttributes() throws ClassNotFoundException, IDMapperException {
+		AttributeMapper mapper = (AttributeMapper)getLocalService();
+		
+		Xref insr = new Xref("3643", BioDataSource.ENTREZ_GENE);
+		Map<String, Set<String>> attrMap = mapper.getAttributes(insr);
+		assertNotNull(attrMap.get("Symbol"));
+		assertTrue(attrMap.get("Symbol").size() == 2);
+		
+		Set<String> attrValues = mapper.getAttributes(insr, "Symbol");
+		assertTrue(attrValues.size() == 2);
+		
+		Map<Xref, String> xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 1);
+		assertTrue(xrefMap.size() == 1);
+
+		xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 100);
+		assertTrue(xrefMap.containsKey(insr));
+		assertTrue(xrefMap.size() > 1);
+		
+		Set<String> attrs = mapper.getAttributeSet();
+		assertTrue(attrs.size() > 0);
+	}
 }

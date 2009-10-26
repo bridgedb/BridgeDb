@@ -16,15 +16,17 @@
 //
 package org.bridgedb.rest;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.bridgedb.DataSource;
+import org.bridgedb.AttributeMapper;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 
-public class SupportedDataSources extends IDMapperResource 
+public class AttributeSet extends IDMapperResource 
 {
 	List<IDMapperRdb> mappers;
   	String org;
@@ -32,10 +34,8 @@ public class SupportedDataSources extends IDMapperResource
   	protected void doInit() throws ResourceException 
 	{
 		try {
-		    System.out.println( "SupportedDataSources.init() start" );
 		    org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
 		    mappers = getIDMappers(org);
-		    System.out.println( "SupportedDataSources.doInit() done" );
 		} catch(Exception e) {
 			throw new ResourceException(e);
 		}
@@ -46,14 +46,18 @@ public class SupportedDataSources extends IDMapperResource
 	{
 		try
 		{
-	        StringBuilder result = new StringBuilder();
+			Set<String> attributes = new HashSet<String>();
+			
 		    for(IDMapperRdb mapper : mappers ) 
 		    {
-		    	for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
-		    	{
-		    		result.append(ds.getSystemCode());
-		    		result.append ("\n");
+		    	if(mapper instanceof AttributeMapper) {
+		    		attributes.addAll(((AttributeMapper)mapper).getAttributeSet());
 		    	}
+		    }
+		    StringBuilder result = new StringBuilder();
+		    for(String a : attributes) {
+		    	result.append(a);
+		    	result.append("\n");
 		    }
 		    return result.toString();
 		} 

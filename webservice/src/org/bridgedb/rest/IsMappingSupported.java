@@ -16,75 +16,53 @@
 //
 package org.bridgedb.rest;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.bridgedb.DataSource;
-import org.bridgedb.Xref;
+import org.bridgedb.IDMapper;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
-/**
- * Resource that handles the xref queries
- */
-public class Xrefs extends IDMapperResource {
+public class IsMappingSupported extends IDMapperResource {
 	List<IDMapperRdb> mappers;
-	Xref xref;
-	DataSource targetDs;
+	DataSource srcDs;
+	DataSource destDs;
 	
 	protected void doInit() throws ResourceException {
 		try {
-		    System.out.println( "Xrefs.doInit start" );
 			//Required parameters
 			String org = (String)getRequest().getAttributes().get(IDMapperService.PAR_ORGANISM);
 			mappers = getIDMappers(org);
 
-			String id = (String)getRequest().getAttributes().get(IDMapperService.PAR_ID);
-			String dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM);
-			DataSource dataSource = parseDataSource(dsName);
-			if(dataSource == null) {
+			String dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_SOURCE_SYSTEM);
+			srcDs = parseDataSource(dsName);
+			if(srcDs == null) {
 				throw new IllegalArgumentException("Unknown datasource: " + dsName);
 			}
-			xref = new Xref(id, dataSource);
+			dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_DEST_SYSTEM);
+			destDs = parseDataSource(dsName);
+			if(destDs == null) {
+				throw new IllegalArgumentException("Unknown datasource: " + dsName);
+			}
 			
-			//Optional parameters
-			String targetDsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_TARGET_SYSTEM);
-			targetDs = parseDataSource(targetDsName);
 		} catch(Exception e) {
 			throw new ResourceException(e);
 		}
 	}
 
 	@Get
-	public String getXrefs() {
-	   System.out.println( "Xrefs.getXrefs() start" );
+	public String isMappingSupported() {
 		try {
-			//The result set
-			Set<Xref> xrefs = new HashSet<Xref>();
-
-			for(IDMapperRdb mapper : mappers) {
-				if(targetDs == null) {
-					xrefs.addAll(mapper.mapID(xref));
-				} else {
-					xrefs.addAll(mapper.mapID(xref, targetDs));
+			boolean supported = false;
+			for(IDMapper m : mappers) {
+				if(m.getCapabilities().isMappingSupported(srcDs, destDs)) {
+					supported = true;
+					break;
 				}
 			}
-					
-			StringBuilder result = new StringBuilder();
-			for(Xref x : xrefs) {
-				result.append(x.getId());
-				result.append("\t");
-				result.append(x.getDataSource().getFullName());
-				result.append("\n");
-			}
-			
-			return result.toString();
+			return "" + supported;
 		} catch(Exception e) {
 			e.printStackTrace();
 			setStatus(Status.SERVER_ERROR_INTERNAL);

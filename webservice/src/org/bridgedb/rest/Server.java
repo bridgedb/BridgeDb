@@ -47,13 +47,14 @@ public class Server
 	
 		File configFile = null;
 		
-		if (args.length == 1)
+		if (args.length > 1)
 		{
-			configFile = new File(args[0]);
+			configFile = new File(args[1]);
 		}
-		else if (args.length > 1)
+		
+		if (args.length > 2)
 		{
-			System.err.println ("Expected zero or one arguments");
+			System.err.println ("Expected max 2 arguments");
 			System.exit(1);
 		}
 		

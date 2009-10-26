@@ -22,25 +22,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bridgedb.AttributeMapper;
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
 /**
- * Resource that handles the xref queries
+ * Resource that handles the attributes queries
  */
-public class Xrefs extends IDMapperResource {
+public class Attributes extends IDMapperResource {
 	List<IDMapperRdb> mappers;
 	Xref xref;
-	DataSource targetDs;
+	String attrType;
 	
 	protected void doInit() throws ResourceException {
 		try {
-		    System.out.println( "Xrefs.doInit start" );
 			//Required parameters
 			String org = (String)getRequest().getAttributes().get(IDMapperService.PAR_ORGANISM);
 			mappers = getIDMappers(org);
@@ -53,42 +54,60 @@ public class Xrefs extends IDMapperResource {
 			}
 			xref = new Xref(id, dataSource);
 			
-			//Optional parameters
-			String targetDsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_TARGET_SYSTEM);
-			targetDs = parseDataSource(targetDsName);
+			attrType = (String)getRequest().getAttributes().get(IDMapperService.PAR_TARGET_ATTR_NAME);
 		} catch(Exception e) {
 			throw new ResourceException(e);
 		}
 	}
 
 	@Get
-	public String getXrefs() {
-	   System.out.println( "Xrefs.getXrefs() start" );
+	public String getAttributes() {
 		try {
-			//The result set
-			Set<Xref> xrefs = new HashSet<Xref>();
-
-			for(IDMapperRdb mapper : mappers) {
-				if(targetDs == null) {
-					xrefs.addAll(mapper.mapID(xref));
-				} else {
-					xrefs.addAll(mapper.mapID(xref, targetDs));
-				}
+			if(attrType != null) {
+				return getAttributesWithType();
+			} else {
+				return getAttributesWithoutType();
 			}
-					
-			StringBuilder result = new StringBuilder();
-			for(Xref x : xrefs) {
-				result.append(x.getId());
-				result.append("\t");
-				result.append(x.getDataSource().getFullName());
-				result.append("\n");
-			}
-			
-			return result.toString();
 		} catch(Exception e) {
 			e.printStackTrace();
 			setStatus(Status.SERVER_ERROR_INTERNAL);
 			return e.getMessage();
 		}
 	}
+	
+	private String getAttributesWithType() throws IDMapperException {
+		Set<String> values = new HashSet<String>();
+		
+		for(IDMapper mapper : mappers) {
+			if(mapper instanceof AttributeMapper) {
+				values.addAll(((AttributeMapper)mapper).getAttributes(xref, attrType));
+			}
+		}
+		StringBuilder str = new StringBuilder();
+		for(String v : values) {
+			str.append(v);
+			str.append("\n");
+		}
+		return str.toString();
+	}
+	
+	private String getAttributesWithoutType() throws IDMapperException {
+		Map<String, Set<String>> values = new HashMap<String, Set<String>>();
+		
+		for(IDMapper mapper : mappers) {
+			if(mapper instanceof AttributeMapper) {
+				values.putAll(((AttributeMapper)mapper).getAttributes(xref));
+			}
+		}
+		StringBuilder str = new StringBuilder();
+		for(String attr : values.keySet()) {
+			for(String v : values.get(attr)) {
+				str.append(attr);
+				str.append("\t");
+				str.append(v);
+				str.append("\n");
+			}
+		}
+		return str.toString();
+	}	
 }

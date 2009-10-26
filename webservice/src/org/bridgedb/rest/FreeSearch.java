@@ -16,79 +16,68 @@
 //
 package org.bridgedb.rest;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
 /**
  * Resource that handles the xref queries
  */
-public class Xrefs extends IDMapperResource {
+public class FreeSearch extends IDMapperResource {
 	List<IDMapperRdb> mappers;
-	Xref xref;
-	DataSource targetDs;
-	
+	String searchStr;
+	int limit = 0;
+	String org;
+
 	protected void doInit() throws ResourceException {
 		try {
-		    System.out.println( "Xrefs.doInit start" );
-			//Required parameters
-			String org = (String)getRequest().getAttributes().get(IDMapperService.PAR_ORGANISM);
+			org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
 			mappers = getIDMappers(org);
+			searchStr = (String) getRequest().getAttributes().get( IDMapperService.PAR_QUERY );
+			String limitStr = (String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_LIMIT );
 
-			String id = (String)getRequest().getAttributes().get(IDMapperService.PAR_ID);
-			String dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM);
-			DataSource dataSource = parseDataSource(dsName);
-			if(dataSource == null) {
-				throw new IllegalArgumentException("Unknown datasource: " + dsName);
+			if ( null != limitStr ) 
+			{
+				limit = new Integer( limitStr ).intValue();
 			}
-			xref = new Xref(id, dataSource);
-			
-			//Optional parameters
-			String targetDsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_TARGET_SYSTEM);
-			targetDs = parseDataSource(targetDsName);
 		} catch(Exception e) {
 			throw new ResourceException(e);
 		}
 	}
 
 	@Get
-	public String getXrefs() {
-	   System.out.println( "Xrefs.getXrefs() start" );
-		try {
-			//The result set
-			Set<Xref> xrefs = new HashSet<Xref>();
+	public String search() 
+	{
+		try 
+		{
+			Set<Xref> results = new HashSet<Xref>();
 
-			for(IDMapperRdb mapper : mappers) {
-				if(targetDs == null) {
-					xrefs.addAll(mapper.mapID(xref));
-				} else {
-					xrefs.addAll(mapper.mapID(xref, targetDs));
+			for(IDMapperRdb mapper : mappers ) {
+				if(mapper.getCapabilities().isFreeSearchSupported()) {
+					results.addAll(mapper.freeSearch(searchStr, limit));
 				}
 			}
-					
+
 			StringBuilder result = new StringBuilder();
-			for(Xref x : xrefs) {
+			for(Xref x : results) {
 				result.append(x.getId());
 				result.append("\t");
 				result.append(x.getDataSource().getFullName());
 				result.append("\n");
 			}
-			
-			return result.toString();
-		} catch(Exception e) {
+
+			return(result.toString());
+		} catch( Exception e ) {
 			e.printStackTrace();
-			setStatus(Status.SERVER_ERROR_INTERNAL);
+			setStatus( Status.SERVER_ERROR_INTERNAL );
 			return e.getMessage();
 		}
 	}
+
 }
