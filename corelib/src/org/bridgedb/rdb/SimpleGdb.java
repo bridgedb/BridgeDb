@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -173,6 +174,28 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 		return result;
 	}
 
+	/**
+	   @return number of rows in gene table for the given datasource
+	   @throws IDMapperException on failure
+	 */
+	final public int getGeneCount(DataSource ds) throws IDMapperException
+	{
+		int result = 0;
+		try
+		{
+			ResultSet r = con.createStatement().executeQuery(
+					"SELECT COUNT(*) FROM datanode WHERE code = '" + ds.getSystemCode() + "'");
+			r.next();
+			result = r.getInt (1);
+			r.close();
+		}
+		catch (SQLException e)
+		{
+			throw new IDMapperException (e);
+		}
+		return result;
+	}
+	
 	/**
 	   compact the database.
 	   @throws IDMapperException on failure
