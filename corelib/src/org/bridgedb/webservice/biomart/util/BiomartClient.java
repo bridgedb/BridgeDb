@@ -34,6 +34,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.bridgedb.webservice.biomart.IDMapperBiomart;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -47,7 +48,7 @@ public final class BiomartClient {
     public static final String defaultBaseURL = "http://www.biomart.org/biomart/martservice";
     
     private final String baseURL;
-    private static final String RESOURCE = "/org/bridgedb/webservice/biomart/util/filterconversion.txt";
+    private static final String RESOURCE = "filterconversion.txt";
 
     //private Map<String, Map<String, String>> databases = null;
     private Map<String, Database> marts = null;
@@ -79,7 +80,7 @@ public final class BiomartClient {
     private void loadConversionFile() throws IOException {
         filterConversionMap = new HashMap<String, Map<String, String>>();
 
-        InputStreamReader inFile = new InputStreamReader(this.getClass().getResource(RESOURCE).openStream());
+        InputStreamReader inFile = new InputStreamReader(IDMapperBiomart.class.getResource(RESOURCE).openStream());
 
         BufferedReader inBuffer = new BufferedReader(inFile);
 
