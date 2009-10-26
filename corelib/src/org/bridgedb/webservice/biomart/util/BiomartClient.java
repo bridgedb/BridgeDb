@@ -18,9 +18,9 @@
 package org.bridgedb.webservice.biomart.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -45,7 +45,7 @@ import org.xml.sax.SAXException;
  * BioMart service class, adapted from BioMart client in Cytoscape.
  */
 public final class BiomartClient {
-    public static final String defaultBaseURL = "http://www.biomart.org/biomart/martservice";
+    public static final String DEFAULT_BASE_URL = "http://www.biomart.org/biomart/martservice";
     
     private final String baseURL;
     private static final String RESOURCE = "filterconversion.txt";
@@ -53,10 +53,10 @@ public final class BiomartClient {
     //private Map<String, Map<String, String>> databases = null;
     private Map<String, Database> marts = null;
 
-    private Map<String, Dataset> datasets = new HashMap();
-    private Map<String, Map<String,Dataset>> mapDbDss = new HashMap();
-    private Map<String, Map<String, Filter>> mapDsFilters = new HashMap();
-    private Map<String, Map<String, Attribute>> mapDsAttrs = new HashMap();
+    private Map<String, Dataset> datasets = new HashMap<String, Dataset>();
+    private Map<String, Map<String,Dataset>> mapDbDss = new HashMap<String, Map<String, Dataset>>();
+    private Map<String, Map<String, Filter>> mapDsFilters = new HashMap<String, Map<String, Filter>>();
+    private Map<String, Map<String, Attribute>> mapDsAttrs = new HashMap<String, Map<String, Attribute>>();
 
     private Map<String, Map<String, String>> filterConversionMap;
 
@@ -226,7 +226,7 @@ public final class BiomartClient {
         }
 
         //final Map<String, String> datasources = new HashMap<String, String>();
-        result = new HashMap();
+        result = new HashMap<String, Dataset>();
 
         Database database = marts.get(martName);
 
@@ -285,7 +285,7 @@ public final class BiomartClient {
             return mapDsFilters.get(datasetName);
         }
 
-        Map<String, Filter> filters = new HashMap();
+        Map<String, Filter> filters = new HashMap<String, Filter>();
 
         Dataset dataset = getDataset(datasetName);
         if (dataset==null) {
@@ -498,12 +498,12 @@ public final class BiomartClient {
         return datasets.get(dsname);
     }
     
-    private static final int msConnectionTimeout = 2000;
+    private static final int MS_CONNECTION_TIMEOUT = 2000;
     //TODO: test when IOException is throwed
     protected static InputStream getInputStream(URL source) throws IOException {
         InputStream stream = null;
         int expCount = 0;
-        int timeOut = msConnectionTimeout;
+        int timeOut = MS_CONNECTION_TIMEOUT;
         while (true) { // multiple chances
             try {
                 URLConnection uc = source.openConnection();

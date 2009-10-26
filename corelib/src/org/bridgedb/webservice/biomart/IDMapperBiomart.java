@@ -53,7 +53,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         public IDMapper connect(String location) throws IDMapperException  {
             // e.g.: dataset=oanatinus_gene_ensembl
             // e.g.: http://www.biomart.org/biomart/martservice?dataset=oanatinus_gene_ensembl
-            String baseURL = BiomartClient.defaultBaseURL;
+            String baseURL = BiomartClient.DEFAULT_BASE_URL;
 
             String param = location;
             int idx = location.indexOf('?');
@@ -119,7 +119,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         if (baseURL!=null) {
             this.baseURL = baseURL;
         } else {
-            this.baseURL = BiomartClient.defaultBaseURL;
+            this.baseURL = BiomartClient.DEFAULT_BASE_URL;
         }
 
         try {
@@ -187,7 +187,8 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 
         // source datasources
-        Map<String, Map<String, Xref>> mapSrcTypeIDXrefs = new HashMap();
+        Map<String, Map<String, Xref>> mapSrcTypeIDXrefs = 
+        	new HashMap<String, Map<String, Xref>>();
         for (Xref xref : srcXrefs) {
             DataSource ds = xref.getDataSource();
             if (!supportedSrcDs.contains(ds)) continue;
@@ -195,14 +196,14 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
             String src = ds.getFullName();
             Map<String, Xref> ids = mapSrcTypeIDXrefs.get(src);
             if (ids==null) {
-                ids = new HashMap();
+                ids = new HashMap<String, Xref>();
                 mapSrcTypeIDXrefs.put(src, ids);
             }
             ids.put(xref.getId(), xref);
         }
 
         // supported tgt datasources
-        Set<String> tgtTypes = new HashSet();
+        Set<String> tgtTypes = new HashSet<String>();
         for (DataSource ds : tgtDataSources) {
             if (supportedTgtDs.contains(ds)) {
                 tgtTypes.add(ds.getFullName());
@@ -227,7 +228,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
 
                 Xref srcXref = mapSrcTypeIDXrefs.get(src).get(srcId);
                 
-                Set<Xref> tgtXrefs = new HashSet();
+                Set<Xref> tgtXrefs = new HashSet<Xref>();
                 for (int itgt=0; itgt<tgts.length; itgt++) {
                     for (String tgtId : tgtIds[itgt]) {
                         Xref tgtXref = new Xref(tgtId,
@@ -247,7 +248,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
      * {@inheritDoc}
      */
     public boolean xrefExists(Xref xref) throws IDMapperException {
-        Set<Xref> srcXrefs = new HashSet(1);
+        Set<Xref> srcXrefs = new HashSet<Xref>(1);
         srcXrefs.add(xref);
 
         Map<Xref, Set<Xref>> map = mapID(srcXrefs);
@@ -269,7 +270,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
      */
     protected Set<DataSource> getSupportedSrcDataSources()
             throws IDMapperException {
-        Set<DataSource> dss = new HashSet();
+        Set<DataSource> dss = new HashSet<DataSource>();
         Set<String> filters = stub.availableSrcIDTypes(mart, dataset);
         for (String filter : filters) {
             DataSource ds = DataSource.getByFullName(filter);
@@ -287,7 +288,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
      */
     protected Set<DataSource> getSupportedTgtDataSources() 
             throws IDMapperException {
-        Set<DataSource> dss = new HashSet();
+        Set<DataSource> dss = new HashSet<DataSource>();
         Set<String> types = stub.availableTgtIDTypes(mart, dataset);
 
         for (String type : types) {
@@ -330,8 +331,15 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
     }
 
     private boolean isConnected = true;
+ 
     // In the case of IDMapperBioMart, there is no need to discard associated resources.
+    /**
+     * {@inheritDoc}
+     */
     public void close() throws IDMapperException { isConnected = false; }
+    /**
+     * {@inheritDoc}
+     */
     public boolean isConnected() { return isConnected; }
 
     /**
@@ -344,7 +352,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
 
         String srcType = ref.getDataSource().getFullName();
         String[] tgtTypes = new String[]{attrType};
-        Set<String> srcIds = new HashSet(1);
+        Set<String> srcIds = new HashSet<String>(1);
         srcIds.add(ref.getId());
 
         Map<String,Set<String>[]> map = stub.translate(mart, dataset, srcType, tgtTypes, srcIds);
@@ -373,7 +381,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
      * {@inheritDoc}
      */
     public Map<String, Set<String>> getAttributes(Xref ref) throws IDMapperException {
-        Map<String, Set<String>> map = new HashMap();
+        Map<String, Set<String>> map = new HashMap<String, Set<String>>();
         for (String attr : getAttributeSet()) {
             Set<String> attrs = getAttributes(ref, attr);
             if (attrs!=null) {

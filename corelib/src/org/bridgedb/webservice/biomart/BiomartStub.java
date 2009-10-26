@@ -20,6 +20,7 @@ package org.bridgedb.webservice.biomart;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -43,10 +44,10 @@ import org.xml.sax.SAXException;
  */
 public final class BiomartStub {
     public static final String defaultBaseURL
-            = BiomartClient.defaultBaseURL;
+            = BiomartClient.DEFAULT_BASE_URL;
 
     // one instance per url
-    private static Map<String, BiomartStub> instances = new HashMap();
+    private static Map<String, BiomartStub> instances = new HashMap<String, BiomartStub>();
 
     /**
      *
@@ -105,7 +106,7 @@ public final class BiomartStub {
             throw new IDMapperException(e);
         }
 
-        Set<String> visibleMarts = new HashSet();
+        Set<String> visibleMarts = new HashSet<String>();
         for (Database db : marts.values()) {
             if (db.visible()) {
                 visibleMarts.add(db.getName());
@@ -137,11 +138,11 @@ public final class BiomartStub {
     public Set<String> availableDatasets(String mart)
             throws IDMapperException {
         if (mart==null) {
-            return new HashSet(0);
+            return Collections.emptySet();
         }
 
         if (!availableMarts().contains(mart)) {
-            return new HashSet(0);
+            return Collections.emptySet();
         }
 
         Map<String,Dataset> datasets;
@@ -179,11 +180,11 @@ public final class BiomartStub {
     public Set<String> availableSrcIDTypes(final String mart,
             final String dataset) throws IDMapperException {
         if (mart==null || dataset==null) {
-            return new HashSet(0);
+            return Collections.emptySet();
         }
 
         if (!availableDatasets(mart).contains(dataset)) {
-            return new HashSet(0);
+            return Collections.emptySet();
         }
 
         Map<String,Filter> filters;
@@ -234,11 +235,11 @@ public final class BiomartStub {
             final String dataset, boolean idOnly) throws IDMapperException {
 
         if (mart==null || dataset==null) {
-            return new HashSet(0);
+            return Collections.emptySet();
         }
 
         if (!availableDatasets(mart).contains(dataset)) {
-            return new HashSet(0);
+            return Collections.emptySet();
         }
 
         Map<String,Attribute> attributes;
@@ -248,7 +249,7 @@ public final class BiomartStub {
             throw new IDMapperException(e);
         }
 
-        Set<String> result = new HashSet();
+        Set<String> result = new HashSet<String>();
         for (String name : attributes.keySet()) {
             if (name.trim().length()==0)
                 continue;
@@ -271,7 +272,7 @@ public final class BiomartStub {
      * @param dataset dataset name
      * @param srcType filter name / source id type
      * @param tgtTypes attribute names / target id types
-     * @param ids source ids to be translated
+     * @param srcIds source ids to be translated
      * @return map from source id to target ids
      *         key: source id
      *         value: corresponding target ids
@@ -287,7 +288,7 @@ public final class BiomartStub {
 
         Attribute tgtAttr = client.filterToAttribute(dataset, srcType);
         if (tgtAttr==null) {
-            return new HashMap();
+            return new HashMap<String, Set<String>[]>();
         }
 
         int nAttr = tgtTypes.length;
@@ -312,7 +313,7 @@ public final class BiomartStub {
             sb.deleteCharAt(len-1);
         }
 
-        Map<String, String> queryFilter = new HashMap(1);
+        Map<String, String> queryFilter = new HashMap<String, String>(1);
         queryFilter.put(srcType, sb.toString());
 
         // build query string
@@ -329,11 +330,11 @@ public final class BiomartStub {
         }
 
         if (bfr==null) {
-            return new HashMap(0);
+            return new HashMap<String, Set<String>[]>(0);
         }
 
         // read id mapping
-        Map<String,Set<String>[]> result = new HashMap();
+        Map<String,Set<String>[]> result = new HashMap<String,Set<String>[]>();
         try {
             bfr.readLine();
             String line;
@@ -346,7 +347,7 @@ public final class BiomartStub {
                 if (tgt==null) {
                     tgt = new Set[nAttr];
                     for (int i=0; i<nAttr; i++) {
-                        tgt[i] = new HashSet();
+                        tgt[i] = new HashSet<String>();
                     }
                     result.put(src, tgt);
                 }
