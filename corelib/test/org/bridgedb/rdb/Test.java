@@ -25,7 +25,6 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 import org.bridgedb.AttributeMapper;
-import org.bridgedb.Base;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
@@ -35,7 +34,7 @@ import org.bridgedb.Xref;
 /**
  * Test access to the derby client running on the webservice.
  */
-public class Test extends Base 
+public class Test extends TestCase
 {
 	private Measure measure;
 	
@@ -44,15 +43,6 @@ public class Test extends Base
 		measure = new Measure("bridgedb_timing.txt");
 	}
 
-	public void testBasic () throws IDMapperException, ClassNotFoundException
-	{
-		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
-		DBConnectorDerbyServer.init ("wikipathways.org", 1527);
-		Xref insr1 = new Xref ("ENSG00000171105", DataSource.getBySystemCode("EnHs"));
-		Xref insr2 = new Xref ("3643", DataSource.getBySystemCode("L"));
-		basicMapperTest ("idmapper-derbyclient:Homo sapiens", insr1, insr2);
-	}
-	
 	public void testDerbyClient() throws IDMapperException, ClassNotFoundException
 	{
 		long start, end, delta;

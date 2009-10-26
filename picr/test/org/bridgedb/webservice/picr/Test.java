@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
@@ -27,12 +29,8 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
-import junit.framework.TestCase;
-
-public class Test extends TestCase 
+public class Test extends TestCase
 {
-	boolean eventReceived = false;
-	
 	public void setUp() throws ClassNotFoundException
 	{
 		Class.forName ("org.bridgedb.webservice.picr.IDMapperPicr");
@@ -72,5 +70,5 @@ public class Test extends TestCase
 
 		System.out.println (amap.getAttributes(src1, "Sequence").iterator().next());
 	}
-	
+		
 }

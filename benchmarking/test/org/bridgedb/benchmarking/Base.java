@@ -1,8 +1,16 @@
-package org.bridgedb;
+package org.bridgedb.benchmarking;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.bridgedb.AttributeMapper;
+import org.bridgedb.BridgeDb;
+import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 
 import junit.framework.TestCase;
 
