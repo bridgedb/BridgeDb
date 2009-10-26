@@ -17,7 +17,6 @@
 package org.bridgedb.webservice.picr;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -135,11 +134,16 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 	}
 
 	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
-			Set<DataSource> tgtDataSources) throws IDMapperException 
+			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 		
-		Object[] databases = objectsFromDataSources(tgtDataSources);
+		
+		Object[] databases;
+		if (tgtDataSources == null) 
+			databases = client.loadDatabases().toArray();
+		else
+			databases = objectsFromDataSources(tgtDataSources);
 		
 		for (Xref srcXref : srcXrefs)
 		{
@@ -170,9 +174,9 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 		return result;
 	}
 	
-	private Object[] objectsFromDataSources (Collection<DataSource> ds)
+	private Object[] objectsFromDataSources (DataSource... ds)
 	{
-		Object[] databases = new Object[ds.size()];
+		Object[] databases = new Object[ds.length];
 		int i = 0;
 		for (DataSource tgt : ds)
 		{
@@ -183,7 +187,7 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 	
 	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
-		List<UPEntry> result = client.performAccessionMapping(xref.getId(), objectsFromDataSources(supportedDatabases));
+		List<UPEntry> result = client.performAccessionMapping(xref.getId(), client.loadDatabases().toArray());
 		return result.size() > 0;
 	}
 
@@ -196,7 +200,7 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 	public Set<String> getAttributes(Xref ref, String attrType)
 			throws IDMapperException 
 	{
-		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), objectsFromDataSources(supportedDatabases));
+		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), client.loadDatabases().toArray());
 		
 		Set<String> result = new HashSet<String>();
 		
@@ -231,12 +235,6 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 
 	public Map<String, Set<String>> getAttributes(Xref ref)
 			throws IDMapperException {
-		// TODO Not yet implemented
-		throw new UnsupportedOperationException();
-	}
-
-	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
-			DataSource... tgtDataSources) throws IDMapperException {
 		// TODO Not yet implemented
 		throw new UnsupportedOperationException();
 	}
