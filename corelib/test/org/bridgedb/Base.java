@@ -84,6 +84,11 @@ public class Base extends TestCase
 		assertTrue (result2.contains(to));
 		assertNotNull (mapper.mapID(NONEXISTENT));
 		assertTrue (mapper.mapID(from, to.getDataSource()).contains(to));
+				
+		try {
+			mapper.mapID((Xref)null);
+		} catch (NullPointerException e)
+		{ /* OK, expected NPE here */ }
 		
 		// test mapping id in set
 		Set<Xref> fromSet = new HashSet<Xref>();
@@ -92,6 +97,11 @@ public class Base extends TestCase
 		assertNotNull (result);
 		assertTrue (result.containsKey(from));
 		assertTrue (result.get(from).contains(to));
+
+		try {
+			mapper.mapID((Set<Xref>)null);
+		} catch (NullPointerException e)
+		{ /* OK, expected NPE here */ }
 
 		// test attributes
 		if (mapper instanceof AttributeMapper)
