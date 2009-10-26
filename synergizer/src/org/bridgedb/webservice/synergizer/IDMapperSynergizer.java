@@ -249,7 +249,7 @@ public class IDMapperSynergizer extends IDMapperWebservice
                     DataSource... resultDs) throws IDMapperException
     {
         if (srcXrefs==null) {
-            throw new java.lang.IllegalArgumentException(
+            throw new NullPointerException(
                         "srcXrefs or tgtDataSources cannot be null.");
         }
 
