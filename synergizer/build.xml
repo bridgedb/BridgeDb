@@ -11,14 +11,21 @@
 	<mkdir dir="build"/>
   </target>
 
+  <path id="class.path">
+    <fileset dir="lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="../dist">
+      <include name="bridgedb.jar"/>
+    </fileset>
+  </path>
+
   <target name="build" depends="prepare">
 	<javac srcdir="src"
 		   includes="**"
 		   debug="true"
 		   destdir="build">
-		<classpath>
-			<pathelement location="../dist/bridgedb.jar"/>
-		</classpath>
+		<classpath refid="class.path"/>
 	</javac>
   </target>
   
@@ -42,4 +49,28 @@
 	<delete file="${jar.name}"/>
   </target>
 
+  <target name="test" depends="build">
+		<path id="test.classpath">
+			<pathelement location="build"/>
+			<path refid="class.path"/>
+			<pathelement location="../corelib/lib/derby.jar"/>
+			<pathelement location="../corelib/build-lib/junit.jar"/>
+			<pathelement location="../corelib/build-lib/measure.jar"/>
+		</path>
+		<javac srcdir="test" debug="true" 
+					includes="**"
+					destdir="build"
+					source="1.5">
+			<classpath refid="test.classpath"/>
+		</javac>		
+		<junit printsummary="on" haltonfailure="true" fork="true">
+			<formatter type="brief" usefile="false"/>
+			<classpath refid="test.classpath"/>
+			<batchtest>
+				<fileset dir="test">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
 </project>

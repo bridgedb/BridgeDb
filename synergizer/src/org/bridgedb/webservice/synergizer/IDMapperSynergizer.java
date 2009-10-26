@@ -18,6 +18,7 @@ package org.bridgedb.webservice.synergizer;
 
 import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class IDMapperSynergizer extends IDMapperWebservice
 
         supportedSrcDs = this.getSupportedSrcDataSources();
         mapSrcDsTgtDs = this.getMapSrcTgt();
-        supportedTgtDs = new HashSet();
+        supportedTgtDs = new HashSet<DataSource>();
         for (Set<DataSource> dss : mapSrcDsTgtDs.values()) {
             supportedTgtDs.addAll(dss);
         }
@@ -164,7 +165,7 @@ public class IDMapperSynergizer extends IDMapperWebservice
 
     private Set<DataSource> getSupportedSrcDataSources()
             throws IDMapperException {
-        Set<DataSource> dss = new HashSet();
+        Set<DataSource> dss = new HashSet<DataSource>();
         Set<String> domains = stub.availableDomains(authority, species);
         for (String domain : domains) {
             dss.add(DataSource.getByFullName(domain));
@@ -174,12 +175,12 @@ public class IDMapperSynergizer extends IDMapperWebservice
 
     private Map<DataSource, Set<DataSource>> getMapSrcTgt()
             throws IDMapperException {
-        Map<DataSource, Set<DataSource>> map = new HashMap();
+        Map<DataSource, Set<DataSource>> map = new HashMap<DataSource, Set<DataSource>>();
         Set<String> domains = stub.availableDomains(authority, species);
         for (String domain : domains) {
             DataSource src = DataSource.getByFullName(domain);
             Set<String> ranges = stub.availableRanges(authority, species, domain);
-            Set<DataSource> tgts = new HashSet();
+            Set<DataSource> tgts = new HashSet<DataSource>();
             for (String range : ranges) {
                 tgts.add(DataSource.getByFullName(range));
             }
@@ -245,7 +246,7 @@ public class IDMapperSynergizer extends IDMapperWebservice
      * {@inheritDoc}
      */
     public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
-                    Set<DataSource> tgtDataSources) throws IDMapperException
+                    DataSource... resultDs) throws IDMapperException
     {
         if (srcXrefs==null) {
             throw new java.lang.IllegalArgumentException(
@@ -253,9 +254,10 @@ public class IDMapperSynergizer extends IDMapperWebservice
         }
 
         Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
+		Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
 
         // source datasources
-        Map<String, Map<String, Xref>> mapSrcTypeIDXrefs = new HashMap();
+        Map<String, Map<String, Xref>> mapSrcTypeIDXrefs = new HashMap<String, Map<String, Xref>>();
         for (Xref xref : srcXrefs) {
             DataSource ds = xref.getDataSource();
             if (!supportedSrcDs.contains(ds)) continue;
@@ -263,25 +265,25 @@ public class IDMapperSynergizer extends IDMapperWebservice
             String src = ds.getFullName();
             Map<String, Xref> ids = mapSrcTypeIDXrefs.get(src);
             if (ids==null) {
-                ids = new HashMap();
+                ids = new HashMap<String, Xref>();
                 mapSrcTypeIDXrefs.put(src, ids);
             }
             ids.put(xref.getId(), xref);
         }
 
         // supported tgt datasources
-        Map<String, Set<String>> mapSrcTgt = new HashMap();
+        Map<String, Set<String>> mapSrcTgt = new HashMap<String, Set<String>>();
         for (Map.Entry<DataSource, Set<DataSource>> entry
                 : mapSrcDsTgtDs.entrySet()) {
             String src = entry.getKey().getFullName();
             if (!mapSrcTypeIDXrefs.containsKey(src))
                 continue;
 
-            Set<String> set = new HashSet();
+            Set<String> set = new HashSet<String>();
             mapSrcTgt.put(src, set);
-            for (DataSource tgt : entry.getValue()) {
-                if (tgtDataSources==null || tgtDataSources.contains(tgt))
-                    set.add(tgt.getFullName());
+            for (DataSource ds : entry.getValue()) {
+				if (resultDs.length == 0 || dsFilter.contains(ds))
+                    set.add(ds.getFullName());
             }
         }
 
@@ -303,7 +305,7 @@ public class IDMapperSynergizer extends IDMapperWebservice
                     Xref srcXref = mapSrcTypeIDXrefs.get(src).get(srcId);
                     Set<Xref> tgtXrefs = result.get(srcXref);
                     if (tgtXrefs==null) {
-                        tgtXrefs = new HashSet();
+                        tgtXrefs = new HashSet<Xref>();
                         result.put(srcXref, tgtXrefs);
                     }
 

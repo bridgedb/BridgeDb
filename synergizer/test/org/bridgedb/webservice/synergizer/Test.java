@@ -83,10 +83,7 @@ public class Test extends TestCase
             srcXrefs.add(new Xref("Rorc", srcDs));
             srcXrefs.add(new Xref("kcnk16", srcDs));
 
-            Set<DataSource> tgtDss = new HashSet();
-            tgtDss.add(DataSource.getByFullName("entrezgene"));
-
-            Map<Xref,Set<Xref>> res = mapper.mapID(srcXrefs, tgtDss);
+            Map<Xref,Set<Xref>> res = mapper.mapID(srcXrefs, DataSource.getByFullName("entrezgene"));
             for (Map.Entry<Xref,Set<Xref>> entry : res.entrySet()) {
                 System.out.println(entry.getKey().getId());
                 for (Xref tgt : entry.getValue()) {

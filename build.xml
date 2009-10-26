@@ -59,6 +59,7 @@
 	<ant dir="batchmapper" target="${allmodules.target}"/>
 	<ant dir="webservice" target="${allmodules.target}"/>
 	<ant dir="picr" target="${allmodules.target}"/>
+	<ant dir="synergizer" target="${allmodules.target}"/>
   </target>
   
    <target name="doc">
