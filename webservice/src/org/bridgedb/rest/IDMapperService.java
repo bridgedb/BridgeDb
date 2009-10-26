@@ -152,7 +152,9 @@ public class IDMapperService extends Application {
 	public static final String URL_IS_MAPPING_SUPPORTED = "/{" + PAR_ORGANISM + "}/isMappingSupported/{" + PAR_SOURCE_SYSTEM + "}/{" + PAR_DEST_SYSTEM + "}";
 
 	/**
-	 * URL pattern for searching by attribute.<BR>
+	 * URL pattern for searching by attribute. Returns tab delimited text with an xref
+	 * result on each line, where the first column is the identifier, the second column
+	 * is the datasource and the third column is the attribute value.<BR>
 	 * <code>
 	 * /{organism}/attributeSearch/{query}?[limit={limit}][&attrName={attrName}]
 	 * </code>

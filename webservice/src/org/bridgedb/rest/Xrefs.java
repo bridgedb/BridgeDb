@@ -16,10 +16,8 @@
 //
 package org.bridgedb.rest;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
@@ -27,7 +25,6 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
 /**

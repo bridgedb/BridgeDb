@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
