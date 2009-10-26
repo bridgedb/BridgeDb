@@ -16,6 +16,7 @@
 //
 package org.bridgedb;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +38,9 @@ public abstract class AbstractIDMapper implements IDMapper
 		Set<Xref> srcXrefs = new HashSet<Xref>();
 		srcXrefs.add(srcRef);
 		Map<Xref, Set<Xref>> mapXrefs = mapID(srcXrefs, tgtDataSources);
-		return mapXrefs.get(srcRef);
+		if (mapXrefs.containsKey(srcRef))
+			return mapXrefs.get(srcRef);
+		else
+			return Collections.emptySet();
 	}
 }
