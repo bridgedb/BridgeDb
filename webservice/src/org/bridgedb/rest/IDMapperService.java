@@ -191,39 +191,6 @@ public class IDMapperService extends Application {
 	public static final String URL_BACK_PAGE_TEXT = "/{" + PAR_ORGANISM + "}/backPageText/{" + PAR_SYSTEM + "}/{" + 
 		PAR_ID + "}";
 
-	/**
-	 * URL pattern for searching by symbol.<BR>
-	 * <code>
-	 * /{organism}/search/symbol/{query}&limit={limit}
-	 * </code>
-	 * <BR>
-	 * Note that this is a shortcut method for the url pattern:<BR>
-	 * <code>
-	 * /{organism}/attributeSearch/{query}&attrName=Symbol
-	 * </code>
-	 */
-	public static final String URL_SEARCH_SYMBOL = "/{" + PAR_ORGANISM + "}/search/symbol/{" + PAR_QUERY + "}";
-
-	/**
-	 * URL pattern for searching by identifier.<BR>
-	 * <code>
-	 * /{organism}/search/id/{query}&limit={limit}
-	 * </code>
-	 *
-	 */
-	//TODO: Looking at the implementation, this just calls IDMapper.freeSearch which isn't
-	//specific for identifiers, but also includes symbols!!
-	public static final String URL_SEARCH_ID = "/{" + PAR_ORGANISM + "}/search/id/{" + PAR_QUERY + "}";
-	
-	/**
-	 * URL pattern for searching by identifier or code.<BR>
-	 * <code>
-	 * /{organism}/search/symbolOrId/{query}&limit={limit}
-	 * </code>
-	 */
-	//TODO: Do we need this? It looks to me like this is the same as freeSearch...
-	public static final String URL_SEARCH_SYMBOL_OR_ID = "/{" + PAR_ORGANISM + "}/search/symbolOrId/{" + PAR_QUERY + "}";
-	
 	private GdbProvider gdbProvider;
 
 	public synchronized void start() throws Exception {
@@ -275,17 +242,6 @@ public class IDMapperService extends Application {
 		attributesRoute.extractQuery( PAR_TARGET_ATTR_NAME, PAR_TARGET_ATTR_NAME, true );
 		
 		/* Extra methods */
-		// Register the route for search-symbol
-		Route searchSymbolRoute = router.attach( URL_SEARCH_SYMBOL, SearchSymbol.class );
-		searchSymbolRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
-
-		// Register the route for search-id
-		Route searchIdRoute = router.attach( URL_SEARCH_ID, SearchId.class );
-		searchIdRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
-		// Register the route for search-symbol-or-id
-		Route searchSymbolOrIdRoute = router.attach( URL_SEARCH_SYMBOL_OR_ID, SearchSymbolOrId.class );
-		searchSymbolOrIdRoute.extractQuery( PAR_TARGET_LIMIT, PAR_TARGET_LIMIT, true );
-		
 		// Register the route for backPageText
 		router.attach( URL_BACK_PAGE_TEXT, BackPageText.class );
 		
