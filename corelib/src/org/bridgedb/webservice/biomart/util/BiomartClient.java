@@ -499,7 +499,14 @@ public final class BiomartClient {
     }
     
     private static final int MS_CONNECTION_TIMEOUT = 2000;
-    //TODO: test when IOException is throwed
+    //TODO: test when IOException is thrown
+    
+    /**
+     * Start downloading a file from the web and open an InputStream to it.
+     * @param source location of file to download.
+     * @return InputStream
+     * @throws IOException after a number of attempts to connect to the remote server have failed.
+     */
     protected static InputStream getInputStream(URL source) throws IOException {
         InputStream stream = null;
         int expCount = 0;

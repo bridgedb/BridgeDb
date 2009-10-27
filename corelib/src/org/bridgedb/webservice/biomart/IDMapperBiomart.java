@@ -257,6 +257,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
 
     /**
      * free text search is not supported for BioMart-based IDMapper.
+     * {@inheritDoc}
      */
     public Set<Xref> freeSearch (String text, int limit)
             throws IDMapperException {

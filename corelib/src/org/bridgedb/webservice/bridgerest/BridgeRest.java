@@ -58,7 +58,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 	private final static class RestCapabilities implements IDMapperCapabilities {
 		private String baseUrl;
-		Map<String, String> properties = new HashMap<String, String>();
+		private Map<String, String> properties = new HashMap<String, String>();
 		private boolean freeSearchSupported;
 
 		public RestCapabilities(String baseUrl) throws IDMapperException {
@@ -67,7 +67,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			try {
 				loadProperties();
 				loadFreeSearchSupported();
-			} catch(Exception e) {
+			} catch(IOException e) {
 				throw new IDMapperException(e);
 			}
 		}
@@ -121,7 +121,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		throws IDMapperException {
 			try {
 				return loadDataSources("sourceDataSources");
-			} catch(Exception e) {
+			} catch(IOException e) {
 				throw new IDMapperException(e);
 			}
 		}
@@ -131,7 +131,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		throws IDMapperException {
 			try {
 				return loadDataSources("targetDataSources");
-			} catch(Exception e) {
+			} catch(IOException e) {
 				throw new IDMapperException(e);
 			}
 		}
@@ -155,7 +155,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 				}
 				in.close();
 				return supported;
-			} catch(Exception e) {
+			} catch(IOException e) {
 				throw new IDMapperException(e);
 			}
 		}
@@ -168,7 +168,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	/**
 	 * @param baseUrl base Url, e.g. http://webservice.bridgedb.org/Human or
 	 * 	http://localhost:8182
-	 * @throws IDMapperException 
+	 * @throws IDMapperException when service is unavailable 
 	 */
 	BridgeRest (String baseUrl) throws IDMapperException
 	{
@@ -194,7 +194,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			result.addAll (parseRefs(url));
 			return result;
 		}
-		catch (Exception ex) {
+		catch (IOException ex) {
 			throw new IDMapperException (ex);
 		} 
 	}
@@ -212,17 +212,13 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	/** {@inheritDoc} */
 	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
 			DataSource... tgtDataSources) throws IDMapperException {
-		try {
-			Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
-			
-			for(Xref x : srcXrefs) {
-				result.put(x, mapID(x, tgtDataSources));
-			}
-			
-			return result;
-		} catch(Exception e) {
-			throw new IDMapperException(e);
+		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
+		
+		for(Xref x : srcXrefs) {
+			result.put(x, mapID(x, tgtDataSources));
 		}
+		
+		return result;
 	}
 
 	/** {@inheritDoc} */
@@ -253,7 +249,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 	/** 
 	 * helper, opens url and parses Xrefs.
-	 * Xrefs are expected as one per row, id <tab> system
+	 * Xrefs are expected as one per row, id &lt;tab> system
 	 * @param url URL to open
 	 * @return parsed Xrefs
 	 * @throws IOException */
@@ -281,7 +277,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			exists = Boolean.parseBoolean(line);
 			in.close();
 			return exists;
-		} catch(Exception e) {
+		} catch(IOException e) {
 			throw new IDMapperException(e);
 		}
 	}
@@ -304,7 +300,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			}
 			in.close();
 			return result;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new IDMapperException (ex);
 		} 
 	}
@@ -325,7 +321,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			}
 			in.close();
 			return results;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new IDMapperException (ex);
 		} 
 	}
@@ -344,7 +340,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			}
 			in.close();
 			return results;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new IDMapperException (ex);
 		} 
 	}
@@ -368,7 +364,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			}
 			in.close();
 			return results;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new IDMapperException (ex);
 		} 
 	}

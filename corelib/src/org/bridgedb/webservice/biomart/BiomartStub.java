@@ -134,6 +134,7 @@ public final class BiomartStub {
      *
      * @param mart mart name
      * @return available datasets from this mart
+     * @throws IDMapperException when mapping service is unavailable
      */
     public Set<String> availableDatasets(String mart)
             throws IDMapperException {
