@@ -12,6 +12,8 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
+import buildsystem.Measure;
+
 import junit.framework.TestCase;
 
 public class Base extends TestCase 
@@ -33,9 +35,13 @@ public class Base extends TestCase
 	 * @param from first Xref of a mapping pair
 	 * @param to second Xref a mapping pair
 	 */
-	protected void basicMapperTest (String connectString, Xref from, Xref to) throws IDMapperException
+	protected void basicMapperTest (Measure measure, String name, String connectString, Xref from, Xref to) throws IDMapperException
 	{
+		long start, end, delta;
+		start = System.currentTimeMillis();
 		IDMapper mapper = BridgeDb.connect (connectString);
+		end = System.currentTimeMillis(); delta = end - start;
+		measure.add("Benchmark::" + name + "::connect", "" + delta, "msec");
 		assertNotNull(mapper);
 		
 		// check that xrefexists doesn't lead to exception
@@ -71,7 +77,10 @@ public class Base extends TestCase
 
 		if (caps.isFreeSearchSupported())
 		{
+			start = System.currentTimeMillis();
 			assertNotNull (mapper.freeSearch("p53", 100));
+			end = System.currentTimeMillis(); delta = end - start;
+			measure.add("Benchmark::" + name + "::freeSearch", "" + delta, "msec");
 			// search for id of existent should return existent
 			assertTrue (mapper.freeSearch(from.getId(), 100).contains(from));
 		}
@@ -88,7 +97,11 @@ public class Base extends TestCase
 		}
 		
 		// test mapping single id
+		start = System.currentTimeMillis();
 		Set<Xref> result2 = mapper.mapID(from);
+		end = System.currentTimeMillis(); delta = end - start;
+		measure.add("Benchmark::" + name + "::mapID(Xref)", "" + delta, "msec");
+		
 		assertTrue (result2.contains(to));
 		assertNotNull (mapper.mapID(NONEXISTENT));
 		assertTrue (mapper.mapID(from, to.getDataSource()).contains(to));
@@ -101,7 +114,10 @@ public class Base extends TestCase
 		// test mapping id in set
 		Set<Xref> fromSet = new HashSet<Xref>();
 		fromSet.add(from);
+		start = System.currentTimeMillis();
 		Map<Xref, Set<Xref>> result = mapper.mapID(fromSet, to.getDataSource());
+		end = System.currentTimeMillis(); delta = end - start;
+		measure.add("Benchmark::" + name + "::mapID(Xref)", "" + delta, "msec");
 		assertNotNull (result);
 		assertTrue (result.containsKey(from));
 		assertTrue (result.get(from).contains(to));
@@ -122,7 +138,10 @@ public class Base extends TestCase
 			
 			if (caps.isFreeSearchSupported())
 			{
+				start = System.currentTimeMillis();
 				assertNotNull (attributes.freeAttributeSearch("p53", "Symbol", 100));
+				end = System.currentTimeMillis(); delta = end - start;
+				measure.add("Benchmark::" + name + "::freeAttributeSearch()", "" + delta, "msec");
 			}
 			else
 			{

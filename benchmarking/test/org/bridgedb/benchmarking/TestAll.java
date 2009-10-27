@@ -10,13 +10,15 @@ import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.rdb.DBConnectorDerbyServer;
 
-//import buildsystem.Measure;
+import buildsystem.Measure;
 
 public class TestAll extends Base
 {
+	private Measure measure;
+	
 	@Override public void setUp()
 	{
-//		measure = new Measure("bridgedb_timing.txt");
+		measure = new Measure("bridgedb_timing.txt");
 	}
 
 	public void testDerbyClient () throws IDMapperException, ClassNotFoundException
@@ -25,7 +27,7 @@ public class TestAll extends Base
 		DBConnectorDerbyServer.init ("wikipathways.org", 1527);
 		Xref insr1 = new Xref ("ENSG00000171105", DataSource.getBySystemCode("EnHs"));
 		Xref insr2 = new Xref ("3643", DataSource.getBySystemCode("L"));
-		basicMapperTest ("idmapper-derbyclient:Homo sapiens", insr1, insr2);
+		basicMapperTest (measure, "derbyclient", "idmapper-derbyclient:Homo sapiens", insr1, insr2);
 	}
 
 	static final String GDB_HUMAN = 
@@ -39,7 +41,7 @@ public class TestAll extends Base
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 		
 		assertTrue (new File(GDB_HUMAN).exists());
-		basicMapperTest ("idmapper-pgdb:" + GDB_HUMAN, insr1, insr2);
+		basicMapperTest (measure, "pgdb", "idmapper-pgdb:" + GDB_HUMAN, insr1, insr2);
 	}	
 
 	public void testPicr() throws IDMapperException, ClassNotFoundException
@@ -47,7 +49,7 @@ public class TestAll extends Base
 		Class.forName ("org.bridgedb.webservice.picr.IDMapperPicr");
 		Xref insr1 = new Xref ("YER095W", DataSource.getByFullName("SGD"));
 		Xref insr2 = new Xref ("1SZP", DataSource.getByFullName("PDB"));
-		basicMapperTest ("idmapper-picr:", insr1, insr2);
+		basicMapperTest (measure, "picr", "idmapper-picr:", insr1, insr2);
 	}
 	
 	public void testSynergizer() throws IDMapperException, ClassNotFoundException
@@ -55,7 +57,7 @@ public class TestAll extends Base
 		Class.forName ("org.bridgedb.webservice.synergizer.IDMapperSynergizer");
 		Xref insr1 = new Xref ("snph", DataSource.getByFullName("hgnc_symbol"));
 		Xref insr2 = new Xref ("9751", DataSource.getByFullName("entrezgene"));
-		basicMapperTest ("idmapper-synergizer:authority=ensembl&species=Homo sapiens", insr1, insr2);
+		basicMapperTest (measure, "synergizer", "idmapper-synergizer:authority=ensembl&species=Homo sapiens", insr1, insr2);
 	}
 
 	public void testBridgeWebservice() throws IDMapperException, ClassNotFoundException
@@ -64,7 +66,7 @@ public class TestAll extends Base
 		Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
 		Xref insr1 = new Xref ("ENSG00000171105", DataSource.getBySystemCode("EnHs"));
 		Xref insr2 = new Xref ("3643", DataSource.getBySystemCode("L"));
-		basicMapperTest ("idmapper-bridgerest:http://webservice.bridgedb.org/Human", insr1, insr2);
+		basicMapperTest (measure, "bridgerest", "idmapper-bridgerest:http://webservice.bridgedb.org/Human", insr1, insr2);
 	}
 	
 	public void testFile() throws IDMapperException, ClassNotFoundException
@@ -74,6 +76,6 @@ public class TestAll extends Base
 		Class.forName("org.bridgedb.file.IDMapperFile");		
 		Xref ref1 = new Xref("YHR055C", DataSource.getByFullName("Ensembl Yeast"));
 		Xref ref2 = new Xref("U00061", DataSource.getByFullName("EMBL"));
-		basicMapperTest ("idmapper-file:" + YEAST_IDS, ref1, ref2);		
+		basicMapperTest (measure, "file", "idmapper-file:" + YEAST_IDS, ref1, ref2);		
 	}
 }

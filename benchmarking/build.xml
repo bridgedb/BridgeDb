@@ -54,6 +54,7 @@
 			<path refid="class.path"/>
 			<pathelement location="build"/>
 			<pathelement location="../corelib/build-lib/junit.jar"/>
+			<pathelement location="../corelib/build-lib/measure.jar"/>
 			<pathelement location="../corelib/build-lib/derbyclient.jar"/>
 		</path>
 		<javac srcdir="test" debug="true" 
