@@ -118,7 +118,7 @@ public class IDMapperService extends Application {
 	/**
 	 * URL pattern for getting the supported source datasources for this database.<BR>
 	 * <code>
-	 * {<organism}/sourceDataSources
+	 * /{organism}/sourceDataSources
 	 * </code>
 	 * @see IDMapperCapabilities#getSupportedSrcDataSources()
 	 */
@@ -177,7 +177,7 @@ public class IDMapperService extends Application {
 	/**
 	 * URL pattern for getting the supported attribute set.<BR>
 	 * <code>
-	 * /<organism>/attributeSet
+	 * /{organism}/attributeSet
 	 * </code>
 	 * @see AttributeMapper#getAttributeSet()
 	 */
