@@ -18,8 +18,11 @@ package org.bridgedb.webservice.bridgerest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -256,7 +259,11 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	private List<Xref> parseRefs(URL url) throws IOException
 	{
 		List<Xref> result = new ArrayList<Xref>();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		BufferedReader reader; 
+		try
+		{
+			reader = new BufferedReader(new InputStreamReader(openUrlHelper(url)));
+		} catch (IOException ex) { return result; }
 		String line;
 		while ((line = reader.readLine()) != null)
 		{
@@ -353,8 +360,13 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 			URL url = new URL (baseUrl + "/attributes/" + ref.getDataSource().getSystemCode() + "/" + 
 					ref.getId());
+			
+			BufferedReader in; 
+			try
+			{
+				in = new BufferedReader(new InputStreamReader(openUrlHelper(url)));
+			} catch (IOException ex) { return results; }
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			String line;
 			while ((line = in.readLine()) != null) {
 				String[] cols = line.split("\t", -1);
@@ -367,5 +379,23 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		} catch (IOException ex) {
 			throw new IDMapperException (ex);
 		} 
+	}
+	
+	/**
+	 * Open an InputStream to a given URL. For certain requests, when there are 0 results, the
+	 * BridgeWebservice helpfully redirects to an error page instead of simply returning
+	 * an empty list. Here we detect that situation and throw IOException.
+	 * @return inputstream to given url.
+	 * @param url url to open inputstream for.
+	 * @throws IOException when there is a timeout, or when the http response code is not 200 - OK 
+	 */
+	private InputStream openUrlHelper(URL url) throws IOException
+	{
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setInstanceFollowRedirects(false);
+		int response = con.getResponseCode();
+		if (response != HttpURLConnection.HTTP_OK) 
+			throw new IOException("HTTP response: " + con.getResponseCode() + " - " + con.getResponseMessage());
+		return con.getInputStream();
 	}
 }
