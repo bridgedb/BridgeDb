@@ -98,7 +98,7 @@ public class IDMapperService extends Application {
 	/**
 	 * URL pattern for finding out if an xref exists in the database.<BR>
 	 * <code>
-	 * /{organism}/xrefExists
+	 * /{organism}/xrefExists/{system}/{id}
 	 * </code>
 	 * @see IDMapper#xrefExists(org.bridgedb.Xref)
 	 */
