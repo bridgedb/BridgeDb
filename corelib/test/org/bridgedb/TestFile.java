@@ -39,7 +39,7 @@ public class TestFile extends TestCase
 {
 	private Measure measure;
 	
-	private static final File YEAST_IDS = new File ("../test-data/yeast_id_mapping.txt");
+	private static final File YEAST_IDS = new File ("test-data/yeast_id_mapping.txt");
 	private static final DataSource ENS_YEAST = DataSource.getByFullName("Ensembl Yeast");
     private static final DataSource ENTREZ = DataSource.getByFullName("Entrez Gene");
     private static final DataSource EMBL = DataSource.getByFullName("EMBL");

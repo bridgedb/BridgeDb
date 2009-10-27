@@ -4,10 +4,25 @@
   <property file="corelib/version.props"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
+   <macrodef name="iterate">
+		<attribute name="target"/>
+		<sequential>
+			<subant target="@{target}">
+				<filelist dir=".">
+					<file name="corelib/build.xml"/>
+					<file name="bio/build.xml"/>
+					<file name="batchmapper/build.xml"/>
+					<file name="webservice/build.xml"/>
+					<file name="picr/build.xml"/>
+					<file name="synergizer/build.xml"/>
+				</filelist>
+			</subant>
+		</sequential>
+	</macrodef>
+
   <target name="dist" depends="doc">
-	<antcall target="_allmodules">
-		<param name="allmodules.target" value="dist"/>
-	</antcall>
+		<iterate target="dist"/>
+
 	
 	<property name="zipbase" value="bridgedb-${bridgedb.version}"/>
 	<zip destfile="${zipbase}.zip">
@@ -35,21 +50,15 @@
   </target>
 
   <target name="clean">
-	<antcall target="_allmodules">
-		<param name="allmodules.target" value="clean"/>
-	</antcall>
+		<iterate target="clean"/>
   </target>
 
   <target name="test">
-	<antcall target="_allmodules">
-		<param name="allmodules.target" value="test"/>
-	</antcall>
+		<iterate target="test"/>
   </target>
 
   <target name="dist-clean">
-	<antcall target="_allmodules">
-		<param name="allmodules.target" value="dist-clean"/>
-	</antcall>
+		<iterate target="dist-clean"/>
   </target>
 
   <!-- ant "subroutine" that calls all modules -->

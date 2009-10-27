@@ -19,7 +19,7 @@ public class TestStack extends TestCase
 	private static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
-	private static final File YEAST_ID_MAPPING = new File ("../test-data/yeast_id_mapping.txt");
+	private static final File YEAST_ID_MAPPING = new File ("test-data/yeast_id_mapping.txt");
 	private static final File NUGO_CUSTOM_MAPPINGS = new File ("/home/martijn/prg/bridgedb/test-data/Nugo-hs-custom.txt");
 
 	private Set<Xref> src = new HashSet<Xref>();

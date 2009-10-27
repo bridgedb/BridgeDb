@@ -100,7 +100,7 @@ public class Test extends TestCase
 		assertTrue (gdb.getAttributes(ref, "Description").iterator().next().startsWith("Insulin receptor Precursor"));
 		
 		// get all crossrefs
-		Set<Xref> crossRefs1 = gdb.mapID(ref, null);
+		Set<Xref> crossRefs1 = gdb.mapID(ref);
 		assertTrue(crossRefs1.contains(new Xref("Hs.465744", BioDataSource.UNIGENE)));
 		assertTrue(crossRefs1.contains(new Xref("NM_000208", BioDataSource.REFSEQ)));
 		assertTrue(crossRefs1.contains(new Xref("P06213", BioDataSource.UNIPROT)));

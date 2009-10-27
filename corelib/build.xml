@@ -32,8 +32,8 @@ bridgedb.version=${bridgedb.version}
 		   debug="true"
 		   destdir="build">
 	</javac>
-    <copy file="../resources/filterconversion.txt"
-          todir="build/org/bridgedb/webservice/biomart/util" />
+    <copy file="src/org/bridgedb/webservice/biomart/filterconversion.txt"
+          todir="build/org/bridgedb/webservice/biomart" />
   </target>
   
   <target name="jar" depends="build">

@@ -11,14 +11,16 @@
 	<mkdir dir="build"/>
   </target>
 
+	<path id="class.path">
+		<pathelement location="../dist/bridgedb.jar"/>
+	</path>
+
   <target name="build" depends="prepare">
 	<javac srcdir="src"
 		   includes="**"
 		   debug="true"
 		   destdir="build">
-		<classpath>
-			<pathelement location="../dist/bridgedb.jar"/>
-		</classpath>
+		   <classpath refid="class.path"/>
 	</javac>
     <copy file="../resources/datasources.txt"
           todir="build/org/bridgedb/bio" />
@@ -48,9 +50,10 @@
 
 	<target name="test" depends="build">
 		<path id="test.classpath">
+			<path refid="class.path"/>
 			<pathelement location="build"/>
 			<pathelement location="../corelib/lib/derby.jar"/>
-			<pathelement location="../corelib/lib/junit.jar"/>
+			<pathelement location="../corelib/build-lib/junit.jar"/>
 		</path>
 		<javac srcdir="test" debug="true" 
 					includes="**"
