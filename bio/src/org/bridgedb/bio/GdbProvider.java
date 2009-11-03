@@ -33,8 +33,6 @@ import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
 
 
-//import org.pathvisio.debug.Logger;
-
 /**
  * Utility class that maintains a list of synonym databases and the species they
  * apply to. This list can be read from a configuration file with on each line:
@@ -84,7 +82,7 @@ public class GdbProvider {
 	static final String DB_GLOBAL = "*";
 	
 	public static GdbProvider fromConfigFile(File f) throws IDMapperException, IOException {
-//		Logger.log.info("Parsing gene database configuration: " + f);
+		System.out.println("Parsing gene database configuration: " + f);
 		GdbProvider gdbs = new GdbProvider();
 		BufferedReader in = new BufferedReader(new FileReader(f));
 		String line = in.readLine();
@@ -103,10 +101,10 @@ public class GdbProvider {
 					SimpleGdb gdb = SimpleGdbFactory.createInstance(value, dbConn, DBConnector.PROP_NONE);
 					gdbs.addGlobalGdb(gdb);
 				} else {
-//					Logger.log.warn("Unable to parse organism: " + key);
+					System.out.println("Unable to parse organism: " + key);
 				}
 			} else {
-//				Logger.log.error("Invalid key/value pair in gene database configuration: " + line);
+				System.out.println("Invalid key/value pair in gene database configuration: " + line);
 			}
 			line = in.readLine();
 		}
