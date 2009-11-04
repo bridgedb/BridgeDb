@@ -134,4 +134,20 @@ public class TestBiomart extends TestCase
          }
     }
 
+    public void testBioMartMapping() throws IOException, IDMapperException, ClassNotFoundException
+    {
+        Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
+        
+        //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
+       IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
+       
+       Set<Xref> result = mapper.mapID(
+    		   new Xref("ENSG00000171105", DataSource.getByFullName("ensembl_gene_id")),
+    		   DataSource.getByFullName("entrezgene"));
+       for (Xref ref : result)
+       {
+    	   System.out.println (ref);
+       }
+       assertTrue (result.contains (new Xref ("3643", DataSource.getByFullName("entrezgene"))));
+   }
 }
