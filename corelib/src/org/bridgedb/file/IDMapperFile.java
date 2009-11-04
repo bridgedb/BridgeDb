@@ -73,7 +73,7 @@ public abstract class IDMapperFile implements IDMapper {
     public Map<Xref, Set<Xref>> mapID(final Set<Xref> srcXrefs,
                 final DataSource... tgtDataSources) throws IDMapperException {
         if (srcXrefs==null) {
-            throw new IllegalArgumentException("srcXrefs or tgtDataSources cannot be null");
+            throw new NullPointerException("argument srcXrefs cannot be null");
         }
 
         Map<Xref, Set<Xref>> result = new HashMap();

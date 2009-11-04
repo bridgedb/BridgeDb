@@ -73,9 +73,9 @@ public class TestAll extends Base
 	{
 		File YEAST_IDS = new File ("../test-data/yeast_id_mapping.txt");
 		assertTrue (YEAST_IDS.exists());
-		Class.forName("org.bridgedb.file.IDMapperFile");		
+		Class.forName("org.bridgedb.file.IDMapperText");		
 		Xref ref1 = new Xref("YHR055C", DataSource.getByFullName("Ensembl Yeast"));
 		Xref ref2 = new Xref("U00061", DataSource.getByFullName("EMBL"));
-		basicMapperTest (measure, "file", "idmapper-file:" + YEAST_IDS, ref1, ref2);		
+		basicMapperTest (measure, "text", "idmapper-text:file://" + YEAST_IDS.getAbsolutePath(), ref1, ref2);		
 	}
 }
