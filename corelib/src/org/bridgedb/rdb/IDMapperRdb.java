@@ -27,6 +27,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.impl.InternalUtils;
 
 /**
  * Interface for all classes that provide Gdb-like functionality,
@@ -76,13 +77,6 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 	/** {@inheritDoc} */
 	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException 
 	{
-		final Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
-		for (Xref src : srcXrefs)
-		{
-			final Set<Xref> refs = mapID(src, tgtDataSources);
-			if (refs.size() > 0)
-				result.put (src, refs);
-		}
-		return result;
+		return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
 	}	
 }

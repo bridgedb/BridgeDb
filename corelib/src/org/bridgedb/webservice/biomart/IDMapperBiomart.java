@@ -53,7 +53,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         /** {@inheritDoc} */
         public IDMapper connect(String location) throws IDMapperException  {
             // e.g.: dataset=oanatinus_gene_ensembl
-            // e.g.: http://www.biomart.org/biomart/martservice?dataset=oanatinus_gene_ensembl
+            // e.g.: http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl
             String baseURL = BiomartClient.DEFAULT_BASE_URL;
 
             String param = location;
@@ -205,11 +205,16 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
 
         // supported tgt datasources
         Set<String> tgtTypes = new HashSet<String>();
-        for (DataSource ds : tgtDataSources) {
-            if (supportedTgtDs.contains(ds)) {
-                tgtTypes.add(ds.getFullName());
-            }
-        }
+        if (tgtDataSources.length > 0)
+        	for (DataSource ds : tgtDataSources) 
+        	{
+        		if (supportedTgtDs.contains(ds)) {
+        			tgtTypes.add(ds.getFullName());
+        		}
+        	}
+        else
+        	for (DataSource ds : supportedTgtDs) 
+            	 tgtTypes.add (ds.getFullName());
         String[] tgts = tgtTypes.toArray(new String[0]);
 
         for (Map.Entry<String, Map<String, Xref>> entry :
@@ -253,7 +258,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         srcXrefs.add(xref);
 
         Map<Xref, Set<Xref>> map = mapID(srcXrefs);
-        return map.isEmpty();
+        return !map.isEmpty();
     }
 
     /**

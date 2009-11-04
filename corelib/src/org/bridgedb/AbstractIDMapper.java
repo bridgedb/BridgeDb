@@ -16,10 +16,9 @@
 //
 package org.bridgedb;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+
+import org.bridgedb.impl.InternalUtils;
 
 /**
  * Contains default implementation of some IDMapper methods.
@@ -35,12 +34,6 @@ public abstract class AbstractIDMapper implements IDMapper
 	 */
 	public Set<Xref> mapID (Xref srcRef, DataSource... tgtDataSources) throws IDMapperException
 	{
-		Set<Xref> srcXrefs = new HashSet<Xref>();
-		srcXrefs.add(srcRef);
-		Map<Xref, Set<Xref>> mapXrefs = mapID(srcXrefs, tgtDataSources);
-		if (mapXrefs.containsKey(srcRef))
-			return mapXrefs.get(srcRef);
-		else
-			return Collections.emptySet();
+		return InternalUtils.mapSingleFromMulti(this, srcRef, tgtDataSources);
 	}
 }
