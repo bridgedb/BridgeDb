@@ -51,7 +51,15 @@ public class TestAll extends Base
 		Xref insr2 = new Xref ("1SZP", DataSource.getByFullName("PDB"));
 		basicMapperTest (measure, "picr", "idmapper-picr:", insr1, insr2);
 	}
-	
+
+	public void testPicrRest() throws IDMapperException, ClassNotFoundException
+	{
+		Class.forName ("org.bridgedb.webservice.picr.IDMapperPicrRest");
+		Xref insr1 = new Xref ("YER095W", DataSource.getByFullName("SGD"));
+		Xref insr2 = new Xref ("1SZP", DataSource.getByFullName("PDB"));
+		basicMapperTest (measure, "picr-rest", "idmapper-picr-rest:", insr1, insr2);
+	}
+
 	public void testSynergizer() throws IDMapperException, ClassNotFoundException
 	{
 		Class.forName ("org.bridgedb.webservice.synergizer.IDMapperSynergizer");
@@ -78,4 +86,14 @@ public class TestAll extends Base
 		Xref ref2 = new Xref("U00061", DataSource.getByFullName("EMBL"));
 		basicMapperTest (measure, "text", "idmapper-text:file://" + YEAST_IDS.getAbsolutePath(), ref1, ref2);		
 	}
+	
+	public void testBioMart() throws IDMapperException, ClassNotFoundException
+	{
+		Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
+		Xref insr1 = new Xref ("ENSG00000171105", DataSource.getByFullName("ensembl_gene_id"));
+		Xref insr2 = new Xref ("3643", DataSource.getByFullName("entrezgene"));
+		basicMapperTest (measure, "biomart", "idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl", insr1, insr2);		
+	}
+
+	//TODO: cronos	
 }
