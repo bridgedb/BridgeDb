@@ -1,6 +1,7 @@
 package org.bridgedb.benchmarking;
 
 import java.io.File;
+import java.util.Set;
 
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
@@ -95,5 +96,13 @@ public class TestAll extends Base
 		basicMapperTest (measure, "biomart", "idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl", insr1, insr2);		
 	}
 
-	//TODO: cronos	
+	public void testCronos() throws IDMapperException, ClassNotFoundException
+	{
+		Class.forName ("org.bridgedb.webservice.cronos.IDMapperCronos");
+		BioDataSource.init();
+		Xref insr1 = new Xref ("ENSG00000171105", BioDataSource.ENSEMBL);
+		Xref insr2 = new Xref ("3643", BioDataSource.ENTREZ_GENE);
+		basicMapperTest (measure, "cronos", "idmapper-cronos:hsa", insr1, insr2);		
+	}
 }
+

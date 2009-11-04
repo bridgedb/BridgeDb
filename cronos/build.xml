@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<project name="BridgeDb-Cronos" default="dist" basedir=".">
+
+  <!-- always be java 1.5 compatible -->
+  <property name="ant.build.javac.target" value="1.5"/>
+  <property name="ant.build.javac.source" value="1.5"/>
+	
+  <property name="jar.name" value="../dist/bridgedb-cronos.jar"/>
+  
+  <target name="prepare">
+	<mkdir dir="build"/>
+  </target>
+
+  <target name="build" depends="prepare">
+    <javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+	</javac>
+	<javac srcdir="src-axis"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+	</javac>
+  </target>
+  
+  <target name="jar" depends="build">
+	<jar jarfile="${jar.name}">
+	  <manifest>
+		<attribute name="Class-Path" value="derby.jar"/>
+	  </manifest>
+	  <fileset dir="build" includes="**/*.class"/>
+      <fileset dir="build" includes="**/*.txt"/>
+	  <fileset dir="src" includes="**/*.properties"/>
+	</jar>
+    <copy file="lib/derby.jar"
+          todir="../dist" />
+  </target>
+
+  <target name="clean">
+	<delete dir="build"/>
+	<delete dir="doc"/>
+  </target>
+
+  <target name="dist-clean" depends="clean">
+	<delete file="${jar.name}"/>
+  </target>
+
+  <target name="dist" depends="jar"/>
+
+  	<taskdef resource="checkstyletask.properties"
+			 classpath="build-lib/checkstyle-all-5.0-beta01.jar"/>
+			 
+	<target name="test" depends="build">
+		<path id="test.classpath">
+			<pathelement location="build"/>
+			<pathelement location="lib/derby.jar"/>
+			<pathelement location="build-lib/junit.jar"/>
+			<pathelement location="build-lib/measure.jar"/>
+			<pathelement location="build-lib/derbyclient.jar"/>
+		</path>
+		<javac srcdir="test" debug="true" 
+					includes="**"
+					destdir="build"
+					source="1.5">
+			<classpath refid="test.classpath"/>
+		</javac>		
+		<junit printsummary="on" haltonfailure="true" fork="true">
+			<formatter type="brief" usefile="false"/>
+			<classpath refid="test.classpath"/>
+			<batchtest>
+				<fileset dir="test">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="checkstyle">
+		<checkstyle config="checks.xml">
+			<fileset dir="src">
+				<include name="**/*.java"/>
+			</fileset>
+			<formatter toFile="${checkstyle.output.file}"/>
+		</checkstyle>	
+	</target>
+
+	<property name="wsdl.url" value="http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL"/>
+	<property name="axis.wpclient.dir" value="src-axis"/>
+	<property name="build.wpclient.dir" value="build/wpclient" />
+	
+	<path id="wpclient.class.path">
+		<path location="${build.wpclient.dir}"/>
+		<fileset dir="lib/axis-1_4/lib" includes="*.jar" />
+	</path>
+	
+	<target name="cronosclient-axis">
+		<fail message="You must specify a url to the CRONOS web service WSDL: 
+			ant -Dwsdl.url=http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL [ant target]">
+			<condition>
+				<not> <isset property="wsdl.url"/> </not>
+			</condition>
+		</fail>
+		<java classpathref="wpclient.class.path" fork="true" failonerror="true" classname="org.apache.axis.wsdl.WSDL2Java">
+			<arg value="-o" />
+			<arg value="${axis.wpclient.dir}" />
+			<arg value="-p" />
+			<arg value="org.bridgedb.webservice.cronos" />
+			<arg value="${wsdl.url}" />
+		</java>
+	</target>
+
+	<target name="compile-cronosclient" depends="cronosclient-axis">
+ 		<javac srcdir="${axis.wpclient.dir}" debug="true" destdir="${build.wpclient.dir}">
+			<classpath refid="wpclient.class.path" />
+		</javac>
+		<javac srcdir="${src.dir}/wikipathways-client" debug="true" destdir="${build.wpclient.dir}">
+			<classpath refid="wpclient.class.path" />
+		</javac>
+	</target>
+
+</project>
