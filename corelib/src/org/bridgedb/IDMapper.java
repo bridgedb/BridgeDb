@@ -16,6 +16,7 @@
 //
 package org.bridgedb;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public interface IDMapper {
      *    return null however.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
-    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException;
+    public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException;
 
 	/**
 	 * Get all cross-references for the given entity, restricting the

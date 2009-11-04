@@ -174,7 +174,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
         /**
          * {@inheritDoc}
          */
-	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
 			Set<DataSource> tgtDataSources) throws IDMapperException 
 	{
             if (srcXrefs==null) {
@@ -337,7 +337,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
         return stream;
     }
 
-	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
 			DataSource... tgtDataSources) throws IDMapperException {
 		// TODO Not yet implemented
 		throw new UnsupportedOperationException();

@@ -19,6 +19,7 @@ package org.bridgedb.webservice.biomart;
 
 import java.io.IOException;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -177,7 +178,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
     /**
      * {@inheritDoc}
      */
-    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+    public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
                 DataSource... tgtDataSources) throws IDMapperException {
         if (srcXrefs==null) {
             throw new java.lang.IllegalArgumentException(

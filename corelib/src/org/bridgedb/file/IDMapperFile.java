@@ -17,6 +17,7 @@
 package org.bridgedb.file;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -70,7 +71,7 @@ public abstract class IDMapperFile implements IDMapper {
     /**
      * {@inheritDoc}
      */
-    public Map<Xref, Set<Xref>> mapID(final Set<Xref> srcXrefs,
+    public Map<Xref, Set<Xref>> mapID(final Collection<Xref> srcXrefs,
                 final DataSource... tgtDataSources) throws IDMapperException {
         if (srcXrefs==null) {
             throw new NullPointerException("argument srcXrefs cannot be null");

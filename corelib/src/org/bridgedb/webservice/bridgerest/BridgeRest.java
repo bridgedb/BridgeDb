@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -212,7 +213,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	}
 
 	/** {@inheritDoc} */
-	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
 			DataSource... tgtDataSources) throws IDMapperException {
 		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 		

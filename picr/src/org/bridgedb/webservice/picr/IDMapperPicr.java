@@ -17,6 +17,7 @@
 package org.bridgedb.webservice.picr;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -133,7 +134,7 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 		return !closed;
 	}
 
-	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
 			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();

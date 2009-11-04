@@ -17,6 +17,7 @@
 package org.bridgedb;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -260,7 +261,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	}
 
 	/** {@inheritDoc} */
-	public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
 			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		if (isTransitive)
@@ -280,7 +281,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	 * @return mapping result
 	 * @throws IDMapperException if one of the children fail
 	 */
-	private Map<Xref, Set<Xref>> mapIDnormal(Set<Xref> srcXrefs,
+	private Map<Xref, Set<Xref>> mapIDnormal(Collection<Xref> srcXrefs,
 			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
@@ -311,7 +312,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	 * @return mapping result
 	 * @throws IDMapperException if one of the children fail
 	 */
-	private Map<Xref, Set<Xref>> mapIDtransitive(Set<Xref> srcXrefs,
+	private Map<Xref, Set<Xref>> mapIDtransitive(Collection<Xref> srcXrefs,
 			DataSource... tgtDataSources) throws IDMapperException 
 	{
 		// Current implementation just repeatedly calls mapIDTransitive (Xref, Set<Ds>) 

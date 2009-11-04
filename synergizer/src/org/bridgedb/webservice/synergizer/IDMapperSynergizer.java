@@ -19,6 +19,7 @@ package org.bridgedb.webservice.synergizer;
 import java.io.IOException;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -245,7 +246,7 @@ public class IDMapperSynergizer extends IDMapperWebservice
     /**
      * {@inheritDoc}
      */
-    public Map<Xref, Set<Xref>> mapID(Set<Xref> srcXrefs,
+    public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
                     DataSource... resultDs) throws IDMapperException
     {
         if (srcXrefs==null) {
