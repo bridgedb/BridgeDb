@@ -45,7 +45,7 @@ public class IDMapperService extends Application {
 	
 	public static final String PAR_SOURCE_SYSTEM = "src";
 	public static final String PAR_DEST_SYSTEM = "dest";
-	
+
 	public final File configFile;
 
 	public IDMapperService(File aConfigFile)
@@ -75,6 +75,15 @@ public class IDMapperService extends Application {
 	 * </code>
 	 */
 	public static final String URL_HOME = "/";
+
+	/**
+ 	 * URL pattern to catch a misformed query.<BR>
+ 	 *
+ 	 * <code>
+ 	 * {unmatched patter}
+ 	 * <code>
+	 */
+	public static final String URL_NO_MATCH = "/{" + PAR_ORGANISM + "}";
 
 	/**
 	 * URL pattern for mapping xrefs.<BR>
@@ -201,6 +210,10 @@ public class IDMapperService extends Application {
 
 	public Restlet createRoot() {
 		Router router = new Router(getContext());
+		
+		//router.setDefaultMatchingMode(Router.BEST);		
+		//System.out.println("MatchingMode: "+ router.getDefaultMatchingMode() + " : "+ router.getRequiredScore());
+
 
 		//Register the route for the home page url pattern
 		String target = "http://bridgedb.org/wiki/BridgeWebservice";
@@ -245,6 +258,10 @@ public class IDMapperService extends Application {
 		// Register the route for backPageText
 		router.attach( URL_BACK_PAGE_TEXT, BackPageText.class );
 		
+
+                //Register the route for a url pattern that doesn't match other patterns
+                router.attach(URL_NO_MATCH, NoMatch.class);
+                
 		return router;
 	}
 
