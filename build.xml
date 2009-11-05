@@ -14,6 +14,7 @@
 					<file name="batchmapper/build.xml"/>
 					<file name="webservice/build.xml"/>
 					<file name="picr/build.xml"/>
+					<file name="cronos/build.xml"/>
 					<file name="synergizer/build.xml"/>
 				</filelist>
 			</subant>
@@ -61,16 +62,6 @@
 		<iterate target="dist-clean"/>
   </target>
 
-  <!-- ant "subroutine" that calls all modules -->
-  <target name="_allmodules">
-	<ant dir="corelib" target="${allmodules.target}"/>
-	<ant dir="bio" target="${allmodules.target}"/>
-	<ant dir="batchmapper" target="${allmodules.target}"/>
-	<ant dir="webservice" target="${allmodules.target}"/>
-	<ant dir="picr" target="${allmodules.target}"/>
-	<ant dir="synergizer" target="${allmodules.target}"/>
-  </target>
-  
    <target name="doc">
      <mkdir dir="apidoc"/>
 	<tstamp /> <!-- set ${TODAY} and ${TSTAMP} -->

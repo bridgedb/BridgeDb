@@ -11,30 +11,38 @@
 	<mkdir dir="build"/>
   </target>
 
-  <target name="build" depends="prepare">
-    <javac srcdir="src"
-		   includes="**"
-		   debug="true"
-		   destdir="build">
-	</javac>
+  <path id="dependencies">
+	<fileset dir="lib/axis-1_4/lib" includes="*.jar" />
+  </path>
+  
+  <path id="class.path">
+    <path refid="dependencies"/>
+    <fileset dir="../dist">
+      <include name="bridgedb.jar"/>
+      <include name="bridgedb-bio.jar"/>
+    </fileset>
+  </path>
+
+  <target name="build" depends="prepare, cronosclient-axis">
 	<javac srcdir="src-axis"
 		   includes="**"
 		   debug="true"
 		   destdir="build">
+		<classpath refid="class.path"/>
 	</javac>
+    <javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+		<classpath refid="class.path"/>
+	</javac>
+    <copy toDir="../dist"><path refid="dependencies"/></copy>
   </target>
   
   <target name="jar" depends="build">
 	<jar jarfile="${jar.name}">
-	  <manifest>
-		<attribute name="Class-Path" value="derby.jar"/>
-	  </manifest>
 	  <fileset dir="build" includes="**/*.class"/>
-      <fileset dir="build" includes="**/*.txt"/>
-	  <fileset dir="src" includes="**/*.properties"/>
 	</jar>
-    <copy file="lib/derby.jar"
-          todir="../dist" />
   </target>
 
   <target name="clean">
@@ -44,20 +52,17 @@
 
   <target name="dist-clean" depends="clean">
 	<delete file="${jar.name}"/>
+	<delete dir="${src.axis}"/>
   </target>
 
   <target name="dist" depends="jar"/>
-
-  	<taskdef resource="checkstyletask.properties"
-			 classpath="build-lib/checkstyle-all-5.0-beta01.jar"/>
 			 
 	<target name="test" depends="build">
 		<path id="test.classpath">
+			<path refid="class.path"/>
 			<pathelement location="build"/>
-			<pathelement location="lib/derby.jar"/>
-			<pathelement location="build-lib/junit.jar"/>
-			<pathelement location="build-lib/measure.jar"/>
-			<pathelement location="build-lib/derbyclient.jar"/>
+			<pathelement location="../corelib/build-lib/junit.jar"/>
+			<pathelement location="../corelib/build-lib/measure.jar"/>
 		</path>
 		<javac srcdir="test" debug="true" 
 					includes="**"
@@ -76,23 +81,9 @@
 		</junit>
 	</target>
 
-	<target name="checkstyle">
-		<checkstyle config="checks.xml">
-			<fileset dir="src">
-				<include name="**/*.java"/>
-			</fileset>
-			<formatter toFile="${checkstyle.output.file}"/>
-		</checkstyle>	
-	</target>
-
 	<property name="wsdl.url" value="http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL"/>
-	<property name="axis.wpclient.dir" value="src-axis"/>
+	<property name="src.axis" value="src-axis"/>
 	<property name="build.wpclient.dir" value="build/wpclient" />
-	
-	<path id="wpclient.class.path">
-		<path location="${build.wpclient.dir}"/>
-		<fileset dir="lib/axis-1_4/lib" includes="*.jar" />
-	</path>
 	
 	<target name="cronosclient-axis">
 		<fail message="You must specify a url to the CRONOS web service WSDL: 
@@ -101,22 +92,13 @@
 				<not> <isset property="wsdl.url"/> </not>
 			</condition>
 		</fail>
-		<java classpathref="wpclient.class.path" fork="true" failonerror="true" classname="org.apache.axis.wsdl.WSDL2Java">
+		<java classpathref="class.path" fork="true" failonerror="true" classname="org.apache.axis.wsdl.WSDL2Java">
 			<arg value="-o" />
-			<arg value="${axis.wpclient.dir}" />
+			<arg value="${src.axis}" />
 			<arg value="-p" />
 			<arg value="org.bridgedb.webservice.cronos" />
 			<arg value="${wsdl.url}" />
 		</java>
-	</target>
-
-	<target name="compile-cronosclient" depends="cronosclient-axis">
- 		<javac srcdir="${axis.wpclient.dir}" debug="true" destdir="${build.wpclient.dir}">
-			<classpath refid="wpclient.class.path" />
-		</javac>
-		<javac srcdir="${src.dir}/wikipathways-client" debug="true" destdir="${build.wpclient.dir}">
-			<classpath refid="wpclient.class.path" />
-		</javac>
 	</target>
 
 </project>
