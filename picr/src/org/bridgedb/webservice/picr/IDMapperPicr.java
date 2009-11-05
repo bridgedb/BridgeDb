@@ -17,6 +17,7 @@
 package org.bridgedb.webservice.picr;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -130,61 +131,69 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 		return !closed;
 	}
 
+	/**
+	 * @{inheritDocs}
+	 */
 	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
-			DataSource... tgtDataSources) throws IDMapperException 
+			DataSource... tgtDataSources) throws IDMapperException
 	{
-		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
-		
-		
+		return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
+	}
+			
+	/**
+	 * @{inheritDocs}
+	 */
+	public Set<Xref> mapID(Xref srcXref,
+			DataSource... tgtDataSources) throws IDMapperException 
+	{		
 		Object[] databases;
 		if (tgtDataSources == null) 
 			databases = client.loadDatabases().toArray();
 		else
 			databases = objectsFromDataSources(tgtDataSources);
 		
-		for (Xref srcXref : srcXrefs)
-		{
-			Set<Xref> resultSet = new HashSet<Xref>();
-			List<CrossReference> refs = new ArrayList<CrossReference>();
-			
-			List<UPEntry> entries = client.performAccessionMapping(srcXref.getId(), databases);
-            for (UPEntry entry : entries) {
-            	refs.addAll (entry.getIdenticalCrossReferences());
-                refs.addAll (entry.getLogicalCrossReferences());
-            }
-            
-            for (CrossReference ref : refs)
-            {
-            	// in onlyActive mode, check if it is deleted first
-            	if (!(onlyActive && ref.isDeleted()))
-    			{
-            		Xref xref = new Xref (ref.getAccession(), DataSource.getByFullName(ref.getDatabaseName()));
-            		resultSet.add (xref);
-    			}
-            }
-            
-            if (resultSet.size() > 0)
-            {
-            	result.put (srcXref, resultSet);
-            }
-		}
+		Set<Xref> result = new HashSet<Xref>();
+		if (databases.length == 0) return result;
+		
+		List<CrossReference> refs = new ArrayList<CrossReference>();
+		
+		List<UPEntry> entries = client.performAccessionMapping(srcXref.getId(), databases);
+        for (UPEntry entry : entries) {
+        	refs.addAll (entry.getIdenticalCrossReferences());
+            refs.addAll (entry.getLogicalCrossReferences());
+        }
+        
+        for (CrossReference ref : refs)
+        {
+        	// in onlyActive mode, check if it is deleted first
+        	if (!(onlyActive && ref.isDeleted()))
+			{
+        		Xref xref = new Xref (ref.getAccession(), DataSource.getByFullName(ref.getDatabaseName()));
+        		result.add (xref);
+			}
+        }
 		return result;
 	}
 	
+	/**
+	 * Only returns supported databases. Resulting array may be shorter than input.
+	 */
 	private Object[] objectsFromDataSources (DataSource... ds)
 	{
-		Object[] databases = new Object[ds.length];
-		int i = 0;
+		List<Object> databases = new ArrayList<Object>(ds.length);		
 		for (DataSource tgt : ds)
 		{
-			databases[i++] = tgt.getFullName();
+			if (supportedDatabases.contains(ds))
+				databases.add(tgt.getFullName());
 		}
-		return databases;
+		return databases.toArray();
 	}
 	
 	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
-		List<UPEntry> result = client.performAccessionMapping(xref.getId(), client.loadDatabases().toArray());
+		if (!supportedDatabases.contains(xref.getDataSource())) return false;
+		List<UPEntry> result = client.performAccessionMapping(
+				xref.getId(), objectsFromDataSources(xref.getDataSource()));
 		return result.size() > 0;
 	}
 
@@ -224,15 +233,29 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 		return result;
 	}
 
+	private static final Set<String> SUPPORTED_ATTRIBUTES =  
+		new HashSet<String>(Arrays.asList(
+				new String[] {"CRC64", "Sequence", "UPI", "Timestamp"} ));
+	
 	public Set<String> getAttributeSet() throws IDMapperException 
 	{
-		// TODO Not yet implemented
-		throw new UnsupportedOperationException();
+		return SUPPORTED_ATTRIBUTES;
 	}
 
 	public Map<String, Set<String>> getAttributes(Xref ref)
-			throws IDMapperException {
-		// TODO Not yet implemented
-		throw new UnsupportedOperationException();
+			throws IDMapperException 
+	{
+		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), client.loadDatabases().toArray());
+		
+		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
+		
+		for (UPEntry entry : entries)
+		{			
+			InternalUtils.multiMapPut (result, "CRC64", entry.getCRC64());
+			InternalUtils.multiMapPut (result, "Sequence", entry.getSequence());
+			InternalUtils.multiMapPut (result, "UPI", entry.getUPI());
+			InternalUtils.multiMapPut (result, "Timestamp", "" + entry.getTimestamp());
+		}
+		return result;
 	}
 }
