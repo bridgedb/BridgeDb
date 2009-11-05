@@ -66,7 +66,7 @@ public class TestAll extends Base
 		Class.forName ("org.bridgedb.webservice.synergizer.IDMapperSynergizer");
 		Xref insr1 = new Xref ("snph", DataSource.getByFullName("hgnc_symbol"));
 		Xref insr2 = new Xref ("9751", DataSource.getByFullName("entrezgene"));
-		basicMapperTest (measure, "synergizer", "idmapper-synergizer:authority=ensembl&species=Homo sapiens", insr1, insr2);
+		basicMapperTest (measure, "synergizer", "idmapper-synergizer:?authority=ensembl&species=Homo sapiens", insr1, insr2);
 	}
 
 	public void testBridgeWebservice() throws IDMapperException, ClassNotFoundException

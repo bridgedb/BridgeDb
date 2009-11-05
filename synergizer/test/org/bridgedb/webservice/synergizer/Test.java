@@ -66,7 +66,7 @@ public class Test extends TestCase
 //                }
 //            }
 
-            IDMapper mapper = BridgeDb.connect("idmapper-synergizer:authority=ensembl&species=Homo sapiens");
+            IDMapper mapper = BridgeDb.connect("idmapper-synergizer:?authority=ensembl&species=Homo sapiens");
 
             DataSource srcDs = DataSource.getByFullName("hgnc_symbol");
             assertTrue(mapper.xrefExists(new Xref("pja1", srcDs)));

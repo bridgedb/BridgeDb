@@ -31,6 +31,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.webservice.IDMapperWebservice;
 import org.bridgedb.Xref;
 
@@ -124,36 +125,20 @@ public class IDMapperSynergizer extends IDMapperWebservice
         private Driver() { } // prevent outside instantiation
 
         public IDMapper connect(String location) throws IDMapperException {
-            // e.g.: authority=ensembl&species=Homo sapiens
+            // e.g.: ?authority=ensembl&species=Homo sapiens
             String baseURL = SynergizerStub.defaultBaseURL;
 
-            String path = location;
-
-            String param = path;
-            int idx = path.indexOf('?');
-            if (idx>-1) {
-                baseURL = path.substring(0,idx);
-                param = path.substring(idx+1);
-            }
-
-            String martTag = "authority=";
-            idx = param.indexOf(martTag);
-            String authority = param.substring(idx+martTag.length());
-
-            idx = authority.indexOf("&");
-            if (idx>-1) {
-                authority = authority.substring(0,idx);
-            }
-
-            String datasetTag = "species=";
-            idx = param.indexOf(datasetTag);
-            String species = param.substring(idx+datasetTag.length());
-
-            idx = species.indexOf("&");
-            if (idx>-1) {
-                species = species.substring(0,idx);
-            }
-
+            Map<String, String> info = 
+            	InternalUtils.parseLocation(location, "authority", "species");
+            
+            if (info.containsKey("BASE"))
+            {
+            	baseURL = info.get("BASE");
+        	}
+            // could be null
+            String authority = info.get ("authority");
+            // could be null
+            String species = info.get ("species");
             return new IDMapperSynergizer(authority, species, baseURL);
 
         }
