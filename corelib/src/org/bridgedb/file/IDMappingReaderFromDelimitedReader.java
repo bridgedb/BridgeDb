@@ -20,28 +20,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.impl.InternalUtils;
 
 /**
  * Class for reading ID mapping data from delimited reader.
  * @author gjj
  */
 public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
-    protected boolean transitivity;
+    private boolean transitivity;
+    private List<DataSource> dataSources;
+    private Map<Xref,Set<Xref>> mapXrefs;
+    private List<String> data;
+
     protected String regExDataSourceDelimiter;
     protected String regExIDDelimiter;
-    protected Vector<DataSource> dataSources;
-    protected Map<Xref,Set<Xref>> mapXrefs;
-    protected Vector<String> data;
-
     protected boolean dsValid, idMappingValid;
 
     /**
@@ -72,11 +74,11 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
 
     /**
      * Read data.
-     * @param reader
-     * @throws IDMapperException
+     * @param reader to read data from
+     * @throws IDMapperException when file can't be read
      */
     protected void readData(final Reader reader) throws IDMapperException {
-        data = new Vector();
+        data = new ArrayList<String>();
         BufferedReader bfdrd = new BufferedReader(reader);
         try {
             String line = bfdrd.readLine();
@@ -114,7 +116,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
      * the delimited reader.
      * @param dataSources {@link DataSource}s
      */
-    public void setDataSources(Vector<DataSource> dataSources) {
+    public void setDataSources(List<DataSource> dataSources) {
         this.dataSources = dataSources;
         dsValid = dataSources==null;
     }
@@ -131,7 +133,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
             }
         }
 
-        return new HashSet(dataSources);
+        return new HashSet<DataSource>(dataSources);
     }
 
     /**
@@ -150,11 +152,11 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
     }
 
     /**
-     * Read {@link DataSource}s from the reader
-     * @throws IDMapperException if failed
+     * Read {@link DataSource}s from the reader.
+     * @throws IOException on failing to read file
      */
     protected void readDataSources() throws IOException {
-        dataSources = new Vector();
+        dataSources = new ArrayList<DataSource>();
 
         // add data sources
         if (data.isEmpty()) {
@@ -180,10 +182,10 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
     
     /**
      * Read ID mappings from the reader.
-     * @throws IDMapperException if failed
+     * @throws IOException on file read error
      */
     protected void readIDMappings() throws IOException {
-        mapXrefs = new HashMap();
+        mapXrefs = new HashMap<Xref, Set<Xref>>();
 
         int nline = data.size();
         if (nline<2) {
@@ -202,7 +204,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
 
             int n = Math.min(strs.length, dataSources.size());
 
-            Set<Xref> xrefs = new HashSet();
+            Set<Xref> xrefs = new HashSet<Xref>();
 
             for (int i=0; i<n; i++) {
                 String str = strs[i];
@@ -232,7 +234,7 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
         }
 
         if (transitivity) {
-            Set<Xref> newXrefs = new HashSet(xrefs);
+            Set<Xref> newXrefs = new HashSet<Xref>(xrefs);
 
             for (Xref xref : xrefs) {
                 Set<Xref> oldXrefs = mapXrefs.get(xref);
@@ -245,16 +247,10 @@ public class IDMappingReaderFromDelimitedReader implements IDMappingReader {
                 mapXrefs.put(xref, newXrefs);
             }
         } else {
-            for (Xref xref : xrefs) {
-                Set<Xref> oldXrefs = mapXrefs.get(xref);
-                if (oldXrefs==null) {
-                    oldXrefs = new HashSet();
-                    mapXrefs.put(xref, oldXrefs);
-                }
-
-                oldXrefs.addAll(xrefs);
+            for (Xref ref : xrefs) 
+            {
+        		InternalUtils.multiMapPutAll(mapXrefs, ref, xrefs);
             }
-        }       
-
+        }
     }
 }

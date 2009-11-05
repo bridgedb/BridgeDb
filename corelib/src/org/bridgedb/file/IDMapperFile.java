@@ -29,6 +29,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.impl.InternalUtils;
 
 /**
  * Interface for ID mapping from files.
@@ -106,17 +107,12 @@ public abstract class IDMapperFile implements IDMapper {
 
             Set<Xref> refs = mapXrefs.get(srcXref);
             if (refs==null) continue;
-
-            Set<Xref> tgtRefs = result.get(srcXref);
-            if (tgtRefs==null) {
-                tgtRefs = new HashSet<Xref>();
-                result.put(srcXref, tgtRefs);
-            }
-
-            for (Xref tgtXref : refs) {
+            
+            for (Xref tgtXref : refs) 
+            {
             	if (tgtDataSources.length == 0 || tgtDss.contains(tgtXref.getDataSource()))
     			{
-                    tgtRefs.add(tgtXref);
+            		InternalUtils.multiMapPut(result, srcXref, tgtXref);
                 }
             }
         }
