@@ -94,7 +94,7 @@ public class IDMapperCronos extends IDMapperWebservice
 		this.speciesCode = speciesCode;
 		if (!Arrays.asList(allowedSpecies).contains(speciesCode))
 		{
-			throw new IllegalArgumentException(speciesCode + " is not allowed as Species Code, must be e.g. 'hsa'");
+			throw new IDMapperException(speciesCode + " is not allowed as Species Code, must be e.g. 'hsa'");
 		}
 		
 		Map<String, String> info = new HashMap<String, String>();
@@ -141,7 +141,7 @@ public class IDMapperCronos extends IDMapperWebservice
   
 	public Set<Xref> freeSearch(String text, int limit)
 			throws IDMapperException {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("Free search not supported by CRONOS");
 	}
 
 	private final CronosCapabilities caps;

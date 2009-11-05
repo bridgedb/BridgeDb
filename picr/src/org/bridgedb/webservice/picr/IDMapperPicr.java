@@ -40,7 +40,7 @@ import uk.ac.ebi.demo.picr.business.PICRClient;
 import uk.ac.ebi.demo.picr.soap.CrossReference;
 import uk.ac.ebi.demo.picr.soap.UPEntry;
 
-public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
+public final class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 {
     static 
     {
@@ -49,8 +49,9 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 
     private boolean onlyActive;
     
-    private Set<DataSource> supportedDatabases = new HashSet<DataSource>();
-    private PICRClient client;
+    private final Set<DataSource> supportedDatabases = new HashSet<DataSource>();
+    private final Object[] supportedDbObjects;
+    private final PICRClient client;
 
     /**
      *
@@ -59,10 +60,12 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
     public IDMapperPicr(boolean onlyActive)
     {
         client = new PICRClient();
-        for (String s : client.loadDatabases())
+        List<String> databases = client.loadDatabases();
+        for (String s : databases)
         {
         	supportedDatabases.add(DataSource.getByFullName(s));
         }
+        supportedDbObjects = databases.toArray();
         this.onlyActive = onlyActive;
     }
 
@@ -148,7 +151,7 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 	{		
 		Object[] databases;
 		if (tgtDataSources == null) 
-			databases = client.loadDatabases().toArray();
+			databases = supportedDbObjects;
 		else
 			databases = objectsFromDataSources(tgtDataSources);
 		
@@ -206,7 +209,7 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 	public Set<String> getAttributes(Xref ref, String attrType)
 			throws IDMapperException 
 	{
-		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), client.loadDatabases().toArray());
+		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), supportedDbObjects);
 		
 		Set<String> result = new HashSet<String>();
 		
@@ -245,7 +248,7 @@ public class IDMapperPicr extends IDMapperWebservice implements AttributeMapper
 	public Map<String, Set<String>> getAttributes(Xref ref)
 			throws IDMapperException 
 	{
-		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), client.loadDatabases().toArray());
+		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), supportedDbObjects);
 		
 		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
 		

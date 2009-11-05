@@ -33,7 +33,9 @@ public interface Driver
 	 * @param locationString string with all necessary information to configure the resource. 
 	 * 	e.g. this could contain a URL or file location with optional parameters at the end.
 	 * @throws IDMapperException when a connection to the resource could not be created, or
-	 *  the IDMapper implementation could not be instantiated for any reason. 
+	 *  the IDMapper implementation could not be instantiated for any reason. IDMapperException
+	 *  should be thrown also if the locationString could not be parsed, or if it was
+	 *  wrongly formatted. 
 	 */
 	IDMapper connect (String locationString) throws IDMapperException;
 }
