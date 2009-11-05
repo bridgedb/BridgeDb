@@ -42,6 +42,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.webservice.IDMapperWebservice;
 import org.bridgedb.Xref;
 
@@ -103,20 +104,15 @@ public class IDMapperPicrRest extends IDMapperWebservice
 
 		public IDMapper connect(String location) throws IDMapperException  
 		{
-			// location string is ignored...
-			
-			if (location.equals("only-active=false"))
+            Map<String, String> args = 
+            	InternalUtils.parseLocation(location, "only-active");
+
+			boolean isOnlyActive = true;
+			if (args.containsKey("only-active"))
 			{
-				return new IDMapperPicrRest(false);
+				isOnlyActive = Boolean.parseBoolean(args.get("only-active"));
 			}
-			else if (location.equals ("only-active=true") || location.equals (""))
-			{
-				return new IDMapperPicrRest(true);
-			}
-			else
-			{
-				throw new IDMapperException ("Could not parse location string '" + location + "'");
-			}
+			return new IDMapperPicr(isOnlyActive);
 		}
 	}
 	
