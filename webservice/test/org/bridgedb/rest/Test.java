@@ -79,6 +79,9 @@ public class Test extends TestCase
 		assertTrue(cap.isFreeSearchSupported());
 		
 		assertTrue(cap.isMappingSupported(BioDataSource.UNIPROT, BioDataSource.ENTREZ_GENE));
+		
+		assertFalse(cap.isMappingSupported(
+				DataSource.getBySystemCode("??"), DataSource.getBySystemCode("!!")));
 	}
 	
 	public void testLocalSearch() throws IDMapperException, ClassNotFoundException {

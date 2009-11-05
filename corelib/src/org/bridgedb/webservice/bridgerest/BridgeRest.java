@@ -18,10 +18,10 @@ package org.bridgedb.webservice.bridgerest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,14 +59,15 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		}
 	}
 
-	private final static class RestCapabilities implements IDMapperCapabilities {
-		private String baseUrl;
+	private final class RestCapabilities implements IDMapperCapabilities {
 		private Map<String, String> properties = new HashMap<String, String>();
 		private boolean freeSearchSupported;
 
-		public RestCapabilities(String baseUrl) throws IDMapperException {
-			this.baseUrl = baseUrl;
-
+		/** 
+		 * Capabilities for the BridgeRest IDMapper. 
+		 * @throws IDMapperException when the webservice was not available.
+		 */
+		public RestCapabilities() throws IDMapperException {
 			try {
 				loadProperties();
 				loadFreeSearchSupported();
@@ -75,22 +76,38 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			}
 		}
 
-		private Set<DataSource> loadDataSources(String cmd) throws IOException {
-			Set<DataSource> results = new HashSet<DataSource>();
-
-			URL url = new URL(baseUrl + "/" + cmd);
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-			String line = null;
-			while((line = in.readLine()) != null) {
-				results.add(DataSource.getByFullName(line));
+		/** 
+		 * Helper method, reads a list of supported datasources from the webservice.
+		 * @param cmd can be sourceDataSources or targetDataSources
+		 * @return Set of DataSources
+		 * @throws IDMapperException when service is unavailable.
+		 */
+		private Set<DataSource> loadDataSources(String cmd) throws IDMapperException
+		{
+			try
+			{
+				Set<DataSource> results = new HashSet<DataSource>();
+	
+				BufferedReader in = new UrlBuilder (cmd).openReader();
+				String line = null;
+				while((line = in.readLine()) != null) {
+					results.add(DataSource.getByFullName(line));
+				}
+				in.close();
+				return results;
 			}
-			in.close();
-			return results;
+			catch (IOException ex)
+			{
+				throw new IDMapperException (ex);
+			}
 		}
 
+		/** 
+		 * Helper method, checks if free search is supported by the webservice.
+		 * @throws IOException when service is unavailable.
+		 */
 		private void loadFreeSearchSupported() throws IOException {
-			URL url = new URL(baseUrl + "/isFreeSearchSupported");
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			BufferedReader in = new UrlBuilder ("isFreeSearchSupported").openReader();
 			String line = null;
 			while((line = in.readLine()) != null) {
 				freeSearchSupported = Boolean.parseBoolean(line);
@@ -98,9 +115,12 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			in.close();
 		}
 
+		/** 
+		 * Helper method, reads properties from the webservice.
+		 * @throws IOException when service is unavailable.
+		 */
 		private void loadProperties() throws IOException {
-			URL url = new URL(baseUrl + "/properties");
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			BufferedReader in = new UrlBuilder ("properties").openReader();
 			String line = null;
 			while((line = in.readLine()) != null) {
 				String[] cols = line.split("\t");
@@ -121,22 +141,16 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 		/** {@inheritDoc} */
 		public Set<DataSource> getSupportedSrcDataSources()
-		throws IDMapperException {
-			try {
-				return loadDataSources("sourceDataSources");
-			} catch(IOException e) {
-				throw new IDMapperException(e);
-			}
+			throws IDMapperException 
+		{
+			return loadDataSources("sourceDataSources");
 		}
 
 		/** {@inheritDoc} */
 		public Set<DataSource> getSupportedTgtDataSources()
-		throws IDMapperException {
-			try {
-				return loadDataSources("targetDataSources");
-			} catch(IOException e) {
-				throw new IDMapperException(e);
-			}
+			throws IDMapperException 
+		{
+			return loadDataSources("targetDataSources");
 		}
 
 		/** {@inheritDoc} */
@@ -148,10 +162,9 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		public boolean isMappingSupported(DataSource src, DataSource tgt)
 		throws IDMapperException {
 			try {
-				boolean supported = false;
-
-				URL url = new URL(baseUrl + "/isMappingSupported/" + src.getSystemCode() + "/" + tgt.getSystemCode());
-				BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+				boolean supported = false;				
+				BufferedReader in = new UrlBuilder("isMappingSupported")
+					.ordered(src.getSystemCode(), tgt.getSystemCode()).openReader();
 				String line = null;
 				while((line = in.readLine()) != null) {
 					supported = Boolean.parseBoolean(line);
@@ -169,6 +182,86 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	private final IDMapperCapabilities capabilities;
 
 	/**
+	 * Helper class for constructing URL of a BridgeRest webservice command.
+	 */
+	private final class UrlBuilder
+	{
+		private StringBuilder builder = new StringBuilder(baseUrl);
+		
+		/**
+		 * Start building a new Url for the BridgeRest webservice.
+		 * @param cmd the command, or the first parameter after the base Url. For example "properties".
+		 * 	This param will be added after the baseUrl, separated by a "/"
+		 */
+		private UrlBuilder(String cmd)
+		{
+			builder.append ("/");
+			builder.append (cmd);
+		}
+		
+		/**
+		 * Ordered, unnamed arguments.
+		 * @param args Optional arguments, these will be URLencoded and separated by "/"
+		 * @return this, for chaining purposes
+		 * @throws IOException in case there is an encoding problem (really unlikely) 
+		 */
+		UrlBuilder ordered (String... args) throws IOException
+		{
+			for (String arg : args)
+			{
+				builder.append ("/");
+				builder.append (URLEncoder.encode (arg, "UTF-8"));
+			}
+			return this;
+		}
+
+		private boolean hasQMark = false;
+		
+		/**
+		 * Named parameters, these will be appended after ? and formatted as key=val pairs,
+		 * separated by &
+		 * @param key name of parameter
+		 * @param val value of parameter
+		 * @throws IOException in case there is an encoding problem (really unlikely) 
+		 * @return this, for chaining purposes
+		 */
+		UrlBuilder named (String key, String val) throws IOException
+		{
+			if (!hasQMark)
+			{
+				builder.append ("?");
+				hasQMark = true;
+			}
+			else
+			{
+				builder.append ("&");
+			}
+			builder.append (URLEncoder.encode (key, "UTF-8"));
+			builder.append ("=");
+			builder.append (URLEncoder.encode (val, "UTF-8"));
+			return this;
+		}
+
+		/**
+		 * Open an InputStream to a given URL. For certain requests, when there are 0 results, the
+		 * BridgeWebservice helpfully redirects to an error page instead of simply returning
+		 * an empty list. Here we detect that situation and throw IOException.
+		 * @return inputstream to given url.
+		 * @throws IOException when there is a timeout, or when the http response code is not 200 - OK 
+		 */
+		private BufferedReader openReader() throws IOException
+		{
+			URL url = new URL (builder.toString()); 
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setInstanceFollowRedirects(false);
+			int response = con.getResponseCode();
+			if (response != HttpURLConnection.HTTP_OK) 
+				throw new IOException("HTTP response: " + con.getResponseCode() + " - " + con.getResponseMessage());
+			return new BufferedReader(new InputStreamReader(con.getInputStream()));
+		}
+	}
+	
+	/**
 	 * @param baseUrl base Url, e.g. http://webservice.bridgedb.org/Human or
 	 * 	http://localhost:8182
 	 * @throws IDMapperException when service is unavailable 
@@ -178,7 +271,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		this.baseUrl = baseUrl;
 
 		//Get the capabilities
-		capabilities = new RestCapabilities(baseUrl);
+		capabilities = new RestCapabilities();
 	}
 
 	private boolean isConnected = true;
@@ -192,9 +285,9 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	{
 		try
 		{
-			URL url = new URL (baseUrl + "/search/" + text);
+			BufferedReader r = new UrlBuilder ("search").ordered(text).openReader();
 			Set<Xref> result = new HashSet<Xref>();
-			result.addAll (parseRefs(url));
+			result.addAll (parseRefs(r));
 			return result;
 		}
 		catch (IOException ex) {
@@ -233,9 +326,11 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 		try
 		{
-			URL url = new URL(baseUrl + "/xrefs/" + src.getDataSource().getSystemCode() + "/" + src.getId());
+			BufferedReader r = new UrlBuilder ("xrefs")
+				.ordered(src.getDataSource().getSystemCode(), src.getId())
+				.openReader();
 			Set<Xref> result = new HashSet<Xref>();
-			for (Xref dest : parseRefs(url))
+			for (Xref dest : parseRefs(r))
 			{
 				if (dsFilter.size() == 0 || dsFilter.contains(dest.getDataSource()))
 				{
@@ -251,19 +346,14 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			}
 
 	/** 
-	 * helper, opens url and parses Xrefs.
+	 * reads from stream and parses Xrefs.
 	 * Xrefs are expected as one per row, id &lt;tab> system
-	 * @param url URL to open
+	 * @param reader BufferedReader to read from.
 	 * @return parsed Xrefs
 	 * @throws IOException */
-	private List<Xref> parseRefs(URL url) throws IOException
+	private List<Xref> parseRefs(BufferedReader reader) throws IOException
 	{
 		List<Xref> result = new ArrayList<Xref>();
-		BufferedReader reader; 
-		try
-		{
-			reader = new BufferedReader(new InputStreamReader(openUrlHelper(url)));
-		} catch (IOException ex) { return result; }
 		String line;
 		while ((line = reader.readLine()) != null)
 		{
@@ -278,8 +368,9 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	public boolean xrefExists(Xref xref) throws IDMapperException {
 		try {
 			boolean exists = false;
-			URL url = new URL(baseUrl + "/xrefExists/" + xref.getDataSource().getSystemCode() + "/" + xref.getId());
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			BufferedReader in = new UrlBuilder ("xrefExists")
+				.ordered(xref.getDataSource().getSystemCode(), xref.getId())
+				.openReader();
 			String line = in.readLine();
 			exists = Boolean.parseBoolean(line);
 			in.close();
@@ -295,9 +386,10 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		try {
 			Map<Xref, String> result = new HashMap<Xref, String>();
 			
-			URL url = new URL (baseUrl + "/attributeSearch/" + query + "?limit=" + limit + "&attrName=" + attrType);
-			
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			BufferedReader in = new UrlBuilder("attributeSearch")
+				.ordered (query).named("limit", "" + limit)
+				.named ("attrName", attrType)
+				.openReader();
 			String line;
 			while ((line = in.readLine()) != null) {
 				String[] cols = line.split("\t", -1);
@@ -318,10 +410,11 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		try {
 			Set<String> results = new HashSet<String>();
 
-			URL url = new URL (baseUrl + "/attributes/" + ref.getDataSource().getSystemCode() + "/" + 
-					ref.getId() + "?attrName=" + attrType);
+			BufferedReader in = new UrlBuilder ("attributes")
+				.ordered(ref.getDataSource().getSystemCode(), ref.getId())
+				.named ("attrName", attrType)
+				.openReader();
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			String line;
 			while ((line = in.readLine()) != null) {
 				results.add(line);
@@ -338,9 +431,8 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		try {
 			Set<String> results = new HashSet<String>();
 
-			URL url = new URL(baseUrl + "/attributeSet");
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			BufferedReader in = new UrlBuilder ("attributeSet")
+				.openReader();
 			String line;
 			while ((line = in.readLine()) != null) {
 				results.add(line);
@@ -358,15 +450,10 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		try {
 			Map<String, Set<String>> results = new HashMap<String, Set<String>>();
 
-			URL url = new URL (baseUrl + "/attributes/" + ref.getDataSource().getSystemCode() + "/" + 
-					ref.getId());
+			BufferedReader in = new UrlBuilder ("attributes")
+				.ordered(ref.getDataSource().getSystemCode(), ref.getId())
+				.openReader();
 			
-			BufferedReader in; 
-			try
-			{
-				in = new BufferedReader(new InputStreamReader(openUrlHelper(url)));
-			} catch (IOException ex) { return results; }
-
 			String line;
 			while ((line = in.readLine()) != null) {
 				String[] cols = line.split("\t", -1);
@@ -381,21 +468,4 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		} 
 	}
 	
-	/**
-	 * Open an InputStream to a given URL. For certain requests, when there are 0 results, the
-	 * BridgeWebservice helpfully redirects to an error page instead of simply returning
-	 * an empty list. Here we detect that situation and throw IOException.
-	 * @return inputstream to given url.
-	 * @param url url to open inputstream for.
-	 * @throws IOException when there is a timeout, or when the http response code is not 200 - OK 
-	 */
-	private InputStream openUrlHelper(URL url) throws IOException
-	{
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
-		con.setInstanceFollowRedirects(false);
-		int response = con.getResponseCode();
-		if (response != HttpURLConnection.HTTP_OK) 
-			throw new IOException("HTTP response: " + con.getResponseCode() + " - " + con.getResponseMessage());
-		return con.getInputStream();
-	}
 }
