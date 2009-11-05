@@ -33,6 +33,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.webservice.IDMapperWebservice;
 import org.bridgedb.webservice.biomart.util.BiomartClient;
 
@@ -56,30 +57,19 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
             // e.g.: http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl
             String baseURL = BiomartClient.DEFAULT_BASE_URL;
 
-            String param = location;
-            int idx = location.indexOf('?');
-            if (idx>-1) {
-                baseURL = location.substring(0,idx);
-                param = location.substring(idx+1);
+            Map<String, String> args = 
+            	InternalUtils.parseLocation(location, "mart", "dataset");
+            
+            if (args.containsKey("BASE"))
+            {
+            	baseURL = args.get("BASE");
             }
-
-            String martTag = "mart=";
-            idx = param.indexOf(martTag);
-            String mart = param.substring(idx+martTag.length());
-
-            idx = mart.indexOf("&");
-            if (idx>-1) {
-                mart = mart.substring(0,idx);
-            }
-
-            String datasetTag = "dataset=";
-            idx = param.indexOf(datasetTag);
-            String dataset = param.substring(idx+datasetTag.length());
-
-            idx = dataset.indexOf("&");
-            if (idx>-1) {
-                dataset = dataset.substring(0,idx);
-            }
+            
+            // may be null if unspecified.
+            String mart = args.get("mart");
+            
+            // may be null if unspecified.
+            String dataset = args.get("dataset");
 
             return new IDMapperBiomart(mart, dataset, baseURL);
         }
