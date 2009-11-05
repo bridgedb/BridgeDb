@@ -126,18 +126,20 @@ public final class InternalUtils
 			param = location.substring(idx+1);
 		}
 		
+		if ("".equals(param)) return result;
+		
 		String[] args = param.split ("&");
 		for (String arg : args)
 		{
-			idx = param.indexOf("=");
+			idx = arg.indexOf("=");
 			if (idx > -1)
 			{
-				String key = arg.substring (0, idx - 1);
+				String key = arg.substring (0, idx);
 				if (!allowedSet.contains(key))
 				{
 					throw new IllegalArgumentException("Unexpected property '" + key + "'");
 				}
-				String val = arg.substring (idx);
+				String val = arg.substring (idx + 1);
 				result.put (key, val);
 			}
 			else
@@ -185,6 +187,42 @@ public final class InternalUtils
         }
 
         return stream;
+    }
+
+    /**
+     * Generic method for multimaps, a map that can contain multiple values per key.
+     */
+    public static <T, U> void multiMapPut(Map<T, Set<U>> map, T key, U val)
+    {
+    	Set<U> set;
+    	if (map.containsKey (key))
+    	{
+    		set = map.get(key);
+    	}
+    	else
+    	{
+    		set = new HashSet<U>();
+    		map.put(key, set);
+    	}
+    	set.add (val);
+    }
+
+    /**
+     * Generic method for multimaps, a map that can contain multiple values per key.
+     */
+    public static <T, U> void multiMapPutAll(Map<T, Set<U>> map, T key, Collection<U> vals)
+    {
+    	Set<U> set;
+    	if (map.containsKey (key))
+    	{
+    		set = map.get(key);
+    	}
+    	else
+    	{
+    		set = new HashSet<U>();
+    		map.put(key, set);
+    	}
+    	set.addAll (vals);
     }
 
 }
