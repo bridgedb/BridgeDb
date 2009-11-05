@@ -25,6 +25,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.bridgedb.IDMapperException;
+import org.bridgedb.impl.InternalUtils;
 
 
 /**
@@ -160,36 +161,11 @@ public class IDMappingReaderFromText extends IDMappingReaderFromDelimitedReader 
 
     private static Reader getReader(URL url) throws IDMapperException {
         try {
-            InputStream inputStream = getInputStream(url);
+            InputStream inputStream = InternalUtils.getInputStream(url);
             return new InputStreamReader(inputStream);
         } catch(IOException e) {
             throw new IDMapperException(e);
         }
-    }
-
-    private static final int MS_CONNECTION_TIMEOUT = 2000;
-    //TODO: test when IOException is throwed
-    protected static InputStream getInputStream(URL source) throws IOException {
-        InputStream stream = null;
-        int expCount = 0;
-        int timeOut = MS_CONNECTION_TIMEOUT;
-        while (true) { // multiple chances
-            try {
-                URLConnection uc = source.openConnection();
-                uc.setUseCaches(false); // don't use a cached page
-                uc.setConnectTimeout(timeOut); // set timeout for connection
-                stream = uc.getInputStream();
-                break;
-            } catch (IOException e) {
-                if (expCount++==4) {
-                    throw(e);
-                } else {
-                    timeOut *= 2;
-                }
-            }
-        }
-
-        return stream;
     }
 
 }

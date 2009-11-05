@@ -130,7 +130,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
 
         private List<String> getMappedDataBaseNames() throws Exception {
             String url = baseUrl + "getMappedDatabaseNames";
-            InputStream is = getInputStream(url);
+            InputStream is = InternalUtils.getInputStream(url);
             // Get the result as XML document.
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
@@ -263,7 +263,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
             }
 
             final Document doc;
-            InputStream is = getInputStream(url.toString());
+            InputStream is = InternalUtils.getInputStream(url.toString());
             if (is.available()<=0) return result;
 
             // Get the result as XML document.
@@ -304,30 +304,4 @@ public class IDMapperPicrRest extends IDMapperWebservice
 
             return result;
         }
-
-    private static final int msConnectionTimeout = 2000;
-    //TODO: test when IOException is thrown
-    protected static InputStream getInputStream(String source) throws IOException {
-        URL url = new URL(source);
-        InputStream stream = null;
-        int expCount = 0;
-        int timeOut = msConnectionTimeout;
-        while (true) { // multiple chances
-            try {
-                URLConnection uc = url.openConnection();
-                uc.setUseCaches(false); // don't use a cached page
-                uc.setConnectTimeout(timeOut); // set timeout for connection
-                stream = uc.getInputStream();
-                break;
-            } catch (IOException e) {
-                if (expCount++==4) {
-                    throw(e);
-                } else {
-                    timeOut *= 2;
-                }
-            }
-        }
-
-        return stream;
-    }
 }

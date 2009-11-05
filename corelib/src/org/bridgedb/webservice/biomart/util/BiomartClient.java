@@ -34,6 +34,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.webservice.biomart.IDMapperBiomart;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -171,7 +172,7 @@ public final class BiomartClient {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         final DocumentBuilder builder = factory.newDocumentBuilder();
 
-        InputStream is = getInputStream(targetURL);
+        InputStream is = InternalUtils.getInputStream(targetURL);
 
         final Document registry = builder.parse(is);
 
@@ -241,7 +242,7 @@ public final class BiomartClient {
         //System.out.println("DB name = " + martName + ", Target URL = " + urlStr + "\n");
 
         URL url = new URL(urlStr);
-        InputStream is = getInputStream(url);
+        InputStream is = InternalUtils.getInputStream(url);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String s;
@@ -308,7 +309,7 @@ public final class BiomartClient {
         //System.out.println("Dataset name = " + datasetName + ", Target URL = "
         //                      + urlStr + "\n");
         URL url = new URL(urlStr);
-        InputStream is = getInputStream(url);
+        InputStream is = InternalUtils.getInputStream(url);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String s;
@@ -376,7 +377,7 @@ public final class BiomartClient {
 
         //System.out.println("Dataset name = " + datasetName + ", Target URL = " + urlStr + "\n");
         URL url = new URL(urlStr);
-        InputStream is = getInputStream(url);
+        InputStream is = InternalUtils.getInputStream(url);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String s;
@@ -496,37 +497,5 @@ public final class BiomartClient {
      */
     public Dataset getDataset(final String dsname) {
         return datasets.get(dsname);
-    }
-    
-    private static final int MS_CONNECTION_TIMEOUT = 2000;
-    //TODO: test when IOException is thrown
-    
-    /**
-     * Start downloading a file from the web and open an InputStream to it.
-     * @param source location of file to download.
-     * @return InputStream
-     * @throws IOException after a number of attempts to connect to the remote server have failed.
-     */
-    protected static InputStream getInputStream(URL source) throws IOException {
-        InputStream stream = null;
-        int expCount = 0;
-        int timeOut = MS_CONNECTION_TIMEOUT;
-        while (true) { // multiple chances
-            try {
-                URLConnection uc = source.openConnection();
-                uc.setUseCaches(false); // don't use a cached page
-                uc.setConnectTimeout(timeOut); // set timeout for connection
-                stream = uc.getInputStream();
-                break;
-            } catch (IOException e) {
-                if (expCount++==4) {
-                    throw(e);
-                } else {
-                    timeOut *= 2;
-                }
-            }
-        }
-
-        return stream;
-    }
+    }    
 }

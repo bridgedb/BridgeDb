@@ -16,6 +16,10 @@
 //
 package org.bridgedb.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -145,4 +149,42 @@ public final class InternalUtils
 		
 		return result;
 	}
+
+    public static InputStream getInputStream(String source) throws IOException {
+        URL url = new URL(source);
+        return getInputStream(url);
+    }
+    
+    private static final int MS_CONNECTION_TIMEOUT = 2000;
+    //TODO: test when IOException is thrown
+    
+    /**
+     * Start downloading a file from the web and open an InputStream to it.
+     * @param source location of file to download.
+     * @return InputStream
+     * @throws IOException after a number of attempts to connect to the remote server have failed.
+     */
+    public static InputStream getInputStream(URL source) throws IOException {
+        InputStream stream = null;
+        int expCount = 0;
+        int timeOut = MS_CONNECTION_TIMEOUT;
+        while (true) { // multiple chances
+            try {
+                URLConnection uc = source.openConnection();
+                uc.setUseCaches(false); // don't use a cached page
+                uc.setConnectTimeout(timeOut); // set timeout for connection
+                stream = uc.getInputStream();
+                break;
+            } catch (IOException e) {
+                if (expCount++==4) {
+                    throw(e);
+                } else {
+                    timeOut *= 2;
+                }
+            }
+        }
+
+        return stream;
+    }
+
 }
