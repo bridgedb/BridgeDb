@@ -16,6 +16,7 @@
 //
 package org.bridgedb.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -99,20 +100,25 @@ public final class InternalUtils
 	 * @param location configuration string to parse.
 	 * @param allowedParams allowed argument names to appear before =
 	 * @return key / value Map of configuration arguments. The base (the part before the ?)
-	 * 	is returned in the special key "BASE".
+	 * 	is returned in the special key "BASE". If the part before ? is empty, 
+	 *  the "BASE" key is not created.
 	 * @throws IllegalArgumentException if arguments do not follow the key=val structure, or 
 	 * 	if the key is not in allowedParams
 	 */
-	public static Map<String, String> parseConfigurationParameters (String location, Set<String> allowedParams)
+	public static Map<String, String> parseLocation (String location, String... allowedParams)
 	{
 		Map<String, String> result = new HashMap<String, String>();
+		Set<String> allowedSet = new HashSet<String>(Arrays.asList(allowedParams));
 		
 		String param = location;
 		
 		int idx = location.indexOf('?');
 		if (idx > -1) 
 		{
-			result.put ("BASE", location.substring(0,idx));
+			// do not add empty string.
+			if (idx > 0) 
+				result.put ("BASE", location.substring(0,idx));
+
 			param = location.substring(idx+1);
 		}
 		
@@ -123,7 +129,7 @@ public final class InternalUtils
 			if (idx > -1)
 			{
 				String key = arg.substring (0, idx - 1);
-				if (!allowedParams.contains(key))
+				if (!allowedSet.contains(key))
 				{
 					throw new IllegalArgumentException("Unexpected property '" + key + "'");
 				}
