@@ -42,7 +42,8 @@ import org.xml.sax.SAXException;
  * Wrapp-up for BiomartClient.
  * @author gjj
  */
-public final class BiomartStub {
+public final class BiomartStub 
+{
     public static final String defaultBaseURL
             = BiomartClient.DEFAULT_BASE_URL;
 
@@ -148,7 +149,7 @@ public final class BiomartStub {
 
         Map<String,Dataset> datasets;
         try {
-            datasets = client.getAvailableDatasets(mart);
+        	datasets = client.getMart(mart).getAvailableDatasets();
         } catch (IOException e) {
             throw new IDMapperException(e);
         }
@@ -161,7 +162,8 @@ public final class BiomartStub {
      * @param dataset dataset name
      * @return dataset display name or null if not exist
      */
-    public String datasetDisplayName(String dataset) {
+    public String datasetDisplayName(String dataset) throws IOException 
+    {
         if (dataset==null) {
             return null;
         }
@@ -190,7 +192,7 @@ public final class BiomartStub {
 
         Map<String,Filter> filters;
         try {
-            filters = client.getFilters(dataset);
+            filters = client.getDataset(dataset).getFilters();
         } catch (IOException e) {
             throw new IDMapperException(e);
         }
@@ -245,30 +247,29 @@ public final class BiomartStub {
 
         Map<String,Attribute> attributes;
         try {
-            attributes = client.getAttributes(dataset);
+            attributes = client.getDataset(dataset).getAttributes();
+
+            Set<String> result = new HashSet<String>();
+            for (String name : attributes.keySet()) {
+            	if (name.trim().length()==0)
+            		continue;
+            	String displayName = client.getAttribute(dataset, name)
+            	.getDisplayName();
+            	if (idOnly == (displayName.endsWith("ID")
+            			|| displayName.endsWith("Accession")
+            			|| name.endsWith("id")
+            			|| name.endsWith("accession"))) {
+            		result.add(name);
+            	}
+            }
+
+            return result;
         } catch (IOException e) {
             throw new IDMapperException(e);
         }
-
-        Set<String> result = new HashSet<String>();
-        for (String name : attributes.keySet()) {
-            if (name.trim().length()==0)
-                continue;
-            String displayName = client.getAttribute(dataset, name)
-                    .getDisplayName();
-            if (idOnly == (displayName.endsWith("ID")
-                    || displayName.endsWith("Accession")
-                    || name.endsWith("id")
-                    || name.endsWith("accession"))) {
-                result.add(name);
-            }
-        }
-
-        return result;
     }
 
     /**
-     * 
      * @param mart mart name
      * @param dataset dataset name
      * @param srcType filter name / source id type
@@ -283,88 +284,86 @@ public final class BiomartStub {
             final String dataset, final String srcType,
             final String[] tgtTypes, final Set<String> srcIds)
             throws IDMapperException {
-        if (mart==null||dataset==null||srcType==null||tgtTypes==null||srcIds==null) {
-            throw new IllegalArgumentException("Null argument.");
-        }
+    	if (mart==null||dataset==null||srcType==null||tgtTypes==null||srcIds==null) {
+    		throw new NullPointerException("Null argument.");
+    	}
 
-        Attribute tgtAttr = client.filterToAttribute(dataset, srcType);
-        if (tgtAttr==null) {
-            return new HashMap<String, Set<String>[]>();
-        }
+    	Attribute tgtAttr;
+    	try {
+    		tgtAttr = client.filterToAttribute(dataset, srcType);
+    		if (tgtAttr==null) {
+    			return new HashMap<String, Set<String>[]>();
+    		}
 
-        int nAttr = tgtTypes.length;
-        Attribute[] attrs = new Attribute[nAttr+1];
+    		int nAttr = tgtTypes.length;
+    		Attribute[] attrs = new Attribute[nAttr+1];
 
-        // prepare attributes
-        int iattr = 0;
-        for (String attr : tgtTypes) {
-            attrs[iattr++] = client.getAttribute(dataset, attr);
-        }
-        attrs[nAttr] = tgtAttr;
+    		// prepare attributes
+    		int iattr = 0;
+    		for (String attr : tgtTypes) {
+    			attrs[iattr++] = client.getAttribute(dataset, attr);
+    		}
+    		attrs[nAttr] = tgtAttr;
 
-        // prepare filters
-        StringBuilder sb = new StringBuilder();
-        for (String str : srcIds) {
-            sb.append(str);
-            sb.append(",");
-        }
+    		// prepare filters
+    		StringBuilder sb = new StringBuilder();
+    		for (String str : srcIds) {
+    			sb.append(str);
+    			sb.append(",");
+    		}
 
-        int len = sb.length();
-        if (len>0) {
-            sb.deleteCharAt(len-1);
-        }
+    		// remove last comma
+    		int len = sb.length();
+    		if (len>0) {
+    			sb.deleteCharAt(len-1);
+    		}
 
-        Map<String, String> queryFilter = new HashMap<String, String>(1);
-        queryFilter.put(srcType, sb.toString());
+    		Map<String, String> queryFilter = new HashMap<String, String>(1);
+    		queryFilter.put(srcType, sb.toString());
 
-        // build query string
-        String query = XMLQueryBuilder.getQueryString(dataset, attrs, queryFilter);
+    		// build query string
+    		String query = XMLQueryBuilder.getQueryString(dataset, attrs, queryFilter);
 
-        // query
-        BufferedReader bfr = null;
-        try {
-            bfr = client.sendQuery(query);
-            if (!bfr.ready())
-                throw new IDMapperException("Query failed");
-        } catch (IOException e) {
-            throw new IDMapperException(e);
-        }
+    		// query
+    		BufferedReader bfr = null;
+    		bfr = client.sendQuery(query);
+    		if (!bfr.ready())
+    			throw new IDMapperException("Query failed");
 
-        if (bfr==null) {
-            return new HashMap<String, Set<String>[]>(0);
-        }
+    		if (bfr==null) {
+    			return new HashMap<String, Set<String>[]>(0);
+    		}
 
-        // read id mapping
-        Map<String,Set<String>[]> result = new HashMap<String,Set<String>[]>();
-        try {
-            bfr.readLine();
-            String line;
-            while ((line = bfr.readLine())!=null) {
-                String[] strs = line.split("\t");
-                if (strs.length!=nAttr+1)
-                    continue; // because the last one is the src id
-                String src = strs[nAttr];
-                Set<String>[] tgt = result.get(src);
-                if (tgt==null) {
-                    tgt = new Set[nAttr];
-                    for (int i=0; i<nAttr; i++) {
-                        tgt[i] = new HashSet<String>();
-                    }
-                    result.put(src, tgt);
-                }
+    		// read id mapping
+    		Map<String,Set<String>[]> result = new HashMap<String,Set<String>[]>();
+    		String header = bfr.readLine();
+    		if (header.indexOf("ERROR") >= 0) throw new IDMapperException(header);
+    		String line;
+    		while ((line = bfr.readLine())!=null) {
+    			String[] strs = line.split("\t");
+    			if (strs.length!=nAttr+1)
+    				continue; // because the last one is the src id
+    			String src = strs[nAttr];
+    			Set<String>[] tgt = result.get(src);
+    			if (tgt==null) {
+    				tgt = new Set[nAttr];
+    				for (int i=0; i<nAttr; i++) {
+    					tgt[i] = new HashSet<String>();
+    				}
+    				result.put(src, tgt);
+    			}
 
-                for (int i=0; i<nAttr; i++) {
-                    String str = strs[i];
-                    if (str.length()>0) {
-                        tgt[i].add(str);
-                    }
-                }
+    			for (int i=0; i<nAttr; i++) {
+    				String str = strs[i];
+    				if (str.length()>0) {
+    					tgt[i].add(str);
+    				}
+    			}
 
-            }
-        } catch (IOException e) {
-            throw new IDMapperException(e);
-        }
-
-        return result;
+    		}
+            return result;
+    	} catch (IOException e) {
+    		throw new IDMapperException(e);
+    	}
     }
 }

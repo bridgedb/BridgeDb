@@ -20,6 +20,7 @@ package org.bridgedb.webservice.biomart;
 import java.io.IOException;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -169,17 +170,21 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
      * {@inheritDoc}
      */
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
-                DataSource... tgtDataSources) throws IDMapperException {
-        if (srcXrefs==null) {
-            throw new java.lang.IllegalArgumentException(
-                        "srcXrefs or tgtDataSources cannot be null.");
-        }
+                DataSource... tgtDataSources) throws IDMapperException 
+    {
+        if (srcXrefs==null)
+            throw new NullPointerException("srcXrefs cannot be null.");
 
         Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 
         // source datasources
+        // first key: full name of src Datasource
+        // second key: id of xref
+        // third key: xref itself
         Map<String, Map<String, Xref>> mapSrcTypeIDXrefs = 
         	new HashMap<String, Map<String, Xref>>();
+        
+        
         for (Xref xref : srcXrefs) {
             DataSource ds = xref.getDataSource();
             if (!supportedSrcDs.contains(ds)) continue;
@@ -203,8 +208,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         		}
         	}
         else
-        	for (DataSource ds : supportedTgtDs) 
-            	 tgtTypes.add (ds.getFullName());
+        	throw new UnsupportedOperationException("For idmapper-biomart, you have to specify at least one target DataSource");
         String[] tgts = tgtTypes.toArray(new String[0]);
 
         for (Map.Entry<String, Map<String, Xref>> entry :
@@ -243,12 +247,14 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
     /**
      * {@inheritDoc}
      */
-    public boolean xrefExists(Xref xref) throws IDMapperException {
-        Set<Xref> srcXrefs = new HashSet<Xref>(1);
-        srcXrefs.add(xref);
-
-        Map<Xref, Set<Xref>> map = mapID(srcXrefs);
-        return !map.isEmpty();
+    public boolean xrefExists(Xref xref) throws IDMapperException 
+    {
+    	// We query specifically for ensembl_gene_id etc.
+    	// Biomart doesn't like querying for everything
+        Set<Xref> set = mapID(xref, 
+        		DataSource.getByFullName("ensembl_gene_id"),
+        		DataSource.getByFullName("ensembl_transcript_id"));
+        return !set.isEmpty();
     }
 
     /**
@@ -344,10 +350,12 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
      */
     public Set<String> getAttributes(Xref ref, String attrType) throws IDMapperException {
         if (ref==null || attrType==null) {
-            return null;
+            return Collections.emptySet();
         }
 
         String srcType = ref.getDataSource().getFullName();
+        if (srcType == null) return Collections.emptySet();
+        
         String[] tgtTypes = new String[]{attrType};
         Set<String> srcIds = new HashSet<String>(1);
         srcIds.add(ref.getId());
@@ -364,7 +372,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
      * {@inheritDoc}
      */
     public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException {
-        return null; // unsupported
+        throw new UnsupportedOperationException("Free attribute search not supported.");
     }
 
     /**

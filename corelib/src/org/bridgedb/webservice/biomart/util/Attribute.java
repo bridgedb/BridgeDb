@@ -21,18 +21,24 @@ package org.bridgedb.webservice.biomart.util;
  * Attribute, corresponding to attribute in BioMart.
  * @author gjj
  */
-public class Attribute {
-    private String name;
-    private String displayName;
+public class Attribute 
+{
+    private final String name;
+    private final String displayName;
+    private final String description;
+    private final String page;
 
     /**
      *
      * @param name attribute name
      * @param displayName attribute display name
      */
-    public Attribute(String name, String displayName) {
-            this.name = name;
-    this.displayName = displayName;
+    public Attribute(String name, String displayName, String description, String page) 
+    {
+    	this.name = name;
+    	this.displayName = displayName;
+    	this.description = description;
+    	this.page = page;
     }
 
     /**

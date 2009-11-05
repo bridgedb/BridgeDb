@@ -17,7 +17,18 @@
 
 package org.bridgedb.webservice.biomart.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.bridgedb.impl.InternalUtils;
+import org.xml.sax.SAXException;
 
 /**
  * Database, corresponding to database/mart in BioMart.
@@ -26,6 +37,63 @@ import java.util.Map;
 public class Database {
     private String dbname;
     private Map<String, String> param;
+
+    // cache for getAvailableDatasets()
+    private Map<String,Dataset> datasets = null;
+
+    /**
+     * Get available datasets of a mart/database.
+     * @return {@link Vector} of available datasets
+     * @throws IOException if failed to read
+     */
+    public Map<String, Dataset> getAvailableDatasets()
+            throws IOException 
+    {
+    	if (datasets != null) return datasets;
+
+    	//TODO: not sure why this is needed
+//        try {
+//            getRegistry();
+//        } catch (ParserConfigurationException e) {
+//            e.printStackTrace();
+//        } catch (SAXException e) {
+//            e.printStackTrace();
+//        }
+
+        datasets = new HashMap<String, Dataset>();
+
+        Map<String, String> detail = getParam();
+
+        String urlStr = "http://" + detail.get("host") + ":" + detail.get("port")
+                        + detail.get("path") + "?type=datasets&mart=" + detail.get("name");
+        //System.out.println("DB name = " + martName + ", Target URL = " + urlStr + "\n");
+
+        URL url = new URL(urlStr);
+        InputStream is = InternalUtils.getInputStream(url);
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        String s;
+
+        String[] parts;
+
+        while ((s = reader.readLine()) != null) {
+            parts = s.split("\\t");
+
+            if ((parts.length > 4) && parts[3].equals("1")) {
+                Dataset dataset = new Dataset(parts[1], parts[2], this);
+                datasets.put(dataset.getName(),dataset);
+                //datasourceMap.put(parts[1], martName);
+                datasets.put(parts[1], dataset);
+            }
+        }
+
+        is.close();
+        reader.close();
+        reader = null;
+        is = null;
+
+        return datasets;
+    }
 
     /**
      *

@@ -96,14 +96,22 @@ public class Base extends TestCase
 			catch (UnsupportedOperationException ex) { /* good. */ }
 		}
 		
-		// test mapping single id
-		start = System.currentTimeMillis();
-		Set<Xref> result2 = mapper.mapID(from);
-		end = System.currentTimeMillis(); delta = end - start;
-		measure.add("Benchmark::" + name + "::mapID(Xref)", "" + delta, "msec");
+		try
+		{
+			// test mapping single id
+			start = System.currentTimeMillis();
+			Set<Xref> result2 = mapper.mapID(from);
+			end = System.currentTimeMillis(); delta = end - start;
+			measure.add("Benchmark::" + name + "::mapID(Xref)", "" + delta, "msec");
+			
+			assertTrue (result2.contains(to));
+			assertNotNull (mapper.mapID(NONEXISTENT));
+		}
+		catch (UnsupportedOperationException ex)
+		{
+			// at least for idmapper-biomart, zero target DataSources is not supported 
+		}
 		
-		assertTrue (result2.contains(to));
-		assertNotNull (mapper.mapID(NONEXISTENT));
 		assertTrue (mapper.mapID(from, to.getDataSource()).contains(to));
 				
 		try {

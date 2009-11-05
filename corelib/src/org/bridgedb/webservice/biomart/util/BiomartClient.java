@@ -51,13 +51,8 @@ public final class BiomartClient {
     private final String baseURL;
     private static final String RESOURCE = "filterconversion.txt";
 
-    //private Map<String, Map<String, String>> databases = null;
+    // caches the result of getRegistry()
     private Map<String, Database> marts = null;
-
-    private Map<String, Dataset> datasets = new HashMap<String, Dataset>();
-    private Map<String, Map<String,Dataset>> mapDbDss = new HashMap<String, Map<String, Dataset>>();
-    private Map<String, Map<String, Filter>> mapDsFilters = new HashMap<String, Map<String, Filter>>();
-    private Map<String, Map<String, Attribute>> mapDsAttrs = new HashMap<String, Map<String, Attribute>>();
 
     private Map<String, Map<String, String>> filterConversionMap;
 
@@ -66,7 +61,7 @@ public final class BiomartClient {
     /**
      * Creates a new BiomartStub object from given URL.
      *
-     * @param baseURL  DOCUMENT ME!
+     * @param baseURL base url of martservice, for example "http://www.biomart.org/biomart/martservice" (default)
      * @throws IOException if failed to read local resource
      */
     public BiomartClient(String baseURL) throws IOException {
@@ -115,9 +110,11 @@ public final class BiomartClient {
      * @param dbName database name
      * @param filterID filter ID
      * @return converted attribute
+     * @throws IOException if failed to read from webservice
      */
     private Attribute filterToAttribute(String dsName, String dbName,
-                String filterID) {
+                String filterID) throws IOException
+    {
         if (filterConversionMap.get(dbName) == null) {
             return null;
         } else {
@@ -131,8 +128,10 @@ public final class BiomartClient {
      * @param dataset dataset name
      * @param filter filter name
      * @return Attribute converted from filter
+     * @throws IOException if failed to read from webservice
      */
-    public Attribute filterToAttribute(String dataset, String filter) {
+    public Attribute filterToAttribute(String dataset, String filter) throws IOException 
+    {
         Attribute attr;
         if (dataset.contains("REACTOME")) {
             attr = filterToAttribute(dataset, "REACTOME", filter);
@@ -206,225 +205,19 @@ public final class BiomartClient {
     }
 
     /**
-     * Get available datasets of a mart/database.
-     * @param martName mart name
-     * @return {@link Vector} of available datasets
-     * @throws IOException if failed to read
-     */
-    public Map<String, Dataset> getAvailableDatasets(final String martName)
-            throws IOException {
-        Map<String, Dataset> result = mapDbDss.get(martName);
-        if (result!=null) {
-            return result;
-        }
-
-        try {
-            getRegistry();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
-
-        //final Map<String, String> datasources = new HashMap<String, String>();
-        result = new HashMap<String, Dataset>();
-
-        Database database = marts.get(martName);
-
-        if (database==null) {
-            return null;
-        }
-
-        Map<String, String> detail = database.getParam();
-
-        String urlStr = "http://" + detail.get("host") + ":" + detail.get("port")
-                        + detail.get("path") + "?type=datasets&mart=" + detail.get("name");
-        //System.out.println("DB name = " + martName + ", Target URL = " + urlStr + "\n");
-
-        URL url = new URL(urlStr);
-        InputStream is = InternalUtils.getInputStream(url);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String s;
-
-        String[] parts;
-
-        while ((s = reader.readLine()) != null) {
-            parts = s.split("\\t");
-
-            if ((parts.length > 4) && parts[3].equals("1")) {
-                Dataset dataset = new Dataset(parts[1], parts[2], database);
-                result.put(dataset.getName(),dataset);
-                //datasourceMap.put(parts[1], martName);
-                datasets.put(parts[1], dataset);
-            }
-        }
-
-        is.close();
-        reader.close();
-        reader = null;
-        is = null;
-
-        mapDbDss.put(martName, result);
-
-        return result;
-    }
-
-    /**
-     * Get filters for a dataset.
-     * @param datasetName name of data set
-     * @return filters
-     * @throws IOException if failed to read
-     */
-    public Map<String, Filter> getFilters(String datasetName)
-        throws IOException {
-        if (datasetName==null) {
-            throw new IllegalArgumentException("Dataset name cannot be null");
-        }
-
-        if (mapDsFilters.get(datasetName)!=null) {
-            return mapDsFilters.get(datasetName);
-        }
-
-        Map<String, Filter> filters = new HashMap<String, Filter>();
-
-        Dataset dataset = getDataset(datasetName);
-        if (dataset==null) {
-            return filters;
-        }
-
-        Database database = dataset.getDatabase();
-
-        Map<String, String> detail = database.getParam();
-
-        String urlStr = "http://" 
-                        + detail.get("host") + ":"
-                        + detail.get("port")
-                        + detail.get("path")
-                        + "?virtualschema="
-                        + detail.get("serverVirtualSchema")
-                        + "&type=filters&dataset="
-                        + datasetName;
-
-        //System.out.println("Dataset name = " + datasetName + ", Target URL = "
-        //                      + urlStr + "\n");
-        URL url = new URL(urlStr);
-        InputStream is = InternalUtils.getInputStream(url);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String s;
-
-        String[] parts;
-
-        while ((s = reader.readLine()) != null) {
-            parts = s.split("\\t");
-
-            if ((parts.length > 1)) {
-                if ((parts[1].contains("ID(s)")
-                            || parts[1].contains("Accession(s)")
-                            || parts[1].contains("IDs"))
-                         && (parts[0].startsWith("with_") == false)
-                         && (parts[0].endsWith("-2") == false)
-                         || parts.length>6
-                         && parts[5].equals("id_list")) {
-                    //filters.put(parts[1], parts[0]);
-                    filters.put(parts[0], new Filter(parts[0], parts[1]));
-                    // System.out.println("### Filter Entry = " + parts[1] + " = " + parts[0]);
-                }
-            }
-        }
-
-        is.close();
-        reader.close();
-        reader = null;
-        is = null;
-
-        mapDsFilters.put(datasetName, filters);
-
-        return filters;
-    }
-
-    /**
-     * Get attributes.
-     * @param datasetName dataset name
-     * @return Map of attribute name to attributes
-     * @throws IOException if failed to read
-     */
-    public Map<String, Attribute> getAttributes(String datasetName) throws IOException {
-        if (datasetName==null) {
-            throw new java.lang.IllegalArgumentException("Dataset name cannot be null");
-        }
-
-        if (mapDsAttrs.get(datasetName)!=null) {
-            return mapDsAttrs.get(datasetName);
-        }
-
-        Map<String, Attribute> attributes = new HashMap<String, Attribute>();
-
-        Dataset dataset = getDataset(datasetName);
-        if (dataset==null) {
-            return attributes;
-        }
-
-        Database database = dataset.getDatabase();
-
-        Map<String, String> detail = database.getParam();
-
-        String urlStr = "http://" + detail.get("host") + ":" + detail.get("port")
-                        + detail.get("path") + "?virtualschema="
-                        + detail.get("serverVirtualSchema") + "&type=attributes&dataset="
-                        + datasetName;
-
-        //System.out.println("Dataset name = " + datasetName + ", Target URL = " + urlStr + "\n");
-        URL url = new URL(urlStr);
-        InputStream is = InternalUtils.getInputStream(url);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String s;
-
-        String displayName;
-
-        String[] parts;
-
-        while ((s = reader.readLine()) != null) {
-            parts = s.split("\\t");
-
-            if (parts.length == 0)
-                continue;
-
-            if (parts.length == 4) {
-                displayName = parts[3] + ": " + parts[1];
-            } else if (parts.length > 1) {
-                displayName = parts[1];
-            } else {
-                displayName = "";
-            }
-
-            attributes.put(parts[0], new Attribute(parts[0],displayName));
-        }
-
-        is.close();
-        reader.close();
-        reader = null;
-        is = null;
-
-        this.mapDsAttrs.put(datasetName, attributes);
-
-        return attributes;
-    }
-
-    /**
      * Get filter.
      * @param datasetName dataset name
      * @param filterName filter name
+     * @throws IOException if failed to read webservice
      * @return filter
      */
-    public Filter getFilter(String datasetName, String filterName) {
+    public Filter getFilter(String datasetName, String filterName) throws IOException
+    {
         if (datasetName==null || filterName==null) {
             throw new java.lang.IllegalArgumentException("datasetName and filterName cannot be null");
         }
 
-        Map<String, Filter> map = this.mapDsFilters.get(datasetName);
+        Map<String, Filter> map = getDataset(datasetName).getFilters();
         if (map==null) {
             return null;
         }
@@ -436,14 +229,17 @@ public final class BiomartClient {
      * get Attribute.
      * @param datasetName dataset name
      * @param attrName attribute name
+     * @throws IOException if failed to read webservice
      * @return attribute
      */
-    public Attribute getAttribute(String datasetName, String attrName) {
+    public Attribute getAttribute(String datasetName, String attrName) throws IOException
+    {
         if (datasetName==null || attrName==null) {
-            throw new java.lang.IllegalArgumentException("datasetName and attrName cannot be null");
+            throw new NullPointerException("datasetName and attrName cannot be null");
         }
 
-        Map<String, Attribute> map = this.mapDsAttrs.get(datasetName);
+        Dataset dataset = getDataset(datasetName);
+        Map<String, Attribute> map = dataset.getAttributes();
         if (map==null) {
             return null;
         }
@@ -455,7 +251,7 @@ public final class BiomartClient {
      * Send the XML query to Biomart, and get the result as table.
      * @param xmlQuery query xml
      * @return result {@link BufferedReader}
-     * @throws IOException if failed to read
+     * @throws IOException if failed to read webservice
      */
     public BufferedReader sendQuery(String xmlQuery) throws IOException {
 
@@ -491,11 +287,18 @@ public final class BiomartClient {
     }
 
     /**
-     * get Dataset.
+     * Scans all available marts for a Dataset.
      * @param dsname dataset name
-     * @return dataset
+     * @return dataset or null if none was found
+     * @throws IOException if failed to read webservice
      */
-    public Dataset getDataset(final String dsname) {
-        return datasets.get(dsname);
+    public Dataset getDataset(final String dsname) throws IOException 
+    {
+    	for (Database db : marts.values())
+    	{
+    		Map<String, Dataset> datasets = db.getAvailableDatasets();
+    		if (datasets.containsKey(dsname)) return datasets.get(dsname);
+    	}
+    	return null; // not found.
     }    
 }
