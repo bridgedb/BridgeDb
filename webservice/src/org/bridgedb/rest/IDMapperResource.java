@@ -47,9 +47,13 @@ public class IDMapperResource extends ServerResource {
 			org = Organism.fromShortName(orgName);
 		}
 		if(org == null) {
-			throw new IllegalArgumentException("Unknown organism: " + orgName);
+			throw new IllegalArgumentException("Unknown organism: " + orgName + "<p><font size='+1'><i>Double check the spelling. We are expecting an entry like: Human</i></font></p>");
 		}
-		return getGdbProvider().getGdbs(org);
+		List<IDMapperRdb> mappers = getGdbProvider().getGdbs(org);
+		if (mappers.isEmpty()){
+			throw new IllegalArgumentException("No database found for: " + orgName +"<p><font size='+1'><i>Verify that the database is supported and properly referenced in gdb.config.</i></font></p>");
+		}
+		return mappers;
 	}
 	
 	private GdbProvider getGdbProvider() {
