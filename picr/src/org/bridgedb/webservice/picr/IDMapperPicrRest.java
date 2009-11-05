@@ -24,19 +24,16 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bridgedb.AbstractIDMapperCapabilities;
-import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
@@ -49,6 +46,7 @@ import org.bridgedb.Xref;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 //TODO: implements AttributeMapper
 public class IDMapperPicrRest extends IDMapperWebservice
@@ -139,7 +137,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
             final Document doc = builder.parse(is);
             NodeList nodes = doc.getElementsByTagName("mappedDatabases");
             int n = nodes.getLength();
-            List<String> dbs = new Vector(n);
+            List<String> dbs = new ArrayList<String>(n);
             for (int i=0; i<n; i++) {
                 Node node = nodes.item(i);
                 dbs.add(node.getTextContent());
@@ -167,21 +165,30 @@ public class IDMapperPicrRest extends IDMapperWebservice
 		return !closed;
 	}
 
-        /**
-         * {@inheritDoc}
-         */
+    /**
+     * {@inheritDoc}
+     */
 	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
+		DataSource... tgtDataSources) throws IDMapperException 
+	{
+		return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override public Set<Xref> mapID(Xref xref,
 			DataSource... tgtDataSources) throws IDMapperException 
 	{
-            if (srcXrefs==null) {
-                throw new java.lang.IllegalArgumentException(
+            if (xref==null) {
+                throw new NullPointerException(
                             "srcXrefs or tgtDataSources cannot be null.");
             }
 
-            Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
+            Set<Xref> result = new HashSet<Xref>();
 
             // remove unsupported data sources
-            Set<String> tgtDss = new HashSet();
+            Set<String> tgtDss = new HashSet<String>();
             if (tgtDataSources!=null) {
                 for (DataSource ds : tgtDataSources) {
                     if (supportedDatabases.contains(ds)) {
@@ -194,32 +201,22 @@ public class IDMapperPicrRest extends IDMapperWebservice
                 }
             }
 
-            for (Xref xref : srcXrefs) {
-                DataSource ds = xref.getDataSource();
-                if (!supportedDatabases.contains(ds))
-                    continue;
+            DataSource ds = xref.getDataSource();
+            if (!supportedDatabases.contains(ds))
+                return result;
 
-                Set<String> databases = new HashSet(tgtDss.size()+1);
-                databases.addAll(tgtDss);
-                databases.add(ds.getFullName()); // add the source ds
+            Set<String> databases = new HashSet<String>(tgtDss.size()+1);
+            databases.addAll(tgtDss);
+            databases.add(ds.getFullName()); // add the source ds
 
-                String accession = xref.getId();
+            String accession = xref.getId();
 
-                Set<Xref> tgtXrefs;
-                try {
-                    tgtXrefs = mappingService(accession, databases);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    continue; // skip this one
-                }
-                
-                if (!tgtXrefs.remove(xref)) // remove itself, if not exist,
-                    continue;               // then the src xref not exist
-
-                if (!tgtXrefs.isEmpty())
-                    result.put(xref, tgtXrefs);
+            try {
+                result = mappingService(accession, databases);
+            } catch (Exception e) {
+            	throw new IDMapperException (e);
             }
-
+ 
             return result;
 	}
 
@@ -232,7 +229,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
             if (!supportedDatabases.contains(ds))
                 return false;
 
-            Set<String> dss = new HashSet();
+            Set<String> dss = new HashSet<String>();
             dss.add(ds.getFullName());
             
             Set<Xref> xrefs = null;
@@ -245,9 +242,10 @@ public class IDMapperPicrRest extends IDMapperWebservice
             return xrefs!=null && !xrefs.isEmpty();
 	}
 
-        private Set<Xref> mappingService(String accession, Set<String> databases)
-                    throws Exception {
-            Set<Xref> result = new HashSet();
+        private Set<Xref> mappingService(String accession, Set<String> databases) 
+        throws IOException, SAXException, ParserConfigurationException
+ {
+            Set<Xref> result = new HashSet<Xref>();
 
             StringBuilder url = new StringBuilder(baseUrl);
             url.append("getUPIForAccession?");
@@ -275,7 +273,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
 
             String[] tags = new String[] {"ns2:identicalCrossReferences"
                         , "ns2:logicalCrossReferences"};
-            List<Node> nodes = new Vector();
+            List<Node> nodes = new ArrayList<Node>();
             for (String tag : tags) {
                 NodeList nodeList = doc.getElementsByTagName(tag);
                 int n = nodeList.getLength();
@@ -308,7 +306,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
         }
 
     private static final int msConnectionTimeout = 2000;
-    //TODO: test when IOException is throwed
+    //TODO: test when IOException is thrown
     protected static InputStream getInputStream(String source) throws IOException {
         URL url = new URL(source);
         InputStream stream = null;
