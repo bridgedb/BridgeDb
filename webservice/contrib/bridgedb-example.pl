@@ -4,27 +4,28 @@ use warnings;
 use strict;
 use LWP::Simple;
 
-my $webservice = "http://localhost:8183";
+## If you want to use a local bridgedb idmapper in perl, setup a local service
+## and change the url below. See http://bridgedb.org/wiki/LocalService
+## for information on how to run a local service.
+my $webservice = "http://webservice.bridgedb.org";
 
 sub mapID
 {
 	my $id = shift;
 	my $code = shift;
 	my $species = "Human";
-	my $cmdUrl = "$webservice/model/$species/$code/$id/xrefs";
+	my $cmdUrl = "$webservice/$species/xrefs/$code/$id";
 	my $content = get $cmdUrl;
 	die "Couldn't get it!" unless defined $content;
 	
 	my @lines = split /\n/, $content;
 	for my $line (@lines)
 	{
-		print "$line\n";
-		
 		#~ my ($id, $ds) = split /\t/, $line;
 		my @fields = split /\t/, $line;
 		my $id = $fields[0];
-		$ds = $fields[1];
-		print "$ds::$id\n";
+		my $ds = $fields[1];
+		print $ds . "::$id\n";
 	}
 }
 

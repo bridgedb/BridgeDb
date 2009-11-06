@@ -1,8 +1,12 @@
-webservice = "http://localhost:8183"
+## If you want to use a local bridgedb idmapper in R, setup a local service
+## and change the url below. See http://bridgedb.org/wiki/LocalService
+## for information on how to run a local service.
+webservice = "http://webservice.bridgedb.org"
+
 organism = "Human"
 
 mapID = function(id, code, targetCode = "") {
-	url = paste(webservice, "model", organism, code, id, "xrefs", sep="/")
+	url = paste(webservice, organism, "xrefs", code, id, sep="/")
 	if(targetCode != "") {
 		url = paste(url, "?dataSource=", targetCode, sep="")
 	}
