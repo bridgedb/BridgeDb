@@ -64,6 +64,29 @@ public class IDMapperCronos extends IDMapperWebservice
 |  17		| MfunGD			|
 |  18		| MGI				|
 -------------------------------------------------
+
+|-------------------------------------------------------------------------------|
+| Integer value	| Query/Target-Type	| Integer value	| Query/Target-Type	|
+|-------------------------------------------------------------------------------|
+| 200		| affy_hc_g110		| 500		| affy_mg_u74a		|
+| 210		| affy_hg_u133_plus_2	| 510		| affy_mg_u74av2	|
+| 220		| affy_hg_u133a_2	| 520		| affy_mg_u74b		|
+| 230		| affy_hg_u133a		| 530		| affy_mg_u74bv2	|
+| 240		| affy_hg_u133b		| 540		| affy_mg_u74c		|
+| 250		| affy_u133_x3p		| 550		| affy_mg_u74cv2	|
+| 260		| affy_hg_u95a		| 560		| affy_moe430a		|
+| 270		| affy_hg_u95av2	| 570		| affy_moe430b		|
+| 280		| affy_hg_u95b		| 580		| affy_mouse430_2	|
+| 290		| affy_hg_u95c		| 590		| affy_mouse430a_2	|
+| 300		| affy_hg_u95d		| 600		| affy_mu11ksuba	|
+| 310		| affy_hg_u95e		| 610		| agilentprobe		|
+| 320		| affy_hg_focus		|---------------------------------------|	
+| 330		| affy_hugenefl		|	
+| 		| 			|		
+| 350		| agilentcgh		|	
+| 360		| agilentprobe		|	
+----------------------------------------|
+
  */
 	private static Map<Integer, DataSource> intMap = new HashMap<Integer, DataSource>();
 	private static Map<DataSource, Integer> invMap = new HashMap<DataSource, Integer>();
@@ -77,6 +100,7 @@ public class IDMapperCronos extends IDMapperWebservice
 		intMap.put (10, BioDataSource.EMBL);
 		intMap.put (14, BioDataSource.HUGO);
 		intMap.put (18, BioDataSource.MGI);
+		intMap.put (210, BioDataSource.AFFY);
 
 		invMap.put (BioDataSource.REFSEQ, 3);
 		invMap.put (BioDataSource.UNIPROT, 4);
@@ -87,6 +111,7 @@ public class IDMapperCronos extends IDMapperWebservice
 		invMap.put (BioDataSource.EMBL, 10);
 		invMap.put (BioDataSource.HUGO, 14);
 		invMap.put (BioDataSource.MGI, 18);
+		invMap.put (BioDataSource.AFFY, 210);
 	}
 
 	IDMapperCronos(String speciesCode) throws IDMapperException
@@ -183,8 +208,10 @@ public class IDMapperCronos extends IDMapperWebservice
 				Integer tgtInt = invMap.get(tgtDs);
 				if (tgtInt != null)
 				{
-					String id = port.cronosWS(srcXref.getId(), speciesCode, srcDs, tgtInt);
-					result.add (new Xref (id, tgtDs));
+					String ids = port.cronosWS(srcXref.getId(), speciesCode, srcDs, tgtInt);
+					if (!ids.equals(""))
+						for (String id : ids.split(";"))
+							result.add (new Xref (id, tgtDs));
 				}
 			}
 		} catch (RemoteException e) {

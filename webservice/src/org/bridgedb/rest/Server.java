@@ -23,9 +23,11 @@ import org.restlet.data.Protocol;
 
 public class Server 
 {
+	private Component component;
+
 	public void run(int port, File configFile)
 	{
-		Component component = new Component();
+		component = new Component();
 		component.getServers().add(Protocol.HTTP, port);
 		component.getDefaultHost().attach(new IDMapperService(configFile));		
 		try {
@@ -35,6 +37,16 @@ public class Server
 		}
 	}
 	
+	public void stop()
+	{
+		try {
+			component.stop();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) 
 	{
 		Server server = new Server();

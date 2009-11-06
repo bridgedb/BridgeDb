@@ -61,6 +61,8 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException 
 		{
+			//TODO: make port and host configurable
+			DBConnectorDerbyServer.init ("wikipathways.org", 1527);
 			return SimpleGdbFactory.createInstance(location, new DBConnectorDerbyServer(), 0);
 		}
 	}

@@ -37,7 +37,7 @@ public class Xref implements Comparable<Xref>
 	public Xref(String id, DataSource ds) {
 		this.id = id;
 		this.ds = ds;
-		rep = (ds == null ? "" : ds.getSystemCode()) + ":" + id; 
+		rep = (ds == null ? "" : (ds.getSystemCode() == null ? ds.getFullName() : ds.getSystemCode())) + ":" + id; 
 	}
 	
 	/**

@@ -25,7 +25,6 @@ public class TestAll extends Base
 	public void testDerbyClient () throws IDMapperException, ClassNotFoundException
 	{
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
-		DBConnectorDerbyServer.init ("wikipathways.org", 1527);
 		Xref insr1 = new Xref ("ENSG00000171105", DataSource.getBySystemCode("EnHs"));
 		Xref insr2 = new Xref ("3643", DataSource.getBySystemCode("L"));
 		basicMapperTest (measure, "derbyclient", "idmapper-derbyclient:Homo sapiens", insr1, insr2);
