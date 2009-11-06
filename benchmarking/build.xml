@@ -63,7 +63,7 @@
 					source="1.5">
 			<classpath refid="test.classpath"/>
 		</javac>		
-		<junit printsummary="on" haltonfailure="true" fork="true">
+		<junit printsummary="on" haltonfailure="false" fork="true">
 			<formatter type="brief" usefile="false"/>
 			<classpath refid="test.classpath"/>
 			<batchtest>

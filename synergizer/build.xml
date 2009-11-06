@@ -11,10 +11,14 @@
 	<mkdir dir="build"/>
   </target>
 
-  <path id="class.path">
+  <path id="dependencies">
     <fileset dir="lib">
       <include name="*.jar"/>
     </fileset>
+  </path>
+
+  <path id="class.path">
+    <path refid="dependencies"/>
     <fileset dir="../dist">
       <include name="bridgedb.jar"/>
     </fileset>
@@ -27,6 +31,7 @@
 		   destdir="build">
 		<classpath refid="class.path"/>
 	</javac>
+    <copy toDir="../dist"><path refid="dependencies"/></copy>
   </target>
   
   <target name="jar" depends="build">
