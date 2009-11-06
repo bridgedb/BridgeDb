@@ -97,7 +97,8 @@ public class ComparisonScript
 //			}
 			
 			total = refs.size();
-			success = result.keySet().size();
+			for (Xref key : result.keySet())
+				if (result.get(key).size() > 0) success++;
 		}
 		
 		public void filterResult (DataSource base, DataSource expected)

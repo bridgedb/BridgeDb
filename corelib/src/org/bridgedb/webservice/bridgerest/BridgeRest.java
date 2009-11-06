@@ -38,6 +38,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.webservice.IDMapperWebservice;
 
 /**
@@ -307,14 +308,9 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 	/** {@inheritDoc} */
 	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs,
-			DataSource... tgtDataSources) throws IDMapperException {
-		Map<Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
-		
-		for(Xref x : srcXrefs) {
-			result.put(x, mapID(x, tgtDataSources));
-		}
-		
-		return result;
+			DataSource... tgtDataSources) throws IDMapperException 
+	{
+		return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
 	}
 
 	/** {@inheritDoc} */
