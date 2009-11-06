@@ -28,7 +28,10 @@
 #    Aug 2009
 #	- Added support for GO term names and definitions (release 55+)  
 #    Oct 2009
-#	- Added support for array probe extraction from funcgen database
+#	- Added support for array probe extraction from funcgen (efg) database
+#    Nov 2009
+#	- Modified array probe extraction after patching efg database with help from Nath Johnson
+#	- Added GO Slim tables for each of the 3 branches: BP, CC, MF
 ###########################################################################
 
 
@@ -665,6 +668,33 @@ while (my $gene = pop(@$genes))
 						     'Type VARCHAR(128) NOT NULL DEFAULT \'\'',
 						     'PRIMARY KEY (ID)'
 						     ]);
+        %{$GeneTables{GOslimBP}} = ('NAME' => ['GOslimBP', 'Tb'],
+                                        'SYSTEM' => ["\'GO Slim - Biological Process\'", "\'$dateArg\'",
+                                                     "\'ID|Name\\\\sBF\|\'", "\'\|$species\|\'", "\'\'",
+                                                     "\'http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=~\'", "\'\|I\|\'",
+                                                     "\'ftp://ftp.geneontology.org/pub/go/ontology/\'"],
+                                        'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                     'PRIMARY KEY (ID)'
+                                                     ]);
+        %{$GeneTables{GOslimCC}} = ('NAME' => ['GOslimCC', 'Tc'],
+                                        'SYSTEM' => ["\'GO Slim - Cellular Component\'", "\'$dateArg\'",
+                                                     "\'ID|Name\\\\sBF\|\'", "\'\|$species\|\'", "\'\'",
+                                                     "\'http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=~\'", "\'\|I\|\'",
+                                                     "\'ftp://ftp.geneontology.org/pub/go/ontology/\'"],
+                                        'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                     'PRIMARY KEY (ID)'
+                                                     ]);
+        %{$GeneTables{GOslimMF}} = ('NAME' => ['GOslimMF', 'Tm'],
+                                        'SYSTEM' => ["\'GO Slim - Molecular Function\'", "\'$dateArg\'",
+                                                     "\'ID|Name\\\\sBF\|\'", "\'\|$species\|\'", "\'\'",
+                                                     "\'http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=~\'", "\'\|I\|\'",
+                                                     "\'ftp://ftp.geneontology.org/pub/go/ontology/\'"],
+                                        'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                     'PRIMARY KEY (ID)'
+                                                     ]);
 	%{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'], 
 				'SYSTEM' => ["\'Affymetrix\'", "\'$dateArg\'", 
 					     "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
@@ -1113,7 +1143,7 @@ while (my $gene = pop(@$genes))
 		    \%Attributes);  
     
     ## EXTRACT FUNCGEN INFORMATION
-    parse_ProbeFeatures($gene->get_all_Transcripts(),
+    parse_ProbeFeatures($gene, 
 			\%GeneTables,
 			\%Ensembl_GeneTables,
 			\%Attributes);
@@ -1682,6 +1712,31 @@ sub parse_DBEntries {
 		++$subcount{GeneOntology};
 	    }
   	}
+	elsif ($dbe_dbname =~ /^\'goslim/){
+	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+            	# Get GO term annotations using $go_adaptor
+                my $acc = $dbe_primary_id;
+                $acc =~ s/\'//g; # strip single quotes to use as variable
+                my $term = $go_adaptor->fetch_by_accession($acc);
+                my $name = mysql_quotes($term->name()); #e.g., plasma membrane
+                my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
+		if ($namespace =~ /\'biological_process\'/){
+			$$GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$dbe_primary_id, $name];
+ 	                $$Ensembl_GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$gene_stable_id, $dbe_primary_id];
+                	++$subcount{GOslimBP};
+		} elsif ($namespace =~ /\'cellular_component\'/){
+                        $$GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$dbe_primary_id, $name];
+                        $$Ensembl_GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$gene_stable_id, $dbe_primary_id];
+                        ++$subcount{GOslimCC};
+                } elsif ($namespace =~ /\'molecular_function\'/){
+                        $$GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$dbe_primary_id, $name];
+                        $$Ensembl_GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$gene_stable_id, $dbe_primary_id];
+                        ++$subcount{GOslimMF};
+		} else {
+			#garbage?
+		}
+        }
+
 # 	elsif ($dbe_dbname =~ /^\'AFFY/i){  #catch all types
 #	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 #	    if (!${$seen{Affy}{$dbe_primary_id}}++){
@@ -2022,7 +2077,7 @@ sub parse_DBEntries {
 # with API calls. Also to populate ADMIN_Xrefs with sample of every available DB Entry.
 #################################################################################################
 sub parse_ProbeFeatures {
-  my ($all_trans, $GeneTables, $Ensembl_GeneTables, $Attributes) = @_;
+  my ($gene, $GeneTables, $Ensembl_GeneTables, $Attributes) = @_;
   my %subcount = ();
   my %seen = ();
 
@@ -2031,11 +2086,10 @@ sub parse_ProbeFeatures {
       %{$seen{$key}} = ();
   }
 
-  foreach my $trans (@$all_trans) {
-    my $trans_stable_id = $trans->stable_id();
-    print "TRANS: $trans_stable_id\n";
-    my $probe_features = $probe_adaptor->fetch_all_by_external_name($trans_stable_id);
-
+    # This only works after the efg database has been patched to key on gene ids
+    # See the NathJohnsonPatch.sql
+    #my $probe_features = $probe_adaptor->fetch_all_by_external_name($gene_stable_id);
+    my $probe_features = $probe_adaptor->fetch_all_by_linked_transcript_Gene($gene);
     foreach my $pf (@$probe_features) {
       my $probe = $pf->probe();
       my $array_list = $probe->get_all_Arrays();
@@ -2060,7 +2114,7 @@ sub parse_ProbeFeatures {
       	my $pf_syns = join("|", @$pf_synonyms);
       	$pf_syns = mysql_quotes($pf_syns);
 
-        print "PROBE: $pf_primary_id | $pf_dbname | $pf_release \n";
+        #print "PROBE: $pf_primary_id | $pf_dbname | $pf_release \n";
 
       	$ADMIN_Xrefs{$pf_dbname} = [$pf_dbname, $pf_display_id, $pf_primary_id, $pf_description, $pf_syns,
                              $pf_release, $pf_status, $pf_version, $pf_info_text, $pf_info_type];
@@ -2095,7 +2149,6 @@ sub parse_ProbeFeatures {
 
       }
     }
-  }
 }
 
 ## FEATURE TO ARRAY #############################################################################
