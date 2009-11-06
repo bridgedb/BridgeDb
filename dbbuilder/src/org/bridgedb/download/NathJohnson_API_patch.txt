@@ -1,0 +1,37 @@
+# Nath Johnson's solutoin #2 (see email 11/5/09)
+# add method to Bio::Ensembl::Funcgen::DBSQL::BaseAdaptor.pm
+
+sub fetch_all_by_linked_transcript_Gene{
+    my ( $self, $gene ) = @_;
+
+    if(! $gene ||
+          ! (ref($gene) && $gene->isa('Bio::EnsEMBL::Gene') && $gene->dbID)){
+         throw('You must provide a valid stored Bio::EnsEMBL:Gene object');
+    }
+
+
+    #Need to bindparams here to protect against injection
+    my @tx_sids = @{$gene->adaptor->db->dbc->db_handle->selectall_arrayref('select tsid.stable_id from transcript_stable_id tsid, transcript t where t.gene_id='.$gene->dbID.' and t.transcript_id=tsid.transcript_id')};
+    @tx_sids = map "@$_", @tx_sids;
+
+   my $entryAdaptor = $self->db->get_DBEntryAdaptor();
+   my (@ids, $type, $type_name);
+   ($type = ref($self)) =~ s/.*:://;
+   $type =~ s/Adaptor$//;
+   ($type_name = $type) =~ s/Feature$/_feature/;
+   my $xref_method = 'list_'.lc($type_name).'_ids_by_extid';
+
+   if(! $entryAdaptor->can($xref_method)){
+        warn "Does not yet accomodate $type external names";
+        return [];
+   }
+   else{
+
+        foreach my $tx_sid(@tx_sids){
+          push @ids, $entryAdaptor->$xref_method($tx_sid, $self->db->species.'_core_Transcript');
+        }
+   }
+
+   return $self->fetch_all_by_dbID_list( \@ids );
+}
+
