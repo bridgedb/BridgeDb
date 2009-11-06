@@ -150,14 +150,15 @@ public final class IDMapperPicr extends IDMapperWebservice implements AttributeM
 			DataSource... tgtDataSources) throws IDMapperException 
 	{		
 		Object[] databases;
-		if (tgtDataSources == null) 
+		if (tgtDataSources.length == 0) 
 			databases = supportedDbObjects;
 		else
 			databases = objectsFromDataSources(tgtDataSources);
 		
 		Set<Xref> result = new HashSet<Xref>();
 		if (databases.length == 0) return result;
-		
+		if (!supportedDatabases.contains(srcXref.getDataSource())) return result;
+
 		List<CrossReference> refs = new ArrayList<CrossReference>();
 		
 		List<UPEntry> entries = client.performAccessionMapping(srcXref.getId(), databases);
@@ -186,7 +187,7 @@ public final class IDMapperPicr extends IDMapperWebservice implements AttributeM
 		List<Object> databases = new ArrayList<Object>(ds.length);		
 		for (DataSource tgt : ds)
 		{
-			if (supportedDatabases.contains(ds))
+			if (supportedDatabases.contains(tgt))
 				databases.add(tgt.getFullName());
 		}
 		return databases.toArray();
@@ -209,10 +210,10 @@ public final class IDMapperPicr extends IDMapperWebservice implements AttributeM
 	public Set<String> getAttributes(Xref ref, String attrType)
 			throws IDMapperException 
 	{
-		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), supportedDbObjects);
-		
 		Set<String> result = new HashSet<String>();
+		if (!supportedDatabases.contains(ref.getDataSource())) return result;
 		
+		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), supportedDbObjects);
 		for (UPEntry entry : entries)
 		{
 			if ("CRC64".equals (attrType))
@@ -248,10 +249,10 @@ public final class IDMapperPicr extends IDMapperWebservice implements AttributeM
 	public Map<String, Set<String>> getAttributes(Xref ref)
 			throws IDMapperException 
 	{
-		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), supportedDbObjects);
-		
 		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
-		
+		if (!supportedDatabases.contains(ref.getDataSource())) return result;
+
+		List<UPEntry> entries = client.performAccessionMapping(ref.getId(), supportedDbObjects);
 		for (UPEntry entry : entries)
 		{			
 			InternalUtils.multiMapPut (result, "CRC64", entry.getCRC64());

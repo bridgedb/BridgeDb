@@ -110,7 +110,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
 			{
 				isOnlyActive = Boolean.parseBoolean(args.get("only-active"));
 			}
-			return new IDMapperPicr(isOnlyActive);
+			return new IDMapperPicrRest(isOnlyActive);
 		}
 	}
 	
@@ -189,7 +189,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
 
             // remove unsupported data sources
             Set<String> tgtDss = new HashSet<String>();
-            if (tgtDataSources!=null) {
+            if (tgtDataSources.length > 0) {
                 for (DataSource ds : tgtDataSources) {
                     if (supportedDatabases.contains(ds)) {
                         tgtDss.add(ds.getFullName());
