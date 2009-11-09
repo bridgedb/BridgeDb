@@ -17,7 +17,6 @@
 package org.bridgedb.rest;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
@@ -31,19 +30,16 @@ import org.restlet.resource.ResourceException;
  * Resource that handles the xref queries
  */
 public class BackPageText extends IDMapperResource {
-	List<IDMapperRdb> mappers;
 	Xref xref;
 	DataSource targetDs;
 	
 	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
 		    System.out.println( "Xrefs.doInit start" );
 			//Required parameters
-			String org = (String)getRequest().getAttributes().get(IDMapperService.PAR_ORGANISM);
-			mappers = getIDMappers(org);
-
-			String id = (String)getRequest().getAttributes().get(IDMapperService.PAR_ID);
-			String dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM);
+			String id = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_ID));
+			String dsName = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM));
 			DataSource dataSource = parseDataSource(dsName);
 			if(dataSource == null) {
 				throw new IllegalArgumentException("Unknown datasource: " + dsName);
@@ -71,7 +67,7 @@ public class BackPageText extends IDMapperResource {
             Set<String> bpInfoChr = new HashSet<String>();
             Set<String> bpInfoSyn = new HashSet<String>();
 	    
-	    for(IDMapperRdb mapper : mappers ) {
+	    for(IDMapperRdb mapper : getIDMappers() ) {
 		bpInfoSym.addAll(mapper.getAttributes( xref, "Symbol"));
                 bpInfoDes.addAll(mapper.getAttributes( xref, "Description"));
                 bpInfoTyp.addAll(mapper.getAttributes( xref, "Type"));

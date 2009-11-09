@@ -16,32 +16,26 @@
 //
 package org.bridgedb.rest;
 
-import java.util.List;
-
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
-import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 
 public class IsMappingSupported extends IDMapperResource {
-	List<IDMapperRdb> mappers;
 	DataSource srcDs;
 	DataSource destDs;
 	
 	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
 			//Required parameters
-			String org = (String)getRequest().getAttributes().get(IDMapperService.PAR_ORGANISM);
-			mappers = getIDMappers(org);
-
-			String dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_SOURCE_SYSTEM);
+			String dsName = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_SOURCE_SYSTEM));
 			srcDs = parseDataSource(dsName);
 			if(srcDs == null) {
 				throw new IllegalArgumentException("Unknown datasource: " + dsName);
 			}
-			dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_DEST_SYSTEM);
+			dsName = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_DEST_SYSTEM));
 			destDs = parseDataSource(dsName);
 			if(destDs == null) {
 				throw new IllegalArgumentException("Unknown datasource: " + dsName);
@@ -56,7 +50,7 @@ public class IsMappingSupported extends IDMapperResource {
 	public String isMappingSupported() {
 		try {
 			boolean supported = false;
-			for(IDMapper m : mappers) {
+			for(IDMapper m : getIDMappers()) {
 				if(m.getCapabilities().isMappingSupported(srcDs, destDs)) {
 					supported = true;
 					break;

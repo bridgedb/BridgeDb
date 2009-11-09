@@ -17,30 +17,15 @@
 package org.bridgedb.rest;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 
-public class AttributeSet extends IDMapperResource 
+public class AttributeSet extends IDMapperResource
 {
-	List<IDMapperRdb> mappers;
-  	String org;
-
-  	protected void doInit() throws ResourceException 
-	{
-		try {
-		    org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
-		    mappers = getIDMappers(org);
-		} catch(Exception e) {
-			throw new ResourceException(e);
-		}
-	}
-
 	@Get
 	public String getSupportedDataSourceResult() 
 	{
@@ -48,7 +33,7 @@ public class AttributeSet extends IDMapperResource
 		{
 			Set<String> attributes = new HashSet<String>();
 			
-		    for(IDMapperRdb mapper : mappers ) 
+		    for(IDMapperRdb mapper : getIDMappers() ) 
 		    {
 		    	if(mapper instanceof AttributeMapper) {
 		    		attributes.addAll(((AttributeMapper)mapper).getAttributeSet());

@@ -18,7 +18,6 @@ package org.bridgedb.rest;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +26,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
@@ -36,18 +34,15 @@ import org.restlet.resource.ResourceException;
  * Resource that handles the attributes queries
  */
 public class Attributes extends IDMapperResource {
-	List<IDMapperRdb> mappers;
 	Xref xref;
 	String attrType;
 	
 	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
 			//Required parameters
-			String org = (String)getRequest().getAttributes().get(IDMapperService.PAR_ORGANISM);
-			mappers = getIDMappers(org);
-
-			String id = (String)getRequest().getAttributes().get(IDMapperService.PAR_ID);
-			String dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM);
+			String id = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_ID));
+			String dsName = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM));
 			DataSource dataSource = parseDataSource(dsName);
 			if(dataSource == null) {
 				throw new IllegalArgumentException("Unknown datasource: " + dsName);
@@ -78,7 +73,7 @@ public class Attributes extends IDMapperResource {
 	private String getAttributesWithType() throws IDMapperException {
 		Set<String> values = new HashSet<String>();
 		
-		for(IDMapper mapper : mappers) {
+		for(IDMapper mapper : getIDMappers()) {
 			if(mapper instanceof AttributeMapper) {
 				values.addAll(((AttributeMapper)mapper).getAttributes(xref, attrType));
 			}
@@ -94,7 +89,7 @@ public class Attributes extends IDMapperResource {
 	private String getAttributesWithoutType() throws IDMapperException {
 		Map<String, Set<String>> values = new HashMap<String, Set<String>>();
 		
-		for(IDMapper mapper : mappers) {
+		for(IDMapper mapper : getIDMappers()) {
 			if(mapper instanceof AttributeMapper) {
 				values.putAll(((AttributeMapper)mapper).getAttributes(xref));
 			}

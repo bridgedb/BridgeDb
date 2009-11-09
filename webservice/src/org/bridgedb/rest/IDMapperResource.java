@@ -16,12 +16,15 @@
 //
 package org.bridgedb.rest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.GdbProvider;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.IDMapperRdb;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 /**
@@ -29,16 +32,41 @@ import org.restlet.resource.ServerResource;
  * between the idmapper resources (such as access to the IDMapper objects).
  */
 public class IDMapperResource extends ServerResource {
+	private List<IDMapperRdb> mappers;
+	private String orgName;
+	
 	protected DataSource parseDataSource(String dsName) {
 		if(dsName == null) return null;
-		DataSource ds = DataSource.getBySystemCode(dsName);
-		if(ds == null) {
+		DataSource ds = null;
+		//Try parsing by full name
+		if(DataSource.getFullNames().contains(dsName)) {
 			ds = DataSource.getByFullName(dsName);
+		} else { //If not possible, use system code
+			ds = DataSource.getBySystemCode(dsName);
 		}
 		return ds;
 	}
 	
-	protected List<IDMapperRdb> getIDMappers(String orgName) {
+	@Override
+	protected void doInit() throws ResourceException {
+		try {
+		orgName = urlDecode(
+				(String) getRequest().getAttributes().get(IDMapperService.PAR_ORGANISM)
+		);
+		initIDMappers();
+		} catch(UnsupportedEncodingException e) {
+			throw new ResourceException(e);
+		}
+	}
+	
+	/**
+	 * Decode the parameter from the url to remove %20 etc.
+	 */
+	protected String urlDecode(String string) throws UnsupportedEncodingException {
+		return string == null ? null : URLDecoder.decode(string, "UTF-8");
+	}
+	
+	private void initIDMappers() {
 		Organism org = Organism.fromLatinName(orgName);
 		if(org == null) { //Fallback on code
 			org = Organism.fromCode(orgName);
@@ -49,10 +77,12 @@ public class IDMapperResource extends ServerResource {
 		if(org == null) {
 			throw new IllegalArgumentException("Unknown organism: " + orgName + "<p><font size='+1'><i>Double check the spelling. We are expecting an entry like: Human</i></font></p>");
 		}
-		List<IDMapperRdb> mappers = getGdbProvider().getGdbs(org);
+		mappers = getGdbProvider().getGdbs(org);
 		if (mappers.isEmpty()){
 			throw new IllegalArgumentException("No database found for: " + orgName +"<p><font size='+1'><i>Verify that the database is supported and properly referenced in gdb.config.</i></font></p>");
 		}
+	}
+	protected List<IDMapperRdb> getIDMappers() {
 		return mappers;
 	}
 	

@@ -17,7 +17,6 @@
 package org.bridgedb.rest;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.bridgedb.Xref;
@@ -30,16 +29,13 @@ import org.restlet.resource.ResourceException;
  * Resource that handles the xref queries
  */
 public class FreeSearch extends IDMapperResource {
-	List<IDMapperRdb> mappers;
 	String searchStr;
 	int limit = 0;
-	String org;
 
 	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
-			org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
-			mappers = getIDMappers(org);
-			searchStr = (String) getRequest().getAttributes().get( IDMapperService.PAR_QUERY );
+			searchStr = urlDecode((String) getRequest().getAttributes().get( IDMapperService.PAR_QUERY ));
 			String limitStr = (String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_LIMIT );
 
 			if ( null != limitStr ) 
@@ -58,7 +54,7 @@ public class FreeSearch extends IDMapperResource {
 		{
 			Set<Xref> results = new HashSet<Xref>();
 
-			for(IDMapperRdb mapper : mappers ) {
+			for(IDMapperRdb mapper : getIDMappers() ) {
 				if(mapper.getCapabilities().isFreeSearchSupported()) {
 					results.addAll(mapper.freeSearch(searchStr, limit));
 				}

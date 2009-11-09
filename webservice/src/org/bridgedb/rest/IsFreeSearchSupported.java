@@ -16,35 +16,19 @@
 //
 package org.bridgedb.rest;
 
-import java.util.List;
-
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 
 public class IsFreeSearchSupported extends IDMapperResource 
 {
-	List<IDMapperRdb> mappers;
-  	String org;
-
-  	protected void doInit() throws ResourceException 
-	{
-		try {
-		    org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
-		    mappers = getIDMappers(org);
-		} catch(Exception e) {
-			throw new ResourceException(e);
-		}
-	}
-
 	@Get
 	public String isFreeSearchSupported() 
 	{
 		try
 		{
 			boolean isSupported = false;
-		    for(IDMapperRdb mapper : mappers ) 
+		    for(IDMapperRdb mapper : getIDMappers() ) 
 		    {
 		    	if(mapper.getCapabilities().isFreeSearchSupported()) {
 		    		isSupported = true;

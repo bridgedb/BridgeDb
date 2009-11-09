@@ -17,7 +17,6 @@
 package org.bridgedb.rest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.bridgedb.AttributeMapper;
@@ -31,18 +30,15 @@ import org.restlet.resource.ResourceException;
  * Resource that handles the xref queries
  */
 public class AttributeSearch extends IDMapperResource {
-	List<IDMapperRdb> mappers;
 	String searchStr;
 	String attribute;
 	int limit = 0;
-	String org;
 
 	protected void doInit() throws ResourceException {
+		super.doInit();
 		try {
-			org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
-			mappers = getIDMappers(org);
-			searchStr = (String) getRequest().getAttributes().get( IDMapperService.PAR_QUERY );
-			attribute = (String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_ATTR_NAME );
+			searchStr = urlDecode((String) getRequest().getAttributes().get( IDMapperService.PAR_QUERY ));
+			attribute = urlDecode((String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_ATTR_NAME ));
 			String limitStr = (String)getRequest().getAttributes().get( IDMapperService.PAR_TARGET_LIMIT );
 
 			if ( null != limitStr ) 
@@ -61,7 +57,7 @@ public class AttributeSearch extends IDMapperResource {
 		{
 			Map<Xref, String> results = new HashMap<Xref, String>();
 
-			for(IDMapperRdb mapper : mappers ) {
+			for(IDMapperRdb mapper : getIDMappers() ) {
 				if(mapper instanceof AttributeMapper) {
 					results.putAll(((AttributeMapper)mapper).freeAttributeSearch(searchStr, attribute, limit));
 				}

@@ -16,8 +16,6 @@
 //
 package org.bridgedb.rest;
 
-import java.util.List;
-
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdb.IDMapperRdb;
@@ -27,18 +25,14 @@ import org.restlet.resource.ResourceException;
 
 public class XrefExists extends IDMapperResource 
 {
-	List<IDMapperRdb> mappers;
 	Xref xref;
-  	String org;
 
   	protected void doInit() throws ResourceException 
 	{
+  		super.doInit();
 		try {
-		    org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
-		    mappers = getIDMappers(org);
-		    
-		    String id = (String)getRequest().getAttributes().get(IDMapperService.PAR_ID);
-			String dsName = (String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM);
+		    String id = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_ID));
+			String dsName = urlDecode((String)getRequest().getAttributes().get(IDMapperService.PAR_SYSTEM));
 			DataSource dataSource = parseDataSource(dsName);
 			if(dataSource == null) {
 				throw new IllegalArgumentException("Unknown datasource: " + dsName);
@@ -55,7 +49,7 @@ public class XrefExists extends IDMapperResource
 		try
 		{
 			boolean exists = false;
-		    for(IDMapperRdb mapper : mappers ) 
+		    for(IDMapperRdb mapper : getIDMappers() ) 
 		    {
 		    	if(mapper.xrefExists(xref)) {
 		    		exists = true;

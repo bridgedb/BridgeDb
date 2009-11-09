@@ -16,30 +16,10 @@
 //
 package org.bridgedb.rest;
 
-import java.util.List;
-
-import org.bridgedb.rdb.IDMapperRdb;
-import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 
 public class NoMatch extends IDMapperResource
 {
-	List<IDMapperRdb> mappers;
-	String org;
-
-  	protected void doInit() throws ResourceException 
-	{
-		try {
-		    System.out.println( "Properties.init() start" );
-		    org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
-		    mappers = getIDMappers(org);
-		    System.out.println( "Properties.doInit() done" );
-		} catch(Exception e) {
-			throw new ResourceException(e);
-		}
-	}
-
 	@Get
 	public String getNoMatchResult() 
 	{

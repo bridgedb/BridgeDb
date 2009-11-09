@@ -16,37 +16,19 @@
 //
 package org.bridgedb.rest;
 
-import java.util.List;
-
 import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 
 public class Properties extends IDMapperResource
 {
-	List<IDMapperRdb> mappers;
-  	String org;
-
-  	protected void doInit() throws ResourceException 
-	{
-		try {
-		    System.out.println( "Properties.init() start" );
-		    org = (String) getRequest().getAttributes().get( IDMapperService.PAR_ORGANISM );
-		    mappers = getIDMappers(org);
-		    System.out.println( "Properties.doInit() done" );
-		} catch(Exception e) {
-			throw new ResourceException(e);
-		}
-	}
-
 	@Get
 	public String getPropertiesResult() 
 	{
 		try
 		{
 	        StringBuilder result = new StringBuilder();
-		    for(IDMapperRdb mapper : mappers ) 
+		    for(IDMapperRdb mapper : getIDMappers() ) 
 		    {
 		    	for (String key : mapper.getCapabilities().getKeys())
 		    	{
