@@ -23,7 +23,6 @@
 
   <target name="dist" depends="doc">
 		<iterate target="dist"/>
-
 	
 	<property name="zipbase" value="bridgedb-${bridgedb.version}"/>
 	<zip destfile="${zipbase}.zip">
@@ -31,12 +30,7 @@
 			<include name="batchmapper.sh"/>
 			<include name="batchmapper.bat"/>
 			<include name="start-server.sh"/>
-			<include name="dist/bridgedb.jar"/>
-			<include name="dist/bridgedb-batchmapper.jar"/>
-			<include name="dist/bridgedb-bio.jar"/>
-			<include name="dist/bridgedb-webservice.jar"/>
-			<include name="dist/org.restlet.jar"/>
-			<include name="dist/derby.jar"/>
+			<include name="dist/*.jar"/>
 			<include name="LICENSE-2.0.txt"/>
 			<include name="README.txt"/>
 			<include name="apidoc"/>
@@ -48,6 +42,32 @@
 	<tar destfile="${zipbase}.tar.gz" compression="gzip">
 		<zipfileset src="${zipbase}.zip"/>
 	</tar>
+	
+	<property name="zipbase2" value="bridgedb-${bridgedb.version}-src"/>
+	<zip destfile="${zipbase2}.zip">
+		<zipfileset dir="." prefix="bridgedb-${bridgedb.version}-src">
+			<include name="batchmapper.sh"/>
+			<include name="batchmapper.bat"/>
+			<include name="start-server.sh"/>
+			<include name="LICENSE-2.0.txt"/>
+			<include name="README.txt"/>
+			<include name="apidoc"/>
+			<include name="corelib/version.props"/>
+			<include name="**/build.xml"/>
+			<include name="corelib/src/org/bridgedb/webservice/biomart/filterconversion.txt"/>
+			<include name="resources/*"/>
+			<include name="**/*.java"/>
+			<include name="**/*.jar"/>
+			<exclude name="dist/*.jar"/>
+			<include name="webservice/gdb.config.template"/>
+			<include name="webservice/contrib/bridgedb-example.pl"/>
+			<include name="webservice/contrib/bridgedb-example.py"/>
+		</zipfileset>
+	</zip>
+	<tar destfile="${zipbase2}.tar.gz" compression="gzip">
+		<zipfileset src="${zipbase2}.zip"/>
+	</tar>
+	
   </target>
 
   <target name="clean">
