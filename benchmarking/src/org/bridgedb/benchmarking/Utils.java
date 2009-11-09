@@ -1,5 +1,6 @@
 package org.bridgedb.benchmarking;
 
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,13 +30,13 @@ public class Utils
 		return a == null ? b == null : a.equals(b);
 	}
 
-	public static void printRefSet(Set<Xref> dests)
+	public static void printRefSet(PrintWriter writer, Set<Xref> dests)
 	{
 		boolean first = true;
 		if (dests != null) for (Xref dest : dests)
 		{
-			if (!first) System.out.print (" /// ");
-			System.out.print (dest);
+			if (!first) writer.print (" /// ");
+			writer.print (dest);
 			first = false;
 		}
 	}

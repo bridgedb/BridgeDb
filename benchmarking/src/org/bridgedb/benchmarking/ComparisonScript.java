@@ -18,8 +18,11 @@ package org.bridgedb.benchmarking;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -117,16 +120,21 @@ public class ComparisonScript
 	{
 //		private Set<Xref> refs = new HashSet<Xref>();
 		public Map<Xref, Set<Xref>> consensus;
+		int all_the_same = 0;
+		
 		private List<SingleTest> tests = new ArrayList<SingleTest>();
 		private final DataSource base;
 		private final DataSource expected;
+
+		private final File reportFile;
 		
 		List<Xref> refs;
 		
-		TestSet (DataSource base, DataSource expected)
+		TestSet (DataSource base, DataSource expected, File dest)
 		{
 			this.base = base;
 			this.expected = expected;
+			this.reportFile = dest;
 		}
 
 		public void mergeTestResults()
@@ -155,13 +163,17 @@ public class ComparisonScript
 				
 				consensus.put (ref, maxVal);
 				
+				// count how many times all mappers have the same result
+				if (max == tests.size() && maxVal != null && maxVal.size() > 0) all_the_same++;
+				
 				// count amount of consensus per test
 				for (SingleTest test : tests)
 				{
-					if (Utils.safeEquals (consensus.get(ref), test.result.get(ref)))
-					{
-						test.consensus++;
-					}
+					if (consensus.get(ref) != null && consensus.get(ref).size() > 0)					
+						if (Utils.safeEquals (consensus.get(ref), test.result.get(ref)))
+						{
+							test.consensus++;
+						}
 				}
 
 			}
@@ -184,57 +196,64 @@ public class ComparisonScript
 			
 		}
 		
-		public void reportMerged()
+		public void reportMerged() throws IOException
 		{
-			System.out.print ("service:");
+			System.out.println ("Writing to file:" + reportFile.getAbsolutePath()); 
+			PrintWriter writer = new PrintWriter (new FileWriter(reportFile));
+			writer.print ("service:");
 			for (SingleTest single : tests)
 			{
-				System.out.print ("\t" + single.connector.name);
+				writer.print ("\t" + single.connector.name);
 			}
-			System.out.println("\tconsensus");
+			writer.println("\tconsensus");
 
-			System.out.print ("connecting (msec):");
+			writer.print ("connecting (msec):");
 			for (SingleTest single : tests)
 			{
-				System.out.print ("\t" + single.deltaConnect);
+				writer.print ("\t" + single.deltaConnect);
 			}
-			System.out.println();
+			writer.println();
 
-			System.out.print ("mapping (msec):");
+			writer.print ("mapping (msec):");
 			for (SingleTest single : tests)
 			{
-				System.out.print ("\t" + single.deltaMapping);
+				writer.print ("\t" + single.deltaMapping);
 			}
-			System.out.println();
+			writer.println();
 
-			System.out.print ("success%:");
+			writer.print ("success%:");
 			for (SingleTest single : tests)
 			{
-				System.out.printf ("\t%2d %3.1f%%", single.success, (double)single.success / (double)single.total * 100.0);
+				writer.printf ("\t%2d %3.1f%%", single.success, (double)single.success / (double)single.total * 100.0);
 			}
-			System.out.println();
+			writer.println();
 
-			System.out.print ("consensus:");
+			writer.print ("consensus:");
 			for (SingleTest single : tests)
 			{
-				System.out.printf ("\t%2d %3.1f%%", single.consensus, (double)single.consensus / (double)single.total * 100.0);
+				writer.printf ("\t%2d %3.1f%%", single.consensus, (double)single.consensus / (double)single.success * 100.0);
 			}
-			System.out.println();
+			writer.println();
 
+			writer.print ("overlap:");
+			writer.printf ("\t%2d", all_the_same);
+			writer.println();
+			
 			for (Xref ref : refs)
 			{
-				System.out.print (ref);
+				writer.print (ref);
 				for (SingleTest single : tests)
 				{
-					System.out.print ("\t");
-					Utils.printRefSet(single.result.get(ref));
+					writer.print ("\t");
+					Utils.printRefSet(writer, single.result.get(ref));
 				}
 				
-				System.out.print ("\t");
-				Utils.printRefSet(consensus.get(ref));
+				writer.print ("\t");
+				Utils.printRefSet(writer, consensus.get(ref));
 				
-				System.out.println();
+				writer.println();
 			}
+			writer.close();
 		}
 
 		public void readList(File f)
@@ -301,6 +320,9 @@ public class ComparisonScript
 	
 	public void run() throws IOException, ClassNotFoundException, IDMapperException
 	{
+		String version = "_v1";
+		File parent = new File ("/home/martijn/Desktop");
+		
 		List<TestSet> allTests = new ArrayList<TestSet>();
 		BioDataSource.init();
 		
@@ -318,9 +340,9 @@ public class ComparisonScript
 //		initRefs();
 //		List<Xref> affylist_syn = readList (new File("IDMapping_X_Test.txt"), );
 
-		TestSet ensembl_hgnc = new TestSet(BioDataSource.ENSEMBL, BioDataSource.HUGO);
+		TestSet ensembl_hgnc = new TestSet(BioDataSource.ENSEMBL, BioDataSource.HUGO, new File(parent, "comparison-ens-hgnc" + version));
 		ensembl_hgnc.readList(new File("IDMapping_En_Test.txt"));
-		ensembl_hgnc.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.HUGO)); 
+//		ensembl_hgnc.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.HUGO)); 
 		
 		// TODO: Synergizer ensembl produces the symbol of hgnc, not the hgnc identifiers 
 //		ensembl_hgnc.tests.add (new SingleTest(Connector.SYNERGIZER_ENSEMBL, DataSource.getByFullName("ensembl_gene_id"),
@@ -329,35 +351,39 @@ public class ComparisonScript
 		ensembl_hgnc.tests.add (new SingleTest(Connector.SYNERGIZER_NCBI, DataSource.getByFullName("ensembl"),
 				DataSource.getByFullName("hgnc"))); 
 		ensembl_hgnc.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.ENSEMBL_HUMAN, BioDataSource.HUGO)); 
-		ensembl_hgnc.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.HUGO)); 
+//		ensembl_hgnc.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.HUGO)); 
 		ensembl_hgnc.tests.add (new SingleTest(Connector.CRONOS, BioDataSource.ENSEMBL_HUMAN, BioDataSource.HUGO)); 
 
 
-		TestSet ensembl_entrez = new TestSet(BioDataSource.ENSEMBL, BioDataSource.ENTREZ_GENE);
+		TestSet ensembl_entrez = new TestSet(BioDataSource.ENSEMBL, BioDataSource.ENTREZ_GENE, new File(parent, "comparison-ens-entrez" + version));
 		ensembl_entrez.readList(new File("IDMapping_En_Test.txt"));
-		ensembl_entrez.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
+//		ensembl_entrez.readList(new File("ensembl_genes_X.txt"));
+//		ensembl_entrez.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
 		ensembl_entrez.tests.add (new SingleTest(Connector.SYNERGIZER_ENSEMBL, DataSource.getByFullName("ensembl_gene_id"),
 				DataSource.getByFullName("entrezgene")));
 		ensembl_entrez.tests.add (new SingleTest(Connector.SYNERGIZER_NCBI, DataSource.getByFullName("ensembl"),
 				DataSource.getByFullName("entrezgene"))); 
 		ensembl_entrez.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
-		ensembl_entrez.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
+//		ensembl_entrez.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
 		ensembl_entrez.tests.add (new SingleTest(Connector.BIOMART, DataSource.getByFullName("ensembl_gene_id"),
 				DataSource.getByFullName("entrezgene")));
 		ensembl_entrez.tests.add (new SingleTest(Connector.CRONOS, 
 				BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE));
 	
-		TestSet affy = new TestSet(BioDataSource.AFFY, BioDataSource.ENSEMBL);
-		affy.readList (new File("IDMapping_X_Test.txt"));
-		affy.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
-		affy.tests.add (new SingleTest(Connector.SYNERGIZER_ENSEMBL, DataSource.getByFullName("affy_hg_u133a"),
+		TestSet affy = new TestSet(BioDataSource.AFFY, BioDataSource.ENSEMBL, new File(parent, "comparison-affy-ens" + version));
+//		affy.readList (new File("IDMapping_X_Test.txt"));
+		affy.readList (new File("U133A2-randomset.txt"));
+//		affy.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
+		affy.tests.add (new SingleTest(Connector.SYNERGIZER_ENSEMBL, DataSource.getByFullName("affy_hg_u133a_2"),
 				DataSource.getByFullName("ensembl_gene_id")));
 		// affy mapping currently not available in BridgeWebservice
-//		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
-		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
+		affy.tests.add (new SingleTest(Connector.BIOMART, DataSource.getByFullName("affy_hg_u133a_2"),
+				DataSource.getByFullName("ensembl_gene_id")));
+		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
+//		affy.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN));
 		affy.tests.add (new SingleTest(Connector.CRONOS, BioDataSource.AFFY, BioDataSource.ENSEMBL_HUMAN)); 
 		
-		TestSet bridgedb_only = new TestSet(BioDataSource.ENSEMBL, BioDataSource.ENTREZ_GENE);
+		TestSet bridgedb_only = new TestSet(BioDataSource.ENSEMBL, BioDataSource.ENTREZ_GENE, new File(parent, "comparison-bridgedb-only" + version));
 		bridgedb_only.readList(new File("IDMapping_En_Test.txt"));
 		bridgedb_only.tests.add (new SingleTest(Connector.DERBY_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
 		bridgedb_only.tests.add (new SingleTest(Connector.DERBY_REMOTE, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
@@ -365,10 +391,10 @@ public class ComparisonScript
 		bridgedb_only.tests.add (new SingleTest(Connector.BRIDGEWEBSERVICE_LOCAL, BioDataSource.ENSEMBL_HUMAN, BioDataSource.ENTREZ_GENE)); 
 
 		// comment test that you want to skip.
-		allTests.add (bridgedb_only);
-//		allTests.add (ensembl_entrez);
-//		allTests.add (affy);
-//		allTests.add (ensembl_hgnc);
+//		allTests.add (bridgedb_only);
+		allTests.add (ensembl_entrez);
+		allTests.add (affy);
+		allTests.add (ensembl_hgnc);
 		
 		for (TestSet set : allTests)
 		{
@@ -378,6 +404,7 @@ public class ComparisonScript
 		}
 		
 		server.stop();
+		System.out.println ("DONE");
 		
 	}
 		
