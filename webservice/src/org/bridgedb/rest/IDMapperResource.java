@@ -18,6 +18,7 @@ package org.bridgedb.rest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bridgedb.DataSource;
@@ -77,7 +78,7 @@ public class IDMapperResource extends ServerResource {
 		if(org == null) {
 			throw new IllegalArgumentException("Unknown organism: " + orgName + "<p><font size='+1'><i>Double check the spelling. We are expecting an entry like: Human</i></font></p>");
 		}
-		mappers = getGdbProvider().getGdbs(org);
+		mappers = new ArrayList<IDMapperRdb>(getGdbProvider().getGdbs(org));
 		if (mappers.isEmpty()){
 			throw new IllegalArgumentException("No database found for: " + orgName +"<p><font size='+1'><i>Verify that the database is supported and properly referenced in gdb.config.</i></font></p>");
 		}
