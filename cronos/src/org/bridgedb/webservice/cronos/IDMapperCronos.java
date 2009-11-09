@@ -100,7 +100,7 @@ public class IDMapperCronos extends IDMapperWebservice
 		intMap.put (10, BioDataSource.EMBL);
 		intMap.put (14, BioDataSource.HUGO);
 		intMap.put (18, BioDataSource.MGI);
-		intMap.put (210, BioDataSource.AFFY);
+		intMap.put (220, BioDataSource.AFFY);
 
 		invMap.put (BioDataSource.REFSEQ, 3);
 		invMap.put (BioDataSource.UNIPROT, 4);
@@ -111,7 +111,7 @@ public class IDMapperCronos extends IDMapperWebservice
 		invMap.put (BioDataSource.EMBL, 10);
 		invMap.put (BioDataSource.HUGO, 14);
 		invMap.put (BioDataSource.MGI, 18);
-		invMap.put (BioDataSource.AFFY, 210);
+		invMap.put (BioDataSource.AFFY, 220);
 	}
 
 	IDMapperCronos(String speciesCode) throws IDMapperException
