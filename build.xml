@@ -58,6 +58,7 @@
 			<include name="resources/*"/>
 			<include name="**/*.java"/>
 			<include name="**/*.jar"/>
+			<include name="benchmarking/*.txt"/>
 			<exclude name="dist/*.jar"/>
 			<include name="webservice/gdb.config.template"/>
 			<include name="webservice/contrib/bridgedb-example.pl"/>
