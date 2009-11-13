@@ -50,7 +50,7 @@ MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/searches/ac
 miRBase	Mb		http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$ID	MI0000808	gene		1	urn:bridgedb:mirbase
 MaizeGDB	Mg		http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$ID	acc1	gene	Zea mays	1	urn:bridgedb:maizegdb
 NASC Gene	N			ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1	urn:bridgedb:nasc.gene
-NuGO wiki	Nw		http://nugowiki.org/index.php/$ID	HMDB00001	probe		0	urn:bridgedb:nugo.wiki
+NuGO wiki	Nw		http://wiki.nugo.org/index.php/$ID	HMDB00001	probe		0	urn:bridgedb:nugo.wiki
 Other	O				gene		1	urn:bridgedb:other
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$ID	468	gene	Oryza sativa	1	urn:bridgedb:oryzabase
 OMIM	Om	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=OMIM&cmd=Search&doptcmdl=Detailed&term=?$ID	608981	probe		0	urn:miriam:OMIM
