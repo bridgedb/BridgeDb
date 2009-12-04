@@ -19,9 +19,10 @@ package org.bridgedb.rest;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bridgedb.AttributeMapper;
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
@@ -67,12 +68,17 @@ public class BackPageText extends IDMapperResource {
             Set<String> bpInfoChr = new HashSet<String>();
             Set<String> bpInfoSyn = new HashSet<String>();
 	    
-	    for(IDMapperRdb mapper : getIDMappers() ) {
-		bpInfoSym.addAll(mapper.getAttributes( xref, "Symbol"));
-                bpInfoDes.addAll(mapper.getAttributes( xref, "Description"));
-                bpInfoTyp.addAll(mapper.getAttributes( xref, "Type"));
-                bpInfoChr.addAll(mapper.getAttributes( xref, "Chromosome"));
-                bpInfoSyn.addAll(mapper.getAttributes( xref, "Synonyms"));
+	    for(IDMapper mapper : getIDMappers()) 
+	    {
+	    	if (mapper instanceof AttributeMapper)
+	    	{
+	    		AttributeMapper attr = (AttributeMapper)mapper;
+				bpInfoSym.addAll(attr.getAttributes( xref, "Symbol"));
+		                bpInfoDes.addAll(attr.getAttributes( xref, "Description"));
+		                bpInfoTyp.addAll(attr.getAttributes( xref, "Type"));
+		                bpInfoChr.addAll(attr.getAttributes( xref, "Chromosome"));
+		                bpInfoSyn.addAll(attr.getAttributes( xref, "Synonyms"));
+	    	}
 	    }
 	    
             StringBuilder result = new StringBuilder();

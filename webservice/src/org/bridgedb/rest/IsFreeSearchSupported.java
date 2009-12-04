@@ -16,7 +16,7 @@
 //
 package org.bridgedb.rest;
 
-import org.bridgedb.rdb.IDMapperRdb;
+import org.bridgedb.IDMapper;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 
@@ -28,7 +28,7 @@ public class IsFreeSearchSupported extends IDMapperResource
 		try
 		{
 			boolean isSupported = false;
-		    for(IDMapperRdb mapper : getIDMappers() ) 
+		    for(IDMapper mapper : getIDMappers()) 
 		    {
 		    	if(mapper.getCapabilities().isFreeSearchSupported()) {
 		    		isSupported = true;

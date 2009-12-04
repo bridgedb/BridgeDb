@@ -269,7 +269,8 @@ public class IDMapperService extends Application {
 		return gdbProvider;
 	}
 
-	private void connectGdbs() throws IDMapperException, IOException {
+	private void connectGdbs() throws IDMapperException, IOException, ClassNotFoundException 
+	{
 		String[] gdbconf = getContext().getParameters().getValuesArray(CONF_GDBS);
 		File gdbFile = configFile;
 		if(gdbconf.length > 0) {

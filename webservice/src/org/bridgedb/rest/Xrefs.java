@@ -20,8 +20,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
@@ -63,7 +63,7 @@ public class Xrefs extends IDMapperResource {
 			//The result set
 			Set<Xref> xrefs = new HashSet<Xref>();
 
-			for(IDMapperRdb mapper : getIDMappers()) {
+			for(IDMapper mapper : getIDMappers()) {
 				if(targetDs == null) {
 					xrefs.addAll(mapper.mapID(xref));
 				} else {

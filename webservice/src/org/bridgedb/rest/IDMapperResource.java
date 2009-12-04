@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
 import org.bridgedb.bio.GdbProvider;
 import org.bridgedb.bio.Organism;
-import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
@@ -33,7 +33,7 @@ import org.restlet.resource.ServerResource;
  * between the idmapper resources (such as access to the IDMapper objects).
  */
 public class IDMapperResource extends ServerResource {
-	private List<IDMapperRdb> mappers;
+	private List<IDMapper> mappers;
 	private String orgName;
 	
 	protected DataSource parseDataSource(String dsName) {
@@ -78,12 +78,12 @@ public class IDMapperResource extends ServerResource {
 		if(org == null) {
 			throw new IllegalArgumentException("Unknown organism: " + orgName + "<p><font size='+1'><i>Double check the spelling. We are expecting an entry like: Human</i></font></p>");
 		}
-		mappers = new ArrayList<IDMapperRdb>(getGdbProvider().getGdbs(org));
+		mappers = new ArrayList<IDMapper>(getGdbProvider().getGdbs(org));
 		if (mappers.isEmpty()){
 			throw new IllegalArgumentException("No database found for: " + orgName +"<p><font size='+1'><i>Verify that the database is supported and properly referenced in gdb.config.</i></font></p>");
 		}
 	}
-	protected List<IDMapperRdb> getIDMappers() {
+	protected List<IDMapper> getIDMappers() {
 		return mappers;
 	}
 	

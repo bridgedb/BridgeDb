@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bridgedb.AttributeMapper;
+import org.bridgedb.IDMapper;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
@@ -57,7 +57,7 @@ public class AttributeSearch extends IDMapperResource {
 		{
 			Map<Xref, String> results = new HashMap<Xref, String>();
 
-			for(IDMapperRdb mapper : getIDMappers() ) {
+			for(IDMapper mapper : getIDMappers() ) {
 				if(mapper instanceof AttributeMapper) {
 					results.putAll(((AttributeMapper)mapper).freeAttributeSearch(searchStr, attribute, limit));
 				}

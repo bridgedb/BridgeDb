@@ -1,2 +1,3 @@
-Homo sapiens	/home/martijn/PathVisio-Data/gene databases/Hs_Derby_20090509.pgdb
-Mus musculus	/home/martijn/PathVisio-Data/gene databases/Mm_Derby_20081119.pgdb
+Homo sapiens	idmapper-pgdb:/home/martijn/PathVisio-Data/gene databases/Hs_Derby_20090509.pgdb
+Mus musculus	idmapper-pgdb:/home/martijn/PathVisio-Data/gene databases/Mm_Derby_20081119.pgdb
+*	idmapper-pgdb:/home/martijn/PathVisio-Data/gene databases/metabolites_081205.pgdb

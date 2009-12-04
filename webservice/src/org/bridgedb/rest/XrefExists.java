@@ -18,7 +18,7 @@ package org.bridgedb.rest;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.IDMapperRdb;
+import org.bridgedb.IDMapper;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
@@ -49,7 +49,7 @@ public class XrefExists extends IDMapperResource
 		try
 		{
 			boolean exists = false;
-		    for(IDMapperRdb mapper : getIDMappers() ) 
+		    for(IDMapper mapper : getIDMappers()) 
 		    {
 		    	if(mapper.xrefExists(xref)) {
 		    		exists = true;

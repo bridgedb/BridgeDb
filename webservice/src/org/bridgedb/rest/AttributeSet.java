@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.AttributeMapper;
-import org.bridgedb.rdb.IDMapperRdb;
+import org.bridgedb.IDMapper;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 
@@ -33,7 +33,7 @@ public class AttributeSet extends IDMapperResource
 		{
 			Set<String> attributes = new HashSet<String>();
 			
-		    for(IDMapperRdb mapper : getIDMappers() ) 
+		    for(IDMapper mapper : getIDMappers()) 
 		    {
 		    	if(mapper instanceof AttributeMapper) {
 		    		attributes.addAll(((AttributeMapper)mapper).getAttributeSet());

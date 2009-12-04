@@ -19,8 +19,8 @@ package org.bridgedb.rest;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bridgedb.IDMapper;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.IDMapperRdb;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
@@ -54,7 +54,7 @@ public class FreeSearch extends IDMapperResource {
 		{
 			Set<Xref> results = new HashSet<Xref>();
 
-			for(IDMapperRdb mapper : getIDMappers() ) {
+			for(IDMapper mapper : getIDMappers() ) {
 				if(mapper.getCapabilities().isFreeSearchSupported()) {
 					results.addAll(mapper.freeSearch(searchStr, limit));
 				}

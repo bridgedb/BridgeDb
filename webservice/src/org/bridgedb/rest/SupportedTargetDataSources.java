@@ -17,7 +17,7 @@
 package org.bridgedb.rest;
 
 import org.bridgedb.DataSource;
-import org.bridgedb.rdb.IDMapperRdb;
+import org.bridgedb.IDMapper;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 
@@ -29,7 +29,7 @@ public class SupportedTargetDataSources extends IDMapperResource
 		try
 		{
 	        StringBuilder result = new StringBuilder();
-		    for(IDMapperRdb mapper : getIDMappers() ) 
+		    for(IDMapper mapper : getIDMappers()) 
 		    {
 		    	for (DataSource ds : mapper.getCapabilities().getSupportedTgtDataSources())
 		    	{
