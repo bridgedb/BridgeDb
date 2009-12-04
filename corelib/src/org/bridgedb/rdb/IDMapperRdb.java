@@ -16,6 +16,9 @@
 //
 package org.bridgedb.rdb;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +42,7 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 	{
 		BridgeDb.register ("idmapper-pgdb", new DriverPgdb());
 		BridgeDb.register ("idmapper-derbyclient", new DriverClient());
+		BridgeDb.register ("idmapper-jdbc", new DriverJdbc());
 	}
 	
 	private static final class DriverPgdb implements org.bridgedb.Driver
@@ -52,7 +56,28 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 			return SimpleGdbFactory.createInstance(location, new DataDerby(), 0);
 		}
 	}
-	
+
+	private static final class DriverJdbc implements org.bridgedb.Driver
+	{
+		/** private constructor to prevent instantiation. */
+		private DriverJdbc() { } 
+		
+		/** {@inheritDoc} */
+		public IDMapper connect(String location) throws IDMapperException 
+		{
+			try
+			{
+				Connection con = DriverManager.getConnection("jdbc:" + location);
+			
+				return SimpleGdbFactory.createInstance(location, con, 0);
+			}
+			catch (SQLException ex)
+			{
+				throw new IDMapperException(ex);
+			}
+		}
+	}
+
 	private static final class DriverClient implements org.bridgedb.Driver
 	{
 		/** private constructor to prevent instantiation. */
