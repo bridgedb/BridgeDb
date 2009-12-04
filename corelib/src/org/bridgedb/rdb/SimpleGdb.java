@@ -51,6 +51,10 @@ import org.bridgedb.IDMapperException;
  */
 public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 {		
+	SimpleGdb(Connection con)
+	{
+		this.con = con;
+	}
 	
 	/**
 	 * helper class that handles lazy initialization of all prepared statements used by SimpleGdb
@@ -107,7 +111,7 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	final public void close() throws IDMapperException 
 	{
 		if (con == null) throw new IDMapperException("Database connection already closed");
-		dbConnector.closeConnection(con);
+		if (dbConnector != null) dbConnector.closeConnection(con);
 		try
 		{
 			con.close();

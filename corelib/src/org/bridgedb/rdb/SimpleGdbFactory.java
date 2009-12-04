@@ -22,10 +22,6 @@ import java.sql.SQLException;
 
 import org.bridgedb.IDMapperException;
 
-
-
-//import org.pathvisio.debug.Logger;
-
 /**
  * Factory class that instantiates the correct SimpleGdb implementation
  * for a new / existing gdb,
@@ -40,11 +36,13 @@ public final class SimpleGdbFactory
 	static final int LATEST_SCHEMA_VERSION = 3;
 
 	/**
-	 * Opens a connection to the Gene Database located in the given file.
+	 * Older method to open a connection to a Gene database
+	 * using a DBConnector to handle differences
+	 * between different RDBMS-es. The other createInstance() is preferred.
 	 * <p>
 	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
 	 * @param dbName The file containing the Gene Database. 
-	 * @param newDbConnector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
+	 * @param newDbConnector handles the differences between types of RDBMS.
 	 * A new instance of DbConnector class is instantiated automatically.
 	 * @param props PROP_RECREATE if you want to create a new database, overwriting any existing ones. Otherwise, PROP_NONE.
 	 * @return a new Gdb
@@ -52,11 +50,9 @@ public final class SimpleGdbFactory
 	*/
 	public static SimpleGdb createInstance(String dbName, DBConnector newDbConnector, int props) throws IDMapperException
 	{
-		if(dbName == null) throw new NullPointerException();
-		
 		DBConnector dbConnector;
 		Connection con;
-		
+
 		try
 		{
 			// create a fresh db connector of the correct type.
@@ -70,15 +66,30 @@ public final class SimpleGdbFactory
 		{
 			throw new IDMapperException (e);
 		}
+		con = dbConnector.createConnection(dbName, props);
+		
+		return createInstance(dbName, con, props);
+	}
 
-//		Logger.log.trace("Opening connection to Gene Database " + dbName);
+	/**
+	 * Opens a connection to the Gene Database located in the given file.
+	 * <p>
+	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
+	 * @param dbName The file containing the Gene Database. 
+	 * @param con An SQL Connection to the database
+	 * @param props PROP_RECREATE if you want to create a new database, overwriting any existing ones. Otherwise, PROP_NONE.
+	 * @return a new Gdb
+	 * @throws IDMapperException on failure
+	*/
+	public static SimpleGdb createInstance(String dbName, Connection con, int props) throws IDMapperException
+	{
+		if(dbName == null) throw new NullPointerException();	
 
 		int version = 0;
 		if ((props & DBConnector.PROP_RECREATE) == 0)
 		{
 			// read database and try to determine version
 			
-			con = dbConnector.createConnection(dbName, props);
 			try 
 			{
 				ResultSet r = con.createStatement().executeQuery("SELECT schemaversion FROM info");
@@ -87,16 +98,7 @@ public final class SimpleGdbFactory
 			catch (SQLException e) 
 			{
 				//Ignore, older db's don't even have schema version
-			}
-			
-			try
-			{
-				con.close();
-			}
-			catch (SQLException e) 
-			{
-				//Unable to close database, ignore.
-			}
+			}			
 		}
 		else
 		{
@@ -106,10 +108,10 @@ public final class SimpleGdbFactory
 		switch (version)
 		{
 		case 2:
-			return new SimpleGdbImpl2(dbName, newDbConnector, props);
+			return new SimpleGdbImpl2(dbName, con, props);
 		case 3:
-			return new SimpleGdbImpl3(dbName, newDbConnector, props);
-		//TODO add new schema versions here
+			return new SimpleGdbImpl3(dbName, con, props);
+		//NB add future schema versions here
 		default:
 			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
 					"version of this software and databases");

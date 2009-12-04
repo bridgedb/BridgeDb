@@ -16,6 +16,7 @@
 //
 package org.bridgedb.rdb;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -180,28 +181,13 @@ class SimpleGdbImpl3 extends SimpleGdb
 	 * 	or PROP_NONE if you want to connect read-only
 	 * @throws IDMapperException when the database could not be created or connected to
 	 */
-	public SimpleGdbImpl3(String dbName, DBConnector newDbConnector, int props) throws IDMapperException
+	public SimpleGdbImpl3(String dbName, Connection con, int props) throws IDMapperException
 	{
+		super(con);
 		if(dbName == null) throw new NullPointerException();
 
 		this.dbName = dbName;
-		try
-		{
-			// create a fresh db connector of the correct type.
-			this.dbConnector = newDbConnector.getClass().newInstance();
-		}
-		catch (InstantiationException e)
-		{
-			throw new IDMapperException (e);
-		} 
-		catch (IllegalAccessException e) 
-		{
-			throw new IDMapperException (e);
-		}
 
-//		Logger.log.trace("Opening connection to Gene Database " + dbName);
-
-		con = dbConnector.createConnection(dbName, props);
 		if ((props & DBConnector.PROP_RECREATE) == 0)
 		{
 			try
