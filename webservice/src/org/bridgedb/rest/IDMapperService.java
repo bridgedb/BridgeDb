@@ -191,7 +191,16 @@ public class IDMapperService extends Application {
 	 * @see AttributeMapper#getAttributeSet()
 	 */
 	public static final String URL_ATTRIBUTE_SET = "/{" + PAR_ORGANISM + "}/attributeSet";
-	
+
+	/**
+	 * URL pattern for getting the server configuration.<BR>
+	 * <code>
+	 * /config
+	 * </code>
+	 * @see Config#getConfig()
+	 */
+	public static final String URL_CONFIG = "/config";
+
 	/**
 	 * URL pattern for getting backpage HTML.<BR>
 	 * URL:<BR>
@@ -219,6 +228,8 @@ public class IDMapperService extends Application {
 		String target = "http://bridgedb.org/wiki/BridgeWebservice";
 		Redirector redirector = new Redirector(getContext(), target, Redirector.MODE_CLIENT_TEMPORARY);	
 		router.attach(URL_HOME, redirector);
+
+		router.attach(URL_CONFIG, Config.class);
 
 		/* IDMapper methods */
 		//Register the route for the xrefs url pattern
