@@ -327,9 +327,11 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 		try
 		{
-			BufferedReader r = new UrlBuilder ("xrefs")
-				.ordered(src.getDataSource().getSystemCode(), src.getId())
-				.openReader();
+			UrlBuilder builder = new UrlBuilder ("xrefs")
+				.ordered(src.getDataSource().getSystemCode(), src.getId());
+			if (tgtDataSources.length == 1) 
+				builder = builder.named("dataSource", tgtDataSources[0].getSystemCode());
+			BufferedReader r = builder.openReader();
 			Set<Xref> result = new HashSet<Xref>();
 			{
 				Xref dest;
