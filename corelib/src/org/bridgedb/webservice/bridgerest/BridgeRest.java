@@ -288,7 +288,12 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		{
 			BufferedReader r = new UrlBuilder ("search").ordered(text).openReader();
 			Set<Xref> result = new HashSet<Xref>();
-			result.addAll (parseRefs(r));
+
+			{
+				Xref dest;
+				while ((dest = parseLine(r)) != null) result.add (dest);
+			}
+			
 			return result;
 		}
 		catch (IOException ex) {
@@ -326,12 +331,15 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 				.ordered(src.getDataSource().getSystemCode(), src.getId())
 				.openReader();
 			Set<Xref> result = new HashSet<Xref>();
-			for (Xref dest : parseRefs(r))
 			{
-				if (dsFilter.size() == 0 || dsFilter.contains(dest.getDataSource()))
+				Xref dest;
+				while ((dest = parseLine(r)) != null)
 				{
-					result.add (dest);
-				}
+					if (dsFilter.size() == 0 || dsFilter.contains(dest.getDataSource()))
+					{
+						result.add (dest);
+					}
+				}		
 			}
 			return result;
 		}
@@ -339,25 +347,38 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		{
 			throw new IDMapperException(ex);
 		}
-			}
+	}
 
 	/** 
-	 * reads from stream and parses Xrefs.
-	 * Xrefs are expected as one per row, id &lt;tab> system
-	 * @param reader BufferedReader to read from.
-	 * @return parsed Xrefs
-	 * @throws IOException */
-	private List<Xref> parseRefs(BufferedReader reader) throws IOException
+	 * parse a single line of input.
+	 * @param reader reader to read line from
+	 * @return Xref or null if end of stream was reached
+	 * @throws IOException if there was an error while reading (not EOF!) */
+	private Xref parseLine(BufferedReader reader) throws IOException
 	{
-		List<Xref> result = new ArrayList<Xref>();
-		String line;
-		while ((line = reader.readLine()) != null)
+		StringBuilder builder = new StringBuilder();
+		String id = null;
+		int c;
+		while (true)
 		{
-			String[] fields = line.split("\t");
-			Xref dest = new Xref (fields[0], DataSource.getByFullName(fields[1]));
-			result.add (dest);
+			// read char by char and use switch statement
+			// for efficiency
+			c = reader.read();
+			switch (c)
+			{
+			case -1:
+				return null; // end of the stream
+			case '\n': 
+				DataSource ds = DataSource.getByFullName(builder.toString());
+				return new Xref(id, ds);
+			case '\t':
+				id = builder.toString();
+				builder = new StringBuilder();
+				break;
+			default:
+				builder.append((char)c);
+			}
 		}
-		return result;
 	}
 
 	/** {@inheritDoc} */
