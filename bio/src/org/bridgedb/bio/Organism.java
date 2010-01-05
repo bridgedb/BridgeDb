@@ -57,6 +57,7 @@ public enum Organism
 	MonodelphisDomestica  ("Monodelphis domestica", "Md", "Opossum"),
 	OrnithorhynchusAnatinus	("Ornithorhynchus anatinus", "Oa", "Platypus"),
 	OryzaSativa("Oryza sativa", "Os", "Rice"),
+	OryzaJaponica("Oryza japonica", "Oj", "Rice"),
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish"),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit"),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee"),
