@@ -61,14 +61,14 @@ public class Xrefs extends IDMapperResource {
 	   System.out.println( "Xrefs.getXrefs() start" );
 		try {
 			//The result set
-			Set<Xref> xrefs = new HashSet<Xref>();
 
-			for(IDMapper mapper : getIDMappers()) {
-				if(targetDs == null) {
-					xrefs.addAll(mapper.mapID(xref));
-				} else {
-					xrefs.addAll(mapper.mapID(xref, targetDs));
-				}
+			IDMapper mapper = getIDMappers().get(0);
+			Set<Xref> xrefs = (targetDs == null) ? mapper.mapID(xref) : mapper.mapID(xref, targetDs);
+
+			for (int i = 1; i < getIDMappers().size(); ++i)
+			{
+				mapper = getIDMappers().get(i);
+				xrefs.addAll ((targetDs == null) ? mapper.mapID(xref) : mapper.mapID(xref, targetDs));
 			}
 					
 			StringBuilder result = new StringBuilder();
