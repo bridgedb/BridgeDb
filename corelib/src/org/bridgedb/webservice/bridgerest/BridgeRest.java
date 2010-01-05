@@ -256,7 +256,7 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setInstanceFollowRedirects(false);
 			int response = con.getResponseCode();
-			if (response != HttpURLConnection.HTTP_OK) 
+			if (response < HttpURLConnection.HTTP_OK || response >= HttpURLConnection.HTTP_MULT_CHOICE ) 
 				throw new IOException("HTTP response: " + con.getResponseCode() + " - " + con.getResponseMessage());
 			return new BufferedReader(new InputStreamReader(con.getInputStream()));
 		}
