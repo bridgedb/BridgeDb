@@ -87,6 +87,10 @@ class SimpleGdbImpl3 extends SimpleGdb
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
 		);
+	private final SimpleGdb.LazyPst pstIdSearchWithAttributes = new SimpleGdb.LazyPst (
+			"SELECT id, code, attrvalue FROM attribute WHERE " +
+			"attrname = 'Symbol' AND LOWER(ID) LIKE ?"
+		);
 	
 	/** {@inheritDoc} */
 	public boolean xrefExists(Xref xref) throws IDMapperException 
@@ -578,7 +582,7 @@ class SimpleGdbImpl3 extends SimpleGdb
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
 	}
-
+	
 	/**
 	 * free text search for matching symbols.
 	 * @return references that match the query
@@ -591,8 +595,8 @@ class SimpleGdbImpl3 extends SimpleGdb
 	{
 		Map<Xref, String> result = new HashMap<Xref, String>();
 		try {
-
-			PreparedStatement pst = pstAttributeSearch.getPreparedStatement();
+			PreparedStatement pst = (MATCH_ID.equals (attrType)) ? 
+					pstIdSearchWithAttributes.getPreparedStatement() : pstAttributeSearch.getPreparedStatement();
 			pst.setQueryTimeout(QUERY_TIMEOUT);
 			if(limit > NO_LIMIT) pst.setMaxRows(limit);
 			pst.setString(1, "%" + query.toLowerCase() + "%");
