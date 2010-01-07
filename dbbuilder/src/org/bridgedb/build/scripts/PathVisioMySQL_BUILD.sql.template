@@ -68,7 +68,7 @@ CREATE TABLE attribute (
 	code VARCHAR(63) NOT NULL, 
 	attrName VARCHAR(63) NOT NULL,
 	attrValue VARCHAR(254) NOT NULL,
-	INDEX (code, attrValue)
+	INDEX (id, code, attrName, attrValue)
 );
 
 
@@ -107,4 +107,6 @@ SELECT datanode.id, "EnXXXXXX", datanode.id, "EnXXXXXX"
 FROM datanode
 WHERE datanode.code = "EnXXXXXX";
 
+## Add one more index to link
+CREATE INDEX i_right on link(idRight, codeRight);
 
