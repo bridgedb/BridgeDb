@@ -44,6 +44,8 @@ mysql -u genmapp -pfun4genmapp -e "update ${Database}.info set species =replace(
 # --net_buffer_length=30K (used to limit size of extended-inserts) 
 # --skip-extended-insert (used to force line-by-line inserts)
 mysqldump --compatible=db2 --no-create-info --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.temp
+## Dump table creation statements separately for 2-step recontruction later (e.g., for bridgedb rest server)
+mysqldump --no-data -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.tables
 
 ## Clean up dump file
 # Replace in emacs using esc-% (! = all occurances)
