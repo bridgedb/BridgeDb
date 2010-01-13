@@ -159,8 +159,10 @@ public final class BiomartStub
 
      /**
      *
+     * @param mart mart name
      * @param dataset dataset name
      * @return dataset display name or null if not exist
+     * @throws IOException if the data could not be read
      */
     public String datasetDisplayName(String mart, String dataset) throws IOException 
     {
@@ -245,9 +247,9 @@ public final class BiomartStub
             return Collections.emptySet();
         }
 
-        Map<String,Attribute> attributes;
         try {
-            attributes = client.getMart(mart).getDataset(dataset).getAttributes();
+            Dataset data = client.getMart(mart).getDataset(dataset);
+            Map<String,Attribute> attributes = data.getAttributes();
 
             Set<String> result = new HashSet<String>();
             for (String name : attributes.keySet()) {

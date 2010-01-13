@@ -50,7 +50,11 @@ import org.bridgedb.IDMapperException;
  * to create or connect to one or more pgdb's of any type.
  */
 public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
-{		
+{
+	/**
+	 * Create IDMapper based on an existing SQL connection.
+	 * @param con Existing SQL Connection.
+	 */
 	SimpleGdb(Connection con)
 	{
 		this.con = con;
@@ -97,7 +101,7 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	 */
 	protected Connection con = null;
 	// dbConnector, helper class for dealing with RDBMS specifcs.
-	protected DBConnector dbConnector;
+	private DBConnector dbConnector;
 
 	/** {@inheritDoc} */
 	final public boolean isConnected() { return con != null; }
@@ -179,7 +183,8 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	}
 
 	/**
-	   @return number of rows in gene table for the given datasource
+	 * @param ds DataSource to count identifiers for.
+	   @return number of identifiers table for the given datasource
 	   @throws IDMapperException on failure
 	 */
 	final public int getGeneCount(DataSource ds) throws IDMapperException

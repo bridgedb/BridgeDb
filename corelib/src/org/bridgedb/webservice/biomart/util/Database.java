@@ -25,10 +25,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.bridgedb.impl.InternalUtils;
-import org.xml.sax.SAXException;
 
 /**
  * Database, corresponding to database/mart in BioMart.
@@ -95,6 +92,12 @@ public class Database {
         return datasets;
     }
 
+    /**
+     * look up a dataset by name.
+     * @param id the name of the dataset to look up
+     * @return the specified Dataset
+     * @throws IOException if the mart could not be accessed.
+     */
     public Dataset getDataset (String id) throws IOException
     {
     	return getAvailableDatasets().get(id);

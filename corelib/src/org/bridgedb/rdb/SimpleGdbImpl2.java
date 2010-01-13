@@ -242,7 +242,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 * Opens a connection to the Gene Database located in the given file.
 	 * A new instance of this class is created automatically.
 	 * @param dbName The file containing the Gene Database. 
-	 * @param newDbConnector An instance of DBConnector, to determine the type of database (e.g. DataDerby).
+	 * @param con An existing SQL Connector.
 	 * @param props PROP_RECREATE if you want to create a new database (possibly overwriting an existing one) 
 	 * 	or PROP_NONE if you want to connect read-only
 	 * @throws IDMapperException when the database could not be created or connected to

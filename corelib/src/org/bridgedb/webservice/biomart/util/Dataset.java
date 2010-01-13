@@ -176,6 +176,12 @@ public class Dataset
         return attributes;
     }    
 
+    /**
+     * look up an attribute by name.
+     * @param id the name of the attribute to look up
+     * @return the specified Attribute
+     * @throws IOException if the mart could not be accessed.
+     */
     public Attribute getAttribute(String id) throws IOException
     {
     	return getAttributes().get(id);
