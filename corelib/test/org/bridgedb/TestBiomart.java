@@ -134,6 +134,27 @@ public class TestBiomart extends TestCase
          }
     }
 
+    private String setRep(Set<Xref> refs)
+    {
+    	StringBuilder result = new StringBuilder("[");
+    	
+    	int remain = refs.size();
+    	int count = 0;
+    	
+    	for (Xref ref : refs)
+    	{
+    		result.append (ref);
+    		remain--;
+    		if (remain > 0) result.append (", ");
+    		count++;
+    		if (count > 3 && remain > 2) break;
+    	}
+    	if (remain > 0) result.append ("... " + remain + " more ...");
+    	
+    	result.append (")");
+    	return result.toString();
+    }
+    
     public void testBioMartMapping() throws IOException, IDMapperException, ClassNotFoundException
     {
         Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
@@ -148,6 +169,8 @@ public class TestBiomart extends TestCase
        {
     	   System.out.println (ref);
        }
-       assertTrue (result.contains (new Xref ("3643", DataSource.getByFullName("entrezgene"))));
+       
+       assertTrue ("Expected entrezgene:3643. Got " + setRep (result), 
+    		   result.contains (new Xref ("3643", DataSource.getByFullName("entrezgene"))));
    }
 }
