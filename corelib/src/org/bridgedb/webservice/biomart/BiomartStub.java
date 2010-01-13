@@ -162,13 +162,13 @@ public final class BiomartStub
      * @param dataset dataset name
      * @return dataset display name or null if not exist
      */
-    public String datasetDisplayName(String dataset) throws IOException 
+    public String datasetDisplayName(String mart, String dataset) throws IOException 
     {
         if (dataset==null) {
             return null;
         }
 
-        Dataset ds = client.getDataset(dataset);
+        Dataset ds = client.getMart(mart).getDataset(dataset);
         return ds==null?null:ds.displayName();
     }
 
@@ -192,7 +192,7 @@ public final class BiomartStub
 
         Map<String,Filter> filters;
         try {
-            filters = client.getDataset(dataset).getFilters();
+            filters = client.getMart(mart).getDataset(dataset).getFilters();
         } catch (IOException e) {
             throw new IDMapperException(e);
         }
@@ -247,14 +247,13 @@ public final class BiomartStub
 
         Map<String,Attribute> attributes;
         try {
-            attributes = client.getDataset(dataset).getAttributes();
+            attributes = client.getMart(mart).getDataset(dataset).getAttributes();
 
             Set<String> result = new HashSet<String>();
             for (String name : attributes.keySet()) {
             	if (name.trim().length()==0)
             		continue;
-            	String displayName = client.getAttribute(dataset, name)
-            	.getDisplayName();
+            	String displayName = attributes.get(name).getDisplayName();
             	if (idOnly == (displayName.endsWith("ID")
             			|| displayName.endsWith("Accession")
             			|| name.endsWith("id")
@@ -290,7 +289,7 @@ public final class BiomartStub
 
     	Attribute tgtAttr;
     	try {
-    		tgtAttr = client.filterToAttribute(dataset, srcType);
+    		tgtAttr = client.filterToAttribute(mart, dataset, srcType);
     		if (tgtAttr==null) {
     			return new HashMap<String, Set<String>[]>();
     		}
@@ -301,7 +300,7 @@ public final class BiomartStub
     		// prepare attributes
     		int iattr = 0;
     		for (String attr : tgtTypes) {
-    			attrs[iattr++] = client.getAttribute(dataset, attr);
+    			attrs[iattr++] = client.getMart(mart).getDataset(dataset).getAttribute(attr);
     		}
     		attrs[nAttr] = tgtAttr;
 

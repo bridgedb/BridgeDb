@@ -129,6 +129,8 @@ public class Dataset
                         + detail.get("serverVirtualSchema") + "&type=attributes&dataset="
                         + name;
 
+        System.out.println (urlStr);
+        
         URL url = new URL(urlStr);
         InputStream is = InternalUtils.getInputStream(url);
 
@@ -174,6 +176,11 @@ public class Dataset
         return attributes;
     }    
 
+    public Attribute getAttribute(String id) throws IOException
+    {
+    	return getAttributes().get(id);
+    }
+  
     /**
      *
      * @param name dataset name

@@ -105,45 +105,25 @@ public final class BiomartClient {
     }
 
     /**
-     * Convert filter to attribute according to the conversion file.
-     * @param dsName dataset name.
-     * @param dbName database name
-     * @param filterID filter ID
-     * @return converted attribute
-     * @throws IOException if failed to read from webservice
-     */
-    private Attribute filterToAttribute(String dsName, String dbName,
-                String filterID) throws IOException
-    {
-        if (filterConversionMap.get(dbName) == null) {
-            return null;
-        } else {
-            String attrName = filterConversionMap.get(dbName).get(filterID);
-            return this.getAttribute(dsName, attrName);
-        }
-    }
-
-    /**
-     *
+     * @param mart mart name
      * @param dataset dataset name
-     * @param filter filter name
+     * @param filter filter to convert
      * @return Attribute converted from filter
      * @throws IOException if failed to read from webservice
      */
-    public Attribute filterToAttribute(String dataset, String filter) throws IOException 
+    public Attribute filterToAttribute(String mart, String dataset, String filter) throws IOException 
     {
-        Attribute attr;
+    	String attrName;
         if (dataset.contains("REACTOME")) {
-            attr = filterToAttribute(dataset, "REACTOME", filter);
+            attrName = filterConversionMap.get("REACTOME").get(filter);
         } else if (dataset.contains("UNIPROT")) {
-            attr = filterToAttribute(dataset, "UNIPROT", filter);
+        	attrName = filterConversionMap.get("UNIPROT").get(filter);
         } else if (dataset.contains("VARIATION")) {
-            attr = getAttribute(dataset, filter + "_stable_id");
+            attrName = filter + "_stable_id";
         } else {
-            attr = getAttribute(dataset, filter);
+            attrName = filter;
         }
-
-        return attr;
+        return getMart(mart).getDataset(dataset).getAttribute(attrName);
     }
 
     /**
@@ -205,49 +185,6 @@ public final class BiomartClient {
     }
 
     /**
-     * Get filter.
-     * @param datasetName dataset name
-     * @param filterName filter name
-     * @throws IOException if failed to read webservice
-     * @return filter
-     */
-    public Filter getFilter(String datasetName, String filterName) throws IOException
-    {
-        if (datasetName==null || filterName==null) {
-            throw new java.lang.IllegalArgumentException("datasetName and filterName cannot be null");
-        }
-
-        Map<String, Filter> map = getDataset(datasetName).getFilters();
-        if (map==null) {
-            return null;
-        }
-
-        return map.get(filterName);
-    }
-
-    /**
-     * get Attribute.
-     * @param datasetName dataset name
-     * @param attrName attribute name
-     * @throws IOException if failed to read webservice
-     * @return attribute
-     */
-    public Attribute getAttribute(String datasetName, String attrName) throws IOException
-    {
-        if (datasetName==null || attrName==null) {
-            throw new NullPointerException("datasetName and attrName cannot be null");
-        }
-
-        Dataset dataset = getDataset(datasetName);
-        Map<String, Attribute> map = dataset.getAttributes();
-        if (map==null) {
-            return null;
-        }
-
-        return map.get(attrName);
-    }
-
-    /**
      * Send the XML query to Biomart, and get the result as table.
      * @param xmlQuery query xml
      * @return result {@link BufferedReader}
@@ -285,20 +222,4 @@ public final class BiomartClient {
     public Database getMart(final String dbname) {
         return marts.get(dbname);
     }
-
-    /**
-     * Scans all available marts for a Dataset.
-     * @param dsname dataset name
-     * @return dataset or null if none was found
-     * @throws IOException if failed to read webservice
-     */
-    public Dataset getDataset(final String dsname) throws IOException 
-    {
-    	for (Database db : marts.values())
-    	{
-    		Map<String, Dataset> datasets = db.getAvailableDatasets();
-    		if (datasets.containsKey(dsname)) return datasets.get(dsname);
-    	}
-    	return null; // not found.
-    }    
 }

@@ -95,6 +95,11 @@ public class Database {
         return datasets;
     }
 
+    public Dataset getDataset (String id) throws IOException
+    {
+    	return getAvailableDatasets().get(id);
+    }
+    
     /**
      *
      * @param dbname database name

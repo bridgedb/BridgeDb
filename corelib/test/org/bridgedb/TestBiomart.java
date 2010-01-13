@@ -100,40 +100,34 @@ public class TestBiomart extends TestCase
 
         //Set<Dataset> datasets = new HashSet(biomartStub.getAvailableDatasets("ensembl"));
 
-         IDMapperBiomart mapper = new IDMapperBiomart("ensembl", "hsapiens_gene_ensembl");
-         System.out.println("\n===Supported source data sources===");
-         for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
-         {
-        	 System.out.println (ds);
-         }
+        IDMapperBiomart mapper = new IDMapperBiomart("ensembl", "hsapiens_gene_ensembl");
+ 		Set<DataSource> dest = mapper.getCapabilities().getSupportedTgtDataSources(); 
+		 
+		assertTrue (dest.size() > 0);
+		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
 
-         System.out.println("\n===Supported target data sources===");
-         for (DataSource ds : mapper.getCapabilities().getSupportedTgtDataSources())
-         {
-        	 System.out.println (ds);
-         }
+		Set<DataSource> src = mapper.getCapabilities().getSupportedSrcDataSources();
+		assertTrue (src.size() > 0);
+		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
     }
 
     public void testBioMartConnector2() throws IOException, IDMapperException, ClassNotFoundException
     {
-        
-        Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
-        
-         //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
-        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
-        System.out.println("\n===Supported source data sources===");
-         for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
-         {
-        	 System.out.println (ds);
-         }
+		Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
+		
+		 //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
+		IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
+		Set<DataSource> dest = mapper.getCapabilities().getSupportedTgtDataSources(); 
+		 
+		assertTrue (dest.size() > 0);
+		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
 
-         System.out.println("\n===Supported target data sources===");
-         for (DataSource ds : mapper.getCapabilities().getSupportedTgtDataSources())
-         {
-        	 System.out.println (ds);
-         }
-    }
+		Set<DataSource> src = mapper.getCapabilities().getSupportedSrcDataSources();
+		assertTrue (src.size() > 0);
+		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
+	}
 
+    //TODO: put in Utility class
     private String setRep(Set<Xref> refs)
     {
     	StringBuilder result = new StringBuilder("[");
@@ -151,7 +145,7 @@ public class TestBiomart extends TestCase
     	}
     	if (remain > 0) result.append ("... " + remain + " more ...");
     	
-    	result.append (")");
+    	result.append ("]");
     	return result.toString();
     }
     
