@@ -40,12 +40,12 @@ public final class BridgeDb
 	 *   to be loaded.
 	 * @return the newly instantiated IDMapper
 	 * @throws IDMapperException when the right IDMapper implementation could not
-	 *   be instantiated 
+	 *   be instantiated, or when the connection string is not formatted correctly
 	 */
 	public static IDMapper connect(String connectionString) throws IDMapperException
 	{
 		int pos = connectionString.indexOf(":");
-		if (pos < 0) throw new IllegalArgumentException("connection String must be of the form 'protocol:location'");
+		if (pos < 0) throw new IDMapperException("connection String must be of the form 'protocol:location'");
 		String protocol = connectionString.substring(0, pos);
 		String location = connectionString.substring(pos + 1);
 		
