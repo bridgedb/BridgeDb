@@ -417,25 +417,28 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	private Set<Xref> mapIDtransitive(Xref ref, DataSource... resultDs) throws IDMapperException 
 	{
 		// first round
-		Set<Xref> round1 = new HashSet<Xref>();
-		for (IDMapper child : gdbs)
+		Set<Xref> result = new HashSet<Xref>();
+		for (IDMapper i : gdbs)
 		{
-			if (child != null && child.isConnected())
+			if (i == null || !i.isConnected()) continue;
+			
+			// map ref in IDMapper i
+			Set<Xref> round1 = i.mapID(ref);
+			
+			// then map the result of that in all IDMappers j (j != i)
+			for (IDMapper j : gdbs)
 			{
-				round1.addAll (child.mapID(ref));
-			}
+				if (j == null || !j.isConnected()) continue;
+				if (i == j) continue;
+				
+				Map<Xref, Set<Xref>> round2 = j.mapID(round1, resultDs); 
+				for (Xref key : round2.keySet())
+				{
+					result.addAll (round2.get (key));
+				}
+			}			
 		}
-		// second round
-		Set<Xref> round2 = new HashSet<Xref>();
-		for (IDMapper child : gdbs)
-		{
-			if (child != null && child.isConnected())
-			{
-				for (Set<Xref> set : child.mapID(round1, resultDs).values())
-					round2.addAll (set);
-			}
-		}
-		return round2;
+		return result;
 	}
 	
 	/**
