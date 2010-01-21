@@ -252,7 +252,8 @@ class SimpleGdbImpl2 extends SimpleGdb
 		super (con);
 		
 		if(dbName == null) throw new NullPointerException();
-
+		this.dbName = dbName;
+		
 		if ((props & DBConnector.PROP_RECREATE) == 0)
 		{
 			try
