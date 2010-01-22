@@ -43,14 +43,16 @@ mysql -u genmapp -pfun4genmapp -e "update ${Database}.info set species =replace(
 ## Dump MySQL-PathVisio Database to .sql
 # --net_buffer_length=30K (used to limit size of extended-inserts) 
 # --skip-extended-insert (used to force line-by-line inserts)
-mysqldump --compatible=db2 --no-create-info --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.temp
+mysqldump --compatible=db2 --no-create-info --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.data
+## Dump table creation statements separately for 2-step recontruction later (e.g., for bridgedb rest server)
+mysqldump --no-data -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.tables
 ## Dump table creation statements separately for 2-step recontruction later (e.g., for bridgedb rest server)
 mysqldump --no-data -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.tables
 
 ## Clean up dump file
 # Replace in emacs using esc-% (! = all occurances)
 # Replace in vi using :%s/old/new/g (use vi if file is too large for emacs)
-cat ${Database}.db2.sql.temp | sed "s/\/\*/--/g" | sed "s/\\\'/\'\'/g" > ${Database}.db2.sql
+cat ${Database}.db2.sql.data | sed "s/\/\*/--/g" | sed "s/\\\'/\'\'/g" > ${Database}.db2.sql
  	
 ## Create & Fill Derby via ij tool 
 #Setup Environment
