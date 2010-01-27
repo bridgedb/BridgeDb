@@ -61,7 +61,7 @@ bridgedb.version=${bridgedb.version}
   <target name="dist" depends="jar"/>
 
   	<taskdef resource="checkstyletask.properties"
-			 classpath="build-lib/checkstyle-all-5.0-beta01.jar"/>
+			 classpath="build-lib/checkstyle-all-5.0.jar"/>
 			 
 	<target name="test" depends="build">
 		<path id="test.classpath">
