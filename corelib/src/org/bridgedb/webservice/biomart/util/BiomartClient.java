@@ -49,7 +49,7 @@ public final class BiomartClient {
     public static final String DEFAULT_BASE_URL = "http://www.biomart.org/biomart/martservice";
     
     private final String baseURL;
-    private static final String RESOURCE = "filterconversion.txt";
+    private static final String RESOURCE = "/org/bridgedb/webservice/biomart/util/filterconversion.txt";
 
     // caches the result of getRegistry()
     private Map<String, Database> marts = null;
