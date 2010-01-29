@@ -121,7 +121,7 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
         }
 
         if (!stub.availableMarts().contains(mart)) {
-            throw new IDMapperException("Mart not exist.");
+            throw new IDMapperException("Mart " + mart + " doesn't exist.");
         }
 
         if (!stub.availableDatasets(mart).contains(dataset)) {
