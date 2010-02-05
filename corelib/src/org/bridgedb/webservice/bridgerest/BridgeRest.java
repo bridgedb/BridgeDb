@@ -54,7 +54,8 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException  {
-			return new BridgeRest(location);
+                	// replace all spaces by "%20" to access organisms such as "Arabidopsis theliana"
+			return new BridgeRest(location.replaceAll(" ", "%20"));
 		}
 	}
 
@@ -142,14 +143,20 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		public Set<DataSource> getSupportedSrcDataSources()
 			throws IDMapperException 
 		{
-			return loadDataSources("sourceDataSources");
+			if (supportedSrcDataSources==null) {
+				supportedSrcDataSources = loadDataSources("sourceDataSources");
+			}
+			return supportedSrcDataSources;
 		}
 
 		/** {@inheritDoc} */
 		public Set<DataSource> getSupportedTgtDataSources()
 			throws IDMapperException 
 		{
-			return loadDataSources("targetDataSources");
+			if (supportedTgtDataSources==null) {
+				supportedTgtDataSources = loadDataSources("targetDataSources");
+			}
+			return supportedTgtDataSources;
 		}
 
 		/** {@inheritDoc} */
@@ -179,6 +186,10 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 	private final String baseUrl;
 
 	private final IDMapperCapabilities capabilities;
+
+	private Set<DataSource> supportedSrcDataSources = null;
+	private Set<DataSource> supportedTgtDataSources = null;
+	private Set<String> attributeSet = null;
 
 	/**
 	 * Helper class for constructing URL of a BridgeRest webservice command.
@@ -445,20 +456,24 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 
 	/** {@inheritDoc} */
 	public Set<String> getAttributeSet() throws IDMapperException {
-		try {
-			Set<String> results = new HashSet<String>();
+		if (attributeSet==null) {
+			try {
+				Set<String> results = new HashSet<String>();
 
-			BufferedReader in = new UrlBuilder ("attributeSet")
-				.openReader();
-			String line;
-			while ((line = in.readLine()) != null) {
-				results.add(line);
+				BufferedReader in = new UrlBuilder ("attributeSet")
+					.openReader();
+				String line;
+				while ((line = in.readLine()) != null) {
+					results.add(line);
+				}
+				in.close();
+				attributeSet = results;
+			} catch (IOException ex) {
+				throw new IDMapperException (ex);
 			}
-			in.close();
-			return results;
-		} catch (IOException ex) {
-			throw new IDMapperException (ex);
-		} 
+                }
+
+                return attributeSet;
 	}
 
 	/** {@inheritDoc} */
