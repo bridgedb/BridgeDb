@@ -89,8 +89,6 @@ public class Dataset
                         + "&type=filters&dataset="
                         + name;
 
-        //System.out.println("Dataset name = " + datasetName + ", Target URL = "
-        //                      + urlStr + "\n");
         URL url = new URL(urlStr);
         InputStream is = InternalUtils.getInputStream(url);
 
@@ -128,8 +126,6 @@ public class Dataset
                         + detail.get("path") + "?virtualschema="
                         + detail.get("serverVirtualSchema") + "&type=attributes&dataset="
                         + name;
-
-        System.out.println (urlStr);
         
         URL url = new URL(urlStr);
         InputStream is = InternalUtils.getInputStream(url);
@@ -195,7 +191,10 @@ public class Dataset
      */
     public Dataset(String name, String displayName, Database database) 
     {
-		if (name == null) throw new NullPointerException("name may not be null");
+        if (name == null)
+            throw new NullPointerException("name may not be null.");
+        if (database==null)
+            throw new NullPointerException("database may not be null.");
     	this.name = name;
         this.displayName = displayName;
         this.database = database;
