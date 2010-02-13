@@ -43,16 +43,12 @@ mysql -u genmapp -pfun4genmapp -e "update ${Database}.info set species =replace(
 ## Dump MySQL-PathVisio Database to .sql
 # --net_buffer_length=30K (used to limit size of extended-inserts) 
 # --skip-extended-insert (used to force line-by-line inserts)
-mysqldump --compatible=db2 --no-create-info --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.data
-## Dump table creation statements separately for 2-step recontruction later (e.g., for bridgedb rest server)
-mysqldump --no-data -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.tables
-## Dump table creation statements separately for 2-step recontruction later (e.g., for bridgedb rest server)
-mysqldump --no-data -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.tables
+mysqldump --compatible=db2 --no-create-info --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K -u genmapp -pfun4genmapp ${Database} > ${Database}.db2.sql.temp
 
 ## Clean up dump file
 # Replace in emacs using esc-% (! = all occurances)
 # Replace in vi using :%s/old/new/g (use vi if file is too large for emacs)
-cat ${Database}.db2.sql.data | sed "s/\/\*/--/g" | sed "s/\\\'/\'\'/g" > ${Database}.db2.sql
+cat ${Database}.db2.sql.temp | sed "s/\/\*/--/g" | sed "s/\\\'/\'\'/g" > ${Database}.db2.sql
  	
 ## Create & Fill Derby via ij tool 
 #Setup Environment
@@ -67,6 +63,10 @@ java -XX:MaxPermSize=128m -Xmx1024m org.apache.derby.tools.ij PathVisioDerby_BUI
 mv ${Database} database
 zip -r -0 ${Database}.bridge database/
 mv database ${Database}
+
+## Beef up MySQL version of Derby databases for web service deployment
+mysql -u genmapp -pfun4genmapp < PathVisioMySQL_BEEF.sql
+mysqldump --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K -u genmapp -pfun4genmapp ${Database} > ${Database}.sql.dump
 
 # report on products (check size > 1.9M)
 ls -lh ${Database}.bridge | echo
