@@ -166,16 +166,8 @@ public class BioDataSource
 		"S", "Uniprot/TrEMBL").asDataSource();
 	public static final DataSource SNP = DataSource.register (
 		"Sn", "dbSNP").asDataSource();
-	public static final DataSource SYMBOL = DataSource.register (
-		"Sym", "Symbol").asDataSource();
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
 		"T", "GeneOntology").asDataSource();
-        public static final DataSource GOSLIM_CC = DataSource.register (
-                "Tc", "GOSlimCC").asDataSource();
-        public static final DataSource GOSlim_BP = DataSource.register (
-                "Tb", "GOSlimBP").asDataSource();
-        public static final DataSource GOSLIM_MF = DataSource.register (
-                "Tm", "GOSlimMF").asDataSource();
 	public static final DataSource TIGR = DataSource.register (
 		"Ti", "TIGR").asDataSource(); 
 	public static final DataSource UNIGENE = DataSource.register (
@@ -184,8 +176,6 @@ public class BioDataSource
 		"Uc", "UCSC Genome Browser").asDataSource();
 	public static final DataSource WORMBASE = DataSource.register (
 		"W", "WormBase").asDataSource();
-        public static final DataSource WIKIGENE = DataSource.register (
-                "Wg", "WikiGene").asDataSource();
 	public static final DataSource WIKIPEDIA = DataSource.register (
 		"Wi", "Wikipedia").asDataSource();
 	public static final DataSource WHEAT_GENE_CATALOG = DataSource.register (
