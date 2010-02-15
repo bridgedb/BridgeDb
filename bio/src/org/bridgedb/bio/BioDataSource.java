@@ -176,6 +176,8 @@ public class BioDataSource
 		"Uc", "UCSC Genome Browser").asDataSource();
 	public static final DataSource WORMBASE = DataSource.register (
 		"W", "WormBase").asDataSource();
+	public static final DataSource WIKIGENE = DataSource.register (
+		"Wg", "WikiGene").asDataSource();
 	public static final DataSource WIKIPEDIA = DataSource.register (
 		"Wi", "Wikipedia").asDataSource();
 	public static final DataSource WHEAT_GENE_CATALOG = DataSource.register (
