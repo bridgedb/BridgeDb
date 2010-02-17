@@ -15,7 +15,7 @@ Ecoli	Ec				gene	Escherichia coli	1	urn:bridgedb:ecoli
 EMBL	Em	http://www.ebi.ac.uk/embl	http://www.ebi.ac.uk/cgi-bin/emblfetch?style=html&id=$ID	AL030996	gene		1	urn:miriam:insdc
 Ensembl	En	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Search/Summary?_q=$ID	ENSG00000139618	gene		0	urn:miriam:ensembl
 Ensembl Mosquito	EnAg	http://www.ensembl.org	http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$ID	AGAP006864	gene	Anopheles gambiae	1	urn:bridgedb:ensembl.mosquito
-Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?_q=$ID	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1	urn:bridgedb:ensembl.arabidopsis
+Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$ID	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1	urn:bridgedb:ensembl.arabidopsis
 Ensembl B. subtilis	EnBs	http://www.ensembl.org	http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$ID	EBBACG00000000013	gene	Bacillus subtilis	1	urn:bridgedb:ensembl.bsubtilis
 Ensembl Cow	EnBt	http://www.ensembl.org	http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$ID	ENSBTAG00000043548	gene	Bos taurus	1	urn:bridgedb:ensembl.cow
 Ensembl C. elegans	EnCe	http://www.ensembl.org	http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$ID	Y42H9B.1	gene	Caenorhabditis elegans	1	urn:bridgedb:ensembl.celegans
