@@ -32,7 +32,7 @@ Ensembl Horse	EnQc	http://www.ensembl.org	http://www.ensembl.org/Equus_caballus/
 Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$ID	ENSRNOG00000016648	gene	Rattus norvegicus	1	urn:bridgedb:ensembl.rat
 Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$ID	YGR147C	gene	Saccharomyces cerevisiae	1	urn:bridgedb:ensembl.yeast
 Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$ID	ENSXETG00000029448	gene	Xenopus tropicalis	1	urn:bridgedb:ensembl.frog
-Gramene Maize	EnZm	http://www.ensembl.org  http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$ID	GRMZM2G174107	gene	Zea mays	1	urn:bridgedb:ensembl.maize
+Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$ID	GRMZM2G174107	gene	Zea mays	1	urn:bridgedb:ensembl.maize
 FlyBase	F		http://flybase.bio.indiana.edu/.bin/fbidq.html?$ID	FBgn0031208	gene	Drosophila melanogaster	1	urn:miriam:flybase
 GenBank	G				probe		0	urn:bridgedb:genbank
 CodeLink	Ge			GE86325	probe		0	urn:bridgedb:codelink
