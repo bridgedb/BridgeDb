@@ -201,6 +201,15 @@ public final class IDMapperPicr extends IDMapperWebservice implements AttributeM
 		return result.size() > 0;
 	}
 
+	/**
+	 *
+	 * @return false
+	 */
+	public boolean isFreeAttributeSearchSupported()
+	{
+		return false;
+	}
+
 	public Map<Xref, String> freeAttributeSearch(String query, String attrType,
 			int limit) throws IDMapperException 
 	{

@@ -43,6 +43,12 @@ public interface AttributeMapper
 	 */
 	public Map<String, Set<String>> getAttributes(Xref ref) throws IDMapperException;
 
+        /**
+         *
+         * @return true if free attribute search is supported, false otherwise.
+         */
+        public boolean isFreeAttributeSearchSupported();
+
 	/**
 	 * free text search for matching symbols.
 	 * @return map references and attribute values that match the query

@@ -369,6 +369,15 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
     }
 
     /**
+     *
+     * @return false
+     */
+    public boolean isFreeAttributeSearchSupported()
+    {
+        return false;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException {

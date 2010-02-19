@@ -660,6 +660,15 @@ class SimpleGdbImpl2 extends SimpleGdb
 	}
 
 	/**
+	 *
+	 * @return true
+	 */
+	public boolean isFreeAttributeSearchSupported()
+	{
+		return true;
+	}
+
+	/**
 	 * free text search for matching symbols.
 	 * @return references that match the query
 	 * @param query The text to search for

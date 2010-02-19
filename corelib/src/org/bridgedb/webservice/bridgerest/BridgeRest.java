@@ -408,6 +408,15 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		}
 	}
 
+	/**
+	 *
+	 * @return true
+	 */
+	public boolean isFreeAttributeSearchSupported()
+	{
+		return true;
+	}
+
 	/** {@inheritDoc} */
 	public Map<Xref, String> freeAttributeSearch(String query, String attrType,
 			int limit) throws IDMapperException {

@@ -580,6 +580,15 @@ class SimpleGdbImpl3 extends SimpleGdb
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
 	}
+
+	/**
+	 *
+	 * @return true
+	 */
+	public boolean isFreeAttributeSearchSupported()
+	{
+		return true;
+	}
 	
 	/**
 	 * free text search for matching symbols.

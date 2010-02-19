@@ -340,13 +340,32 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		return result;
 	}
 
+	/**
+	 * @return true if free attribute search is supported by one of the children
+	 */
+	public boolean isFreeAttributeSearchSupported()
+	{
+		// returns true if any returns true
+		// TODO: not sure if this is the right logic?
+		for (IDMapper child : IDMapperStack.this.gdbs)
+		{
+		        if (child != null && child instanceof AttributeMapper)
+		        {
+		        	if (((AttributeMapper)child).isFreeAttributeSearchSupported())
+					return true;
+		        }
+		}
+		return false;
+	}
+
 	/** {@inheritDoc} */
 	public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
 	{
 		Map<Xref, String> result = null;
 		for (IDMapper child : gdbs)
 		{
-			if (child != null && child instanceof AttributeMapper && child.isConnected())
+			if (child != null && child instanceof AttributeMapper && child.isConnected()
+				&& ((AttributeMapper)child).isFreeAttributeSearchSupported())
 			{
 				Map<Xref, String> childResult = 
 					((AttributeMapper)child).freeAttributeSearch(query, attrType, limit);
