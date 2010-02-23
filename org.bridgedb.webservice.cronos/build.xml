@@ -23,7 +23,7 @@
     </fileset>
   </path>
 
-  <target name="build" depends="prepare, cronosclient-axis">
+  <target name="build" depends="prepare">
 	<javac srcdir="src-axis"
 		   includes="**"
 		   debug="true"
@@ -52,7 +52,6 @@
 
   <target name="dist-clean" depends="clean">
 	<delete file="${jar.name}"/>
-	<delete dir="${src.axis}"/>
   </target>
 
   <target name="dist" depends="jar"/>
@@ -85,13 +84,14 @@
 	<property name="src.axis" value="src-axis"/>
 	<property name="build.wpclient.dir" value="build/wpclient" />
 	
-	<target name="cronosclient-axis">
+	<target name="update-axis">
 		<fail message="You must specify a url to the CRONOS web service WSDL: 
 			ant -Dwsdl.url=http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL [ant target]">
 			<condition>
 				<not> <isset property="wsdl.url"/> </not>
 			</condition>
 		</fail>
+		<delete dir="${src.axis}"/>
 		<java classpathref="class.path" fork="true" failonerror="true" classname="org.apache.axis.wsdl.WSDL2Java">
 			<arg value="-o" />
 			<arg value="${src.axis}" />
