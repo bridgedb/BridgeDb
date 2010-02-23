@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="bridgedb" default="dist" basedir=".">
   
-  <property file="corelib/version.props"/>
+  <property file="org.bridgedb/version.props"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
    <macrodef name="iterate">
@@ -9,13 +9,17 @@
 		<sequential>
 			<subant target="@{target}">
 				<filelist dir=".">
-					<file name="corelib/build.xml"/>
-					<file name="bio/build.xml"/>
-					<file name="batchmapper/build.xml"/>
-					<file name="webservice/build.xml"/>
-					<file name="picr/build.xml"/>
-					<file name="cronos/build.xml"/>
-					<file name="synergizer/build.xml"/>
+					<!-- NOTE: order is important! -->
+					<file name="org.bridgedb/build.xml"/>
+					<file name="org.bridgedb.bio/build.xml"/>
+					<file name="org.bridgedb.rdb/build.xml"/>
+					<file name="org.bridgedb.tools.batchmapper/build.xml"/>
+					<file name="org.bridgedb.server/build.xml"/>
+					<file name="org.bridgedb.webservice.picr/build.xml"/>
+					<file name="org.bridgedb.webservice.cronos/build.xml"/>
+					<file name="org.bridgedb.webservice.synergizer/build.xml"/>
+					<file name="org.bridgedb.webservice.biomart/build.xml"/>
+					<file name="org.bridgedb.webservice.bridgerest/build.xml"/>
 				</filelist>
 			</subant>
 		</sequential>
@@ -52,17 +56,17 @@
 			<include name="LICENSE-2.0.txt"/>
 			<include name="README.txt"/>
 			<include name="apidoc"/>
-			<include name="corelib/version.props"/>
+			<include name="org.bridgedb/version.props"/>
 			<include name="**/build.xml"/>
-			<include name="corelib/src/org/bridgedb/webservice/biomart/filterconversion.txt"/>
+			<include name="org.bridgedb.webservice.biomart/src/org/bridgedb/webservice/biomart/filterconversion.txt"/>
 			<include name="resources/*"/>
 			<include name="**/*.java"/>
 			<include name="**/*.jar"/>
-			<include name="benchmarking/*.txt"/>
+			<include name="org.bridgedb.tools.benchmarking/*.txt"/>
 			<exclude name="dist/*.jar"/>
-			<include name="webservice/gdb.config.template"/>
-			<include name="webservice/contrib/bridgedb-example.pl"/>
-			<include name="webservice/contrib/bridgedb-example.py"/>
+			<include name="org.bridgedb.server/gdb.config.template"/>
+			<include name="org.bridgedb.server/contrib/bridgedb-example.pl"/>
+			<include name="org.bridgedb.server/contrib/bridgedb-example.py"/>
 		</zipfileset>
 	</zip>
 	<tar destfile="${zipbase2}.tar.gz" compression="gzip">
@@ -99,9 +103,9 @@
 		<package name="org.bridgedb.rdb"/>
         <package name="org.bridgedb.webservice"/>
         <package name="org.bridgedb.webservice.biomart"/>
-		<sourcepath>			
-			<pathelement location="corelib/src"/>
-			<pathelement location="bio/src"/>
+		<sourcepath>
+			<pathelement location="org.bridgedb/src"/>
+			<pathelement location="org.bridgedb.bio/src"/>
 		</sourcepath>
 	</javadoc>
   </target> 

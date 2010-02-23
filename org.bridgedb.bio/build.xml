@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<project name="org.bridgedb.bio" default="dist" basedir=".">
+
+  <!-- always be java 1.5 compatible -->
+  <property name="ant.build.javac.target" value="1.5"/>
+  <property name="ant.build.javac.source" value="1.5"/>
+	
+  <property name="jar.name" value="../dist/org.bridgedb.bio.jar"/>
+  
+  <target name="prepare">
+	<mkdir dir="build"/>
+  </target>
+
+	<path id="class.path">
+		<pathelement location="../dist/org.bridgedb.jar"/>
+	</path>
+
+  <target name="build" depends="prepare">
+	<javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+		   <classpath refid="class.path"/>
+	</javac>
+    <copy file="../resources/datasources.txt"
+          todir="build/org/bridgedb/bio" />
+    <copy file="../resources/organisms.txt"
+          todir="build/org/bridgedb/bio" />
+  </target>
+  
+  <target name="jar" depends="build">
+	<jar jarfile="${jar.name}">
+	  <manifest>
+		<attribute name="Class-Path" value="derby.jar bridgedb.jar"/>
+	  </manifest>
+	  <fileset dir="build"/>
+	  <fileset dir="src" includes="**/*.properties"/>
+	</jar>
+  </target>
+
+  <target name="dist" depends="jar"/>
+
+  <target name="clean">
+	<delete dir="build"/>
+  </target>
+
+  <target name="dist-clean" depends="clean">
+	<delete file="${jar.name}"/>
+  </target>
+
+	<target name="test" depends="build">
+		<path id="test.classpath">
+			<path refid="class.path"/>
+			<pathelement location="build"/>
+			<pathelement location="../org.bridgedb/build-lib/junit.jar"/>
+		</path>
+		<javac srcdir="test" debug="true" 
+					includes="**"
+					destdir="build"
+					source="1.5">
+			<classpath refid="test.classpath"/>
+		</javac>		
+		<junit printsummary="on" haltonfailure="true" fork="true">
+			<formatter type="brief" usefile="false"/>
+			<classpath refid="test.classpath"/>
+			<batchtest>
+				<fileset dir="test">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+</project>

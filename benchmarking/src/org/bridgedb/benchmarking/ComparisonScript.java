@@ -35,7 +35,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
-import org.bridgedb.rest.Server;
+import org.bridgedb.server.Server;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;

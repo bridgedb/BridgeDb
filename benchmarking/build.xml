@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<project name="Benchmarking" default="jar" basedir=".">
+<project name="org.bridgedb.tools.benchmarking" default="jar" basedir=".">
 	
 	<path id="project.class.path">
 		<pathelement location="build"/>
 		<fileset dir="lib">
 			<include name="*.jar"/>
 		</fileset>
-		<pathelement location="../dist/bridgedb.jar"/>
+		<pathelement location="../dist/org.bridgedb.jar"/>
 		<pathelement location="../dist/derby.jar"/>
 		<!--TODO make sure corelib build is called first -->
 	</path>
