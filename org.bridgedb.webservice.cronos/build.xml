@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<project name="BridgeDb-Cronos" default="dist" basedir=".">
+<project name="org.bridgedb.webservice.cronos" default="dist" basedir=".">
 
   <!-- always be java 1.5 compatible -->
   <property name="ant.build.javac.target" value="1.5"/>
   <property name="ant.build.javac.source" value="1.5"/>
 	
-  <property name="jar.name" value="../dist/bridgedb-cronos.jar"/>
+  <property name="jar.name" value="../dist/org.bridgedb.webservice.cronos.jar"/>
   
   <target name="prepare">
 	<mkdir dir="build"/>
@@ -18,8 +18,8 @@
   <path id="class.path">
     <path refid="dependencies"/>
     <fileset dir="../dist">
-      <include name="bridgedb.jar"/>
-      <include name="bridgedb-bio.jar"/>
+      <include name="org.bridgedb.jar"/>
+      <include name="org.bridgedb.bio.jar"/>
     </fileset>
   </path>
 
