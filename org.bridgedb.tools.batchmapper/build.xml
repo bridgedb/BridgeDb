@@ -16,7 +16,7 @@
 	</target>
 	
 	<target name="clean" description="Remove all generated files.">
-		<delete dir="${build.dir}"/>
+		<delete dir="build"/>
 	</target>
 	
 	<target name="compile" depends="prepare" description="Compile all sources">
@@ -41,7 +41,7 @@
 		</jar>
 	</target>
 	
-	<target name="dist-clean" description="Remove all generated files.">
+	<target name="dist-clean" depends="clean" description="Remove all generated files.">
 		<delete file="${jar.file}"/>
 	</target>
 	

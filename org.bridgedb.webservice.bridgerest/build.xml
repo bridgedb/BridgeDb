@@ -54,7 +54,7 @@
   <target name="dist" depends="jar"/>
 
   	<taskdef resource="checkstyletask.properties"
-			 classpath="build-lib/checkstyle-all-5.0.jar"/>
+			 classpath="../org.bridgedb/build-lib/checkstyle-all-5.0.jar"/>
 			 
 	<target name="test" depends="build">
 		<!-- no tests yet... -->

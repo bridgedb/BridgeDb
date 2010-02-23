@@ -25,7 +25,11 @@
 		</sequential>
 	</macrodef>
 
-  <target name="dist" depends="doc">
+  <target name="build">
+		<iterate target="dist"/>
+	</target>
+
+  <target name="dist" depends="doc, build">
 		<iterate target="dist"/>
 	
 	<property name="zipbase" value="bridgedb-${bridgedb.version}"/>
@@ -58,7 +62,7 @@
 			<include name="apidoc"/>
 			<include name="org.bridgedb/version.props"/>
 			<include name="**/build.xml"/>
-			<include name="org.bridgedb.webservice.biomart/src/org/bridgedb/webservice/biomart/filterconversion.txt"/>
+			<include name="org.bridgedb.webservice.biomart/src/org/bridgedb/webservice/biomart/util/filterconversion.txt"/>
 			<include name="resources/*"/>
 			<include name="**/*.java"/>
 			<include name="**/*.jar"/>
@@ -77,6 +81,7 @@
 
   <target name="clean">
 		<iterate target="clean"/>
+		<delete dir="apidoc"/>
   </target>
 
   <target name="test">
@@ -85,6 +90,8 @@
 
   <target name="dist-clean">
 		<iterate target="dist-clean"/>
+		<delete dir="apidoc"/>
+		<delete dir="dist"/>
   </target>
 
    <target name="doc">
