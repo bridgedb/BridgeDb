@@ -62,7 +62,7 @@ public class IDMapperService extends Application {
 		if (!configFile.exists())
 		{
 			System.err.println ("Could not find config file " + configFile);
-			System.err.println ("Please copy webservice/gdb.config.template and adjust it to your needs");
+			System.err.println ("Please copy org.bridgedb.server/gdb.config.template and adjust it to your needs");
 			System.exit(1);
 		}
 	}

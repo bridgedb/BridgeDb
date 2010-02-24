@@ -25,9 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bridgedb.BridgeDb;
+import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.Organism;
-
 
 /**
  * Utility class that maintains a list of synonym databases and the species they
@@ -38,13 +39,13 @@ import org.bridgedb.bio.Organism;
  * If a database applies to all species (e.g. metabolites), use "*" as species.
  */
 public class GdbProvider {
-	Map<Organism, List<IDMapperRdb>> organism2gdb = new HashMap<Organism, List<IDMapperRdb>>();
-	List<IDMapperRdb> globalGdbs = new ArrayList<IDMapperRdb>();
+	Map<Organism, List<IDMapper>> organism2gdb = new HashMap<Organism, List<IDMapper>>();
+	List<IDMapper> globalGdbs = new ArrayList<IDMapper>();
 	
-	public void addOrganismGdb(Organism organism, IDMapperRdb gdb) {
-		List<IDMapperRdb> l = organism2gdb.get(organism);
+	public void addOrganismGdb(Organism organism, IDMapper gdb) {
+		List<IDMapper> l = organism2gdb.get(organism);
 		if(l == null) {
-			organism2gdb.put(organism, l = new ArrayList<IDMapperRdb>());
+			organism2gdb.put(organism, l = new ArrayList<IDMapper>());
 		}
 		if(!l.contains(gdb)) {
 			l.add(gdb);
@@ -52,24 +53,24 @@ public class GdbProvider {
 	}
 	
 	public void removeOrganismGdb(Organism organism, IDMapperRdb gdb) {
-		List<IDMapperRdb> l = organism2gdb.get(organism);
+		List<IDMapper> l = organism2gdb.get(organism);
 		if(l != null) {
 			l.remove(gdb);
 		}
 	}
 	
-	public void addGlobalGdb(IDMapperRdb gdb) {
+	public void addGlobalGdb(IDMapper gdb) {
 		if(!globalGdbs.contains(gdb)) globalGdbs.add(gdb);
 	}
 	
-	public void removeGlobalGdb(IDMapperRdb gdb) {
+	public void removeGlobalGdb(IDMapper gdb) {
 		globalGdbs.remove(gdb);
 	}
 	
-	public List<IDMapperRdb> getGdbs(Organism organism) {
-		List<IDMapperRdb> gdbs = organism2gdb.get(organism);
+	public List<IDMapper> getGdbs(Organism organism) {
+		List<IDMapper> gdbs = organism2gdb.get(organism);
 		if(gdbs == null) {
-			gdbs = new ArrayList<IDMapperRdb>();
+			gdbs = new ArrayList<IDMapper>();
 		}
 		gdbs.addAll(globalGdbs);
 		return gdbs;
@@ -77,25 +78,34 @@ public class GdbProvider {
 	
 	static final String DB_GLOBAL = "*";
 	
-	public static GdbProvider fromConfigFile(File f) throws IDMapperException, IOException {
-		System.out.println("Parsing gene database configuration: " + f);
+	public static GdbProvider fromConfigFile(File f) throws IDMapperException, IOException, ClassNotFoundException {
+		System.out.println("Parsing gene database configuration: " + f.getAbsolutePath());
 		GdbProvider gdbs = new GdbProvider();
 		BufferedReader in = new BufferedReader(new FileReader(f));
 		String line = in.readLine();
+		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
+		Class.forName("org.bridgedb.file.IDMapperText");
+		try
+		{
+			Class.forName ("com.mysql.jdbc.Driver");
+		}
+		catch (ClassNotFoundException ex)
+		{
+			System.out.println ("MySQL driver not in classpath, mysql backend unavailable");
+		}
 		while(line != null) {
 			String[] kv = line.split("\t");
 			if(kv.length == 2) {
 				String key = kv[0];
 				String value = kv[1];
+				
+				if (!value.startsWith("idmapper")) value = "idmapper-pgdb:" + value;
+				IDMapper mapper = BridgeDb.connect (value);
 				Organism org = Organism.fromLatinName(key);
 				if(org != null) {
-					DataDerby dbConn = new DataDerby();
-					SimpleGdb gdb = SimpleGdbFactory.createInstance(value, dbConn, DBConnector.PROP_NONE);
-					gdbs.addOrganismGdb(org, gdb);
+					gdbs.addOrganismGdb(org, mapper);
 				} else if(DB_GLOBAL.equalsIgnoreCase(key)) {
-					DataDerby dbConn = new DataDerby();
-					SimpleGdb gdb = SimpleGdbFactory.createInstance(value, dbConn, DBConnector.PROP_NONE);
-					gdbs.addGlobalGdb(gdb);
+					gdbs.addGlobalGdb(mapper);
 				} else {
 					System.out.println("Unable to parse organism: " + key);
 				}

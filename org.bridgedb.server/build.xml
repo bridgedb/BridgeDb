@@ -32,8 +32,8 @@
 	<mkdir dir="${dist.dir}"/>
 	<jar jarfile="${jar.name}">
 	  <manifest>
-	  	<attribute name="Main-Class" value="org.bridgedb.rest.Server"/>
-		<attribute name="Class-Path" value="derby.jar bridgedb.jar bridgedb-bio.jar org.restlet.jar"/>
+	  	<attribute name="Main-Class" value="org.bridgedb.server.Server"/>
+		<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar"/>
 	  </manifest>
 	  <fileset dir="build"/>
 	</jar>
