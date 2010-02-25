@@ -43,65 +43,66 @@ class SimpleGdbImpl2 extends SimpleGdb
 {		
 	private static final int GDB_COMPAT_VERSION = 2; //Preferred schema version
 	
-	private final SimpleGdb.LazyPst pstDatasources = new SimpleGdb.LazyPst(
+	private final SimpleGdb.QueryLifeCycle qDatasources = new SimpleGdb.QueryLifeCycle(
 			"SELECT codeRight FROM link GROUP BY codeRight"
 		);
-	private final SimpleGdb.LazyPst pstInfo = new SimpleGdb.LazyPst(
+	private final SimpleGdb.QueryLifeCycle qInfo = new SimpleGdb.QueryLifeCycle(
 			"SELECT * FROM info"
 		);
-	private final SimpleGdb.LazyPst pstXrefExists = new SimpleGdb.LazyPst(
+	private final SimpleGdb.QueryLifeCycle qXrefExists = new SimpleGdb.QueryLifeCycle(
 			"SELECT id FROM " + "datanode" + " WHERE " +
 			"id = ? AND code = ?"
 		);
-	private final SimpleGdb.LazyPst pstBackpage = new SimpleGdb.LazyPst(
+	private final SimpleGdb.QueryLifeCycle qBackpage = new SimpleGdb.QueryLifeCycle(
 			"SELECT backpageText FROM datanode " +
 			" WHERE id = ? AND code = ?"
 		);
-	private final SimpleGdb.LazyPst pstAttribute = new SimpleGdb.LazyPst(
+	private final SimpleGdb.QueryLifeCycle qAttribute = new SimpleGdb.QueryLifeCycle(
 			"SELECT attrvalue FROM attribute " +
 			" WHERE id = ? AND code = ? AND attrname = ?"
 		);
-	private final SimpleGdb.LazyPst pstAllAttributes = new SimpleGdb.LazyPst(
+	private final SimpleGdb.QueryLifeCycle qAllAttributes = new SimpleGdb.QueryLifeCycle(
 			"SELECT attrname, attrvalue FROM attribute " +
 			" WHERE id = ? AND code = ?"
 		);
-	private final SimpleGdb.LazyPst pstAttributesSet = new SimpleGdb.LazyPst(
+	private final SimpleGdb.QueryLifeCycle qAttributesSet = new SimpleGdb.QueryLifeCycle(
 			"SELECT attrname FROM attribute GROUP BY attrname"
 		);
-	private final SimpleGdb.LazyPst pstCrossRefs = new SimpleGdb.LazyPst (
+	private final SimpleGdb.QueryLifeCycle qCrossRefs = new SimpleGdb.QueryLifeCycle (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
 			"WHERE src.idRight = ? AND src.codeRight = ?"
 		);
-	private final SimpleGdb.LazyPst pstCrossRefsWithCode = new SimpleGdb.LazyPst (
+	private final SimpleGdb.QueryLifeCycle qCrossRefsWithCode = new SimpleGdb.QueryLifeCycle (
 			"SELECT dest.idRight, dest.codeRight FROM link AS src JOIN link AS dest " +
 			"ON src.idLeft = dest.idLeft and src.codeLeft = dest.codeLeft " +
 			"WHERE src.idRight = ? AND src.codeRight = ? AND dest.codeRight = ?"
 		);
-	private final SimpleGdb.LazyPst pstRefsByAttribute = new SimpleGdb.LazyPst (
+	private final SimpleGdb.QueryLifeCycle qRefsByAttribute = new SimpleGdb.QueryLifeCycle (
 			"SELECT datanode.id, datanode.code FROM datanode " +
 			" LEFT JOIN attribute ON attribute.code = datanode.code AND attribute.id = datanode.id " +
 			"WHERE attrName = ? AND attrValue = ?"
 		);
-	private final SimpleGdb.LazyPst pstFreeSearch = new SimpleGdb.LazyPst (
+	private final SimpleGdb.QueryLifeCycle qFreeSearch = new SimpleGdb.QueryLifeCycle (
 			"SELECT id, code FROM datanode WHERE " +
 			"LOWER(ID) LIKE ?"
 		);
-	private final SimpleGdb.LazyPst pstAttributeSearch = new SimpleGdb.LazyPst (
+	private final SimpleGdb.QueryLifeCycle qAttributeSearch = new SimpleGdb.QueryLifeCycle (
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
 		);
-	private final SimpleGdb.LazyPst pstIdSearchWithAttributes = new SimpleGdb.LazyPst (
+	private final SimpleGdb.QueryLifeCycle qIdSearchWithAttributes = new SimpleGdb.QueryLifeCycle (
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
 			"attrname = 'Symbol' AND LOWER(ID) LIKE ?"
 		);
-	
+
 	/** {@inheritDoc} */
 	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
+		final QueryLifeCycle pst = qXrefExists;
 		try 
 		{
-			PreparedStatement pst = pstXrefExists.getPreparedStatement();
+			pst.init();
 			pst.setString(1, xref.getId());
 			pst.setString(2, xref.getDataSource().getSystemCode());
 			ResultSet r = pst.executeQuery();
@@ -115,6 +116,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		{
 			throw new IDMapperException (e);
 		}
+		finally {pst.cleanup(); }
 		return false;
 	}
 
@@ -125,10 +127,11 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 */
 	private Map<String, String> getInfo() throws IDMapperException
 	{
+		final QueryLifeCycle pst = qInfo;
 		Map<String, String> result = new HashMap<String, String>();
 		try
 		{
-			PreparedStatement pst = pstInfo.getPreparedStatement();
+			pst.init();
 			ResultSet rs = pst.executeQuery();
 			
 			if (rs.next())
@@ -161,8 +164,9 @@ class SimpleGdbImpl2 extends SimpleGdb
 	 */
 	private String getBpInfo(Xref ref) throws IDMapperException 
 	{
+		final QueryLifeCycle pst = qBackpage;
 		try {
-			PreparedStatement pst = pstBackpage.getPreparedStatement();
+			pst.init();
 			pst.setString (1, ref.getId());
 			pst.setString (2, ref.getDataSource().getSystemCode());
 			ResultSet r = pst.executeQuery();
@@ -173,29 +177,22 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException (e); } //Gene not found
+		finally {pst.cleanup(); }
 	}
 
 	/** {@inheritDoc} */
 	public Set<Xref> mapID (Xref idc, DataSource... resultDs) throws IDMapperException
 	{
+		final QueryLifeCycle pst = resultDs.length != 1 ? qCrossRefs : qCrossRefsWithCode;
 		Set<Xref> refs = new HashSet<Xref>();
 		
 		if (idc.getDataSource() == null) return refs;
 		try
 		{
-			PreparedStatement pst;
-			if (resultDs.length != 1)
-			{
-				pst = pstCrossRefs.getPreparedStatement();
-			}
-			else
-			{
-				pst = pstCrossRefsWithCode.getPreparedStatement();
-				pst.setString(3, resultDs[0].getSystemCode());
-			}
-			
+			pst.init();
 			pst.setString(1, idc.getId());
 			pst.setString(2, idc.getDataSource().getSystemCode());
+			if (resultDs.length == 1) pst.setString(3, resultDs[0].getSystemCode());			
 			
 			Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
 
@@ -213,6 +210,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		{
 			throw new IDMapperException (e);
 		}
+		finally {pst.cleanup(); }
 		
 		return refs;
 	}
@@ -221,9 +219,9 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public List<Xref> getCrossRefsByAttribute(String attrName, String attrValue) throws IDMapperException {
 //		Logger.log.trace("Fetching cross references by attribute: " + attrName + " = " + attrValue);
 		List<Xref> refs = new ArrayList<Xref>();
-
+		final QueryLifeCycle pst = qRefsByAttribute;
 		try {
-			PreparedStatement pst = pstRefsByAttribute.getPreparedStatement();
+			pst.init();
 			pst.setString(1, attrName);
 			pst.setString(2, attrValue);
 			ResultSet r = pst.executeQuery();
@@ -234,6 +232,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		} catch(SQLException e) {
 			throw new IDMapperException (e);
 		}
+		finally {pst.cleanup(); }
 //		Logger.log.trace("End fetching cross references by attribute");
 		return refs;
 	}
@@ -372,16 +371,11 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public Set<Xref> freeSearch (String text, int limit) throws IDMapperException 
 	{		
 		Set<Xref> result = new HashSet<Xref>();
+		final QueryLifeCycle pst = qFreeSearch;
 		try {
-			PreparedStatement ps1 = pstFreeSearch.getPreparedStatement();
-			ps1.setQueryTimeout(QUERY_TIMEOUT);
-			if(limit > NO_LIMIT) 
-			{
-				ps1.setMaxRows(limit);
-			}
-
-			ps1.setString(1, "%" + text.toLowerCase() + "%");
-			ResultSet r = ps1.executeQuery();
+			pst.init(limit);
+			pst.setString(1, "%" + text.toLowerCase() + "%");
+			ResultSet r = pst.executeQuery();
 			while(r.next()) {
 				String id = r.getString(1);
 				DataSource ds = DataSource.getBySystemCode(r.getString(2));
@@ -393,6 +387,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		{
 			throw new IDMapperException(e);
 		}
+		finally {pst.cleanup(); }
 		return result;
 	}
 	
@@ -529,9 +524,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 	private Set<DataSource> getDataSources() throws IDMapperException
 	{
 		Set<DataSource> result = new HashSet<DataSource>();
+		final QueryLifeCycle pst = qDatasources;
     	try
     	{
-    	 	PreparedStatement pst = pstDatasources.getPreparedStatement();
+    	 	pst.init();
     	 	ResultSet rs = pst.executeQuery();
     	 	while (rs.next())
     	 	{
@@ -543,6 +539,7 @@ class SimpleGdbImpl2 extends SimpleGdb
     	{
     		throw new IDMapperException(ignore);
     	}
+		finally {pst.cleanup(); }
     	return result;
 	}
 	
@@ -584,6 +581,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			throws IDMapperException 
 	{
 		Set<String> result = new HashSet<String>();
+		final QueryLifeCycle pst = qAttribute;
 		
 		if (ATTRIBUTES_FROM_BACKPAGE.containsKey(attrname))
 		{
@@ -600,7 +598,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 		
 		try {
-			PreparedStatement pst = pstAttribute.getPreparedStatement();
+			pst.init();
 			pst.setString (1, ref.getId());
 			pst.setString (2, ref.getDataSource().getSystemCode());
 			pst.setString (3, attrname);
@@ -611,6 +609,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref + ", Attribute: " + attrname, e); } // Database unavailable
+		finally {pst.cleanup(); }
 	}
 
 	/** {@inheritDoc} */
@@ -618,6 +617,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			throws IDMapperException 
 	{
 		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
+		final QueryLifeCycle pst = qAllAttributes;
 				
 		String bpInfo = getBpInfo(ref);
 		if (bpInfo != null)
@@ -636,7 +636,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		}
 		
 		try {
-			PreparedStatement pst = pstAllAttributes.getPreparedStatement();
+			pst.init();
 			pst.setString (1, ref.getId());
 			pst.setString (2, ref.getDataSource().getSystemCode());
 			ResultSet r = pst.executeQuery();
@@ -657,6 +657,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 			}
 			return result;
 		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
+		finally {pst.cleanup(); }
 	}
 
 	/**
@@ -679,11 +680,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public Map<Xref, String> freeAttributeSearch (String query, String attrType, int limit) throws IDMapperException
 	{
 		Map<Xref, String> result = new HashMap<Xref, String>();
+		final QueryLifeCycle pst = (MATCH_ID.equals (attrType)) ? 
+				qIdSearchWithAttributes : qAttributeSearch;
 		try {
-			PreparedStatement pst = (MATCH_ID.equals (attrType)) ? 
-					pstIdSearchWithAttributes.getPreparedStatement() : pstAttributeSearch.getPreparedStatement();
-			pst.setQueryTimeout(QUERY_TIMEOUT);
-			if(limit > NO_LIMIT) pst.setMaxRows(limit);
+			pst.init(limit);
 			pst.setString(1, "%" + query.toLowerCase() + "%");
 			ResultSet r = pst.executeQuery();
 
@@ -697,6 +697,7 @@ class SimpleGdbImpl2 extends SimpleGdb
 		} catch (SQLException e) {
 			throw new IDMapperException (e);
 		}
+		finally {pst.cleanup(); }
 		return result;		
 	}
 
@@ -704,9 +705,10 @@ class SimpleGdbImpl2 extends SimpleGdb
 	public Set<String> getAttributeSet() throws IDMapperException 
 	{
 		Set<String> result = new HashSet<String>();
+		final QueryLifeCycle pst = qAttributesSet;
     	try
     	{
-    	 	PreparedStatement pst = pstAttributesSet.getPreparedStatement();
+    	 	pst.init();
     	 	ResultSet rs = pst.executeQuery();
     	 	while (rs.next())
     	 	{
@@ -717,6 +719,7 @@ class SimpleGdbImpl2 extends SimpleGdb
     	{
     		throw new IDMapperException(ignore);
     	}
+		finally {pst.cleanup(); }
     	return result;
 	}
 }

@@ -16,6 +16,7 @@
 //
 package org.bridgedb.rdb;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,42 +61,116 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 		this.con = con;
 	}
 	
+	private boolean keepConnection = true;
+
 	/**
-	 * helper class that handles lazy initialization of all prepared statements used by SimpleGdb
-	 * Non-static, because it needs the con database connection field.
+	 * helper class that handles the life cycle of a connection, query and resultset.
+	 * <p>
+	 * The sql for a query is passed in at construction time.
+	 * Before each query, call init(). This will lead to lazy initialization of the
+	 * connection and preparedstatement objects, if necessary. Set the query parameters
+	 * using setString(int, String). Get the resultSet using 
+	 * Do not close the resultset! This will be closed for you when you call cleanup().
+	 * Always call cleanup() in a finally block.
+	 * <p>
+	 * The advantages of using QueryLifeCycle are:
+	 * <ul>
+	 * <li>guarantee to close preparedstatement, resultset and connection if necessary.
+	 * <li>in case of connection pooling, preparedstatement and connection are kept together as long
+	 *   as possible.
+	 * <li>lazy initialization of prepared statement
+	 * <li>always uses preparedstatement, so safe from SQL injection.
+	 * </ul> 
+	 * <p>
+	 * This class is not static because it needs SimpleGdb.getConnection().
 	 */
-	protected final class LazyPst
+	final class QueryLifeCycle
 	{
 		/**
 		 * Initialize with given SQL string, but don't create PreparedStatement yet.
 		 * Valid to call before database connection is created.
 		 * @param aSql SQL query
 		 */
-		public LazyPst(String aSql)
+		public QueryLifeCycle(String aSql)
 		{
 			sql = aSql;
 		}
 		
+		private Connection con = null;
+		private ResultSet rs = null;
 		private PreparedStatement pst = null;
 		private final String sql;
+		private boolean inited = false;
+
+		public static final int QUERY_TIMEOUT = 20; //seconds
+		public static final int NO_LIMIT = 0;
+		public static final int NO_TIMEOUT = 0;
+
+		public void init(int limit) throws SQLException
+		{
+			init();
+			pst.setQueryTimeout(QUERY_TIMEOUT);			
+			if(limit > NO_LIMIT) 
+			{
+				pst.setMaxRows(limit);
+			}
+		}
 		
 		/**
-		 * Get a PreparedStatement using lazy initialization.
+		 * Initialize connection and PreparedStatement lazily.
 		 * <p>
-		 * Assumes SimpleGdbImpl2.con is already valid
-		 * @return a prepared statement for the given query.
 		 * @throws SQLException when a PreparedStatement could not be created
 		 */
-		public PreparedStatement getPreparedStatement() throws SQLException
+		public void init() throws SQLException
 		{
-			if (pst == null)
+			if (inited) throw new IllegalStateException("Must call cleanup() between two init() calls");
+			try
 			{
-				pst = con.prepareStatement(sql);
+				if (con == null) con = getConnection();
+				if (pst == null)
+				{
+					pst = con.prepareStatement(sql);
+				}
 			}
-			return pst;
+			finally { inited = true; }
+		}
+		
+		public void setString (int index, String val) throws SQLException
+		{
+			if (!inited) throw new IllegalStateException("Must call init() before setString()");
+			pst.setString(index, val);
+		}
+		
+		public ResultSet executeQuery() throws SQLException
+		{
+			if (!inited) throw new IllegalStateException("Must call init() before executeQuery()");
+			rs = pst.executeQuery();
+			return rs;
+		}
+
+		/** 
+		 * Clean up resultset. If keepConnection is false, preparedstatement
+		 * and connection are cached. If keepConnection is true, they are closed as well.
+		 * The later is useful when using connection pooling.
+		 * <p>
+		 * Always call this in a finally block! 
+		 * */
+		public void cleanup()
+		{
+			if (!inited) throw new IllegalStateException("Must call init() before cleanup()");
+			inited = false;
+			if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+			if (keepConnection) return;
+			if (pst != null) try { pst.close(); } catch (SQLException ignore) {}
+			if (con != null) try { con.close(); } catch (SQLException ignore) {}
 		}
 	}
-
+	
+	protected Connection getConnection() throws SQLException
+	{
+		return con;
+	}
+	
 	/**
 	 * The {@link Connection} to the Gene Database.
 	 */
