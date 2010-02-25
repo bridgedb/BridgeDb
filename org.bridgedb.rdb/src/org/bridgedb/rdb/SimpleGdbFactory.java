@@ -33,44 +33,6 @@ public final class SimpleGdbFactory
 	/** private constructor prevents instantiation. */
 	private SimpleGdbFactory() {};
 	
-	static final int LATEST_SCHEMA_VERSION = 3;
-
-	/**
-	 * Older method to open a connection to a Gene database
-	 * using a DBConnector to handle differences
-	 * between different RDBMS-es. The other createInstance() is preferred.
-	 * <p>
-	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
-	 * @param dbName The file containing the Gene Database. 
-	 * @param newDbConnector handles the differences between types of RDBMS.
-	 * A new instance of DbConnector class is instantiated automatically.
-	 * @param props PROP_RECREATE if you want to create a new database, overwriting any existing ones. Otherwise, PROP_NONE.
-	 * @return a new Gdb
-	 * @throws IDMapperException on failure
-	*/
-	public static SimpleGdb createInstance(String dbName, DBConnector newDbConnector, int props) throws IDMapperException
-	{
-		DBConnector dbConnector;
-		Connection con;
-
-		try
-		{
-			// create a fresh db connector of the correct type.
-			dbConnector = newDbConnector.getClass().newInstance();
-		}
-		catch (InstantiationException e)
-		{
-			throw new IDMapperException (e);
-		} 
-		catch (IllegalAccessException e) 
-		{
-			throw new IDMapperException (e);
-		}
-		con = dbConnector.createConnection(dbName, props);
-		
-		return createInstance(dbName, con, props);
-	}
-
 	/**
 	 * Opens a connection to the Gene Database located in the given file.
 	 * <p>
@@ -81,36 +43,27 @@ public final class SimpleGdbFactory
 	 * @return a new Gdb
 	 * @throws IDMapperException on failure
 	*/
-	public static SimpleGdb createInstance(String dbName, Connection con, int props) throws IDMapperException
+	public static SimpleGdb createInstance(String dbName, Connection con) throws IDMapperException
 	{
 		if(dbName == null) throw new NullPointerException();	
 
 		int version = 0;
-		if ((props & DBConnector.PROP_RECREATE) == 0)
+		try 
 		{
-			// read database and try to determine version
-			
-			try 
-			{
-				ResultSet r = con.createStatement().executeQuery("SELECT schemaversion FROM info");
-				if(r.next()) version = r.getInt(1);
-			} 
-			catch (SQLException e) 
-			{
-				//Ignore, older db's don't even have schema version
-			}			
-		}
-		else
+			ResultSet r = con.createStatement().executeQuery("SELECT schemaversion FROM info");
+			if(r.next()) version = r.getInt(1);
+		} 
+		catch (SQLException e) 
 		{
-			version = LATEST_SCHEMA_VERSION;
-		}
+			//Ignore, older db's don't even have schema version
+		}			
 		
 		switch (version)
 		{
 		case 2:
-			return new SimpleGdbImpl2(dbName, con, props);
+			return new SimpleGdbImpl2(dbName, con);
 		case 3:
-			return new SimpleGdbImpl3(dbName, con, props);
+			return new SimpleGdbImpl3(dbName, con);
 		//NB add future schema versions here
 		default:
 			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +

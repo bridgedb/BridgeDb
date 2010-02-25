@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.rdb;
+package org.bridgedb.rdb.construct;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -57,4 +57,19 @@ public interface GdbConstruct
 	   @throws IDMapperException on failure
 	 */
 	public void createGdbIndices() throws IDMapperException;   
+
+	/**
+	   prepare for inserting genes and/or links.
+	   @throws IDMapperException on failure
+	 */
+	public void preInsert() throws IDMapperException;
+	
+	/**
+	 * Excecutes several SQL statements to create the tables and indexes in the database the given
+	 * connection is connected to
+	 * Note: Official GDB's are created by Alex Pico's script, not with this code.
+	 * This is just here for testing purposes.
+	 */
+	abstract public void createGdbTables();	
+
 }

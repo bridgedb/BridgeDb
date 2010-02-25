@@ -9,7 +9,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
-import org.bridgedb.rdb.DBConnectorDerbyServer;
+import org.bridgedb.rdb.construct.DBConnectorDerbyServer;
 
 import buildsystem.Measure;
 

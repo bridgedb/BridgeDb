@@ -16,7 +16,6 @@
 //
 package org.bridgedb.rdb;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,7 +49,7 @@ import org.bridgedb.IDMapperException;
  * and use SimpleGdb directly 
  * to create or connect to one or more pgdb's of any type.
  */
-public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
+public abstract class SimpleGdb extends IDMapperRdb
 {
 	/**
 	 * Create IDMapper based on an existing SQL connection.
@@ -175,8 +174,6 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	 * The {@link Connection} to the Gene Database.
 	 */
 	protected Connection con = null;
-	// dbConnector, helper class for dealing with RDBMS specifcs.
-	private DBConnector dbConnector;
 
 	/** {@inheritDoc} */
 	final public boolean isConnected() { return con != null; }
@@ -190,7 +187,6 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 	final public void close() throws IDMapperException 
 	{
 		if (con == null) throw new IDMapperException("Database connection already closed");
-		if (dbConnector != null) dbConnector.closeConnection(con);
 		try
 		{
 			con.close();
@@ -201,40 +197,10 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 		}
 		con = null;
 	}
-
-	/**
-	 * Excecutes several SQL statements to create the tables and indexes in the database the given
-	 * connection is connected to
-	 * Note: Official GDB's are created by Alex Pico's script, not with this code.
-	 * This is just here for testing purposes.
-	 */
-	abstract public void createGdbTables();
 	
 	public static final int NO_LIMIT = 0;
 	public static final int NO_TIMEOUT = 0;
 	public static final int QUERY_TIMEOUT = 5; //seconds
-
-	/**
-	   prepare for inserting genes and/or links.
-	   @throws IDMapperException on failure
-	 */
-	abstract public void preInsert() throws IDMapperException;
-
-	/**
-	   commit inserted data.
-	   @throws IDMapperException on failure
-	 */
-	final public void commit() throws IDMapperException
-	{
-		try
-		{
-			con.commit();
-		}
-		catch (SQLException e)
-		{
-			throw new IDMapperException (e);
-		}
-	}
 
 	/**
 	   @return number of rows in gene table.
@@ -279,28 +245,5 @@ public abstract class SimpleGdb extends IDMapperRdb implements GdbConstruct
 		}
 		return result;
 	}
-	
-	/**
-	   compact the database.
-	   @throws IDMapperException on failure
-	 */
-	final public void compact() throws IDMapperException
-	{
-		dbConnector.compact(con);
-	}
-	
-	/**
-	   finalize the database.
-	   @throws IDMapperException on failure
-	 */
-	final public void finalize() throws IDMapperException
-	{
-		dbConnector.compact(con);
-		createGdbIndices();
-		dbConnector.closeConnection(con, DBConnector.PROP_FINALIZE);
-		String newDb = dbConnector.finalizeNewDatabase(dbName);
-		dbName = newDb;
-	}
-
 	
 }

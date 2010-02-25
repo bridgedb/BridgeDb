@@ -48,9 +48,10 @@ public class Test extends TestCase
 		long start, end, delta;
 		start = System.currentTimeMillis();
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
-		DBConnectorDerbyServer.init ("wikipathways.org", 1527);
-		IDMapper mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens");
-		IDMapper mapper2 = BridgeDb.connect ("idmapper-derbyclient:metabolites");
+		Class.forName ("org.apache.derby.jdbc.ClientDriver");
+		
+		IDMapper mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens?host=137.120.14.24");
+		IDMapper mapper2 = BridgeDb.connect ("idmapper-derbyclient:metabolites?host=137.120.14.24");
 		end = System.currentTimeMillis();
 		delta = end - start;
 		measure.add ("timing::idmapper-derbyclient connect to two databases", "" + delta, "msec");

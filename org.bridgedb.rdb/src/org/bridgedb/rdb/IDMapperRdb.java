@@ -16,11 +16,14 @@
 //
 package org.bridgedb.rdb;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.bridgedb.AttributeMapper;
@@ -52,7 +55,16 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException 
 		{
-			return SimpleGdbFactory.createInstance(location, new DataDerby(), 0);
+			try
+			{
+				String url = "jdbc:derby:jar:(" + location + ")database";
+				Connection con = DriverManager.getConnection(url);
+				return SimpleGdbFactory.createInstance(location, con);
+			}
+			catch (SQLException ex)
+			{
+				throw new IDMapperException(ex);
+			}
 		}
 	}
 
@@ -66,9 +78,9 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 		{
 			try
 			{
-				Connection con = DriverManager.getConnection("jdbc:" + location);
-			
-				return SimpleGdbFactory.createInstance(location, con, 0);
+				String url = "jdbc:" + location;
+				Connection con = DriverManager.getConnection(url);
+				return SimpleGdbFactory.createInstance(location, con);
 			}
 			catch (SQLException ex)
 			{
@@ -85,9 +97,38 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException 
 		{
-			//TODO: make port and host configurable
-			DBConnectorDerbyServer.init ("wikipathways.org", 1527);
-			return SimpleGdbFactory.createInstance(location, new DBConnectorDerbyServer(), 0);
+			try
+			{
+	            Map<String, String> args = 
+	            	InternalUtils.parseLocation(location, "host", "port");
+
+	            if (!args.containsKey("BASE")) 
+	            	throw new IllegalArgumentException("Expected species name in connection string: " + location);
+
+	            String host = args.containsKey("host") ? args.get("host") : "wikipathways.org";
+	            String port = args.containsKey("port") ? args.get("port") : "1527";
+	            
+				Class.forName("org.apache.derby.jdbc.ClientDriver");
+				Properties sysprop = System.getProperties();
+				sysprop.setProperty("derby.storage.tempDirectory", System.getProperty("java.io.tmpdir"));
+				sysprop.setProperty("derby.stream.error.file", File.createTempFile("derby",".log").toString());
+				
+				String url = "jdbc:derby://" + host + ":" + port + "/" + args.get("BASE");
+				Connection con = DriverManager.getConnection(url);
+				return SimpleGdbFactory.createInstance(location, con);
+			}
+			catch (SQLException f)
+			{
+				throw new IDMapperException (f);
+			}
+			catch (IOException e)
+			{
+				throw new IDMapperException (e);
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new IDMapperException (e);
+			}
 		}
 	}
 	

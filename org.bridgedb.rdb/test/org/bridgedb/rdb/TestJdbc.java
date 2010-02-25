@@ -13,7 +13,7 @@ public class TestJdbc extends TestCase
 	{
 		Class.forName ("com.mysql.jdbc.Driver");
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
-		String connectString = "idmapper-jdbc:mysql://localhost/Celegans?user=bridgedb&password=bridgedb";
+		String connectString = "idmapper-jdbc:mysql://localhost/worm?user=bridgedb";
 		
 		IDMapper mapper = BridgeDb.connect(connectString);
 		

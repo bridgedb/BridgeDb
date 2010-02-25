@@ -24,12 +24,12 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.DataDerby;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
 
@@ -80,12 +80,13 @@ public class Test2 extends TestCase
 	{
 		// test special attributes that are grabbed from backpage
 		// since this is a Schema v2 database
-		SimpleGdb gdb = SimpleGdbFactory.createInstance (GDB_HUMAN, new DataDerby(), 0);
+		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
+		AttributeMapper am = (AttributeMapper)gdb;
 		Xref ref = new Xref ("26873", DataSource.getBySystemCode("L"));
-		assertTrue (gdb.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZP434H244|OPLA"));
-		assertTrue (gdb.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9) (5-oxo-L-prolinase) (5-OPase) (Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
-		assertTrue (gdb.getAttributes(ref, "Chromosome").contains ("8"));
-		assertTrue (gdb.getAttributes(ref, "Symbol").contains ("OPLAH"));
+		assertTrue (am.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZP434H244|OPLA"));
+		assertTrue (am.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9) (5-oxo-L-prolinase) (5-OPase) (Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
+		assertTrue (am.getAttributes(ref, "Chromosome").contains ("8"));
+		assertTrue (am.getAttributes(ref, "Symbol").contains ("OPLAH"));
 		
 		Set<String> allExpectedAttributes = new HashSet<String>();
 		allExpectedAttributes.add ("26873");

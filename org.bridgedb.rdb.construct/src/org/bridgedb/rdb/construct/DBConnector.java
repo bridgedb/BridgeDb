@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.rdb;
+package org.bridgedb.rdb.construct;
 
 import java.sql.Connection;
 import java.sql.SQLException;
