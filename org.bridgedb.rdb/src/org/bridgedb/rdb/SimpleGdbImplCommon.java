@@ -1,6 +1,5 @@
 package org.bridgedb.rdb;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -23,9 +22,9 @@ import org.bridgedb.Xref;
  */
 public abstract class SimpleGdbImplCommon extends SimpleGdb
 {
-	SimpleGdbImplCommon(Connection con) throws IDMapperException
+	SimpleGdbImplCommon(String dbName, String connectionString) throws IDMapperException
 	{
-		super(con);
+		super(dbName, connectionString);
 		caps = new SimpleGdbCapabilities();
 	}
 
@@ -82,24 +81,26 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
 		final QueryLifeCycle pst = qXrefExists;
-		try 
-		{
-			pst.init();
-			pst.setString(1, xref.getId());
-			pst.setString(2, xref.getDataSource().getSystemCode());
-			ResultSet r = pst.executeQuery();
-
-			while(r.next()) 
+		synchronized (pst) {
+			try 
 			{
-				return true;
+				pst.init();
+				pst.setString(1, xref.getId());
+				pst.setString(2, xref.getDataSource().getSystemCode());
+				ResultSet r = pst.executeQuery();
+	
+				while(r.next()) 
+				{
+					return true;
+				}
+			} 
+			catch (SQLException e) 
+			{
+				throw new IDMapperException (e);
 			}
-		} 
-		catch (SQLException e) 
-		{
-			throw new IDMapperException (e);
+			finally {pst.cleanup(); }
+			return false;
 		}
-		finally {pst.cleanup(); }
-		return false;
 	}
 
 	/**
@@ -109,30 +110,32 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	 */
 	Map<String, String> getInfo() throws IDMapperException
 	{
-		final QueryLifeCycle pst = qInfo;
 		Map<String, String> result = new HashMap<String, String>();
-		try
-		{
-			pst.init();
-			ResultSet rs = pst.executeQuery();
-			
-			if (rs.next())
+		final QueryLifeCycle pst = qInfo;
+		synchronized (pst) {
+			try
 			{
-				ResultSetMetaData rsmd = rs.getMetaData();
-				for (int i = 1; i <= rsmd.getColumnCount(); ++i)
+				pst.init();
+				ResultSet rs = pst.executeQuery();
+				
+				if (rs.next())
 				{
-					String key = rsmd.getColumnName(i);
-					String val = rs.getString(i);
-					result.put (key, val);
+					ResultSetMetaData rsmd = rs.getMetaData();
+					for (int i = 1; i <= rsmd.getColumnCount(); ++i)
+					{
+						String key = rsmd.getColumnName(i);
+						String val = rs.getString(i);
+						result.put (key, val);
+					}
 				}
 			}
+			catch (SQLException ex)
+			{
+				throw new IDMapperException (ex);
+			}
+			
+			return result;
 		}
-		catch (SQLException ex)
-		{
-			throw new IDMapperException (ex);
-		}
-		
-		return result;
 	}
 
 
@@ -143,32 +146,34 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 		Set<Xref> refs = new HashSet<Xref>();
 		
 		if (idc.getDataSource() == null) return refs;
-		try
-		{
-			pst.init();
-			pst.setString(1, idc.getId());
-			pst.setString(2, idc.getDataSource().getSystemCode());
-			if (resultDs.length == 1) pst.setString(3, resultDs[0].getSystemCode());			
-			
-			Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
-
-			ResultSet rs = pst.executeQuery();
-			while (rs.next())
+		synchronized (pst) {
+			try
 			{
-				DataSource ds = DataSource.getBySystemCode(rs.getString(2));
-				if (resultDs.length == 0 || dsFilter.contains(ds))
+				pst.init();
+				pst.setString(1, idc.getId());
+				pst.setString(2, idc.getDataSource().getSystemCode());
+				if (resultDs.length == 1) pst.setString(3, resultDs[0].getSystemCode());			
+				
+				Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
+	
+				ResultSet rs = pst.executeQuery();
+				while (rs.next())
 				{
-					refs.add (new Xref (rs.getString(1), ds));
+					DataSource ds = DataSource.getBySystemCode(rs.getString(2));
+					if (resultDs.length == 0 || dsFilter.contains(ds))
+					{
+						refs.add (new Xref (rs.getString(1), ds));
+					}
 				}
 			}
-		}
-		catch (SQLException e)
-		{
-			throw new IDMapperException (e);
-		}
-		finally {pst.cleanup(); }
+			catch (SQLException e)
+			{
+				throw new IDMapperException (e);
+			}
+			finally {pst.cleanup(); }
 		
-		return refs;
+			return refs;
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -177,21 +182,23 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 		List<Xref> refs = new ArrayList<Xref>();
 
 		final QueryLifeCycle pst = qRefsByAttribute;
-		try {
-			pst.init();
-			pst.setString(1, attrName);
-			pst.setString(2, attrValue);
-			ResultSet r = pst.executeQuery();
-			while(r.next()) {
-				Xref ref = new Xref(r.getString(1), DataSource.getBySystemCode(r.getString(2)));
-				refs.add(ref);
+		synchronized (pst) { 
+			try {
+				pst.init();
+				pst.setString(1, attrName);
+				pst.setString(2, attrValue);
+				ResultSet r = pst.executeQuery();
+				while(r.next()) {
+					Xref ref = new Xref(r.getString(1), DataSource.getBySystemCode(r.getString(2)));
+					refs.add(ref);
+				}
+			} catch(SQLException e) {
+				throw new IDMapperException (e);
 			}
-		} catch(SQLException e) {
-			throw new IDMapperException (e);
+			finally {pst.cleanup(); }
+	//		Logger.log.trace("End fetching cross references by attribute");
+			return refs;
 		}
-		finally {pst.cleanup(); }
-//		Logger.log.trace("End fetching cross references by attribute");
-		return refs;
 	}
 
 	/** {@inheritDoc} */
@@ -199,23 +206,25 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	{		
 		Set<Xref> result = new HashSet<Xref>();
 		final QueryLifeCycle pst = qFreeSearch;
-		try {
-			pst.init(limit);
-			pst.setString(1, "%" + text.toLowerCase() + "%");
-			ResultSet r = pst.executeQuery();
-			while(r.next()) {
-				String id = r.getString(1);
-				DataSource ds = DataSource.getBySystemCode(r.getString(2));
-				Xref ref = new Xref (id, ds);
-				result.add (ref);
-			}			
-		} 
-		catch (SQLException e) 
-		{
-			throw new IDMapperException(e);
+		synchronized (pst) { 
+			try {
+				pst.init(limit);
+				pst.setString(1, "%" + text.toLowerCase() + "%");
+				ResultSet r = pst.executeQuery();
+				while(r.next()) {
+					String id = r.getString(1);
+					DataSource ds = DataSource.getBySystemCode(r.getString(2));
+					Xref ref = new Xref (id, ds);
+					result.add (ref);
+				}			
+			} 
+			catch (SQLException e) 
+			{
+				throw new IDMapperException(e);
+			}
+			finally {pst.cleanup(); }
+			return result;
 		}
-		finally {pst.cleanup(); }
-		return result;
 	}
 
 	/**
@@ -226,22 +235,24 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	{
 		Set<DataSource> result = new HashSet<DataSource>();
 		final QueryLifeCycle pst = qDatasources;
-    	try
-    	{
-    	 	pst.init();
-    	 	ResultSet rs = pst.executeQuery();
-    	 	while (rs.next())
-    	 	{
-    	 		DataSource ds = DataSource.getBySystemCode(rs.getString(1)); 
-    	 		result.add (ds);
-    	 	}
-    	}
-    	catch (SQLException ignore)
-    	{
-    		throw new IDMapperException(ignore);
-    	}
-		finally {pst.cleanup(); }
-    	return result;
+		synchronized (pst) { 
+			try
+	    	{
+	    	 	pst.init();
+	    	 	ResultSet rs = pst.executeQuery();
+	    	 	while (rs.next())
+	    	 	{
+	    	 		DataSource ds = DataSource.getBySystemCode(rs.getString(1)); 
+	    	 		result.add (ds);
+	    	 	}
+	    	}
+	    	catch (SQLException ignore)
+	    	{
+	    		throw new IDMapperException(ignore);
+	    	}
+			finally {pst.cleanup(); }
+	    	return result;
+		}
 	}
 
 	private final IDMapperCapabilities caps;
@@ -287,23 +298,25 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 		Map<Xref, String> result = new HashMap<Xref, String>();
 		final QueryLifeCycle pst = (MATCH_ID.equals (attrType)) ? 
 				qIdSearchWithAttributes : qAttributeSearch;
-		try {
-			pst.init(limit);
-			pst.setString(1, "%" + query.toLowerCase() + "%");
-			ResultSet r = pst.executeQuery();
-
-			while(r.next()) 
-			{
-				String id = r.getString("id");
-				String code = r.getString("code");
-				String symbol = r.getString("attrValue");
-				result.put(new Xref (id, DataSource.getBySystemCode(code)), symbol);
+		synchronized (pst) { 
+			try {
+				pst.init(limit);
+				pst.setString(1, "%" + query.toLowerCase() + "%");
+				ResultSet r = pst.executeQuery();
+	
+				while(r.next()) 
+				{
+					String id = r.getString("id");
+					String code = r.getString("code");
+					String symbol = r.getString("attrValue");
+					result.put(new Xref (id, DataSource.getBySystemCode(code)), symbol);
+				}
+			} catch (SQLException e) {
+				throw new IDMapperException (e);
 			}
-		} catch (SQLException e) {
-			throw new IDMapperException (e);
+			finally {pst.cleanup(); }
+			return result;
 		}
-		finally {pst.cleanup(); }
-		return result;		
 	}
 
 	/** {@inheritDoc} */
@@ -311,21 +324,23 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	{
 		Set<String> result = new HashSet<String>();
 		final QueryLifeCycle pst = qAttributesSet;
-    	try
-    	{
-    	 	pst.init();
-    	 	ResultSet rs = pst.executeQuery();
-    	 	while (rs.next())
-    	 	{
-    	 		result.add (rs.getString(1));
-    	 	}
-    	}
-    	catch (SQLException ignore)
-    	{
-    		throw new IDMapperException(ignore);
-    	}
-		finally {pst.cleanup(); }
-    	return result;
+		synchronized (pst) { 
+	    	try
+	    	{
+	    	 	pst.init();
+	    	 	ResultSet rs = pst.executeQuery();
+	    	 	while (rs.next())
+	    	 	{
+	    	 		result.add (rs.getString(1));
+	    	 	}
+	    	}
+	    	catch (SQLException ignore)
+	    	{
+	    		throw new IDMapperException(ignore);
+	    	}
+			finally {pst.cleanup(); }
+	    	return result;
+		}
 	}
 
 }

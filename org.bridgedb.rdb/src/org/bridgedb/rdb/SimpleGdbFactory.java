@@ -17,8 +17,10 @@
 package org.bridgedb.rdb;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.bridgedb.IDMapperException;
 
@@ -37,33 +39,42 @@ public final class SimpleGdbFactory
 	 * Opens a connection to the Gene Database located in the given file.
 	 * <p>
 	 * Use this instead of constructor to create an instance of SimpleGdb that matches the schema version.
-	 * @param dbName The file containing the Gene Database. 
-	 * @param con An SQL Connection to the database
-	 * @param props PROP_RECREATE if you want to create a new database, overwriting any existing ones. Otherwise, PROP_NONE.
+	 * @param connectionString a JDBC Connection string 
 	 * @return a new Gdb
 	 * @throws IDMapperException on failure
 	*/
-	public static SimpleGdb createInstance(String dbName, Connection con) throws IDMapperException
+	public static SimpleGdb createInstance(String dbName, String connectionString) throws IDMapperException
 	{
-		if(dbName == null) throw new NullPointerException();	
+		if(connectionString == null) throw new NullPointerException();	
 
 		int version = 0;
+		Connection con = null;
+		ResultSet r = null;
+		Statement stmt = null;
 		try 
 		{
-			ResultSet r = con.createStatement().executeQuery("SELECT schemaversion FROM info");
+			con = DriverManager.getConnection(connectionString);
+			stmt = con.createStatement();
+			r = stmt.executeQuery("SELECT schemaversion FROM info");
 			if(r.next()) version = r.getInt(1);
 		} 
 		catch (SQLException e) 
 		{
 			//Ignore, older db's don't even have schema version
-		}			
+		}
+		finally
+		{
+			if (r != null) try { r.close(); } catch (SQLException ignore) {}
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+			if (con != null) try { con.close(); } catch (SQLException ignore) {}
+		}
 		
 		switch (version)
 		{
 		case 2:
-			return new SimpleGdbImpl2(dbName, con);
+			return new SimpleGdbImpl2(dbName, connectionString);
 		case 3:
-			return new SimpleGdbImpl3(dbName, con);
+			return new SimpleGdbImpl3(dbName, connectionString);
 		//NB add future schema versions here
 		default:
 			throw new IDMapperException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +

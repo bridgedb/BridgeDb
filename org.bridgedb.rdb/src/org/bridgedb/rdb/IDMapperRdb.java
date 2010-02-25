@@ -55,16 +55,8 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException 
 		{
-			try
-			{
-				String url = "jdbc:derby:jar:(" + location + ")database";
-				Connection con = DriverManager.getConnection(url);
-				return SimpleGdbFactory.createInstance(location, con);
-			}
-			catch (SQLException ex)
-			{
-				throw new IDMapperException(ex);
-			}
+			String url = "jdbc:derby:jar:(" + location + ")database";
+			return SimpleGdbFactory.createInstance(location, url);
 		}
 	}
 
@@ -76,16 +68,8 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 		/** {@inheritDoc} */
 		public IDMapper connect(String location) throws IDMapperException 
 		{
-			try
-			{
-				String url = "jdbc:" + location;
-				Connection con = DriverManager.getConnection(url);
-				return SimpleGdbFactory.createInstance(location, con);
-			}
-			catch (SQLException ex)
-			{
-				throw new IDMapperException(ex);
-			}
+			String url = "jdbc:" + location;
+			return SimpleGdbFactory.createInstance(location, url);
 		}
 	}
 
@@ -114,12 +98,7 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 				sysprop.setProperty("derby.stream.error.file", File.createTempFile("derby",".log").toString());
 				
 				String url = "jdbc:derby://" + host + ":" + port + "/" + args.get("BASE");
-				Connection con = DriverManager.getConnection(url);
-				return SimpleGdbFactory.createInstance(location, con);
-			}
-			catch (SQLException f)
-			{
-				throw new IDMapperException (f);
+				return SimpleGdbFactory.createInstance(location, url);
 			}
 			catch (IOException e)
 			{

@@ -41,21 +41,9 @@ class SimpleGdbImpl3 extends SimpleGdbImplCommon
 	 * 	or PROP_NONE if you want to connect read-only
 	 * @throws IDMapperException when the database could not be created or connected to
 	 */
-	public SimpleGdbImpl3(String dbName, Connection con) throws IDMapperException
+	public SimpleGdbImpl3(String dbName, String connectionString) throws IDMapperException
 	{
-		super(con);
-		if(dbName == null) throw new NullPointerException();
-
-		this.dbName = dbName;
-
-		try
-		{
-			con.setReadOnly(true);
-		}
-		catch (SQLException e)
-		{
-			throw new IDMapperException (e);
-		}
+		super(dbName, connectionString);
 		checkSchemaVersion();
 	}
 	
@@ -68,7 +56,7 @@ class SimpleGdbImpl3 extends SimpleGdbImplCommon
 		int version = 0;
 		try 
 		{
-			ResultSet r = con.createStatement().executeQuery("SELECT schemaversion FROM info");
+			ResultSet r = getConnection().createStatement().executeQuery("SELECT schemaversion FROM info");
 			if(r.next()) version = r.getInt(1);
 		} 
 		catch (SQLException e) 
@@ -87,19 +75,22 @@ class SimpleGdbImpl3 extends SimpleGdbImplCommon
 	{
 		Set<String> result = new HashSet<String>();
 		final QueryLifeCycle pst = qAttribute;
-		try {
-			pst.init();
-			pst.setString (1, ref.getId());
-			pst.setString (2, ref.getDataSource().getSystemCode());
-			pst.setString (3, attrname);
-			ResultSet r = pst.executeQuery();
-			if (r.next())
-			{
-				result.add (r.getString(1));
-			}
-			return result;
-		} catch	(SQLException e) { throw new IDMapperException (e); } // Database unavailable
-		finally {pst.cleanup(); }
+		synchronized (pst)
+		{
+			try {
+				pst.init();
+				pst.setString (1, ref.getId());
+				pst.setString (2, ref.getDataSource().getSystemCode());
+				pst.setString (3, attrname);
+				ResultSet r = pst.executeQuery();
+				if (r.next())
+				{
+					result.add (r.getString(1));
+				}
+				return result;
+			} catch	(SQLException e) { throw new IDMapperException (e); } // Database unavailable
+			finally {pst.cleanup(); }
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -108,28 +99,31 @@ class SimpleGdbImpl3 extends SimpleGdbImplCommon
 	{
 		Map<String, Set<String>> result = new HashMap<String, Set<String>>();				
 		final QueryLifeCycle pst = qAllAttributes;
-		try {
-			pst.init();
-			pst.setString (1, ref.getId());
-			pst.setString (2, ref.getDataSource().getSystemCode());
-			ResultSet r = pst.executeQuery();
-			if (r.next())
-			{
-				String key = r.getString(1);
-				String value = r.getString(2);
-				if (result.containsKey (key))
+		synchronized (pst)
+		{
+			try {
+				pst.init();
+				pst.setString (1, ref.getId());
+				pst.setString (2, ref.getDataSource().getSystemCode());
+				ResultSet r = pst.executeQuery();
+				if (r.next())
 				{
-					result.get(key).add (value);
+					String key = r.getString(1);
+					String value = r.getString(2);
+					if (result.containsKey (key))
+					{
+						result.get(key).add (value);
+					}
+					else
+					{
+						Set<String> valueSet = new HashSet<String>();
+						valueSet.add (value);
+						result.put (key, valueSet);
+					}
 				}
-				else
-				{
-					Set<String> valueSet = new HashSet<String>();
-					valueSet.add (value);
-					result.put (key, valueSet);
-				}
-			}
-			return result;
-		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
-		finally {pst.cleanup(); }
+				return result;
+			} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
+			finally {pst.cleanup(); }
+		}
 	}
 }

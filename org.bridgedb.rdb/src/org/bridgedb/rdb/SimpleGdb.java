@@ -17,6 +17,7 @@
 package org.bridgedb.rdb;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,17 +52,20 @@ import org.bridgedb.IDMapperException;
  */
 public abstract class SimpleGdb extends IDMapperRdb
 {
+	private final String connectionString;
 	/**
 	 * Create IDMapper based on an existing SQL connection.
 	 * @param con Existing SQL Connection.
 	 */
-	SimpleGdb(Connection con)
+	SimpleGdb(String dbName, String connectionString)
 	{
-		this.con = con;
+		this.connectionString = connectionString;
+		this.dbName = dbName;
 	}
-	
-	private boolean keepConnection = true;
 
+	private boolean singleConnection = true;
+	private boolean neverCloseConnection = true;
+	
 	/**
 	 * helper class that handles the life cycle of a connection, query and resultset.
 	 * <p>
@@ -159,26 +163,41 @@ public abstract class SimpleGdb extends IDMapperRdb
 			if (!inited) throw new IllegalStateException("Must call init() before cleanup()");
 			inited = false;
 			if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
-			if (keepConnection) return;
+			if (neverCloseConnection) return;
 			if (pst != null) try { pst.close(); } catch (SQLException ignore) {}
+			pst = null;
 			if (con != null) try { con.close(); } catch (SQLException ignore) {}
+			con = null;
 		}
 	}
+
+	private Connection con = null;
 	
-	protected Connection getConnection() throws SQLException
+	synchronized public Connection getConnection() throws SQLException
 	{
+		// if singleConnection is true, each call to getConnection() will return the same object.
+		// if singleConnection is false, each call to getConneciton() will lead to a new connection object being created.
+		if (!singleConnection || con == null)
+		{
+			con = DriverManager.getConnection(connectionString); 
+			con.setReadOnly(true);
+		}
 		return con;
 	}
 	
 	/**
 	 * The {@link Connection} to the Gene Database.
 	 */
-	protected Connection con = null;
+	
+	//private Connection con = null;
 
 	/** {@inheritDoc} */
-	final public boolean isConnected() { return con != null; }
+	final public boolean isConnected() { 
+		//return con != null; 
+		return true;
+	}
 
-	protected String dbName;
+	protected final String dbName;
 	
 	/** {@inheritDoc} */
 	@Override final public String getDbName() { return dbName; }
@@ -186,16 +205,15 @@ public abstract class SimpleGdb extends IDMapperRdb
 	/** {@inheritDoc} */
 	final public void close() throws IDMapperException 
 	{
-		if (con == null) throw new IDMapperException("Database connection already closed");
-		try
-		{
-			con.close();
-		}
-		catch (SQLException ex)
-		{
-			throw new IDMapperException (ex);
-		}
-		con = null;
+//		try
+//		{
+//			con.close();
+//		}
+//		catch (SQLException ex)
+//		{
+//			throw new IDMapperException (ex);
+//		}
+//		con = null;
 	}
 	
 	public static final int NO_LIMIT = 0;
@@ -211,7 +229,7 @@ public abstract class SimpleGdb extends IDMapperRdb
 		int result = 0;
 		try
 		{
-			ResultSet r = con.createStatement().executeQuery("SELECT COUNT(*) FROM " + "datanode");
+			ResultSet r = getConnection().createStatement().executeQuery("SELECT COUNT(*) FROM " + "datanode");
 			r.next();
 			result = r.getInt (1);
 			r.close();
@@ -233,7 +251,7 @@ public abstract class SimpleGdb extends IDMapperRdb
 		int result = 0;
 		try
 		{
-			ResultSet r = con.createStatement().executeQuery(
+			ResultSet r = getConnection().createStatement().executeQuery(
 					"SELECT COUNT(*) FROM datanode WHERE code = '" + ds.getSystemCode() + "'");
 			r.next();
 			result = r.getInt (1);

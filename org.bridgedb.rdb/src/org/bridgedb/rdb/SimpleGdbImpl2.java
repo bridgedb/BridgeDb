@@ -50,19 +50,22 @@ class SimpleGdbImpl2 extends SimpleGdbImplCommon
 	private String getBpInfo(Xref ref) throws IDMapperException 
 	{
 		final QueryLifeCycle pst = qBackpage;
-		try {
-			pst.init();
-			pst.setString (1, ref.getId());
-			pst.setString (2, ref.getDataSource().getSystemCode());
-			ResultSet r = pst.executeQuery();
-			String result = null;
-			if (r.next())
-			{
-				result = r.getString(1);
-			}
-			return result;
-		} catch	(SQLException e) { throw new IDMapperException (e); } //Gene not found
-		finally {pst.cleanup(); }
+		synchronized (pst)
+		{
+			try {
+				pst.init();
+				pst.setString (1, ref.getId());
+				pst.setString (2, ref.getDataSource().getSystemCode());
+				ResultSet r = pst.executeQuery();
+				String result = null;
+				if (r.next())
+				{
+					result = r.getString(1);
+				}
+				return result;
+			} catch	(SQLException e) { throw new IDMapperException (e); } //Gene not found
+			finally {pst.cleanup(); }
+		}
 	}
 
 	/**
@@ -74,21 +77,11 @@ class SimpleGdbImpl2 extends SimpleGdbImplCommon
 	 * 	or PROP_NONE if you want to connect read-only
 	 * @throws IDMapperException when the database could not be created or connected to
 	 */
-	public SimpleGdbImpl2(String dbName, Connection con) throws IDMapperException
+	public SimpleGdbImpl2(String dbName, String connectionString) throws IDMapperException
 	{
-		super (con);
+		super (dbName, connectionString);
 		
-		if(dbName == null) throw new NullPointerException();
-		this.dbName = dbName;
-		
-		try
-		{
-			con.setReadOnly(true);
-		}
-		catch (SQLException e)
-		{
-			throw new IDMapperException (e);
-		}
+		if(dbName == null) throw new NullPointerException();		
 		checkSchemaVersion();
 	}
 	
@@ -101,7 +94,7 @@ class SimpleGdbImpl2 extends SimpleGdbImplCommon
 		int version = 0;
 		try 
 		{
-			ResultSet r = con.createStatement().executeQuery("SELECT schemaversion FROM info");
+			ResultSet r = getConnection().createStatement().executeQuery("SELECT schemaversion FROM info");
 			if(r.next()) version = r.getInt(1);
 		} 
 		catch (SQLException e) 
@@ -147,19 +140,22 @@ class SimpleGdbImpl2 extends SimpleGdbImplCommon
 			}
 		}
 		
-		try {
-			pst.init();
-			pst.setString (1, ref.getId());
-			pst.setString (2, ref.getDataSource().getSystemCode());
-			pst.setString (3, attrname);
-			ResultSet r = pst.executeQuery();
-			if (r.next())
-			{
-				result.add (r.getString(1));
-			}
-			return result;
-		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref + ", Attribute: " + attrname, e); } // Database unavailable
-		finally {pst.cleanup(); }
+		synchronized (pst)
+		{
+			try {
+				pst.init();
+				pst.setString (1, ref.getId());
+				pst.setString (2, ref.getDataSource().getSystemCode());
+				pst.setString (3, attrname);
+				ResultSet r = pst.executeQuery();
+				if (r.next())
+				{
+					result.add (r.getString(1));
+				}
+				return result;
+			} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref + ", Attribute: " + attrname, e); } // Database unavailable
+			finally {pst.cleanup(); }
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -185,28 +181,31 @@ class SimpleGdbImpl2 extends SimpleGdbImplCommon
 			}
 		}
 		
-		try {
-			pst.init();
-			pst.setString (1, ref.getId());
-			pst.setString (2, ref.getDataSource().getSystemCode());
-			ResultSet r = pst.executeQuery();
-			if (r.next())
-			{
-				String key = r.getString(1);
-				String value = r.getString(2);
-				if (result.containsKey (key))
+		synchronized (pst)
+		{
+			try {
+				pst.init();
+				pst.setString (1, ref.getId());
+				pst.setString (2, ref.getDataSource().getSystemCode());
+				ResultSet r = pst.executeQuery();
+				if (r.next())
 				{
-					result.get(key).add (value);
+					String key = r.getString(1);
+					String value = r.getString(2);
+					if (result.containsKey (key))
+					{
+						result.get(key).add (value);
+					}
+					else
+					{
+						Set<String> valueSet = new HashSet<String>();
+						valueSet.add (value);
+						result.put (key, valueSet);
+					}
 				}
-				else
-				{
-					Set<String> valueSet = new HashSet<String>();
-					valueSet.add (value);
-					result.put (key, valueSet);
-				}
-			}
-			return result;
-		} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
-		finally {pst.cleanup(); }
+				return result;
+			} catch	(SQLException e) { throw new IDMapperException ("Xref:" + ref, e); } // Database unavailable
+			finally {pst.cleanup(); }
+		}
 	}
 }
