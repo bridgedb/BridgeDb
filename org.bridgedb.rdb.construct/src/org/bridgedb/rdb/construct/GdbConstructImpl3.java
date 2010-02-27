@@ -50,7 +50,7 @@ public class GdbConstructImpl3 implements GdbConstruct
     private PreparedStatement pstAttr = null;
 
 	/** {@inheritDoc} */
-	public int addGene(Xref ref, String bpText) 
+	public int addGene(Xref ref)
 	{
 		//TODO: bpText is unused
     	if (pstGene == null) throw new NullPointerException();
@@ -61,8 +61,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 			pstGene.executeUpdate();
 		} 
 		catch (SQLException e) 
-		{ 
-//			Logger.log.error("" + ref, e);
+		{
 			return 1;
 		}
 		return 0;
@@ -78,7 +77,6 @@ public class GdbConstructImpl3 implements GdbConstruct
 			pstAttr.setString(4, ref.getDataSource().getSystemCode());
 			pstAttr.executeUpdate();
 		} catch (SQLException e) {
-//			Logger.log.error(attr + "\t" + val + "\t" + ref, e);
 			return 1;
 		}
 		return 0;
@@ -96,9 +94,8 @@ public class GdbConstructImpl3 implements GdbConstruct
 			pstLink.setString(4, right.getDataSource().getSystemCode());
 			pstLink.executeUpdate();
 		} 
-		catch (SQLException e)
+    	catch (SQLException e) 
 		{
-//			Logger.log.error(left + "\t" + right , e);
 			return 1;
 		}
 		return 0;
@@ -176,26 +173,21 @@ public class GdbConstructImpl3 implements GdbConstruct
 	 * connection is connected to
 	 * Note: Official GDB's are created by AP, not with this code.
 	 * This is just here for testing purposes.
+	 * @throws IDMapperException 
 	 */
-	public void createGdbTables() 
+	public void createGdbTables() throws IDMapperException 
 	{
 //		Logger.log.info("Info:  Creating tables");
 		try 
 		{
 			Statement sh = con.createStatement();
-			sh.execute("DROP TABLE info");
-			sh.execute("DROP TABLE link");
-			sh.execute("DROP TABLE datanode");
-			sh.execute("DROP TABLE attribute");
-		} 
-		catch(SQLException e) 
-		{
-//			Logger.log.error("Unable to drop gdb tables (ignoring): " + e.getMessage());
-		}
-
-		try
-		{
-			Statement sh = con.createStatement();
+//			sh.execute("DROP TABLE info");
+//			sh.execute("DROP TABLE link");
+//			sh.execute("DROP TABLE datanode");
+//			sh.execute("DROP TABLE attribute");
+//			sh.close();
+			
+//			sh = con.createStatement();
 			sh.execute(
 					"CREATE TABLE					" +
 					"		info							" +
@@ -221,7 +213,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 					"CREATE TABLE					" +
 					"		datanode						" +
 					" (   id VARCHAR(50),					" +
-					"     code VARCHAR(50)					" +
+					"     code VARCHAR(50),					" +
 					"     PRIMARY KEY (id, code)    		" +
 					" )										");
 //			Logger.log.info("DataNode table created");
@@ -237,7 +229,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 		} 
 		catch (SQLException e)
 		{
-//			Logger.log.error("while creating gdb tables: " + e.getMessage(), e);
+			throw new IDMapperException (e);
 		}
 	}
 

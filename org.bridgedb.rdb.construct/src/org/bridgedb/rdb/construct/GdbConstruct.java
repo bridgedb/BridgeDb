@@ -31,7 +31,7 @@ public interface GdbConstruct
 	 * @param bpText html-formatted description
 	 * @return 1 if addition was successful, 0 otherwise. 
 	 */
-	public int addGene(Xref ref, String bpText); 
+	public int addGene(Xref ref);
 
 	/**
 	 * Add an attribute for a biological entity to the database.
@@ -66,10 +66,11 @@ public interface GdbConstruct
 	
 	/**
 	 * Excecutes several SQL statements to create the tables and indexes in the database the given
-	 * connection is connected to
-	 * Note: Official GDB's are created by Alex Pico's script, not with this code.
-	 * This is just here for testing purposes.
+	 * connection is connected to.
 	 */
-	abstract public void createGdbTables();	
+	abstract public void createGdbTables() throws IDMapperException;	
 
+	abstract public void commit() throws IDMapperException;
+	
+	abstract public void finalize() throws IDMapperException;
 }
