@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bridgedb.BridgeDb;
 import org.bridgedb.IDMapper;
@@ -41,6 +42,11 @@ import org.bridgedb.bio.Organism;
 public class GdbProvider {
 	Map<Organism, List<IDMapper>> organism2gdb = new HashMap<Organism, List<IDMapper>>();
 	List<IDMapper> globalGdbs = new ArrayList<IDMapper>();
+	
+	public Set<Organism> getOrganisms()
+	{
+		return organism2gdb.keySet();
+	}
 	
 	public void addOrganismGdb(Organism organism, IDMapper gdb) {
 		List<IDMapper> l = organism2gdb.get(organism);

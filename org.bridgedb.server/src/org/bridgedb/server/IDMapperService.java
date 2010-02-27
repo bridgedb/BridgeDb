@@ -201,6 +201,16 @@ public class IDMapperService extends Application {
 	 */
 	public static final String URL_CONFIG = "/config";
 
+
+	/**
+	 * URL pattern for getting a list of species loaded in the server.<BR>
+	 * <code>
+	 * /contents
+	 * </code>
+	 * @see Contents#getContents()
+	 */
+	public static final String URL_CONTENTS = "/contents";
+
 	/**
 	 * URL pattern for getting backpage HTML.<BR>
 	 * URL:<BR>
@@ -230,6 +240,7 @@ public class IDMapperService extends Application {
 		router.attach(URL_HOME, redirector);
 
 		router.attach(URL_CONFIG, Config.class);
+		router.attach(URL_CONTENTS, Contents.class);
 
 		/* IDMapper methods */
 		//Register the route for the xrefs url pattern

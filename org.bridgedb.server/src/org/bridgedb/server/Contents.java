@@ -9,19 +9,21 @@ import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-public class Config extends ServerResource
+public class Contents extends ServerResource
 {
 	@Get
-	public String getConfig() 
+	public String getContents() 
 	{
 		try
 		{
-			Properties props = new Properties();
-			props.load (BridgeDb.class.getResourceAsStream("BridgeDb.properties"));			
 	        StringBuilder result = new StringBuilder();
-	        result.append ("java.version\t" + System.getProperty("java.version") + "\n");	        
-	        result.append ("bridgedb.version\t" + props.getProperty("bridgedb.version") + "\n");
-	        result.append ("bridgedb.revision\t" + props.getProperty("REVISION") + "\n");	        
+	        for (Organism org : getGdbProvider().getOrganisms())
+	        {
+	        	result.append (org.shortName());
+	        	result.append ("\t");
+	        	result.append (org.latinName());
+	        	result.append ("\n");
+	        }	        
 		    return result.toString();
 		} 
 		catch( Exception e ) 
