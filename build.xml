@@ -85,7 +85,7 @@
 		<delete dir="apidoc"/>
   </target>
 
-  <target name="test">
+  <target name="test" depends="build">
 		<iterate target="test"/>
   </target>
 

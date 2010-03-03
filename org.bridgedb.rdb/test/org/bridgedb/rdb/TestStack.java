@@ -1,4 +1,4 @@
-package org.bridgedb.bio;
+package org.bridgedb.rdb;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -11,6 +11,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
+import org.bridgedb.bio.BioDataSource;
 
 import junit.framework.TestCase;
 

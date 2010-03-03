@@ -31,7 +31,7 @@
   <target name="jar" depends="build">
 	<jar jarfile="${jar.name}">
 	  <manifest>
-		<attribute name="Class-Path" value="derby.jar bridgedb.jar"/>
+		<attribute name="Class-Path" value="derby.jar org.bridgedb.jar"/>
 	  </manifest>
 	  <fileset dir="build"/>
 	  <fileset dir="src" includes="**/*.properties"/>
