@@ -67,8 +67,8 @@ public final class DataSource
 	private Object organism = null;
 	private String idExample = null;
 	private boolean isPrimary = true;
-	private String type;
-	private String urnBase;
+	private String type = "unknown";
+	private String urnBase = "";
 	
 	/**
 	 * Constructor is private, so that we don't
