@@ -51,16 +51,27 @@ public final class SimpleGdbFactory
 		Connection con = null;
 		ResultSet r = null;
 		Statement stmt = null;
-		try 
+		
+		try
 		{
-			con = DriverManager.getConnection(connectionString);
-			stmt = con.createStatement();
-			r = stmt.executeQuery("SELECT schemaversion FROM info");
-			if(r.next()) version = r.getInt(1);
-		} 
-		catch (SQLException e) 
-		{
-			//Ignore, older db's don't even have schema version
+			try 
+			{
+				con = DriverManager.getConnection(connectionString);
+				stmt = con.createStatement();
+			} 
+			catch (SQLException e) 
+			{
+				throw new IDMapperException("Could not connect to database", e);
+			}
+			try 
+			{
+				r = stmt.executeQuery("SELECT schemaversion FROM info");
+				if(r.next()) version = r.getInt(1);
+			} 
+			catch (SQLException e) 
+			{
+				throw new IDMapperException("Database schema error, info table or schemaversion column missing", e);
+			}
 		}
 		finally
 		{
@@ -68,7 +79,7 @@ public final class SimpleGdbFactory
 			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 			if (con != null) try { con.close(); } catch (SQLException ignore) {}
 		}
-		
+
 		switch (version)
 		{
 		case 2:
