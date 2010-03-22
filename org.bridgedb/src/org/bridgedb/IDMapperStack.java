@@ -443,7 +443,8 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 			
 			// map ref in IDMapper i
 			Set<Xref> round1 = i.mapID(ref);
-			
+			result.addAll (round1);
+
 			// then map the result of that in all IDMappers j (j != i)
 			for (IDMapper j : gdbs)
 			{
