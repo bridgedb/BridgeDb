@@ -50,8 +50,7 @@ public class Test extends TestCase
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 		Class.forName ("org.apache.derby.jdbc.ClientDriver");
 		
-		IDMapper mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens?host=137.120.14.24");
-		IDMapper mapper2 = BridgeDb.connect ("idmapper-derbyclient:metabolites?host=137.120.14.24");
+		IDMapper mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens?host=www.wikipathways.org");
 		end = System.currentTimeMillis();
 		delta = end - start;
 		measure.add ("timing::idmapper-derbyclient connect to two databases", "" + delta, "msec");
