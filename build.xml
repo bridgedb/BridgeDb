@@ -43,9 +43,8 @@
 			<include name="LICENSE-2.0.txt"/>
 			<include name="README.txt"/>
 			<include name="apidoc"/>
-			<include name="webservice/gdb.config.template"/>
-			<include name="webservice/contrib/bridgedb-example.pl"/>
-			<include name="webservice/contrib/bridgedb-example.py"/>
+			<include name="org.bridgedb.server/gdb.config.template"/>
+			<include name="org.bridgedb.server/contrib/bridgedb-example.*"/>
 		</zipfileset>
 	</zip>
 	<tar destfile="${zipbase}.tar.gz" compression="gzip">
