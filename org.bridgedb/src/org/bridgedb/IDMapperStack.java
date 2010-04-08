@@ -17,6 +17,7 @@
 package org.bridgedb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -437,13 +438,21 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	{
 		// first round
 		Set<Xref> result = new HashSet<Xref>();
+		Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
 		for (IDMapper i : gdbs)
 		{
 			if (i == null || !i.isConnected()) continue;
 			
 			// map ref in IDMapper i
 			Set<Xref> round1 = i.mapID(ref);
-			result.addAll (round1);
+
+			for (Xref r1 : round1)
+			{
+				if (resultDs.length == 0 || dsFilter.contains(r1.getDataSource()))
+				{
+					result.add (r1);
+				}
+			}
 
 			// then map the result of that in all IDMappers j (j != i)
 			for (IDMapper j : gdbs)

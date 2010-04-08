@@ -92,7 +92,8 @@ public class BatchMapper
 				"		[-c <input column, 0-based>]\n" +
 				"		[-r <report file>] \n" +
 				"\n" +
-				"You should specify at least one -g or -t option \n");
+				"You should specify at least one -g or -t option.\n" +
+				"Multiple -g or -t options will be combined transitively.\n");
 	}
 	
 	public String parseArgs(Settings settings, String[] args)
@@ -245,6 +246,7 @@ public class BatchMapper
 			{
 				gdb.addIDMapper(connectionString);
 			}
+			gdb.setTransitive(true);
 		}
 		
 		public void writeMapping() throws IOException, IDMapperException
