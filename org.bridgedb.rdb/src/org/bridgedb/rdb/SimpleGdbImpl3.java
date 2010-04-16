@@ -106,7 +106,7 @@ class SimpleGdbImpl3 extends SimpleGdbImplCommon
 				pst.setString (1, ref.getId());
 				pst.setString (2, ref.getDataSource().getSystemCode());
 				ResultSet r = pst.executeQuery();
-				if (r.next())
+				while (r.next())
 				{
 					String key = r.getString(1);
 					String value = r.getString(2);
