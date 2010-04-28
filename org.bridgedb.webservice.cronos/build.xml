@@ -80,13 +80,13 @@
 		</junit>
 	</target>
 
-	<property name="wsdl.url" value="http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL"/>
+	<property name="wsdl.url" value="http://mips.helmholtz-muenchen.de/genre/proj/cronos/CronosWSService.wsdl"/>
 	<property name="src.axis" value="src-axis"/>
 	<property name="build.wpclient.dir" value="build/wpclient" />
 	
 	<target name="update-axis">
 		<fail message="You must specify a url to the CRONOS web service WSDL: 
-			ant -Dwsdl.url=http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL [ant target]">
+			ant -Dwsdl.url=http://mips.helmholtz-muenchen.de/genre/proj/cronos/CronosWSService.wsdl [ant target]">
 			<condition>
 				<not> <isset property="wsdl.url"/> </not>
 			</condition>
