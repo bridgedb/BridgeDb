@@ -211,7 +211,8 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		
 		/**
 		 * Ordered, unnamed arguments.
-		 * @param args Optional arguments, these will be URLencoded and separated by "/"
+		 * @param args Optional arguments, these will be URLencoded and separated by "/". 
+		 *    Null arguments are skipped.
 		 * @return this, for chaining purposes
 		 * @throws IOException in case there is an encoding problem (really unlikely) 
 		 */
@@ -219,8 +220,11 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 		{
 			for (String arg : args)
 			{
-				builder.append ("/");
-				builder.append (URLEncoder.encode (arg, "UTF-8"));
+				if (arg != null)
+				{
+					builder.append ("/");
+					builder.append (URLEncoder.encode (arg, "UTF-8"));
+				}
 			}
 			return this;
 		}
