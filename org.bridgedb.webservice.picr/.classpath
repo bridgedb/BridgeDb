@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry exported="true" kind="lib" path="lib/activation-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb-api-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb-impl-2.1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb-xjc-2.1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxws-api-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxws-rt-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxws-tools-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsr173_api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsr181-api-1.0-MR1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jsr250-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/resolver.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/saaj-api-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/sjsxp-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/stax-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/stax-ex-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/streambuffer-0.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xfire-jsr181-api-1.0-M1.jar"/>
+	<classpathentry kind="lib" path="lib/saaj-impl-1.3.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.bridgedb"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
