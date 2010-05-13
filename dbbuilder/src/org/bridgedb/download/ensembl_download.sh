@@ -1,8 +1,8 @@
 ftp_site=ftp.ensembl.org
 species_list=${1?"Usage: $0 species_list"}
 
-mysql=mysql
-mysqlimport=mysqlimport
+mysql='mysql  --host=mysql-dev.cgl.ucsf.edu --port=13308'
+mysqlimport='mysqlimport  --host=mysql-dev.cgl.ucsf.edu --port=13308'
 
 cat $species_list | while read species_name
 do
@@ -36,9 +36,9 @@ then
   gunzip ./${mysql_go_name}.sql.gz
 
   #create local mysql db
-  echo "create database if not exists ${mysql_go_name}" | ${mysql} -u genmapp -pfun4genmapp
+  echo "create database if not exists genmapp_${mysql_go_name}" | ${mysql} -u genmapp -pfun4genmapp
   #create schema
-  ${mysql} -u genmapp -pfun4genmapp ${mysql_go_name} < ./${mysql_go_name}.sql
+  ${mysql} -u genmapp -pfun4genmapp genmapp_${mysql_go_name} < ./${mysql_go_name}.sql
   #place in own scope due to "cd" command
   (
    cd ./${mysql_go_name}; for table_name in *.txt
@@ -46,7 +46,7 @@ then
     #import data
     cp $table_name /tmp/
     
-    ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_go_name} /tmp/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_go_name} /tmp/${table_name}
     
     rm /tmp/${table_name}
   done
@@ -76,10 +76,10 @@ fi  # end ontology grab
   ncftpget ${ftp_site} ./${mysql_core_name} /pub/current_mysql/${mysql_core_name}/*.txt.gz
   for q in ./${mysql_core_name}/*.txt.gz
   do
-    # skip huge, unused dna tables
-    if [[ $q =~ 'dna' ]]
+    # skip huge, unused dna and protein tables
+    if [[ $q =~ 'dna' || $q =~ 'protein' ]]
     then
-	echo "Skip!: large, unused dna table: $q"
+	echo "Skip!: large, unused dna and protein tables: $q"
 	continue
     fi
     gunzip $q
@@ -89,9 +89,9 @@ fi  # end ontology grab
   gunzip ./${mysql_core_name}.sql.gz
 
   #create local mysql db
-  echo "create database if not exists ${mysql_core_name}" | ${mysql} -u genmapp -pfun4genmapp
+  echo "create database if not exists genmapp_${mysql_core_name}" | ${mysql} -u genmapp -pfun4genmapp
   #create schema
-  ${mysql} -u genmapp -pfun4genmapp ${mysql_core_name} < ./${mysql_core_name}.sql
+  ${mysql} -u genmapp -pfun4genmapp genmapp_${mysql_core_name} < ./${mysql_core_name}.sql
   #place in own scope due to "cd" command
   (
    cd ./${mysql_core_name}; for table_name in *.txt
@@ -99,7 +99,7 @@ fi  # end ontology grab
     #import data
     cp $table_name /tmp/
     
-    ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_core_name} /tmp/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_core_name} /tmp/${table_name}
 
     rm /tmp/${table_name}
   done
@@ -127,7 +127,7 @@ rm -R ./${mysql_core_name}/
   ncftpget ${ftp_site} ./${mysql_efg_name} /pub/current_mysql/${mysql_efg_name}/*.txt.gz
   for q in ./${mysql_efg_name}/*.txt.gz
   do
-    # skip huge, unused dna tables
+    # skip huge, unused result table
     if [[ $q =~ 'result' ]]
     then
         echo "Skip!: large, unused result table: $q"
@@ -140,9 +140,9 @@ rm -R ./${mysql_core_name}/
   gunzip ./${mysql_efg_name}.sql.gz
 
   #create local mysql db
-  echo "create database if not exists ${mysql_efg_name}" | ${mysql} -u genmapp -pfun4genmapp
+  echo "create database if not exists genmapp_${mysql_efg_name}" | ${mysql} -u genmapp -pfun4genmapp
   #create schema
-  ${mysql} -u genmapp -pfun4genmapp ${mysql_efg_name} < ./${mysql_efg_name}.sql
+  ${mysql} -u genmapp -pfun4genmapp genmapp_${mysql_efg_name} < ./${mysql_efg_name}.sql
   #place in own scope due to "cd" command
   (
    cd ./${mysql_efg_name}; for table_name in *.txt
@@ -150,7 +150,7 @@ rm -R ./${mysql_core_name}/
     #import data
     cp $table_name /tmp/
 
-    ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_efg_name} /tmp/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_efg_name} /tmp/${table_name}
 
     rm /tmp/${table_name}
   done
