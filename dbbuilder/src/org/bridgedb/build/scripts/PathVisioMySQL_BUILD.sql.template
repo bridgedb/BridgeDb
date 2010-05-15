@@ -4,7 +4,7 @@
 
 ##Copy Ensembl annotations (Description, Chr) to EntrezGene
 USE genmapp_XXXXXX_CS_YYYYYY;
-#drop index index_id_right on link;
+drop index index_id_right on link;
 create index index_id_right on link (ID_Right);
 
 create table gene_temp
@@ -67,7 +67,7 @@ CREATE TABLE attribute (
 	id VARCHAR(63) NOT NULL, 
 	code VARCHAR(63) NOT NULL, 
 	attrName VARCHAR(63) NOT NULL,
-	attrValue VARCHAR(254) NOT NULL,
+	attrValue VARCHAR(254) NOT NULL
 );
 
 
