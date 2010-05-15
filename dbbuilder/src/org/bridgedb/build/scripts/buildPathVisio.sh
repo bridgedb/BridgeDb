@@ -8,7 +8,8 @@ DatabaseDb=$1_Derby_$2
 DatabaseCS=genmapp_$1_CS_$2
 mysql='mysql --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp -pfun4genmapp'
 mysqldump='mysqldump --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp -pfun4genmapp'
-ScriptsDir=/home/apico/Derby/scripts
+ScriptsDir=/home/socr/c/users2/apico/Derby/scripts
+DerbyDir=/home/socr/c/users2/apico/Derby/db-derby-10.5.3.0-bin/
 
 ## Special modification for Yeast database: swapping in SGD identifiers from external file
 if [[ $DatabaseSpecies == Sc ]]; then
@@ -56,7 +57,7 @@ cat ${DatabaseDb}.db2.sql.temp | sed "s/\/\*/--/g" | sed "s/\\\'/\'\'/g" > ${Dat
  	
 ## Create & Fill Derby via ij tool 
 #Setup Environment
-export DERBY_INSTALL=/home/apico/Derby/db-derby-10.4.2.0-bin/
+export DERBY_INSTALL=${DerbyDir}
 export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:.
 # Run ij Tool
 cat ${ScriptsDir}/PathVisioDerby_BUILD.ij.template | sed "s/XXXXXX/${DatabaseDb}/g" | perl ${ScriptsDir}/replacePath.pl ${ScriptsDir} > PathVisioDerby_BUILD.ij 
