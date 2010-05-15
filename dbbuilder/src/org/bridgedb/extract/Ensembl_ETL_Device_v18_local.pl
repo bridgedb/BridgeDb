@@ -39,18 +39,18 @@
 use strict;
 use DBI;
 use HashSpeciesList;
-use lib '/home/apico/src/ensembl/modules';
-use lib '/home/apico/src/ensembl-compara/modules';
-use lib '/home/apico/src/ensembl-variation/modules';
-use lib '/home/apico/src/ensembl-functgenomics/modules';
-use lib '/home/apico/bioperl-live'; 
+use lib '/home/socr/c/users2/apico/src/ensembl/modules';
+use lib '/home/socr/c/users2/apico/src/ensembl-compara/modules';
+use lib '/home/socr/c/users2/apico/src/ensembl-variation/modules';
+use lib '/home/socr/c/users2/apico/src/ensembl-functgenomics/modules';
+use lib '/home/socr/c/users2/apico/bioperl-live'; 
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBConnection;
 use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::DBSQL::GOTermAdaptor;
 use Bio::EnsEMBL::OntologyTerm;
 use Bio::EnsEMBL::Funcgen::ProbeFeature;
-my $api_path = "/home/apico/src/ensembl/modules";
+my $api_path = "/home/socr/c/users2/apico/src/ensembl/modules";
 
 ## Under script control
 ## E.g., see Derby/runAll.sh and runList
@@ -132,7 +132,7 @@ print "
  Keep up-to-date by installing the latest API modules via Ensembl's CVS.
  Simply copy and paste the following command line statements:
 
-  1) cd /home/apico/src/
+  1) cd /home/socr/c/users2/apico/src/
   2) cvs -d :pserver:cvsuser\@cvs.sanger.ac.uk:/cvsroot/ensembl  login
      password: CVSUSER  (yes, in all caps)
   3) cvs -d :pserver:cvsuser\@cvs.sanger.ac.uk:/cvsroot/ensembl  checkout -r branch-ensembl-## ensembl
@@ -145,7 +145,7 @@ print "
   7) Increase region cache size in ensembl/modules/Bio/EnsEMBL/Utils/SeqRegionCache.pm SEQ_REGION_CACHE_SIZE from 40000 to 250000
 	to allow for performance enhancement by slice_adaptor->fetch_all(toplevel)
  These steps will update the local copy of the Ensembl API by overwriting the
- folder /home/apico/src/ensembl/ and /home/apico/src/ensembl-compara.
+ folder /home/socr/c/users2/apico/src/ensembl/ and /home/socr/c/users2/apico/src/ensembl-compara.
 
  Update the list of species by editing the file 'SpeciesList' which is read-in
  by this program. Currenlty, the first, second and fifth columns are used.
@@ -1449,7 +1449,7 @@ my $new_std = $twoLetterSpecies."_Std_".$dateArg;
 my $current_cs = "current_CS_".$genus_species;
 my $new_cs = $twoLetterSpecies."_CS_".$dateArg;
 my $sqlPass = "fun4genmapp";
-my $bkupDir = "/home/apico/EnsemblAPI/DB_Copies/";
+my $bkupDir = "/home/socr/c/users2/apico/EnsemblAPI/DB_Copies/";
 my $mysqldump_cmd = "mysqldump -u genmapp --password=".$sqlPass;
 my $mysql_cmd = "mysql -u genmapp --password=".$sqlPass;
 
