@@ -40,13 +40,13 @@ use strict;
 use DBI;
 use HashSpeciesList;
 use lib '/home/socr/c/users2/apico/src/ensembl/modules';
-use lib '/home/socr/c/users2/apico/src/ensembl-compara/modules';
-use lib '/home/socr/c/users2/apico/src/ensembl-variation/modules';
+#use lib '/home/socr/c/users2/apico/src/ensembl-compara/modules';
+#use lib '/home/socr/c/users2/apico/src/ensembl-variation/modules';
 use lib '/home/socr/c/users2/apico/src/ensembl-functgenomics/modules';
 use lib '/home/socr/c/users2/apico/bioperl-live'; 
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBConnection;
-use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
+#use Bio::EnsEMBL::Compara::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::DBSQL::GOTermAdaptor;
 use Bio::EnsEMBL::OntologyTerm;
 use Bio::EnsEMBL::Funcgen::ProbeFeature;
@@ -389,7 +389,8 @@ $sec = $zero.$sec unless $sec >= 10;
 my $registry = 'Bio::EnsEMBL::Registry';
 
 $registry->load_registry_from_db(
-        -host => 'localhost',
+        -host => 'mysql-dev.cgl.ucsf.edu',
+	-port => '13308',
         -user => 'genmapp',
 	-pass => 'fun4genmapp',
         -verbose => "0");
@@ -420,11 +421,11 @@ my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
 my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
-if ($split_dbname[1] == "collection"){	     # shift array elements for "collections"
+if ($split_dbname[2] == "collection"){	     # shift array elements for "collections"
 	splice(@split_dbname,1,1);
 }
-my $build = $split_dbname[3];                # e.g., 42
-my $build_nums = $build.$split_dbname[4];    # e.g., 42_36c
+my $build = $split_dbname[4];                # e.g., 42
+my $build_nums = $build.$split_dbname[5];    # e.g., 42_36c
 
 ############################################################################
 ## DECLARE/INITIALIZE DATA TABLES ##
@@ -1173,10 +1174,12 @@ while (my $gene = pop(@$genes))
 	    # NOTE: Admin priviledges required to create database
 	    my $sqlUser = "genmapp";                    # username
 	    my $sqlPass = "fun4genmapp";                # password
-	    my $sqlDBLog = "ensembl_etl_device_log";    # permanent log table
-	    my $sqlDB = "current_".$genus_species;      # name of species database, based on user-selected species
-	    my $sqlCSDB = "current_CS_".$genus_species; # name of species database, based on user-selected species
-	    my $sqlConnection ="dbi:mysql:$sqlDBLog";   # connection statement used in DBI->connect()
+	    my $sqlDBLog = "genmapp_ensembl_etl_device_log";    # permanent log table
+	    my $sqlHost = "mysql-dev.cgl.ucsf.edu";	# plato host
+	    my $sqlPort = "13308";			# plato port
+	    my $sqlDB = "genmapp_current_".$genus_species;      # name of species database, based on user-selected species
+	    my $sqlCSDB = "genmapp_current_CS_".$genus_species; # name of species database, based on user-selected species
+	    my $sqlConnection ="dbi:mysql:$sqlDBLog:$sqlHost:$sqlPort";   # connection statement used in DBI->connect()
 
 	    $dbh = DBI->connect($sqlConnection, $sqlUser, $sqlPass)
 		or die "Connection Error: $DBI::errstr\n"; 
@@ -1444,14 +1447,14 @@ print "\n@Runtime\n";
 if ($dateArg == 0){
 	$dateArg = $year.$mon.$mday;
 }
-my $current_std = "current_".$genus_species;
-my $new_std = $twoLetterSpecies."_Std_".$dateArg;
-my $current_cs = "current_CS_".$genus_species;
-my $new_cs = $twoLetterSpecies."_CS_".$dateArg;
+my $current_std = "genmapp_current_".$genus_species;
+my $new_std = "genmapp_".$twoLetterSpecies."_Std_".$dateArg;
+my $current_cs = "genmapp_current_CS_".$genus_species;
+my $new_cs = "genmapp_".$twoLetterSpecies."_CS_".$dateArg;
 my $sqlPass = "fun4genmapp";
 my $bkupDir = "/home/socr/c/users2/apico/EnsemblAPI/DB_Copies/";
-my $mysqldump_cmd = "mysqldump -u genmapp --password=".$sqlPass;
-my $mysql_cmd = "mysql -u genmapp --password=".$sqlPass;
+my $mysqldump_cmd = "mysqldump --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp --password=".$sqlPass;
+my $mysql_cmd = "mysql --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp --password=".$sqlPass;
 
 ## BACKUP and COPY STD TABLES?
 if ( $mysql_std_load  =~ /(Y|Yes)/i){
@@ -1702,11 +1705,15 @@ sub parse_DBEntries {
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{GeneOntology}{$dbe_primary_id}}++){
 		# Get GO term annotations using $go_adaptor
-		my $acc = $dbe_primary_id;
-		$acc =~ s/\'//g; # strip single quotes to use as variable
-		my $term = $go_adaptor->fetch_by_accession($acc);
-		my $name = mysql_quotes($term->name()); #e.g., plasma membrane
-		my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
+		my $name = "";
+		my $namespace = "";
+		if ($go_adaptor){
+			my $acc = $dbe_primary_id;
+			$acc =~ s/\'//g; # strip single quotes to use as variable
+			my $term = $go_adaptor->fetch_by_accession($acc);
+			my $name = mysql_quotes($term->name()); #e.g., plasma membrane
+			my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
+		}	
 		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $name, $namespace];
 		$$Ensembl_GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$gene_stable_id, $dbe_primary_id];
 		++$subcount{GeneOntology};
@@ -1714,26 +1721,30 @@ sub parse_DBEntries {
   	}
 	elsif ($dbe_dbname =~ /^\'goslim/){
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-            	# Get GO term annotations using $go_adaptor
                 my $acc = $dbe_primary_id;
                 $acc =~ s/\'//g; # strip single quotes to use as variable
-                my $term = $go_adaptor->fetch_by_accession($acc);
-                my $name = mysql_quotes($term->name()); #e.g., plasma membrane
-                my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
-		if ($namespace =~ /\'biological_process\'/){
+		# Get GO term annotations using $go_adaptor
+		if ($go_adaptor){
+                  my $term = $go_adaptor->fetch_by_accession($acc);
+                  my $name = mysql_quotes($term->name()); #e.g., plasma membrane
+               	  my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
+		  if ($namespace =~ /\'biological_process\'/){
 			$$GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$dbe_primary_id, $name];
  	                $$Ensembl_GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$gene_stable_id, $dbe_primary_id];
                 	++$subcount{GOslimBP};
-		} elsif ($namespace =~ /\'cellular_component\'/){
+		  } elsif ($namespace =~ /\'cellular_component\'/){
                         $$GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$gene_stable_id, $dbe_primary_id];
                         ++$subcount{GOslimCC};
-                } elsif ($namespace =~ /\'molecular_function\'/){
+                  } elsif ($namespace =~ /\'molecular_function\'/){
                         $$GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$gene_stable_id, $dbe_primary_id];
                         ++$subcount{GOslimMF};
-		} else {
+		  } else {
 			#garbage?
+		  }
+		} else {
+			# no go
 		}
         }
 
@@ -2091,6 +2102,8 @@ sub parse_ProbeFeatures {
     #my $probe_features = $probe_adaptor->fetch_all_by_external_name($gene_stable_id);
   ## Solution #2 only works after API method has been added
   ## See NathJohnson_API_patch.txt
+print $gene_stable_id;
+print $gene;
     my $probe_features = $probe_adaptor->fetch_all_by_linked_transcript_Gene($gene);
   
     foreach my $pf (@$probe_features) {
