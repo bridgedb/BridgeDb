@@ -43,12 +43,7 @@ then
   (
    cd ./${mysql_go_name}; for table_name in *.txt
    do
-    #import data
-    cp $table_name /tmp/
-    
-    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_go_name} /tmp/${table_name}
-    
-    rm /tmp/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_go_name} `pwd`/${table_name}
   done
  )
 
