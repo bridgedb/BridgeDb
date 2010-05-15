@@ -3,7 +3,7 @@
 ## A.Pico 20070817
 
 ##Copy Ensembl annotations (Description, Chr) to EntrezGene
-USE XXXXXX_CS_YYYYYY;
+USE genmapp_XXXXXX_CS_YYYYYY;
 #drop index index_id_right on link;
 create index index_id_right on link (ID_Right);
 
@@ -32,9 +32,9 @@ drop table gene_temp;
 drop table gene_temp2;
 
 ##Create database
-DROP DATABASE IF EXISTS XXXXXX_Derby_YYYYYY;
-CREATE DATABASE XXXXXX_Derby_YYYYYY;
-USE XXXXXX_Derby_YYYYYY;
+DROP DATABASE IF EXISTS genmapp_XXXXXX_Derby_YYYYYY;
+CREATE DATABASE genmapp_XXXXXX_Derby_YYYYYY;
+USE genmapp_XXXXXX_Derby_YYYYYY;
 
 ## Create 'datanode'
 CREATE TABLE datanode (
@@ -73,34 +73,34 @@ CREATE TABLE attribute (
 
 ## Fill 'info'
 INSERT INTO info 
-SELECT XXXXXX_CS_YYYYYY.Info.Version, '3', 'Ensembl', XXXXXX_CS_YYYYYY.Info.Notes, XXXXXX_CS_YYYYYY.Info.Species, 'GeneProduct' 
-FROM XXXXXX_CS_YYYYYY.Info;
+SELECT genmapp_XXXXXX_CS_YYYYYY.Info.Version, '3', 'Ensembl', genmapp_XXXXXX_CS_YYYYYY.Info.Notes, genmapp_XXXXXX_CS_YYYYYY.Info.Species, 'GeneProduct' 
+FROM genmapp_XXXXXX_CS_YYYYYY.Info;
 
 ## Fill 'attribute'
 ## From CS Database
 #symbol
 INSERT INTO attribute
-SELECT DISTINCT XXXXXX_CS_YYYYYY.attr.ID, XXXXXX_CS_YYYYYY.attr.Code, 
-XXXXXX_CS_YYYYYY.attr.Name, XXXXXX_CS_YYYYYY.attr.Value
-FROM XXXXXX_CS_YYYYYY.attr
-WHERE XXXXXX_CS_YYYYYY.attr.Value != '';
+SELECT DISTINCT genmapp_XXXXXX_CS_YYYYYY.attr.ID, genmapp_XXXXXX_CS_YYYYYY.attr.Code, 
+genmapp_XXXXXX_CS_YYYYYY.attr.Name, genmapp_XXXXXX_CS_YYYYYY.attr.Value
+FROM genmapp_XXXXXX_CS_YYYYYY.attr
+WHERE genmapp_XXXXXX_CS_YYYYYY.attr.Value != '';
 
 ## Fill 'datanode'
 ## From CS Database
 INSERT INTO datanode
-SELECT XXXXXX_CS_YYYYYY.gene.ID, XXXXXX_CS_YYYYYY.gene.Code
-FROM XXXXXX_CS_YYYYYY.gene
-WHERE XXXXXX_CS_YYYYYY.gene.ID != '' 
-AND XXXXXX_CS_YYYYYY.gene.Code IN ("EnXXXXXX","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg");
+SELECT genmapp_XXXXXX_CS_YYYYYY.gene.ID, genmapp_XXXXXX_CS_YYYYYY.gene.Code
+FROM genmapp_XXXXXX_CS_YYYYYY.gene
+WHERE genmapp_XXXXXX_CS_YYYYYY.gene.ID != '' 
+AND genmapp_XXXXXX_CS_YYYYYY.gene.Code IN ("EnXXXXXX","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg");
 
 ## Fill 'link'
 ## From CS Databases
 INSERT INTO link
 SELECT DISTINCT *
-FROM XXXXXX_CS_YYYYYY.link
-WHERE XXXXXX_CS_YYYYYY.link.Code_Right IN ("EnXXXXXX","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg");
+FROM genmapp_XXXXXX_CS_YYYYYY.link
+WHERE genmapp_XXXXXX_CS_YYYYYY.link.Code_Right IN ("EnXXXXXX","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg");
 
-##Add EnXXXXXXsembl IDs to right side of 'link' table
+##Add Ensembl IDs to right side of 'link' table
 INSERT INTO link
 SELECT datanode.id, "EnXXXXXX", datanode.id, "EnXXXXXX"
 FROM datanode
