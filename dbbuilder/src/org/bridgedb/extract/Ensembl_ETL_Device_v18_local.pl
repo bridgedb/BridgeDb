@@ -1705,8 +1705,8 @@ sub parse_DBEntries {
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{GeneOntology}{$dbe_primary_id}}++){
 		# Get GO term annotations using $go_adaptor
-		my $name = "";
-		my $namespace = "";
+		my $name = mysql_quotes("");
+		my $namespace = mysql_quotes("");
 		if ($go_adaptor){
 			my $acc = $dbe_primary_id;
 			$acc =~ s/\'//g; # strip single quotes to use as variable
