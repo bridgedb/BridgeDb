@@ -26,6 +26,7 @@ Ensembl E. coli	EnEc	http://www.ensembl.org	http://bacteria.ensembl.org/Escheric
 Ensembl Chicken	EnGg	http://www.ensembl.org	http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$ID	ENSGALG00000021736	gene	Gallus gallus	1	EnGg
 Ensembl Human	EnHs	http://www.ensembl.org	http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$ID	ENSG00000139618	gene	Homo sapiens	1	EnHs
 Ensembl Mouse	EnMm	http://www.ensembl.org	http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$ID	ENSMUSG00000017167	gene	Mus musculus	1	EnMm
+Ensembl M. tuberculosis	EnMx	http://www.ensembl.org	http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Gene/Summary?g=$ID	EBMYCG00000003122	gene	Mycobacterium tuberculosis	1	EnMx
 Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa_japonica/Gene/Summary?db=core;g=$ID	osa-MIR171a	gene	Oryza sativa	1	EnOj
 Ensembl Chimp	EnPt	http://www.ensembl.org	http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$ID	ENSPTRG00000036034	gene	Pan troglodytes	1	EnPt
 Ensembl Horse	EnQc	http://www.ensembl.org	http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$ID	ENSECAG00000026160	gene	Equus caballus	1	EnQc

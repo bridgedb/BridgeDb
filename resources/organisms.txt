@@ -30,3 +30,4 @@ Vitis	vinifera	Wine	Grape	Vv
 Populus	trichocarpa	Western	Balsam	Poplar	Pi
 Bacillus	subtilis	Bsubtilis	Bs
 Escherichia	coli	Ecoli	Ec
+Mycobacterium tuberculosis	Mtuberculosis	Mx
