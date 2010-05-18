@@ -57,8 +57,8 @@ cat ${DatabaseDb}.db2.sql.temp | sed "s/\/\*/--/g" | sed "s/\\\'/\'\'/g" > ${Dat
  	
 ## Create & Fill Derby via ij tool 
 #Setup Environment
-export DERBY_INSTALL=${DerbyDir}
-export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:.
+setenv DERBY_INSTALL ${DerbyDir}
+setenv CLASSPATH $DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:.
 # Run ij Tool
 cat ${ScriptsDir}/PathVisioDerby_BUILD.ij.template | sed "s/XXXXXX/${DatabaseDb}/g" | perl ${ScriptsDir}/replacePath.pl ${ScriptsDir} > PathVisioDerby_BUILD.ij 
 
