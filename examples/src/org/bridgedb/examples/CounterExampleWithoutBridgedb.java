@@ -1,17 +1,14 @@
 package org.bridgedb.examples;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.xml.rpc.ServiceException;
 
 import org.bridgedb.webservice.cronos.CronosWS;
-import org.bridgedb.webservice.cronos.CronosWSServiceLocator;
-import org.json.JSONException;
+import org.bridgedb.webservice.cronos.CronosWSService;
 
-import synergizer.SynergizerClient;
+//import org.json.JSONException;
+//import synergizer.SynergizerClient;
 
 /*
  * This example shows you would map an identifier with the Cronos and 
@@ -36,8 +33,10 @@ public class CounterExampleWithoutBridgedb
 		// This example shows how to map an identifier
 		// using the Cronos service directly
 		// Call Web Service Operation
-		CronosWSServiceLocator locator = new CronosWSServiceLocator();
-		CronosWS port = locator.getCronosWSPort();
+		//CronosWSServiceLocator locator = new CronosWSServiceLocator();
+		//CronosWS port = locator.getCronosWSPort();
+		CronosWSService service = new CronosWSService();
+		CronosWS port = service.getCronosWSPort();
 		
 		String organismCode = "hsa";
 		int source = 9; //Entrez Gene
@@ -53,6 +52,7 @@ public class CounterExampleWithoutBridgedb
 		}
 	}
 	
+	/*
 	public void mapSynergizer(String id) throws IOException, JSONException
 	{
 		SynergizerClient client = new SynergizerClient(new URL(SynergizerClient.defaultServiceURLString));
@@ -70,13 +70,14 @@ public class CounterExampleWithoutBridgedb
          	System.out.println ("  " + dest);
          }
 	}
+	*/
 	
-	public static void main(String args[]) throws ServiceException, IOException, JSONException
+	public static void main(String args[]) throws Exception
 	{
 		CounterExampleWithoutBridgedb main = new CounterExampleWithoutBridgedb();
 		
 		String id = "3643";
 		main.mapCronos(id);
-		main.mapSynergizer(id);
+		//main.mapSynergizer(id);
 	}
 }

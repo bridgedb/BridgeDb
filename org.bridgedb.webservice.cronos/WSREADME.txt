@@ -5,8 +5,8 @@
 WSDL for WebService is available at:
 -----------------------------------
 
-http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL
-
+http://mips.helmholtz-muenchen.de/genre/proj/cronos/CronosWSService.wsdl
+[http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL - doesn't not work for xjc]
 
 Supported Methods:
 ------------------

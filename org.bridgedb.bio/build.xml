@@ -22,9 +22,9 @@
 		   destdir="build">
 		   <classpath refid="class.path"/>
 	</javac>
-    <copy file="../resources/datasources.txt"
+    <copy file="resources/org/bridgedb/bio/datasources.txt"
           todir="build/org/bridgedb/bio" />
-    <copy file="../resources/organisms.txt"
+    <copy file="resources/org/bridgedb/bio/organisms.txt"
           todir="build/org/bridgedb/bio" />
   </target>
   

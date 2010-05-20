@@ -16,7 +16,7 @@
 //
 package org.bridgedb;
 
-import buildsystem.Measure;
+//import buildsystem.Measure;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,7 @@ import org.bridgedb.file.IDMapperText;
  */
 public class TestFile extends TestCase 
 {
-	private Measure measure;
+	//private Measure measure;
 	
 	private static final File YEAST_IDS = new File ("test-data/yeast_id_mapping.txt");
 	private static final DataSource ENS_YEAST = DataSource.getByFullName("Ensembl Yeast");
@@ -47,7 +47,7 @@ public class TestFile extends TestCase
 	
 	@Override public void setUp()
 	{
-		measure = new Measure("bridgedb_timing.txt");
+		//measure = new Measure("bridgedb_timing.txt");
 	}
 	
 	public void testFiles()
@@ -70,7 +70,7 @@ public class TestFile extends TestCase
 		long end = System.currentTimeMillis();
 		long delta = end - start;
 		System.out.println (delta);
-		measure.add ("timing::text file non-transitive", "" + delta, "msec");
+		//measure.add ("timing::text file non-transitive", "" + delta, "msec");
 
 		Set<Xref> expected = new HashSet<Xref>();
         expected.addAll (Arrays.asList(
@@ -114,7 +114,7 @@ public class TestFile extends TestCase
 		long end = System.currentTimeMillis();
 		long delta = end - start;
 		System.out.println (delta);
-		measure.add ("timing::text file transitive", "" + delta, "msec");
+		//measure.add ("timing::text file transitive", "" + delta, "msec");
 
 		System.out.println (mapXrefs);
         Set<Xref> xrefs = mapXrefs.get(XREF1);

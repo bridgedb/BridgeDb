@@ -159,7 +159,8 @@ public class Dataset
             }
             
             // only add attributes listed as "feature_page"
-            if ("feature_page".equals(page))
+            // and "homologs"
+            if ("feature_page".equals(page) || "homologs".equals(page))
             	attributes.put(parts[0], new Attribute(
             		parts[0], displayName, description, page));
         }

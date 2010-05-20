@@ -35,7 +35,6 @@ import org.bridgedb.rdb.SimpleGdbFactory;
 
 public class Test2 extends TestCase 
 {
-	//TODO
 	private static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";

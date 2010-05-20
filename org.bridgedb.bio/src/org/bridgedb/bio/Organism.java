@@ -27,8 +27,6 @@ import java.util.Map;
  * Handles conversion from full bionominal name to common name and short code.
  * Still work in progress, currently not used everywhere it could be used.
  * <p>
- * TODO: this class will move to the org.bridgedb.bio package in the future.
- * <p> 
  * TODO: make extensible
  */
 public enum Organism 

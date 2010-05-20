@@ -5,6 +5,10 @@ If you've obtained the source code of BridgeDb, you should be
 able to compile with a simple:
 
 	ant
+	
+or (experimental, makes not all jars) - 
+
+	mvn clean install
 
 Library dependencies
 --------------------

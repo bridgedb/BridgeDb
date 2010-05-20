@@ -23,7 +23,7 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.webservice.biomart.util.BiomartClient;
-import buildsystem.Measure;
+//import buildsystem.Measure;
 
 import java.io.File;
 import java.io.IOException;
