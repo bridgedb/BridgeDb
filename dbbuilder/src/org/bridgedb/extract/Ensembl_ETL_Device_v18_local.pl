@@ -1003,6 +1003,16 @@ while (my $gene = pop(@$genes))
                                              'Description VARCHAR(255) DEFAULT NULL',
                                              'PRIMARY KEY (ID)',
                                              'INDEX (Symbol)']);
+        %{$GeneTables{GeneWiki}} = ('NAME' => ['GeneWiki', 'Gw'],
+                                      'SYSTEM' => ["\'GeneWiki (Wikipedia)\'", "\'$dateArg\'",
+                                                   "\'ID\|Symbol\\\\sBF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+                                                   "\'http://plugins.gnf.org/cgi-bin/wp.cgi?id=~\'", "\'\'",
+                                                   "\'http://en.wikipedia.org/wiki/Portal:Gene_Wiki\'"],
+                                      'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                   'Symbol VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                   'Synonyms VARCHAR(255) DEFAULT NULL',
+                                                   'PRIMARY KEY (ID)'
+                                                   ]);
 
 
 	## ENSEMBL LINK TABLES
@@ -1673,6 +1683,15 @@ sub parse_DBEntries {
 		$$Attributes{EntrezGene}{$count.$dot.$subcount{EntrezGene}.$dot.'2'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{EntrezGene}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
 		++$subcount{EntrezGene};
 	    }
+       	    ## Use Entrez Gene IDs to fill GeneWiki tables
+            if (!${$seen{GeneWiki}{$dbe_primary_id}}++){
+                $$GeneTables{GeneWiki}{$count.$dot.$subcount{GeneWiki}} = [$dbe_primary_id, $dbe_display_id, $dbe_syns];
+                $$Ensembl_GeneTables{GeneWiki}{$count.$dot.$subcount{GeneWiki}} = [$gene_stable_id, $dbe_primary_id];
+                #process Attributes
+                ## SKIP THIS STEP: too much information
+                ++$subcount{GeneWiki};
+            }
+
 	}
   	elsif ($dbe_dbname =~ /^\'Uniprot/i){ #catch all types
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
@@ -1748,30 +1767,30 @@ sub parse_DBEntries {
 		}
         }
 
-# 	elsif ($dbe_dbname =~ /^\'AFFY/i){  #catch all types
-#	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-#	    if (!${$seen{Affy}{$dbe_primary_id}}++){
-#		$$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$dbe_primary_id, $dbe_dbname];
-#		$$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $dbe_primary_id];
-#		++$subcount{Affy};
-#	    }
-#  	}
-#    	elsif ($dbe_dbname =~ /^\'Agilent/i){  #catch all types
-#	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-#	    if (!${$seen{Agilent}{$dbe_primary_id}}++){
-#		$$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$dbe_primary_id, $dbe_dbname];
-#		$$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $dbe_primary_id];
-#		++$subcount{Agilent};
-#	    }
-#  	}
-#    	elsif ($dbe_dbname =~ /^\'Illumina/i){ #catch all types  
-#	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-#	    if (!${$seen{Illumina}{$dbe_primary_id}}++){
-#		$$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$dbe_primary_id, $dbe_dbname, $dbe_description];
-#		$$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $dbe_primary_id];
-#		++$subcount{Illumina};
-#	    }
-#  	}
+ 	elsif ($dbe_dbname =~ /^\'AFFY/i){  #catch all types
+	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+	    if (!${$seen{Affy}{$dbe_primary_id}}++){
+		$$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$dbe_primary_id, $dbe_dbname];
+		$$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $dbe_primary_id];
+		++$subcount{Affy};
+	    }
+ 	}
+    	elsif ($dbe_dbname =~ /^\'Agilent/i){  #catch all types
+	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+	    if (!${$seen{Agilent}{$dbe_primary_id}}++){
+		$$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$dbe_primary_id, $dbe_dbname];
+		$$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $dbe_primary_id];
+		++$subcount{Agilent};
+	    }
+ 	}
+    	elsif ($dbe_dbname =~ /^\'Illumina/i){ #catch all types  
+	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+	    if (!${$seen{Illumina}{$dbe_primary_id}}++){
+		$$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$dbe_primary_id, $dbe_dbname, $dbe_description];
+		$$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $dbe_primary_id];
+		++$subcount{Illumina};
+	    }
+  	}
         elsif ($dbe_dbname =~ /^\'cint\'$/i){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{Cint}{$dbe_primary_id}}++){
