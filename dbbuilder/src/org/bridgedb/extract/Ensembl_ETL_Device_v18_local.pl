@@ -839,7 +839,7 @@ while (my $gene = pop(@$genes))
 					     "\'http://www.genenames.org/data/hgnc_data.php?hgnc_id=~\'", "\'\'", 
 					     "\'http://www.genenames.org\'"],
 				'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
-					     'Symbol VARCHAR(128) NOT NULL DEFAULT \'\'', 
+					     'Alt VARCHAR(128) NOT NULL DEFAULT \'\'', 
 					     'Description VARCHAR(255) DEFAULT NULL',
 					     'Synonyms VARCHAR(255) DEFAULT NULL',
                                              'PRIMARY KEY (ID)',
@@ -1898,16 +1898,17 @@ sub parse_DBEntries {
   	}
     	elsif ($dbe_dbname =~ /^\'HGNC\'$/){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{HUGO}{$dbe_primary_id}}++){ 
-		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_primary_id, $dbe_display_id, $dbe_description, $dbe_syns];
-		$$Ensembl_GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$gene_stable_id, $dbe_primary_id];
+            ## NOTE: working with symbols as primary id; storing numerical identifier as 'Alt' in attributes 
+	    if (!${$seen{HUGO}{$dbe_display_id}}++){ 
+		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, $dbe_primary_id, $dbe_description, $dbe_syns];
+		$$Ensembl_GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$gene_stable_id, $dbe_display_id];
                 #process Attributes
                 unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_primary_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                	$$Attributes{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Alt'), $dbe_primary_id];
 		}
                 #@syns = (@syns, $dbe_display_id);
-                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
-                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'2'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
+                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'1'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'2'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
 		++$subcount{HUGO};
 	    }
   	}
