@@ -92,11 +92,7 @@ fi  # end ontology grab
    cd ./${mysql_core_name}; for table_name in *.txt
    do
     #import data
-    cp $table_name /tmp/
-    
-    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_core_name} /tmp/${table_name}
-
-    rm /tmp/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_core_name} `pwd`/${table_name}
   done
  )
 
@@ -143,11 +139,7 @@ rm -R ./${mysql_core_name}/
    cd ./${mysql_efg_name}; for table_name in *.txt
    do
     #import data
-    cp $table_name /tmp/
-
-    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_efg_name} /tmp/${table_name}
-
-    rm /tmp/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_efg_name} `pwd`/${table_name}
   done
  )
  # apply NathJohnsonPatch to alter xref and object_xref tables to support
