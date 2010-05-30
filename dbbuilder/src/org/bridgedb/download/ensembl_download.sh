@@ -36,14 +36,14 @@ then
   gunzip ./${mysql_go_name}.sql.gz
 
   #create local mysql db
-  echo "create database if not exists genmapp_${mysql_go_name}" | ${mysql} -u genmapp -pfun4genmapp
+  echo "create database if not exists ${mysql_go_name}" | ${mysql} -u genmapp -pfun4genmapp
   #create schema
-  ${mysql} -u genmapp -pfun4genmapp genmapp_${mysql_go_name} < ./${mysql_go_name}.sql
+  ${mysql} -u genmapp -pfun4genmapp ${mysql_go_name} < ./${mysql_go_name}.sql
   #place in own scope due to "cd" command
   (
    cd ./${mysql_go_name}; for table_name in *.txt
    do
-    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_go_name} `pwd`/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_go_name} `pwd`/${table_name}
   done
  )
 
@@ -84,15 +84,15 @@ fi  # end ontology grab
   gunzip ./${mysql_core_name}.sql.gz
 
   #create local mysql db
-  echo "create database if not exists genmapp_${mysql_core_name}" | ${mysql} -u genmapp -pfun4genmapp
+  echo "create database if not exists ${mysql_core_name}" | ${mysql} -u genmapp -pfun4genmapp
   #create schema
-  ${mysql} -u genmapp -pfun4genmapp genmapp_${mysql_core_name} < ./${mysql_core_name}.sql
+  ${mysql} -u genmapp -pfun4genmapp ${mysql_core_name} < ./${mysql_core_name}.sql
   #place in own scope due to "cd" command
   (
    cd ./${mysql_core_name}; for table_name in *.txt
    do
     #import data
-    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_core_name} `pwd`/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_core_name} `pwd`/${table_name}
   done
  )
 
@@ -131,15 +131,15 @@ rm -R ./${mysql_core_name}/
   gunzip ./${mysql_efg_name}.sql.gz
 
   #create local mysql db
-  echo "create database if not exists genmapp_${mysql_efg_name}" | ${mysql} -u genmapp -pfun4genmapp
+  echo "create database if not exists ${mysql_efg_name}" | ${mysql} -u genmapp -pfun4genmapp
   #create schema
-  ${mysql} -u genmapp -pfun4genmapp genmapp_${mysql_efg_name} < ./${mysql_efg_name}.sql
+  ${mysql} -u genmapp -pfun4genmapp ${mysql_efg_name} < ./${mysql_efg_name}.sql
   #place in own scope due to "cd" command
   (
    cd ./${mysql_efg_name}; for table_name in *.txt
    do
     #import data
-    ${mysqlimport} -u genmapp -pfun4genmapp genmapp_${mysql_efg_name} `pwd`/${table_name}
+    ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_efg_name} `pwd`/${table_name}
   done
  )
  # apply NathJohnsonPatch to alter xref and object_xref tables to support
