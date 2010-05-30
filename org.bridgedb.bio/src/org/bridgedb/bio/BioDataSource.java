@@ -116,8 +116,8 @@ public class BioDataSource
 		"Gl", "Gramene Literature").asDataSource();
 	public static final DataSource GRAMENE_PATHWAY = DataSource.register (
 		"Gp", "Gramene Pathway").asDataSource();
-	public static final DataSource GEN_PEPT = DataSource.register (
-		"Gp", "GenPept").asDataSource(); 
+	public static final DataSource GENE_WIKI = DataSource.register (
+		"Gw", "GeneWiki").asDataSource(); 
 	public static final DataSource HUGO = DataSource.register (
 		"H", "HUGO").asDataSource();
 	public static final DataSource HSGENE = DataSource.register (
@@ -220,6 +220,11 @@ public class BioDataSource
 		//entrez gene
 		DataSourcePatterns.registerPattern(
 				BioDataSource.ENTREZ_GENE, 
+				Pattern.compile("\\d+")
+		);
+		//gene wiki (using entrez gene ids)
+		DataSourcePatterns.registerPattern(
+				BioDataSource.GENE_WIKI, 
 				Pattern.compile("\\d+")
 		);
 
