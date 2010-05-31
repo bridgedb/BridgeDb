@@ -2121,8 +2121,6 @@ sub parse_ProbeFeatures {
     #my $probe_features = $probe_adaptor->fetch_all_by_external_name($gene_stable_id);
   ## Solution #2 only works after API method has been added
   ## See NathJohnson_API_patch.txt
-print $gene_stable_id;
-print $gene;
     my $probe_features = $probe_adaptor->fetch_all_by_linked_transcript_Gene($gene);
   
     foreach my $pf (@$probe_features) {
