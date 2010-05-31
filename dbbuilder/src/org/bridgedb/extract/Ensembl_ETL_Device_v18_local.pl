@@ -409,16 +409,15 @@ foreach my $db_adaptor (@db_adaptors) {
     );
 }
 
-
 ## API: GET ADAPTORS 
 # get gene adaptor to query gene information
 # get slice adaptor to load 'top-level' regions into SeqRegionCache
 # get database adaptors to identify the name of latest species database
-my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
-my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
+my $gene_adaptor = $registry->get_adaptor($genus_species, "core", "gene");
+my $slice_adaptor = $registry->get_adaptor($genus_species, "core", "slice");
 my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
-my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
-my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
+my $probe_adaptor = $registry->get_adaptor($genus_species, "funcgen", "ProbeFeature");
+my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $genus_species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
 if ($split_dbname[2] == "collection"){	     # shift array elements for "collections"
