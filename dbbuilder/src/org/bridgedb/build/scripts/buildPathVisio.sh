@@ -9,7 +9,7 @@ DatabaseCS=genmapp_$1_CS_$2
 mysql='mysql --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp -pfun4genmapp'
 mysqldump='mysqldump --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp -pfun4genmapp'
 ScriptsDir=/home/socr/c/users2/apico/Derby/scripts
-DerbyDir=/home/socr/c/users2/apico/Derby/db-derby-10.5.3.0-bin/
+DerbyDir=/home/socr/c/users2/apico/Derby/db-derby-10.4.2.0-bin/
 
 ## Special modification for Yeast database: swapping in SGD identifiers from external file
 if [[ $DatabaseSpecies == Sc ]]; then
