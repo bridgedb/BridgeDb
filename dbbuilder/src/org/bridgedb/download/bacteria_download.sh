@@ -1,4 +1,6 @@
+#!!!!!!!!!!!
 # Update "release-#" below
+#!!!!!!!!!!!
 
 ftp_site=ftp.ensemblgenomes.org
 species_list=${1?"Usage: $0 species_list"}
