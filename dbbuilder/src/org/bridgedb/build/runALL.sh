@@ -9,7 +9,7 @@ do
 
   echo $x $y
   (
-  cd /home/apico/EnsemblAPI
+  cd /home/socr/c/users2/apico/EnsemblAPI
   perl Ensembl_ETL_Device_v18_local.pl $x $y 
   ) 
   bash -x scripts/buildPathVisio.sh $x $y > temp.$x.$y 2> temp.$x.$y.err
