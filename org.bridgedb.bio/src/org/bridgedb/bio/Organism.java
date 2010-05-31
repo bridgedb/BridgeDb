@@ -53,6 +53,7 @@ public enum Organism
 	MacacaMulatta ("Macaca mulatta", "Ml", "Rhesus Monkey"),
 	MusMusculus("Mus musculus", "Mm", "Mouse"),
 	MonodelphisDomestica  ("Monodelphis domestica", "Md", "Opossum"),
+	MycobacteriumTuberculosis ("Mycobacterium tuberculosis", "Mx", "Tuberculosis"),
 	OrnithorhynchusAnatinus	("Ornithorhynchus anatinus", "Oa", "Platypus"),
 	OryzaSativa("Oryza sativa", "Os", "Rice"),
 	OryzaJaponica("Oryza japonica", "Oj", "Rice"),

@@ -92,6 +92,8 @@ public class BioDataSource
 		"EnHs", "Ensembl Human").asDataSource();
 	public static final DataSource ENSEMBL_MOUSE = DataSource.register (
 		"EnMm", "Ensembl Mouse").asDataSource();
+	public static final DataSource ENSEMBL_MTUBERCULOSIS = DataSource.register (
+		"EnMx", "Ensembl M. tuberculosis").asDataSource();
 	public static final DataSource GRAMENE_RICE = DataSource.register (
 		"EnOj", "Gramene Rice").asDataSource();
 	public static final DataSource ENSEMBL_CHIMP = DataSource.register (
@@ -349,6 +351,10 @@ public class BioDataSource
 				BioDataSource.ENSEMBL_ZEBRAFISH, 
 				Pattern.compile("ENSDARG\\d{11}")
 		);
+                DataSourcePatterns.registerPattern(
+                                BioDataSource.ENSEMBL_MTUBERCULOSIS,
+                                Pattern.compile("EBMYCG\\d{11}")
+                );
 		DataSourcePatterns.registerPattern(
 				BioDataSource.ENSEMBL_FRUITFLY, 
 				Pattern.compile("FBgn\\d{7}")
@@ -463,6 +469,7 @@ public class BioDataSource
 		ensemblBySpecies.put (Organism.SaccharomycesCerevisiae, ENSEMBL_SCEREVISIAE);
 		ensemblBySpecies.put (Organism.XenopusTropicalis, ENSEMBL_XENOPUS);
 		ensemblBySpecies.put (Organism.DanioRerio, ENSEMBL_ZEBRAFISH);		
+		ensemblBySpecies.put (Organism.MycobacteriumTuberculosis, ENSEMBL_MTUBERCULOSIS);
 	}
 	
 	/**
