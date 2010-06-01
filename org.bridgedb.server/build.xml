@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.server" default="dist" basedir=".">
-
+  <!-- test comment -->
   <!-- always be java 1.5 compatible -->
   <property name="ant.build.javac.target" value="1.5"/>
   <property name="ant.build.javac.source" value="1.5"/>
