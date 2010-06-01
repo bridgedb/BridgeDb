@@ -42,14 +42,14 @@ do
   gunzip ./${mysql_db_name}.sql.gz
 
   #create local mysql db
-  echo "create database if not exists ${mysql_db_name_local}" | ${mysql} -u genmapp -pfun4genmapp
+  echo "create database if not exists ${mysql_db_name}" | ${mysql} -u genmapp -pfun4genmapp
   #create schema
-  ${mysql} -u genmapp -pfun4genmapp ${mysql_db_name_local} < ./${mysql_db_name}.sql
+  ${mysql} -u genmapp -pfun4genmapp ${mysql_db_name} < ./${mysql_db_name}.sql
    # place in own scope, due to "cd" command
   (
     cd ./${mysql_db_name}; for table_name in *.txt
     do
-      ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_db_name_local} `pwd`/${table_name}
+      ${mysqlimport} -u genmapp -pfun4genmapp ${mysql_db_name} `pwd`/${table_name}
     done
   )
 
