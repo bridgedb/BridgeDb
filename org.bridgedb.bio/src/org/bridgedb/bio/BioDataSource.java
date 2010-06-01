@@ -41,6 +41,8 @@ public class BioDataSource
 		"Ag", "Agilent").asDataSource();
 	public static final DataSource BIOGRID = DataSource.register (
 		"Bg", "BioGrid").asDataSource();
+	public static final DataSource BIOCYC = DataSource.register (
+		"Bc", "BioCyc").asDataSource();
 	public static final DataSource CINT = DataSource.register (
 		"C", "Cint").asDataSource();
 	public static final DataSource CCDS = DataSource.register (
@@ -132,6 +134,8 @@ public class BioDataSource
 		"Ip", "IPI").asDataSource(); 
 	public static final DataSource IRGSP_GENE = DataSource.register (
 		"Ir", "IRGSP Gene").asDataSource();
+	public static final DataSource KEGG_GENES = DataSource.register (
+		"Kg", "KEGG Genes").asDataSource();
 	public static final DataSource ENTREZ_GENE = DataSource.register (
 		"L", "Entrez Gene").asDataSource();
 	public static final DataSource MGI = DataSource.register (
@@ -351,10 +355,10 @@ public class BioDataSource
 				BioDataSource.ENSEMBL_ZEBRAFISH, 
 				Pattern.compile("ENSDARG\\d{11}")
 		);
-                DataSourcePatterns.registerPattern(
-                                BioDataSource.ENSEMBL_MTUBERCULOSIS,
-                                Pattern.compile("EBMYCG\\d{11}")
-                );
+		DataSourcePatterns.registerPattern(
+				BioDataSource.ENSEMBL_MTUBERCULOSIS,
+				Pattern.compile("EBMYCG\\d{11}")
+		);
 		DataSourcePatterns.registerPattern(
 				BioDataSource.ENSEMBL_FRUITFLY, 
 				Pattern.compile("FBgn\\d{7}")
@@ -452,6 +456,14 @@ public class BioDataSource
 				BioDataSource.KEGG_COMPOUND,
 				Pattern.compile("C\\d+")
 		);
+		DataSourcePatterns.registerPattern(
+				BioDataSource.KEGG_GENES,
+				Pattern.compile("[a-z]{3}:.+")
+		);
+		DataSourcePatterns.registerPattern(
+				BioDataSource.BIOCYC,
+				Pattern.compile("(Meta|Eco)Cyc:.+")
+		);		
 		
 		ensemblBySpecies.put (Organism.BacillusSubtilis, ENSEMBL_BSUBTILIS);
 		ensemblBySpecies.put (Organism.CaenorhabditisElegans, ENSEMBL_CELEGANS);

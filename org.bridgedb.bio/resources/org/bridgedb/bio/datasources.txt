@@ -1,5 +1,6 @@
 TAIR	A	http://www.arabidopsis.org/		AT1G35255	gene	Arabidopsis thaliana	1	urn:miriam:tair.locus
 Agilent	Ag			A_24_P98555	probe		0	Ag
+BioCyc	Bc	http://www.biocyc.org	http://www.biocyc.org/getid?id=$ID	EcoCyc:MON0-2657	gene		1	Bc
 BioGrid	Bg	http://www.thebiogrid.org/			probe		0	urn:miriam:biogrid
 Cint	C				probe		0	C
 CAS	Ca		http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$ID		metabolite		1	Ca
@@ -47,6 +48,7 @@ InterPro	I	http://www.ebi.ac.uk/interpro	http://www.ebi.ac.uk/interpro/IEntry?ac
 Illumina	Il			ILMN_5668	probe		0	Il
 IPI	Ip		http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-e+[IPI-acc:$ID]	IPI00020529	probe		0	Ip
 IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/		Os12g0561000	gene		1	Ir
+KEGG Genes	Kg	http://www.genome.jp/kegg/genes.html	http://www.genome.jp/dbget-bin/www_bget?$ID	ecj:JW5076	gene		1	Kg
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene	http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=$ID	1232	gene		1	urn:miriam:entrez.gene
 MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/searches/accession_report.cgi?id=$ID	MGI:2687328	gene	Mus musculus	1	urn:miriam:mgd
 miRBase	Mb		http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$ID	MI0000808	gene		1	Mb
