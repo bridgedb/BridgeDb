@@ -123,7 +123,7 @@ public class BioDataSource
 	public static final DataSource GENE_WIKI = DataSource.register (
 		"Gw", "GeneWiki").asDataSource(); 
 	public static final DataSource HUGO = DataSource.register (
-		"H", "HUGO").asDataSource();
+		"H", "HGNC").asDataSource();
 	public static final DataSource HSGENE = DataSource.register (
 		"Hs", "HsGene").asDataSource();
 	public static final DataSource INTERPRO = DataSource.register (
@@ -400,7 +400,7 @@ public class BioDataSource
 		//HUGO
 		DataSourcePatterns.registerPattern(
 				BioDataSource.HUGO,
-				Pattern.compile("\\d+")
+				Pattern.compile("[A-Z][A-Z,0-9]+")
 		);
 		
 		//OMIM (http://www.ncbi.nlm.nih.gov/Omim/omimfaq.html#numbering_system)		
