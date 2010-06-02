@@ -8,12 +8,14 @@
   <modules>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
-  	<!-- <module>org.bridgedb.rdb</module> -->
+
+    <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.webservice.cronos</module>
   	<module>org.bridgedb.webservice.picr</module>
   	<module>examples</module>
+        <module>org.bridgedb.server</module>
   </modules>
   
   	<build>
