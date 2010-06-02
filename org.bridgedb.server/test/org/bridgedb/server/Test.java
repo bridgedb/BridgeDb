@@ -16,10 +16,13 @@
 //
 package org.bridgedb.server;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Set;
 
 import junit.framework.TestCase;
+import junit.framework.TestResult;
 
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
@@ -34,23 +37,35 @@ public class Test extends TestCase
 {
 	private IDMapper mapper;
 	private Server server;
+	private boolean configExists;
 	
 	@Override
 	protected void setUp() throws Exception {
 	    
-	    if (server == null)
-        {
-            server = new Server();
-            server.run(8183, null);
-        }
-		if(mapper == null) {
-			// Start local service
-		
-
-			// Create a client
-			Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
-			mapper = BridgeDb.connect("idmapper-bridgerest:http://localhost:8183/Human");
-		}
+	   
+	    File f= new File(IDMapperService.CONF_GDBS);
+	    
+	    configExists = f.exists();
+	    
+	    if (configExists)
+	    {
+	    
+    	    if (server == null)
+            {
+                server = new Server();
+                server.run(8183, null);
+            }
+    		if(mapper == null) {
+    		    
+    			// Create a client
+    			Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
+    			mapper = BridgeDb.connect("idmapper-bridgerest:http://localhost:8183/Human");
+    		}
+	    }
+	    else
+	    {
+	        System.err.println("Skipping server tests. No " + IDMapperService.CONF_GDBS + " found.");
+	    }
 		
 	}
 	
@@ -59,9 +74,12 @@ public class Test extends TestCase
 	@Override
     protected void tearDown() throws Exception
     {
-        // TODO Auto-generated method stub
-        super.tearDown();
-        server.stop();
+	    super.tearDown();
+    
+	    if (server != null)
+	    {
+	        server.stop();
+	    }
     }
 
 
@@ -71,65 +89,84 @@ public class Test extends TestCase
 	}
 	
 	public void testLocalMapID() throws IDMapperException, ClassNotFoundException {
-		IDMapper mapper = getLocalService();
 		
-		Xref insr = new Xref ("3643", BioDataSource.ENTREZ_GENE);
-		Xref affy = new Xref ("33162_at", BioDataSource.AFFY);
-		Set<Xref> result = mapper.mapID(insr);
-		assertTrue (result.contains(affy));
-		
-		assertTrue(mapper.xrefExists(insr));
+	    if (configExists)
+	    {
+    	    IDMapper mapper = getLocalService();
+    		
+    		Xref insr = new Xref ("3643", BioDataSource.ENTREZ_GENE);
+    		Xref affy = new Xref ("33162_at", BioDataSource.AFFY);
+    		Set<Xref> result = mapper.mapID(insr);
+    		assertTrue (result.contains(affy));
+    		
+    		assertTrue(mapper.xrefExists(insr));
+	    }
 	}
 	
 	public void testLocalCapabilities() throws IDMapperException, ClassNotFoundException {
-		IDMapper mapper = getLocalService();
 		
-		IDMapperCapabilities cap = mapper.getCapabilities();
-		
-		Set<DataSource> supported = cap.getSupportedSrcDataSources();
-		assertTrue (supported.contains(DataSource.getBySystemCode("L")));
-
-		String val = cap.getProperty("SCHEMAVERSION");
-		assertNotNull(val);
-		
-		Set<DataSource> srcDs = cap.getSupportedSrcDataSources();
-		assertTrue(srcDs.size() > 0);
-		
-		assertTrue(cap.isFreeSearchSupported());
-		
-		assertTrue(cap.isMappingSupported(BioDataSource.UNIPROT, BioDataSource.ENTREZ_GENE));
-		
-		assertFalse(cap.isMappingSupported(
-				DataSource.getBySystemCode("??"), DataSource.getBySystemCode("!!")));
+	    if (configExists)
+	    {
+    	    IDMapper mapper = getLocalService();
+    		
+    		IDMapperCapabilities cap = mapper.getCapabilities();
+    		
+    		Set<DataSource> supported = cap.getSupportedSrcDataSources();
+    		assertTrue (supported.contains(DataSource.getBySystemCode("L")));
+    
+    		String val = cap.getProperty("SCHEMAVERSION");
+    		assertNotNull(val);
+    		
+    		Set<DataSource> srcDs = cap.getSupportedSrcDataSources();
+    		assertTrue(srcDs.size() > 0);
+    		
+    		assertTrue(cap.isFreeSearchSupported());
+    		
+    		assertTrue(cap.isMappingSupported(BioDataSource.UNIPROT, BioDataSource.ENTREZ_GENE));
+    		
+    		assertFalse(cap.isMappingSupported(
+    				DataSource.getBySystemCode("??"), DataSource.getBySystemCode("!!")));
+	    }
 	}
 	
 	public void testLocalSearch() throws IDMapperException, ClassNotFoundException {
-		IDMapper mapper = getLocalService();
 		
-		Set<Xref> result = mapper.freeSearch("1234", 100);
-		System.out.println(result);
-		assertTrue(result.size() > 0);
+	    if (configExists)
+        {
+    	    IDMapper mapper = getLocalService();
+    		
+    		Set<Xref> result = mapper.freeSearch("1234", 100);
+    		System.out.println(result);
+    		assertTrue(result.size() > 0);
+        }
 	}
 	
 	public void testLocalAttributes() throws ClassNotFoundException, IDMapperException {
-		AttributeMapper mapper = (AttributeMapper)getLocalService();
 		
-		Xref insr = new Xref("3643", BioDataSource.ENTREZ_GENE);
-		Map<String, Set<String>> attrMap = mapper.getAttributes(insr);
-		assertNotNull(attrMap.get("Symbol"));
-		assertTrue(attrMap.get("Symbol").size() == 2);
-		
-		Set<String> attrValues = mapper.getAttributes(insr, "Symbol");
-		assertTrue(attrValues.size() == 2);
-		
-		Map<Xref, String> xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 1);
-		assertTrue(xrefMap.size() == 1);
-
-		xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 100);
-		assertTrue(xrefMap.containsKey(insr));
-		assertTrue(xrefMap.size() > 1);
-		
-		Set<String> attrs = mapper.getAttributeSet();
-		assertTrue(attrs.size() > 0);
+	    if (configExists)
+        {
+    	    AttributeMapper mapper = (AttributeMapper)getLocalService();
+    		
+    		Xref insr = new Xref("3643", BioDataSource.ENTREZ_GENE);
+    		Map<String, Set<String>> attrMap = mapper.getAttributes(insr);
+    		assertNotNull(attrMap.get("Symbol"));
+    		assertTrue(attrMap.get("Symbol").size() == 2);
+    		
+    		Set<String> attrValues = mapper.getAttributes(insr, "Symbol");
+    		assertTrue(attrValues.size() == 2);
+    		
+    		Map<Xref, String> xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 1);
+    		assertTrue(xrefMap.size() == 1);
+    
+    		xrefMap = mapper.freeAttributeSearch("INSR", "Symbol", 100);
+    		assertTrue(xrefMap.containsKey(insr));
+    		assertTrue(xrefMap.size() > 1);
+    		
+    		Set<String> attrs = mapper.getAttributeSet();
+    		assertTrue(attrs.size() > 0);
+        }
 	}
+
+
+
 }
