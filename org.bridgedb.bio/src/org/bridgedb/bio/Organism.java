@@ -28,6 +28,8 @@ import java.util.Map;
  * Still work in progress, currently not used everywhere it could be used.
  * <p>
  * TODO: make extensible
+ * TODO: use static initializer - static {...} - instead of multiple initMappings calls...
+ * TODO: link to taxonomy, e.g., using int constructor arg. and new method: public DataSource getTaxonomy(){...}
  */
 public enum Organism 
 {
