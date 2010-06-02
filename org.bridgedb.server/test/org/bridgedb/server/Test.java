@@ -33,21 +33,40 @@ import org.bridgedb.bio.BioDataSource;
 public class Test extends TestCase
 {
 	private IDMapper mapper;
+	private Server server;
 	
 	@Override
 	protected void setUp() throws Exception {
+	    
+	    if (server == null)
+        {
+            server = new Server();
+            server.run(8183, null);
+        }
 		if(mapper == null) {
 			// Start local service
-			Server server = new Server();
-			server.run(8183, null);
+		
 
 			// Create a client
 			Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
 			mapper = BridgeDb.connect("idmapper-bridgerest:http://localhost:8183/Human");
 		}
+		
 	}
+	
+	
 
-	public IDMapper getLocalService() {
+	@Override
+    protected void tearDown() throws Exception
+    {
+        // TODO Auto-generated method stub
+        super.tearDown();
+        server.stop();
+    }
+
+
+
+    public IDMapper getLocalService() {
 		return mapper;
 	}
 	
