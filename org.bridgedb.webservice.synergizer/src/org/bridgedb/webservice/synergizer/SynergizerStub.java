@@ -259,7 +259,7 @@ public class SynergizerStub {
 
     public boolean idExist(final String authority, final String species,
             final String domain, final String id) throws IDMapperException {
-        String range = domain;
+        String range = domain; // bug: client now complains that domain==range!
         Set<String> ids = new HashSet(1);
         ids.add(id);
 

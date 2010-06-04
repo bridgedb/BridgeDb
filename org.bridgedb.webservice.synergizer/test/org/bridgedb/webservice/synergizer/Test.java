@@ -49,27 +49,29 @@ public class Test extends TestCase
         }
 
         public void testIDMapperSynergizer() throws IOException, IDMapperException {
-//            SynergizerStub client = SynergizerStub.getInstance();
-//            for (String auth : client.availableAuthorities()) {
-//                System.out.println("Authority: "+auth);
-//                for (String species : client.availableSpecies(auth)) {
-//                    System.out.println("  Species: "+species);
-//                    IDMapperSynergizer mapper = new IDMapperSynergizer(auth, species);
-//                    System.out.println("    Supported source data sources:");
-//                    for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources()) {
-//                        System.out.println("      "+ds.getFullName());
-//                    }
-//                    System.out.println("    Supported target data sources:");
-//                    for (DataSource ds : mapper.getCapabilities().getSupportedTgtDataSources()) {
-//                        System.out.println("      "+ds.getFullName());
-//                    }
-//                }
-//            }
+        	
+            SynergizerStub client = SynergizerStub.getInstance();
+            for (String auth : client.availableAuthorities()) {
+                System.out.println("Authority: "+auth);
+                for (String species : client.availableSpecies(auth)) {
+                    System.out.println("  Species: "+species);
+                    IDMapperSynergizer mapper = new IDMapperSynergizer(auth, species);
+                    System.out.println("    Supported source data sources:");
+                    for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources()) {
+                        System.out.println("      "+ds.getFullName());
+                    }
+                    System.out.println("    Supported target data sources:");
+                    for (DataSource ds : mapper.getCapabilities().getSupportedTgtDataSources()) {
+                        System.out.println("      "+ds.getFullName());
+                    }
+                    break; // one is enough for now
+                }
+                break; // one is enough for now
+            }
 
             IDMapper mapper = BridgeDb.connect("idmapper-synergizer:?authority=ensembl&species=Homo sapiens");
-
             DataSource srcDs = DataSource.getByFullName("hgnc_symbol");
-            assertTrue(mapper.xrefExists(new Xref("pja1", srcDs)));
+            assertTrue(mapper.xrefExists(new Xref("snph", srcDs)));
 
             Set<Xref> srcXrefs = new HashSet();
             srcXrefs.add(new Xref("snph", srcDs));
