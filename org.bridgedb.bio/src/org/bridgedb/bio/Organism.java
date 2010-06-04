@@ -29,7 +29,7 @@ import java.util.Map;
  * <p>
  * TODO: make extensible
  * TODO: use static initializer - static {...} - instead of multiple initMappings calls...
- * TODO: link to taxonomy, e.g., using int constructor arg. and new method: public DataSource getTaxonomy(){...}
+ * TODO: link to taxonomy, e.g., using int constructor arg.; and new method: public Xref getTaxonomy(){...}
  */
 public enum Organism 
 {
