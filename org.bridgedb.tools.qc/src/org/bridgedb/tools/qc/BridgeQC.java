@@ -1,4 +1,4 @@
-package org.bridgedb.util;
+package org.bridgedb.tools.qc;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ import org.bridgedb.rdb.SimpleGdbFactory;
 /**
  * Utility to do simple quality control on a BridgeDerby database.
  * Run with two parameters: [old database] and [new database]
- * Some basic comparisons will be done, which servers as a sanity check
+ * Some basic comparisons will be done, which serves as a sanity check
  * that not suddenly a whole identifier system has gone missing.
  * <p>
  * The script produces a report on stdout, lines starting with "INFO"
