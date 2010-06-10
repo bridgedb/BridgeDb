@@ -310,16 +310,8 @@ public class IDMapperSynergizer extends IDMapperWebservice
     /**
      * {@inheritDoc}
      */
-    public boolean xrefExists(Xref xref) throws IDMapperException {
-        if (xref==null)
-            return false;
-
-        DataSource ds = xref.getDataSource();
-        if (!supportedSrcDs.contains(ds))
-            return false;
-
-        String src = ds.getFullName();
-        String id = xref.getId();
-        return stub.idExist(authority, species, src, id);
+    public boolean xrefExists(Xref xref) throws IDMapperException 
+    {
+    	throw new UnsupportedOperationException ("xrefExists operation not supported for synergizer");
     }
 }

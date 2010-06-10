@@ -257,22 +257,4 @@ public class SynergizerStub {
         return res.translationMap();
     }
 
-    public boolean idExist(final String authority, final String species,
-            final String domain, final String id) throws IDMapperException {
-        String range = domain; // bug: client now complains that domain==range!
-        Set<String> ids = new HashSet(1);
-        ids.add(id);
-
-        SynergizerClient.TranslateResult res;
-        try {
-             res = client.translate(authority, species, domain, range, ids);
-        } catch (IOException e) {
-            throw new IDMapperException(e);
-        } catch (JSONException e) {
-            throw new IDMapperException(e);
-        }
-
-        return res.foundSourceIDsWithFoundTargetIDs().contains(id)
-                || res.foundSourceIDsWithUnfoundTargetIDs().contains(id);
-    }
 }

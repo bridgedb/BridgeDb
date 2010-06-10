@@ -71,7 +71,16 @@ public class Test extends TestCase
 
             IDMapper mapper = BridgeDb.connect("idmapper-synergizer:?authority=ensembl&species=Homo sapiens");
             DataSource srcDs = DataSource.getByFullName("hgnc_symbol");
-            assertTrue(mapper.xrefExists(new Xref("snph", srcDs)));
+            
+            try
+            {
+            	mapper.xrefExists(new Xref("snph", srcDs));
+            	fail ("Expected UnsupportedOperationException after calling xrefExists");
+            }
+            catch (UnsupportedOperationException ex)
+            {
+            	// ok.
+            }
 
             Set<Xref> srcXrefs = new HashSet();
             srcXrefs.add(new Xref("snph", srcDs));

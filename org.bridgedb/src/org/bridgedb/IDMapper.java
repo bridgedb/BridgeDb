@@ -53,10 +53,10 @@ public interface IDMapper {
 	public Set<Xref> mapID (Xref ref, DataSource... tgtDataSources) throws IDMapperException;
 	
     /**
-     * Check whether an Xref exists.
+     * Check whether an Xref is known by the given mapping source. This is an optionally supported operation.
      * @param xref reference to check
      * @return if the reference exists, false if not
-     * @throws IDMapperException if failed
+     * @throws IDMapperException if failed, UnsupportedOperationException if it's not supported by the Driver.
      */
     public boolean xrefExists(Xref xref) throws IDMapperException;
 
