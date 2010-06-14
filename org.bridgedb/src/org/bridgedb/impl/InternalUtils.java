@@ -191,7 +191,14 @@ public final class InternalUtils
 
     /**
      * Generic method for multimaps, a map that can contain multiple values per key.
-     */
+     * Unlike a regular map, if you insert a value for a key that already exists, the previous value 
+     * will not be discared. 
+     * @param <T> key type of multimap
+     * @param <U> value type of multimap
+     * @param map multimap to work on
+     * @param key key of the value to insert
+     * @param val value to insert.
+    */
     public static <T, U> void multiMapPut(Map<T, Set<U>> map, T key, U val)
     {
     	Set<U> set;
@@ -209,6 +216,15 @@ public final class InternalUtils
 
     /**
      * Generic method for multimaps, a map that can contain multiple values per key.
+     * Unlike a regular map, if you insert a value for a key that already exists, the previous value 
+     * will not be discared.
+     * <p>
+     * multiMapPutAll let's you insert a collection of items at once. 
+     * @param <T> key type of multimap
+     * @param <U> value type of multimap
+     * @param map multimap to work on
+     * @param key key of the value to insert
+     * @param vals values to insert.
      */
     public static <T, U> void multiMapPutAll(Map<T, Set<U>> map, T key, Collection<U> vals)
     {
@@ -224,5 +240,24 @@ public final class InternalUtils
     	}
     	set.addAll (vals);
     }
+
+    /**
+     * Split a heterogeneous Xref set into multiple homogeneous Xref sets.
+     * <p>
+     * If the input contains {L:3643, L:1234, X:1004_at, X:1234_at},
+     * then the output will contain
+     * { L=> {L:3643, L:1234}, X=> {X:1004_at, X:1234_at} }.
+     * @param srcXrefs the set to split
+     * @return map with datasources as keys and homogeneous sets as values.
+     */
+	public static Map<DataSource, Set<Xref>> groupByDataSource(Collection<Xref> srcXrefs)
+	{
+		Map<DataSource, Set<Xref>> result = new HashMap<DataSource, Set<Xref>>();
+		for (Xref ref : srcXrefs) 
+		{  
+			multiMapPut(result, ref.getDataSource(), ref);
+		}
+		return result;
+	}
 
 }
