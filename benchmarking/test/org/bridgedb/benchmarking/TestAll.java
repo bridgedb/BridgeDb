@@ -11,15 +11,15 @@ import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.rdb.construct.DBConnectorDerbyServer;
 
-//import buildsystem.Measure;
+import buildsystem.Measure;
 
 public class TestAll extends Base
 {
-	//private Measure measure;
+	private Measure measure;
 	
 	@Override public void setUp()
 	{
-		//measure = new Measure("bridgedb_timing.txt");
+		measure = new Measure("bridgedb_timing.txt");
 	}
 
 	public void testDerbyClient () throws IDMapperException, ClassNotFoundException
