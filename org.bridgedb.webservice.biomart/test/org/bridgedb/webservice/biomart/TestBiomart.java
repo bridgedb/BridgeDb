@@ -22,28 +22,23 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.webservice.biomart.util.BiomartClient;
-//import buildsystem.Measure;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import junit.framework.TestCase;
-
-import org.bridgedb.webservice.biomart.*;
+import org.junit.Ignore;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Test identifier mapping using Biomart web service.
  */
-public class TestBiomart extends TestCase
+@Ignore //uncomment if biomart service is down again...
+public class TestBiomart // do not need to extend TestCase
 {
 	// disabled test, because it takes several minutes to run
+	//@Test
     public void _testBiomartStub() throws IOException, IDMapperException {
         BiomartStub biomartStub = BiomartStub.getInstance();
 
@@ -85,27 +80,32 @@ public class TestBiomart extends TestCase
         }
     }
 
-    public void testBioMartConnector() throws IOException, IDMapperException
+    @Test
+    public void testBioMartConnector() throws IOException, IDMapperException, ClassNotFoundException
     {
-//        BiomartStub biomartStub = BiomartStub.getInstance();
-//        Map<String, Database> reg = null;
-//        try {
-//            reg = biomartStub.getRegistry();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        Set<Database> dbs = new HashSet(reg.size());
-//         for (Database db : reg.values()) {
-//             //if (db.visible()) {
-//                 dbs.add(db);
-//             //}
-//                System.out.println (db.getName());
-//         }
+    /*
+        BiomartStub biomartStub = BiomartStub.getInstance();
+        Map<String, Database> reg = null;
+        try {
+            reg = biomartStub.getRegistry();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Set<Database> dbs = new HashSet(reg.size());
+         for (Database db : reg.values()) {
+             //if (db.visible()) {
+                 dbs.add(db);
+             //}
+                System.out.println (db.getName());
+         }
         //BiomartStub biomartStub = BiomartStub.getInstance();
 
         //Set<Dataset> datasets = new HashSet(biomartStub.getAvailableDatasets("ensembl"));
+    */
 
-        IDMapperBiomart mapper = new IDMapperBiomart("ensembl", "hsapiens_gene_ensembl");
+    	IDMapperBiomart mapper = new IDMapperBiomart("ensembl", "hsapiens_gene_ensembl");
+    	//Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
+    	//IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
  		Set<DataSource> dest = mapper.getCapabilities().getSupportedTgtDataSources(); 
 		 
 		assertTrue (dest.size() > 0);
@@ -116,11 +116,11 @@ public class TestBiomart extends TestCase
 		assertTrue (dest.contains (DataSource.getByFullName("entrezgene")));
     }
 
+    @Test
     public void testBioMartConnector2() throws IOException, IDMapperException, ClassNotFoundException
     {
 		Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
 		
-		 //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
 		IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
 		Set<DataSource> dest = mapper.getCapabilities().getSupportedTgtDataSources(); 
 		 
@@ -154,11 +154,12 @@ public class TestBiomart extends TestCase
     	return result.toString();
     }
     
+    
+    @Test
     public void testBioMartMapping() throws IOException, IDMapperException, ClassNotFoundException
     {
-        Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
+       Class.forName("org.bridgedb.webservice.biomart.IDMapperBiomart");
         
-        //IDMapperBiomart mapper = new IDMapperBiomart("hsapiens_gene_ensembl");
        IDMapper mapper = BridgeDb.connect ("idmapper-biomart:http://www.biomart.org/biomart/martservice?mart=ensembl&dataset=hsapiens_gene_ensembl");
        
        Set<Xref> result = mapper.mapID(

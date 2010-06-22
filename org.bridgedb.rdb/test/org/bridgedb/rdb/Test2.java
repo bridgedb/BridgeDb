@@ -32,7 +32,9 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
+import org.junit.Ignore;
 
+//@Ignore
 public class Test2 extends TestCase 
 {
 	private static final String GDB_HUMAN = 

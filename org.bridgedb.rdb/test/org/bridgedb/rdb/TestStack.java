@@ -12,9 +12,11 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
+//@Ignore
 public class TestStack extends TestCase
 {
 	private static final String GDB_HUMAN = 
