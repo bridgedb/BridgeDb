@@ -42,7 +42,7 @@ Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/sear
 Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literature/pub_search?ref_id=$ID	6200	probe		0	Gl
 GenPept	Gp			AAH72400	probe		0	Gp
 Gramene Pathway	Gp	http://www.gramene.org/pathway		PROTEIN-KINASE-RXN	probe		0	Gp
-Gene Wiki       Gw      http://en.wikipedia.org/wiki/Portal:Gene_Wiki   http://plugins.gnf.org/cgi-bin/wp.cgi?id=$ID    1017    gene            0       Gw
+Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.gnf.org/cgi-bin/wp.cgi?id=$ID	1017	gene		0	Gw
 HGNC	H	http://www.genenames.org/	http://www.genenames.org/data/hgnc_data.php?match=$ID	25068	gene	Homo sapiens	1	urn:miriam:hgnc
 HsGene	Hs				gene	Homo sapiens	1	Hs
 InterPro	I	http://www.ebi.ac.uk/interpro	http://www.ebi.ac.uk/interpro/IEntry?ac=$ID		domain		0	urn:miriam:interpro
