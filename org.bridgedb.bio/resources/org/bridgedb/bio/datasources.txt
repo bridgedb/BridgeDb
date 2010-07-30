@@ -77,7 +77,7 @@ WormBase	W	http://www.wormbase.org	http://www.wormbase.org/db/gene/gene?name=$ID
 Wheat gene catalog	Wc	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$ID	341	gene	Triticum aestivum	1	Wc
 Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$ID	Acetate	metabolite		1	Wi
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$ID	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	Wn
-WikiPathways	Wp	http://www.wikipathways.org	http://wikipathways.org/index.php/Pathway:$ID	WP702	pathway		0	urn:miriam:wikipathways
+WikiPathways	Wp	http://www.wikipathways.org	http://wikipathways.org/index.php/Pathway:$ID	WP702	pathway		1	urn:miriam:wikipathways
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$ID	WGS-95-1333	probe	Triticum aestivum	0	Wr
 Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/Homo_sapiens/Search/Results?species=all;feature=OligoProbe;q=$ID	1851_s_at	probe		0	X
 ZFIN	Z	http://zfin.org	http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=$ID	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin
