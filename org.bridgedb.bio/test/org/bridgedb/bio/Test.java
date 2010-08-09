@@ -16,25 +16,26 @@
 //
 package org.bridgedb.bio;
 
-import java.io.File;
 import java.util.Set;
+import static org.junit.Assert.*;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.Xref;
+import org.junit.Before;
 
-import junit.framework.TestCase;
-
-public class Test extends TestCase 
+public class Test
 {
 	boolean eventReceived = false;
 
+	@Before
 	public void setUp()
 	{
 		// cause static initializer to run.
 		BioDataSource.init();
 	}
 
+	@org.junit.Test
 	public void testInit()
 	{
 		for (DataSource ds : DataSource.getDataSources())
@@ -45,6 +46,7 @@ public class Test extends TestCase
 		}
 	}
 	
+	@org.junit.Test
 	public void testURN()
 	{
 		Xref ref = new Xref ("3643", BioDataSource.ENTREZ_GENE);
@@ -54,19 +56,22 @@ public class Test extends TestCase
 		
 	}
 
+	@org.junit.Test
 	public void testSpeciesSpecificEnsembl()
 	{
 		assertEquals (BioDataSource.ENSEMBL_COW, BioDataSource.getSpeciesSpecificEnsembl(Organism.BosTaurus));
 		assertEquals (BioDataSource.ENSEMBL_MOSQUITO, BioDataSource.getSpeciesSpecificEnsembl(Organism.AnophelesGambiae));
 	}
 
+	@org.junit.Test
 	public void testBioDataSources()
 	{
 		assertEquals (BioDataSource.WORMBASE.getOrganism(), Organism.CaenorhabditisElegans);
 		assertEquals (BioDataSource.ENSEMBL_CHICKEN.getOrganism(), Organism.GallusGallus);
 		assertEquals (BioDataSource.CAS.getType(), "metabolite");
 	}
-		
+	
+	@org.junit.Test
 	public void testPatterns()
 	{
 		assertTrue (DataSourcePatterns.getDataSourceMatches("1.1.1.1").contains(BioDataSource.ENZYME_CODE));
@@ -76,6 +81,7 @@ public class Test extends TestCase
 		assertTrue (DataSourcePatterns.getDataSourceMatches("CHEBI:17925").contains(BioDataSource.CHEBI));
 	}
 
+	@org.junit.Test
 	public void testDataSource()
 	{
 		DataSource ds = BioDataSource.ENSEMBL;
@@ -89,6 +95,7 @@ public class Test extends TestCase
 		assertEquals (ds5, BioDataSource.ENTREZ_GENE);
 	}
 
+	@org.junit.Test
 	public void testDataSourceFilter ()
 	{
 		// ensembl is primary, affy isn't
