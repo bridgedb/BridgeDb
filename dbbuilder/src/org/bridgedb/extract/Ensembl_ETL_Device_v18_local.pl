@@ -1026,6 +1026,14 @@ while (my $gene = pop(@$genes))
                                       'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
                                                    'PRIMARY KEY (ID)'
                                                    ]);
+        %{$GeneTables{TubercuList}} = ('NAME' => ['TubercuList', 'Tb'],
+                                      'SYSTEM' => ["\'TubercuList\'", "\'$dateArg\'",
+                                                   "\'ID\|\'", "\'\|$species\|\'", "\'\'",
+                                                   "\'http://tuberculist.epfl.ch/quicksearch.php?gene+name=~\'", "\'\'",
+                                                   "\'http://tuberculist.epfl.ch\'"],
+                                      'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                   'PRIMARY KEY (ID)'
+                                                   ]);
 
 
 	## ENSEMBL LINK TABLES
@@ -2116,6 +2124,14 @@ sub parse_DBEntries {
                 $$GeneTables{BioCyc}{$count.$dot.$subcount{BioCyc}} = [$dbe_primary_id];
                 $$Ensembl_GeneTables{BioCyc}{$count.$dot.$subcount{BioCyc}} = [$gene_stable_id, $dbe_primary_id];
                 ++$subcount{BioCyc};
+            }
+        }
+         elsif ($dbe_dbname =~ /^\'TubercuList\'$/){
+            $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{TubercuList}{$dbe_primary_id}}++){
+                $$GeneTables{TubercuList}{$count.$dot.$subcount{BioCyc}} = [$dbe_primary_id];
+                $$Ensembl_GeneTables{TubercuList}{$count.$dot.$subcount{BioCyc}} = [$gene_stable_id, $dbe_primary_id];
+                ++$subcount{TubercuList};
             }
         }
 	else {
