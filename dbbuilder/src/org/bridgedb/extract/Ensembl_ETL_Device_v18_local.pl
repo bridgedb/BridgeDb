@@ -413,11 +413,11 @@ foreach my $db_adaptor (@db_adaptors) {
 # get gene adaptor to query gene information
 # get slice adaptor to load 'top-level' regions into SeqRegionCache
 # get database adaptors to identify the name of latest species database
-my $gene_adaptor = $registry->get_adaptor($genus_species, "core", "gene");
-my $slice_adaptor = $registry->get_adaptor($genus_species, "core", "slice");
+my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
+my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
 my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
-my $probe_adaptor = $registry->get_adaptor($genus_species, "funcgen", "ProbeFeature");
-my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $genus_species)};
+my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
+my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
 if ($split_dbname[2] == "collection"){	     # shift array elements for "collections"
@@ -834,15 +834,13 @@ while (my $gene = pop(@$genes))
 					     'INDEX (Symbol)']);
 	%{$GeneTables{HUGO}} = ('NAME' => ['HUGO','H'], 
 				'SYSTEM' => ["\'The Human Genome Organisation\'", "\'$dateArg\'", 
-					     "\'ID|Symbol\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
-					     "\'http://www.genenames.org/data/hgnc_data.php?hgnc_id=~\'", "\'\'", 
+					     "\'ID|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+					     "\'http://www.genenames.org/data/hgnc_data.php?match=~\'", "\'\'", 
 					     "\'http://www.genenames.org\'"],
 				'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
-					     'Alt VARCHAR(128) NOT NULL DEFAULT \'\'', 
 					     'Description VARCHAR(255) DEFAULT NULL',
 					     'Synonyms VARCHAR(255) DEFAULT NULL',
-                                             'PRIMARY KEY (ID)',
-					     'INDEX (Symbol)']);
+                                             'PRIMARY KEY (ID)']);
 	%{$GeneTables{MGI}} = ('NAME' => ['MGI', 'M'], 
 			       'SYSTEM' => ["\'Mouse Genome Informatics\'", "\'$dateArg\'", 
 					    "\'ID|Symbol\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
@@ -1012,6 +1010,22 @@ while (my $gene = pop(@$genes))
                                                    'Synonyms VARCHAR(255) DEFAULT NULL',
                                                    'PRIMARY KEY (ID)'
                                                    ]);
+        %{$GeneTables{KEGG}} = ('NAME' => ['KeggGenes', 'Kg'],
+                                      'SYSTEM' => ["\'KEGG Genes\'", "\'$dateArg\'",
+                                                   "\'ID\|\'", "\'\|$species\|\'", "\'\'",
+                                                   "\'http://www.genome.jp/dbget-bin/www_bget?~\'", "\'\'",
+                                                   "\'http://www.genome.jp/kegg/genes.html\'"],
+                                      'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                   'PRIMARY KEY (ID)'
+                                                   ]);
+        %{$GeneTables{BioCyc}} = ('NAME' => ['BioCyc', 'Bc'],
+                                      'SYSTEM' => ["\'BioCyc\'", "\'$dateArg\'",
+                                                   "\'ID\|\'", "\'\|$species\|\'", "\'\'",
+                                                   "\'http://www.biocyc.org/getid?id=~\'", "\'\'",
+                                                   "\'http://www.biocyc.org\'"],
+                                      'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                   'PRIMARY KEY (ID)'
+                                                   ]);
 
 
 	## ENSEMBL LINK TABLES
@@ -1153,10 +1167,10 @@ while (my $gene = pop(@$genes))
 		    \%Attributes);  
     
     ## EXTRACT FUNCGEN INFORMATION
-    parse_ProbeFeatures($gene, 
-			\%GeneTables,
-			\%Ensembl_GeneTables,
-			\%Attributes);
+#    parse_ProbeFeatures($gene, 
+#			\%GeneTables,
+#			\%Ensembl_GeneTables,
+#			\%Attributes);
 
     ## EXTRACT GENE STRUCTURE INFORMATINO
 #    parse_AllTranscripts($gene->get_all_Transcripts(), 
@@ -1682,12 +1696,10 @@ sub parse_DBEntries {
 		$$Attributes{EntrezGene}{$count.$dot.$subcount{EntrezGene}.$dot.'2'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{EntrezGene}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
 		++$subcount{EntrezGene};
 	    }
-       	    ## Use Entrez Gene IDs to fill GeneWiki tables
-            if (!${$seen{GeneWiki}{$dbe_primary_id}}++){
+       	    ## Use Entrez Gene IDs to fill GeneWiki tables for HUMAN ONLY
+            if ($genus_species eq 'homo_sapiens' && !${$seen{GeneWiki}{$dbe_primary_id}}++){
                 $$GeneTables{GeneWiki}{$count.$dot.$subcount{GeneWiki}} = [$dbe_primary_id, $dbe_display_id, $dbe_syns];
                 $$Ensembl_GeneTables{GeneWiki}{$count.$dot.$subcount{GeneWiki}} = [$gene_stable_id, $dbe_primary_id];
-                #process Attributes
-                ## SKIP THIS STEP: too much information
                 ++$subcount{GeneWiki};
             }
 
@@ -1897,14 +1909,11 @@ sub parse_DBEntries {
   	}
     	elsif ($dbe_dbname =~ /^\'HGNC\'$/){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-            ## NOTE: working with symbols as primary id; storing numerical identifier as 'Alt' in attributes 
+            ## NOTE: working with symbols as primary id 
 	    if (!${$seen{HUGO}{$dbe_display_id}}++){ 
-		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, $dbe_primary_id, $dbe_description, $dbe_syns];
+		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, $dbe_description, $dbe_syns];
 		$$Ensembl_GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$gene_stable_id, $dbe_display_id];
                 #process Attributes
-                unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Alt'), $dbe_primary_id];
-		}
                 #@syns = (@syns, $dbe_display_id);
                 $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'1'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
                 $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'2'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
@@ -2091,6 +2100,22 @@ sub parse_DBEntries {
                 #process Attributes
                 ## SKIP THIS STEP: too much information
                 ++$subcount{WikiGene};
+            }
+        }
+        elsif ($dbe_dbname =~ /^\'KEGG\'$/){
+            $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{KEGG}{$dbe_primary_id}}++){
+                $$GeneTables{KEGG}{$count.$dot.$subcount{KEGG}} = [$dbe_primary_id];
+                $$Ensembl_GeneTables{KEGG}{$count.$dot.$subcount{KEGG}} = [$gene_stable_id, $dbe_primary_id];
+                ++$subcount{KEGG};
+            }
+        }
+         elsif ($dbe_dbname =~ /^\'BioCyc\'$/){
+            $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
+            if (!${$seen{BioCyc}{$dbe_primary_id}}++){
+                $$GeneTables{BioCyc}{$count.$dot.$subcount{BioCyc}} = [$dbe_primary_id];
+                $$Ensembl_GeneTables{BioCyc}{$count.$dot.$subcount{BioCyc}} = [$gene_stable_id, $dbe_primary_id];
+                ++$subcount{BioCyc};
             }
         }
 	else {
