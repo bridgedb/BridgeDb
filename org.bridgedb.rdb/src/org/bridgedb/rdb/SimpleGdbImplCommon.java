@@ -80,6 +80,7 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 	/** {@inheritDoc} */
 	public boolean xrefExists(Xref xref) throws IDMapperException 
 	{
+		if (xref.getDataSource() == null) return false;
 		final QueryLifeCycle pst = qXrefExists;
 		synchronized (pst) {
 			try 

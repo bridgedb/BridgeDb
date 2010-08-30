@@ -11,6 +11,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.bio.BioDataSource;
 
 import buildsystem.Measure;
 
@@ -19,6 +20,8 @@ import junit.framework.TestCase;
 public class Base extends TestCase 
 {
 	static final Xref NONEXISTENT = new Xref("123", DataSource.getBySystemCode("??"));
+	static final Xref HALFNULL1 = new Xref("123", null);
+	static final Xref HALFNULL2 = new Xref(null, BioDataSource.ENTREZ_GENE);
 	
 	/**
 	 * Basic check for a mapper.
@@ -46,6 +49,8 @@ public class Base extends TestCase
 		
 		// check that xrefexists doesn't lead to exception
 		assertFalse (mapper.xrefExists(NONEXISTENT));
+		assertFalse (mapper.xrefExists(HALFNULL1));
+		assertFalse (mapper.xrefExists(HALFNULL2));
 		assertTrue (mapper.xrefExists(from));
 		assertTrue (mapper.xrefExists(to));
 		
