@@ -31,4 +31,4 @@ Populus	trichocarpa	Western Balsam	Poplar	Pi
 Zea	mays	Maize	Zm
 Bacillus	subtilis	Bsubtilis	Bs
 Escherichia	coli	Ecoli	Ec
-Mycobacterium tuberculosis	Mtuberculosis	Mx
+Mycobacterium	tuberculosis	Mtuberculosis	Mx
