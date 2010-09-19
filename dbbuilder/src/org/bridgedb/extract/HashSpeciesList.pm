@@ -32,6 +32,7 @@ unless( open( SPECIES, $speciesFile)){
                 exit; 
 	} else {
 		# download the file from BridgeDb
+		# should update with http://svn.bigcat.unimaas.nl/bridgedb/trunk/org.bridgedb.bio/resources/org/bridgedb/bio/organisms.txt
 		`wget http://svn.bigcat.unimaas.nl/bridgedb/trunk/dbbuilder/src/org/bridgedb/extract/SpeciesList`;
 
 		# now try again
