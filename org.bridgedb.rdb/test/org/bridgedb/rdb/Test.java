@@ -55,11 +55,21 @@ public class Test extends TestCase
 		delta = end - start;
 		measure.add ("timing::idmapper-derbyclient connect to two databases", "" + delta, "msec");
 		
+		for (String key : mapper.getCapabilities().getKeys())
+		{
+			System.out.println (key + " -> " + mapper.getCapabilities().getProperty(key));
+		}
+
 		System.out.println (mapper.getCapabilities().getSupportedTgtDataSources());
 		
 		Set <String> symbols = new HashSet<String>();
 		AttributeMapper attr = (AttributeMapper)mapper;
-		
+
+		for (String key : attr.getAttributeSet())
+		{
+			System.out.println (key);
+		}
+
 		// time the common case of doing a free search and then querying all for symbol
 		start = System.currentTimeMillis();
 		Map<Xref, String> symbolMap = attr.freeAttributeSearch("p53", "symbol", 100);
@@ -72,9 +82,10 @@ public class Test extends TestCase
 		// time the case of getting all attributes for backpage info
 		start = System.currentTimeMillis();
 		Xref insr = new Xref ("ENSG00000171105", DataSource.getBySystemCode("EnHs"));
-		for (String x : new String[] {"Description", "Symbol", "Synonyms", "Chromosome"})
+		for (String x : new String[] {"Description", "Symbol", "Chromosome"})
+		//TODO: Synonyms is also available, but not on ENSG.... ids
 		{
-			Set<String> result = attr.getAttributes(insr, x);
+			Set<String> result = attr.getAttributes(insr , x);
 			assertTrue ("No result for " + x, result.size() > 0);
 			System.out.println (result);
 		}
