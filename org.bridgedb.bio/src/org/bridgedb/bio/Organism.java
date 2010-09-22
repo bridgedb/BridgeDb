@@ -62,6 +62,7 @@ public enum Organism
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish"),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit"),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee"),
+	SusScrofa("Sus scrofa", "Ss", "Pig"),
 	
 	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	
 	PopulusTrichocarpa("Populus trichocarpa", "Pi", "Western Balsam Poplar"),
