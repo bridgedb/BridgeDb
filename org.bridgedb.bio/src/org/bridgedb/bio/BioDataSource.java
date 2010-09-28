@@ -186,6 +186,8 @@ public class BioDataSource
 		"Wg", "WikiGene").asDataSource();
 	public static final DataSource WIKIPEDIA = DataSource.register (
 		"Wi", "Wikipedia").asDataSource();
+	public static final DataSource WIKIPATHWAYS = DataSource.register (
+		"Wp", "Wikipathways").asDataSource();
 	public static final DataSource WHEAT_GENE_CATALOG = DataSource.register (
 		"Wc", "Wheat gene catalog").asDataSource(); 
 	public static final DataSource WHEAT_GENE_NAMES = DataSource.register (
