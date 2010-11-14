@@ -57,10 +57,14 @@ my $api_path = "/home/socr/c/users2/apico/src/ensembl/modules";
 my $scriptmode = 0;
 my $speciesArg = 0;
 my $dateArg = 0;
+my $funcgen = 0;
+my $gs = 0;
 
-if ($#ARGV == 1) { # if 2 args passed in, then use them
+if ($#ARGV == 3) { # if 4 args passed in, then use them
 	$speciesArg = $ARGV[0];
 	$dateArg = $ARGV[1];
+	$funcgen = $ARGV[2];
+	$gs = $ARGV[3];
 
 	#trigger script mode
 	$scriptmode = 1;
@@ -271,7 +275,7 @@ my $end_count = $start_count + $collect_sample - 1;  # store end boundary of sam
 
 
 ## INSERT DATA INTO MYSQL STD TABLES?
-my $mysql_std_load_default = 'Yes';      # default answer
+my $mysql_std_load_default = 'No';      # default answer
 
 print "\n\n\tWould you like to load data directly into MySQL Std tables? ($mysql_std_load_default) --> ";
 my $mysql_std_load = $mysql_std_load_default;
@@ -413,11 +417,11 @@ foreach my $db_adaptor (@db_adaptors) {
 # get gene adaptor to query gene information
 # get slice adaptor to load 'top-level' regions into SeqRegionCache
 # get database adaptors to identify the name of latest species database
-my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
-my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
+my $gene_adaptor = $registry->get_adaptor(($gs=='Y'?$genus_species:$species), "core", "gene");
+my $slice_adaptor = $registry->get_adaptor(($gs=='Y'?$genus_species:$species), "core", "slice");
 my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
-my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
-my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
+my $probe_adaptor = $registry->get_adaptor(($gs=='Y'?$genus_species:$species), "funcgen", "ProbeFeature");
+my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => ($gs=='Y'?$genus_species:$species))};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
 if ($split_dbname[2] == "collection"){	     # shift array elements for "collections"
@@ -697,11 +701,11 @@ while (my $gene = pop(@$genes))
                                                      ]);
 	%{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'], 
 				'SYSTEM' => ["\'Affymetrix\'", "\'$dateArg\'", 
-					     "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+					     "\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.ensembl.org/".$genus_species."/Search/Summary?q=~\'", "\'\'", 
 					     "\'https://www.affymetrix.com/analysis/downloads/\'"],
 				'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
-					     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+					     #'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
 					     'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
 					     'PRIMARY KEY (ID)'
 					     ]);
@@ -1175,10 +1179,12 @@ while (my $gene = pop(@$genes))
 		    \%Attributes);  
     
     ## EXTRACT FUNCGEN INFORMATION
-#    parse_ProbeFeatures($gene, 
-#			\%GeneTables,
-#			\%Ensembl_GeneTables,
-#			\%Attributes);
+    if ($funcgen =~ /(Y|Yes)/i){
+     	parse_ProbeFeatures($gene, 
+			\%GeneTables,
+			\%Ensembl_GeneTables,
+			\%Attributes);
+    }
 
     ## EXTRACT GENE STRUCTURE INFORMATINO
 #    parse_AllTranscripts($gene->get_all_Transcripts(), 
