@@ -121,7 +121,7 @@ public class BioDataSource
 	public static final DataSource GRAMENE_PATHWAY = DataSource.register (
 		"Gp", "Gramene Pathway").asDataSource();
 	public static final DataSource GENE_WIKI = DataSource.register (
-		"Gw", "GeneWiki").asDataSource(); 
+		"Gw", "Gene Wiki").asDataSource(); 
 	public static final DataSource HUGO = DataSource.register (
 		"H", "HGNC").asDataSource();
 	public static final DataSource HSGENE = DataSource.register (
@@ -183,7 +183,7 @@ public class BioDataSource
 	public static final DataSource WORMBASE = DataSource.register (
 		"W", "WormBase").asDataSource();
 	public static final DataSource WIKIGENE = DataSource.register (
-		"Wg", "WikiGene").asDataSource();
+		"Wg", "WikiGenes").asDataSource();
 	public static final DataSource WIKIPEDIA = DataSource.register (
 		"Wi", "Wikipedia").asDataSource();
 	public static final DataSource WIKIPATHWAYS = DataSource.register (
