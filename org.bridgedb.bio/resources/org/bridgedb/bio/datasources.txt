@@ -179,7 +179,7 @@ Uniprot/TrEMBL	S	http://www.ebi.uniprot.org/	http://www.ebi.uniprot.org/entry/$i
 Wheat gene catalog	Wc	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$id	341	gene	Triticum aestivum	1	Wc		
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	Wn		
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		
-WikiGenes	Wg	http://www.wikigenes.org/ http://www.wikigenes.org/e/gene/e/$id.html	7157	gene	0	Wg	\d+	
+WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene	0	Wg	\d+	
 WikiPathways	Wp	http://www.wikipathways.org/	http://www.wikipathways.org/index.php/Pathway:$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}	WikiPathways
 Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$id	Acetate	metabolite		1	Wi		
 WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wormbase	^WBGene\d{8}$	WormBase
