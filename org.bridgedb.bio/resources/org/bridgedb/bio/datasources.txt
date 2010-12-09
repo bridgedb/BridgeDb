@@ -71,7 +71,8 @@ Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literatu
 Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id	GRMZM2G174107	gene		1	EnZm		
 Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	probe		0	Gp		
 Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa_japonica/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		
-HGNC	H	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?match=$id	HGNC:2674	gene	Homo sapiens	1	urn:miriam:hgnc	HGNC:\d{1,5}	HGNC
+HGNC	H	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?match=$id	DAPK1	gene	Homo sapiens	1	H	^[A-Za-z][A-Za-z0-9]*$	HGNC
+HGNC Accession number	Hac	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id	HGNC:2674	gene	Homo sapiens	1	urn:miriam:hgnc	HGNC:\d{1,5}	HGNC Accession number
 HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabolite		1	urn:miriam:hmdb	^HMDB\d{5}$	HMDB
 HOVERGEN		http://pbil.univ-lyon1.fr/databases/hovergen.php	http://pbil.univ-lyon1.fr/cgi-bin/acnuc-ac2tree?query=$id&db=HOVERGEN	P10000	gene		1	urn:miriam:hovergen	^P\d{5}$	HOVERGEN
 HsGene	Hs				gene	Homo sapiens	1	Hs		
