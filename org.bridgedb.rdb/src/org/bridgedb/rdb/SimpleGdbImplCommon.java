@@ -70,11 +70,11 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 		);
 	final SimpleGdb.QueryLifeCycle qAttributeSearch = new SimpleGdb.QueryLifeCycle (
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
-			"attrname = 'Symbol' AND LOWER(attrvalue) LIKE ?"
+			"attrname = ? AND LOWER(attrvalue) LIKE ?"
 		);
 	final SimpleGdb.QueryLifeCycle qIdSearchWithAttributes = new SimpleGdb.QueryLifeCycle (
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
-			"attrname = 'Symbol' AND LOWER(ID) LIKE ?"
+			"attrname = ? AND LOWER(ID) LIKE ?"
 		);
 
 	/** {@inheritDoc} */
@@ -302,7 +302,8 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 		synchronized (pst) { 
 			try {
 				pst.init(limit);
-				pst.setString(1, "%" + query.toLowerCase() + "%");
+				pst.setString(1, attrType);
+				pst.setString(2, "%" + query.toLowerCase() + "%");
 				ResultSet r = pst.executeQuery();
 	
 				while(r.next()) 
