@@ -366,6 +366,10 @@ public class BioDataSource
 				Pattern.compile("FBgn\\d{7}")
 		);
 		DataSourcePatterns.registerPattern(
+				BioDataSource.ENSEMBL_SCEREVISIAE, 
+				Pattern.compile("Y[A-Z][RL]\\d{3}[WC](?:\\-[A-Z])?")
+		);
+		DataSourcePatterns.registerPattern(
 				BioDataSource.TAIR,
 				Pattern.compile("AT[\\dCM]G\\d{5}")
 				);
