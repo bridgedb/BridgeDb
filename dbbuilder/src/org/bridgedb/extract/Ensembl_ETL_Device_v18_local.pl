@@ -413,15 +413,21 @@ foreach my $db_adaptor (@db_adaptors) {
     );
 }
 
+# switch per database convention
+my $temp_species = $species;
+if ($gs =~ /(Y|Yes)/i){
+	$species = $genus_species;
+}
+	
 ## API: GET ADAPTORS 
 # get gene adaptor to query gene information
 # get slice adaptor to load 'top-level' regions into SeqRegionCache
 # get database adaptors to identify the name of latest species database
-my $gene_adaptor = $registry->get_adaptor(($gs=='Y'?$genus_species:$species), "core", "gene");
-my $slice_adaptor = $registry->get_adaptor(($gs=='Y'?$genus_species:$species), "core", "slice");
+my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
+my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
 my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
-my $probe_adaptor = $registry->get_adaptor(($gs=='Y'?$genus_species:$species), "funcgen", "ProbeFeature");
-my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => ($gs=='Y'?$genus_species:$species))};
+my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
+my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
 if ($split_dbname[2] == "collection"){	     # shift array elements for "collections"
@@ -429,6 +435,9 @@ if ($split_dbname[2] == "collection"){	     # shift array elements for "collecti
 }
 my $build = $split_dbname[4];                # e.g., 42
 my $build_nums = $build.$split_dbname[5];    # e.g., 42_36c
+
+# swtich back
+$species = $temp_species;
 
 ############################################################################
 ## DECLARE/INITIALIZE DATA TABLES ##
@@ -701,11 +710,11 @@ while (my $gene = pop(@$genes))
                                                      ]);
 	%{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'], 
 				'SYSTEM' => ["\'Affymetrix\'", "\'$dateArg\'", 
-					     "\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+					     "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
 					     "\'http://www.ensembl.org/".$genus_species."/Search/Summary?q=~\'", "\'\'", 
 					     "\'https://www.affymetrix.com/analysis/downloads/\'"],
 				'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
-					     #'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+					     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
 					     'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
 					     'PRIMARY KEY (ID)'
 					     ]);
