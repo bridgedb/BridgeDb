@@ -1,4 +1,4 @@
-cat runList | while read x y
+cat runList | while read x y z w v
 do
  # check if commented out
  if [[ $x =~ '#' ]]
@@ -7,8 +7,8 @@ do
         continue
  fi
 
-  echo $x $y
-  bash -x scripts/buildPathVisio.sh $x $y > temp.$x.$y 2> temp.$x.$y.err
+  echo $x $y $v 
+  bash -x scripts/buildPathVisio.sh $x $y $v > temp.$x.$y 2> temp.$x.$y.err
 done
 
 # report from temp.err files
