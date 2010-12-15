@@ -3,8 +3,10 @@
 
 DatabaseSpecies=$1
 DatabaseDate=$2
+PriorDatabaseDate=$3
 Database=genmapp_$1_Derby_$2 #everything in mysql on plato needs "genmapp_" prefix
 DatabaseDb=$1_Derby_$2
+DatabaseDb_prior=$1_Derby_$3
 DatabaseCS=genmapp_$1_CS_$2
 mysql='mysql --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp -pfun4genmapp'
 mysqldump='mysqldump --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp -pfun4genmapp'
@@ -32,7 +34,6 @@ cat ${ScriptsDir}/PathVisioMySQL_BUILD.sql.template | sed "s/XXXXXX/$DatabaseSpe
 
 ## Build a MySQL Database for PathVisio: 
 ${mysql} < PathVisioMySQL_BUILD.sql 
-
 
 ## Clean up MySQL-PathVisio Database
 # Replace semicolons from backpageText fields
@@ -72,6 +73,9 @@ mv database ${DatabaseDb}
 ## Beef up MySQL version of Derby databases for web service deployment
 ${mysql} < PathVisioMySQL_BEEF.sql
 ${mysqldump} --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K ${Database} > ${DatabaseDb}.sql.dump
+
+#Run qc.sh
+./qc.sh ${DatabaseDb_prior}.bridge ${DatabaseDb}.bridge
 
 # report on products (check size > 1.9M)
 ls -lh ${DatabaseDb}.bridge | echo
