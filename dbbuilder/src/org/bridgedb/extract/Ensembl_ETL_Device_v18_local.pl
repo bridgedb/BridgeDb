@@ -436,7 +436,7 @@ if ($split_dbname[2] == "collection"){	     # shift array elements for "collecti
 my $build = $split_dbname[4];                # e.g., 42
 my $build_nums = $build.$split_dbname[5];    # e.g., 42_36c
 
-# swtich back
+# switch back
 $species = $temp_species;
 
 ############################################################################
