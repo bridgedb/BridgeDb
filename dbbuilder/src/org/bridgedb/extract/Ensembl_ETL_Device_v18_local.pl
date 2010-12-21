@@ -1971,7 +1971,7 @@ sub parse_DBEntries {
 		++$subcount{RGD}; 
 	    }
   	}
-  	elsif ($dbe_dbname =~ /^\'SGD\'$/){  
+  	elsif ($dbe_dbname =~ /^\'SGD_GENE\'$/){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{SGD}{$dbe_primary_id}}++){
 		$$GeneTables{SGD}{$count.$dot.$subcount{SGD}} = [$dbe_primary_id, $dbe_display_id, $dbe_description, $dbe_syns]; 
