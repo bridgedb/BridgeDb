@@ -69,6 +69,7 @@ java -XX:MaxPermSize=128m -Xmx1024m org.apache.derby.tools.ij PathVisioDerby_BUI
 mv ${DatabaseDb} database
 zip -r -0 ${DatabaseDb}.bridge database/
 mv database ${DatabaseDb}
+zip ${DatabaseDb}.zip ${DatabaseDb}.bridge
 
 ## Beef up MySQL version of Derby databases for web service deployment
 ${mysql} < PathVisioMySQL_BEEF.sql
