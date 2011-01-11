@@ -474,7 +474,7 @@ public class BioDataSource
 		);		
 		DataSourcePatterns.registerPattern(
 				BioDataSource.TUBERCULIST,
-				Pattern.compile("Rv\\d{4}(A|B|c|\.\\d)?")
+				Pattern.compile("Rv\\d{4}(A|B|c|\\.\\d)?")
 		);		
 		
 		ensemblBySpecies.put (Organism.BacillusSubtilis, ENSEMBL_BSUBTILIS);
