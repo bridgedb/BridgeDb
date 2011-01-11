@@ -175,7 +175,9 @@ public class BioDataSource
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
 		"T", "GeneOntology").asDataSource();
 	public static final DataSource TIGR = DataSource.register (
-		"Ti", "TIGR").asDataSource(); 
+			"Ti", "TIGR").asDataSource(); 
+	public static final DataSource TUBERCULIST = DataSource.register (
+			"Tb", "TUBERCULIST").asDataSource(); 
 	public static final DataSource UNIGENE = DataSource.register (
 		"U", "UniGene").asDataSource();
 	public static final DataSource UCSC = DataSource.register (
@@ -469,6 +471,10 @@ public class BioDataSource
 		DataSourcePatterns.registerPattern(
 				BioDataSource.BIOCYC,
 				Pattern.compile("(Meta|Eco)Cyc:.+")
+		);		
+		DataSourcePatterns.registerPattern(
+				BioDataSource.TUBERCULIST,
+				Pattern.compile("Rv\\d{4}(A|B|c|\.\\d)?")
 		);		
 		
 		ensemblBySpecies.put (Organism.BacillusSubtilis, ENSEMBL_BSUBTILIS);
