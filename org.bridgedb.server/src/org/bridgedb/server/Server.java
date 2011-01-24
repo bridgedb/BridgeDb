@@ -31,6 +31,7 @@ public class Server
 		component.getServers().add(Protocol.HTTP, port);
 		component.getDefaultHost().attach(new IDMapperService(configFile));		
 		try {
+			System.out.println ("Starting server on port " + port);
 			component.start();
 		} catch (Exception e) {
 			e.printStackTrace();
