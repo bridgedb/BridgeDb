@@ -387,6 +387,13 @@ public class IDMapperBiomart extends IDMapperWebservice implements AttributeMapp
     /**
      * {@inheritDoc}
      */
+    public Map<Xref, Set<String>> freeAttributeSearchEx (String query, String attrType, int limit) throws IDMapperException {
+        throw new UnsupportedOperationException("Free attribute search not supported.");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Set<String> getAttributeSet() throws IDMapperException {
         return stub.availableTgtAttributes(mart, dataset);
     }

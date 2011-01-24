@@ -16,6 +16,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.impl.InternalUtils;
 
 /**
  * Some methods and constants that are shared between SimpleGdbImpl2 and SimpleGdbImpl3
@@ -317,6 +318,34 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 				throw new IDMapperException (e);
 			}
 			finally {pst.cleanup(); }
+			return result;
+		}
+	}
+	
+	public Map<Xref, Set<String>> freeAttributeSearchEx (String query, String attrType, int limit) throws IDMapperException
+	{
+		Map<Xref, Set<String>> result = new HashMap<Xref, Set<String>>();
+		final QueryLifeCycle pst = (MATCH_ID.equals (attrType)) ? 
+				qIdSearchWithAttributes : qAttributeSearch;
+		synchronized (pst) { 
+			try {
+				pst.init(limit);
+				pst.setString(1, attrType);
+				pst.setString(2, "%" + query.toLowerCase() + "%");
+				ResultSet r = pst.executeQuery();
+	
+				while(r.next()) 
+				{
+					String id = r.getString("id");
+					String code = r.getString("code");
+					String symbol = r.getString("attrValue");
+					Xref ref = new Xref (id, DataSource.getBySystemCode(code));
+					InternalUtils.multiMapPut(result, ref, symbol);
+				}
+			} catch (SQLException e) {
+				throw new IDMapperException (e);
+			}
+			finally { pst.cleanup(); }
 			return result;
 		}
 	}

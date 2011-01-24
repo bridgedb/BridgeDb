@@ -512,5 +512,30 @@ public class BridgeRest extends IDMapperWebservice implements AttributeMapper
 			throw new IDMapperException (ex);
 		} 
 	}
+
+	@Override
+	public Map<Xref, Set<String>> freeAttributeSearchEx(String query, String attrType, int limit)
+			throws IDMapperException
+	{
+		try {
+			Map<Xref, Set<String>> result = new HashMap<Xref, Set<String>>();
+			
+			BufferedReader in = new UrlBuilder("attributeSearch")
+				.ordered (query).named("limit", "" + limit)
+				.named ("attrName", attrType)
+				.openReader();
+			String line;
+			while ((line = in.readLine()) != null) {
+				String[] cols = line.split("\t", -1);
+				Xref x = new Xref (cols[0], DataSource.getByFullName(cols[1]));
+				String value = cols[2];
+				InternalUtils.multiMapPut(result, x, value);
+			}
+			in.close();
+			return result;
+		} catch (IOException ex) {
+			throw new IDMapperException (ex);
+		} 
+	}
 	
 }

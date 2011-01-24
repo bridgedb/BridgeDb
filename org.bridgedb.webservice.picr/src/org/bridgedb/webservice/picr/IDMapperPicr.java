@@ -271,4 +271,11 @@ public final class IDMapperPicr extends IDMapperWebservice implements AttributeM
 		}
 		return result;
 	}
+
+	@Override
+	public Map<Xref, Set<String>> freeAttributeSearchEx(String query, String attrType, int limit)
+			throws IDMapperException
+	{
+		throw new UnsupportedOperationException();
+	}
 }
