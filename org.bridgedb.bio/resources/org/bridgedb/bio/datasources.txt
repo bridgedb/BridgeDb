@@ -10,18 +10,19 @@ BioCyc	Bc	http://www.biocyc.org	http://www.biocyc.org/getid?id=$id	EcoCyc:MON0-2
 BioGrid	Bg	http://www.thebiogrid.org/index.php	http://www.thebiogrid.org/SearchResults/summary/$id	31623	probe		1	urn:miriam:biogrid	^\d+$	BioGRID
 BioModels Database		http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^(BIOMD|MODEL)\d{10}$	BioModels Database
 BioNumbers		http://www.bionumbers.hms.harvard.edu/search.aspx	http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=$id&ver=1	104674	experiment		1	urn:miriam:bionumbers	^\d+$	BioNumbers
-BioSystems		http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/biosystems/$id	001	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems
+BioSystems		http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/biosystems/$id	1	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems
 Brenda Tissue Ontology		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	BTO:0000146	ontology		1	urn:miriam:obo.bto	^BTO:\d{7}$	Brenda Tissue Ontology
 CAS	Ca		http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id		metabolite		1	Ca	\d+-\d+-\d+	
 CCDS	Cc		http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id	CCDS43989	probe		0	Cc		
 Cell Ontology		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	CL:0000232	ontology		1	urn:miriam:obo.clo	^CL:\d{7}$	Cell Ontology
 ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:obo.chebi	^CHEBI:\d+$	ChEBI
-ChEMBL compound		http://www.ebi.ac.uk/chembldb	http://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id	210313	metabolite		1	urn:miriam:chembl.compound	^\d+$	ChEMBL compound
-ChEMBL target		http://www.ebi.ac.uk/chembldb	http://www.ebi.ac.uk/chembldb/index.php/target/inspect/$id	11031	protein		1	urn:miriam:chembl.target	^\d+$	ChEMBL target
+ChEMBL compound		https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id	210313	metabolite		1	urn:miriam:chembl.compound	^\d+$	ChEMBL compound
+ChEMBL target		https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembldb/index.php/target/inspect/$id	11031	protein		1	urn:miriam:chembl.target	^\d+$	ChEMBL target
 Chemical Component Dictionary		http://www.ebi.ac.uk/msd-srv/msdchem/cgi-bin/cgi.pl?APPLICATION=1	http://www.ebi.ac.uk/msd-srv/msdchem/cgi-bin/cgi.pl?FUNCTION=record&ENTITY=CHEM_COMP&PRIMARYKEY=$id&APPLICATION=1	AB0	ontology		1	urn:miriam:pdb-ccd	^\w{3}$	Chemical Component Dictionary
-ChemIDplus		http://chem.sis.nlm.nih.gov/chemidplus/chemidheavy.jsp	http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id	000057272	metabolite		1	urn:miriam:chemidplus	^\d+$	ChemIDplus
-Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html		metabolite		1	Cs		
+ChemIDplus		http://chem.sis.nlm.nih.gov/chemidplus/chemidheavy.jsp	http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id	57272	metabolite		1	urn:miriam:chemidplus	^\d+$	ChemIDplus
+Chemspider	Cs	http://www.chemspider.com/	http://www.chemspider.com/Chemical-Structure.$id.html	56586	metabolite		1	urn:miriam:chemspider	^/d+$	ChemSpider
 Cint	C				probe		0	C		
+ClinicalTrials.gov		http://clinicaltrials.gov/	http://clinicaltrials.gov/ct2/show/$id	NCT00222573	experiment		1		^NCT\d{8}$	ClinicalTrials.gov
 CluSTr		http://www.ebi.ac.uk/clustr/	http://www.ebi.ac.uk/clustr-srv/CCluster?interpro=yes&cluster_varid=$id	HUMAN:55140:308.6	protein		1	urn:miriam:clustr	^[0-9A-Za-z]+:\d+:\d{1,5}(\.\d)?$	CluSTr
 CodeLink	Ge			GE86325	probe		0	Ge		
 Conserved Domain Database		http://www.ncbi.nlm.nih.gov/sites/entrez?db=cdd	http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=$id	cd00400	protein		1	urn:miriam:cdd	^cd\d{5}$	Conserved Domain Database
@@ -29,13 +30,15 @@ CTD Chemical		http://ctd.mdibl.org/	http://ctd.mdibl.org/detail.go?type=chem&acc
 CTD Disease		http://ctd.mdibl.org/	http://ctd.mdibl.org/detail.go?type=disease&db=MESH&acc=$id	D053716	ontology		1	urn:miriam:ctd.disease	^D\d+$	CTD Disease
 CTD Gene		http://ctd.mdibl.org/	http://ctd.mdibl.org/basicQuery.go?bqCat=gene&bq=$id	101	gene		1	urn:miriam:ctd.gene	^\d+$	CTD Gene
 Database of Interacting Proteins		http://dip.doe-mbi.ucla.edu/	http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id	DIP-743N	protein		1	urn:miriam:dip	^DIP[\:\-]\d{3}[EN]$	Database of Interacting Proteins
+Database of Quantitative Cellular Signaling: Model		http://doqcs.ncbs.res.in/	http://doqcs.ncbs.res.in/template.php?&y=accessiondetails&an=$id	57	pathway		1	urn:miriam:doqcs.model	^\d+$	Database of Quantitative Cellular Signaling: Model
+Database of Quantitative Cellular Signaling: Pathway		http://doqcs.ncbs.res.in/	http://doqcs.ncbs.res.in/template.php?&y=pathwaydetails&pn=$id	131	pathway		1	urn:miriam:doqcs.pathway	^\d+$	Database of Quantitative Cellular Signaling: Pathway
 dbSNP	Sn				gene		1	Sn		
 DOI		http://www.doi.org/	http://dx.doi.org/$id	10.1038/nbt1156	publication		1	urn:miriam:doi	^(doi\:)?\d{2}\.\d{4}/.*$	DOI
 DrugBank		http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^DB\d{5}$	DrugBank
 EC Number	E	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id	1.1.1.1	gene		1	urn:miriam:brenda	^((\d+\.-\.-\.-)|(\d+\.\d+\.-\.-)|(\d+\.\d+\.\d+\.-)|(\d+\.\d+\.\d+\.\d+))$	BRENDA
 Ecoli	Ec				gene	Escherichia coli	1	Ec		
 EMBL	Em	http://www.ebi.ac.uk/embl/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+[EMBL:$id]+-view+EmblEntry	X58356	gene		1	urn:miriam:insdc	^\w+(\_)?\d+(\.\d+)?$	Nucleotide Sequence Database
-Ensembl	En	http://www.ensembl.org/	http://www.ensembl.org/Homo_sapiens/Search/Results?species=all;q=$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl
+Ensembl	En	http://www.ensembl.org/	http://www.ensembl.org/id/$id	ENSG00000139618	gene		1	urn:miriam:ensembl	^ENS[A-Z]*[FPTG]\d{11}$	Ensembl
 Ensembl B. subtilis	EnBs	http://www.ensembl.org	http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$id	EBBACG00000000013	gene	Bos taurus	1	EnBs	EBBACG\d{11}	
 Ensembl C. elegans	EnCe	http://www.ensembl.org	http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$id	Y42H9B.1	gene	Caenorhabditis elegans	1	EnCe		
 Ensembl Chicken	EnGg	http://www.ensembl.org	http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$id	ENSGALG00000021736	gene	Gallus gallus	1	EnGg	ENSGALG\d{11}	
@@ -52,11 +55,11 @@ Ensembl Mouse	EnMm	http://www.ensembl.org	http://www.ensembl.org/Mus_musculus/Ge
 Ensembl Pig	EnSs	http://www.ensembl.org	http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id	ENSSSCG00000004244	gene	Sus scrofa	1	EnSs		
 Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id	ENSRNOG00000016648	gene	Rattus norvegicus	1	EnRn	ENSRNOG\d{11}	
 Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id	ENSXETG00000029448	gene	Xenopus tropicalis	1	EnXt	ENSXETG\d{11}	
-Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id	YGR147C	gene	Saccharomyces cerevisiae	1	EnSc		
+Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id	YGR147C	gene	Saccharomyces cerevisiae	1	EnSc	Y[A-Z][RL]\d{3}[WC](?:\-[A-Z])?	
 Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id	ENSDARG00000024771	gene	Danio rerio	1	EnDr	ENSDARG\d{11}	
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene	http://www.ncbi.nlm.nih.gov/sites/entrez?Db=gene&Cmd=ShowDetailView&TermToSearch=$id	100010	gene		1	urn:miriam:entrez.gene	^\d+$	Entrez Gene
 Enzyme Nomenclature		http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	protein		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.\d+$	Enzyme Nomenclature
-Evidence Code		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	ECO:0000006	ontology		1	urn:miriam:obo.eco	ECO:\d{7}$	Evidence Code
+Evidence Code		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	ECO:0000006	ontology		1	urn:miriam:obo.eco	ECO:\d{7}$	Evidence Code Ontology
 FlyBase	F	http://www.flybase.org/	http://www.flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase
 FMA		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	FMA:67112	ontology		1	urn:miriam:obo.fma	^FMA:\d+$	FMA
 GenBank	G				probe		0	G	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	
@@ -71,8 +74,8 @@ Gramene Literature	Gl	http://www.gramene.org/	http://www.gramene.org/db/literatu
 Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id	GRMZM2G174107	gene		1	EnZm		
 Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	probe		0	Gp		
 Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa_japonica/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		
-HGNC	H	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?match=$id	DAPK1	gene	Homo sapiens	1	H	^[A-Za-z][A-Za-z0-9]*$	HGNC
-HGNC Accession number	Hac	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id	HGNC:2674	gene	Homo sapiens	1	urn:miriam:hgnc	HGNC:\d{1,5}	HGNC Accession number
+HGNC	H	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?match=$id	DAPK1	gene	Homo sapiens	1	H	[A-Z][A-Z,0-9]+	
+HGNC Accession number	Hac	http://www.genenames.org	http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id	HGNC:2674	gene	Homo sapiens	1	urn:miriam:hgnc	HGNC:\d{1,5}	HGNC
 HMDB	Ch	http://www.hmdb.ca/	http://www.hmdb.ca/metabolites/$id	HMDB00001	metabolite		1	urn:miriam:hmdb	^HMDB\d{5}$	HMDB
 HOVERGEN		http://pbil.univ-lyon1.fr/databases/hovergen.php	http://pbil.univ-lyon1.fr/cgi-bin/acnuc-ac2tree?query=$id&db=HOVERGEN	P10000	gene		1	urn:miriam:hovergen	^P\d{5}$	HOVERGEN
 HsGene	Hs				gene	Homo sapiens	1	Hs		
@@ -85,7 +88,7 @@ IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$
 iRefWeb		http://wodaklab.org/iRefWeb/	http://wodaklab.org/iRefWeb/interaction/show/$id	239002	pathway		1	urn:miriam:irefweb	^\d+$	iRefWeb
 IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/		Os12g0561000	gene		1	Ir	Os\d{2}g\d+	
 ISBN		http://isbndb.com/	http://isbndb.com/search-all.html?kw=$id	9781584885658	publication		1	urn:miriam:isbn	^(ISBN)?(-13|-10)?[:]?[ ]?(\d{2,3}[ -]?)?\d{1,5}[ -]?\d{1,7}[ -]?\d{1,6}[ -]?(\d|X)$	ISBN
-JWS		http://jjj.biochem.sun.ac.za/index.html	http://jjj.biochem.sun.ac.za/cgi-bin/processModelSelection.py?keytype=modelname&amp;keyword=$id	curien	pathway		1	urn:miriam:jws	^\w+$	JWS Online
+JWS		http://jjj.biochem.sun.ac.za/index.html	http://jjj.biochem.sun.ac.za/cgi-bin/processModelSelection.py?keytype=modelname&keyword=$id	curien	pathway		1	urn:miriam:jws	^\w+$	JWS Online
 Kegg Compound	Ck	http://www.genome.jp/kegg/ligand.html	http://www.genome.jp/dbget-bin/www_bget?cpd:$id	C12345	metabolite		1	urn:miriam:kegg.compound	^C\d+$	KEGG Compound
 KEGG Drug		http://www.genome.jp/kegg/drug/	http://www.genome.jp/dbget-bin/www_bget?dr:$id	D00123	metabolite		1	urn:miriam:kegg.drug	^D\d+$	KEGG Drug
 KEGG Genes	Kg	http://www.genome.jp/kegg/genes.html	http://www.genome.jp/dbget-bin/www_bget?$id	syn:ssr3451	gene		1	urn:miriam:kegg.genes	^\w+:[\w\d\.-]*$	KEGG Genes
@@ -108,13 +111,14 @@ Microbial Protein Interaction Database		http://www.jcvi.org/mpidb/about.php	http
 MINT		http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	pathway		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT
 miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence
 MIRIAM Resources		http://www.ebi.ac.uk/miriam/	http://www.ebi.ac.uk/miriam/main/$id	MIR:00000008	ontology		1	urn:miriam:miriam	^MIR:\d{8}$	MIRIAM Resources
-ModelDB		http://senselab.med.yale.edu/ModelDB/	http://senselab.med.yale.edu/ModelDB/ShowModel.asp?model=$id	45539			1	urn:miriam:modeldb	^\d+$	ModelDB
+ModelDB		http://senselab.med.yale.edu/ModelDB/	http://senselab.med.yale.edu/ModelDB/ShowModel.asp?model=$id	45539	pathway		1	urn:miriam:modeldb	^\d+$	ModelDB
 Molecular Interactions Ontology		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	MI:0308	ontology		1	urn:miriam:obo.mi	^MI:\d{4}$	Molecular Interactions Ontology
 Molecular Modeling Database		http://www.ncbi.nlm.nih.gov/sites/entrez?db=structure	http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=$id	50885	pathway		1	urn:miriam:mmdb	^\d{1,5}$	Molecular Modeling Database
 NASC Gene	N			ATMG00960-TAIR-G	gene	Arabidopsis thaliana	1	N	AT[\dCM]G\d{5}\-TAIR\-G	
+NCI Pathway Interaction Database: Pathway		http://pid.nci.nih.gov/	http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=$id	pi3kcipathway	pathway		1	urn:miriam:pid.pathway	^\w+$	NCI Pathway Interaction Database: Pathway
 NeuroLex		http://www.neurolex.org/wiki/Main_Page	http://www.neurolex.org/wiki/$id	Birnlex_721	ontology		1	urn:miriam:neurolex	^(Birnlex_|Sao)\d+$	NeuroLex
 NeuroMorpho		http://neuromorpho.org/neuroMorpho/index.jsp	http://neuromorpho.org/neuroMorpho/neuron_info.jsp?neuron_name=$id	Rosa2	experiment		1	urn:miriam:neuromorpho	^\w+$	NeuroMorpho
-NeuronDB		http://senselab.med.yale.edu/NeuronDB/	http://senselab.med.yale.edu/NeuronDB/ndbEavSum.asp?id=$id	265	experiment		1	urn:miriam:neurondb	^\d+$	NeuronDB
+NeuronDB		http://senselab.med.yale.edu/NeuronDB/	http://senselab.med.yale.edu/NeuronDB/NeuronProp.aspx?id=$id	265	experiment		1	urn:miriam:neurondb	^\d+$	NeuronDB
 NuGO wiki	Nw		http://wiki.nugo.org/index.php/$id	HMDB00001	metabolite		0	Nw		
 OMIM	Om	http://www.ncbi.nlm.nih.gov/omim/	http://www.ncbi.nlm.nih.gov/omim/$id	603903	gene		1	urn:miriam:omim	^[*#+%^]?\d{6}$	OMIM
 Ontology for Biomedical Investigations		http://obi-ontology.org/page/Main_Page	http://ashby.csail.mit.edu/cgi-bin/obiterm?ref=$id	OBI_0000225	ontology		1	urn:miriam:obo.obi	^OBI_\d{7}$	Ontology for Biomedical Investigations
@@ -122,7 +126,7 @@ Ontology of Physics for Biology		http://bioportal.bioontology.org/	http://biopor
 Oryzabase	Ob	http://www.shigen.nig.ac.jp/rice/oryzabase	http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id	468	gene	Oryza sativa	1	Ob		
 Other	O				gene		1	O		
 PANTHER		http://www.pantherdb.org/	http://www.pantherdb.org/panther/family.do?clsAccession=$id	PTHR12345	protein		1	urn:miriam:panther	^PTHR\d{5}$	PANTHER
-Pathway Commons		http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	68808	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons
+Pathway Commons		http://www.pathwaycommons.org/pc/	http://www.pathwaycommons.org/pc/record2.do?id=$id	717762	pathway		1	urn:miriam:pathwaycommons	^\d+$	Pathway Commons
 PATO		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	PATO:0001998	ontology		1	urn:miriam:obo.pato	^PATO:\d{7}$	PATO
 PDB	Pd	http://www.pdb.org/	http://www.rcsb.org/pdb/explore/explore.do?structureId=$id	2gc4	protein		1	urn:miriam:pdb	^\w{4}$	Protein Data Bank
 PeptideAtlas		http://www.peptideatlas.org/	https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=$id	PAp00000009	protein		1	urn:miriam:peptideatlas	^PAp[0-9]{8}$	PeptideAtlas
@@ -160,6 +164,7 @@ Signaling Gateway		http://www.signaling-gateway.org/	http://www.signaling-gatewa
 Small Molecule Pathway Database		http://www.smpdb.ca/pathways	http://pathman.smpdb.ca/pathways/$id/pathway	SMP00001	pathway		1	urn:miriam:smpdb	^SMP\d{5}$	Small Molecule Pathway Database
 SMART		http://smart.embl-heidelberg.de/	http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=$id	SM00015	protein		1	urn:miriam:smart	^SM\d{5}$	SMART
 SPRINT		http://www.bioinf.manchester.ac.uk/dbbrowser/sprint/	http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn=$id&display_opts=Prints&category=None&queryform=false&regexpr=off	PR00001	protein		1	urn:miriam:sprint	^PR\d{5}$	SPRINT
+SubtiWiki		http://www.subtiwiki.uni-goettingen.de/wiki/index.php/Main_Page	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/$id	BSU29180	pathway		1	urn:miriam:subtiwiki	^BSU\d{5}$	SubtiWiki
 Systems Biology Ontology		http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:obo.sbo	^SBO:\d{7}$	Systems Biology Ontology
 T3DB		http://www.t3db.org/	http://www.t3db.org/toxins/$id	T3D0001	metabolite		1	urn:miriam:t3db	^T3D\d+$	T3DB
 TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObject?type=locus&name=$id	AT1G01030	gene		1	urn:miriam:tair.locus	^AT[1-5]G\d{5}$	TAIR Locus
@@ -171,16 +176,17 @@ TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti
 Transport Classification Database		http://www.tcdb.org/	http://www.tcdb.org/search/result.php?tc=$id	5.A.1.1.1	protein		1	urn:miriam:tcdb	^\d+\.[A-Z]\.\d+\.\d+\.\d+$	Transport Classification Database
 TTD Drug		http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id	DAP000773	metabolite		1	urn:miriam:ttd.drug	^DAP\d+$	TTD Drug
 TTD Target		http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=$id	TTDS00056	protein		1	urn:miriam:ttd.target	^TTDS\d+$	TTD Target
-TubercuList	Tb	http://tuberculist.epfl.ch	http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id	Rv0064	gene	Mycobacterium tuberculosis	1	Tb		
+TubercuList	Tb	http://tuberculist.epfl.ch	http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id	Rv0064	gene	Mycobacterium tuberculosis	1	Tb	Rv\d{4}(A|B|c|\.\d)?	
 UCSC Genome Browser	Uc	http://genome.ucsc.edu/	http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id	uc001tyh.1	gene		1	Uc	uc\d{3}[a-z]{3}\.\d	
 UniGene	U	http://www.ncbi.nlm.nih.gov/sites/entrez?db=unigene	http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$id	Hs.553708	gene		1	U	[A-Z][a-z][a-z]?\.\d+	
 UniParc		http://www.ebi.ac.uk/uniparc/	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=uniparc&id=$id	UPI000000000A	protein		1	urn:miriam:uniparc	^UPI[A-F0-9]{10}$	UniParc
 Unipathway		http://www.grenoble.prabi.fr/obiwarehouse/unipathway	http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id	UPA00206	pathway		1	urn:miriam:unipathway	^UPA\d{5}$	Unipathway
 Uniprot/TrEMBL	S	http://www.ebi.uniprot.org/	http://www.ebi.uniprot.org/entry/$id	P62158	protein		1	urn:miriam:uniprot	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])$	UniProt
+Unit Ontology		http://www.obofoundry.org/cgi-bin/detail.cgi?id=unit	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	UO:0000080	ontology		1	urn:miriam:obo.unit	^UO:\d{7}?	Unit Ontology
 Wheat gene catalog	Wc	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$id	341	gene	Triticum aestivum	1	Wc		
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	Wn		
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		
-WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene	0	Wg	\d+	
+WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	Wg		
 WikiPathways	Wp	http://www.wikipathways.org/	http://www.wikipathways.org/index.php/Pathway:$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}	WikiPathways
 Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$id	Acetate	metabolite		1	Wi		
 WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wormbase	^WBGene\d{8}$	WormBase
