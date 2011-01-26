@@ -37,7 +37,7 @@ import synergizer.SynergizerClient;
  */
 public class SynergizerStub {
     public static final String defaultBaseURL
-            = SynergizerClient.defaultServiceURLString;
+            = "http://llama.mshri.on.ca/cgi/synergizer/serv";
 
     // cache data
     private Map<String,Map<String,Map<String,Set<String>>>>
