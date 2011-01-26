@@ -146,7 +146,7 @@ PubChem	Cp	http://pubchem.ncbi.nlm.nih.gov/	http://pubchem.ncbi.nlm.nih.gov/summ
 PubChem-bioassay		http://www.ncbi.nlm.nih.gov/sites/entrez?db=pcassay 	http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=$id	1018	metabolite		1	urn:miriam:pubchem.bioassay	^\d+$	PubChem-bioassay
 PubChem-substance		http://pubchem.ncbi.nlm.nih.gov/	http://www.ncbi.nlm.nih.gov/sites/entrez?cmd=search&db=pcsubstance&term=$id	100101	metabolite		1	urn:miriam:pubchem.substance	^\d+$	PubChem-substance
 PubMed		http://www.ncbi.nlm.nih.gov/PubMed/	http://www.ncbi.nlm.nih.gov/pubmed/$id	16333295	publication		1	urn:miriam:pubmed	^\d+$	PubMed
-Reactome		http://www.reactome.org/	http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome
+Reactome	Re	http://www.reactome.org/	http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id	REACT_1590	pathway		1	urn:miriam:reactome	^REACT_\d+(\.\d+)?$	Reactome
 RefSeq	Q	http://www.ncbi.nlm.nih.gov/projects/RefSeq/	http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id	NP_012345	gene		1	urn:miriam:refseq	^(NC|AC|NG|NT|NW|NZ|NM|NR|XM|XR|NP|AP|XP|ZP)_\d+$	RefSeq
 Relation Ontology		http://www.obofoundry.org/ro/	http://www.obofoundry.org/ro/#$id	OBO_REL:is_a	ontology		1	urn:miriam:obo.ro	^OBO_REL:\w+\_\w+$	Relation Ontology
 RESID		http://www.ebi.ac.uk/RESID/	http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']	AA0001	protein		1	urn:miriam:resid	^AA\d{4}$	RESID
