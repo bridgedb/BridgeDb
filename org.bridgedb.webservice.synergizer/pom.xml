@@ -38,10 +38,10 @@
 		</dependency>
 		<dependency>
 			<groupId>synergizer</groupId>
-			<artifactId>synergizer-client</artifactId>
+			<artifactId>synergizer</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/synergizer-client.jar</systemPath>
+			<systemPath>${basedir}/lib/synergizer.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
