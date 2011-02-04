@@ -16,7 +16,7 @@ import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
-//@Ignore
+@Ignore
 public class TestStack extends TestCase
 {
 	private static final String GDB_HUMAN = 
