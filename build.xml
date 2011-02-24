@@ -21,6 +21,7 @@
 					<file name="org.bridgedb.webservice.synergizer/build.xml"/>
 					<file name="org.bridgedb.webservice.biomart/build.xml"/>
 					<file name="org.bridgedb.webservice.bridgerest/build.xml"/>
+					<file name="org.bridgedb.gui/build.xml"/>
 				</filelist>
 			</subant>
 		</sequential>
