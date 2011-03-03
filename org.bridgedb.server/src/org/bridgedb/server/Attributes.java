@@ -16,15 +16,12 @@
 //
 package org.bridgedb.server;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bridgedb.AttributeMapper;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
@@ -71,13 +68,8 @@ public class Attributes extends IDMapperResource {
 	}
 	
 	private String getAttributesWithType() throws IDMapperException {
-		Set<String> values = new HashSet<String>();
-		
-		for(IDMapper mapper : getIDMappers()) {
-			if(mapper instanceof AttributeMapper) {
-				values.addAll(((AttributeMapper)mapper).getAttributes(xref, attrType));
-			}
-		}
+		IDMapperStack mapper = getIDMappers();
+		Set<String> values = mapper.getAttributes(xref, attrType);
 		StringBuilder str = new StringBuilder();
 		for(String v : values) {
 			str.append(v);
@@ -87,13 +79,8 @@ public class Attributes extends IDMapperResource {
 	}
 	
 	private String getAttributesWithoutType() throws IDMapperException {
-		Map<String, Set<String>> values = new HashMap<String, Set<String>>();
-		
-		for(IDMapper mapper : getIDMappers()) {
-			if(mapper instanceof AttributeMapper) {
-				values.putAll(((AttributeMapper)mapper).getAttributes(xref));
-			}
-		}
+		IDMapperStack mapper = getIDMappers();
+		Map<String, Set<String>> values = mapper.getAttributes(xref);
 		StringBuilder str = new StringBuilder();
 		for(String attr : values.keySet()) {
 			for(String v : values.get(attr)) {

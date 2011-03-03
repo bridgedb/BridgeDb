@@ -16,7 +16,6 @@
 //
 package org.bridgedb.server;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.DataSource;
@@ -62,15 +61,13 @@ public class Xrefs extends IDMapperResource {
 		try {
 			//The result set
 
-			IDMapper mapper = getIDMappers().get(0);
-			Set<Xref> xrefs = (targetDs == null) ? mapper.mapID(xref) : mapper.mapID(xref, targetDs);
-
-			for (int i = 1; i < getIDMappers().size(); ++i)
-			{
-				mapper = getIDMappers().get(i);
-				xrefs.addAll ((targetDs == null) ? mapper.mapID(xref) : mapper.mapID(xref, targetDs));
-			}
-					
+			IDMapper mapper = getIDMappers();
+			Set<Xref> xrefs;
+			if (targetDs == null)
+				xrefs = mapper.mapID(xref);
+			else
+				xrefs = mapper.mapID(xref, targetDs);
+			
 			StringBuilder result = new StringBuilder();
 			for(Xref x : xrefs) {
 				result.append(x.getId());

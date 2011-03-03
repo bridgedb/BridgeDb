@@ -17,6 +17,7 @@
 package org.bridgedb.server;
 
 import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperStack;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 
@@ -28,8 +29,10 @@ public class Properties extends IDMapperResource
 		try
 		{
 	        StringBuilder result = new StringBuilder();
-		    for(IDMapper mapper : getIDMappers()) 
+	        IDMapperStack stack = getIDMappers();
+		    for(int i = 0; i < stack.getSize(); ++i) 
 		    {
+		    	IDMapper mapper = stack.getIDMapperAt(i);
 		    	for (String key : mapper.getCapabilities().getKeys())
 		    	{
 		    		result.append( key );

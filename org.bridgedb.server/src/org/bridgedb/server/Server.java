@@ -18,6 +18,14 @@ package org.bridgedb.server;
 
 import java.io.File;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 
@@ -25,11 +33,11 @@ public class Server
 {
 	private Component component;
 
-	public void run(int port, File configFile)
+	public void run(int port, File configFile, boolean transitive)
 	{
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, port);
-		component.getDefaultHost().attach(new IDMapperService(configFile));		
+		component.getDefaultHost().attach(new IDMapperService(configFile, transitive));		
 		try {
 			System.out.println ("Starting server on port " + port);
 			component.start();
@@ -50,27 +58,48 @@ public class Server
 
 	public static void main(String[] args) 
 	{
-		Server server = new Server();
-		
 		int port = 8183; // default port
-		if ( args.length > 0 )
-		{
-		  port = new Integer( args[0] ).intValue();
-		}
-	
+		boolean transitive = false;
 		File configFile = null;
 		
-		if (args.length > 1)
+		Options options = new Options();
+		options.addOption(OptionBuilder.withArgName("port")
+				.hasArg()
+				.withDescription("Port to use (default: 8183)")
+				.create("p"));
+		options.addOption("t", false, "Enable transitive mode (default: false)");
+		options.addOption(OptionBuilder.withArgName("file")
+				.hasArg()
+				.withDescription("Override configuration file (default: gdb.config)")
+				.create("f"));
+		options.addOption("h", false, "Print help and quit");
+		CommandLineParser parser = new PosixParser();
+		try
 		{
-			configFile = new File(args[1]);
+			CommandLine line = parser.parse (options, args);
+			if (line.getArgs().length > 0) throw new ParseException("Unknown options: " + line.getArgList());
+			if (line.hasOption("h"))
+			{
+				HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp( "startserver.sh", options );
+				System.exit(0);
+			}
+			
+			if (line.hasOption("p")) port = Integer.parseInt(line.getOptionValue("p"));
+			if (line.hasOption("f")) configFile = new File (line.getOptionValue("f"));
+			if (line.hasOption("t")) transitive = true; 
+				
+		}
+		catch (Exception e)
+		{
+			System.err.println ("Did not understand command line options. Reason: " + e.getClass().getName() + " " + e.getMessage());
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp( "startserver.sh", options );
+			System.exit(-1);
 		}
 		
-		if (args.length > 2)
-		{
-			System.err.println ("Expected max 2 arguments");
-			System.exit(1);
-		}
-		
-		server.run (port, configFile);
+		Server server = new Server();
+				
+		server.run (port, configFile, transitive);
 	}
 }

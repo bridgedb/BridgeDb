@@ -17,6 +17,7 @@
 		<pathelement location="../dist/org.bridgedb.bio.jar"/>
 		<pathelement location="../dist/org.bridgedb.rdb.jar"/>
 		<pathelement location="lib/restlet-2.0m6/org.restlet.jar"/>
+		<pathelement location="lib/commons-cli-1.2.jar"/>
 	</path>
 	
   <target name="build" depends="prepare">
@@ -41,6 +42,7 @@
 
   <target name="dist" depends="jar">
   	<copy toDir="${dist.dir}" file="lib/restlet-2.0m6/org.restlet.jar"/>
+  	<copy toDir="${dist.dir}" file="lib/commons-cli-1.2.jar"/>
   </target>
 
   <target name="clean">

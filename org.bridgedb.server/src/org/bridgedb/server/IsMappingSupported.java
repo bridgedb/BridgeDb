@@ -49,13 +49,9 @@ public class IsMappingSupported extends IDMapperResource {
 	@Get
 	public String isMappingSupported() {
 		try {
-			boolean supported = false;
-			for(IDMapper m : getIDMappers()) {
-				if(m.getCapabilities().isMappingSupported(srcDs, destDs)) {
-					supported = true;
-					break;
-				}
-			}
+			
+			IDMapper m = getIDMappers();
+			boolean supported = m.getCapabilities().isMappingSupported(srcDs, destDs);
 			return "" + supported;
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -16,11 +16,9 @@
 //
 package org.bridgedb.server;
 
-import java.util.HashSet;
 import java.util.Set;
 
-import org.bridgedb.AttributeMapper;
-import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperStack;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 
@@ -31,14 +29,8 @@ public class AttributeSet extends IDMapperResource
 	{
 		try
 		{
-			Set<String> attributes = new HashSet<String>();
-			
-		    for(IDMapper mapper : getIDMappers()) 
-		    {
-		    	if(mapper instanceof AttributeMapper) {
-		    		attributes.addAll(((AttributeMapper)mapper).getAttributeSet());
-		    	}
-		    }
+		    IDMapperStack mapper = getIDMappers(); 
+			Set<String> attributes = mapper.getAttributeSet();
 		    StringBuilder result = new StringBuilder();
 		    for(String a : attributes) {
 		    	result.append(a);

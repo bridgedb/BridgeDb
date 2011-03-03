@@ -27,14 +27,8 @@ public class IsFreeSearchSupported extends IDMapperResource
 	{
 		try
 		{
-			boolean isSupported = false;
-		    for(IDMapper mapper : getIDMappers()) 
-		    {
-		    	if(mapper.getCapabilities().isFreeSearchSupported()) {
-		    		isSupported = true;
-		    		break;
-		    	}
-		    }
+			IDMapper mapper = getIDMappers();
+			boolean isSupported = mapper.getCapabilities().isFreeSearchSupported();
 		    return "" + isSupported;
 		} 
 		catch( Exception e ) 

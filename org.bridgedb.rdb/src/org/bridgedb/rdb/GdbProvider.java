@@ -29,6 +29,7 @@ import java.util.Set;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.IDMapperStack;
 import org.bridgedb.bio.Organism;
 
 /**
@@ -40,7 +41,7 @@ import org.bridgedb.bio.Organism;
  * If a database applies to all species (e.g. metabolites), use "*" as species.
  */
 public class GdbProvider {
-	Map<Organism, List<IDMapper>> organism2gdb = new HashMap<Organism, List<IDMapper>>();
+	Map<Organism, IDMapperStack> organism2gdb = new HashMap<Organism, IDMapperStack>();
 	List<IDMapper> globalGdbs = new ArrayList<IDMapper>();
 	
 	public Set<Organism> getOrganisms()
@@ -49,19 +50,18 @@ public class GdbProvider {
 	}
 	
 	public void addOrganismGdb(Organism organism, IDMapper gdb) {
-		List<IDMapper> l = organism2gdb.get(organism);
+		IDMapperStack l = organism2gdb.get(organism);
 		if(l == null) {
-			organism2gdb.put(organism, l = new ArrayList<IDMapper>());
+			organism2gdb.put(organism, l = new IDMapperStack());
+			l.setTransitive(transitive);
 		}
-		if(!l.contains(gdb)) {
-			l.add(gdb);
-		}
+		l.addIDMapper(gdb);
 	}
 	
 	public void removeOrganismGdb(Organism organism, IDMapperRdb gdb) {
-		List<IDMapper> l = organism2gdb.get(organism);
+		IDMapperStack l = organism2gdb.get(organism);
 		if(l != null) {
-			l.remove(gdb);
+			l.removeIDMapper(gdb);
 		}
 	}
 	
@@ -73,20 +73,31 @@ public class GdbProvider {
 		globalGdbs.remove(gdb);
 	}
 	
-	public List<IDMapper> getGdbs(Organism organism) {
-		List<IDMapper> gdbs = organism2gdb.get(organism);
+	public IDMapperStack getGdbs(Organism organism) {
+		IDMapperStack gdbs = organism2gdb.get(organism);
 		if(gdbs == null) {
-			gdbs = new ArrayList<IDMapper>();
+			gdbs = new IDMapperStack();
+			gdbs.setTransitive(transitive);
 		}
-		gdbs.addAll(globalGdbs);
+		for (IDMapper globalGdb : globalGdbs)
+		{
+			gdbs.addIDMapper(globalGdb);
+		}
 		return gdbs;
 	}
 	
 	static final String DB_GLOBAL = "*";
 	
-	public static GdbProvider fromConfigFile(File f) throws IDMapperException, IOException, ClassNotFoundException {
+	private final boolean transitive;
+	GdbProvider() { this(false); }
+	GdbProvider(boolean transitive)
+	{
+		this.transitive = transitive;
+	}
+	
+	public static GdbProvider fromConfigFile(File f, boolean transitive) throws IDMapperException, IOException, ClassNotFoundException {
 		System.out.println("Parsing gene database configuration: " + f.getAbsolutePath());
-		GdbProvider gdbs = new GdbProvider();
+		GdbProvider gdbs = new GdbProvider(transitive);
 		BufferedReader in = new BufferedReader(new FileReader(f));
 		String line = in.readLine();
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");

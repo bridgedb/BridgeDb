@@ -16,7 +16,6 @@
 //
 package org.bridgedb.server;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.IDMapper;
@@ -52,13 +51,8 @@ public class FreeSearch extends IDMapperResource {
 	{
 		try 
 		{
-			Set<Xref> results = new HashSet<Xref>();
-
-			for(IDMapper mapper : getIDMappers() ) {
-				if(mapper.getCapabilities().isFreeSearchSupported()) {
-					results.addAll(mapper.freeSearch(searchStr, limit));
-				}
-			}
+			IDMapper mapper = getIDMappers();
+			Set<Xref> results = mapper.freeSearch(searchStr, limit);
 
 			StringBuilder result = new StringBuilder();
 			for(Xref x : results) {

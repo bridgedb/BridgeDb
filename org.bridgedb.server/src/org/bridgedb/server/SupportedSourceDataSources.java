@@ -29,14 +29,12 @@ public class SupportedSourceDataSources extends IDMapperResource
 		try
 		{
 	        StringBuilder result = new StringBuilder();
-		    for(IDMapper mapper : getIDMappers()) 
-		    {
-		    	for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
-		    	{
-		    		result.append(ds.getFullName());
-		    		result.append ("\n");
-		    	}
-		    }
+	        IDMapper mapper = getIDMappers();
+        	for (DataSource ds : mapper.getCapabilities().getSupportedSrcDataSources())
+	    	{
+	    		result.append(ds.getFullName());
+	    		result.append ("\n");
+	    	}
 		    return result.toString();
 		} 
 		catch( Exception e ) 

@@ -48,15 +48,8 @@ public class XrefExists extends IDMapperResource
 	{
 		try
 		{
-			boolean exists = false;
-		    for(IDMapper mapper : getIDMappers()) 
-		    {
-		    	if(mapper.xrefExists(xref)) {
-		    		exists = true;
-		    		break;
-		    	}
-		    }
-		    return "" + exists;
+		    IDMapper mapper = getIDMappers(); 
+		    return "" + mapper.xrefExists(xref);
 		} 
 		catch( Exception e ) 
 		{

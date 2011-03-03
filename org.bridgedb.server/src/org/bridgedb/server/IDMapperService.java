@@ -47,9 +47,11 @@ public class IDMapperService extends Application {
 	public static final String PAR_DEST_SYSTEM = "dest";
 
 	public final File configFile;
+	private boolean transitive;
 
-	public IDMapperService(File aConfigFile)
+	public IDMapperService(File aConfigFile, boolean transitive)
 	{
+		this.transitive = transitive;
 		if (aConfigFile == null)
 		{
 			this.configFile = new File (CONF_GDBS);
@@ -298,6 +300,6 @@ public class IDMapperService extends Application {
 		if(gdbconf.length > 0) {
 			gdbFile = new File(gdbconf[0]);
 		}
-		gdbProvider = GdbProvider.fromConfigFile(gdbFile);
+		gdbProvider = GdbProvider.fromConfigFile(gdbFile, transitive);
 	}
 }

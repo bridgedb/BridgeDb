@@ -16,11 +16,9 @@
 //
 package org.bridgedb.server;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.bridgedb.AttributeMapper;
-import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
@@ -55,13 +53,8 @@ public class AttributeSearch extends IDMapperResource {
 	{
 		try 
 		{
-			Map<Xref, String> results = new HashMap<Xref, String>();
-
-			for(IDMapper mapper : getIDMappers() ) {
-				if(mapper instanceof AttributeMapper) {
-					results.putAll(((AttributeMapper)mapper).freeAttributeSearch(searchStr, attribute, limit));
-				}
-			}
+			IDMapperStack mapper = getIDMappers();
+			Map<Xref, String> results = mapper.freeAttributeSearch(searchStr, attribute, limit);
 
 			StringBuilder result = new StringBuilder();
 			for(Xref x : results.keySet()) {

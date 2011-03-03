@@ -3,8 +3,6 @@ package org.bridgedb.server;
 import java.util.Properties;
 
 import org.bridgedb.BridgeDb;
-import org.bridgedb.rdb.GdbProvider;
-import org.bridgedb.bio.Organism;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
@@ -32,7 +30,4 @@ public class Config extends ServerResource
 		}
 	}
 	
-	private GdbProvider getGdbProvider() {
-		return ((IDMapperService)getApplication()).getGdbProvider();
-	}	
 }

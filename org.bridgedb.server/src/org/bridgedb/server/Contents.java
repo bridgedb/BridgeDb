@@ -1,8 +1,5 @@
 package org.bridgedb.server;
 
-import java.util.Properties;
-
-import org.bridgedb.BridgeDb;
 import org.bridgedb.rdb.GdbProvider;
 import org.bridgedb.bio.Organism;
 import org.restlet.data.Status;

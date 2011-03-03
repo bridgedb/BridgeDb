@@ -16,12 +16,10 @@
 //
 package org.bridgedb.server;
 
-import java.util.HashSet;
 import java.util.Set;
 
-import org.bridgedb.AttributeMapper;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
@@ -58,53 +56,42 @@ public class BackPageText extends IDMapperResource {
 	@Get
 	public String getBackPageText() 
 	{
-	  System.out.println( "Xrefs.getBackPageText() start" );
-	  try 
-	  {
-	    //The result set
-	    Set<String> bpInfoSym = new HashSet<String>();
-            Set<String> bpInfoDes = new HashSet<String>();
-            Set<String> bpInfoTyp = new HashSet<String>();
-            Set<String> bpInfoChr = new HashSet<String>();
-            Set<String> bpInfoSyn = new HashSet<String>();
-	    
-	    for(IDMapper mapper : getIDMappers()) 
-	    {
-	    	if (mapper instanceof AttributeMapper)
-	    	{
-	    		AttributeMapper attr = (AttributeMapper)mapper;
-				bpInfoSym.addAll(attr.getAttributes( xref, "Symbol"));
-		                bpInfoDes.addAll(attr.getAttributes( xref, "Description"));
-		                bpInfoTyp.addAll(attr.getAttributes( xref, "Type"));
-		                bpInfoChr.addAll(attr.getAttributes( xref, "Chromosome"));
-		                bpInfoSyn.addAll(attr.getAttributes( xref, "Synonyms"));
-	    	}
-	    }
-	    
-            StringBuilder result = new StringBuilder();
-	    result.append("<html><body><table>");
-	    for( String x : bpInfoSym ) {
-	      result.append("<tr><td>Symbol</td><td>" + x + "</td></tr>" );
-	    }
-            for( String x : bpInfoDes ) {
-              result.append("<tr><td>Description</td><td>" + x + "</td></tr>" );
-            }
-            for( String x : bpInfoTyp ) {
-              result.append("<tr><td>Type</td><td>" + x + "</td></tr>" );
-            }
-            for( String x : bpInfoChr ) {
-              result.append("<tr><td>Chromosome</td><td>" + x + "</td></tr>" );
-            }
-            for( String x : bpInfoSyn ) {
-              result.append("<tr><td>Synonyms</td><td>" + x + "</td></tr>" );
-            }
-	    result.append("</table></body></html>");
-	    return( result.toString() );
-          } catch( Exception e ) {
-	    e.printStackTrace();
-	    setStatus( Status.SERVER_ERROR_INTERNAL );
-	    return e.getMessage();
-	  }
+		System.out.println( "Xrefs.getBackPageText() start" );
+		try 
+		{
+			IDMapperStack mapper = getIDMappers();
+
+			//The result set
+			Set<String> bpInfoSym = mapper.getAttributes( xref, "Symbol");
+			Set<String> bpInfoDes = mapper.getAttributes( xref, "Description");
+			Set<String> bpInfoTyp = mapper.getAttributes( xref, "Type");
+			Set<String> bpInfoChr = mapper.getAttributes( xref, "Chromosome");
+			Set<String> bpInfoSyn = mapper.getAttributes( xref, "Synonyms");
+
+			StringBuilder result = new StringBuilder();
+			result.append("<html><body><table>");
+			for( String x : bpInfoSym ) {
+				result.append("<tr><td>Symbol</td><td>" + x + "</td></tr>" );
+			}
+			for( String x : bpInfoDes ) {
+				result.append("<tr><td>Description</td><td>" + x + "</td></tr>" );
+			}
+			for( String x : bpInfoTyp ) {
+				result.append("<tr><td>Type</td><td>" + x + "</td></tr>" );
+			}
+			for( String x : bpInfoChr ) {
+				result.append("<tr><td>Chromosome</td><td>" + x + "</td></tr>" );
+			}
+			for( String x : bpInfoSyn ) {
+				result.append("<tr><td>Synonyms</td><td>" + x + "</td></tr>" );
+			}
+			result.append("</table></body></html>");
+			return( result.toString() );
+		} catch( Exception e ) {
+			e.printStackTrace();
+			setStatus( Status.SERVER_ERROR_INTERNAL );
+			return e.getMessage();
+		}
 	}
 
 }

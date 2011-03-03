@@ -18,11 +18,9 @@ package org.bridgedb.server;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperStack;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.GdbProvider;
 import org.restlet.resource.ResourceException;
@@ -33,7 +31,7 @@ import org.restlet.resource.ServerResource;
  * between the idmapper resources (such as access to the IDMapper objects).
  */
 public class IDMapperResource extends ServerResource {
-	private List<IDMapper> mappers;
+	private IDMapperStack mappers;
 	private String orgName;
 	
 	protected DataSource parseDataSource(String dsName) {
@@ -78,12 +76,13 @@ public class IDMapperResource extends ServerResource {
 		if(org == null) {
 			throw new IllegalArgumentException("Unknown organism: " + orgName + "<p><font size='+1'><i>Double check the spelling. We are expecting an entry like: Human</i></font></p>");
 		}
-		mappers = new ArrayList<IDMapper>(getGdbProvider().getGdbs(org));
-		if (mappers.isEmpty()){
+		mappers = getGdbProvider().getGdbs(org);
+		if (mappers.getSize() == 0)
+		{
 			throw new IllegalArgumentException("No database found for: " + orgName +"<p><font size='+1'><i>Verify that the database is supported and properly referenced in gdb.config.</i></font></p>");
 		}
 	}
-	protected List<IDMapper> getIDMappers() {
+	protected IDMapperStack getIDMappers() {
 		return mappers;
 	}
 	
