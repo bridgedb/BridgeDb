@@ -73,7 +73,13 @@ public class GdbProvider {
 		globalGdbs.remove(gdb);
 	}
 	
-	public IDMapperStack getGdbs(Organism organism) {
+	/** @deprecated use getStack(organism) instead */
+	public List<IDMapper> getGdbs(Organism organism)
+	{
+		return getStack(organism).getMappers();
+	}
+	
+	public IDMapperStack getStack(Organism organism) {
 		IDMapperStack gdbs = organism2gdb.get(organism);
 		if(gdbs == null) {
 			gdbs = new IDMapperStack();
@@ -93,6 +99,11 @@ public class GdbProvider {
 	GdbProvider(boolean transitive)
 	{
 		this.transitive = transitive;
+	}
+	
+	public static GdbProvider fromConfigFile(File f) throws IDMapperException, IOException, ClassNotFoundException
+	{
+		return fromConfigFile(f, false);
 	}
 	
 	public static GdbProvider fromConfigFile(File f, boolean transitive) throws IDMapperException, IOException, ClassNotFoundException {

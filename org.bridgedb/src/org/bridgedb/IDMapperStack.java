@@ -557,4 +557,10 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
+
+	/** get all mappers */
+	public List<IDMapper> getMappers()
+	{
+		return gdbs;
+	}
 }

@@ -76,7 +76,7 @@ public class IDMapperResource extends ServerResource {
 		if(org == null) {
 			throw new IllegalArgumentException("Unknown organism: " + orgName + "<p><font size='+1'><i>Double check the spelling. We are expecting an entry like: Human</i></font></p>");
 		}
-		mappers = getGdbProvider().getGdbs(org);
+		mappers = getGdbProvider().getStack(org);
 		if (mappers.getSize() == 0)
 		{
 			throw new IllegalArgumentException("No database found for: " + orgName +"<p><font size='+1'><i>Verify that the database is supported and properly referenced in gdb.config.</i></font></p>");
