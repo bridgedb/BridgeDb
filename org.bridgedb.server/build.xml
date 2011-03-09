@@ -34,7 +34,7 @@
 	<jar jarfile="${jar.name}">
 	  <manifest>
 	  	<attribute name="Main-Class" value="org.bridgedb.server.Server"/>
-		<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar"/>
+		<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar commons-cli-1.2.jar"/>
 	  </manifest>
 	  <fileset dir="build"/>
 	</jar>
