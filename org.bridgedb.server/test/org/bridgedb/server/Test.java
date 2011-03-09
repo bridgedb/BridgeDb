@@ -53,7 +53,7 @@ public class Test extends TestCase
     	    if (server == null)
             {
                 server = new Server();
-                server.run(8183, null);
+                server.run(8183, null, false);
             }
     		if(mapper == null) {
     		    
