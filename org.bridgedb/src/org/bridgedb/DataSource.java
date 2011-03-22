@@ -59,6 +59,7 @@ public final class DataSource
 	private static Map<String, DataSource> byFullName = new HashMap<String, DataSource>();
 	private static Set<DataSource> registry = new HashSet<DataSource>();
 	private static Map<String, DataSource> byAlias = new HashMap<String, DataSource>();
+	private static Map<String, DataSource> byMiriamBase = new HashMap<String, DataSource>();
 	
 	private String sysCode = null;
 	private String fullName = null;
@@ -310,6 +311,11 @@ public final class DataSource
 			registry.add (current);
 		}
 		
+		if (current.urnBase != null)
+		{
+			byMiriamBase.put (current.urnBase, current);
+		}
+		
 		current.sysCode = sysCode;
 		current.fullName = fullName;
 
@@ -463,6 +469,11 @@ public final class DataSource
 	public Object getOrganism()
 	{
 		return organism;
+	}
+
+	public static DataSource getByUrnBase(String base)
+	{
+		return byMiriamBase.get(base);
 	}
 
 }

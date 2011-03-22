@@ -129,5 +129,23 @@ public class Test
 		DataSource ds = DataSource.getByAlias("ensembl_gene_id");
 		assertSame(ds, BioDataSource.ENSEMBL);
 	}
+
+	@org.junit.Test
+	public void testFromUrn()
+	{
+		Xref ref = Xref.fromUrn("urn:miriam:entrez.gene:3643");
+		assertEquals (BioDataSource.ENTREZ_GENE, ref.getDataSource());
+		assertEquals ("3643", ref.getId());
+
+		ref = Xref.fromUrn("urn:miriam:blahblahblah:abc");
+		assertNull (ref);
+
+		ref = Xref.fromUrn("blahblahblha");
+		assertNull (ref);
+		
+		ref = Xref.fromUrn("urn:miriam:obo.go:GO%3A00001234");
+		assertEquals (BioDataSource.GENE_ONTOLOGY, ref.getDataSource());
+		assertEquals ("GO:00001234", ref.getId());
+	}
 	
 }
