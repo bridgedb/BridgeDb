@@ -33,6 +33,12 @@ public class Server
 {
 	private Component component;
 
+	/** @deprecated use run (port, configFile, transitive) instead */
+	public void run(int port, File configFile)
+	{
+		run(port, configFile, false);
+	}
+
 	public void run(int port, File configFile, boolean transitive)
 	{
 		component = new Component();
