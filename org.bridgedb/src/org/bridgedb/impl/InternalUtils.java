@@ -28,10 +28,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * To prevent duplication and redundancy, functions that are common to 
@@ -258,6 +267,53 @@ public final class InternalUtils
 			multiMapPut(result, ref.getDataSource(), ref);
 		}
 		return result;
+	}
+
+	/** read a configuration file in the bridgedb xml format */
+	public static void readXmlConfig(InputSource is) throws ParserConfigurationException, SAXException, IOException
+	{	
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+        spf.setNamespaceAware(true);
+        SAXParser saxParser = spf.newSAXParser();
+
+        XMLReader xmlReader = saxParser.getXMLReader();
+        xmlReader.setContentHandler(new ConfigXmlHandler());
+        xmlReader.parse(is);
+	}
+	
+	private static class ConfigXmlHandler extends DefaultHandler
+	{
+		DataSource current = null;
+		
+		@Override
+		public void startElement(String namespaceURI, String localName,
+				String qName, Attributes atts)
+		throws SAXException
+		{
+			if ("datasource".equals (localName))
+			{
+				String fullname = atts.getValue("fullname");
+				if (fullname == null) throw new SAXException ("missing attribute fullname");
+				current = DataSource.getByFullName(fullname);
+			}
+			
+			if ("alias".equals (localName))
+			{
+				String alias = atts.getValue ("name");
+				if (alias != null && current != null)
+					current.registerAlias(alias);
+			}
+		}
+		
+		@Override
+		public void endElement(String namespaceURI, String localName, String qName) throws SAXException
+		{
+			if ("datasource".equals (localName))
+			{
+				current = null;
+			}
+		}
+
 	}
 
 }

@@ -24,8 +24,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
+import org.bridgedb.impl.InternalUtils;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Definition of many common biological DataSources.
@@ -531,11 +536,25 @@ public class BioDataSource
 				if (fields.length > 7 && fields[7].length() > 0) builder.primary (fields[7].equals ("1"));					      
 				if (fields.length > 8) builder.urnBase(fields[8]);
 			}
+			
+			InternalUtils.readXmlConfig(
+					new InputSource(
+							BioDataSource.class.getClassLoader().getResourceAsStream(
+									"org/bridgedb/bio/datasources.xml")));
+			
 		}
 		catch (IOException ex)
 		{
 			throw new Error(ex);
 		}
+		catch (ParserConfigurationException e)
+		{
+			throw new Error(e);
+		}
+		catch (SAXException e)
+		{
+			throw new Error(e);
+		}
+		
 	}
-	
 }

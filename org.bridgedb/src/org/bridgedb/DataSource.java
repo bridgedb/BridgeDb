@@ -58,6 +58,7 @@ public final class DataSource
 	private static Map<String, DataSource> bySysCode = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byFullName = new HashMap<String, DataSource>();
 	private static Set<DataSource> registry = new HashSet<DataSource>();
+	private static Map<String, DataSource> byAlias = new HashMap<String, DataSource>();
 	
 	private String sysCode = null;
 	private String fullName = null;
@@ -320,6 +321,11 @@ public final class DataSource
 		return new Builder(current);
 	}
 	
+	public void registerAlias(String alias)
+	{
+		byAlias.put (alias, this);
+	}
+	
 	/**
 	 * Helper method to determine if a String is allowed as key for bySysCode and byFullname hashes.
 	 * Null values and empty strings are not allowed.
@@ -362,6 +368,11 @@ public final class DataSource
 		return byFullName.get(fullName);
 	}
 	
+	public static DataSource getByAlias(String alias)
+	{
+		return byAlias.get(alias);
+	}
+
 	/**
 		get all registered datasoures as a set.
 		@return set of all registered DataSources

@@ -123,4 +123,11 @@ public class Test
 		assertFalse (f4.contains(BioDataSource.HMDB));
 	}
 	
+	@org.junit.Test
+	public void testAlias()
+	{
+		DataSource ds = DataSource.getByAlias("ensembl_gene_id");
+		assertSame(ds, BioDataSource.ENSEMBL);
+	}
+	
 }
