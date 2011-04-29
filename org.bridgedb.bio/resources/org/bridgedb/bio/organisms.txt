@@ -17,7 +17,7 @@ Ornithorhynchus	anatinus	Platypus	Oa
 Tetraodon	nigroviridis	Pufferfish	Tn
 Oryctolagus	cuniculus	Rabbit	Oc
 Rattus	norvegicus	Rat	Rn
-Macaca	mulatta	Rhesus	Monkey	Ml
+Macaca	mulatta	Rhesus Monkey	Ml
 Sorex	araneus	Shrew	Sa
 Ciona	intestinalis	Sea Squirt	Ci
 Xenopus	tropicalis	Xenopus	Xt
@@ -27,7 +27,7 @@ Arabidopsis	thaliana	Arabidopsis	At
 Oryza	sativa	Japanese Rice	Os
 Sorghum	bicolor	Sorghum	Sb
 Vitis	vinifera	Wine Grape	Vv
-Populus	trichocarpa	Western Balsam	Poplar	Pi
+Populus	trichocarpa	Western Balsam Poplar	Pi
 Zea	mays	Maize	Zm
 Bacillus	subtilis	Bsubtilis	Bs
 Escherichia	coli	Ecoli	Ec
