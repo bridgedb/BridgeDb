@@ -54,6 +54,7 @@ public class AttributeSearch extends IDMapperResource {
 		try 
 		{
 			IDMapperStack mapper = getIDMappers();
+			if (attribute == null) attribute = "Symbol"; // use symbol by default.
 			Map<Xref, String> results = mapper.freeAttributeSearch(searchStr, attribute, limit);
 
 			StringBuilder result = new StringBuilder();
