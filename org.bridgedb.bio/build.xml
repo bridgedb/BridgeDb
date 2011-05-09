@@ -24,6 +24,8 @@
 	</javac>
     <copy file="resources/org/bridgedb/bio/datasources.txt"
           todir="build/org/bridgedb/bio" />
+    <copy file="resources/org/bridgedb/bio/datasources.xml"
+          todir="build/org/bridgedb/bio" />
     <copy file="resources/org/bridgedb/bio/organisms.txt"
           todir="build/org/bridgedb/bio" />
   </target>
