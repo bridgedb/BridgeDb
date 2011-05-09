@@ -1,11 +1,17 @@
-<datasources>
-	<datasource fullname="Ensembl">
-		<alias name="ensembl_gene_id"/>
-	</datasource>
-	<datasource fullname="Entrez Gene">
-		<alias name="entrezgene"/>
-	</datasource>
-	<datasource fullname="Affy">
-		<alias name="affy_hg_u133a_2"/>
-	</datasource>
-</datasources>
+<?xml version="1.0"?>
+<bridgedb>
+	<datasources>
+		<datasource fullname="Ensembl">
+			<alias name="ensembl_gene_id"/>
+		</datasource>
+		<datasource fullname="Entrez Gene">
+			<alias name="entrezgene"/>
+		</datasource>
+		<datasource fullname="Affy">
+			<alias name="affy_hg_u133a_2"/>
+		</datasource>
+	</datasources>
+	<properties>
+		<property key="org.bridgedb.webservice.synergizer.DefaultUrl" value="http://...."/>
+	</properties>
+</bridgedb>

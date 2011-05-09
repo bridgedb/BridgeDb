@@ -31,6 +31,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.bio.Organism;
+import org.bridgedb.rdb.impl.ConfigFile;
 
 /**
  * Utility class that maintains a list of synonym databases and the species they
@@ -106,28 +107,34 @@ public class GdbProvider {
 		return fromConfigFile(f, false);
 	}
 	
-	public static GdbProvider fromConfigFile(File f, boolean transitive) throws IDMapperException, IOException, ClassNotFoundException {
-		System.out.println("Parsing gene database configuration: " + f.getAbsolutePath());
+	public static GdbProvider fromConfigFile(File f, boolean transitive) throws IDMapperException, IOException, ClassNotFoundException 
+	{	
+		ConfigFile cf = new ConfigFile(f);	
 		GdbProvider gdbs = new GdbProvider(transitive);
-		BufferedReader in = new BufferedReader(new FileReader(f));
-		String line = in.readLine();
-		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
-		Class.forName("org.bridgedb.file.IDMapperText");
-		try
+		List<String> drivers = cf.getDrivers();
+		
+		// add a few defaults that will always be loaded
+		drivers.add("org.bridgedb.rdb.IDMapperRdb");
+		drivers.add("org.bridgedb.file.IDMapperText");
+		drivers.add("com.mysql.jdbc.Driver");
+		
+		for (String driver : drivers)
 		{
-			Class.forName ("com.mysql.jdbc.Driver");
+			try
+			{
+				Class.forName (driver);
+				System.out.println ("Loaded driver: " + driver);
+			}
+			catch (ClassNotFoundException ex)
+			{
+				System.out.println ("Warning: driver '" + driver + "'  not in classpath, some features may not be available.");
+			}
 		}
-		catch (ClassNotFoundException ex)
+
+		for (String key : cf.getMappers().keySet())
 		{
-			System.out.println ("MySQL driver not in classpath, mysql backend unavailable");
-		}
-		while(line != null) {
-			String[] kv = line.split("\t");
-			if(kv.length == 2) {
-				String key = kv[0];
-				String value = kv[1];
-				
-				if (!value.startsWith("idmapper")) value = "idmapper-pgdb:" + value;
+			for (String value : cf.getMappers().get(key))
+			{
 				IDMapper mapper = BridgeDb.connect (value);
 				Organism org = Organism.fromLatinName(key);
 				if(org != null) {
@@ -137,12 +144,9 @@ public class GdbProvider {
 				} else {
 					System.out.println("Unable to parse organism: " + key);
 				}
-			} else {
-				System.out.println("Invalid key/value pair in gene database configuration: " + line);
 			}
-			line = in.readLine();
 		}
-		in.close();
+
 		return gdbs;
 	}
 }

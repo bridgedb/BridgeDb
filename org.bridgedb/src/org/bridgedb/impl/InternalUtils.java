@@ -20,11 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -221,6 +223,33 @@ public final class InternalUtils
     		map.put(key, set);
     	}
     	set.add (val);
+    }
+
+    /**
+     * Generic method for multimaps, a map that can contain multiple values per key.
+     * Unlike a regular map, if you insert a value for a key that already exists, the previous value 
+     * will not be discared.
+     * <p>
+     * This is like multiMapPut, but uses a list instead of a set for each value of the map. 
+     * @param <T> key type of multimap
+     * @param <U> value type of multimap
+     * @param map multimap to work on
+     * @param key key of the value to insert
+     * @param val value to insert.
+    */
+    public static <T, U> void multiMapAdd(Map<T, List<U>> map, T key, U val)
+    {
+    	List<U> list;
+    	if (map.containsKey (key))
+    	{
+    		list = map.get(key);
+    	}
+    	else
+    	{
+    		list = new ArrayList<U>();
+    		map.put(key, list);
+    	}
+    	list.add (val);
     }
 
     /**
