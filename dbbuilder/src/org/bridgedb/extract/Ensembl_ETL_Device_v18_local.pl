@@ -426,7 +426,9 @@ if ($gs =~ /(Y|Yes)/i){
 my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
 my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
 my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
-my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
+my $probe_feature_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
+my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "Probe");
+my $probe_set_adaptor = $registry->get_adaptor($species, "funcgen", "Probeset");
 my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
@@ -2177,10 +2179,13 @@ sub parse_ProbeFeatures {
     #my $probe_features = $probe_adaptor->fetch_all_by_external_name($gene_stable_id);
   ## Solution #2 only works after API method has been added
   ## See NathJohnson_API_patch.txt
-    my $probe_features = $probe_adaptor->fetch_all_by_linked_transcript_Gene($gene);
-  
-    foreach my $pf (@$probe_features) {
-      my $probe = $pf->probe();
+    #my @probe_features = @{$probe_feature_adaptor->fetch_all_by_linked_transcript_Gene($gene)};
+    my @probes = @{$probe_adaptor->fetch_all_by_linked_transcript_Gene($gene)};
+    my @probe_sets = @{$probe_set_adaptor->fetch_all_by_linked_transcript_Gene($gene)};
+    my @all_probes = (@probes, @probe_sets);
+
+    foreach my $probe (@all_probes) {
+      #my $probe = $pf->probe();
       my $array_list = $probe->get_all_Arrays();
 
       foreach my $array (@$array_list){
@@ -2188,10 +2193,13 @@ sub parse_ProbeFeatures {
 		next;
 	}
 	my $pf_dbname = mysql_quotes($array->vendor());
-        my $pf_display_id = mysql_quotes($probe->get_probename($array->name()));
+        my $pf_display_id = 'null';
 	if ($pf_dbname =~ /^\'AFFY/i) { # Affy uses probesets
-		$pf_display_id = mysql_quotes($probe->probeset()->name());
+		$pf_display_id = mysql_quotes($probe->name()); ##probeset()->name());
+	} else {
+		$pf_display_id = mysql_quotes($probe->get_probename($array->name()));
 	}
+		
 	my $pf_primary_id = $pf_display_id;
       	my $pf_description = mysql_quotes($array->description());
       	my $pf_release = mysql_quotes($array->name());
@@ -2199,8 +2207,8 @@ sub parse_ProbeFeatures {
       	my $pf_version = mysql_quotes($array->format());
       	my $pf_info_text = mysql_quotes($array->type());
       	my $pf_info_type = mysql_quotes("SEQUENCE_MATCH"); #enum
-      	my $pf_synonyms = $probe->get_all_probenames();
-      	my $pf_syns = join("|", @$pf_synonyms);
+      	#my $pf_synonyms = $probe->get_all_probenames();
+      	my $pf_syns = ''; ##join("|", @$pf_synonyms);
       	$pf_syns = mysql_quotes($pf_syns);
 
         #print "PROBE: $pf_primary_id | $pf_dbname | $pf_release \n";
@@ -2208,7 +2216,7 @@ sub parse_ProbeFeatures {
       	$ADMIN_Xrefs{$pf_dbname} = [$pf_dbname, $pf_display_id, $pf_primary_id, $pf_description, $pf_syns,
                              $pf_release, $pf_status, $pf_version, $pf_info_text, $pf_info_type];
 
-        if ($pf_dbname =~ /^\'AFFY/i){  #catch all types
+        if ($pf_dbname =~ /^\'AFFY/i && $pf_release !~ /Ex-/){  #catch all types #skip all exon arrays
             $ADMIN_Xrefs{$pf_dbname}[10] = "\'Y\'"; # collected
             if (!${$seen{Affy}{$pf_primary_id}}++){
                 $$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$pf_primary_id, $pf_dbname, $pf_release];
