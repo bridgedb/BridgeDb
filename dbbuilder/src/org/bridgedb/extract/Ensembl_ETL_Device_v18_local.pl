@@ -683,7 +683,7 @@ while (my $gene = pop(@$genes))
 						     'Type VARCHAR(128) NOT NULL DEFAULT \'\'',
 						     'PRIMARY KEY (ID)'
 						     ]);
-        %{$GeneTables{GOslimBP}} = ('NAME' => ['GOslimBP', 'Tb'],
+        %{$GeneTables{GOslimBP}} = ('NAME' => ['GOslimBP', 'Tp'],
                                         'SYSTEM' => ["\'GO Slim - Biological Process\'", "\'$dateArg\'",
                                                      "\'ID|Name\\\\sBF\|\'", "\'\|$species\|\'", "\'\'",
                                                      "\'http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=~\'", "\'\|I\|\'",
