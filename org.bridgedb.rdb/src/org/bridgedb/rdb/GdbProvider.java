@@ -55,6 +55,10 @@ public class GdbProvider {
 		if(l == null) {
 			organism2gdb.put(organism, l = new IDMapperStack());
 			l.setTransitive(transitive);
+			for (IDMapper globalGdb : globalGdbs)
+			{
+				l.addIDMapper(globalGdb);
+			}
 		}
 		l.addIDMapper(gdb);
 	}
@@ -67,11 +71,25 @@ public class GdbProvider {
 	}
 	
 	public void addGlobalGdb(IDMapper gdb) {
-		if(!globalGdbs.contains(gdb)) globalGdbs.add(gdb);
+		if(!globalGdbs.contains(gdb)) 
+		{
+			globalGdbs.add(gdb);
+			for (Organism org : organism2gdb.keySet())
+			{
+				organism2gdb.get(org).addIDMapper(gdb);
+			}
+		}
 	}
 	
 	public void removeGlobalGdb(IDMapper gdb) {
-		globalGdbs.remove(gdb);
+		if (globalGdbs.contains(gdb))
+		{
+			globalGdbs.remove(gdb);
+			for (Organism org : organism2gdb.keySet())
+			{
+				organism2gdb.get(org).removeIDMapper(gdb);
+			}
+		}
 	}
 	
 	/** @deprecated use getStack(organism) instead */
@@ -85,10 +103,10 @@ public class GdbProvider {
 		if(gdbs == null) {
 			gdbs = new IDMapperStack();
 			gdbs.setTransitive(transitive);
-		}
-		for (IDMapper globalGdb : globalGdbs)
-		{
-			gdbs.addIDMapper(globalGdb);
+			for (IDMapper globalGdb : globalGdbs)
+			{
+				gdbs.addIDMapper(globalGdb);
+			}
 		}
 		return gdbs;
 	}
@@ -96,8 +114,8 @@ public class GdbProvider {
 	static final String DB_GLOBAL = "*";
 	
 	private final boolean transitive;
-	GdbProvider() { this(false); }
-	GdbProvider(boolean transitive)
+	public GdbProvider() { this(false); }
+	public GdbProvider(boolean transitive)
 	{
 		this.transitive = transitive;
 	}

@@ -16,7 +16,6 @@
 //
 package org.bridgedb;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * combines multiple {@link IDMapper}'s in a stack.
@@ -41,7 +41,7 @@ import java.util.Set;
  */
 public class IDMapperStack implements IDMapper, AttributeMapper
 {
-	private List<IDMapper> gdbs = new ArrayList<IDMapper>();
+	private List<IDMapper> gdbs = new CopyOnWriteArrayList<IDMapper>();
 
 	/**
 	 * Create a fresh IDMapper from a connectionString and add it to the stack.
