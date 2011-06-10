@@ -1,6 +1,6 @@
 3DMET		http://www.3dmet.dna.affrc.go.jp/	http://www.3dmet.dna.affrc.go.jp/html/$id.html	B00162	metabolite		1	urn:miriam:3dmet	^B\d{5}$	3DMET
 Aclame		http://aclame.ulb.ac.be/	http://aclame.ulb.ac.be/perl/Aclame/Genomes/mge_view.cgi?view=info&id=$id	mge:2	gene		1	urn:miriam:aclame	^mge:\d+$	Aclame
-Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/Homo_sapiens/Search/Results?species=all;feature=OligoProbe;q=$id	1851_s_at	probe		0	X	.+_at	
+Affy	X	http://www.affymetrix.com/	http://www.ensembl.org/common/Lucene/Results?species=all;feature=OligoProbe;q=$id	1851_s_at	probe		0	X	.+_at	
 Agilent	Ag			A_24_P98555	probe		0	Ag	A_\d+_.+	
 Anatomical Therapeutic Chemical		http://www.whocc.no/atc_ddd_index/	http://www.whocc.no/atc_ddd_index/?code=$id	A10BA02	metabolite		1	urn:miriam:atc	^(\w+(\-\w+)?(\.\w+)?/)?\d{4,7}(\.\d{4}(v\d+)?)?$	Anatomical Therapeutic Chemical
 ArrayExpress		http://www.ebi.ac.uk/arrayexpress/	http://www.ebi.ac.uk/arrayexpress/experiments/$id	E-MEXP-1712	experiment		1	urn:miriam:arrayexpress	^[AEP]-\w{4}-\d+$	ArrayExpress
