@@ -1,83 +1,29 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.rdb" default="dist" basedir=".">
-
-  <!-- always be java 1.5 compatible -->
-  <property name="ant.build.javac.target" value="1.5"/>
-  <property name="ant.build.javac.source" value="1.5"/>
 	
-  <property name="jar.name" value="../dist/org.bridgedb.rdb.jar"/>
+	<property name="jar.name" value="../dist/org.bridgedb.rdb.jar"/>
   
-  <target name="prepare">
-	<mkdir dir="build"/>
-  </target>
+	<!-- absolute deps are used for building, testing and in the manifest classpath -->
+	<path id="absolute.deps">
+		<fileset dir="../dist">
+			<include name="org.bridgedb.jar"/>
+			<include name="org.bridgedb.bio.jar"/>
+		</fileset>
+	</path>
 
-  <path id="class.path">
-    <fileset dir="../dist">
-      <include name="org.bridgedb.jar"/>
-      <include name="org.bridgedb.bio.jar"/>
-    </fileset>
-  </path>
+	<!-- transient deps are optional, they are used only in the manifest classpath -->
+	<path id="transient.deps">
+		<pathelement location="lib/derby.jar"/>
+	</path>
 
-  <target name="build" depends="prepare">
-	<javac srcdir="src"
-		   includes="**"
-		   debug="true"
-		   destdir="build">
-		<classpath refid="class.path"/>
-	</javac>
-  </target>
-  
-  <target name="jar" depends="build">
-	<jar jarfile="${jar.name}">
-	  <manifest>
-		<attribute name="Class-Path" value="derby.jar"/>
-	  </manifest>
-	  <fileset dir="build" includes="**/*.class"/>
-	  <fileset dir="src" includes="**/*.properties"/>
-	</jar>
-    <copy file="lib/derby.jar"
-          todir="../dist" />
-  </target>
+	<!-- test deps are only used for testing -->
+	<path id="test.deps">
+		<pathelement location="../org.bridgedb/build-lib/junit4.jar"/>
+		<pathelement location="../org.bridgedb/build-lib/hamcrest-core.jar"/>
+		<pathelement location="../org.bridgedb/build-lib/measure.jar"/>
+		<pathelement location="build-lib/derbyclient.jar"/>
+	</path>
 
-  <target name="clean">
-	<delete dir="build"/>
-	<delete dir="doc"/>
-  </target>
-
-  <target name="dist-clean" depends="clean">
-	<delete file="${jar.name}"/>
-  </target>
-
-  <target name="dist" depends="jar"/>
-
-  	<taskdef resource="checkstyletask.properties"
-			 classpath="build-lib/checkstyle-all-5.0-beta01.jar"/>
-			 
-	<target name="test" depends="build">
-		<path id="test.classpath">
-			<path refid="class.path"/>
-			<pathelement location="build"/>
-			<pathelement location="lib/derby.jar"/>
-			<pathelement location="../org.bridgedb/build-lib/junit4.jar"/>
-			<pathelement location="../org.bridgedb/build-lib/hamcrest-core.jar"/>
-			<pathelement location="../org.bridgedb/build-lib/measure.jar"/>
-			<pathelement location="build-lib/derbyclient.jar"/>
-		</path>
-		<javac srcdir="test" debug="true" 
-					includes="**"
-					destdir="build"
-					source="1.5">
-			<classpath refid="test.classpath"/>
-		</javac>		
-		<junit printsummary="on" haltonfailure="true" fork="true">
-			<formatter type="brief" usefile="false"/>
-			<classpath refid="test.classpath"/>
-			<batchtest>
-				<fileset dir="test">
-					<include name="**/*Test*.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
+	<import file="../build-common.xml" />
 
 </project>

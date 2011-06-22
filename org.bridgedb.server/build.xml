@@ -1,59 +1,38 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.server" default="dist" basedir=".">
- 
-  <!-- always be java 1.5 compatible -->
-  <property name="ant.build.javac.target" value="1.5"/>
-  <property name="ant.build.javac.source" value="1.5"/>
-	
-  <property name="dist.dir" value="../dist"/>
-  <property name="jar.name" value="${dist.dir}/org.bridgedb.server.jar"/>
-  
-  <target name="prepare">
-	<mkdir dir="build"/>
-  </target>
+ 	
+	<property name="dist.dir" value="../dist"/>
+	<property name="jar.name" value="${dist.dir}/org.bridgedb.server.jar"/>
 
-	<path id="class.path">
+	<!-- absolute deps are used for building, testing and in the manifest classpath -->
+	<path id="absolute.deps">
 		<pathelement location="../dist/org.bridgedb.jar"/>
 		<pathelement location="../dist/org.bridgedb.bio.jar"/>
 		<pathelement location="../dist/org.bridgedb.rdb.jar"/>
-		<pathelement location="lib/restlet-2.0m6/org.restlet.jar"/>
-		<pathelement location="lib/commons-cli-1.2.jar"/>
 	</path>
-	
-  <target name="build" depends="prepare">
-	<javac srcdir="src"
-		   includes="**"
-		   debug="true"
-		   destdir="build">
-		<classpath refid="class.path"/>
-	</javac>
-  </target>
+
+	<!-- transient deps are optional, they are used only in the manifest classpath -->
+	<path id="transient.deps">
+		<!-- None -->
+	</path>
+
+	<!-- test deps are only used for testing -->
+	<path id="test.deps">
+		<pathelement location="../org.bridgedb.rdb/lib/derby.jar"/>
+		<pathelement location="../org.bridgedb/build-lib/junit.jar"/>
+	</path>
+
   
-  <target name="jar" depends="build">
-	<mkdir dir="${dist.dir}"/>
-	<jar jarfile="${jar.name}">
-	  <manifest>
-	  	<attribute name="Main-Class" value="org.bridgedb.server.Server"/>
-		<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar commons-cli-1.2.jar"/>
-	  </manifest>
-	  <fileset dir="build"/>
-	</jar>
-  </target>
-
-  <target name="dist" depends="jar">
-  	<copy toDir="${dist.dir}" file="lib/restlet-2.0m6/org.restlet.jar"/>
-  	<copy toDir="${dist.dir}" file="lib/commons-cli-1.2.jar"/>
-  </target>
-
-  <target name="clean">
-	<delete dir="build"/>
-  </target>
-
-  <target name="dist-clean" depends="clean">
-	<delete file="${jar.name}"/>
-  	<delete dir="${dist.dir}/org.restlet.jar"/>
-  	<delete file="${dist.dir}/bridgedb-webservice.war"/>
-  </target>
+	<target name="jar" depends="build">
+		<mkdir dir="${dist.dir}"/>
+		<jar jarfile="${jar.name}">
+		  <manifest>
+			<attribute name="Main-Class" value="org.bridgedb.server.Server"/>
+			<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar commons-cli-1.2.jar"/>
+		  </manifest>
+		  <fileset dir="build"/>
+		</jar>
+	</target>
 
 	<target name="war" depends="jar">
 		<fail message="You must specify the bridgedb config file that specifies the database locations for the web application. Example: ant war -Dbridge.config=/home/thomas/data/bridgedb/bridge.config.">
@@ -79,28 +58,9 @@
 	</target>
 	
 	<target name="test" depends="build">
-		<path id="test.classpath">
-			<path refid="class.path"/>
-			<pathelement location="build"/>
-			<pathelement location="../org.bridgedb.rdb/lib/derby.jar"/>
-			<pathelement location="../org.bridgedb/build-lib/junit.jar"/>
-		</path>
-		<javac srcdir="test" debug="true" 
-					includes="**"
-					destdir="build"
-					source="1.5">
-			<classpath refid="test.classpath"/>
-		</javac>
-<!-- Disabled for now...		
-	<junit printsummary="on" haltonfailure="true" fork="true">
-			<formatter type="brief" usefile="false"/>
-			<classpath refid="test.classpath"/>
-			<batchtest>
-				<fileset dir="test">
-					<include name="**/*Test*.java"/>
-				</fileset>
-			</batchtest>
-		</junit> -->
+		<!-- Disabled for now... -->
 	</target>
-	
+
+	<import file="../build-common.xml" />
+
 </project>
