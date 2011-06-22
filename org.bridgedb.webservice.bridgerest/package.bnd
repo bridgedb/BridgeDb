@@ -1,0 +1,5 @@
+Bundle-Name: org.bridgedb.webservice.bridgerest
+Bundle-Version: 1.0.3
+Bundle-SymbolicName: org.bridgedb.webservice.bridgerest
+Export-Package: * 
+Require-Bundle: derby;bundle-version="10.4.2000000", org.bridgedb;bundle-version="1.0.3", org.bridgedb.bio;bundle-version="1.0.3"

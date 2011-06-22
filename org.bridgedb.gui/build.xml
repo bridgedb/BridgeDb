@@ -1,57 +1,28 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.gui" default="dist" basedir=".">
-
-  <!-- always be java 1.5 compatible -->
-  <property name="ant.build.javac.target" value="1.5"/>
-  <property name="ant.build.javac.source" value="1.5"/>
 	
-  <property name="jar.name" value="../dist/org.bridgedb.gui.jar"/>
-  
-  <target name="prepare">
-	<mkdir dir="build"/>
-  </target>
+	<property name="jar.name" value="../dist/org.bridgedb.gui.jar"/>
 
-  <path id="class.path">
-    <fileset dir="../dist">
-      <include name="org.bridgedb.jar"/>
-      <include name="org.bridgedb.webservice.bridgerest.jar"/>
-      <include name="org.bridgedb.rdb.jar"/>
-    </fileset>
-    <fileset dir="lib">
-      <include name="*.jar"/>
-    </fileset>
-  </path>
+	<!-- absolute deps are used for building, testing and in the manifest classpath -->
+	<path id="absolute.deps">
+		<fileset dir="../dist">
+			<include name="org.bridgedb.jar"/>
+			<include name="org.bridgedb.webservice.bridgerest.jar"/>
+			<include name="org.bridgedb.rdb.jar"/>
+		</fileset>
+	</path>
 
-  <target name="build" depends="prepare">
-	<javac srcdir="src"
-		   includes="**"
-		   debug="true"
-		   destdir="build">
-		<classpath refid="class.path"/>
-	</javac>
-  </target>
-  
-  <target name="jar" depends="build">
-	<jar jarfile="${jar.name}">
-	  <manifest>
-		<attribute name="Class-Path" value="derby.jar"/>
-	  </manifest>
-	  <fileset dir="build" includes="**/*.class"/>
-	  <fileset dir="src" includes="**/*.properties"/>
-	</jar>
-    <copy file="lib/forms-1.2.0.jar"
-          todir="../dist" />
-  </target>
+	<!-- transient deps are optional, they are used only in the manifest classpath -->
+	<path id="transient.deps">
+		<!-- nothing -->
+	</path>
 
-  <target name="clean">
-	<delete dir="build"/>
-	<delete dir="doc"/>
-  </target>
+	<!-- test deps are only used for testing -->
+	<path id="test.deps">
+		<pathelement location="../org.bridgedb/build-lib/junit4.jar"/>
+		<pathelement location="../org.bridgedb/build-lib/hamcrest-core.jar"/>
+	</path>
 
-  <target name="dist-clean" depends="clean">
-	<delete file="${jar.name}"/>
-  </target>
-
-  <target name="dist" depends="jar"/>
+	<import file="../build-common.xml" />
 
 </project>

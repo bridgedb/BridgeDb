@@ -1,72 +1,22 @@
 <?xml version="1.0"?>
-<project name="BridgeDb" default="dist" basedir=".">
-
-  <!-- always be java 1.5 compatible -->
-  <property name="ant.build.javac.target" value="1.5"/>
-  <property name="ant.build.javac.source" value="1.5"/>
+<project name="org.bridgedb.webservice.bridgerest" default="dist" basedir=".">
 	
-  <property name="jar.name" value="../dist/org.bridgedb.webservice.bridgerest.jar"/>
-  <property name="svn.exec.svnversion" value="svnversion"/>
-  <property name="checkstyle.output.file" value="warnings.txt"/>
-  <property file="version.props"/>
+	<property name="jar.name" value="../dist/org.bridgedb.webservice.bridgerest.jar"/>
   
-  <target name="prepare">
-	<mkdir dir="build"/>
-	<mkdir dir="../dist"/>
-  </target>
-
-	<path id="project.class.path">
-		<pathelement location="build"/>
+	<path id="absolute.deps">
 		<pathelement location="../dist/org.bridgedb.jar"/>
 		<pathelement location="../dist/org.bridgedb.bio.jar"/>
 		<!--TODO make sure corelib build is called first -->
 	</path>
 
+	<!-- transient deps are optional, they are used only in the manifest classpath -->
+	<path id="transient.deps">
+	</path>
 
-  <target name="build" depends="prepare">
-		<javac srcdir="src" 
-			    debug="true"	
-			    destdir="build">
-			<classpath refid="project.class.path"/>
-		</javac>
-  </target>
-  
-  <target name="jar" depends="build">
-	<jar jarfile="${jar.name}">
-	  <manifest>
-		<attribute name="Class-Path" value="derby.jar"/>
-	  </manifest>
-	  <fileset dir="build" includes="**/*.class"/>
-      <fileset dir="build" includes="**/*.txt"/>
-	  <fileset dir="src" includes="**/*.properties"/>
-	</jar>
-  </target>
+	<!-- test deps are only used for testing -->
+	<path id="test.deps">
+	</path>
 
-  <target name="clean">
-	<delete dir="build"/>
-	<delete dir="doc"/>
-  </target>
-
-  <target name="dist-clean" depends="clean">
-	<delete file="${jar.name}"/>
-  </target>
-
-  <target name="dist" depends="jar"/>
-
-  	<taskdef resource="checkstyletask.properties"
-			 classpath="../org.bridgedb/build-lib/checkstyle-all-5.0.jar"/>
-			 
-	<target name="test" depends="build">
-		<!-- no tests yet... -->
-	</target>
-
-	<target name="checkstyle">
-		<checkstyle config="checks.xml">
-			<fileset dir="src">
-				<include name="**/*.java"/>
-			</fileset>
-			<formatter toFile="${checkstyle.output.file}"/>
-		</checkstyle>	
-	</target>
+	<import file="../build-common.xml" />
 
 </project>

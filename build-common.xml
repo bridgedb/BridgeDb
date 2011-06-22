@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<project name="common" basedir=".">
+
+	<!-- always be java 1.5 compatible -->
+	<property name="ant.build.javac.target" value="1.5"/>
+	<property name="ant.build.javac.source" value="1.5"/>
+	
+	<property name="checkstyle.output.file" value="warnings.txt"/>
+
+	<property file="version.props"/>
+
+	<target name="prepare-common">
+		<mkdir dir="build"/>
+
+		<!-- the following property is used to skip the "test" target if there is no test subdirectory -->
+		<condition property="test.dir.exists"><available file="test"/></condition>
+	</target>
+
+	<path id="absolute.and.libs">
+		<path refid="absolute.deps"/>
+		<fileset dir="lib" erroronmissingdir="false">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="prepare"/> <!-- designed to be overriden by project build file -->
+
+	<target name="build" depends="prepare, prepare-common">
+		<javac srcdir="src"
+			   includes="**"
+			   debug="true"
+			   destdir="build">
+			   <classpath refid="absolute.and.libs"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="build">
+		<taskdef resource="aQute/bnd/ant/taskdef.properties"
+			classpath="../build-lib/biz.aQute.bnd.jar"/> 
+		<bnd
+			output="${jar.name}"
+			eclipse="false"
+			files="package.bnd"
+			classpath="build,resources">
+		</bnd>
+	</target>
+
+	<target name="clean">
+		<delete dir="build"/>
+	</target>
+
+	<target name="dist-clean" depends="clean">
+		<delete file="${jar.name}"/>
+	</target>
+
+	<target name="dist" depends="jar">
+		<copy todir="../dist">
+			<fileset dir="lib" erroronmissingdir="false">
+				<include name="*.jar"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="test" depends="build" if="test.dir.exists">
+		<path id="test.classpath">
+			<path refid="absolute.deps"/>
+			<path refid="transient.deps"/>
+			<path refid="test.deps"/>
+			<pathelement location="resources"/>
+			<pathelement location="build"/>
+		</path>
+		<javac srcdir="test" debug="true" 
+					includes="**"
+					destdir="build"
+					source="1.5">
+			<classpath refid="test.classpath"/>
+		</javac>		
+		<junit printsummary="on" haltonfailure="true" fork="true">
+			<formatter type="brief" usefile="false"/>
+			<classpath refid="test.classpath"/>
+			<batchtest>
+				<fileset dir="test">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="checkstyle">
+		<taskdef resource="checkstyletask.properties"
+				 classpath="../org.bridgedb.bio/build-lib/checkstyle-all-5.0.jar"/>
+		<checkstyle config="checks.xml">
+			<fileset dir="src">
+				<include name="**/*.java"/>
+			</fileset>
+			<formatter toFile="${checkstyle.output.file}"/>
+		</checkstyle>	
+	</target>
+
+</project>

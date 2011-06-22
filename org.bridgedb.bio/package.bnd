@@ -1,0 +1,5 @@
+Bundle-Name: org.bridgedb.bio
+Bundle-Version: 1.0.3
+Bundle-SymbolicName: org.bridgedb.bio
+Export-Package: * 
+Require-Bundle: org.bridgedb;bundle-version="1.0.3"
