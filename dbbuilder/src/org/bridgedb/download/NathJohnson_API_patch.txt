@@ -1,4 +1,4 @@
-# Nath Johnson's solutoin #2 (see email 11/5/09)
+# Nath Johnson's solution #2 (see email 11/5/09)
 # add method to Bio::Ensembl::Funcgen::DBSQL::BaseAdaptor.pm
 
 sub fetch_all_by_linked_transcript_Gene{
