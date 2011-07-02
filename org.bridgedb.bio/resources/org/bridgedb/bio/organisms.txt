@@ -1,34 +1,36 @@
-Dasypus	novemcinctus	Armadillo	Dn
-Caenorhabditis	elegans	Celegans	Ce
-Gallus	gallus	Chicken	Gg
-Pan	troglodytes	Chimp	Pt
+Anopheles	gambiae	Mosquito_Ag	Ag
+Arabidopsis	thaliana	Arabidopsis	At
+Aspergillus	niger	Black mold	An
+Bacillus	subtilis	Bsubtilis	Bs
 Bos	taurus	Cow	Bt
+Caenorhabditis	elegans	Celegans	Ce
 Canis	familiaris	Dog	Cf
-Loxodonta	africana	Elephant	La
+Ciona	intestinalis	Sea Squirt	Ci
+Danio	rerio	Zebrafish	Dr
+Dasypus	novemcinctus	Armadillo	Dn
 Drosophila	melanogaster	Fruitfly	Dm
 Echinops	telfairi	Hedgehog	Et
 Equus	caballus	Horse	Qc
-Homo	sapiens	Human	Hs
-Oryzias	latipes	Medaka Fish	Ol
-Anopheles	gambiae	Mosquito_Ag	Ag
-Mus	musculus	Mouse	Mm
-Monodelphis	domestica	Opossum	Md
-Ornithorhynchus	anatinus	Platypus	Oa
-Tetraodon	nigroviridis	Pufferfish	Tn
-Oryctolagus	cuniculus	Rabbit	Oc
-Rattus	norvegicus	Rat	Rn
-Macaca	mulatta	Rhesus Monkey	Ml
-Sorex	araneus	Shrew	Sa
-Ciona	intestinalis	Sea Squirt	Ci
-Xenopus	tropicalis	Xenopus	Xt
-Saccharomyces	cerevisiae	Yeast	Sc
-Danio	rerio	Zebrafish	Dr
-Arabidopsis	thaliana	Arabidopsis	At
-Oryza	sativa	Japanese Rice	Os
-Sorghum	bicolor	Sorghum	Sb
-Vitis	vinifera	Wine Grape	Vv
-Populus	trichocarpa	Western Balsam Poplar	Pi
-Zea	mays	Maize	Zm
-Bacillus	subtilis	Bsubtilis	Bs
 Escherichia	coli	Ecoli	Ec
+Gallus	gallus	Chicken	Gg
+Homo	sapiens	Human	Hs
+Loxodonta	africana	Elephant	La
+Macaca	mulatta	Rhesus Monkey	Ml
+Monodelphis	domestica	Opossum	Md
+Mus	musculus	Mouse	Mm
 Mycobacterium	tuberculosis	Mtuberculosis	Mx
+Ornithorhynchus	anatinus	Platypus	Oa
+Oryctolagus	cuniculus	Rabbit	Oc
+Oryza	sativa	Japanese Rice	Os
+Oryzias	latipes	Medaka Fish	Ol
+Pan	troglodytes	Chimp	Pt
+Populus	trichocarpa	Western Balsam Poplar	Pi
+Rattus	norvegicus	Rat	Rn
+Saccharomyces	cerevisiae	Yeast	Sc
+Sorex	araneus	Shrew	Sa
+Sorghum	bicolor	Sorghum	Sb
+Sus	scrofa	Pig	Ss
+Tetraodon	nigroviridis	Pufferfish	Tn
+Vitis	vinifera	Wine Grape	Vv
+Xenopus	tropicalis	Xenopus	Xt
+Zea	mays	Maize	Zm
