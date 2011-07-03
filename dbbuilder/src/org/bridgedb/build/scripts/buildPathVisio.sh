@@ -74,6 +74,7 @@ zip ${DatabaseDb}.zip ${DatabaseDb}.bridge
 ## Beef up MySQL version of Derby databases for web service deployment
 ${mysql} < PathVisioMySQL_BEEF.sql
 ${mysqldump} --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffer_length=30K ${Database} > ${DatabaseDb}.sql.dump
+gzip ${DatabaseDb}.sql.dump
 
 #Run qc.sh
 ./qc.sh ${DatabaseSpecies} ${PriorDatabaseDate} ${DatabaseDate} >> temp.${DatabaseDb}.qc 
