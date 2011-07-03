@@ -1774,7 +1774,7 @@ sub parse_DBEntries {
 		}	
 		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $name, $namespace];
 		$$Ensembl_GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$gene_stable_id, $dbe_primary_id];
-		$$Attributes{GeneOntology}{$count.$dot.$subcount{GeneOntology}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GeneOntology}{'NAME'}[1]), mysql_quotes('Term'), $name]; 
+		$$Attributes{GeneOntology}{$count.$dot.$subcount{GeneOntology}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GeneOntology}{'NAME'}[1]), mysql_quotes('Description'), $name]; 
 		++$subcount{GeneOntology};
 	    }
   	}
@@ -1790,17 +1790,17 @@ sub parse_DBEntries {
 		  if ($namespace =~ /\'biological_process\'/){
 			$$GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$dbe_primary_id, $name];
  	                $$Ensembl_GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$gene_stable_id, $dbe_primary_id];
-			$$Attributes{GOslimBP}{$count.$dot.$subcount{GOslimBP}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimBP}{'NAME'}[1]), mysql_quotes('Term'), $name];	
+			$$Attributes{GOslimBP}{$count.$dot.$subcount{GOslimBP}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimBP}{'NAME'}[1]), mysql_quotes('Description'), $name];	
                 	++$subcount{GOslimBP};
 		  } elsif ($namespace =~ /\'cellular_component\'/){
                         $$GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$gene_stable_id, $dbe_primary_id];
-			$$Attributes{GOslimCC}{$count.$dot.$subcount{GOslimCC}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimCC}{'NAME'}[1]), mysql_quotes('Term'), $name];
+			$$Attributes{GOslimCC}{$count.$dot.$subcount{GOslimCC}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimCC}{'NAME'}[1]), mysql_quotes('Description'), $name];
                         ++$subcount{GOslimCC};
                   } elsif ($namespace =~ /\'molecular_function\'/){
                         $$GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$gene_stable_id, $dbe_primary_id];
-			$$Attributes{GOslimMF}{$count.$dot.$subcount{GOslimMF}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimMF}{'NAME'}[1]), mysql_quotes('Term'), $name];
+			$$Attributes{GOslimMF}{$count.$dot.$subcount{GOslimMF}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimMF}{'NAME'}[1]), mysql_quotes('Description'), $name];
                         ++$subcount{GOslimMF};
 		  } else {
 			#garbage?
