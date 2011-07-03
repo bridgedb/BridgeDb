@@ -77,7 +77,7 @@ ${mysqldump} --skip-add-locks --skip-disable-keys --skip-quote-names --net_buffe
 gzip ${DatabaseDb}.sql.dump
 
 #Run qc.sh
-./qc.sh ${DatabaseSpecies} ${PriorDatabaseDate} ${DatabaseDate} >> temp.${DatabaseDb}.qc 
+./qc.sh ${DatabaseSpecies} ${PriorDatabaseDate} ${DatabaseDate} > temp.${DatabaseDb}.qc 
 
 # report on products (check size > 1.9M)
 ls -lh ${DatabaseDb}.bridge | echo
