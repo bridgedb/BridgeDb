@@ -39,6 +39,7 @@
 use strict;
 use DBI;
 use HashSpeciesList;
+use HashArrayList;
 use lib '/home/socr/c/users2/apico/src/ensembl/modules';
 #use lib '/home/socr/c/users2/apico/src/ensembl-compara/modules';
 #use lib '/home/socr/c/users2/apico/src/ensembl-variation/modules';
@@ -183,8 +184,6 @@ for my $key (keys %speciesTable){
     }
 
 }
-
-close(SPECIES);
 
 ## MENU OF SUPPORTED SPECIES
 unless ($scriptmode) {
@@ -426,9 +425,10 @@ if ($gs =~ /(Y|Yes)/i){
 my $gene_adaptor = $registry->get_adaptor($species, "core", "gene");
 my $slice_adaptor = $registry->get_adaptor($species, "core", "slice");
 my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
-my $probe_feature_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
-my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "Probe");
-my $probe_set_adaptor = $registry->get_adaptor($species, "funcgen", "Probeset");
+#my $probe_feature_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
+#my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "Probe");
+#my $probe_set_adaptor = $registry->get_adaptor($species, "funcgen", "Probeset");
+my $array_adaptor = $registry->get_adaptor($species, "funcgen", "Array");  
 my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
@@ -1189,14 +1189,6 @@ while (my $gene = pop(@$genes))
 		    \%Ensembl_GeneTables,
 		    \%Attributes);  
     
-    ## EXTRACT FUNCGEN INFORMATION
-    if ($funcgen =~ /(Y|Yes)/i){
-     	parse_ProbeFeatures($gene, 
-			\%GeneTables,
-			\%Ensembl_GeneTables,
-			\%Attributes);
-    }
-
     ## EXTRACT GENE STRUCTURE INFORMATINO
 #    parse_AllTranscripts($gene->get_all_Transcripts(), 
 #			 \%Trans, \%Ensembl_Trans, 
@@ -1214,6 +1206,18 @@ while (my $gene = pop(@$genes))
     #####################################################################################
     if ($count % $purge_frequency == 0 || $count == ($collect_sample + $start_count - 1)){
 	print "\n";
+
+            ## AT THE END OF SAMPLE COLLECTION OR TOTAL GENOME COLLECTION
+	    ## BUT BEFORE THE LAST DATA LOAD INTO MYSQL
+            if ($count == ($collect_sample + $start_count - 1)){
+                ## COLLECT MIRCOARRAY TABLES
+                if ($funcgen !~ /(N|No)/i ){
+                    parse_ProbeFeatures(
+                        \%GeneTables,
+                        \%Ensembl_GeneTables
+                        );
+                }
+	    }
 
 	## LOAD DATA INTO MYSQL TABLES?
 	if ($mysql_std_load =~ /(Y|Yes)/i || $mysql_cs_load =~ /(Y|Yes)/i){
@@ -1472,7 +1476,6 @@ while (my $gene = pop(@$genes))
 #    $gene = 0;
 
 } # END: loop through each gene in genome
-
 
 print "\nDONE\n";
 
@@ -1771,6 +1774,7 @@ sub parse_DBEntries {
 		}	
 		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $name, $namespace];
 		$$Ensembl_GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$gene_stable_id, $dbe_primary_id];
+		$$Attributes{GeneOntology}{$count.$dot.$subcount{GeneOntology}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GeneOntology}{'NAME'}[1]), mysql_quotes('Term'), $name]; 
 		++$subcount{GeneOntology};
 	    }
   	}
@@ -1782,21 +1786,25 @@ sub parse_DBEntries {
 		if ($go_adaptor){
                   my $term = $go_adaptor->fetch_by_accession($acc);
                   my $name = mysql_quotes($term->name()); #e.g., plasma membrane
-               	  my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
+               	  my $namespace = mysql_quotes($term->namespace()); # e.g., cellular_component
 		  if ($namespace =~ /\'biological_process\'/){
 			$$GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$dbe_primary_id, $name];
  	                $$Ensembl_GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$gene_stable_id, $dbe_primary_id];
+			$$Attributes{GOslimBP}{$count.$dot.$subcount{GOslimBP}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimBP}{'NAME'}[1]), mysql_quotes('Term'), $name];	
                 	++$subcount{GOslimBP};
 		  } elsif ($namespace =~ /\'cellular_component\'/){
                         $$GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$gene_stable_id, $dbe_primary_id];
+			$$Attributes{GOslimCC}{$count.$dot.$subcount{GOslimCC}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimCC}{'NAME'}[1]), mysql_quotes('Term'), $name];
                         ++$subcount{GOslimCC};
                   } elsif ($namespace =~ /\'molecular_function\'/){
                         $$GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$gene_stable_id, $dbe_primary_id];
+			$$Attributes{GOslimMF}{$count.$dot.$subcount{GOslimMF}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimMF}{'NAME'}[1]), mysql_quotes('Term'), $name];
                         ++$subcount{GOslimMF};
 		  } else {
 			#garbage?
+			print "Unrecognized GO-slim namespace in $genus_species: $namespace\n";
 		  }
 		} else {
 			# no go
@@ -2165,87 +2173,106 @@ sub parse_DBEntries {
 # with API calls. Also to populate ADMIN_Xrefs with sample of every available DB Entry.
 #################################################################################################
 sub parse_ProbeFeatures {
-  my ($gene, $GeneTables, $Ensembl_GeneTables, $Attributes) = @_;
+  #my ($gene, $GeneTables, $Ensembl_GeneTables, $Attributes) = @_;
+  my ($GeneTables, $Ensembl_GeneTables) = @_;
   my %subcount = ();
   my %seen = ();
+  my %arrayTable = getArrayTable();
 
   foreach my $key ( keys %$GeneTables) {
       $subcount{$key} = 1;
-      %{$seen{$key}} = ();
   }
 
-  ## Solution #1 only works after the efg database has been patched to key on gene ids
-  ## See NathJohnson_DB_patch.sql
-    #my $probe_features = $probe_adaptor->fetch_all_by_external_name($gene_stable_id);
-  ## Solution #2 only works after API method has been added
-  ## See NathJohnson_API_patch.txt
-    #my @probe_features = @{$probe_feature_adaptor->fetch_all_by_linked_transcript_Gene($gene)};
-    my @probes = @{$probe_adaptor->fetch_all_by_linked_transcript_Gene($gene)};
-    my @probe_sets = @{$probe_set_adaptor->fetch_all_by_linked_transcript_Gene($gene)};
-    my @all_probes = (@probes, @probe_sets);
+my @arrayList = (@{$arrayTable{$genus_species}});  
+foreach my $array_name (@arrayList){
 
-    foreach my $probe (@all_probes) {
-      #my $probe = $pf->probe();
-      my $array_list = $probe->get_all_Arrays();
+print "fetching array: $array_name...\n";
+    my $array = $array_adaptor->fetch_by_name_vendor($array_name);
+    my $p_dbname = mysql_quotes($array->vendor());
 
-      foreach my $array (@$array_list){
-	if (!$array) {
-		next;
-	}
-	my $pf_dbname = mysql_quotes($array->vendor());
-        my $pf_display_id = 'null';
-	if ($pf_dbname =~ /^\'AFFY/i) { # Affy uses probesets
-		$pf_display_id = mysql_quotes($probe->name()); ##probeset()->name());
+print "getting all probes...\n";
+my @plist = ();
+  if ($p_dbname =~ /^\'AFFY/i) {  
+    @plist = @{$array->get_all_ProbeSets()};
+  } else {
+    @plist = @{$array->get_all_Probes()};  
+  }
+
+my $pcount = $#plist;
+print "probe count= $pcount\n";
+
+    %{$seen{dbRel}} = ();
+    foreach my $p (@plist) {
+        my $p_display_id = 'null';
+	if ($p_dbname =~ /^\'AFFY/i) { # Affy uses probesets
+		$p_display_id = $p->name(); 
 	} else {
-		$pf_display_id = mysql_quotes($probe->get_probename($array->name()));
+		$p_display_id = $p->get_probename($array_name);
 	}
-		
-	my $pf_primary_id = $pf_display_id;
-      	my $pf_description = mysql_quotes($array->description());
-      	my $pf_release = mysql_quotes($array->name());
-      	my $pf_status = mysql_quotes("XREF"); #enum
-      	my $pf_version = mysql_quotes($array->format());
-      	my $pf_info_text = mysql_quotes($array->type());
-      	my $pf_info_type = mysql_quotes("SEQUENCE_MATCH"); #enum
-      	#my $pf_synonyms = $probe->get_all_probenames();
-      	my $pf_syns = ''; ##join("|", @$pf_synonyms);
-      	$pf_syns = mysql_quotes($pf_syns);
 
-        #print "PROBE: $pf_primary_id | $pf_dbname | $pf_release \n";
+	## Handle case when list of of probe names is returned
+	my @pnamelist = split(',', $p_display_id);
+ 	foreach my $p_name (@pnamelist){	
 
-      	$ADMIN_Xrefs{$pf_dbname} = [$pf_dbname, $pf_display_id, $pf_primary_id, $pf_description, $pf_syns,
-                             $pf_release, $pf_status, $pf_version, $pf_info_text, $pf_info_type];
+	my $p_primary_id = mysql_quotes($p_name);
+      	my $p_release = mysql_quotes($array->name());
 
-        if ($pf_dbname =~ /^\'AFFY/i && $pf_release !~ /Ex-/){  #catch all types #skip all exon arrays
-            $ADMIN_Xrefs{$pf_dbname}[10] = "\'Y\'"; # collected
-            if (!${$seen{Affy}{$pf_primary_id}}++){
-                $$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$pf_primary_id, $pf_dbname, $pf_release];
-                $$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $pf_primary_id];
+	%{$seen{Gene}} = ();
+	my @dbeList = @{$p->get_all_DBEntries()};
+	foreach my $dbe (@dbeList){
+	  my $dbe_dbname = $dbe->dbname();
+	  my $gene = "";
+	  if ($dbe_dbname =~ /core_Transcript$/){
+		$gene = $gene_adaptor->fetch_by_transcript_stable_id($dbe->primary_id());	
+	  } else {
+		next;
+	  } 
+	  $gene_stable_id = mysql_quotes($gene->stable_id());
+	  if (${$seen{Gene}{$gene_stable_id}}++){ 
+		next;
+	  } 
+
+	## Collect info on first occurence  
+	my $db_release = $p_dbname."-".$p_release;
+	if (!${$seen{DbRel}{$db_release}}++){
+          my $p_description = mysql_quotes($array->description());
+          my $p_status = mysql_quotes("XREF"); #enum
+          my $p_version = mysql_quotes($array->format());
+          my $p_info_text = mysql_quotes($array->type());
+          my $p_info_type = mysql_quotes("SEQUENCE_MATCH"); #enum
+          my $p_syns = mysql_quotes("");
+
+      	  $ADMIN_Xrefs{$db_release} = [$p_dbname, $p_primary_id, $p_primary_id, $p_description, $p_syns,
+                             $p_release, $p_status, $p_version, $p_info_text, $p_info_type];
+	}
+
+        if ($p_dbname =~ /^\'AFFY/i #catch all types
+	  && $p_release !~ /Ex-/ && $p_release !~ /U133/){  #skip all exon array and old arrays
+            $ADMIN_Xrefs{$db_release}[10] = "\'Y\'"; # collected
+                $$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$p_primary_id, $p_dbname, $p_release];
+                $$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $p_primary_id];
                 ++$subcount{Affy};
-            }
         }
-        elsif ($pf_dbname =~ /^\'Agilent/i){  #catch all types
-            $ADMIN_Xrefs{$pf_dbname}[10] = "\'Y\'"; # collected
-            if (!${$seen{Agilent}{$pf_primary_id}}++){
-                $$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$pf_primary_id, $pf_dbname, $pf_release];
-                $$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $pf_primary_id];
+        elsif ($p_dbname =~ /^\'Agilent/i){  #catch all types
+            $ADMIN_Xrefs{$db_release}[10] = "\'Y\'"; # collected
+                $$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$p_primary_id, $p_dbname, $p_release];
+                $$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $p_primary_id];
                 ++$subcount{Agilent};
-            }
         }
-        elsif ($pf_dbname =~ /^\'Illumina/i){ #catch all types  
-            $ADMIN_Xrefs{$pf_dbname}[10] = "\'Y\'"; # collected
-            if (!${$seen{Illumina}{$pf_primary_id}}++){
-                $$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$pf_primary_id, $pf_dbname, $pf_release];
-                $$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $pf_primary_id];
+        elsif ($p_dbname =~ /^\'Illumina/i){ #catch all types  
+            $ADMIN_Xrefs{$db_release}[10] = "\'Y\'"; # collected
+                $$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$p_primary_id, $p_dbname, $p_release];
+                $$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $p_primary_id];
                 ++$subcount{Illumina};
-            }
         }
         else {
-            $ADMIN_Xrefs{$pf_dbname}[10] = "\'N\'"; # not collected!
+            $ADMIN_Xrefs{$db_release}[10] = "\'N\'"; # not collected!
         }
-
+	}
       }
+	++$count;
     }
+  }
 }
 
 ## FEATURE TO ARRAY #############################################################################
