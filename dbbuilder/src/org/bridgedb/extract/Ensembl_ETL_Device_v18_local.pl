@@ -1509,7 +1509,7 @@ my $mysql_cmd = "mysql --host=mysql-dev.cgl.ucsf.edu --port=13308 -u genmapp --p
 
 ## BACKUP and COPY STD TABLES?
 if ( $mysql_std_load  =~ /(Y|Yes)/i){
-my $bkup_std_default = 'Yes';      # default answer
+my $bkup_std_default = 'No';      # default answer
 
 print "\n\n\tWould you like to backup and copy the Std tables? ($bkup_std_default) --> ";
 my $bkup_std = $bkup_std_default;
