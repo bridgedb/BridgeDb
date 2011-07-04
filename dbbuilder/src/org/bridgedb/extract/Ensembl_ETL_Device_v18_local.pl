@@ -263,8 +263,8 @@ if ($sample_only =~ /(Y|Yes)/i ){
     if ($start_count eq '') {
 	$start_count = $start_count_default;  
     }
-    until ( $start_count =~ /^([1-3]?\d?\d?\d?\d|40000)$/ ) {
-	print "\n\nInvalid Entry!!!\nPlease type a number between 1 and 40000 --> ";
+    until ( $start_count =~ /^([1-7]?\d?\d?\d?\d|80000)$/ ) {
+	print "\n\nInvalid Entry!!!\nPlease type a number between 1 and 80000 --> ";
 	$start_count = <STDIN>;
 	chomp $start_count;
     }
