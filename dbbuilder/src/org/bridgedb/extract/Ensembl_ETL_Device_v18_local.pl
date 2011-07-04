@@ -432,7 +432,7 @@ my $array_adaptor = $registry->get_adaptor($species, "funcgen", "Array");
 my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
-if ($split_dbname[2] == "collection"){	     # shift array elements for "collections"
+if ($split_dbname[2] eq "collection"){	     # shift array elements for "collections"
 	splice(@split_dbname,1,1);
 }
 my $build = $split_dbname[4];                # e.g., 42
@@ -1762,19 +1762,20 @@ sub parse_DBEntries {
     	elsif ($dbe_dbname =~ /^\'GO\'$/){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{GeneOntology}{$dbe_primary_id}}++){
-		# Get GO term annotations using $go_adaptor
 		my $name = mysql_quotes("");
 		my $namespace = mysql_quotes("");
+                # Get GO term annotations using $go_adaptor
 		if ($go_adaptor){
-			my $acc = $dbe_primary_id;
-			$acc =~ s/\'//g; # strip single quotes to use as variable
-			my $term = $go_adaptor->fetch_by_accession($acc);
-			my $name = mysql_quotes($term->name()); #e.g., plasma membrane
-			my $namespace = mysql_quotes($term->namespace()); # e.g., cellular component
-		}	
-		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $name, $namespace];
+                  my $acc = $dbe_primary_id;
+                  $acc =~ s/\'//g; # strip single quotes to use as variable
+                  my $term = $go_adaptor->fetch_by_accession($acc);
+                  my $name = mysql_quotes($term->name()); #e.g., plasma membrane
+                  my $namespace = mysql_quotes($term->namespace()); # e.g., cellular_component
+		  $dbe_description = $name unless ($name eq "" || !$name);
+		}
+		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $dbe_description, $namespace];
 		$$Ensembl_GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$gene_stable_id, $dbe_primary_id];
-		$$Attributes{GeneOntology}{$count.$dot.$subcount{GeneOntology}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GeneOntology}{'NAME'}[1]), mysql_quotes('Description'), $name]; 
+		$$Attributes{GeneOntology}{$count.$dot.$subcount{GeneOntology}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GeneOntology}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description]; 
 		++$subcount{GeneOntology};
 	    }
   	}
@@ -1788,20 +1789,26 @@ sub parse_DBEntries {
                   my $name = mysql_quotes($term->name()); #e.g., plasma membrane
                	  my $namespace = mysql_quotes($term->namespace()); # e.g., cellular_component
 		  if ($namespace =~ /\'biological_process\'/){
+		    if (!${$seen{GOslimBP}{$dbe_primary_id}}++){
 			$$GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$dbe_primary_id, $name];
  	                $$Ensembl_GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$gene_stable_id, $dbe_primary_id];
 			$$Attributes{GOslimBP}{$count.$dot.$subcount{GOslimBP}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimBP}{'NAME'}[1]), mysql_quotes('Description'), $name];	
                 	++$subcount{GOslimBP};
+		    }
 		  } elsif ($namespace =~ /\'cellular_component\'/){
+		    if (!${$seen{GOslimCC}{$dbe_primary_id}}++){
                         $$GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$gene_stable_id, $dbe_primary_id];
 			$$Attributes{GOslimCC}{$count.$dot.$subcount{GOslimCC}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimCC}{'NAME'}[1]), mysql_quotes('Description'), $name];
                         ++$subcount{GOslimCC};
+		    }
                   } elsif ($namespace =~ /\'molecular_function\'/){
+		    if (!${$seen{GOslimMF}{$dbe_primary_id}}++){
                         $$GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$gene_stable_id, $dbe_primary_id];
 			$$Attributes{GOslimMF}{$count.$dot.$subcount{GOslimMF}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimMF}{'NAME'}[1]), mysql_quotes('Description'), $name];
                         ++$subcount{GOslimMF};
+		    }
 		  } else {
 			#garbage?
 			print "Unrecognized GO-slim namespace in $genus_species: $namespace\n";
@@ -2178,6 +2185,10 @@ sub parse_ProbeFeatures {
   my %subcount = ();
   my %seen = ();
   my %arrayTable = getArrayTable();
+
+if (!defined $arrayTable{$genus_species} ){
+	return;
+}
 
   foreach my $key ( keys %$GeneTables) {
       $subcount{$key} = 1;
