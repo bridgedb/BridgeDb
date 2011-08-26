@@ -77,6 +77,12 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 			"SELECT id, code, attrvalue FROM attribute WHERE " +
 			"attrname = ? AND LOWER(ID) LIKE ?"
 		);
+	final SimpleGdb.QueryLifeCycle qAllXrefs = new SimpleGdb.QueryLifeCycle(
+			"SELECT id, code FROM datanode"
+		);
+	final SimpleGdb.QueryLifeCycle qAllXrefsByDatasource = new SimpleGdb.QueryLifeCycle(
+			"SELECT id, code FROM datanode WHERE code = ?"
+		);
 
 	/** {@inheritDoc} */
 	public boolean xrefExists(Xref xref) throws IDMapperException 
@@ -374,4 +380,50 @@ public abstract class SimpleGdbImplCommon extends SimpleGdb
 		}
 	}
 
+	@Override
+	public Iterable<Xref> getIterator() throws IDMapperException {
+		Set<Xref> xrefs = new HashSet<Xref>();
+		final QueryLifeCycle pst = qAllXrefs;
+		synchronized (pst) { 
+	    	try
+	    	{
+	    	 	pst.init();
+	    	 	ResultSet rs = pst.executeQuery();
+	    	 	while (rs.next())
+	    	 	{
+	    	 		xrefs.add(new Xref(rs.getString(1), DataSource.getBySystemCode(rs.getString(2))));
+	    	 	}
+	    	}
+	    	catch (SQLException ignore)
+	    	{
+	    		throw new IDMapperException(ignore);
+	    	}
+			finally {pst.cleanup(); }
+	    	return xrefs;
+		}		
+	}
+	
+	@Override
+	public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
+		Set<Xref> xrefs = new HashSet<Xref>();
+		final QueryLifeCycle pst = qAllXrefsByDatasource;
+		synchronized (pst) { 
+	    	try
+	    	{
+	    	 	pst.init();
+	    	 	pst.setString(1, ds.getSystemCode());
+	    	 	ResultSet rs = pst.executeQuery();
+	    	 	while (rs.next())
+	    	 	{
+	    	 		xrefs.add(new Xref(rs.getString(1), ds));
+	    	 	}
+	    	}
+	    	catch (SQLException ignore)
+	    	{
+	    		throw new IDMapperException(ignore);
+	    	}
+			finally {pst.cleanup(); }
+	    	return xrefs;
+		}
+	}
 }
