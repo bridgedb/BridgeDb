@@ -18,9 +18,6 @@ package org.bridgedb.rdb;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
@@ -32,13 +29,14 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.XrefIterator;
 import org.bridgedb.impl.InternalUtils;
 
 /**
  * Interface for all classes that provide Gdb-like functionality,
  * such as looking up cross-references and backpage text.
  */
-public abstract class IDMapperRdb implements IDMapper, AttributeMapper
+public abstract class IDMapperRdb implements IDMapper, AttributeMapper, XrefIterator
 {
 	static
 	{
@@ -124,5 +122,5 @@ public abstract class IDMapperRdb implements IDMapper, AttributeMapper
 	public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException 
 	{
 		return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
-	}	
+	}
 }
