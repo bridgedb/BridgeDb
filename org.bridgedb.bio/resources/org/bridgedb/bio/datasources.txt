@@ -63,7 +63,7 @@ Evidence Code		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontolo
 FlyBase	F	http://www.flybase.org/	http://www.flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase
 FMA		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	FMA:67112	ontology		1	urn:miriam:obo.fma	^FMA:\d+$	FMA
 GenBank	G				probe		0	G	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	
-Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.gnf.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	Gw	\d+	
+Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	Gw	\d+	
 GeneDB		http://www.genedb.org/	http://www.genedb.org/gene/$id	Cj1536c	gene		1	urn:miriam:genedb	^[\w\d\.-]*$	GeneDB
 GeneOntology	T	http://www.ebi.ac.uk/ego/	http://www.ebi.ac.uk/ego/GTerm?id=$id	GO:0006915	probe		1	urn:miriam:obo.go	^GO:\d{7}$	Gene Ontology
 GEO		http://www.ncbi.nlm.nih.gov/geo/	http://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=$id	GDS1234	experiment		1	urn:miriam:geo	^GDS\d+$	GEO
