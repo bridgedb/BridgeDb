@@ -27,7 +27,9 @@ import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
 
 import junit.framework.TestCase;
+//import org.junit.Ignore;
 
+//@Ignore
 public class Test extends TestCase 
 {
 	@Override public void setUp() throws ClassNotFoundException
