@@ -2,13 +2,13 @@
   <parent>
     <artifactId>bridgedb-bundle</artifactId>
     <groupId>org.bridgedb</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
   <artifactId>examples</artifactId>
   <name>Bridge DB Examples</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
   
   	<build>
 		<directory>target</directory>
@@ -34,25 +34,25 @@
     <dependency>
     	<groupId>org.bridgedb</groupId>
     	<artifactId>org.bridgedb</artifactId>
-    	<version>1.0-SNAPSHOT</version>
+    	<version>1.1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
     	<groupId>org.bridgedb</groupId>
     	<artifactId>org.bridgedb.bio</artifactId>
-    	<version>1.0-SNAPSHOT</version>
+    	<version>1.1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
     	<groupId>org.bridgedb.webservice</groupId>
     	<artifactId>org.bridgedb.webservice.bridgerest</artifactId>
-    	<version>1.0-SNAPSHOT</version>
+    	<version>1.1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
     	<groupId>org.bridgedb.webservice</groupId>
     	<artifactId>org.bridgedb.webservice.biomart</artifactId>
-    	<version>1.0-SNAPSHOT</version>
+    	<version>1.1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
@@ -84,13 +84,13 @@
     <dependency>
     	<groupId>org.bridgedb.webservice</groupId>
     	<artifactId>org.bridgedb.webservice.picr</artifactId>
-    	<version>1.0-SNAPSHOT</version>
+    	<version>1.1.0</version>
     	<scope>compile</scope>
     </dependency>
     <dependency>
     	<groupId>org.bridgedb.webservice</groupId>
     	<artifactId>org.bridgedb.webservice.cronos</artifactId>
-    	<version>1.0-SNAPSHOT</version>
+    	<version>1.1.0</version>
     	<scope>compile</scope>
     </dependency>
   </dependencies>
