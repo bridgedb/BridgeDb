@@ -4,7 +4,7 @@
   <artifactId>bridgedb-bundle</artifactId>
   <packaging>pom</packaging>
   <name>BridgeDb bundle</name>
-  <version>1.1.0</version>
+  <version>1.1.1-SNAPSHOT</version>
   <modules>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
