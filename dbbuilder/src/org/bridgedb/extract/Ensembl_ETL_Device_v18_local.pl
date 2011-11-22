@@ -197,7 +197,7 @@ if ($arrayPick eq 'null') {
 my @splitPick = split(/\t/, $arrayPick);                      # split: [0]=common name, [1]=(genus species)
 my $speciesPick = $splitPick[0];                              # store common name, e.g., Mouse
 my $twoLetterSpecies = $speciesTable{$speciesPick}[3];	      # two-letter code, e.g., Mm
-my $EnSpeciesCode = "En".$twoLetterSpecies;		      # Ensembl species-specific codes, e.g., EnMm
+#my $EnSpeciesCode = "En".$twoLetterSpecies;		      # Ensembl species-specific codes, e.g., EnMm
 my $species = $speciesTable{$speciesPick}[0];                 # store genus species, e.g., Mus musculus 
 my @split_species = split(/\s/, $species);   		      # split: [0]=genus, [1]=species, [2]=extra
 my $genus = $split_species[0];
@@ -1060,7 +1060,7 @@ while (my $gene = pop(@$genes))
 	# the corresponding link table will be automatically generated here.                #
 	#####################################################################################
 	foreach my $key ( keys %GeneTables){
-	    %{$Ensembl_GeneTables{$key}} = ('NAME' => ["Ensembl_${$GeneTables{$key}}{NAME}[0]", "$EnSpeciesCode", "${$GeneTables{$key}}{NAME}[1]"], 
+	    %{$Ensembl_GeneTables{$key}} = ('NAME' => ["Ensembl_${$GeneTables{$key}}{NAME}[0]", 'En', "${$GeneTables{$key}}{NAME}[1]"], 
 					    'HEADER' => ["\`Primary\` VARCHAR(128) NOT NULL DEFAULT \'\'", 
 							 "\`Related\` VARCHAR(128) NOT NULL DEFAULT \'\'", 
 							 "INDEX (\`Primary\`)"]);
@@ -1082,7 +1082,7 @@ while (my $gene = pop(@$genes))
 	# and proteins. Modifications to the 'HEADER' fields may be required over time,   #
 	# but there is no need to use these Hash names as variables as with Gene Tables.  #
 	###################################################################################
-	%Ensembl = ('NAME' => ['Ensembl', "$EnSpeciesCode"], 
+	%Ensembl = ('NAME' => ['Ensembl', 'En'], 
 		    'SYSTEM' => ["\'Ensembl (EBI, Sanger)\'", "\'$dateArg\'", 
 				 "\'ID|Symbol\\\\sBF|Description\\\\BF|Chromosome\\\\BF\|\'", "\'\|$species\|\'", "\'$species\'", 
 				 "\'http://www.ensembl.org/".$genus_species."/Gene/Summary?g==~\'", "\'\|M\|\'", 
@@ -1165,9 +1165,9 @@ while (my $gene = pop(@$genes))
     $gene_chr = mysql_quotes($gene->slice->seq_region_name());
     $Ensembl{$count} = [$gene_stable_id, $gene_symbol, $gene_description, $gene_chr];
     #note: dummy subcount and subsubcount to support HoHoA sorting and parsing
-    $Attributes{Ensembl}{$count.$dot.'1'.$dot.'1'} = [$gene_stable_id, mysql_quotes($EnSpeciesCode), mysql_quotes('Symbol'), $gene_symbol];
-    $Attributes{Ensembl}{$count.$dot.'1'.$dot.'2'} = [$gene_stable_id, mysql_quotes($EnSpeciesCode), mysql_quotes('Description'), $gene_description];
-    $Attributes{Ensembl}{$count.$dot.'1'.$dot.'3'} = [$gene_stable_id, mysql_quotes($EnSpeciesCode), mysql_quotes('Chromosome'), $gene_chr];
+    $Attibutes{Ensembl}{$count.$dot.'1'.$dot.'1'} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Symbol'), $gene_symbol];
+    $Attributes{Ensembl}{$count.$dot.'1'.$dot.'2'} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Description'), $gene_description];
+    $Attributes{Ensembl}{$count.$dot.'1'.$dot.'3'} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Chromosome'), $gene_chr];
 
     ## PRINT PROGRESS MESSAGE
     print "Processing $gene_stable_id: $count of $total ";
