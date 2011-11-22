@@ -1775,7 +1775,7 @@ sub parse_DBEntries {
 		}
 		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $dbe_description, $namespace];
 		$$Ensembl_GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$gene_stable_id, $dbe_primary_id];
-		$$Attributes{GeneOntology}{$count.$dot.$subcount{GeneOntology}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GeneOntology}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description]; 
+		$$Attributes{GeneOntology}{$count.$dot.$subcount{GeneOntology}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GeneOntology}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_description]; 
 		++$subcount{GeneOntology};
 	    }
   	}
@@ -1792,21 +1792,21 @@ sub parse_DBEntries {
 		    if (!${$seen{GOslimBP}{$dbe_primary_id}}++){
 			$$GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$dbe_primary_id, $name];
  	                $$Ensembl_GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$gene_stable_id, $dbe_primary_id];
-			$$Attributes{GOslimBP}{$count.$dot.$subcount{GOslimBP}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimBP}{'NAME'}[1]), mysql_quotes('Description'), $name];	
+			$$Attributes{GOslimBP}{$count.$dot.$subcount{GOslimBP}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimBP}{'NAME'}[1]), mysql_quotes('Symbol'), $name];	
                 	++$subcount{GOslimBP};
 		    }
 		  } elsif ($namespace =~ /\'cellular_component\'/){
 		    if (!${$seen{GOslimCC}{$dbe_primary_id}}++){
                         $$GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimCC}{$count.$dot.$subcount{GOslimCC}} = [$gene_stable_id, $dbe_primary_id];
-			$$Attributes{GOslimCC}{$count.$dot.$subcount{GOslimCC}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimCC}{'NAME'}[1]), mysql_quotes('Description'), $name];
+			$$Attributes{GOslimCC}{$count.$dot.$subcount{GOslimCC}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimCC}{'NAME'}[1]), mysql_quotes('Symbol'), $name];
                         ++$subcount{GOslimCC};
 		    }
                   } elsif ($namespace =~ /\'molecular_function\'/){
 		    if (!${$seen{GOslimMF}{$dbe_primary_id}}++){
                         $$GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$dbe_primary_id, $name];
                         $$Ensembl_GeneTables{GOslimMF}{$count.$dot.$subcount{GOslimMF}} = [$gene_stable_id, $dbe_primary_id];
-			$$Attributes{GOslimMF}{$count.$dot.$subcount{GOslimMF}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimMF}{'NAME'}[1]), mysql_quotes('Description'), $name];
+			$$Attributes{GOslimMF}{$count.$dot.$subcount{GOslimMF}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{GOslimMF}{'NAME'}[1]), mysql_quotes('Symbol'), $name];
                         ++$subcount{GOslimMF};
 		    }
 		  } else {
