@@ -60,8 +60,13 @@ public class BioDataSource
 		"Ch", "HMDB").asDataSource();
 	public static final DataSource KEGG_COMPOUND = DataSource.register (
 		"Ck", "Kegg Compound").asDataSource();
+	/** @deprecated use one of the organism-specific system codes instead */ 
 	public static final DataSource PUBCHEM = DataSource.register (
 		"Cp", "PubChem").asDataSource();
+	public static final DataSource PUBCHEM_SUBSTANCE = DataSource.register (
+		"Cps", "PubChem substance").asDataSource();
+	public static final DataSource PUBCHEM_COMPOUND = DataSource.register (
+		"Cpc", "PubChem compound").asDataSource();
 	public static final DataSource CHEMSPIDER = DataSource.register (
 		"Cs", "Chemspider").asDataSource();
 	public static final DataSource SGD = DataSource.register (
