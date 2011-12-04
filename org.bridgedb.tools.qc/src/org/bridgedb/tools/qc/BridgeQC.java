@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
 
@@ -97,14 +98,14 @@ public class BridgeQC
 	public void compareLinks() throws SQLException
 	{
 		Connection con = oldGdb.getConnection();
-		//TODO
+		//TODO ... do something to compare cross-link consistency ...
 	}
 
 	public void compareFileSizes() throws SQLException
 	{
 		long oldSize = oldDb.length();
 		long newSize = newDb.length();
-		System.out.printf ("INFO: new size is %d Mb (changed %+3.1f%%)", newSize / 1000000, 
+		System.out.printf ("INFO: new size is %d Mb (changed %+3.1f%%)\n", newSize / 1000000, 
 				(double)(newSize - oldSize) / (double)oldSize * 100);
 	}
 
@@ -157,6 +158,10 @@ public class BridgeQC
 		if (args.length != 2) { printUsage(); return; }
 		BridgeQC main = new BridgeQC (new File(args[0]), new File(args[1]));
 		main.run();
+		
+		BioDataSource.init();
+		PatternChecker checker = new PatternChecker();
+		checker.run(new File(args[0]));
 	}
 
 }
