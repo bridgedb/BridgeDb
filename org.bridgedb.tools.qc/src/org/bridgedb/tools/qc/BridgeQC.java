@@ -2,6 +2,9 @@ package org.bridgedb.tools.qc;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,6 +12,7 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.Organism;
 import org.bridgedb.rdb.SimpleGdb;
 import org.bridgedb.rdb.SimpleGdbFactory;
 
@@ -132,15 +136,112 @@ public class BridgeQC
 		}
 	}
 
+	public static boolean safeEquals (Object a, Object b)
+	{
+		return a == null ? b == null : a.equals(b);
+	}
+
+	public interface PropertyChecker
+	{
+		abstract void check(String oldVal, String newVal);
+	}
+	
+	enum Props implements PropertyChecker
+	{
+		ORGANISM (true, false) {
+			public void check(String oldVal, String newVal) 
+			{
+				if (newVal != null)
+				{
+					Organism o = Organism.fromLatinName(newVal);
+					if (o == null) System.out.println ("WARNING: species '" + newVal + "' is not a recognized latin name");
+				}
+			}
+		},
+		DATASOURCENAME (true, true) {
+			public void check(String oldVal, String newVal) {}
+		},
+		SERIES (true, true) {
+			public void check(String oldVal, String newVal) {}
+		},
+		DATATYPE (true, true) {
+			public void check(String oldVal, String newVal) {}
+		},
+		DATASOURCEVERSION (false, true) {
+			public void check(String oldVal, String newVal) {}
+		},
+		BUILDDATE (false, true) {
+			public void check(String oldVal, String newVal) {
+				SimpleDateFormat sft = new SimpleDateFormat("yyyyMMdd");
+				Date oldDate = null;
+				Date newDate = null;
+				try
+				{
+					if (oldVal != null)
+						oldDate = sft.parse(oldVal);
+				}
+				catch (ParseException e)
+				{
+					System.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd"); 
+				}
+				try
+				{
+					if (newVal != null)
+						newDate = sft.parse(newVal);
+				}
+				catch (ParseException e)
+				{
+					System.out.println ("ERROR: " + oldVal + " does not match pattern yyyymmdd"); 
+				}
+				if (oldDate != null && newDate != null && oldDate.after(newDate))
+				{
+					System.out.println ("ERROR: new date " + newVal + " is older than old date " + oldVal); 
+				}
+			}
+		},
+		SCHEMAVERSION (false, true) {
+			public void check(String oldVal, String newVal) {}
+		},
+		;
+		
+		private boolean mustBeSame;
+		private boolean mustBeDefined;
+		
+		Props(boolean mustBeSame, boolean mustBeDefined)
+		{
+			this.mustBeSame = mustBeSame;
+			this.mustBeDefined = mustBeDefined;
+		}
+		
+		public void checkWrap(String oldVal, String newVal)
+		{
+			if (mustBeSame && !safeEquals (oldVal, newVal))
+				System.out.println ("WARNING: old " + name() + "'" + oldVal + "' doesn\'t match new " + name() + " '" + newVal + "'");
+			if (mustBeDefined && (newVal == null || newVal.equals("")))
+				System.out.println ("WARNING: property " + name() + " is undefined");
+			check(oldVal, newVal);
+		}
+	}
+	
+	public void compareInfo()
+	{
+		for (Props p : Props.values())
+		{
+			p.checkWrap(oldGdb.getCapabilities().getProperty(p.name()),
+					newGdb.getCapabilities().getProperty(p.name()));
+		}
+	}
+	
 	public void run() throws IDMapperException, SQLException
 	{
 		initDatabases();
+		compareInfo();
 		compareDataSources();
 
 		compareLinks();
 		
 		compareAttributes();
-		compareFileSizes();
+		compareFileSizes();		
 	}
 	
 	public static void printUsage()
