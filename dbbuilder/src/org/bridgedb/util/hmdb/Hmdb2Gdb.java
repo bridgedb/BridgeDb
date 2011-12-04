@@ -33,9 +33,9 @@ import org.bridgedb.rdb.construct.GdbConstruct;
 import org.bridgedb.rdb.construct.GdbConstructImpl3;
 import org.bridgedb.util.hmdb.ParseHmdb.Compound;
 import org.bridgedb.util.hmdb.ParseHmdb.ParseException;
-import org.pathvisio.debug.Logger;
-import org.pathvisio.debug.StopWatch;
-import org.pathvisio.preferences.PreferenceManager;
+import org.pathvisio.core.debug.Logger;
+import org.pathvisio.core.debug.StopWatch;
+import org.pathvisio.core.preferences.PreferenceManager;
 
 /**
  * Program to create a metabolite database based on a
