@@ -133,6 +133,33 @@ public class GdbConstructImpl3 implements GdbConstruct
 		}
 	}
 
+	public void setInfo(String key, String value) throws IDMapperException
+	{
+		try
+		{
+			/** 
+			 * This is a bit awkward because we store keys as columns.
+			 * TODO: in a future schema version this should be a regular 2-column table.
+			 */
+			if (!key.matches("^\\w+$")) throw new IllegalArgumentException("key: '" + key + "' contains invalid characters");
+			PreparedStatement pstInfo1 = con.prepareStatement (
+					"ALTER TABLE info " +
+					"ADD COLUMN " + key + " VARCHAR (50)"
+		 		);
+			pstInfo1.execute();
+			PreparedStatement pstInfo2 = con.prepareStatement (
+						"UPDATE info SET " + key + " = ? " +
+						"WHERE schemaversion = " + GDB_COMPAT_VERSION
+			 		);
+			pstInfo2.setString(1, value);
+			pstInfo2.execute();
+		}
+		catch (SQLException ex)
+		{
+			throw new IDMapperException(ex);
+		}
+	}
+	
 	
 	/**
 	   Create indices on the database
