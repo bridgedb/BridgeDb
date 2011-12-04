@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.zip.ZipFile;
 
 import org.bridgedb.IDMapperException;
@@ -111,6 +113,13 @@ public class Hmdb2Gdb
 
 		simpleGdb.createGdbTables();
 		simpleGdb.preInsert();
+		
+		String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
+		simpleGdb.setInfo("BUILDDATE", dateStr);
+		simpleGdb.setInfo("DATASOURCENAME", "HMDB");
+		simpleGdb.setInfo("DATASOURCEVERSION", "metabocards_" + dateStr);
+		simpleGdb.setInfo("DATATYPE", "Metabolite");
+		simpleGdb.setInfo("SERIES", "standard_metabolite");
     }
 
 	private void done() throws IDMapperException
@@ -151,7 +160,12 @@ public class Hmdb2Gdb
 			error += simpleGdb.addGene (right);
 			error += simpleGdb.addLink (ref, right);
 		}
-
+		
+		if (c.inchi != null)
+		{
+			error += simpleGdb.addAttribute(ref, "InChI", c.inchi);
+		}
+		
 		if (c.idKegg != null) for (String id : c.idKegg)
 		{
 			Xref right = new Xref (id, BioDataSource.KEGG_COMPOUND);
@@ -161,7 +175,7 @@ public class Hmdb2Gdb
 
 		if (c.idChebi != null) for (String id : c.idChebi)
 		{
-			Xref right = new Xref (id, BioDataSource.CHEBI);
+			Xref right = new Xref ("CHEBI:" + id, BioDataSource.CHEBI);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}

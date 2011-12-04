@@ -80,6 +80,10 @@ public class ParseHmdb
 			{
 				smiles = value;
 			}
+			else if (key.equals("inchi_identifier"))	
+			{
+				inchi = value;
+			}
 		}
 
 		String idHmdb = null;
@@ -93,6 +97,7 @@ public class ParseHmdb
 		String[] idWikipedia = null;
 		String smiles = null;
 		String[] synonyms = null;
+		String inchi = null;
 	}
 
 	/**
