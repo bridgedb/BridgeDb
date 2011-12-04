@@ -50,6 +50,12 @@ public interface GdbConstruct
 	 */
     public int addLink(Xref left, Xref right);
     
+    /** 
+     * Set a database info property 
+     * @throws IDMapperException 
+     */
+    public void setInfo(String key, String value) throws IDMapperException;
+    
 	/**
 	   Create indices on the database
 	   You can call this at any time after creating the tables,
