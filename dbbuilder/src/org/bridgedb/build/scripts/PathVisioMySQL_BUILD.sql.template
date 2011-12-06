@@ -54,6 +54,7 @@ CREATE TABLE link (
 
 ## Create 'info'
 CREATE TABLE info (
+	series VARCHAR(31) NOT NULL,
 	buildDate INTEGER,
 	schemaVersion INTEGER,
 	dataSourceName VARCHAR(31) NOT NULL,
@@ -73,7 +74,7 @@ CREATE TABLE attribute (
 
 ## Fill 'info'
 INSERT INTO info 
-SELECT genmapp_XXXXXX_CS_YYYYYY.Info.Version, '3', 'Ensembl', genmapp_XXXXXX_CS_YYYYYY.Info.Notes, genmapp_XXXXXX_CS_YYYYYY.Info.Species, 'GeneProduct' 
+SELECT genmapp_XXXXXX_CS_YYYYYY.Info.Series, genmapp_XXXXXX_CS_YYYYYY.Info.Version, '3', 'Ensembl', genmapp_XXXXXX_CS_YYYYYY.Info.Notes, genmapp_XXXXXX_CS_YYYYYY.Info.Species, 'GeneProduct' 
 FROM genmapp_XXXXXX_CS_YYYYYY.Info;
 
 ## Fill 'attribute'
