@@ -34,6 +34,7 @@ CREATE TABLE attribute (
 -- Create 'info' 
 DROP TABLE info;
 CREATE TABLE info (
+  series VARCHAR(31) NOT NULL,
   buildDate INTEGER,
   schemaVersion INTEGER,
   dataSourceName VARCHAR(31) NOT NULL,
