@@ -517,6 +517,7 @@ my %ADMIN_Xrefs = ('NAME' => ['ADMIN_Xrefs'],
 # Basic information for each species database, used by GenMAPP
 my %Info = ('NAME' => ['Info'], 
 	    'HEADER' => ['Owner VARCHAR(128) DEFAULT NULL', 
+			 'Series VARCHAR(31) NOT NULL DEFAULT \'\'',
 			 'Version INT(10) UNSIGNED NOT NULL DEFAULT \'0\'', 
 			 'MODSystem VARCHAR(128)  NOT NULL DEFAULT \'\'', 
 			 'Species VARCHAR(255)  NOT NULL DEFAULT \'\'', 
@@ -525,7 +526,7 @@ my %Info = ('NAME' => ['Info'],
 			 'Notes VARCHAR(255)  NOT NULL DEFAULT \'\'']);
 
 # Populate Info Table
-$Info{1} = ["\'GenMAPP\.org\'", "\'$dateArg\'", "\'$mod_system\'", "\'\|$species\|\'", "\'$dateArg\'", "\'\'", "\'$dbname\'"];
+$Info{1} = ["\'BridgeDb\.org\'", "\'$species genes and proteins\'", "\'$dateArg\'", "\'$mod_system\'", "\'\|$species\|\'", "\'$dateArg\'", "\'\'", "\'$dbname\'"];
 
 ############################################################################
 ## ALL SYSTEMS GO! ##
@@ -1286,7 +1287,7 @@ while (my $gene = pop(@$genes))
 
 		# ENTER DISPLAY ORDER INTO INFO TABLE
 		$displayOrder = join("|", @systemTables);
-		$Info{1}[5] = "\'\|$displayOrder\|\'";
+		$Info{1}[6] = "\'\|$displayOrder\|\'";
 
 		## OVERWRITE SUMMARY TABLES EACH COLLECTION
 		mysql_Drop(%Info);
@@ -1375,7 +1376,7 @@ while (my $gene = pop(@$genes))
 
 		# ENTER DISPLAY ORDER INTO INFO TABLE
 		$displayOrder = join("|", @systemTables);
-		$Info{1}[5] = "\'\|$displayOrder\|\'";
+		$Info{1}[6] = "\'\|$displayOrder\|\'";
 
 		## OVERWRITE SUMMARY TABLES EACH COLLECTION
 		mysql_Drop(%Info);
