@@ -1166,7 +1166,7 @@ while (my $gene = pop(@$genes))
     $gene_chr = mysql_quotes($gene->slice->seq_region_name());
     $Ensembl{$count} = [$gene_stable_id, $gene_symbol, $gene_description, $gene_chr];
     #note: dummy subcount and subsubcount to support HoHoA sorting and parsing
-    $Attibutes{Ensembl}{$count.$dot.'1'.$dot.'1'} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Symbol'), $gene_symbol];
+    $Attributes{Ensembl}{$count.$dot.'1'.$dot.'1'} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Symbol'), $gene_symbol];
     $Attributes{Ensembl}{$count.$dot.'1'.$dot.'2'} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Description'), $gene_description];
     $Attributes{Ensembl}{$count.$dot.'1'.$dot.'3'} = [$gene_stable_id, mysql_quotes('En'), mysql_quotes('Chromosome'), $gene_chr];
 
