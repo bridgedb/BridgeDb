@@ -152,6 +152,8 @@ public class BioDataSource
 		"M", "MGI").asDataSource();
 	public static final DataSource MIRBASE = DataSource.register (
 		"Mb", "miRBase").asDataSource();
+	public static final DataSource MIRBASE_MATURE = DataSource.register (
+		"Mbm", "miRBase mature").asDataSource();
 	public static final DataSource MAIZE_GDB = DataSource.register (
 		"Mg", "MaizeGDB").asDataSource();
 	public static final DataSource NASC_GENE = DataSource.register (
