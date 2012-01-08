@@ -135,7 +135,7 @@ public class IDMapperPicrRest extends IDMapperWebservice
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder builder = factory.newDocumentBuilder();
             final Document doc = builder.parse(is);
-            NodeList nodes = doc.getElementsByTagName("mappedDatabases");
+            NodeList nodes = doc.getElementsByTagName("ns2:mappedDatabases");
             int n = nodes.getLength();
             List<String> dbs = new ArrayList<String>(n);
             for (int i=0; i<n; i++) {
@@ -271,8 +271,8 @@ public class IDMapperPicrRest extends IDMapperWebservice
             final DocumentBuilder builder = factory.newDocumentBuilder();
             doc = builder.parse(is);
 
-            String[] tags = new String[] {"ns2:identicalCrossReferences"
-                        , "ns2:logicalCrossReferences"};
+            String[] tags = new String[] {"identicalCrossReferences"
+                        , "logicalCrossReferences"};
             List<Node> nodes = new ArrayList<Node>();
             for (String tag : tags) {
                 NodeList nodeList = doc.getElementsByTagName(tag);
@@ -289,9 +289,12 @@ public class IDMapperPicrRest extends IDMapperWebservice
                 String tgtDb = null;
                 for (int j=0; j<nc; j++) {
                     Node child = children.item(j);
-                    if (child.getNodeName().compareTo("ns2:accession")==0) {
+                    if ("accession".equals(child.getNodeName())) 
+                    {
                         tgtAcc = child.getTextContent();
-                    }  else if (child.getNodeName().compareTo("ns2:databaseName")==0) {
+                    } 
+                    else if ("databaseName".equals(child.getNodeName())) 
+                    {
                         tgtDb = child.getTextContent();
                     }
                     if (tgtAcc!=null && tgtDb!=null) {

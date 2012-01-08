@@ -58,7 +58,7 @@ public class TestRest extends TestCase
 		Xref src1 = new Xref ("YER095W", ENSEMBL_YEAST);
 		for (DataSource ds : dslist) System.out.println (ds.getFullName());
 
-                assertTrue(idmap.xrefExists(src1));
+		assertTrue(idmap.xrefExists(src1));
 
 		Set<Xref> srcRefs = new HashSet<Xref>();
 		srcRefs.add (src1);
