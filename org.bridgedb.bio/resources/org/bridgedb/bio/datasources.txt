@@ -173,7 +173,7 @@ MGI	M	http://www.informatics.jax.org/	http://www.informatics.jax.org/searches/ac
 Microbial Protein Interaction Database		http://www.jcvi.org/mpidb/about.php	http://www.jcvi.org/mpidb/experiment.php?interaction_id=$id	172	pathway		1	urn:miriam:mpid	^\d+$	Microbial Protein Interaction Database
 MicrosporidiaDB		http://microsporidiadb.org/micro/	http://microsporidiadb.org/micro/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id	ECU03_0820i			1	urn:miriam:microsporidia	^\w+$	MicrosporidiaDB
 MINT		http://mint.bio.uniroma2.it/mint/	http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id	MINT-10000	pathway		1	urn:miriam:mint	^MINT\-\d{1,5}$	MINT
-miRBase mature sequence		http://www.mirbase.org/	http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id	MIMAT0000001			1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence
+miRBase mature sequence	Mbm	http://www.mirbase.org/	http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id	MIMAT0000001			1	urn:miriam:mirbase.mature	MIMAT\d{7}	miRBase mature sequence
 miRBase Sequence	Mb	http://microrna.sanger.ac.uk/	http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id	MI0000001	gene		1	urn:miriam:mirbase	MI\d{7}	miRBase Sequence
 MIRIAM Registry collection		http://www.ebi.ac.uk/miriam/	http://www.ebi.ac.uk/miriam/main/$id	MIR:00000008			1	urn:miriam:miriam.collection	^MIR:000\d{5}$	MIRIAM Registry collection
 MIRIAM Registry resource		http://www.ebi.ac.uk/miriam/	http://www.ebi.ac.uk/miriam/main/resources/$id	MIR:00100005			1	urn:miriam:miriam.resource	^MIR:001\d{5}$	MIRIAM Registry resource
