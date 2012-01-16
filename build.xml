@@ -109,10 +109,13 @@
 		<package name="org.bridgedb.bio"/>
 		<package name="org.bridgedb.file"/>
 		<package name="org.bridgedb.rdb"/>
+		<package name="org.bridgedb.rdb.construct"/>
         <package name="org.bridgedb.webservice"/>
         <package name="org.bridgedb.webservice.biomart"/>
 		<sourcepath>
 			<pathelement location="org.bridgedb/src"/>
+			<pathelement location="org.bridgedb.rdb/src"/>
+			<pathelement location="org.bridgedb.rdb.construct/src"/>
 			<pathelement location="org.bridgedb.bio/src"/>
 		</sourcepath>
 	</javadoc>
