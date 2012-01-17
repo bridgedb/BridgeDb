@@ -19,18 +19,18 @@ libraries in the dist directory in your project.
 Here is a brief overview that will help you to find out
 which ones you need. For questions, you can always contact our mailing list.
 
-bridgedb.jar - always needed. 
-    This includes file, rdb, biomart and BridgeRest drivers.
-bridgedb-bio.jar - includes the BioDataSource enum, often needed
-bridgedb-cronos.jar - needed for CRONOS webservice
-bridgedb-synergizer.jar - needed for Synergizer webservice
-bridgedb-picr.jar - needed for PICR webservice
-bridgedb-webservice.jar - the BridgeRest SERVER, not needed if you only 
+org.bridgedb.jar - always needed. 
+    This includes the tab-delimited file driver.
+org.bridgedb.bio.jar - includes the BioDataSource enum, often needed
+org.bridgedb.webservice.cronos.jar - needed for CRONOS webservice
+org.bridgedb.webservice.synergizer.jar - needed for Synergizer webservice
+org.bridgedb.webservice.picr.jar - needed for PICR webservice
+org.bridgedb.server.jar - the BridgeRest SERVER, not needed if you only 
 	want to access BridgeRest or BridgeWebservice as client
-bridgedb-batchmapper.jar - Contains the batchmapper command line tool
+org.bridgedb.tools.batchmapper.jar - Contains the batchmapper command line tool
 
-bridgedb.jar and bridgedb-bio.jar do not need any other jar files to work.
-All the other jar files in dist/ are SOAP libraries needed only for
+org.bridgedb.jar and org.bridgedb.bio.jar do not need any other jar files to work.
+Most of the other jar files in dist/ are part of the SOAP libraries needed only for
 some of the webservices. Look in the lib directory and build.xml of the 
 respective mappers to find clues which libraries are needed by which service.
 
