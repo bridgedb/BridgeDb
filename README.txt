@@ -51,6 +51,11 @@ Isaac Ho
 Martijn van Iersel
 Alex Pico
 
+OpenPhacts BridgeDB Team:
+Christian Brenninkmeijer
+Alasdair Gray
+Egon Willighagen
+
 License
 -------
 
