@@ -99,6 +99,7 @@ public class Xref implements Comparable<Xref>
 	 */
 	public String getUrl()
 	{
+		if (ds == null) return null;
 		return ds.getUrl (id);
 	}
 	
