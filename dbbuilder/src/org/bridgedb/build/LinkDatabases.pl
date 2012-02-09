@@ -35,7 +35,7 @@ until ($answer =~ /(a|i)/i) {
 
 my $pwd = `pwd`;
 chomp $pwd;
-my $config = 'bridge.config';
+my $config = 'gdb.config';
 open CONFIG, ">$config" or die $!;
 
 ## Begin Processing List
