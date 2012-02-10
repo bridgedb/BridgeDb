@@ -27,16 +27,17 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.bridgedb.file.IDMapperFile;
 import org.bridgedb.file.IDMapperText;
+import org.junit.Before;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Test identifier mapping using a tab-delimited text file.
  */
-public class TestFile extends TestCase 
-{
+public class TestFile {
 	//private Measure measure;
 	
 	private static final File YEAST_IDS = new File ("test-data/yeast_id_mapping.txt");
@@ -45,17 +46,17 @@ public class TestFile extends TestCase
     private static final DataSource EMBL = DataSource.getByFullName("EMBL");
     private static final Xref XREF1 = new Xref("YHR055C", ENS_YEAST);
 	
-	@Override public void setUp()
+	@Before public void setUp()
 	{
 		//measure = new Measure("bridgedb_timing.txt");
 	}
 	
-	public void testFiles()
+	@Test public void testFiles()
 	{
-		assertTrue (YEAST_IDS.exists());
+		Assert.assertTrue (YEAST_IDS.exists());
 	}
 	
-	public void testRead() throws IDMapperException, IOException
+	@Test public void testRead() throws IDMapperException, IOException
 	{
 		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL());
 
@@ -83,7 +84,7 @@ public class TestFile extends TestCase
         		new Xref("856450", ENTREZ)
         		));
         Set<Xref> xrefs = mapXrefs.get(XREF1);
-        assertEquals (expected, xrefs);
+        Assert.assertEquals (expected, xrefs);
 
         for (Xref xr : xrefs) {
             System.out.println(xr.getDataSource().getFullName() + ": " + xr.getId());
@@ -91,11 +92,12 @@ public class TestFile extends TestCase
         
         Xref nonsense = new Xref ("Humbug", DataSource.getByFullName("Ebenizer Scrooge"));
         // non-existent id should just return empty list.
-        assertEquals (0, idMapper.mapID(nonsense).size());
+        Assert.assertEquals (0, idMapper.mapID(nonsense).size());
 
 	}
 
 	// Test disabled, takes several minutes and produces too much output. 
+	@Ignore
 	public void _testTransitive() throws MalformedURLException, IDMapperException
 	{
 		IDMapperFile idMapper = new IDMapperText (YEAST_IDS.toURL(),
