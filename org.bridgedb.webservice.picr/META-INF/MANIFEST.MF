@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Picr
 Bundle-SymbolicName: org.bridgedb.webservice.picr
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0
 Bundle-ClassPath: picr.jar,
  lib/activation-1.1.jar,
  lib/commons-collections-3.2.jar,

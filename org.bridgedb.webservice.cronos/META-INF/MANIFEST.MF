@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Cronos
 Bundle-SymbolicName: org.bridgedb.webservice.cronos
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0
 Bundle-ClassPath: cronos.jar,
  lib/axis-1_4/lib/axis-ant.jar,
  lib/axis-1_4/lib/axis.jar,

@@ -6,4 +6,5 @@ Bundle-Version: 1.1.0
 Bundle-ClassPath: lib/org.pathvisio.jgoodies.forms-1.2.0.jar
 Export-Package: org.bridgedb.gui
 Require-Bundle: org.bridgedb;bundle-version="1.1.0",
- org.bridgedb.webservice.bridgerest;bundle-version="1.1.0"
+ org.bridgedb.webservice.bridgerest;bundle-version="1.1.0",
+ org.pathvisio.jgoodies.forms;bundle-version="1.2.0"
