@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.bridgedb
+Bundle-SymbolicName: org.bridgedb
+Bundle-Version: 1.1.0
+Bundle-ClassPath: bridgedb.jar,
+ build-lib/measure.jar
+Export-Package: buildsystem,
+ org.bridgedb,
+ org.bridgedb.file,
+ org.bridgedb.impl,
+ org.bridgedb.webservice
