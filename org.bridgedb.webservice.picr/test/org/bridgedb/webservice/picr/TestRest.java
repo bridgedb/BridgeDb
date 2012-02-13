@@ -60,7 +60,7 @@ public class TestRest {
 
         try {
         	Assert.assertTrue(idmap.xrefExists(src1));        
-        } catch (AssertionFailedError er){
+        } catch (Error er){
             System.out.println("**** WARNING PICR Failure. Expected Xref not fount in PIRC server");
         }
 
