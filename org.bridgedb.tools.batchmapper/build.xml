@@ -24,7 +24,7 @@
 		<jar jarfile="${jar.file}">
 			<manifest>
 				<attribute name="Main-Class" value="org.bridgedb.tools.batchmapper.BatchMapper"/>
-				<attribute name="Class-Path" value="org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar"/>
+				<attribute name="Class-Path" value="org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar derby.jar"/>
 			</manifest>
 			<fileset dir="build" includes="**/*.class"/>
 		</jar>
