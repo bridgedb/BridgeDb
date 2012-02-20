@@ -64,9 +64,9 @@ public class BioDataSource
 	public static final DataSource PUBCHEM = DataSource.register (
 		"Cp", "PubChem").asDataSource();
 	public static final DataSource PUBCHEM_SUBSTANCE = DataSource.register (
-		"Cps", "PubChem substance").asDataSource();
+		"Cps", "PubChem-substance").asDataSource();
 	public static final DataSource PUBCHEM_COMPOUND = DataSource.register (
-		"Cpc", "PubChem compound").asDataSource();
+		"Cpc", "PubChem-compound").asDataSource();
 	public static final DataSource CHEMSPIDER = DataSource.register (
 		"Cs", "Chemspider").asDataSource();
 	public static final DataSource SGD = DataSource.register (
