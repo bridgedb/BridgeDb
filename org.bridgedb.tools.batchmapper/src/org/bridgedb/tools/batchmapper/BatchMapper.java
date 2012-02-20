@@ -55,6 +55,7 @@ public class BatchMapper
 		int inputColumn = 0; 
 		int verbose = 0; // 0, 1 or 2
 		int mode = 0; // 0 or 1
+		int multiMap = 0; // 0 or 1
 	}
 	
 	public static void main(String[] args)
@@ -83,6 +84,7 @@ public class BatchMapper
 				" or\n" +
 				"	batchmapper \n" +
 				"		[-v|-vv] \n" +
+				"		[-mm] \n" +
 				"		[-g <gene database>] \n " +
 				"		[-t <biomart text file>] \n " +
 				"		[-i <input file>] \n" +
@@ -178,7 +180,11 @@ public class BatchMapper
 				pos++;
 				if (pos > args.length) return "System code expected after -os";
 				settings.os = DataSource.getBySystemCode(args[pos]);
-			}			
+			}
+			else if (args[pos].equals("-mm"))
+			{
+				settings.multiMap = 1;
+			}
 			else
 			{
 				return "Unrecognized option " + args[pos];
@@ -193,9 +199,10 @@ public class BatchMapper
 				settings.fInput != null ||
 				settings.fOutput != null ||
 				settings.inputColumn != 0 ||
+				settings.multiMap != 0 ||
 				settings.fReport != null)
 			{
-				return "-ls option can't be combined with -g, -t, -i, -is, -os, -o or -r options";
+				return "-ls option can't be combined with -g, -t, -i, -is, -os, -o, -mm or -r options";
 			}
 		}
 		else
@@ -218,6 +225,7 @@ public class BatchMapper
 		private DataSource os = null;
 		private int inputColumn = 0; 
 		private int verbose = 0; // 0, 1 or 2
+		private int multiMap = 0; // 0 or 1
 
 		PrintStream report = System.out;
 		private IDMapperStack gdb;
@@ -227,7 +235,7 @@ public class BatchMapper
 		int totalLines = 0;
 		int okLines = 0;
 
-		public Mapper(List<String> connections, File fInput, File fOutput, File fReport, DataSource is, DataSource os, int inputColumn, int verbose)
+		public Mapper(List<String> connections, File fInput, File fOutput, File fReport, DataSource is, DataSource os, int inputColumn, int verbose, int multiMap)
 		{
 			this.connections = connections;
 			this.fInput = fInput;
@@ -237,6 +245,7 @@ public class BatchMapper
 			this.os = os;
 			this.inputColumn = inputColumn;
 			this.verbose = verbose;
+			this.multiMap = multiMap;
 		}
 		
 		private void connectGdb() throws IDMapperException
@@ -292,8 +301,29 @@ public class BatchMapper
 					if (destRefs != null && destRefs.size() > 0)
 					{
 						okLines++;
-						// use first one
-						writer.print(destRefs.toArray(new Xref[0])[0].getId());
+						if (multiMap == 0)
+						{
+							// use first one
+							writer.print(destRefs.toArray(new Xref[0])[0].getId());
+						}
+						else
+						{
+							// concatenate all, with " /// " as separator
+							boolean first = true;
+							for (Xref ref : destRefs)
+							{
+								if (first)
+								{
+									first = false;
+								}
+								else
+								{
+									writer.print (" /// ");
+								}
+								writer.print(ref.getId());
+							}
+						}
+						
 					}
 					totalLines++;
 				}
@@ -405,7 +435,8 @@ public class BatchMapper
 			Mapper mapper = new Mapper(
 					settings.connectStrings, 
 					settings.fInput, settings.fOutput, settings.fReport, 
-					settings.is, settings.os, settings.inputColumn, settings.verbose);
+					settings.is, settings.os, settings.inputColumn, 
+					settings.verbose, settings.multiMap);
 			mapper.run();
 		}
 		else
