@@ -59,7 +59,7 @@
 			<pathelement location="build"/>
 			<path refid="class.path"/>
 			<pathelement location="../org.bridgedb.rdb/lib/derby.jar"/>
-			<pathelement location="../org.bridgedb/build-lib/junit.jar"/>
+			<pathelement location="../org.bridgedb/build-lib/junit4.jar"/>
 			<pathelement location="../org.bridgedb/build-lib/measure.jar"/>
 		</path>
 		<javac srcdir="test" debug="true" 
