@@ -116,7 +116,8 @@ public class Test2 {
 		Assert.assertEquals ("20081119", gdb2.getCapabilities().getProperty("BUILDDATE"));
 	}
 	
-	@Ignore public void testRegisterDataSource()
+	@org.junit.Test
+	public void testRegisterDataSource()
 	{
 		DataSource.register("@@", "ZiZaZo");
 		

@@ -16,7 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 
-public class TestStack {
+@Ignore public class TestStack {
 	private static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
@@ -38,13 +38,13 @@ public class TestStack {
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 	}
 	
-	@Ignore public void testNeededFiles()
+	public void testNeededFiles()
 	{
 		Assert.assertTrue (YEAST_ID_MAPPING.exists());
 		Assert.assertTrue (new File(GDB_HUMAN).exists());
 	}
 	
-	@Ignore public void testFile() throws IDMapperException, MalformedURLException
+	public void testFile() throws IDMapperException, MalformedURLException
 	{
 		IDMapper mapper = BridgeDb.connect ("idmapper-text:" + YEAST_ID_MAPPING.toURL());
 		src.add (RAD51);
@@ -56,7 +56,7 @@ public class TestStack {
 		System.out.println (mapper.getCapabilities().getSupportedTgtDataSources());
 	}
 	
-	@Ignore public void testPgdb() throws IDMapperException
+	public void testPgdb() throws IDMapperException
 	{
 		IDMapper mapper = BridgeDb.connect("idmapper-pgdb:" + GDB_HUMAN);
 		src.add (INSR);
@@ -66,7 +66,7 @@ public class TestStack {
 		Assert.assertEquals (expected, refmap.get(INSR));
 	}
 
-	@Ignore public void testStack() throws IDMapperException, MalformedURLException
+	public void testStack() throws IDMapperException, MalformedURLException
 	{
 		IDMapperStack stack = new IDMapperStack();
 		stack.addIDMapper("idmapper-pgdb:" + GDB_HUMAN);
@@ -120,4 +120,5 @@ public class TestStack {
 		Map<Xref, Set<Xref>> result2 = stack.mapID(set1);
 		Assert.assertTrue (result2.get(ENTREZ).contains(NUGO));
 	}
+	
 }
