@@ -459,7 +459,7 @@ public class BioDataSource
 
 		DataSourcePatterns.registerPattern(
 				BioDataSource.CAS,
-				Pattern.compile("\\d+-\\d+-\\d+")
+				Pattern.compile("\\d+-\\d{2}-\\d{1}")
 		);
 		
 		DataSourcePatterns.registerPattern(
