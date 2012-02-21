@@ -6,6 +6,7 @@ Bos	taurus	Cow	Bt
 Caenorhabditis	elegans	Celegans	Ce
 Canis	familiaris	Dog	Cf
 Ciona	intestinalis	Sea Squirt	Ci
+Clostridium	thermocellum	Cthe	Ct
 Danio	rerio	Zebrafish	Dr
 Dasypus	novemcinctus	Armadillo	Dn
 Drosophila	melanogaster	Fruitfly	Dm
