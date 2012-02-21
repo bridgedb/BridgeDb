@@ -15,7 +15,7 @@
 	</path>
 
 	<path id="test.deps">
-		<pathelement location="build-lib/junit.jar"/>
+		<pathelement location="build-lib/junit4.jar"/>
 		<pathelement location="build-lib/measure.jar"/>
 	</path>
 
