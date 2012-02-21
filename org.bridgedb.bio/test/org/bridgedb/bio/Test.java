@@ -82,6 +82,15 @@ public class Test
 	}
 
 	@org.junit.Test
+	public void testBasCASNumbers()
+	{
+		assertFalse(DataSourcePatterns.getDataSourceMatches("50-99-77").contains(BioDataSource.CAS));
+		assertFalse(DataSourcePatterns.getDataSourceMatches("1-99-77").contains(BioDataSource.CAS));
+		assertFalse(DataSourcePatterns.getDataSourceMatches("50-1-7").contains(BioDataSource.CAS));
+		assertFalse(DataSourcePatterns.getDataSourceMatches("50-333-7").contains(BioDataSource.CAS));
+	}
+
+	@org.junit.Test
 	public void testDataSource()
 	{
 		DataSource ds = BioDataSource.ENSEMBL;
