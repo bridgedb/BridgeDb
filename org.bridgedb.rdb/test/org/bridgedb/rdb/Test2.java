@@ -16,8 +16,6 @@
 //
 package org.bridgedb.rdb;
 
-import buildsystem.Measure;
-
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,13 +28,13 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.rdb.SimpleGdb;
-import org.bridgedb.rdb.SimpleGdbFactory;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 
-@Ignore
-public class Test2 extends TestCase 
-{
+import buildsystem.Measure;
+
+public class Test2 {
 	private static final String GDB_HUMAN = 
 		System.getProperty ("user.home") + File.separator + 
 		"PathVisio-Data/gene databases/Hs_Derby_20081119.pgdb";
@@ -49,15 +47,15 @@ public class Test2 extends TestCase
 	
 	private Measure measure;
 	
-	@Override public void setUp() throws ClassNotFoundException
+	@Before public void setUp() throws ClassNotFoundException
 	{
 		measure = new Measure("bridgedb_timing.txt");
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 	}
 	
-	public void testGdbConnect() throws IDMapperException
+	@Ignore public void testGdbConnect() throws IDMapperException
 	{
-		assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense. 
+		Assert.assertTrue (new File (GDB_HUMAN).exists()); // if gdb can't be found, rest of test doesn't make sense. 
 
 		long start, end, delta;
 		start = System.currentTimeMillis();		
@@ -77,17 +75,17 @@ public class Test2 extends TestCase
 	 * This is tested here. 
 	 * @throws IDMapperException should be considered a failed test
 	 */
-	public void testGdbAttributes() throws IDMapperException
+	@Ignore public void testGdbAttributes() throws IDMapperException
 	{
 		// test special attributes that are grabbed from backpage
 		// since this is a Schema v2 database
 		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
 		AttributeMapper am = (AttributeMapper)gdb;
 		Xref ref = new Xref ("26873", DataSource.getBySystemCode("L"));
-		assertTrue (am.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZP434H244|OPLA"));
-		assertTrue (am.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9) (5-oxo-L-prolinase) (5-OPase) (Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
-		assertTrue (am.getAttributes(ref, "Chromosome").contains ("8"));
-		assertTrue (am.getAttributes(ref, "Symbol").contains ("OPLAH"));
+		Assert.assertTrue (am.getAttributes(ref, "Synonyms").contains ("5-Opase|DKFZP434H244|OPLA"));
+		Assert.assertTrue (am.getAttributes(ref, "Description").contains ("5-oxoprolinase (EC 3.5.2.9) (5-oxo-L-prolinase) (5-OPase) (Pyroglutamase) [Source:UniProtKB/Swiss-Prot.Acc:O14841]"));
+		Assert.assertTrue (am.getAttributes(ref, "Chromosome").contains ("8"));
+		Assert.assertTrue (am.getAttributes(ref, "Symbol").contains ("OPLAH"));
 		
 		Set<String> allExpectedAttributes = new HashSet<String>();
 		allExpectedAttributes.add ("26873");
@@ -97,37 +95,37 @@ public class Test2 extends TestCase
 	 * Tests the capability properties of a Schema v3 database.
 	 * @throws IDMapperException should be considered a failed test
 	 */
-	public void testGdbProperties() throws IDMapperException 
+	@Ignore public void testGdbProperties() throws IDMapperException 
 	{
 		IDMapper gdb = BridgeDb.connect ("idmapper-pgdb:" + GDB_CE_V3);		
 		for (String key : gdb.getCapabilities().getKeys())
 		{
 			System.out.println (key + " -> " + gdb.getCapabilities().getProperty(key));
 		}
-		assertEquals ("Caenorhabditis elegans", gdb.getCapabilities().getProperty("SPECIES"));
-		assertEquals ("3", gdb.getCapabilities().getProperty("SCHEMAVERSION"));
-		assertEquals ("Ensembl", gdb.getCapabilities().getProperty("DATASOURCENAME"));
-		assertEquals ("20090720", gdb.getCapabilities().getProperty("BUILDDATE"));
+		Assert.assertEquals ("Caenorhabditis elegans", gdb.getCapabilities().getProperty("SPECIES"));
+		Assert.assertEquals ("3", gdb.getCapabilities().getProperty("SCHEMAVERSION"));
+		Assert.assertEquals ("Ensembl", gdb.getCapabilities().getProperty("DATASOURCENAME"));
+		Assert.assertEquals ("20090720", gdb.getCapabilities().getProperty("BUILDDATE"));
 		
 		IDMapper gdb2 = BridgeDb.connect ("idmapper-pgdb:" + GDB_HUMAN);
 		for (String key : gdb2.getCapabilities().getKeys())
 		{
 			System.out.println (key + " -> " + gdb2.getCapabilities().getProperty(key));
 		}
-		assertEquals ("2", gdb2.getCapabilities().getProperty("SCHEMAVERSION"));
-		assertEquals ("20081119", gdb2.getCapabilities().getProperty("BUILDDATE"));
+		Assert.assertEquals ("2", gdb2.getCapabilities().getProperty("SCHEMAVERSION"));
+		Assert.assertEquals ("20081119", gdb2.getCapabilities().getProperty("BUILDDATE"));
 	}
 	
-	public void testRegisterDataSource()
+	@Ignore public void testRegisterDataSource()
 	{
 		DataSource.register("@@", "ZiZaZo");
 		
 		DataSource ds2 = DataSource.getBySystemCode ("@@");
 		DataSource ds3 = DataSource.getByFullName ("ZiZaZo");
-		assertEquals (ds2, ds3);
+		Assert.assertEquals (ds2, ds3);
 		
 		// assert that you can refer to 
 		// undeclared systemcodes if necessary.
-		assertNotNull (DataSource.getBySystemCode ("##"));		
+		Assert.assertNotNull (DataSource.getBySystemCode ("##"));		
 	}
 }

@@ -16,13 +16,9 @@
 //
 package org.bridgedb.rdb;
 
-import buildsystem.Measure;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import junit.framework.TestCase;
 
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.BridgeDb;
@@ -30,19 +26,24 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.junit.Assert;
+import org.junit.Before;
+
+import buildsystem.Measure;
 
 /**
  * Test access to the derby client running on the webservice.
  */
-public class Test extends TestCase
-{
+public class Test {
+	
 	private Measure measure;
 	
-	@Override public void setUp()
+	@Before public void setUp()
 	{
 		measure = new Measure("bridgedb_timing.txt");
 	}
 
+	@org.junit.Test
 	public void testDerbyClient() throws IDMapperException, ClassNotFoundException
 	{
 		long start, end, delta;
@@ -86,7 +87,7 @@ public class Test extends TestCase
 		//TODO: Synonyms is also available, but not on ENSG.... ids
 		{
 			Set<String> result = attr.getAttributes(insr , x);
-			assertTrue ("No result for " + x, result.size() > 0);
+			Assert.assertTrue ("No result for " + x, result.size() > 0);
 			System.out.println (result);
 		}
 		

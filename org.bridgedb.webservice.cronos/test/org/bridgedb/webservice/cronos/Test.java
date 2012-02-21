@@ -16,8 +16,6 @@
 //
 package org.bridgedb.webservice.cronos;
 
-import java.io.File;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.bridgedb.BridgeDb;
@@ -25,18 +23,16 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
+import org.junit.Before;
 
-import junit.framework.TestCase;
-//import org.junit.Ignore;
-
-//@Ignore
-public class Test extends TestCase 
-{
-	@Override public void setUp() throws ClassNotFoundException
+public class Test {
+	
+	@Before public void setUp() throws ClassNotFoundException
 	{
 		Class.forName ("org.bridgedb.webservice.cronos.IDMapperCronos");
 	}
 	
+	@org.junit.Test
 	public void testSimple() throws IDMapperException
 	{
         try {
