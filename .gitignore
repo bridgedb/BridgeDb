@@ -5,6 +5,7 @@
 
 # ignore target files #
 target/
+bin/
 
 # ignore log files #
 *.log
