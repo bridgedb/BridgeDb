@@ -35,6 +35,7 @@ public enum Organism
 {
 	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito"),
 	ArabidopsisThaliana("Arabidopsis thaliana", "At"),
+	Aspergillusniger("Aspergillus niger", "An", "Black mold"),
 	BacillusSubtilis("Bacillus subtilis", "Bs"),
 	BosTaurus("Bos taurus", "Bt", "Cow"),
 	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm"),
