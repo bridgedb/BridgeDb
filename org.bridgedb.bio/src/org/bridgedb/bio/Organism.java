@@ -40,6 +40,7 @@ public enum Organism
 	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm"),
 	CanisFamiliaris("Canis familiaris", "Cf", "Dog"),
 	CionaIntestinalis("Ciona intestinalis", "Ci", "Sea Squirt"),
+	Clostridiumthermocellum("Clostridium thermocellum", "Ct", "Cthe"),
 	DanioRerio("Danio rerio", "Dr", "Zebra fish"),
 	DasypusNovemcinctus("Dasypus novemcinctus", "Dn", "Armadillo"),
 	DrosophilaMelanogaster("Drosophila melanogaster", "Dm", "Fruit fly"),
