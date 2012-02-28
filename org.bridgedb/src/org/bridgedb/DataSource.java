@@ -17,6 +17,8 @@
 package org.bridgedb;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,6 +62,8 @@ public final class DataSource
 	private static Set<DataSource> registry = new HashSet<DataSource>();
 	private static Map<String, DataSource> byAlias = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byMiriamBase = new HashMap<String, DataSource>();
+	private static HashMap<String, DataSource> byPrefix = new HashMap<String, DataSource>();
+	private static Set<DataSource> withPrefixAndPostfix = new HashSet<DataSource>();
 	
 	private String sysCode = null;
 	private String fullName = null;
@@ -198,12 +202,16 @@ public final class DataSource
 		/**
 		 * 
 		 * @param urlPattern is a template for generating valid URL's for identifiers. 
-		 * 	The pattern should contain the substring "$ID", which will be replaced by the actual identifier.
+		 * 	The pattern should contain the substring "$id", which will be replaced by the actual identifier.
 		 * @return the same Builder object so you can chain setters
 		 */
-		public Builder urlPattern (String urlPattern)
+		public Builder urlPattern (String urlPattern) throws IDMapperException
 		{
-			if (urlPattern == null || "".equals (urlPattern))
+            //Clear any previously registered values
+            byPrefix.values().remove(current);
+            withPrefixAndPostfix.remove(current);
+            
+ 			if (urlPattern == null || urlPattern.isEmpty())
 			{
 				current.prefix = "";
 				current.postfix = "";
@@ -214,6 +222,22 @@ public final class DataSource
 				if (pos == -1) throw new IllegalArgumentException("Url maker pattern for " + current + "' should have $id in it");
 				current.prefix = urlPattern.substring(0, pos);
 				current.postfix = urlPattern.substring(pos + 3);
+                //ystem.out.println(current.prefix);
+                //ystem.out.println(current.postfix);
+                if (current.postfix.isEmpty() & 
+                        (current.prefix.endsWith("#") || current.prefix.endsWith("/") || current.prefix.endsWith(":"))){
+                    if (byPrefix.containsKey(current.prefix)){
+                        throw new IDMapperException ("There is already a DataSource registered with this urlPattern's prefix");
+                    }
+                    byPrefix.put(current.prefix, current);
+                } else {
+                    DataSource previous = getByURLPattern(urlPattern);
+                    if (previous != null){
+                        throw new IDMapperException ("There is already a DataSource " + previous + 
+                                " registered with this urlPattern");
+                    }
+                    withPrefixAndPostfix.add(current);
+                }
 			}
 			return this;
 		}
@@ -497,4 +521,45 @@ public final class DataSource
 		return current;
 	}
 
+    /**
+     * Attempts to find a DataSource that fits this URL. 
+     * <p>
+     * The first attempt is to assume the uri has a nameSpace followed by the ID.
+     * This is where the urlPattern used in Builder.urlPattern ends with "#$ID", "/$ID" or ":#$ID", 
+     * and "$ID" does not contain the characters '#', '/', or ':' 
+     * <p>
+     * The url is Split after the first occurrence of the '#' character,
+     * If this fails, split after the last occurrence of the '/' character,
+     * If this fails, split after the last occurrence of the ':' character. 
+     * The first part of the split is assumed to be the prefix and a DataSource with that prefix is looked.
+     * <p>
+     * If that fails the method iterates through all know DataSources (with a urlPattern) 
+     * and checks to see it the URL's start and ends match the pattern.
+     * @param url A 
+     * @return A DataSource whoe urlPattern matches the url or null if none is found. 
+     */
+    public static DataSource getByURLPattern(String url) {
+        String lookupPrefix = null;
+        url = url.trim();
+        if (url.contains("#")){
+            lookupPrefix = url.substring(0, url.lastIndexOf("#")+1);
+        } else if (url.contains("/")){
+            lookupPrefix = url.substring(0, url.lastIndexOf("/")+1);
+        } else if (url.contains(":")){
+            lookupPrefix = url.substring(0, url.lastIndexOf(":")+1);
+        }
+        //ystem.out.println(lookupPrefix);
+        if (lookupPrefix != null){
+            DataSource result = byPrefix.get(lookupPrefix);
+            if (result != null){
+                return result;
+            }
+        }
+        for (DataSource source:withPrefixAndPostfix){
+            if (url.startsWith(source.prefix) && url.endsWith(source.postfix)){
+                return source;
+            }
+        }
+        return null;
+    }
 }
