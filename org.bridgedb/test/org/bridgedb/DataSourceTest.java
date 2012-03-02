@@ -17,40 +17,63 @@
 //
 package org.bridgedb;
 
-import java.util.List;
-import java.util.Set;
-import org.bridgedb.DataSource.Builder;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author Christian
- */
 public class DataSourceTest {
-    
-    public DataSourceTest() {
-    }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+	@Test
+	public void testAsDataSource() {
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .asDataSource();
+		Assert.assertNotNull(source);
+	}
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+	@Test
+	public void testBuilding() {
+		DataSource source = DataSource.register("X", "Affymetrix").asDataSource();
+		Assert.assertEquals("X", source.getSystemCode());
+		Assert.assertEquals("Affymetrix", source.getFullName());
+	}
+
+	@Test
+	public void testBuildingMainUrl() {
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .mainUrl("http://www.affymetrix.com")
+		    .asDataSource();
+		Assert.assertEquals("http://www.affymetrix.com", source.getMainUrl());
+	}
+
+	@Test
+	public void testBuildingType() {
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .type("probe")
+		    .asDataSource();
+		Assert.assertEquals("probe", source.getType());
+		Assert.assertFalse(source.isMetabolite());
+	}
+
+	@Test
+	public void testBuildingPrimary() {
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .primary(false)
+		    .asDataSource();
+		Assert.assertFalse(source.isPrimary());
+		source = DataSource.register("X", "Affymetrix")
+			.primary(true)
+			.asDataSource();
+		Assert.assertTrue(source.isPrimary());
+	}
+
+	@Test
+	public void testBuildingMetabolite() {
+		DataSource source = DataSource.register("F", "MetaboLoci")
+		    .type("metabolite")
+		    .asDataSource();
+		Assert.assertEquals("metabolite", source.getType());
+		Assert.assertTrue(source.isMetabolite());
+	}
 
 	@Test
 	public void testAsDataSource() {
@@ -289,4 +312,27 @@ public class DataSourceTest {
         System.out.println(result);
         assertFalse(expected.equals(result));
     }
+    
+    public void testNameSpace(){
+       String nameSpace = "http://www.example15.com/";
+       DataSource expResult = DataSource.register("test1", "test1").nameSpace(nameSpace).asDataSource();
+       DataSource result =  DataSource.getByNameSpace(nameSpace);
+       assertEquals(expResult, result);
+       result =  DataSource.getByURL(nameSpace + "1234");
+       assertEquals(expResult, result);
+       result =  DataSource.getByURLPattern(nameSpace + "$1d");
+       assertEquals(expResult, result);
+    }
+
+    public void testByNameSpace(){
+       String nameSpace = "http://www.example16.com/";
+       DataSource expResult = DataSource.getByNameSpace(nameSpace);
+       DataSource result =  DataSource.getByNameSpace(nameSpace);
+       assertEquals(expResult, result);
+       result =  DataSource.getByURL(nameSpace + "1234");
+       assertEquals(expResult, result);
+       result =  DataSource.getByURLPattern(nameSpace + "$1d");
+       assertEquals(expResult, result);
+    }
+
 }
