@@ -17,11 +17,7 @@
 //
 package org.bridgedb;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -264,4 +260,27 @@ public class DataSourceTest {
         System.out.println(result);
         assertFalse(expected.equals(result));
     }
+    
+    public void testNameSpace(){
+       String nameSpace = "http://www.example15.com/";
+       DataSource expResult = DataSource.register("test1", "test1").nameSpace(nameSpace).asDataSource();
+       DataSource result =  DataSource.getByNameSpace(nameSpace);
+       assertEquals(expResult, result);
+       result =  DataSource.getByURL(nameSpace + "1234");
+       assertEquals(expResult, result);
+       result =  DataSource.getByURLPattern(nameSpace + "$1d");
+       assertEquals(expResult, result);
+    }
+
+    public void testByNameSpace(){
+       String nameSpace = "http://www.example16.com/";
+       DataSource expResult = DataSource.getByNameSpace(nameSpace);
+       DataSource result =  DataSource.getByNameSpace(nameSpace);
+       assertEquals(expResult, result);
+       result =  DataSource.getByURL(nameSpace + "1234");
+       assertEquals(expResult, result);
+       result =  DataSource.getByURLPattern(nameSpace + "$1d");
+       assertEquals(expResult, result);
+    }
+
 }
