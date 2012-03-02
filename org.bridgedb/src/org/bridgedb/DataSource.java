@@ -85,6 +85,7 @@ public final class DataSource
 	
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
+     * <p>
 	 * @param id identifier to use in url
 	 * @return Url
 	 */
@@ -216,8 +217,14 @@ public final class DataSource
 		
 		/**
 		 * 
+		 * The pattern should contain the substring "$id", which will be replaced by the actual identifier.
+         * <p>
+         * Warning this method and nameSpace(String) have the same functionality. 
+         * Calling both will result in the second call overwriting the setting of the first call.
+         * Similarly calling this function more than once will have the same effect. 
+         * Only the last urlPattern will be valid.
+         * 
 		 * @param urlPattern is a template for generating valid URL's for identifiers. 
-		 * 	The pattern should contain the substring "$id", which will be replaced by the actual identifier.
 		 * @return the same Builder object so you can chain setters
 		 */
 		public Builder urlPattern (String urlPattern) throws IDMapperException
@@ -245,12 +252,31 @@ public final class DataSource
 			}
 			return this;
 		}
-		
-    private void setFixes(String prefix, String postfix) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 	
-		/**
+        /**
+         * Uses this nameSpace to construct url where th id will be the localName 
+         * <p>
+         * Warning this method and urlPattern(String) have the same functionality. 
+         * It is equivellent to calling urlPattern(nameSpace + "$id").
+         * Calling both will result in the second call overwriting the setting of the first call.
+         * Similarly calling this function more than once will have the same effect. 
+         * Only the last nameSpace will be valid.
+       * 
+         * @param prefix
+         * @return 
+         */
+        public Builder nameSpace(String nameSpace){
+            //Clear any previously registered values
+            byPrefix.values().remove(current);
+            withPrefixAndPostfix.remove(current);
+
+            if (nameSpace != null && nameSpace.isEmpty()){
+                current.setFixes(nameSpace, "");
+            }
+            return this;
+        }
+        
+ 		/**
 		 * @param mainUrl url of homepage
 		 * @return the same Builder object so you can chain setters
 		 */
@@ -545,8 +571,14 @@ public final class DataSource
      * <p>
      * If that fails the method iterates through all know DataSources (with a urlPattern) 
      * and checks to see it the URL's start and ends match the pattern.
+     * <p>
+     * If no DataSource exists with this URL a new one is created.
+     * <p>
+     * Note the methods getByURL(String)  and getByNameSpace(String) are semantic sugar for getByURLPattern(String).
+     * All work with the same internal data 
+     *    so where they referer to the same URLPattern they will return the same DataSource
      * @param url A 
-     * @return A DataSource whoe urlPattern matches the url or null if none is found. 
+     * @return A DataSource whoe urlPattern matches the url. 
      */
     public static DataSource getByURL(String url) {
         int pos = url.indexOf("$id");
@@ -557,12 +589,53 @@ public final class DataSource
         }
     }
     
-    public static DataSource getByURLPattern(String url) {    
-        int pos = url.indexOf("$id");
+    /**
+     * Attempts to find a DataSource that fits this URL Patternotherwise registers a new URL
+     * <p>
+     * The URLPattern must contain the String "$id".
+     * <p>
+     * If no DataSource exists with this URL a new one is created.
+     * <p>
+     * Note the methods getByURL(String)  and getByNameSpace(String) are semantic sugar for getByURLPattern(String).
+     * All work with the same internal data 
+     *    so where they referer to the same URLPattern they will return the same DataSource
+     * @param url A 
+     * @return A DataSource whose urlPattern matches the urlPattern. 
+     */
+    public static DataSource getByURLPattern(String urlPattern) {    
+        int pos = urlPattern.indexOf("$id");
         if (pos == -1){
             throw new IllegalArgumentException("Url pattern should have $id in it");
         } else {
-            return getByURLPatternOnly(url, true);
+            return getByURLPatternOnly(urlPattern, true);
+        }
+    }
+    
+    /**
+     * Attempts to find a DataSource with this nameSpace.
+     * <p>
+     * Equivellent (but faster) to calling getByURLPattern (nameSpace + "$id").
+     * <p>
+     * If no DataSource exists with this URL a new one is created.
+     * <p>
+     * Note the methods getByURL(String) and getByNameSpace(String) are semantic sugar for getByURLPattern(String).
+     * All work with the same internal data 
+     *    so where they referer to the same URLPattern they will return the same DataSource
+     * @param url A 
+     * @return A DataSource whose urlPattern is nameSpace + "$id". 
+     */
+    public static DataSource getByNameSpace(String nameSpace){
+        if (nameSpace == null){
+            throw new IllegalArgumentException("nameSpace may not be null.");
+        }
+        if (nameSpace.isEmpty()){
+            throw new IllegalArgumentException("nameSpace may not be empty.");            
+        }
+        DataSource result = byPrefix.get(nameSpace);
+        if (result == null){
+            return createDataSource(nameSpace);
+        } else {
+            return result;
         }
     }
 
@@ -571,7 +644,6 @@ public final class DataSource
         int pos = urlPattern.indexOf("$id");
         String prefix = urlPattern.substring(0, pos);
         String postfix = urlPattern.substring(pos + 3);
-        System.out.println("£" + prefix + "  " + postfix);
         if (postfix.isEmpty()){
             DataSource result = byPrefix.get(prefix);
             if (result != null){
@@ -611,6 +683,9 @@ public final class DataSource
         //ystem.out.println(lookupPrefix);
         if (prefix == null){
             throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
+        }
+        if (prefix.isEmpty()){
+            throw new IllegalArgumentException("Url should not start with a '#', '/, or a ':'.");            
         }
         DataSource result = byPrefix.get(prefix);
         if (result != null){
