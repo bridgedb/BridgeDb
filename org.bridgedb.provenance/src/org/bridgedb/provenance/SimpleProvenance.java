@@ -20,7 +20,14 @@ public class SimpleProvenance implements Provenance{
     private Date creationDate;
     private Date uploadDate;
     
-    public SimpleProvenance (String createdBy, String predicate, Date creationDate, Date uploadDate){
+    /**
+     * Constructor. However recommended call method is via the ProvenanceFactory
+     * @param createdBy
+     * @param predicate
+     * @param creationDate
+     * @param uploadDate 
+     */
+    SimpleProvenance (String createdBy, String predicate, Date creationDate, Date uploadDate){
         this.createdBy = createdBy;
         this.predicate = predicate;
         this.creationDate = creationDate;
@@ -50,6 +57,11 @@ public class SimpleProvenance implements Provenance{
     @Override
     public boolean isTransative() {
         return false;
+    }
+
+    @Override
+    public int getId() {
+        return Provenance.NO_ID_ASSIGNED;
     }
     
 }

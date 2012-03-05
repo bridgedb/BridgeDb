@@ -17,7 +17,12 @@ public class TransativeProvenace implements Provenance{
     private Provenance first;
     private Provenance second;
     
-    public TransativeProvenace(Provenance first, Provenance second){
+    /**
+     * Constructor. However recommended call method is via the ProvenanceFactory
+     * @param first
+     * @param second 
+     */
+    TransativeProvenace(Provenance first, Provenance second){
         this.first = first;
         this.second = second;
     }
@@ -58,4 +63,9 @@ public class TransativeProvenace implements Provenance{
         return true;
     }
     
+    @Override
+    public int getId() {
+        return Provenance.NO_ID_ASSIGNED;
+    }
+
 }
