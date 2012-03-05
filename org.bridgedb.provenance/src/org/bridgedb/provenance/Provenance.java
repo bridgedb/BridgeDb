@@ -10,6 +10,8 @@ import org.bridgedb.IDMapperException;
  */
 public interface Provenance {
     
+    public static int NO_ID_ASSIGNED = -1;
+
     //I wonder if something with hierarcy works better here
     //For example why not org.semanticweb.owlapi.model.OWLClass
     public String getPredicate() throws IDMapperException;
@@ -21,5 +23,10 @@ public interface Provenance {
     public Date getUploadDate();
     
     public boolean isTransative();
+    
+    //Not sure if int is the correct class here.
+    //int is easy as databases can autoincrement.
+    //Possibly with a -1 return if no id has been assigned
+    public int getId();
     
 }
