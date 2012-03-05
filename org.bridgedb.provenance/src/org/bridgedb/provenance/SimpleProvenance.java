@@ -1,6 +1,6 @@
 package org.bridgedb.provenance;
 
-import java.util.Date;
+import java.util.Calendar;
 import org.bridgedb.provenance.Provenance;
 
 /*
@@ -17,8 +17,9 @@ public class SimpleProvenance implements Provenance{
 
     private String createdBy;
     private String predicate;
-    private Date creationDate;
-    private Date uploadDate;
+    private long creationDate;
+    private long uploadDate;
+    private int id;
     
     /**
      * Constructor. However recommended call method is via the ProvenanceFactory
@@ -27,11 +28,24 @@ public class SimpleProvenance implements Provenance{
      * @param creationDate
      * @param uploadDate 
      */
-    SimpleProvenance (String createdBy, String predicate, Date creationDate, Date uploadDate){
+    public SimpleProvenance (String createdBy, String predicate, long creation, long upload){
+        this(Provenance.NO_ID_ASSIGNED, createdBy, predicate, creation, upload);
+    }
+    
+    /**
+     * Constructor. However recommended call method is via the ProvenanceFactory
+     * @param id  (Optional)
+     * @param createdBy
+     * @param predicate
+     * @param creationDate
+     * @param uploadDate 
+     */
+    public SimpleProvenance (int id, String createdBy, String predicate, long creation, long upload){
+        this.id = id;
         this.createdBy = createdBy;
         this.predicate = predicate;
-        this.creationDate = creationDate;
-        this.uploadDate = uploadDate;
+        this.creationDate = creation;
+        this.uploadDate = upload;
     }
     
     @Override
@@ -45,12 +59,12 @@ public class SimpleProvenance implements Provenance{
     }
 
     @Override
-    public Date getCreationDate() {
+    public long getCreation() {
         return creationDate;
     }
 
     @Override
-    public Date getUploadDate() {
+    public long getUpload() {
         return uploadDate;
     }
 
@@ -61,7 +75,7 @@ public class SimpleProvenance implements Provenance{
 
     @Override
     public int getId() {
-        return Provenance.NO_ID_ASSIGNED;
+        return id;
     }
     
 }
