@@ -5,10 +5,14 @@
 package org.bridgedb.linkset;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.provenance.Provenance;
+import org.bridgedb.provenance.ProvenanceFactory;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -31,9 +35,11 @@ public class LinksetHandler extends RDFHandlerBase{
     Value creator;
     int linksetId;
     LinkListener listener;
+    ProvenanceFactory provenanceFactory;
 
-    public LinksetHandler(LinkListener listener){
+    public LinksetHandler(LinkListener listener, ProvenanceFactory provenanceFactory){
         this.listener = listener;
+        this.provenanceFactory = provenanceFactory;
     }
     
     public void handleStatement(Statement st) throws RDFHandlerException {
@@ -110,8 +116,22 @@ public class LinksetHandler extends RDFHandlerBase{
         // Ignores any predicate that we do not know how to process
     }
     
-    private void finishProcessingHeader() {
+    private void finishProcessingHeader() throws RDFHandlerException {
         processingHeader = false;
+        long created = new GregorianCalendar().getTimeInMillis();
+        try {
+            created = dateCreated.calendarValue().toGregorianCalendar().getTimeInMillis();
+        } catch (Exception e){
+            //OK no usable date
+            System.err.println(e);
+        }
+        Provenance provenance = 
+                provenanceFactory.createProvenance(creator.toString(), linkPredicate.stringValue(), created);
+        try {
+            listener.init(provenance);
+        } catch (IDMapperException ex) {
+            throw new RDFHandlerException ("Error starting listener ", ex);
+        }
     }
 
     /**
@@ -138,6 +158,16 @@ public class LinksetHandler extends RDFHandlerBase{
     @Override
     public void startRDF() throws RDFHandlerException{
         System.out.println ("start");
+        //NOTE listener.init method called fromfinishProcessingHeader();
         super.startRDF();
     } 
+    
+    public void endRDF() throws RDFHandlerException{
+        super.endRDF();
+        try {
+            listener.closeInput();
+        } catch (IDMapperException ex) {
+            throw new RDFHandlerException("Error endingRDF ", ex);
+        }
+    }
 }
