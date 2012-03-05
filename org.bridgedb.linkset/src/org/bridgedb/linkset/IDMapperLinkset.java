@@ -18,6 +18,7 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
+import org.bridgedb.provenance.Provenance;
 import org.openrdf.model.URI;
 
 /**
@@ -28,19 +29,19 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
 
     private Set<DataSource> sources;
     private Set<DataSource> targets;
-    private String predicate;
+    private Provenance provenance;
     private Map<Xref,Set<Xref>> sourceToTarget;
     int linkCount;
     
     public IDMapperLinkset() {
-        init();
+        init(null);
     }
 
     @Override
-    public void init() {
+    public void init(Provenance provenance) {
         sources = new HashSet<DataSource>();
         targets = new HashSet<DataSource>();
-        predicate = null;;
+        this.provenance = provenance;
         sourceToTarget = new HashMap<Xref,Set<Xref>>();
         linkCount = 0;
     }
@@ -129,7 +130,7 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
 
     @Override
     public void close() throws IDMapperException {
-        init();
+        init(null);
     }
 
     @Override
