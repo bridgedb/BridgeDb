@@ -1,6 +1,6 @@
 package org.bridgedb.provenance;
 
-import java.util.Date;
+import java.util.Calendar;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -18,9 +18,10 @@ public interface Provenance {
     
     public String getCreatedBy();
 
-    public Date getCreationDate();
+    //I choose long as it can easily be converted to and from java.util.Date, java.sql.Date and various calanders
+    public long getCreation();
 
-    public Date getUploadDate();
+    public long getUpload();
     
     public boolean isTransative();
     

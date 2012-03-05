@@ -1,6 +1,8 @@
 package org.bridgedb.provenance;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * The purpose of this class is to provide a single entry point for creating provenance.
@@ -9,13 +11,11 @@ import java.util.Date;
  * Or add DataBase or registry support to save the Provenances of reuse and providing ids.
  * @author Christian
  */
-public abstract class ProvenanceFactory {
+public interface ProvenanceFactory {
     
-    public static Provenance createProvenance(String createdBy, String predicate, Date creationDate, Date uploadDate){
-        return new SimpleProvenance(createdBy, predicate, creationDate, uploadDate);
-    }
+    public Provenance createProvenance(String createdBy, String predicate, long creation, long upload) throws ProvenanceException;
     
-    public static Provenance createProvenace(Provenance first, Provenance second){
-        return new TransativeProvenace(first, second);
-    }
+    public Provenance createProvenance(String createdBy, String predicate, long creation) throws ProvenanceException;
+    
+    public Provenance createProvenace(Provenance first, Provenance second) throws ProvenanceException;
 }

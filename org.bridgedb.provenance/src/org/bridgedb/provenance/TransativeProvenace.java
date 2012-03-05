@@ -4,7 +4,7 @@
  */
 package org.bridgedb.provenance;
 
-import java.util.Date;
+import java.util.Calendar;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -41,20 +41,20 @@ public class TransativeProvenace implements Provenance{
     }
 
     @Override
-    public Date getCreationDate() {
-        if (first.getCreationDate().after(second.getCreationDate())){
-            return first.getCreationDate();
+    public long getCreation() {
+        if (first.getCreation() > second.getCreation()){
+            return first.getCreation();
         } else {
-            return second.getCreationDate();
+            return second.getCreation();
         }
     }
 
     @Override
-    public Date getUploadDate() {
-        if (first.getUploadDate().after(second.getUploadDate())){
-            return first.getUploadDate();
+    public long getUpload() {
+        if (first.getUpload()> second.getUpload()){
+            return first.getUpload();
         } else {
-            return second.getUploadDate();
+            return second.getUpload();
         }
     }
 
