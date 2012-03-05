@@ -20,10 +20,8 @@ public class tester {
         IDMapperSQL idMapperSQL = new IDMapperSQL(access);
         idMapperSQL.dropSQLTables();
         idMapperSQL.createSQLTables();
-        idMapperSQL.init();
-        LinksetParser.parse (idMapperSQL, "C:/Temp/cs-chembl_small.ttl", "http://foo/bar");
-        LinksetParser.parse (idMapperSQL, "C:/Temp/cs-chembl_small.ttl", "http://foo/bar");
+        LinksetParser.parse (idMapperSQL, idMapperSQL, "C:/Temp/cs-chembl_small.ttl", "http://foo/bar");
+        LinksetParser.parse (idMapperSQL, idMapperSQL, "C:/Temp/cs-chembl_small.ttl", "http://foo/bar");
         //LinksetParser.parse (idMapperSQL, "C:/Temp/cw-cs.ttl", "http://foo/bar");
-        idMapperSQL.closeInput();
     }    
 }
