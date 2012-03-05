@@ -6,6 +6,9 @@ package org.bridgedb.linkset;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -118,12 +121,16 @@ public class LinksetHandler extends RDFHandlerBase{
     private void insertLink(Statement st) throws RDFHandlerException {
         try {
             URI subjectURI = (URI)st.getSubject();
+            DataSource sourceDataSource = DataSource.getByNameSpace(subjectURI.getNamespace());
+            Xref sourceXref = new Xref(subjectURI.getLocalName(), sourceDataSource);
             String predicate = st.getPredicate().stringValue();
-            URI target = (URI)st.getObject();
-            listener.insertLink(subjectURI, predicate, target);
+            URI objectURI = (URI)st.getObject();
+            DataSource targetDataSource = DataSource.getByNameSpace(objectURI.getNamespace());
+            Xref targetXref = new Xref(objectURI.getLocalName(), sourceDataSource);
+            listener.insertLink(sourceXref, targetXref);
         } catch (ClassCastException ex) {
             throw new RDFHandlerException ("Unepected statement " + st, ex);
-        } catch (IDMapperLinksetException ex){
+        } catch (IDMapperException ex){
             throw new RDFHandlerException ("Error inserting link " + st, ex);            
         }
     }
