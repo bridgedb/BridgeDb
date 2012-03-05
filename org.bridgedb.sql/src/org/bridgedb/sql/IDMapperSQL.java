@@ -189,7 +189,8 @@ public class IDMapperSQL implements LinkListener, ProvenanceFactory{
                     + "(idLeft, codeLeft,                       "   
                     + " idRight, codeRight,                     "
                     + " provenance )                            " 
-                    + "VALUES (?, ?, ?, ?, ?)                   ");
+                    + "VALUES (?, ?, ?, ?,                      " 
+                    + provenance.getId() + ")                   ");
 			pstCheckLink = possibleOpenConnection.prepareStatement("SELECT EXISTS "
                     + "(SELECT * FROM link      "
                     + "where                    "
@@ -197,7 +198,7 @@ public class IDMapperSQL implements LinkListener, ProvenanceFactory{
                     + "   AND codeLeft = ?      "   
                     + "   AND idRight = ?       "
                     + "   AND codeRight = ?     "
-                    + "   AND provenance = ?)   ");
+                    + "   AND provenance = " + provenance.getId() + ")");
 		}
 		catch (SQLException e)
 		{
@@ -239,7 +240,6 @@ public class IDMapperSQL implements LinkListener, ProvenanceFactory{
             pstCheckLink.setString(2, source.getDataSource().getSystemCode());
             pstCheckLink.setString(3, target.getId());
             pstCheckLink.setString(4, target.getDataSource().getSystemCode());
-            pstCheckLink.setInt(5, 0);
             ResultSet rs = pstCheckLink.executeQuery();
             if (rs.next()) {
                 exists = rs.getBoolean(1);
@@ -254,7 +254,6 @@ public class IDMapperSQL implements LinkListener, ProvenanceFactory{
                 pstInsertLink.setString(2, source.getDataSource().getSystemCode());
                 pstInsertLink.setString(3, target.getId());
                 pstInsertLink.setString(4, target.getDataSource().getSystemCode());
-                pstInsertLink.setInt(5, 0);
                 pstInsertLink.executeUpdate();
                 insertCount++;
                 if (insertCount % BLOCK_SIZE == 0){
