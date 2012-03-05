@@ -33,10 +33,11 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
     int linkCount;
     
     public IDMapperLinkset() {
-        reset();
+        init();
     }
 
-    private void reset() {
+    @Override
+    public void init() {
         sources = new HashSet<DataSource>();
         targets = new HashSet<DataSource>();
         predicate = null;;
@@ -44,22 +45,11 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
         linkCount = 0;
     }
 
-    @Override
-    public void insertLink(URI source, String predicate, URI target) throws IDMapperLinksetException{
-        linkCount ++;
-        if (linkCount % 100000 == 0){
-            System.out.println("Processeed " + linkCount + " link so far");
-        }
-        //ystem.out.println(source);
+//    @Override
+/*    public void insertLink(URI source, String predicate, URI target) throws IDMapperLinksetException{
         DataSource sourceDataSource = DataSource.getByURL(source.stringValue());
-        sources.add(sourceDataSource);
         Xref sourceXref = new Xref(source.getLocalName(), sourceDataSource);
-        Set<Xref> targetSet = sourceToTarget.get(sourceXref);
-        //ystem.out.println(targetSet);
-        if (targetSet == null){
-            targetSet = new HashSet<Xref>();
-        }
-        
+
         if (this.predicate == null){
             this.predicate = predicate;
         } else if (!this.predicate.equals(predicate)){
@@ -68,14 +58,29 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
         }
         
         DataSource targetDataSource = DataSource.getByURL(target.stringValue());        
-        targets.add(targetDataSource);
         Xref targetXref = new Xref(target.getLocalName(), targetDataSource);
-        targetSet.add(targetXref);
-        sourceToTarget.put(sourceXref, targetSet);
-        //String nameSpace = getNameSpace(targetURI);
-        //System.out.println(sourceXref + "   "+ targetXref);
+        
+        insertLink(sourceXref, targetXref);
     }
-
+*/
+    public void insertLink(Xref source, Xref target) throws IDMapperLinksetException{
+        linkCount ++;
+        if (linkCount % 100000 == 0){
+            System.out.println("Processeed " + linkCount + " link so far");
+        }
+        //ystem.out.println(source);
+        sources.add(source.getDataSource());
+        Set<Xref> targetSet = sourceToTarget.get(source);
+        //ystem.out.println(targetSet);
+        if (targetSet == null){
+            targetSet = new HashSet<Xref>();
+        }
+        
+        targets.add(target.getDataSource());
+        targetSet.add(target);
+        sourceToTarget.put(source, targetSet);    
+    }
+    
     @Override
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
         return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
@@ -124,7 +129,7 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
 
     @Override
     public void close() throws IDMapperException {
-        reset();
+        init();
     }
 
     @Override
@@ -154,6 +159,11 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
             targetHash.addAll(xrefs);
         }
         System.out.println(targetHash.size() + " targets xrefs found");       
+    }
+
+   @Override
+    public void closeInput() {
+        //do nothing;
     }
 
     private class IDMapperLinksetCapabilities extends AbstractIDMapperCapabilities {
