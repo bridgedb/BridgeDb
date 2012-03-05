@@ -4,6 +4,8 @@
  */
 package org.bridgedb.linkset;
 
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.openrdf.model.URI;
 
 /**
@@ -12,5 +14,13 @@ import org.openrdf.model.URI;
  */
 public interface LinkListener {
     
-    public void insertLink(URI source, String predicate, URI target) throws IDMapperLinksetException;
+    public void insertLink(Xref source, Xref target) throws IDMapperException;
+
+    //public void insertLink(URI source, String predicate, URI target) throws IDMapperException;
+    
+    public void init() throws IDMapperException;
+    
+    //public void init(Provenance provenance) throws IDMapperException;
+
+    public void closeInput()throws IDMapperException;
 }
