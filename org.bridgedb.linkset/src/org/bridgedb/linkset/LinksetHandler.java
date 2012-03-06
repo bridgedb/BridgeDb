@@ -125,9 +125,9 @@ public class LinksetHandler extends RDFHandlerBase{
             //OK no usable date
             System.err.println(e);
         }
-        Provenance provenance = 
-                provenanceFactory.createProvenance(creator.toString(), linkPredicate.stringValue(), created);
         try {
+            Provenance provenance = 
+                    provenanceFactory.createProvenance(creator.toString(), linkPredicate.stringValue(), created);
             listener.init(provenance);
         } catch (IDMapperException ex) {
             throw new RDFHandlerException ("Error starting listener ", ex);
