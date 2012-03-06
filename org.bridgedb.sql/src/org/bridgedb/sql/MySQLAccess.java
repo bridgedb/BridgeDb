@@ -56,6 +56,7 @@ public class MySQLAccess implements SQLAccess{
             Connection conn = DriverManager.getConnection(dbUrl, username, password);
             return conn;
         } catch (SQLException ex) {
+            System.err.println(ex);
             final String msg = "Problem connecting to database.";
             //Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, msg, ex);
             throw new BridgeDbSqlException(msg, ex);
