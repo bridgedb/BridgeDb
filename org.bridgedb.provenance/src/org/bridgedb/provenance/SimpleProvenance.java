@@ -1,8 +1,5 @@
 package org.bridgedb.provenance;
 
-import java.util.Calendar;
-import org.bridgedb.provenance.Provenance;
-
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -46,6 +43,19 @@ public class SimpleProvenance implements Provenance{
         this.predicate = predicate;
         this.creationDate = creation;
         this.uploadDate = upload;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof SimpleProvenance){
+            SimpleProvenance sp = (SimpleProvenance)other;
+            if (this.id != sp.id) return false;
+            if (!this.createdBy.equals(sp.createdBy)) return false;
+            if (!this.predicate.equals(sp.predicate)) return false;
+            if (this.creationDate != sp.creationDate) return false;
+            return true;
+        }
+        return false;
     }
     
     @Override
