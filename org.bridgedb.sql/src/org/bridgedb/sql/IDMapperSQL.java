@@ -6,10 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bridgedb.DataSource;
+import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
@@ -23,7 +29,7 @@ import org.bridgedb.provenance.SimpleProvenance;
  * 
  * @author Christian
  */
-public class IDMapperSQL implements LinkListener, ProvenanceFactory{
+public class IDMapperSQL implements IDMapper, LinkListener, ProvenanceFactory{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 4;
@@ -356,4 +362,55 @@ public class IDMapperSQL implements LinkListener, ProvenanceFactory{
             throw new ProvenanceException ("Unable to check if Provenance already exists ", ex);
         }
     }
+
+    //***** IDMapper funtctions  *****
+    @Override
+    public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean xrefExists(Xref xref) throws IDMapperException {
+        String query = "SELECT EXISTS "
+                + "(SELECT * FROM link      "
+                + "where                    "
+                + "   idLeft = \"" + xref.getId() + "\""
+                + "   AND codeLeft = \"" + xref.getDataSource().getSystemCode() + "\""   
+                + ")";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            return rs.getBoolean(1);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public IDMapperCapabilities getCapabilities() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void close() throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isConnected() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }
