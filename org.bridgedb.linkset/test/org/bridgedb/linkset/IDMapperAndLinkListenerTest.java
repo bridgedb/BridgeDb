@@ -51,5 +51,4 @@ public abstract class IDMapperAndLinkListenerTest extends IDMapperTest{
         listener.insertLink(map3xref3, map3xref3);
     }
     
-    
 }
