@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class IDMapperTest {
+public abstract class IDMapperTest {
     
     //If the actual source to be tested does not contain these please overwrite with ones that do exist.
     public DataSource DataSource1 = DataSource.register("TestDS1", "TestDS1").asDataSource();
@@ -37,21 +37,12 @@ public class IDMapperTest {
     public Xref map3xref3 = new Xref("789", DataSource3);
     //And a few Xrefs also not used
     public Xref mapBadxref1 = new Xref("123", DataSourceBad);
-    public Xref mapBadxref2 = new Xref("-1", DataSource2);
+    public Xref mapBadxref2 = new Xref("abc", DataSource2);
     public Xref mapBadxref3 = new Xref("789", DataSourceBad);
-    
-    
-    
+        
     //Must be instantiated bu sup tests.
     public static IDMapper idMapper;
     
-    //This method MUST be overwritten without calling super!
-    //Overriding class MUST set IDMapper idMapper
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        org.junit.Assume.assumeTrue(false);
-    }
-
     @Test
     public void testMapIDManyToManyNoDataSources() throws IDMapperException{
         System.out.println("MapIDManyToManyNoDataSources");
