@@ -13,27 +13,14 @@ import org.junit.Test;
  * @author Christian
  */
 public class IDMapperLinksetTest extends IDMapperAndLinkListenerTest{
-
-    private IDMapperException setupException = null;
   
-    public IDMapperLinksetTest(){
+    @BeforeClass
+    public static void setupIDMapper() throws IDMapperException{
         IDMapperLinkset iDMapperLinkset = new IDMapperLinkset();
         idMapper = iDMapperLinkset;
         provenanceFactory = new SimpleProvenanceFactory();
         listener = iDMapperLinkset;       
-        try {
-            defaultLoadData();
-        } catch (IDMapperException ex) {
-            setupException = ex;
-        }
+        defaultLoadData();
     }
     
-    @Test
-    public void TestSetup() throws Exception{
-        if (setupException != null){
-            throw setupException;
-        }
-    }
-
-
 }
