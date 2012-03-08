@@ -17,9 +17,6 @@ import static org.junit.Assert.*;
  */
 public class SimpleProvenanceFactoryTest extends ProvenanceFactoryTest{
     
-    public SimpleProvenanceFactoryTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws Exception {
         factory = new SimpleProvenanceFactory();
