@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceException;
@@ -29,7 +31,7 @@ import org.bridgedb.provenance.SimpleProvenance;
  * 
  * @author Christian
  */
-public class IDMapperSQL implements IDMapper, LinkListener, ProvenanceFactory{
+public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 4;
@@ -366,14 +368,69 @@ public class IDMapperSQL implements IDMapper, LinkListener, ProvenanceFactory{
     //***** IDMapper funtctions  *****
     @Override
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
     }
 
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (tgtDataSources.length == 0){
+            return mapID(ref);
+        }
+        String query = "SELECT idRight as id, codeRight as code "
+                + "FROM link      "
+                + "where                    "
+                + "   idLeft = \"" + ref.getId() + "\""
+                + "   AND codeLeft = \"" + ref.getDataSource().getSystemCode() + "\""
+                + "   AND (" 
+                + "      codeRight = \"" + tgtDataSources[0].getSystemCode() + "\"";
+        for (int i = 1; i < tgtDataSources.length; i++){
+            query+= "      OR "
+                   + "      codeRight = \"" + tgtDataSources[i].getSystemCode() + "\"";
+        }
+        query+= "   )";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            return resultSetToXrefSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
     }
 
+    public Set<Xref> mapID(Xref ref) throws IDMapperException {
+        String query = "SELECT distinct idRight as id, codeRight as code  "
+                + "FROM link      "
+                + "where                    "
+                + "   idLeft = \"" + ref.getId() + "\""
+                + "   AND codeLeft = \"" + ref.getDataSource().getSystemCode() + "\"";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            return resultSetToXrefSet(rs);
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    private Set<Xref> resultSetToXrefSet(ResultSet rs ) throws IDMapperException{
+        HashSet<Xref> results = new HashSet<Xref>();
+        try {
+            while (rs.next()){
+                String id = rs.getString("id");
+                String sysCode = rs.getString("code");
+                DataSource ds = DataSource.getBySystemCode(sysCode);
+                Xref xref = new Xref(id, ds);
+                results.add(xref);
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+    
     @Override
     public boolean xrefExists(Xref xref) throws IDMapperException {
         String query = "SELECT EXISTS "
@@ -400,17 +457,100 @@ public class IDMapperSQL implements IDMapper, LinkListener, ProvenanceFactory{
 
     @Override
     public IDMapperCapabilities getCapabilities() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this;
     }
 
     @Override
     public void close() throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //currently we do nothing
     }
 
     @Override
     public boolean isConnected() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            sqlAccess.getConnection();
+            return true;
+        } catch (BridgeDbSqlException ex) {
+            return false;
+        }
+    }
+
+    //***** IDMapperCapabilities funtctions  *****
+    @Override
+    public boolean isFreeSearchSupported() {
+        //not yet
+        return false;
+    }
+
+    @Override
+    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
+        String query = "SELECT DISTINCT codeLeft as code "
+                + "FROM link      ";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            return resultSetToDataSourceSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    private Set<DataSource> resultSetToDataSourceSet(ResultSet rs ) throws IDMapperException{
+        HashSet<DataSource> results = new HashSet<DataSource>();
+        try {
+            while (rs.next()){
+                String sysCode = rs.getString("code");
+                DataSource ds = DataSource.getBySystemCode(sysCode);
+                results.add(ds);
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+
+    @Override
+    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
+        String query = "SELECT DISTINCT codeRight as code "
+                + "FROM link      ";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            return resultSetToDataSourceSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
+        String query = "SELECT EXISTS "
+                + "(SELECT * FROM link      "
+                + "where                    "
+                + "   codeLeft = \"" + src.getSystemCode() + "\""
+                + "   AND codeRight = \"" + tgt.getSystemCode() + "\""   
+                + ")";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            return rs.getBoolean(1);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public String getProperty(String key) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getKeys() {
+        return new HashSet<String>();
     }
 
 }
