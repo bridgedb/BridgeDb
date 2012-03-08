@@ -20,32 +20,10 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class ProvenanceFactoryTest {
+public abstract class ProvenanceFactoryTest {
     
     public static ProvenanceFactory factory;
     
-    public ProvenanceFactoryTest() {
-    }
-
-    //This class should be overwritten without calling super!
-    //Overriding class MUST set ProvenanceFactory factory
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        org.junit.Assume.assumeTrue(false);
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of createProvenance method, of class ProvenanceFactory.
      * /
