@@ -14,34 +14,71 @@ import static org.junit.Assert.*;
  */
 public abstract class IDMapperTest {
     
-    //If the actual source to be tested does not contain these please overwrite with ones that do exist.
-    public DataSource DataSource1 = DataSource.register("TestDS1", "TestDS1").asDataSource();
-    public DataSource DataSource2 = DataSource.register("TestDS2", "TestDS2").asDataSource();
-    public DataSource DataSource3 = DataSource.register("TestDS3", "TestDS3").asDataSource();
+    //Must be instantiated by implementation of these tests.
+    protected static IDMapper idMapper;
+    
+    //DataSource that MUST be supported.
+    protected static DataSource DataSource1;
+    protected static DataSource DataSource2;
+    protected static DataSource DataSource3;
     //This DataSource MUST not be supported
-    public DataSource DataSourceBad = DataSource.register("TestDSBad", "TestDSBad").asDataSource();
+    protected static DataSource DataSourceBad;
     
     //Set of Xrefs that are expected to map together.
-    //Note: Ids intentionally equals for testing of DataCollection
-    public Xref map1xref1 = new Xref("123", DataSource1);
-    public Xref map1xref2 = new Xref("123", DataSource2);
-    public Xref map1xref3 = new Xref("123", DataSource3);
+    protected static Xref map1xref1;
+    protected static Xref map1xref2;
+    protected static Xref map1xref3;
     //Second set of Xrefs that are expected to map together.
-    //But these are not expected NOT to map to the first set
-    public Xref map2xref1 = new Xref("456", DataSource1);
-    public Xref map2xref2 = new Xref("456", DataSource2);
-    public Xref map2xref3 = new Xref("456", DataSource3);
-    //Third Set of Xref which again should map to eachothe but not the above
-    public Xref map3xref1 = new Xref("789", DataSource1);
-    public Xref map3xref2 = new Xref("789", DataSource2);
-    public Xref map3xref3 = new Xref("789", DataSource3);
+    protected static Xref map2xref1;
+    protected static Xref map2xref2;
+    protected static Xref map2xref3;
+    //Third Set of Xref which again should map to each other but not the above
+    protected static Xref map3xref1;
+    protected static Xref map3xref2;
+    protected static Xref map3xref3;
     //And a few Xrefs also not used
-    public Xref mapBadxref1 = new Xref("123", DataSourceBad);
-    public Xref mapBadxref2 = new Xref("abc", DataSource2);
-    public Xref mapBadxref3 = new Xref("789", DataSourceBad);
+    protected static Xref mapBadxref1;
+    protected static Xref mapBadxref2;
+    protected static Xref mapBadxref3;
         
-    //Must be instantiated bu sup tests.
-    public static IDMapper idMapper;
+    
+    @BeforeClass
+    /**
+     * Class to set up the variables.
+     * 
+     * Should be overrided to change all of the variables.
+     * To change some over write it. Call super.setupVariables() and then change the few that need fixing.
+     * <p>
+     * Note: According to the Junit api 
+     * "The @BeforeClass methods of superclasses will be run before those the current class."
+     */
+    public static void setupVariables(){
+        //If the actual source to be tested does not contain these please overwrite with ones that do exist.
+        DataSource1 = DataSource.register("TestDS1", "TestDS1").asDataSource();
+        DataSource2 = DataSource.register("TestDS2", "TestDS2").asDataSource();
+        DataSource3 = DataSource.register("TestDS3", "TestDS3").asDataSource();
+        //This DataSource MUST not be supported
+        DataSourceBad = DataSource.register("TestDSBad", "TestDSBad").asDataSource();
+    
+        //Set of Xrefs that are expected to map together.
+        //Note: Ids intentionally equals for testing of DataCollection
+        map1xref1 = new Xref("123", DataSource1);
+        map1xref2 = new Xref("123", DataSource2);
+        map1xref3 = new Xref("123", DataSource3);
+        //Second set of Xrefs that are expected to map together.
+        //But these are not expected NOT to map to the first set
+        map2xref1 = new Xref("456", DataSource1);
+        map2xref2 = new Xref("456", DataSource2);
+        map2xref3 = new Xref("456", DataSource3);
+        //Third Set of Xref which again should map to eachothe but not the above
+        map3xref1 = new Xref("789", DataSource1);
+        map3xref2 = new Xref("789", DataSource2);
+        map3xref3 = new Xref("789", DataSource3);
+        //And a few Xrefs also not used
+        mapBadxref1 = new Xref("123", DataSourceBad);
+        mapBadxref2 = new Xref("abc", DataSource2);
+        mapBadxref3 = new Xref("789", DataSourceBad);        
+    }
     
     @Test
     public void testMapIDManyToManyNoDataSources() throws IDMapperException{
@@ -91,6 +128,17 @@ public abstract class IDMapperTest {
     }
 
     @Test
+    public void testMapIDOneToManyWithOneDataSource() throws IDMapperException{
+        System.out.println("MapIDOneToManyWithOneDataSource");
+        Set<Xref> results = idMapper.mapID(map1xref1, DataSource2);
+        assertTrue(results.contains(map1xref2));
+        assertFalse(results.contains(map1xref3));
+        assertFalse(results.contains(map2xref1));
+        assertFalse(results.contains(map2xref2));
+        assertFalse(results.contains(map2xref2));
+    }
+ 
+    @Test
     public void testMapIDOneToManyWithTwoDataSources() throws IDMapperException{
         System.out.println("MapIDOneToManyWithTwoDataSources");
         Set<Xref> results = idMapper.mapID(map1xref1, DataSource2, DataSource3);
@@ -115,9 +163,7 @@ public abstract class IDMapperTest {
     public void testDataSourceSupported() throws Exception {
         System.out.println("DataSourceSupported");
         Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
-        System.out.println(dataSources);
         DataSource expected = dataSources.iterator().next();
-        System.out.println(expected);
         
         assertTrue(dataSources.contains(DataSource1));
         assertTrue(dataSources.contains(DataSource2));
@@ -125,6 +171,18 @@ public abstract class IDMapperTest {
         assertFalse(dataSources.contains(DataSourceBad));
     }
    
+    @Test
+    public void testDataTargetSupported() throws Exception {
+        System.out.println("DataTagerSupported");
+        Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedTgtDataSources();
+        DataSource expected = dataSources.iterator().next();
+        
+        assertTrue(dataSources.contains(DataSource1));
+        assertTrue(dataSources.contains(DataSource2));
+        assertTrue(dataSources.contains(DataSource3));
+        assertFalse(dataSources.contains(DataSourceBad));
+    }
+
     @Test
     public void testXrefSupported() throws Exception {
         System.out.println("XrefSupported");
@@ -142,5 +200,18 @@ public abstract class IDMapperTest {
         assertFalse(idMapper.xrefExists(mapBadxref3));
     }
     
-    
+    @Test
+    public void testIsMappingSupported() throws IDMapperException{
+        System.out.println("isMappingSupported");
+        IDMapperCapabilities capabilities = idMapper.getCapabilities();
+        assertTrue(capabilities.isMappingSupported(DataSource1, DataSource2));
+        assertFalse(capabilities.isMappingSupported(DataSource1, DataSourceBad));
+    }
+
+    @Test
+    public void testGetKeys() throws IDMapperException{
+        System.out.println("GetKeys");
+        IDMapperCapabilities capabilities = idMapper.getCapabilities();
+        assertNotNull(capabilities.getKeys());
+    }
 }
