@@ -16,8 +16,14 @@ public abstract class IDMapperAndLinkListenerTest extends IDMapperTest{
     
     //The ProvenanceFactory may but needs not be the same as either the IdMapper or the LinkListener
     protected static ProvenanceFactory provenanceFactory;
-       
-    protected void defaultLoadData() throws IDMapperException{
+    
+    /**
+     * Suggested method to load the data.
+     * 
+     * Must be called or replaced.
+     * @throws IDMapperException 
+     */
+    protected static void defaultLoadData() throws IDMapperException{
         Provenance provenance = provenanceFactory.createProvenance("testProvenance", "mapsTo", 1000);
         listener.init(provenance);
         //First set of matches
