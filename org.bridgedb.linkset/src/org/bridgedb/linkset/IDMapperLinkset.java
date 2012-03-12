@@ -39,6 +39,7 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
 
     @Override
     public void init(Provenance provenance) {
+        isConnected = provenance != null; 
         sources = new HashSet<DataSource>();
         targets = new HashSet<DataSource>();
         this.provenance = provenance;
@@ -128,6 +129,8 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
         return new IDMapperLinksetCapabilities();
     }
 
+    private boolean isConnected = true;
+
     @Override
     public void close() throws IDMapperException {
         init(null);
@@ -135,9 +138,9 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
 
     @Override
     public boolean isConnected() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isConnected;
     }
-    
+        
     private Set<DataSource> getDataSources() {
         HashSet<DataSource> result = new HashSet<DataSource>(sources);
         result.addAll(targets);
