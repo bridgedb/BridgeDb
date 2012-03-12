@@ -11,8 +11,6 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
@@ -452,7 +450,24 @@ public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener
 
     @Override
     public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String query = "SELECT distinct idRight as id, codeRight as code  "
+                + "FROM link      "
+                + "where                    "
+                + "   idRight = \"" + text + "\" "
+                + "UNION "
+                + "SELECT distinct idLeft as id, codeLeft as code  "
+                + "FROM link      "
+                + "where                    "
+                + "   idLeft = \"" + text + "\" ";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            return resultSetToXrefSet(rs);
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
     }
 
     @Override
@@ -478,8 +493,7 @@ public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener
     //***** IDMapperCapabilities funtctions  *****
     @Override
     public boolean isFreeSearchSupported() {
-        //not yet
-        return false;
+        return true;
     }
 
     @Override
