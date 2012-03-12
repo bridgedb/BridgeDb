@@ -240,14 +240,20 @@ public final class DataSource
 			}
 			else
 			{
+				int pos = urlPattern.indexOf("$id");
+				if (pos == -1) {
+                    throw new IllegalArgumentException("Url maker pattern for " + current + 
+                        "' should have $id in it");
+                }
+                if (urlPattern.equals("$id")){
+                    throw new IllegalArgumentException("Url maker pattern for " + current + 
+                        "' should be more than just \"$id\".");
+                }
                 DataSource previous = getByURLPatternOnly(urlPattern, false);
                 if (previous != null){
                     throw new IDMapperException ("There is already a DataSource " + previous + 
-                            " registered with this urlPattern");
+                            " registered with this urlPattern " + urlPattern + " so unable to set in " + current);
                 }
-				int pos = urlPattern.indexOf("$id");
-				if (pos == -1) throw new IllegalArgumentException("Url maker pattern for " + current + 
-                        "' should have $id in it");
                 current.setFixes(urlPattern.substring(0, pos), urlPattern.substring(pos + 3));
 			}
 			return this;
@@ -489,7 +495,11 @@ public final class DataSource
 	 */
 	public String toString()
 	{
-		return fullName;
+        if (fullName != null){
+            return fullName;
+        } else {
+            return sysCode;
+        }
 	}
 	
 	/**
