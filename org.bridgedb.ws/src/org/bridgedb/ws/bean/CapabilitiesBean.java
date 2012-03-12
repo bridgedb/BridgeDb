@@ -120,6 +120,6 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     }
 
     public IDMapperCapabilities asIDMapperCapabilities() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return this;
     }
 }
