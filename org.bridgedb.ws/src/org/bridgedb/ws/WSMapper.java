@@ -28,7 +28,11 @@ import org.bridgedb.ws.bean.PropertyBean;
  */
 public class WSMapper implements IDMapper, IDMapperCapabilities{
 
-    MappingResource webService;
+    WSInterface webService;
+    
+    public WSMapper(WSInterface webService){
+        this.webService = webService;
+    }
     
     @Override
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
