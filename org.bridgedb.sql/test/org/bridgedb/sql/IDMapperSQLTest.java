@@ -29,7 +29,7 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/imstest", "imstest", "imstest");
+        SQLAccess sqlAccess = MySQLAccess.getTestMySQLAccess();
         checkConnection(sqlAccess);
         IDMapperSQL iDMapperSQL = new IDMapperSQL(sqlAccess);
         iDMapperSQL.dropSQLTables();
