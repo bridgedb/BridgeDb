@@ -2,6 +2,7 @@ package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
 @XmlRootElement(name="Xref")
@@ -32,7 +33,7 @@ public class XrefBean {
         this.dataSource = dataSource;
     }
 
-    public Xref asXref() {
+    public Xref asXref() throws IDMapperException {
         DataSource ds = dataSource.asDataSource();
         return new Xref(id, ds);
     }

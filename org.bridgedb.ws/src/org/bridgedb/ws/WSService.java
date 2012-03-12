@@ -36,6 +36,7 @@ import org.bridgedb.ws.bean.XrefExistsBean;
 public class WSService implements WSInterface {
 
     private IDMapper idMapper;
+
     
     public WSService() throws BridgeDbSqlException {
         SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/imstest", "imstest", "imstest");
@@ -249,7 +250,7 @@ public class WSService implements WSInterface {
     
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getTargets")
+    @Path("/getSupportedTgtDataSources")
     @Override
     public List<DataSourceBean> getSupportedTgtDataSources() throws IDMapperException {
         ArrayList<DataSourceBean> targets = new ArrayList<DataSourceBean>();
