@@ -21,60 +21,61 @@ import org.bridgedb.IDMapperException;
 public class CapabilitiesBean implements IDMapperCapabilities{
 
     private Boolean isFreeSearchSupported;
-    private List<DataSourceBean> supportedSrcDataSources;
-    private List<DataSourceBean> supportedTgtDataSources;
-    private List<DataSourceMapBean> supportedMappings;
-    private List<PropertyBean> properties;
+    //Names of list are singular as they appear in the xml individually
+    private List<DataSourceBean> sourceDataSource;
+    private List<DataSourceBean> targetDataSource;
+    private List<DataSourceMapBean> supportedMapping;
+    private List<PropertyBean> property;
     
     public CapabilitiesBean(){
         isFreeSearchSupported = null;
-        supportedSrcDataSources = null;
-        supportedTgtDataSources = null;
-        supportedMappings = null;
-        properties = new ArrayList<PropertyBean>();
+        sourceDataSource = null;
+        targetDataSource = null;
+        supportedMapping = null;
+        property = new ArrayList<PropertyBean>();
     }
     
     public CapabilitiesBean(IDMapperCapabilities capabilities) {
         isFreeSearchSupported = capabilities.isFreeSearchSupported();
-        supportedSrcDataSources = new ArrayList<DataSourceBean>();
-        supportedTgtDataSources = new ArrayList<DataSourceBean>();
-        supportedMappings = new ArrayList<DataSourceMapBean>();
+        sourceDataSource = new ArrayList<DataSourceBean>();
+        targetDataSource = new ArrayList<DataSourceBean>();
+        supportedMapping = new ArrayList<DataSourceMapBean>();
         try {
             Set<DataSource> sources = capabilities.getSupportedSrcDataSources();
             Set<DataSource> targets = capabilities.getSupportedTgtDataSources();
             for (DataSource dataSource:targets){
-                supportedTgtDataSources.add(new DataSourceBean(dataSource));
+                targetDataSource.add(new DataSourceBean(dataSource));
             }
             for (DataSource source:sources){
-                supportedSrcDataSources.add(new DataSourceBean(source));
+                sourceDataSource.add(new DataSourceBean(source));
                 HashSet<DataSource> mappedTargets = new HashSet<DataSource>();
                 for (DataSource target:targets){
                     if (capabilities.isMappingSupported(source, target)){
                         mappedTargets.add(target);
                     }
                 }
-                supportedMappings.add(new DataSourceMapBean(source, mappedTargets));
+                supportedMapping.add(new DataSourceMapBean(source, mappedTargets));
             } 
         } catch (IDMapperException ex){
             ex.printStackTrace();
             //Nothing else we can do so leave it as empty as it its.
         }
-        properties = new ArrayList<PropertyBean>();
+        property = new ArrayList<PropertyBean>();
         Set<String> keys = capabilities.getKeys();
         for (String key:keys){
-            properties.add(new PropertyBean(key, capabilities.getProperty(key)));
+            property.add(new PropertyBean(key, capabilities.getProperty(key)));
         }
     }
     
     @Override
     public boolean isFreeSearchSupported() {
-        return isFreeSearchSupported;
+        return getIsFreeSearchSupported();
     }
 
     @Override
     public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
-        for (DataSourceBean bean:supportedSrcDataSources){
+        for (DataSourceBean bean:sourceDataSource){
             results.add(bean.asDataSource());
         }
         return results;
@@ -83,7 +84,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     @Override
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
-        for (DataSourceBean bean:supportedTgtDataSources){
+        for (DataSourceBean bean:targetDataSource){
             results.add(bean.asDataSource());
         }
         return results;
@@ -91,7 +92,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
 
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
-        for (DataSourceMapBean bean:supportedMappings){
+        for (DataSourceMapBean bean:supportedMapping){
             if (bean.getKey() == src ){
                 Set<DataSource> targets = bean.getMappedSet();
                 return targets.contains(tgt);
@@ -102,7 +103,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
 
     @Override
     public String getProperty(String key) {
-        for (PropertyBean bean:properties){
+        for (PropertyBean bean:property){
             if (bean.getKey().equals(key)){
                 return bean.getValue();
             }
@@ -113,7 +114,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     @Override
     public Set<String> getKeys() {
         HashSet<String> keys = new HashSet<String>();
-        for (PropertyBean bean:properties){
+        for (PropertyBean bean:property){
             keys.add(bean.getKey());
         }
         return keys;
@@ -121,5 +122,75 @@ public class CapabilitiesBean implements IDMapperCapabilities{
 
     public IDMapperCapabilities asIDMapperCapabilities() {
         return this;
+    }
+
+    /**
+     * @return the isFreeSearchSupported
+     */
+    public Boolean getIsFreeSearchSupported() {
+        return isFreeSearchSupported;
+    }
+
+    /**
+     * @param isFreeSearchSupported the isFreeSearchSupported to set
+     */
+    public void setIsFreeSearchSupported(Boolean isFreeSearchSupported) {
+        this.isFreeSearchSupported = isFreeSearchSupported;
+    }
+
+    /**
+     * @param sourceDataSource  the sourceDataSource(s) to set
+     */
+    public void setSourceDataSource(List<DataSourceBean> sourceDataSource) {
+        this.sourceDataSource = sourceDataSource;
+    }
+
+    /**
+     * @param targetDataSource the targetDataSource(s) to set
+     */
+    public void setTargetDataSource(List<DataSourceBean> targetDataSource) {
+        this.targetDataSource = targetDataSource;
+    }
+
+    /**
+     * @return the supportedMapping(s)
+     */
+    public List<DataSourceMapBean> getSupportedMapping() {
+        return supportedMapping;
+    }
+
+    /**
+     * @param supportedMapping the supportedMapping(s) to set
+     */
+    public void setSupportedMapping(List<DataSourceMapBean> supportedMapping) {
+        this.supportedMapping = supportedMapping;
+    }
+
+    /**
+     * @return the properties
+     */
+    public List<PropertyBean> getProperty() {
+        return property;
+    }
+
+    /**
+     * @param property the properties to set
+     */
+    public void setProperty(List<PropertyBean> property) {
+        this.property = property;
+    }
+
+    /**
+     * @return the sourceDataSource(s)
+     */
+    public List<DataSourceBean> getSourceDataSource() {
+        return sourceDataSource;
+    }
+
+    /**
+     * @return the targetDataSource(s)
+     */
+    public List<DataSourceBean> getTargetDataSource() {
+        return targetDataSource;
     }
 }

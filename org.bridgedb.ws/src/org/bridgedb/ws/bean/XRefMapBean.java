@@ -5,25 +5,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 
 @XmlRootElement(name="XrefMapping")
 public class XRefMapBean {
     private XrefBean source;
-    private List<XrefBean> targets;
+    //Names of list are singular as they appear in the xml individually
+    private List<XrefBean> target;
     
     public XRefMapBean(){}
 
-    public XRefMapBean(XrefBean source, List<XrefBean> targets){
+    public XRefMapBean(XrefBean source, List<XrefBean> target){
         this.source = source;
-        this.targets = targets;
+        this.target = target;
     }
 
     public XRefMapBean(Xref source, Set<Xref> tgtXrefs){
         this.source = new XrefBean(source);
-        this.targets = new ArrayList<XrefBean>();
+        this.target = new ArrayList<XrefBean>();
         for (Xref tgt:tgtXrefs){
-           this.targets.add(new XrefBean(tgt));
+           this.target.add(new XrefBean(tgt));
         }
     }
 
@@ -42,27 +44,27 @@ public class XRefMapBean {
     }
 
     /**
-     * @return the targets
+     * @return the target(s)
      */
-    public List<XrefBean> getTargets() {
-        return targets;
+    public List<XrefBean> getTarget() {
+        return target;
     }
 
     /**
-     * @param targets the targets to set
+     * @param target the target(s) to set
      */
-    public void setTargets(List<XrefBean> targets) {
-        this.targets = targets;
+    public void setTarget(List<XrefBean> target) {
+        this.target = target;
     }
 
-    public Xref getKey() {
+    public Xref getKey() throws IDMapperException {
         return source.asXref();
     }
 
-    public Set<Xref> getMappedSet() {
+    public Set<Xref> getMappedSet() throws IDMapperException {
         HashSet<Xref> results = new HashSet<Xref>();
-        for (XrefBean target:targets){
-            results.add(target.asXref());
+        for (XrefBean trg:target){
+            results.add(trg.asXref());
         }
         return results;
     }
