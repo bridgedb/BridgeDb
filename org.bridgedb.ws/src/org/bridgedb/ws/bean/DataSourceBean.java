@@ -1,6 +1,5 @@
-package org.bridgedb.ws;
+package org.bridgedb.ws.bean;
 
-import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.bridgedb.DataSource;
@@ -26,7 +25,17 @@ public class DataSourceBean {
     }
     
     public DataSourceBean(DataSource dataSource){
-        loadDataSource(dataSource);
+        this.ds = dataSource;
+        this.sysCode = dataSource.getSystemCode();
+        this.fullName = dataSource.getFullName();
+        this.urlPattern = dataSource.getURN("$id");
+        this.idExample = dataSource.getExample().getId();
+        this.isPrimary = dataSource.isPrimary();
+        this.type = dataSource.getType();
+    	this.organism = dataSource.getOrganism();
+        String emptyUrn = dataSource.getURN("");
+        this.urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
+        this.mainUrl = dataSource.getMainUrl();      
     }
     
     /**
@@ -34,15 +43,6 @@ public class DataSourceBean {
      */
     public DataSource asDataSource() {
         return ds;
-    }
-
-    /**
-     * @param ds the ds to set
-     */
-    public void loadDataSource(DataSource dataSource) {
-        this.ds = dataSource;
-        this.sysCode = dataSource.getSystemCode();
-        this.fullName = dataSource.getFullName();
     }
 
     /**
