@@ -11,6 +11,8 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
@@ -371,6 +373,9 @@ public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener
 
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
+        if (ref.getId() == null || ref.getDataSource() == null){
+            return new HashSet<Xref>();
+        }
         if (tgtDataSources.length == 0){
             return mapID(ref);
         }
@@ -396,7 +401,7 @@ public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener
         }
     }
 
-    public Set<Xref> mapID(Xref ref) throws IDMapperException {
+    private Set<Xref> mapID(Xref ref) throws IDMapperException {
         String query = "SELECT distinct idRight as id, codeRight as code  "
                 + "FROM link      "
                 + "where                    "
@@ -431,6 +436,9 @@ public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener
     
     @Override
     public boolean xrefExists(Xref xref) throws IDMapperException {
+        if (xref.getId() == null || xref.getDataSource() == null){
+            return false;
+        }
         String query = "SELECT EXISTS "
                 + "(SELECT * FROM link      "
                 + "where                    "
@@ -475,21 +483,36 @@ public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener
         return this;
     }
 
+    private boolean isConnected = true;
+    // In the case of DataCollection, there is no need to discard associated resources.
+    
     @Override
-    public void close() throws IDMapperException {
-        //currently we do nothing
-    }
-
-    @Override
-    public boolean isConnected() {
-        try {
-            sqlAccess.getConnection();
-            return true;
-        } catch (BridgeDbSqlException ex) {
-            return false;
+    /** {@inheritDoc} */
+    public void close() throws IDMapperException { 
+        isConnected = false;
+        if (this.possibleOpenConnection != null){
+            try {
+                this.possibleOpenConnection.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
+    @Override
+    /** {@inheritDoc} */
+    public boolean isConnected() { 
+        if (isConnected){
+            try {
+                sqlAccess.getConnection();
+                return true;
+            } catch (BridgeDbSqlException ex) {
+                return false;
+            }
+        }
+        return isConnected; 
+    }
+    
     //***** IDMapperCapabilities funtctions  *****
     @Override
     public boolean isFreeSearchSupported() {
