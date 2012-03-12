@@ -44,6 +44,10 @@ public class MySQLAccess implements SQLAccess{
         }
     }
 
+    public static MySQLAccess getTestMySQLAccess() throws BridgeDbSqlException{
+        return new MySQLAccess("jdbc:mysql://localhost:3306/imstest", "imstest", "imstest");
+    }
+    
     /**
      * Retrieve an active connection to the database
      * 
