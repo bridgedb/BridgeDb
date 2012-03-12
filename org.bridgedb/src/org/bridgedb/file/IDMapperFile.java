@@ -158,7 +158,7 @@ public abstract class IDMapperFile implements IDMapper {
     }
 
     private boolean isConnected = true;
-    // In the case of IDMapperFile, there is no need to discard associated resources.
+    // In the case of DataCollection, there is no need to discard associated resources.
     
     /** {@inheritDoc} */
     public void close() throws IDMapperException { isConnected = false; }
