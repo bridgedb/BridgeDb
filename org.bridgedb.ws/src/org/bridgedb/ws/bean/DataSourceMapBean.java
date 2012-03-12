@@ -1,5 +1,6 @@
 package org.bridgedb.ws.bean;
 
+import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.DataSourceBean;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,20 +12,21 @@ import org.bridgedb.DataSource;
 @XmlRootElement(name="DataSourceMapping")
 public class DataSourceMapBean {
     private DataSourceBean source;
-    private List<DataSourceBean> targets;
+    //Names of list are singular as they appear in the xml individually
+    private List<DataSourceBean> target;
     
     public DataSourceMapBean(){}
 
     public DataSourceMapBean(DataSourceBean source, List<DataSourceBean> targets){
         this.source = source;
-        this.targets = targets;
+        this.target = targets;
     }
 
     public DataSourceMapBean(DataSource source, Set<DataSource> tgtDataSource){
         this.source = new DataSourceBean(source);
-        this.targets = new ArrayList<DataSourceBean>();
+        this.target = new ArrayList<DataSourceBean>();
         for (DataSource tgt:tgtDataSource){
-           this.targets.add(new DataSourceBean(tgt));
+           this.target.add(new DataSourceBean(tgt));
         }
     }
 
@@ -43,27 +45,27 @@ public class DataSourceMapBean {
     }
 
     /**
-     * @return the targets
+     * @return the target(s)
      */
-    public List<DataSourceBean> getTargets() {
-        return targets;
+    public List<DataSourceBean> getTarget() {
+        return target;
     }
 
     /**
      * @param targets the targets to set
      */
-    public void setTargets(List<DataSourceBean> targets) {
-        this.targets = targets;
+    public void setTarget(List<DataSourceBean> target) {
+        this.target = target;
     }
 
-    DataSource getKey() {
+    DataSource getKey() throws IDMapperException {
         return source.asDataSource();
     }
 
-    Set<DataSource> getMappedSet() {
+    Set<DataSource> getMappedSet() throws IDMapperException {
         HashSet<DataSource> results = new HashSet<DataSource>();
-        for (DataSourceBean target:targets){
-            results.add(target.asDataSource());
+        for (DataSourceBean trg:target){
+            results.add(trg.asDataSource());
         }
         return results;
     }

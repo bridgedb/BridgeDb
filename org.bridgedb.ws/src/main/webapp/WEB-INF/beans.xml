@@ -17,6 +17,6 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
     
-    <bean id="irsImpl" class="org.bridgedb.ws.MappingResource" />
+    <bean id="irsImpl" class="org.bridgedb.ws.WSService" />
 
 </beans>

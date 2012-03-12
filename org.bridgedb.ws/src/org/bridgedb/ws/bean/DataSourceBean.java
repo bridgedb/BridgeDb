@@ -3,12 +3,13 @@ package org.bridgedb.ws.bean;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSource.Builder;
+import org.bridgedb.IDMapperException;
 
 //TODO: Hide the linkset ID but leave it available for internal use but have URI available for external display
 //@XmlTransient is not working :(
 @XmlRootElement(name="DataSource")
 public class DataSourceBean {
-    @XmlTransient private DataSource ds;
   	private String sysCode = null;
 	private String fullName = null;
     private String urlPattern = null;
@@ -25,24 +26,50 @@ public class DataSourceBean {
     }
     
     public DataSourceBean(DataSource dataSource){
-        this.ds = dataSource;
         this.sysCode = dataSource.getSystemCode();
         this.fullName = dataSource.getFullName();
-        this.urlPattern = dataSource.getURN("$id");
+        String urlPattern = dataSource.getUrl("$id");
+        if (urlPattern.length() > 3 ){
+            this.urlPattern = urlPattern;
+        } else {
+            this.urlPattern = null;
+        }
         this.idExample = dataSource.getExample().getId();
         this.isPrimary = dataSource.isPrimary();
         this.type = dataSource.getType();
     	this.organism = dataSource.getOrganism();
         String emptyUrn = dataSource.getURN("");
-        this.urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
+        if (emptyUrn.length() > 1){
+            this.urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
+        } else {
+            this.urnBase = null;
+        }
         this.mainUrl = dataSource.getMainUrl();      
     }
     
     /**
      * @return the ds
      */
-    public DataSource asDataSource() {
-        return ds;
+    public DataSource asDataSource() throws IDMapperException {
+        Builder builder = DataSource.register(sysCode, fullName);
+        if (urlPattern != null){
+            builder = builder.urlPattern(urlPattern);
+        }
+        if (idExample != null){
+            builder = builder.idExample(idExample);
+        }
+        builder = builder.primary(isPrimary);
+        builder = builder.type(type);
+        if (organism != null){
+            builder = builder.organism(organism);
+        }
+        if (urnBase != null){
+            builder = builder.urnBase(type);
+        }
+        if (mainUrl != null){
+            builder = builder.mainUrl(mainUrl);
+        }
+        return builder.asDataSource();
     }
 
     /**
@@ -84,7 +111,11 @@ public class DataSourceBean {
      * @param urlPattern the urlPattern to set
      */
     public void setUrlPattern(String urlPattern) {
-        this.urlPattern = urlPattern;
+        if (urlPattern != null && urlPattern.length() <= 3){
+            this.urlPattern = "STRANGE:" + urlPattern;
+        } else {
+            this.urlPattern = urlPattern;
+        }
     }
 
     /**
