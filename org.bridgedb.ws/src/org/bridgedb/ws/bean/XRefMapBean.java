@@ -1,6 +1,7 @@
-package org.bridgedb.ws;
+package org.bridgedb.ws.bean;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -52,6 +53,18 @@ public class XRefMapBean {
      */
     public void setTargets(List<XrefBean> targets) {
         this.targets = targets;
+    }
+
+    public Xref getKey() {
+        return source.asXref();
+    }
+
+    public Set<Xref> getMappedSet() {
+        HashSet<Xref> results = new HashSet<Xref>();
+        for (XrefBean target:targets){
+            results.add(target.asXref());
+        }
+        return results;
     }
     
 }

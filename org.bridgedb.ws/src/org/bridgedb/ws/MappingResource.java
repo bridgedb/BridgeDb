@@ -1,5 +1,9 @@
 package org.bridgedb.ws;
 
+import org.bridgedb.ws.bean.XrefBean;
+import org.bridgedb.ws.bean.XRefMapBean;
+import org.bridgedb.ws.bean.DataSourceBean;
+import org.bridgedb.ws.bean.CapabilitiesBean;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,12 +20,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.IDMapperSQL;
 import org.bridgedb.sql.MySQLAccess;
 import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.ws.bean.FreeSearchSupportedBean;
+import org.bridgedb.ws.bean.MappingSupportedBean;
+import org.bridgedb.ws.bean.PropertyBean;
+import org.bridgedb.ws.bean.XrefExistsBean;
 
 @Path("/")
 public class MappingResource {
@@ -90,12 +99,21 @@ public class MappingResource {
         sb.append("<li>tgtCode as string ");
         sb.append("<ul>");        
  
+        sb.append("<li>freeSearch");
+        sb.append("<ul>");
+        sb.append("<li>Required arguements:<ul>");
+        sb.append("<li>text as string</li>");
+        sb.append("</ul></li>");
+        sb.append("<li>Optional arguments<ul>");
+        sb.append("<li>limit as Integer ");
+        sb.append("<ul>");        
+
         sb.append("<li>There can be more than one</li>");        
         sb.append("<li>Where code is the SystemCode of the DataSource)</li>");
         sb.append("</ul></ul></li>");
         sb.append("</ul></p>");
-        sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getSources\">Get sources</a></li>");
-        sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getTargets\">Get targets</a></li>");
+        sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getSupportedSrcDataSources\">Get sources</a></li>");
+        sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getSupportedTgtDataSources\">Get targets</a></li>");
         sb.append("</ul>");
         sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -103,8 +121,8 @@ public class MappingResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getSources")
-    public List<DataSourceBean> getSources() throws IDMapperException {
+    @Path("/getSupportedSrcDataSources")
+    public List<DataSourceBean> getSupportedSrcDataSources() throws IDMapperException {
         ArrayList<DataSourceBean> sources = new ArrayList<DataSourceBean>();
         Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
         for (DataSource dataSource:dataSources){
@@ -125,11 +143,29 @@ public class MappingResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/freeSearch")
+    public List<XrefBean> freeSearch(
+            @QueryParam("text") String text,
+            @QueryParam("limit") Integer limit) throws IDMapperException {
+        if (text == null) throw new IDMapperException("text parameter missig");
+        if (limit == null){
+            Set<Xref> mappings = idMapper.freeSearch(text, Integer.MAX_VALUE);
+            return setXrefToListXrefBeans(mappings);
+        } else {
+            Set<Xref> mappings = idMapper.freeSearch(text,limit);
+            return setXrefToListXrefBeans(mappings);
+        }
+    } 
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mapByXRef")
     public List<XrefBean> mapByXref(
             @QueryParam("id") String id,
             @QueryParam("code") String scrCode,
             @QueryParam("tgtCode") List<String> targetCodes) throws IDMapperException {
+        if (id == null) throw new IDMapperException("id parameter missig");
+        if (scrCode == null) throw new IDMapperException("code parameter missig");
         DataSource dataSource = DataSource.getBySystemCode(scrCode);
         Xref source = new Xref(id, dataSource);
         if (targetCodes == null){
@@ -161,7 +197,9 @@ public class MappingResource {
             @QueryParam("code") List<String> scrCode,
             @QueryParam("tgtCode") List<String> targetCodes) throws IDMapperException {
         if (id == null) throw new IDMapperException("id parameter missig");
+        if (id.isEmpty()) throw new IDMapperException("id parameter missig");
         if (scrCode == null) throw new IDMapperException("code parameter missig");
+        if (scrCode.isEmpty()) throw new IDMapperException("code parameter missig");
         if (id.size() != scrCode.size()) throw new IDMapperException("Must have same number of id and code parameters");
         HashSet<Xref> srcXrefs = new HashSet<Xref>();
         for (int i = 0; i < id.size() ;i++){
@@ -188,8 +226,21 @@ public class MappingResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/xrefExists")
+    public XrefExistsBean xrefExists( 
+            @QueryParam("id") String id,
+            @QueryParam("code") String scrCode) throws IDMapperException {
+        if (id == null) throw new IDMapperException ("\"id\" parameter can not be null");
+        if (scrCode == null) throw new IDMapperException ("\"code\" parameter can not be null");            
+        DataSource dataSource = DataSource.getBySystemCode(scrCode);
+        Xref source = new Xref(id, dataSource);
+        return new XrefExistsBean(source, idMapper.xrefExists(source));
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getTargets")
-    public List<DataSourceBean> getTargets() throws IDMapperException {
+    public List<DataSourceBean> getSupportedTgtDataSources() throws IDMapperException {
         ArrayList<DataSourceBean> targets = new ArrayList<DataSourceBean>();
         Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
         for (DataSource dataSource:dataSources){
@@ -197,5 +248,52 @@ public class MappingResource {
             targets.add(bean);
         }
         return targets;
-    } 
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/isFreeSearchSupported")
+    public FreeSearchSupportedBean isFreeSearchSupported() {
+        return new FreeSearchSupportedBean(idMapper.getCapabilities().isFreeSearchSupported());
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/isMappingSupported")
+    public MappingSupportedBean isMappingSupported(
+            @QueryParam("source") String srcCode, 
+            @QueryParam("target") String tgtCode) throws IDMapperException {
+        if (srcCode == null) throw new IDMapperException ("\"source\" parameter can not be null");
+        if (tgtCode == null) throw new IDMapperException ("\"target\" parameter can not be null");
+        DataSource src = DataSource.getBySystemCode(srcCode);
+        DataSource tgt = DataSource.getBySystemCode(tgtCode);
+        return new MappingSupportedBean(src, tgt, idMapper.getCapabilities().isMappingSupported(src, tgt));
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getProperty/{key}")
+    public PropertyBean getProperty(@PathParam("key")String key) {
+        return new PropertyBean(key, idMapper.getCapabilities().getProperty(key));
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getKeys")
+    public List<PropertyBean> getKeys() {
+        Set<String> keys = idMapper.getCapabilities().getKeys();
+        ArrayList<PropertyBean> results = new ArrayList<PropertyBean>();
+        IDMapperCapabilities idMapperCapabilities = idMapper.getCapabilities();
+        for (String key:keys){
+            results.add(new PropertyBean(key, idMapperCapabilities.getProperty(key)));
+        }
+        return results;
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getCapabilities")
+    CapabilitiesBean getCapabilities()  {
+        return new CapabilitiesBean(idMapper.getCapabilities());
+    }
 }

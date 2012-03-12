@@ -1,12 +1,9 @@
-package org.bridgedb.ws;
+package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 
-//TODO: Hide the linkset ID but leave it available for internal use but have URI available for external display
-//@XmlTransient is not working :(
 @XmlRootElement(name="Xref")
 public class XrefBean {
     private String id;
@@ -33,5 +30,10 @@ public class XrefBean {
     
     public void setDataSource(DataSourceBean dataSource){
         this.dataSource = dataSource;
+    }
+
+    public Xref asXref() {
+        DataSource ds = dataSource.asDataSource();
+        return new Xref(id, ds);
     }
 }
