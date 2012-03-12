@@ -55,6 +55,9 @@ public class DataCollection implements IDMapper{
 
     @Override
     public boolean xrefExists(Xref xref) throws IDMapperException {
+        if (xref.getId() == null || xref.getDataSource() == null){
+            return false;
+        }
         if (patternString != null){
             Pattern p = Pattern.compile(patternString);
             Matcher m = p.matcher(xref.getId());
@@ -90,16 +93,20 @@ public class DataCollection implements IDMapper{
         return new DataCollectionCapabilities(patternString != null);
     }
 
+    private boolean isConnected = true;
+    // In the case of DataCollection, there is no need to discard associated resources.
+    
     @Override
-    public void close() throws IDMapperException {
-        //do nothing
-    }
-
-    @Override
-    public boolean isConnected() {
-        return true;
+    /** {@inheritDoc} */
+    public void close() throws IDMapperException { 
+        isConnected = false; 
+        
     }
     
+    @Override
+    /** {@inheritDoc} */
+    public boolean isConnected() { return isConnected; }
+
     private class DataCollectionCapabilities extends AbstractIDMapperCapabilities {
 
         public DataCollectionCapabilities(final boolean freeSearch) 
