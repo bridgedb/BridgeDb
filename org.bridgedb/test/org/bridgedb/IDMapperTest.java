@@ -24,6 +24,8 @@ public abstract class IDMapperTest {
     //This DataSource MUST not be supported
     protected static DataSource DataSourceBad;
     
+    //The id for map1xref1
+    String goodId1;
     //Set of Xrefs that are expected to map together.
     protected static Xref map1xref1;
     protected static Xref map1xref2;
@@ -36,6 +38,9 @@ public abstract class IDMapperTest {
     protected static Xref map3xref1;
     protected static Xref map3xref2;
     protected static Xref map3xref3;
+    //Add an id that does not exist and can not be used in freesearch
+    //Or null if all Strings can be used.
+    protected static String badID;
     //And a few Xrefs also not used
     protected static Xref mapBadxref1;
     protected static Xref mapBadxref2;
@@ -74,9 +79,12 @@ public abstract class IDMapperTest {
         map3xref1 = new Xref("789", DataSource1);
         map3xref2 = new Xref("789", DataSource2);
         map3xref3 = new Xref("789", DataSource3);
+        //Add an id that does not exist and can not be used in freesearch
+        //Or null if all Strings can be used.
+        badID = "abc";
         //And a few Xrefs also not used
         mapBadxref1 = new Xref("123", DataSourceBad);
-        mapBadxref2 = new Xref("abc", DataSource2);
+        mapBadxref2 = new Xref(badID, DataSource2);
         mapBadxref3 = new Xref("789", DataSourceBad);        
     }
     
@@ -213,5 +221,22 @@ public abstract class IDMapperTest {
         System.out.println("GetKeys");
         IDMapperCapabilities capabilities = idMapper.getCapabilities();
         assertNotNull(capabilities.getKeys());
+    }
+    
+    @Test
+    public void testFreeSearchGood() throws IDMapperException{
+        org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
+        System.out.println("FreeSearchGood");
+        Set<Xref> results = idMapper.freeSearch(map1xref1.getId(), 10);
+        assertTrue (results.contains(map1xref1));
+    }
+
+    @Test
+    public void testFreeSearch() throws IDMapperException{
+        org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
+        org.junit.Assume.assumeTrue(badID != null);
+        System.out.println("FreeSearchBad");
+        Set<Xref> results = idMapper.freeSearch(badID, 10);
+        assertTrue (results == null || results.isEmpty());
     }
 }
