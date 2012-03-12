@@ -33,14 +33,18 @@ import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
 
 @Path("/")
-public class MappingResource {
+public class WSService implements WSInterface {
 
     private IDMapper idMapper;
     
-    public MappingResource() throws BridgeDbSqlException {
+    public WSService() throws BridgeDbSqlException {
         SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/imstest", "imstest", "imstest");
         idMapper = new IDMapperSQL(sqlAccess);
-
+    }
+    
+    //For testing allow another mapper to be inserted
+    public WSService(IDMapper idMapper) throws BridgeDbSqlException {
+        this.idMapper = idMapper;
     }
     
     @Context 
@@ -51,7 +55,7 @@ public class MappingResource {
    //             irs = new IRSImpl();
    //     } catch (IRSException ex) {
    //         String msg = "Cannot initialise IRS service";
-   //        Logger.getLogger(MappingResource.class.getName()).log(Level.SEVERE, msg, ex);
+   //        Logger.getLogger(WSService.class.getName()).log(Level.SEVERE, msg, ex);
    //     }
    // }
 
@@ -122,6 +126,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getSupportedSrcDataSources")
+    @Override
     public List<DataSourceBean> getSupportedSrcDataSources() throws IDMapperException {
         ArrayList<DataSourceBean> sources = new ArrayList<DataSourceBean>();
         Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
@@ -135,6 +140,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getDataSource/{code}")
+    @Override
     public DataSourceBean getDataSoucre(@PathParam("code") String code) throws IDMapperException {
         DataSource dataSource = DataSource.getBySystemCode(code);
         DataSourceBean bean = new DataSourceBean(dataSource);
@@ -144,6 +150,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/freeSearch")
+    @Override
     public List<XrefBean> freeSearch(
             @QueryParam("text") String text,
             @QueryParam("limit") Integer limit) throws IDMapperException {
@@ -160,6 +167,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mapByXRef")
+    @Override
     public List<XrefBean> mapByXref(
             @QueryParam("id") String id,
             @QueryParam("code") String scrCode,
@@ -192,6 +200,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mapByXRefs")
+    @Override
     public List<XRefMapBean> mapByXrefs(
             @QueryParam("id") List<String> id,
             @QueryParam("code") List<String> scrCode,
@@ -227,6 +236,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/xrefExists")
+    @Override
     public XrefExistsBean xrefExists( 
             @QueryParam("id") String id,
             @QueryParam("code") String scrCode) throws IDMapperException {
@@ -240,6 +250,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getTargets")
+    @Override
     public List<DataSourceBean> getSupportedTgtDataSources() throws IDMapperException {
         ArrayList<DataSourceBean> targets = new ArrayList<DataSourceBean>();
         Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
@@ -253,6 +264,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/isFreeSearchSupported")
+    @Override
     public FreeSearchSupportedBean isFreeSearchSupported() {
         return new FreeSearchSupportedBean(idMapper.getCapabilities().isFreeSearchSupported());
     }
@@ -260,6 +272,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/isMappingSupported")
+    @Override
     public MappingSupportedBean isMappingSupported(
             @QueryParam("source") String srcCode, 
             @QueryParam("target") String tgtCode) throws IDMapperException {
@@ -273,6 +286,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getProperty/{key}")
+    @Override
     public PropertyBean getProperty(@PathParam("key")String key) {
         return new PropertyBean(key, idMapper.getCapabilities().getProperty(key));
     }
@@ -280,6 +294,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getKeys")
+    @Override
     public List<PropertyBean> getKeys() {
         Set<String> keys = idMapper.getCapabilities().getKeys();
         ArrayList<PropertyBean> results = new ArrayList<PropertyBean>();
@@ -293,7 +308,7 @@ public class MappingResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getCapabilities")
-    CapabilitiesBean getCapabilities()  {
+    public CapabilitiesBean getCapabilities()  {
         return new CapabilitiesBean(idMapper.getCapabilities());
     }
 }

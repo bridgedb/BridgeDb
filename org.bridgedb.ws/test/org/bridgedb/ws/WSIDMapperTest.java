@@ -4,8 +4,12 @@
  */
 package org.bridgedb.ws;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
+import org.bridgedb.file.IDMapperText;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.IDMapperSQL;
 import org.bridgedb.sql.MySQLAccess;
@@ -19,25 +23,20 @@ import org.junit.BeforeClass;
 public class WSIDMapperTest extends IDMapperTest{
     
     @BeforeClass
-    public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/imstest", "imstest", "imstest");
-        boolean connectionOk = false;
+    public static void setupIDMapper() throws IDMapperException, MalformedURLException{
+        IDMapper inner;
+        SQLAccess sqlAccess = MySQLAccess.getTestMySQLAccess();
         try {
             sqlAccess.getConnection();
-            connectionOk = true;
-        } catch (BridgeDbSqlException ex) {
+            inner = new IDMapperSQL(sqlAccess);
+        } catch (BridgeDbSqlException ex){
             System.err.println(ex);
-            System.err.println("**** SKIPPPING IDMapperSQLTest tests due to Connection error.");
-            System.err.println("To run these test you must have the following:");
-            System.err.println("1. A MYSQL server running on port 3306");
-            System.err.println("2. A database \"imstest\" setup on that server");
-            System.err.println("3. A user \"imstest\" with password \"imstest\"");
-            System.err.println("4. Full rights for user \"imstest\" on the database \"imstest\".");
-            System.err.println("      DO NOT GRANT \"imstest\" RIGHTS TO OTHER DATABASES.");
-         }
-        org.junit.Assume.assumeTrue(connectionOk);        
-        IDMapperSQL iDMapperSQL = new IDMapperSQL(sqlAccess);
-        idMapper = iDMapperSQL;
+            System.err.println("**** Using file based tests due to SQL Connection error.");
+            File INTERFACE_TEST_FILE = new File ("../org.bridgedb/test-data/interfaceTest.txt");
+            inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
+        }
+        WSService wsService = new WSService();
+        idMapper = new WSMapper(wsService);
     }
 
 }
