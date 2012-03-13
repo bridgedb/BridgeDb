@@ -7,12 +7,6 @@ package org.bridgedb.sql;
 import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.IDMapperAndLinkListenerTest;
-import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.ProvenanceException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,7 +35,7 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
     }
     
     private static void checkConnection(SQLAccess sqlAccess){
-        boolean connectionOk = false;
+        connectionOk = false;
         try {
             sqlAccess.getConnection();
             connectionOk = true;
