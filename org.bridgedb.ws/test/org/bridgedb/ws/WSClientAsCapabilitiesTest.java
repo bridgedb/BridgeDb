@@ -1,22 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.ws;
 
-import org.bridgedb.IDMapperTest;
+import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperCapabilitiesTest;
 import org.junit.BeforeClass;
 
 /**
  *
  * @author Christian
  */
-public class WSClientTest  extends WSTest{
+public abstract class WSClientAsCapabilitiesTest  extends IDMapperCapabilitiesTest{
     
     @BeforeClass
     public static void setupIDMapper() {
         connectionOk = false;
-        webService = new WSClient("http://localhost:8080/OPS-IMS");
+        WSInterface webService = new WSClient("http://localhost:8080/OPS-IMS");
         try { 
             webService.isFreeSearchSupported();
             connectionOk = true;
@@ -25,7 +22,11 @@ public class WSClientTest  extends WSTest{
             System.out.println ("***** SKIPPING WSClientTest ******");
             System.out.println ("Please make sure the server is running");
         }
-        idMapper = new WSMapper(webService);
+        idMapper = new WSMapper(webService){
+            public IDMapperCapabilities getCapabilities() {
+                return this;
+            }
+        };
         org.junit.Assume.assumeTrue(connectionOk);        
     }
 

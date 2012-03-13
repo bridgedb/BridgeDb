@@ -43,6 +43,10 @@ public class WSService implements WSInterface {
         idMapper = new IDMapperSQL(sqlAccess);
     }
     
+    public WSService(SQLAccess sqlAccess) throws BridgeDbSqlException {
+        idMapper = new IDMapperSQL(sqlAccess);
+    }
+
     //For testing allow another mapper to be inserted
     public WSService(IDMapper idMapper) throws BridgeDbSqlException {
         this.idMapper = idMapper;
@@ -289,7 +293,9 @@ public class WSService implements WSInterface {
     @Path("/getProperty/{key}")
     @Override
     public PropertyBean getProperty(@PathParam("key")String key) {
-        return new PropertyBean(key, idMapper.getCapabilities().getProperty(key));
+        String property = idMapper.getCapabilities().getProperty(key);
+        if (property == null) return null;
+        return new PropertyBean(key, property);
     }
     
     @GET
