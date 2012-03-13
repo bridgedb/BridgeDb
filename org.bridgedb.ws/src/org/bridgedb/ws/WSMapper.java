@@ -40,14 +40,17 @@ public class WSMapper implements IDMapper, IDMapperCapabilities{
         ArrayList<String> codes = new ArrayList<String>();
         ArrayList<String> tgtCodes = new ArrayList<String>();
         for (Xref srcXref:srcXrefs){
-            ids.add(srcXref.getId());
-            codes.add(srcXref.getDataSource().getSystemCode());
+            if (srcXref.getId() != null && srcXref.getDataSource() != null){
+                ids.add(srcXref.getId());
+                codes.add(srcXref.getDataSource().getSystemCode());
+            }
         }
         for (int i = 0 ; i < tgtDataSources.length; i++){
             tgtCodes.add(tgtDataSources[i].getSystemCode());
         }
-        List<XRefMapBean>  beans = webService.mapByXrefs(ids, codes, tgtCodes);
         HashMap<Xref, Set<Xref>> results = new HashMap<Xref, Set<Xref>>();
+        if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
+        List<XRefMapBean>  beans = webService.mapByXrefs(ids, codes, tgtCodes);
         for (XRefMapBean bean:beans){
             Xref key = bean.getKey();
             Set<Xref> mapSet = bean.getMappedSet();
@@ -58,6 +61,7 @@ public class WSMapper implements IDMapper, IDMapperCapabilities{
 
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
+        if (ref.getId() == null || ref.getDataSource() == null) return new HashSet<Xref>();
         String id = ref.getId();
         String code = ref.getDataSource().getSystemCode();
         ArrayList<String> tgtCodes = new ArrayList<String>();
@@ -74,6 +78,8 @@ public class WSMapper implements IDMapper, IDMapperCapabilities{
 
     @Override
     public boolean xrefExists(Xref xref) throws IDMapperException {
+        if (xref.getId() == null) return false;
+        if (xref.getDataSource() == null) return false;
         String id = xref.getId();
         String code = xref.getDataSource().getSystemCode();
         return webService.xrefExists(id,code).exists();
@@ -95,19 +101,27 @@ public class WSMapper implements IDMapper, IDMapperCapabilities{
         return bean.asIDMapperCapabilities();
     }
 
+    private boolean isConnected = true;
+    // In the case of DataCollection, there is no need to discard associated resources.
+    
     @Override
-    public void close() throws IDMapperException {
-        //Do nothing;
+    /** {@inheritDoc} */
+    public void close() throws IDMapperException { 
+        isConnected = false; 
     }
-
+ 
     @Override
-    public boolean isConnected() {
-        try{
-            webService.freeSearch(null, Integer.SIZE);
-           return true; 
-        } catch (Exception ex) {
-            return false;
-        }
+    /** {@inheritDoc} */
+    public boolean isConnected() { 
+        if (isConnected) {
+            try{
+                webService.isFreeSearchSupported();
+                return true; 
+            } catch (Exception ex) {
+                return false;
+            }
+        } 
+        return false;
     }
 
     @Override
@@ -142,7 +156,9 @@ public class WSMapper implements IDMapper, IDMapperCapabilities{
 
     @Override
     public String getProperty(String key) {
-        return webService.getProperty(key).getValue();
+        PropertyBean bean = webService.getProperty(key);
+        if (bean == null) return null;
+        return bean.getValue();
     }
 
     @Override

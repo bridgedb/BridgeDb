@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.ws;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import org.bridgedb.IDMapper;
+import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperCapabilitiesTest;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTest;
 import org.bridgedb.file.IDMapperText;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.IDMapperSQL;
@@ -17,10 +14,10 @@ import org.bridgedb.sql.SQLAccess;
 import org.junit.BeforeClass;
 
 /**
- *
+ * This test uses WSMapper directly for the Capabilities rather than downloading the whole capabilities xml.
  * @author Christian
  */
-public class WSIDMapperTest extends WSTest{
+public class WSIDMapperAsCapabilitiesTest extends IDMapperCapabilitiesTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
@@ -35,8 +32,12 @@ public class WSIDMapperTest extends WSTest{
             File INTERFACE_TEST_FILE = new File ("../org.bridgedb/test-data/interfaceTest.txt");
             inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
         }
-        webService = new WSService(sqlAccess);
-        idMapper = new WSMapper(webService);
+        WSService wsService = new WSService();
+        idMapper = new WSMapper(wsService){
+            public IDMapperCapabilities getCapabilities() {
+                return this;
+            }
+        };
     }
 
 }

@@ -31,11 +31,12 @@ import org.bridgedb.ws.bean.XrefExistsBean;
  */
 public class WSClient implements WSInterface{
 
-    public String serviceAddress = "http://localhost:8080/OPS-IMS";
+    public String serviceAddress;
 
     private final WebResource webResource;
 
-    public WSClient() {
+    public WSClient(String serviceAddress) {
+        this.serviceAddress = serviceAddress;
         ClientConfig config = new DefaultClientConfig();
         Client client = Client.create(config);
         webResource = client.resource(serviceAddress);        
@@ -58,27 +59,61 @@ public class WSClient implements WSInterface{
 
     @Override
     public DataSourceBean getDataSoucre(String code) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //Make service call
+        DataSourceBean result = 
+                webResource.path("getDataSource/" + code)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<DataSourceBean>() {});
+        return result;
     }
 
     @Override
     public List<PropertyBean> getKeys() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        //Make service call
+        List<PropertyBean> result = 
+                webResource.path("getKeys")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<PropertyBean>>() {});
+        return result;
     }
 
     @Override
     public PropertyBean getProperty(String key) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add("key", key);
+        //Make service call
+        PropertyBean result = 
+                webResource.path("getProperty")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<PropertyBean>() {});
+        return result;
     }
 
     @Override
     public List<DataSourceBean> getSupportedSrcDataSources() throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        //Make service call
+        List<DataSourceBean> result = 
+                webResource.path("getSupportedSrcDataSources")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<DataSourceBean>>() {});
+        return result;
     }
 
     @Override
     public List<DataSourceBean> getSupportedTgtDataSources() throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        //Make service call
+        List<DataSourceBean> result = 
+                webResource.path("getSupportedTgtDataSources")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<DataSourceBean>>() {});
+        return result;
     }
 
     @Override
@@ -95,7 +130,16 @@ public class WSClient implements WSInterface{
 
     @Override
     public MappingSupportedBean isMappingSupported(String srcCode, String tgtCode) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add("source", srcCode);
+        params.add("target", tgtCode);
+        //Make service call
+        MappingSupportedBean result = 
+                webResource.path("isMappingSupported")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<MappingSupportedBean>() {});
+        return result;
     }
 
     @Override
