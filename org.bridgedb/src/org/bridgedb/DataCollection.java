@@ -32,9 +32,9 @@ public class DataCollection implements IDMapper{
     }
 
     @Override
-    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
+    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {        
         Set<Xref> results = new HashSet<Xref>();
-        if (!mappedSources.contains(ref.getDataSource())){
+        if (!this.xrefExists(ref)){
             return results;
         }
         if (tgtDataSources.length == 0){
