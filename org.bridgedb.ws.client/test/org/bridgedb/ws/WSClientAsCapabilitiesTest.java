@@ -1,14 +1,14 @@
 package org.bridgedb.ws;
 
 import org.bridgedb.IDMapperCapabilities;
-import org.bridgedb.IDMapperCapabilitiesTest;
+import org.bridgedb.IDMapperTestBase;
 import org.junit.BeforeClass;
 
 /**
  *
  * @author Christian
  */
-public class WSClientAsCapabilitiesTest  extends IDMapperCapabilitiesTest{
+public class WSClientAsCapabilitiesTest  extends IDMapperTestBase{
     
     @BeforeClass
     public static void setupIDMapper() {
