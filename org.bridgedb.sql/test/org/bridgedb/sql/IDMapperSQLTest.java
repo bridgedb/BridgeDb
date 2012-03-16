@@ -4,14 +4,18 @@
  */
 package org.bridgedb.sql;
 
+import org.bridgedb.XrefIterator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Date;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.bridgedb.linkset.IDMapperAndLinkListenerTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- * Note: The order of the tests is Important.
  * 
  * @author Christian
  */
@@ -20,17 +24,18 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
     private static final String CREATOR1 = "testCreateProvenance";
     private static final String PREDICATE1 = "testMapping";
     private static final long CREATION1 = new Date().getTime();
-    
+    private static IDMapperSQL iDMapperSQL;
+
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         SQLAccess sqlAccess = MySQLAccess.getTestMySQLAccess();
         checkConnection(sqlAccess);
-        IDMapperSQL iDMapperSQL = new IDMapperSQL(sqlAccess);
+        iDMapperSQL = new IDMapperSQL(sqlAccess);
         iDMapperSQL.dropSQLTables();
         iDMapperSQL.createSQLTables();
         idMapper = iDMapperSQL;
         provenanceFactory = iDMapperSQL;
-        listener = iDMapperSQL;       
+        listener = iDMapperSQL;     
         defaultLoadData();
     }
     
@@ -58,7 +63,8 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
      * However due to the Assume in setUpClass() it should never be reached if connection fails.
      */
 	public void testConnection() throws BridgeDbSqlException {
-        SQLAccess access = new MySQLAccess("jdbc:mysql://localhost:3306/imstest", "imstest", "imstest");
+        System.out.println("testConnection");
+        SQLAccess access = MySQLAccess.getTestMySQLAccess();
         access.getConnection();
     }
     
