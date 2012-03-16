@@ -11,13 +11,12 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.XrefIterator;
 import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
@@ -31,7 +30,7 @@ import org.bridgedb.provenance.SimpleProvenance;
  * 
  * @author Christian
  */
-public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory{
+public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, XrefIterator{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 4;
@@ -590,4 +589,95 @@ public class IDMapperSQL implements IDMapper, IDMapperCapabilities, LinkListener
         return new HashSet<String>();
     }
 
+    //*** Support method for interation ****
+    /**
+     * Gets the Xref currently at this possition in the database.
+     * 
+     * The main purposes of this method are to underpin iteration and to give example Xrefs.
+     * It is NOT designed to assign Ids to Xrefs as 
+     * which Xref is returned for each possition can change if the data changes.
+     * 
+     * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
+     * @param possition
+     * @return
+     * @throws IDMapperException 
+     */
+    public Xref getXrefByPossition(int possition) throws IDMapperException {
+        String query = "SELECT distinct idRight as id, codeRight as code  "
+                + "FROM link      "
+                + "UNION "
+                + "SELECT distinct idLeft as id, codeLeft as code  "
+                + "FROM link      "
+                + "LIMIT " + possition + ",1";
+        Statement statement = this.createStatement();
+        System.out.println(query);
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                String id = rs.getString("id");
+                String sysCode = rs.getString("code");
+                DataSource ds = DataSource.getBySystemCode(sysCode);
+                return new Xref(id, ds);
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    /**
+     * Gets the Xref currently at this possition in the database.
+     * 
+     * The main purposes of this method are to underpin iteration and to give example Xrefs.
+     * It is NOT designed to assign Ids to Xrefs as 
+     * which Xref is returned for each possition can change if the data changes.
+     * 
+     * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
+     * @param possition
+     * @return
+     * @throws IDMapperException 
+     */
+    public Xref getXrefByPossitionAndDataSource(DataSource ds, int possition) throws IDMapperException {
+        String query = "SELECT distinct idRight as id "
+                + "FROM link      "
+                + "WHERE "
+                + "codeRight = \"" + ds.getSystemCode() + "\" "
+                + "UNION "
+                + "SELECT distinct idLeft as id  "
+                + "FROM link      "
+                + "WHERE "
+                + "codeLeft = \"" + ds.getSystemCode() + "\" "
+                + "LIMIT " + possition + ",1";
+        Statement statement = this.createStatement();
+        System.out.println(query);
+        try {
+            System.out.println("start");
+            ResultSet rs = statement.executeQuery(query);
+            System.out.println("run");
+            if (rs.next()){
+                String id = rs.getString("id");
+                System.out.println("got id");
+                return new Xref(id, ds);
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
+        return new SqlIterator(this, ds);
+    }
+
+    @Override
+    public Iterable<Xref> getIterator() throws IDMapperException {
+        return new SqlIterator(this);
+    }
 }
