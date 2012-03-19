@@ -16,17 +16,9 @@ public class WSClientTest  extends WSTest{
     @BeforeClass
     public static void setupIDMapper() {
         connectionOk = false;
-        webService = new WSClient("http://localhost:8080/OPS-IMS");
-        try { 
-            webService.isFreeSearchSupported();
-            connectionOk = true;
-        } catch (Exception ex) {
-            System.err.println(ex);
-            System.out.println ("***** SKIPPING WSClientTest ******");
-            System.out.println ("Please make sure the server is running");
-        }
+        webService = WSClientFactory.createTestWSClient();
+        connectionOk = true;
         idMapper = new WSMapper(webService);
-        org.junit.Assume.assumeTrue(connectionOk);        
     }
 
 }

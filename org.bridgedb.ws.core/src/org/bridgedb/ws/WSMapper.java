@@ -20,13 +20,14 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.XrefIterator;
 import org.bridgedb.ws.bean.PropertyBean;
 
 /**
  *
  * @author Christian
  */
-public class WSMapper implements IDMapper, IDMapperCapabilities{
+public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, XrefByPossition {
 
     WSInterface webService;
     
@@ -169,6 +170,58 @@ public class WSMapper implements IDMapper, IDMapperCapabilities{
             results.add(bean.getKey());
         }
         return results;
+    }
+
+    //OPTIONAL
+    @Override
+    public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
+        return new WSIterator(webService, ds);
+    }
+
+    //OPTIONAL
+    @Override
+    public Iterable<Xref> getIterator() throws IDMapperException {
+        return new WSIterator(webService);
+    }
+
+    @Override
+    public Set<Xref> getXrefByPossition(int possition, int limit) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPossition(null, possition, limit);
+        HashSet<Xref> results = new HashSet<Xref>();
+        for (XrefBean bean:beans){
+            results.add(bean.asXref());
+        }
+        return results;
+    }
+
+    @Override
+    public Xref getXrefByPossition(int possition) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPossition(null, possition, null);
+        HashSet<Xref> results = new HashSet<Xref>();
+        if (beans.isEmpty()) {
+            return null;
+        }
+        return beans.get(0).asXref();
+    }
+
+    @Override
+    public Set<Xref> getXrefByPossition(DataSource ds, int possition, int limit) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPossition(ds.getSystemCode(), possition, limit);
+        HashSet<Xref> results = new HashSet<Xref>();
+        for (XrefBean bean:beans){
+            results.add(bean.asXref());
+        }
+        return results;
+    }
+
+    @Override
+    public Xref getXrefByPossition(DataSource ds, int possition) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPossition(ds.getSystemCode(), possition, null);
+        HashSet<Xref> results = new HashSet<Xref>();
+        if (beans.isEmpty()) {
+            return null;
+        }
+        return beans.get(0).asXref();
     }
     
 }

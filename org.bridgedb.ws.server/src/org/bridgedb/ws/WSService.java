@@ -32,6 +32,7 @@ import org.bridgedb.ws.bean.XrefExistsBean;
 public class WSService implements WSInterface {
 
     protected IDMapper idMapper;
+    protected XrefByPossition byPossition;
 
     /**
      * Defuault constuctor for super classes.
@@ -39,11 +40,15 @@ public class WSService implements WSInterface {
      * Super classes will have the responsibilites of setting up the idMapper.
      */
     protected WSService(){
-        int error = 1/0;
     }
     
     public WSService(IDMapper idMapper) {
         this.idMapper = idMapper;
+        if (idMapper instanceof XrefByPossition){
+            this.byPossition = (XrefByPossition)idMapper;
+        } else {
+            this.byPossition = null;
+        }
     }
     
     @Context 
@@ -128,6 +133,7 @@ public class WSService implements WSInterface {
     @Override
     public List<DataSourceBean> getSupportedSrcDataSources() throws IDMapperException {
         ArrayList<DataSourceBean> sources = new ArrayList<DataSourceBean>();
+        System.err.println(idMapper);
         IDMapperCapabilities capabilities = idMapper.getCapabilities();
         Set<DataSource> dataSources = capabilities.getSupportedSrcDataSources();
         for (DataSource dataSource:dataSources){
@@ -189,7 +195,7 @@ public class WSService implements WSInterface {
         }
     } 
 
-    private List setXrefToListXrefBeans(Set<Xref> xrefs){
+    private List<XrefBean> setXrefToListXrefBeans(Set<Xref> xrefs){
        ArrayList<XrefBean> results = new ArrayList<XrefBean>();
         for (Xref xref:xrefs){
            results.add(new XrefBean(xref));
@@ -197,6 +203,12 @@ public class WSService implements WSInterface {
         return results;        
     }
     
+    private List<XrefBean> xrefToListXrefBeans(Xref xref){
+        ArrayList<XrefBean> results = new ArrayList<XrefBean>();
+        results.add(new XrefBean(xref));
+        return results;        
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mapByXRefs")
@@ -285,11 +297,10 @@ public class WSService implements WSInterface {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getProperty/{key}")
+    @Path("/getProperty")
     @Override
     public PropertyBean getProperty(@PathParam("key")String key) {
         String property = idMapper.getCapabilities().getProperty(key);
-        if (property == null) return null;
         return new PropertyBean(key, property);
     }
     
@@ -312,5 +323,37 @@ public class WSService implements WSInterface {
     @Path("/getCapabilities")
     public CapabilitiesBean getCapabilities()  {
         return new CapabilitiesBean(idMapper.getCapabilities());
+    }
+
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getXrefByPossition")
+    public List<XrefBean> getXrefByPossition(
+            @QueryParam("code") String code, 
+            @QueryParam("possition") Integer possition, 
+            @QueryParam("limit") Integer limit) throws IDMapperException {
+        if (this.byPossition == null) {
+            throw new UnsupportedOperationException("Underlying IDMapper does not support getXrefByPossition.");
+        }
+        if (possition == null) throw new IDMapperException ("\"possition\" parameter can not be null");
+        if (code == null){
+            if (limit == null){
+                Xref xref = byPossition.getXrefByPossition(possition);
+                return xrefToListXrefBeans(xref);
+            } else {
+                Set<Xref> xrefs = byPossition.getXrefByPossition(possition, limit);
+                return setXrefToListXrefBeans(xrefs);
+            }
+        } else {
+            DataSource dataSource = DataSource.getBySystemCode(code);
+            if (limit == null){
+                Xref xref = byPossition.getXrefByPossition(dataSource, possition);
+                return xrefToListXrefBeans(xref);
+            } else {
+                Set<Xref> xrefs = byPossition.getXrefByPossition(dataSource, possition, limit);
+                return setXrefToListXrefBeans(xrefs);
+            }            
+        }
     }
 }
