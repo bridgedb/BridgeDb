@@ -29,11 +29,13 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
     @Test
     public void testMapIDManyToManyNoDataSources() throws IDMapperException{
         System.out.println("MapIDManyToManyNoDataSources");
+        System.out.println(idMapper.getCapabilities().getSupportedSrcDataSources());
         HashSet<Xref> srcXrefs = new HashSet<Xref>();
         srcXrefs.add(map1xref1);
         srcXrefs.add(map2xref2);
         srcXrefs.add(mapBadxref1);
         Map<Xref, Set<Xref>> results = idMapper.mapID(srcXrefs);
+        System.out.println(results);
         Set<Xref> resultSet = results.get(map1xref1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1xref2));
