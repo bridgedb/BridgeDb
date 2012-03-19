@@ -45,4 +45,18 @@ public interface WSInterface {
  
     CapabilitiesBean getCapabilities();
 
+    /**
+     * Obtains the Xref(s) by their current possition in the underlying data source.
+     * 
+     * Used for Iteration NOT assigning IDs.
+     * <p>
+     * Possition numbers must be sequencial starting at zero.
+     * There is NO requirement that the same xref is returned for the same possition over time.
+     * OPTIONAL
+     * @param code DataSource Optional default is all DataSources
+     * @param possition Zero based start possition
+     * @param limit Maximum number of xrefs to return OPTIONAL
+     * @return 
+     */
+    List<XrefBean> getXrefByPossition (String code, Integer possition, Integer limit) throws IDMapperException;
 }

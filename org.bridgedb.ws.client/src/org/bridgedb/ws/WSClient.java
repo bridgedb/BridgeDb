@@ -205,5 +205,24 @@ public class WSClient implements WSInterface{
                 .get(new GenericType<CapabilitiesBean>() {});
         return result;
     }
+
+    @Override
+    public List<XrefBean> getXrefByPossition(String code, Integer possition, Integer limit) throws IDMapperException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        if (code != null) {
+            params.add("code",  code);
+        }
+        params.add("possition",  possition.toString());
+        if (limit != null){
+            params.add("limit",  limit.toString());
+        }
+       //Make service call
+        List<XrefBean> result = 
+                webResource.path("getXrefByPossition")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<XrefBean>>() {});
+        return result;
+    }
     
 }

@@ -1,5 +1,6 @@
 package org.bridgedb;
 
+import org.junit.Ignore;
 import org.junit.AfterClass;
 import java.util.Map;
 import java.util.HashSet;
@@ -69,6 +70,7 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     }
     
     @Test
+    @Ignore
     public void testBadKeyNoProperties(){
         IDMapperCapabilities capabilities = idMapper.getCapabilities();
         assertNull(capabilities.getProperty(badKey));

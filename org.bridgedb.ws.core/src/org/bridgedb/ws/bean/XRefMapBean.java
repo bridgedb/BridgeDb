@@ -29,6 +29,12 @@ public class XRefMapBean {
         }
     }
 
+    public XRefMapBean(Xref source, Xref tgtXref){
+        this.source = new XrefBean(source);
+        this.target = new ArrayList<XrefBean>();
+        this.target.add(new XrefBean(tgtXref));
+    }
+
     /**
      * @return the source
      */

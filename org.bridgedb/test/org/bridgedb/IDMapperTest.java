@@ -4,7 +4,6 @@ import org.junit.AfterClass;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -14,6 +13,10 @@ import static org.junit.Assert.*;
  */
 public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
             
+    //Used by subsets during settup to check connection is ok.
+    //If set to false will skip testClose(). 
+    protected static boolean connectionOk = true;
+    
     @AfterClass //Setup as an afterclass so it is run last.
     public static void testClose() throws IDMapperException{
         if (connectionOk){        
