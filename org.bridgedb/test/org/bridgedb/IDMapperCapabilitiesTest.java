@@ -70,7 +70,6 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     }
     
     @Test
-    @Ignore
     public void testBadKeyNoProperties(){
         IDMapperCapabilities capabilities = idMapper.getCapabilities();
         assertNull(capabilities.getProperty(badKey));

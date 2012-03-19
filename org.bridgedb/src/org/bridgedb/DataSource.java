@@ -182,6 +182,10 @@ public final class DataSource
         }
     }
 
+    public String getNameSpace() {
+        return prefix;
+    }
+
 	/**
 	 * Uses builder pattern to set optional attributes for a DataSource. For example, this allows you to use the 
 	 * following code:
@@ -276,7 +280,7 @@ public final class DataSource
             byPrefix.values().remove(current);
             withPrefixAndPostfix.remove(current);
 
-            if (nameSpace != null && nameSpace.isEmpty()){
+            if (nameSpace != null && !nameSpace.isEmpty()){
                 current.setFixes(nameSpace, "");
             }
             return this;
@@ -496,7 +500,7 @@ public final class DataSource
 	public String toString()
 	{
         if (fullName != null){
-            return fullName;
+            return fullName + ":" + prefix;
         } else {
             return sysCode;
         }
@@ -599,6 +603,15 @@ public final class DataSource
         }
     }
     
+    public static Xref uriToXref(String url) throws IDMapperException{
+        int pos = url.indexOf("$id");
+        if (pos == -1){
+            return uriToXrefByNonPattern(url);
+        } else {
+            throw new IDMapperException ("URLs with $id are considered to be patterns and not");
+        }        
+    }
+    
     /**
      * Attempts to find a DataSource that fits this URL Patternotherwise registers a new URL
      * <p>
@@ -680,6 +693,7 @@ public final class DataSource
         }
     }
 
+    //Changes made here should also be maded to uriToXrefByNonPattern
     private static DataSource getByNonPattern(String url) {
         String prefix = null;
         url = url.trim();
@@ -709,6 +723,43 @@ public final class DataSource
         return createDataSource(prefix);
     }
     
+    //Changes made here should also be maded to getByNonPattern
+    private static Xref uriToXrefByNonPattern(String url) {
+        String prefix = null;
+        String id = null;
+        url = url.trim();
+        if (url.contains("#")){
+            prefix = url.substring(0, url.lastIndexOf("#")+1);
+            id = url.substring(url.lastIndexOf("#")+1, url.length());
+        } else if (url.contains("/")){
+            prefix = url.substring(0, url.lastIndexOf("/")+1);
+            id = url.substring(url.lastIndexOf("/")+1, url.length());
+        } else if (url.contains(":")){
+            prefix = url.substring(0, url.lastIndexOf(":")+1);
+            id = url.substring(url.lastIndexOf(":")+1, url.length());
+        }
+        //ystem.out.println(lookupPrefix);
+        if (prefix == null){
+            throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
+        }
+        if (prefix.isEmpty()){
+            throw new IllegalArgumentException("Url should not start with a '#', '/, or a ':'.");            
+        }
+        DataSource dataSource = byPrefix.get(prefix);
+        if (dataSource != null){
+            return new Xref(id, dataSource);
+        }
+        for (DataSource source:withPrefixAndPostfix){
+            if (url.startsWith(source.prefix) && url.endsWith(source.postfix)){
+                id = url.substring(source.prefix.length(), url.length() -  source.postfix.length());
+                return new Xref(id, source);
+            }
+        }
+        dataSource = createDataSource(prefix);
+        return new Xref(id, dataSource);
+    }
+
+
     private static DataSource createDataSource(String prefix) {
         DataSource result = register(prefix, prefix).asDataSource();
         //ystem.out.println(prefix);
