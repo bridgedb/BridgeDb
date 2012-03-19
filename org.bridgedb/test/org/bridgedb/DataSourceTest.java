@@ -102,6 +102,35 @@ public class DataSourceTest {
      * Test of getByURLPattern method, of class DataSource.
      */
     @Test
+    public void testGetByNameSpace() throws Exception {
+        String nameSpace= "http://www.example1.com/";
+        String urlProfile = "http://www.example1.com/$id";
+        DataSource expResult = DataSource.register("test1", "test1").nameSpace(nameSpace).asDataSource();
+        DataSource result = DataSource.getByURL(urlProfile);
+        assertEquals(expResult, result);
+        result = DataSource.getByNameSpace(nameSpace);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getByURLPattern method, of class DataSource.
+     */
+    @Test
+    public void testXrefByURLDifferentURL() throws Exception {
+        String urlProfile = "http://www.example2.com/$id";
+        String url = "http://www.example2.com/12345";
+        DataSource dataSource = DataSource.register("test1", "test1").urlPattern(urlProfile).asDataSource();
+        Xref expResult = new Xref("12345", dataSource);
+        Xref result = DataSource.uriToXref(url);
+        assertEquals(expResult, result);
+        String newURL = result.getUrl();
+        assertEquals (url, newURL);
+    }
+
+    /**
+     * Test of getByURLPattern method, of class DataSource.
+     */
+    @Test
     public void testGetByURLChangedPattern() throws Exception {
         String urlProfile1 = "http://www.example3.com/Pizza/$id";
         String urlProfile2 = "http://www.example3.com/Bread/$id";
@@ -109,14 +138,38 @@ public class DataSourceTest {
         String url2 = "http://www.example3.com/Bread/12345";
         DataSource expResult = DataSource.register("test1", "test1").urlPattern(urlProfile1).asDataSource();
         DataSource result = DataSource.getByURL(url1);
-        assertEquals(expResult, result);
+        assertTrue(expResult == result);
         expResult = DataSource.register("test1", "test1").urlPattern(urlProfile2).asDataSource();
         result = DataSource.getByURL(url1);
+        //there can be a Datasource by Url1 but it can not be the "test1" one.
         assertNotNull(result);
+        assertTrue(expResult != result);
         result = DataSource.getByURL(url2);
-        assertEquals(expResult, result);
+        assertTrue(expResult == result);
     }
     
+    /**
+     * Test of getByURLPattern method, of class DataSource.
+     */
+    @Test
+    public void testXrefByURLChangedPattern() throws Exception {
+        String urlProfile1 = "http://www.example3a.com/Pizza/$id";
+        String urlProfile2 = "http://www.example3a.com/Bread/$id";
+        String url1 = "http://www.example3a.com/Pizza/12345";
+        String url2 = "http://www.example3a.com/Bread/12345";
+        DataSource dataSource = DataSource.register("test1", "test1").urlPattern(urlProfile1).asDataSource();
+        Xref expResult = new Xref("12345", dataSource);
+        Xref result = DataSource.uriToXref(url1);
+        assertEquals(expResult, result);
+        assertEquals(url1, result.getUrl());
+        DataSource.register("test1", "test1").urlPattern(urlProfile2);
+        result = DataSource.uriToXref(url1);
+        assertEquals(url1, result.getUrl());
+        result = DataSource.uriToXref(url2);
+        assertEquals(expResult, result);
+        assertEquals(url2, result.getUrl());
+    }
+
     /**
      * Test of getByURLPattern method, of class DataSource.
      */
@@ -171,6 +224,19 @@ public class DataSourceTest {
      * Test of getByURLPattern method, of class DataSource.
      */
     @Test
+    public void testXrefByURLDifferentURWithPostFix() throws Exception {
+        String urlProfile = "http://www.example6.com/$id/more";
+        String url = "http://www.example6.com/12345/more";
+        DataSource dataSource = DataSource.register("test1", "test1").urlPattern(urlProfile).asDataSource();
+        Xref expResult = new Xref("12345", dataSource);
+        Xref result = DataSource.uriToXref(url);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getByURLPattern method, of class DataSource.
+     */
+    @Test
     public void testGetByURLChangedPatternWithPostFix() throws Exception {
         String urlProfile1 = "http://www.example7.com/Pizza/$id/more";
         String urlProfile2 = "http://www.example7.com/Bread/$id/more";
@@ -185,6 +251,28 @@ public class DataSourceTest {
         assertFalse(expResult.equals(result));
         result = DataSource.getByURL(url2);
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getByURLPattern method, of class DataSource.
+     */
+    @Test
+    public void testXrefByURLChangedPatternWithPostFix() throws Exception {
+        String urlProfile1 = "http://www.example7a.com/Pizza/$id/more";
+        String urlProfile2 = "http://www.example7a.com/Bread/$id/more";
+        String url1 = "http://www.example7a.com/Pizza/12345/more";
+        String url2 = "http://www.example7a.com/Bread/12345/more";
+        DataSource dataSource = DataSource.register("test1", "test1").urlPattern(urlProfile1).asDataSource();
+        Xref expResult = new Xref("12345", dataSource);
+        Xref result = DataSource.uriToXref(url1);
+        assertEquals(expResult, result);
+        assertEquals(url1, result.getUrl());
+        DataSource.register("test1", "test1").urlPattern(urlProfile2);
+        result = DataSource.uriToXref(url1);
+        assertEquals(url1, result.getUrl());
+        result = DataSource.uriToXref(url2);
+        assertEquals(expResult, result);
+        assertEquals(url2, result.getUrl());
     }
     
     /**
@@ -256,8 +344,6 @@ public class DataSourceTest {
         DataSource expected = DataSource.getByURLPattern(urlPattern1);
         DataSource result = DataSource.getByURLPattern(urlPattern2);
         assertNotNull(result);
-        System.out.println(expected);
-        System.out.println(result);
         assertFalse(expected.equals(result));
     }
     
