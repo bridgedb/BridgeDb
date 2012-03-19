@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.sql;
+package org.bridgedb.ws;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -14,20 +14,20 @@ import org.bridgedb.Xref;
  *
  * @author Christian
  */
-public class SqlIterator implements Iterator<Xref>,Iterable<Xref>{
+public class ByPossitionIterator implements Iterator<Xref>,Iterable<Xref>{
 
     private Xref bufferedNext;
-    private IDMapperSQL idMapperSQL;  
+    private XrefByPossition xrefByPossition;  
     private DataSource dataSource;
     int count;
         
-    public SqlIterator (IDMapperSQL idMapperSQL, DataSource dataSource){
-        this(idMapperSQL);
+    public ByPossitionIterator (XrefByPossition xrefByPossition, DataSource dataSource){
+        this(xrefByPossition);
         this.dataSource = dataSource;
     }
     
-    public SqlIterator (IDMapperSQL idMapperSQL){
-        this.idMapperSQL = idMapperSQL;
+    public ByPossitionIterator (XrefByPossition xrefByPossition){
+        this.xrefByPossition = xrefByPossition;
         count = -1;
     }
    
@@ -44,9 +44,9 @@ public class SqlIterator implements Iterator<Xref>,Iterable<Xref>{
     private Xref getNext() throws IDMapperException{
         count ++;
         if (dataSource == null){
-            return idMapperSQL.getXrefByPossition(count);
+            return xrefByPossition.getXrefByPossition(count);
         } else {
-            return idMapperSQL.getXrefByPossitionAndDataSource(dataSource, count);
+            return xrefByPossition.getXrefByPossition(dataSource, count);
         }
     }
     

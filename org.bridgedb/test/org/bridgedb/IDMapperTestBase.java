@@ -42,10 +42,6 @@ public abstract class IDMapperTestBase {
     //Add a property key that will not be found
     protected static String badKey;
     
-    //Used by subsets during settup to check connection is ok.
-    //If set to false will skip testClose(). 
-    protected static boolean connectionOk = true;
-    
     @BeforeClass
     /**
      * Class to set up the variables.

@@ -4,11 +4,13 @@
  */
 package org.bridgedb.ws.server;
 
+
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.IDMapperSQL;
 import org.bridgedb.sql.MySQLAccess;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.ws.WSService;
+import org.bridgedb.ws.XrefByPossition;
 
 /**
  *
@@ -16,10 +18,14 @@ import org.bridgedb.ws.WSService;
  */
 public class WsSqlServer extends WSService{
     
-    public WsSqlServer() throws BridgeDbSqlException {
+    public WsSqlServer() throws BridgeDbSqlException  {
         SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/imstest", "imstest", "imstest");
         idMapper = new IDMapperSQL(sqlAccess);
+        byPossition = (XrefByPossition)idMapper;
     }
 
     
+
 }
+
+

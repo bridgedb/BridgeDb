@@ -4,16 +4,11 @@
  */
 package org.bridgedb.sql;
 
-import org.bridgedb.XrefIterator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Date;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
 import org.bridgedb.linkset.IDMapperAndLinkListenerTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  * 
@@ -28,8 +23,9 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
 
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = MySQLAccess.getTestMySQLAccess();
-        checkConnection(sqlAccess);
+        connectionOk = false;
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        connectionOk = true;
         iDMapperSQL = new IDMapperSQL(sqlAccess);
         iDMapperSQL.dropSQLTables();
         iDMapperSQL.createSQLTables();
@@ -38,34 +34,5 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
         listener = iDMapperSQL;     
         defaultLoadData();
     }
-    
-    private static void checkConnection(SQLAccess sqlAccess){
-        connectionOk = false;
-        try {
-            sqlAccess.getConnection();
-            connectionOk = true;
-        } catch (BridgeDbSqlException ex) {
-            System.err.println(ex);
-            System.err.println("**** SKIPPPING IDMapperSQLTest tests due to Connection error.");
-            System.err.println("To run these test you must have the following:");
-            System.err.println("1. A MYSQL server running on port 3306");
-            System.err.println("2. A database \"imstest\" setup on that server");
-            System.err.println("3. A user \"imstest\" with password \"imstest\"");
-            System.err.println("4. Full rights for user \"imstest\" on the database \"imstest\".");
-            System.err.println("      DO NOT GRANT \"imstest\" RIGHTS TO OTHER DATABASES.");
-         }
-        org.junit.Assume.assumeTrue(connectionOk);        
-    }
-    
-    @Test
-    /**
-     * This test will fail if there is no connection.
-     * However due to the Assume in setUpClass() it should never be reached if connection fails.
-     */
-	public void testConnection() throws BridgeDbSqlException {
-        System.out.println("testConnection");
-        SQLAccess access = MySQLAccess.getTestMySQLAccess();
-        access.getConnection();
-    }
-    
+            
 }
