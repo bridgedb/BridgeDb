@@ -223,7 +223,11 @@ public final class DataSource
 		 * 
 		 * The pattern should contain the substring "$id", which will be replaced by the actual identifier.
          * <p>
-         * Warning this method and nameSpace(String) have the same functionality. 
+         * If more than one DataSource source is set with the same urlPattern than the last datasource set 
+         *    using this method will be returned by the meothods getByURLPattern and getByNameSpace.
+         * The behaviour of allowing two or more DataSources to share a URLPattern is historical.
+         * <p>
+         * Warning this method and nameSpace(String) has almost the same functionality.(see above)
          * Calling both will result in the second call overwriting the setting of the first call.
          * Similarly calling this function more than once will have the same effect. 
          * Only the last urlPattern will be valid.
@@ -231,7 +235,7 @@ public final class DataSource
 		 * @param urlPattern is a template for generating valid URL's for identifiers. 
 		 * @return the same Builder object so you can chain setters
 		 */
-		public Builder urlPattern (String urlPattern) throws IDMapperException
+		public Builder urlPattern (String urlPattern) 
 		{
             //Clear any previously registered values
             byPrefix.values().remove(current);
@@ -253,11 +257,8 @@ public final class DataSource
                     throw new IllegalArgumentException("Url maker pattern for " + current + 
                         "' should be more than just \"$id\".");
                 }
-                DataSource previous = getByURLPatternOnly(urlPattern, false);
-                if (previous != null){
-                    throw new IDMapperException ("There is already a DataSource " + previous + 
-                            " registered with this urlPattern " + urlPattern + " so unable to set in " + current);
-                }
+                //Can not check for previous as existing code allows two or more DataSoruces to share a URL pattern.
+                //FOr example BIO.
                 current.setFixes(urlPattern.substring(0, pos), urlPattern.substring(pos + 3));
 			}
 			return this;
@@ -266,7 +267,14 @@ public final class DataSource
         /**
          * Uses this nameSpace to construct url where th id will be the localName 
          * <p>
-         * Warning this method and urlPattern(String) have the same functionality. 
+         * If more than one DataSource source is set with the same nameSpace this methond will throw an exception.
+         * However the namespace information can be overwritten using the urlPattern method.
+         * Only the last datasource set using either method will be returned 
+         *    by the meothods getByURLPattern and getByNameSpace.
+         * For Historical reason the method urlPattern can not enforce that no two DataSources share the same namespace.
+         * This method is new so can and does.
+         * <p>
+         * Warning this method and urlPattern(String) has almost (see above) the same functionality. 
          * It is equivellent to calling urlPattern(nameSpace + "$id").
          * Calling both will result in the second call overwriting the setting of the first call.
          * Similarly calling this function more than once will have the same effect. 
@@ -275,12 +283,16 @@ public final class DataSource
          * @param prefix
          * @return 
          */
-        public Builder nameSpace(String nameSpace){
+        public Builder nameSpace(String nameSpace) throws IDMapperException{
             //Clear any previously registered values
             byPrefix.values().remove(current);
             withPrefixAndPostfix.remove(current);
 
             if (nameSpace != null && !nameSpace.isEmpty()){
+                if (byPrefix.get(nameSpace) != null){
+                    throw new IDMapperException("Unable to set nameSpace for DataSoucrce: " + current + 
+                            " because is has already been used by DataSource: " + byPrefix.get(nameSpace));
+                }
                 current.setFixes(nameSpace, "");
             }
             return this;
