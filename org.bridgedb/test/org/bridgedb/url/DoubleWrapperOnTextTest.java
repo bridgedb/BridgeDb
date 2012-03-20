@@ -36,7 +36,7 @@ public class DoubleWrapperOnTextTest extends IDMapperTest {
      * Note: According to the Junit api 
      * "The @BeforeClass methods of superclasses will be run before those the current class."
      */
-    public static void setupVariables2(){
+    public static void setupVariables2() throws IDMapperException{
          //If the actual source to be tested does not contain these please overwrite with ones that do exist.
         DataSource.register("TestDS1", "TestDS1").nameSpace("www.example.org#");
         DataSource.register("TestDS2", "TestDS2").nameSpace("www.example.com:");
