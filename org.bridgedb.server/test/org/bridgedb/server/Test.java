@@ -38,7 +38,7 @@ public class Test {
 	private boolean configExists;
 	
 	@Before
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 	    
 	   
 	    File f= new File(IDMapperService.CONF_GDBS);
@@ -70,7 +70,7 @@ public class Test {
 	
 
 	@After
-    protected void tearDown() throws Exception
+    public void tearDown() throws Exception
     {
 	    if (server != null)
 	    {
