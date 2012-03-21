@@ -187,7 +187,7 @@ public abstract class URLMapperTest {
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         org.junit.Assume.assumeTrue(badID != null);
         System.out.println("FreeSearchBad");
-        Set<String> results = urlMapper.freeSearch(badID, 10);
+        Set<String> results = urlMapper.urlSearch(badID, 10);
         assertTrue (results == null || results.isEmpty());
     }
     

@@ -69,7 +69,7 @@ public class WrapperURLMapper implements URLMapper{
     }
 
     @Override
-    public Set<String> freeSearch(String text, int limit) throws IDMapperException {
+    public Set<String> urlSearch(String text, int limit) throws IDMapperException {
         Set<Xref> xrefs = idMapper.freeSearch(text, limit);
         HashSet<String> result = new HashSet<String>();
         for (Xref tgt: xrefs){
