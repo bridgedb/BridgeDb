@@ -52,14 +52,16 @@ public abstract class IDMapperTestBase {
      * Note: According to the Junit api 
      * "The @BeforeClass methods of superclasses will be run before those the current class."
      */
-    public static void setupVariables(){
+    public static void setupVariables() throws IDMapperException{
         //If the actual source to be tested does not contain these please overwrite with ones that do exist.
-        DataSource1 = DataSource.register("TestDS1", "TestDS1").asDataSource();
-        DataSource2 = DataSource.register("TestDS2", "TestDS2").asDataSource();
-        DataSource3 = DataSource.register("TestDS3", "TestDS3").asDataSource();
+        DataSource1 = DataSource.register("TestDS1", "TestDS1").
+                urlPattern("www.example.com/pizza/$id/topping").asDataSource();
+        DataSource2 = DataSource.register("TestDS2", "TestDS2").urlPattern("www.example.com/$id").asDataSource();
+        DataSource3 = DataSource.register("TestDS3", "TestDS3").nameSpace("www.example.org#").asDataSource();
         //This DataSource MUST not be supported
-        DataSourceBad = DataSource.register("TestDSBad", "TestDSBad").asDataSource();
-    
+        DataSourceBad = DataSource.register("TestDSBad", "TestDSBad")
+                .nameSpace("www.NotInTheURlMapper.com#").asDataSource();
+   
         //Set of Xrefs that are expected to map together.
         //Note: Ids intentionally equals for testing of DataCollection
         map1xref1 = new Xref("123", DataSource1);

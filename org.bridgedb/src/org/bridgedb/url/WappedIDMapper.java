@@ -75,7 +75,7 @@ public class WappedIDMapper implements IDMapper{
     @Override
     public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
         HashSet<Xref> results = new HashSet<Xref>();
-        for (String url: urlMapper.freeSearch(text, limit)){
+        for (String url: urlMapper.urlSearch(text, limit)){
             results.add(DataSource.uriToXref(url));
         }
         return results;
