@@ -9,6 +9,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.IDMapperSQL;
 import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
 
@@ -20,7 +21,7 @@ public class WsSqlXRefByPossitionTest extends XrefByPossitionTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestIDSQLAccess();
         IDMapper inner = new IDMapperSQL(sqlAccess);
         WSService webService = new WSService(inner);
         xrefByPossition = new WSMapper(webService);
