@@ -162,43 +162,33 @@ public class URLMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabil
         if (ref.getId() == null || ref.getDataSource() == null){
             return new HashSet<Xref>();
         }
-        if (tgtDataSources.length == 0){
-            return mapID(ref);
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT targetURL as url  ");
+        query.append("FROM link      ");
+        query.append("where                    ");
+        query.append("   sourceURL = \"");
+            query.append(ref.getUrl());
+            query.append("\"");
+        if (tgtDataSources.length > 0){    
+            query.append("   AND ( "); 
+            query.append("      targetNameSpace = \"");
+                query.append(tgtDataSources[0].getNameSpace());
+                query.append("\" ");
+            for (int i = 1; i < tgtDataSources.length; i++){
+                query.append("      OR   ");     
+                query.append("      targetNameSpace = \"");
+                    query.append(tgtDataSources[i].getNameSpace());
+                    query.append("\"  ");
+            }
+            query.append("   )");
         }
-        String query = "SELECT targetURL as url  "
-                + "FROM link      "
-                + "where                    "
-                + "   sourceURL = \"" + ref.getUrl() + "\""
-                + "   AND ( " 
-                + "      targetNameSpace = \"" + tgtDataSources[0].getNameSpace() + "\" ";
-        for (int i = 1; i < tgtDataSources.length; i++){
-            query+= "      OR   "     
-                   + "      targetNameSpace = \"" + tgtDataSources[i].getNameSpace() + "\"  ";
-        }
-        query+= "   )";
         Statement statement = this.createStatement();
         try {
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(query.toString());
             return resultSetToXrefSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.out.println(query);
-            throw new IDMapperException("Unable to run query.", ex);
-        }
-    }
-
-    private Set<Xref> mapID(Xref ref) throws IDMapperException {
-        String query = "SELECT distinct targetURL as url "
-                + "FROM link      "
-                + "where                    "
-                + "   sourceURL = \"" + ref.getUrl() + "\"";
-        Statement statement = this.createStatement();
-        try {
-            ResultSet rs = statement.executeQuery(query);
-            return resultSetToXrefSet(rs);
-        } catch (SQLException ex) {
-            System.out.println(query);
-            ex.printStackTrace();
             throw new IDMapperException("Unable to run query.", ex);
         }
     }
