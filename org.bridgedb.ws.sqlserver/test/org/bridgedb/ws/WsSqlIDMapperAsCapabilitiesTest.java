@@ -11,7 +11,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.IDMapperSQL;
 import org.bridgedb.sql.MySQLAccess;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.SqlFactory;
 import org.junit.BeforeClass;
 
 /**
@@ -23,7 +23,7 @@ public class WsSqlIDMapperAsCapabilitiesTest extends IDMapperCapabilitiesTest{
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
 
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();;
+        SQLAccess sqlAccess = SqlFactory.createIDSQLAccess();;
         IDMapper inner = new IDMapperSQL(sqlAccess);
         WSService wsService = new WSService(inner);
         idMapper = new WSMapper(wsService){
