@@ -32,16 +32,16 @@ import org.bridgedb.ws.XrefByPossition;
  * 
  * @author Christian
  */
-public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, 
+public class URLMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, 
         XrefIterator, XrefByPossition{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	private static final int SQL_COMPAT_VERSION = 4;
-         
+	private static final int SQL_COMPAT_VERSION = 5;
+    
     private PreparedStatement pstInsertLink = null;
     private PreparedStatement pstCheckLink = null;
 
-    public IDMapperSQL(SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public URLMapperSQL(SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(sqlAccess);
     }   
 
@@ -49,7 +49,7 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
     boolean correctVersion(int currentVersion) {
         return currentVersion == SQL_COMPAT_VERSION;
     }
-    
+
     /**
 	 * Excecutes several SQL statements to create the tables and indexes in the database the given
 	 * connection is connected to
@@ -63,17 +63,20 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
 			Statement sh = createStatement();
 			sh.execute( //Add compatibility version of GDB
 					"INSERT INTO info VALUES ( " + SQL_COMPAT_VERSION + ")");
-			sh.execute("CREATE TABLE                        "
-                    + "IF NOT EXISTS                        "
-                    + "link                                 " 
-					+ " (   idLeft VARCHAR(50) NOT NULL,	" 
-					+ "     codeLeft VARCHAR(100) NOT NULL,	" 
-					+ "     idRight VARCHAR(50) NOT NULL,	" 
-					+ "     codeRight VARCHAR(100) NOT NULL," 
-					+ "     provenance INT,                 "  //Type still under review
-					+ "     PRIMARY KEY (idLeft, codeLeft,  " 
-					+ "		idRight, codeRight, provenance) 			" 
-					+ " )									");
+			sh.execute("CREATE TABLE                                                    "
+                    + "IF NOT EXISTS                                                    "
+                    + "link                                                             " 
+                            //As most search are on full url full url is stored in one column
+					+ " (   sourceURL VARCHAR(150) NOT NULL,                            "
+                            //for functions that require the sourceNameSpace/ DataSource
+                    + "     sourceNameSpace VARCHAR(100) NOT NULL,                      "
+                            //Again a speed for space choice.
+					+ "     targetURL VARCHAR(150) NOT NULL,                               " 
+                            //Targets are oftne filtered on NameSpace
+					+ "     targetNameSpace VARCHAR(100) NOT NULL,                         "        
+					+ "     provenance INT,                                             "  //Type still under review
+					+ "     PRIMARY KEY (sourceURL, targetURL, provenance)                 " 
+					+ " )									                            ");
             sh.close();
 		} catch (SQLException e)
 		{
@@ -85,38 +88,35 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
 
     @Override
     public void init(Provenance provenance) throws BridgeDbSqlException {
-        super.init();
 		try
 		{
 			pstInsertLink = possibleOpenConnection.prepareStatement("INSERT INTO link    "
-                    + "(idLeft, codeLeft,                       "   
-                    + " idRight, codeRight,                     "
+                    + "(sourceURL, sourceNameSpace,                       "   
+                    + " targetURL, targetNameSpace,                     "
                     + " provenance )                            " 
                     + "VALUES (?, ?, ?, ?,                      " 
                     + provenance.getId() + ")                   ");
 			pstCheckLink = possibleOpenConnection.prepareStatement("SELECT EXISTS "
                     + "(SELECT * FROM link      "
                     + "where                    "
-                    + "   idLeft = ?            "
-                    + "   AND codeLeft = ?      "   
-                    + "   AND idRight = ?       "
-                    + "   AND codeRight = ?     "
+                    + "   sourceURL = ?            "
+                    + "   AND targetURL = ?      "   
                     + "   AND provenance = " + provenance.getId() + ")");
 		}
 		catch (SQLException e)
 		{
 			throw new BridgeDbSqlException ("Error creating prepared statements", e);
 		}
-	}
+ 	}
 
     @Override
     public void insertLink(Xref source, Xref target) throws BridgeDbSqlException {
         boolean exists = false;
+        checkXrefValidToLoadInURLDataBase(source);
+        checkXrefValidToLoadInURLDataBase(target);
         try {
-            pstCheckLink.setString(1, source.getId());
-            pstCheckLink.setString(2, source.getDataSource().getSystemCode());
-            pstCheckLink.setString(3, target.getId());
-            pstCheckLink.setString(4, target.getDataSource().getSystemCode());
+            pstCheckLink.setString(1, source.getUrl());
+            pstCheckLink.setString(2, target.getUrl());
             ResultSet rs = pstCheckLink.executeQuery();
             if (rs.next()) {
                 exists = rs.getBoolean(1);
@@ -127,10 +127,10 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
                     System.out.println("Already skipped " + doubleCount + " links that already exist with this provenance");
                 }
             } else {
-                pstInsertLink.setString(1, source.getId());
-                pstInsertLink.setString(2, source.getDataSource().getSystemCode());
-                pstInsertLink.setString(3, target.getId());
-                pstInsertLink.setString(4, target.getDataSource().getSystemCode());
+                pstInsertLink.setString(1, source.getUrl());
+                pstInsertLink.setString(2, source.getDataSource().getNameSpace());
+                pstInsertLink.setString(3, target.getUrl());
+                pstInsertLink.setString(4, target.getDataSource().getNameSpace());
                 pstInsertLink.executeUpdate();
                 insertCount++;
                 if (insertCount % BLOCK_SIZE == 0){
@@ -140,10 +140,22 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
             }
         } catch (SQLException ex) {
             System.out.println(ex);
-            throw new BridgeDbSqlException ("Error inserting link");
+            throw new BridgeDbSqlException ("Error inserting link ", ex);
         }
     }
 
+    private void checkXrefValidToLoadInURLDataBase(Xref xref) throws BridgeDbSqlException{
+        if (xref.getId() == null) throw new BridgeDbSqlException("The id may not be null");
+        DataSource ds = xref.getDataSource();
+        if (ds == null) throw new BridgeDbSqlException("The DataSource may not be null");
+        if (ds.getNameSpace() == null) throw new BridgeDbSqlException("The DataSource's namespace may not be null");
+        if (ds.getNameSpace().isEmpty()) throw new BridgeDbSqlException("The DataSource's namespace may not be empty");
+        if (!ds.getUrl("$id").equals(ds.getNameSpace() + "$id")) {
+            throw new BridgeDbSqlException("The DataSource's urlPattern was " + ds.getUrl("$id") + " "
+                    + "However this implemenation does not allow postfixes (the part after the \"$id\"");
+        }
+    }
+    
     //***** IDMapper funtctions  *****
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
@@ -153,16 +165,15 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
         if (tgtDataSources.length == 0){
             return mapID(ref);
         }
-        String query = "SELECT idRight as id, codeRight as code "
+        String query = "SELECT targetURL as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   idLeft = \"" + ref.getId() + "\""
-                + "   AND codeLeft = \"" + ref.getDataSource().getSystemCode() + "\""
-                + "   AND (" 
-                + "      codeRight = \"" + tgtDataSources[0].getSystemCode() + "\"";
+                + "   sourceURL = \"" + ref.getUrl() + "\""
+                + "   AND ( " 
+                + "      targetNameSpace = \"" + tgtDataSources[0].getNameSpace() + "\" ";
         for (int i = 1; i < tgtDataSources.length; i++){
-            query+= "      OR "
-                   + "      codeRight = \"" + tgtDataSources[i].getSystemCode() + "\"";
+            query+= "      OR   "     
+                   + "      targetNameSpace = \"" + tgtDataSources[i].getNameSpace() + "\"  ";
         }
         query+= "   )";
         Statement statement = this.createStatement();
@@ -171,16 +182,16 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
             return resultSetToXrefSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
+            System.out.println(query);
             throw new IDMapperException("Unable to run query.", ex);
         }
     }
 
     private Set<Xref> mapID(Xref ref) throws IDMapperException {
-        String query = "SELECT distinct idRight as id, codeRight as code  "
+        String query = "SELECT distinct targetURL as url "
                 + "FROM link      "
                 + "where                    "
-                + "   idLeft = \"" + ref.getId() + "\""
-                + "   AND codeLeft = \"" + ref.getDataSource().getSystemCode() + "\"";
+                + "   sourceURL = \"" + ref.getUrl() + "\"";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -196,10 +207,8 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
         HashSet<Xref> results = new HashSet<Xref>();
         try {
             while (rs.next()){
-                String id = rs.getString("id");
-                String sysCode = rs.getString("code");
-                DataSource ds = DataSource.getBySystemCode(sysCode);
-                Xref xref = new Xref(id, ds);
+                String url = rs.getString("url");
+                Xref xref = DataSource.uriToXref(url);
                 results.add(xref);
             }
         } catch (SQLException ex) {
@@ -216,8 +225,9 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
         String query = "SELECT EXISTS "
                 + "(SELECT * FROM link      "
                 + "where                    "
-                + "   idLeft = \"" + xref.getId() + "\""
-                + "   AND codeLeft = \"" + xref.getDataSource().getSystemCode() + "\""   
+                + "       sourceURL = \"" + xref.getUrl() + "\"" 
+                + "   OR "
+                + "       targetURL = \"" + xref.getUrl() + "\""   
                 + ")";
         Statement statement = this.createStatement();
         try {
@@ -232,15 +242,15 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
 
     @Override
     public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
-        String query = "SELECT distinct idRight as id, codeRight as code  "
+        String query = "SELECT distinct sourceURL as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   idRight = \"" + text + "\" "
+                + "   sourceURL LIKE \"%" + text + "\" "
                 + "UNION "
-                + "SELECT distinct idLeft as id, codeLeft as code  "
+                + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   idLeft = \"" + text + "\" ";
+                + "   targetURL LIKE \"%" + text + "\" ";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -251,11 +261,11 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
             throw new IDMapperException("Unable to run query.", ex);
         }
     }
-    
+
     //***** IDMapperCapabilities funtctions  *****
     @Override
     public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
-        String query = "SELECT DISTINCT codeLeft as code "
+        String query = "SELECT DISTINCT sourceNameSpace as nameSpace "
                 + "FROM link      ";
         Statement statement = this.createStatement();
         try {
@@ -271,8 +281,8 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
         HashSet<DataSource> results = new HashSet<DataSource>();
         try {
             while (rs.next()){
-                String sysCode = rs.getString("code");
-                DataSource ds = DataSource.getBySystemCode(sysCode);
+                String nameSpace = rs.getString("nameSpace");
+                DataSource ds = DataSource.getByNameSpace(nameSpace);
                 results.add(ds);
             }
         } catch (SQLException ex) {
@@ -283,7 +293,7 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
 
     @Override
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
-        String query = "SELECT DISTINCT codeRight as code "
+        String query = "SELECT DISTINCT targetNameSpace as nameSpace "
                 + "FROM link      ";
         Statement statement = this.createStatement();
         try {
@@ -300,8 +310,8 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
         String query = "SELECT EXISTS "
                 + "(SELECT * FROM link      "
                 + "where                    "
-                + "   codeLeft = \"" + src.getSystemCode() + "\""
-                + "   AND codeRight = \"" + tgt.getSystemCode() + "\""   
+                + "   sourceNameSpace = \"" + src.getNameSpace() + "\""
+                + "   AND targetNameSpace = \"" + tgt.getNameSpace() + "\""   
                 + ")";
         Statement statement = this.createStatement();
         try {
@@ -328,10 +338,10 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
      * @throws IDMapperException 
      */
     public Set<Xref> getXrefByPossition(int possition, int limit) throws IDMapperException {
-        String query = "SELECT distinct idRight as id, codeRight as code  "
+        String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "UNION "
-                + "SELECT distinct idLeft as id, codeLeft as code  "
+                + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "LIMIT " + possition + " , " + limit;
         Statement statement = this.createStatement();
@@ -366,10 +376,10 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
      * @throws IDMapperException 
      */
     public Xref getXrefByPossition(int possition) throws IDMapperException {
-        String query = "SELECT distinct idRight as id, codeRight as code  "
+        String query = "SELECT distinct  sourceURL as url "
                 + "FROM link      "
                 + "UNION "
-                + "SELECT distinct idLeft as id, codeLeft as code  "
+                + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "LIMIT " + possition + ",1";
         Statement statement = this.createStatement();
@@ -403,23 +413,23 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
      * @throws IDMapperException 
      */
     public Set<Xref> getXrefByPossition(DataSource ds, int possition, int limit) throws IDMapperException {
-        String query = "SELECT distinct idRight as id "
+        String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
-                + "codeRight = \"" + ds.getSystemCode() + "\" "
+                + "sourceURL = \"" + ds.getNameSpace() + "\" "
                 + "UNION "
-                + "SELECT distinct idLeft as id  "
+                + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "WHERE "
-                + "codeLeft = \"" + ds.getSystemCode() + "\" "
+                + "targetUrl = \"" + ds.getNameSpace() + "\" "
                 + "LIMIT " + possition + " , " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
             HashSet<Xref> results = new HashSet<Xref>();
             while (rs.next()){
-                String id = rs.getString("id");
-                results.add(new Xref(id, ds));
+                String url = rs.getString("url");
+                results.add(DataSource.uriToXref(url));
             } 
             return results;
         } catch (SQLException ex) {
@@ -442,15 +452,15 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
      * @throws IDMapperException 
      */
     public Xref getXrefByPossition(DataSource ds, int possition) throws IDMapperException {
-        String query = "SELECT distinct idRight as id "
+        String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
-                + "codeRight = \"" + ds.getSystemCode() + "\" "
+                + "sourceURL = \"" + ds.getNameSpace() + "\" "
                 + "UNION "
-                + "SELECT distinct idLeft as id  "
+                + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "WHERE "
-                + "codeLeft = \"" + ds.getSystemCode() + "\" "
+                + "targetUrl = \"" + ds.getNameSpace() + "\" "
                 + "LIMIT " + possition + ",1";
         Statement statement = this.createStatement();
         try {
