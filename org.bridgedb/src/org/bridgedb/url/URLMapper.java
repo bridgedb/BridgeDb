@@ -35,6 +35,9 @@ public interface URLMapper {
 	 * Get all cross-references for a set of entities, restricting the
 	 * result to contain only references from the given set of name spaces.
      * Supports one-to-one mapping and one-to-many mapping.
+     * 
+     * Similar to the mapID method in IDMapper.
+     * 
      * @param srcURLs source URLs, Strings that DataSource can split into prefix, id and postfix
      * @param tgtNameSpaces target name spaces (prefix) that can be included in the resulst. Set this to null
      *   if you want to retrieve all results.
@@ -48,6 +51,9 @@ public interface URLMapper {
 	/**
 	 * Get all cross-references for the given entity, restricting the
 	 * result to contain only references from the given set of name spaces.
+     * 
+     * Similar to the mapID method in IDMapper.
+     * 
 	 * @param ref the entity to get cross-references for. 
      * @param tgtNameSpaces target name spaces (prefix) that can be included in the resulst. Set this to null
      *   if you want to retrieve all results.
@@ -67,12 +73,14 @@ public interface URLMapper {
 
     /**
      * free text search for matching symbols or identifiers.
+     * 
+     * Similar to the freeSearch meathod in IDMapper
      * @param text text to search
      * @param limit up limit of number of hits
      * @return a set of hit references
      * @throws IDMapperException if failed
      */
-    public Set<String> freeSearch (String text, int limit) throws IDMapperException;
+    public Set<String> urlSearch (String text, int limit) throws IDMapperException;
 
     /**
      * Identical to IDMapper method.
