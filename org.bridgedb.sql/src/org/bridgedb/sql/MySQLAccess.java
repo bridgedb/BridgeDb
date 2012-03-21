@@ -27,7 +27,7 @@ public class MySQLAccess implements SQLAccess{
      * 
      * @throws IMSException If there is a problem connecting to the database.
      */
-    public MySQLAccess(String dbUrl, String username, String password) throws BridgeDbSqlException {
+    MySQLAccess(String dbUrl, String username, String password) throws BridgeDbSqlException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             if (dbUrl.equals("jdbc:mysql://localhost:3306/irs")){
