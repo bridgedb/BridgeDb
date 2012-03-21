@@ -24,7 +24,7 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestIDSQLAccess();
         connectionOk = true;
         iDMapperSQL = new IDMapperSQL(sqlAccess);
         iDMapperSQL.dropSQLTables();
