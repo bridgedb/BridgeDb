@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceException;
 import org.bridgedb.provenance.ProvenanceFactory;
 import org.bridgedb.provenance.SimpleProvenance;
+import org.bridgedb.url.URLMapper;
 import org.bridgedb.ws.XrefByPossition;
 
 /**
@@ -32,7 +34,7 @@ import org.bridgedb.ws.XrefByPossition;
  * 
  * @author Christian
  */
-public class URLMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, 
+public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, 
         XrefIterator, XrefByPossition{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
@@ -156,6 +158,109 @@ public class URLMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabil
         }
     }
     
+    //***** URLMapper funtctions  *****
+    @Override
+    public Map<String, Set<String>> mapURL(Collection<String> srcURLs, String... tgtNameSpaces) throws IDMapperException {
+        HashMap<String, Set<String>> results = new HashMap<String, Set<String>>();
+        for (String ref:srcURLs){
+            Set<String> mapped = this.mapURL(ref, tgtNameSpaces);
+            results.put(ref, mapped);
+        }
+        return results;
+    }
+
+    @Override
+    public Set<String> mapURL(String ref, String... tgtNameSpaces) throws IDMapperException {
+        if (ref == null) throw new IDMapperException ("Illegal null ref. Please use a URL");
+        if (ref.isEmpty()) throw new IDMapperException ("Illegal empty ref. Please use a URL");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT targetURL as url  ");
+        query.append("FROM link      ");
+        query.append("where                    ");
+        query.append("   sourceURL = \"");
+            query.append(ref);
+            query.append("\"");
+        if (tgtNameSpaces.length > 0){    
+            query.append("   AND ( "); 
+            query.append("      targetNameSpace = \"");
+                query.append(tgtNameSpaces[0]);
+                query.append("\" ");
+            for (int i = 1; i < tgtNameSpaces.length; i++){
+                query.append("      OR   ");     
+                query.append("      targetNameSpace = \"");
+                    query.append(tgtNameSpaces[i]);
+                    query.append("\"  ");
+            }
+            query.append("   )");
+        }
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToURLSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println(query);
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    private Set<String> resultSetToURLSet(ResultSet rs ) throws IDMapperException{
+        HashSet<String> results = new HashSet<String>();
+        try {
+            while (rs.next()){
+                String url = rs.getString("url");
+                results.add(url);
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+
+    @Override
+    public boolean uriExists(String URL) throws IDMapperException {
+        if (URL == null) return false;
+        if (URL.isEmpty()) return false;
+        String query = "SELECT EXISTS "
+                + "(SELECT * FROM link      "
+                + "where                    "
+                + "       sourceURL = \"" + URL + "\"" 
+                + "   OR "
+                + "       targetURL = \"" + URL + "\""   
+                + ")";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            return rs.getBoolean(1);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public Set<String> urlSearch(String text, int limit) throws IDMapperException {
+        String query = "SELECT distinct sourceURL as url  "
+                + "FROM link      "
+                + "where                    "
+                + "   sourceURL LIKE \"%" + text + "\" "
+                + "UNION "
+                + "SELECT distinct targetUrl as url  "
+                + "FROM link      "
+                + "where                    "
+                + "   targetURL LIKE \"%" + text + "\" ";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            return resultSetToURLSet(rs);
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
     //***** IDMapper funtctions  *****
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {

@@ -24,8 +24,6 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
         Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
         DataSource expected = dataSources.iterator().next();
         
-        System.out.println(dataSources);
-        System.out.println(DataSource1);
         assertTrue(dataSources.contains(DataSource1));
         assertTrue(dataSources.contains(DataSource2));
         assertTrue(dataSources.contains(DataSource3));
