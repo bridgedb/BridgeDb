@@ -25,10 +25,6 @@ public class URLMapperSQLTest extends URLMapperTest {
 
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        DataSource.register("TestDS1", "TestDS1").nameSpace("example:");
-        map1URL1 = "example:123";
-        map2URL1 = "example:456";
-        map3URL1 = "example:789";
 
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestURLSQLAccess();
