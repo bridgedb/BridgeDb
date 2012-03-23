@@ -16,4 +16,9 @@ public class SqlFactory {
         return sqlAccess;
     } 
 
+    public static SQLAccess createURLSQLAccess() throws BridgeDbSqlException {
+        SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/imsurltest", "imstest", "imstest");
+        sqlAccess.getConnection();
+        return sqlAccess;
+    } 
 }
