@@ -1,5 +1,8 @@
 package org.bridgedb.provenance;
 
+import java.util.Date;
+import org.bridgedb.DataSource;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -12,8 +15,10 @@ package org.bridgedb.provenance;
  */
 public class SimpleProvenance implements Provenance{
 
-    private String createdBy;
+    private DataSource source;
     private String predicate;
+    private DataSource target;
+    private String createdBy;
     private long creationDate;
     private long uploadDate;
     private int id;
@@ -25,8 +30,9 @@ public class SimpleProvenance implements Provenance{
      * @param creationDate
      * @param uploadDate 
      */
-    public SimpleProvenance (String createdBy, String predicate, long creation, long upload){
-        this(Provenance.NO_ID_ASSIGNED, createdBy, predicate, creation, upload);
+    public SimpleProvenance (DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation, long upload){
+        this(Provenance.NO_ID_ASSIGNED, source, predicate, target, createdBy, creation, upload);
     }
     
     /**
@@ -37,10 +43,13 @@ public class SimpleProvenance implements Provenance{
      * @param creationDate
      * @param uploadDate 
      */
-    public SimpleProvenance (int id, String createdBy, String predicate, long creation, long upload){
+    public SimpleProvenance (int id, DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation, long upload){
         this.id = id;
-        this.createdBy = createdBy;
+        this.source = source;
         this.predicate = predicate;
+        this.target = target;
+        this.createdBy = createdBy;
         this.creationDate = creation;
         this.uploadDate = upload;
     }
@@ -50,8 +59,10 @@ public class SimpleProvenance implements Provenance{
         if (other instanceof SimpleProvenance){
             SimpleProvenance sp = (SimpleProvenance)other;
             if (this.id != sp.id) return false;
-            if (!this.createdBy.equals(sp.createdBy)) return false;
+            if (this.source !=  sp.source) return false;
             if (!this.predicate.equals(sp.predicate)) return false;
+            if (this.target !=  sp.target) return false;
+            if (!this.createdBy.equals(sp.createdBy)) return false;
             if (this.creationDate != sp.creationDate) return false;
             return true;
         }
@@ -87,5 +98,19 @@ public class SimpleProvenance implements Provenance{
     public int getId() {
         return id;
     }
-    
+
+    @Override
+    public DataSource getSource() {
+        return source;
+    }
+
+    @Override
+    public DataSource getTarget() {
+        return target;
+    }
+
+    @Override
+    public String toString(){
+        return source + " " + predicate + " " + target + " " + createdBy + " " + new Date(this.creationDate);
+    }
 }

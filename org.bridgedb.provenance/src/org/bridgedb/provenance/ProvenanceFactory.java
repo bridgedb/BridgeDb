@@ -1,8 +1,6 @@
 package org.bridgedb.provenance;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import org.bridgedb.DataSource;
 
 /**
  * The purpose of this class is to provide a single entry point for creating provenance.
@@ -13,9 +11,11 @@ import java.util.GregorianCalendar;
  */
 public interface ProvenanceFactory {
     
-    public Provenance createProvenance(String createdBy, String predicate, long creation, long upload) throws ProvenanceException;
+    public Provenance createProvenance(DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation, long upload) throws ProvenanceException;
     
-    public Provenance createProvenance(String createdBy, String predicate, long creation) throws ProvenanceException;
+    public Provenance createProvenance(DataSource source, String predicate, DataSource target,
+            String createdBy, long creation) throws ProvenanceException;
     
     public Provenance createProvenace(Provenance first, Provenance second) throws ProvenanceException;
 }

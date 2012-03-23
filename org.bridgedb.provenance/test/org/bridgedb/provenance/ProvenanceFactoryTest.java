@@ -4,14 +4,7 @@
  */
 package org.bridgedb.provenance;
 
-import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.ProvenanceFactory;
-import org.bridgedb.provenance.ProvenanceFactory;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.bridgedb.IDMapperTestBase;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
@@ -20,27 +13,10 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public abstract class ProvenanceFactoryTest {
+public abstract class ProvenanceFactoryTest extends IDMapperTestBase {
     
     public static ProvenanceFactory factory;
     
-    /**
-     * Test of createProvenance method, of class ProvenanceFactory.
-     * /
-    @Test
-    public void testCreateProvenance_4args() throws Exception {
-        System.out.println("createProvenance");
-        String createdBy = "A";
-        String predicate = "";
-        long creation = 0L;
-        long upload = 0L;
-        ProvenanceFactory instance = new ProvenanceFactoryImpl();
-        Provenance expResult = null;
-        Provenance result = instance.createProvenance(createdBy, predicate, creation, upload);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
 
     /**
      * Test of createProvenance method, of class ProvenanceFactory.
@@ -51,8 +27,53 @@ public abstract class ProvenanceFactoryTest {
         String createdBy = "createdB";
         String predicate = "predicate";
         long creation = 1000;
-        Provenance expResult = factory.createProvenance(createdBy, predicate, creation);
-        Provenance result = factory.createProvenance(createdBy, predicate, creation);
+        Provenance expResult = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
+        Provenance result = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
+        assertEquals(expResult, result);
+        //assertTrue(false);
+    }
+
+    /**
+     * Test of createProvenance method, of class ProvenanceFactory.
+     */
+    @Test
+    public void testCreateProvenance_3argsDifferentSource() throws Exception {
+        System.out.println("CreateProvenance_3args");
+        String createdBy = "createdB";
+        String predicate = "predicate";
+        long creation = 1000;
+        Provenance expResult = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
+        Provenance result = factory.createProvenance(DataSource2, predicate, DataSource2, createdBy, creation);
+        assertThat(expResult, not(result));
+        //assertTrue(false);
+    }
+
+    /**
+     * Test of createProvenance method, of class ProvenanceFactory.
+     */
+    @Test
+    public void testCreateProvenance_3argsDifferentTarget() throws Exception {
+        System.out.println("CreateProvenance_3args");
+        String createdBy = "createdB";
+        String predicate = "predicate";
+        long creation = 1000;
+        Provenance expResult = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
+        Provenance result = factory.createProvenance(DataSource3, predicate, DataSource2, createdBy, creation);
+        assertThat(expResult, not(result));
+        //assertTrue(false);
+    }
+    
+    /**
+     * Test of createProvenance method, of class ProvenanceFactory.
+     */
+    @Test
+    public void testCreateProvenance_3argsSourceEqualsTarget() throws Exception {
+        System.out.println("CreateProvenance_3args");
+        String createdBy = "createdB";
+        String predicate = "predicate";
+        long creation = 1000;
+        Provenance expResult = factory.createProvenance(DataSource1, predicate, DataSource1, createdBy, creation);
+        Provenance result = factory.createProvenance(DataSource1, predicate, DataSource1, createdBy, creation);
         assertEquals(expResult, result);
         //assertTrue(false);
     }
@@ -66,8 +87,8 @@ public abstract class ProvenanceFactoryTest {
         String createdBy = "createdB";
         String predicate = "predicate";
         long creation = 1000;
-        Provenance expResult = factory.createProvenance(createdBy, predicate, creation);
-        Provenance result = factory.createProvenance(createdBy+"2", predicate, creation);
+        Provenance expResult = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
+        Provenance result = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy + 2, creation);
         assertThat(expResult, not(result));
         //assertTrue(false);
     }
@@ -81,8 +102,8 @@ public abstract class ProvenanceFactoryTest {
         String createdBy = "createdB";
         String predicate = "predicate";
         long creation = 1000;
-        Provenance expResult = factory.createProvenance(createdBy, predicate, creation);
-        Provenance result = factory.createProvenance(createdBy, predicate + "2", creation);
+        Provenance expResult = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
+        Provenance result = factory.createProvenance(DataSource1, predicate + 2, DataSource2, createdBy, creation);
         assertThat(expResult, not(result));
         //assertTrue(false);
     }
@@ -96,26 +117,10 @@ public abstract class ProvenanceFactoryTest {
         String createdBy = "createdB";
         String predicate = "predicate";
         long creation = 1000;
-        Provenance expResult = factory.createProvenance(createdBy, predicate, creation);
-        Provenance result = factory.createProvenance(createdBy, predicate, creation + 2);
+        Provenance expResult = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
+        Provenance result = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation + 2);
         assertThat(expResult, not(result));
         //assertTrue(false);
     }
 
-    /**
-     * Test of createProvenace method, of class ProvenanceFactory.
-     * /
-    @Test
-    public void testCreateProvenace() throws Exception {
-        System.out.println("createProvenace");
-        Provenance first = null;
-        Provenance second = null;
-        ProvenanceFactory instance = new ProvenanceFactoryImpl();
-        Provenance expResult = null;
-        Provenance result = instance.createProvenace(first, second);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-     * */
  }
