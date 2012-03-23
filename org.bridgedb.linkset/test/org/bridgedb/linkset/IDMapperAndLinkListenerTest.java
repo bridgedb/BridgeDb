@@ -1,5 +1,6 @@
 package org.bridgedb.linkset;
 
+import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceFactory;
@@ -24,37 +25,48 @@ public abstract class IDMapperAndLinkListenerTest extends IDMapperTest{
      * @throws IDMapperException 
      */
     protected static void defaultLoadData() throws IDMapperException{
-        Provenance provenance = provenanceFactory.createProvenance("testProvenance", "mapsTo", 1000);
+        Provenance provenance;
+        provenance = provenanceFactory.createProvenance(DataSource1, "mapsTo", DataSource2, 
+                "testProvenance", new Date().getTime());
         listener.init(provenance);
-        //First set of matches
         listener.insertLink(map1xref1, map1xref2);
-        listener.insertLink(map1xref2, map1xref3);
-        //As the Listener is not required to support transativity
-        listener.insertLink(map1xref1, map1xref3);
-        //As the Listner is not required to be Semetric
-        listener.insertLink(map1xref2, map1xref1);
-        listener.insertLink(map1xref3, map1xref1);
-        listener.insertLink(map1xref3, map1xref3);
-        
-        //Second set of matches
         listener.insertLink(map2xref1, map2xref2);
-        listener.insertLink(map2xref2, map2xref3);
-        //As the Listener is not required to support transativity
-        listener.insertLink(map2xref1, map2xref3);
-        //As the Listner is not required to be Semetric
-        listener.insertLink(map2xref2, map2xref1);
-        listener.insertLink(map2xref3, map2xref1);
-        listener.insertLink(map2xref3, map2xref3);
-
-        //Third set of matches
         listener.insertLink(map3xref1, map3xref2);
-        listener.insertLink(map3xref2, map3xref3);
-        //As the Listener is not required to support transativity
+
+        provenance = provenanceFactory.createProvenance(DataSource1, "mapsTo", DataSource3, 
+                "testProvenance", new Date().getTime());
+        listener.init(provenance);
+        listener.insertLink(map1xref1, map1xref3);
+        listener.insertLink(map2xref1, map2xref3);
         listener.insertLink(map3xref1, map3xref3);
-        //As the Listner is not required to be Semetric
+
+        provenance = provenanceFactory.createProvenance(DataSource2, "mapsTo", DataSource1, 
+                "testProvenance", new Date().getTime());
+        listener.init(provenance);
+        listener.insertLink(map1xref2, map1xref1);
+        listener.insertLink(map2xref2, map2xref1);
         listener.insertLink(map3xref2, map3xref1);
+
+        provenance = provenanceFactory.createProvenance(DataSource2, "mapsTo", DataSource3, 
+                "testProvenance", new Date().getTime());
+        listener.init(provenance);
+        listener.insertLink(map1xref2, map1xref3);
+        listener.insertLink(map2xref2, map2xref3);
+        listener.insertLink(map3xref2, map3xref3);
+
+        provenance = provenanceFactory.createProvenance(DataSource3, "mapsTo", DataSource1, 
+                "testProvenance", new Date().getTime());
+        listener.init(provenance);
+        listener.insertLink(map1xref3, map1xref1);
+        listener.insertLink(map2xref3, map2xref1);
         listener.insertLink(map3xref3, map3xref1);
-        listener.insertLink(map3xref3, map3xref3);
-    }
+
+        provenance = provenanceFactory.createProvenance(DataSource3, "mapsTo", DataSource2, 
+                "testProvenance", new Date().getTime());
+        listener.init(provenance);
+        listener.insertLink(map1xref3, map1xref2);
+        listener.insertLink(map2xref3, map2xref2);
+        listener.insertLink(map3xref3, map3xref2);
+     }
     
 }
