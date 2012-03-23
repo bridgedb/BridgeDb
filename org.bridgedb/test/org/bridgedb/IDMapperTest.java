@@ -123,7 +123,7 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
     }
         
     @Test
-    public void testFreeSearch() throws IDMapperException{
+    public void testFreeSearchBad() throws IDMapperException{
         org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
         org.junit.Assume.assumeTrue(badID != null);
         System.out.println("FreeSearchBad");
@@ -131,4 +131,14 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
         assertTrue (results == null || results.isEmpty());
     }
     
+    @Test
+    public void testFreeSearchGood() throws IDMapperException{
+        org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
+        System.out.println("FreeSearchGood");
+        Set<Xref> results = idMapper.freeSearch(goodId1, 10);
+        assertTrue (results.contains(map1xref1));
+        assertTrue (results.contains(map1xref2));
+        assertTrue (results.contains(map1xref3));
+        assertFalse (results.contains(map2xref1));
+    }
 }
