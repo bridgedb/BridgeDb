@@ -26,6 +26,7 @@ public abstract class URLMapperTest {
     protected static String nameSpace2;
     protected static String nameSpace3;
     
+    protected static String goodId1;
     protected static String map1URL1;
     protected static String map1URL2;
     protected static String map1URL3;
@@ -47,22 +48,24 @@ public abstract class URLMapperTest {
 
     @BeforeClass
     public static void loadDataSources() throws IDMapperException{
-        DataSource.register("TestDS1", "TestDS1").urlPattern("www.example.com/pizza/$id/topping");
+        DataSource.register("TestDS1", "TestDS1").nameSpace("example:");
         DataSource.register("TestDS2", "TestDS2").urlPattern("www.example.com/$id");
         DataSource.register("TestDS3", "TestDS3").nameSpace("www.example.org#");
-        
+      
         nameSpace2 = "www.example.com/";
         nameSpace3 = "www.example.org#";
-        
-        map1URL1 = "www.example.com/pizza/123/topping";
+         
+        goodId1 = "123";
+
+        map1URL1 = "example:123";
         map1URL2 = "www.example.com/123";
         map1URL3 = "www.example.org#123";
         //Second set of URLs that are expected to map together.
-        map2URL1 = "www.example.com/pizza/456/topping";
+        map2URL1 = "example:456";
         map2URL2 = "www.example.com/456";
         map2URL3 = "www.example.org#456";
         //Third Set of URLs which again should map to each other but not the above
-        map3URL1 = "www.example.com/pizza/789/topping";
+        map3URL1 = "example:789";
         map3URL2 = "www.example.com/789";
         map3URL3 = "www.example.org#789";
         //Add an id that does not exist and can not be used in freesearch
@@ -183,12 +186,23 @@ public abstract class URLMapperTest {
     }
         
     @Test
-    public void testFreeSearch() throws IDMapperException{
+    public void testFreeSearchBad() throws IDMapperException{
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         org.junit.Assume.assumeTrue(badID != null);
         System.out.println("FreeSearchBad");
         Set<String> results = urlMapper.urlSearch(badID, 10);
         assertTrue (results == null || results.isEmpty());
+    }
+    
+    @Test
+    public void testFreeSearchGood() throws IDMapperException{
+        org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
+        System.out.println("FreeSearchGood");
+        Set<String> results = urlMapper.urlSearch(goodId1, 10);
+        assertTrue (results.contains(map1URL1));
+        assertTrue (results.contains(map1URL1));
+        assertTrue (results.contains(map1URL3));
+        assertFalse (results.contains(map2URL1));
     }
     
 }

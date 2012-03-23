@@ -16,7 +16,7 @@ public abstract class IDMapperTestBase {
     protected static DataSource DataSourceBad;
     
     //The id for map1xref1
-    String goodId1;
+    protected static String goodId1;
     //Set of Xrefs that are expected to map together.
     protected static Xref map1xref1;
     protected static Xref map1xref2;
@@ -55,7 +55,7 @@ public abstract class IDMapperTestBase {
     public static void setupVariables() throws IDMapperException{
         //If the actual source to be tested does not contain these please overwrite with ones that do exist.
         DataSource1 = DataSource.register("TestDS1", "TestDS1").
-                urlPattern("www.example.com/pizza/$id/topping").asDataSource();
+                urlPattern("example:$id").asDataSource();
         DataSource2 = DataSource.register("TestDS2", "TestDS2").urlPattern("www.example.com/$id").asDataSource();
         DataSource3 = DataSource.register("TestDS3", "TestDS3").nameSpace("www.example.org#").asDataSource();
         //This DataSource MUST not be supported
@@ -64,9 +64,10 @@ public abstract class IDMapperTestBase {
    
         //Set of Xrefs that are expected to map together.
         //Note: Ids intentionally equals for testing of DataCollection
-        map1xref1 = new Xref("123", DataSource1);
-        map1xref2 = new Xref("123", DataSource2);
-        map1xref3 = new Xref("123", DataSource3);
+        goodId1 = "123";
+        map1xref1 = new Xref(goodId1, DataSource1);
+        map1xref2 = new Xref(goodId1, DataSource2);
+        map1xref3 = new Xref(goodId1, DataSource3);
         //Second set of Xrefs that are expected to map together.
         //But these are not expected NOT to map to the first set
         map2xref1 = new Xref("456", DataSource1);
