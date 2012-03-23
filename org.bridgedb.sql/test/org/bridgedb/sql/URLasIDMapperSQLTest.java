@@ -27,8 +27,7 @@ public class URLasIDMapperSQLTest extends IDMapperAndLinkListenerTest {
     public static void setupVariables() throws IDMapperException{
         IDMapperTest.setupVariables();
         //Change the postfix pattern. And why not test the nameSpace:id pattern
-        DataSource.register("TestDS1", "TestDS1").nameSpace("example:");
-    }
+     }
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{

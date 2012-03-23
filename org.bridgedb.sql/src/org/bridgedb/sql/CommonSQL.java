@@ -1,9 +1,10 @@
 package org.bridgedb.sql;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bridgedb.ws.ByPossitionIterator;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,7 +39,16 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
     static final int BLOCK_SIZE = 10000;
     
     private static final int SQL_TIMEOUT = 2;
-
+    static final int SYSCODE_LENGTH = 100;
+    private static final int FULLNAME_LENGTH = 100;
+    private static final int MAINURL_LENGTH = 100;
+    private static final int URLPATTERN_LENGTH = 100;
+    static final int ID_LENGTH = 100;
+    private static final int TYPE_LENGTH = 100;
+    private static final int URNBASE_LENGTH = 100;
+    private static final int PREDICATE_LENGTH = 100;
+    private static final int CREATOR_LENGTH = 100;
+    
     Connection possibleOpenConnection;
     private SQLAccess sqlAccess;
     int insertCount = 0;
@@ -49,7 +59,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
             throw new IllegalArgumentException("sqlAccess can not be null");
         }
         this.sqlAccess = sqlAccess;
-        checkVersion();
+      //  checkVersion();
     }   
 
     Statement createStatement() throws BridgeDbSqlException{
@@ -126,16 +136,31 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 					+ "(    schemaversion INTEGER PRIMARY KEY	"
                     + ")");
             //provenance table sitll under development.
-			sh.execute(	"CREATE TABLE                           " 
-                    + "IF NOT EXISTS                            "
-					+ "		provenance                          " 
-					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,  " 
-					+ "     creator VARCHAR(100),                "
-                    + "     linkPredicate VARCHAR(50) NOT NULL, "
-                    + "     dateCreated DATE NOT NULL,          "
-                    + "     dateUploaded DATE NOT NULL         "
-					+ " )                                       ");   
-            sh.close();
+            //TODO add organism as required
+            sh.execute("CREATE TABLE  "
+                    + "IF NOT EXISTS  "
+                    + "     DataSource "
+                    + "  (  sysCode VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
+                    + "     isPrimary BOOLEAN,                              "
+                    + "     fullName VARCHAR(" + FULLNAME_LENGTH + "),      "
+                    + "     mainUrl VARCHAR(" + MAINURL_LENGTH + "),        "
+                    + "     urlPattern VARCHAR(" + URLPATTERN_LENGTH + "),  "
+                    + "     idExample VARCHAR(" + ID_LENGTH + "),           "
+                    + "     type VARCHAR(" + TYPE_LENGTH + "),              "
+                    + "     urnBase VARCHAR(" + URNBASE_LENGTH + ")         "
+                    + "  ) ");
+        	sh.execute(	"CREATE TABLE                                                   "    
+                    + "IF NOT EXISTS                                                    "
+					+ "		provenance                                                  " 
+					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,                          " 
+                    + "     source VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,            "
+                    + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,   "
+                    + "     target VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,            "
+					+ "     creator VARCHAR (" + CREATOR_LENGTH + "),                   "
+                    + "     dateCreated DATE NOT NULL,                                  "
+                    + "     dateUploaded DATE NOT NULL                                  "
+					+ " ) ");   
+           sh.close();
 		} catch (SQLException e)
 		{
             System.err.println(e);
@@ -159,6 +184,9 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 			sh.execute("DROP TABLE  "
                     + "IF EXISTS    "
                     + "link         ");
+			sh.execute("DROP TABLE  "
+                    + "IF EXISTS    "
+                    + "DataSource   ");
             //provenance table sitll under development.
 			sh.execute(	"DROP TABLE " 
                     + "IF EXISTS    "
@@ -232,24 +260,25 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 
     // **** ProvenanceFactory Methods ****
     @Override
-    public Provenance createProvenance(String createdBy, String predicate, long creation, long upload) 
-            throws ProvenanceException{
-        Provenance result = findProvenanceNumber(createdBy, predicate, creation);
+    public Provenance createProvenance(DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation, long upload) throws ProvenanceException{
+        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
         if (result != null){
             return result;
         }
-        createMissingProvenance(createdBy, predicate, creation, upload);
-        return findProvenanceNumber(createdBy, predicate, creation);
+        createMissingProvenance(source, predicate, target, createdBy, creation, upload);
+        return findProvenanceNumber(source, predicate, target, createdBy, creation);
     }
     
     @Override
-    public Provenance createProvenance(String createdBy, String predicate, long creation) throws ProvenanceException {
-        Provenance result = findProvenanceNumber(createdBy, predicate, creation);
+    public Provenance createProvenance(DataSource source, String predicate, DataSource target,
+            String createdBy, long creation) throws ProvenanceException {
+        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
         if (result != null){
             return result;
         }
-        createMissingProvenance(createdBy, predicate, creation, new GregorianCalendar().getTimeInMillis());
-        return findProvenanceNumber(createdBy, predicate, creation);
+        createMissingProvenance(source, predicate, target, createdBy, creation, new GregorianCalendar().getTimeInMillis());
+        return findProvenanceNumber(source, predicate, target, createdBy, creation);
     }
 
     @Override
@@ -257,23 +286,29 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private Provenance findProvenanceNumber(String createdBy, String predicate, long creation) throws ProvenanceException{
+    private Provenance findProvenanceNumber(DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation) throws ProvenanceException{
         Statement statement;
         try {
             statement = this.createStatement();
         } catch (BridgeDbSqlException ex) {
             throw new ProvenanceException ("Unable to create the statement ", ex);
         }
-        String query = "SELECT id, creator, linkPredicate, dateCreated, dateUploaded from provenance "
-                + "where creator = \"" + createdBy + "\""
+        String query = "SELECT id, source, linkPredicate, target, creator, dateCreated, dateUploaded from provenance "
+                + "where "
+                + "      source = \"" + source.getSystemCode() + "\""
                 + "  AND linkPredicate = \"" + predicate +"\"" 
+                + "  AND target = \"" + target.getSystemCode() + "\""
+                + "  AND creator = \"" + createdBy + "\""
                 + "  AND dateCreated = \"" + new Date(creation).toString() + "\"";
         try {
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()){
                 return new SimpleProvenance(rs.getInt("id"), 
-                                            rs.getString("creator"), 
+                                            DataSource.getBySystemCode(rs.getString("source")),
                                             rs.getString("linkPredicate"), 
+                                            DataSource.getBySystemCode(rs.getString("target")),
+                                            rs.getString("creator"), 
                                             rs.getDate("dateCreated").getTime(), 
                                             rs.getDate("dateUploaded").getTime());
             } else {
@@ -286,7 +321,22 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         }
     }
 
-    private void createMissingProvenance(String createdBy, String predicate, long creation, long uploaded) throws ProvenanceException {
+    private void createMissingProvenance(DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation, long uploaded) throws ProvenanceException  {
+        try {
+            checkDataSourceInDatabase(source);
+            checkDataSourceInDatabase(target);
+        } catch (BridgeDbSqlException ex) {
+            throw new ProvenanceException ("Error checking DataSource ", ex);
+        }
+        if (predicate.length() > PREDICATE_LENGTH){
+            throw new ProvenanceException("Unable to store predicate longer than " + PREDICATE_LENGTH + 
+                    " so unable to store " + predicate);
+        }
+        if (createdBy.length() > CREATOR_LENGTH){
+            throw new ProvenanceException("Unable to store creator longer than " + CREATOR_LENGTH + 
+                    " so unable to store " + createdBy);
+        }
         Statement statement;
         try {
             statement = this.createStatement();
@@ -294,9 +344,14 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
             throw new ProvenanceException ("Unable to create the statement ", ex);
         }
         String update = "INSERT INTO provenance "
-                + "(creator, linkPredicate, dateCreated, dateUploaded) "
-                + "VALUES ( \"" + createdBy + "\", \"" + predicate + "\", \"" 
-                + new Date(creation).toString() + "\", \"" + new Date(uploaded).toString() + "\")";
+                + "(source, linkPredicate, target, creator, dateCreated, dateUploaded) "
+                + "VALUES ( "
+                + "\"" + source.getSystemCode() + "\", "
+                + "\"" + predicate + "\", "
+                + "\"" + target.getSystemCode() + "\", "
+                + "\"" + createdBy + "\", "
+                + "\"" + new Date(creation).toString() + "\", "
+                + "\"" + new Date(uploaded).toString() + "\")";
         try {
             statement.executeUpdate(update);
         } catch (SQLException ex) {
@@ -306,6 +361,213 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         }
     }
 
+    private void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
+        Statement statement = this.createStatement();
+        String sysCode  = source.getSystemCode();
+        if (sysCode == null) {
+            throw new BridgeDbSqlException ("Currently unable to handle Datasources with null systemCode");
+        }
+        if (sysCode.isEmpty()) {
+            throw new BridgeDbSqlException ("Currently unable to handle Datasources with empty systemCode");
+        }
+        String query = "SELECT EXISTS"
+                + "(  SELECT sysCode"
+                + "   from DataSource "
+                + "   where "
+                + "      sysCode = \"" + source.getSystemCode() + "\")"; 
+        boolean found;
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            rs.next();
+            found = rs.getBoolean(1);
+        } catch (SQLException ex) {
+            System.out.println(query);
+            throw new BridgeDbSqlException("Unable to check provenace", ex);
+        }
+        if (found){
+            updateDataSource(source);
+        } else {
+            writeDataSource(source);
+        }
+    }
+    
+    private void writeDataSource(DataSource source) throws BridgeDbSqlException{
+        StringBuilder insert = new StringBuilder ("INSERT INTO DataSource ( sysCode , isPrimary ");
+        StringBuilder values = new StringBuilder ("Values ( ");
+        if (source.getSystemCode().length() > SYSCODE_LENGTH ){
+            throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
+                    " so unable to save " + source.getSystemCode());
+        }
+        values.append("\"");
+        values.append(source.getSystemCode());
+        values.append("\" , ");
+        values.append (source.isPrimary());
+        String value = source.getFullName(); 
+        if (value != null && !value.isEmpty()){
+            if (value.length() > FULLNAME_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
+                        " so unable to save " + value);
+            }
+            insert.append (", fullName ");
+            values.append (", \"");
+            values.append (value);
+            values.append ("\" ");
+        }
+        value = source.getMainUrl();
+        if (value != null && !value.isEmpty()){
+            if (value.length() > MAINURL_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
+                        " so unable to save " + value);
+            }
+            insert.append (", mainUrl ");
+            values.append (", \"");
+            values.append (value);
+            values.append ("\" ");
+        }
+        value = source.getUrl("$id");
+        if (value != null && !value.isEmpty()){
+            if (value.length() > URLPATTERN_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
+                        " so unable to save " + value);
+            }
+            insert.append (", urlPattern ");
+            values.append (", \"");
+            values.append (value);
+            values.append ("\" ");
+        }
+        value = source.getExample().getId();
+        if (value != null && !value.isEmpty()){
+            if (value.length() > ID_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for exampleId is " + ID_LENGTH + 
+                        " so unable to save " + value);
+            }
+            insert.append (", idExample ");
+            values.append (", \"");
+            values.append (value);
+            values.append ("\" ");
+        }
+        value = source.getType();
+        if (value != null && !value.isEmpty()){
+            if (value.length() > TYPE_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for type is " + TYPE_LENGTH + 
+                        " so unable to save " + value);
+            }
+            insert.append (", type ");
+            values.append (", \"");
+            values.append (value);
+            values.append ("\" ");
+        }
+        value = source.getURN("");
+        //remove the :
+        value = value.substring(0, value.length()-1);
+        if (value != null && !value.isEmpty()){
+            if (value.length() > URNBASE_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
+                        " so unable to save " + value);
+            }
+            insert.append ("SET urnBase = \"");
+            values.append (", \"");
+            values.append (value);
+            values.append ("\" ");
+        }
+        if (source.getOrganism() != null){
+            throw new BridgeDbSqlException("Sorry DataSource oraginism filed is upsupported");
+        }
+        Statement statement = this.createStatement();
+        try {
+            statement.executeUpdate(insert.toString() + ") " + values.toString() + " )");
+        } catch (SQLException ex) {
+            System.out.println(insert.toString() + ") " + values.toString() + " )");
+            throw new BridgeDbSqlException("Unable to writeDataSource", ex);
+        }
+    }
+
+    private void updateDataSource(DataSource source) throws BridgeDbSqlException{
+        StringBuilder update = new StringBuilder("UPDATE DataSource ");
+        update.append ("SET isPrimary = ");
+        update.append (source.isPrimary());
+        update.append (" ");       
+        String value = source.getFullName();
+        if (value != null && !value.isEmpty()){
+            if (value.length() > FULLNAME_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
+                        " so unable to save " + value);
+            }
+            update.append (", fullName = \"");
+            update.append (value);
+            update.append ("\" ");
+        }       
+        value = source.getMainUrl();
+        if (value != null && !value.isEmpty()){
+            if (value.length() > MAINURL_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
+                        " so unable to save " + value);
+            }
+            update.append (", mainUrl = \"");
+            update.append (value);
+            update.append ("\" ");
+        }
+        value = source.getUrl("$id");
+        if (value != null && !value.isEmpty()){
+            if (value.length() > URLPATTERN_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
+                        " so unable to save " + value);
+            }
+            update.append (", urlPattern = \"");
+            update.append (value);
+            update.append ("\" ");
+        }
+        value = source.getExample().getId();
+        if (value != null && !value.isEmpty()){
+            if (value.length() > ID_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for exampleId is " + ID_LENGTH + 
+                        " so unable to save " + value);
+            }
+            update.append (", idExample = \"");
+            update.append (value);
+            update.append ("\" ");
+        }
+        value = source.getType();
+        if (value != null && !value.isEmpty()){
+            if (value.length() > TYPE_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for type is " + TYPE_LENGTH + 
+                        " so unable to save " + value);
+            }
+            update.append (", type = \"");
+            update.append (value);
+            update.append ("\" ");
+        }
+        value = source.getURN("");
+        //remove the :
+        value = value.substring(0, value.length()-1);
+        if (value != null && !value.isEmpty()){
+            if (value.length() > URNBASE_LENGTH){
+                throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
+                        " so unable to save " + value);
+            }
+            update.append ("SET urnBase = \"");
+            update.append (value);
+            update.append ("\" ");
+        }
+        if (source.getSystemCode().length() > SYSCODE_LENGTH ){
+            throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
+                    " so unable to save " + source.getSystemCode());
+        }
+        update.append ("WHERE sysCode  = \"");
+        update.append (source.getSystemCode());
+        update.append ("\" ");
+        if (source.getOrganism() != null){
+            throw new BridgeDbSqlException("Sorry DataSource oraginism filed is upsupported");
+        }
+        Statement statement = this.createStatement();
+        try {
+            statement.executeUpdate(update.toString());
+        } catch (SQLException ex) {
+            System.out.println(update);
+            throw new BridgeDbSqlException("Unable to updateDataSource", ex);
+        }
+    }
+    
     //***** IDMapper funtctions  *****
     @Override
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
