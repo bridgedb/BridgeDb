@@ -1,6 +1,7 @@
 package org.bridgedb.provenance;
 
 import java.util.Calendar;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -15,6 +16,10 @@ public interface Provenance {
     //I wonder if something with hierarcy works better here
     //For example why not org.semanticweb.owlapi.model.OWLClass
     public String getPredicate() throws IDMapperException;
+    
+    public DataSource getSource();
+    
+    public DataSource getTarget();
     
     public String getCreatedBy();
 

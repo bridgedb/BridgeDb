@@ -4,18 +4,16 @@
  */
 package org.bridgedb.provenance;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.bridgedb.IDMapperTestBase;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
 /**
  *
  * @author Christian
  */
-public class SimpleProvenanceTest {
+public class SimpleProvenanceTest  extends IDMapperTestBase{
     
    /**
      * Test of equals method, of class SimpleProvenance.
@@ -25,22 +23,65 @@ public class SimpleProvenanceTest {
         System.out.println("equals");
         long creation = 100;
         long upload = 50;
-        Object other = new SimpleProvenance("createdBy", "predicate", creation, upload);
-        SimpleProvenance instance = new SimpleProvenance("createdBy", "predicate", creation, upload);
-        assertTrue(instance.equals(other));
+        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        assertEquals(expected, result);
     }
 
     /**
      * Test of equals method, of class SimpleProvenance.
      */
     @Test
-    public void testEqualsFailsOnCreatorID() {
-        System.out.println("EqualsFailsOnCreatorID");
+    public void testEqualsIDSame() {
+        System.out.println("EqualsIDSame");
         long creation = 100;
         long upload = 50;
-        Object other = new SimpleProvenance(23,"createdBy", "predicate", creation, upload);
-        SimpleProvenance instance = new SimpleProvenance(45,"createdBy2", "predicate", creation, upload);
-        assertFalse(instance.equals(other));
+        SimpleProvenance expected = new SimpleProvenance(45, DataSource1, "predicate", DataSource2, 
+                "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(45, DataSource1, "predicate", DataSource2, 
+                "createdBy", creation, upload);
+        assertEquals(expected, result);
+    }
+
+    /**
+     * Test of equals method, of class SimpleProvenance.
+     */
+    @Test
+    public void testEqualsFailsOnIDDifferent() {
+        System.out.println("EqualsFailsOnIDDifferent");
+        long creation = 100;
+        long upload = 50;
+        SimpleProvenance expected = new SimpleProvenance(45, DataSource1, "predicate", DataSource2, 
+                "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(23, DataSource1, "predicate", DataSource2, 
+                "createdBy", creation, upload);
+        assertThat(expected, not(result));
+    }
+
+    /**
+     * Test of equals method, of class SimpleProvenance.
+     */
+    @Test
+    public void testEqualsFailsOnSourceDiff() {
+        System.out.println("EqualsFailsOnSourceDiff");
+        long creation = 100;
+        long upload = 50;
+        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(DataSource3, "predicate", DataSource2, "createdBy", creation, upload);
+        assertThat(expected, not(result));
+    }
+
+    /**
+     * Test of equals method, of class SimpleProvenance.
+     */
+    @Test
+    public void testEqualsFailsOnTargetDiff() {
+        System.out.println("EqualsFailsOnTargetDiff");
+        long creation = 100;
+        long upload = 50;
+        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource3, "createdBy", creation, upload);
+        assertThat(expected, not(result));
     }
 
     /**
@@ -51,11 +92,10 @@ public class SimpleProvenanceTest {
         System.out.println("EqualsFailsOnCreatorDiff");
         long creation = 100;
         long upload = 50;
-        Object other = new SimpleProvenance("createdBy", "predicate", creation, upload);
-        SimpleProvenance instance = new SimpleProvenance("createdBy2", "predicate", creation, upload);
-        assertFalse(instance.equals(other));
+        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy2", creation, upload);
+        assertThat(expected, not(result));
     }
-
     /**
      * Test of equals method, of class SimpleProvenance.
      */
@@ -64,9 +104,9 @@ public class SimpleProvenanceTest {
         System.out.println("EqualsFailsOnPredicateDiff");
         long creation = 100;
         long upload = 50;
-        Object other = new SimpleProvenance("createdBy", "predicate", creation, upload);
-        SimpleProvenance instance = new SimpleProvenance("createdBy", "predicate2", creation, upload);
-        assertFalse(instance.equals(other));
+        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate2", DataSource2, "createdBy", creation, upload);
+        assertThat(expected, not(result));
     }
 
     /**
@@ -77,92 +117,9 @@ public class SimpleProvenanceTest {
         System.out.println("EqualsFailsOnCreationDiff");
         long creation = 100;
         long upload = 50;
-        Object other = new SimpleProvenance("createdBy", "predicate", creation, upload);
-        SimpleProvenance instance = new SimpleProvenance("createdBy", "predicate", creation + 10, upload);
-        assertFalse(instance.equals(other));
+        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation + 10, upload);
+        assertThat(expected, not(result));
     }
 
-    /**
-     * Test of getPredicate method, of class SimpleProvenance.
-     * /
-    @Test
-    public void testGetPredicate() {
-        System.out.println("getPredicate");
-        SimpleProvenance instance = null;
-        String expResult = "";
-        String result = instance.getPredicate();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getCreatedBy method, of class SimpleProvenance.
-     * /
-    @Test
-    public void testGetCreatedBy() {
-        System.out.println("getCreatedBy");
-        SimpleProvenance instance = null;
-        String expResult = "";
-        String result = instance.getCreatedBy();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getCreation method, of class SimpleProvenance.
-     * /
-    @Test
-    public void testGetCreation() {
-        System.out.println("getCreation");
-        SimpleProvenance instance = null;
-        long expResult = 0L;
-        long result = instance.getCreation();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getUpload method, of class SimpleProvenance.
-     * /
-    @Test
-    public void testGetUpload() {
-        System.out.println("getUpload");
-        SimpleProvenance instance = null;
-        long expResult = 0L;
-        long result = instance.getUpload();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of isTransative method, of class SimpleProvenance.
-     * /
-    @Test
-    public void testIsTransative() {
-        System.out.println("isTransative");
-        SimpleProvenance instance = null;
-        boolean expResult = false;
-        boolean result = instance.isTransative();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getId method, of class SimpleProvenance.
-     * /
-    @Test
-    public void testGetId() {
-        System.out.println("getId");
-        SimpleProvenance instance = null;
-        int expResult = 0;
-        int result = instance.getId();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
 }
