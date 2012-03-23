@@ -4,7 +4,7 @@
  */
 package org.bridgedb.provenance;
 
-import java.util.Calendar;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -22,9 +22,13 @@ public class TransativeProvenace implements Provenance{
      * @param first
      * @param second 
      */
-    TransativeProvenace(Provenance first, Provenance second){
-        this.first = first;
-        this.second = second;
+    TransativeProvenace(Provenance first, Provenance second) throws ProvenanceException{
+        if (first.getTarget().equals(second.getTarget())){
+            this.first = first;
+            this.second = second;
+        } else {
+            throw new ProvenanceException("Tagrget of " + first + " does not match the source of " + second);
+        }
     }
     
     @Override
@@ -66,6 +70,16 @@ public class TransativeProvenace implements Provenance{
     @Override
     public int getId() {
         return Provenance.NO_ID_ASSIGNED;
+    }
+
+    @Override
+    public DataSource getSource() {
+        return first.getSource();
+    }
+
+    @Override
+    public DataSource getTarget() {
+        return second.getTarget();
     }
 
 }
