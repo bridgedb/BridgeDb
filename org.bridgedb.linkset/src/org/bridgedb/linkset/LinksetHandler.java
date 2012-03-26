@@ -132,7 +132,7 @@ public class LinksetHandler extends RDFHandlerBase{
                     linkPredicate.stringValue(), 
                     DataSource.getBySystemCode(objectTarget.toString()), 
                     creator.toString(), created);
-            listener.init(provenance);
+            listener.openInput(provenance);
         } catch (IDMapperException ex) {
             throw new RDFHandlerException ("Error starting listener ", ex);
         }

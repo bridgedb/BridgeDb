@@ -22,7 +22,8 @@ import org.bridgedb.provenance.Provenance;
 import org.openrdf.model.URI;
 
 /**
- *
+ * Limited to a single Provenance
+ * @deprecated 
  * @author Christian
  */
 public class IDMapperLinkset implements IDMapper, LinkListener{
@@ -34,11 +35,11 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
     int linkCount;
     
     public IDMapperLinkset() {
-        init(null);
+        openInput(null);
     }
 
     @Override
-    public void init(Provenance provenance) {
+    public void openInput(Provenance provenance) {
         isConnected = provenance != null; 
         sources = new HashSet<DataSource>();
         targets = new HashSet<DataSource>();
@@ -133,7 +134,7 @@ public class IDMapperLinkset implements IDMapper, LinkListener{
 
     @Override
     public void close() throws IDMapperException {
-        init(null);
+        isConnected = false;
     }
 
     @Override

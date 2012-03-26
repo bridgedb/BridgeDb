@@ -54,12 +54,27 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
     int insertCount = 0;
     int doubleCount = 0;
     
-    public CommonSQL(SQLAccess sqlAccess) throws BridgeDbSqlException{
+    CommonSQL(SQLAccess sqlAccess) throws BridgeDbSqlException{
         if (sqlAccess == null){
             throw new IllegalArgumentException("sqlAccess can not be null");
         }
         this.sqlAccess = sqlAccess;
-      //  checkVersion();
+        checkVersion();
+        loadDataSources();
+    }   
+
+    CommonSQL(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+        if (sqlAccess == null){
+            throw new IllegalArgumentException("sqlAccess can not be null");
+        }
+        this.sqlAccess = sqlAccess;
+        if (dropTables){
+            this.dropSQLTables();
+            this.createSQLTables();
+        } else {
+            checkVersion();
+            loadDataSources();
+        }
     }   
 
     Statement createStatement() throws BridgeDbSqlException{
@@ -93,9 +108,8 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         try {
             r = stmt.executeQuery("SELECT schemaversion FROM info");
             if(r.next()) version = r.getInt(1);
-        } catch (SQLException e) {
-            //probably new databse do nothing.
-            return;
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Error checking the version. ", ex);
         }
 		finally
 		{
@@ -125,7 +139,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	public void createSQLTables() throws BridgeDbSqlException
+	void createSQLTables() throws BridgeDbSqlException
 	{
 		try 
 		{
@@ -173,7 +187,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 	 * Excecutes several SQL statements to drop the tables 
 	 * @throws IDMapperException 
 	 */
-	public void dropSQLTables() throws BridgeDbSqlException
+	private void dropSQLTables() throws BridgeDbSqlException
 	{
     	Statement sh = createStatement();
 		try 
@@ -198,7 +212,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 		}
 	}
 
-    public void init() throws BridgeDbSqlException {
+    public void openInput() throws BridgeDbSqlException {
 		try
 		{
             if (possibleOpenConnection == null){
@@ -465,7 +479,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
                 throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
                         " so unable to save " + value);
             }
-            insert.append ("SET urnBase = \"");
+            insert.append (", urnBase ");
             values.append (", \"");
             values.append (value);
             values.append ("\" ");
@@ -545,7 +559,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
                 throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append ("SET urnBase = \"");
+            update.append (", urnBase = \"");
             update.append (value);
             update.append ("\" ");
         }
@@ -565,6 +579,26 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         } catch (SQLException ex) {
             System.out.println(update);
             throw new BridgeDbSqlException("Unable to updateDataSource", ex);
+        }
+    }
+    
+    private void loadDataSources() throws BridgeDbSqlException{
+        try {
+            Statement statement = this.createStatement();
+            String query = "SELECT sysCode, isPrimary, fullName, mainUrl, urlPattern, idExample, type, urnBase"
+                    + "   from DataSource ";           
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                DataSource.register(rs.getString("sysCode"), rs.getString("fullName")).
+                        primary(rs.getBoolean("isPrimary")).
+                        mainUrl(rs.getString("mainUrl")).
+                        urlPattern(rs.getString("urlPattern")).
+                        idExample(rs.getString("idExample")).
+                        type(rs.getString("type")).
+                        urnBase(rs.getString("urnBase"));
+            }
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to load DataSources");
         }
     }
     

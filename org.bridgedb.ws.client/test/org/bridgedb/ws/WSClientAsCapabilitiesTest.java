@@ -3,11 +3,13 @@ package org.bridgedb.ws;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperCapabilitiesTest;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  *
  * @author Christian
  */
+@Ignore
 public class WSClientAsCapabilitiesTest  extends IDMapperCapabilitiesTest{
     
     @BeforeClass

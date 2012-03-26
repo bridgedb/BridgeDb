@@ -1,14 +1,10 @@
 package org.bridgedb.sql;
 
-import org.bridgedb.ws.ByPossitionIterator;
-import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,12 +15,9 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
-import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.ProvenanceException;
 import org.bridgedb.provenance.ProvenanceFactory;
-import org.bridgedb.provenance.SimpleProvenance;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.ws.XrefByPossition;
 
@@ -47,6 +40,10 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
         super(sqlAccess);
     }   
 
+    public URLMapperSQL(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+        super(dropTables, sqlAccess);
+    }   
+
     @Override
     boolean correctVersion(int currentVersion) {
         return currentVersion == SQL_COMPAT_VERSION;
@@ -57,7 +54,7 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	public void createSQLTables() throws BridgeDbSqlException
+	void createSQLTables() throws BridgeDbSqlException
 	{
         super.createSQLTables();
 		try 
@@ -89,7 +86,8 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
 	}
 
     @Override
-    public void init(Provenance provenance) throws BridgeDbSqlException {
+    public void openInput(Provenance provenance) throws BridgeDbSqlException {
+        super.openInput();
 		try
 		{
 			pstInsertLink = possibleOpenConnection.prepareStatement("INSERT INTO link    "
@@ -444,10 +442,8 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
             ResultSet rs = statement.executeQuery(query);
             HashSet<Xref> results = new HashSet<Xref>();
             while (rs.next()){
-                String id = rs.getString("id");
-                String sysCode = rs.getString("code");
-                DataSource ds = DataSource.getBySystemCode(sysCode);
-                results.add(new Xref(id, ds));
+                String url = rs.getString("url");
+                results.add(DataSource.uriToXref(url));
             } 
             return results;
         } catch (SQLException ex) {
@@ -481,10 +477,8 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
         try {
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()){
-                String id = rs.getString("id");
-                String sysCode = rs.getString("code");
-                DataSource ds = DataSource.getBySystemCode(sysCode);
-                return new Xref(id, ds);
+                String url = rs.getString("url");
+                return DataSource.uriToXref(url);
             } else {
                 return null;
             }
@@ -511,12 +505,12 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
-                + "sourceURL = \"" + ds.getNameSpace() + "\" "
+                + "sourceNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "WHERE "
-                + "targetUrl = \"" + ds.getNameSpace() + "\" "
+                + "targetNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "LIMIT " + possition + " , " + limit;
         Statement statement = this.createStatement();
         try {
@@ -550,20 +544,21 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
-                + "sourceURL = \"" + ds.getNameSpace() + "\" "
+                + "sourceNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "WHERE "
-                + "targetUrl = \"" + ds.getNameSpace() + "\" "
+                + "targetNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "LIMIT " + possition + ",1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()){
-                String id = rs.getString("id");
-                return new Xref(id, ds);
+                String url = rs.getString("url");
+                return DataSource.uriToXref(url);
             } else {
+                System.out.println(query);
                 return null;
             }
         } catch (SQLException ex) {

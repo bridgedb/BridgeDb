@@ -21,6 +21,9 @@ import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSupportedBean;
 import org.bridgedb.ws.bean.PropertyBean;
+import org.bridgedb.ws.bean.URLExistsBean;
+import org.bridgedb.ws.bean.URLMapBean;
+import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.XRefMapBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
@@ -42,7 +45,68 @@ public class WSClient implements WSInterface{
         webResource = client.resource(serviceAddress);        
     }
     
-            
+    //*** URLMapper functions methods *****
+    @Override
+    public List<URLMapBean> mapByURLs(List<String> srcURLs, List<String> tgtNameSpaces) throws IDMapperException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        for (String srcURL:srcURLs){
+            params.add("srcURLs", srcURL);
+        }
+        for (String target:tgtNameSpaces){
+            params.add("tgtNameSpaces", target);
+        }
+        //Make service call
+        List<URLMapBean> result = 
+                webResource.path("mapByURLs")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<URLMapBean>>() {});
+        return result;
+    }
+
+    @Override
+    public URLMapBean mapByURL(String ref, List<String> tgtNameSpaces) throws IDMapperException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add("ref", ref);
+        for (String target:tgtNameSpaces){
+            params.add("tgtNameSpaces", target);
+        }
+        //Make service call
+        URLMapBean result = 
+                webResource.path("mapByURL")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<URLMapBean>() {});
+        return result;
+    }
+
+    @Override
+    public URLExistsBean urlExists(String URL) throws IDMapperException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add("URL", URL);
+        //Make service call
+        URLExistsBean result = 
+                webResource.path("URLExists")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<URLExistsBean>() {});
+        return result;
+    }
+
+    @Override
+    public URLSearchBean URLSearch(String text, Integer limit) throws IDMapperException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add("text", text);
+        params.add("limit", limit.toString());
+        //Make service call
+        URLSearchBean result = 
+                webResource.path("URLSearch")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<URLSearchBean>() {});
+        return result;
+    }
+    
     @Override
     public List<XrefBean> freeSearch(String text, Integer limit) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
@@ -224,5 +288,5 @@ public class WSClient implements WSInterface{
                 .get(new GenericType<List<XrefBean>>() {});
         return result;
     }
-    
+
 }

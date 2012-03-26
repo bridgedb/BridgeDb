@@ -8,7 +8,6 @@ import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.IDMapperAndLinkListenerTest;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * 
@@ -26,9 +25,7 @@ public class IDMapperSQLTest extends IDMapperAndLinkListenerTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestIDSQLAccess();
         connectionOk = true;
-        iDMapperSQL = new IDMapperSQL(sqlAccess);
-        iDMapperSQL.dropSQLTables();
-        iDMapperSQL.createSQLTables();
+        iDMapperSQL = new IDMapperSQL(true, sqlAccess);
         idMapper = iDMapperSQL;
         provenanceFactory = iDMapperSQL;
         listener = iDMapperSQL;     

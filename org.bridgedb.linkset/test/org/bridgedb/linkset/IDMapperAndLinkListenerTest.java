@@ -28,45 +28,51 @@ public abstract class IDMapperAndLinkListenerTest extends IDMapperTest{
         Provenance provenance;
         provenance = provenanceFactory.createProvenance(DataSource1, "mapsTo", DataSource2, 
                 "testProvenance", new Date().getTime());
-        listener.init(provenance);
+        listener.openInput(provenance);
         listener.insertLink(map1xref1, map1xref2);
         listener.insertLink(map2xref1, map2xref2);
         listener.insertLink(map3xref1, map3xref2);
-
+        listener.closeInput();
+        
         provenance = provenanceFactory.createProvenance(DataSource1, "mapsTo", DataSource3, 
                 "testProvenance", new Date().getTime());
-        listener.init(provenance);
+        listener.openInput(provenance);
         listener.insertLink(map1xref1, map1xref3);
         listener.insertLink(map2xref1, map2xref3);
         listener.insertLink(map3xref1, map3xref3);
+        listener.closeInput();
 
         provenance = provenanceFactory.createProvenance(DataSource2, "mapsTo", DataSource1, 
                 "testProvenance", new Date().getTime());
-        listener.init(provenance);
+        listener.openInput(provenance);
         listener.insertLink(map1xref2, map1xref1);
         listener.insertLink(map2xref2, map2xref1);
         listener.insertLink(map3xref2, map3xref1);
+        listener.closeInput();
 
         provenance = provenanceFactory.createProvenance(DataSource2, "mapsTo", DataSource3, 
                 "testProvenance", new Date().getTime());
-        listener.init(provenance);
+        listener.openInput(provenance);
         listener.insertLink(map1xref2, map1xref3);
         listener.insertLink(map2xref2, map2xref3);
         listener.insertLink(map3xref2, map3xref3);
+        listener.closeInput();
 
         provenance = provenanceFactory.createProvenance(DataSource3, "mapsTo", DataSource1, 
                 "testProvenance", new Date().getTime());
-        listener.init(provenance);
+        listener.openInput(provenance);
         listener.insertLink(map1xref3, map1xref1);
         listener.insertLink(map2xref3, map2xref1);
         listener.insertLink(map3xref3, map3xref1);
+        listener.closeInput();
 
         provenance = provenanceFactory.createProvenance(DataSource3, "mapsTo", DataSource2, 
                 "testProvenance", new Date().getTime());
-        listener.init(provenance);
+        listener.openInput(provenance);
         listener.insertLink(map1xref3, map1xref2);
         listener.insertLink(map2xref3, map2xref2);
         listener.insertLink(map3xref3, map3xref2);
+        listener.closeInput();
      }
     
 }

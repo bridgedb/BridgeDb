@@ -4,24 +4,27 @@
  */
 package org.bridgedb.ws;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTest;
-import org.bridgedb.file.IDMapperText;
+import org.bridgedb.sql.IDMapperSQL;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.URLMapperSQL;
 import org.junit.BeforeClass;
 
 /**
  *
  * @author Christian
  */
-public class WSIDMapperTest extends IDWSTest{
+public class WsSqlIDMapperTest extends IDWSTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
-        File INTERFACE_TEST_FILE = new File ("../org.bridgedb/test-data/interfaceTest.txt");
-        IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
+        connectionOk = false;
+        SQLAccess sqlAccess = TestSqlFactory.createTestURLSQLAccess();
+        connectionOk = true;
+        IDMapper inner = new URLMapperSQL(sqlAccess);
         webService = new WSService(inner);
         idMapper = new WSMapper(webService);
     }
