@@ -14,19 +14,19 @@ import org.bridgedb.Xref;
  *
  * @author Christian
  */
-public class ByPossitionIterator implements Iterator<Xref>,Iterable<Xref>{
+public class ByPossitionXrefIterator implements Iterator<Xref>, Iterable<Xref>{
 
     private Xref bufferedNext;
     private XrefByPossition xrefByPossition;  
     private DataSource dataSource;
     int count;
         
-    public ByPossitionIterator (XrefByPossition xrefByPossition, DataSource dataSource){
+    public ByPossitionXrefIterator (XrefByPossition xrefByPossition, DataSource dataSource){
         this(xrefByPossition);
         this.dataSource = dataSource;
     }
     
-    public ByPossitionIterator (XrefByPossition xrefByPossition){
+    public ByPossitionXrefIterator (XrefByPossition xrefByPossition){
         this.xrefByPossition = xrefByPossition;
         count = -1;
     }
