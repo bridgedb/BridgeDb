@@ -24,6 +24,7 @@ import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMapBean;
 import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XRefMapBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
@@ -286,6 +287,25 @@ public class WSClient implements WSInterface{
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<XrefBean>>() {});
+        return result;
+    }
+
+    @Override
+    public URLsBean getURLByPossition(String nameSpace, Integer possition, Integer limit) throws IDMapperException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        if (nameSpace != null) {
+            params.add("nameSpace",  nameSpace);
+        }
+        params.add("possition",  possition.toString());
+        if (limit != null){
+            params.add("limit",  limit.toString());
+        }
+       //Make service call
+        URLsBean result = 
+                webResource.path("getURLByPossition")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<URLsBean>() {});
         return result;
     }
 
