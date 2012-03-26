@@ -15,6 +15,7 @@ import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMapBean;
 import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XRefMapBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
@@ -63,6 +64,8 @@ public interface WSInterface {
      * @return 
      */
     List<XrefBean> getXrefByPossition (String code, Integer possition, Integer limit) throws IDMapperException;
+
+    URLsBean getURLByPossition (String nameSpace, Integer possition, Integer limit) throws IDMapperException;
 
     public List<URLMapBean> mapByURLs(List<String> srcURLs, List<String> tgtNameSpaces) throws IDMapperException;
 

@@ -22,16 +22,19 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
+import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.URLMapBean;
 import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.URLsBean;
 
 /**
  *
  * @author Christian
  */
-public class WSMapper implements URLMapper, IDMapper, IDMapperCapabilities, XrefIterator, XrefByPossition {
+public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, XrefByPossition, 
+        URLMapper, URLIterator, URLByPossition {
 
     WSInterface webService;
     
@@ -257,6 +260,46 @@ public class WSMapper implements URLMapper, IDMapper, IDMapperCapabilities, Xref
             return null;
         }
         return beans.get(0).asXref();
+    }
+
+    @Override
+    public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
+        return new ByPossitionURLIterator (this, nameSpace);
+    }
+
+    @Override
+    public Iterable<String> getURLIterator() throws IDMapperException {
+        return new ByPossitionURLIterator (this);
+    }
+
+    @Override
+    public Set<String> getURLByPossition(int possition, int limit) throws IDMapperException {
+        URLsBean beans = webService.getURLByPossition(null, possition, limit);
+        return beans.getUrlSet();
+    }
+
+    @Override
+    public String getURLByPossition(int possition) throws IDMapperException {
+        return getURLByPossition(null, possition);
+    }
+
+    @Override
+    public Set<String> getURLByPossition(String nameSpace, int possition, int limit) throws IDMapperException {
+        URLsBean beans = webService.getURLByPossition(nameSpace, possition, limit);
+        return beans.getUrlSet();
+    }
+
+    @Override
+    public String getURLByPossition(String nameSpace, int possition) throws IDMapperException {
+        URLsBean beans = webService.getURLByPossition(nameSpace, possition, 1);
+        List<String> urls = beans.getUrl();
+        if (urls.size() == 1){
+            return urls.get(0);
+        }
+        if (urls.isEmpty()){
+            throw new IDMapperException("Empty list received from getURLByPossition at possition " + possition);
+        }
+        throw new IDMapperException("More than one url received from getURLByPossition at possition " + possition);
     }
     
 }
