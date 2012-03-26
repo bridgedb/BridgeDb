@@ -2,7 +2,7 @@ package org.bridgedb.sql;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bridgedb.ws.ByPossitionIterator;
+import org.bridgedb.ws.ByPossitionXrefIterator;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -663,11 +663,11 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 
     @Override
     public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
-        return new ByPossitionIterator(this, ds);
+        return new ByPossitionXrefIterator(this, ds);
     }
 
     @Override
     public Iterable<Xref> getIterator() throws IDMapperException {
-        return new ByPossitionIterator(this);
+        return new ByPossitionXrefIterator(this);
     }
 }

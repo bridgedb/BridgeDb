@@ -3,6 +3,7 @@ package org.bridgedb.ws;
 import java.util.Collection;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMapBean;
+import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XRefMapBean;
 import org.bridgedb.ws.bean.DataSourceBean;
@@ -40,7 +41,8 @@ public class WSService implements WSInterface {
     protected IDMapper idMapper;
     protected URLMapper urlMapper;
     
-    protected XrefByPossition byPossition;
+    protected XrefByPossition byXrefPossition;
+    protected URLByPossition byURLPossition;
 
     /**
      * Defuault constuctor for super classes.
@@ -53,14 +55,19 @@ public class WSService implements WSInterface {
     public WSService(IDMapper idMapper) {
         this.idMapper = idMapper;
         if (idMapper instanceof XrefByPossition){
-            this.byPossition = (XrefByPossition)idMapper;
+            this.byXrefPossition = (XrefByPossition)idMapper;
         } else {
-            this.byPossition = null;
+            this.byXrefPossition = null;
         }
         if (idMapper instanceof URLMapper){
             urlMapper = (URLMapper)idMapper;
         } else {
             urlMapper = new WrapperURLMapper(idMapper);
+        }
+        if (idMapper instanceof URLByPossition){
+            this.byURLPossition = (URLByPossition)idMapper;
+        } else {
+            this.byURLPossition = null;
         }
     }
     
@@ -416,27 +423,59 @@ public class WSService implements WSInterface {
             @QueryParam("code") String code, 
             @QueryParam("possition") Integer possition, 
             @QueryParam("limit") Integer limit) throws IDMapperException {
-        if (this.byPossition == null) {
+        if (this.byXrefPossition == null) {
             throw new UnsupportedOperationException("Underlying IDMapper does not support getXrefByPossition.");
         }
         if (possition == null) throw new IDMapperException ("\"possition\" parameter can not be null");
         if (code == null){
             if (limit == null){
-                Xref xref = byPossition.getXrefByPossition(possition);
+                Xref xref = byXrefPossition.getXrefByPossition(possition);
                 return xrefToListXrefBeans(xref);
             } else {
-                Set<Xref> xrefs = byPossition.getXrefByPossition(possition, limit);
+                Set<Xref> xrefs = byXrefPossition.getXrefByPossition(possition, limit);
                 return setXrefToListXrefBeans(xrefs);
             }
         } else {
             DataSource dataSource = DataSource.getBySystemCode(code);
             if (limit == null){
-                Xref xref = byPossition.getXrefByPossition(dataSource, possition);
+                Xref xref = byXrefPossition.getXrefByPossition(dataSource, possition);
                 return xrefToListXrefBeans(xref);
             } else {
-                Set<Xref> xrefs = byPossition.getXrefByPossition(dataSource, possition, limit);
+                Set<Xref> xrefs = byXrefPossition.getXrefByPossition(dataSource, possition, limit);
                 return setXrefToListXrefBeans(xrefs);
             }            
+        }
+    }
+
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getURLByPossition")
+    public URLsBean getURLByPossition( 
+            @QueryParam("nameSpace") String nameSpace, 
+            @QueryParam("possition") Integer possition, 
+            @QueryParam("limit") Integer limit) throws IDMapperException {
+            System.out.println("$"+nameSpace);
+        if (this.byURLPossition == null) {
+            throw new UnsupportedOperationException("Underlying IDMapper does not support getURLByPossition.");
+        }
+        if (possition == null) throw new IDMapperException ("\"possition\" parameter can not be null");
+        if (nameSpace == null){
+            if (limit == null){
+                String url = byURLPossition.getURLByPossition(possition);
+                return new URLsBean(url);
+            } else {
+                Set<String> urls = byURLPossition.getURLByPossition(possition, limit);
+                return new URLsBean(urls);
+            }
+        } else {
+            if (limit == null){
+                String url = byURLPossition.getURLByPossition(nameSpace, possition);
+                return new URLsBean(url);
+            } else {
+                Set<String> urls = byURLPossition.getURLByPossition(nameSpace, possition, limit);
+                return new URLsBean(urls);
+            }
         }
     }
 

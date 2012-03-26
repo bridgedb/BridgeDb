@@ -22,7 +22,7 @@ public class WsSqlServer extends WSService{
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         idMapper = urlMapperSQL;
         urlMapper = urlMapperSQL;
-        byPossition = urlMapperSQL;
+        byXrefPossition = urlMapperSQL;
     }
 
     

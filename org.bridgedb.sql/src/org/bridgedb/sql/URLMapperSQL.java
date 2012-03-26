@@ -18,7 +18,10 @@ import org.bridgedb.XrefIterator;
 import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceFactory;
+import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
+import org.bridgedb.ws.ByPossitionURLIterator;
+import org.bridgedb.ws.URLByPossition;
 import org.bridgedb.ws.XrefByPossition;
 
 /**
@@ -27,8 +30,7 @@ import org.bridgedb.ws.XrefByPossition;
  * 
  * @author Christian
  */
-public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, 
-        XrefIterator, XrefByPossition{
+public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, URLByPossition{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 5;
@@ -557,6 +559,117 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, IDMapper, IDMa
             if (rs.next()){
                 String url = rs.getString("url");
                 return DataSource.uriToXref(url);
+            } else {
+                System.out.println(query);
+                return null;
+            }
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
+        return new ByPossitionURLIterator(this, nameSpace);
+    }
+
+    @Override
+    public Iterable<String> getURLIterator() throws IDMapperException {
+        return new ByPossitionURLIterator(this);
+    }
+
+    @Override
+    public Set<String> getURLByPossition(int possition, int limit) throws IDMapperException {
+        String query = "SELECT distinct sourceURL as url "
+                + "FROM link      "
+                + "UNION "
+                + "SELECT distinct targetUrl as url  "
+                + "FROM link      "
+                + "LIMIT " + possition + " , " + limit;
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            HashSet<String> results = new HashSet<String>();
+            while (rs.next()){
+                results.add(rs.getString("url"));
+            } 
+            return results;
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public String getURLByPossition(int possition) throws IDMapperException {
+        String query = "SELECT distinct  sourceURL as url "
+                + "FROM link      "
+                + "UNION "
+                + "SELECT distinct targetUrl as url  "
+                + "FROM link      "
+                + "LIMIT " + possition + ",1";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                return rs.getString("url");
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public Set<String> getURLByPossition(String nameSpace, int possition, int limit) throws IDMapperException {
+        String query = "SELECT distinct sourceURL as url "
+                + "FROM link      "
+                + "WHERE "
+                + "sourceNameSpace = \"" + nameSpace + "\" "
+                + "UNION "
+                + "SELECT distinct targetUrl as url  "
+                + "FROM link      "
+                + "WHERE "
+                + "targetNameSpace = \"" + nameSpace + "\" "
+                + "LIMIT " + possition + " , " + limit;
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            HashSet<String> results = new HashSet<String>();
+            while (rs.next()){
+                results.add(rs.getString("url"));
+            } 
+            return results;
+        } catch (SQLException ex) {
+            System.out.println(query);
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    @Override
+    public String getURLByPossition(String nameSpace, int possition) throws IDMapperException {
+        String query = "SELECT distinct sourceURL as url "
+                + "FROM link      "
+                + "WHERE "
+                + "sourceNameSpace = \"" + nameSpace + "\" "
+                + "UNION "
+                + "SELECT distinct targetUrl as url  "
+                + "FROM link      "
+                + "WHERE "
+                + "targetNameSpace = \"" + nameSpace + "\" "
+                + "LIMIT " + possition + ",1";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                return rs.getString("url");
             } else {
                 System.out.println(query);
                 return null;
