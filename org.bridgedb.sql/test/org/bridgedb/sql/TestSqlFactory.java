@@ -4,8 +4,6 @@
  */
 package org.bridgedb.sql;
 
-import org.bridgedb.sql.*;
-
 /**
  *
  * @author Christian

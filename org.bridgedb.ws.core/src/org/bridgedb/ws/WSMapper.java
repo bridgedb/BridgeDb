@@ -9,6 +9,7 @@ import org.bridgedb.ws.bean.XRefMapBean;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,13 +22,16 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
+import org.bridgedb.url.URLMapper;
 import org.bridgedb.ws.bean.PropertyBean;
+import org.bridgedb.ws.bean.URLMapBean;
+import org.bridgedb.ws.bean.URLSearchBean;
 
 /**
  *
  * @author Christian
  */
-public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, XrefByPossition {
+public class WSMapper implements URLMapper, IDMapper, IDMapperCapabilities, XrefIterator, XrefByPossition {
 
     WSInterface webService;
     
@@ -35,6 +39,37 @@ public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, X
         this.webService = webService;
     }
     
+    //**** URLMapper functions **** 
+    
+    @Override
+    public Map<String, Set<String>> mapURL(Collection<String> srcURLs, String... tgtNameSpaces) throws IDMapperException {
+        HashMap<String, Set<String>> results = new HashMap<String, Set<String>> ();
+        if (srcURLs.isEmpty()) return results; //No valid srcrefs so return empty set
+        List<URLMapBean>  beans = webService.mapByURLs(new ArrayList(srcURLs), Arrays.asList(tgtNameSpaces));
+        for (URLMapBean bean:beans){
+            results.put(bean.getSource(), bean.getTargetsSet());
+        }
+        return results;
+    }
+
+    @Override
+    public Set<String> mapURL(String ref, String... tgtNameSpaces) throws IDMapperException {
+        URLMapBean  bean = webService.mapByURL(ref, Arrays.asList(tgtNameSpaces));
+        return bean.getTargetsSet();
+    }
+
+    @Override
+    public boolean uriExists(String URL) throws IDMapperException {
+        return webService.urlExists(URL).exists();
+    }
+
+    @Override
+    public Set<String> urlSearch(String text, int limit) throws IDMapperException {
+        URLSearchBean  bean = webService.URLSearch(text, limit);
+        return bean.getURLSet();
+    }
+
+    //**** IDMApper functions *****
     @Override
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
         ArrayList<String> ids = new ArrayList<String>();

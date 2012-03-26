@@ -5,12 +5,9 @@
 package org.bridgedb.sql;
 
 import java.util.Date;
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.linkset.IDMapperAndLinkListenerTest;
 import org.bridgedb.url.URLMapperTest;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * This class depends on URLasIDMapperSQLTest having loaded the data.
