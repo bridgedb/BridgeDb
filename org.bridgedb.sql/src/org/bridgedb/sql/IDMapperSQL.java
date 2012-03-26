@@ -1,16 +1,10 @@
 package org.bridgedb.sql;
 
-import org.bridgedb.ws.ByPossitionIterator;
-import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
@@ -18,12 +12,9 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
-import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.ProvenanceException;
 import org.bridgedb.provenance.ProvenanceFactory;
-import org.bridgedb.provenance.SimpleProvenance;
 import org.bridgedb.ws.XrefByPossition;
 
 /**
@@ -45,6 +36,10 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
         super(sqlAccess);
     }   
 
+    public IDMapperSQL(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+        super(dropTables, sqlAccess);
+    }   
+
     @Override
     boolean correctVersion(int currentVersion) {
         return currentVersion == SQL_COMPAT_VERSION;
@@ -55,7 +50,7 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	public void createSQLTables() throws BridgeDbSqlException
+	void createSQLTables() throws BridgeDbSqlException
 	{
         super.createSQLTables();
 		try 
@@ -84,8 +79,8 @@ public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabili
 	}
 
     @Override
-    public void init(Provenance provenance) throws BridgeDbSqlException {
-        super.init();
+    public void openInput(Provenance provenance) throws BridgeDbSqlException {
+        super.openInput();
 		try
 		{
 			pstInsertLink = possibleOpenConnection.prepareStatement("INSERT INTO link    "

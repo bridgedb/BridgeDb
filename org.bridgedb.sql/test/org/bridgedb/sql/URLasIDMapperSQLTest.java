@@ -5,12 +5,10 @@
 package org.bridgedb.sql;
 
 import java.util.Date;
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
 import org.bridgedb.linkset.IDMapperAndLinkListenerTest;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * 
@@ -34,9 +32,7 @@ public class URLasIDMapperSQLTest extends IDMapperAndLinkListenerTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestURLSQLAccess();
         connectionOk = true;
-        urlMapperSQL = new URLMapperSQL(sqlAccess);
-        urlMapperSQL.dropSQLTables();
-        urlMapperSQL.createSQLTables();
+        urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         idMapper = urlMapperSQL;
         provenanceFactory = urlMapperSQL;
         listener = urlMapperSQL;     

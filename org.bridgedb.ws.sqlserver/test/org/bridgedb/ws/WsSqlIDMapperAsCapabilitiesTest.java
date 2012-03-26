@@ -1,15 +1,11 @@
 package org.bridgedb.ws;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperCapabilitiesTest;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.file.IDMapperText;
-import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.IDMapperSQL;
-import org.bridgedb.sql.MySQLAccess;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SqlFactory;
 import org.junit.BeforeClass;

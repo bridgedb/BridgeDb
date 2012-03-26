@@ -1,5 +1,8 @@
 package org.bridgedb.ws;
 
+import java.util.Collection;
+import org.bridgedb.ws.bean.URLExistsBean;
+import org.bridgedb.ws.bean.URLMapBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XRefMapBean;
 import org.bridgedb.ws.bean.DataSourceBean;
@@ -23,15 +26,20 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.url.URLMapper;
+import org.bridgedb.url.WrapperURLMapper;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSupportedBean;
 import org.bridgedb.ws.bean.PropertyBean;
+import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
 
 @Path("/")
 public class WSService implements WSInterface {
 
     protected IDMapper idMapper;
+    protected URLMapper urlMapper;
+    
     protected XrefByPossition byPossition;
 
     /**
@@ -48,6 +56,11 @@ public class WSService implements WSInterface {
             this.byPossition = (XrefByPossition)idMapper;
         } else {
             this.byPossition = null;
+        }
+        if (idMapper instanceof URLMapper){
+            urlMapper = (URLMapper)idMapper;
+        } else {
+            urlMapper = new WrapperURLMapper(idMapper);
         }
     }
     
@@ -125,6 +138,76 @@ public class WSService implements WSInterface {
         sb.append("</ul>");
         sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    // ***** URLMapper Supporting Methods ****
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/mapByURLs")
+    @Override
+    public List<URLMapBean> mapByURLs(
+            @QueryParam("srcURLs") List<String> srcURLs,
+            @QueryParam("tgtNameSpaces") List<String> tgtNameSpaces) throws IDMapperException {
+        if (srcURLs == null) throw new IDMapperException("srcURLs parameter missig");
+        if (srcURLs.isEmpty()) throw new IDMapperException("srcURLs parameter missig");
+        Map<String, Set<String>> mappings;
+        if (tgtNameSpaces!= null){
+            mappings = urlMapper.mapURL(srcURLs, tgtNameSpaces.toArray(new String[0]));
+        } else {
+            mappings = urlMapper.mapURL(srcURLs);
+        }
+        ArrayList<URLMapBean> results = new ArrayList<URLMapBean>();
+        for (String source:mappings.keySet()){
+           results.add(new URLMapBean(source, mappings.get(source)));
+        }
+        return results;
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/mapByURL")
+    @Override
+    public URLMapBean mapByURL(
+            @QueryParam("ref") String ref, 
+            @QueryParam("tgtNameSpaces") List<String> tgtNameSpaces) throws IDMapperException {
+        if (ref == null) throw new IDMapperException("ref parameter missig");
+        if (ref.isEmpty()) throw new IDMapperException("ref parameter missig");
+        Set<String> mappings;
+        if ( tgtNameSpaces!=null){
+            mappings = urlMapper.mapURL(ref, tgtNameSpaces.toArray(new String[0]));
+        } else {
+            mappings = urlMapper.mapURL(ref);
+        }
+        return new URLMapBean(ref, mappings);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/URLExists")
+    @Override
+    public URLExistsBean urlExists( 
+            @QueryParam("URL") String URL) throws IDMapperException {
+        if (URL == null) throw new IDMapperException ("\"URL\" parameter missing");
+        if (URL.isEmpty()) throw new IDMapperException ("\"URL\" parameter missing");            
+        return new URLExistsBean(URL, urlMapper.uriExists(URL));
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/URLSearch")
+    @Override
+    public URLSearchBean URLSearch(
+            @QueryParam("text") String text, 
+            @QueryParam("limit") Integer limit) throws IDMapperException {
+        if (text == null) throw new IDMapperException("text parameter missig");
+        Set<String> mappings;
+        if (limit == null){
+            mappings = urlMapper.urlSearch(text, Integer.MAX_VALUE);
+        } else {
+            mappings = urlMapper.urlSearch(text,limit);
+        }
+        return new URLSearchBean(text, mappings);
     }
 
     @GET
@@ -356,4 +439,5 @@ public class WSService implements WSInterface {
             }            
         }
     }
+
 }

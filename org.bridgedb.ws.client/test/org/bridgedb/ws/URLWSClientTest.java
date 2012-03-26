@@ -11,14 +11,14 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-public class WSClientTest  extends IDWSTest{
+public class URLWSClientTest  extends URLWSTest{
     
     @BeforeClass
     public static void setupIDMapper() {
         connectionOk = false;
         webService = WSClientFactory.createTestWSClient();
         connectionOk = true;
-        idMapper = new WSMapper(webService);
+        urlMapper = new WSMapper(webService);
     }
 
 }

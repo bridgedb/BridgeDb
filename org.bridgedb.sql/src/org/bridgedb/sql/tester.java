@@ -17,9 +17,8 @@ public class tester {
     
     public static void main( String[] args ) throws BridgeDbSqlException, IOException, RDFParseException, RDFHandlerException {
         SQLAccess access = new MySQLAccess("jdbc:mysql://localhost:3306/ims", "ims", "ims");
-        IDMapperSQL idMapperSQL = new IDMapperSQL(access);
-        idMapperSQL.dropSQLTables();
-        idMapperSQL.createSQLTables();
+        IDMapperSQL idMapperSQL = new IDMapperSQL(true, access);
+        //TODO check if this still works.
         LinksetParser.parse (idMapperSQL, idMapperSQL, "C:/Temp/cs-chembl_small.ttl", "http://foo/bar");
         LinksetParser.parse (idMapperSQL, idMapperSQL, "C:/Temp/cs-chembl_small.ttl", "http://foo/bar");
         //LinksetParser.parse (idMapperSQL, "C:/Temp/cw-cs.ttl", "http://foo/bar");

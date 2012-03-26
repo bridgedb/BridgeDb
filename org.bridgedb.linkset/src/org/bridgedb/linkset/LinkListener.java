@@ -21,7 +21,7 @@ public interface LinkListener {
     
     //public void init() throws IDMapperException;
     
-    public void init(Provenance provenance) throws IDMapperException;
+    public void openInput(Provenance provenance) throws IDMapperException;
 
     public void closeInput()throws IDMapperException;
 }

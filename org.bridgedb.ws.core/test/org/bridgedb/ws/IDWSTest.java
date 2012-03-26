@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public abstract class WSTest extends IDMapperTest{
+public abstract class IDWSTest extends IDMapperTest{
     
     public static WSInterface webService;
     
