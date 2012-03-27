@@ -7,15 +7,9 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefIterator;
-import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.ProvenanceFactory;
-import org.bridgedb.ws.XrefByPossition;
 
 /**
  * UNDER DEVELOPMENT
@@ -23,8 +17,7 @@ import org.bridgedb.ws.XrefByPossition;
  * 
  * @author Christian
  */
-public class IDMapperSQL extends CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, 
-        XrefIterator, XrefByPossition{
+public class IDMapperSQL extends CommonSQL {
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 4;

@@ -1,5 +1,6 @@
 package org.bridgedb.ws;
 
+import org.bridgedb.iterator.URLByPossitionTest;
 import org.junit.BeforeClass;
 
 /**

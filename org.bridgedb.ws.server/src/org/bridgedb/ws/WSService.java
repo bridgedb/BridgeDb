@@ -1,6 +1,5 @@
 package org.bridgedb.ws;
 
-import java.util.Collection;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMapBean;
 import org.bridgedb.ws.bean.URLsBean;
@@ -27,6 +26,8 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.iterator.URLByPossition;
+import org.bridgedb.iterator.XrefByPossition;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.WrapperURLMapper;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
@@ -72,7 +73,7 @@ public class WSService implements WSInterface {
     }
     
     @Context 
-    private UriInfo uriInfo;
+    public UriInfo uriInfo;
 
    // static {
    //     try {
@@ -85,7 +86,7 @@ public class WSService implements WSInterface {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response welcomeMessage() {
+    public Response welcomeMessageQ() {
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
@@ -96,53 +97,61 @@ public class WSService implements WSInterface {
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
         sb.append("<p>Welcome to the prototype Identity Mapping Service. ");
         sb.append("Support services include:");
-        sb.append("<ul>");
         
-        sb.append("<li>mapByXRef");
         sb.append("<ul>");
-        sb.append("<li>Required arguements:<ul>");
-        sb.append("<li>id as string</li>");
-        sb.append("<li>code as string (Where code is the SystemCode of the DataSource)</li>");
-        sb.append("</ul></li>");
-        sb.append("<li>Optional arguments<ul>");
-        sb.append("<li>tgtCode as string ");
-        sb.append("<ul>");        
-        sb.append("<li>There can be more than one</li>");        
-        sb.append("<li>Where code is the SystemCode of the DataSource)</li>");
-        sb.append("</ul></ul></li>");
-
-        sb.append("<li>mapByXRefs");
-        sb.append("<ul>");
-        sb.append("<li>Required arguements:<ul>");
-        sb.append("<li>id as string</li>");
-        sb.append("<li>code as string (Where code is the SystemCode of the DataSource)</li>");
-        sb.append("<li>(There can be multiple \"id\" and \"code\" values");
-        sb.append("<ul>");
-        sb.append("<li>There must be at least one of each.</li>");                
-        sb.append("<li>There must be the same number of each.</li>");                
-        sb.append("<li>They will be paired by order.</li>");                
+        sb.append("<li>mapByXRef</li>");
+            sb.append("<ul>");
+            sb.append("<li>Required arguements:</li>");
+                sb.append("<ul>");
+                sb.append("<li>id as string</li>");
+                sb.append("<li>code as string (Where code is the SystemCode of the DataSource)</li>");
+                sb.append("</ul>");
+            sb.append("<li>Optional arguments</li>");
+                sb.append("<ul>");
+                sb.append("<li>tgtCode as string</li> ");
+                sb.append("<ul>");        
+            sb.append("<li>There can be more than one</li>");        
+            sb.append("<li>Where code is the SystemCode of the DataSource)</li>");
+            sb.append("</ul>");
         sb.append("</ul>");
-        sb.append("</ul></li>");
-        sb.append("<li>Optional arguments<ul>");
-        sb.append("<li>tgtCode as string ");
-        sb.append("<ul>");        
- 
-        sb.append("<li>freeSearch");
+    
         sb.append("<ul>");
-        sb.append("<li>Required arguements:<ul>");
-        sb.append("<li>text as string</li>");
-        sb.append("</ul></li>");
-        sb.append("<li>Optional arguments<ul>");
-        sb.append("<li>limit as Integer ");
-        sb.append("<ul>");        
-
-        sb.append("<li>There can be more than one</li>");        
-        sb.append("<li>Where code is the SystemCode of the DataSource)</li>");
-        sb.append("</ul></ul></li>");
-        sb.append("</ul></p>");
-        sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getSupportedSrcDataSources\">Get sources</a></li>");
-        sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getSupportedTgtDataSources\">Get targets</a></li>");
+        sb.append("<li>mapByXRefs</li>");
+            sb.append("<ul>");
+            sb.append("<li>Required arguements:</li>");
+                sb.append("<ul>");
+                sb.append("<li>id as string</li>");
+                sb.append("<li>code as string (Where code is the SystemCode of the DataSource)</li>");
+                sb.append("<li>(There can be multiple \"id\" and \"code\" values</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>There must be at least one of each.</li>");                
+                    sb.append("<li>There must be the same number of each.</li>");                
+                    sb.append("<li>They will be paired by order.</li>");                
+                    sb.append("</ul>");
+                sb.append("</ul>");
+            sb.append("<li>Optional arguments</li>");
+                sb.append("<ul>");
+                    sb.append("<li>tgtCode as string<li> ");
+                sb.append("</ul>");        
+            sb.append("</ul>");
         sb.append("</ul>");
+    
+        sb.append("<ul>"); 
+        sb.append("<li>freeSearch</li>");
+            sb.append("<ul>");
+            sb.append("<li>Required arguements:");
+                sb.append("<ul>");
+                sb.append("<li>text as string</li>");
+                sb.append("</ul>");
+            sb.append("<li>Optional arguments</li>");
+                sb.append("<ul>");
+                sb.append("<li>limit as Integer ");
+                sb.append("</ul>");        
+            sb.append("</ul>");
+        sb.append("</ul>");
+
+        //sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getSupportedSrcDataSources\">Get sources</a></li>");
+        //sb.append("<li><a href=\"").append(uriInfo.getBaseUri()).append("getSupportedTgtDataSources\">Get targets</a></li>");
         sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
