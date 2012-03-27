@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.AbstractIDMapperCapabilities;
@@ -18,32 +17,26 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
-import org.bridgedb.provenance.Provenance;
-import org.openrdf.model.URI;
 
 /**
- * Limited to a single Provenance
- * @deprecated 
  * @author Christian
  */
 public class IDMapperLinkset implements IDMapper, LinkListener{
 
     private Set<DataSource> sources;
     private Set<DataSource> targets;
-    private Provenance provenance;
     private Map<Xref,Set<Xref>> sourceToTarget;
     int linkCount;
     
     public IDMapperLinkset() {
-        openInput(null);
+        openInput();
     }
 
     @Override
-    public void openInput(Provenance provenance) {
-        isConnected = provenance != null; 
+    public void openInput() {
+        isConnected = true; 
         sources = new HashSet<DataSource>();
         targets = new HashSet<DataSource>();
-        this.provenance = provenance;
         sourceToTarget = new HashMap<Xref,Set<Xref>>();
         linkCount = 0;
     }

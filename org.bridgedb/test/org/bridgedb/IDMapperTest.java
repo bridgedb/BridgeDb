@@ -35,6 +35,7 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
         srcXrefs.add(mapBadxref1);
         Map<Xref, Set<Xref>> results = idMapper.mapID(srcXrefs);
         Set<Xref> resultSet = results.get(map1xref1);
+        System.out.println(map1xref1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1xref2));
         assertTrue(resultSet.contains(map1xref3));

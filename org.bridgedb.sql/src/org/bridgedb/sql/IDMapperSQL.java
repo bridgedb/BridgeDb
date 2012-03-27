@@ -9,7 +9,6 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.provenance.Provenance;
 
 /**
  * UNDER DEVELOPMENT
@@ -58,9 +57,8 @@ public class IDMapperSQL extends CommonSQL {
 					+ "     codeLeft VARCHAR(100) NOT NULL,	" 
 					+ "     idRight VARCHAR(50) NOT NULL,	" 
 					+ "     codeRight VARCHAR(100) NOT NULL," 
-					+ "     provenance INT,                 "  //Type still under review
 					+ "     PRIMARY KEY (idLeft, codeLeft,  " 
-					+ "		idRight, codeRight, provenance) 			" 
+					+ "		idRight, codeRight) 			" 
 					+ " )									");
             sh.close();
 		} catch (SQLException e)
@@ -72,24 +70,21 @@ public class IDMapperSQL extends CommonSQL {
 	}
 
     @Override
-    public void openInput(Provenance provenance) throws BridgeDbSqlException {
+    public void openInput() throws BridgeDbSqlException {
         super.openInput();
 		try
 		{
 			pstInsertLink = possibleOpenConnection.prepareStatement("INSERT INTO link    "
                     + "(idLeft, codeLeft,                       "   
-                    + " idRight, codeRight,                     "
-                    + " provenance )                            " 
-                    + "VALUES (?, ?, ?, ?,                      " 
-                    + provenance.getId() + ")                   ");
+                    + " idRight, codeRight)                     " 
+                    + "VALUES (?, ?, ?, ?)                      ");
 			pstCheckLink = possibleOpenConnection.prepareStatement("SELECT EXISTS "
                     + "(SELECT * FROM link      "
                     + "where                    "
                     + "   idLeft = ?            "
                     + "   AND codeLeft = ?      "   
                     + "   AND idRight = ?       "
-                    + "   AND codeRight = ?     "
-                    + "   AND provenance = " + provenance.getId() + ")");
+                    + "   AND codeRight = ?    )");
 		}
 		catch (SQLException e)
 		{
@@ -99,6 +94,8 @@ public class IDMapperSQL extends CommonSQL {
 
     @Override
     public void insertLink(Xref source, Xref target) throws BridgeDbSqlException {
+        checkDataSourceInDatabase(source.getDataSource());
+        checkDataSourceInDatabase(target.getDataSource());
         boolean exists = false;
         try {
             pstCheckLink.setString(1, source.getId());
