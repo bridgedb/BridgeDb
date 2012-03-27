@@ -1,8 +1,5 @@
 package org.bridgedb.sql;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bridgedb.ws.ByPossitionXrefIterator;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -20,12 +17,13 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
 import org.bridgedb.impl.InternalUtils;
+import org.bridgedb.iterator.ByPossitionXrefIterator;
+import org.bridgedb.iterator.XrefByPossition;
 import org.bridgedb.linkset.LinkListener;
 import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceException;
 import org.bridgedb.provenance.ProvenanceFactory;
 import org.bridgedb.provenance.SimpleProvenance;
-import org.bridgedb.ws.XrefByPossition;
 
 /**
  * UNDER DEVELOPMENT

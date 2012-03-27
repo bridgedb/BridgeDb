@@ -1,4 +1,4 @@
-package org.bridgedb.ws;
+package org.bridgedb.iterator;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

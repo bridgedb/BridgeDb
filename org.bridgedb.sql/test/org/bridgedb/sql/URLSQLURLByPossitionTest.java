@@ -4,9 +4,8 @@
  */
 package org.bridgedb.sql;
 
-import org.bridgedb.ws.XrefByPossitionTest;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.ws.URLByPossitionTest;
+import org.bridgedb.iterator.URLByPossitionTest;
 import org.junit.BeforeClass;
 
 /**
