@@ -18,7 +18,7 @@ public class URLSQLIDByPossitionTest extends XrefByPossitionTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = TestSqlFactory.createTestURLSQLAccess();
+        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         xrefByPossition = urlMapperSQL;
     }

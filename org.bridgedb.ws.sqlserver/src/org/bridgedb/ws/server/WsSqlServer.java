@@ -13,8 +13,8 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.sql.URLMapperSQL;
+import org.bridgedb.sql.URLSqlFactory;
 import org.bridgedb.ws.WSService;
 
 /**
@@ -24,7 +24,7 @@ import org.bridgedb.ws.WSService;
 public class WsSqlServer extends WSService{
     
     public WsSqlServer() throws BridgeDbSqlException  {
-        SQLAccess sqlAccess = SqlFactory.createURLSQLAccess();
+        SQLAccess sqlAccess = URLSqlFactory.createSQLAccess();
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         idMapper = urlMapperSQL;
         urlMapper = urlMapperSQL;

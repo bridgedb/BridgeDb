@@ -20,10 +20,6 @@ import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.iterator.ByPossitionXrefIterator;
 import org.bridgedb.iterator.XrefByPossition;
 import org.bridgedb.linkset.LinkListener;
-import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.ProvenanceException;
-import org.bridgedb.provenance.ProvenanceFactory;
-import org.bridgedb.provenance.SimpleProvenance;
 
 /**
  * UNDER DEVELOPMENT
@@ -31,8 +27,7 @@ import org.bridgedb.provenance.SimpleProvenance;
  * 
  * @author Christian
  */
-public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, ProvenanceFactory, 
-        XrefIterator, XrefByPossition{
+public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, XrefIterator, XrefByPossition{
         
     static final int BLOCK_SIZE = 10000;
     
@@ -44,8 +39,6 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
     static final int ID_LENGTH = 100;
     private static final int TYPE_LENGTH = 100;
     private static final int URNBASE_LENGTH = 100;
-    private static final int PREDICATE_LENGTH = 100;
-    private static final int CREATOR_LENGTH = 100;
     
     Connection possibleOpenConnection;
     private SQLAccess sqlAccess;
@@ -161,17 +154,6 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
                     + "     type VARCHAR(" + TYPE_LENGTH + "),              "
                     + "     urnBase VARCHAR(" + URNBASE_LENGTH + ")         "
                     + "  ) ");
-        	sh.execute(	"CREATE TABLE                                                   "    
-                    + "IF NOT EXISTS                                                    "
-					+ "		provenance                                                  " 
-					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,                          " 
-                    + "     source VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,            "
-                    + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,   "
-                    + "     target VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,            "
-					+ "     creator VARCHAR (" + CREATOR_LENGTH + "),                   "
-                    + "     dateCreated DATE NOT NULL,                                  "
-                    + "     dateUploaded DATE NOT NULL                                  "
-					+ " ) ");   
            sh.close();
 		} catch (SQLException e)
 		{
@@ -270,110 +252,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         }
     }
 
-    // **** ProvenanceFactory Methods ****
-    @Override
-    public Provenance createProvenance(DataSource source, String predicate, DataSource target, 
-            String createdBy, long creation, long upload) throws ProvenanceException{
-        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
-        if (result != null){
-            return result;
-        }
-        createMissingProvenance(source, predicate, target, createdBy, creation, upload);
-        return findProvenanceNumber(source, predicate, target, createdBy, creation);
-    }
-    
-    @Override
-    public Provenance createProvenance(DataSource source, String predicate, DataSource target,
-            String createdBy, long creation) throws ProvenanceException {
-        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
-        if (result != null){
-            return result;
-        }
-        createMissingProvenance(source, predicate, target, createdBy, creation, new GregorianCalendar().getTimeInMillis());
-        return findProvenanceNumber(source, predicate, target, createdBy, creation);
-    }
-
-    @Override
-    public Provenance createProvenace(Provenance first, Provenance second) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private Provenance findProvenanceNumber(DataSource source, String predicate, DataSource target, 
-            String createdBy, long creation) throws ProvenanceException{
-        Statement statement;
-        try {
-            statement = this.createStatement();
-        } catch (BridgeDbSqlException ex) {
-            throw new ProvenanceException ("Unable to create the statement ", ex);
-        }
-        String query = "SELECT id, source, linkPredicate, target, creator, dateCreated, dateUploaded from provenance "
-                + "where "
-                + "      source = \"" + source.getSystemCode() + "\""
-                + "  AND linkPredicate = \"" + predicate +"\"" 
-                + "  AND target = \"" + target.getSystemCode() + "\""
-                + "  AND creator = \"" + createdBy + "\""
-                + "  AND dateCreated = \"" + new Date(creation).toString() + "\"";
-        try {
-            ResultSet rs = statement.executeQuery(query);
-            if (rs.next()){
-                return new SimpleProvenance(rs.getInt("id"), 
-                                            DataSource.getBySystemCode(rs.getString("source")),
-                                            rs.getString("linkPredicate"), 
-                                            DataSource.getBySystemCode(rs.getString("target")),
-                                            rs.getString("creator"), 
-                                            rs.getDate("dateCreated").getTime(), 
-                                            rs.getDate("dateUploaded").getTime());
-            } else {
-                return null;
-            }
-        } catch (SQLException ex) {
-            System.err.println(query);
-            ex.printStackTrace();
-            throw new ProvenanceException ("Unable to check if Provenance already exists ", ex);
-        }
-    }
-
-    private void createMissingProvenance(DataSource source, String predicate, DataSource target, 
-            String createdBy, long creation, long uploaded) throws ProvenanceException  {
-        try {
-            checkDataSourceInDatabase(source);
-            checkDataSourceInDatabase(target);
-        } catch (BridgeDbSqlException ex) {
-            throw new ProvenanceException ("Error checking DataSource ", ex);
-        }
-        if (predicate.length() > PREDICATE_LENGTH){
-            throw new ProvenanceException("Unable to store predicate longer than " + PREDICATE_LENGTH + 
-                    " so unable to store " + predicate);
-        }
-        if (createdBy.length() > CREATOR_LENGTH){
-            throw new ProvenanceException("Unable to store creator longer than " + CREATOR_LENGTH + 
-                    " so unable to store " + createdBy);
-        }
-        Statement statement;
-        try {
-            statement = this.createStatement();
-        } catch (BridgeDbSqlException ex) {
-            throw new ProvenanceException ("Unable to create the statement ", ex);
-        }
-        String update = "INSERT INTO provenance "
-                + "(source, linkPredicate, target, creator, dateCreated, dateUploaded) "
-                + "VALUES ( "
-                + "\"" + source.getSystemCode() + "\", "
-                + "\"" + predicate + "\", "
-                + "\"" + target.getSystemCode() + "\", "
-                + "\"" + createdBy + "\", "
-                + "\"" + new Date(creation).toString() + "\", "
-                + "\"" + new Date(uploaded).toString() + "\")";
-        try {
-            statement.executeUpdate(update);
-        } catch (SQLException ex) {
-            System.err.println(update);
-            ex.printStackTrace();
-            throw new ProvenanceException ("Unable to check if Provenance already exists ", ex);
-        }
-    }
-
-    private void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
+    void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();
         if (sysCode == null) {

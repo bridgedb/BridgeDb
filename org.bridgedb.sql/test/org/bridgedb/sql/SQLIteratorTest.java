@@ -24,7 +24,7 @@ public class SQLIteratorTest extends XrefIteratorTest {
 
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = TestSqlFactory.createTestIDSQLAccess();
+        SQLAccess sqlAccess = TestIDSqlFactory.createTestSQLAccess();
         iDMapperSQL = new IDMapperSQL(sqlAccess);
         XrefIterator = iDMapperSQL;
     }
