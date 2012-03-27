@@ -1,29 +1,22 @@
-<project 
-    xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-        http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bridgedb</groupId>
-    <artifactId>org.bridgedb.ws.core</artifactId>
-    <packaging>jar</packaging>
-    <name>BridgeDb Websever Core</name>
-
-    <parent>
-        <artifactId>bridgedb-bundle</artifactId>
-        <groupId>org.bridgedb</groupId>
-        <version>1.1.1-SNAPSHOT</version>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.bridgedb</groupId>
+  <artifactId>org.bridgedb.plus</artifactId>
+  <name>BridgeDb Plus</name>
+  <parent>
+  	<artifactId>bridgedb-bundle</artifactId>
+  	<groupId>org.bridgedb</groupId>
+  	<version>1.1.1-SNAPSHOT</version>
+  </parent>
 
     <properties>
-        <cxf.version>2.4.3</cxf.version>
-        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+         <sesame.version>2.3.2</sesame.version>
     </properties>
 
     <build>
- 		<finalName>${artifactId}-${version}</finalName>
 		<directory>target</directory>
 		<outputDirectory>target/classes</outputDirectory>
+		<finalName>${artifactId}-${version}</finalName>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
 		<sourceDirectory>src</sourceDirectory>
 		<scriptSourceDirectory>scripts</scriptSourceDirectory>
@@ -38,14 +31,8 @@
 				<directory>test-data</directory>
 			</testResource>
 		</testResources>
-        <!--finalName>OPS-IMS-Prototype</finalName-->
         <plugins>
-            <!--plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tomcat-maven-plugin</artifactId>
-                <version>1.1</version>
-            </plugin-->
-             <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
@@ -59,29 +46,23 @@
         </plugins>
 	</build>
 	
-	<dependencies>
- 		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
- 		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.plus</artifactId>
-			<version>${project.version}</version>
+    <dependencies>
+		<dependency>
+			<groupId>checkstyle</groupId>
+			<artifactId>checkstyle</artifactId>
+			<version>5.0</version>
+			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb</artifactId>
 			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
- 		<dependency>
+		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.plus</artifactId>
+			<artifactId>org.bridgedb</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
@@ -92,6 +73,6 @@
             <version>1.2</version>
 			<scope>test</scope>
         </dependency>    
-	</dependencies>
+    </dependencies>
   
 </project>

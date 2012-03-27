@@ -10,19 +10,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefIterator;
-import org.bridgedb.linkset.LinkListener;
+import org.bridgedb.iterator.ByPossitionURLIterator;
+import org.bridgedb.iterator.URLByPossition;
 import org.bridgedb.provenance.Provenance;
-import org.bridgedb.provenance.ProvenanceFactory;
 import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
-import org.bridgedb.ws.ByPossitionURLIterator;
-import org.bridgedb.ws.URLByPossition;
-import org.bridgedb.ws.XrefByPossition;
 
 /**
  * UNDER DEVELOPMENT

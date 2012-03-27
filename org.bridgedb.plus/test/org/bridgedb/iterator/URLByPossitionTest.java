@@ -1,4 +1,4 @@
-package org.bridgedb.ws;
+package org.bridgedb.iterator;
 
 import org.bridgedb.url.URLMapperTestBase;
 import java.util.Set;

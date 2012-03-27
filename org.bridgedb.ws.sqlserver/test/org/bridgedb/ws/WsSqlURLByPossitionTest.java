@@ -7,6 +7,7 @@ package org.bridgedb.ws;
 import java.net.MalformedURLException;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.iterator.URLByPossitionTest;
 import org.bridgedb.sql.IDMapperSQL;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SqlFactory;

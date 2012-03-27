@@ -1,5 +1,6 @@
 package org.bridgedb.ws;
 
+import org.bridgedb.iterator.XrefByPossitionTest;
 import org.junit.BeforeClass;
 
 /**
