@@ -20,21 +20,15 @@ public class URLasIDMapperSQLTest extends IDMapperAndLinkListenerTest {
     private static final String PREDICATE1 = "testMapping";
     private static final long CREATION1 = new Date().getTime();
     private static URLMapperSQL urlMapperSQL;
-
-    @BeforeClass
-    public static void setupVariables() throws IDMapperException{
-        IDMapperTest.setupVariables();
-        //Change the postfix pattern. And why not test the nameSpace:id pattern
-     }
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestSqlFactory.createTestURLSQLAccess();
+        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
         connectionOk = true;
         urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         idMapper = urlMapperSQL;
-        provenanceFactory = urlMapperSQL;
+        //provenanceFactory = urlMapperSQL;
         listener = urlMapperSQL;     
         defaultLoadData();
     }

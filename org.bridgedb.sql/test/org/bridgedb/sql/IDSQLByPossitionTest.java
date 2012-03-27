@@ -18,7 +18,7 @@ public class IDSQLByPossitionTest extends XrefByPossitionTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = TestSqlFactory.createTestIDSQLAccess();
+        SQLAccess sqlAccess = TestIDSqlFactory.createTestSQLAccess();
         IDMapperSQL iDMapperSQL = new IDMapperSQL(sqlAccess);
         xrefByPossition = iDMapperSQL;
     }

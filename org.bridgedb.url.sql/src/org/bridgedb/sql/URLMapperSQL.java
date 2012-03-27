@@ -1,10 +1,12 @@
 package org.bridgedb.sql;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +17,9 @@ import org.bridgedb.Xref;
 import org.bridgedb.iterator.ByPossitionURLIterator;
 import org.bridgedb.iterator.URLByPossition;
 import org.bridgedb.provenance.Provenance;
+import org.bridgedb.provenance.ProvenanceException;
+import org.bridgedb.provenance.ProvenanceFactory;
+import org.bridgedb.provenance.SimpleProvenance;
 import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
 
@@ -24,11 +29,14 @@ import org.bridgedb.url.URLMapper;
  * 
  * @author Christian
  */
-public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, URLByPossition{
+public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, URLByPossition, ProvenanceFactory{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 5;
     
+    private static final int PREDICATE_LENGTH = 100;
+    private static final int CREATOR_LENGTH = 100;
+
     private PreparedStatement pstInsertLink = null;
     private PreparedStatement pstCheckLink = null;
 
@@ -72,6 +80,17 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
 					+ "     provenance INT,                                             "  //Type still under review
 					+ "     PRIMARY KEY (sourceURL, targetURL, provenance)                 " 
 					+ " )									                            ");
+        	sh.execute(	"CREATE TABLE                                                   "    
+                    + "IF NOT EXISTS                                                    "
+					+ "		provenance                                                  " 
+					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,                          " 
+                    + "     source VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,            "
+                    + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,   "
+                    + "     target VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,            "
+					+ "     creator VARCHAR (" + CREATOR_LENGTH + "),                   "
+                    + "     dateCreated DATE NOT NULL,                                  "
+                    + "     dateUploaded DATE NOT NULL                                  "
+					+ " ) ");   
             sh.close();
 		} catch (SQLException e)
 		{
@@ -82,7 +101,7 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
 	}
 
     @Override
-    public void openInput(Provenance provenance) throws BridgeDbSqlException {
+    public void openInput() throws BridgeDbSqlException {
         super.openInput();
 		try
 		{
@@ -90,14 +109,13 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
                     + "(sourceURL, sourceNameSpace,                       "   
                     + " targetURL, targetNameSpace,                     "
                     + " provenance )                            " 
-                    + "VALUES (?, ?, ?, ?,                      " 
-                    + provenance.getId() + ")                   ");
+                    + "VALUES (?, ?, ?, ?, ?)                   ");
 			pstCheckLink = possibleOpenConnection.prepareStatement("SELECT EXISTS "
                     + "(SELECT * FROM link      "
                     + "where                    "
-                    + "   sourceURL = ?            "
-                    + "   AND targetURL = ?      "   
-                    + "   AND provenance = " + provenance.getId() + ")");
+                    + "   sourceURL = ?         "
+                    + "   AND targetURL = ?     "   
+                    + "   AND provenance =  ?  )");
 		}
 		catch (SQLException e)
 		{
@@ -110,9 +128,12 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
         boolean exists = false;
         checkXrefValidToLoadInURLDataBase(source);
         checkXrefValidToLoadInURLDataBase(target);
+        checkDataSourceInDatabase(source.getDataSource());
+        checkDataSourceInDatabase(target.getDataSource());
         try {
             pstCheckLink.setString(1, source.getUrl());
             pstCheckLink.setString(2, target.getUrl());
+            pstCheckLink.setInt(3, 0);
             ResultSet rs = pstCheckLink.executeQuery();
             if (rs.next()) {
                 exists = rs.getBoolean(1);
@@ -127,6 +148,7 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
                 pstInsertLink.setString(2, source.getDataSource().getNameSpace());
                 pstInsertLink.setString(3, target.getUrl());
                 pstInsertLink.setString(4, target.getDataSource().getNameSpace());
+                pstInsertLink.setInt(5, 0);
                 pstInsertLink.executeUpdate();
                 insertCount++;
                 if (insertCount % BLOCK_SIZE == 0){
@@ -410,6 +432,109 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query.", ex);
+        }
+    }
+
+    // **** ProvenanceFactory Methods ****
+    @Override
+    public Provenance createProvenance(DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation, long upload) throws ProvenanceException{
+        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
+        if (result != null){
+            return result;
+        }
+        createMissingProvenance(source, predicate, target, createdBy, creation, upload);
+        return findProvenanceNumber(source, predicate, target, createdBy, creation);
+    }
+    
+    @Override
+    public Provenance createProvenance(DataSource source, String predicate, DataSource target,
+            String createdBy, long creation) throws ProvenanceException {
+        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
+        if (result != null){
+            return result;
+        }
+        createMissingProvenance(source, predicate, target, createdBy, creation, new GregorianCalendar().getTimeInMillis());
+        return findProvenanceNumber(source, predicate, target, createdBy, creation);
+    }
+
+    @Override
+    public Provenance createProvenace(Provenance first, Provenance second) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private Provenance findProvenanceNumber(DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation) throws ProvenanceException{
+        Statement statement;
+        try {
+            statement = this.createStatement();
+        } catch (BridgeDbSqlException ex) {
+            throw new ProvenanceException ("Unable to create the statement ", ex);
+        }
+        String query = "SELECT id, source, linkPredicate, target, creator, dateCreated, dateUploaded from provenance "
+                + "where "
+                + "      source = \"" + source.getSystemCode() + "\""
+                + "  AND linkPredicate = \"" + predicate +"\"" 
+                + "  AND target = \"" + target.getSystemCode() + "\""
+                + "  AND creator = \"" + createdBy + "\""
+                + "  AND dateCreated = \"" + new Date(creation).toString() + "\"";
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                return new SimpleProvenance(rs.getInt("id"), 
+                                            DataSource.getBySystemCode(rs.getString("source")),
+                                            rs.getString("linkPredicate"), 
+                                            DataSource.getBySystemCode(rs.getString("target")),
+                                            rs.getString("creator"), 
+                                            rs.getDate("dateCreated").getTime(), 
+                                            rs.getDate("dateUploaded").getTime());
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            System.err.println(query);
+            ex.printStackTrace();
+            throw new ProvenanceException ("Unable to check if Provenance already exists ", ex);
+        }
+    }
+
+    private void createMissingProvenance(DataSource source, String predicate, DataSource target, 
+            String createdBy, long creation, long uploaded) throws ProvenanceException  {
+        try {
+            checkDataSourceInDatabase(source);
+            checkDataSourceInDatabase(target);
+        } catch (BridgeDbSqlException ex) {
+            throw new ProvenanceException ("Error checking DataSource ", ex);
+        }
+        if (predicate.length() > PREDICATE_LENGTH){
+            throw new ProvenanceException("Unable to store predicate longer than " + PREDICATE_LENGTH + 
+                    " so unable to store " + predicate);
+        }
+        if (createdBy.length() > CREATOR_LENGTH){
+            throw new ProvenanceException("Unable to store creator longer than " + CREATOR_LENGTH + 
+                    " so unable to store " + createdBy);
+        }
+        Statement statement;
+        try {
+            statement = this.createStatement();
+        } catch (BridgeDbSqlException ex) {
+            throw new ProvenanceException ("Unable to create the statement ", ex);
+        }
+        String update = "INSERT INTO provenance "
+                + "(source, linkPredicate, target, creator, dateCreated, dateUploaded) "
+                + "VALUES ( "
+                + "\"" + source.getSystemCode() + "\", "
+                + "\"" + predicate + "\", "
+                + "\"" + target.getSystemCode() + "\", "
+                + "\"" + createdBy + "\", "
+                + "\"" + new Date(creation).toString() + "\", "
+                + "\"" + new Date(uploaded).toString() + "\")";
+        try {
+            statement.executeUpdate(update);
+        } catch (SQLException ex) {
+            System.err.println(update);
+            ex.printStackTrace();
+            throw new ProvenanceException ("Unable to check if Provenance already exists ", ex);
         }
     }
 

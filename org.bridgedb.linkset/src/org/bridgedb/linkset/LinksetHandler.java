@@ -5,7 +5,6 @@
 package org.bridgedb.linkset;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import org.bridgedb.DataSource;
@@ -132,7 +131,7 @@ public class LinksetHandler extends RDFHandlerBase{
                     linkPredicate.stringValue(), 
                     DataSource.getBySystemCode(objectTarget.toString()), 
                     creator.toString(), created);
-            listener.openInput(provenance);
+            listener.openInput();
         } catch (IDMapperException ex) {
             throw new RDFHandlerException ("Error starting listener ", ex);
         }

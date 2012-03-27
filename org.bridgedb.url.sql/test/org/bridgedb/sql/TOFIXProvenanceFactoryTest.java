@@ -12,9 +12,9 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-public class IDMapperSQLProvenanceFactoryTest extends ProvenanceFactoryTest{
+public class TOFIXProvenanceFactoryTest extends ProvenanceFactoryTest{
     
-    public IDMapperSQLProvenanceFactoryTest() {
+    public TOFIXProvenanceFactoryTest() {
     }
 
     @BeforeClass

@@ -1,14 +1,14 @@
 package org.bridgedb.url;
 
-import org.bridgedb.DataSource;
 import org.junit.BeforeClass;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.MapperTestBase;
 
 /**
  *
  * @author Christian
  */
-public abstract class URLMapperTestBase {
+public abstract class URLMapperTestBase extends MapperTestBase {
             
     //Must be instantiated by implementation of these tests.
     protected static URLMapper urlMapper;
@@ -41,10 +41,7 @@ public abstract class URLMapperTestBase {
     protected static String mapBadURL3;
 
     @BeforeClass
-    public static void loadDataSources() throws IDMapperException{
-        DataSource.register("TestDS1", "TestDS1").nameSpace("example:");
-        DataSource.register("TestDS2", "TestDS2").urlPattern("www.example.com/$id");
-        DataSource.register("TestDS3", "TestDS3").nameSpace("www.example.org#");
+    public static void LoadMappings() throws IDMapperException{
       
         nameSpace2 = "www.example.com/";
         nameSpace3 = "www.example.org#";
