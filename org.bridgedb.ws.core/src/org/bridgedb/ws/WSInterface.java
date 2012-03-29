@@ -67,9 +67,9 @@ public interface WSInterface {
 
     URLsBean getURLByPossition (String nameSpace, Integer possition, Integer limit) throws IDMapperException;
 
-    public List<URLMapBean> mapByURLs(List<String> srcURLs, List<String> tgtNameSpaces) throws IDMapperException;
+    public List<URLMapBean> mapByURLs(List<String> srcURL, List<String> tgtNameSpace) throws IDMapperException;
 
-    public URLMapBean mapByURL(String ref, List<String> tgtNameSpaces) throws IDMapperException;
+    public URLMapBean mapByURL(String srcURL, List<String> tgtNameSpace) throws IDMapperException;
 
     public URLExistsBean urlExists(String URL) throws IDMapperException;
 
