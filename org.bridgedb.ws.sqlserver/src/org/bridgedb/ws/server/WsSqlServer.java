@@ -222,7 +222,7 @@ public class WsSqlServer extends WSService{
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                sb.append("<li>limit as an Integer (currently ignored)</li>");
+                sb.append("<li>limit as an Integer </li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
@@ -375,7 +375,7 @@ public class WsSqlServer extends WSService{
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                sb.append("<li>limit as an Integer (currently ignored)</li>");
+                sb.append("<li>limit as an Integer </li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
