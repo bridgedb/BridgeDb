@@ -12,14 +12,15 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-public class TOFIXProvenanceFactoryTest extends ProvenanceFactoryTest{
+public class URLsqlProvenanceFactoryTest extends ProvenanceFactoryTest{
     
-    public TOFIXProvenanceFactoryTest() {
+    public URLsqlProvenanceFactoryTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        factory = new SimpleProvenanceFactory();
+        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
+        factory = new URLMapperSQL(sqlAccess);
     }
 
 }

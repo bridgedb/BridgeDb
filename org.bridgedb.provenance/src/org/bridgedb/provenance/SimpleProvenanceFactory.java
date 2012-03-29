@@ -14,10 +14,13 @@ import org.bridgedb.DataSource;
  */
 public class SimpleProvenanceFactory implements ProvenanceFactory{
     
+    static int idCounter = 0;
+    
     @Override
     public Provenance createProvenance(DataSource source, String predicate, DataSource target, 
             String createdBy, long creation, long upload){
-        return new SimpleProvenance(source, predicate, target, createdBy, creation, upload);
+        idCounter++;
+        return new SimpleProvenance(idCounter, source, predicate, target, createdBy, creation, upload);
     }
     
     @Override
@@ -29,6 +32,7 @@ public class SimpleProvenanceFactory implements ProvenanceFactory{
     
     @Override
     public Provenance createProvenace(Provenance first, Provenance second) throws ProvenanceException{
-        return new TransativeProvenace(first, second);
+        idCounter++;
+        return new TransativeProvenace(idCounter, first, second);
     }
 }
