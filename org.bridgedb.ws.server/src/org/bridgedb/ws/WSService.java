@@ -163,15 +163,15 @@ public class WSService implements WSInterface {
     @Path("/mapByURLs")
     @Override
     public List<URLMapBean> mapByURLs(
-            @QueryParam("srcURLs") List<String> srcURLs,
-            @QueryParam("tgtNameSpaces") List<String> tgtNameSpaces) throws IDMapperException {
-        if (srcURLs == null) throw new IDMapperException("srcURLs parameter missig");
-        if (srcURLs.isEmpty()) throw new IDMapperException("srcURLs parameter missig");
+            @QueryParam("srcURL") List<String> srcURL,
+            @QueryParam("tgtNameSpace") List<String> tgtNameSpace) throws IDMapperException {
+        if (srcURL == null) throw new IDMapperException("srcURL parameter missig");
+        if (srcURL.isEmpty()) throw new IDMapperException("srcURL parameter missig");
         Map<String, Set<String>> mappings;
-        if (tgtNameSpaces!= null){
-            mappings = urlMapper.mapURL(srcURLs, tgtNameSpaces.toArray(new String[0]));
+        if (tgtNameSpace!= null){
+            mappings = urlMapper.mapURL(srcURL, tgtNameSpace.toArray(new String[0]));
         } else {
-            mappings = urlMapper.mapURL(srcURLs);
+            mappings = urlMapper.mapURL(srcURL);
         }
         ArrayList<URLMapBean> results = new ArrayList<URLMapBean>();
         for (String source:mappings.keySet()){
@@ -185,17 +185,19 @@ public class WSService implements WSInterface {
     @Path("/mapByURL")
     @Override
     public URLMapBean mapByURL(
-            @QueryParam("ref") String ref, 
-            @QueryParam("tgtNameSpaces") List<String> tgtNameSpaces) throws IDMapperException {
-        if (ref == null) throw new IDMapperException("ref parameter missig");
-        if (ref.isEmpty()) throw new IDMapperException("ref parameter missig");
+            @QueryParam("srcURL") String srcURL, 
+            @QueryParam("tgtNameSpace") List<String> tgtNameSpace) throws IDMapperException {
+        if (srcURL == null) throw new IDMapperException("srcURL parameter missig");
+        if (srcURL.isEmpty()) throw new IDMapperException("srcURL parameter missig");
         Set<String> mappings;
-        if ( tgtNameSpaces!=null){
-            mappings = urlMapper.mapURL(ref, tgtNameSpaces.toArray(new String[0]));
+        System.out.println(" mapByURL" + srcURL + "-> " + tgtNameSpace);
+        if ( tgtNameSpace!=null){
+            mappings = urlMapper.mapURL(srcURL, tgtNameSpace.toArray(new String[0]));
         } else {
-            mappings = urlMapper.mapURL(ref);
+            mappings = urlMapper.mapURL(srcURL);
         }
-        return new URLMapBean(ref, mappings);
+        System.out.println(mappings);
+        return new URLMapBean(srcURL, mappings);
     }
 
     @GET

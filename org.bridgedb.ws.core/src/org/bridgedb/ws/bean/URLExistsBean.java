@@ -5,7 +5,6 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.Xref;
 
 /**
  *
@@ -22,7 +21,7 @@ public class URLExistsBean {
     
     public URLExistsBean(String URL, boolean exists){
         this.exists = exists;
-        URL = URL;
+        this.URL = URL;
     }
     
     /**
