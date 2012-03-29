@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
  * Once IDMapperSQLTest is run once these should be fine until the test data changes again.
  * @author Christian
  */
-public class URLSQLURLByPossitionTest extends URLByPossitionTest {
+public class URLsqlURLByPossitionTest extends URLByPossitionTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{

@@ -25,18 +25,6 @@ public class SimpleProvenance implements Provenance{
     
     /**
      * Constructor. However recommended call method is via the ProvenanceFactory
-     * @param createdBy
-     * @param predicate
-     * @param creationDate
-     * @param uploadDate 
-     */
-    public SimpleProvenance (DataSource source, String predicate, DataSource target, 
-            String createdBy, long creation, long upload){
-        this(Provenance.NO_ID_ASSIGNED, source, predicate, target, createdBy, creation, upload);
-    }
-    
-    /**
-     * Constructor. However recommended call method is via the ProvenanceFactory
      * @param id  (Optional)
      * @param createdBy
      * @param predicate
@@ -51,6 +39,7 @@ public class SimpleProvenance implements Provenance{
         this.target = target;
         this.createdBy = createdBy;
         this.creationDate = creation;
+        System.out.println(this.creationDate);
         this.uploadDate = upload;
     }
     

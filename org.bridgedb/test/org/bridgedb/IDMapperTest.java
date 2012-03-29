@@ -35,7 +35,6 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
         srcXrefs.add(mapBadxref1);
         Map<Xref, Set<Xref>> results = idMapper.mapID(srcXrefs);
         Set<Xref> resultSet = results.get(map1xref1);
-        System.out.println(map1xref1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1xref2));
         assertTrue(resultSet.contains(map1xref3));
@@ -89,6 +88,10 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
     public void testMapIDOneToManyWithTwoDataSources() throws IDMapperException{
         System.out.println("MapIDOneToManyWithTwoDataSources");
         Set<Xref> results = idMapper.mapID(map1xref1, DataSource2, DataSource3);
+        System.out.println(map1xref3.getDataSource());
+        System.out.println(DataSource3);
+        System.out.println(results);
+        System.out.println(results.contains(map1xref3));
         assertTrue(results.contains(map1xref2));
         assertTrue(results.contains(map1xref3));
         assertFalse(results.contains(map2xref1));

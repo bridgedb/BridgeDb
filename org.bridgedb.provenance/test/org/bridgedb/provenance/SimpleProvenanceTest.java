@@ -15,19 +15,6 @@ import static org.junit.Assert.*;
  */
 public class SimpleProvenanceTest  extends IDMapperTestBase{
     
-   /**
-     * Test of equals method, of class SimpleProvenance.
-     */
-    @Test
-    public void testEquals() {
-        System.out.println("equals");
-        long creation = 100;
-        long upload = 50;
-        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
-        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
-        assertEquals(expected, result);
-    }
-
     /**
      * Test of equals method, of class SimpleProvenance.
      */
@@ -66,8 +53,8 @@ public class SimpleProvenanceTest  extends IDMapperTestBase{
         System.out.println("EqualsFailsOnSourceDiff");
         long creation = 100;
         long upload = 50;
-        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
-        SimpleProvenance result = new SimpleProvenance(DataSource3, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance expected = new SimpleProvenance(2, DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(2, DataSource3, "predicate", DataSource2, "createdBy", creation, upload);
         assertThat(expected, not(result));
     }
 
@@ -79,8 +66,8 @@ public class SimpleProvenanceTest  extends IDMapperTestBase{
         System.out.println("EqualsFailsOnTargetDiff");
         long creation = 100;
         long upload = 50;
-        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
-        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource3, "createdBy", creation, upload);
+        SimpleProvenance expected = new SimpleProvenance(3, DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(3, DataSource1, "predicate", DataSource3, "createdBy", creation, upload);
         assertThat(expected, not(result));
     }
 
@@ -92,8 +79,8 @@ public class SimpleProvenanceTest  extends IDMapperTestBase{
         System.out.println("EqualsFailsOnCreatorDiff");
         long creation = 100;
         long upload = 50;
-        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
-        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy2", creation, upload);
+        SimpleProvenance expected = new SimpleProvenance(4, DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(4, DataSource1, "predicate", DataSource2, "createdBy2", creation, upload);
         assertThat(expected, not(result));
     }
     /**
@@ -104,8 +91,8 @@ public class SimpleProvenanceTest  extends IDMapperTestBase{
         System.out.println("EqualsFailsOnPredicateDiff");
         long creation = 100;
         long upload = 50;
-        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
-        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate2", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance expected = new SimpleProvenance(5, DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(5, DataSource1, "predicate2", DataSource2, "createdBy", creation, upload);
         assertThat(expected, not(result));
     }
 
@@ -117,8 +104,8 @@ public class SimpleProvenanceTest  extends IDMapperTestBase{
         System.out.println("EqualsFailsOnCreationDiff");
         long creation = 100;
         long upload = 50;
-        SimpleProvenance expected = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
-        SimpleProvenance result = new SimpleProvenance(DataSource1, "predicate", DataSource2, "createdBy", creation + 10, upload);
+        SimpleProvenance expected = new SimpleProvenance(6, DataSource1, "predicate", DataSource2, "createdBy", creation, upload);
+        SimpleProvenance result = new SimpleProvenance(6, DataSource1, "predicate", DataSource2, "createdBy", creation + 10, upload);
         assertThat(expected, not(result));
     }
 

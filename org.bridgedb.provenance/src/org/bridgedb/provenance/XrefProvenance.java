@@ -13,7 +13,7 @@ public class XrefProvenance extends Xref
         this.provenance = provenance;
 	}
 
-    XrefProvenance(Xref plainXref, Provenance provenance) {
+    public XrefProvenance(Xref plainXref, Provenance provenance) {
        super (plainXref.getId(), plainXref.getDataSource());
        this.provenance = provenance;
     }
@@ -22,4 +22,8 @@ public class XrefProvenance extends Xref
         return provenance;
     }
 
+    @Override
+    public String toString(){
+        return super.toString()+ "@" + provenance.getId();
+    }
 }

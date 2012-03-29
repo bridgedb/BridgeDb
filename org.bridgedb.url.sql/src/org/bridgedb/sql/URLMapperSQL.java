@@ -16,6 +16,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.iterator.ByPossitionURLIterator;
 import org.bridgedb.iterator.URLByPossition;
+import org.bridgedb.linkset.URLLinkListener;
 import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceException;
 import org.bridgedb.provenance.ProvenanceFactory;
@@ -29,7 +30,8 @@ import org.bridgedb.url.URLMapper;
  * 
  * @author Christian
  */
-public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, URLByPossition, ProvenanceFactory{
+public class URLMapperSQL extends CommonSQL 
+        implements URLLinkListener, URLMapper, URLIterator, URLByPossition, ProvenanceFactory{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 5;
@@ -88,8 +90,8 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
                     + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,   "
                     + "     target VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,            "
 					+ "     creator VARCHAR (" + CREATOR_LENGTH + "),                   "
-                    + "     dateCreated DATE NOT NULL,                                  "
-                    + "     dateUploaded DATE NOT NULL                                  "
+                    + "     dateCreated BIGINT NOT NULL,                                  "
+                    + "     dateUploaded BIGINT NOT NULL                                  "
 					+ " ) ");   
             sh.close();
 		} catch (SQLException e)
@@ -122,6 +124,41 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
 			throw new BridgeDbSqlException ("Error creating prepared statements", e);
 		}
  	}
+
+    @Override
+    public void insertLink(String source, String target, Provenance provenace) throws IDMapperException {
+        boolean exists = false;
+        try {
+            pstCheckLink.setString(1, source);
+            pstCheckLink.setString(2, target);
+            pstCheckLink.setInt(3, provenace.getId());
+            ResultSet rs = pstCheckLink.executeQuery();
+            if (rs.next()) {
+                exists = rs.getBoolean(1);
+            }
+            if (exists){
+                doubleCount++;
+                if (doubleCount % BLOCK_SIZE == 0){
+                    System.out.println("Already skipped " + doubleCount + " links that already exist with this provenance");
+                }
+            } else {
+                pstInsertLink.setString(1, source);
+                pstInsertLink.setString(2, provenace.getSource().getNameSpace());
+                pstInsertLink.setString(3, target);
+                pstInsertLink.setString(4, provenace.getTarget().getNameSpace());
+                pstInsertLink.setInt(5, provenace.getId());
+                pstInsertLink.executeUpdate();
+                insertCount++;
+                if (insertCount % BLOCK_SIZE == 0){
+                    System.out.println("Inserted " + insertCount + " links loaded so far");
+                    possibleOpenConnection.commit();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+            throw new BridgeDbSqlException ("Error inserting link ", ex);
+        }
+    }
 
     @Override
     public void insertLink(Xref source, Xref target) throws BridgeDbSqlException {
@@ -477,7 +514,7 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
                 + "  AND linkPredicate = \"" + predicate +"\"" 
                 + "  AND target = \"" + target.getSystemCode() + "\""
                 + "  AND creator = \"" + createdBy + "\""
-                + "  AND dateCreated = \"" + new Date(creation).toString() + "\"";
+                + "  AND dateCreated = \"" + creation + "\"";
         try {
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()){
@@ -486,8 +523,8 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
                                             rs.getString("linkPredicate"), 
                                             DataSource.getBySystemCode(rs.getString("target")),
                                             rs.getString("creator"), 
-                                            rs.getDate("dateCreated").getTime(), 
-                                            rs.getDate("dateUploaded").getTime());
+                                            rs.getLong("dateCreated"), 
+                                            rs.getLong("dateUploaded"));
             } else {
                 return null;
             }
@@ -527,8 +564,8 @@ public class URLMapperSQL extends CommonSQL implements URLMapper, URLIterator, U
                 + "\"" + predicate + "\", "
                 + "\"" + target.getSystemCode() + "\", "
                 + "\"" + createdBy + "\", "
-                + "\"" + new Date(creation).toString() + "\", "
-                + "\"" + new Date(uploaded).toString() + "\")";
+                + "\"" + creation + "\", "
+                + "\"" + uploaded + "\")";
         try {
             statement.executeUpdate(update);
         } catch (SQLException ex) {
