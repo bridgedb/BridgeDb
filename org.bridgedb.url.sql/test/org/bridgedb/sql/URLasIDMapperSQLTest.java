@@ -9,6 +9,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
 import org.bridgedb.linkset.IDMapperAndLinkListenerTest;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * 

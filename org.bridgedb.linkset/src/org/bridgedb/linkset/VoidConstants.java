@@ -16,6 +16,7 @@ class VoidConstants {
     static final String SUBJECTSTARGET = voidns + "subjectsTarget";
     static final String OBJECTSTARGET = voidns + "objectsTarget";
     static final String TARGET = voidns + "target";
-    static String SUBSET = voidns + "subset";
+    static final String SUBSET = voidns + "subset";
+    static final String URI_SPACE = voidns + "uriSpace";
 
 }

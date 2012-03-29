@@ -16,13 +16,15 @@ public class TransativeProvenace implements Provenance{
 
     private Provenance first;
     private Provenance second;
-    
+    private int id;
+
     /**
      * Constructor. However recommended call method is via the ProvenanceFactory
      * @param first
      * @param second 
      */
-    TransativeProvenace(Provenance first, Provenance second) throws ProvenanceException{
+    TransativeProvenace(int id, Provenance first, Provenance second) throws ProvenanceException{
+        this.id = id;
         if (first.getTarget().equals(second.getTarget())){
             this.first = first;
             this.second = second;
@@ -69,7 +71,7 @@ public class TransativeProvenace implements Provenance{
     
     @Override
     public int getId() {
-        return Provenance.NO_ID_ASSIGNED;
+        return id;
     }
 
     @Override
