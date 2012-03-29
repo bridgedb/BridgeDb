@@ -21,6 +21,7 @@ public class URLSearchBean {
         } else {
             URL = new ArrayList(URLs);
         }
+        this.term = term;
     }
 
     /**

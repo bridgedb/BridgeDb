@@ -48,13 +48,13 @@ public class WSClient implements WSInterface{
     
     //*** URLMapper functions methods *****
     @Override
-    public List<URLMapBean> mapByURLs(List<String> srcURLs, List<String> tgtNameSpaces) throws IDMapperException {
+    public List<URLMapBean> mapByURLs(List<String> srcURL, List<String> tgtNameSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        for (String srcURL:srcURLs){
-            params.add("srcURLs", srcURL);
+        for (String asrcURL:srcURL){
+            params.add("srcURL", asrcURL);
         }
-        for (String target:tgtNameSpaces){
-            params.add("tgtNameSpaces", target);
+        for (String target:tgtNameSpace){
+            params.add("tgtNameSpace", target);
         }
         //Make service call
         List<URLMapBean> result = 
@@ -66,11 +66,11 @@ public class WSClient implements WSInterface{
     }
 
     @Override
-    public URLMapBean mapByURL(String ref, List<String> tgtNameSpaces) throws IDMapperException {
+    public URLMapBean mapByURL(String srcURL, List<String> tgtNameSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("ref", ref);
-        for (String target:tgtNameSpaces){
-            params.add("tgtNameSpaces", target);
+        params.add("srcURL", srcURL);
+        for (String target:tgtNameSpace){
+            params.add("tgtNameSpace", target);
         }
         //Make service call
         URLMapBean result = 
