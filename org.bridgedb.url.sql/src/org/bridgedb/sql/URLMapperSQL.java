@@ -302,7 +302,8 @@ public class URLMapperSQL extends CommonSQL
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   targetURL LIKE \"%" + text + "\" ";
+                + "   targetURL LIKE \"%" + text + "\""
+                + "LIMIT " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -398,7 +399,8 @@ public class URLMapperSQL extends CommonSQL
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   targetURL LIKE \"%" + text + "\" ";
+                + "   targetURL LIKE \"%" + text + "\""
+                + "LIMIT " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);

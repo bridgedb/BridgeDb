@@ -141,11 +141,18 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     public void testFreeSearchGood() throws IDMapperException{
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         System.out.println("FreeSearchGood");
-        Set<String> results = urlMapper.urlSearch(goodId1, 10);
+        Set<String> results = urlMapper.urlSearch(goodId1, 1000);
         assertTrue (results.contains(map1URL1));
         assertTrue (results.contains(map1URL1));
         assertTrue (results.contains(map1URL3));
         assertFalse (results.contains(map2URL1));
     }
     
+    @Test
+    public void testFreeSearchGoodJut2() throws IDMapperException{
+        org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
+        System.out.println("FreeSearchGoodJust2");
+        Set<String> results = urlMapper.urlSearch(goodId1, 2);
+        assertEquals (2, results.size());
+     }
 }

@@ -2,6 +2,7 @@ package org.bridgedb;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -82,7 +83,17 @@ public class DataCollection implements IDMapper{
         boolean allowedId = m.matches();
         if (allowedId){
             Xref temp = new Xref(text, mappedSources.iterator().next());
-            return mapID(temp);
+            Set<Xref> possible = mapID(temp);
+            if (possible.size() <= limit){
+                return possible;
+            } else {
+                Set<Xref> smaller = new HashSet<Xref>();
+                Iterator<Xref> iterator = possible.iterator();
+                for (int i = 0; i < limit; i++){
+                    smaller.add(iterator.next());
+                }
+                return smaller;
+            }
         } else {
             return new HashSet<Xref>();
         } 
