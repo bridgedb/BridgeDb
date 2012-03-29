@@ -225,7 +225,8 @@ public class IDMapperSQL extends CommonSQL {
                 + "SELECT distinct idLeft as id, codeLeft as code  "
                 + "FROM link      "
                 + "where                    "
-                + "   idLeft = \"" + text + "\" ";
+                + "   idLeft = \"" + text + "\" "
+                + "LIMIT " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
