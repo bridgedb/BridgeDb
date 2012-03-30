@@ -4,6 +4,7 @@
  */
 package org.bridgedb.ws;
 
+import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
 import org.junit.BeforeClass;
 
@@ -14,7 +15,7 @@ import org.junit.BeforeClass;
 public class WSClientTest  extends IDWSTest{
     
     @BeforeClass
-    public static void setupIDMapper() {
+    public static void setupIDMapper() throws IDMapperException {
         connectionOk = false;
         webService = WSClientFactory.createTestWSClient();
         connectionOk = true;
