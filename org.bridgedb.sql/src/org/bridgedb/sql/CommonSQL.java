@@ -17,8 +17,8 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
 import org.bridgedb.impl.InternalUtils;
-import org.bridgedb.iterator.ByPossitionXrefIterator;
-import org.bridgedb.iterator.XrefByPossition;
+import org.bridgedb.iterator.ByPositionXrefIterator;
+import org.bridgedb.iterator.XrefByPosition;
 import org.bridgedb.linkset.LinkListener;
 
 /**
@@ -27,7 +27,7 @@ import org.bridgedb.linkset.LinkListener;
  * 
  * @author Christian
  */
-public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, XrefIterator, XrefByPossition{
+public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, XrefIterator, XrefByPosition{
         
     static final int BLOCK_SIZE = 10000;
     
@@ -540,11 +540,11 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
 
     @Override
     public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
-        return new ByPossitionXrefIterator(this, ds);
+        return new ByPositionXrefIterator(this, ds);
     }
 
     @Override
     public Iterable<Xref> getIterator() throws IDMapperException {
-        return new ByPossitionXrefIterator(this);
+        return new ByPositionXrefIterator(this);
     }
 }

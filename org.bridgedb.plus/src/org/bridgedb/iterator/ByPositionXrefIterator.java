@@ -14,20 +14,20 @@ import org.bridgedb.Xref;
  *
  * @author Christian
  */
-public class ByPossitionXrefIterator implements Iterator<Xref>, Iterable<Xref>{
+public class ByPositionXrefIterator implements Iterator<Xref>, Iterable<Xref>{
 
     private Xref bufferedNext;
-    private XrefByPossition xrefByPossition;  
+    private XrefByPosition xrefByPosition;  
     private DataSource dataSource;
     int count;
         
-    public ByPossitionXrefIterator (XrefByPossition xrefByPossition, DataSource dataSource){
-        this(xrefByPossition);
+    public ByPositionXrefIterator (XrefByPosition xrefByPosition, DataSource dataSource){
+        this(xrefByPosition);
         this.dataSource = dataSource;
     }
     
-    public ByPossitionXrefIterator (XrefByPossition xrefByPossition){
-        this.xrefByPossition = xrefByPossition;
+    public ByPositionXrefIterator (XrefByPosition xrefByPosition){
+        this.xrefByPosition = xrefByPosition;
         count = -1;
     }
    
@@ -44,9 +44,9 @@ public class ByPossitionXrefIterator implements Iterator<Xref>, Iterable<Xref>{
     private Xref getNext() throws IDMapperException{
         count ++;
         if (dataSource == null){
-            return xrefByPossition.getXrefByPossition(count);
+            return xrefByPosition.getXrefByPosition(count);
         } else {
-            return xrefByPossition.getXrefByPossition(dataSource, count);
+            return xrefByPosition.getXrefByPosition(dataSource, count);
         }
     }
     

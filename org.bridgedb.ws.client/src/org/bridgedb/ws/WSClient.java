@@ -272,18 +272,18 @@ public class WSClient implements WSInterface{
     }
 
     @Override
-    public List<XrefBean> getXrefByPossition(String code, Integer possition, Integer limit) throws IDMapperException {
+    public List<XrefBean> getXrefByPosition(String code, Integer position, Integer limit) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         if (code != null) {
             params.add("code",  code);
         }
-        params.add("possition",  possition.toString());
+        params.add("position",  position.toString());
         if (limit != null){
             params.add("limit",  limit.toString());
         }
        //Make service call
         List<XrefBean> result = 
-                webResource.path("getXrefByPossition")
+                webResource.path("getXrefByPosition")
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<XrefBean>>() {});
@@ -291,18 +291,18 @@ public class WSClient implements WSInterface{
     }
 
     @Override
-    public URLsBean getURLByPossition(String nameSpace, Integer possition, Integer limit) throws IDMapperException {
+    public URLsBean getURLByPosition(String nameSpace, Integer position, Integer limit) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         if (nameSpace != null) {
             params.add("nameSpace",  nameSpace);
         }
-        params.add("possition",  possition.toString());
+        params.add("position",  position.toString());
         if (limit != null){
             params.add("limit",  limit.toString());
         }
        //Make service call
         URLsBean result = 
-                webResource.path("getURLByPossition")
+                webResource.path("getURLByPosition")
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<URLsBean>() {});

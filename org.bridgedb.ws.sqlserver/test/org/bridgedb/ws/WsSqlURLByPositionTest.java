@@ -7,7 +7,7 @@ package org.bridgedb.ws;
 import java.net.MalformedURLException;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.iterator.URLByPossitionTest;
+import org.bridgedb.iterator.URLByPositionTest;
 import org.bridgedb.sql.IDMapperSQL;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestURLSqlFactory;
@@ -19,14 +19,14 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-public class WsSqlURLByPossitionTest extends URLByPossitionTest{
+public class WsSqlURLByPositionTest extends URLByPositionTest{
     
     @BeforeClass
     public static void setupURLMapper() throws IDMapperException, MalformedURLException{
         SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
         IDMapper inner = new URLMapperSQL(sqlAccess);
         WSService webService = new WSService(inner);
-        urlByPossition = new WSMapper(webService);
+        urlByPosition = new WSMapper(webService);
     }
 
 }
