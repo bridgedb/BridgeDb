@@ -8,20 +8,20 @@ import org.bridgedb.IDMapperException;
  *
  * @author Christian
  */
-public class ByPossitionURLIterator implements Iterator<String>,Iterable<String>{
+public class ByPositionURLIterator implements Iterator<String>,Iterable<String>{
 
     private String bufferedNext;
-    private URLByPossition urlByPossition;  
+    private URLByPosition urlByPosition;  
     private String nameSpace;
     int count;
         
-    public ByPossitionURLIterator (URLByPossition urlByPossition, String nameSpace){
-        this(urlByPossition);
+    public ByPositionURLIterator (URLByPosition urlByPosition, String nameSpace){
+        this(urlByPosition);
         this.nameSpace = nameSpace;
     }
     
-    public ByPossitionURLIterator (URLByPossition urlByPossition){
-        this.urlByPossition = urlByPossition;
+    public ByPositionURLIterator (URLByPosition urlByPosition){
+        this.urlByPosition = urlByPosition;
         count = -1;
     }
    
@@ -38,9 +38,9 @@ public class ByPossitionURLIterator implements Iterator<String>,Iterable<String>
     private String getNext() throws IDMapperException{
         count ++;
         if (nameSpace == null){
-            return urlByPossition.getURLByPossition(count);
+            return urlByPosition.getURLByPosition(count);
         } else {
-            return urlByPossition.getURLByPossition(nameSpace, count);
+            return urlByPosition.getURLByPosition(nameSpace, count);
         }
     }
     

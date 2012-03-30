@@ -302,24 +302,24 @@ public class IDMapperSQL extends CommonSQL {
 
     //*** Support method for iteration ****
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Set<Xref> getXrefByPossition(int possition, int limit) throws IDMapperException {
+    public Set<Xref> getXrefByPosition(int position, int limit) throws IDMapperException {
         String query = "SELECT distinct idRight as id, codeRight as code  "
                 + "FROM link      "
                 + "UNION "
                 + "SELECT distinct idLeft as id, codeLeft as code  "
                 + "FROM link      "
-                + "LIMIT " + possition + " , " + limit;
+                + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -340,24 +340,24 @@ public class IDMapperSQL extends CommonSQL {
 
     //*** Support method for interation ****
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Xref getXrefByPossition(int possition) throws IDMapperException {
+    public Xref getXrefByPosition(int position) throws IDMapperException {
         String query = "SELECT distinct idRight as id, codeRight as code  "
                 + "FROM link      "
                 + "UNION "
                 + "SELECT distinct idLeft as id, codeLeft as code  "
                 + "FROM link      "
-                + "LIMIT " + possition + ",1";
+                + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -377,18 +377,18 @@ public class IDMapperSQL extends CommonSQL {
     }
 
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Set<Xref> getXrefByPossition(DataSource ds, int possition, int limit) throws IDMapperException {
+    public Set<Xref> getXrefByPosition(DataSource ds, int position, int limit) throws IDMapperException {
         String query = "SELECT distinct idRight as id "
                 + "FROM link      "
                 + "WHERE "
@@ -398,7 +398,7 @@ public class IDMapperSQL extends CommonSQL {
                 + "FROM link      "
                 + "WHERE "
                 + "codeLeft = \"" + ds.getSystemCode() + "\" "
-                + "LIMIT " + possition + " , " + limit;
+                + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -416,18 +416,18 @@ public class IDMapperSQL extends CommonSQL {
     }
 
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Xref getXrefByPossition(DataSource ds, int possition) throws IDMapperException {
+    public Xref getXrefByPosition(DataSource ds, int position) throws IDMapperException {
         String query = "SELECT distinct idRight as id "
                 + "FROM link      "
                 + "WHERE "
@@ -437,7 +437,7 @@ public class IDMapperSQL extends CommonSQL {
                 + "FROM link      "
                 + "WHERE "
                 + "codeLeft = \"" + ds.getSystemCode() + "\" "
-                + "LIMIT " + possition + ",1";
+                + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);

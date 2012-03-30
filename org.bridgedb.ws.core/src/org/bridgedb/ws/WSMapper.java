@@ -22,9 +22,9 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
-import org.bridgedb.iterator.ByPossitionURLIterator;
-import org.bridgedb.iterator.URLByPossition;
-import org.bridgedb.iterator.XrefByPossition;
+import org.bridgedb.iterator.ByPositionURLIterator;
+import org.bridgedb.iterator.URLByPosition;
+import org.bridgedb.iterator.XrefByPosition;
 import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.ws.bean.PropertyBean;
@@ -36,8 +36,8 @@ import org.bridgedb.ws.bean.URLsBean;
  *
  * @author Christian
  */
-public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, XrefByPossition, 
-        URLMapper, URLIterator, URLByPossition {
+public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, XrefByPosition, 
+        URLMapper, URLIterator, URLByPosition {
 
     WSInterface webService;
     
@@ -226,8 +226,8 @@ public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, X
     }
 
     @Override
-    public Set<Xref> getXrefByPossition(int possition, int limit) throws IDMapperException {
-        List<XrefBean> beans = webService.getXrefByPossition(null, possition, limit);
+    public Set<Xref> getXrefByPosition(int position, int limit) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPosition(null, position, limit);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefBean bean:beans){
             results.add(bean.asXref());
@@ -236,8 +236,8 @@ public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, X
     }
 
     @Override
-    public Xref getXrefByPossition(int possition) throws IDMapperException {
-        List<XrefBean> beans = webService.getXrefByPossition(null, possition, null);
+    public Xref getXrefByPosition(int position) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPosition(null, position, null);
         HashSet<Xref> results = new HashSet<Xref>();
         if (beans.isEmpty()) {
             return null;
@@ -246,8 +246,8 @@ public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, X
     }
 
     @Override
-    public Set<Xref> getXrefByPossition(DataSource ds, int possition, int limit) throws IDMapperException {
-        List<XrefBean> beans = webService.getXrefByPossition(ds.getSystemCode(), possition, limit);
+    public Set<Xref> getXrefByPosition(DataSource ds, int position, int limit) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPosition(ds.getSystemCode(), position, limit);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefBean bean:beans){
             results.add(bean.asXref());
@@ -256,8 +256,8 @@ public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, X
     }
 
     @Override
-    public Xref getXrefByPossition(DataSource ds, int possition) throws IDMapperException {
-        List<XrefBean> beans = webService.getXrefByPossition(ds.getSystemCode(), possition, null);
+    public Xref getXrefByPosition(DataSource ds, int position) throws IDMapperException {
+        List<XrefBean> beans = webService.getXrefByPosition(ds.getSystemCode(), position, null);
         HashSet<Xref> results = new HashSet<Xref>();
         if (beans.isEmpty()) {
             return null;
@@ -267,42 +267,42 @@ public class WSMapper implements IDMapper, IDMapperCapabilities, XrefIterator, X
 
     @Override
     public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
-        return new ByPossitionURLIterator (this, nameSpace);
+        return new ByPositionURLIterator (this, nameSpace);
     }
 
     @Override
     public Iterable<String> getURLIterator() throws IDMapperException {
-        return new ByPossitionURLIterator (this);
+        return new ByPositionURLIterator (this);
     }
 
     @Override
-    public Set<String> getURLByPossition(int possition, int limit) throws IDMapperException {
-        URLsBean beans = webService.getURLByPossition(null, possition, limit);
+    public Set<String> getURLByPosition(int position, int limit) throws IDMapperException {
+        URLsBean beans = webService.getURLByPosition(null, position, limit);
         return beans.getUrlSet();
     }
 
     @Override
-    public String getURLByPossition(int possition) throws IDMapperException {
-        return getURLByPossition(null, possition);
+    public String getURLByPosition(int position) throws IDMapperException {
+        return getURLByPosition(null, position);
     }
 
     @Override
-    public Set<String> getURLByPossition(String nameSpace, int possition, int limit) throws IDMapperException {
-        URLsBean beans = webService.getURLByPossition(nameSpace, possition, limit);
+    public Set<String> getURLByPosition(String nameSpace, int position, int limit) throws IDMapperException {
+        URLsBean beans = webService.getURLByPosition(nameSpace, position, limit);
         return beans.getUrlSet();
     }
 
     @Override
-    public String getURLByPossition(String nameSpace, int possition) throws IDMapperException {
-        URLsBean beans = webService.getURLByPossition(nameSpace, possition, 1);
+    public String getURLByPosition(String nameSpace, int position) throws IDMapperException {
+        URLsBean beans = webService.getURLByPosition(nameSpace, position, 1);
         List<String> urls = beans.getUrl();
         if (urls.size() == 1){
             return urls.get(0);
         }
         if (urls.isEmpty()){
-            throw new IDMapperException("Empty list received from getURLByPossition at possition " + possition);
+            throw new IDMapperException("Empty list received from getURLByPosition at position " + position);
         }
-        throw new IDMapperException("More than one url received from getURLByPossition at possition " + possition);
+        throw new IDMapperException("More than one url received from getURLByPosition at position " + position);
     }
     
 }
