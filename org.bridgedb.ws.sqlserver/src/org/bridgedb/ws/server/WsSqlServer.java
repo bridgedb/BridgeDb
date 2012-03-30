@@ -67,6 +67,11 @@ public class WsSqlServer extends WSService{
         sb.append("<dd>State if the URL is know to the Mapping Service or not</dd>");
         sb.append("<dt><a href=\"#URLSearch\">URLSearch</a></dt>");
         sb.append("<dd>Searches for URLs that have this ending.</dd>");
+        if (byURLPossition != null){ 
+            sb.append("<dt><a href=\"#getURLByPossition\">getURLByPossition</a></dt>");
+            sb.append("<dd>Returns the URL(s) currently at this possition.</dd>");
+        }
+        
         
         sb.append("<dt><a href=\"#mapByXRef\">mapByXRef</a></dt>");
         sb.append("<dd>List the Xrefs that map to this Xref</dd>");
@@ -82,6 +87,11 @@ public class WsSqlServer extends WSService{
         sb.append("<dd>Not supported as clients should not be able to close the server.</dd>");
         sb.append("<dt>isConnected</dt>");
         sb.append("<dd>Not supported as Close() is not allowed</dd>");
+        
+        if (byXrefPossition != null){ 
+            sb.append("<dt><a href=\"#getXrefByPossition\">getXrefByPossition</a></dt>");
+            sb.append("<dd>Returns the Xref(s) currently at this possition.</dd>");
+        }
         
         sb.append("<dt><a href=\"#isFreeSearchSupported\">isFreeSearchSupported</a></dt>");
         if (idMapper.getCapabilities().isFreeSearchSupported()){
@@ -238,6 +248,44 @@ public class WsSqlServer extends WSService{
                     sb.append("</a></li>");    
             sb.append("</ul>");
             
+         if (byURLPossition != null){ 
+            sb.append("<h3><a name=\"getURLByPossition\">getURLByPossition</h3>");
+                sb.append("<ul>");
+                sb.append("<li>Returns the URL(s) currently at this possition.</li>");
+                sb.append("<li><b>WARNING:</b> There is no guarantee that the same possition will return the same URL over time.</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>This method can <b>NOT</b> be used as an Identifier.</li>");
+                    sb.append("</ul>");
+                sb.append("<li>Used to Implement a URL version of:  org.bridgedb.XrefIterator</li>");
+                sb.append("<li>Required arguements:</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>possition as Integer</li>");
+                    sb.append("</ul>");
+                sb.append("<li>Optional arguments</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>nameSpace as String </li>");
+                    sb.append("<li>limit as an Integer </li>");
+                        sb.append("<ul>");
+                        sb.append("<li>Will return this number of URLs starting at possition. (assuming that many remain) </li>");
+                        sb.append("</ul>");
+                    sb.append("</ul>");
+                sb.append("<li>Example: <a href=\"");
+                        sb.append(uriInfo.getBaseUri());
+                        sb.append("getURLByPossition?possition=2");
+                        sb.append("\">");
+                        sb.append("getURLByPossition?possition=2");
+                        sb.append("</a></li>");    
+                sb.append("<li>Example: <a href=\"");
+                        sb.append(uriInfo.getBaseUri());
+                        sb.append("getURLByPossition?possition=0&limit=20&nameSpace=");
+                        sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                        sb.append("\">");
+                        sb.append("getURLByPossition?possition=0&limit=20&nameSpace=");
+                        sb.append(first.getDataSource().getNameSpace());
+                        sb.append("</a></li>");    
+                sb.append("</ul>");
+         }
+
         sb.append("<h2>Implementations of BridgeDB's IDMapper methods</h2>");
         sb.append("<h3><a name=\"mapByXRef\">mapByXRef</h3>");
             sb.append("<ul>");
@@ -400,7 +448,45 @@ public class WsSqlServer extends WSService{
                     sb.append("getCapabilities\">getCapabilities</a></li>");    
             sb.append("</ul>");
 
-        sb.append("<h2>Implementations of BridgeDB's IDMapperCapabilities methods</h2>");
+         if (byXrefPossition != null){ 
+            sb.append("<h3><a name=\"getXrefByPossition\">getXrefByPossition</h3>");
+                sb.append("<ul>");
+                sb.append("<li>Returns the Xref(s) currently at this possition.</li>");
+                sb.append("<li><b>WARNING:</b> There is no guarantee that the same possition will return the same Xref over time.</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>This method can <b>NOT</b> be used as an Identifier.</li>");
+                    sb.append("</ul>");
+                sb.append("<li>Used to Implement:  org.bridgedb.XrefIterator</li>");
+                sb.append("<li>Required arguements:</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>possition as Integer</li>");
+                    sb.append("</ul>");
+                sb.append("<li>Optional arguments</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>code as string (Where code is the SystemCode of the DataSource)</li>");
+                    sb.append("<li>limit as an Integer </li>");
+                        sb.append("<ul>");
+                        sb.append("<li>Will return this number of Xrefs starting at possition. (assuming that many remain) </li>");
+                        sb.append("</ul>");
+                    sb.append("</ul>");
+                sb.append("<li>Example: <a href=\"");
+                        sb.append(uriInfo.getBaseUri());
+                        sb.append("getXrefByPossition?possition=2");
+                        sb.append("\">");
+                        sb.append("getXrefByPossition?possition=2");
+                        sb.append("</a></li>");    
+                sb.append("<li>Example: <a href=\"");
+                        sb.append(uriInfo.getBaseUri());
+                        sb.append("getXrefByPossition?possition=0&limit=5&code=");
+                        sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
+                        sb.append("\">");
+                        sb.append("getXrefByPossition?possition=0&limit=5&code=");
+                        sb.append(first.getDataSource().getSystemCode());
+                        sb.append("</a></li>");    
+                sb.append("</ul>");
+         }
+
+         sb.append("<h2>Implementations of BridgeDB's IDMapperCapabilities methods</h2>");
          sb.append("<h3><a name=\"isFreeSearchSupported\">isFreeSearchSupported</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  boolean isFreeSearchSupported()</li>");
@@ -493,7 +579,45 @@ public class WsSqlServer extends WSService{
             }
             sb.append("</ul>");
 
-            sb.append("</body></html>");
+         if (byXrefPossition != null){ 
+            sb.append("<h3><a name=\"getXrefByPossition\">getXrefByPossition</h3>");
+                sb.append("<ul>");
+                sb.append("<li>Returns the Xref(s) currently at this possition.</li>");
+                sb.append("<li><b>WARNING:</b> There is no guarantee that the same possition will return the same Xref over time.</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>This method can <b>NOT</b> be used as an Identifier.</li>");
+                    sb.append("</ul>");
+                sb.append("<li>Used to Implement:  org.bridgedb.XrefIterator</li>");
+                sb.append("<li>Required arguements:</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>possition as Integer</li>");
+                    sb.append("</ul>");
+                sb.append("<li>Optional arguments</li>");
+                    sb.append("<ul>");
+                    sb.append("<li>code as string (Where code is the SystemCode of the DataSource)</li>");
+                    sb.append("<li>limit as an Integer </li>");
+                        sb.append("<ul>");
+                        sb.append("<li>Will return this number of Xrefs starting at possition. (assuming that many remain) </li>");
+                        sb.append("</ul>");
+                    sb.append("</ul>");
+                sb.append("<li>Example: <a href=\"");
+                        sb.append(uriInfo.getBaseUri());
+                        sb.append("getXrefByPossition?possition=2");
+                        sb.append("\">");
+                        sb.append("getXrefByPossition?possition=2");
+                        sb.append("</a></li>");    
+                sb.append("<li>Example: <a href=\"");
+                        sb.append(uriInfo.getBaseUri());
+                        sb.append("getXrefByPossition?possition=0&limit=2&code=");
+                        sb.append(first.getDataSource().getSystemCode());
+                        sb.append("\">");
+                        sb.append("getXrefByPossition?possition=0&limit=2&code=");
+                        sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
+                        sb.append("</a></li>");    
+                sb.append("</ul>");
+         }
+         
+        sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
