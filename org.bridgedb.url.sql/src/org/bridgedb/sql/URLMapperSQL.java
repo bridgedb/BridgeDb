@@ -14,8 +14,8 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.iterator.ByPossitionURLIterator;
-import org.bridgedb.iterator.URLByPossition;
+import org.bridgedb.iterator.ByPositionURLIterator;
+import org.bridgedb.iterator.URLByPosition;
 import org.bridgedb.linkset.URLLinkListener;
 import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceException;
@@ -31,7 +31,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 public class URLMapperSQL extends CommonSQL 
-        implements URLLinkListener, URLMapper, URLIterator, URLByPossition, ProvenanceFactory{
+        implements URLLinkListener, URLMapper, URLIterator, URLByPosition, ProvenanceFactory{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 5;
@@ -579,24 +579,24 @@ public class URLMapperSQL extends CommonSQL
 
     //*** Support method for iteration ****
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Set<Xref> getXrefByPossition(int possition, int limit) throws IDMapperException {
+    public Set<Xref> getXrefByPosition(int position, int limit) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
-                + "LIMIT " + possition + " , " + limit;
+                + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -615,24 +615,24 @@ public class URLMapperSQL extends CommonSQL
 
     //*** Support method for interation ****
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Xref getXrefByPossition(int possition) throws IDMapperException {
+    public Xref getXrefByPosition(int position) throws IDMapperException {
         String query = "SELECT distinct  sourceURL as url "
                 + "FROM link      "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
-                + "LIMIT " + possition + ",1";
+                + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -650,18 +650,18 @@ public class URLMapperSQL extends CommonSQL
     }
 
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Set<Xref> getXrefByPossition(DataSource ds, int possition, int limit) throws IDMapperException {
+    public Set<Xref> getXrefByPosition(DataSource ds, int position, int limit) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
@@ -671,7 +671,7 @@ public class URLMapperSQL extends CommonSQL
                 + "FROM link      "
                 + "WHERE "
                 + "targetNameSpace = \"" + ds.getNameSpace() + "\" "
-                + "LIMIT " + possition + " , " + limit;
+                + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -689,18 +689,18 @@ public class URLMapperSQL extends CommonSQL
     }
 
     /**
-     * Gets the Xref currently at this possition in the database.
+     * Gets the Xref currently at this position in the database.
      * 
      * The main purposes of this method are to underpin iteration and to give example Xrefs.
      * It is NOT designed to assign Ids to Xrefs as 
-     * which Xref is returned for each possition can change if the data changes.
+     * which Xref is returned for each position can change if the data changes.
      * 
      * WARNING: THIS METHOD DOES NOT PROVIDE IDS TO Xref OBJECTS.
-     * @param possition
+     * @param position
      * @return
      * @throws IDMapperException 
      */
-    public Xref getXrefByPossition(DataSource ds, int possition) throws IDMapperException {
+    public Xref getXrefByPosition(DataSource ds, int position) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
@@ -710,7 +710,7 @@ public class URLMapperSQL extends CommonSQL
                 + "FROM link      "
                 + "WHERE "
                 + "targetNameSpace = \"" + ds.getNameSpace() + "\" "
-                + "LIMIT " + possition + ",1";
+                + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -730,22 +730,22 @@ public class URLMapperSQL extends CommonSQL
 
     @Override
     public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
-        return new ByPossitionURLIterator(this, nameSpace);
+        return new ByPositionURLIterator(this, nameSpace);
     }
 
     @Override
     public Iterable<String> getURLIterator() throws IDMapperException {
-        return new ByPossitionURLIterator(this);
+        return new ByPositionURLIterator(this);
     }
 
     @Override
-    public Set<String> getURLByPossition(int possition, int limit) throws IDMapperException {
+    public Set<String> getURLByPosition(int position, int limit) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
-                + "LIMIT " + possition + " , " + limit;
+                + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -762,13 +762,13 @@ public class URLMapperSQL extends CommonSQL
     }
 
     @Override
-    public String getURLByPossition(int possition) throws IDMapperException {
+    public String getURLByPosition(int position) throws IDMapperException {
         String query = "SELECT distinct  sourceURL as url "
                 + "FROM link      "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
                 + "FROM link      "
-                + "LIMIT " + possition + ",1";
+                + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -785,7 +785,7 @@ public class URLMapperSQL extends CommonSQL
     }
 
     @Override
-    public Set<String> getURLByPossition(String nameSpace, int possition, int limit) throws IDMapperException {
+    public Set<String> getURLByPosition(String nameSpace, int position, int limit) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
@@ -795,7 +795,7 @@ public class URLMapperSQL extends CommonSQL
                 + "FROM link      "
                 + "WHERE "
                 + "targetNameSpace = \"" + nameSpace + "\" "
-                + "LIMIT " + possition + " , " + limit;
+                + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -812,7 +812,7 @@ public class URLMapperSQL extends CommonSQL
     }
 
     @Override
-    public String getURLByPossition(String nameSpace, int possition) throws IDMapperException {
+    public String getURLByPosition(String nameSpace, int position) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
                 + "FROM link      "
                 + "WHERE "
@@ -822,7 +822,7 @@ public class URLMapperSQL extends CommonSQL
                 + "FROM link      "
                 + "WHERE "
                 + "targetNameSpace = \"" + nameSpace + "\" "
-                + "LIMIT " + possition + ",1";
+                + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);

@@ -5,7 +5,7 @@
 package org.bridgedb.sql;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.iterator.XrefByPossitionTest;
+import org.bridgedb.iterator.XrefByPositionTest;
 import org.junit.BeforeClass;
 
 /**
@@ -14,13 +14,13 @@ import org.junit.BeforeClass;
  * Once IDMapperSQLTest is run once these should be fine until the test data changes again.
  * @author Christian
  */
-public class IDSQLByPossitionTest extends XrefByPossitionTest {
+public class IDSQLByPositionTest extends XrefByPositionTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         SQLAccess sqlAccess = TestIDSqlFactory.createTestSQLAccess();
         IDMapperSQL iDMapperSQL = new IDMapperSQL(sqlAccess);
-        xrefByPossition = iDMapperSQL;
+        xrefByPosition = iDMapperSQL;
     }
      
 }

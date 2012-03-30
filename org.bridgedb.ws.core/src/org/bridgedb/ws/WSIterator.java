@@ -53,9 +53,9 @@ public class WSIterator implements Iterator<Xref>,Iterable<Xref>{
     private void fillBuffer() throws IDMapperException{
         List<XrefBean> beans;
         if (dataSource == null){
-            beans = webService.getXrefByPossition(null, count, XREFS_TO_BUFFER);
+            beans = webService.getXrefByPosition(null, count, XREFS_TO_BUFFER);
         } else {
-            beans = webService.getXrefByPossition(dataSource.getSystemCode(), count, XREFS_TO_BUFFER);
+            beans = webService.getXrefByPosition(dataSource.getSystemCode(), count, XREFS_TO_BUFFER);
         }
         count += XREFS_TO_BUFFER;
         buffered.clear();
