@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -52,14 +53,44 @@ public class WsSqlServer extends WSService{
                 + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
-        sb.append("<head><title>OPR IRS</title></head><body>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
+        sb.append("<p>Welcome to the prototype Identity Mapping Service. </p>");
+        
+        sb.append("<p>The Main OPS method is <a href=\"/OPS-IMS/api/#mapByURL\">mapByURL</a></dt>");
+        sb.append("<dd>List the URLs that map to this URL</dd>");
+        sb.append("<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
+        sb.append("</body></html>");
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/api")
+    public Response apiPage() throws IDMapperException, UnsupportedEncodingException {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbInnerPure;
+        StringBuilder sbInnerEncoded;
+
+        Xref first = byXrefPosition.getXrefByPosition(0);
+        Xref second = byXrefPosition.getXrefByPosition(1);
+        Set<Xref> firstMaps = idMapper.mapID(first);
+        Set<String> keys = idMapper.getCapabilities().getKeys();
+
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
+        sb.append("<p><a href=\"/OPS-IMS\">Home Page</a></p>");
         sb.append("<p>Welcome to the prototype Identity Mapping Service. ");
                 
         sb.append("<p>");
         sb.append("Support services include:");
         sb.append("<dl>");
-        sb.append("<dt><a href=\"#mapByURL\">mapByURLs</a></dt>");
+        sb.append("<dt><a href=\"#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to these URLs</dd>");
         sb.append("<dt><a href=\"#mapByURL\">mapByURL</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
