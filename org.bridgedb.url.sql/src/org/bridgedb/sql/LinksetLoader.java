@@ -4,6 +4,7 @@
  */
 package org.bridgedb.sql;
 
+import java.io.File;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.LinksetParser;
@@ -18,12 +19,23 @@ public class LinksetLoader {
     
    	public static void main(String[] args) 
             throws BridgeDbSqlException, IOException, RDFParseException, RDFHandlerException, IDMapperException {
-        if (args.length != 2){
+        SQLAccess sqlAccess = URLSqlFactory.createSQLAccess();
+        URLMapperSQL urlMapperSQL = null;
+        if (args.length == 2){
+             urlMapperSQL = new URLMapperSQL(sqlAccess);
+        } else if (args.length == 3){
+            if (args[2].equals("new")){
+                urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+            } else {
+                usage();
+            }
+        } else {
             usage();
         }
-        SQLAccess sqlAccess = URLSqlFactory.createSQLAccess();
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         LinksetParser parser = new LinksetParser();
+        System.out.println("reading " + args[0]);
+        File test = new File(args[0]);
+        System.out.println(test.exists());
         parser.parse (urlMapperSQL, args[0], args[1]);
     }
 
