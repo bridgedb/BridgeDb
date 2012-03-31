@@ -514,7 +514,7 @@ public final class DataSource
         if (fullName != null){
             return fullName + ":" + prefix;
         } else {
-            return sysCode;
+            return sysCode + ":" + prefix;
         }
 	}
 	

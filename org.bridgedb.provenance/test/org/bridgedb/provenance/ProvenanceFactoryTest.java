@@ -24,12 +24,13 @@ public abstract class ProvenanceFactoryTest extends IDMapperTestBase {
     @Test
     public void testCreateProvenance_3args() throws Exception {
         System.out.println("CreateProvenance_3args");
-        String createdBy = "createdB";
+        String createdBy = "testCreateProvenance_3args";
         String predicate = "predicate";
         long creation = 1000;
         Provenance result = factory.createProvenance(DataSource1, predicate, DataSource2, createdBy, creation);
         assertEquals(DataSource1, result.getSource());
         assertEquals(predicate, result.getPredicate());
+        assertEquals(DataSource2.getNameSpace(), result.getTarget().getNameSpace());
         assertEquals(DataSource2, result.getTarget());
         assertEquals(createdBy, result.getCreatedBy());
         assertEquals(creation, result.getCreation());
@@ -42,7 +43,7 @@ public abstract class ProvenanceFactoryTest extends IDMapperTestBase {
     @Test
     public void testCreateProvenance_3argsSourceEqualsTarget() throws Exception {
         System.out.println("CreateProvenance_3args");
-        String createdBy = "createdB";
+        String createdBy = "testCreateProvenance_3argsSourceEqualsTarget";
         String predicate = "predicate";
         long creation = 1000;
         Provenance result = factory.createProvenance(DataSource1, predicate, DataSource1, createdBy, creation);
