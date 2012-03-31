@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -41,6 +43,9 @@ public class URLMapperSQL extends CommonSQL
 
     private PreparedStatement pstInsertLink = null;
     private PreparedStatement pstCheckLink = null;
+    
+    private static final String UNSPECIFIED_PREDICATE = "NO predicate provided";
+    private static final String UNSPECIFIED_CREATOR = "Unkown";
 
     public URLMapperSQL(SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(sqlAccess);
@@ -73,22 +78,18 @@ public class URLMapperSQL extends CommonSQL
                     + "link                                                             " 
                             //As most search are on full url full url is stored in one column
 					+ " (   sourceURL VARCHAR(150) NOT NULL,                            "
-                            //for functions that require the sourceNameSpace/ DataSource
-                    + "     sourceNameSpace VARCHAR(100) NOT NULL,                      "
                             //Again a speed for space choice.
 					+ "     targetURL VARCHAR(150) NOT NULL,                               " 
-                            //Targets are oftne filtered on NameSpace
-					+ "     targetNameSpace VARCHAR(100) NOT NULL,                         "        
-					+ "     provenance INT,                                             "  //Type still under review
-					+ "     PRIMARY KEY (sourceURL, targetURL, provenance)                 " 
+					+ "     provenance_id INT,                                             "  //Type still under review
+					+ "     PRIMARY KEY (sourceURL, targetURL, provenance_id)                 " 
 					+ " )									                            ");
         	sh.execute(	"CREATE TABLE                                                   "    
                     + "IF NOT EXISTS                                                    "
 					+ "		provenance                                                  " 
 					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,                          " 
-                    + "     source VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,            "
+                    + "     sourceNameSpace VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,            "
                     + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,   "
-                    + "     target VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,            "
+                    + "     targetNameSpace VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,            "
 					+ "     creator VARCHAR (" + CREATOR_LENGTH + "),                   "
                     + "     dateCreated BIGINT NOT NULL,                                  "
                     + "     dateUploaded BIGINT NOT NULL                                  "
@@ -108,16 +109,14 @@ public class URLMapperSQL extends CommonSQL
 		try
 		{
 			pstInsertLink = possibleOpenConnection.prepareStatement("INSERT INTO link    "
-                    + "(sourceURL, sourceNameSpace,                       "   
-                    + " targetURL, targetNameSpace,                     "
-                    + " provenance )                            " 
-                    + "VALUES (?, ?, ?, ?, ?)                   ");
+                    + "(sourceURL, targetURL, provenance_id )                            " 
+                    + "VALUES (?, ?, ?)                   ");
 			pstCheckLink = possibleOpenConnection.prepareStatement("SELECT EXISTS "
                     + "(SELECT * FROM link      "
                     + "where                    "
                     + "   sourceURL = ?         "
                     + "   AND targetURL = ?     "   
-                    + "   AND provenance =  ?  )");
+                    + "   AND provenance_id =  ?  )");
 		}
 		catch (SQLException e)
 		{
@@ -143,10 +142,8 @@ public class URLMapperSQL extends CommonSQL
                 }
             } else {
                 pstInsertLink.setString(1, source);
-                pstInsertLink.setString(2, provenace.getSource().getNameSpace());
-                pstInsertLink.setString(3, target);
-                pstInsertLink.setString(4, provenace.getTarget().getNameSpace());
-                pstInsertLink.setInt(5, provenace.getId());
+                pstInsertLink.setString(2, target);
+                pstInsertLink.setInt(3, provenace.getId());
                 pstInsertLink.executeUpdate();
                 insertCount++;
                 if (insertCount % BLOCK_SIZE == 0){
@@ -155,7 +152,7 @@ public class URLMapperSQL extends CommonSQL
                 }
             }
         } catch (SQLException ex) {
-            System.out.println(ex);
+            System.err.println(ex);
             throw new BridgeDbSqlException ("Error inserting link ", ex);
         }
     }
@@ -167,10 +164,17 @@ public class URLMapperSQL extends CommonSQL
         checkXrefValidToLoadInURLDataBase(target);
         checkDataSourceInDatabase(source.getDataSource());
         checkDataSourceInDatabase(target.getDataSource());
+        Provenance provenance;
+        try {
+            provenance = createProvenance(source.getDataSource(), UNSPECIFIED_PREDICATE, target.getDataSource(), 
+                    UNSPECIFIED_CREATOR, 0);
+        } catch (ProvenanceException ex) {
+            throw new BridgeDbSqlException ("Unable to set provenance", ex);
+        }
         try {
             pstCheckLink.setString(1, source.getUrl());
             pstCheckLink.setString(2, target.getUrl());
-            pstCheckLink.setInt(3, 0);
+            pstCheckLink.setInt(3, provenance.getId());
             ResultSet rs = pstCheckLink.executeQuery();
             if (rs.next()) {
                 exists = rs.getBoolean(1);
@@ -182,10 +186,8 @@ public class URLMapperSQL extends CommonSQL
                 }
             } else {
                 pstInsertLink.setString(1, source.getUrl());
-                pstInsertLink.setString(2, source.getDataSource().getNameSpace());
-                pstInsertLink.setString(3, target.getUrl());
-                pstInsertLink.setString(4, target.getDataSource().getNameSpace());
-                pstInsertLink.setInt(5, 0);
+                pstInsertLink.setString(2, target.getUrl());
+                pstInsertLink.setInt(3, provenance.getId());
                 pstInsertLink.executeUpdate();
                 insertCount++;
                 if (insertCount % BLOCK_SIZE == 0){
@@ -227,24 +229,22 @@ public class URLMapperSQL extends CommonSQL
         if (ref == null) throw new IDMapperException ("Illegal null ref. Please use a URL");
         if (ref.isEmpty()) throw new IDMapperException ("Illegal empty ref. Please use a URL");
         StringBuilder query = new StringBuilder();
-        query.append("SELECT targetURL as url  ");
-        query.append("FROM link      ");
-        query.append("where                    ");
-        query.append("   sourceURL = \"");
+        query.append("SELECT targetURL as url ");
+        query.append("FROM link, provenance ");
+        query.append("WHERE provenance_id = provenance.id ");
+        query.append("AND sourceURL = \"");
             query.append(ref);
-            query.append("\"");
+            query.append("\" ");
         if (tgtNameSpaces.length > 0){    
-            query.append("   AND ( "); 
-            query.append("      targetNameSpace = \"");
+            query.append("AND ( targetNameSpace = \"");
                 query.append(tgtNameSpaces[0]);
                 query.append("\" ");
             for (int i = 1; i < tgtNameSpaces.length; i++){
-                query.append("      OR   ");     
-                query.append("      targetNameSpace = \"");
+                query.append("OR targetNameSpace = \"");
                     query.append(tgtNameSpaces[i]);
-                    query.append("\"  ");
+                    query.append("\"");
             }
-            query.append("   )");
+            query.append(")");
         }
         Statement statement = this.createStatement();
         try {
@@ -252,8 +252,7 @@ public class URLMapperSQL extends CommonSQL
             return resultSetToURLSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.out.println(query);
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -288,7 +287,7 @@ public class URLMapperSQL extends CommonSQL
             return rs.getBoolean(1);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -309,9 +308,8 @@ public class URLMapperSQL extends CommonSQL
             ResultSet rs = statement.executeQuery(query);
             return resultSetToURLSet(rs);
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -322,24 +320,22 @@ public class URLMapperSQL extends CommonSQL
             return new HashSet<Xref>();
         }
         StringBuilder query = new StringBuilder();
-        query.append("SELECT targetURL as url  ");
-        query.append("FROM link      ");
-        query.append("where                    ");
-        query.append("   sourceURL = \"");
+        query.append("SELECT targetURL as url ");
+        query.append("FROM link, provenance ");
+        query.append("WHERE provenance_id = provenance.id ");
+        query.append("AND sourceURL = \"");
             query.append(ref.getUrl());
             query.append("\"");
         if (tgtDataSources.length > 0){    
-            query.append("   AND ( "); 
-            query.append("      targetNameSpace = \"");
+            query.append("AND (targetNameSpace = \"");
                 query.append(tgtDataSources[0].getNameSpace());
                 query.append("\" ");
             for (int i = 1; i < tgtDataSources.length; i++){
-                query.append("      OR   ");     
-                query.append("      targetNameSpace = \"");
+                query.append("OR targetNameSpace = \"");
                     query.append(tgtDataSources[i].getNameSpace());
-                    query.append("\"  ");
+                    query.append("\" ");
             }
-            query.append("   )");
+            query.append(")");
         }
         Statement statement = this.createStatement();
         try {
@@ -347,8 +343,7 @@ public class URLMapperSQL extends CommonSQL
             return resultSetToXrefSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.out.println(query);
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -385,7 +380,7 @@ public class URLMapperSQL extends CommonSQL
             return rs.getBoolean(1);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -406,9 +401,8 @@ public class URLMapperSQL extends CommonSQL
             ResultSet rs = statement.executeQuery(query);
             return resultSetToXrefSet(rs);
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -416,14 +410,14 @@ public class URLMapperSQL extends CommonSQL
     @Override
     public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
         String query = "SELECT DISTINCT sourceNameSpace as nameSpace "
-                + "FROM link      ";
+                + "FROM provenance";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
             return resultSetToDataSourceSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query." + query, ex);
         }
     }
 
@@ -444,25 +438,23 @@ public class URLMapperSQL extends CommonSQL
     @Override
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
         String query = "SELECT DISTINCT targetNameSpace as nameSpace "
-                + "FROM link      ";
+                + "FROM provenance ";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
             return resultSetToDataSourceSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
         String query = "SELECT EXISTS "
-                + "(SELECT * FROM link      "
-                + "where                    "
-                + "   sourceNameSpace = \"" + src.getNameSpace() + "\""
-                + "   AND targetNameSpace = \"" + tgt.getNameSpace() + "\""   
-                + ")";
+                + "(SELECT * FROM provenance "
+                + "WHERE sourceNameSpace = \"" + src.getNameSpace() + "\""
+                + "AND targetNameSpace = \"" + tgt.getNameSpace() + "\")";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -470,7 +462,7 @@ public class URLMapperSQL extends CommonSQL
             return rs.getBoolean(1);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -478,23 +470,23 @@ public class URLMapperSQL extends CommonSQL
     @Override
     public Provenance createProvenance(DataSource source, String predicate, DataSource target, 
             String createdBy, long creation, long upload) throws ProvenanceException{
-        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
+        Provenance result = findProvenance(source, predicate, target, createdBy, creation);
         if (result != null){
             return result;
         }
         createMissingProvenance(source, predicate, target, createdBy, creation, upload);
-        return findProvenanceNumber(source, predicate, target, createdBy, creation);
+        return findProvenance(source, predicate, target, createdBy, creation);
     }
     
     @Override
     public Provenance createProvenance(DataSource source, String predicate, DataSource target,
             String createdBy, long creation) throws ProvenanceException {
-        Provenance result = findProvenanceNumber(source, predicate, target, createdBy, creation);
+        Provenance result = findProvenance(source, predicate, target, createdBy, creation);
         if (result != null){
             return result;
         }
         createMissingProvenance(source, predicate, target, createdBy, creation, new GregorianCalendar().getTimeInMillis());
-        return findProvenanceNumber(source, predicate, target, createdBy, creation);
+        return findProvenance(source, predicate, target, createdBy, creation);
     }
 
     @Override
@@ -502,7 +494,7 @@ public class URLMapperSQL extends CommonSQL
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private Provenance findProvenanceNumber(DataSource source, String predicate, DataSource target, 
+    private Provenance findProvenance(DataSource source, String predicate, DataSource target, 
             String createdBy, long creation) throws ProvenanceException{
         Statement statement;
         try {
@@ -510,20 +502,21 @@ public class URLMapperSQL extends CommonSQL
         } catch (BridgeDbSqlException ex) {
             throw new ProvenanceException ("Unable to create the statement ", ex);
         }
-        String query = "SELECT id, source, linkPredicate, target, creator, dateCreated, dateUploaded from provenance "
+        String query = "SELECT id, sourceNameSpace, linkPredicate, targetNamespace, creator, dateCreated, dateUploaded from provenance "
                 + "where "
-                + "      source = \"" + source.getSystemCode() + "\""
+                + "      sourceNameSpace = \"" + source.getNameSpace() + "\""
                 + "  AND linkPredicate = \"" + predicate +"\"" 
-                + "  AND target = \"" + target.getSystemCode() + "\""
+                + "  AND targetNameSpace = \"" + target.getNameSpace() + "\""
                 + "  AND creator = \"" + createdBy + "\""
                 + "  AND dateCreated = \"" + creation + "\"";
         try {
             ResultSet rs = statement.executeQuery(query);
+            System.out.print("rs ok");
             if (rs.next()){
                 return new SimpleProvenance(rs.getInt("id"), 
-                                            DataSource.getBySystemCode(rs.getString("source")),
+                                            DataSource.getByNameSpace(rs.getString("sourceNameSpace")),
                                             rs.getString("linkPredicate"), 
-                                            DataSource.getBySystemCode(rs.getString("target")),
+                                            DataSource.getByNameSpace(rs.getString("targetNameSpace")),
                                             rs.getString("creator"), 
                                             rs.getLong("dateCreated"), 
                                             rs.getLong("dateUploaded"));
@@ -531,9 +524,8 @@ public class URLMapperSQL extends CommonSQL
                 return null;
             }
         } catch (SQLException ex) {
-            System.err.println(query);
             ex.printStackTrace();
-            throw new ProvenanceException ("Unable to check if Provenance already exists ", ex);
+            throw new ProvenanceException ("Unable to run query. " + query, ex);
         }
     }
 
@@ -560,20 +552,19 @@ public class URLMapperSQL extends CommonSQL
             throw new ProvenanceException ("Unable to create the statement ", ex);
         }
         String update = "INSERT INTO provenance "
-                + "(source, linkPredicate, target, creator, dateCreated, dateUploaded) "
+                + "(sourceNameSpace, linkPredicate, targetNameSpace, creator, dateCreated, dateUploaded) "
                 + "VALUES ( "
-                + "\"" + source.getSystemCode() + "\", "
+                + "\"" + source.getNameSpace() + "\", "
                 + "\"" + predicate + "\", "
-                + "\"" + target.getSystemCode() + "\", "
+                + "\"" + target.getNameSpace() + "\", "
                 + "\"" + createdBy + "\", "
                 + "\"" + creation + "\", "
                 + "\"" + uploaded + "\")";
         try {
             statement.executeUpdate(update);
         } catch (SQLException ex) {
-            System.err.println(update);
             ex.printStackTrace();
-            throw new ProvenanceException ("Unable to check if Provenance already exists ", ex);
+            throw new ProvenanceException ("Unable to run update. " + update, ex);
         }
     }
 
@@ -607,9 +598,8 @@ public class URLMapperSQL extends CommonSQL
             } 
             return results;
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -643,9 +633,8 @@ public class URLMapperSQL extends CommonSQL
                 return null;
             }
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -663,14 +652,14 @@ public class URLMapperSQL extends CommonSQL
      */
     public Set<Xref> getXrefByPosition(DataSource ds, int position, int limit) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
-                + "FROM link      "
-                + "WHERE "
-                + "sourceNameSpace = \"" + ds.getNameSpace() + "\" "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND sourceNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
-                + "FROM link      "
-                + "WHERE "
-                + "targetNameSpace = \"" + ds.getNameSpace() + "\" "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND targetNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
@@ -682,9 +671,8 @@ public class URLMapperSQL extends CommonSQL
             } 
             return results;
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -702,14 +690,14 @@ public class URLMapperSQL extends CommonSQL
      */
     public Xref getXrefByPosition(DataSource ds, int position) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
-                + "FROM link      "
-                + "WHERE "
-                + "sourceNameSpace = \"" + ds.getNameSpace() + "\" "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND sourceNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
-                + "FROM link      "
-                + "WHERE "
-                + "targetNameSpace = \"" + ds.getNameSpace() + "\" "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND targetNameSpace = \"" + ds.getNameSpace() + "\" "
                 + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
@@ -718,13 +706,12 @@ public class URLMapperSQL extends CommonSQL
                 String url = rs.getString("url");
                 return DataSource.uriToXref(url);
             } else {
-                System.out.println(query);
+                System.err.println(query);
                 return null;
             }
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -755,9 +742,8 @@ public class URLMapperSQL extends CommonSQL
             } 
             return results;
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
@@ -778,23 +764,22 @@ public class URLMapperSQL extends CommonSQL
                 return null;
             }
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
     @Override
     public Set<String> getURLByPosition(String nameSpace, int position, int limit) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
-                + "FROM link      "
-                + "WHERE "
-                + "sourceNameSpace = \"" + nameSpace + "\" "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND sourceNameSpace = \"" + nameSpace + "\" "
                 + "UNION "
-                + "SELECT distinct targetUrl as url  "
-                + "FROM link      "
-                + "WHERE "
-                + "targetNameSpace = \"" + nameSpace + "\" "
+                + "SELECT distinct targetUrl as url "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND targetNameSpace = \"" + nameSpace + "\" "
                 + "LIMIT " + position + " , " + limit;
         Statement statement = this.createStatement();
         try {
@@ -805,23 +790,22 @@ public class URLMapperSQL extends CommonSQL
             } 
             return results;
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
     @Override
     public String getURLByPosition(String nameSpace, int position) throws IDMapperException {
         String query = "SELECT distinct sourceURL as url "
-                + "FROM link      "
-                + "WHERE "
-                + "sourceNameSpace = \"" + nameSpace + "\" "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND sourceNameSpace = \"" + nameSpace + "\" "
                 + "UNION "
                 + "SELECT distinct targetUrl as url  "
-                + "FROM link      "
-                + "WHERE "
-                + "targetNameSpace = \"" + nameSpace + "\" "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id "
+                + "AND targetNameSpace = \"" + nameSpace + "\" "
                 + "LIMIT " + position + ",1";
         Statement statement = this.createStatement();
         try {
@@ -829,13 +813,12 @@ public class URLMapperSQL extends CommonSQL
             if (rs.next()){
                 return rs.getString("url");
             } else {
-                System.out.println(query);
+                System.err.println(query);
                 return null;
             }
         } catch (SQLException ex) {
-            System.out.println(query);
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query.", ex);
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
