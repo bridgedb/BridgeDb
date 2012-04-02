@@ -142,8 +142,8 @@ public abstract class URLMapperProvenanceTest extends URLMapperTest{
         assertEquals(DataSource1, result.dataSource);
         assertThat(result.numberOfSourceMappings, greaterThanOrEqualTo(3));
         assertThat(result.numberOfTargetMappings, greaterThanOrEqualTo(3));
-        assertThat(result.numberOfSourceProvenances, greaterThanOrEqualTo(3));
-        assertThat(result.numberOfTargetProvenances, greaterThanOrEqualTo(3));
+        assertThat(result.numberOfSourceProvenances, greaterThanOrEqualTo(2));
+        assertThat(result.numberOfTargetProvenances, greaterThanOrEqualTo(2));
     }
     
     @Test
