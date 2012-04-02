@@ -16,6 +16,7 @@ import org.openrdf.rio.RDFParseException;
  *
  * @author Christian
  */
+@Ignore
 public class URLsqlLinksetHandlerTest extends LinksetHandlerTest {
     
     @BeforeClass
