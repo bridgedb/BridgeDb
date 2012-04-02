@@ -6,7 +6,7 @@ package org.bridgedb.sql;
 
 import java.util.Date;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.url.URLMapperTest;
+import org.bridgedb.url.URLMapperProvenanceTest;
 import org.junit.BeforeClass;
 
 /**
@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
  * 
  * @author Christian
  */
-public class URLMapperSQLTest extends URLMapperTest {
+public class URLMapperSQLTest extends URLMapperProvenanceTest {
     
     private static final String CREATOR1 = "testCreateProvenance";
     private static final String PREDICATE1 = "testMapping";
@@ -26,7 +26,9 @@ public class URLMapperSQLTest extends URLMapperTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
         connectionOk = true;
-        urlMapper = new URLMapperSQL(sqlAccess);
+        URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
+        urlMapper = urlMapperSQL;
+        urlMapperProvenance = urlMapperSQL;
     }
             
 }

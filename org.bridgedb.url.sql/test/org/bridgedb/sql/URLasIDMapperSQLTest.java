@@ -27,11 +27,10 @@ public class URLasIDMapperSQLTest extends IDMapperAndLinkListenerTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
         connectionOk = true;
-        urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        urlMapperSQL = new URLMapperSQL(sqlAccess);
         idMapper = urlMapperSQL;
         //provenanceFactory = urlMapperSQL;
         listener = urlMapperSQL;     
-        defaultLoadData();
     }
             
 }
