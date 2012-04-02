@@ -7,6 +7,7 @@ package org.bridgedb.sql;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.iterator.XrefByPositionTest;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * Warning: These tests depend on the data loaded in the IDMapperSQLTest.

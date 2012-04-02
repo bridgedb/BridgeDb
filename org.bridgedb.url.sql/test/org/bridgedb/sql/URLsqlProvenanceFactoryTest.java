@@ -7,6 +7,7 @@ package org.bridgedb.sql;
 import org.bridgedb.provenance.ProvenanceFactoryTest;
 import org.bridgedb.provenance.SimpleProvenanceFactory;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  *
