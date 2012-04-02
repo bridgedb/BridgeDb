@@ -1,14 +1,15 @@
 package org.bridgedb.sql;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -19,12 +20,17 @@ import org.bridgedb.Xref;
 import org.bridgedb.iterator.ByPositionURLIterator;
 import org.bridgedb.iterator.URLByPosition;
 import org.bridgedb.linkset.URLLinkListener;
+import org.bridgedb.provenance.DataVersion;
 import org.bridgedb.provenance.Provenance;
 import org.bridgedb.provenance.ProvenanceException;
 import org.bridgedb.provenance.ProvenanceFactory;
 import org.bridgedb.provenance.SimpleProvenance;
+import org.bridgedb.provenance.url.DataSourceStatistics;
+import org.bridgedb.provenance.url.MapperStatistics;
+import org.bridgedb.provenance.url.ProvenanceStatistics;
+import org.bridgedb.provenance.url.URLMapperProvenance;
+import org.bridgedb.provenance.url.URLMapping;
 import org.bridgedb.url.URLIterator;
-import org.bridgedb.url.URLMapper;
 
 /**
  * UNDER DEVELOPMENT
@@ -33,7 +39,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 public class URLMapperSQL extends CommonSQL 
-        implements URLLinkListener, URLMapper, URLIterator, URLByPosition, ProvenanceFactory{
+        implements URLLinkListener, URLMapperProvenance, URLIterator, URLByPosition, ProvenanceFactory{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 5;
@@ -77,22 +83,22 @@ public class URLMapperSQL extends CommonSQL
                     + "IF NOT EXISTS                                                    "
                     + "link                                                             " 
                             //As most search are on full url full url is stored in one column
-					+ " (   sourceURL VARCHAR(150) NOT NULL,                            "
+					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,                          " 
+					+ "     sourceURL VARCHAR(150) NOT NULL,                            "
                             //Again a speed for space choice.
-					+ "     targetURL VARCHAR(150) NOT NULL,                               " 
-					+ "     provenance_id INT,                                             "  //Type still under review
-					+ "     PRIMARY KEY (sourceURL, targetURL, provenance_id)                 " 
+					+ "     targetURL VARCHAR(150) NOT NULL,                            " 
+					+ "     provenance_id INT                                           "  //Type still under review
 					+ " )									                            ");
         	sh.execute(	"CREATE TABLE                                                   "    
                     + "IF NOT EXISTS                                                    "
 					+ "		provenance                                                  " 
 					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,                          " 
-                    + "     sourceNameSpace VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,            "
+                    + "     sourceNameSpace VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
                     + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,   "
-                    + "     targetNameSpace VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,            "
+                    + "     targetNameSpace VARCHAR(" + SYSCODE_LENGTH+ ")  NOT NULL,   "
 					+ "     creator VARCHAR (" + CREATOR_LENGTH + "),                   "
-                    + "     dateCreated BIGINT NOT NULL,                                  "
-                    + "     dateUploaded BIGINT NOT NULL                                  "
+                    + "     dateCreated BIGINT NOT NULL,                                "
+                    + "     dateUploaded BIGINT NOT NULL                                "
 					+ " ) ");   
             sh.close();
 		} catch (SQLException e)
@@ -511,15 +517,8 @@ public class URLMapperSQL extends CommonSQL
                 + "  AND dateCreated = \"" + creation + "\"";
         try {
             ResultSet rs = statement.executeQuery(query);
-            System.out.print("rs ok");
             if (rs.next()){
-                return new SimpleProvenance(rs.getInt("id"), 
-                                            DataSource.getByNameSpace(rs.getString("sourceNameSpace")),
-                                            rs.getString("linkPredicate"), 
-                                            DataSource.getByNameSpace(rs.getString("targetNameSpace")),
-                                            rs.getString("creator"), 
-                                            rs.getLong("dateCreated"), 
-                                            rs.getLong("dateUploaded"));
+                return resultSetToProvenance(rs);
             } else {
                 return null;
             }
@@ -527,6 +526,42 @@ public class URLMapperSQL extends CommonSQL
             ex.printStackTrace();
             throw new ProvenanceException ("Unable to run query. " + query, ex);
         }
+    }
+
+    private Provenance resultSetToProvenance(ResultSet rs) throws SQLException{
+        return new SimpleProvenance(rs.getInt("id"), 
+                DataSource.getByNameSpace(rs.getString("sourceNameSpace")),
+                rs.getString("linkPredicate"), 
+                DataSource.getByNameSpace(rs.getString("targetNameSpace")),
+                rs.getString("creator"), 
+                rs.getLong("dateCreated"), 
+                rs.getLong("dateUploaded"));
+    }
+    
+    private ProvenanceStatistics resultSetToProvenanceStatistics(ResultSet rs) throws BridgeDbSqlException{
+        Provenance provenance;
+        try {
+            provenance = resultSetToProvenance(rs);
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unexpected error converting resultSet tp Provenance.", ex);
+        }
+        Statement statement =  this.createStatement();
+        String query = "SELECT count(*) as count "
+                + "FROM LINK "
+                + "WHERE  provenance_id = " + provenance.getId();
+        int count;
+        try {
+            ResultSet countRs = statement.executeQuery(query);
+            if (countRs.next()){
+                count =  countRs.getInt("count");
+            } else {
+                count = 0; 
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+        }
+        return new ProvenanceStatistics(provenance, count);
     }
 
     private void createMissingProvenance(DataSource source, String predicate, DataSource target, 
@@ -566,6 +601,101 @@ public class URLMapperSQL extends CommonSQL
             ex.printStackTrace();
             throw new ProvenanceException ("Unable to run update. " + update, ex);
         }
+    }
+
+    @Override
+    public ProvenanceStatistics getProvenance(int id) throws BridgeDbSqlException {
+        Statement statement = this.createStatement();
+        String query = "SELECT id, sourceNameSpace, linkPredicate, targetNamespace, creator, dateCreated, dateUploaded "
+                + "FROM provenance "
+                + "WHERE id = " + id;
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                return resultSetToProvenanceStatistics(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDbSqlException ("Unable to run query. " + query, ex);
+        }
+    }
+
+    @Override
+    public ProvenanceStatistics getProvenanceByPosition(int position) throws BridgeDbSqlException {
+        Statement statement = this.createStatement();
+        String query = "SELECT id, sourceNameSpace, linkPredicate, targetNamespace, creator, dateCreated, dateUploaded "
+                + "FROM provenance "
+                + "LIMIT " + position + ", 1";
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                return resultSetToProvenanceStatistics(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDbSqlException ("Unable to run query. " + query, ex);
+        }
+    }
+
+    @Override
+    public List<ProvenanceStatistics> getProvenanceByPosition(int position, int limit) throws BridgeDbSqlException {
+        Statement statement = this.createStatement();
+        String query = "SELECT id, sourceNameSpace, linkPredicate, targetNamespace, creator, dateCreated, dateUploaded "
+                + "FROM provenance "
+                + "LIMIT " + position + ", " + limit;
+        ArrayList<ProvenanceStatistics> results = new ArrayList<ProvenanceStatistics>();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                results.add(resultSetToProvenanceStatistics(rs));
+            } 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDbSqlException ("Unable to run query. " + query, ex);
+        }
+        return results;
+    }
+
+    @Override
+    public Set<ProvenanceStatistics> getSourceProvenanceByNameSpace(String nameSpace) throws IDMapperException {
+        Statement statement = this.createStatement();
+        String query = "SELECT id, sourceNameSpace, linkPredicate, targetNamespace, creator, dateCreated, dateUploaded "
+                + "FROM provenance "
+                + "WHERE sourceNameSpace = \"" + nameSpace + "\"";
+        HashSet<ProvenanceStatistics> results = new HashSet<ProvenanceStatistics>(); 
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                results.add(resultSetToProvenanceStatistics(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ProvenanceException ("Unable to run query. " + query, ex);
+        }
+        return results;
+    }
+
+    @Override
+    public Set<ProvenanceStatistics> getTargetProvenanceByNameSpace(String nameSpace) throws IDMapperException {
+        Statement statement = this.createStatement();
+        String query = "SELECT id, sourceNameSpace, linkPredicate, targetNamespace, creator, dateCreated, dateUploaded "
+                + "FROM provenance "
+                + "WHERE targetNameSpace = \"" + nameSpace + "\"";
+        HashSet<ProvenanceStatistics> results = new HashSet<ProvenanceStatistics>(); 
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                results.add(resultSetToProvenanceStatistics(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new ProvenanceException ("Unable to run query. " + query, ex);
+        }
+        return results;
     }
 
     //*** Support method for iteration ****
@@ -820,6 +950,181 @@ public class URLMapperSQL extends CommonSQL
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query, ex);
         }
+    }
+
+    @Override
+    public Set<URLMapping> getURLMappings(String ref, String... tgtNameSpaces) throws IDMapperException {
+        if (ref == null) throw new IDMapperException ("Illegal null ref. Please use a URL");
+        if (ref.isEmpty()) throw new IDMapperException ("Illegal empty ref. Please use a URL");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
+            query.append("targetNameSpace, creator, dateCreated, dateUploaded ");
+        query.append("FROM link, provenance ");
+        query.append("WHERE provenance_id = provenance.id ");
+        query.append("AND sourceURL = \"");
+            query.append(ref);
+            query.append("\" ");
+        if (tgtNameSpaces.length > 0){    
+            query.append("AND ( targetNameSpace = \"");
+                query.append(tgtNameSpaces[0]);
+                query.append("\" ");
+            for (int i = 1; i < tgtNameSpaces.length; i++){
+                query.append("OR targetNameSpace = \"");
+                    query.append(tgtNameSpaces[i]);
+                    query.append("\"");
+            }
+            query.append(")");
+        }
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToURLMappingSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }
+    }
+
+    private URLMapping resultSetToURLMapping(ResultSet rs ) throws IDMapperException{
+        try {
+            Provenance provenance = this.resultSetToProvenance(rs);
+            return new URLMapping(
+                    rs.getInt("link.id"), 
+                    rs.getString("sourceURL"), 
+                    rs.getString("targetURL"), 
+                    provenance);
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+    }
+
+    private List<URLMapping> resultSetToURLMappingList(ResultSet rs ) throws IDMapperException{
+        ArrayList<URLMapping> results = new ArrayList<URLMapping>();
+        try {
+            while (rs.next()){
+                results.add(resultSetToURLMapping(rs));
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+
+    private Set<URLMapping> resultSetToURLMappingSet(ResultSet rs ) throws IDMapperException{
+        HashSet<URLMapping> results = new HashSet<URLMapping>();
+        try {
+            while (rs.next()){
+                results.add(resultSetToURLMapping(rs));
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+
+    @Override
+    public URLMapping getMapping(int id) throws IDMapperException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
+            query.append("targetNameSpace, creator, dateCreated, dateUploaded ");
+        query.append("FROM link, provenance ");
+        query.append("WHERE provenance_id = provenance.id ");
+        query.append("AND link.id  = ");
+            query.append (id);
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            if (rs.next()){
+                return resultSetToURLMapping(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }
+    }
+
+    @Override
+    public DataSourceStatistics getDataSourceStatistics(DataSource dataSource) throws IDMapperException {
+        Set<ProvenanceStatistics> sourceProvenance = getSourceProvenanceByNameSpace(dataSource.getNameSpace());
+        Set<ProvenanceStatistics> targetProvenance = getTargetProvenanceByNameSpace(dataSource.getNameSpace());
+        int numberOfSourceProvenances = sourceProvenance.size();
+        int numberOfTargetProvenances = targetProvenance.size();
+        int numberOfSourceMappings = 0;
+        for (ProvenanceStatistics provenance:sourceProvenance){
+            numberOfSourceMappings+= provenance.getNumberOfMappings();
+        }
+        int numberOfTargetMappings = 0;
+        for (ProvenanceStatistics provenance:targetProvenance){
+            numberOfTargetMappings+= provenance.getNumberOfMappings();
+        }
+        return new DataSourceStatistics (dataSource, numberOfSourceProvenances, numberOfTargetProvenances, 
+                numberOfSourceMappings, numberOfTargetMappings);
+    }
+
+    @Override
+    public DataSourceStatistics getDataSourceStatisticsByPosition(int position) throws IDMapperException {
+        Statement statement = this.createStatement();
+        String query = "SELECT sysCode "
+                + "FROM DataSource "           
+                + "LIMIT " + position + ",1";
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                DataSource dataSource = DataSource.getBySystemCode(rs.getString("sysCode"));
+                return getDataSourceStatistics(dataSource);
+            }  else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable run run query "+ query);
+        }
+    }
+
+    @Override
+    public List<DataSourceStatistics> getDataSourceStatisticsByPosition(int position, int limit) 
+            throws IDMapperException {
+        Statement statement = this.createStatement();
+        String query = "SELECT sysCode "
+                + "FROM DataSource "           
+                + "LIMIT " + position + ", " + limit;
+        ArrayList<DataSourceStatistics> results = new ArrayList<DataSourceStatistics>();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                DataSource dataSource = DataSource.getBySystemCode(rs.getString("sysCode"));
+                results.add(getDataSourceStatistics(dataSource));                
+            }  
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable run run query "+ query);
+        }
+        return results;
+    }
+
+    @Override
+    public DataVersion getDataVersion(int id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public DataVersion getDataVersionByPosition(int position) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<DataVersion> getDataVersionByPosition(int position, int limit) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<DataVersion> getDataVersionByNameSpace(String nameSpace) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public MapperStatistics getMapperStatistics() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
