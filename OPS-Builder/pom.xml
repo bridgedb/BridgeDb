@@ -14,9 +14,8 @@
   <modules>
     <!-- It may be better to build the standard BridgeDb bundle once even though not required for this build -->
   	<module>../org.bridgedb</module>
-  	<module>../org.bridgedb.plus</module>
-    <module>../org.bridgedb.provenance</module>
-  	<module>../org.bridgedb.linkset</module>
+  	<module>../org.bridgedb.url</module>
+  	<module>../org.bridgedb.ops</module>
   	<module>../org.bridgedb.sql</module>
   	<module>../org.bridgedb.url.sql</module>
   	<module>../org.bridgedb.ws.core</module>

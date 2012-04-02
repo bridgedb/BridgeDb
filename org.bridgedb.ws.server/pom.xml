@@ -61,17 +61,17 @@
 	</build>
 	
 	<dependencies>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ws.core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
         <dependency>
         	<groupId>com.sun.jersey</groupId>
         	<artifactId>jersey-core</artifactId>
@@ -92,7 +92,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.plus</artifactId>
+			<artifactId>org.bridgedb.url</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
