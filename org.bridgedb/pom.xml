@@ -41,15 +41,5 @@
             </plugin>
         </plugins>
 	</build>
-	
-	<dependencies>
-		<dependency>
-			<groupId>checkstyle</groupId>
-			<artifactId>checkstyle</artifactId>
-			<version>5.0</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-	</dependencies>
-  
+	  
 </project>
