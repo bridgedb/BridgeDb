@@ -1,0 +1,49 @@
+
+@prefix : <#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cs: <http://rdf.chemspider.com/> .
+@prefix cw: <http://www.conceptwiki.org/concept/> .
+
+:conceptwiki 
+    a void:Dataset ;
+    pav:sourceAccessedOn "2012-02-28"^^xsd:date ;
+    void:uriSpace "http://www.conceptwiki.org/concept/" ;
+	void:class <XXX> ;
+    dcterms:title "ConceptWiki" ;
+	foaf:homepage <http://www.conceptwiki.org> .
+
+:chemspider 
+    a void:dataset ;
+	pav:importedOn "2012-02-22"^^xsd:date ;
+	pav:importedFrom <http://rdf.chemspider.com> ;
+	pav:importedBy <http://www.conceptwiki.org> ;
+    void:uriSpace "http://rdf.chemspider.com/" ;
+    void:class <YYY> ;
+	dcterms:title "ChemSpider" ;
+    dcterms:description "A chemical structure database." ;
+    foaf:homepage <http://rdf.chemspider.com/> ;
+	foaf:page <http://www.chemspider.com/> .
+
+:conceptwiki_chemspider 
+    a void:Linkset ;
+    dcterms:license <http://creativecommons.org/licenses/by/3.0/> ;
+    void:subset :conceptwiki ;
+	dcterms:created "2012-02-28"^^xsd:date ;
+    dcterms:creator <http://www.conceptwiki.org> ;
+	void:subjectsTarget :conceptwiki ;
+    void:objectsTarget :chemspider ;
+	void:linkPredicate skos:closeMatch ;
+    void:triples 1089403 ;
+    dcterms:title "ConceptWiki to ChemSpider" ;
+    dcterms:description "Linkset relating ConceptWiki concepts to ChemSpider compounds." .    
+
+cw:84adfdf2-3900-47e1-86a7-bf603cb24aa9 skos:closeMatch cs:916037 .
+cw:7a581aa9-116e-4cc4-94fb-5a8a89de4fdf skos:closeMatch cs:3233992 .
+cw:424d4bd9-d953-4b00-b01c-a3b9941ba05a skos:closeMatch cs:10177322 .
+#rest of the linkset appears here

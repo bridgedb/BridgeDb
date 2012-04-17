@@ -14,12 +14,12 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Reporter;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
 import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.iterator.ByPositionXrefIterator;
 import org.bridgedb.iterator.XrefByPosition;
-import org.bridgedb.linkset.LinkListener;
 
 /**
  * UNDER DEVELOPMENT
@@ -27,7 +27,7 @@ import org.bridgedb.linkset.LinkListener;
  * 
  * @author Christian
  */
-public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkListener, XrefIterator, XrefByPosition{
+public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, XrefIterator, XrefByPosition{
         
     static final int BLOCK_SIZE = 10000;
     
@@ -84,6 +84,18 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         }
     }
     
+    Statement createAStatement() throws SQLException{
+        if (possibleOpenConnection == null){
+            possibleOpenConnection = sqlAccess.getAConnection();
+        } else if (possibleOpenConnection.isClosed()){
+            possibleOpenConnection = sqlAccess.getAConnection();
+        } else if (!possibleOpenConnection.isValid(SQL_TIMEOUT)){
+            possibleOpenConnection.close();
+            possibleOpenConnection = sqlAccess.getAConnection();
+        }  
+        return possibleOpenConnection.createStatement();
+    }
+
     abstract boolean correctVersion(int currentVersion);
     
     /**
@@ -213,45 +225,6 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         doubleCount = 0;
 	}
 
-/*    @Override
-    public void insertLink(URI source, String predicate, URI target) throws BridgeDbSqlException {
-        DataSource sourceDataSource = DataSource.getByNameSpace(source.getNamespace());
-        String sourceCode = sourceDataSource.getSystemCode();
-        DataSource targetDataSource = DataSource.getByNameSpace(target.getNamespace());
-        String targetCode = targetDataSource.getSystemCode();
-        try {
-            pstInsertLink.setString(1, source.getLocalName());
-            pstInsertLink.setString(2, sourceDataSource.getSystemCode());
-            pstInsertLink.setString(3, target.getLocalName());
-            pstInsertLink.setString(4, targetDataSource.getSystemCode());
-            pstInsertLink.setInt(5, 0);
-            pstInsertLink.executeUpdate();
-            insertCount++;
-            if (insertCount % BLOCK_SIZE == 0){
-                System.out.println("Inserted " + insertCount + " links loaded so far");
-                possibleOpenConnection.commit();
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex);
-            throw new BridgeDbSqlException ("Error inserting link");
-        }
-    }
-*/
-
-    @Override
-    public void closeInput() throws BridgeDbSqlException {
-        System.out.println ("Inserted " + this.insertCount + " links");
-        System.out.println ("Skipped " + this.doubleCount + " links that where already there");
-        if (possibleOpenConnection != null){
-            try {
-                possibleOpenConnection.commit();
-                possibleOpenConnection.close();
-            } catch (SQLException ex) {
-               throw new BridgeDbSqlException ("Error closing connection ", ex);
-            }
-        }
-    }
-
     void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();
@@ -272,8 +245,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
             rs.next();
             found = rs.getBoolean(1);
         } catch (SQLException ex) {
-            System.out.println(query);
-            throw new BridgeDbSqlException("Unable to check provenace", ex);
+            throw new BridgeDbSqlException("Unable to check provenace " +  query, ex);
         }
         if (found){
             updateDataSource(source);
@@ -368,7 +340,6 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         try {
             statement.executeUpdate(insert.toString() + ") " + values.toString() + " )");
         } catch (SQLException ex) {
-            System.out.println(insert.toString() + ") " + values.toString() + " )");
             throw new BridgeDbSqlException("Unable to writeDataSource", ex);
         }
     }
@@ -454,8 +425,7 @@ public abstract class CommonSQL implements IDMapper, IDMapperCapabilities, LinkL
         try {
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
-            System.out.println(update);
-            throw new BridgeDbSqlException("Unable to updateDataSource", ex);
+            throw new BridgeDbSqlException("Unable to updateDataSource " + update, ex);
         }
     }
     

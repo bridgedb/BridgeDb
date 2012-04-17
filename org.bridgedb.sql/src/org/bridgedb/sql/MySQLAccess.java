@@ -63,5 +63,16 @@ public class MySQLAccess implements SQLAccess{
         }
     }
     
+    /**
+     * Retrieve an active connection to the database
+     * 
+     * @return database connection
+     * @throws IMSException if there is a problem establishing a connection
+     */
+    @Override
+    public Connection getAConnection() throws SQLException {
+        Connection conn = DriverManager.getConnection(dbUrl, username, password);
+        return conn;
+    }
 
 }
