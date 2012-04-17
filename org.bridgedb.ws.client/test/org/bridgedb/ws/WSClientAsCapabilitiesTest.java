@@ -14,13 +14,8 @@ public class WSClientAsCapabilitiesTest  extends IDMapperCapabilitiesTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {
-        WSInterface webService = WSClientFactory.createTestWSClient();
-        idMapper = new WSMapper(webService){
-            @Override
-            public IDMapperCapabilities getCapabilities() {
-                return this;
-            }
-        };
+        WSCoreInterface webService = WSCoreClientFactory.createTestWSClient();
+        capabilities = new WSCoreMapper(webService);
     }
 
 }
