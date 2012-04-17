@@ -16,6 +16,11 @@ public class BridgeDbSqlException extends IDMapperException{
         super(msg, ex);
     }
 
+    BridgeDbSqlException(String msg, Exception ex, String query) {
+        super(msg + ":" + query, ex);
+        System.err.println(query);
+    }
+
     BridgeDbSqlException(String msg) {
         super (msg);
     }

@@ -8,12 +8,11 @@ package org.bridgedb.sql;
  *
  * @author Christian
  */
-public class IDSqlFactory {
+public class URLSqlFactory {
 
     public static SQLAccess createSQLAccess() throws BridgeDbSqlException {
-        SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/imsidtest", "imstest", "imstest");
+        SQLAccess sqlAccess = new MySQLAccess("jdbc:mysql://localhost:3306/ims", "ims", "ims");
         sqlAccess.getConnection();
         return sqlAccess;
     } 
-
- }
+}
