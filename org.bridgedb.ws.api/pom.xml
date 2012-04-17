@@ -5,9 +5,9 @@
         http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bridgedb</groupId>
-    <artifactId>org.bridgedb.ws.client</artifactId>
+    <artifactId>org.bridgedb.ws.api</artifactId>
     <packaging>jar</packaging>
-    <name>BridgeDb Websever Client</name>
+    <name>BridgeDb Websever API</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
@@ -21,8 +21,7 @@
     </properties>
 
     <build>
-        <finalName>OPS-IMS</finalName>
-		<!--finalName>${artifactId}-${version}</finalName-->
+ 		<finalName>${artifactId}-${version}</finalName>
 		<directory>target</directory>
 		<outputDirectory>target/classes</outputDirectory>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
@@ -59,52 +58,5 @@
             </plugin>
         </plugins>
 	</build>
-	
-	<dependencies>
- 		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ws.core</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-        <dependency>
-        	<groupId>com.sun.jersey</groupId>
-        	<artifactId>jersey-core</artifactId>
-        	<version>1.10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>1.10</version>
-            <type>jar</type>
-        </dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.plus</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ws.core</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-        <dependency>
-        	<groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>1.2</version>
-			<scope>test</scope>
-        </dependency>    
-	</dependencies>
-  
+ 	
 </project>
