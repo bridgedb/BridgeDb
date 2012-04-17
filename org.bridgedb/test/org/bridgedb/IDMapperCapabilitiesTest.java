@@ -1,11 +1,8 @@
 package org.bridgedb;
 
-import org.junit.Ignore;
-import org.junit.AfterClass;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -16,12 +13,14 @@ import static org.junit.Assert.*;
 public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     
     //Must be instantiated by implementation of these tests.
-    protected static IDMapper idMapper;
+    protected static IDMapperCapabilities capabilities;
         
     @Test
     public void testDataSourceSupported() throws Exception {
-        System.out.println("DataSourceSupported");
-        Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
+        report("DataSourceSupported");
+        
+        Set<DataSource> dataSources = capabilities.getSupportedSrcDataSources();
+        
         DataSource expected = dataSources.iterator().next();
         
         assertTrue(dataSources.contains(DataSource1));
@@ -32,8 +31,8 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
    
     @Test
     public void testDataTargetSupported() throws Exception {
-        System.out.println("DataTagerSupported");
-        Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedTgtDataSources();
+        report("DataTagerSupported");
+        Set<DataSource> dataSources = capabilities.getSupportedTgtDataSources();
         DataSource expected = dataSources.iterator().next();
         
         assertTrue(dataSources.contains(DataSource1));
@@ -44,16 +43,14 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
 
     @Test
     public void testIsMappingSupported() throws IDMapperException{
-        System.out.println("isMappingSupported");
-        IDMapperCapabilities capabilities = idMapper.getCapabilities();
+        report("isMappingSupported");
         assertTrue(capabilities.isMappingSupported(DataSource1, DataSource2));
         assertFalse(capabilities.isMappingSupported(DataSource1, DataSourceBad));
     }
 
     @Test
     public void testGetKeys() throws IDMapperException{
-        System.out.println("GetKeys");
-        IDMapperCapabilities capabilities = idMapper.getCapabilities();
+        report("GetKeys");
         assertNotNull(capabilities.getKeys());
     }
     
@@ -62,8 +59,8 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     // test is irrelevant
     @Test
     public void testKeysHaveProperties(){
-        IDMapperCapabilities capabilities = idMapper.getCapabilities();
-        for (String key : idMapper.getCapabilities().getKeys())
+        report("KeysHaveProperties");
+        for (String key : capabilities.getKeys())
 		{	
 			assertNotNull (capabilities.getProperty(key));
 		}
@@ -71,62 +68,8 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     
     @Test
     public void testBadKeyNoProperties(){
-        IDMapperCapabilities capabilities = idMapper.getCapabilities();
+        report ("BadKeyNoProperties");
         assertNull(capabilities.getProperty(badKey));
     }
 
-    @Test
-    public void testFreeSearch() throws IDMapperException{
-        org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
-        org.junit.Assume.assumeTrue(badID != null);
-        System.out.println("FreeSearchBad");
-        Set<Xref> results = idMapper.freeSearch(badID, 10);
-        assertTrue (results == null || results.isEmpty());
-    }
-
-    //** Tests where half of Xref is null **
-    @Test
-    public void testXrefWithHalfNullXrefs() throws IDMapperException{
-        System.out.println("XrefWithHalfNullXrefs");
-        assertFalse (idMapper.xrefExists(HALFNULL1));
-		assertFalse (idMapper.xrefExists(HALFNULL2));
-    }
-    
-    @Test
-    public void testIDMapperHalfNullXrefs() throws IDMapperException{
-        System.out.println("IDMapperHalfNullXrefs");
-        Set<Xref> result = idMapper.mapID(HALFNULL1);
-        assertTrue(result == null || result.isEmpty());
-    }
-    
-    @Test
-    public void testIDMapperHalfNullXrefs2() throws IDMapperException{
-        System.out.println("IDMapperHalfNullXrefs2");
-        Set<Xref> result = idMapper.mapID(HALFNULL2);
-        assertTrue(result == null || result.isEmpty());
-    }
-
-    @Test
-    public void testIDMapperHalfNullXrefs3() throws IDMapperException{
-        System.out.println("IDMapperHalfNullXrefs3");
-        Set<Xref> result = idMapper.mapID(HALFNULL1, DataSource2, DataSource3);
-        assertTrue(result == null || result.isEmpty());
-    }
-    
-    @Test
-    public void testIDMapperHalfNullXrefs4() throws IDMapperException{
-        System.out.println("IDMapperHalfNullXrefs4");
-        Set<Xref> result = idMapper.mapID(HALFNULL2, DataSource2, DataSource3);
-        assertTrue(result == null || result.isEmpty());
-    }
-
-    @Test
-    public void testIDMapperSeveralHalfNullXrefs() throws IDMapperException{
-        System.out.println("IDMapperSeveralHalfNullXrefs");
-        HashSet<Xref> src = new HashSet<Xref>();
-        src.add(HALFNULL1);
-        src.add(HALFNULL2);
-        Map<Xref, Set<Xref>> result = idMapper.mapID(src, DataSource2, DataSource3);
-        assertTrue(result == null || result.isEmpty());
-    }
 }
