@@ -14,14 +14,16 @@
   <modules>
     <!-- It may be better to build the standard BridgeDb bundle once even though not required for this build -->
   	<module>../org.bridgedb</module>
-  	<module>../org.bridgedb.url</module>
-  	<module>../org.bridgedb.ops</module>
+  	<module>../org.bridgedb.plus</module>
   	<module>../org.bridgedb.sql</module>
-  	<module>../org.bridgedb.url.sql</module>
+  	<module>../org.bridgedb.ws.api</module>
   	<module>../org.bridgedb.ws.core</module>
+  	<module>../org.bridgedb.ws.ops.core</module>
   	<module>../org.bridgedb.ws.server</module>
+  	<module>../org.bridgedb.ws.ops.server</module>
   	<module>../org.bridgedb.ws.sqlserver</module>
   	<module>../org.bridgedb.ws.client</module>
+  	<module>../org.bridgedb.ws.ops.client</module>
   </modules>
   
   	<build>

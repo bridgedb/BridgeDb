@@ -5,9 +5,9 @@
         http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bridgedb</groupId>
-    <artifactId>org.bridgedb.ws.sqlserver</artifactId>
-    <packaging>war</packaging>
-    <name>BridgeDb Websever SQL Server</name>
+    <artifactId>org.bridgedb.ws.ops.server</artifactId>
+    <packaging>jar</packaging>
+    <name>BridgeDb Websever OPS Server</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
@@ -63,13 +63,19 @@
 	<dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.sql</artifactId>
+			<artifactId>org.bridgedb.ws.ops.core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ws.ops.server</artifactId>
+			<artifactId>org.bridgedb.ws.server</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -77,6 +83,17 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
             <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>com.sun.jersey</groupId>
+        	<artifactId>jersey-core</artifactId>
+        	<version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.10</version>
+            <type>jar</type>
         </dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
@@ -88,13 +105,6 @@
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.plus</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
@@ -113,22 +123,9 @@
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ws.server</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
         <dependency>
         	<groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
-            <version>1.2</version>
-			<scope>test</scope>
-        </dependency>    
-        <dependency>
-        	<groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
             <version>1.2</version>
 			<scope>test</scope>
         </dependency>    

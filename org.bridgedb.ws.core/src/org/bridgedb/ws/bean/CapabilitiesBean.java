@@ -44,17 +44,17 @@ public class CapabilitiesBean implements IDMapperCapabilities{
             Set<DataSource> sources = capabilities.getSupportedSrcDataSources();
             Set<DataSource> targets = capabilities.getSupportedTgtDataSources();
             for (DataSource dataSource:targets){
-                targetDataSource.add(new DataSourceBean(dataSource));
+                targetDataSource.add(DataSourceBeanFactory.asBean(dataSource));
             }
             for (DataSource source:sources){
-                sourceDataSource.add(new DataSourceBean(source));
+                sourceDataSource.add(DataSourceBeanFactory.asBean(source));
                 HashSet<DataSource> mappedTargets = new HashSet<DataSource>();
                 for (DataSource target:targets){
                     if (capabilities.isMappingSupported(source, target)){
                         mappedTargets.add(target);
                     }
                 }
-                supportedMapping.add(new DataSourceMapBean(source, mappedTargets));
+                supportedMapping.add(DataSourceMapBeanFactory.asBean(source, mappedTargets));
             } 
         } catch (IDMapperException ex){
             ex.printStackTrace();
@@ -76,7 +76,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:sourceDataSource){
-            results.add(bean.asDataSource());
+            results.add(DataSourceBeanFactory.asDataSource(bean));
         }
         return results;
     }
@@ -85,7 +85,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:targetDataSource){
-            results.add(bean.asDataSource());
+            results.add(DataSourceBeanFactory.asDataSource(bean));
         }
         return results;
     }
@@ -93,8 +93,8 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
         for (DataSourceMapBean bean:supportedMapping){
-            if (bean.getKey() == src ){
-                Set<DataSource> targets = bean.getMappedSet();
+            if (DataSourceMapBeanFactory.getKey(bean) == src ){
+                Set<DataSource> targets = DataSourceMapBeanFactory.getMappedSet(bean);
                 return targets.contains(tgt);
             }
         }
