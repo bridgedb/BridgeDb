@@ -26,7 +26,7 @@ public class TestIDMapperText extends IDMapperTest {
 	@Test 
     public void testFileExists()
 	{
-        System.out.println("FileExists");
+        report("FileExists");
 		Assert.assertTrue (INTERFACE_TEST_FILE.exists());
 	}	
 	

@@ -19,7 +19,7 @@ public abstract class XrefIteratorTest extends IDMapperTestBase{
     
     @Test
     public void TestAllDataSourcesIterator() throws IDMapperException{
-        System.out.println("TestAllDataSourcesIterator");
+        report("TestAllDataSourcesIterator");
         Iterable<Xref> iterable = XrefIterator.getIterator();
         Iterator<Xref> iterator = iterable.iterator();
         HashSet<Xref> asSet = new HashSet<Xref>();
@@ -37,7 +37,7 @@ public abstract class XrefIteratorTest extends IDMapperTestBase{
 
     @Test
     public void TestOneDataSourcesIterator() throws IDMapperException{
-        System.out.println("TestOneDataSourcesIterator");
+        report("TestOneDataSourcesIterator");
         Iterable<Xref> iterable = XrefIterator.getIterator(DataSource2);
         Iterator<Xref> iterator = iterable.iterator();
         HashSet<Xref> asSet = new HashSet<Xref>();
