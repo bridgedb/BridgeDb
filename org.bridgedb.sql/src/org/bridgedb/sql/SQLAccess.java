@@ -5,6 +5,7 @@
 package org.bridgedb.sql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -14,4 +15,5 @@ public interface SQLAccess {
 
     public Connection getConnection()  throws BridgeDbSqlException;
     
+    public Connection getAConnection()  throws SQLException;
 }

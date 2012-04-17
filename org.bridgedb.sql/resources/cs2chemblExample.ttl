@@ -1,0 +1,71 @@
+
+@prefix : <#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix cs: <http://rdf.chemspider.com/> .
+@prefix chembl: <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/> .
+
+:alasdair
+	a foaf:Person; 
+	foaf:name "Alasdair Gray"@en . 
+	
+:antonis
+	a foaf:Person ; 
+	foaf:name "Antonis Loizou"@en .
+
+:chemspider
+	a void:dataset ;
+	pav:importedOn "2012-03-01"^^xsd:date ;
+	pav:importedFrom <http://rdf.chemspider.com> ;
+	pav:importedBy :alasdair ;
+	void:uriSpace "http://rdf.chemspider.com/" ;
+	void:class <XXX> ;
+	dcterms:title "ChemSpider" ;
+	dcterms:description "A chemical structure database." ;
+	foaf:homepage <http://rdf.chemspider.com/> ;
+	foaf:page <http://www.chemspider.com/> .
+
+:chembl_compounds
+	a void:dataset ;
+	void:subset :chembl ;
+	void:uriSpace "http://chem2bio2rdf.org/chembl/resource/chembl_compounds/" ;
+	void:class <http://chem2bio2rdf.org/chembl/resource/chembl_compounds> ;
+	dcterms:title "Chem2Bio2RDF ChEMBL Compounds" ;
+	dcterms:description "The compounds subset of the Chem2Bio2RDF conversion of the ChEMBL database." ;
+	foaf:homepage <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/> .
+
+:chembl
+	a void:dataset ;
+	pav:versionNumber "02"^^xsd:integer ;
+	pav:retrievedFrom <http://cheminfov.informatics.indiana.edu:8080/download/chembl.n3.gz> ;
+	pav:retrievedOn "2011-11-30"^^xsd:date ;
+	pav:retrieveBy :antonis ;
+	foaf:homepage <http://chem2bio2rdf.org/chembl/> ;
+	foaf:page <https://www.ebi.ac.uk/chembl/> ;
+	dcterms:title "Chem2Bio2RDF ChEMBL" ;
+	dcterms:description "The Chem2Bio2RDF conversion of the ChEMBL database." .
+
+:chemspider_chembl
+	a void:Linkset ;
+	dcterms:license <http://www.opendatacommons.org/licenses/odbl/> ;
+	void:subset :chemspider ;
+	pav:authoredOn "2012-02-22"^^xsd:date ;
+	pav:authoredBy <http://www.chemspider.com/> ;
+	pav:createdOn "2012-03-01"^^xsd:date ;
+	pav:createdBy :alasdair ;
+	void:target :chembl_compounds ;
+    void:target :chemspider ;
+	void:linkPredicate skos:exactMatch ;
+	void:triples 1024305 ;
+	dcterms:title "ChemSpider to ChEMBL Compounds" ;
+	dcterms:description "Linkset relating ChemSpider compounds to ChEMBL compounds using the Chem2Bio2RDF encoding of ChEMBL." . 
+
+#The data now follows
+cs:43 skos:exactMatch chembl:698788 .
+cs:60 skos:exactMatch chembl:241273 .
+### the rest of the triples should be presented
