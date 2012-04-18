@@ -40,7 +40,7 @@ public interface WSCoreInterface {
 
     MappingSupportedBean isMappingSupported( String srcCode, String tgtCode) throws IDMapperException;
 
-    List<XrefMapBean> mapByXrefs(List<String> id, List<String> scrCode, List<String> provenanceId, 
+    List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> provenanceId, 
             List<String> targetCodes) throws IDMapperException;
 
     XrefExistsBean xrefExists(String id, String scrCode) throws IDMapperException;
