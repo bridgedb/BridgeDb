@@ -938,9 +938,9 @@ public class URLMapperSQL extends CommonSQL
     @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {
         String query = "SELECT count(*) as numberOfMappings, count(distinct(provenance_id)) as numberOfProvenances, "
-                + "count(provenance.sourceNameSpace) as numberOfSourceDataSources, "
-                + "count(provenance.linkPredicate) as numberOfPredicates, "
-                + "count(provenance.targetNameSpace) as numberOfTargetDataSources "
+                + "count(distinct(provenance.sourceNameSpace)) as numberOfSourceDataSources, "
+                + "count(distinct(provenance.linkPredicate)) as numberOfPredicates, "
+                + "count(distinct(provenance.targetNameSpace)) as numberOfTargetDataSources "
                 + "FROM link, provenance "
                 + "WHERE provenance_id = provenance.id ";
         Statement statement = this.createStatement();

@@ -183,8 +183,8 @@ public class WSCoreClient implements WSCoreInterface{
     @Override
     public MappingSupportedBean isMappingSupported(String srcCode, String tgtCode) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("source", srcCode);
-        params.add("target", tgtCode);
+        params.add("srcCode", srcCode);
+        params.add("tgtCode", tgtCode);
         //Make service call
         MappingSupportedBean result = 
                 webResource.path("isMappingSupported")

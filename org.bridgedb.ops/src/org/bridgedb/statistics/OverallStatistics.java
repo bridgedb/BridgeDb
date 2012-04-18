@@ -51,4 +51,11 @@ public class OverallStatistics {
     public int getNumberOfTargetDataSources() {
         return numberOfTargetDataSources;
     }
+
+    /**
+     * @return the numberOfPredicates
+     */
+    public int getNumberOfPredicates() {
+        return numberOfPredicates;
+    }
 }

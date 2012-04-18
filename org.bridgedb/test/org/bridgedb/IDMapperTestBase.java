@@ -54,10 +54,13 @@ public abstract class IDMapperTestBase {
      */
     public static void setupXref() throws IDMapperException{
         //If the actual source to be tested does not contain these please overwrite with ones that do exist.
-        DataSource1 = DataSource.register("TestDS1", "TestDS1").
-                urlPattern("http://www.foo.com/$id").asDataSource();
-        DataSource2 = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id").asDataSource();
-        DataSource3 = DataSource.register("TestDS3", "TestDS3").nameSpace("http://www.example.org#").asDataSource();
+        goodId1 = "123";
+        DataSource1 = DataSource.register("TestDS1", "TestDS1"). urlPattern("http://www.foo.com/$id")
+                .idExample(goodId1).asDataSource();
+        DataSource2 = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id")
+                .idExample(goodId1).asDataSource();
+        DataSource3 = DataSource.register("TestDS3", "TestDS3").nameSpace("http://www.example.org#")
+                .idExample(goodId1).asDataSource();
         //This DataSource MUST not be supported
         DataSourceBad = DataSource.register("TestDSBad", "TestDSBad")
                 .nameSpace("www.NotInTheURlMapper.com#").asDataSource();
