@@ -211,12 +211,12 @@ public class WSCoreService implements WSCoreInterface {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/mapByXRefs")
+    @Path("/mapID")
     @Override
-    public List<XrefMapBean> mapByXrefs(
+    public List<XrefMapBean> mapID(
             @QueryParam("id") List<String> id,
             @QueryParam("code") List<String> scrCode,
-            @QueryParam("provenance") List<String> provenaceIds,
+            @QueryParam("provenanceId") List<String> provenaceIds,
             @QueryParam("tgtCode") List<String> targetCodes) throws IDMapperException {
         if (id == null) throw new IDMapperException("id parameter missig");
         if (id.isEmpty()) throw new IDMapperException("id parameter missig");

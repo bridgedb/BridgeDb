@@ -195,7 +195,7 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public List<XrefMapBean> mapByXrefs(List<String> id, List<String> scrCode, List<String> provenanceId, 
+    public List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> provenanceId, 
             List<String> targetCodes) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String one:id){
@@ -212,7 +212,7 @@ public class WSCoreClient implements WSCoreInterface{
         }
         //Make service call
         List<XrefMapBean> result = 
-                webResource.path("mapByXRefs")
+                webResource.path("mapID")
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<XrefMapBean>>() {});

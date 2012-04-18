@@ -106,7 +106,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         }
         HashMap<Xref, Set<Xref>> results = new HashMap<Xref, Set<Xref>>();
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
-        List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, ALL_PROVENANCE, tgtCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_PROVENANCE, tgtCodes);
         for (XrefMapBean bean:beans){
             System.out.println(bean);
             Xref source = XrefBeanFactory.asXref(bean.getSource());
@@ -131,7 +131,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         for (int i = 0 ; i < tgtDataSources.length; i++){
             tgtCodes.add(tgtDataSources[i].getSystemCode());
         }
-        List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, ALL_PROVENANCE, tgtCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_PROVENANCE, tgtCodes);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefMapBean bean:beans){
             results.add(XrefBeanFactory.asXref(bean.getTarget()));
@@ -252,7 +252,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         }
         HashMap<Xref, Set<XrefProvenance>> results = new HashMap<Xref, Set<XrefProvenance>>();
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
-        List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, new ArrayList(provenanceIds), tgtCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, new ArrayList(provenanceIds), tgtCodes);
         for (XrefMapBean bean:beans){
             Xref source = XrefBeanFactory.asXref(bean.getSource());
             Set<XrefProvenance> targets = results.get(source);
@@ -277,7 +277,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         Iterator<DataSource> targetDataSourcesIterator = targetDataSources.iterator();
         while (targetDataSourcesIterator.hasNext())
             tgtCodes.add(targetDataSourcesIterator.next().getSystemCode());
-        List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, new ArrayList(provenanceIds), tgtCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, new ArrayList(provenanceIds), tgtCodes);
         HashSet<XrefProvenance> results = new HashSet<XrefProvenance>();
         for (XrefMapBean bean:beans){
             results.add(XrefMapBeanFactory.asXrefProvenance(bean));

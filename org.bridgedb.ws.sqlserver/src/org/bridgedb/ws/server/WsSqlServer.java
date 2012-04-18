@@ -145,7 +145,7 @@ public class WsSqlServer extends WSService{
         sb.append("Their behaviour is consitant across all methods.");
         
         sb.append("<ul>");
-        sb.append("<li><a name=\"id_code\">code and id</a></li>");
+        sb.append("<dt><a name=\"id_code\">code and id</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with this/these Xrefs.</li>");
             sb.append("<li>code is the SystemCode of the Xref's DataSource)</li>");
@@ -158,17 +158,22 @@ public class WsSqlServer extends WSService{
                 sb.append("<li>If multiple Xref's have the same DataSource their code must be repeated.</li>");                
                 sb.append("</ul>");
             sb.append("</ul>");
-        sb.append("<li><a name=\"limit\">limit</a></li>");
+        sb.append("<dt><a name=\"key\">key</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Selects which property to return.</li>");
+            sb.append("<li>Only one key parameter is supported.</li>");
+            sb.append("</ul>");
+        sb.append("<dt><a name=\"limit\">limit</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the number of results.</li>");
             sb.append("<li>Must be a positive Integer in String Format</li>");
             sb.append("<li>If less than limit results are availabe limit will have no effect.</li>");
             sb.append("<li>Only one limit parameter is supported.</li>");
             sb.append("</ul>");
-        sb.append("<li><a name=\"key\">key</a></li>");
+        sb.append("<dt><a name=\"provenanceId\">provenanceId</a></dt>");
             sb.append("<ul>");
-            sb.append("<li>Selects which property to return.</li>");
-            sb.append("<li>Only one key parameter is supported.</li>");
+            sb.append("<li>Limits the results to only those with this provenace Id.</li>");
+            sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
         sb.append("<dt><a name=\"srcCode\">srcCode</a></dt>");
             sb.append("<ul>");
@@ -176,7 +181,7 @@ public class WsSqlServer extends WSService{
             sb.append("<li>String Format</li>");
             sb.append("<li>Typically there must be exactly one srcCode when used..</li>");
             sb.append("</ul>");
-        sb.append("<li><a name=\"srcURL\">srcURL</a></li>");
+        sb.append("<dt><a name=\"srcURL\">srcURL</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with this/these Source URLs.</li>");
             sb.append("<li>String Format</li>");
@@ -241,6 +246,7 @@ public class WsSqlServer extends WSService{
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
+                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
                 sb.append("<li><a href=\"#tgtNameSpace\">tgtNameSpace</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
@@ -320,7 +326,7 @@ public class WsSqlServer extends WSService{
     }
     
     protected final void introduce_IDMapper(StringBuilder sb) {
-        sb.append("<dt><a href=\"#mapByXRefs\">mapByXRefs</a></dt>");
+        sb.append("<dt><a href=\"#mapID\">mapID</a></dt>");
         sb.append("<dd>List the Xrefs that map to these Xrefs</dd>");
         sb.append("<dt><a href=\"#xrefExists\">xrefExists</a></dt>");
         sb.append("<dd>State if the Xref is know to the Mapping Service or not</dd>");       
@@ -337,7 +343,7 @@ public class WsSqlServer extends WSService{
     protected void describe_IDMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) throws UnsupportedEncodingException{
         sb.append("<h2>Implementations of BridgeDB's IDMapper methods</h2>");
 
-        describe_mapByXRefs(sb, first, firstMaps, second);    
+        describe_mapID(sb, first, firstMaps, second);    
         describe_xrefExists(sb, first);
         describe_freeSearch(sb, first);
         describe_getCapabilities(sb); 
@@ -350,12 +356,13 @@ public class WsSqlServer extends WSService{
         sb.append("</dl>");
     }
     
-    private void describe_mapByXRefs(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) 
+    private void describe_mapID(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) 
             throws UnsupportedEncodingException{
-        sb.append("<h3><a name=\"mapByXRefs\">mapByXRefs</h3>");
+        sb.append("<h3><a name=\"mapID\">mapID</h3>");
             sb.append("<ul>");
             sb.append("<li>List the Xrefs that map to these Xrefs</li>");
-            sb.append("<li>Implements:  Map&ltXref, Set&ltXref&gt&lt mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources)</li>");
+            sb.append("<li>Implements:  Map&ltXref, Set&ltXref&gt&gt mapID(Collection&ltXref&gt srcXrefs, DataSource... tgtDataSources)</li>");
+            sb.append("<li>Implements:  Set&ltXref&gt mapID(Xref srcXrefs, DataSource... tgtDataSources)</li>");
             sb.append("<li>Required arguements: (Only Source Xref considered)</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#id_code\">id</a></li>");
@@ -363,12 +370,13 @@ public class WsSqlServer extends WSService{
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                    sb.append("<li><a href=\"#tgtCode\">tgtCode</a></li> ");
+                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("<li><a href=\"#tgtCode\">tgtCode</a></li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
-                    StringBuilder sbInnerPure = new StringBuilder("mapByXRefs?id=");
-                    StringBuilder sbInnerEncoded = new StringBuilder("mapByXRefs?id=");
+                    StringBuilder sbInnerPure = new StringBuilder("mapID?id=");
+                    StringBuilder sbInnerEncoded = new StringBuilder("mapID?id=");
                     sbInnerPure.append(first.getId());
                     sbInnerEncoded.append(first.getId());
                     sbInnerPure.append("&code=");
