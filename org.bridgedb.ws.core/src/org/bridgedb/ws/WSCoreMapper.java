@@ -4,7 +4,6 @@
  */
 package org.bridgedb.ws;
 
-import org.bridgedb.provenance.ProvenanceLink;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.ws.bean.XrefBean;
@@ -29,14 +28,10 @@ import org.bridgedb.url.URLMapper;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourceBeanFactory;
 import org.bridgedb.ws.bean.PropertyBean;
-import org.bridgedb.ws.bean.ProvenanceBean;
-import org.bridgedb.ws.bean.ProvenanceBeanFactory;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.XrefMapBeanFactory;
-import org.bridgedb.ws.bean.XrefProvenanceBean;
-import org.bridgedb.ws.bean.XrefProvenanceBeanFactory;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 
 /**
@@ -113,9 +108,14 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
         List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, ALL_PROVENANCE, tgtCodes);
         for (XrefMapBean bean:beans){
-            Xref key = XrefMapBeanFactory.getKey(bean);
-            Set<Xref> mapSet = XrefMapBeanFactory.getXrefMappedSet(bean);
-            results.put(key, mapSet);
+            System.out.println(bean);
+            Xref source = XrefBeanFactory.asXref(bean.getSource());
+            Set<Xref> targets = results.get(source);
+            if (targets == null){
+                targets = new HashSet<Xref>(); 
+            }
+            targets.add(XrefBeanFactory.asXref(bean.getTarget()));
+            results.put(source, targets);
         }
         return results;
     }
@@ -123,16 +123,18 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
         if (ref.getId() == null || ref.getDataSource() == null) return new HashSet<Xref>();
-        String id = ref.getId();
-        String code = ref.getDataSource().getSystemCode();
+        ArrayList<String> ids = new ArrayList<String>();
+        ArrayList<String> codes = new ArrayList<String>();
+        ids.add(ref.getId());
+        codes.add(ref.getDataSource().getSystemCode());
         ArrayList<String> tgtCodes = new ArrayList<String>();
         for (int i = 0 ; i < tgtDataSources.length; i++){
             tgtCodes.add(tgtDataSources[i].getSystemCode());
         }
-        List<XrefProvenanceBean>  beans = webService.mapByXref(id, code, ALL_PROVENANCE, tgtCodes);
+        List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, ALL_PROVENANCE, tgtCodes);
         HashSet<Xref> results = new HashSet<Xref>();
-        for (XrefProvenanceBean bean:beans){
-            results.add(XrefProvenanceBeanFactory.asXref(bean));
+        for (XrefMapBean bean:beans){
+            results.add(XrefBeanFactory.asXref(bean.getTarget()));
         }
         return results;
     }
@@ -252,9 +254,13 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
         List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, new ArrayList(provenanceIds), tgtCodes);
         for (XrefMapBean bean:beans){
-            Xref key = XrefMapBeanFactory.getKey(bean);
-            Set<XrefProvenance> mapSet = XrefMapBeanFactory.getXrefProvenanceMappedSet(bean);
-            results.put(key, mapSet);
+            Xref source = XrefBeanFactory.asXref(bean.getSource());
+            Set<XrefProvenance> targets = results.get(source);
+            if (targets == null){
+                targets = new HashSet<XrefProvenance>();
+            }
+            targets.add(XrefMapBeanFactory.asXrefProvenance(bean));
+            results.put(source, targets);
         }
         return results;
     }
@@ -263,16 +269,18 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
     public Set<XrefProvenance> mapIDProvenance(Xref ref, Collection<String> provenanceIds, 
             Collection<DataSource> targetDataSources) throws IDMapperException {
         if (ref.getId() == null || ref.getDataSource() == null) return new HashSet<XrefProvenance>();
-        String id = ref.getId();
-        String code = ref.getDataSource().getSystemCode();
+        ArrayList<String> ids = new ArrayList<String>();
+        ArrayList<String> codes = new ArrayList<String>();
+        ids.add(ref.getId());
+        codes.add(ref.getDataSource().getSystemCode());
         ArrayList<String> tgtCodes = new ArrayList<String>();    
         Iterator<DataSource> targetDataSourcesIterator = targetDataSources.iterator();
         while (targetDataSourcesIterator.hasNext())
             tgtCodes.add(targetDataSourcesIterator.next().getSystemCode());
-        List<XrefProvenanceBean>  beans = webService.mapByXref(id, code, new ArrayList(provenanceIds), tgtCodes);
+        List<XrefMapBean>  beans = webService.mapByXrefs(ids, codes, new ArrayList(provenanceIds), tgtCodes);
         HashSet<XrefProvenance> results = new HashSet<XrefProvenance>();
-        for (XrefProvenanceBean bean:beans){
-            results.add(XrefProvenanceBeanFactory.asXrefProvenance(bean));
+        for (XrefMapBean bean:beans){
+            results.add(XrefMapBeanFactory.asXrefProvenance(bean));
         }
         return results;
     }

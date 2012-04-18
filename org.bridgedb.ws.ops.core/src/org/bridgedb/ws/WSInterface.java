@@ -5,7 +5,6 @@
 package org.bridgedb.ws;
 
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
-import org.bridgedb.ws.bean.ProvenanceStatisticsBean;
 import java.util.List;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.URLMappingBean;
@@ -41,15 +40,15 @@ public interface WSInterface extends WSCoreInterface {
             List<String> nameSpaces, List<String> sourceNameSpaces, List<String> targetNameSpaces,
             List<String> provenanceIdStrings,String positionString, String limitString, Boolean full);
 
-    public ProvenanceStatisticsBean getProvenance(Integer id) throws IDMapperException;
+    //public ProvenanceStatisticsBean getProvenance(Integer id) throws IDMapperException;
 
-    public ProvenanceStatisticsBean getProvenanceByPosition(Integer position) throws IDMapperException;
+    //public ProvenanceStatisticsBean getProvenanceByPosition(Integer position) throws IDMapperException;
 
-    public List<ProvenanceStatisticsBean> getProvenanceByPosition(Integer position, Integer limit) throws IDMapperException;
+    //public List<ProvenanceStatisticsBean> getProvenanceByPosition(Integer position, Integer limit) throws IDMapperException;
 
-    public List<ProvenanceStatisticsBean> getSourceProvenanceByNameSpace(String nameSpace) throws IDMapperException;
+    //public List<ProvenanceStatisticsBean> getSourceProvenanceByNameSpace(String nameSpace) throws IDMapperException;
 
-    public List<ProvenanceStatisticsBean> getTargetProvenanceByNameSpace(String nameSpace) throws IDMapperException;
+    //public List<ProvenanceStatisticsBean> getTargetProvenanceByNameSpace(String nameSpace) throws IDMapperException;
 
     public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException;
 

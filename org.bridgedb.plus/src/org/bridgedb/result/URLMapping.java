@@ -4,8 +4,6 @@
  */
 package org.bridgedb.result;
 
-import org.bridgedb.provenance.ProvenanceLink;
-
 /**
  *
  * @author Christian
@@ -15,10 +13,11 @@ public class URLMapping extends ResultBase{
     private int id;
     private String sourceURL;
     private String targetURL;
-    private ProvenanceLink provenanceLink;
+    private String provenanceId;
+    private String predicate;
     private static String SAFE_MESSAGE = "Error generating Mapping. The administrstor has been informed";
     
-    public URLMapping (int id, String sourceURL, String targetURL, ProvenanceLink provenanceLink){
+    public URLMapping (int id, String sourceURL, String targetURL, String provenanceId, String predicate){
         errorMessage = "";
         this.id = id;
         if (sourceURL == null || targetURL == null){
@@ -26,7 +25,8 @@ public class URLMapping extends ResultBase{
         } 
         this.sourceURL = sourceURL;
         this.targetURL = targetURL;
-        this.provenanceLink = provenanceLink;
+        this.provenanceId = provenanceId;
+        this.predicate = predicate;
     }
 
     public URLMapping (String errorMessage){
@@ -62,22 +62,10 @@ public class URLMapping extends ResultBase{
         return targetURL;
     }
 
-    /**
-     * @return the provenance
-     */
-    public ProvenanceLink getProvenanceLink() {
-        return provenanceLink;
-    }
-    
     public String toString(){
         if (isValid()){
-            if (provenanceLink == null){
-                return this.id  + ": " + sourceURL + " " + provenanceLink.getPredicate() + " " + this.targetURL + 
-                    " No provenance. ";
-            } else {
-                return this.id  + ": " + sourceURL + " " + provenanceLink.getPredicate() + " " + this.targetURL + 
-                    " provenance: " + this.provenanceLink.getId();
-            }
+            return this.id  + ": " + this.sourceURL + " " + this.getPredicate() + " " + this.targetURL + 
+                    " provenance: " + this.getProvenanceId();
         } else {
             return "URLMapping: Error " + errorMessage;
         }
@@ -99,13 +87,25 @@ public class URLMapping extends ResultBase{
             if (otherMapping.id != id) return false;
             if (otherMapping.sourceURL.equals(sourceURL)) return false;
             if (otherMapping.targetURL.equals(targetURL)) return false;
-            if (provenanceLink == null){
-                return otherMapping.provenanceLink == null;
-            } else {
-                return provenanceLink.equals(otherMapping.provenanceLink);
-            }
-        } else {
+            if (otherMapping.getProvenanceId().equals(getProvenanceId())) return false;
+            //No need to check predicate as by defintion one id has one predicate
+            return true;
+         } else {
             return false;
         }
+    }
+
+    /**
+     * @return the provenanceId
+     */
+    public String getProvenanceId() {
+        return provenanceId;
+    }
+
+    /**
+     * @return the predicate
+     */
+    public String getPredicate() {
+        return predicate;
     }
 }

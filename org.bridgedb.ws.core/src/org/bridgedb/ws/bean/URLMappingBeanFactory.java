@@ -1,13 +1,5 @@
 package org.bridgedb.ws.bean;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.bridgedb.DataSource;
-import org.bridgedb.IDMapperException;
-import org.bridgedb.provenance.ProvenanceLink;
 import org.bridgedb.result.URLMapping;
-import org.bridgedb.ws.bean.ProvenanceBeanFactory;
-import org.bridgedb.ws.bean.URLMappingBean;
 
 /**
  *
@@ -21,12 +13,12 @@ public class URLMappingBeanFactory extends URLMappingBean{
             bean.id = mapping.getId();
             bean.sourceURL = mapping.getSourceURL();
             bean.targetURL = mapping.getTargetURL();
-            if (full){
-                bean.provenance =  ProvenanceBeanFactory.asBean(mapping.getProvenanceLink());
-            } else {
-                bean.provenanceId = mapping.getProvenanceLink().getId();
-                bean.predicate = mapping.getProvenanceLink().getPredicate();
-            }
+            //if (full){
+            //    bean.provenance =  ProvenanceBeanFactory.asBean(mapping.getProvenanceLink());
+            //} else {
+                bean.provenanceId = mapping.getProvenanceId();
+                bean.predicate = mapping.getPredicate();
+            //}
         } else {
             bean.Error = mapping.getErrorMessage();
         }
@@ -43,19 +35,7 @@ public class URLMappingBeanFactory extends URLMappingBean{
         if (bean.Error != null && !bean.Error.isEmpty()){
             return new URLMapping(bean.Error);
         }
-        if (bean.getProvenance() == null){
-            try {
-                String sourceNameSpace = DataSource.uriToXref(bean.sourceURL).getDataSource().getNameSpace();
-                String targetnameSpace = DataSource.uriToXref(bean.targetURL).getDataSource().getNameSpace();
-                ProvenanceLink link = 
-                        new ProvenanceLink(bean.getProvenanceId(), sourceNameSpace, bean.predicate, targetnameSpace);
-                return new URLMapping(bean.getId(), bean.getSourceURL(), bean.getTargetURL(), link);
-            } catch (IDMapperException ex) {
-                return new URLMapping(ex);
-            }
-        }
-        return new URLMapping(bean.getId(), bean.getSourceURL(), bean.getTargetURL(), 
-                ProvenanceBeanFactory.asProvenance(bean.provenance));
+        return new URLMapping(bean.getId(), bean.getSourceURL(), bean.getTargetURL(), bean.provenanceId, bean.predicate);
     }
          
     

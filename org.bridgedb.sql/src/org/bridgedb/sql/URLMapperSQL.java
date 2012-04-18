@@ -20,7 +20,6 @@ import org.bridgedb.Xref;
 import org.bridgedb.iterator.ByPositionURLIterator;
 import org.bridgedb.iterator.URLByPosition;
 import org.bridgedb.linkset.URLLinkListener;
-import org.bridgedb.provenance.ProvenanceLink;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
@@ -127,31 +126,42 @@ public class URLMapperSQL extends CommonSQL
  	}
 
     @Override
-    public void registerProvenanceLink(ProvenanceLink provenaceLink) throws BridgeDbSqlException{
-        checkDataSourceInDatabase(provenaceLink.getSource());
-        checkDataSourceInDatabase(provenaceLink.getTarget());
+    public void registerProvenanceLink(String provenanceId, DataSource source, String predicate, DataSource target) 
+            throws BridgeDbSqlException{
+        checkDataSourceInDatabase(source);
+        checkDataSourceInDatabase(target);
         String query = "SELECT * FROM provenance "
-                    + "WHERE id = \"" + provenaceLink.getId() + "\"";
+                    + "WHERE id = \"" + provenanceId + "\"";
         try {
 			Statement statement = createStatement();
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()) {
                 System.out.println("next");
-                ProvenanceLink found = resultSetToProvenanceLink(rs);
-                if (found.equals(provenaceLink)){
-                    return;
-                } else {
-                    throw new BridgeDbSqlException("Error regeitering provenaceLink " + provenaceLink + 
-                            " it clashes with " + found);
+                String foundID = rs.getString("linkPredicate");
+                DataSource foundSource = DataSource.getByNameSpace(rs.getString("sourceNameSpace"));
+                String foundPredicate = rs.getString("linkPredicate");
+                DataSource foundTarget = DataSource.getByNameSpace(rs.getString("targetNameSpace"));
+                if (foundSource != source){
+                    throw new BridgeDbSqlException("Error regeitering provenaceId " + provenanceId + 
+                            " with source " + source + " it clashes with " + foundSource);
                 }
+                if (!foundPredicate.endsWith(predicate)){
+                    throw new BridgeDbSqlException("Error regeitering provenaceId " + provenanceId + 
+                            " with predicate " + predicate + " it clashes with " + foundPredicate);
+                }
+                if (foundTarget != target){
+                    throw new BridgeDbSqlException("Error regeitering provenaceId " + provenanceId + 
+                            " with target " + target + " it clashes with " + foundTarget);
+                }
+                return;
             }
             query = "INSERT INTO provenance "
                     + "(id, sourceNameSpace, linkPredicate, targetNameSpace ) " 
                     + "VALUES (" 
-                    + "\"" + provenaceLink.getId() + "\", " 
-                    + "\"" + provenaceLink.getSourceNameSpace() + "\", " 
-                    + "\"" + provenaceLink.getPredicate() + "\", " 
-                    + "\"" + provenaceLink.getTargetNameSpace() + "\")";
+                    + "\"" + provenanceId + "\", " 
+                    + "\"" + source.getNameSpace() + "\", " 
+                    + "\"" + predicate + "\", " 
+                    + "\"" + target.getNameSpace() + "\")";
             System.out.println(query);
             statement.executeUpdate(query);
             System.out.println("2");
@@ -162,12 +172,12 @@ public class URLMapperSQL extends CommonSQL
     }
 
     @Override
-    public void insertLink(String source, String target, ProvenanceLink provenaceLink) throws IDMapperException {
+    public void insertLink(String source, String target, String provenanceId) throws IDMapperException {
         boolean exists = false;
         try {
             pstCheckLink.setString(1, source);
             pstCheckLink.setString(2, target);
-            pstCheckLink.setString(3, provenaceLink.getId());
+            pstCheckLink.setString(3, provenanceId);
             ResultSet rs = pstCheckLink.executeQuery();
             if (rs.next()) {
                 exists = rs.getBoolean(1);
@@ -180,7 +190,7 @@ public class URLMapperSQL extends CommonSQL
             } else {
                 pstInsertLink.setString(1, source);
                 pstInsertLink.setString(2, target);
-                pstInsertLink.setString(3, provenaceLink.getId());
+                pstInsertLink.setString(3, provenanceId);
                 pstInsertLink.executeUpdate();
                 insertCount++;
                 if (insertCount % BLOCK_SIZE == 0){
@@ -484,15 +494,7 @@ public class URLMapperSQL extends CommonSQL
         }
     }
 
-    
-    private ProvenanceLink resultSetToProvenanceLink(ResultSet rs) throws SQLException{
-        return new ProvenanceLink(rs.getString("id"), 
-                DataSource.getByNameSpace(rs.getString("sourceNameSpace")),
-                rs.getString("linkPredicate"), 
-                DataSource.getByNameSpace(rs.getString("targetNameSpace")));
-    }
-    
-    private ProvenanceStatistics resultSetToProvenanceStatistics(ResultSet rs) throws BridgeDbSqlException{
+    /*private ProvenanceStatistics resultSetToProvenanceStatistics(ResultSet rs) throws BridgeDbSqlException{
         ProvenanceLink provenanceLink;
         try {
             provenanceLink = resultSetToProvenanceLink(rs);
@@ -517,7 +519,7 @@ public class URLMapperSQL extends CommonSQL
         }
         return new ProvenanceStatistics(provenanceLink, count);
     }
-    /*
+    
     private void createMissingProvenance(DataSource source, String predicate, DataSource target, 
             String createdBy, long creation, long uploaded) throws ProvenanceException  {
         try {
@@ -1070,24 +1072,23 @@ public class URLMapperSQL extends CommonSQL
     }
     
     private URLMapping resultSetToURLMapping(ResultSet rs) throws SQLException {
-        ProvenanceLink provenanceLink = this.resultSetToProvenanceLink(rs);
         return new URLMapping(
                 rs.getInt("link.id"), 
                 rs.getString("sourceURL"), 
                 rs.getString("targetURL"), 
-                provenanceLink);
+                rs.getString("provenance.id"),
+                rs.getString("linkPredicate"));
     }
 
     private List<URLMapping> resultSetToURLMappingList(ResultSet rs) throws SQLException {
         ArrayList<URLMapping> results = new ArrayList<URLMapping>();
         while (rs.next()){
-            ProvenanceLink provenanceLink = this.resultSetToProvenanceLink(rs);
-            System.out.println(provenanceLink);
             results.add(new URLMapping(
                 rs.getInt("link.id"), 
                 rs.getString("sourceURL"), 
                 rs.getString("targetURL"), 
-                provenanceLink));
+                rs.getString("provenance.id"),
+                rs.getString("linkPredicate")));
         }
         return results;
     }
@@ -1248,9 +1249,8 @@ public class URLMapperSQL extends CommonSQL
     }
 
     private XrefProvenance resultSetToXrefProvenance(ResultSet rs) throws SQLException, IDMapperException {
-        ProvenanceLink provenanceLink = this.resultSetToProvenanceLink(rs);
         Xref xref = DataSource.uriToXref(rs.getString("targetURL"));
-        return new XrefProvenance(xref, provenanceLink);
+        return new XrefProvenance(xref, rs.getString("provenance.id"), rs.getString("linkPredicate"));
     }
 
     @Override

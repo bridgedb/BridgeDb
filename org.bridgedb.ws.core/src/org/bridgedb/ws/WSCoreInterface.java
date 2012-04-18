@@ -11,12 +11,10 @@ import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSupportedBean;
 import org.bridgedb.ws.bean.PropertyBean;
-import org.bridgedb.ws.bean.ProvenanceBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.XrefMapBean;
-import org.bridgedb.ws.bean.XrefProvenanceBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
 
@@ -41,9 +39,6 @@ public interface WSCoreInterface {
     FreeSearchSupportedBean isFreeSearchSupported();
 
     MappingSupportedBean isMappingSupported( String srcCode, String tgtCode) throws IDMapperException;
-
-    List<XrefProvenanceBean> mapByXref(String id, String scrCode, List<String> provenanceId, List<String> targetCodes) 
-            throws IDMapperException;
 
     List<XrefMapBean> mapByXrefs(List<String> id, List<String> scrCode, List<String> provenanceId, 
             List<String> targetCodes) throws IDMapperException;

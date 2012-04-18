@@ -37,6 +37,7 @@ public class DataSourceBeanFactory{
      * @return the ds
     */
     public static DataSource asDataSource(DataSourceBean bean) {
+        bean.toString();
         Builder builder = DataSource.register(bean.sysCode, bean.fullName);
         if (bean.urlPattern != null){
             builder = builder.urlPattern(bean.urlPattern);

@@ -57,18 +57,9 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
             Collection<String> provenanceIds){
         Set<XrefProvenance> with = new HashSet<XrefProvenance>();
         for (Xref xref:plainResults){
-            ProvenanceLink provenanceLink = new ProvenanceLink(
-                    //The source nameSpace
-                    ref.getDataSource().getNameSpace() + ID_DIVIDER + xref.getDataSource().getNameSpace(), 
-                    ref.getDataSource(), predicate, xref.getDataSource());
-            if (provenanceIds.isEmpty()){
-                with.add(new XrefProvenance(xref, provenanceLink));
-            } else {
-                for (String id: provenanceIds){
-                    if (id.equals(provenanceLink.getId())){
-                        with.add(new XrefProvenance(xref, provenanceLink));
-                    }
-                }
+            String provenanceId = ref.getDataSource().getNameSpace() + ID_DIVIDER + xref.getDataSource().getNameSpace();
+            if (provenanceIds.isEmpty() || provenanceIds.contains(provenanceId)){
+                with.add(new XrefProvenance(xref, provenanceId, predicate));
             }
         }
         return with;
@@ -99,17 +90,10 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
         for (String url:plainResults){
             DataSource sourceDS = DataSource.getByURL(ref);
             DataSource targetDS = DataSource.getByURL(url);
-            ProvenanceLink provenanceLink = new ProvenanceLink(
-                    sourceDS.getNameSpace() + ID_DIVIDER + targetDS.getNameSpace(), sourceDS, predicate, targetDS);
-            if (provenanceIds.isEmpty()){
-                with.add(new URLMapping(0, ref, url, provenanceLink));
-            } else {
-                for (String id:provenanceIds){
-                    if (id.equals(provenanceLink.getId())){
-                        with.add(new URLMapping(0, ref, url, provenanceLink));
-                    }
-                }
-            }
+            String provenanceId = sourceDS.getNameSpace() + ID_DIVIDER + targetDS.getNameSpace();
+            if (provenanceIds.isEmpty() || provenanceIds.contains(provenanceId)){
+                with.add(new URLMapping(0, ref, url, provenanceId, predicate));
+            } 
         }
         return with;
     }
