@@ -6,7 +6,6 @@ package org.bridgedb.ws;
 
 import java.util.Collection;
 import java.util.Map;
-import org.bridgedb.provenance.ProvenanceLink;
 import org.bridgedb.provenance.XrefProvenance;
 import java.util.ArrayList;
 import org.bridgedb.ws.bean.XrefBean;

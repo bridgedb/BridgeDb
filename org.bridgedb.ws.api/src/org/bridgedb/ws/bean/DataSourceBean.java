@@ -146,5 +146,8 @@ public class DataSourceBean {
     public void setMainUrl(String mainUrl) {
         this.mainUrl = mainUrl;
     }
-            
+     
+    public String toString(){
+        return sysCode;
+    }
 }

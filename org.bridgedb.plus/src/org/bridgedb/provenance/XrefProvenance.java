@@ -6,24 +6,37 @@ import org.bridgedb.Xref;
 public class XrefProvenance extends Xref
 {	
 
-    private final ProvenanceLink provenanceLink;
+    private final String provenanceId;
+    private final String predicate;
     
-	public XrefProvenance(String id, DataSource ds, ProvenanceLink provenanceLink) {
+	public XrefProvenance(String id, DataSource ds, String provenanceId, String predicate) {
         super(id, ds);
-        this.provenanceLink = provenanceLink;
+        this.provenanceId = provenanceId;
+        this.predicate = predicate;
 	}
 
-    public XrefProvenance(Xref plainXref, ProvenanceLink provenanceLink) {
+    public XrefProvenance(Xref plainXref, String provenanceId, String predicate) {
        super (plainXref.getId(), plainXref.getDataSource());
-       this.provenanceLink = provenanceLink;
+        this.provenanceId = provenanceId;
+        this.predicate = predicate;
     }
 	
-    public ProvenanceLink getProvenanceLink(){
-        return provenanceLink;
-    }
-
     @Override
     public String toString(){
-        return super.toString()+ "@" + provenanceLink.getId();
+        return super.toString()+ "@" + getProvenanceId();
+    }
+
+    /**
+     * @return the provenanceId
+     */
+    public String getProvenanceId() {
+        return provenanceId;
+    }
+
+    /**
+     * @return the predicate
+     */
+    public String getPredicate() {
+        return predicate;
     }
 }

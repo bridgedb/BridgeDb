@@ -3,7 +3,6 @@ package org.bridgedb.url;
 import org.junit.BeforeClass;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTestBase;
-import org.bridgedb.provenance.ProvenanceLink;
 
 /**
  *
@@ -22,12 +21,12 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     protected static String nameSpace2;
     protected static String nameSpace3;
     
-    protected static ProvenanceLink link1to2;
-    protected static ProvenanceLink link1to3;
-    protected static ProvenanceLink link2to1; 
-    protected static ProvenanceLink link2to3;
-    protected static ProvenanceLink link3to1;
-    protected static ProvenanceLink link3to2; 
+    protected static String link1to2;
+    protected static String link1to3;
+    protected static String link2to1; 
+    protected static String link2to3;
+    protected static String link3to1;
+    protected static String link3to2; 
     
     protected static String map1URL1;
     protected static String map1URL2;
@@ -57,18 +56,12 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
         nameSpace2 = DataSource2.getNameSpace(); 
         nameSpace3 = DataSource3.getNameSpace(); 
          
-        link1to2 = new ProvenanceLink(
-                nameSpace1 + "->" + nameSpace2, nameSpace1, TEST_PREDICATE, nameSpace2);
-        link1to3 = new ProvenanceLink(
-                nameSpace1 + "->" + nameSpace3, nameSpace1, TEST_PREDICATE, nameSpace3);
-        link2to1 = new ProvenanceLink(
-                nameSpace2 + "->" + nameSpace1, nameSpace2, TEST_PREDICATE, nameSpace1);
-        link2to3 = new ProvenanceLink(
-                nameSpace2 + "->" + nameSpace3, nameSpace2, TEST_PREDICATE, nameSpace3);
-        link3to1 = new ProvenanceLink(
-                nameSpace3 + "->" + nameSpace1, nameSpace3, TEST_PREDICATE, nameSpace1);
-        link3to2 = new ProvenanceLink(
-                nameSpace3 + "->" + nameSpace3, nameSpace3, TEST_PREDICATE, nameSpace2);
+        link1to2 = nameSpace1 + "->" + nameSpace2;
+        link1to3 = nameSpace1 + "->" + nameSpace3;
+        link2to1 = nameSpace2 + "->" + nameSpace1;
+        link2to3 = nameSpace2 + "->" + nameSpace3;
+        link3to1 = nameSpace3 + "->" + nameSpace1;
+        link3to2 = nameSpace3 + "->" + nameSpace3;
 
         map1URL1 = map1xref1.getUrl();
         map1URL2 = map1xref2.getUrl();

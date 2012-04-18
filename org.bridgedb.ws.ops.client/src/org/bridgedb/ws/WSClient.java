@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
-import org.bridgedb.ws.bean.ProvenanceStatisticsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -162,7 +161,7 @@ public class WSClient extends WSCoreClient implements WSInterface{
                 .get(new GenericType<List<URLMappingBean>>() {});
         return result;
     }
-*/
+
     @Override
     public ProvenanceStatisticsBean getProvenance(Integer id) throws IDMapperException {
        //Make service call
@@ -224,7 +223,7 @@ public class WSClient extends WSCoreClient implements WSInterface{
                 .get(new GenericType<List<ProvenanceStatisticsBean>>() {});
         return result;
     }
-
+*/
     @Override
     public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();

@@ -1,56 +1,30 @@
 package org.bridgedb.ws.bean;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.provenance.XrefProvenance;
 
 public class XrefMapBeanFactory {
-    public static XrefMapBean asBean(XrefBean source, List<XrefProvenanceBean> target){
+    public static XrefMapBean asBean(String provenanceId, XrefBean source, String predicate, XrefBean target){
         XrefMapBean bean = new XrefMapBean();
+        bean.provenanceId = provenanceId;
         bean.source = source;
+        bean.predicate = predicate;
         bean.target = target;
         return bean;
     }
 
-    public static XrefMapBean asBean(Xref source, Set<XrefProvenance> tgtXrefs){
+    public static XrefProvenance asXrefProvenance(XrefMapBean bean) {
+        Xref xref = XrefBeanFactory.asXref(bean.target);
+        return new XrefProvenance(xref, bean.provenanceId, bean.predicate);
+    }
+
+    public static XrefMapBean asBean(Xref source, XrefProvenance target) {
         XrefMapBean bean = new XrefMapBean();
+        bean.provenanceId = target.getProvenanceId();
         bean.source = XrefBeanFactory.asBean(source);
-        bean.target = new ArrayList<XrefProvenanceBean>();
-        for (XrefProvenance tgt:tgtXrefs){
-           bean.target.add(XrefProvenanceBeanFactory.asBean(tgt));
-        }
+        bean.predicate = target.getPredicate();
+        bean.target = XrefBeanFactory.asBean(target);
         return bean;
     }
 
-    public static XrefMapBean asBean(Xref source, XrefProvenance tgtXref){
-        XrefMapBean bean = new XrefMapBean();
-        bean.source = XrefBeanFactory.asBean(source);
-        bean.target = new ArrayList<XrefProvenanceBean>();
-        bean.target.add(XrefProvenanceBeanFactory.asBean(tgtXref));
-        return bean;
-    }
-
-    public static Xref getKey(XrefMapBean bean){
-        return XrefBeanFactory.asXref(bean.source);
-    }
-    
-    public static Set<Xref> getXrefMappedSet(XrefMapBean bean) throws IDMapperException {
-        HashSet<Xref> results = new HashSet<Xref>();
-        for (XrefProvenanceBean trg:bean.target){
-            results.add(XrefProvenanceBeanFactory.asXref(trg));
-        }
-        return results;
-    }
-    
-    public static Set<XrefProvenance> getXrefProvenanceMappedSet(XrefMapBean bean) throws IDMapperException {
-        HashSet<XrefProvenance> results = new HashSet<XrefProvenance>();
-        for (XrefProvenanceBean trg:bean.target){
-            results.add(XrefProvenanceBeanFactory.asXrefProvenance(trg));
-        }
-        return results;
-    }
 }

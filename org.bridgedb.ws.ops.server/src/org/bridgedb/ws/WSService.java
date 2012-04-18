@@ -2,7 +2,6 @@ package org.bridgedb.ws;
 
 import java.util.ArrayList;
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
-import org.bridgedb.ws.bean.ProvenanceStatisticsBean;
 import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
 import java.util.List;
@@ -416,31 +415,6 @@ public class WSService extends WSCoreService implements WSInterface {
         return beans;
     }
 */
-
-    @Override
-    public ProvenanceStatisticsBean getProvenance(Integer id) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public ProvenanceStatisticsBean getProvenanceByPosition(Integer position) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<ProvenanceStatisticsBean> getProvenanceByPosition(Integer position, Integer limit) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<ProvenanceStatisticsBean> getSourceProvenanceByNameSpace(String nameSpace) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<ProvenanceStatisticsBean> getTargetProvenanceByNameSpace(String nameSpace) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException {
