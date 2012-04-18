@@ -19,9 +19,6 @@
         <module>org.bridgedb.server</module>
   </modules>
   
-    <properties>
-         <sesame.version>2.3.2</sesame.version>
-    </properties>
   	<build>
 		<pluginManagement>
 			<plugins>

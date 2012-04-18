@@ -12,7 +12,6 @@ import org.openrdf.rio.RDFHandler;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
-import org.openrdf.rio.n3.N3ParserFactory;
 import org.openrdf.rio.turtle.TurtleParser;
 
 /**
