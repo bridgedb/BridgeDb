@@ -4,8 +4,8 @@
  */
 package org.bridgedb.linkset;
 
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.provenance.ProvenanceLink;
 
 /**
  *
@@ -13,9 +13,10 @@ import org.bridgedb.provenance.ProvenanceLink;
  */
 public interface URLLinkListener {
     
-    public void registerProvenanceLink(ProvenanceLink provenaceLink) throws IDMapperException;
+    public void registerProvenanceLink(String provenanceId, DataSource source, String predicate, DataSource target) 
+            throws IDMapperException;
     
-    public void insertLink(String source, String target, ProvenanceLink provenaceLink) throws IDMapperException;
+    public void insertLink(String source, String target, String provenanceId) throws IDMapperException;
 
     public void openInput() throws IDMapperException;
 

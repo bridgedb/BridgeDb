@@ -42,17 +42,11 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
             assertThat(result.getSourceURL(), anyOf(equalTo(map1URL1), equalTo(map2URL2)));
             if (result.getSourceURL().equals(map1URL1)){
                 assertThat(result.getTargetURL(), anyOf(equalTo(map1URL1), equalTo(map1URL2), equalTo(map1URL3)));
-                assertNotNull(result.getProvenanceLink());
-                assertEquals(nameSpace1, result.getProvenanceLink().getSourceNameSpace());
             }
             if (result.getSourceURL().equals(map2URL2)){
                 assertThat(result.getTargetURL(), anyOf(equalTo(map2URL1), equalTo(map2URL2), equalTo(map2URL3)));
-                assertNotNull(result.getProvenanceLink());
-                assertEquals(result.getProvenanceLink().getSourceNameSpace(),nameSpace2);
             }            
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTargetNameSpace(), 
-                    anyOf(equalTo(nameSpace1), equalTo(nameSpace2), equalTo(nameSpace3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
       }
     
@@ -67,10 +61,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
             assertTrue(result.isValid());
             assertEquals(result.getSourceURL(), map1URL1);
             assertThat(result.getTargetURL(), anyOf(equalTo(map1URL1), equalTo(map1URL2), equalTo(map1URL3)));
-            assertEquals(result.getProvenanceLink().getSourceNameSpace(),nameSpace1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTargetNameSpace(), 
-                    anyOf(equalTo(nameSpace1), equalTo(nameSpace2), equalTo(nameSpace3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
     }
     
@@ -96,9 +87,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
             assertTrue(result.isValid());
             assertEquals(result.getSourceURL(), map1URL1);
             assertEquals(result.getTargetURL(), map1URL2);
-            assertEquals(result.getProvenanceLink().getSourceNameSpace(),nameSpace1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertEquals(result.getProvenanceLink().getTargetNameSpace(), nameSpace2);
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
     }
  
@@ -116,9 +105,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
             assertTrue(result.isValid());
             assertEquals(result.getSourceURL(), map1URL1);
             assertThat(result.getTargetURL(), anyOf(equalTo(map1URL2), equalTo(map1URL3)));
-            assertEquals(result.getProvenanceLink().getSourceNameSpace(),nameSpace1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTargetNameSpace(), anyOf(equalTo(nameSpace2), equalTo(nameSpace3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
     }
  
@@ -128,16 +115,14 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         HashSet<String> srcURLs = new HashSet<String>();
         srcURLs.add(map1URL1);
         HashSet<String> provenanceIds = new HashSet<String>();
-        provenanceIds.add(link1to2.getId());
+        provenanceIds.add(link1to2);
         Set<URLMapping> results = provenaceMapper.mapURL(srcURLs, provenanceIds, ALL_TARGET_NAME_SPACES);
         assertEquals(results.size(), 1);
         for (URLMapping result:results){
             assertTrue(result.isValid());
             assertEquals(map1URL1, result.getSourceURL());
             assertEquals(map1URL2, result.getTargetURL());
-            assertEquals(nameSpace1, result.getProvenanceLink().getSourceNameSpace());
-            assertEquals(TEST_PREDICATE, result.getProvenanceLink().getPredicate());
-            assertEquals(nameSpace2, result.getProvenanceLink().getTargetNameSpace());
+            assertEquals(TEST_PREDICATE, result.getPredicate());
         }
     }
     
@@ -147,17 +132,15 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         HashSet<String> srcURLs = new HashSet<String>();
         srcURLs.add(map1URL1);
         HashSet<String> provenanceIds = new HashSet<String>();
-        provenanceIds.add(link1to2.getId());
-        provenanceIds.add(link1to3.getId());
+        provenanceIds.add(link1to2);
+        provenanceIds.add(link1to3);
         Set<URLMapping> results = provenaceMapper.mapURL(srcURLs, provenanceIds, ALL_TARGET_NAME_SPACES);
         assertEquals(results.size(), 2);
         for (URLMapping result:results){
             assertTrue(result.isValid());
             assertEquals(result.getSourceURL(), map1URL1);
             assertThat(result.getTargetURL(), anyOf(equalTo(map1URL2), equalTo(map1URL3)));
-            assertEquals(result.getProvenanceLink().getSourceNameSpace(),nameSpace1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTargetNameSpace(), anyOf(equalTo(nameSpace2), equalTo(nameSpace3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
     }
 
@@ -178,19 +161,13 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
             assertThat(result.getId(), anyOf(equalTo(map1xref1.getId()), equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref1.getDataSource()), 
                     equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
-            assertEquals(result.getProvenanceLink().getSource(), DataSource1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTarget(), 
-                    anyOf(equalTo(DataSource1), equalTo(DataSource2), equalTo(DataSource3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
         for (XrefProvenance result:results2){
             assertThat(result.getId(), anyOf(equalTo(map2xref1.getId()), equalTo(map2xref2.getId()), equalTo(map2xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map2xref1.getDataSource()), 
                     equalTo(map2xref2.getDataSource()), equalTo(map2xref3.getDataSource())));
-            assertEquals(result.getProvenanceLink().getSource(),DataSource2);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTarget(), 
-                    anyOf(equalTo(DataSource1), equalTo(DataSource2), equalTo(DataSource3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
       }
     
@@ -203,10 +180,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
             assertThat(result.getId(), anyOf(equalTo(map1xref1.getId()), equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref1.getDataSource()), 
                     equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
-            assertEquals(result.getProvenanceLink().getSource(), DataSource1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTarget(), 
-                    anyOf(equalTo(DataSource1), equalTo(DataSource2), equalTo(DataSource3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
     }
     
@@ -228,9 +202,8 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         for (XrefProvenance result:results){
             assertEquals(result.getId(), map1xref2.getId());
             assertEquals(result.getDataSource(), map1xref2.getDataSource());
-            assertEquals(result.getProvenanceLink().getSource(), DataSource1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertEquals(result.getProvenanceLink().getTarget(), DataSource2);
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
+            assertEquals(link1to2, result.getProvenanceId());
         }
     }
  
@@ -245,9 +218,8 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         for (XrefProvenance result:results){
             assertThat(result.getId(), anyOf(equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
-            assertEquals(result.getProvenanceLink().getSource(), DataSource1);
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTarget(), anyOf(equalTo(DataSource2), equalTo(DataSource3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
+            assertThat(result.getProvenanceId(), anyOf(equalTo(link1to2), equalTo(link1to3)));
         }
     }
  
@@ -255,15 +227,14 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
     public void testMapOneProvenanceOneDataSource() throws IDMapperException{
         report("MapMapOneProvenanceOneDataSource");
         HashSet<String> provenanceIds = new HashSet<String>();
-        provenanceIds.add(link1to2.getId());
+        provenanceIds.add(link1to2);
         Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(map1xref1, provenanceIds, ALL_TARGET_DATA_SOURCE);
         assertEquals(1, results.size());
         for (XrefProvenance result:results){
             assertEquals(map1xref2.getId(), result.getId());
             assertEquals(map1xref2.getDataSource(), result.getDataSource());
-            assertEquals(DataSource1, result.getProvenanceLink().getSource());
-            assertEquals(TEST_PREDICATE, result.getProvenanceLink().getPredicate());
-            assertEquals(DataSource2, result.getProvenanceLink().getTarget());
+            assertEquals(TEST_PREDICATE, result.getPredicate());
+            assertEquals(link1to2, result.getProvenanceId());
         }
     }
     
@@ -273,16 +244,15 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         HashSet<String> srcURLs = new HashSet<String>();
         srcURLs.add(map1URL1);
         HashSet<String> provenanceIds = new HashSet<String>();
-        provenanceIds.add(link1to2.getId());
-        provenanceIds.add(link1to3.getId());
+        provenanceIds.add(link1to2);
+        provenanceIds.add(link1to3);
         Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(map1xref1, provenanceIds, ALL_TARGET_DATA_SOURCE);
         assertEquals(results.size(), 2);
         for (XrefProvenance result:results){
             assertThat(result.getId(), anyOf(equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
-            assertEquals(DataSource1, result.getProvenanceLink().getSource());
-            assertEquals(result.getProvenanceLink().getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceLink().getTarget(), anyOf(equalTo(DataSource2), equalTo(DataSource3)));
+            assertEquals(result.getPredicate(), TEST_PREDICATE);
+            assertThat(result.getProvenanceId(), anyOf(equalTo(link1to2), equalTo(link1to3)));
         }
     }
     

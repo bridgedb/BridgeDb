@@ -1,18 +1,29 @@
 package org.bridgedb.ws.bean;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="XrefMapping")
 public class XrefMapBean {
+    String provenanceId;
     XrefBean source;
-    //Names of list are singular as they appear in the xml individually
-    List<XrefProvenanceBean> target;
+    String predicate;
+    XrefBean target;
     
     public XrefMapBean(){}
+
+    /**
+     * @return the provenanceId
+     */
+    public String getProvenanceId() {
+        return provenanceId;
+    }
+
+    /**
+     * @param provenanceId the provenanceId to set
+     */
+    public void setProvenanceId(String provenanceId) {
+        this.provenanceId = provenanceId;
+    }
 
     /**
      * @return the source
@@ -29,17 +40,34 @@ public class XrefMapBean {
     }
 
     /**
-     * @return the target(s)
+     * @return the predicate
      */
-    public List<XrefProvenanceBean> getTarget() {
+    public String getPredicate() {
+        return predicate;
+    }
+
+    /**
+     * @param predicate the predicate to set
+     */
+    public void setPredicate(String predicate) {
+        this.predicate = predicate;
+    }
+
+    /**
+     * @return the target
+     */
+    public XrefBean getTarget() {
         return target;
     }
 
     /**
-     * @param target the target(s) to set
+     * @param target the target to set
      */
-    public void setTarget(List<XrefProvenanceBean> target) {
+    public void setTarget(XrefBean target) {
         this.target = target;
     }
-    
+
+    public String toString(){
+        return provenanceId + " " + source + " " + predicate + " " + target;
+    }
 }

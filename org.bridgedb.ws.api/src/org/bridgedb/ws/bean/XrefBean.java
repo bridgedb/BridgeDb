@@ -25,4 +25,7 @@ public class XrefBean {
         this.dataSource = dataSource;
     }
 
+    public String toString(){
+        return id + ":" + dataSource;
+    }
 }

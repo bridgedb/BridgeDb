@@ -1,6 +1,5 @@
 package org.bridgedb.ws;
 
-import org.bridgedb.ws.bean.ProvenanceBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefMapBean;
@@ -24,7 +23,6 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.provenance.ProvenanceLink;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.WrappedProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
@@ -45,8 +43,6 @@ import org.bridgedb.ws.bean.XrefMapBeanFactory;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.bridgedb.ws.bean.XrefExistsBean;
 import org.bridgedb.ws.bean.XrefExistsBeanFactory;
-import org.bridgedb.ws.bean.XrefProvenanceBean;
-import org.bridgedb.ws.bean.XrefProvenanceBeanFactory;
 
 @Path("/")
 public class WSCoreService implements WSCoreInterface {
@@ -205,36 +201,6 @@ public class WSCoreService implements WSCoreInterface {
         }
     } 
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/mapByXRef")
-    @Override
-    public List<XrefProvenanceBean> mapByXref(
-            @QueryParam("id") String id,
-            @QueryParam("code") String scrCode,
-            @QueryParam("provenance") List<String> provenaceIds,
-            @QueryParam("tgtCode") List<String> targetCodes
-            ) throws IDMapperException {
-        if (id == null) throw new IDMapperException("id parameter missig");
-        if (scrCode == null) throw new IDMapperException("code parameter missig");
-        DataSource dataSource = DataSource.getBySystemCode(scrCode);
-        Xref source = new Xref(id, dataSource);
-        ArrayList<DataSource> targetDataSources = new ArrayList<DataSource>();
-        for (String targetCode: targetCodes){
-             targetDataSources.add(DataSource.getBySystemCode(targetCode));
-        }
-        Set<XrefProvenance> mappings = provenanceMapper.mapIDProvenance(source, provenaceIds, targetDataSources);
-        return setXrefProvenanceToListXrefProvenanceBeans(mappings);
-    } 
-
-    protected List<XrefProvenanceBean> setXrefProvenanceToListXrefProvenanceBeans(Set<XrefProvenance> xrefProvenances){
-       ArrayList<XrefProvenanceBean> results = new ArrayList<XrefProvenanceBean>();
-        for (XrefProvenance xrefProvenance:xrefProvenances){
-           results.add(XrefProvenanceBeanFactory.asBean(xrefProvenance));
-        }
-        return results;        
-    }
-    
     protected List<XrefBean> setXrefToListXrefBeans(Set<Xref> xrefs){
        ArrayList<XrefBean> results = new ArrayList<XrefBean>();
         for (Xref xref:xrefs){
@@ -270,7 +236,9 @@ public class WSCoreService implements WSCoreInterface {
         Map<Xref, Set<XrefProvenance>>  mappings = provenanceMapper.mapIDProvenance(srcXrefs,  provenaceIds, targetDataSources);
         ArrayList<XrefMapBean> results = new ArrayList<XrefMapBean>();
         for (Xref source:mappings.keySet()){
-           results.add(XrefMapBeanFactory.asBean(source, mappings.get(source)));
+            for (XrefProvenance target:mappings.get(source)){
+                results.add(XrefMapBeanFactory.asBean(source, target));
+            }
         }
         return results;
     } 

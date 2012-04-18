@@ -27,7 +27,6 @@ import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.XrefMapBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
-import org.bridgedb.ws.bean.XrefProvenanceBean;
 
 /**
  *
@@ -192,26 +191,6 @@ public class WSCoreClient implements WSCoreInterface{
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<MappingSupportedBean>() {});
-        return result;
-    }
-
-    @Override
-    public List<XrefProvenanceBean> mapByXref(String id, String scrCode, List<String> provenanceId, List<String> targetCodes){ 
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("id", id);
-        params.add("code", scrCode);
-        for (String provId:provenanceId){
-            params.add("provenanceId", provId);
-        }
-        for (String target:targetCodes){
-            params.add("tgtCode", target);
-        }
-        //Make service call
-        List<XrefProvenanceBean> result = 
-                webResource.path("mapByXRef")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<XrefProvenanceBean>>() {});
         return result;
     }
 
