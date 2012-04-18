@@ -7,6 +7,7 @@ package org.bridgedb.ws;
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
 import java.util.List;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -55,6 +56,8 @@ public interface WSInterface extends WSCoreInterface {
     public DataSourceStatisticsBean getDataSourceStatisticsByPosition(Integer position) throws IDMapperException;
 
     public List<DataSourceStatisticsBean> getDataSourceStatisticsByPosition(Integer position, Integer limit) throws IDMapperException;
+
+    public OverallStatisticsBean getOverallStatistics() throws IDMapperException;
 
 
 }

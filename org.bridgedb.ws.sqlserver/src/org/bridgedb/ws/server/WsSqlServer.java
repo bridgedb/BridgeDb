@@ -35,6 +35,7 @@ public class WsSqlServer extends WSService{
         byXrefPosition = urlMapperSQL;
         byURLPosition = urlMapperSQL;
         provenanceMapper = urlMapperSQL;
+        opsMapper = urlMapperSQL;
     }
 
     @GET

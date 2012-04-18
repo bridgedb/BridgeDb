@@ -2,6 +2,7 @@ package org.bridgedb.ws;
 
 import java.util.ArrayList;
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
+import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
 import java.util.List;
@@ -21,10 +22,10 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.iterator.URLByPosition;
 import org.bridgedb.iterator.XrefByPosition;
-import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.result.URLMapping;
-import org.bridgedb.url.FullMapper;
-import org.bridgedb.statistics.ProvenanceStatistics;
+import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.url.OpsMapper;
+import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.XrefBeanFactory;
@@ -34,7 +35,7 @@ public class WSService extends WSCoreService implements WSInterface {
 
     protected XrefByPosition byXrefPosition;
     protected URLByPosition byURLPosition;
-    protected FullMapper fullMapper;
+    protected OpsMapper opsMapper;
     
     /**
      * Defuault constuctor for super classes.
@@ -46,22 +47,9 @@ public class WSService extends WSCoreService implements WSInterface {
     
     public WSService(IDMapper idMapper) {
         super(idMapper);
-        if (idMapper instanceof XrefByPosition){
-            this.byXrefPosition = (XrefByPosition)idMapper;
-        } else {
-            this.byXrefPosition = null;
-        }
-        if (idMapper instanceof URLByPosition){
-            this.byURLPosition = (URLByPosition)idMapper;
-        } else {
-            this.byURLPosition = null;
-        }
-        if (idMapper instanceof FullMapper){
-            this.fullMapper = (FullMapper)idMapper;
-        } else {
-            this.fullMapper = null;
-        }
-        
+        this.byXrefPosition = (XrefByPosition)idMapper;
+        this.byURLPosition = (URLByPosition)idMapper;
+        this.opsMapper = (OpsMapper)idMapper;    
     }
     
     @Context 
@@ -159,7 +147,7 @@ public class WSService extends WSCoreService implements WSInterface {
         for (String idString:idStrings ) {
             try {
                 Integer id = Integer.parseInt(idString);
-                mappings.add(fullMapper.getMapping(id));        
+                mappings.add(opsMapper.getMapping(id));        
             } catch (NumberFormatException ex){
                 mappings.add(new URLMapping("Illegal non integer id " + idString));                  
             }
@@ -181,7 +169,7 @@ public class WSService extends WSCoreService implements WSInterface {
                 mappings.add(new URLMapping("Illegal non integer limit " + limitString));                  
             }
         }       
-        mappings.addAll(fullMapper.getMappings(URLs, sourceURLs, targetURLs, 
+        mappings.addAll(opsMapper.getMappings(URLs, sourceURLs, targetURLs, 
                 nameSpaces, sourceNameSpaces, targetNameSpaces, provenanceIds, position, limit));
         if (mappings.isEmpty()){
             StringBuilder parameters = new StringBuilder();
@@ -239,6 +227,15 @@ public class WSService extends WSCoreService implements WSInterface {
         return beans;
     }
     
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getOverallStatistics") 
+    public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
+        OverallStatistics overallStatistics = opsMapper.getOverallStatistics();
+        return OverallStatisticsBeanFactory.asBean(overallStatistics);
+    }
+
     /*
     @Override
     @GET
@@ -430,4 +427,5 @@ public class WSService extends WSCoreService implements WSInterface {
     public List<DataSourceStatisticsBean> getDataSourceStatisticsByPosition(Integer position, Integer limit) throws IDMapperException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 }

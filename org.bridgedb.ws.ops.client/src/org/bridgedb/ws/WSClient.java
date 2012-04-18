@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
+import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -106,6 +107,16 @@ public class WSClient extends WSCoreClient implements WSInterface{
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<URLMappingBean>>() {});
         return result;        
+    }
+
+    @Override
+    public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
+       OverallStatisticsBean result = 
+                webResource.path("getOverallStatistics")
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<OverallStatisticsBean>() {});
+        return result;        
+ 
     }
 
     public List<URLMappingBean> getURLMappings(List<String> ids, List<String> URLs, List<String> tgtNameSpace, 
