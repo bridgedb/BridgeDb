@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import org.bridgedb.provenance.XrefProvenance;
 import java.util.ArrayList;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.ws.bean.XrefBean;
 import java.util.HashSet;
 import java.util.List;
@@ -21,8 +22,10 @@ import org.bridgedb.iterator.URLByPosition;
 import org.bridgedb.iterator.XrefByPosition;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.result.URLMapping;
-import org.bridgedb.url.FullMapper;
+import org.bridgedb.url.OpsMapper;
 import org.bridgedb.url.URLIterator;
+import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLsBean;
@@ -33,7 +36,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
  * @author Christian
  */
 public class WSMapper extends WSCoreMapper implements XrefIterator, XrefByPosition, 
-        URLIterator, URLByPosition, FullMapper {
+        URLIterator, URLByPosition, OpsMapper {
 
     WSInterface webService;
     final static List<String> NO_IDS = new ArrayList<String>();
@@ -170,6 +173,13 @@ public class WSMapper extends WSCoreMapper implements XrefIterator, XrefByPositi
         return URLMappingBeanFactory.asURLMapping(beans.get(0));
     }
     
+    @Override
+    public OverallStatistics getOverallStatistics() throws IDMapperException {
+        OverallStatisticsBean bean = webService.getOverallStatistics();
+        return OverallStatisticsBeanFactory.asOverallStatistics(bean);
+    }
+
+
     /*@Override
     public ProvenanceStatistics getProvenance(int id) throws IDMapperException {
         ProvenanceStatisticsBean bean = webService.getProvenance(id);
