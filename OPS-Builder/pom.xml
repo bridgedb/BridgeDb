@@ -16,6 +16,7 @@
   	<module>../org.bridgedb</module>
   	<module>../org.bridgedb.plus</module>
   	<module>../org.bridgedb.sql</module>
+  	<module>../org.bridgedb.linksets</module>
   	<module>../org.bridgedb.ws.api</module>
   	<module>../org.bridgedb.ws.core</module>
   	<module>../org.bridgedb.ws.ops.core</module>
