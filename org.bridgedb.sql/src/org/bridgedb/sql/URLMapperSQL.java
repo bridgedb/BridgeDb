@@ -23,7 +23,9 @@ import org.bridgedb.linkset.URLLinkListener;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProvenanceStatistics;
+import org.bridgedb.url.OpsMapper;
 import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
 
@@ -34,7 +36,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 public class URLMapperSQL extends CommonSQL 
-        implements URLLinkListener, URLMapper, ProvenanceMapper, URLIterator, URLByPosition, FullMapper{
+        implements URLLinkListener, URLMapper, ProvenanceMapper, URLIterator, URLByPosition, OpsMapper{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 5;
@@ -930,6 +932,35 @@ public class URLMapperSQL extends CommonSQL
             ArrayList<URLMapping> results = new ArrayList<URLMapping>();
             results.add(new URLMapping(ex, query.toString()));
             return results;
+        }
+    }
+
+    @Override
+    public OverallStatistics getOverallStatistics() throws IDMapperException {
+        String query = "SELECT count(*) as numberOfMappings, count(distinct(provenance_id)) as numberOfProvenances, "
+                + "count(provenance.sourceNameSpace) as numberOfSourceDataSources, "
+                + "count(provenance.linkPredicate) as numberOfPredicates, "
+                + "count(provenance.targetNameSpace) as numberOfTargetDataSources "
+                + "FROM link, provenance "
+                + "WHERE provenance_id = provenance.id ";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                int numberOfMappings = rs.getInt("numberOfMappings");
+                int numberOfProvenances = rs.getInt("numberOfProvenances");
+                int numberOfSourceDataSources = rs.getInt("numberOfSourceDataSources");
+                int numberOfPredicates= rs.getInt("numberOfPredicates");
+                int numberOfTargetDataSources = rs.getInt("numberOfTargetDataSources");
+                return new OverallStatistics(numberOfMappings, numberOfProvenances, 
+                        numberOfSourceDataSources, numberOfPredicates, numberOfTargetDataSources);
+            } else {
+                System.err.println(query);
+                throw new IDMapperException("o Results for query. " + query);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
 
