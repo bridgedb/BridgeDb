@@ -23,7 +23,7 @@ import org.bridgedb.iterator.URLByPosition;
 import org.bridgedb.iterator.XrefByPosition;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.result.URLMapping;
-import org.bridgedb.sql.FullMapper;
+import org.bridgedb.url.FullMapper;
 import org.bridgedb.statistics.ProvenanceStatistics;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
