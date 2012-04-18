@@ -23,8 +23,8 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         OverallStatistics results = opsMapper.getOverallStatistics();
         assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(6));
         assertThat (results.getNumberOfProvenances(), greaterThan(1));
-        assertThat (results.getNumberOfTargetDataSources(), greaterThan(3));
-        assertThat (results.getNumberOfSourceDataSources(), greaterThan(3));
+        assertThat (results.getNumberOfTargetDataSources(), greaterThanOrEqualTo(3));
+        assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
     }
 
 }

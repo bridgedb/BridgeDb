@@ -19,7 +19,7 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
         connectionOk = false;
         SQLAccess sqlAccess = URLSqlFactory.createSQLAccess();
         connectionOk = true;
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
+        URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         //Use with true version only is database structure has changed. It deletes all tables!!!
         //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         listener = urlMapperSQL;
