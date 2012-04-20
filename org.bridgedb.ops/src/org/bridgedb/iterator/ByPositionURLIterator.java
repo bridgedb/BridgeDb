@@ -1,8 +1,11 @@
 package org.bridgedb.iterator;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.url.OpsMapper;
 
 /**
  *
@@ -11,18 +14,22 @@ import org.bridgedb.IDMapperException;
 public class ByPositionURLIterator implements Iterator<String>,Iterable<String>{
 
     private String bufferedNext;
-    private URLByPosition urlByPosition;  
-    private String nameSpace;
-    int count;
-        
-    public ByPositionURLIterator (URLByPosition urlByPosition, String nameSpace){
-        this(urlByPosition);
-        this.nameSpace = nameSpace;
+    private OpsMapper opsMapper;  
+    private ArrayList<String> nameSpaces;
+    int position;
+         
+    //Statics for easy readability of method calls
+    private static final ArrayList<String> ALL_PROVENANCE_IDS = new ArrayList<String>();
+
+    public ByPositionURLIterator (OpsMapper opsMapper, String nameSpace){
+        this(opsMapper);
+        nameSpaces.add(nameSpace);
     }
     
-    public ByPositionURLIterator (URLByPosition urlByPosition){
-        this.urlByPosition = urlByPosition;
-        count = -1;
+    public ByPositionURLIterator (OpsMapper opsMapper){
+        this.opsMapper = opsMapper;
+        nameSpaces = new ArrayList<String>();
+        position = -1;
     }
    
     @Override
@@ -36,12 +43,12 @@ public class ByPositionURLIterator implements Iterator<String>,Iterable<String>{
     }
 
     private String getNext() throws IDMapperException{
-        count ++;
-        if (nameSpace == null){
-            return urlByPosition.getURLByPosition(count);
-        } else {
-            return urlByPosition.getURLByPosition(nameSpace, count);
+        position ++;
+        List<String> list = opsMapper.getURLs(nameSpaces, ALL_PROVENANCE_IDS, position, 1);
+        if (list.isEmpty()){
+            return null;
         }
+        return list.get(0);
     }
     
     @Override

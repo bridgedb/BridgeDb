@@ -27,18 +27,18 @@ public class WappedIDMapper implements IDMapper{
     @Override
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) 
             throws IDMapperException {
-        HashSet<String> srcURLs = new HashSet<String>();
+        HashSet<String> sourceURLs = new HashSet<String>();
         for (Xref srcXref: srcXrefs){
             String url = srcXref.getUrl();
             if (url != null){
-                srcURLs.add(url);
+                sourceURLs.add(url);
             }
         }
-        String[] tgtNameSpaces = new String[tgtDataSources.length];
+        String[] targetNameSpaces = new String[tgtDataSources.length];
         for (int i = 0; i < tgtDataSources.length; i++){
-            tgtNameSpaces[i] = tgtDataSources[i].getNameSpace();
+            targetNameSpaces[i] = tgtDataSources[i].getNameSpace();
         }
-        Map<String, Set<String>> mapURLs = urlMapper.mapURL(srcURLs, tgtNameSpaces);
+        Map<String, Set<String>> mapURLs = urlMapper.mapURL(sourceURLs, targetNameSpaces);
         HashMap<Xref, Set<Xref>> results = new HashMap<Xref, Set<Xref>>();
         for (String src: mapURLs.keySet()){
             HashSet<Xref> mapped = new HashSet<Xref>();
@@ -55,11 +55,11 @@ public class WappedIDMapper implements IDMapper{
         HashSet<Xref> results = new HashSet<Xref>();
         String src = ref.getUrl();
         if (src == null) return results;
-        String[] tgtNameSpaces = new String[tgtDataSources.length];
+        String[] targetNameSpaces = new String[tgtDataSources.length];
         for (int i = 0; i < tgtDataSources.length; i++){
-            tgtNameSpaces[i] = tgtDataSources[i].getNameSpace();
+            targetNameSpaces[i] = tgtDataSources[i].getNameSpace();
         }
-        for (String tgt: urlMapper.mapURL(src, tgtNameSpaces)){
+        for (String tgt: urlMapper.mapURL(src, targetNameSpaces)){
             results.add(DataSource.uriToXref(tgt));
         }      
         return results;

@@ -32,14 +32,14 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     @Test
     public void testMapIDManyToManyNoDataSources() throws IDMapperException{
         report("MapIDManyToManyNoDataSources");
-        HashSet<String> srcURLs = new HashSet<String>();
-        srcURLs.add(map1URL1);
-        srcURLs.add(map2URL2);
-        srcURLs.add(mapBadURL1);
+        HashSet<String> sourceURLs = new HashSet<String>();
+        sourceURLs.add(map1URL1);
+        sourceURLs.add(map2URL2);
+        sourceURLs.add(mapBadURL1);
         assertNotNull(map1URL1);
         assertNotNull(map2URL2);
         assertNotNull(mapBadURL1);
-        Map<String, Set<String>> results = urlMapper.mapURL(srcURLs);
+        Map<String, Set<String>> results = urlMapper.mapURL(sourceURLs);
         Set<String> resultSet = results.get(map1URL1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1URL2));

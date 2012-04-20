@@ -1,7 +1,9 @@
 package org.bridgedb.url;
 
 import java.util.List;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
 
@@ -15,6 +17,12 @@ public interface OpsMapper {
             List<String> provenanceIds, Integer position, Integer limit);
 
     public URLMapping getMapping(int id);
+
+    public List<Xref> getXrefs(List<DataSource> dataSources, List<String> provenanceIds, Integer position, Integer limit) 
+            throws IDMapperException;
+
+    public List<String> getURLs(List<String> nameSpaces, List<String> provenanceIds, Integer position, Integer limit) 
+            throws IDMapperException;
     
     public  OverallStatistics getOverallStatistics() throws IDMapperException;
 }

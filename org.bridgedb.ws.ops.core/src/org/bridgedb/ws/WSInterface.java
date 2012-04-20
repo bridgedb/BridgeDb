@@ -4,12 +4,13 @@
  */
 package org.bridgedb.ws;
 
+import java.util.ArrayList;
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
 import java.util.List;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
-import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**
@@ -31,12 +32,12 @@ public interface WSInterface extends WSCoreInterface {
      * @param limit Maximum number of xrefs to return OPTIONAL
      * @return 
      */
-    List<XrefBean> getXrefByPosition (String code, Integer position, Integer limit) throws IDMapperException;
+    //List<XrefBean> getXrefByPosition (String code, Integer position, Integer limit) throws IDMapperException;
 
-    URLsBean getURLByPosition (String nameSpace, Integer position, Integer limit) throws IDMapperException;
+    //URLsBean getURLByPosition (String nameSpace, Integer position, Integer limit) throws IDMapperException;
 
     //provenanceIdStrings, positionString and limitString are Strings so I can catch and report illegal values
-    public List<URLMappingBean> getMappings(List<String> idStrings, 
+    public List<URLMappingBean> getMappings(
             List<String> URLs, List<String> sourceURLs, List<String> targetURLs, 
             List<String> nameSpaces, List<String> sourceNameSpaces, List<String> targetNameSpaces,
             List<String> provenanceIdStrings,String positionString, String limitString, Boolean full);
@@ -51,13 +52,23 @@ public interface WSInterface extends WSCoreInterface {
 
     //public List<ProvenanceStatisticsBean> getTargetProvenanceByNameSpace(String nameSpace) throws IDMapperException;
 
-    public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException;
+    //public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException;
 
-    public DataSourceStatisticsBean getDataSourceStatisticsByPosition(Integer position) throws IDMapperException;
+    // DataSourceStatisticsBean getDataSourceStatisticsByPosition(Integer position) throws IDMapperException;
 
-    public List<DataSourceStatisticsBean> getDataSourceStatisticsByPosition(Integer position, Integer limit) throws IDMapperException;
+    //public List<DataSourceStatisticsBean> getDataSourceStatisticsByPosition(Integer position, Integer limit) throws IDMapperException;
 
     public OverallStatisticsBean getOverallStatistics() throws IDMapperException;
+
+    public URLMappingBean getMapping(String idString);
+
+    //Position and Limit are Strings rather than Integers as this allow for better error handling
+    public List<XrefBean> getXrefs(ArrayList<String> dataSourceSysCodes, List<String> provenanceIds, 
+            String position, String limit) throws IDMapperException;
+
+    //Position and Limit are Strings rather than Integers as this allow for better error handling
+    public List<URLBean> getURLs(List<String> nameSpaces, List<String> provenanceIds,
+            String position, String limit) throws IDMapperException;
 
 
 }

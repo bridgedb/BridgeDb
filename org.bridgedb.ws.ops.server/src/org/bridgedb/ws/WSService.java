@@ -1,12 +1,10 @@
 package org.bridgedb.ws;
 
 import java.util.ArrayList;
-import org.bridgedb.ws.bean.DataSourceStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.URLsBean;
+import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.XrefBean;
 import java.util.List;
-import java.util.Set;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,8 +18,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.iterator.URLByPosition;
-import org.bridgedb.iterator.XrefByPosition;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.OpsMapper;
@@ -33,8 +29,8 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
 @Path("/")
 public class WSService extends WSCoreService implements WSInterface {
 
-    protected XrefByPosition byXrefPosition;
-    protected URLByPosition byURLPosition;
+//    protected XrefByPosition byXrefPosition;
+//    protected URLByPosition byURLPosition;
     protected OpsMapper opsMapper;
     
     /**
@@ -47,14 +43,15 @@ public class WSService extends WSCoreService implements WSInterface {
     
     public WSService(IDMapper idMapper) {
         super(idMapper);
-        this.byXrefPosition = (XrefByPosition)idMapper;
-        this.byURLPosition = (URLByPosition)idMapper;
+ //      this.byXrefPosition = (XrefByPosition)idMapper;
+ //       this.byURLPosition = (URLByPosition)idMapper;
         this.opsMapper = (OpsMapper)idMapper;    
     }
     
     @Context 
     public UriInfo uriInfo;
 
+    /*
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
@@ -123,13 +120,12 @@ public class WSService extends WSCoreService implements WSInterface {
         results.add(XrefBeanFactory.asBean(xref));
         return results;        
     }
-    
+    */
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getMappings") 
     public List<URLMappingBean> getMappings(
-            @QueryParam("id") List<String> idStrings,
             @QueryParam("URL") List<String> URLs,
             @QueryParam("sourceURL") List<String> sourceURLs,            
             @QueryParam("targetURL") List<String> targetURLs,            
@@ -144,14 +140,6 @@ public class WSService extends WSCoreService implements WSInterface {
             throw new UnsupportedOperationException("Underlying IDMapper does not support URLMapperProvenance.");
         }
         List<URLMapping> mappings = new ArrayList<URLMapping>();
-        for (String idString:idStrings ) {
-            try {
-                Integer id = Integer.parseInt(idString);
-                mappings.add(opsMapper.getMapping(id));        
-            } catch (NumberFormatException ex){
-                mappings.add(new URLMapping("Illegal non integer id " + idString));                  
-            }
-        }
         boolean ok = true;;
         Integer position = null;
         if (positionString != null){
@@ -173,10 +161,10 @@ public class WSService extends WSCoreService implements WSInterface {
                 nameSpaces, sourceNameSpaces, targetNameSpaces, provenanceIds, position, limit));
         if (mappings.isEmpty()){
             StringBuilder parameters = new StringBuilder();
-            for (String id:idStrings){
-               parameters.append(" id="); 
-               parameters.append(id);
-            }
+            //for (String id:idStrings){
+            //   parameters.append(" id="); 
+            //   parameters.append(id);
+            //}
             for (String URL:URLs){
                parameters.append(" URL="); 
                parameters.append(URL);
@@ -230,6 +218,60 @@ public class WSService extends WSCoreService implements WSInterface {
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getMapping/{id}")
+    public URLMappingBean getMapping(@PathParam("id") String idString) {
+        Integer id = Integer.parseInt(idString);
+        URLMapping mapping = opsMapper.getMapping(id);
+        return URLMappingBeanFactory.asBean(mapping, true);
+    }
+
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getXrefs")
+    public List<XrefBean> getXrefs(
+            @QueryParam("dataSourceSysCode") ArrayList<String> dataSourceSysCodes, 
+            @QueryParam("provenanceId")  List<String> provenanceIds, 
+            @QueryParam("position") String positionString, 
+            @DefaultValue("100") @QueryParam("limit") String limitString) throws IDMapperException{
+        ArrayList<DataSource> dataSources = new ArrayList<DataSource>();
+        for (String dataCode: dataSourceSysCodes){
+            dataSources.add(DataSource.getBySystemCode(dataCode));
+        }
+        Integer position = new Integer(positionString);
+        Integer limit = new Integer(limitString);
+        List<Xref> xrefs = opsMapper.getXrefs(dataSources, provenanceIds, position, limit);
+        List<XrefBean> beans = new ArrayList<XrefBean>();
+        for (Xref xref:xrefs){
+            beans.add(XrefBeanFactory.asBean(xref));
+        }
+        return beans;
+    }
+
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getURLs")
+    public List<URLBean> getURLs(
+            @QueryParam("nameSpace")List<String> nameSpaces,             
+            @QueryParam("provenanceId")  List<String> provenanceIds, 
+            @QueryParam("position") String positionString, 
+            @DefaultValue("100") @QueryParam("limit") String limitString) throws IDMapperException{
+        Integer position = new Integer(positionString);
+        Integer limit = new Integer(limitString);
+        List<String> URLs = opsMapper.getURLs(nameSpaces, provenanceIds, position, limit);
+        List<URLBean> beans = new ArrayList<URLBean>();
+        for (String URL:URLs){
+            URLBean bean = new URLBean();
+            bean.setURL(URL);
+            beans.add(bean);
+        }
+        return beans;
+    }
+
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getOverallStatistics") 
     public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
         OverallStatistics overallStatistics = opsMapper.getOverallStatistics();
@@ -258,14 +300,14 @@ public class WSService extends WSCoreService implements WSInterface {
     @Path("/getURLMappings")
     public List<URLMappingBean> getURLMappings(
             @QueryParam("URL") String URL,
-            @QueryParam("tgtNameSpace") List<String> tgtNameSpace) throws IDMapperException {
+            @QueryParam("targetNameSpace") List<String> targetNameSpace) throws IDMapperException {
         if (URL == null) throw new IDMapperException ("\"URL\" parameter missing");
         if (URL.isEmpty()) throw new IDMapperException ("\"URL\" parameter missing");            
         Set<URLMapping> mappings;
-        if (tgtNameSpace == null ){
+        if (targetNameSpace == null ){
             mappings = provenanceMapper.getURLMappings(URL);
         } else {
-            mappings = provenanceMapper.getURLMappings(URL, tgtNameSpace.toArray(new String[0]));
+            mappings = provenanceMapper.getURLMappings(URL, targetNameSpace.toArray(new String[0]));
         }
         List<URLMappingBean> beans = new ArrayList<URLMappingBean>();
         for (URLMapping mapping:mappings){
@@ -411,7 +453,7 @@ public class WSService extends WSCoreService implements WSInterface {
         }
         return beans;
     }
-*/
+
 
     @Override
     public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException {
@@ -427,5 +469,11 @@ public class WSService extends WSCoreService implements WSInterface {
     public List<DataSourceStatisticsBean> getDataSourceStatisticsByPosition(Integer position, Integer limit) throws IDMapperException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+*/
+
+    //@Override
+    //public List<XrefBean> getXrefByPosition(String code, Integer position, Integer limit) throws IDMapperException {
+    //    throw new UnsupportedOperationException("Not supported yet.");
+    //}
 
 }

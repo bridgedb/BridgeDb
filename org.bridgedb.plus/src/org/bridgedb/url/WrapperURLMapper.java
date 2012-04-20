@@ -25,14 +25,14 @@ public class WrapperURLMapper implements URLMapper{
     }
     
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> srcURLs, String... tgtNameSpaces) throws IDMapperException {
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetNameSpaces) throws IDMapperException {
         HashSet<Xref> srcXrefs = new HashSet<Xref>();
-        for (String srcURL: srcURLs){
-            srcXrefs.add(DataSource.uriToXref(srcURL));
+        for (String sourceURL: sourceURLs){
+            srcXrefs.add(DataSource.uriToXref(sourceURL));
         }
-        DataSource[] tgtDataSources = new DataSource[tgtNameSpaces.length];
-        for (int i = 0; i < tgtNameSpaces.length; i++){
-            tgtDataSources[i] = DataSource.getByNameSpace(tgtNameSpaces[i]);
+        DataSource[] tgtDataSources = new DataSource[targetNameSpaces.length];
+        for (int i = 0; i < targetNameSpaces.length; i++){
+            tgtDataSources[i] = DataSource.getByNameSpace(targetNameSpaces[i]);
         }
         Map<Xref, Set<Xref>> mapID = idMapper.mapID(srcXrefs, tgtDataSources);
         HashMap<String, Set<String>> result = new HashMap<String, Set<String>>();
@@ -48,11 +48,11 @@ public class WrapperURLMapper implements URLMapper{
     }
 
     @Override
-    public Set<String> mapURL(String srcURL, String... tgtNameSpaces) throws IDMapperException {
-        Xref ref = DataSource.uriToXref(srcURL);
-        DataSource[] tgtDataSources = new DataSource[tgtNameSpaces.length];
-        for (int i = 0; i < tgtNameSpaces.length; i++){
-            tgtDataSources[i] = DataSource.getByNameSpace(tgtNameSpaces[i]);
+    public Set<String> mapURL(String sourceURL, String... targetNameSpaces) throws IDMapperException {
+        Xref ref = DataSource.uriToXref(sourceURL);
+        DataSource[] tgtDataSources = new DataSource[targetNameSpaces.length];
+        for (int i = 0; i < targetNameSpaces.length; i++){
+            tgtDataSources[i] = DataSource.getByNameSpace(targetNameSpaces[i]);
         }
         Set<Xref> mapID = idMapper.mapID(ref, tgtDataSources);
         HashSet<String> result = new HashSet<String>();

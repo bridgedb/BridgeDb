@@ -7,14 +7,19 @@ package org.bridgedb.ws.server;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.URLMapperSQL;
@@ -28,13 +33,20 @@ import org.bridgedb.ws.WSService;
  */
 public class WsSqlServer extends WSService{
     
+    private static final ArrayList<DataSource> ALL_DATA_SOURCES = new ArrayList<DataSource>();
+    private static final ArrayList<String> ALL_URLs = new ArrayList<String>(); 
+    private static final ArrayList<String> ALL_SOURCE_URLs = ALL_URLs; 
+    private static final ArrayList<String> ALL_TARGET_URLs = ALL_URLs; 
+    private static final ArrayList<String> ALL_NAME_SPACES = ALL_URLs; 
+    private static final ArrayList<String> ALL_SOURCE_NAME_SPACES = ALL_URLs; 
+    private static final ArrayList<String> ALL_TARGET_NAME_SPACES = ALL_URLs; 
+    private static final ArrayList<String> ALL_PROVENANCE_IDS = ALL_URLs;
+
     public WsSqlServer() throws BridgeDbSqlException  {
         SQLAccess sqlAccess = URLSqlFactory.createSQLAccess();
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         idMapper = urlMapperSQL;
         urlMapper = urlMapperSQL;
-        byXrefPosition = urlMapperSQL;
-        byURLPosition = urlMapperSQL;
         provenanceMapper = urlMapperSQL;
         opsMapper = urlMapperSQL;
     }
@@ -45,11 +57,6 @@ public class WsSqlServer extends WSService{
         StringBuilder sb = new StringBuilder();
         StringBuilder sbInnerPure;
         StringBuilder sbInnerEncoded;
-
-        Xref first = byXrefPosition.getXrefByPosition(0);
-        Xref second = byXrefPosition.getXrefByPosition(1);
-        Set<Xref> firstMaps = idMapper.mapID(first);
-        Set<String> keys = idMapper.getCapabilities().getKeys();
 
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
@@ -93,11 +100,14 @@ public class WsSqlServer extends WSService{
     public Response apiPage() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
  
-        Xref first = byXrefPosition.getXrefByPosition(0);
-        Xref second = byXrefPosition.getXrefByPosition(1);
+        List<Xref> xrefs = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 0, 2);      
+        Xref first = xrefs.get(0);
+        Xref second = xrefs.get(1);
         Set<Xref> firstMaps = idMapper.mapID(first);
         Set<String> keys = idMapper.getCapabilities().getKeys();
-
+        List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 10);
+        URLMapping mapping1 = mappings.get(0);
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
                 + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -113,14 +123,7 @@ public class WsSqlServer extends WSService{
 
         
         introduce_URLMapper(sb);
-        if (byURLPosition != null){ 
-            sb.append("<dt><a href=\"#getURLByposition\">getURLByposition</a></dt>");
-            sb.append("<dd>Returns the URL(s) currently at this position.</dd>");
-        }
-        if (byXrefPosition != null){ 
-            sb.append("<dt><a href=\"#getXrefByposition\">getXrefByposition</a></dt>");
-            sb.append("<dd>Returns the Xref(s) currently at this position.</dd>");
-        }
+        introduce_OpsMapper(sb);
         introduce_IDMapper(sb);
         introduce_IDMapperCapabilities(sb, keys);
         //introduce_Statistics(sb);
@@ -128,7 +131,8 @@ public class WsSqlServer extends WSService{
         sb.append("</p>");
         describeParameter(sb);        
         
-        describe_URLMapper(sb, first,  firstMaps, second);            
+        describe_URLMapper(sb, first,  firstMaps, second);
+        describe_OpsMapper(sb, first,  mapping1, second);
         describe_IDMapper(sb, first, firstMaps, second);
         describe_IDMapperCapabilities(sb, first, firstMaps, keys);
         //describe_byXrefPosition(sb, first);
@@ -169,46 +173,79 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Must be a positive Integer in String Format</li>");
             sb.append("<li>If less than limit results are availabe limit will have no effect.</li>");
             sb.append("<li>Only one limit parameter is supported.</li>");
+            sb.append("<li>If no limit is set a default limit will be used.</li>");
+            sb.append("<li>If too high a limit is set the default limit will be used.</li>");
+            sb.append("<li>To obtain a full data dump please contact the admins.</li>");
+            sb.append("</ul>");
+        sb.append("<dt><a name=\"nameSpace\">nameSpace</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Limits the results to ones with URLs in this/these nameSpace(s) as either a source or target.</li>");
+            sb.append("<li>The nameSpace of a URL is one defined when the mapping is loaded, not any with which the URL startWith.</li>");
+            sb.append("<li>String Format</li>");
+            sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
+            sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
         sb.append("<dt><a name=\"provenanceId\">provenanceId</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to only those with this provenace Id.</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"srcCode\">srcCode</a></dt>");
+        sb.append("<dt><a name=\"position\">position</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Sets the position for the results.</li>");
+            sb.append("<li>Default value is 0. (First position).</li>");
+            sb.append("<li>Warning if position is greater than the number of possible results available the result will be an empty set.</li>");
+            sb.append("</ul>");
+        sb.append("<dt><a name=\"sourceNnameSpace\">sourceNameSpace</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Limits the results to ones with URLs in this/these nameSpace(s) as a source.</li>");
+            sb.append("<li>The nameSpace of a URL is one defined when the mapping is loaded, not any with which the URL startWith.</li>");
+            sb.append("<li>String Format</li>");
+            sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
+            sb.append("<li>Typically there can but need not be more than one.</li>");
+            sb.append("</ul>");
+        sb.append("<dt><a name=\"sourceSysCode\">sourceSysCode</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with those Source Xref's DataSource has this sysCode.</li>");
             sb.append("<li>String Format</li>");
-            sb.append("<li>Typically there must be exactly one srcCode when used..</li>");
+            sb.append("<li>Typically there must be exactly one sourceSysCode when used..</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"srcURL\">srcURL</a></dt>");
+        sb.append("<dt><a name=\"sourceURL\">sourceURL</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with this/these Source URLs.</li>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"text\">text</a></dt>");
+        sb.append("<dt><a name=\"targetNameSpace\">targetNameSpace</a></dt>");
             sb.append("<ul>");
-            sb.append("<li>A bit of text that will be searched for.</li>");
+            sb.append("<li>Limits the results to ones with URLs in this/these nameSpace(s) as a target.</li>");
+            sb.append("<li>The nameSpace of a URL is one defined when the mapping is loaded, not any with which the URL startWith.</li>");
             sb.append("<li>String Format</li>");
-            sb.append("<li>Only one text parameter is supported.</li>");
-            sb.append("<li>Note this is for searching for text in Identifiers not for mapping between text and Identifiers.</li>");
-            sb.append("</ul>");      
-        sb.append("<dt><a name=\"tgtCode\">tgtCode</a></dt>");
+            sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
+            sb.append("<li>Typically there can but need not be more than one.</li>");
+            sb.append("</ul>");
+        sb.append("<dt><a name=\"targetSysCode\">targetSysCode</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with those Target Xref's DataSource has this sysCode.</li>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"tgtNameSpace\">tgtNameSpace</a></dt>");
+        sb.append("<dt><a name=\"targetNameSpace\">targetNameSpace</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with those Target URL has this URI space.</li>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"URL\">URL</a></dt>");
+         sb.append("<dt><a name=\"text\">text</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>A bit of text that will be searched for.</li>");
+            sb.append("<li>String Format</li>");
+            sb.append("<li>Only one text parameter is supported.</li>");
+            sb.append("<li>Note this is for searching for text in Identifiers not for mapping between text and Identifiers.</li>");
+            sb.append("</ul>");      
+       sb.append("<dt><a name=\"URL\">URL</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with this/these URLs as either a source or target.</li>");
             sb.append("<li>String Format</li>");
@@ -242,21 +279,21 @@ public class WsSqlServer extends WSService{
             sb.append("<li>List the URLs that map to these URLs</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#srcURL\">srcURL</a></li>");
+                sb.append("<li><a href=\"#sourceURL\">sourceURL</a></li>");
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
-                sb.append("<li><a href=\"#tgtNameSpace\">tgtNameSpace</a></li> ");
+                sb.append("<li><a href=\"#targetNameSpace\">targetNameSpace</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
-                    StringBuilder sbInnerPure = new StringBuilder("mapByURLs?srcURL=");
-                    StringBuilder sbInnerEncoded = new StringBuilder("mapByURLs?srcURL=");
+                    StringBuilder sbInnerPure = new StringBuilder("mapByURLs?sourceURL=");
+                    StringBuilder sbInnerEncoded = new StringBuilder("mapByURLs?sourceURL=");
                     sbInnerPure.append(first.getUrl());
                     sbInnerEncoded.append(URLEncoder.encode(first.getUrl(), "UTF-8"));
-                    sbInnerPure.append("&srcURL=");
-                    sbInnerEncoded.append("&srcURL=");
+                    sbInnerPure.append("&sourceURL=");
+                    sbInnerEncoded.append("&sourceURL=");
                     sbInnerPure.append(second.getUrl());
                     sbInnerEncoded.append(URLEncoder.encode(second.getUrl(), "UTF-8"));
                     sb.append(sbInnerEncoded.toString());
@@ -266,9 +303,9 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
                     for (Xref map:firstMaps){
-                        sbInnerPure.append("&tgtNameSpace=");
+                        sbInnerPure.append("&targetNameSpace=");
                         sbInnerPure.append(map.getDataSource().getNameSpace());
-                        sbInnerEncoded.append("&tgtNameSpace=");
+                        sbInnerEncoded.append("&targetNameSpace=");
                         sbInnerEncoded.append(URLEncoder.encode(map.getDataSource().getNameSpace(), "UTF-8"));
                     }
                     sb.append(sbInnerEncoded.toString());
@@ -284,7 +321,7 @@ public class WsSqlServer extends WSService{
             sb.append("<li>State if the URL is know to the Mapping Service or not</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#srcURL\">srcURL</a></li>");
+                sb.append("<li><a href=\"#sourceURL\">sourceURL</a></li>");
                 sb.append("<ul>");
                 sb.append("<li>Currently limited to single URI</li>");
                 sb.append("</ul>");
@@ -307,10 +344,7 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#text\">text</a></li>");
-                sb.append("</ul>");
-            sb.append("<li>Optional arguments</li>");
-                sb.append("<ul>");
-                sb.append("<li><a href=\"#limit\">limit</a></li>");
+                sb.append("<li><a href=\"#limit\">limit</a> (default available)</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
@@ -321,6 +355,103 @@ public class WsSqlServer extends WSService{
                     sb.append("URLSearch?text=");
                     sb.append(first.getId());
                     sb.append("&limit=5");
+                    sb.append("</a></li>");    
+            sb.append("</ul>");        
+    }
+    
+    protected final void introduce_OpsMapper(StringBuilder sb) {
+        sb.append("<dt><a href=\"#getMappings\">getMappings</a></dt>");
+        sb.append("<dd>Lists a number of mappings based on some parameters</dd>");
+        sb.append("<dt><a href=\"#getMapping\">getMapping</a></dt>");
+        sb.append("<dd>Retreives a Mapping based on its Id. (In the future plus provenance)</dd>");       
+        sb.append("<dt><a href=\"#getOverallStatistics\">getOverallStatistics</a></dt>");
+        sb.append("<dd>Returns some high level statistics. (Used by homepage generator)</dd>");
+        sb.append("<dt><a href=\"#getXrefs\">getXrefs</a></dt>");
+        sb.append("<dd>Lists a number of Xrefs based on some parameters.</dd>");
+        sb.append("<dt><a href=\"#getURLs\">getURLs</a></dt>");
+        sb.append("<dd>Lists a number of URLs based on some parameters.</dd>");
+    }
+
+    protected void describe_OpsMapper(StringBuilder sb, Xref first, URLMapping mapping1, Xref second) throws UnsupportedEncodingException{
+        sb.append("<h2>Implementations of Extra Methods added to Bridge for OpenPhacts</h2>");
+
+        describe_getMappings(sb, first, mapping1, second);    
+    //    describe_getMapping(sb, first);
+    //    describe_getOverallStatistics(sb);
+    //    describe_getXrefs(sb, firstMaps); 
+    //    describe_getURLs(sb, firstMaps); 
+   }
+    
+   private void describe_getMappings(StringBuilder sb, Xref first, URLMapping mapping1, Xref second) 
+            throws UnsupportedEncodingException{
+         sb.append("<h3><a name=\"getMappings\">getMappings</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Obtians a list of a subset of the mappings</li>");
+            sb.append("<li>Required arguements: </li>");
+                sb.append("<ul>");
+                sb.append("<li><a href=\"#limit\">limit</a> (default available)</li> ");
+                sb.append("</ul>");
+            sb.append("<li>Optional arguments </li>");
+                sb.append("<ul>");
+                sb.append("<li><a href=\"#URL\">URL</a></li> ");
+                sb.append("<li><a href=\"#sourceURL\">sourceURL</a></li> ");
+                sb.append("<li><a href=\"#targetURL\">targetURL</a></li> ");
+                sb.append("<li><a href=\"#nameSpace\">nameSpace</a></li> ");
+                sb.append("<li><a href=\"#sourceNameSpace\">sourceNameSpace</a></li> ");
+                sb.append("<li><a href=\"#targetNameSpace\">targetNameSpace</a></li> ");
+                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("<li><a href=\"#position\">position</a></li> ");
+                sb.append("<li><a href=\"#full\">full</a> (Currently has no effect)</li> ");
+                sb.append("</ul>");        
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getMappings?URL=");
+                    sb.append(URLEncoder.encode(first.getUrl(), "UTF-8"));
+                    sb.append("&URL=");
+                    sb.append(URLEncoder.encode(second.getUrl(), "UTF-8"));
+                    sb.append("&limit=10");
+                    sb.append("\">");
+                    sb.append("getMappings?URL=");
+                    sb.append(first.getUrl());
+                    sb.append("&URL=getUrl()");
+                    sb.append(second.getId());
+                    sb.append("&limit=10");
+                    sb.append("</a></li>");    
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getMappings?sourceURL=");
+                    sb.append(URLEncoder.encode(mapping1.getSourceURL(), "UTF-8"));
+                    sb.append("&targetURL=");
+                    sb.append(URLEncoder.encode(mapping1.getTargetURL(), "UTF-8"));
+                    sb.append("\">");
+                    sb.append("getMappings?sourceURL=");
+                    sb.append(mapping1.getSourceURL());
+                    sb.append("&targetURL=");
+                    sb.append(mapping1.getTargetURL());
+                    sb.append("</a></li>");    
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getMappings?nameSpace=");
+                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append("\">");
+                    sb.append("getMappings?nameSpace=");
+                    sb.append(first.getDataSource().getNameSpace());
+                    sb.append("</a></li>");    
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getMappings?sourceNameSpace=");
+                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append("\">");
+                    sb.append("getMappings?sourceNameSpace=");
+                    sb.append(first.getDataSource().getNameSpace());
+                    sb.append("</a></li>");    
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getMappings?targetNameSpace=");
+                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append("\">");
+                    sb.append("getMappings?targetNameSpace=");
+                    sb.append(first.getDataSource().getNameSpace());
                     sb.append("</a></li>");    
             sb.append("</ul>");        
     }
@@ -371,7 +502,7 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
-                sb.append("<li><a href=\"#tgtCode\">tgtCode</a></li> ");
+                sb.append("<li><a href=\"#targetSysCode\">targetSysCode</a></li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
@@ -398,8 +529,8 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
                     for (Xref map:firstMaps){
-                        sbInnerPure.append("&tgtCode=");
-                        sbInnerEncoded.append("&tgtCode=");
+                        sbInnerPure.append("&targetSysCode=");
+                        sbInnerEncoded.append("&targetSysCode=");
                         sbInnerPure.append(map.getDataSource().getSystemCode());
                         sbInnerEncoded.append(URLEncoder.encode(map.getDataSource().getSystemCode(), "UTF-8"));
                     }
@@ -444,10 +575,7 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#text\">text</a></li>");
-                sb.append("</ul>");
-            sb.append("<li>Optional arguments</li>");
-                sb.append("<ul>");
-                sb.append("<li><a href=\"#limit\">limit</a></li>");
+                sb.append("<li><a href=\"#limit\">limit</a> (default available)</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
@@ -552,19 +680,19 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Implements:  boolean isMappingSupported(DataSource src, DataSource tgt)</li>");
             sb.append("<li>Required arguements: (One of each)</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#srcCode\">srcCode</a></li> ");
-                sb.append("<li><a href=\"#tgtCode\">tgtCode</a></li> ");
+                sb.append("<li><a href=\"#sourceSysCode\">sourceSysCode</a></li> ");
+                sb.append("<li><a href=\"#targetSysCode\">targetSysCode</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(uriInfo.getBaseUri());
-                    sb.append("isMappingSupported?srcCode=");
+                    sb.append("isMappingSupported?sourceSysCode=");
                     sb.append(first.getDataSource().getSystemCode());
-                    sb.append("&tgtCode=");
+                    sb.append("&targetSysCode=");
                     sb.append(firstMaps.iterator().next().getDataSource().getSystemCode());
                     sb.append("\">");
-                    sb.append("isMappingSupported?srcCode=");
+                    sb.append("isMappingSupported?sourceSysCode=");
                     sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
-                    sb.append("&tgtCode=");
+                    sb.append("&targetSysCode=");
                     sb.append(URLEncoder.encode(firstMaps.iterator().next().getDataSource().getSystemCode(), "UTF-8"));
                     sb.append("</a></li>");    
             sb.append("</ul>");
@@ -697,7 +825,7 @@ public class WsSqlServer extends WSService{
     }
 
     //getMapping/{id}
-    //getURLMappings String URL,List<String> "tgtNameSpace"
+    //getURLMappings String URL,List<String> "targetNameSpace"
     //getProvenance/{id}
     //getProvenanceByPosition position
     //getProvenancesByPosition") position""limit")

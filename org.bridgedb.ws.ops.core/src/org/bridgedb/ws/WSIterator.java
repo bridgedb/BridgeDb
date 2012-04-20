@@ -22,19 +22,22 @@ public class WSIterator implements Iterator<Xref>,Iterable<Xref>{
 
     private ArrayList<Xref> buffered;
     private WSInterface webService;  
-    private DataSource dataSource;
+    private ArrayList<String> dataCodes;
     int count;
     private static final int XREFS_TO_BUFFER = 10;
-        
+    //Statics for easy readability of method calls
+    private static final ArrayList<String> ALL_PROVENANCE_IDS = new ArrayList<String>();
+ 
     public WSIterator (WSInterface webService, DataSource dataSource){
         this(webService);
-        this.dataSource = dataSource;
+        dataCodes.add(dataSource.getSystemCode());
     }
     
     public WSIterator (WSInterface webService){
         this.webService = webService;
         count = 0;
         buffered = new ArrayList<Xref>(XREFS_TO_BUFFER);
+        dataCodes = new ArrayList<String>();
     }
    
     @Override
@@ -52,15 +55,7 @@ public class WSIterator implements Iterator<Xref>,Iterable<Xref>{
     }
 
     private void fillBuffer() throws IDMapperException{
-        List<XrefBean> beans;
-        if (dataSource == null){
-            beans = webService.getXrefByPosition(null, count, XREFS_TO_BUFFER);
-        } else {
-            System.out.println(dataSource.getSystemCode());
-            System.out.println(webService);
-            System.out.println(count);
-            beans = webService.getXrefByPosition(dataSource.getSystemCode(), count, XREFS_TO_BUFFER);
-        }
+        List<XrefBean> beans = webService.getXrefs(dataCodes, ALL_PROVENANCE_IDS,  "" + count, "" + XREFS_TO_BUFFER);
         count += XREFS_TO_BUFFER;
         buffered.clear();
         for (XrefBean bean:beans){
