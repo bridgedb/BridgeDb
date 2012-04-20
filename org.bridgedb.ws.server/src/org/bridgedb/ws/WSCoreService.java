@@ -103,7 +103,6 @@ public class WSCoreService implements WSCoreInterface {
         if (sourceURL == null) throw new IDMapperException("sourceURL parameter missig");
         if (sourceURL.isEmpty()) throw new IDMapperException("sourceURL parameter missig");
         Set<URLMapping> mappings = provenanceMapper.mapURL(sourceURL, provenaceId, targetNameSpace);
-        System.out.println(provenaceId);
         ArrayList<URLMappingBean> results = new ArrayList<URLMappingBean>();
         for (URLMapping mapping: mappings){
             results.add(URLMappingBeanFactory.asBean(mapping, false));
@@ -295,10 +294,13 @@ public class WSCoreService implements WSCoreInterface {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getProperty")
+    @Path("/property/{key}")
     @Override
     public PropertyBean getProperty(@PathParam("key")String key) {
         String property = idMapper.getCapabilities().getProperty(key);
+        if (property == null){
+            property = "key was \"" + key + "\"";
+        }
         return new PropertyBean(key, property);
     }
     

@@ -86,6 +86,10 @@ public class WsSqlServer extends WSService{
                 sb.append(overallStatistics.getNumberOfTargetDataSources());
                 sb.append(" Target URI spaces</li>");
         sb.append("</ul></p>");
+        
+        sb.append("<p>The links where last updated ");
+        sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
+        sb.append("</p>");
                 
         sb.append("<p>The Main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
@@ -603,7 +607,7 @@ public class WsSqlServer extends WSService{
         sb.append("<dd>Returns Supported Target (BridgeDB)DataSource(s).</dd>");
         sb.append("<dt><a href=\"#isMappingSupported\">isMappingSupported</a></dt>");
         sb.append("<dd>States if two DataSources are mapped at least once.</dd>");
-        sb.append("<dt><a href=\"#getProperty\">getProperty</a></dt>");
+        sb.append("<dt><a href=\"#property\">property/key</a></dt>");
         if (keys.isEmpty()){
             sb.append("<dd>There are currently no properties supported.</dd>");
         } else {
@@ -699,23 +703,23 @@ public class WsSqlServer extends WSService{
     }
 
     private void describe_getProperty(StringBuilder sb, Set<String> keys) throws UnsupportedEncodingException{
-         sb.append("<h3><a name=\"getProperty\">getProperty</h3>");
+         sb.append("<h3><a name=\"property\">property/key</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  String getProperty(String key)</li>");
             sb.append("<li>Returns The property value for this key.</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#key\">key</a></li> ");
+                sb.append("<li>Place the actual key after the /</li> ");
                 sb.append("</ul>");
             if (keys.isEmpty()){
                 sb.append("<li>There are currently no properties supported</li>");
             } else {
                 sb.append("<li>Example: <a href=\"");
                         sb.append(uriInfo.getBaseUri());
-                        sb.append("getProperty?key=");
+                        sb.append("property/");
                         sb.append(keys.iterator().next());
                         sb.append("\">");
-                        sb.append("getProperty?key=");
+                        sb.append("property/");
                         sb.append(URLEncoder.encode(keys.iterator().next(), "UTF-8"));
                         sb.append("</a></li>");    
             }
