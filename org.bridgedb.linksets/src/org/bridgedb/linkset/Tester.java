@@ -25,7 +25,7 @@ public class Tester {
          RDFParser parser = new TurtleParser();
          //N3ParserFactory factory = new N3ParserFactory();
          //RDFParser parser = factory.getParser();
-         RDFHandler handler = new LinksetHandler(listener );
+         RDFHandler handler = new LinksetHandler(listener, "example.com/tester" );
          parser.setRDFHandler(handler);
          parser.setParseErrorListener(new LinksetParserErrorListener());
          parser.setVerifyData(false);
