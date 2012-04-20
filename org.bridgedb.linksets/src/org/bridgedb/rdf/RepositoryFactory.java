@@ -24,7 +24,6 @@ import org.openrdf.sail.nativerdf.NativeStore;
  */
 public class RepositoryFactory {
     private static Repository repository;
-    static final Resource[] NO_RESOURCES = new Resource[0];
 
     public static Repository getRepository() throws RepositoryException {
         if (repository == null){
@@ -36,11 +35,11 @@ public class RepositoryFactory {
         return repository;
     }
 
-    public static Value getStringletonObject(Resource subject, URI predicateURI) throws RDFHandlerException{
+    public static Value getStringletonObject(Resource subject, URI predicateURI, Resource graph) throws RDFHandlerException{
         List<Statement> list;
         try {
             RepositoryResult<Statement> rr = 
-                    getRepository().getConnection().getStatements(subject, predicateURI, null, false, NO_RESOURCES);
+                    getRepository().getConnection().getStatements(subject, predicateURI, null, false, graph);
             list = rr.asList();
         } catch (RepositoryException ex) {
             throw new RDFHandlerException ("Unable to extract statements ", ex);
@@ -57,12 +56,12 @@ public class RepositoryFactory {
         }           
     }
     
-    public static List<Value> getObjects(Resource subject, URI predicateURI) throws RDFHandlerException{
+    public static List<Value> getObjects(Resource subject, URI predicateURI, Resource graph) throws RDFHandlerException{
         List<Statement> statements;
         List<Value> objects = new ArrayList<Value>();
         try {
             RepositoryResult<Statement> rr = 
-                    getRepository().getConnection().getStatements(subject, predicateURI, null, false, NO_RESOURCES);
+                    getRepository().getConnection().getStatements(subject, predicateURI, null, false, graph);
             statements = rr.asList();
         } catch (RepositoryException ex) {
             throw new RDFHandlerException ("Unable to extract statements ", ex);
@@ -73,11 +72,11 @@ public class RepositoryFactory {
         return objects;
     }
 
-    public static Boolean containsObject(Resource subject, URI predicateURI, Value object) throws RDFHandlerException{
+    public static Boolean containsObject(Resource subject, URI predicateURI, Value object, Resource graph) throws RDFHandlerException{
         List<Statement> list;
         try {
             RepositoryResult<Statement> rr = 
-                    getRepository().getConnection().getStatements(subject, predicateURI, null, false, NO_RESOURCES);
+                    getRepository().getConnection().getStatements(subject, predicateURI, null, false, graph);
             list = rr.asList();
             for (Statement statement:list){
                 if (statement.getObject().equals(object)){
@@ -90,7 +89,7 @@ public class RepositoryFactory {
         }
     }
 
-    public static void addStatement(Resource subject, URI predicate, Value object) throws RepositoryException{
-        getRepository().getConnection().add(subject, predicate, object, NO_RESOURCES);
+    public static void addStatement(Resource subject, URI predicate, Value object, Resource graph) throws RepositoryException{
+        getRepository().getConnection().add(subject, predicate, object, graph);
     }
 }

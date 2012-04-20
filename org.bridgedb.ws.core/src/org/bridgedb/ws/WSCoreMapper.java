@@ -108,7 +108,6 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
         List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_PROVENANCE, targetCodes);
         for (XrefMapBean bean:beans){
-            System.out.println(bean);
             Xref source = XrefBeanFactory.asXref(bean.getSource());
             Set<Xref> targets = results.get(source);
             if (targets == null){

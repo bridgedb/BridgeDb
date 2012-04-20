@@ -133,12 +133,9 @@ public class WSCoreClient implements WSCoreInterface{
 
     @Override
     public PropertyBean getProperty(String key) {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("key", key);
         //Make service call
         PropertyBean result = 
-                webResource.path("getProperty")
-                .queryParams(params)
+                webResource.path("property/" + key)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<PropertyBean>() {});
         return result;

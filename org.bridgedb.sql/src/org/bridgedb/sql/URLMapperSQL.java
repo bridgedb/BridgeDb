@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -55,7 +56,10 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
     private static final int PREDICATE_LENGTH = 100;
     private static final int PROVENANCE_ID_LENGTH = 100;
     private static final int NAME_SPACE_LENGTH = 100;
+    private static final int KEY_LENGTH= 100; 
+    private static final int PROPERTY_LENGTH = 100;
 
+        
     //Internal parameters
     private static final int DEFAULT_LIMIT = 1000;
     private static final int SQL_TIMEOUT = 2;
@@ -116,7 +120,6 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
-            System.out.println(query);
             return resultSetToXrefSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -254,14 +257,43 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
             throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
+    
     @Override
     public String getProperty(String key) {
-        return null;
+        String query = "SELECT DISTINCT property "
+                + "FROM properties "
+                + "WHERE thekey = \"" + key + "\"";
+        try {
+            Statement statement = this.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                return rs.getString("property");
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public Set<String> getKeys() {
-        return new HashSet<String>();
+        HashSet<String> results = new HashSet<String>();
+        String query = "SELECT DISTINCT thekey "
+                + "FROM properties "
+                + "WHERE public = true";
+        try {
+            Statement statement = this.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                results.add(rs.getString("thekey"));
+            }
+            return results;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     /**** URLLinkListener Methods ****/
@@ -302,13 +334,13 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
             throws BridgeDbSqlException{
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
+        updateLastUpdated();
         String query = "SELECT * FROM provenance "
                     + "WHERE id = \"" + provenanceId + "\"";
         try {
 			Statement statement = createStatement();
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()) {
-                System.out.println("next");
                 String foundID = rs.getString("linkPredicate");
                 DataSource foundSource = DataSource.getByNameSpace(rs.getString("sourceNameSpace"));
                 String foundPredicate = rs.getString("linkPredicate");
@@ -334,9 +366,7 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
                     + "\"" + source.getNameSpace() + "\", " 
                     + "\"" + predicate + "\", " 
                     + "\"" + target.getNameSpace() + "\")";
-            System.out.println(query);
             statement.executeUpdate(query);
-            System.out.println("2");
         } catch (SQLException ex) {
             System.err.println(ex);
             throw new BridgeDbSqlException ("Error inserting link with " + query, ex);
@@ -570,7 +600,6 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
-            System.out.println(query);
             return resultSetToXrefList(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -596,7 +625,6 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
-            System.out.println(query);
             return resultSetToURLList(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -1086,6 +1114,9 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
 			sh.execute(	"DROP TABLE " 
                     + "IF EXISTS    "
 					+ "provenance   ");   
+			sh.execute(	"DROP TABLE " 
+                    + "IF EXISTS    "
+					+ "properties   ");   
             sh.close();
 		} catch (SQLException e)
 		{
@@ -1140,7 +1171,14 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
                     + "     sourceNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ") NOT NULL,    "
                     + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,       "
                     + "     targetNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ")  NOT NULL   "
-					+ " ) ");   
+					+ " ) "); 
+            sh.execute ("CREATE TABLE  "
+                    + "IF NOT EXISTS "
+                    + "    properties "
+                    + "(   thekey      VARCHAR(" + KEY_LENGTH + ") NOT NULL, "
+                    + "    property    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
+                    + "    public      BOOLEAN "
+					+ " ) "); 
             sh.close();
 		} catch (SQLException e)
 		{
@@ -1351,6 +1389,25 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to updateDataSource " + update, ex);
+        }
+    }
+
+    private void updateLastUpdated() throws BridgeDbSqlException {
+        String delete = "DELETE from properties where thekey = \"LastUpdates\"";
+        Statement statement = this.createStatement();
+        try {
+            statement.executeUpdate(delete.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Error Deleting LastUpDated " + delete, ex);
+        }
+        String date = new Date().toString();
+        String update = "INSERT INTO properties    "
+                    + "(thekey, property, public )                            " 
+                    + "VALUES (\"LastUpdates\", \"" + date  + "\" , true)  ";
+        try {
+            statement.executeUpdate(update.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Error insertoing LastUpDated " + update, ex);
         }
     }
     

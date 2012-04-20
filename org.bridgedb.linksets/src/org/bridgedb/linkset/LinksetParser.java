@@ -25,7 +25,7 @@ public class LinksetParser {
     public static void parse (URLLinkListener listener, String fileName, String baseURI) 
             throws IOException, RDFParseException, RDFHandlerException, IDMapperException, RepositoryException{
          RDFParser parser = new TurtleParser();
-         RDFHandler handler = new LinksetHandler(listener);
+         RDFHandler handler = new LinksetHandler(listener, "http://www.openphacts.org/");
          parser.setRDFHandler(handler);
          parser.setParseErrorListener(new LinksetParserErrorListener());
          parser.setVerifyData(true);

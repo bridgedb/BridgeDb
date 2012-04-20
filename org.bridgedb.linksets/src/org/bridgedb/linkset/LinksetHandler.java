@@ -15,6 +15,7 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
@@ -31,12 +32,14 @@ public class LinksetHandler extends RDFHandlerBase{
     URLLinkListener listener;
     String provenanceId;
     Repository myRepository;
-    final Resource[] NO_RESOURCES = new Resource[0];
+   //final Resource[] NO_RESOURCES = new Resource[0];
+    final Resource linkSetGraph;
     
-    public LinksetHandler(URLLinkListener listener) throws RepositoryException, IDMapperException {
+    public LinksetHandler(URLLinkListener listener, String graph) throws RepositoryException, IDMapperException {
         this.listener = listener;
         listener.openInput();
         myRepository = RepositoryFactory.getRepository();
+        linkSetGraph = new URIImpl(graph);
     }
     
     @Override
@@ -83,7 +86,7 @@ public class LinksetHandler extends RDFHandlerBase{
             linksetId = (URI) subject;
         }
         try {
-            myRepository.getConnection().add(subject, predicate, object, NO_RESOURCES);
+            myRepository.getConnection().add(subject, predicate, object, linkSetGraph);
         } catch (RepositoryException ex) {
             throw new RDFHandlerException("Unable to save statement to memory", ex);
         }
@@ -91,7 +94,7 @@ public class LinksetHandler extends RDFHandlerBase{
    
     private String getMatchingUriSpace(Resource subject, String uri) throws RDFHandlerException{
         if (subject == null) return null;
-        Value URIspace = RepositoryFactory.getStringletonObject(subject, VoidConstants.URI_SPACEURI);
+        Value URIspace = RepositoryFactory.getStringletonObject(subject, VoidConstants.URI_SPACEURI, linkSetGraph);
         System.out.println("URIspace:" + URIspace.stringValue());
         System.out.println("uri:" + uri);
         if (URIspace == null){
@@ -107,15 +110,16 @@ public class LinksetHandler extends RDFHandlerBase{
     
     private String getSubjectUriSpace(Statement firstMap) throws RDFHandlerException, RepositoryException{
         System.out.println("linksetId="+linksetId);
-        Resource subject = (Resource)RepositoryFactory.getStringletonObject(linksetId, VoidConstants.SUBJECTSTARGETURI);
+        Resource subject = (Resource)RepositoryFactory.
+                getStringletonObject(linksetId, VoidConstants.SUBJECTSTARGETURI, linkSetGraph);
         System.out.println("subject="+subject);
         String URIspace = getMatchingUriSpace(subject,firstMap.getSubject().stringValue());
         if (URIspace != null) return URIspace;
-        List<Value> possibles = RepositoryFactory.getObjects(subject, VoidConstants.TARGETURI);
+        List<Value> possibles = RepositoryFactory.getObjects(subject, VoidConstants.TARGETURI, linkSetGraph);
         for (Value possible:possibles){
             URIspace = getMatchingUriSpace((Resource)possible, firstMap.getSubject().stringValue());
             if (URIspace != null) {
-                RepositoryFactory.addStatement(linksetId, VoidConstants.SUBJECTSTARGETURI, possible);
+                RepositoryFactory.addStatement(linksetId, VoidConstants.SUBJECTSTARGETURI, possible, linkSetGraph);
                 return URIspace;
             }
         }
@@ -123,14 +127,15 @@ public class LinksetHandler extends RDFHandlerBase{
     }
      
     private String getObjectUriSpace(Statement firstMap) throws RDFHandlerException, RepositoryException{
-        Resource subject = (Resource)RepositoryFactory.getStringletonObject(linksetId, VoidConstants.OBJECTSTARGETURI);
+        Resource subject = (Resource)RepositoryFactory.
+                getStringletonObject(linksetId, VoidConstants.OBJECTSTARGETURI, linkSetGraph);
         String URIspace = getMatchingUriSpace(subject,firstMap.getObject().stringValue());
         if (URIspace != null) return URIspace;
-        List<Value> possibles = RepositoryFactory.getObjects(subject, VoidConstants.TARGETURI);
+        List<Value> possibles = RepositoryFactory.getObjects(subject, VoidConstants.TARGETURI, linkSetGraph);
         for (Value possible:possibles){
             URIspace = getMatchingUriSpace((Resource)possible, firstMap.getObject().stringValue());
             if (URIspace != null) {
-                RepositoryFactory.addStatement(linksetId, VoidConstants.OBJECTSTARGETURI, possible);
+                RepositoryFactory.addStatement(linksetId, VoidConstants.OBJECTSTARGETURI, possible, linkSetGraph);
                 return URIspace;
             }
         }
