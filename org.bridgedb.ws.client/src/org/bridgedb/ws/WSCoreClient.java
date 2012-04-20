@@ -47,17 +47,17 @@ public class WSCoreClient implements WSCoreInterface{
     
     //*** URLMapper functions methods *****
     @Override
-    public List<URLMappingBean> mapByURLs(List<String> srcURL, List<String> provenanceId, List<String> targetNameSpace) 
+    public List<URLMappingBean> mapByURLs(List<String> sourceURL, List<String> provenanceId, List<String> targetNameSpace) 
             throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        for (String asrcURL:srcURL){
-            params.add("srcURL", asrcURL);
+        for (String asourceURL:sourceURL){
+            params.add("sourceURL", asourceURL);
         }
         for (String id:provenanceId){
             params.add("provenanceId", id);
         }
         for (String target:targetNameSpace){
-            params.add("tgtNameSpace", target);
+            params.add("targetNameSpace", target);
         }
         //Make service call
         List<URLMappingBean> result = 
@@ -181,10 +181,10 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public MappingSupportedBean isMappingSupported(String srcCode, String tgtCode) throws IDMapperException {
+    public MappingSupportedBean isMappingSupported(String sourceSysCode, String targetCode) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("srcCode", srcCode);
-        params.add("tgtCode", tgtCode);
+        params.add("sourceSysCode", sourceSysCode);
+        params.add("targetCode", targetCode);
         //Make service call
         MappingSupportedBean result = 
                 webResource.path("isMappingSupported")
@@ -208,7 +208,7 @@ public class WSCoreClient implements WSCoreInterface{
             params.add("provenanceId", provId);
         }
         for (String target:targetCodes){
-            params.add("tgtCode", target);
+            params.add("targetCode", target);
         }
         //Make service call
         List<XrefMapBean> result = 

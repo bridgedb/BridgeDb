@@ -38,7 +38,7 @@ public interface WSCoreInterface {
 
     FreeSearchSupportedBean isFreeSearchSupported();
 
-    MappingSupportedBean isMappingSupported( String srcCode, String tgtCode) throws IDMapperException;
+    MappingSupportedBean isMappingSupported( String sourceSysCode, String targetCode) throws IDMapperException;
 
     List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> provenanceId, 
             List<String> targetCodes) throws IDMapperException;
@@ -47,7 +47,7 @@ public interface WSCoreInterface {
  
     CapabilitiesBean getCapabilities();
 
-    public List<URLMappingBean> mapByURLs(List<String> srcURL, List<String> provenanceId, List<String> targetNameSpace) 
+    public List<URLMappingBean> mapByURLs(List<String> sourceURL, List<String> provenanceId, List<String> targetNameSpace) 
             throws IDMapperException;
 
     public URLExistsBean urlExists(String URL) throws IDMapperException;

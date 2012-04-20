@@ -50,11 +50,11 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
     //**** URLMapper functions **** 
     
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> srcURLs, String... tgtNameSpaces) throws IDMapperException {
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetNameSpaces) throws IDMapperException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>> ();
-        if (srcURLs.isEmpty()) return results; //No valid srcrefs so return empty set
+        if (sourceURLs.isEmpty()) return results; //No valid srcrefs so return empty set
         List<URLMappingBean>  beans = 
-                webService.mapByURLs(new ArrayList(srcURLs), ALL_PROVENANCE, Arrays.asList(tgtNameSpaces));
+                webService.mapByURLs(new ArrayList(sourceURLs), ALL_PROVENANCE, Arrays.asList(targetNameSpaces));
         for (URLMappingBean bean:beans){
             Set<String> targets = results.get(bean.getSourceURL());
             if (targets == null){
@@ -67,10 +67,10 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
     }
 
     @Override
-    public Set<String> mapURL(String srcURL, String... tgtNameSpaces) throws IDMapperException {
-        ArrayList<String> srcURLs = new ArrayList<String>();
-        srcURLs.add(srcURL);
-        List<URLMappingBean> beans = webService.mapByURLs(srcURLs, ALL_PROVENANCE, Arrays.asList(tgtNameSpaces));
+    public Set<String> mapURL(String sourceURL, String... targetNameSpaces) throws IDMapperException {
+        ArrayList<String> sourceURLs = new ArrayList<String>();
+        sourceURLs.add(sourceURL);
+        List<URLMappingBean> beans = webService.mapByURLs(sourceURLs, ALL_PROVENANCE, Arrays.asList(targetNameSpaces));
         HashSet<String> targetURLS = new HashSet<String>(); 
         for (URLMappingBean bean:beans){
             targetURLS.add(bean.getTargetURL());
@@ -94,7 +94,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
         ArrayList<String> ids = new ArrayList<String>();
         ArrayList<String> codes = new ArrayList<String>();
-        ArrayList<String> tgtCodes = new ArrayList<String>();
+        ArrayList<String> targetCodes = new ArrayList<String>();
         for (Xref srcXref:srcXrefs){
             if (srcXref.getId() != null && srcXref.getDataSource() != null){
                 ids.add(srcXref.getId());
@@ -102,11 +102,11 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
             }
         }
         for (int i = 0 ; i < tgtDataSources.length; i++){
-            tgtCodes.add(tgtDataSources[i].getSystemCode());
+            targetCodes.add(tgtDataSources[i].getSystemCode());
         }
         HashMap<Xref, Set<Xref>> results = new HashMap<Xref, Set<Xref>>();
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
-        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_PROVENANCE, tgtCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_PROVENANCE, targetCodes);
         for (XrefMapBean bean:beans){
             System.out.println(bean);
             Xref source = XrefBeanFactory.asXref(bean.getSource());
@@ -127,11 +127,11 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         ArrayList<String> codes = new ArrayList<String>();
         ids.add(ref.getId());
         codes.add(ref.getDataSource().getSystemCode());
-        ArrayList<String> tgtCodes = new ArrayList<String>();
+        ArrayList<String> targetCodes = new ArrayList<String>();
         for (int i = 0 ; i < tgtDataSources.length; i++){
-            tgtCodes.add(tgtDataSources[i].getSystemCode());
+            targetCodes.add(tgtDataSources[i].getSystemCode());
         }
-        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_PROVENANCE, tgtCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_PROVENANCE, targetCodes);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefMapBean bean:beans){
             results.add(XrefBeanFactory.asXref(bean.getTarget()));
@@ -246,13 +246,13 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
                 codes.add(srcXref.getDataSource().getSystemCode());
             }
         }
-        ArrayList<String> tgtCodes = new ArrayList<String>();
+        ArrayList<String> targetCodes = new ArrayList<String>();
         for (DataSource targetDataSource:targetDataSources){
-            tgtCodes.add(targetDataSource.getSystemCode());
+            targetCodes.add(targetDataSource.getSystemCode());
         }
         HashMap<Xref, Set<XrefProvenance>> results = new HashMap<Xref, Set<XrefProvenance>>();
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
-        List<XrefMapBean>  beans = webService.mapID(ids, codes, new ArrayList(provenanceIds), tgtCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, new ArrayList(provenanceIds), targetCodes);
         for (XrefMapBean bean:beans){
             Xref source = XrefBeanFactory.asXref(bean.getSource());
             Set<XrefProvenance> targets = results.get(source);
@@ -273,11 +273,11 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
         ArrayList<String> codes = new ArrayList<String>();
         ids.add(ref.getId());
         codes.add(ref.getDataSource().getSystemCode());
-        ArrayList<String> tgtCodes = new ArrayList<String>();    
+        ArrayList<String> targetCodes = new ArrayList<String>();    
         Iterator<DataSource> targetDataSourcesIterator = targetDataSources.iterator();
         while (targetDataSourcesIterator.hasNext())
-            tgtCodes.add(targetDataSourcesIterator.next().getSystemCode());
-        List<XrefMapBean>  beans = webService.mapID(ids, codes, new ArrayList(provenanceIds), tgtCodes);
+            targetCodes.add(targetDataSourcesIterator.next().getSystemCode());
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, new ArrayList(provenanceIds), targetCodes);
         HashSet<XrefProvenance> results = new HashSet<XrefProvenance>();
         for (XrefMapBean bean:beans){
             results.add(XrefMapBeanFactory.asXrefProvenance(bean));
@@ -286,12 +286,12 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities, URLMapper, 
     }
 
     @Override
-    public Set<URLMapping> mapURL(Collection<String> srcURLs, Collection<String> provenanceIds, 
+    public Set<URLMapping> mapURL(Collection<String> sourceURLs, Collection<String> provenanceIds, 
             Collection<String> targetNameSpaces) throws IDMapperException {
         HashSet<URLMapping> results = new HashSet<URLMapping>();
-        if (srcURLs.isEmpty()) return results; //No valid srcrefs so return empty set
+        if (sourceURLs.isEmpty()) return results; //No valid srcrefs so return empty set
         List<URLMappingBean>  beans = 
-                webService.mapByURLs(new ArrayList(srcURLs), new ArrayList(provenanceIds), new ArrayList(targetNameSpaces));
+                webService.mapByURLs(new ArrayList(sourceURLs), new ArrayList(provenanceIds), new ArrayList(targetNameSpaces));
         for (URLMappingBean bean:beans){
             results.add(URLMappingBeanFactory.asURLMapping(bean));
         }

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.ws;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.jersey.api.client.GenericType;
@@ -11,10 +12,9 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.ws.bean.DataSourceStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
-import org.bridgedb.ws.bean.URLsBean;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**
@@ -28,52 +28,11 @@ public class WSClient extends WSCoreClient implements WSInterface{
     }
     
     @Override
-    public List<XrefBean> getXrefByPosition(String code, Integer position, Integer limit) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        if (code != null) {
-            params.add("code",  code);
-        }
-        params.add("position",  position.toString());
-        if (limit != null){
-            params.add("limit",  limit.toString());
-        }
-       //Make service call
-        List<XrefBean> result = 
-                webResource.path("getXrefByPosition")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<XrefBean>>() {});
-        return result;
-    }
-
-    @Override
-    public URLsBean getURLByPosition(String nameSpace, Integer position, Integer limit) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        if (nameSpace != null) {
-            params.add("nameSpace",  nameSpace);
-        }
-        params.add("position",  position.toString());
-        if (limit != null){
-            params.add("limit",  limit.toString());
-        }
-       //Make service call
-        URLsBean result = 
-                webResource.path("getURLByPosition")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<URLsBean>() {});
-        return result;
-    }
-
-    @Override
-    public List<URLMappingBean> getMappings(List<String> idStrings, 
+    public List<URLMappingBean> getMappings(
             List<String> URLs, List<String> sourceURLs, List<String> targetURLs, 
             List<String> nameSpaces, List<String> sourceNameSpaces, List<String> targetNameSpaces,
             List<String> provenanceIdStrings, String positionString, String limitString, Boolean full){
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        for (String id:idStrings){
-            params.add("id", id);
-        }
         for (String URL:URLs){
             params.add("URL", URL);
         }
@@ -95,6 +54,9 @@ public class WSClient extends WSCoreClient implements WSInterface{
         for (String provenanceIdString:provenanceIdStrings){
             params.add("provenanceId", provenanceIdString);
         }
+        if (positionString != null){
+           params.add("position", positionString);            
+        }
         if (limitString != null){
            params.add("limit", limitString);            
         }
@@ -110,6 +72,15 @@ public class WSClient extends WSCoreClient implements WSInterface{
     }
 
     @Override
+    public URLMappingBean getMapping(String idString) {
+        URLMappingBean result = 
+                webResource.path("getMapping/" + idString)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<URLMappingBean>() {});
+        return result;        
+    }
+
+    @Override
     public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
        OverallStatisticsBean result = 
                 webResource.path("getOverallStatistics")
@@ -119,34 +90,53 @@ public class WSClient extends WSCoreClient implements WSInterface{
  
     }
 
-    public List<URLMappingBean> getURLMappings(List<String> ids, List<String> URLs, List<String> tgtNameSpace, 
-            String position, String limit, Boolean full){
+    @Override
+    public List<XrefBean> getXrefs(ArrayList<String> dataSourceSysCodes, List<String> provenanceIdStrings, 
+            String positionString, String limitString) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        for (String id:ids){
-            params.add("id", id);
+        for (String dataSourceSysCode:dataSourceSysCodes){
+            params.add("dataSourceSysCode", dataSourceSysCode);
         }
-        for (String URL:URLs){
-            params.add("URL",  URL);
+        for (String provenanceIdString:provenanceIdStrings){
+            params.add("provenanceId", provenanceIdString);
         }
-        for (String target:tgtNameSpace){
-            params.add("tgtNameSpace", target);
+        if (positionString != null){
+           params.add("position", positionString);            
         }
-        if (position != null){
-            params.add("position",  position);
+        if (limitString != null){
+           params.add("limit", limitString);            
         }
-        if (limit != null){
-            params.add("limit",  limit);
-        }
-        params.add("full", "true");
-       //Make service call
-        List<URLMappingBean> result = 
-                webResource.path("getURLMappings")
+        List<XrefBean> result = 
+                webResource.path("getXrefs")
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<URLMappingBean>>() {});
+                .get(new GenericType<List<XrefBean>>() {});
         return result;        
     }
 
+    @Override
+    public List<URLBean> getURLs(List<String> nameSpaces, List<String> provenanceIdStrings, 
+            String positionString, String limitString) throws IDMapperException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        for (String nameSpace:nameSpaces){
+            params.add("nameSpace", nameSpace);
+        }
+        for (String provenanceIdString:provenanceIdStrings){
+            params.add("provenanceId", provenanceIdString);
+        }
+        if (positionString != null){
+           params.add("position", positionString);            
+        }
+        if (limitString != null){
+           params.add("limit", limitString);            
+        }
+        List<URLBean> result = 
+                webResource.path("getURLs")
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<URLBean>>() {});
+        return result;        
+    }
 /*    @Override
     public URLMappingBeanImpl getMapping(Integer id) throws IDMapperException {
        //Make service call
@@ -158,11 +148,11 @@ public class WSClient extends WSCoreClient implements WSInterface{
     }
 
     @Override
-    public List<URLMappingBean> getURLMappings(String URL, List<String> tgtNameSpace) throws IDMapperException {
+    public List<URLMappingBean> getURLMappings(String URL, List<String> targetNameSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add("URL",  URL);
-        for (String target:tgtNameSpace){
-            params.add("tgtNameSpace", target);
+        for (String target:targetNameSpace){
+            params.add("targetNameSpace", target);
         }
        //Make service call
         List<URLMappingBean> result = 
@@ -235,7 +225,7 @@ public class WSClient extends WSCoreClient implements WSInterface{
         return result;
     }
 */
-    @Override
+   /* @Override
     public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add("code",  code);
@@ -271,5 +261,6 @@ public class WSClient extends WSCoreClient implements WSInterface{
                 .get(new GenericType<List<DataSourceStatisticsBean>>() {});
         return result;
     }
+*/
 
 }

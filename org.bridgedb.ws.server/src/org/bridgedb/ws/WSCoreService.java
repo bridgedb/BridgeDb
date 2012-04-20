@@ -97,12 +97,12 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/mapByURLs")
     @Override
     public List<URLMappingBean> mapByURLs(
-            @QueryParam("srcURL") List<String> srcURL,
+            @QueryParam("sourceURL") List<String> sourceURL,
             @QueryParam("provenaceId") List<String> provenaceId, 
-            @QueryParam("tgtNameSpace") List<String> targetNameSpace) throws IDMapperException {
-        if (srcURL == null) throw new IDMapperException("srcURL parameter missig");
-        if (srcURL.isEmpty()) throw new IDMapperException("srcURL parameter missig");
-        Set<URLMapping> mappings = provenanceMapper.mapURL(srcURL, provenaceId, targetNameSpace);
+            @QueryParam("targetNameSpace") List<String> targetNameSpace) throws IDMapperException {
+        if (sourceURL == null) throw new IDMapperException("sourceURL parameter missig");
+        if (sourceURL.isEmpty()) throw new IDMapperException("sourceURL parameter missig");
+        Set<URLMapping> mappings = provenanceMapper.mapURL(sourceURL, provenaceId, targetNameSpace);
         System.out.println(provenaceId);
         ArrayList<URLMappingBean> results = new ArrayList<URLMappingBean>();
         for (URLMapping mapping: mappings){
@@ -116,18 +116,18 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/mapByURL")
     @Override
     public URLMappingBean mapByURL(
-            @QueryParam("srcURL") String srcURL, 
+            @QueryParam("sourceURL") String sourceURL, 
             @QueryParam("provenaceId") List<String> provenaceId, 
-            @QueryParam("tgtNameSpace") List<String> tgtNameSpace) throws IDMapperException {
-        if (srcURL == null) throw new IDMapperException("srcURL parameter missig");
-        if (srcURL.isEmpty()) throw new IDMapperException("srcURL parameter missig");
+            @QueryParam("targetNameSpace") List<String> targetNameSpace) throws IDMapperException {
+        if (sourceURL == null) throw new IDMapperException("sourceURL parameter missig");
+        if (sourceURL.isEmpty()) throw new IDMapperException("sourceURL parameter missig");
         Set<String> mappings;
-        if ( tgtNameSpace!=null){
-            mappings = urlMapper.mapURL(srcURL, tgtNameSpace.toArray(new String[0]));
+        if ( targetNameSpace!=null){
+            mappings = urlMapper.mapURL(sourceURL, targetNameSpace.toArray(new String[0]));
         } else {
-            mappings = urlMapper.mapURL(srcURL);
+            mappings = urlMapper.mapURL(sourceURL);
         }
-        return new URLMapBean(srcURL, mappings);
+        return new URLMapBean(sourceURL, mappings);
     }
 */
     @GET
@@ -217,7 +217,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam("id") List<String> id,
             @QueryParam("code") List<String> scrCode,
             @QueryParam("provenanceId") List<String> provenaceIds,
-            @QueryParam("tgtCode") List<String> targetCodes) throws IDMapperException {
+            @QueryParam("targetCode") List<String> targetCodes) throws IDMapperException {
         if (id == null) throw new IDMapperException("id parameter missig");
         if (id.isEmpty()) throw new IDMapperException("id parameter missig");
         if (scrCode == null) throw new IDMapperException("code parameter missig");
@@ -284,12 +284,12 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/isMappingSupported")
     @Override
     public MappingSupportedBean isMappingSupported(
-            @QueryParam("srcCode") String srcCode, 
-            @QueryParam("tgtCode") String tgtCode) throws IDMapperException {
-        if (srcCode == null) throw new IDMapperException ("\"srcCode\" parameter can not be null");
-        if (tgtCode == null) throw new IDMapperException ("\"tgtCode\" parameter can not be null");
-        DataSource src = DataSource.getBySystemCode(srcCode);
-        DataSource tgt = DataSource.getBySystemCode(tgtCode);
+            @QueryParam("sourceSysCode") String sourceSysCode, 
+            @QueryParam("targetCode") String targetCode) throws IDMapperException {
+        if (sourceSysCode == null) throw new IDMapperException ("\"sourceSysCode\" parameter can not be null");
+        if (targetCode == null) throw new IDMapperException ("\"targetCode\" parameter can not be null");
+        DataSource src = DataSource.getBySystemCode(sourceSysCode);
+        DataSource tgt = DataSource.getBySystemCode(targetCode);
         return MappingSupportedBeanFactory.asBean(src, tgt, idMapper.getCapabilities().isMappingSupported(src, tgt));
     }
 

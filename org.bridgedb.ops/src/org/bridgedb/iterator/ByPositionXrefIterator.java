@@ -4,11 +4,14 @@
  */
 package org.bridgedb.iterator;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.url.OpsMapper;
 
 /**
  *
@@ -17,18 +20,22 @@ import org.bridgedb.Xref;
 public class ByPositionXrefIterator implements Iterator<Xref>, Iterable<Xref>{
 
     private Xref bufferedNext;
-    private XrefByPosition xrefByPosition;  
-    private DataSource dataSource;
-    int count;
-        
-    public ByPositionXrefIterator (XrefByPosition xrefByPosition, DataSource dataSource){
-        this(xrefByPosition);
-        this.dataSource = dataSource;
+    private OpsMapper opsMapper;  
+    private ArrayList<DataSource> dataSources;
+    int position;
+    
+    //Statics for easy readability of method calls
+    private static final ArrayList<String> ALL_PROVENANCE_IDS = new ArrayList<String>();
+    
+    public ByPositionXrefIterator (OpsMapper opsMapper, DataSource dataSource){
+        this(opsMapper);
+        dataSources.add(dataSource);
     }
     
-    public ByPositionXrefIterator (XrefByPosition xrefByPosition){
-        this.xrefByPosition = xrefByPosition;
-        count = -1;
+    public ByPositionXrefIterator (OpsMapper opsMapper){
+        this.opsMapper = opsMapper;
+        dataSources = new ArrayList<DataSource>();
+        position = -1;
     }
    
     @Override
@@ -42,12 +49,12 @@ public class ByPositionXrefIterator implements Iterator<Xref>, Iterable<Xref>{
     }
 
     private Xref getNext() throws IDMapperException{
-        count ++;
-        if (dataSource == null){
-            return xrefByPosition.getXrefByPosition(count);
-        } else {
-            return xrefByPosition.getXrefByPosition(dataSource, count);
+        position ++;
+        List<Xref> list = opsMapper.getXrefs(dataSources, ALL_PROVENANCE_IDS, position, 1);
+        if (list.isEmpty()){
+            return null;
         }
+        return list.get(0);
     }
     
     @Override

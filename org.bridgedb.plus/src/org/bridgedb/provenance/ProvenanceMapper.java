@@ -24,7 +24,7 @@ public interface ProvenanceMapper {
 	public Set<XrefProvenance> mapIDProvenance (Xref ref, Collection<String> provenanceIds, 
             Collection<DataSource> targetDataSources) throws IDMapperException;
 	
-    public Set<URLMapping> mapURL(Collection<String> srcURLs, Collection<String> provenanceIds, 
+    public Set<URLMapping> mapURL(Collection<String> sourceURLs, Collection<String> provenanceIds, 
             Collection<String> targetNameSpaces) throws IDMapperException;
 
 //    public ProvenanceLink getProvenance(String id) throws IDMapperException;
