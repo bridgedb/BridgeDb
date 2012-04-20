@@ -73,9 +73,9 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
     }
 
     @Override
-    public Set<URLMapping> mapURL(Collection<String> srcURLs, Collection<String> provenanceIds, 
-            Collection<String> tgtNameSpaces) throws IDMapperException {
-        Map<String, Set<String>> plainResults = urlMapper.mapURL(srcURLs, tgtNameSpaces.toArray(new String[0]));
+    public Set<URLMapping> mapURL(Collection<String> sourceURLs, Collection<String> provenanceIds, 
+            Collection<String> targetNameSpaces) throws IDMapperException {
+        Map<String, Set<String>> plainResults = urlMapper.mapURL(sourceURLs, targetNameSpaces.toArray(new String[0]));
         Set<URLMapping> results = new HashSet<URLMapping>();
         for (String key:plainResults.keySet()){
             Set<String> plain = plainResults.get(key);

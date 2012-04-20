@@ -85,9 +85,9 @@ public class URLMapping extends ResultBase{
             URLMapping otherMapping = (URLMapping)other;
             if (super.sameError(otherMapping)) return true;
             if (otherMapping.id != id) return false;
-            if (otherMapping.sourceURL.equals(sourceURL)) return false;
-            if (otherMapping.targetURL.equals(targetURL)) return false;
-            if (otherMapping.getProvenanceId().equals(getProvenanceId())) return false;
+            if (!otherMapping.sourceURL.equals(sourceURL)) return false;
+            if (!otherMapping.targetURL.equals(targetURL)) return false;
+            if (!otherMapping.getProvenanceId().equals(getProvenanceId())) return false;
             //No need to check predicate as by defintion one id has one predicate
             return true;
          } else {
