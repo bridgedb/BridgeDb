@@ -17,7 +17,7 @@ public class XrefIteratorTest extends org.bridgedb.XrefIteratorTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         XrefIterator = urlMapperSQL;
     }

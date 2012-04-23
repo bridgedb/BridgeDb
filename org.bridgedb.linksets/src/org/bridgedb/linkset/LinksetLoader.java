@@ -10,7 +10,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.URLMapperSQL;
-import org.bridgedb.sql.URLSqlFactory;
+import org.bridgedb.sql.SqlFactory;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
@@ -23,7 +23,7 @@ public class LinksetLoader {
     
    	public static void main(String[] args) 
             throws BridgeDbSqlException, IOException, RDFParseException, RDFHandlerException, IDMapperException, RepositoryException {
-        SQLAccess sqlAccess = URLSqlFactory.createSQLAccess();
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         URLMapperSQL urlMapperSQL = null;
         if (args.length == 2){
              urlMapperSQL = new URLMapperSQL(sqlAccess);
