@@ -18,7 +18,7 @@ public class IDMapperTest extends org.bridgedb.IDMapperTest {
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         idMapper = urlMapperSQL;

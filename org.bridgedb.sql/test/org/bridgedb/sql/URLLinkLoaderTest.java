@@ -13,7 +13,7 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
         URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         listener = urlMapperSQL;

@@ -1,0 +1,10 @@
+#This is an example sqlConfig.txt file with the default values in it.
+#To set your own file copy this file to conf/OPS-IMS and edit it there.
+#Also place it in tomcatX/conf/OPS-IMS
+SqlPort 		jdbc:mysql://localhost:3306
+SqlDatabase 	ims
+SqlUser			ims
+SqlPassword		ims
+TestSqlDatabase	imstest
+TestSqlUser		imstest
+TestSqlPassword	imstest

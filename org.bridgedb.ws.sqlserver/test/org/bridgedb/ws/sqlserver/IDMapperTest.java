@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.TestURLSqlFactory;
+import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.sql.URLMapperSQL;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
@@ -24,7 +24,7 @@ public class IDMapperTest extends org.bridgedb.IDMapperTest{
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
         IDMapper inner = new URLMapperSQL(sqlAccess);
         WSCoreInterface webService = new WSCoreService(inner);

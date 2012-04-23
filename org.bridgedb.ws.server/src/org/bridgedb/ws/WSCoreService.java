@@ -301,6 +301,9 @@ public class WSCoreService implements WSCoreInterface {
         if (property == null){
             property = "key was \"" + key + "\"";
         }
+        if (property == null){
+            property = "key was \"" + key + "\"";
+        }
         return new PropertyBean(key, property);
     }
     

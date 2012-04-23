@@ -17,7 +17,7 @@ public class IDMapperCapabilitiesTest extends org.bridgedb.IDMapperCapabilitiesT
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         capabilities = urlMapperSQL;
     }
