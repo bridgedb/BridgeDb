@@ -23,7 +23,7 @@ import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.URLMapperSQL;
-import org.bridgedb.sql.URLSqlFactory;
+import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.ws.WSService;
 
@@ -43,7 +43,7 @@ public class WsSqlServer extends WSService{
     private static final ArrayList<String> ALL_PROVENANCE_IDS = ALL_URLs;
 
     public WsSqlServer() throws BridgeDbSqlException  {
-        SQLAccess sqlAccess = URLSqlFactory.createSQLAccess();
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         idMapper = urlMapperSQL;
         urlMapper = urlMapperSQL;

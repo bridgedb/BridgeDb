@@ -18,7 +18,7 @@ public class ProvenanceMapperTest extends org.bridgedb.provenance.ProvenanceMapp
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestURLSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
         provenaceMapper = urlMapperSQL;
