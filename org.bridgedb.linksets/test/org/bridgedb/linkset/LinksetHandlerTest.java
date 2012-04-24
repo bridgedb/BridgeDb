@@ -7,11 +7,7 @@ package org.bridgedb.linkset;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
-import org.bridgedb.linkset.URLLinkListener;
-import org.junit.BeforeClass;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParseException;
+import org.openrdf.OpenRDFException;
 
 /**
  *
@@ -20,23 +16,26 @@ import org.openrdf.rio.RDFParseException;
 public abstract class LinksetHandlerTest extends IDMapperTest {
     
     protected static URLLinkListener listener;
+    private static final boolean IS_TEST = true;
     
-    public static void loadMappings() throws IDMapperException, IOException, RDFParseException, RDFHandlerException, RepositoryException{
-        LinksetParser parser = new LinksetParser();
-        //ystem.out.println("sample1to2.ttl");
+    private static void parse(){        
+    }
+    
+    public static void loadMappings() throws IDMapperException, IOException, OpenRDFException{
+       //ystem.out.println("sample1to2.ttl");
         //The up and back file reference is important for other modules.
         System.out.println("sample1to2.ttl");
-        parser.parse (listener, "../org.bridgedb.linksets/test-data/sample1to2.ttl", "http://foo/test1to2");
+        LinksetHandler.testClearAndParse (listener, "../org.bridgedb.linksets/test-data/sample1to2.ttl");
         System.out.println("sample1to3.ttl");
-        parser.parse (listener, "../org.bridgedb.linksets/test-data/sample1to3.ttl", "http://foo/test3to1");
+        LinksetHandler.testParse (listener, "../org.bridgedb.linksets/test-data/sample1to3.ttl");
         System.out.println("sample2to1.ttl");
-        parser.parse (listener, "../org.bridgedb.linksets/test-data/sample2to1.ttl", "http://foo/test2to1");
+        LinksetHandler.testParse (listener, "../org.bridgedb.linksets/test-data/sample2to1.ttl");
         System.out.println("sample2to3.ttl");
-        parser.parse (listener, "../org.bridgedb.linksets/test-data/sample2to3.ttl", "http://foo/test2to3");
+        LinksetHandler.testParse (listener, "../org.bridgedb.linksets/test-data/sample2to3.ttl");
         System.out.println("sample3to1.ttl");
-        parser.parse (listener, "../org.bridgedb.linksets/test-data/sample3to1.ttl", "http://foo/test3to1");
+        LinksetHandler.testParse (listener, "../org.bridgedb.linksets/test-data/sample3to1.ttl");
         System.out.println("sample3to2.ttl");
-        parser.parse (listener, "../org.bridgedb.linksets/test-data/sample3to2.ttl", "http://foo/test3to2");
+        LinksetHandler.testParse (listener, "../org.bridgedb.linksets/test-data/sample3to2.ttl");
 	}
 
 }

@@ -7,13 +7,11 @@ package org.bridgedb.linkset;
 import java.io.File;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.URLMapperSQL;
 import org.bridgedb.sql.SqlFactory;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParseException;
+import org.openrdf.OpenRDFException;
 
 /**
  *
@@ -21,24 +19,23 @@ import org.openrdf.rio.RDFParseException;
  */
 public class LinksetLoader {
     
-   	public static void main(String[] args) 
-            throws BridgeDbSqlException, IOException, RDFParseException, RDFHandlerException, IDMapperException, RepositoryException {
+   	public static void main(String[] args) throws IDMapperException, IOException, OpenRDFException  {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         URLMapperSQL urlMapperSQL = null;
-        if (args.length == 2){
-             urlMapperSQL = new URLMapperSQL(sqlAccess);
-        } else if (args.length == 3){
+        if (args.length == 1){
+            urlMapperSQL = new URLMapperSQL(sqlAccess);
+            LinksetHandler.parse (urlMapperSQL, args[0]);
+        } else if (args.length == 2){
             if (args[2].equals("new")){
                 urlMapperSQL = new URLMapperSQL(true, sqlAccess);
-            } else {
+                LinksetHandler.clearAndParse(urlMapperSQL, args[0]);
+        } else {
                 usage();
             }
         } else {
             usage();
         }
-        LinksetParser parser = new LinksetParser();
-        File test = new File(args[0]);
-        parser.parse (urlMapperSQL, args[0], args[1]);
+       LinksetHandler.parse (urlMapperSQL, args[0]);
     }
 
     private static void usage() {

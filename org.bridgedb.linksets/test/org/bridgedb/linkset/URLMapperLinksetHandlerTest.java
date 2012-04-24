@@ -7,9 +7,7 @@ package org.bridgedb.linkset;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.junit.BeforeClass;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParseException;
+import org.openrdf.OpenRDFException;
 
 /**
  *
@@ -18,7 +16,7 @@ import org.openrdf.rio.RDFParseException;
 public class URLMapperLinksetHandlerTest extends LinksetHandlerTest {
     
     @BeforeClass
-    public static void loadMappings() throws IDMapperException, IOException, RDFParseException, RDFHandlerException, RepositoryException{
+    public static void loadMappings() throws IDMapperException, IOException, OpenRDFException{
         URLMapperLinkset mapper = new URLMapperLinkset(); 
         listener = mapper;
         idMapper = mapper;

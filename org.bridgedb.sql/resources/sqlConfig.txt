@@ -1,10 +1,17 @@
-#This is an example sqlConfig.txt file with the default values in it.
+This is an example sqlConfig.txt file with the default values in it.
 #To set your own file copy this file to conf/OPS-IMS and edit it there.
+#If not found in the projects conf/OPS-IMS or resource folders it will be looked for in the SQL project
 #Also place it in tomcatX/conf/OPS-IMS
+
 SqlPort 		jdbc:mysql://localhost:3306
 SqlDatabase 	ims
 SqlUser			ims
 SqlPassword		ims
+#Test Database MUST NOT be the same one tests drops and recreates all tables!
 TestSqlDatabase	imstest
+#Test user may be the same but having a different users adds security
 TestSqlUser		imstest
 TestSqlPassword	imstest
+
+#Warning you will also need a rdfConfig.txt file
+#See Linkset Project resource directory
