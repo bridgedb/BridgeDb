@@ -1,4 +1,4 @@
-package org.bridgedb.ws;
+package org.bridgedb.ws.server;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
