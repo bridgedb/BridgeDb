@@ -6,11 +6,8 @@ package org.bridgedb.rdf;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.linkset.VoidConstants;
-import org.openrdf.model.Namespace;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -35,7 +32,14 @@ public class LinksetStore {
     private final Resource metaData;
     
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
-            
+    
+    //CONSTANTS to make code easier to read
+    private static final Resource ANY_SUBJECT = null;
+    private static final URI ANY_PREDICATE = null;
+    private static final Value ANY_OBJECT = null;
+    private static final boolean EXCLUDE_INFERRED =false;
+    private static final Resource ANY_RESOURCE = null;
+    
     public static LinksetStore factory() throws IDMapperLinksetException{
         if (production == null){
             production = new LinksetStore(false);
@@ -66,7 +70,7 @@ public class LinksetStore {
     
     public Resource createNewGraph() throws RDFHandlerException {
         String baseURI = RdfFactory.getBaseURI(); 
-        Value lastLinksetId = getStringletonObject(metaData, HIGHEST_LINKSET_ID_PREDICATE, null);
+        Value lastLinksetId = getStringletonObject(metaData, HIGHEST_LINKSET_ID_PREDICATE, ANY_RESOURCE);
         int linksetId;
         if (lastLinksetId == null){
             linksetId = 1;
@@ -97,7 +101,7 @@ public class LinksetStore {
     public URI getSubjectUriSpace(Statement linkStatement, Resource linkSetGraph) 
             throws RDFHandlerException {
         URI subjectURI = (URI)linkStatement.getSubject();
-        Resource subjectDataSet = (Resource)getStringletonObject(null, VoidConstants.SUBJECTSTARGETURI, linkSetGraph);
+        Resource subjectDataSet = (Resource)getStringletonObject(ANY_SUBJECT, VoidConstants.SUBJECTSTARGETURI, linkSetGraph);
         if (subjectDataSet != null){
             return getUriSpace(subjectDataSet, linkSetGraph, subjectURI, true);
         }
@@ -115,7 +119,7 @@ public class LinksetStore {
     public URI getObjectUriSpace(Statement linkStatement, Resource linkSetGraph) 
             throws RDFHandlerException {
         URI objectURI = (URI)linkStatement.getObject();
-        Resource objectDataSet = (Resource)getStringletonObject(null, VoidConstants.OBJECTSTARGETURI, linkSetGraph);
+        Resource objectDataSet = (Resource)getStringletonObject(ANY_SUBJECT, VoidConstants.OBJECTSTARGETURI, linkSetGraph);
         if (objectDataSet != null){
             return getUriSpace(objectDataSet, linkSetGraph, objectURI, true);
         }
@@ -130,15 +134,25 @@ public class LinksetStore {
         throw new RDFHandlerException ("Unable to find a valid URISpace for the object " + objectURI) ;
     }
 
-    public List<Resource> getLinksetGraphs() throws RDFHandlerException{
+    public List<Resource> getLinksetGraphs() throws IDMapperLinksetException{
         try {
             RepositoryResult<Resource> rr = getConnection().getContextIDs();
             return rr.asList();
         } catch (RepositoryException ex) {
-            throw new RDFHandlerException("Unable to get graphs ", ex);
+            throw new IDMapperLinksetException("Unable to get graphs ", ex);
         }
     }
     
+    public List<Statement> getStatemenets (Resource linkSetGraph) throws IDMapperLinksetException {
+        try {
+            RepositoryResult<Statement> rr = 
+                getConnection().getStatements(ANY_SUBJECT, ANY_PREDICATE, ANY_OBJECT, EXCLUDE_INFERRED, linkSetGraph); 
+            return rr.asList();
+        } catch (RepositoryException ex) {
+            throw new IDMapperLinksetException("Unable to clear repository ", ex);
+        }
+    }
+   
     public void clear() throws IDMapperLinksetException{
         try {
             getConnection().clear();
@@ -214,12 +228,21 @@ public class LinksetStore {
         }
     }
 
-    public static void main(String[] args) throws IDMapperLinksetException, RDFHandlerException {
+    private void showAll() throws IDMapperLinksetException{
+        List<Resource> graphs = getLinksetGraphs();
+        for (Resource graph:graphs){
+            System.out.println();
+            System.out.println(graph);
+            System.out.println(this.getStatemenets(graph));
+        }
+    }
+    
+    public static void main(String[] args) throws IDMapperLinksetException {
         System.out.println("production");
         LinksetStore linksetStore = LinksetStore.factory();
-        System.out.println(linksetStore.getLinksetGraphs());
+        linksetStore.showAll();
         System.out.println("Test");
         linksetStore = LinksetStore.testFactory();
-        System.out.println(linksetStore.getLinksetGraphs());
+        linksetStore.showAll();
     }
 }
