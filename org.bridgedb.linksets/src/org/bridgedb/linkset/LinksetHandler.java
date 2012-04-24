@@ -4,22 +4,27 @@
  */
 package org.bridgedb.linkset;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.rdf.RepositoryFactory;
+import org.bridgedb.rdf.LinksetStore;
+import org.openrdf.OpenRDFException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
+import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.RDFHandlerBase;
+import org.openrdf.rio.turtle.TurtleParser;
+
 /**
  *
  * @author Christian
@@ -31,15 +36,73 @@ public class LinksetHandler extends RDFHandlerBase{
     URI linksetId;
     URLLinkListener listener;
     String provenanceId;
-    Repository myRepository;
+    //Repository myRepository;
+    LinksetStore linksetStore;
    //final Resource[] NO_RESOURCES = new Resource[0];
     final Resource linkSetGraph;
     
-    public LinksetHandler(URLLinkListener listener, String graph) throws RepositoryException, IDMapperException {
-        this.listener = listener;
-        listener.openInput();
-        myRepository = RepositoryFactory.getRepository();
-        linkSetGraph = new URIImpl(graph);
+    public static void testParse (URLLinkListener listener, String fileName) 
+            throws IDMapperLinksetException  {
+        LinksetStore linksetStore = LinksetStore.testFactory();
+        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
+        parse (handler, fileName);
+    }
+
+    public static void parse (URLLinkListener listener, String fileName) 
+            throws IDMapperLinksetException  {
+        LinksetStore linksetStore = LinksetStore.factory();
+        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
+        parse (handler, fileName);
+    }
+
+    public static void testClearAndParse (URLLinkListener listener, String fileName) 
+            throws IDMapperLinksetException  {
+        LinksetStore linksetStore = LinksetStore.testFactory();
+        linksetStore.clear();
+        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
+        parse (handler, fileName);
+    }
+
+    public static void clearAndParse (URLLinkListener listener, String fileName) 
+            throws IDMapperLinksetException  {
+        LinksetStore linksetStore = LinksetStore.factory();
+        linksetStore.clear();
+        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
+        parse (handler, fileName);
+    }
+
+    private static void parse (LinksetHandler handler, String fileName) 
+            throws IDMapperLinksetException  {
+        FileReader reader = null;
+        try {
+            RDFParser parser = new TurtleParser();
+            parser.setRDFHandler(handler);
+            parser.setParseErrorListener(new LinksetParserErrorListener());
+            parser.setVerifyData(true);
+            reader = new FileReader(fileName);
+            parser.parse (reader, handler.getDefaultBaseURI());
+        } catch (IOException ex) {
+            throw new IDMapperLinksetException("Error reading file " + fileName, ex);
+        } catch (OpenRDFException ex) {
+            throw new IDMapperLinksetException("Error parsing file " + fileName, ex);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private LinksetHandler(URLLinkListener listener, LinksetStore linksetStore) throws IDMapperLinksetException  {
+        try {
+            this.listener = listener;
+            listener.openInput();
+            this.linksetStore = linksetStore;                
+            linkSetGraph = linksetStore.createNewGraph();
+        } catch (Exception ex) {
+            throw new IDMapperLinksetException ("Unable to create LinksetHandler ", ex);
+        }
     }
     
     @Override
@@ -54,7 +117,11 @@ public class LinksetHandler extends RDFHandlerBase{
         }
     }
     
-        /**
+    public String getDefaultBaseURI(){
+        return linkSetGraph.stringValue() + "/";
+    }
+    
+    /**
      * Process an RDF statement that forms part of the VoID header for the 
      * linkset file.
      * 
@@ -85,76 +152,18 @@ public class LinksetHandler extends RDFHandlerBase{
             linkPredicate = (URI) object;
             linksetId = (URI) subject;
         }
-        try {
-            myRepository.getConnection().add(subject, predicate, object, linkSetGraph);
-        } catch (RepositoryException ex) {
-            throw new RDFHandlerException("Unable to save statement to memory", ex);
-        }
+        linksetStore.addStatement(subject, predicate, object, linkSetGraph);
     }
    
-    private String getMatchingUriSpace(Resource subject, String uri) throws RDFHandlerException{
-        if (subject == null) return null;
-        Value URIspace = RepositoryFactory.getStringletonObject(subject, VoidConstants.URI_SPACEURI, linkSetGraph);
-        System.out.println("URIspace:" + URIspace.stringValue());
-        System.out.println("uri:" + uri);
-        if (URIspace == null){
-            return null; 
-        }
-        if (uri.startsWith(URIspace.stringValue())){
-            return URIspace.toString();
-        } else {
-            System.out.println("no");
-        }
-        return null;
-    }
-    
-    private String getSubjectUriSpace(Statement firstMap) throws RDFHandlerException, RepositoryException{
-        System.out.println("linksetId="+linksetId);
-        Resource subject = (Resource)RepositoryFactory.
-                getStringletonObject(linksetId, VoidConstants.SUBJECTSTARGETURI, linkSetGraph);
-        System.out.println("subject="+subject);
-        String URIspace = getMatchingUriSpace(subject,firstMap.getSubject().stringValue());
-        if (URIspace != null) return URIspace;
-        List<Value> possibles = RepositoryFactory.getObjects(subject, VoidConstants.TARGETURI, linkSetGraph);
-        for (Value possible:possibles){
-            URIspace = getMatchingUriSpace((Resource)possible, firstMap.getSubject().stringValue());
-            if (URIspace != null) {
-                RepositoryFactory.addStatement(linksetId, VoidConstants.SUBJECTSTARGETURI, possible, linkSetGraph);
-                return URIspace;
-            }
-        }
-        throw new RDFHandlerException ("Unable to find a valid URISpace for the subject");
-    }
-     
-    private String getObjectUriSpace(Statement firstMap) throws RDFHandlerException, RepositoryException{
-        Resource subject = (Resource)RepositoryFactory.
-                getStringletonObject(linksetId, VoidConstants.OBJECTSTARGETURI, linkSetGraph);
-        String URIspace = getMatchingUriSpace(subject,firstMap.getObject().stringValue());
-        if (URIspace != null) return URIspace;
-        List<Value> possibles = RepositoryFactory.getObjects(subject, VoidConstants.TARGETURI, linkSetGraph);
-        for (Value possible:possibles){
-            URIspace = getMatchingUriSpace((Resource)possible, firstMap.getObject().stringValue());
-            if (URIspace != null) {
-                RepositoryFactory.addStatement(linksetId, VoidConstants.OBJECTSTARGETURI, possible, linkSetGraph);
-                return URIspace;
-            }
-        }
-        throw new RDFHandlerException ("Unable to find a valid URISpace for the subject");
-    }
-
     private void finishProcessingHeader(Statement firstMap) throws RDFHandlerException {
         processingHeader = false;
-        try{
-            String subjectUriSpace = getSubjectUriSpace(firstMap);
-            String objectUriSpace =  getObjectUriSpace(firstMap);
-            try {
-                listener.registerProvenanceLink(linksetId.stringValue(), DataSource.getByNameSpace(subjectUriSpace), 
-                        linkPredicate.stringValue(), DataSource.getByNameSpace(objectUriSpace));
-            } catch (IDMapperException ex) {
-                throw new RDFHandlerException ("Unable to register header info ", ex);
-            }
-        } catch (RepositoryException ex){
-            throw new RDFHandlerException(ex);          
+        String subjectUriSpace = linksetStore.getSubjectUriSpace(firstMap, linkSetGraph).stringValue();
+        String objectUriSpace =  linksetStore.getObjectUriSpace(firstMap, linkSetGraph).stringValue();
+        try {
+            listener.registerProvenanceLink(linksetId.stringValue(), DataSource.getByNameSpace(subjectUriSpace), 
+                    linkPredicate.stringValue(), DataSource.getByNameSpace(objectUriSpace));
+        } catch (IDMapperException ex) {
+            throw new RDFHandlerException ("Unable to register header info ", ex);
         }
     }
 

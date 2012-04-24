@@ -10,20 +10,21 @@ import org.openrdf.model.impl.URIImpl;
 /**
  *
  */
-class VoidConstants {
+public class VoidConstants {
 
     private static final String voidns = "http://rdfs.org/ns/void#";
     
-    static final String DATASET = voidns + "Dataset";
-    static final String LINK_PREDICATE = voidns + "linkPredicate";
-    static final String TARGET = voidns + "target";
-    static final URI TARGETURI = new URIImpl(TARGET);
-    static final String SUBJECTSTARGET = voidns + "subjectsTarget";
-    static final URI SUBJECTSTARGETURI = new URIImpl(SUBJECTSTARGET);
-    static final String OBJECTSTARGET = voidns + "objectsTarget";
-    static final URI OBJECTSTARGETURI = new URIImpl(OBJECTSTARGET);
-    static final String SUBSET = voidns + "subset";
-    static final String URI_SPACE = voidns + "uriSpace";
-    static final URI URI_SPACEURI = new URIImpl(URI_SPACE);
+    public static final String DATASET = voidns + "Dataset";
+    public static final String LINK_PREDICATE = voidns + "linkPredicate";
+    public static final URI LINK_PREDICATE_URI = new URIImpl(LINK_PREDICATE);
+    public static final String TARGET = voidns + "target";
+    public static final URI TARGETURI = new URIImpl(TARGET);
+    public static final String SUBJECTSTARGET = voidns + "subjectsTarget";
+    public static final URI SUBJECTSTARGETURI = new URIImpl(SUBJECTSTARGET);
+    public static final String OBJECTSTARGET = voidns + "objectsTarget";
+    public static final URI OBJECTSTARGETURI = new URIImpl(OBJECTSTARGET);
+    public static final String SUBSET = voidns + "subset";
+    public static final String URI_SPACE = voidns + "uriSpace";
+    public static final URI URI_SPACEURI = new URIImpl(URI_SPACE);
 
 }

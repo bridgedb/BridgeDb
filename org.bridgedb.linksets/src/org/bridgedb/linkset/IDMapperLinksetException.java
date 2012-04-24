@@ -25,4 +25,13 @@ public class IDMapperLinksetException extends IDMapperException {
     public IDMapperLinksetException(String msg) {
         super(msg);
     }
+
+    /**
+     * Constructs an instance of <code>IDMapperLinksetException</code> with the specified detail message.
+     * @param msg the detail message.
+     * @param ex Exception thrown and wrapped
+     */
+    public IDMapperLinksetException(String msg, Exception ex) {
+        super(msg, ex);
+    }
 }

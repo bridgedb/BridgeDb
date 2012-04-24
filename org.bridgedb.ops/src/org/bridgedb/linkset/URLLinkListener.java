@@ -22,4 +22,4 @@ public interface URLLinkListener {
 
     public void closeInput()throws IDMapperException;
 
-}
+ }
