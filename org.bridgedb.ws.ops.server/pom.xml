@@ -123,9 +123,42 @@
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ops</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.sql</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.sql</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws.server</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
         <dependency>
         	<groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
+            <version>1.2</version>
+			<scope>test</scope>
+        </dependency>    
+        <dependency>
+        	<groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
             <version>1.2</version>
 			<scope>test</scope>
         </dependency>    
