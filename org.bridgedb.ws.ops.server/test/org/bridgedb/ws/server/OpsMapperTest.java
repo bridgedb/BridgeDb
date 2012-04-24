@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.ws.sqlserver;
+package org.bridgedb.ws.server;
 
 import java.net.MalformedURLException;
 import org.bridgedb.IDMapper;
@@ -13,20 +13,25 @@ import org.bridgedb.sql.URLMapperSQL;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
 import org.bridgedb.ws.WSCoreService;
+import org.bridgedb.ws.WSInterface;
+import org.bridgedb.ws.WSMapper;
+import org.bridgedb.ws.WSService;
 import org.junit.BeforeClass;
 
 /**
  *
  * @author Christian
  */
-public class IndirectIDMapperCapabilitiesTest extends org.bridgedb.IDMapperCapabilitiesTest{
+public class OpsMapperTest extends org.bridgedb.url.OpsMapperTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
+        connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        connectionOk = true;
         IDMapper inner = new URLMapperSQL(sqlAccess);
-        WSCoreInterface webService = new WSCoreService(inner);
-        capabilities = new WSCoreMapper(webService).getCapabilities();
+        WSInterface webService = new WSService(inner);
+        opsMapper = new WSMapper(webService);
     }
 
 }
