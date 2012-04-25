@@ -4,6 +4,8 @@
  */
 package org.bridgedb.linkset;
 
+import java.util.List;
+import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 
@@ -20,6 +22,8 @@ public interface URLLinkListener {
 
     public void openInput() throws IDMapperException;
 
-    public void closeInput()throws IDMapperException;
+    public void closeInput() throws IDMapperException;
+    
+    public Set<String> getProvenanceIds() throws IDMapperException;
 
  }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.AbstractIDMapperCapabilities;
@@ -166,6 +167,11 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
                     " so can not be registered with " + predicate);
         }
         predicates.put(provenanceId, predicate);
+    }
+
+    @Override
+    public Set<String> getProvenanceIds() {
+        return predicates.keySet();
     }
 
     private class IDMapperLinksetCapabilities extends AbstractIDMapperCapabilities {

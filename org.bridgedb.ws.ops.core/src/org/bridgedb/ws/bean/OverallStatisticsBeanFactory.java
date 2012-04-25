@@ -13,6 +13,7 @@ public class OverallStatisticsBeanFactory {
         bean.setNumberOfMappings(overallStatistics.getNumberOfMappings());
         bean.setNumberOfProvenances(overallStatistics.getNumberOfProvenances());
         bean.setNumberOfSourceDataSources(overallStatistics.getNumberOfSourceDataSources());
+        bean.setNumberOfPredicates(overallStatistics.getNumberOfPredicates());
         bean.setNumberOfTargetDataSources(overallStatistics.getNumberOfTargetDataSources());
         return bean;
     }

@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.url.OpsMapper;
+import org.bridgedb.ops.OpsMapper;
 
 /**
  *

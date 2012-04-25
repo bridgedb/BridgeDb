@@ -14,7 +14,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-public class OpsMapperTest extends org.bridgedb.url.OpsMapperTest {
+public class OpsMapperTest extends org.bridgedb.ops.OpsMapperTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{

@@ -42,8 +42,8 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
     }
 
     @Override
-    public Map<Xref, Set<XrefProvenance>> mapIDProvenance(Collection<Xref> srcXrefs, 
-            Collection<String> provenanceIds, Collection<DataSource> tgtDataSources) throws IDMapperException {
+    public Map<Xref, Set<XrefProvenance>> mapIDProvenance(List<Xref> srcXrefs, 
+            List<String> provenanceIds, List<DataSource> tgtDataSources) throws IDMapperException {
         Map<Xref, Set<Xref>> plainResults = idMapper.mapID(srcXrefs, tgtDataSources.toArray(new DataSource[0]));
         Map<Xref, Set<XrefProvenance>> results = new HashMap<Xref, Set<XrefProvenance>>();
         for (Xref key:plainResults.keySet()){
@@ -54,7 +54,7 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
     }
 
     private Set<XrefProvenance> convertToXrefProvenance(Xref ref, Set<Xref> plainResults,
-            Collection<String> provenanceIds){
+            List<String> provenanceIds){
         Set<XrefProvenance> with = new HashSet<XrefProvenance>();
         for (Xref xref:plainResults){
             String provenanceId = ref.getDataSource().getNameSpace() + ID_DIVIDER + xref.getDataSource().getNameSpace();
@@ -66,15 +66,15 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
     }
     
     @Override
-    public Set<XrefProvenance> mapIDProvenance(Xref ref, Collection<String> provenanceIds, 
-            Collection<DataSource> tgtDataSources) throws IDMapperException {
+    public Set<XrefProvenance> mapIDProvenance(Xref ref, List<String> provenanceIds, 
+            List<DataSource> tgtDataSources) throws IDMapperException {
         Set<Xref> plain = idMapper.mapID(ref, tgtDataSources.toArray(new DataSource[0]));
         return convertToXrefProvenance(ref, plain, provenanceIds);
     }
 
     @Override
-    public Set<URLMapping> mapURL(Collection<String> sourceURLs, Collection<String> provenanceIds, 
-            Collection<String> targetNameSpaces) throws IDMapperException {
+    public Set<URLMapping> mapURL(List<String> sourceURLs, List<String> provenanceIds, 
+            List<String> targetNameSpaces) throws IDMapperException {
         Map<String, Set<String>> plainResults = urlMapper.mapURL(sourceURLs, targetNameSpaces.toArray(new String[0]));
         Set<URLMapping> results = new HashSet<URLMapping>();
         for (String key:plainResults.keySet()){
@@ -96,6 +96,11 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
             } 
         }
         return with;
+    }
+
+    //@Override
+    public Set<String> getProvenanceIds() throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
  }

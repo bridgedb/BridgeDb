@@ -1,14 +1,14 @@
-package org.bridgedb.url;
+package org.bridgedb.ops;
 
+import java.util.Set;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.Xref;
 import org.bridgedb.DataSource;
 import java.util.List;
 import java.util.ArrayList;
-import org.bridgedb.url.OpsMapper;
-import org.bridgedb.url.URLMapperTestBase;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.url.URLMapperTestBase;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 
@@ -261,10 +261,26 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         report("GetOverallStatistics");
         OverallStatistics results = opsMapper.getOverallStatistics();
         assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(6));
+        assertThat (results.getNumberOfPredicates(), greaterThanOrEqualTo(1));
         assertThat (results.getNumberOfProvenances(), greaterThan(1));
         assertThat (results.getNumberOfTargetDataSources(), greaterThanOrEqualTo(3));
         assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
     }
 
-
+    @Test
+    public void testGetProvenanceInfos() throws IDMapperException{
+        report("GetProvenanceInfos");
+        List<ProvenanceInfo> results = opsMapper.getProvenanceInfos();
+        assertThat (results.size(), greaterThanOrEqualTo(6));
+        boolean found = false;
+        for (ProvenanceInfo info:results){
+            if (info.getId().equals(link3to2)){
+                found = true;
+                assertEquals(TEST_PREDICATE, info.getPredicate());
+                assertEquals(nameSpace3, info.getSourceNameSpace());
+                assertEquals(nameSpace2, info.getTargetNameSpace());
+            }
+        }
+        assertTrue(found);
+    }
 }

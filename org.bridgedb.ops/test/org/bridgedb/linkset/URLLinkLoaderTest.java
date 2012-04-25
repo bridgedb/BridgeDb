@@ -1,10 +1,12 @@
 package org.bridgedb.linkset;
 
+import java.util.Set;
 import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
 import org.bridgedb.IDMapperTestBase;
 import org.bridgedb.url.URLMapperTestBase;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -55,6 +57,14 @@ public abstract class URLLinkLoaderTest extends URLMapperTestBase {
         listener.insertLink(map3URL3, map3URL2, link3to2);
         
         listener.closeInput();
-     }
+ 
+        Set<String> results = listener.getProvenanceIds();
+        assertTrue(results.contains(link1to2));
+        assertTrue(results.contains(link1to3));
+        assertTrue(results.contains(link2to1));
+        assertTrue(results.contains(link2to3));
+        assertTrue(results.contains(link3to1));
+        assertTrue(results.contains(link3to2));
+    }
     
 }

@@ -5,10 +5,12 @@
 package org.bridgedb.ws;
 
 import java.util.ArrayList;
+import java.util.Set;
 import org.bridgedb.ws.bean.DataSourceStatisticsBean;
 import java.util.List;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.ProvenanceBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -69,6 +71,8 @@ public interface WSInterface extends WSCoreInterface {
     //Position and Limit are Strings rather than Integers as this allow for better error handling
     public List<URLBean> getURLs(List<String> nameSpaces, List<String> provenanceIds,
             String position, String limit) throws IDMapperException;
+
+    public List<ProvenanceBean> getProvenanceInfos() throws IDMapperException;
 
 
 }
