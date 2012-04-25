@@ -1,6 +1,7 @@
-package org.bridgedb.url;
+package org.bridgedb.ops;
 
 import java.util.List;
+import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -25,4 +26,8 @@ public interface OpsMapper {
             throws IDMapperException;
     
     public  OverallStatistics getOverallStatistics() throws IDMapperException;
+    
+    public List<ProvenanceInfo> getProvenanceInfos() throws IDMapperException;
+
+
 }

@@ -22,7 +22,7 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-public class OpsMapperTest extends org.bridgedb.url.OpsMapperTest{
+public class OpsMapperTest extends org.bridgedb.ops.OpsMapperTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{

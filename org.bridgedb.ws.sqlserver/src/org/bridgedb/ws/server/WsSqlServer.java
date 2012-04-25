@@ -165,6 +165,11 @@ public class WsSqlServer extends WSService{
                 sb.append("<li>They will be paired by order.</li>");                
                 sb.append("<li>If multiple Xref's have the same DataSource their code must be repeated.</li>");                
                 sb.append("</ul>");
+            sb.append("</ul>");           
+        sb.append("<dt><a name=\"dataSourceSysCode\">dataSourceSysCode</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Limits the results to ones with a DataSource that has one of this/these SysCode(s)</li>");
+            sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
         sb.append("<dt><a name=\"key\">key</a></dt>");
             sb.append("<ul>");
@@ -192,6 +197,7 @@ public class WsSqlServer extends WSService{
         sb.append("<dt><a name=\"provenanceId\">provenanceId</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to only those with this provenace Id.</li>");
+            sb.append("<li>For URLs and Xrefs that will be ones that exist in a mapping with this provenace.</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
         sb.append("<dt><a name=\"position\">position</a></dt>");
@@ -200,7 +206,7 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Default value is 0. (First position).</li>");
             sb.append("<li>Warning if position is greater than the number of possible results available the result will be an empty set.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"sourceNnameSpace\">sourceNameSpace</a></dt>");
+        sb.append("<dt><a name=\"sourceNameSpace\">sourceNameSpace</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with URLs in this/these nameSpace(s) as a source.</li>");
             sb.append("<li>The nameSpace of a URL is one defined when the mapping is loaded, not any with which the URL startWith.</li>");
@@ -369,21 +375,24 @@ public class WsSqlServer extends WSService{
         sb.append("<dt><a href=\"#getMapping\">getMapping</a></dt>");
         sb.append("<dd>Retreives a Mapping based on its Id. (In the future plus provenance)</dd>");       
         sb.append("<dt><a href=\"#getOverallStatistics\">getOverallStatistics</a></dt>");
-        sb.append("<dd>Returns some high level statistics. (Used by homepage generator)</dd>");
+        sb.append("<dd>Returns some high level statistics. (Same as shown on homepage)</dd>");
         sb.append("<dt><a href=\"#getXrefs\">getXrefs</a></dt>");
         sb.append("<dd>Lists a number of Xrefs based on some parameters.</dd>");
         sb.append("<dt><a href=\"#getURLs\">getURLs</a></dt>");
         sb.append("<dd>Lists a number of URLs based on some parameters.</dd>");
+        sb.append("<dt><a href=\"#getProvenanceInfos\">getProvenanceInfos</a></dt>");
+        sb.append("<dd>Lists all the Provenance with some basic information.</dd>");
     }
 
     protected void describe_OpsMapper(StringBuilder sb, Xref first, URLMapping mapping1, Xref second) throws UnsupportedEncodingException{
         sb.append("<h2>Implementations of Extra Methods added to Bridge for OpenPhacts</h2>");
 
         describe_getMappings(sb, first, mapping1, second);    
-    //    describe_getMapping(sb, first);
-    //    describe_getOverallStatistics(sb);
-    //    describe_getXrefs(sb, firstMaps); 
-    //    describe_getURLs(sb, firstMaps); 
+        describe_getMapping(sb, mapping1);
+        describe_getOverallStatistics(sb);
+        describe_getXrefs(sb, first, mapping1); 
+        describe_getURLs(sb, first, mapping1); 
+        describe_getProvenanceInfos(sb);    
    }
     
    private void describe_getMappings(StringBuilder sb, Xref first, URLMapping mapping1, Xref second) 
@@ -394,6 +403,7 @@ public class WsSqlServer extends WSService{
             sb.append("<li>Required arguements: </li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#limit\">limit</a> (default available)</li> ");
+                sb.append("<li><a href=\"#position\">position</a> (default is \"0\")</li> ");
                 sb.append("</ul>");
             sb.append("<li>Optional arguments </li>");
                 sb.append("<ul>");
@@ -404,7 +414,6 @@ public class WsSqlServer extends WSService{
                 sb.append("<li><a href=\"#sourceNameSpace\">sourceNameSpace</a></li> ");
                 sb.append("<li><a href=\"#targetNameSpace\">targetNameSpace</a></li> ");
                 sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
-                sb.append("<li><a href=\"#position\">position</a></li> ");
                 sb.append("<li><a href=\"#full\">full</a> (Currently has no effect)</li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
@@ -417,8 +426,8 @@ public class WsSqlServer extends WSService{
                     sb.append("\">");
                     sb.append("getMappings?URL=");
                     sb.append(first.getUrl());
-                    sb.append("&URL=getUrl()");
-                    sb.append(second.getId());
+                    sb.append("&URL=");
+                    sb.append(second.getUrl());
                     sb.append("&limit=10");
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
@@ -460,7 +469,138 @@ public class WsSqlServer extends WSService{
             sb.append("</ul>");        
     }
     
-    protected final void introduce_IDMapper(StringBuilder sb) {
+   private void describe_getMapping(StringBuilder sb, URLMapping mapping1) 
+            throws UnsupportedEncodingException{
+         sb.append("<h3><a name=\"getMapping\">getMapping/id</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Obtian a mapping</li>");
+            sb.append("<li>Required arguements: </li>");
+                sb.append("<ul>");
+                sb.append("<li>Place the mapping's ID after the /</li> ");
+                sb.append("</ul>");
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getMapping/");
+                    sb.append(mapping1.getId());
+                    sb.append("\">");
+                    sb.append("getMapping/");
+                    sb.append(mapping1.getId());
+                    sb.append("</a></li>");    
+            sb.append("</ul>");        
+    }
+
+   private void describe_getOverallStatistics(StringBuilder sb) 
+            throws UnsupportedEncodingException{
+         sb.append("<h3><a name=\"getOverallStatistics\">getOverallStatistics</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Returns some high level statistics. </li>");
+                sb.append("<ul>");
+                sb.append("<li>Same as shown on homepage.</li> ");
+                sb.append("</ul>");
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getOverallStatistics");
+                    sb.append("\">");
+                    sb.append("getOverallStatistics");
+                    sb.append("</a></li>");    
+            sb.append("</ul>");        
+   }
+
+   private void describe_getXrefs(StringBuilder sb, Xref first, URLMapping mapping1) 
+            throws UnsupportedEncodingException{
+         sb.append("<h3><a name=\"getXrefs\">getXrefs</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Obtians a list of a subset of the Xrefs</li>");
+            sb.append("<li>Required arguements: </li>");
+                sb.append("<ul>");
+                sb.append("<li><a href=\"#limit\">limit</a> (default available)</li> ");
+                sb.append("<li><a href=\"#position\">position</a> (default is \"0\")</li> ");
+                sb.append("</ul>");
+            sb.append("<li>Optional arguments </li>");
+                sb.append("<ul>");
+                sb.append("<li><a href=\"#dataSourceSysCode\">dataSourceSysCode</a></li> ");
+                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("</ul>");        
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getXrefs?dataSourceSysCode=");
+                    sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
+                    sb.append("&limit=10");
+                    sb.append("\">");
+                    sb.append("getXrefs?dataSourceSysCode=");
+                    sb.append(first.getDataSource().getSystemCode());
+                    sb.append("&limit=10");
+                    sb.append("</a></li>");    
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getXrefs?provenanceId=");
+                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append("&targetURL=");
+                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append("\">");
+                    sb.append("getXrefs?provenanceId=");
+                    sb.append(mapping1.getProvenanceId());
+                    sb.append("&targetURL=");
+                    sb.append(mapping1.getProvenanceId());
+                    sb.append("</a></li>");    
+            sb.append("</ul>");        
+   }
+
+   private void describe_getURLs(StringBuilder sb, Xref first, URLMapping mapping1) 
+            throws UnsupportedEncodingException{
+         sb.append("<h3><a name=\"getURLs\">getURLs</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Obtians a list of a subset of the Urls</li>");
+            sb.append("<li>Required arguements: </li>");
+                sb.append("<ul>");
+                sb.append("<li><a href=\"#limit\">limit</a> (default available)</li> ");
+                sb.append("<li><a href=\"#position\">position</a> (default is \"0\")</li> ");
+                sb.append("</ul>");
+            sb.append("<li>Optional arguments </li>");
+                sb.append("<ul>");
+                sb.append("<li><a href=\"#nameSpace\">nameSpace</a></li> ");
+                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("</ul>");        
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getURLs?nameSpace=");
+                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append("&limit=10");
+                    sb.append("\">");
+                    sb.append("getURLs?nameSpace=");
+                    sb.append(first.getDataSource().getNameSpace());
+                    sb.append("&limit=10");
+                    sb.append("</a></li>");    
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getURLs?provenanceId=");
+                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append("&targetURL=");
+                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append("\">");
+                    sb.append("getURLs?provenanceId=");
+                    sb.append(mapping1.getProvenanceId());
+                    sb.append("&targetURL=");
+                    sb.append(mapping1.getProvenanceId());
+                    sb.append("</a></li>");    
+            sb.append("</ul>");        
+   }
+
+   private void describe_getProvenanceInfos(StringBuilder sb) 
+            throws UnsupportedEncodingException{
+         sb.append("<h3><a name=\"getProvenanceInfos\">getProvenanceInfos</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Lists all the Provenances with some basic information </li>");
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                    sb.append("getProvenanceInfos");
+                    sb.append("\">");
+                    sb.append("getProvenanceInfos");
+                    sb.append("</a></li>");    
+            sb.append("</ul>");        
+   }
+
+   protected final void introduce_IDMapper(StringBuilder sb) {
         sb.append("<dt><a href=\"#mapID\">mapID</a></dt>");
         sb.append("<dd>List the Xrefs that map to these Xrefs</dd>");
         sb.append("<dt><a href=\"#xrefExists\">xrefExists</a></dt>");

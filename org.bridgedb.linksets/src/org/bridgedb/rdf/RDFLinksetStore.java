@@ -4,6 +4,8 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.ops.Triple;
+import org.bridgedb.ops.LinkSetStore;
 import java.util.ArrayList;
 import java.util.List;
 import org.bridgedb.linkset.IDMapperLinksetException;
@@ -24,9 +26,9 @@ import org.openrdf.rio.RDFHandlerException;
  *
  * @author Christian
  */
-public class LinksetStore {
-    private static LinksetStore production;
-    private static LinksetStore testStore;
+public class RDFLinksetStore implements LinkSetStore{
+    private static RDFLinksetStore production;
+    private static RDFLinksetStore testStore;
 
     private Repository repository;    
     private final Resource metaData;
@@ -40,21 +42,21 @@ public class LinksetStore {
     private static final boolean EXCLUDE_INFERRED =false;
     private static final Resource ANY_RESOURCE = null;
     
-    public static LinksetStore factory() throws IDMapperLinksetException{
+    public static RDFLinksetStore factory() throws IDMapperLinksetException{
         if (production == null){
-            production = new LinksetStore(false);
+            production = new RDFLinksetStore(false);
         }
         return production;
     }
             
-    public static LinksetStore testFactory() throws IDMapperLinksetException{
+    public static RDFLinksetStore testFactory() throws IDMapperLinksetException{
         if (testStore == null){
-            testStore = new LinksetStore(true);
+            testStore = new RDFLinksetStore(true);
         }
         return testStore;
     }
 
-    private LinksetStore(boolean test) throws IDMapperLinksetException{
+    private RDFLinksetStore(boolean test) throws IDMapperLinksetException{
         try {
             if (test){
                 repository = RdfFactory.getTestRepository();
@@ -143,6 +145,15 @@ public class LinksetStore {
         }
     }
     
+    public List<String> getLinksetNames() throws IDMapperLinksetException{
+        List<Resource> resources = getLinksetGraphs();
+        ArrayList<String> linksetNames = new ArrayList<String>();
+        for (Resource resource:resources){
+            linksetNames.add(resource.stringValue());
+        }
+        return linksetNames;
+    }
+    
     public List<Statement> getStatemenets (Resource linkSetGraph) throws IDMapperLinksetException {
         try {
             RepositoryResult<Statement> rr = 
@@ -153,6 +164,21 @@ public class LinksetStore {
         }
     }
    
+    public List<Triple> getTriples (String graphId) throws IDMapperLinksetException {
+        try {
+            Resource linkSetGraph = new URIImpl(graphId);
+            RepositoryResult<Statement> rr = 
+                getConnection().getStatements(ANY_SUBJECT, ANY_PREDICATE, ANY_OBJECT, EXCLUDE_INFERRED, linkSetGraph); 
+           ArrayList<Triple> triples = new ArrayList<Triple>();
+           while (rr.hasNext()){
+               triples.add(new OpenRdfTriple(rr.next()));
+           }
+           return triples;
+        } catch (RepositoryException ex) {
+            throw new IDMapperLinksetException("Unable to clear repository ", ex);
+        }
+    }
+
     public void clear() throws IDMapperLinksetException{
         try {
             getConnection().clear();
@@ -239,10 +265,10 @@ public class LinksetStore {
     
     public static void main(String[] args) throws IDMapperLinksetException {
         System.out.println("production");
-        LinksetStore linksetStore = LinksetStore.factory();
+        RDFLinksetStore linksetStore = RDFLinksetStore.factory();
         linksetStore.showAll();
         System.out.println("Test");
-        linksetStore = LinksetStore.testFactory();
+        linksetStore = RDFLinksetStore.testFactory();
         linksetStore.showAll();
     }
 }

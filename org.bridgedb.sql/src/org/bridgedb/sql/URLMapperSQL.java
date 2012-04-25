@@ -25,11 +25,12 @@ import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.iterator.ByPositionURLIterator;
 import org.bridgedb.iterator.ByPositionXrefIterator;
 import org.bridgedb.linkset.URLLinkListener;
+import org.bridgedb.ops.OpsMapper;
+import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.OpsMapper;
 import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
 
@@ -420,6 +421,20 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
         }
     }
 
+    @Override
+    public Set<String> getProvenanceIds() throws IDMapperException {
+        String query = ("SELECT id FROM provenance ");
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToProvenanceIds(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }
+
+    }
+    
     //***** URLMapper funtctions  *****
     @Override
     public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetNameSpaces) throws IDMapperException {
@@ -661,10 +676,25 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
         }
     }
 
+    @Override
+    public List<ProvenanceInfo> getProvenanceInfos() throws IDMapperException {
+        String query = ("SELECT * FROM provenance ");
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToProvenanceInfos(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }
+
+    }
+
+
     /*** ProvenanceMapper methods ***/
     @Override
-    public Map<Xref, Set<XrefProvenance>> mapIDProvenance(Collection<Xref> srcXrefs, 
-            Collection<String> provenanceIds, Collection<DataSource> targetDataSources) throws IDMapperException {
+    public Map<Xref, Set<XrefProvenance>> mapIDProvenance(List<Xref> srcXrefs, 
+            List<String> provenanceIds, List<DataSource> targetDataSources) throws IDMapperException {
         Map<Xref, Set<XrefProvenance>> results = new HashMap<Xref, Set<XrefProvenance>>();
         for (Xref ref: srcXrefs){
             Set<XrefProvenance> result = mapIDProvenance(ref, provenanceIds, targetDataSources);
@@ -676,8 +706,8 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
     }
 
     @Override
-    public Set<XrefProvenance> mapIDProvenance(Xref ref, Collection<String> provenanceIds, 
-            Collection<DataSource> targetDataSources) throws IDMapperException {
+    public Set<XrefProvenance> mapIDProvenance(Xref ref, List<String> provenanceIds, 
+            List<DataSource> targetDataSources) throws IDMapperException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
             query.append("targetNameSpace ");
@@ -696,8 +726,8 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
     }
 
     @Override
-    public Set<URLMapping> mapURL(Collection<String> sourceURLs, 
-            Collection<String> provenanceIds, Collection<String> targetNameSpaces) throws IDMapperException {
+    public Set<URLMapping> mapURL(List<String> sourceURLs, 
+            List<String> provenanceIds, List<String> targetNameSpaces) throws IDMapperException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
             query.append("targetNameSpace ");
@@ -933,6 +963,31 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
                 String nameSpace = rs.getString("nameSpace");
                 DataSource ds = DataSource.getByNameSpace(nameSpace);
                 results.add(ds);
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+
+    private Set<String> resultSetToProvenanceIds(ResultSet rs ) throws IDMapperException{
+        HashSet<String> results = new HashSet<String>();
+        try {
+            while (rs.next()){
+                results.add(rs.getString("id"));
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+
+    private List<ProvenanceInfo> resultSetToProvenanceInfos(ResultSet rs ) throws IDMapperException{
+        ArrayList<ProvenanceInfo> results = new ArrayList<ProvenanceInfo>();
+        try {
+            while (rs.next()){
+                results.add(new ProvenanceInfo(rs.getString("id"), rs.getString("sourceNameSpace"), 
+                        rs.getString("linkPredicate"), rs.getString("targetNameSpace")));
             }
         } catch (SQLException ex) {
             throw new IDMapperException("Unable to parse results.", ex);
@@ -1410,5 +1465,5 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
             throw new BridgeDbSqlException("Error insertoing LastUpDated " + update, ex);
         }
     }
-    
+
 }

@@ -222,7 +222,7 @@ public class WSCoreService implements WSCoreInterface {
         if (scrCode == null) throw new IDMapperException("code parameter missig");
         if (scrCode.isEmpty()) throw new IDMapperException("code parameter missig");
         if (id.size() != scrCode.size()) throw new IDMapperException("Must have same number of id and code parameters");
-        HashSet<Xref> srcXrefs = new HashSet<Xref>();
+        ArrayList<Xref> srcXrefs = new ArrayList<Xref>();
         for (int i = 0; i < id.size() ;i++){
             DataSource dataSource = DataSource.getBySystemCode(scrCode.get(i));
             Xref source = new Xref(id.get(i), dataSource);

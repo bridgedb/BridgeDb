@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.url.OpsMapper;
+import org.bridgedb.ops.OpsMapper;
 
 /**
  *
