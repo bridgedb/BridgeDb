@@ -5,6 +5,9 @@
 package org.bridgedb.ws;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.ws.bean.XrefBean;
 import java.util.List;
@@ -13,11 +16,13 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
 import org.bridgedb.iterator.ByPositionURLIterator;
+import org.bridgedb.ops.OpsMapper;
 import org.bridgedb.result.URLMapping;
-import org.bridgedb.url.OpsMapper;
 import org.bridgedb.url.URLIterator;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
+import org.bridgedb.ws.bean.ProvenanceBean;
+import org.bridgedb.ws.bean.ProvenanceFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
@@ -133,6 +138,15 @@ public class WSMapper extends WSCoreMapper implements XrefIterator, URLIterator,
         return OverallStatisticsBeanFactory.asOverallStatistics(bean);
     }
 
+    @Override
+    public List<ProvenanceInfo> getProvenanceInfos() throws IDMapperException {
+        List<ProvenanceBean> beans = webService.getProvenanceInfos();
+        ArrayList<ProvenanceInfo> results = new ArrayList<ProvenanceInfo>();
+        for (ProvenanceBean bean: beans){
+            results.add(ProvenanceFactory.asProvenanceInfo(bean));
+        }
+        return results;
+    }
 
     /*@Override
     public ProvenanceStatistics getProvenance(int id) throws IDMapperException {
@@ -295,6 +309,7 @@ public class WSMapper extends WSCoreMapper implements XrefIterator, URLIterator,
 
 
 */
+
 
 
 }

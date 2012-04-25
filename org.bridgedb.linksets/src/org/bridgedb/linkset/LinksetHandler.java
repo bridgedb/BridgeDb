@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.rdf.LinksetStore;
+import org.bridgedb.rdf.RDFLinksetStore;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -37,27 +37,27 @@ public class LinksetHandler extends RDFHandlerBase{
     URLLinkListener listener;
     String provenanceId;
     //Repository myRepository;
-    LinksetStore linksetStore;
+    RDFLinksetStore linksetStore;
    //final Resource[] NO_RESOURCES = new Resource[0];
     final Resource linkSetGraph;
     
     public static void testParse (URLLinkListener listener, String fileName) 
             throws IDMapperLinksetException  {
-        LinksetStore linksetStore = LinksetStore.testFactory();
+        RDFLinksetStore linksetStore = RDFLinksetStore.testFactory();
         LinksetHandler handler = new LinksetHandler(listener, linksetStore);
         parse (handler, fileName);
     }
 
     public static void parse (URLLinkListener listener, String fileName) 
             throws IDMapperLinksetException  {
-        LinksetStore linksetStore = LinksetStore.factory();
+        RDFLinksetStore linksetStore = RDFLinksetStore.factory();
         LinksetHandler handler = new LinksetHandler(listener, linksetStore);
         parse (handler, fileName);
     }
 
     public static void testClearAndParse (URLLinkListener listener, String fileName) 
             throws IDMapperLinksetException  {
-        LinksetStore linksetStore = LinksetStore.testFactory();
+        RDFLinksetStore linksetStore = RDFLinksetStore.testFactory();
         linksetStore.clear();
         LinksetHandler handler = new LinksetHandler(listener, linksetStore);
         parse (handler, fileName);
@@ -65,7 +65,7 @@ public class LinksetHandler extends RDFHandlerBase{
 
     public static void clearAndParse (URLLinkListener listener, String fileName) 
             throws IDMapperLinksetException  {
-        LinksetStore linksetStore = LinksetStore.factory();
+        RDFLinksetStore linksetStore = RDFLinksetStore.factory();
         linksetStore.clear();
         LinksetHandler handler = new LinksetHandler(listener, linksetStore);
         parse (handler, fileName);
@@ -94,7 +94,7 @@ public class LinksetHandler extends RDFHandlerBase{
         }
     }
 
-    private LinksetHandler(URLLinkListener listener, LinksetStore linksetStore) throws IDMapperLinksetException  {
+    private LinksetHandler(URLLinkListener listener, RDFLinksetStore linksetStore) throws IDMapperLinksetException  {
         try {
             this.listener = listener;
             listener.openInput();

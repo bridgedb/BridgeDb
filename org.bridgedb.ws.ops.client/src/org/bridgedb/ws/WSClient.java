@@ -9,10 +9,12 @@ import java.util.List;
 
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import java.util.Set;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.ProvenanceBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -137,130 +139,14 @@ public class WSClient extends WSCoreClient implements WSInterface{
                 .get(new GenericType<List<URLBean>>() {});
         return result;        
     }
-/*    @Override
-    public URLMappingBeanImpl getMapping(Integer id) throws IDMapperException {
-       //Make service call
-        URLMappingBeanImpl result = 
-                webResource.path("getMapping/" + id)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<URLMappingBean>() {});
-        return result;
-    }
 
     @Override
-    public List<URLMappingBean> getURLMappings(String URL, List<String> targetNameSpace) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("URL",  URL);
-        for (String target:targetNameSpace){
-            params.add("targetNameSpace", target);
-        }
-       //Make service call
-        List<URLMappingBean> result = 
-                webResource.path("getURLMappings")
-                .queryParams(params)
+    public List<ProvenanceBean> getProvenanceInfos() throws IDMapperException {
+        List<ProvenanceBean> result = 
+                webResource.path("getProvenanceInfos")
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<URLMappingBean>>() {});
-        return result;
+                .get(new GenericType<List<ProvenanceBean>>() {});
+        return result;        
     }
-
-    @Override
-    public ProvenanceStatisticsBean getProvenance(Integer id) throws IDMapperException {
-       //Make service call
-        ProvenanceStatisticsBean result = 
-                webResource.path("getProvenance/" + id)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<ProvenanceStatisticsBean>() {});
-        return result;
-    }
-
-    @Override
-    public ProvenanceStatisticsBean getProvenanceByPosition(Integer position) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("position",  position.toString());
-       //Make service call
-        ProvenanceStatisticsBean result = 
-                webResource.path("getProvenanceByPosition")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<ProvenanceStatisticsBean>() {});
-        return result;
-    }
-
-    @Override
-    public List<ProvenanceStatisticsBean> getProvenanceByPosition(Integer position, Integer limit) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("position",  position.toString());
-        if (limit != null){
-            params.add("limit",  limit.toString());
-        }
-        List<ProvenanceStatisticsBean> result = 
-                webResource.path("getProvenancesByPosition")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<ProvenanceStatisticsBean>>() {});
-        return result;
-    }
-
-    @Override
-    public List<ProvenanceStatisticsBean> getSourceProvenanceByNameSpace(String nameSpace) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("nameSpace",  nameSpace);
-        List<ProvenanceStatisticsBean> result = 
-                webResource.path("getSourceProvenanceByNameSpace")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<ProvenanceStatisticsBean>>() {});
-        return result;
-    }
-
-    @Override
-    public List<ProvenanceStatisticsBean> getTargetProvenanceByNameSpace(String nameSpace) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("nameSpace",  nameSpace);;
-        List<ProvenanceStatisticsBean> result = 
-                webResource.path("getTargetProvenanceByNameSpace")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<ProvenanceStatisticsBean>>() {});
-        return result;
-    }
-*/
-   /* @Override
-    public DataSourceStatisticsBean getDataSourceStatistics(String code) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("code",  code);
-        DataSourceStatisticsBean result = 
-                webResource.path("getDataSourceStatistics")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<DataSourceStatisticsBean>() {});
-        return result;
-    }
-
-    @Override
-    public DataSourceStatisticsBean getDataSourceStatisticsByPosition(Integer position) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("position",  position.toString());
-        DataSourceStatisticsBean result = 
-                webResource.path("getDataSourceStatisticsByAPosition")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<DataSourceStatisticsBean>() {});
-        return result;
-    }
-
-    @Override
-    public List<DataSourceStatisticsBean> getDataSourceStatisticsByPosition(Integer position, Integer limit) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("position",  position.toString());
-        params.add("limit",  limit.toString());
-        List<DataSourceStatisticsBean> result = 
-                webResource.path("getDataSourceStatisticsByPosition")
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<DataSourceStatisticsBean>>() {});
-        return result;
-    }
-*/
 
 }
