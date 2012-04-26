@@ -47,7 +47,7 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     protected static String mapBadURL2;
     protected static String mapBadURL3;
 
-    protected static final String TEST_PREDICATE = "www.bridgedb.org/test_predicate";
+    protected static final String TEST_PREDICATE = "http://www.bridgedb.org/test#testPredicate";
     
     @BeforeClass
     public static void setupURLs() throws IDMapperException{

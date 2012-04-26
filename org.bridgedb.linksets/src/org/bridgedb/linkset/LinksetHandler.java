@@ -36,7 +36,6 @@ public class LinksetHandler extends RDFHandlerBase{
     URI linkPredicate;
     URI linksetId;
     URLLinkListener listener;
-    String provenanceId;
     //Repository myRepository;
     RDFLinksetStore linksetStore;
    //final Resource[] NO_RESOURCES = new Resource[0];
@@ -182,7 +181,7 @@ public class LinksetHandler extends RDFHandlerBase{
                 throw new RDFHandlerException (st + " has an unexpected predicate. Expected: " 
                         + linkPredicate);
             }
-            listener.insertLink(st.getSubject().stringValue(), st.getObject().stringValue(), provenanceId);
+            listener.insertLink(st.getSubject().stringValue(), st.getObject().stringValue(), linksetId.stringValue());
         } catch (ClassCastException ex) {
             throw new RDFHandlerException ("Unepected statement " + st, ex);
         } catch (IDMapperException ex){

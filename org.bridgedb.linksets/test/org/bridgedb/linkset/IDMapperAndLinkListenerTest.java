@@ -4,11 +4,13 @@ import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
 import org.bridgedb.linkset.LinkListener;
+import org.junit.Ignore;
 
 /**
  *
  * @author Christian
  */
+@Ignore
 public abstract class IDMapperAndLinkListenerTest extends IDMapperTest{
    
     //The Listener may be but needs not be the same as the IDMapper

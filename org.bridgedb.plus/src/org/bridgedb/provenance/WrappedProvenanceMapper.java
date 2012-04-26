@@ -57,7 +57,7 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
             List<String> provenanceIds){
         Set<XrefProvenance> with = new HashSet<XrefProvenance>();
         for (Xref xref:plainResults){
-            String provenanceId = ref.getDataSource().getNameSpace() + ID_DIVIDER + xref.getDataSource().getNameSpace();
+            String provenanceId = createProvenaceId(ref.getDataSource(), xref.getDataSource());
             if (provenanceIds.isEmpty() || provenanceIds.contains(provenanceId)){
                 with.add(new XrefProvenance(xref, provenanceId, predicate));
             }
@@ -90,7 +90,7 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
         for (String url:plainResults){
             DataSource sourceDS = DataSource.getByURL(ref);
             DataSource targetDS = DataSource.getByURL(url);
-            String provenanceId = sourceDS.getNameSpace() + ID_DIVIDER + targetDS.getNameSpace();
+            String provenanceId = createProvenaceId(sourceDS, targetDS);
             if (provenanceIds.isEmpty() || provenanceIds.contains(provenanceId)){
                 with.add(new URLMapping(0, ref, url, provenanceId, predicate));
             } 
@@ -103,4 +103,7 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    private String createProvenaceId(DataSource source, DataSource target){
+        return source.getNameSpace() + ID_DIVIDER + target.getNameSpace();
+    }
  }
