@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Reporter;
 import org.bridgedb.rdf.RDFLinksetStore;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Resource;
@@ -41,16 +42,16 @@ public class LinksetHandler extends RDFHandlerBase{
    //final Resource[] NO_RESOURCES = new Resource[0];
     final Resource linkSetGraph;
     
-    public static void testParse (URLLinkListener listener, String fileName) 
+    public static void parse (URLLinkListener listener, String fileName) 
             throws IDMapperLinksetException  {
-        RDFLinksetStore linksetStore = RDFLinksetStore.testFactory();
+        RDFLinksetStore linksetStore = RDFLinksetStore.factory();
         LinksetHandler handler = new LinksetHandler(listener, linksetStore);
         parse (handler, fileName);
     }
 
-    public static void parse (URLLinkListener listener, String fileName) 
+    public static void testParse (URLLinkListener listener, String fileName) 
             throws IDMapperLinksetException  {
-        RDFLinksetStore linksetStore = RDFLinksetStore.factory();
+        RDFLinksetStore linksetStore = RDFLinksetStore.testFactory();
         LinksetHandler handler = new LinksetHandler(listener, linksetStore);
         parse (handler, fileName);
     }
@@ -73,6 +74,7 @@ public class LinksetHandler extends RDFHandlerBase{
 
     private static void parse (LinksetHandler handler, String fileName) 
             throws IDMapperLinksetException  {
+        Reporter.report("Parsing " + fileName);
         FileReader reader = null;
         try {
             RDFParser parser = new TurtleParser();
@@ -82,12 +84,14 @@ public class LinksetHandler extends RDFHandlerBase{
             reader = new FileReader(fileName);
             parser.parse (reader, handler.getDefaultBaseURI());
         } catch (IOException ex) {
-            throw new IDMapperLinksetException("Error reading file " + fileName, ex);
+            throw new IDMapperLinksetException("Error reading file " + fileName + " " + ex.getMessage(), ex);
         } catch (OpenRDFException ex) {
-            throw new IDMapperLinksetException("Error parsing file " + fileName, ex);
+            throw new IDMapperLinksetException("Error parsing file " + fileName+ " " + ex.getMessage(), ex);
         } finally {
             try {
-                reader.close();
+                if (reader != null){
+                    reader.close();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
