@@ -376,6 +376,9 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
 
     @Override
     public void insertLink(String source, String target, String provenanceId) throws IDMapperException {
+        if (provenanceId == null){
+            int error = 1/0;
+        }
         boolean exists = false;
         try {
             pstCheckLink.setString(1, source);
