@@ -1,5 +1,6 @@
 package org.bridgedb.ops;
 
+import org.junit.BeforeClass;
 import java.util.Set;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
@@ -33,6 +34,17 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     private static final ArrayList<String> NONE_BY_ID = ALL_URLs; 
     private static final int JUST_ONE = 1;
 
+    @BeforeClass
+    public static void setupURLs() throws IDMapperException{
+        URLMapperTestBase.setupURLs();
+        link1to2 = "http://localhost:8080/OPS-IMS/linkset/1/#Test1_2";
+        link1to3 = "http://localhost:8080/OPS-IMS/linkset/2/#Test1_3";
+        link2to1 = "http://localhost:8080/OPS-IMS/linkset/3/#Test2_1";
+        link2to3 = "http://localhost:8080/OPS-IMS/linkset/4/#Test2_3";
+        link3to1 = "http://localhost:8080/OPS-IMS/linkset/5/#Test3_1";
+        link3to2 = "http://localhost:8080/OPS-IMS/linkset/6/#Test3_2";
+    }
+    
     @Test 
     public void testGetMappings() throws IDMapperException{
         report ("testGetMappings");
@@ -124,6 +136,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         report ("testGetMappingsByProvenanceId");
         ArrayList<String> provenanceIds = new ArrayList<String>();
         provenanceIds.add(link1to2);
+        System.out.println(link1to2);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
                 ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, provenanceIds, 0, 3);
         assertEquals(3, mappings.size());
