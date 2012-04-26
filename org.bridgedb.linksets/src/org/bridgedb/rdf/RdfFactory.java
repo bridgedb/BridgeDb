@@ -23,6 +23,7 @@ public class RdfFactory {
     public static final String CONFIG_FILE_PATH_PROPERTY = "ConfigPath";
     public static final String CONFIG_FILE_PATH_SOURCE_PROPERTY = "ConfigPathSource";
     public static final String SAIL_NATIVE_STORE_PROPERTY = "SailNativeStore";
+    public static final String LOAD_SAIL_NATIVE_STORE_PROPERTY = "LoadSailNativeStore";
     public static final String TEST_SAIL_NATIVE_STORE_PROPERTY = "TestSailNativeStore";
     public static final String BASE_URI_PROPERTY = "BaseURI";
             
@@ -43,6 +44,16 @@ public class RdfFactory {
             productionRepository.initialize();
         }
         return productionRepository;
+    }
+
+    public static Repository getLoadRepository() throws RepositoryException {
+        if (testRepository == null){
+            File dataDir = new File(getLoadSailNativeStore());
+            testRepository = new SailRepository(new NativeStore(dataDir));
+            //myRepository = new SailRepository(new MemoryStore());
+            testRepository.initialize();
+        }
+        return testRepository;
     }
 
     public static Repository getTestRepository() throws RepositoryException {
@@ -80,6 +91,17 @@ public class RdfFactory {
         }
         if (result != null) return result;
         return "rdf/linksets";
+    }
+
+    public static String getLoadSailNativeStore(){
+        String result;
+        try {
+            result = getProperties().getProperty(LOAD_SAIL_NATIVE_STORE_PROPERTY);
+        } catch (IOException ex) {
+            return ex.getMessage();
+        }
+        if (result != null) return result;
+        return getSailNativeStore();
     }
 
     public static String getTestSailNativeStore(){

@@ -22,6 +22,7 @@ public class SqlFactory {
     public static final String SQL_USER_PROPERTY = "SqlUser";
     public static final String SQL_PASSWORD_PROPERTY = "SqlPassword";
     public static final String SQL_DATABASE_PROPERTY = "SqlDatabase";
+    public static final String LOAD_SQL_DATABASE_PROPERTY = "LoadSqlDatabase";
     public static final String TEST_SQL_DATABASE_PROPERTY = "TestSqlDatabase";
     public static final String TEST_SQL_USER_PROPERTY = "TestSqlUser";
     public static final String TEST_SQL_PASSWORD_PROPERTY = "TestSqlPassword";
@@ -39,13 +40,19 @@ public class SqlFactory {
         return sqlAccess;
     }
 
+    public static SQLAccess createLoadSQLAccess() throws BridgeDbSqlException {
+        SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlLoadDatabase(), sqlUser(), sqlPassword());
+        sqlAccess.getConnection();
+        return sqlAccess;
+    }
+
     public static SQLAccess createTestSQLAccess() throws BridgeDbSqlException {
         SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
         sqlAccess.getConnection();
         return sqlAccess;
     }
 
-    private static String configFilePath(){
+    public static String configFilePath(){
         try {
             return getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
         } catch (IOException ex) {
@@ -53,9 +60,9 @@ public class SqlFactory {
         }
     }
     
-    private static String configSource(){
+    public static String configSource(){
         try {
-            return getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
+            return getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
         } catch (IOException ex) {
            return ex.getMessage();
         }
@@ -103,6 +110,17 @@ public class SqlFactory {
         }
         if (result != null) return result;
         return "ims";
+    }
+
+    private static String sqlLoadDatabase(){
+        String result;
+        try {
+            result = getProperties().getProperty(LOAD_SQL_DATABASE_PROPERTY);
+        } catch (IOException ex) {
+            return ex.getMessage();
+        }
+        if (result != null) return result;
+        return sqlDatabase();
     }
 
     private static String sqlTestDatabase(){
