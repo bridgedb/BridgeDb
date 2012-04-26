@@ -7,67 +7,11 @@
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
-  	<version>1.1.1-SNAPSHOT</version>
+  	<version>2.0.0-SNAPSHOT</version>
   </parent>
 
-    <properties>
-         <sesame.version>2.3.2</sesame.version>
-    </properties>
-	
     <build>
-		<directory>target</directory>
-		<outputDirectory>target/classes</outputDirectory>
-		<finalName>${artifactId}-${version}</finalName>
-		<testOutputDirectory>target/test-classes</testOutputDirectory>
-		<sourceDirectory>src</sourceDirectory>
-		<scriptSourceDirectory>scripts</scriptSourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
-		<resources>
-			<resource>
-				<directory>resources</directory>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>test-data</directory>
-			</testResource>
-		</testResources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.bridgedb.sql.LinksetLoader</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.dstovall</groupId>
-                <artifactId>onejar-maven-plugin</artifactId>
-                <version>1.4.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>one-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
 	</build>
 	<dependencies>
@@ -80,16 +24,16 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.12</version>
+			<version>${mysql.version}</version>
 			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.6.4</version>
 			<scope>runtime</scope>
-        </dependency>
+        </dependency-->
         <dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb</artifactId>
@@ -114,13 +58,13 @@
         <dependency>
         	<groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
-            <version>1.2</version>
+            <version>${hamcrest.version}</version>
 			<scope>test</scope>
         </dependency>    
         <dependency>
         	<groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-            <version>1.2</version>
+            <version>${hamcrest.version}</version>
 			<scope>test</scope>
         </dependency>    
 	</dependencies>
