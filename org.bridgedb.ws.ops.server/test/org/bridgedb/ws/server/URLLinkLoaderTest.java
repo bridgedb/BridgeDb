@@ -12,7 +12,6 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-@Ignore
 public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
@@ -20,7 +19,10 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
         connectionOk = false;
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         connectionOk = true;
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        //Use this to recreate the databases
+        //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        //Use this one to keep the database
+        URLMapperSQL urlMapperSQL = new URLMapperSQL(false, sqlAccess);
         //Use with true version only is database structure has changed. It deletes all tables!!!
         //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         listener = urlMapperSQL;
