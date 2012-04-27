@@ -64,18 +64,14 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
     //Internal parameters
     private static final int DEFAULT_LIMIT = 1000;
     private static final int SQL_TIMEOUT = 2;
-    static final int BLOCK_SIZE = 10000;
-    
-//    private static final String UNSPECIFIED_PREDICATE = "NO predicate provided";
-//    private static final String UNSPECIFIED_CREATOR = "Unkown";
-
-    private PreparedStatement pstInsertLink = null;
-    private PreparedStatement pstCheckLink = null;
+    static final int BLOCK_SIZE = 1000;
     
     private SQLAccess sqlAccess;
     private Connection possibleOpenConnection;
+    private int blockCount = 0;
     private int insertCount = 0;
     private int doubleCount = 0;    
+    private StringBuilder insertQuery;
 
     public URLMapperSQL(SQLAccess sqlAccess) throws BridgeDbSqlException{
         if (sqlAccess == null){
@@ -301,33 +297,10 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
     
     @Override
     public void openInput() throws BridgeDbSqlException {
-		try
-		{
-            if (possibleOpenConnection == null){
-                possibleOpenConnection = sqlAccess.getConnection();
-            } else if (possibleOpenConnection.isClosed()){
-                possibleOpenConnection = sqlAccess.getConnection();
-            } else if (!possibleOpenConnection.isValid(SQL_TIMEOUT)){
-                possibleOpenConnection.close();
-                possibleOpenConnection = sqlAccess.getConnection();
-            }  
-  			possibleOpenConnection.setAutoCommit(false);
-            insertCount = 0;
-            doubleCount = 0;
-			pstInsertLink = possibleOpenConnection.prepareStatement("INSERT INTO link    "
-                    + "(sourceURL, targetURL, provenance_id )                            " 
-                    + "VALUES (?, ?, ?)                   ");
-			pstCheckLink = possibleOpenConnection.prepareStatement("SELECT EXISTS "
-                    + "(SELECT * FROM link      "
-                    + "where                    "
-                    + "   sourceURL = ?         "
-                    + "   AND targetURL = ?     "   
-                    + "   AND provenance_id =  ?  )");
-		}
-		catch (SQLException e)
-		{
-			throw new BridgeDbSqlException ("Error creating prepared statements", e);
-		}
+        //Starting with a block will cause a new query to start.
+        blockCount = BLOCK_SIZE ;
+        insertCount = 0;
+        doubleCount = 0;    
  	}
 
     @Override
@@ -360,7 +333,7 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
                 }
                 return;
             }
-            query = "INSERT INTO provenance "
+            query = "INSERT IGNORE INTO provenance "
                     + "(id, sourceNameSpace, linkPredicate, targetNameSpace ) " 
                     + "VALUES (" 
                     + "\"" + provenanceId + "\", " 
@@ -376,47 +349,29 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
 
     @Override
     public void insertLink(String source, String target, String provenanceId) throws IDMapperException {
-        if (provenanceId == null){
-            int error = 1/0;
+        if (blockCount >= BLOCK_SIZE){
+            runInsert();
+            insertQuery = new StringBuilder("INSERT IGNORE INTO link (sourceURL, targetURL, provenance_id) VALUES ");
+        } else {
+            insertQuery.append(", ");        
         }
-        boolean exists = false;
-        try {
-            pstCheckLink.setString(1, source);
-            pstCheckLink.setString(2, target);
-            pstCheckLink.setString(3, provenanceId);
-            ResultSet rs = pstCheckLink.executeQuery();
-            if (rs.next()) {
-                exists = rs.getBoolean(1);
-            }
-            if (exists){
-                doubleCount++;
-                if (doubleCount % BLOCK_SIZE == 0){
-                   Reporter.report("Already skipped " + doubleCount + " links that already exist with this provenance");
-                }
-            } else {
-                pstInsertLink.setString(1, source);
-                pstInsertLink.setString(2, target);
-                pstInsertLink.setString(3, provenanceId);
-                pstInsertLink.executeUpdate();
-                insertCount++;
-                if (insertCount % BLOCK_SIZE == 0){
-                    Reporter.report("Inserted " + insertCount + " links loaded so far");
-                    possibleOpenConnection.commit();
-                }
-            }
-        } catch (SQLException ex) {
-            System.err.println(ex);
-            throw new BridgeDbSqlException ("Error inserting link ", ex);
-        }
+        blockCount++;
+        insertQuery.append("(\"");
+        insertQuery.append(source);
+        insertQuery.append("\", \"");
+        insertQuery.append(target);
+        insertQuery.append("\", \"");
+        insertQuery.append(provenanceId);
+        insertQuery.append("\")");
     }
 
     @Override
     public void closeInput() throws BridgeDbSqlException {
-        Reporter.report ("Inserted " + this.insertCount + " links");
-        Reporter.report ("Skipped " + this.doubleCount + " links that where already there");
+            runInsert();
+        Reporter.report ("FInished processing linkset");
         if (possibleOpenConnection != null){
             try {
-                possibleOpenConnection.commit();
+                //possibleOpenConnection.commit();
                 possibleOpenConnection.close();
             } catch (SQLException ex) {
                throw new BridgeDbSqlException ("Error closing connection ", ex);
@@ -1220,8 +1175,11 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
 					+ "     sourceURL VARCHAR(150) NOT NULL,                            "
                             //Again a speed for space choice.
 					+ "     targetURL VARCHAR(150) NOT NULL,                            " 
-					+ "     provenance_id VARCHAR(" + PROVENANCE_ID_LENGTH + ")         "  //Type still under review
+					+ "     provenance_id VARCHAR(" + PROVENANCE_ID_LENGTH + ")         "
 					+ " )									                            ");
+            sh.execute("CREATE UNIQUE INDEX insertTest ON link (sourceURL, targetURL, provenance_id) ");
+            sh.execute("CREATE INDEX sourceFind ON link (sourceURL) ");
+            sh.execute("CREATE INDEX sourceProvenaceFind ON link (sourceURL, provenance_id) ");
          	sh.execute(	"CREATE TABLE                                                       "    
                     + "IF NOT EXISTS                                                        "
 					+ "		provenance                                                      " 
@@ -1467,6 +1425,23 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Error insertoing LastUpDated " + update, ex);
         }
+    }
+
+    private void runInsert() throws BridgeDbSqlException{
+        if (insertQuery != null) {
+           try {
+                Statement statement = createStatement();
+                int changed = statement.executeUpdate(insertQuery.toString());
+                insertCount += changed;
+                doubleCount += blockCount - changed;
+                Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
+            } catch (SQLException ex) {
+                System.err.println(ex);
+                throw new BridgeDbSqlException ("Error inserting link ", ex, insertQuery.toString());
+            }
+        }   
+        insertQuery = null;
+        blockCount = 0;
     }
 
 }
