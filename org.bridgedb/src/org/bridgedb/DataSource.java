@@ -86,9 +86,11 @@ public final class DataSource
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
      * <p>
+     * Used by URL based methods to convert an Xref into a URL
+     * 
 	 * @param id identifier to use in url
 	 * @return Url
-	 */
+ 	 */
 	public String getUrl(String id)
 	{
 		return prefix + id + postfix;
@@ -182,6 +184,15 @@ public final class DataSource
         }
     }
 
+    /**
+     * Returns the prefix for this DataSource.
+     * <p>
+     * Used by the URI based methods to go from a DataSource to a namespace.
+     * <p>
+     * This method ignores the postfix so application that use postfix should be careful here.
+     * @since 2.0.0
+     * @return The postfix
+     */
     public String getNameSpace() {
         return prefix;
     }
@@ -223,6 +234,8 @@ public final class DataSource
 		 * 
 		 * The pattern should contain the substring "$id", which will be replaced by the actual identifier.
          * <p>
+         * Since 2.0.0 this method keeps a register of urlPatterns to DataSources.
+         * <p>
          * If more than one DataSource source is set with the same urlPattern than the last datasource set 
          *    using this method will be returned by the meothods getByURLPattern and getByNameSpace.
          * The behaviour of allowing two or more DataSources to share a URLPattern is historical.
@@ -231,7 +244,7 @@ public final class DataSource
          * Calling both will result in the second call overwriting the setting of the first call.
          * Similarly calling this function more than once will have the same effect. 
          * Only the last urlPattern will be valid.
-         * 
+         * <p>
 		 * @param urlPattern is a template for generating valid URL's for identifiers. 
 		 * @return the same Builder object so you can chain setters
 		 */
@@ -282,6 +295,7 @@ public final class DataSource
        * 
          * @param prefix
          * @return 
+         * @since 2.0.0
          */
         public Builder nameSpace(String nameSpace) throws IDMapperException{
             //Clear any previously registered values
@@ -605,6 +619,7 @@ public final class DataSource
      *    so where they referer to the same URLPattern they will return the same DataSource
      * @param url A 
      * @return A DataSource whoe urlPattern matches the url. 
+     * @Since 2.0.0
      */
     public static DataSource getByURL(String url) {
         int pos = url.indexOf("$id");
@@ -615,6 +630,14 @@ public final class DataSource
         }
     }
     
+    /**
+     * Converts a URL to an Xref.
+     * 
+     * @param url
+     * @return
+     * @throws IDMapperException 
+     * @since 2.0.0
+     */
     public static Xref uriToXref(String url) throws IDMapperException{
         int pos = url.indexOf("$id");
         if (pos == -1){
@@ -635,7 +658,8 @@ public final class DataSource
      * All work with the same internal data 
      *    so where they referer to the same URLPattern they will return the same DataSource
      * @param url A 
-     * @return A DataSource whose urlPattern matches the urlPattern. 
+     * @return A DataSource whose urlPattern matches the urlPattern.
+     * @since 2.0.0 
      */
     public static DataSource getByURLPattern(String urlPattern) {    
         int pos = urlPattern.indexOf("$id");
@@ -658,6 +682,7 @@ public final class DataSource
      *    so where they referer to the same URLPattern they will return the same DataSource
      * @param url A 
      * @return A DataSource whose urlPattern is nameSpace + "$id". 
+     * @since 2.0.0
      */
     public static DataSource getByNameSpace(String nameSpace){
         if (nameSpace == null){
@@ -674,6 +699,13 @@ public final class DataSource
         }
     }
 
+    /**
+     * 
+     * @param urlPattern
+     * @param createNew
+     * @return 
+     * @since 2.0.0
+     */
     private static DataSource getByURLPatternOnly(String urlPattern, boolean createNew) {
         urlPattern = urlPattern.trim();
         int pos = urlPattern.indexOf("$id");
@@ -705,6 +737,12 @@ public final class DataSource
         }
     }
 
+    /**
+     * 
+     * @param url
+     * @return 
+     * @since 2.0.0
+     */
     //Changes made here should also be maded to uriToXrefByNonPattern
     private static DataSource getByNonPattern(String url) {
         String prefix = null;
@@ -735,6 +773,12 @@ public final class DataSource
         return createDataSource(prefix);
     }
     
+    /**
+     * 
+     * @param url
+     * @return 
+     * @since 2.0.0
+     */
     //Changes made here should also be maded to getByNonPattern
     private static Xref uriToXrefByNonPattern(String url) {
         String prefix = null;
@@ -772,6 +816,12 @@ public final class DataSource
     }
 
 
+    /**
+     * 
+     * @param prefix
+     * @return 
+     * @since 2.0.0
+     */
     private static DataSource createDataSource(String prefix) {
         DataSource result = register(prefix, prefix).asDataSource();
         //ystem.out.println(prefix);
