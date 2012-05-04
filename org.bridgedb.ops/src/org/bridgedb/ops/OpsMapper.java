@@ -19,11 +19,14 @@ public interface OpsMapper {
 
     public URLMapping getMapping(int id);
 
-    public List<Xref> getXrefs(List<DataSource> dataSources, List<String> provenanceIds, Integer position, Integer limit) 
-            throws IDMapperException;
+    //Removed as they do not scale with major reworking
+    //public List<Xref> getXrefs(List<DataSource> dataSources, List<String> provenanceIds, Integer position, Integer limit) 
+    //        throws IDMapperException;
 
-    public List<String> getURLs(List<String> nameSpaces, List<String> provenanceIds, Integer position, Integer limit) 
-            throws IDMapperException;
+    // public List<String> getURLs(List<String> nameSpaces, List<String> provenanceIds, Integer position, Integer limit) 
+    //        throws IDMapperException;
+    
+    //public List<String> getSampleURLs();
     
     public  OverallStatistics getOverallStatistics() throws IDMapperException;
     
