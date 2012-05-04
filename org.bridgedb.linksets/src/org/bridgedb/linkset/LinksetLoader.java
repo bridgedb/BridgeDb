@@ -74,7 +74,7 @@ public class LinksetLoader {
     public static void main(String[] args) throws IDMapperException, IOException, OpenRDFException  {
         System.out.println(SqlFactory.configFilePath());
         System.out.println(SqlFactory.configSource());
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
+        SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
         if (args.length == 1){
             URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
             parse (urlMapperSQL, args[0]);
