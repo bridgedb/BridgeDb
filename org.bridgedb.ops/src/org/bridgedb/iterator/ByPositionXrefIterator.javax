@@ -1,34 +1,40 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package org.bridgedb.iterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.bridgedb.ops.OpsMapper;
 
 /**
- *
+ * Removed due to SCALE problem.
  * @author Christian
  */
-public class ByPositionURLIterator implements Iterator<String>,Iterable<String>{
+public class ByPositionXrefIterator implements Iterator<Xref>, Iterable<Xref>{
 
-    private String bufferedNext;
+    private Xref bufferedNext;
     private OpsMapper opsMapper;  
-    private ArrayList<String> nameSpaces;
+    private ArrayList<DataSource> dataSources;
     int position;
-         
+    
     //Statics for easy readability of method calls
     private static final ArrayList<String> ALL_PROVENANCE_IDS = new ArrayList<String>();
-
-    public ByPositionURLIterator (OpsMapper opsMapper, String nameSpace){
+    
+    public ByPositionXrefIterator (OpsMapper opsMapper, DataSource dataSource){
         this(opsMapper);
-        nameSpaces.add(nameSpace);
+        dataSources.add(dataSource);
     }
     
-    public ByPositionURLIterator (OpsMapper opsMapper){
+    public ByPositionXrefIterator (OpsMapper opsMapper){
         this.opsMapper = opsMapper;
-        nameSpaces = new ArrayList<String>();
+        dataSources = new ArrayList<DataSource>();
         position = -1;
     }
    
@@ -42,9 +48,9 @@ public class ByPositionURLIterator implements Iterator<String>,Iterable<String>{
         }
     }
 
-    private String getNext() throws IDMapperException{
+    private Xref getNext() throws IDMapperException{
         position ++;
-        List<String> list = opsMapper.getURLs(nameSpaces, ALL_PROVENANCE_IDS, position, 1);
+        List<Xref> list = opsMapper.getXrefs(dataSources, ALL_PROVENANCE_IDS, position, 1);
         if (list.isEmpty()){
             return null;
         }
@@ -52,8 +58,8 @@ public class ByPositionURLIterator implements Iterator<String>,Iterable<String>{
     }
     
     @Override
-    public String next() {
-        String result;
+    public Xref next() {
+        Xref result;
         if (bufferedNext == null){
             try {
                 result = getNext();
@@ -77,7 +83,7 @@ public class ByPositionURLIterator implements Iterator<String>,Iterable<String>{
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<Xref> iterator() {
         return this;
     }
 

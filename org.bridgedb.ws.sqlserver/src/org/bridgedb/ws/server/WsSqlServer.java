@@ -8,6 +8,7 @@ package org.bridgedb.ws.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -102,16 +103,25 @@ public class WsSqlServer extends WSService{
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
     public Response apiPage() throws IDMapperException, UnsupportedEncodingException {
+        Long start = new Date().getTime();
         StringBuilder sb = new StringBuilder();
  
-        List<Xref> xrefs = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 0, 2);      
+        System.out.println("api called at " + start);
+        List<Xref> xrefs = null;//opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 0, 2);      
+        System.out.println("Done xrefs "+ (new Date().getTime() - start));
         Xref first = xrefs.get(0);
+        System.out.println("Done first "+ (new Date().getTime() - start));
         Xref second = xrefs.get(1);
+        System.out.println("Done second "+ (new Date().getTime() - start));
         Set<Xref> firstMaps = idMapper.mapID(first);
+        System.out.println("Done firstMaps "+ (new Date().getTime() - start));
         Set<String> keys = idMapper.getCapabilities().getKeys();
+        System.out.println("Done keys "+ (new Date().getTime() - start));
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
                 ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 10);
+        System.out.println("Done mappings "+ (new Date().getTime() - start));
         URLMapping mapping1 = mappings.get(0);
+        System.out.println("Done mapping1 "+ (new Date().getTime() - start));
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
                 + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -130,7 +140,6 @@ public class WsSqlServer extends WSService{
         introduce_OpsMapper(sb);
         introduce_IDMapper(sb);
         introduce_IDMapperCapabilities(sb, keys);
-        //introduce_Statistics(sb);
         sb.append("</dl>");
         sb.append("</p>");
         describeParameter(sb);        
@@ -143,6 +152,7 @@ public class WsSqlServer extends WSService{
         //describe_getURLByposition(sb, first);
         
         sb.append("</body></html>");
+        System.out.println("Done "+ (new Date().getTime() - start));
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
            
@@ -376,10 +386,10 @@ public class WsSqlServer extends WSService{
         sb.append("<dd>Retreives a Mapping based on its Id. (In the future plus provenance)</dd>");       
         sb.append("<dt><a href=\"#getOverallStatistics\">getOverallStatistics</a></dt>");
         sb.append("<dd>Returns some high level statistics. (Same as shown on homepage)</dd>");
-        sb.append("<dt><a href=\"#getXrefs\">getXrefs</a></dt>");
-        sb.append("<dd>Lists a number of Xrefs based on some parameters.</dd>");
-        sb.append("<dt><a href=\"#getURLs\">getURLs</a></dt>");
-        sb.append("<dd>Lists a number of URLs based on some parameters.</dd>");
+        //sb.append("<dt><a href=\"#getXrefs\">getXrefs</a></dt>");
+        //sb.append("<dd>Lists a number of Xrefs based on some parameters.</dd>");
+        //sb.append("<dt><a href=\"#getURLs\">getURLs</a></dt>");
+        //sb.append("<dd>Lists a number of URLs based on some parameters.</dd>");
         sb.append("<dt><a href=\"#getProvenanceInfos\">getProvenanceInfos</a></dt>");
         sb.append("<dd>Lists all the Provenance with some basic information.</dd>");
     }
@@ -390,8 +400,8 @@ public class WsSqlServer extends WSService{
         describe_getMappings(sb, first, mapping1, second);    
         describe_getMapping(sb, mapping1);
         describe_getOverallStatistics(sb);
-        describe_getXrefs(sb, first, mapping1); 
-        describe_getURLs(sb, first, mapping1); 
+        //describe_getXrefs(sb, first, mapping1); 
+        //describe_getURLs(sb, first, mapping1); 
         describe_getProvenanceInfos(sb);    
    }
     
@@ -506,6 +516,7 @@ public class WsSqlServer extends WSService{
             sb.append("</ul>");        
    }
 
+   /* Removed due to scale issues
    private void describe_getXrefs(StringBuilder sb, Xref first, URLMapping mapping1) 
             throws UnsupportedEncodingException{
          sb.append("<h3><a name=\"getXrefs\">getXrefs</h3>");
@@ -584,7 +595,7 @@ public class WsSqlServer extends WSService{
                     sb.append(mapping1.getProvenanceId());
                     sb.append("</a></li>");    
             sb.append("</ul>");        
-   }
+   }*/
 
    private void describe_getProvenanceInfos(StringBuilder sb) 
             throws UnsupportedEncodingException{

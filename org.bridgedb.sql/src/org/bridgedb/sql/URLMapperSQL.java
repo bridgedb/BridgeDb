@@ -20,10 +20,7 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
 import org.bridgedb.Xref;
-import org.bridgedb.XrefIterator;
 import org.bridgedb.impl.InternalUtils;
-import org.bridgedb.iterator.ByPositionURLIterator;
-import org.bridgedb.iterator.ByPositionXrefIterator;
 import org.bridgedb.linkset.URLLinkListener;
 import org.bridgedb.ops.OpsMapper;
 import org.bridgedb.ops.ProvenanceInfo;
@@ -31,7 +28,6 @@ import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
 
 /**
@@ -40,8 +36,9 @@ import org.bridgedb.url.URLMapper;
  * 
  * @author Christian
  */
-public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterator, URLLinkListener, URLMapper, ProvenanceMapper, 
-        URLIterator, OpsMapper{
+// removed Iterators due to scale issues URLIterator, XrefIterator,
+public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
+        OpsMapper{
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 4;
@@ -482,27 +479,31 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, XrefIterato
 
     //*** XrefIterator methods ****
 
-    @Override
-    public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
-        return new ByPositionXrefIterator(this, ds);
-    }
+    //Removed due to scale problem
+    //@Override
+    //public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
+    //    return new ByPositionXrefIterator(this, ds);
+    //}
 
-    @Override
-    public Iterable<Xref> getIterator() throws IDMapperException {
-        return new ByPositionXrefIterator(this);
-    }
+    //Removed due to scale problem
+    //@Override
+    //public Iterable<Xref> getIterator() throws IDMapperException {
+    //    return new ByPositionXrefIterator(this);
+    //}
 
     //*** UrlIterator methods ****
 
-    @Override
-    public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
-        return new ByPositionURLIterator(this, nameSpace);
-    }
+    //Removed due to scale problem
+    //@Override
+    //public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
+    //    return new ByPositionURLIterator(this, nameSpace);
+    //}
 
-    @Override
-    public Iterable<String> getURLIterator() throws IDMapperException {
-        return new ByPositionURLIterator(this);
-    }
+    //Removed due to scale problem
+    //@Override
+    //public Iterable<String> getURLIterator() throws IDMapperException {
+    //    return new ByPositionURLIterator(this);
+    //}
 
     //**** OpsMapper Methods  **/ 
     @Override

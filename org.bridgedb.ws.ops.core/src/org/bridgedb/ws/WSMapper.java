@@ -15,7 +15,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
-import org.bridgedb.iterator.ByPositionURLIterator;
 import org.bridgedb.ops.OpsMapper;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.url.URLIterator;
@@ -32,7 +31,8 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
  *
  * @author Christian
  */
-public class WSMapper extends WSCoreMapper implements XrefIterator, URLIterator, OpsMapper {
+public class WSMapper extends WSCoreMapper implements OpsMapper {
+    //removed due to scale issues XrefIterator, URLIterator, 
 
     WSInterface webService;
     final static List<String> NO_IDS = new ArrayList<String>();
@@ -44,26 +44,27 @@ public class WSMapper extends WSCoreMapper implements XrefIterator, URLIterator,
     }
     
     /** XrefIterator Methods **/
-    @Override
-    public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
-        return new WSIterator(webService, ds);
-    }
+    //@Override
+    //public Iterable<Xref> getIterator(DataSource ds) throws IDMapperException {
+    //    return new WSIterator(webService, ds);
+    //}
 
-    @Override
-    public Iterable<Xref> getIterator() throws IDMapperException {
-        return new WSIterator(webService);
-    }
+    //@Override
+    //public Iterable<Xref> getIterator() throws IDMapperException {
+    //    return new WSIterator(webService);
+    //}
 
     /** URLIterator Methods ****/
-    @Override
-    public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
-        return new ByPositionURLIterator (this, nameSpace);
-    }
+    //Removed due to scale problem
+    //@Override
+    //public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
+    //    return new ByPositionURLIterator (this, nameSpace);
+    //}
 
-    @Override
-    public Iterable<String> getURLIterator() throws IDMapperException {
-        return new ByPositionURLIterator (this);
-    }
+    //@Override
+    //public Iterable<String> getURLIterator() throws IDMapperException {
+    //    return new ByPositionURLIterator (this);
+    //}
 
     /** OpsMapper Methods **/
     @Override
@@ -106,7 +107,15 @@ public class WSMapper extends WSCoreMapper implements XrefIterator, URLIterator,
     //    return URLMappingBeanFactory.asURLMapping(beans.get(0));
     //}
 
-    @Override
+    /**
+     * Warning does not scale!
+     * @param dataSources
+     * @param provenanceIds
+     * @param position
+     * @param limit
+     * @return
+     * @throws IDMapperException 
+     * /
     public List<Xref> getXrefs(List<DataSource> dataSources, List<String> provenanceIds, 
             Integer position, Integer limit) throws IDMapperException {
         ArrayList<String> dataCodes = new ArrayList<String>();
@@ -121,7 +130,15 @@ public class WSMapper extends WSCoreMapper implements XrefIterator, URLIterator,
         return results;
     }
 
-    @Override
+    /**
+     * Warning does scale
+     * @param nameSpaces
+     * @param provenanceIds
+     * @param position
+     * @param limit
+     * @return
+     * @throws IDMapperException 
+     * /
     public List<String> getURLs(List<String> nameSpaces, List<String> provenanceIds, Integer position, Integer limit) 
             throws IDMapperException {
         List<URLBean> beans = webService.getURLs(nameSpaces, provenanceIds, "" + position, "" + limit);
@@ -130,7 +147,7 @@ public class WSMapper extends WSCoreMapper implements XrefIterator, URLIterator,
             results.add(bean.getURL());
         }
         return results;
-    }
+    }*/
 
     @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {

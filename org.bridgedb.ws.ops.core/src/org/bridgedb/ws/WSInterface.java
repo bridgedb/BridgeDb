@@ -64,13 +64,15 @@ public interface WSInterface extends WSCoreInterface {
 
     public URLMappingBean getMapping(String idString);
 
+    //Removed due to scale issues
     //Position and Limit are Strings rather than Integers as this allow for better error handling
-    public List<XrefBean> getXrefs(ArrayList<String> dataSourceSysCodes, List<String> provenanceIds, 
-            String position, String limit) throws IDMapperException;
+    //public List<XrefBean> getXrefs(ArrayList<String> dataSourceSysCodes, List<String> provenanceIds, 
+    //        String position, String limit) throws IDMapperException;
 
+    //Removed due to scale issues
     //Position and Limit are Strings rather than Integers as this allow for better error handling
-    public List<URLBean> getURLs(List<String> nameSpaces, List<String> provenanceIds,
-            String position, String limit) throws IDMapperException;
+    //public List<URLBean> getURLs(List<String> nameSpaces, List<String> provenanceIds,
+    //        String position, String limit) throws IDMapperException;
 
     public List<ProvenanceBean> getProvenanceInfos() throws IDMapperException;
 

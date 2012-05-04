@@ -16,10 +16,11 @@ import org.junit.BeforeClass;
  */
 public class XrefIteratorTest  extends org.bridgedb.XrefIteratorTest{
     
+    /* removed due to scale issues
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {
         WSInterface webService = WSClientFactory.createTestWSClient();
         XrefIterator = new WSMapper(webService);
     }
-
+     */
 }

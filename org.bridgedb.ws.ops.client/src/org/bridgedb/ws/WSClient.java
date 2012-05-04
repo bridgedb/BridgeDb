@@ -92,6 +92,7 @@ public class WSClient extends WSCoreClient implements WSInterface{
  
     }
 
+    /* Removed due to scale issues
     @Override
     public List<XrefBean> getXrefs(ArrayList<String> dataSourceSysCodes, List<String> provenanceIdStrings, 
             String positionString, String limitString) throws IDMapperException {
@@ -138,7 +139,7 @@ public class WSClient extends WSCoreClient implements WSInterface{
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<URLBean>>() {});
         return result;        
-    }
+    }*/
 
     @Override
     public List<ProvenanceBean> getProvenanceInfos() throws IDMapperException {
