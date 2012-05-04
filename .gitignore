@@ -3,6 +3,8 @@
 .project
 .settings/
 *.~java
+nbactions-local.xml
+nbactions.xml
 
 # ignore target files #
 target/
