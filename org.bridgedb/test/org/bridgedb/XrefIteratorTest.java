@@ -17,6 +17,8 @@ public abstract class XrefIteratorTest extends IDMapperTestBase{
     //Must be set by supclasses.
     protected static XrefIterator XrefIterator;
     
+    //Removed due to scale issues
+    /*
     @Test
     public void TestAllDataSourcesIterator() throws IDMapperException{
         report("TestAllDataSourcesIterator");
@@ -55,5 +57,5 @@ public abstract class XrefIteratorTest extends IDMapperTestBase{
         assertFalse(asSet.contains(mapBadxref2));
         assertFalse(asSet.contains(mapBadxref3));
     }
-
+     */
 }

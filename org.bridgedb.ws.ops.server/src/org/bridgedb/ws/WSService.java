@@ -154,7 +154,8 @@ public class WSService extends WSCoreService implements WSInterface {
         return URLMappingBeanFactory.asBean(mapping, true);
     }
 
-    @Override
+    /* Removed due to scale issues
+     * @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getXrefs")
@@ -196,7 +197,7 @@ public class WSService extends WSCoreService implements WSInterface {
             beans.add(bean);
         }
         return beans;
-    }
+    }*/
 
     @Override
     @GET

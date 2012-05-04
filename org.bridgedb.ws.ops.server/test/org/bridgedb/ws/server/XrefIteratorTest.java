@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
  */
 public class XrefIteratorTest extends org.bridgedb.XrefIteratorTest{
     
+    /* Removed due to scale issues
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
@@ -28,5 +29,5 @@ public class XrefIteratorTest extends org.bridgedb.XrefIteratorTest{
         WSInterface webService = new WSService(inner);
         XrefIterator = new WSMapper(webService);
     }
-
+     */
 }
