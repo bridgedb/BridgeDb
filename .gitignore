@@ -2,6 +2,8 @@
 .classpath
 .project
 .settings/
+nbactions-local.xml
+nbactions.xml
 
 # ignore target files #
 target/
