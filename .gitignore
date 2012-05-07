@@ -6,6 +6,11 @@
 # ignore target files #
 target/
 bin/
+build/
+apidoc/
+dist/
+bridgedb-*.zip
+bridgedb-*.gz
 
 # ignore log files #
 *.log
