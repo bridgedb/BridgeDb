@@ -220,5 +220,20 @@ public class WSService extends WSCoreService implements WSInterface {
         }
         return beans;
     }
+    
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getSampleSourceURLs") 
+    public List<URLBean> getSampleSourceURLs() throws IDMapperException {
+        List<String> URLs = opsMapper.getSampleSourceURLs();
+        List<URLBean> beans = new ArrayList<URLBean>();
+        for (String URL:URLs){
+            URLBean bean = new URLBean();
+            bean.setURL(URL);
+            beans.add(bean);
+        }
+        return beans;
+    }
 
 }

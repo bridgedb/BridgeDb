@@ -165,6 +165,18 @@ public class WSMapper extends WSCoreMapper implements OpsMapper {
         return results;
     }
 
+    @Override
+    public List<String> getSampleSourceURLs() throws IDMapperException {
+        List<URLBean> beans = webService.getSampleSourceURLs();
+        ArrayList<String> results = new ArrayList<String>();
+        for (URLBean bean:beans){
+            results.add(bean.getURL());
+        }
+        return results;
+    }
+
+
+
     /*@Override
     public ProvenanceStatistics getProvenance(int id) throws IDMapperException {
         ProvenanceStatisticsBean bean = webService.getProvenance(id);
@@ -326,7 +338,5 @@ public class WSMapper extends WSCoreMapper implements OpsMapper {
 
 
 */
-
-
 
 }

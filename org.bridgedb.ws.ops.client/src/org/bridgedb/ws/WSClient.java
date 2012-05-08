@@ -150,4 +150,13 @@ public class WSClient extends WSCoreClient implements WSInterface{
         return result;        
     }
 
+    @Override
+    public List<URLBean> getSampleSourceURLs() throws IDMapperException {
+        List<URLBean> result = 
+                webResource.path("getSampleSourceURLs")
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<URLBean>>() {});
+        return result;        
+    }
+
 }
