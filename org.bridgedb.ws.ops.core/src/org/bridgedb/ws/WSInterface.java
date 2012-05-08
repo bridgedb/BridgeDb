@@ -76,5 +76,6 @@ public interface WSInterface extends WSCoreInterface {
 
     public List<ProvenanceBean> getProvenanceInfos() throws IDMapperException;
 
+    public List<URLBean> getSampleSourceURLs() throws IDMapperException;
 
 }

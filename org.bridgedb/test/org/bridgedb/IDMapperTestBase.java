@@ -82,7 +82,7 @@ public abstract class IDMapperTestBase {
         map3xref3 = new Xref("789", DataSource3);
         //Add an id that does not exist and can not be used in freesearch
         //Or null if all Strings can be used.
-        badID = "abc";
+        badID = "ThisIdIsNotinTheSystem";
         //And a few Xrefs also not used
         mapBadxref1 = new Xref("123", DataSourceBad);
         mapBadxref2 = new Xref(badID, DataSource2);

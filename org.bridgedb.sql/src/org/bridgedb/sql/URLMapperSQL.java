@@ -126,44 +126,17 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         if (xref.getId() == null || xref.getDataSource() == null){
             return false;
         }
-        String query = "SELECT EXISTS "
-                + "(SELECT * FROM link      "
-                + "where                    "
-                + "       sourceURL = \"" + xref.getUrl() + "\"" 
-                + "   OR "
-                + "       targetURL = \"" + xref.getUrl() + "\""   
-                + ")";
-        Statement statement = this.createStatement();
-        try {
-            ResultSet rs = statement.executeQuery(query);
-            rs.next();
-            return rs.getBoolean(1);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
-        }
+        return uriExists(xref.getUrl());
     }
 
     @Override
     public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
-        String query = "SELECT distinct sourceURL as url  "
-                + "FROM link      "
-                + "where                    "
-                + "   sourceURL LIKE \"%" + text + "\" "
-                + "UNION "
-                + "SELECT distinct targetUrl as url  "
-                + "FROM link      "
-                + "where                    "
-                + "   targetURL LIKE \"%" + text + "\""
-                + "LIMIT " + limit;
-        Statement statement = this.createStatement();
-        try {
-            ResultSet rs = statement.executeQuery(query);
-            return resultSetToXrefSet(rs);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
+        Set<String> URLS =  urlSearch(text, limit);
+        HashSet<Xref> results = new HashSet<Xref>();
+        for (String URL:URLS){
+            results.add(DataSource.uriToXref(URL));
         }
+        return results;
     }
 
     @Override
@@ -237,15 +210,14 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
 
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
-        String query = "SELECT EXISTS "
-                + "(SELECT * FROM provenance "
+        String query = "SELECT * FROM provenance "
                 + "WHERE sourceNameSpace = \"" + src.getNameSpace() + "\""
-                + "AND targetNameSpace = \"" + tgt.getNameSpace() + "\")";
+                + "AND targetNameSpace = \"" + tgt.getNameSpace() + "\""
+                + "LIMIT 1";
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query);
-            rs.next();
-            return rs.getBoolean(1);
+            return (rs.next());
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query, ex);
@@ -437,43 +409,81 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
     public boolean uriExists(String URL) throws IDMapperException {
         if (URL == null) return false;
         if (URL.isEmpty()) return false;
-        String query = "SELECT EXISTS "
-                + "(SELECT * FROM link      "
+        String query1 = "SELECT * FROM link      "
                 + "where                    "
                 + "       sourceURL = \"" + URL + "\"" 
-                + "   OR "
-                + "       targetURL = \"" + URL + "\""   
-                + ")";
+                + "LIMIT 1";
         Statement statement = this.createStatement();
         try {
-            ResultSet rs = statement.executeQuery(query);
-            rs.next();
-            return rs.getBoolean(1);
+            ResultSet rs = statement.executeQuery(query1);
+            if (rs.next()) return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new IDMapperException("Unable to run query. " + query1, ex);
+        }
+        String query2 = "SELECT * FROM link      "
+                + "where                    "
+                + "       targetURL = \"" + URL + "\""   
+                + "LIMIT 1";
+        statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query2);
+            return (rs.next());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query2, ex);
         }
     }
 
     @Override
     public Set<String> urlSearch(String text, int limit) throws IDMapperException {
-        String query = "SELECT distinct sourceURL as url  "
+        //Try source using index so no joker at the front
+        String query1 = "SELECT distinct sourceURL as url  "
+                + "FROM link      "
+                + "where                    "
+                + "   sourceURL LIKE \"" + text + "\" "
+                + "LIMIT " + limit;
+        Statement statement = this.createStatement();
+        Set<String> foundSoFar;
+        try {
+            ResultSet rs = statement.executeQuery(query1);
+            foundSoFar = resultSetToURLSet(rs);
+            if (foundSoFar.size() == limit){
+                return foundSoFar;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query1, ex);
+        }
+        //Try source without using index so joker at the front
+        String query2 = "SELECT distinct sourceURL as url  "
                 + "FROM link      "
                 + "where                    "
                 + "   sourceURL LIKE \"%" + text + "\" "
-                + "UNION "
-                + "SELECT distinct targetUrl as url  "
-                + "FROM link      "
-                + "where                    "
-                + "   targetURL LIKE \"%" + text + "\""
                 + "LIMIT " + limit;
-        Statement statement = this.createStatement();
         try {
-            ResultSet rs = statement.executeQuery(query);
-            return resultSetToURLSet(rs);
+            ResultSet rs = statement.executeQuery(query2);
+            foundSoFar.addAll(resultSetToURLSet(rs));
+            if (foundSoFar.size() == limit){
+                return foundSoFar;
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new IDMapperException("Unable to run query. " + query2, ex);
+        }
+        //Try target without using index so joker at the front
+        String query3 = "SELECT distinct targetURL as url  "
+                + "FROM link      "
+                + "where                    "
+                + "   targetURL LIKE \"%" + text + "\" "
+                + "LIMIT " + limit;
+        try {
+            ResultSet rs = statement.executeQuery(query3);
+            foundSoFar.addAll(resultSetToURLSet(rs));
+            return foundSoFar;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query3, ex);
         }
     }
 
@@ -556,6 +566,15 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         }
     }
 
+    /**
+     * DOES NOT SCALE
+     * @param dataSources
+     * @param provenanceIds
+     * @param position
+     * @param limit
+     * @return
+     * @throws IDMapperException 
+     */
     public List<Xref> getXrefs(List<DataSource> dataSources, List<String> provenanceIds, Integer position, Integer limit) 
             throws IDMapperException{
         StringBuilder query = new StringBuilder();
@@ -581,6 +600,15 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         }        
     }
 
+    /**
+     * DOES NOT SCALE
+     * @param nameSpaces
+     * @param provenanceIds
+     * @param position
+     * @param limit
+     * @return
+     * @throws IDMapperException 
+     */
     public List<String> getURLs(List<String> nameSpaces, List<String> provenanceIds, Integer position, Integer limit) 
             throws IDMapperException{
         StringBuilder query = new StringBuilder();
@@ -607,18 +635,46 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
     }
     
     @Override
+    public List<String> getSampleSourceURLs() throws IDMapperException {
+        long start = new Date().getTime();
+        String query = "SELECT sourceURL as url FROM link LIMIT 5";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            System.out.println("query took " + (new Date().getTime() - start));
+            return resultSetToURLList(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }        
+    }
+
+    @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {
-        String query = "SELECT count(*) as numberOfMappings, count(distinct(provenance_id)) as numberOfProvenances, "
+        String linkQuery = "SELECT count(*) as numberOfMappings "
+                + "FROM link";
+        Statement statement = this.createStatement();
+        int numberOfMappings;
+        try {
+            ResultSet rs = statement.executeQuery(linkQuery);
+            if (rs.next()){
+                numberOfMappings = rs.getInt("numberOfMappings");
+            } else {
+                System.err.println(linkQuery);
+                throw new IDMapperException("o Results for query. " + linkQuery);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + linkQuery, ex);
+        }
+        String provenanceQuery = "SELECT count(distinct(id)) as numberOfProvenances, "
                 + "count(distinct(provenance.sourceNameSpace)) as numberOfSourceDataSources, "
                 + "count(distinct(provenance.linkPredicate)) as numberOfPredicates, "
                 + "count(distinct(provenance.targetNameSpace)) as numberOfTargetDataSources "
-                + "FROM link, provenance "
-                + "WHERE provenance_id = provenance.id ";
-        Statement statement = this.createStatement();
+                + "FROM provenance ";
         try {
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(provenanceQuery);
             if (rs.next()){
-                int numberOfMappings = rs.getInt("numberOfMappings");
                 int numberOfProvenances = rs.getInt("numberOfProvenances");
                 int numberOfSourceDataSources = rs.getInt("numberOfSourceDataSources");
                 int numberOfPredicates= rs.getInt("numberOfPredicates");
@@ -626,12 +682,12 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
                 return new OverallStatistics(numberOfMappings, numberOfProvenances, 
                         numberOfSourceDataSources, numberOfPredicates, numberOfTargetDataSources);
             } else {
-                System.err.println(query);
-                throw new IDMapperException("o Results for query. " + query);
+                System.err.println(provenanceQuery);
+                throw new IDMapperException("o Results for query. " + provenanceQuery);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new IDMapperException("Unable to run query. " + provenanceQuery, ex);
         }
     }
 
@@ -1214,16 +1270,14 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         if (sysCode.isEmpty()) {
             throw new BridgeDbSqlException ("Currently unable to handle Datasources with empty systemCode");
         }
-        String query = "SELECT EXISTS"
-                + "(  SELECT sysCode"
+        String query = "SELECT sysCode"
                 + "   from DataSource "
                 + "   where "
-                + "      sysCode = \"" + source.getSystemCode() + "\")"; 
+                + "      sysCode = \"" + source.getSystemCode() + "\""; 
         boolean found;
         try {
             ResultSet rs = statement.executeQuery(query);
-            rs.next();
-            found = rs.getBoolean(1);
+            found = rs.next();
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to check provenace " +  query, ex);
         }
