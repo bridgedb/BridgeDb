@@ -28,6 +28,16 @@ public interface OpsMapper {
     
     //public List<String> getSampleURLs();
     
+    //Gets a few sample URLs
+   
+    /**
+     * Gets a Sample of Source URls.
+     * 
+     * Main use is for writing the api description page
+     * @return 
+     */
+    public List<String> getSampleSourceURLs() throws IDMapperException;
+    
     public  OverallStatistics getOverallStatistics() throws IDMapperException;
     
     public List<ProvenanceInfo> getProvenanceInfos() throws IDMapperException;

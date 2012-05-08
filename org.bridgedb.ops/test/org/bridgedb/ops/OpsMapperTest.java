@@ -297,4 +297,10 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         }
         assertTrue(found);
     }
+    
+    @Test
+    public void testGetSampleURLs() throws IDMapperException{
+        List<String> results = opsMapper.getSampleSourceURLs();
+        assertFalse(results.isEmpty());
+    }
 }

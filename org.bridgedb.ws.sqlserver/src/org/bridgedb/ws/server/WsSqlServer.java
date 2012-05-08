@@ -107,11 +107,11 @@ public class WsSqlServer extends WSService{
         StringBuilder sb = new StringBuilder();
  
         System.out.println("api called at " + start);
-        List<Xref> xrefs = null;//opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 0, 2);      
+        List<String> urls = opsMapper.getSampleSourceURLs();      
         System.out.println("Done xrefs "+ (new Date().getTime() - start));
-        Xref first = xrefs.get(0);
+        Xref first = DataSource.uriToXref(urls.get(0));
         System.out.println("Done first "+ (new Date().getTime() - start));
-        Xref second = xrefs.get(1);
+        Xref second =  DataSource.uriToXref(urls.get(1));
         System.out.println("Done second "+ (new Date().getTime() - start));
         Set<Xref> firstMaps = idMapper.mapID(first);
         System.out.println("Done firstMaps "+ (new Date().getTime() - start));
