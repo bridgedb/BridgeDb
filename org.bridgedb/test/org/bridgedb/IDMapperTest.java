@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -11,6 +12,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
+@Ignore
 public abstract class IDMapperTest extends IDMapperTestBase{
             
     static protected IDMapper idMapper;

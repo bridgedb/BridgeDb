@@ -6,6 +6,7 @@ package org.bridgedb;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -13,6 +14,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
+@Ignore
 public abstract class XrefIteratorTest extends IDMapperTestBase{
     //Must be set by supclasses.
     protected static XrefIterator XrefIterator;

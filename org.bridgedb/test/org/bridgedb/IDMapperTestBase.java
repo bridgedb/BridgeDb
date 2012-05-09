@@ -1,11 +1,13 @@
 package org.bridgedb;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  *
  * @author Christian
  */
+@Ignore
 public abstract class IDMapperTestBase {
         
     //DataSource that MUST be supported.
