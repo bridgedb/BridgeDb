@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb" default="dist" basedir=".">
 	
-  <property name="jar.name" value="../dist/org.bridgedb.jar"/>
+  <property name="jar.name" value="../dist/org.bridgedb.plus.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
   <property file="version.props"/>
 
 	<path id="absolute.deps">
-		<!-- no dependencies -->
+             <fileset dir="../dist">
+                  <include name="org.bridgedb.jar"/>
+             </fileset>
 	</path>
 
 	<path id="transient.deps">
