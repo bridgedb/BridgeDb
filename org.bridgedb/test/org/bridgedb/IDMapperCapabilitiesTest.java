@@ -33,6 +33,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
+@Ignore
 public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     
     //Must be instantiated by implementation of these tests.
