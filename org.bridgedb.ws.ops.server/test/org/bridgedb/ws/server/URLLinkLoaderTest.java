@@ -35,7 +35,7 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
         //Use this to recreate the databases
         //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         //Use this one to keep the database
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        URLMapperSQL urlMapperSQL = new URLMapperSQL(false, sqlAccess);
         //Use with true version only is database structure has changed. It deletes all tables!!!
         //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
         listener = urlMapperSQL;
