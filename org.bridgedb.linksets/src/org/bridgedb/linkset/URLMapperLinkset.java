@@ -47,7 +47,8 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
     }
 
     @Override
-    public void insertLink(String source, String target, String provenanceId) throws IDMapperException{
+    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId)
+            throws IDMapperException{
         linkCount ++;
         if (linkCount % 100000 == 0){
             Reporter.report("Processeed " + linkCount + " link so far");
@@ -59,11 +60,19 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
         //ystem.out.println(targetSet);
         if (targetSet == null){
             targetSet = new HashSet<XrefProvenance>();
-        }
-        
+        }        
         targets.add(targetXref.getDataSource());
-        targetSet.add(new XrefProvenance(targetXref, provenanceId, predicates.get(provenanceId)));
-        sourceToTarget.put(sourceXref, targetSet);    
+        targetSet.add(new XrefProvenance(targetXref, forwardProvenanceId, predicates.get(forwardProvenanceId)));
+        
+        //No add the inverse
+        Set<XrefProvenance> sourceSet = sourceToTarget.get(targetXref);
+        //ystem.out.println(targetSet);
+        if (sourceSet == null){
+            sourceSet = new HashSet<XrefProvenance>();
+        }
+        targets.add(sourceXref.getDataSource());
+        sourceSet.add(new XrefProvenance(sourceXref, inverseProvenanceId, predicates.get(inverseProvenanceId)));
+        sourceToTarget.put(targetXref, sourceSet);    
     }
 
     @Override
