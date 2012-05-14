@@ -18,7 +18,8 @@ public interface URLLinkListener {
     public void registerProvenanceLink(String provenanceId, DataSource source, String predicate, DataSource target) 
             throws IDMapperException;
     
-    public void insertLink(String source, String target, String provenanceId) throws IDMapperException;
+    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId) 
+            throws IDMapperException;
 
     public void openInput() throws IDMapperException;
 
