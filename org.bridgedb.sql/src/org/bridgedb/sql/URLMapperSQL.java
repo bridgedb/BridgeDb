@@ -321,7 +321,6 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
     @Override
     public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId)
             throws IDMapperException {
-        System.out.println(forwardProvenanceId + "  " + inverseProvenanceId);
         if (blockCount >= BLOCK_SIZE){
             runInsert();
             insertQuery = new StringBuilder("INSERT IGNORE INTO link (sourceURL, targetURL, provenance_id) VALUES ");
@@ -525,6 +524,7 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         query.append(nameSpace);
         query.append("\"");
         Statement statement = this.createStatement();
+        System.out.println(query.toString());
         try {
             ResultSet rs = statement.executeQuery(query.toString());
             return resultSetToURLSet(rs);
