@@ -28,6 +28,8 @@ import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.url.ByNameSpaceIterable;
+import org.bridgedb.url.URLIterator;
 import org.bridgedb.url.URLMapper;
 
 /**
@@ -38,7 +40,7 @@ import org.bridgedb.url.URLMapper;
  */
 // removed Iterators due to scale issues URLIterator, XrefIterator,
 public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
-        OpsMapper{
+        OpsMapper, URLIterator {
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	private static final int SQL_COMPAT_VERSION = 4;
@@ -503,17 +505,40 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
 
     //*** UrlIterator methods ****
 
-    //Removed due to scale problem
-    //@Override
-    //public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
-    //    return new ByPositionURLIterator(this, nameSpace);
-    //}
+    @Override
+    public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT sourceURL as url ");
+        query.append("FROM link, provenance ");
+        query.append("WHERE provenance_id = provenance.id ");
+        query.append("AND sourceNameSpace = \"");
+        query.append(nameSpace);
+        query.append("\"");
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToURLSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query.toString(), ex);
+        }
+    }
 
-    //Removed due to scale problem
-    //@Override
-    //public Iterable<String> getURLIterator() throws IDMapperException {
-    //    return new ByPositionURLIterator(this);
-    //}
+    @Override
+    public Iterable<String> getURLIterator() throws IDMapperException {
+        String query = "SELECT sourceNameSpace as nameSpace FROM provenance";
+        Statement statement = this.createStatement();
+        Set<String> nameSpaces;
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            nameSpaces = resultSetToNameSpaceSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query.toString(), ex);
+        }
+        return new ByNameSpaceIterable(nameSpaces, this);
+    }
+
 
     //**** OpsMapper Methods  **/ 
     @Override
@@ -978,6 +1003,18 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
                 String nameSpace = rs.getString("nameSpace");
                 DataSource ds = DataSource.getByNameSpace(nameSpace);
                 results.add(ds);
+            }
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+
+    private Set<String> resultSetToNameSpaceSet(ResultSet rs ) throws IDMapperException{
+        HashSet<String> results = new HashSet<String>();
+        try {
+            while (rs.next()){
+                results.add(rs.getString("nameSpace"));
             }
         } catch (SQLException ex) {
             throw new IDMapperException("Unable to parse results.", ex);
@@ -1486,7 +1523,9 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         if (insertQuery != null) {
            try {
                 Statement statement = createStatement();
+                long start = new Date().getTime();
                 int changed = statement.executeUpdate(insertQuery.toString());
+                System.out.println(new Date().getTime() - start);
                 insertCount += changed;
                 doubleCount += blockCount - changed;
                 Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
