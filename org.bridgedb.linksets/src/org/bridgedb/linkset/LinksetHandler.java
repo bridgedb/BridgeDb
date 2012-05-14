@@ -188,8 +188,8 @@ public class LinksetHandler extends RDFHandlerBase{
                 throw new RDFHandlerException (st + " has an unexpected predicate. Expected: " 
                         + linkPredicate);
             }
-            listener.insertLink(st.getSubject().stringValue(), st.getObject().stringValue(), linksetId.stringValue());
-            listener.insertLink(st.getObject().stringValue(), st.getSubject().stringValue(), inverseLinksetId.stringValue());
+            listener.insertLink(st.getSubject().stringValue(), st.getObject().stringValue(), 
+                    linksetId.stringValue(), inverseLinksetId.stringValue());
         } catch (ClassCastException ex) {
             throw new RDFHandlerException ("Unepected statement " + st, ex);
         } catch (IDMapperException ex){
