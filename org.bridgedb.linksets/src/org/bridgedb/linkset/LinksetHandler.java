@@ -20,6 +20,7 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParser;
@@ -35,6 +36,7 @@ public class LinksetHandler extends RDFHandlerBase{
     private List<String> datasets = new ArrayList<String>(2);
     URI linkPredicate;
     URI linksetId;
+    URI inverseLinksetId;
     URLLinkListener listener;
     //Repository myRepository;
     RDFLinksetStore linksetStore;
@@ -154,6 +156,7 @@ public class LinksetHandler extends RDFHandlerBase{
             }
             linkPredicate = (URI) object;
             linksetId = (URI) subject;
+            inverseLinksetId = new URIImpl(subject.stringValue() + "/inverted");
         }
         linksetStore.addStatement(subject, predicate, object, linkSetGraph);
     }
@@ -162,9 +165,13 @@ public class LinksetHandler extends RDFHandlerBase{
         processingHeader = false;
         String subjectUriSpace = linksetStore.getSubjectUriSpace(firstMap, linkSetGraph).stringValue();
         String objectUriSpace =  linksetStore.getObjectUriSpace(firstMap, linkSetGraph).stringValue();
+        DataSource subjectDataSource = DataSource.getByNameSpace(subjectUriSpace);
+        DataSource objectDataSource = DataSource.getByNameSpace(objectUriSpace);
         try {
-            listener.registerProvenanceLink(linksetId.stringValue(), DataSource.getByNameSpace(subjectUriSpace), 
-                    linkPredicate.stringValue(), DataSource.getByNameSpace(objectUriSpace));
+            listener.registerProvenanceLink(linksetId.stringValue(), 
+                    subjectDataSource, linkPredicate.stringValue(), objectDataSource);
+            listener.registerProvenanceLink(inverseLinksetId.stringValue(), 
+                    objectDataSource, linkPredicate.stringValue(), subjectDataSource);
         } catch (IDMapperException ex) {
             throw new RDFHandlerException ("Unable to register header info ", ex);
         }
@@ -182,6 +189,7 @@ public class LinksetHandler extends RDFHandlerBase{
                         + linkPredicate);
             }
             listener.insertLink(st.getSubject().stringValue(), st.getObject().stringValue(), linksetId.stringValue());
+            listener.insertLink(st.getObject().stringValue(), st.getSubject().stringValue(), inverseLinksetId.stringValue());
         } catch (ClassCastException ex) {
             throw new RDFHandlerException ("Unepected statement " + st, ex);
         } catch (IDMapperException ex){
