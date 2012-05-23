@@ -13,12 +13,14 @@ public class ProvenanceInfo {
     private final String sourceNameSpace;
     private final String predicate;
     private final String targetNameSpace;
+    private final Integer numberOfLinks;
 
-    public ProvenanceInfo(String id, String sourceNameSpace, String predicate, String targetNameSpace){
+    public ProvenanceInfo(String id, String sourceNameSpace, String predicate, String targetNameSpace, Integer numberOfLinks){
         this.id = id;
         this.predicate = predicate;
         this.sourceNameSpace = sourceNameSpace;
         this.targetNameSpace = targetNameSpace;
+        this.numberOfLinks = numberOfLinks;
     }
     
     /**
@@ -47,5 +49,12 @@ public class ProvenanceInfo {
      */
     public String getTargetNameSpace() {
         return targetNameSpace;
+    }
+
+    /**
+     * @return the numberOfLinks
+     */
+    public Integer getNumberOfLinks() {
+        return numberOfLinks;
     }
 }

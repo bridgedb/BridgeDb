@@ -17,6 +17,7 @@ public class ProvenanceBean {
     private String predicate;
     private String sourceNameSpace;
     private String targetNameSpace;
+    private Integer linkCount;
 
     public ProvenanceBean(){
     }
@@ -77,4 +78,18 @@ public class ProvenanceBean {
         this.targetNameSpace = targetNameSpace;
     }
 
-}
+    /**
+     * @return the linkCount
+     */
+    public Integer getLinkCount() {
+        return linkCount;
+    }
+
+    /**
+     * @param linkCount the linkCount to set
+     */
+    public void setLinkCount(Integer linkCount) {
+        this.linkCount = linkCount;
+     }
+
+ }

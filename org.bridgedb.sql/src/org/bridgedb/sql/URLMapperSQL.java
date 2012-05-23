@@ -1077,8 +1077,9 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         ArrayList<ProvenanceInfo> results = new ArrayList<ProvenanceInfo>();
         try {
             while (rs.next()){
+                Integer count = rs.getInt("linkCount");
                 results.add(new ProvenanceInfo(rs.getString("id"), rs.getString("sourceNameSpace"), 
-                        rs.getString("linkPredicate"), rs.getString("targetNameSpace")));
+                        rs.getString("linkPredicate"), rs.getString("targetNameSpace"), count));
             }
         } catch (SQLException ex) {
             throw new IDMapperException("Unable to parse results.", ex);
