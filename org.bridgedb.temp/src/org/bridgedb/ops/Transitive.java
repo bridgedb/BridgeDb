@@ -32,7 +32,7 @@ public class Transitive {
     String LINK_PREDICATE = "<http://www.bridgedb.org/transitiveMapping>";
     
     public Transitive() throws BridgeDbSqlException{
-        sqlAccess = TestSqlFactory.createTestSQLAccess();
+        sqlAccess = SqlFactory.createSQLAccess();
         urlMapperSQL = new URLMapperSQL(false, sqlAccess);
     }
     
@@ -112,8 +112,9 @@ public class Transitive {
     
     public static void main(String[] args) throws BridgeDbSqlException, IDMapperException, IOException {
         Transitive worker = new Transitive();
-        worker.createVoid("D:/OpenPhacts/linksets/transitivetest.ttl", 
-                "http://www.foo.com/", "http://www.example.com/", "http://www.example.org#");
+        worker.createVoid("D:/OpenPhacts/linksets/chemspider_chembl_transitive.ttl", 
+                "http://rdf.chemspider.com/", "http://data.kasabi.com/dataset/chembl-rdf/chemblid/", "http://data.kasabi.com/dataset/chembl-rdf/molecule/");
+                //"http://www.foo.com/", "http://www.example.com/", "http://www.example.org#");
         //Iterable<String> iterable = urlMapperSQL.getURLIterator("http://data.kasabi.com/dataset/chembl-rdf/chemblid/");
     }
  
