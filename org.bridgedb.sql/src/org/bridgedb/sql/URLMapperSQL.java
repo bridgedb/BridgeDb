@@ -1,7 +1,6 @@
 package org.bridgedb.sql;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -346,9 +345,10 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
     }
 
     @Override
-    public void closeInput() throws BridgeDbSqlException {
+    public void closeInput() throws IDMapperException {
             runInsert();
         Reporter.report ("FInished processing linkset");
+        countLinks();
         if (possibleOpenConnection != null){
             try {
                 //possibleOpenConnection.commit();
@@ -370,7 +370,36 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query, ex);
         }
-
+    }
+    
+    private void countLinks () throws IDMapperException{
+        Reporter.report ("Updating link count. Please Wait!");
+        Statement countStatement = this.createStatement();
+        Statement updateStatement = this.createStatement();
+        String query = ("select count(*) as count, provenance_id from link group by provenance_id");  
+        ResultSet rs;
+        try {
+            rs = countStatement.executeQuery(query);    
+            Reporter.report ("Count query run. Updating link count now");
+            while (rs.next()){
+                int count = rs.getInt("count");
+                String provenanceId = rs.getString("provenance_id");  
+                String update = "update provenance set linkCount = " + count + " where id = \"" + provenanceId + "\"";
+                try {
+                    int updateCount = updateStatement.executeUpdate(update);
+                    if (updateCount != 1){
+                        throw new IDMapperException("Updated rows <> ! when running " + update);
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    throw new IDMapperException("Unable to run update. " + update, ex);
+                }
+            }
+            Reporter.report ("Updating counts finished!");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }
     }
     
     //***** URLMapper funtctions  *****
@@ -1290,7 +1319,8 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
 					+ " (   id VARCHAR(" + PROVENANCE_ID_LENGTH + ") PRIMARY KEY,           " 
                     + "     sourceNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ") NOT NULL,    "
                     + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,       "
-                    + "     targetNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ")  NOT NULL   "
+                    + "     targetNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ")  NOT NULL,    "
+                    + "     linkCount INT                                                   "
 					+ " ) "); 
             sh.execute ("CREATE TABLE  "
                     + "IF NOT EXISTS "
