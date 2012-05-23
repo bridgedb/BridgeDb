@@ -15,11 +15,12 @@ public class ProvenanceFactory {
         bean.setSourceNameSpace(provenanceInfo.getSourceNameSpace());
         bean.setPredicate(provenanceInfo.getPredicate());
         bean.setTargetNameSpace(provenanceInfo.getTargetNameSpace());
+        bean.setLinkCount(provenanceInfo.getNumberOfLinks());
         return bean;
     }
     
     public static ProvenanceInfo asProvenanceInfo(ProvenanceBean bean){
         return new ProvenanceInfo(bean.getId(), bean.getSourceNameSpace(), bean.getPredicate(), 
-                bean.getTargetNameSpace());
+                bean.getTargetNameSpace(), bean.getLinkCount());
     }
 }

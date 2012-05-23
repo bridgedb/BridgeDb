@@ -293,6 +293,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
                 assertEquals(TEST_PREDICATE, info.getPredicate());
                 assertEquals(nameSpace3, info.getSourceNameSpace());
                 assertEquals(nameSpace2, info.getTargetNameSpace());
+                assertEquals(new Integer(3), info.getNumberOfLinks());
             }
         }
         assertTrue(found);
