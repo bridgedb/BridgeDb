@@ -13,7 +13,7 @@ public class ProvenanceInfo {
     private final String sourceNameSpace;
     private final String predicate;
     private final String targetNameSpace;
-    private final Integer numberOfLinks;
+    private Integer numberOfLinks;
 
     public ProvenanceInfo(String id, String sourceNameSpace, String predicate, String targetNameSpace, Integer numberOfLinks){
         this.id = id;
@@ -56,5 +56,17 @@ public class ProvenanceInfo {
      */
     public Integer getNumberOfLinks() {
         return numberOfLinks;
+    }
+
+    /**
+     * @param numberOfLinks the numberOfLinks to set
+     */
+    public void setNumberOfLinks(Integer numberOfLinks) {
+        this.numberOfLinks = numberOfLinks;
+    }
+    
+    public String toString(){
+        return this.id + "\n\tsourceNameSpace:" + this.sourceNameSpace + "\n\tpredicate:" + this.predicate + 
+                "\n\ttargetNameSpace:" +this.targetNameSpace + "\n\tnumberOfLinks:" + this.numberOfLinks + "\n";
     }
 }

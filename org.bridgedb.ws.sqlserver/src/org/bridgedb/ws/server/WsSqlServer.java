@@ -9,7 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.ws.rs.GET;
@@ -20,12 +19,14 @@ import javax.ws.rs.core.Response;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.URLMapperSQL;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.SourceTargetCounter;
 import org.bridgedb.ws.WSService;
 
 /**
@@ -92,6 +93,9 @@ public class WsSqlServer extends WSService{
         sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
         sb.append("</p>");
                 
+        sb.append("<p>A List of which mappings we current have can be found at ");
+        sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
+        
         sb.append("<p>The Main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
@@ -893,6 +897,46 @@ public class WsSqlServer extends WSService{
                         sb.append("</a></li>");    
             }
             sb.append("</ul>");
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/getMappingInfo")
+    public Response mappingInfoPage() throws IDMapperException, UnsupportedEncodingException {
+        StringBuilder sb = new StringBuilder();
+        List<ProvenanceInfo> rawProvenaceinfos = opsMapper.getProvenanceInfos();
+        SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<h1>Open PHACTS Identity Mapping Counter per NameSpaces</h1>");
+        sb.append("<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
+        sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
+        sb.append("<p>");
+        sb.append("<table border=\"1\">");
+        sb.append("<tr>");
+        sb.append("<th>Source NameSpace</th>");
+        sb.append("<th>Target NameSpace</th>");
+        sb.append("<th>Sum of Mappings</th>");
+        sb.append("</tr>");
+        for (ProvenanceInfo info:sourceTargetCounter.getSummaryInfos()){
+            sb.append("<tr>");
+            sb.append("<td>");
+            sb.append(info.getSourceNameSpace());
+            sb.append("</td>");
+            sb.append("<td>");
+            sb.append(info.getTargetNameSpace());
+            sb.append("</td>");
+            sb.append("<td>");
+            sb.append(info.getNumberOfLinks());
+            sb.append("</td>");
+            sb.append("</tr>");
+        }
+        sb.append("</table>"); 
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
     /*private void describe_byXrefPosition(StringBuilder sb, Xref first) throws UnsupportedEncodingException{
