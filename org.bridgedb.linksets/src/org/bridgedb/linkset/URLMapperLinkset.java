@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.AbstractIDMapperCapabilities;
@@ -55,26 +54,24 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
         }
         Xref sourceXref = DataSource.uriToXref(source);
         Xref targetXref = DataSource.uriToXref(target);
+  
+        insertLink(sourceXref, targetXref, forwardProvenanceId);
+        //No add the inverse
+        insertLink(targetXref, sourceXref, inverseProvenanceId);
+    }
+
+    private void insertLink (Xref sourceXref, Xref targetXref, String provenanceId){
         sources.add(sourceXref.getDataSource());
+        targets.add(targetXref.getDataSource());
         Set<XrefProvenance> targetSet = sourceToTarget.get(sourceXref);
         //ystem.out.println(targetSet);
         if (targetSet == null){
             targetSet = new HashSet<XrefProvenance>();
+            sourceToTarget.put(sourceXref, targetSet);
         }        
-        targets.add(targetXref.getDataSource());
-        targetSet.add(new XrefProvenance(targetXref, forwardProvenanceId, predicates.get(forwardProvenanceId)));
-        
-        //No add the inverse
-        Set<XrefProvenance> sourceSet = sourceToTarget.get(targetXref);
-        //ystem.out.println(targetSet);
-        if (sourceSet == null){
-            sourceSet = new HashSet<XrefProvenance>();
-        }
-        targets.add(sourceXref.getDataSource());
-        sourceSet.add(new XrefProvenance(sourceXref, inverseProvenanceId, predicates.get(inverseProvenanceId)));
-        sourceToTarget.put(targetXref, sourceSet);    
+        targetSet.add(new XrefProvenance(targetXref, provenanceId, predicates.get(provenanceId)));   
     }
-
+    
     @Override
     public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
         return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
