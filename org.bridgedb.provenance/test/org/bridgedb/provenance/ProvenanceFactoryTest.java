@@ -23,7 +23,7 @@ public abstract class ProvenanceFactoryTest extends IDMapperTestBase {
      */
     @Test
     public void testCreateProvenance_3args() throws Exception {
-        System.out.println("CreateProvenance_3args");
+        report("CreateProvenance_3args");
         String createdBy = "testCreateProvenance_3args";
         String predicate = "predicate";
         long creation = 1000;
@@ -42,7 +42,7 @@ public abstract class ProvenanceFactoryTest extends IDMapperTestBase {
      */
     @Test
     public void testCreateProvenance_3argsSourceEqualsTarget() throws Exception {
-        System.out.println("CreateProvenance_3args");
+        report("CreateProvenance_3args");
         String createdBy = "testCreateProvenance_3argsSourceEqualsTarget";
         String predicate = "predicate";
         long creation = 1000;
