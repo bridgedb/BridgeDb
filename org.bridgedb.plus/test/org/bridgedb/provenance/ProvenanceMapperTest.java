@@ -82,7 +82,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         ArrayList<String> trgNameSpaces = new ArrayList<String>();
         trgNameSpaces.add(nameSpace2);
         Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, ALL_PROVENACE, trgNameSpaces);
-        assertEquals(results.size(), 1);
+        assertEquals(1, results.size());
         for (URLMapping result:results){
             assertTrue(result.isValid());
             assertEquals(result.getSourceURL(), map1URL1);
