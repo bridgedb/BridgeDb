@@ -34,11 +34,53 @@
 	<dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.plus</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+  		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ops</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
  		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws.api</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws.core</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+  		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws.ops.core</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws.server</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ws.ops.server</artifactId>
 			<version>${project.version}</version>
