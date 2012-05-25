@@ -126,6 +126,11 @@ public class WsSqlServer extends WSService{
         System.out.println("Done mappings "+ (new Date().getTime() - start));
         URLMapping mapping1 = mappings.get(0);
         System.out.println("Done mapping1 "+ (new Date().getTime() - start));
+        
+        System.out.println("api called at " + start);
+        boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
+        System.out.println("Done xrefs "+ (new Date().getTime() - start));
+
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
                 + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -140,17 +145,17 @@ public class WsSqlServer extends WSService{
         sb.append("<dl>");
 
         
-        introduce_URLMapper(sb);
-        introduce_OpsMapper(sb);
-        introduce_IDMapper(sb);
+        introduce_URLMapper(sb, freeSearchSupported);
+       // introduce_OpsMapper(sb);
+        introduce_IDMapper(sb, freeSearchSupported);
         introduce_IDMapperCapabilities(sb, keys);
         sb.append("</dl>");
         sb.append("</p>");
         describeParameter(sb);        
         
-        describe_URLMapper(sb, first,  firstMaps, second);
-        describe_OpsMapper(sb, first,  mapping1, second);
-        describe_IDMapper(sb, first, firstMaps, second);
+        describe_URLMapper(sb, first,  firstMaps, second, freeSearchSupported);
+       // describe_OpsMapper(sb, first,  mapping1, second);
+        describe_IDMapper(sb, first, firstMaps, second, freeSearchSupported);
         describe_IDMapperCapabilities(sb, first, firstMaps, keys);
         //describe_byXrefPosition(sb, first);
         //describe_getURLByposition(sb, first);
@@ -280,21 +285,29 @@ public class WsSqlServer extends WSService{
     }
 
 
-    protected final void introduce_URLMapper(StringBuilder sb) {
+    protected final void introduce_URLMapper(StringBuilder sb, boolean freeSearchSupported) {
         sb.append("<dt><a href=\"#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to these URLs</dd>");
         sb.append("<dt><a href=\"#URLExists\">URLExists</a></dt>");
         sb.append("<dd>State if the URL is know to the Mapping Service or not</dd>");
-        sb.append("<dt><a href=\"#URLSearch\">URLSearch</a></dt>");
-        sb.append("<dd>Searches for URLs that have this ending.</dd>");
+        if (freeSearchSupported){
+            sb.append("<dt><a href=\"#URLSearch\">URLSearch</a></dt>");
+            sb.append("<dd>Searches for URLs that have this ending.</dd>");    
+        } else {
+            sb.append("<dt>URLSearch</dt>");
+            sb.append("<dd>This is currently not supported.</dd>");            
+        }
     }
     
-    protected final void describe_URLMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) throws UnsupportedEncodingException{
+    protected final void describe_URLMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second,
+            boolean freeSearchSupported) throws UnsupportedEncodingException{
         sb.append("<h2>URL based methods");
 
         describe_mapByURLs(sb, first, firstMaps, second);
         describe_URLExists(sb, first);
-        describe_URLSearch(sb, first); 
+        if (freeSearchSupported) {
+            describe_URLSearch(sb, first); 
+        }
     }
         
     private void describe_mapByURLs(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) throws UnsupportedEncodingException{
@@ -615,13 +628,18 @@ public class WsSqlServer extends WSService{
             sb.append("</ul>");        
    }
 
-   protected final void introduce_IDMapper(StringBuilder sb) {
+   protected final void introduce_IDMapper(StringBuilder sb, boolean freeSearchSupported) {
         sb.append("<dt><a href=\"#mapID\">mapID</a></dt>");
         sb.append("<dd>List the Xrefs that map to these Xrefs</dd>");
         sb.append("<dt><a href=\"#xrefExists\">xrefExists</a></dt>");
-        sb.append("<dd>State if the Xref is know to the Mapping Service or not</dd>");       
-        sb.append("<dt><a href=\"#freeSearch\">freeSearch</a></dt>");
-        sb.append("<dd>Searches for Xrefs that have this id.</dd>");
+        sb.append("<dd>State if the Xref is know to the Mapping Service or not</dd>");   
+        if (freeSearchSupported){
+            sb.append("<dt><a href=\"#freeSearch\">freeSearch</a></dt>");
+            sb.append("<dd>Searches for Xrefs that have this id.</dd>");
+        } else {
+            sb.append("<dt>freeSearch</dt>");
+            sb.append("<dd>This is currently not supported.</dd>");      
+        }
         sb.append("<dt><a href=\"#getCapabilities\">getCapabilities</a></dt>");
         sb.append("<dd>Gives the Capabilitles as defined by BridgeDB.</dd>");
         sb.append("<dt>Close()</a></dt>");
@@ -630,12 +648,15 @@ public class WsSqlServer extends WSService{
         sb.append("<dd>Not supported as Close() is not allowed</dd>");
     }
 
-    protected void describe_IDMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) throws UnsupportedEncodingException{
+    protected void describe_IDMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second,
+            boolean freeSearchSupported) throws UnsupportedEncodingException{
         sb.append("<h2>Implementations of BridgeDB's IDMapper methods</h2>");
 
         describe_mapID(sb, first, firstMaps, second);    
         describe_xrefExists(sb, first);
-        describe_freeSearch(sb, first);
+        if (freeSearchSupported){
+            describe_freeSearch(sb, first);
+        }
         describe_getCapabilities(sb); 
         sb.append("<h3>Other IDMapper Functions</h3>");
         sb.append("<dl>");

@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
@@ -58,7 +60,7 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
     private static final int KEY_LENGTH= 100; 
     private static final int PROPERTY_LENGTH = 100;
 
-        
+    private static final int FREESEARCH_CUTOFF = 100000;      
     //Internal parameters
     private static final int DEFAULT_LIMIT = 1000;
     private static final int SQL_TIMEOUT = 2;
@@ -132,7 +134,7 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
 
     @Override
     public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
-        Set<String> URLS =  urlSearch(text, limit);
+        Set<String> URLS = urlSearch(text, limit);
         HashSet<Xref> results = new HashSet<Xref>();
         for (String URL:URLS){
             results.add(DataSource.uriToXref(URL));
@@ -178,7 +180,13 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
     //***** IDMapperCapabilities funtctions  *****
     @Override
     public boolean isFreeSearchSupported() {
-        return true;
+        //Due to scale issues we will only admit supporting freesearch on small databases;
+        try {
+            int count = getMappingsCount();
+            return (count < FREESEARCH_CUTOFF);
+        } catch (IDMapperException ex) {
+            return false;
+        }
     }
 
     @Override
@@ -461,6 +469,8 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query1, ex);
         }
+        return false;
+        /* No need for target as all links bi directional 
         String query2 = "SELECT * FROM link      "
                 + "where                    "
                 + "       targetURL = \"" + URL + "\""   
@@ -472,7 +482,7 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query2, ex);
-        }
+        }*/
     }
 
     @Override
@@ -511,7 +521,9 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query2, ex);
         }
-        //Try target without using index so joker at the front
+        return foundSoFar;
+        /* No need as all links are loaded both ways
+         * Try target without using index so joker at the front
         String query3 = "SELECT distinct targetURL as url  "
                 + "FROM link      "
                 + "where                    "
@@ -524,7 +536,7 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query3, ex);
-        }
+        }*/
     }
 
     //*** XrefIterator methods ****
@@ -715,27 +727,13 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
 
     @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {
-        String linkQuery = "SELECT count(*) as numberOfMappings "
-                + "FROM link";
-        Statement statement = this.createStatement();
-        int numberOfMappings;
-        try {
-            ResultSet rs = statement.executeQuery(linkQuery);
-            if (rs.next()){
-                numberOfMappings = rs.getInt("numberOfMappings");
-            } else {
-                System.err.println(linkQuery);
-                throw new IDMapperException("o Results for query. " + linkQuery);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + linkQuery, ex);
-        }
+        int numberOfMappings = getMappingsCount();
         String provenanceQuery = "SELECT count(distinct(id)) as numberOfProvenances, "
                 + "count(distinct(provenance.sourceNameSpace)) as numberOfSourceDataSources, "
                 + "count(distinct(provenance.linkPredicate)) as numberOfPredicates, "
                 + "count(distinct(provenance.targetNameSpace)) as numberOfTargetDataSources "
                 + "FROM provenance ";
+        Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(provenanceQuery);
             if (rs.next()){
@@ -755,6 +753,24 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         }
     }
 
+    private int getMappingsCount() throws IDMapperException{
+        String linkQuery = "SELECT count(*) as numberOfMappings "
+                + "FROM link";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(linkQuery);
+            if (rs.next()){
+                return rs.getInt("numberOfMappings");
+            } else {
+                System.err.println(linkQuery);
+                throw new IDMapperException("o Results for query. " + linkQuery);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + linkQuery, ex);
+        }      
+    }
+
     @Override
     public List<ProvenanceInfo> getProvenanceInfos() throws IDMapperException {
         String query = ("SELECT * FROM provenance ");
@@ -766,7 +782,6 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query, ex);
         }
-
     }
 
 

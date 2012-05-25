@@ -1,16 +1,22 @@
 package org.bridgedb.ws.client;
 
+import org.junit.Ignore;
+import java.util.List;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.url.URLMapperTestBase;
 import org.bridgedb.ws.WSClientFactory;
 import org.bridgedb.ws.WSInterface;
 import org.bridgedb.ws.WSMapper;
 import org.junit.BeforeClass;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Christian
  */
+@Ignore //to slow on too much data boo!
 public class OpsMapperTest  extends org.bridgedb.ops.OpsMapperTest{
     
     @BeforeClass
