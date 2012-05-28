@@ -26,7 +26,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 			<type>jar</type>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 		</dependency>
         <!--dependency>
             <groupId>org.slf4j</groupId>
