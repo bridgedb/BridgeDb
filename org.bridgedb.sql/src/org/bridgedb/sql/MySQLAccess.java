@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import com.mysql.jdbc.SQLError;
 /**
  *
  * @author Christian
@@ -37,6 +37,9 @@ public class MySQLAccess implements SQLAccess{
             this.dbUrl = dbUrl;
             this.username = username;
             this.password = password;
+        //} catch (SQLError er){
+        //    String msg = "Problem loading in MySQL JDBC driver.";
+        //    throw new BridgeDbSqlException(msg);
         } catch (ClassNotFoundException ex) {
             String msg = "Problem loading in MySQL JDBC driver.";
             //Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, msg, ex);
