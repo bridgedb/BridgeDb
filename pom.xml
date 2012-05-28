@@ -10,7 +10,7 @@
         <cxf.version>2.4.3</cxf.version>
         <hamcrest.version>1.2</hamcrest.version>
         <jersey.version>1.10</jersey.version>
-        <mysql.version>5.1.12</mysql.version>
+        <mysql.version>5.1.20</mysql.version>
         <sesame.version>2.6.4</sesame.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
