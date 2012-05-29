@@ -7,6 +7,9 @@ package org.bridgedb.ws.server;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,7 +48,8 @@ public class WsSqlServer extends WSService{
     private static final ArrayList<String> ALL_SOURCE_NAME_SPACES = ALL_URLs; 
     private static final ArrayList<String> ALL_TARGET_NAME_SPACES = ALL_URLs; 
     private static final ArrayList<String> ALL_PROVENANCE_IDS = ALL_URLs;
-
+    private NumberFormat formatter;
+    
     public WsSqlServer() throws BridgeDbSqlException  {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
@@ -53,6 +57,13 @@ public class WsSqlServer extends WSService{
         urlMapper = urlMapperSQL;
         provenanceMapper = urlMapperSQL;
         opsMapper = urlMapperSQL;
+        formatter = NumberFormat.getInstance();
+        if (formatter instanceof DecimalFormat) {
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+            dfs.setGroupingSeparator(',');
+            ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
+        }
+
     }
 
     @GET
@@ -75,19 +86,19 @@ public class WsSqlServer extends WSService{
         sb.append("<p>Currently the service includes: ");
         sb.append("<ul>");
             sb.append("<li>");
-                sb.append(overallStatistics.getNumberOfMappings());
+                sb.append(formatter.format(overallStatistics.getNumberOfMappings()));
                 sb.append(" Mappings</li>");
             sb.append("<li>From ");
-                sb.append(overallStatistics.getNumberOfProvenances());
+                sb.append(formatter.format(overallStatistics.getNumberOfProvenances()));
                 sb.append(" LinkSets</li>");
             sb.append("<li>Covering ");
-                sb.append(overallStatistics.getNumberOfSourceDataSources());
+                sb.append(formatter.format(overallStatistics.getNumberOfSourceDataSources()));
                 sb.append(" Source URI spaces</li>");
             sb.append("<li>Using ");
-                sb.append(overallStatistics.getNumberOfPredicates());
+                sb.append(formatter.format(overallStatistics.getNumberOfPredicates()));
                 sb.append(" Predicates</li>");
             sb.append("<li>Mapping to ");
-                sb.append(overallStatistics.getNumberOfTargetDataSources());
+                sb.append(formatter.format(overallStatistics.getNumberOfTargetDataSources()));
                 sb.append(" Target URI spaces</li>");
         sb.append("</ul></p>");
         
@@ -953,8 +964,8 @@ public class WsSqlServer extends WSService{
             sb.append("<td>");
             sb.append(info.getTargetNameSpace());
             sb.append("</td>");
-            sb.append("<td>");
-            sb.append(info.getNumberOfLinks());
+            sb.append("<td align=\"right\">");
+            sb.append(formatter.format(info.getNumberOfLinks()));
             sb.append("</td>");
             sb.append("</tr>");
         }
