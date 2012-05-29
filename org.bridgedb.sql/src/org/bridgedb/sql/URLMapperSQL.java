@@ -1326,7 +1326,6 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
 					+ "     targetURL VARCHAR(150) NOT NULL,                            " 
 					+ "     provenance_id VARCHAR(" + PROVENANCE_ID_LENGTH + ")         "
 					+ " )									                            ");
-            sh.execute("CREATE UNIQUE INDEX insertTest ON link (sourceURL, targetURL, provenance_id) ");
             sh.execute("CREATE INDEX sourceFind ON link (sourceURL) ");
             sh.execute("CREATE INDEX sourceProvenaceFind ON link (sourceURL, provenance_id) ");
          	sh.execute(	"CREATE TABLE                                                       "    
