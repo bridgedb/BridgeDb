@@ -57,8 +57,9 @@ public abstract class URLMapperTest extends URLMapperTestBase{
         resultSet = results.get(map3URL1);
         assertNull(resultSet);
         resultSet = results.get(mapBadURL1);
-        //Assuming either theer 
-        assertTrue(resultSet == null || resultSet.isEmpty());
+        //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
+        //Still optional as I am not sure text does.
+        assertTrue(resultSet == null || resultSet.size() <= 1);
     }
     
     @Test
@@ -76,7 +77,10 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     public void testMapIDOneBad() throws IDMapperException{
         report("MapIDOneToManyNoDataSources");
         Set<String> results = urlMapper.mapURL(mapBadURL1);
-        assertEquals(0, results.size());
+        //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
+        //Still optional as I am not sure text does.
+        //Not all mappers will have the pattern matching to notice this is an invalid URI
+        assertTrue(results.size() <= 1);
     }
 
     @Test

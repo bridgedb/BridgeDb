@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
@@ -446,7 +444,17 @@ public class URLMapperSQL implements IDMapper, IDMapperCapabilities, URLLinkList
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
-            return resultSetToURLSet(rs);
+            Set<String> results = resultSetToURLSet(rs);
+            if (targetNameSpaces.length == 0){
+               results.add(ref); 
+            } else {
+                for (String targetNameSpace: targetNameSpaces){
+                    if (ref.startsWith(targetNameSpace)){
+                        results.add(ref);
+                    }
+                }
+            }
+            return results;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query, ex);
