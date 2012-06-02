@@ -52,6 +52,7 @@ public enum Organism
 	EquusCaballus("Equus caballus", "Qc", "Horse"),
 	
 	GallusGallus("Gallus gallus", "Gg", "Chicken"),
+	GibberellaZeae("Gibberella zeae", "Gz", "Fusarium graminearum"),
 	HomoSapiens("Homo sapiens", "Hs", "Human"),
 	LoxodontaAfricana ("Loxodonta africana", "La", "Elephant"),
 	MacacaMulatta ("Macaca mulatta", "Ml", "Rhesus Monkey"),
