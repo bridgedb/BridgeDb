@@ -428,7 +428,7 @@ my $go_adaptor = $registry->get_adaptor("Multi", "Ontology", "GOTerm");
 #my $probe_feature_adaptor = $registry->get_adaptor($species, "funcgen", "ProbeFeature");
 #my $probe_adaptor = $registry->get_adaptor($species, "funcgen", "Probe");
 #my $probe_set_adaptor = $registry->get_adaptor($species, "funcgen", "Probeset");
-my $array_adaptor = $registry->get_adaptor($species, "funcgen", "Array");  
+my $array_adaptor = $registry->get_adaptor($species, "funcgen", "array");  
 my @dbas = @{Bio::EnsEMBL::Registry->get_all_DBAdaptors(-species => $species)};
 my $dbname = $dbas[0]->dbc->dbname();        # e.g., core_mus_musculus_42_36c
 my @split_dbname = split(/_/, $dbname);
@@ -848,12 +848,23 @@ while (my $gene = pop(@$genes))
 					     'Description VARCHAR(255) DEFAULT NULL',
 					     'PRIMARY KEY (ID)',
 					     'INDEX (Symbol)']);
-	%{$GeneTables{HUGO}} = ('NAME' => ['HUGO','H'], 
+	%{$GeneTables{HUGO}} = ('NAME' => ['HUGO','H'],
+                                'SYSTEM' => ["\'The Human Genome Organisation\'", "\'$dateArg\'",
+                                             "\'ID|Accession\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+                                             "\'http://www.genenames.org/data/hgnc_data.php?match=~\'", "\'\'",
+                                             "\'http://www.genenames.org\'"],
+                                'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+					     'Accession VARCHAR(128) DEFAULT NULL',
+                                             'Description VARCHAR(255) DEFAULT NULL',
+                                             'Synonyms VARCHAR(255) DEFAULT NULL',
+                                             'PRIMARY KEY (ID)']);
+        %{$GeneTables{HUGOAC}} = ('NAME' => ['HUGOAC','HAC'], 
 				'SYSTEM' => ["\'The Human Genome Organisation\'", "\'$dateArg\'", 
-					     "\'ID|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
-					     "\'http://www.genenames.org/data/hgnc_data.php?match=~\'", "\'\'", 
+					     "\'ID|Symbol\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+					     "\'http://www.genenames.org/data/hgnc_data.php?hgnc_id=~\'", "\'\'", 
 					     "\'http://www.genenames.org\'"],
 				'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
+					     'Symbol VARCHAR(128) DEFAULT NULL',
 					     'Description VARCHAR(255) DEFAULT NULL',
 					     'Synonyms VARCHAR(255) DEFAULT NULL',
                                              'PRIMARY KEY (ID)']);
@@ -1213,11 +1224,21 @@ while (my $gene = pop(@$genes))
             if ($count == ($collect_sample + $start_count - 1)){
                 ## COLLECT MIRCOARRAY TABLES
                 if ($funcgen !~ /(N|No)/i ){
+		  if (defined($array_adaptor)){
                     parse_ProbeFeatures(
                         \%GeneTables,
                         \%Ensembl_GeneTables
                         );
+		  }
+		  else {
+			print "!!!ERROR!!! Funcgen called but no adaptor found. Check for funcgen db and populated tables.\n";
+		  }
                 }
+		else {
+		  if (defined($array_adaptor)){
+			print "!!!WARNING!!! Funcgen db avaiable, but not called for. Suggest collecting funcgen info next time.\n"; 
+		  }
+		}
 	    }
 
 	## LOAD DATA INTO MYSQL TABLES?
@@ -1952,13 +1973,24 @@ sub parse_DBEntries {
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
             ## NOTE: working with symbols as primary id 
 	    if (!${$seen{HUGO}{$dbe_display_id}}++){ 
-		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, $dbe_description, $dbe_syns];
+		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, $dbe_primary_id, $dbe_description, $dbe_syns];
 		$$Ensembl_GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$gene_stable_id, $dbe_display_id];
                 #process Attributes
                 #@syns = (@syns, $dbe_display_id);
-                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'1'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
-                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'2'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
+		$$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'1'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Accession'), $dbe_primary_id];
+                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'2'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{HUGO}{$count.$dot.$subcount{HUGO}.$dot.'3'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGO}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
 		++$subcount{HUGO};
+	    }
+	    if (!${$seen{HUGOAC}{$dbe_primary_id}}++){
+                $$GeneTables{HUGOAC}{$count.$dot.$subcount{HUGOAC}} = [$dbe_primary_id, $dbe_display_id, $dbe_description, $dbe_syns];
+                $$Ensembl_GeneTables{HUGOAC}{$count.$dot.$subcount{HUGOAC}} = [$gene_stable_id, $dbe_primary_id];
+                #process Attributes
+                #@syns = (@syns, $dbe_display_id);
+                $$Attributes{HUGOAC}{$count.$dot.$subcount{HUGOAC}.$dot.'1'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGOAC}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                $$Attributes{HUGOAC}{$count.$dot.$subcount{HUGOAC}.$dot.'2'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGOAC}{'NAME'}[1]), mysql_quotes('Synonyms'), @syns];
+                $$Attributes{HUGOAC}{$count.$dot.$subcount{HUGOAC}.$dot.'3'} = [$dbe_display_id, mysql_quotes( $$GeneTables{HUGOAC}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
+                ++$subcount{HUGOAC};
 	    }
   	}
   	elsif ($dbe_dbname =~ /^\'MGI\'$/){  
