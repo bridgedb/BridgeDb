@@ -16,7 +16,7 @@ DerbyDir=/home/socr/c/users2/apico/Derby/db-derby-10.4.2.0-bin/
 ## Special modification for Yeast database: swapping in SGD identifiers from external file
 if [[ $DatabaseSpecies == Sc ]]; then
 	rm ${ScriptsDir}/SGD_features.tab
-	wget http://downloads.yeastgenome.org/chromosomal_feature/SGD_features.tab
+	wget http://downloads.yeastgenome.org/curation/chromosomal_feature/SGD_features.tab
 	mv SGD_features.tab ${ScriptsDir}/.
 	${mysql} -e "create table ${DatabaseCS}.sgd (a varchar(31), b varchar(31), c varchar(31), d varchar(31), e varchar(31), f varchar(31), g varchar(31))";
 	${mysql} -e "load data local infile '${ScriptsDir}/SGD_features.tab' into table ${DatabaseCS}.sgd fields terminated by '\t' lines terminated by '\n'";
