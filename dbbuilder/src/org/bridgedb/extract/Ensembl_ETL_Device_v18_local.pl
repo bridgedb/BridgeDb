@@ -850,11 +850,10 @@ while (my $gene = pop(@$genes))
 					     'INDEX (Symbol)']);
 	%{$GeneTables{HUGO}} = ('NAME' => ['HUGO','H'],
                                 'SYSTEM' => ["\'The Human Genome Organisation\'", "\'$dateArg\'",
-                                             "\'ID|Accession\\\\sBF|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+                                             "\'ID|Description\\\\BF|Synonyms\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
                                              "\'http://www.genenames.org/data/hgnc_data.php?match=~\'", "\'\'",
                                              "\'http://www.genenames.org\'"],
                                 'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
-					     'Accession VARCHAR(128) DEFAULT NULL',
                                              'Description VARCHAR(255) DEFAULT NULL',
                                              'Synonyms VARCHAR(255) DEFAULT NULL',
                                              'PRIMARY KEY (ID)']);
@@ -1973,7 +1972,7 @@ sub parse_DBEntries {
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
             ## NOTE: working with symbols as primary id 
 	    if (!${$seen{HUGO}{$dbe_display_id}}++){ 
-		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, $dbe_primary_id, $dbe_description, $dbe_syns];
+		$$GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$dbe_display_id, $dbe_description, $dbe_syns];
 		$$Ensembl_GeneTables{HUGO}{$count.$dot.$subcount{HUGO}} = [$gene_stable_id, $dbe_display_id];
                 #process Attributes
                 #@syns = (@syns, $dbe_display_id);
