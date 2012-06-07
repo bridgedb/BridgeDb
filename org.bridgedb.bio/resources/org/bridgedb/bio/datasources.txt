@@ -118,7 +118,7 @@ Gramene Maize	EnZm	http://www.ensembl.org	http://www.maizesequence.org/Zea_mays/
 Gramene Pathway	Gp	http://www.gramene.org/pathway		AAH72400	probe		0	Gp		
 Gramene protein		http://www.gramene.org/	http://www.gramene.org/db/protein/protein_search?protein_id=$id	78073			1	urn:miriam:gramene.protein	^\d+$	Gramene protein
 Gramene QTL		http://www.gramene.org/	http://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=$id	CQG5			1	urn:miriam:gramene.qtl	^\w+$	Gramene QTL
-Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa_japonica/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		
+Gramene Rice	EnOj	http://www.gramene.org/	http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id	osa-MIR171a	gene		1	EnOj		
 Gramene Taxonomy		http://www.gramene.org/	http://www.gramene.org/db/ontology/search?id=$id	GR_tax:013681			1	urn:miriam:gramene.taxonomy	^GR\_tax\:\d+$	Gramene Taxonomy
 GreenGenes		http://greengenes.lbl.gov/	http://greengenes.lbl.gov/cgi-bin/show_one_record_v2.pl?prokMSA_id=$id	100000			1	urn:miriam:greengenes	^\d+$	GreenGenes
 GRIN Plant Taxonomy		http://www.ars-grin.gov/cgi-bin/npgs/html/index.pl?language=en	http://www.ars-grin.gov/cgi-bin/npgs/html/taxon.pl?$id	19333			1	urn:miriam:grin.taxonomy	^\d+$	GRIN Plant Taxonomy
