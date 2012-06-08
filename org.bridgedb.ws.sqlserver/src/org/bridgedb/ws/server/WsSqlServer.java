@@ -153,6 +153,7 @@ public class WsSqlServer extends WSService{
 
         
         introduce_URLMapper(sb, freeSearchSupported);
+        introduce_Info(sb);
        // introduce_OpsMapper(sb);
         introduce_IDMapper(sb, freeSearchSupported);
         introduce_IDMapperCapabilities(sb, keys);
@@ -161,6 +162,7 @@ public class WsSqlServer extends WSService{
         describeParameter(sb);        
         
         describe_URLMapper(sb, first,  firstMaps, second, freeSearchSupported);
+        describe_Info(sb);
        // describe_OpsMapper(sb, first,  mapping1, second);
         describe_IDMapper(sb, first, firstMaps, second, freeSearchSupported);
         describe_IDMapperCapabilities(sb, first, firstMaps, keys);
@@ -403,6 +405,42 @@ public class WsSqlServer extends WSService{
             sb.append("</ul>");        
     }
     
+    protected final void introduce_Info(StringBuilder sb) {
+        sb.append("<dt><a href=\"#getMappingInfo\">getMappingInfo</a></dt>");
+        sb.append("<dd>Brings up a table of all the mappings in the system by URISpace</dd>");
+        sb.append("<dt><a href=\"#graphviz\">graphviz</a></dt>");
+        sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>");           
+    }
+
+    protected final void describe_Info(StringBuilder sb) {
+        sb.append("<h2>URL based methods");
+        sb.append("<h3><a name=\"getMappingInfo\">getMappingInfo</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Brings up a table of all the mappings in the system by URISpace</li>");
+            sb.append("<li>No arguements</li>");
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                sb.append("/getMappingInfo\">getMappingInfo</a></li>");    
+            sb.append("</ul>");        
+        sb.append("<h3><a name=\"graphviz\">graphviz</h3>");
+            sb.append("<ul>");
+            sb.append("<li>Brings up the getMappingInfo as graphviz input.</li>");
+            sb.append("<li>This method is underdevelopment. Formatting suggestions from Graphviz exports highly welcome.</li>");
+            sb.append("<li>This output can then used to create an image of the URISpaces mapped.</li>");
+                sb.append("<ul>");
+                sb.append("<li>Requires graphviz to be installed on your machine</li>");
+                sb.append("<li>Save the output in a file. (ex imsMappings.dot)</li>");
+                sb.append("<li>Call graphviz (ex dot -Tgif imsMappings.dot -o imsMappings.gif)</li>");
+                sb.append("<li>Open output in your favourite viewer</li>");
+                sb.append("</ul>");
+            sb.append("<li>No arguements</li>");
+            sb.append("<li>Example: <a href=\"");
+                sb.append(uriInfo.getBaseUri());
+                sb.append("/graphviz\">graphviz</a></li>");    
+            sb.append("</ul>");        
+    
+    }
+
     protected final void introduce_OpsMapper(StringBuilder sb) {
         sb.append("<dt><a href=\"#getMappings\">getMappings</a></dt>");
         sb.append("<dd>Lists a number of mappings based on some parameters</dd>");
