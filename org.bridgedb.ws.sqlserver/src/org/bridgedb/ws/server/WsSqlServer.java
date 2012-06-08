@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.ws.server;
 
 
@@ -14,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -973,6 +967,29 @@ public class WsSqlServer extends WSService{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/graphviz")
+    public Response graphvizDot() throws IDMapperException, UnsupportedEncodingException {
+        StringBuilder sb = new StringBuilder();
+        List<ProvenanceInfo> rawProvenaceinfos = opsMapper.getProvenanceInfos();
+        SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
+        sb.append("digraph G {");
+        for (ProvenanceInfo info:sourceTargetCounter.getSummaryInfos()){
+            if (info.getSourceNameSpace().compareTo(info.getTargetNameSpace()) < 0 ){
+                sb.append("\"");
+                sb.append(info.getSourceNameSpace());
+                sb.append("\" -> \"");
+                sb.append(info.getTargetNameSpace());
+                sb.append("\" [dir = both, label=\"");
+                sb.append(formatter.format(info.getNumberOfLinks()));            
+                sb.append("\"];\n");
+            }
+        }
+        sb.append("}"); 
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
     /*private void describe_byXrefPosition(StringBuilder sb, Xref first) throws UnsupportedEncodingException{
          if (byXrefPosition != null){ 
             sb.append("<h3><a name=\"getXrefByposition\">getXrefByposition</h3>");
