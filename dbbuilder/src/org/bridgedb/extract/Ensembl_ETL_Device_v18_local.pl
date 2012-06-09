@@ -2216,24 +2216,21 @@ sub parse_ProbeFeatures {
   my ($GeneTables, $Ensembl_GeneTables) = @_;
   my %subcount = ();
   my %seen = ();
-  my %arrayTable = getArrayTable();
-
-if (!defined $arrayTable{$genus_species} ){
-	return;
-}
 
   foreach my $key ( keys %$GeneTables) {
       $subcount{$key} = 1;
   }
 
-my @arrayList = (@{$arrayTable{$genus_species}});  
-foreach my $array_name (@arrayList){
-
-print "fetching array: $array_name...\n";
-    my $array = $array_adaptor->fetch_by_name_vendor($array_name);
+print "fetching arrays...\n";
+my @arrayList = @{$array_adaptor->fetch_all()};  
+foreach my $array (@arrayList){
+    ## Skip massive Exon arrays and the like. Anything >2 million probes	
+    if ($array->probe_count() > 2000000){
+	next;
+    }
     my $p_dbname = mysql_quotes($array->vendor());
 
-print "getting all probes...\n";
+print "getting all probes from ".$array->name()."...\n";
 my @plist = ();
   if ($p_dbname =~ /^\'AFFY/i) {  
     @plist = @{$array->get_all_ProbeSets()};
@@ -2250,7 +2247,7 @@ print "probe count= $pcount\n";
 	if ($p_dbname =~ /^\'AFFY/i) { # Affy uses probesets
 		$p_display_id = $p->name(); 
 	} else {
-		$p_display_id = $p->get_probename($array_name);
+		$p_display_id = $p->get_probename($array->name());
 	}
 
 	## Handle case when list of of probe names is returned
