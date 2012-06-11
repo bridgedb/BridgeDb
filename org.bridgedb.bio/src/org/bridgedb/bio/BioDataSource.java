@@ -60,10 +60,6 @@ public class BioDataSource
 		"Ch", "HMDB").asDataSource();
 	public static final DataSource KEGG_COMPOUND = DataSource.register (
 		"Ck", "Kegg Compound").asDataSource();
-	public static final DataSource KEGG_REACTION = DataSource.register (
-			"Rk", "Kegg Reaction").asDataSource();
-	public static final DataSource REACTOME = DataSource.register (
-			"Re", "Reactome").asDataSource();
 	/** @deprecated use one of the organism-specific system codes instead */ 
 	public static final DataSource PUBCHEM = DataSource.register (
 		"Cp", "PubChem").asDataSource();
@@ -182,6 +178,10 @@ public class BioDataSource
 		"Q", "RefSeq").asDataSource();
 	public static final DataSource RGD = DataSource.register (
 		"R", "RGD").asDataSource(); 
+	public static final DataSource REACTOME = DataSource.register (
+		"Re", "Reactome").asDataSource();
+	public static final DataSource KEGG_REACTION = DataSource.register (
+		"Rk", "Kegg Reaction").asDataSource();
 	public static final DataSource RFAM = DataSource.register (
 		"Rf", "Rfam").asDataSource();
 	/** NB the UNIPROT datasource is for Uniprot accession numbers like P12345 */
@@ -195,9 +195,9 @@ public class BioDataSource
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
 		"T", "GeneOntology").asDataSource();
 	public static final DataSource TIGR = DataSource.register (
-			"Ti", "TIGR").asDataSource(); 
+		"Ti", "TIGR").asDataSource(); 
 	public static final DataSource TUBERCULIST = DataSource.register (
-			"Tb", "TUBERCULIST").asDataSource(); 
+		"Tb", "TUBERCULIST").asDataSource(); 
 	public static final DataSource UNIGENE = DataSource.register (
 		"U", "UniGene").asDataSource();
 	public static final DataSource UCSC = DataSource.register (

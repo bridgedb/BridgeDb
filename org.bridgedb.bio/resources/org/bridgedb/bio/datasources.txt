@@ -24,7 +24,7 @@ BioSystems		http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/
 BOLD Taxonomy		http://www.boldsystems.org/	http://www.boldsystems.org/views/taxbrowser.php?taxid=$id	27267			1	urn:miriam:bold.taxonomy	^\d+$	BOLD Taxonomy
 Brenda Tissue Ontology		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	BTO:0000146	ontology		1	urn:miriam:obo.bto	^BTO:\d{7}$	Brenda Tissue Ontology
 Candida Genome Database		http://www.candidagenome.org/	http://www.candidagenome.org/cgi-bin/locus.pl?dbid=$id	CAL0003079			1	urn:miriam:cgd	^CAL\d{7}$	Candida Genome Database
-CAS	Ca		http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id		metabolite		1	Ca	\d+-\d+-\d+	
+CAS	Ca		http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id		metabolite		1	urn:miriam:cas	\d+-\d+-\d+	
 CATH domain		http://www.cathdb.info/	http://www.cathdb.info/domain/$id	1cukA01			1	urn:miriam:cath.domain	^\w+$	CATH domain
 CATH superfamily		http://www.cathdb.info/	http://www.cathdb.info/cathnode/$id	1.10.10.200			1	urn:miriam:cath.superfamily	^\d+\.\d+\.\d+\.\d+	CATH superfamily
 CAZy		http://www.cazy.org/	http://www.cazy.org/$id.html	GT10			1	urn:miriam:cazy	^GT\d+$	CAZy
@@ -61,7 +61,7 @@ dbSNP		http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.g
 DisProt		http://www.disprot.org/	http://www.disprot.org/protein.php?id=$id	DP00001			1	urn:miriam:disprot	^DP\d{5}$	DisProt
 DOI		http://www.doi.org/	http://dx.doi.org/$id	10.1038/nbt1156	publication		1	urn:miriam:doi	^(doi\:)?\d{2}\.\d{4}/.*$	DOI
 DrugBank		http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^DB\d{5}$	DrugBank
-EC Number	E	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id	1.1.1.1	gene		1	urn:miriam:brenda	^((\d+\.-\.-\.-)|(\d+\.\d+\.-\.-)|(\d+\.\d+\.\d+\.-)|(\d+\.\d+\.\d+\.\d+))$	BRENDA
+EC Number	E	http://www.brenda-enzymes.org/	http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^((\d+\.-\.-\.-)|(\d+\.\d+\.-\.-)|(\d+\.\d+\.\d+\.-)|(\d+\.\d+\.\d+\.\d+))$	BRENDA
 EchoBASE		http://www.ecoli-york.org/	http://www.ecoli-york.org/Gene.cfm?recordID=$id	EB0170			1	urn:miriam:echobase	^EB\d+$	EchoBASE
 EcoGene		http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173			1	urn:miriam:ecogene	^EG\d+$	EcoGene
 Ecoli	Ec				gene	Escherichia coli	1	Ec		
@@ -92,7 +92,7 @@ Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus
 Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id	ENSXETG00000029448	gene	Xenopus tropicalis	1	EnXt	ENSXETG\d{11}	
 Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id	YGR147C	gene	Saccharomyces cerevisiae	1	EnSc	Y[A-Z][RL]\d{3}[WC](?:\-[A-Z])?	
 Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id	ENSDARG00000024771	gene	Danio rerio	1	EnDr	ENSDARG\d{11}	
-Entrez Gene	L	http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene	http://www.ncbi.nlm.nih.gov/sites/entrez?Db=gene&Cmd=ShowDetailView&TermToSearch=$id	100010	gene		1	urn:miriam:entrez.gene	^\d+$	Entrez Gene
+Entrez Gene	L	http://www.ncbi.nlm.nih.gov/sites/entrez?db=gene	http://www.ncbi.nlm.nih.gov/sites/entrez?Db=gene&Cmd=ShowDetailView&TermToSearch=$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene
 Enzyme Nomenclature		http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	protein		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature
 Evidence Code		http://www.ebi.ac.uk/ontology-lookup/	http://www.ebi.ac.uk/ontology-lookup/?termId=$id	ECO:0000006	ontology		1	urn:miriam:obo.eco	ECO:\d{7}$	Evidence Code Ontology
 FlyBase	F	http://www.flybase.org/	http://www.flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase
@@ -157,7 +157,7 @@ KEGG Genes	Kg	http://www.genome.jp/kegg/genes.html	http://www.genome.jp/dbget-bi
 KEGG Glycan		http://www.genome.jp/kegg/glycan/	http://www.genome.jp/dbget-bin/www_bget?gl:$id	G00123	metabolite		1	urn:miriam:kegg.glycan	^G\d+$	KEGG Glycan
 KEGG Orthology		http://www.genome.jp/kegg/ko.html	http://www.genome.jp/dbget-bin/www_bget?ko+$id	K00001	protein		1	urn:miriam:kegg.orthology	^K\d+$	KEGG Orthology
 KEGG Pathway		http://www.genome.jp/kegg/pathway.html	http://www.genome.ad.jp/dbget-bin/www_bget?pathway+$id	hsa00620	pathway		1	urn:miriam:kegg.pathway	^\w{2,3}\d{5}$	KEGG Pathway
-KEGG Reaction		http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	protein		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
+KEGG Reaction	Rk	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	protein		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
 KiSAO		http://bioportal.bioontology.org/	http://bioportal.bioontology.org/ontologies/1410?p=terms&conceptid=kisao:$id	KISAO_0000057	ontology		1	urn:miriam:biomodels.kisao	^KISAO_\d+$	KiSAO
 Ligand Expo		http://ligand-depot.rutgers.edu/index.html	http://ligand-depot.rutgers.edu/pyapps/ldHandler.py?formid=cc-index-search&target=$id&operation=ccid	ABC	protein		1	urn:miriam:ligandexpo	^(\w){3}$	Ligand Expo
 Ligand-Gated Ion Channel database		http://www.ebi.ac.uk/compneur-srv/LGICdb/LGICdb.php	http://www.ebi.ac.uk/compneur-srv/LGICdb/HTML/$id.php	5HT3Arano	protein		1	urn:miriam:lgic	^\w+$	Ligand-Gated Ion Channel database
