@@ -180,8 +180,12 @@ public class BioDataSource
 		"R", "RGD").asDataSource(); 
 	public static final DataSource RFAM = DataSource.register (
 		"Rf", "Rfam").asDataSource();
+	/** NB the UNIPROT datasource is for Uniprot accession numbers like P12345 */
 	public static final DataSource UNIPROT = DataSource.register (
-		"S", "Uniprot/TrEMBL").asDataSource();
+		"S", "Uniprot/TrEMBL").asDataSource(); 
+	/** THE UNIPROT_ID datasource is for id's like P53_HUMAN */
+	public static final DataSource UNIPROT_ID = DataSource.register (
+		"Sid", "UNIPROT_ID").asDataSource();
 	public static final DataSource SNP = DataSource.register (
 		"Sn", "dbSNP").asDataSource();
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
@@ -292,6 +296,12 @@ public class BioDataSource
 		DataSourcePatterns.registerPattern(
 				BioDataSource.UNIPROT, 
 				Pattern.compile("([A-N,R-][0-9][A-Z][A-Z,0-9][A-Z,0-9][0-9])|([O,P,Q][0-9][A-Z,0-9][A-Z,0-9][A-Z,0-9][0-9])")
+		);
+
+		//Swiss Prot (http://expasy.org/sprot/userman.html#ID_line)
+		DataSourcePatterns.registerPattern(
+				BioDataSource.UNIPROT_ID, 
+				Pattern.compile("[A-Z0-9]+_[A-Z]+")
 		);
 
 		//gene ontology
