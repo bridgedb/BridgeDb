@@ -471,9 +471,30 @@ public final class DataSource
 		return organism;
 	}
 
+	/**
+	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
+	 * @returns the DataSource for a given urn base, or null if the base is invalid.
+	 * If the given urn base is unknown, a new DataSource will be created with the full name equal to the urn base without "urn.miriam."  
+	 */
 	public static DataSource getByUrnBase(String base)
 	{
-		return byMiriamBase.get(base);
+		if (!base.startsWith ("urn:miriam:"))
+		{
+			return null;
+		}
+		DataSource current = null;
+		
+		if (byMiriamBase.containsKey(base))
+		{
+			current = byMiriamBase.get(base);
+		}
+		else
+		{
+			current = getByFullName(base.substring("urn:miriam:".length()));
+			current.urnBase = base;
+			byMiriamBase.put (base, current);
+		}
+		return current;
 	}
 
 }
