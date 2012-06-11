@@ -60,6 +60,10 @@ public class BioDataSource
 		"Ch", "HMDB").asDataSource();
 	public static final DataSource KEGG_COMPOUND = DataSource.register (
 		"Ck", "Kegg Compound").asDataSource();
+	public static final DataSource KEGG_REACTION = DataSource.register (
+			"Rk", "Kegg Reaction").asDataSource();
+	public static final DataSource REACTOME = DataSource.register (
+			"Re", "Reactome").asDataSource();
 	/** @deprecated use one of the organism-specific system codes instead */ 
 	public static final DataSource PUBCHEM = DataSource.register (
 		"Cp", "PubChem").asDataSource();
@@ -486,6 +490,7 @@ public class BioDataSource
 				BioDataSource.KEGG_COMPOUND,
 				Pattern.compile("C\\d+")
 		);
+		
 		DataSourcePatterns.registerPattern(
 				BioDataSource.KEGG_GENES,
 				Pattern.compile("[a-z]{3}:.+")
@@ -516,6 +521,16 @@ public class BioDataSource
 		ensemblBySpecies.put (Organism.XenopusTropicalis, ENSEMBL_XENOPUS);
 		ensemblBySpecies.put (Organism.DanioRerio, ENSEMBL_ZEBRAFISH);		
 		ensemblBySpecies.put (Organism.MycobacteriumTuberculosis, ENSEMBL_MTUBERCULOSIS);
+		
+		//Reactions
+		DataSourcePatterns.registerPattern(
+				BioDataSource.KEGG_REACTION,
+				Pattern.compile("^R\\d+$")
+		);
+		DataSourcePatterns.registerPattern(
+				BioDataSource.REACTOME,
+				Pattern.compile("^REACT_\\d+(\\.\\d+)?$")
+		);
 	}
 	
 	/**
@@ -575,3 +590,4 @@ public class BioDataSource
 		
 	}
 }
+
