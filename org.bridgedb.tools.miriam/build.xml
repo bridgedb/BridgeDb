@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<project name="org.bridgedb.tools.miriam" default="dist" basedir=".">
+
+  <!-- always be java 1.5 compatible -->
+  <property name="ant.build.javac.target" value="1.5"/>
+  <property name="ant.build.javac.source" value="1.5"/>
+	
+  <property name="jar.name" value="../dist/org.bridgedb.tools.miriam.jar"/>
+  
+  <target name="prepare">
+	<mkdir dir="build"/>
+  </target>
+
+  <path id="dependencies">
+	<fileset dir="../lib" includes="*jdom*.jar" />
+	<fileset dir="../org.bridgedb.webservice.cronos/lib/axis-1_4/lib" includes="*.jar" />
+  </path>
+  
+  <path id="class.path">
+    <path refid="dependencies"/>
+    <fileset dir="../dist">
+      <include name="org.bridgedb.jar"/>
+      <include name="org.bridgedb.bio.jar"/>
+    </fileset>
+  </path>
+
+  <target name="build" depends="prepare">
+	<javac srcdir="src-axis"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+		<classpath refid="class.path"/>
+	</javac>
+    <javac srcdir="src"
+		   includes="**"
+		   debug="true"
+		   destdir="build">
+		<classpath refid="class.path"/>
+	</javac>
+    <copy toDir="../dist"><path refid="dependencies"/></copy>
+  </target>
+  
+  <target name="jar" depends="build">
+	<jar jarfile="${jar.name}">
+	  <fileset dir="build" includes="**/*.class"/>
+	  <manifest>
+		<attribute name="Main-Class" value="org.bridgedb.tools.miriam.UpdateDatasources"/>
+		<attribute name="Class-Path" value="org.bridgedb.jar org.bridgedb.bio.jar axis.jar commons-discovery-0.2.jar log4j-1.2.8.jar jaxrpc.jar saaj.jar wsdl4j-1.5.1.jar commons-logging-1.0.4.jar com.springsource.org.jdom-1.1.0.jar"/>
+	  </manifest>
+	</jar>
+  </target>
+
+  <target name="clean">
+	<delete dir="build"/>
+	<delete dir="doc"/>
+  </target>
+
+  <target name="dist-clean" depends="clean">
+	<delete file="${jar.name}"/>
+  </target>
+
+  <target name="dist" depends="jar"/>
+			 
+	<target name="test" depends="build">
+		<path id="test.classpath">
+			<path refid="class.path"/>
+			<pathelement location="build"/>
+			<pathelement location="../org.bridgedb/build-lib/junit.jar"/>
+			<pathelement location="../org.bridgedb/build-lib/measure.jar"/>
+		</path>
+		<javac srcdir="test" debug="true" 
+					includes="**"
+					destdir="build"
+					source="1.5">
+			<classpath refid="test.classpath"/>
+		</javac>		
+		<junit printsummary="on" haltonfailure="true" fork="true">
+			<formatter type="brief" usefile="false"/>
+			<classpath refid="test.classpath"/>
+			<batchtest>
+				<fileset dir="test">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<property name="wsdl.url" value="http://www.ebi.ac.uk/miriamws/main/MiriamWebServices?wsdl"/>
+	<property name="src.axis" value="src-axis"/>
+	<property name="build.wpclient.dir" value="build/wpclient" />
+	
+	<target name="update-axis">
+		<fail message="You must specify a url to the CRONOS web service WSDL: 
+			ant -Dwsdl.url=http://www.ebi.ac.uk/miriamws/main/MiriamWebServices?wsdl [ant target]">
+			<condition>
+				<not> <isset property="wsdl.url"/> </not>
+			</condition>
+		</fail>
+		<delete dir="${src.axis}"/>
+		<java classpathref="class.path" fork="true" failonerror="true" classname="org.apache.axis.wsdl.WSDL2Java">
+			<arg value="-o" />
+			<arg value="${src.axis}" />
+			<arg value="-p" />
+			<arg value="org.bridgedb.tools.miriam" />
+			<arg value="${wsdl.url}" />
+		</java>
+	</target>
+
+</project>
