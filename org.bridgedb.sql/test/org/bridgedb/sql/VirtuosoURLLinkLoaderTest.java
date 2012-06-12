@@ -11,7 +11,7 @@ import org.junit.Test;
  * @author Christian
  */
 @Ignore
-public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
+public class VirtuosoURLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
     public static void setupURLs() throws IDMapperException{
@@ -27,10 +27,10 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
-        listener = urlMapperSQL;
+        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(true, sqlAccess);
+        listener = urlMapperVirtuoso;
     }
       
     @Test
