@@ -10,7 +10,6 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-@Ignore
 public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
