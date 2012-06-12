@@ -38,38 +38,36 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URLIterator, XrefIterator,
-public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
+public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
         OpsMapper, URLIterator {
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	private static final int SQL_COMPAT_VERSION = 4;
+	static final int SQL_COMPAT_VERSION = 4;
   
     //Maximumn size in database
-    private static final int SYSCODE_LENGTH = 100;
-    private static final int FULLNAME_LENGTH = 100;
-    private static final int MAINURL_LENGTH = 100;
-    private static final int URLPATTERN_LENGTH = 100;
-    private static final int ID_LENGTH = 100;
-    private static final int TYPE_LENGTH = 100;
-    private static final int URNBASE_LENGTH = 100;
-    private static final int PREDICATE_LENGTH = 100;
-    private static final int PROVENANCE_ID_LENGTH = 100;
-    private static final int NAME_SPACE_LENGTH = 100;
-    private static final int KEY_LENGTH= 100; 
-    private static final int PROPERTY_LENGTH = 100;
+    static final int SYSCODE_LENGTH = 100;
+    static final int FULLNAME_LENGTH = 100;
+    static final int MAINURL_LENGTH = 100;
+    static final int URLPATTERN_LENGTH = 100;
+    static final int ID_LENGTH = 100;
+    static final int TYPE_LENGTH = 100;
+    static final int URNBASE_LENGTH = 100;
+    static final int PREDICATE_LENGTH = 100;
+    static final int PROVENANCE_ID_LENGTH = 100;
+    static final int NAME_SPACE_LENGTH = 100;
+    static final int KEY_LENGTH= 100; 
+    static final int PROPERTY_LENGTH = 100;
 
     private static final int FREESEARCH_CUTOFF = 100000;      
     //Internal parameters
     private static final int DEFAULT_LIMIT = 1000;
-    private static final int SQL_TIMEOUT = 2;
     static final int BLOCK_SIZE = 1000;
+    int blockCount = 0;
+    int insertCount = 0;
+    int doubleCount = 0;    
     
-    private SQLAccess sqlAccess;
-    private Connection possibleOpenConnection;
-    private int blockCount = 0;
-    private int insertCount = 0;
-    private int doubleCount = 0;    
-    private StringBuilder insertQuery;
+    SQLAccess sqlAccess;
+    Connection possibleOpenConnection;
 
     public SQLBase(SQLAccess sqlAccess) throws BridgeDbSqlException{
         if (sqlAccess == null){
@@ -218,8 +216,8 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
         String query = "SELECT * FROM provenance "
-                + "WHERE sourceNameSpace = \"" + src.getNameSpace() + "\""
-                + "AND targetNameSpace = \"" + tgt.getNameSpace() + "\""
+                + "WHERE sourceNameSpace = '" + src.getNameSpace() + "'"
+                + "AND targetNameSpace = '" + tgt.getNameSpace() + "'"
                 + "LIMIT 1";
         Statement statement = this.createStatement();
         try {
@@ -235,7 +233,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     public String getProperty(String key) {
         String query = "SELECT DISTINCT property "
                 + "FROM properties "
-                + "WHERE thekey = \"" + key + "\"";
+                + "WHERE thekey = '" + key + "'";
         try {
             Statement statement = this.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -255,7 +253,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         HashSet<String> results = new HashSet<String>();
         String query = "SELECT DISTINCT thekey "
                 + "FROM properties "
-                + "WHERE public = true";
+                + "WHERE isPublic = true";
         try {
             Statement statement = this.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -272,21 +270,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     /**** URLLinkListener Methods ****/
     
     @Override
-    public void openInput() throws BridgeDbSqlException {
-        //Starting with a block will cause a new query to start.
-        blockCount = BLOCK_SIZE ;
-        insertCount = 0;
-        doubleCount = 0;    
- 	}
-
-    @Override
     public void registerProvenanceLink(String provenanceId, DataSource source, String predicate, DataSource target) 
             throws BridgeDbSqlException{
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
         updateLastUpdated();
         String query = "SELECT * FROM provenance "
-                    + "WHERE id = \"" + provenanceId + "\"";
+                    + "WHERE id = '" + provenanceId + "'";
         try {
 			Statement statement = createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -309,13 +299,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                 }
                 return;
             }
-            query = "INSERT IGNORE INTO provenance "
+            query = "INSERT INTO provenance "
                     + "(id, sourceNameSpace, linkPredicate, targetNameSpace ) " 
                     + "VALUES (" 
-                    + "\"" + provenanceId + "\", " 
-                    + "\"" + source.getNameSpace() + "\", " 
-                    + "\"" + predicate + "\", " 
-                    + "\"" + target.getNameSpace() + "\")";
+                    + "'" + provenanceId + "', " 
+                    + "'" + source.getNameSpace() + "', " 
+                    + "'" + predicate + "', " 
+                    + "'" + target.getNameSpace() + "')";
             statement.executeUpdate(query);
         } catch (SQLException ex) {
             System.err.println(ex);
@@ -324,35 +314,11 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     }
 
     @Override
-    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId)
-            throws IDMapperException {
-        if (blockCount >= BLOCK_SIZE){
-            runInsert();
-            insertQuery = new StringBuilder("INSERT IGNORE INTO link (sourceURL, targetURL, provenance_id) VALUES ");
-        } else {
-            insertQuery.append(", ");        
-        }
-        blockCount++;
-        insertQuery.append("(\"");
-        insertQuery.append(source);
-        insertQuery.append("\", \"");
-        insertQuery.append(target);
-        insertQuery.append("\", \"");
-        insertQuery.append(forwardProvenanceId);
-        insertQuery.append("\"),");
-        blockCount++;
-        insertQuery.append("(\"");
-        insertQuery.append(target);
-        insertQuery.append("\", \"");
-        insertQuery.append(source);
-        insertQuery.append("\", \"");
-        insertQuery.append(inverseProvenanceId);
-        insertQuery.append("\")");
-    }
+    public abstract void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId)
+            throws IDMapperException;
 
     @Override
     public void closeInput() throws IDMapperException {
-            runInsert();
         Reporter.report ("FInished processing linkset");
         countLinks();
         if (possibleOpenConnection != null){
@@ -382,15 +348,15 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         Reporter.report ("Updating link count. Please Wait!");
         Statement countStatement = this.createStatement();
         Statement updateStatement = this.createStatement();
-        String query = ("select count(*) as count, provenance_id from link group by provenance_id");  
+        String query = ("select count(*) as mycount, provenance_id from link group by provenance_id");  
         ResultSet rs;
         try {
             rs = countStatement.executeQuery(query);    
             Reporter.report ("Count query run. Updating link count now");
             while (rs.next()){
-                int count = rs.getInt("count");
+                int count = rs.getInt("mycount");
                 String provenanceId = rs.getString("provenance_id");  
-                String update = "update provenance set linkCount = " + count + " where id = \"" + provenanceId + "\"";
+                String update = "update provenance set linkCount = " + count + " where id = '" + provenanceId + "'";
                 try {
                     int updateCount = updateStatement.executeUpdate(update);
                     if (updateCount != 1){
@@ -427,17 +393,17 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         query.append("SELECT targetURL as url ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
-        query.append("AND sourceURL = \"");
+        query.append("AND sourceURL = '");
             query.append(ref);
-            query.append("\" ");
+            query.append("' ");
         if (targetNameSpaces.length > 0){    
-            query.append("AND ( targetNameSpace = \"");
+            query.append("AND ( targetNameSpace = '");
                 query.append(targetNameSpaces[0]);
-                query.append("\" ");
+                query.append("' ");
             for (int i = 1; i < targetNameSpaces.length; i++){
-                query.append("OR targetNameSpace = \"");
+                query.append("OR targetNameSpace = '");
                     query.append(targetNameSpaces[i]);
-                    query.append("\"");
+                    query.append("'");
             }
             query.append(")");
         }
@@ -467,7 +433,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         if (URL.isEmpty()) return false;
         String query1 = "SELECT * FROM link      "
                 + "where                    "
-                + "       sourceURL = \"" + URL + "\"" 
+                + "       sourceURL = '" + URL + "'" 
                 + "LIMIT 1";
         Statement statement = this.createStatement();
         try {
@@ -481,7 +447,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         /* No need for target as all links bi directional 
         String query2 = "SELECT * FROM link      "
                 + "where                    "
-                + "       targetURL = \"" + URL + "\""   
+                + "       targetURL = '" + URL + "'"   
                 + "LIMIT 1";
         statement = this.createStatement();
         try {
@@ -499,7 +465,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         String query1 = "SELECT distinct sourceURL as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   sourceURL LIKE \"" + text + "\" "
+                + "   sourceURL LIKE '" + text + "' "
                 + "LIMIT " + limit;
         Statement statement = this.createStatement();
         Set<String> foundSoFar;
@@ -517,7 +483,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         String query2 = "SELECT distinct sourceURL as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   sourceURL LIKE \"%" + text + "\" "
+                + "   sourceURL LIKE '%" + text + "' "
                 + "LIMIT " + limit;
         try {
             ResultSet rs = statement.executeQuery(query2);
@@ -535,7 +501,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         String query3 = "SELECT distinct targetURL as url  "
                 + "FROM link      "
                 + "where                    "
-                + "   targetURL LIKE \"%" + text + "\" "
+                + "   targetURL LIKE '%" + text + "' "
                 + "LIMIT " + limit;
         try {
             ResultSet rs = statement.executeQuery(query3);
@@ -569,9 +535,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         query.append("SELECT sourceURL as url ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
-        query.append("AND sourceNameSpace = \"");
+        query.append("AND sourceNameSpace = '");
         query.append(nameSpace);
-        query.append("\"");
+        query.append("'");
         Statement statement = this.createStatement();
         System.out.println(query.toString());
         try {
@@ -851,49 +817,39 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
 
     /**  Support methods **/
     
-    private Statement createStatement() throws BridgeDbSqlException{
+    Statement createStatement() throws BridgeDbSqlException{
         try {
             return createAStatement();
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException ("Error creating a new statement");
+            throw new BridgeDbSqlException ("Error creating a new statement ", ex);
         }
     }
    
-    Statement createAStatement() throws SQLException{
-        if (possibleOpenConnection == null){
-            possibleOpenConnection = sqlAccess.getAConnection();
-        } else if (possibleOpenConnection.isClosed()){
-            possibleOpenConnection = sqlAccess.getAConnection();
-        } else if (!possibleOpenConnection.isValid(SQL_TIMEOUT)){
-            possibleOpenConnection.close();
-            possibleOpenConnection = sqlAccess.getAConnection();
-        }  
-        return possibleOpenConnection.createStatement();
-    }
+    abstract Statement createAStatement() throws SQLException;
     
     /** Append methods **/
     
     private void appendSourceXref(StringBuilder query, Xref ref){
-        query.append("AND sourceURL = \"");
+        query.append("AND sourceURL = '");
             query.append(ref.getUrl());
-            query.append("\"");        
+            query.append("'");        
     }
     
     private void appendAllDataSourceConditions(StringBuilder query, List<DataSource> dataSources){
         if (!dataSources.isEmpty()){
-            query.append("AND (sourceNameSpace = \"");
+            query.append("AND (sourceNameSpace = '");
                 query.append(dataSources.get(0).getNameSpace());
-                query.append("\" ");
-            query.append("OR targetNameSpace = \"");
+                query.append("' ");
+            query.append("OR targetNameSpace = '");
                 query.append(dataSources.get(0).getNameSpace());
-                query.append("\" ");
+                query.append("' ");
             for (int i = 1; i < dataSources.size(); i++){
-                query.append("OR sourceNameSpace = \"");
+                query.append("OR sourceNameSpace = '");
                     query.append(dataSources.get(i).getNameSpace());
-                    query.append("\" ");                
-                query.append("OR targetNameSpace = \"");
+                    query.append("' ");                
+                query.append("OR targetNameSpace = '");
                     query.append(dataSources.get(i).getNameSpace());
-                    query.append("\" ");
+                    query.append("' ");
             }
             query.append(") ");
         }
@@ -902,13 +858,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     private void appendSourceDataSources(StringBuilder query, List<DataSource> sourceDataSources){ 
         if (!sourceDataSources.isEmpty()){    
             Iterator<DataSource> iterator = sourceDataSources.iterator();
-            query.append("AND (sourceNameSpace = \"");
+            query.append("AND (sourceNameSpace = '");
                 query.append(iterator.next().getNameSpace());
-                query.append("\" ");
+                query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR sourceNameSpace = \"");
+                query.append("OR sourceNameSpace = '");
                 query.append(iterator.next().getNameSpace());
-                    query.append("\" ");
+                    query.append("' ");
             }
             query.append(")");
         }        
@@ -917,13 +873,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     private void appendTargetDataSources(StringBuilder query, Collection<DataSource> targetDataSources){
         if (!targetDataSources.isEmpty()){    
             Iterator<DataSource> iterator = targetDataSources.iterator();
-            query.append("AND (targetNameSpace = \"");
+            query.append("AND (targetNameSpace = '");
                 query.append(iterator.next().getNameSpace());
-                query.append("\" ");
+                query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR targetNameSpace = \"");
+                query.append("OR targetNameSpace = '");
                 query.append(iterator.next().getNameSpace());
-                    query.append("\" ");
+                    query.append("' ");
             }
             query.append(")");
         }        
@@ -931,19 +887,19 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
    
     private void appendAllURLconditions(StringBuilder query, List<String> URLs){
         if (!URLs.isEmpty()){
-            query.append("AND (sourceURL = \"");
+            query.append("AND (sourceURL = '");
                 query.append(URLs.get(0));
-                query.append("\" ");
-            query.append("OR targetURL = \"");
+                query.append("' ");
+            query.append("OR targetURL = '");
                 query.append(URLs.get(0));
-                query.append("\" ");
+                query.append("' ");
             for (int i = 1; i < URLs.size(); i++){
-                query.append("OR sourceURL = \"");
+                query.append("OR sourceURL = '");
                     query.append(URLs.get(i));
-                    query.append("\" ");                
-                query.append("OR targetURL = \"");
+                    query.append("' ");                
+                query.append("OR targetURL = '");
                     query.append(URLs.get(i));
-                    query.append("\" ");
+                    query.append("' ");
             }
             query.append(") ");
         }
@@ -951,14 +907,14 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     
     private void appendSourceURLConditions(StringBuilder query, Collection<String> sourceURLs){
         if (!sourceURLs.isEmpty()){
-            query.append("AND (sourceURL = \"");
+            query.append("AND (sourceURL = '");
             Iterator<String> iterator = sourceURLs.iterator();
                 query.append(iterator.next());
-                query.append("\" ");
+                query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR sourceURL = \"");
+                query.append("OR sourceURL = '");
                     query.append(iterator.next());
-                    query.append("\" ");                
+                    query.append("' ");                
             }
             query.append(") ");
         }
@@ -966,13 +922,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
 
     private void appendTargetURLConditions(StringBuilder query, List<String> targetURLs){
         if (!targetURLs.isEmpty()){
-            query.append("AND (targetURL = \"");
+            query.append("AND (targetURL = '");
                 query.append(targetURLs.get(0));
-                query.append("\" ");
+                query.append("' ");
             for (int i = 1; i < targetURLs.size(); i++){
-                query.append("OR targetURL = \"");
+                query.append("OR targetURL = '");
                     query.append(targetURLs.get(i));
-                    query.append("\" ");                
+                    query.append("' ");                
             }
             query.append(") ");
         } 
@@ -980,19 +936,19 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     
     private void appendAllNameSpaceConditions(StringBuilder query,List<String> nameSpaces){
         if (!nameSpaces.isEmpty()){
-            query.append("AND (sourceNameSpace = \"");
+            query.append("AND (sourceNameSpace = '");
                 query.append(nameSpaces.get(0));
-                query.append("\" ");
-            query.append("OR targetNameSpace = \"");
+                query.append("' ");
+            query.append("OR targetNameSpace = '");
                 query.append(nameSpaces.get(0));
-                query.append("\" ");
+                query.append("' ");
             for (int i = 1; i < nameSpaces.size(); i++){
-                query.append("OR sourceNameSpace = \"");
+                query.append("OR sourceNameSpace = '");
                     query.append(nameSpaces.get(i));
-                    query.append("\" ");                
-                query.append("OR targetNameSpace = \"");
+                    query.append("' ");                
+                query.append("OR targetNameSpace = '");
                     query.append(nameSpaces.get(i));
-                    query.append("\" ");
+                    query.append("' ");
             }
             query.append(") ");
         }
@@ -1000,13 +956,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
 
     private void appendSourceNameSpaceConditions(StringBuilder query, List<String> sourceNameSpaces){
         if (!sourceNameSpaces.isEmpty()){
-            query.append("AND (sourceNameSpace = \"");
+            query.append("AND (sourceNameSpace = '");
                 query.append(sourceNameSpaces.get(0));
-                query.append("\" ");
+                query.append("' ");
             for (int i = 1; i < sourceNameSpaces.size(); i++){
-                query.append("OR sourceNameSpace = \"");
+                query.append("OR sourceNameSpace = '");
                     query.append(sourceNameSpaces.get(i));
-                    query.append("\" ");                
+                    query.append("' ");                
             }
             query.append(")");
         }
@@ -1015,13 +971,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     private void appendTargetNameSpaceConditions(StringBuilder query, Collection<String> targetNameSpaces){
         if (!targetNameSpaces.isEmpty()){
             Iterator<String> iterator = targetNameSpaces.iterator();
-            query.append("AND (targetNameSpace = \"");
+            query.append("AND (targetNameSpace = '");
                 query.append(iterator.next());
-                query.append("\" ");
+                query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR targetNameSpace = \"");
+                query.append("OR targetNameSpace = '");
                     query.append(iterator.next());
-                    query.append("\" ");                
+                    query.append("' ");                
             }
             query.append(") ");
         } 
@@ -1030,13 +986,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     private void appendProvenanceConditions(StringBuilder query, Collection<String> provenanceIds){
         if (!provenanceIds.isEmpty()){
             Iterator<String> iterator = provenanceIds.iterator();
-            query.append("AND ( provenance.id = \"");
+            query.append("AND ( provenance.id = '");
                 query.append(iterator.next());
-                query.append("\" ");
+                query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR provenance.id = \"");
+                query.append("OR provenance.id = '");
                     query.append(iterator.next());
-                    query.append("\" ");                
+                    query.append("' ");                
             }
             query.append(")");
         }   
@@ -1266,100 +1222,27 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
 	 * Excecutes several SQL statements to drop the tables 
 	 * @throws IDMapperException 
 	 */
+     /**
+	 * Excecutes several SQL statements to drop the tables 
+	 * @throws IDMapperException 
+	 */
 	private void dropSQLTables() throws BridgeDbSqlException
 	{
-    	Statement sh = createStatement();
-		try 
-		{
- 			sh.execute("DROP TABLE  "
-                    + "IF EXISTS    "
-					+ "info         ");
-			sh.execute("DROP TABLE  "
-                    + "IF EXISTS    "
-                    + "link         ");
-			sh.execute("DROP TABLE  "
-                    + "IF EXISTS    "
-                    + "DataSource   ");
-            //provenance table sitll under development.
-			sh.execute(	"DROP TABLE " 
-                    + "IF EXISTS    "
-					+ "provenance   ");   
-			sh.execute(	"DROP TABLE " 
-                    + "IF EXISTS    "
-					+ "properties   ");   
-            sh.close();
-		} catch (SQLException e)
-		{
-			throw new BridgeDbSqlException ("Error dropping the tables ", e);
-		}
-	}
+ 		dropTable("info");
+ 		dropTable("link");
+ 		dropTable("DataSource");
+ 		dropTable("provenance");
+ 		dropTable("properties");
+     }
+    
+	abstract void dropTable(String table) throws BridgeDbSqlException;
 
     /**
 	 * Excecutes several SQL statements to create the tables and indexes in the database the given
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	void createSQLTables() throws BridgeDbSqlException
-	{
-		try 
-		{
-			Statement sh = createStatement();
- 			sh.execute("CREATE TABLE                            "
-                    + "IF NOT EXISTS                            "
-					+ "info                                     " 
-					+ "(    schemaversion INTEGER PRIMARY KEY	"
-                    + ")");
-  			sh.execute( //Add compatibility version of GDB
-					"INSERT INTO info VALUES ( " + SQL_COMPAT_VERSION + ")");
-            //TODO add organism as required
-            sh.execute("CREATE TABLE  "
-                    + "IF NOT EXISTS  "
-                    + "     DataSource "
-                    + "  (  sysCode VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
-                    + "     isPrimary BOOLEAN,                              "
-                    + "     fullName VARCHAR(" + FULLNAME_LENGTH + "),      "
-                    + "     mainUrl VARCHAR(" + MAINURL_LENGTH + "),        "
-                    + "     urlPattern VARCHAR(" + URLPATTERN_LENGTH + "),  "
-                    + "     idExample VARCHAR(" + ID_LENGTH + "),           "
-                    + "     type VARCHAR(" + TYPE_LENGTH + "),              "
-                    + "     urnBase VARCHAR(" + URNBASE_LENGTH + ")         "
-                    + "  ) ");
- 			sh.execute("CREATE TABLE                                                    "
-                    + "IF NOT EXISTS                                                    "
-                    + "link                                                             " 
-                            //As most search are on full url full url is stored in one column
-					+ " (   id INT AUTO_INCREMENT PRIMARY KEY,                          " 
-					+ "     sourceURL VARCHAR(150) NOT NULL,                            "
-                            //Again a speed for space choice.
-					+ "     targetURL VARCHAR(150) NOT NULL,                            " 
-					+ "     provenance_id VARCHAR(" + PROVENANCE_ID_LENGTH + ")         "
-					+ " )									                            ");
-            sh.execute("CREATE INDEX sourceFind ON link (sourceURL) ");
-            sh.execute("CREATE INDEX sourceProvenaceFind ON link (sourceURL, provenance_id) ");
-         	sh.execute(	"CREATE TABLE                                                       "    
-                    + "IF NOT EXISTS                                                        "
-					+ "		provenance                                                      " 
-					+ " (   id VARCHAR(" + PROVENANCE_ID_LENGTH + ") PRIMARY KEY,           " 
-                    + "     sourceNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ") NOT NULL,    "
-                    + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,       "
-                    + "     targetNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ")  NOT NULL,    "
-                    + "     linkCount INT                                                   "
-					+ " ) "); 
-            sh.execute ("CREATE TABLE  "
-                    + "IF NOT EXISTS "
-                    + "    properties "
-                    + "(   thekey      VARCHAR(" + KEY_LENGTH + ") NOT NULL, "
-                    + "    property    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
-                    + "    public      BOOLEAN "
-					+ " ) "); 
-            sh.close();
-		} catch (SQLException e)
-		{
-            System.err.println(e);
-            e.printStackTrace();
-			throw new BridgeDbSqlException ("Error creating the tables ", e);
-		}
-	}
+	abstract void createSQLTables() throws BridgeDbSqlException;
 
     void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();
@@ -1373,7 +1256,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         String query = "SELECT sysCode"
                 + "   from DataSource "
                 + "   where "
-                + "      sysCode = \"" + source.getSystemCode() + "\""; 
+                + "      sysCode = '" + source.getSystemCode() + "'"; 
         boolean found;
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -1395,10 +1278,14 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
             throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
                     " so unable to save " + source.getSystemCode());
         }
-        values.append("\"");
+        values.append("'");
         values.append(source.getSystemCode());
-        values.append("\" , ");
-        values.append (source.isPrimary());
+        values.append("' , ");
+        if (source.isPrimary()){
+            values.append (1);
+        } else {
+           values.append (0);
+        }
         String value = source.getFullName(); 
         if (value != null && !value.isEmpty()){
             if (value.length() > FULLNAME_LENGTH){
@@ -1406,9 +1293,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                         " so unable to save " + value);
             }
             insert.append (", fullName ");
-            values.append (", \"");
+            values.append (", '");
             values.append (value);
-            values.append ("\" ");
+            values.append ("' ");
         }
         value = source.getMainUrl();
         if (value != null && !value.isEmpty()){
@@ -1417,9 +1304,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                         " so unable to save " + value);
             }
             insert.append (", mainUrl ");
-            values.append (", \"");
+            values.append (", '");
             values.append (value);
-            values.append ("\" ");
+            values.append ("' ");
         }
         value = source.getUrl("$id");
         if (value != null && !value.isEmpty()){
@@ -1428,9 +1315,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                         " so unable to save " + value);
             }
             insert.append (", urlPattern ");
-            values.append (", \"");
+            values.append (", '");
             values.append (value);
-            values.append ("\" ");
+            values.append ("' ");
         }
         value = source.getExample().getId();
         if (value != null && !value.isEmpty()){
@@ -1439,9 +1326,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                         " so unable to save " + value);
             }
             insert.append (", idExample ");
-            values.append (", \"");
+            values.append (", '");
             values.append (value);
-            values.append ("\" ");
+            values.append ("' ");
         }
         value = source.getType();
         if (value != null && !value.isEmpty()){
@@ -1450,9 +1337,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                         " so unable to save " + value);
             }
             insert.append (", type ");
-            values.append (", \"");
+            values.append (", '");
             values.append (value);
-            values.append ("\" ");
+            values.append ("' ");
         }
         value = source.getURN("");
         //remove the :
@@ -1463,25 +1350,30 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                         " so unable to save " + value);
             }
             insert.append (", urnBase ");
-            values.append (", \"");
+            values.append (", '");
             values.append (value);
-            values.append ("\" ");
+            values.append ("' ");
         }
         if (source.getOrganism() != null){
             throw new BridgeDbSqlException("Sorry DataSource oraginism filed is upsupported");
         }
         Statement statement = this.createStatement();
+        String update = insert.toString() + ") " + values.toString() + " )";
         try {
-            statement.executeUpdate(insert.toString() + ") " + values.toString() + " )");
+            statement.executeUpdate(update);
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to writeDataSource", ex);
+            throw new BridgeDbSqlException("Unable to writeDataSource " + update, ex);
         }
     }
 
     private void updateDataSource(DataSource source) throws BridgeDbSqlException{
         StringBuilder update = new StringBuilder("UPDATE DataSource ");
         update.append ("SET isPrimary = ");
-        update.append (source.isPrimary());
+        if (source.isPrimary()){
+            update.append (1);
+        } else {
+           update.append (0);
+        }
         update.append (" ");       
         String value = source.getFullName();
         if (value != null && !value.isEmpty()){
@@ -1489,9 +1381,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                 throw new BridgeDbSqlException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", fullName = \"");
+            update.append (", fullName = '");
             update.append (value);
-            update.append ("\" ");
+            update.append ("' ");
         }       
         value = source.getMainUrl();
         if (value != null && !value.isEmpty()){
@@ -1499,9 +1391,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                 throw new BridgeDbSqlException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", mainUrl = \"");
+            update.append (", mainUrl = '");
             update.append (value);
-            update.append ("\" ");
+            update.append ("' ");
         }
         value = source.getUrl("$id");
         if (value != null && !value.isEmpty()){
@@ -1509,9 +1401,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                 throw new BridgeDbSqlException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", urlPattern = \"");
+            update.append (", urlPattern = '");
             update.append (value);
-            update.append ("\" ");
+            update.append ("' ");
         }
         value = source.getExample().getId();
         if (value != null && !value.isEmpty()){
@@ -1519,9 +1411,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                 throw new BridgeDbSqlException("Maximum length supported for exampleId is " + ID_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", idExample = \"");
+            update.append (", idExample = '");
             update.append (value);
-            update.append ("\" ");
+            update.append ("' ");
         }
         value = source.getType();
         if (value != null && !value.isEmpty()){
@@ -1529,9 +1421,9 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                 throw new BridgeDbSqlException("Maximum length supported for type is " + TYPE_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", type = \"");
+            update.append (", type = '");
             update.append (value);
-            update.append ("\" ");
+            update.append ("' ");
         }
         value = source.getURN("");
         //remove the :
@@ -1541,17 +1433,17 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
                 throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", urnBase = \"");
+            update.append (", urnBase = '");
             update.append (value);
-            update.append ("\" ");
+            update.append ("' ");
         }
         if (source.getSystemCode().length() > SYSCODE_LENGTH ){
             throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
                     " so unable to save " + source.getSystemCode());
         }
-        update.append ("WHERE sysCode  = \"");
+        update.append ("WHERE sysCode  = '");
         update.append (source.getSystemCode());
-        update.append ("\" ");
+        update.append ("' ");
         if (source.getOrganism() != null){
             throw new BridgeDbSqlException("Sorry DataSource oraginism filed is upsupported");
         }
@@ -1564,7 +1456,7 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
     }
 
     private void updateLastUpdated() throws BridgeDbSqlException {
-        String delete = "DELETE from properties where thekey = \"LastUpdates\"";
+        String delete = "DELETE from properties where thekey = 'LastUpdates'";
         Statement statement = this.createStatement();
         try {
             statement.executeUpdate(delete.toString());
@@ -1573,32 +1465,13 @@ public class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener,
         }
         String date = new Date().toString();
         String update = "INSERT INTO properties    "
-                    + "(thekey, property, public )                            " 
-                    + "VALUES (\"LastUpdates\", \"" + date  + "\" , true)  ";
+                    + "(thekey, property, isPublic )                            " 
+                    + "VALUES ('LastUpdates', '" + date  + "' , 1)  ";
         try {
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Error insertoing LastUpDated " + update, ex);
         }
-    }
-
-    private void runInsert() throws BridgeDbSqlException{
-        if (insertQuery != null) {
-           try {
-                Statement statement = createStatement();
-                long start = new Date().getTime();
-                int changed = statement.executeUpdate(insertQuery.toString());
-                System.out.println(new Date().getTime() - start);
-                insertCount += changed;
-                doubleCount += blockCount - changed;
-                Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
-            } catch (SQLException ex) {
-                System.err.println(ex);
-                throw new BridgeDbSqlException ("Error inserting link ", ex, insertQuery.toString());
-            }
-        }   
-        insertQuery = null;
-        blockCount = 0;
     }
 
 }
