@@ -14,6 +14,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
+@Ignore
 public class OpsMapperTest extends org.bridgedb.ops.OpsMapperTest {
     
     @BeforeClass
