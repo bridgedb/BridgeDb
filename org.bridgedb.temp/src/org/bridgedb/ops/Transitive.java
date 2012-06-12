@@ -13,7 +13,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.sql.URLMapperSQL;
+import org.bridgedb.mysql.URLMapperSQL;
 import org.bridgedb.url.URLIterator;
 
 /*

@@ -42,32 +42,32 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         OpsMapper, URLIterator {
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	static final int SQL_COMPAT_VERSION = 4;
+	protected static final int SQL_COMPAT_VERSION = 4;
   
     //Maximumn size in database
-    static final int SYSCODE_LENGTH = 100;
-    static final int FULLNAME_LENGTH = 100;
-    static final int MAINURL_LENGTH = 100;
-    static final int URLPATTERN_LENGTH = 100;
-    static final int ID_LENGTH = 100;
-    static final int TYPE_LENGTH = 100;
-    static final int URNBASE_LENGTH = 100;
-    static final int PREDICATE_LENGTH = 100;
-    static final int PROVENANCE_ID_LENGTH = 100;
-    static final int NAME_SPACE_LENGTH = 100;
-    static final int KEY_LENGTH= 100; 
-    static final int PROPERTY_LENGTH = 100;
+    protected static final int SYSCODE_LENGTH = 100;
+    protected static final int FULLNAME_LENGTH = 100;
+    protected static final int MAINURL_LENGTH = 100;
+    protected static final int URLPATTERN_LENGTH = 100;
+    protected static final int ID_LENGTH = 100;
+    protected static final int TYPE_LENGTH = 100;
+    protected static final int URNBASE_LENGTH = 100;
+    protected static final int PREDICATE_LENGTH = 100;
+    protected static final int PROVENANCE_ID_LENGTH = 100;
+    protected static final int NAME_SPACE_LENGTH = 100;
+    protected static final int KEY_LENGTH= 100; 
+    protected static final int PROPERTY_LENGTH = 100;
 
     private static final int FREESEARCH_CUTOFF = 100000;      
     //Internal parameters
     private static final int DEFAULT_LIMIT = 1000;
-    static final int BLOCK_SIZE = 1000;
-    int blockCount = 0;
-    int insertCount = 0;
-    int doubleCount = 0;    
+    protected static final int BLOCK_SIZE = 1000;
+    protected int blockCount = 0;
+    protected int insertCount = 0;
+    protected int doubleCount = 0;    
     
-    SQLAccess sqlAccess;
-    Connection possibleOpenConnection;
+    protected SQLAccess sqlAccess;
+    protected Connection possibleOpenConnection;
 
     public SQLBase(SQLAccess sqlAccess) throws BridgeDbSqlException{
         if (sqlAccess == null){
@@ -817,7 +817,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     /**  Support methods **/
     
-    Statement createStatement() throws BridgeDbSqlException{
+    protected Statement createStatement() throws BridgeDbSqlException{
         try {
             return createAStatement();
         } catch (SQLException ex) {
@@ -825,7 +825,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         }
     }
    
-    abstract Statement createAStatement() throws SQLException;
+    abstract protected Statement createAStatement() throws SQLException;
     
     /** Append methods **/
     
@@ -1235,14 +1235,14 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
  		dropTable("properties");
      }
     
-	abstract void dropTable(String table) throws BridgeDbSqlException;
+	abstract protected void dropTable(String table) throws BridgeDbSqlException;
 
     /**
 	 * Excecutes several SQL statements to create the tables and indexes in the database the given
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	abstract void createSQLTables() throws BridgeDbSqlException;
+	abstract protected void createSQLTables() throws BridgeDbSqlException;
 
     void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();

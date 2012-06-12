@@ -1,4 +1,4 @@
-package org.bridgedb.sql;
+package org.bridgedb.virtuoso;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,6 +29,9 @@ import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
+import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLBase;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.ByNameSpaceIterable;
 import org.bridgedb.url.URLIterator;
@@ -54,7 +57,7 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
         super(dropTables, sqlAccess);
     }   
     
-  	void dropTable(String name) throws BridgeDbSqlException{
+  	protected void dropTable(String name) throws BridgeDbSqlException{
         //"IF NOT EXISTS" is unsupported 
         String query = "select * from information_schema.tables where table_name='" + name + "'";
         Statement sh = createStatement();
@@ -76,7 +79,7 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
         } 
     }
 
-    Statement createAStatement() throws SQLException{
+    protected Statement createAStatement() throws SQLException{
         if (possibleOpenConnection == null){
             possibleOpenConnection = sqlAccess.getAConnection();
         } else if (possibleOpenConnection.isClosed()){
@@ -90,7 +93,7 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	void createSQLTables() throws BridgeDbSqlException
+	protected void createSQLTables() throws BridgeDbSqlException
 	{
         //"IF NOT EXISTS " is not supported
 		try 
