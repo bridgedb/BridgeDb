@@ -4,6 +4,8 @@
  */
 package org.bridgedb.sql;
 
+import org.bridgedb.virtuoso.VirtuosoAccess;
+import org.bridgedb.mysql.MySQLAccess;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

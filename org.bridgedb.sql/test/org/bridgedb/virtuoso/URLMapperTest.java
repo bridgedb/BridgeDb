@@ -2,7 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.sql;
+package org.bridgedb.virtuoso;
+import org.bridgedb.sql.*;
 
 import org.bridgedb.mysql.URLMapperSQL;
 import java.util.Date;
@@ -26,10 +27,10 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
     public static void setupIDMapper() throws IDMapperException{
 
         connectionOk = false;
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
-        urlMapper = urlMapperSQL;
+        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(true, sqlAccess);
+        urlMapper =  urlMapperVirtuoso;
     }
             
 }

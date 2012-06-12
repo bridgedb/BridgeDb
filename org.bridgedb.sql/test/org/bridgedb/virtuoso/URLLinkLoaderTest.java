@@ -1,6 +1,9 @@
-package org.bridgedb.sql;
+package org.bridgedb.virtuoso;
 
+import org.bridgedb.virtuoso.URLMapperVirtuoso;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.url.URLMapperTestBase;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -10,7 +13,7 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-public class VirtuosoURLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
+public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
     public static void setupURLs() throws IDMapperException{

@@ -12,11 +12,11 @@ import org.bridgedb.IDMapperException;
  */
 public class BridgeDbSqlException extends IDMapperException{
 
-    BridgeDbSqlException(String msg, Exception ex) {
+    public BridgeDbSqlException(String msg, Exception ex) {
         super(msg, ex);
     }
 
-    BridgeDbSqlException(String msg, Exception ex, String query) {
+    public BridgeDbSqlException(String msg, Exception ex, String query) {
         super(msg + ":" + query, ex);
         System.err.println(query);
     }

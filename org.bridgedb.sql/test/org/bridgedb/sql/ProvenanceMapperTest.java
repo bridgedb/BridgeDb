@@ -4,6 +4,7 @@
  */
 package org.bridgedb.sql;
 
+import org.bridgedb.mysql.URLMapperSQL;
 import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.url.URLMapperTestBase;
