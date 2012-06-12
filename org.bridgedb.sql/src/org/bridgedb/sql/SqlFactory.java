@@ -52,6 +52,12 @@ public class SqlFactory {
         return sqlAccess;
     }
 
+    public static SQLAccess createTestVirtuosoAccess() throws BridgeDbSqlException {
+        VirtuosoAccess virtuosoAccess = new VirtuosoAccess();
+        virtuosoAccess.getConnection();
+        return virtuosoAccess;
+    }
+    
     public static String configFilePath(){
         try {
             return getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
@@ -287,6 +293,7 @@ public class SqlFactory {
         //                      env.get(envName));
         //}
     }
+
 
 
     
