@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.sql.URLMapperSQL;
+import org.bridgedb.mysql.URLMapperSQL;
 import org.junit.BeforeClass;
 import org.openrdf.OpenRDFException;
 

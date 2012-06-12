@@ -1,4 +1,4 @@
-package org.bridgedb.sql;
+package org.bridgedb.mysql;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -26,6 +26,9 @@ import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.provenance.ProvenanceMapper;
 import org.bridgedb.provenance.XrefProvenance;
 import org.bridgedb.result.URLMapping;
+import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLBase;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.ByNameSpaceIterable;
 import org.bridgedb.url.URLIterator;
@@ -52,7 +55,7 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
         super(dropTables, sqlAccess);
     }   
 
-	void dropTable(String name) throws BridgeDbSqlException
+	protected void dropTable(String name) throws BridgeDbSqlException
 	{
     	Statement sh = createStatement();
 		try 
@@ -67,7 +70,7 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
 		}
 	}
 
-    Statement createAStatement() throws SQLException{
+    protected Statement createAStatement() throws SQLException{
         if (possibleOpenConnection == null){
             possibleOpenConnection = sqlAccess.getAConnection();
         } else if (possibleOpenConnection.isClosed()){
@@ -84,7 +87,7 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	void createSQLTables() throws BridgeDbSqlException
+	protected void createSQLTables() throws BridgeDbSqlException
 	{
 		try 
 		{

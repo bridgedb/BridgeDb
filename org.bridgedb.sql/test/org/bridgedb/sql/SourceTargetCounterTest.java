@@ -4,6 +4,7 @@
  */
 package org.bridgedb.sql;
 
+import org.bridgedb.mysql.URLMapperSQL;
 import org.bridgedb.IDMapperException;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

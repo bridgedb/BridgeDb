@@ -9,7 +9,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.sql.URLMapperSQL;
+import org.bridgedb.mysql.URLMapperSQL;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
 import org.bridgedb.ws.WSCoreService;
