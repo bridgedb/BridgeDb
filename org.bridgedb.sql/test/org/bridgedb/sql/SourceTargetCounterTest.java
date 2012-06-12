@@ -6,12 +6,14 @@ package org.bridgedb.sql;
 
 import org.bridgedb.IDMapperException;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * This class depends on URLasIDMapperSQLTest having loaded the data.
  * 
  * @author Christian
  */
+@Ignore
 public class SourceTargetCounterTest extends org.bridgedb.statistics.SourceTargetCounterTest {
     
     @BeforeClass

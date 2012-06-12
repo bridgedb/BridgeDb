@@ -13,6 +13,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
+@Ignore
 public class IDMapperTest extends org.bridgedb.IDMapperTest {
     
     @BeforeClass
