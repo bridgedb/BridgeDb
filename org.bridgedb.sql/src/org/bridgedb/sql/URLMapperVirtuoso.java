@@ -38,14 +38,14 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URLIterator, XrefIterator,
-public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
+public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
         OpsMapper, URLIterator {
     
-    public URLMapperSQL(SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public URLMapperVirtuoso(SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(sqlAccess);
      }   
 
-    public URLMapperSQL(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public URLMapperVirtuoso(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(dropTables, sqlAccess);
     }   
 
