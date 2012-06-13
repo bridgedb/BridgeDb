@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SqlFactory;
 import org.openrdf.OpenRDFException;
 
@@ -18,7 +19,7 @@ import org.openrdf.OpenRDFException;
  */
 public class LinksetLoader {
     
-    private static void parse(URLMapperSQL urlMapperSQL, String fileName) throws IDMapperLinksetException{
+    public static void parse(SQLBase urlMapperSQL, String fileName) throws IDMapperLinksetException{
         File file = new File(fileName);
         if (file.isFile()){
             LinksetHandler.parse (urlMapperSQL,fileName);
@@ -29,7 +30,7 @@ public class LinksetLoader {
         }
     }
     
-    private static void parse(URLMapperSQL urlMapperSQL, File file){
+    private static void parse(SQLBase urlMapperSQL, File file){
         if (file.isFile()){
             try {
                 LinksetHandler.parse (urlMapperSQL,file.getAbsolutePath());
@@ -44,7 +45,7 @@ public class LinksetLoader {
         }
     }
 
-    private static void clearAndParse(URLMapperSQL urlMapperSQL, String fileName) throws IDMapperLinksetException{
+    protected static void clearAndParse(SQLBase urlMapperSQL, String fileName) throws IDMapperLinksetException{
         File file = new File(fileName);
         if (file.isFile()){
             LinksetHandler.clearAndParse (urlMapperSQL,fileName);
@@ -55,7 +56,7 @@ public class LinksetLoader {
         }
     }
     
-    private static void clearAndParse(URLMapperSQL urlMapperSQL, File file){
+    private static void clearAndParse(SQLBase urlMapperSQL, File file){
         if (file.isFile()){
             try {
                 LinksetHandler.clearAndParse (urlMapperSQL,file.getAbsolutePath());
