@@ -311,4 +311,33 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
         }*/
     }
 
+    protected void appendMySQLLimitConditions(StringBuilder query, Integer position, Integer limit){
+        if (position == null) {
+            position = 0;
+        }
+        if (limit == null){
+            limit = DEFAULT_LIMIT;
+        }
+        query.append("LIMIT " + position + ", " + limit);       
+    }
+
+    @Override
+    protected void appendVirtuosoTopConditions(StringBuilder query, Integer position, Integer limit) {
+        //do nothing at all!
+    }
+
+    @Override
+    public List<String> getSampleSourceURLs() throws IDMapperException {
+        String query = "SELECT sourceURL as url FROM link LIMIT 5";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToURLList(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }        
+    }
+
+
 }

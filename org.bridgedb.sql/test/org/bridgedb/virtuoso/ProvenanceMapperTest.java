@@ -15,7 +15,6 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-@Ignore
 public class ProvenanceMapperTest extends org.bridgedb.provenance.ProvenanceMapperTest {
     
     @BeforeClass
