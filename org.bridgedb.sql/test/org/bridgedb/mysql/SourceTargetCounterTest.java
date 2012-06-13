@@ -2,10 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.sql;
+package org.bridgedb.mysql;
 
 import org.bridgedb.mysql.URLMapperSQL;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 
