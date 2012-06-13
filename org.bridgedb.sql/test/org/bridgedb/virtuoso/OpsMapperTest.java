@@ -15,7 +15,6 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-@Ignore //not doing ops mapper at the moment. Too slow.
 public class OpsMapperTest extends org.bridgedb.ops.OpsMapperTest {
     
     @BeforeClass

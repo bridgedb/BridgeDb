@@ -291,4 +291,33 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
         }
         return smaller;
     }
+    
+    protected void appendMySQLLimitConditions(StringBuilder query, Integer position, Integer limit){
+        //do nothing at all!
+    }
+
+    @Override
+    protected void appendVirtuosoTopConditions(StringBuilder query, Integer position, Integer limit) {
+        if (position == null) {
+            position = 0;
+        }
+        if (limit == null){
+            limit = DEFAULT_LIMIT;
+        }
+        query.append("TOP " + position + ", " + limit + " ");       
+    }
+
+    @Override
+    public List<String> getSampleSourceURLs() throws IDMapperException {
+        String query = "SELECT TOP 5 sourceURL as url FROM link";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToURLList(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }        
+    }
+
 }

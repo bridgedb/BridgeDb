@@ -60,7 +60,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     private static final int FREESEARCH_CUTOFF = 100000;      
     //Internal parameters
-    private static final int DEFAULT_LIMIT = 1000;
+    protected static final int DEFAULT_LIMIT = 1000;
     protected static final int BLOCK_SIZE = 1000;
     protected int blockCount = 0;
     protected int insertCount = 0;
@@ -461,15 +461,16 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         return new ByNameSpaceIterable(nameSpaces, this);
     }
 
-
     //**** OpsMapper Methods  **/ 
     @Override
     public List<URLMapping> getMappings(List<String> URLs, List<String> sourceURLs, List<String> targetURLs, 
             List<String> nameSpaces, List<String> sourceNameSpaces, List<String> targetNameSpaces, 
             List<String> provenanceIds, Integer position, Integer limit){
         StringBuilder query = new StringBuilder();
-        query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
-            query.append("targetNameSpace ");
+        query.append("SELECT ");
+        appendVirtuosoTopConditions(query, position, limit);
+        query.append("link.id as linkId, sourceURL, targetURL, provenance.id as provenanceId, sourceNameSpace, linkPredicate, ");
+        query.append("targetNameSpace ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
         appendAllURLconditions(query, URLs);
@@ -479,7 +480,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         appendSourceNameSpaceConditions(query, sourceNameSpaces);
         appendTargetNameSpaceConditions(query, targetNameSpaces);
         appendProvenanceConditions(query, provenanceIds);
-        appendLimitConditions(query, position, limit);
+        appendMySQLLimitConditions(query, position, limit);
         try {
             Statement statement = this.createAStatement();
             ResultSet rs = statement.executeQuery(query.toString());
@@ -494,7 +495,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     @Override
     public URLMapping getMapping(int id) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
+        query.append("SELECT link.id as linkId, sourceURL, targetURL, provenance.id as provenanceId, sourceNameSpace, linkPredicate, ");
             query.append("targetNameSpace ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
@@ -525,7 +526,9 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     public List<Xref> getXrefs(List<DataSource> dataSources, List<String> provenanceIds, Integer position, Integer limit) 
             throws IDMapperException{
         StringBuilder query = new StringBuilder();
-        query.append("SELECT sourceURL as url ");
+        query.append("SELECT ");
+        appendVirtuosoTopConditions(query, position, limit);
+        query.append("sourceURL as url ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
         appendSourceDataSources(query, dataSources);
@@ -536,7 +539,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         query.append("WHERE provenance_id = provenance.id ");
         appendTargetDataSources(query, dataSources);
         appendProvenanceConditions(query, provenanceIds);
-        appendLimitConditions(query, position, limit);
+        appendMySQLLimitConditions(query, position, limit);
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
@@ -559,7 +562,9 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     public List<String> getURLs(List<String> nameSpaces, List<String> provenanceIds, Integer position, Integer limit) 
             throws IDMapperException{
         StringBuilder query = new StringBuilder();
-        query.append("SELECT sourceURL as url ");
+        query.append("SELECT ");
+        appendVirtuosoTopConditions(query, position, limit);
+        query.append("sourceURL as url ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
         appendSourceNameSpaceConditions(query, nameSpaces);
@@ -570,7 +575,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         query.append("WHERE provenance_id = provenance.id ");
         appendTargetNameSpaceConditions(query, nameSpaces);
         appendProvenanceConditions(query, provenanceIds);
-        appendLimitConditions(query, position, limit);
+        appendMySQLLimitConditions(query, position, limit);
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
@@ -582,18 +587,8 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     }
     
     @Override
-    public List<String> getSampleSourceURLs() throws IDMapperException {
-        String query = "SELECT sourceURL as url FROM link LIMIT 5";
-        Statement statement = this.createStatement();
-        try {
-            ResultSet rs = statement.executeQuery(query.toString());
-            return resultSetToURLList(rs);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
-        }        
-    }
-
+    public abstract List<String> getSampleSourceURLs() throws IDMapperException;
+    
     @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {
         int numberOfMappings = getMappingsCount();
@@ -672,7 +667,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     public Set<XrefProvenance> mapIDProvenance(Xref ref, List<String> provenanceIds, 
             List<DataSource> targetDataSources) throws IDMapperException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
+        query.append("SELECT link.id as linkId, sourceURL, targetURL, provenance.id as provenanceId, sourceNameSpace, linkPredicate, ");
             query.append("targetNameSpace ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
@@ -692,7 +687,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     public Set<URLMapping> mapURL(List<String> sourceURLs, 
             List<String> provenanceIds, List<String> targetNameSpaces) throws IDMapperException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT link.id, sourceURL, targetURL, provenance.id as id, sourceNameSpace, linkPredicate, ");
+        query.append("SELECT link.id as linkId, sourceURL, targetURL, provenance.id as provenanceId, sourceNameSpace, linkPredicate, ");
             query.append("targetNameSpace ");
         query.append("FROM link, provenance ");
         query.append("WHERE provenance_id = provenance.id ");
@@ -893,16 +888,10 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         }   
     }
     
-    private void appendLimitConditions(StringBuilder query, Integer position, Integer limit){
-        if (position == null) {
-            position = 0;
-        }
-        if (limit == null){
-            limit = DEFAULT_LIMIT;
-        }
-        query.append("LIMIT " + position + ", " + limit);       
-    }
+    protected abstract void appendMySQLLimitConditions(StringBuilder query, Integer position, Integer limit);
     
+    protected abstract void appendVirtuosoTopConditions(StringBuilder query, Integer position, Integer limit);
+
     private Set<URLMapping> URLMappingParameterError(String error){
         HashSet<URLMapping> results = new HashSet<URLMapping>();
         results.add(new URLMapping(error));
@@ -963,10 +952,10 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     private URLMapping resultSetToURLMapping(ResultSet rs) throws SQLException {
         return new URLMapping(
-                rs.getInt("link.id"), 
+                rs.getInt("linkId"), 
                 rs.getString("sourceURL"), 
                 rs.getString("targetURL"), 
-                rs.getString("provenance.id"),
+                rs.getString("provenanceId"),
                 rs.getString("linkPredicate"));
     }
 
@@ -974,10 +963,10 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         ArrayList<URLMapping> results = new ArrayList<URLMapping>();
         while (rs.next()){
             results.add(new URLMapping(
-                rs.getInt("link.id"), 
+                rs.getInt("linkId"), 
                 rs.getString("sourceURL"), 
                 rs.getString("targetURL"), 
-                rs.getString("provenance.id"),
+                rs.getString("provenanceId"),
                 rs.getString("linkPredicate")));
         }
         return results;
@@ -991,7 +980,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         return results;
     }
 
-    private List<String> resultSetToURLList(ResultSet rs ) throws IDMapperException{
+    protected List<String> resultSetToURLList(ResultSet rs ) throws IDMapperException{
         ArrayList<String> results = new ArrayList<String>();
         try {
             while (rs.next()){
@@ -1027,7 +1016,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     private XrefProvenance resultSetToXrefProvenance(ResultSet rs) throws SQLException, IDMapperException {
         Xref xref = DataSource.uriToXref(rs.getString("targetURL"));
-        return new XrefProvenance(xref, rs.getString("provenance.id"), rs.getString("linkPredicate"));
+        return new XrefProvenance(xref, rs.getString("provenanceId"), rs.getString("linkPredicate"));
     }
 
     private List<Xref> resultSetToXrefList(ResultSet rs ) throws IDMapperException{
