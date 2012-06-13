@@ -1,18 +1,22 @@
-package org.bridgedb.sql;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.bridgedb.virtuoso;
 
-import org.bridgedb.mysql.URLMapperSQL;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.url.URLMapperTestBase;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * 
  * @author Christian
  */
 @Ignore
-public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
+public class ProvenanceMapperTest extends org.bridgedb.provenance.ProvenanceMapperTest {
     
     @BeforeClass
     public static void setupURLs() throws IDMapperException{
@@ -28,14 +32,10 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
-        listener = urlMapperSQL;
+        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(sqlAccess);
+        provenaceMapper = urlMapperVirtuoso;
     }
-      
-    @Test
-    public void loadData() throws IDMapperException{
-        defaultLoadData();        
-    }
+            
 }

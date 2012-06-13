@@ -15,7 +15,6 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-@Ignore
 public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
     
     private static final String CREATOR1 = "testCreateProvenance";
