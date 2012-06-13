@@ -182,7 +182,7 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
                 Statement statement = createStatement();
                 long start = new Date().getTime();
                 int changed = statement.executeUpdate(insertQuery.toString());
-                System.out.println(new Date().getTime() - start);
+                Reporter.report("insertTook " + (new Date().getTime() - start));
                 insertCount += changed;
                 doubleCount += blockCount - changed;
                 Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
@@ -209,5 +209,106 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
         doubleCount = 0;    
  	}
 
+    @Override
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
+        String query = "SELECT * FROM provenance "
+                + "WHERE sourceNameSpace = '" + src.getNameSpace() + "'"
+                + "AND targetNameSpace = '" + tgt.getNameSpace() + "'"
+                + "LIMIT 1";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query);
+            return (rs.next());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }
+    }
+    
+    @Override
+    public boolean uriExists(String URL) throws IDMapperException {
+        if (URL == null) return false;
+        if (URL.isEmpty()) return false;
+        String query1 = "SELECT * FROM link      "
+                + "where                    "
+                + "       sourceURL = '" + URL + "'" 
+                + "LIMIT 1";
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query1);
+            if (rs.next()) return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query1, ex);
+        }
+        return false;
+        /* No need for target as all links bi directional 
+        String query2 = "SELECT * FROM link      "
+                + "where                    "
+                + "       targetURL = '" + URL + "'"   
+                + "LIMIT 1";
+        statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query2);
+            return (rs.next());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query2, ex);
+        }*/
+    }
+
+    @Override
+    public Set<String> urlSearch(String text, int limit) throws IDMapperException {
+        //Try source using index so no joker at the front
+        String query1 = "SELECT distinct sourceURL as url  "
+                + "FROM link      "
+                + "where                    "
+                + "   sourceURL LIKE '" + text + "' "
+                + "LIMIT " + limit;
+        Statement statement = this.createStatement();
+        Set<String> foundSoFar;
+        try {
+            ResultSet rs = statement.executeQuery(query1);
+            foundSoFar = resultSetToURLSet(rs);
+            if (foundSoFar.size() == limit){
+                return foundSoFar;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query1, ex);
+        }
+        //Try source without using index so joker at the front
+        String query2 = "SELECT distinct sourceURL as url  "
+                + "FROM link      "
+                + "where                    "
+                + "   sourceURL LIKE '%" + text + "' "
+                + "LIMIT " + limit;
+        try {
+            ResultSet rs = statement.executeQuery(query2);
+            foundSoFar.addAll(resultSetToURLSet(rs));
+            if (foundSoFar.size() == limit){
+                return foundSoFar;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query2, ex);
+        }
+        return foundSoFar;
+        /* No need as all links are loaded both ways
+         * Try target without using index so joker at the front
+        String query3 = "SELECT distinct targetURL as url  "
+                + "FROM link      "
+                + "where                    "
+                + "   targetURL LIKE '%" + text + "' "
+                + "LIMIT " + limit;
+        try {
+            ResultSet rs = statement.executeQuery(query3);
+            foundSoFar.addAll(resultSetToURLSet(rs));
+            return foundSoFar;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query3, ex);
+        }*/
+    }
 
 }

@@ -3,11 +3,10 @@
  * and open the template in the editor.
  */
 package org.bridgedb.virtuoso;
-import org.bridgedb.sql.*;
 
-import org.bridgedb.mysql.URLMapperSQL;
-import java.util.Date;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 
@@ -16,12 +15,9 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
+@Ignore //not doing ops mapper at the moment. Too slow.
+public class OpsMapperTest extends org.bridgedb.ops.OpsMapperTest {
     
-    private static final String CREATOR1 = "testCreateProvenance";
-    private static final String PREDICATE1 = "testMapping";
-    private static final long CREATION1 = new Date().getTime();
-
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
 
@@ -29,7 +25,7 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
         SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
         URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(sqlAccess);
-        urlMapper =  urlMapperVirtuoso;
+        opsMapper = urlMapperVirtuoso;
     }
             
 }
