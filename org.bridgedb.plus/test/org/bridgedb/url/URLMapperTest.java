@@ -1,5 +1,7 @@
 package org.bridgedb.url;
 
+import org.junit.Ignore;
+import java.util.Date;
 import org.bridgedb.DataSource;
 import org.junit.BeforeClass;
 import org.bridgedb.IDMapperException;
@@ -20,6 +22,18 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     //If set to false will skip testClose(). 
     protected static boolean connectionOk = true;
         
+    static private Date start;
+    
+    @BeforeClass
+    public static void startTime() throws IDMapperException{
+        start = new Date();
+    }
+
+    @AfterClass
+    public static void stopTime() throws IDMapperException{
+        System.out.println("Test took " + ((new Date()).getTime() - start.getTime()));
+    }
+
     @AfterClass //Setup as an afterclass so it is run last.
     public static void testClose() throws IDMapperException{
         if (connectionOk){        
@@ -40,6 +54,7 @@ public abstract class URLMapperTest extends URLMapperTestBase{
         assertNotNull(map2URL2);
         assertNotNull(mapBadURL1);
         Map<String, Set<String>> results = urlMapper.mapURL(sourceURLs);
+        System.out.println(results);
         Set<String> resultSet = results.get(map1URL1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1URL2));
