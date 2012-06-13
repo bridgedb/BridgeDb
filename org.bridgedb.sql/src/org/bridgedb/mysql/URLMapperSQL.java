@@ -57,6 +57,7 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
 
 	protected void dropTable(String name) throws BridgeDbSqlException
 	{
+        int error = 1/0;
     	Statement sh = createStatement();
 		try 
 		{
@@ -89,6 +90,7 @@ public class URLMapperSQL extends SQLBase implements IDMapper, IDMapperCapabilit
 	 */
 	protected void createSQLTables() throws BridgeDbSqlException
 	{
+        int error = 1/0;
 		try 
 		{
 			Statement sh = createStatement();
