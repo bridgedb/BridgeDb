@@ -58,6 +58,7 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
     }   
     
   	protected void dropTable(String name) throws BridgeDbSqlException{
+        int error = 1/0;
         //"IF NOT EXISTS" is unsupported 
         String query = "select * from information_schema.tables where table_name='" + name + "'";
         Statement sh = createStatement();
@@ -95,6 +96,7 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
 	 */
 	protected void createSQLTables() throws BridgeDbSqlException
 	{
+        int error = 1/0;
         //"IF NOT EXISTS " is not supported
 		try 
 		{
@@ -162,6 +164,7 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
         } catch (SQLException ex) {
 			throw new BridgeDbSqlException ("Error inserting forward link ", ex);
         }
+        blockCount++;
         try {
             pstLink.setString(1, target);
 			pstLink.setString(2, source);
@@ -169,6 +172,10 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
 			pstLink.executeUpdate();
         } catch (SQLException ex) {
 			throw new BridgeDbSqlException ("Error inserting inverse link ", ex);
+        }
+        blockCount++;
+        if (blockCount >= BLOCK_SIZE){
+            Reporter.report("Inserted " + insertCount + " links ");
         }
     }
     
@@ -180,6 +187,7 @@ public class URLMapperVirtuoso extends SQLBase implements IDMapper, IDMapperCapa
         } catch (SQLException ex) {
 			throw new BridgeDbSqlException ("Error preparing inserting link statement", ex);
         }
+        blockCount = 0;
  	}
 
     @Override

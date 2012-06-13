@@ -19,6 +19,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
+@Ignore //TOO SLOW
 public class URLIteratorTest extends org.bridgedb.url.URLIteratorTest {
     
     @BeforeClass
