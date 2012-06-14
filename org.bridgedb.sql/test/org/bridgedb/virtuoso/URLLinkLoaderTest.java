@@ -1,19 +1,16 @@
 package org.bridgedb.virtuoso;
 
-import org.bridgedb.virtuoso.URLMapperVirtuoso;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.url.URLMapperTestBase;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * 
  * @author Christian
  */
-@Ignore
 public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
@@ -32,7 +29,7 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
-        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(true, sqlAccess);
+        VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(true, sqlAccess);
         listener = urlMapperVirtuoso;
     }
       

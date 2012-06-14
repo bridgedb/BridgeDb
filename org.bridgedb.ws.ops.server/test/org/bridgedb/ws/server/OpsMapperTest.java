@@ -9,7 +9,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.mysql.MysqlMapper;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
 import org.bridgedb.ws.WSCoreService;
@@ -29,7 +29,7 @@ public class OpsMapperTest extends org.bridgedb.ops.OpsMapperTest{
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
-        IDMapper inner = new URLMapperSQL(sqlAccess);
+        IDMapper inner = new MysqlMapper(sqlAccess);
         WSInterface webService = new WSService(inner);
         opsMapper = new WSMapper(webService);
     }

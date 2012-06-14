@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.virtuoso;
 
 import org.bridgedb.IDMapperException;
@@ -23,7 +19,7 @@ public class SourceTargetCounterTest extends org.bridgedb.statistics.SourceTarge
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
-        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(sqlAccess);
+        VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(sqlAccess);
         opsMapper = urlMapperVirtuoso;
     }
             

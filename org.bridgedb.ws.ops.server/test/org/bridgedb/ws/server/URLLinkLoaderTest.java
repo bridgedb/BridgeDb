@@ -2,7 +2,7 @@ package org.bridgedb.ws.server;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.mysql.MysqlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLMapperTestBase;
 import org.junit.BeforeClass;
@@ -33,11 +33,11 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         connectionOk = true;
         //Use this to recreate the databases
-        //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        //URLMapperSQL urlMapperSQL = new MysqlMapper(true, sqlAccess);
         //Use this one to keep the database
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(false, sqlAccess);
+        MysqlMapper urlMapperSQL = new MysqlMapper(false, sqlAccess);
         //Use with true version only is database structure has changed. It deletes all tables!!!
-        //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        //URLMapperSQL urlMapperSQL = new MysqlMapper(true, sqlAccess);
         listener = urlMapperSQL;
     }
       

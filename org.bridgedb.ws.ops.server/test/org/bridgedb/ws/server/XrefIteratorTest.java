@@ -9,7 +9,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.mysql.MysqlMapper;
 import org.bridgedb.ws.WSInterface;
 import org.bridgedb.ws.WSMapper;
 import org.bridgedb.ws.WSService;
@@ -25,7 +25,7 @@ public class XrefIteratorTest extends org.bridgedb.XrefIteratorTest{
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
-        IDMapper inner = new URLMapperSQL(sqlAccess);
+        IDMapper inner = new MysqlMapper(sqlAccess);
         WSInterface webService = new WSService(inner);
         XrefIterator = new WSMapper(webService);
     }
