@@ -58,7 +58,7 @@ my $api_path = "/home/socr/c/users2/apico/src/ensembl/modules";
 my $scriptmode = 0;
 my $speciesArg = 0;
 my $dateArg = 0;
-my $funcgen = 1;
+my $funcgen = 0;
 my $gs = 0;
 
 if ($#ARGV == 3) { # if 4 args passed in, then use them
