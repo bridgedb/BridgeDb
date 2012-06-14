@@ -8,10 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.mysql.MysqlMapper;
 import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SqlFactory;
-import org.bridgedb.virtuoso.URLMapperVirtuoso;
+import org.bridgedb.virtuoso.VirtuosoMapper;
 import org.openrdf.OpenRDFException;
 
 /**
@@ -22,12 +22,12 @@ public class TestLoader extends LinksetLoader{
     
     public static void main(String[] args) throws IDMapperException, IOException, OpenRDFException  {
         SQLAccess sqlAccess = SqlFactory.createTestVirtuosoAccess();
-        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(sqlAccess);
+        VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(sqlAccess);
         parse (urlMapperVirtuoso, "D:/OpenPhacts/linksets");
         
-        //URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
+        //URLMapperSQL urlMapperSQL = new MysqlMapper(sqlAccess);
         //parse (urlMapperSQL, "D:/OpenPhacts/linksets");
-        //URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        //URLMapperSQL urlMapperSQL = new MysqlMapper(true, sqlAccess);
         //clearAndParse(urlMapperSQL, args[0]);
     }
 

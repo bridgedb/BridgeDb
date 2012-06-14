@@ -5,11 +5,9 @@
 package org.bridgedb.virtuoso;
 import org.bridgedb.sql.*;
 
-import org.bridgedb.mysql.URLMapperSQL;
 import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 
 /**
  * This class depends on URLasIDMapperSQLTest having loaded the data.
@@ -28,7 +26,7 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
-        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(sqlAccess);
+        VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(sqlAccess);
         urlMapper =  urlMapperVirtuoso;
     }
             
