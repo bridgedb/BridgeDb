@@ -58,7 +58,7 @@ my $api_path = "/home/socr/c/users2/apico/src/ensembl/modules";
 my $scriptmode = 0;
 my $speciesArg = 0;
 my $dateArg = 0;
-my $funcgen = 0;
+my $funcgen = 1;
 my $gs = 0;
 
 if ($#ARGV == 3) { # if 4 args passed in, then use them
@@ -557,27 +557,6 @@ my $count = 1;                      # keeps count of each gene
 my $purge_frequency = 1000;         # indicates frequency of mysql loading, print out, and reinitialization of data tables 
 
 
-## CHECK TOTAL NUMBER OF GENES IN GENOME 
-my $total = $#{$gene_adaptor->list_dbIDs()} + 1;    # total number of genes in genome
-
-# Set $collect_sample to $total if collecting all genes
-if ($collect_sample == 0){
-    $collect_sample = $total;
-}
-
-# Filename for print_Tables subroutine
-my $output = $twoLetterSpecies."_Std_".$year.$mon.$mday."_All_".$collect_sample.".tab";
-
-
-
-## CHECK INPUT PARAMETERS AGAINST TOTAL GENE COUNT
-# check to see if user-defined start and sample size are within the size of the genome
-if ($collect_sample > $total || $start_count > $total){
-    print "INVALID USER PARAMETERS!!!\n\nSample size = $collect_sample\nStart = $start_count\nGenome = $total genes\n\n";
-    exit;
-}
-
-
 ## LOOP THROUGH EACH GENE IN GENOME
 ######################################################################################
 # The performance of $gene_adaptor->fetch_all() is dependent on a number of factors. #
@@ -603,6 +582,27 @@ $slice_adaptor->fetch_all('toplevel');
 # Using a while-pop loop instead of foreach, removes the need to reset $gene=0 in order to keep memory clear
 #foreach my $gene (@{$gene_adaptor->fetch_all()})
 my $genes = $gene_adaptor->fetch_all();
+
+## CHECK TOTAL NUMBER OF GENES IN GENOME 
+my $total = scalar @$genes;    # total number of genes in genome
+
+## Set $collect_sample to $total if collecting all genes
+if ($collect_sample == 0){
+    $collect_sample = $total;
+}
+
+# Filename for print_Tables subroutine
+my $output = $twoLetterSpecies."_Std_".$year.$mon.$mday."_All_".$collect_sample.".tab";
+
+
+
+## CHECK INPUT PARAMETERS AGAINST TOTAL GENE COUNT
+# check to see if user-defined start and sample size are within the size of the genome
+if ($collect_sample > $total || $start_count > $total){
+     print "INVALID USER PARAMETERS!!!\n\nSample size = $collect_sample\nStart = $start_count\nGenome = $total genes\n\n";
+     exit;
+}
+
 
 while (my $gene = pop(@$genes)) 
 {
@@ -711,36 +711,6 @@ while (my $gene = pop(@$genes))
                                                      'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
                                                      'PRIMARY KEY (ID)'
                                                      ]);
-	%{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'], 
-				'SYSTEM' => ["\'Affymetrix\'", "\'$dateArg\'", 
-					     "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
-					     "\'http://www.ensembl.org/".$genus_species."/Search/Summary?q=~\'", "\'\'", 
-					     "\'https://www.affymetrix.com/analysis/downloads/\'"],
-				'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
-					     'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
-					     'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
-					     'PRIMARY KEY (ID)'
-					     ]);
-	%{$GeneTables{Agilent}} = ('NAME' => ['Agilent', 'Ag'], 
-				   'SYSTEM' => ["\'Agilent Technologies\'", "\'$dateArg\'", 
-						"\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
-						"\'\'", "\'\'", 
-						"\'http://www.agilent.com/\'"],
-				   'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
-                                                'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
-						'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
-						'PRIMARY KEY (ID)'
-						]);
-	%{$GeneTables{Illumina}} = ('NAME' => ['Illumina', 'Il'], 
-				    'SYSTEM' => ["\'Illumina\'", "\'$dateArg\'", 
-						 "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
-						 "\'\'", "\'\'", 
-						 "\'http://www.illumina.com/products/arraysreagents/overview.ilmn\'"],
-				    'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'', 
-                                                 'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
-						 'Chip VARCHAR(128) NOT NULL DEFAULT \'\'', 
-						 'PRIMARY KEY (ID)'
-						 ]);
 	%{$GeneTables{Cint}} = ('NAME' => ['Cint', 'C'], 
 				    'SYSTEM' => ["\'Custom Microarrays for Ciona\'", "\'$dateArg\'", 
 						 "\'ID|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
@@ -1839,30 +1809,6 @@ sub parse_DBEntries {
 		}
         }
 
- 	elsif ($dbe_dbname =~ /^\'AFFY/i){  #catch all types
-	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{Affy}{$dbe_primary_id}}++){
-		$$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$dbe_primary_id, $dbe_dbname];
-		$$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $dbe_primary_id];
-		++$subcount{Affy};
-	    }
- 	}
-    	elsif ($dbe_dbname =~ /^\'Agilent/i){  #catch all types
-	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{Agilent}{$dbe_primary_id}}++){
-		$$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$dbe_primary_id, $dbe_dbname];
-		$$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $dbe_primary_id];
-		++$subcount{Agilent};
-	    }
- 	}
-    	elsif ($dbe_dbname =~ /^\'Illumina/i){ #catch all types  
-	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{Illumina}{$dbe_primary_id}}++){
-		$$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$dbe_primary_id, $dbe_dbname, $dbe_description];
-		$$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $dbe_primary_id];
-		++$subcount{Illumina};
-	    }
-  	}
         elsif ($dbe_dbname =~ /^\'cint\'$/i){  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{Cint}{$dbe_primary_id}}++){
@@ -2212,30 +2158,86 @@ sub parse_DBEntries {
 # with API calls. Also to populate ADMIN_Xrefs with sample of every available DB Entry.
 #################################################################################################
 sub parse_ProbeFeatures {
-  #my ($gene, $GeneTables, $Ensembl_GeneTables, $Attributes) = @_;
-  my ($GeneTables, $Ensembl_GeneTables) = @_;
   my %subcount = ();
   my %seen = ();
 
-  foreach my $key ( keys %$GeneTables) {
-      $subcount{$key} = 1;
-  }
+$subcount{Affy} = 1;
+$subcount{Agilent} = 1;
+$subcount{Illumina} = 1;
+
+my %GeneTables = ();             # ID systems
+my %Ensembl_GeneTables = ();     # links between Ensembl and other ID systems
+
 
 print "fetching arrays...\n";
 my @arrayList = @{$array_adaptor->fetch_all()};  
 foreach my $array (@arrayList){
-    ## Skip massive Exon arrays and the like. Anything >2 million probes	
-    if ($array->probe_count() > 2000000){
-	next;
-    }
-    my $p_dbname = mysql_quotes($array->vendor());
+  ##Reset HoH and variables for array data
+  $subcount{Affy} = 1;
+  $subcount{Agilent} = 1;
+  $subcount{Illumina} = 1;
 
-print "getting all probes from ".$array->name()."...\n";
-my @plist = ();
+	        %{$GeneTables{Affy}} = ('NAME' => ['Affy', 'X'],
+                                'SYSTEM' => ["\'Affymetrix\'", "\'$dateArg\'",
+                                             "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+                                             "\'http://www.ensembl.org/".$genus_species."/Search/Summary?q=~\'", "\'\'",
+                                             "\'https://www.affymetrix.com/analysis/downloads/\'"],
+                                'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                             'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                             'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                             'PRIMARY KEY (ID)'
+                                             ]);
+        %{$GeneTables{Agilent}} = ('NAME' => ['Agilent', 'Ag'],
+                                   'SYSTEM' => ["\'Agilent Technologies\'", "\'$dateArg\'",
+                                                "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+                                                "\'\'", "\'\'",
+                                                "\'http://www.agilent.com/\'"],
+                                   'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                'PRIMARY KEY (ID)'
+                                                ]);
+        %{$GeneTables{Illumina}} = ('NAME' => ['Illumina', 'Il'],
+                                    'SYSTEM' => ["\'Illumina\'", "\'$dateArg\'",
+                                                 "\'ID|Name\\\\BF|Chip\\\\BF\|\'", "\'\|$species\|\'", "\'\'",
+                                                 "\'\'", "\'\'",
+                                                 "\'http://www.illumina.com/products/arraysreagents/overview.ilmn\'"],
+                                    'HEADER' => ['ID VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                 'Name VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                 'Chip VARCHAR(128) NOT NULL DEFAULT \'\'',
+                                                 'PRIMARY KEY (ID)'
+                                                 ]);
+
+        %{$Ensembl_GeneTables{Affy}} = ('NAME' => ["Ensembl_${$GeneTables{Affy}}{NAME}[0]", 'En', "${$GeneTables{Affy}}{NAME}[1]"],
+                                            'HEADER' => ["\`Primary\` VARCHAR(128) NOT NULL DEFAULT \'\'",
+                                                         "\`Related\` VARCHAR(128) NOT NULL DEFAULT \'\'",
+                                                         "INDEX (\`Primary\`)"]);
+        %{$Ensembl_GeneTables{Agilent}} = ('NAME' => ["Ensembl_${$GeneTables{Agilent}}{NAME}[0]", 'En', "${$GeneTables{Agilent}}{NAME}[1]"],
+                                            'HEADER' => ["\`Primary\` VARCHAR(128) NOT NULL DEFAULT \'\'",
+                                                         "\`Related\` VARCHAR(128) NOT NULL DEFAULT \'\'",
+                                                         "INDEX (\`Primary\`)"]);
+        %{$Ensembl_GeneTables{Illumina}} = ('NAME' => ["Ensembl_${$GeneTables{Illumina}}{NAME}[0]", 'En', "${$GeneTables{Illumina}}{NAME}[1]"],
+                                            'HEADER' => ["\`Primary\` VARCHAR(128) NOT NULL DEFAULT \'\'",
+                                                         "\`Related\` VARCHAR(128) NOT NULL DEFAULT \'\'",
+                                                         "INDEX (\`Primary\`)"]);
+	
+
+
+  ## Skip massive Exon arrays and the like. Anything >2 million probes	
+  if ($array->probe_count() > 2000000){
+	next;
+  }
+  my $p_dbname = mysql_quotes($array->vendor());
+
+  my @plist = ();
   if ($p_dbname =~ /^\'AFFY/i) {  
-    @plist = @{$array->get_all_ProbeSets()};
+  	print "getting all probesets from ".$array->name()."...\n";  
+	@plist = @{$array->get_all_ProbeSets()};
+  } elsif ($p_dbname =~ /^\'Agilent/i || $p_dbname =~ /^\'Illumina/i ) {
+	print "getting all probes from ".$array->name()."...\n";
+    	@plist = @{$array->get_all_Probes()};  
   } else {
-    @plist = @{$array->get_all_Probes()};  
+	next;
   }
 
 my $pcount = $#plist;
@@ -2289,31 +2291,55 @@ print "probe count= $pcount\n";
         if ($p_dbname =~ /^\'AFFY/i #catch all types
 	  && $p_release !~ /Ex-/ && $p_release !~ /U133/){  #skip all exon array and old arrays
             $ADMIN_Xrefs{$db_release}[10] = "\'Y\'"; # collected
-                $$GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$p_primary_id, $p_dbname, $p_release];
-                $$Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $p_primary_id];
+                $GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$p_primary_id, $p_dbname, $p_release];
+                $Ensembl_GeneTables{Affy}{$count.$dot.$subcount{Affy}} = [$gene_stable_id, $p_primary_id];
                 ++$subcount{Affy};
         }
         elsif ($p_dbname =~ /^\'Agilent/i){  #catch all types
             $ADMIN_Xrefs{$db_release}[10] = "\'Y\'"; # collected
-                $$GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$p_primary_id, $p_dbname, $p_release];
-                $$Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $p_primary_id];
+                $GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$p_primary_id, $p_dbname, $p_release];
+                $Ensembl_GeneTables{Agilent}{$count.$dot.$subcount{Agilent}} = [$gene_stable_id, $p_primary_id];
                 ++$subcount{Agilent};
         }
         elsif ($p_dbname =~ /^\'Illumina/i){ #catch all types  
             $ADMIN_Xrefs{$db_release}[10] = "\'Y\'"; # collected
-                $$GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$p_primary_id, $p_dbname, $p_release];
-                $$Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $p_primary_id];
+                $GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$p_primary_id, $p_dbname, $p_release];
+                $Ensembl_GeneTables{Illumina}{$count.$dot.$subcount{Illumina}} = [$gene_stable_id, $p_primary_id];
                 ++$subcount{Illumina};
         }
         else {
             $ADMIN_Xrefs{$db_release}[10] = "\'N\'"; # not collected!
         }
-	}
-      }
+	} #end foreach dbe
+      } #end foreach pname
 	++$count;
-    }
-  }
-}
+    } #end foreach p
+		## Dump into database
+		my $sqlCSDB = "genmapp_current_CS_".$genus_species; # name of species database, based on user-selected species
+		my $sqlUser = "genmapp";                    # username
+            	my $sqlPass = "fun4genmapp";                # password
+                my $sqlDBLog = "genmapp_ensembl_etl_device_log";    # permanent log table
+                my $sqlHost = "mysql-dev.cgl.ucsf.edu";     # plato host
+                my $sqlPort = "13308";                      # plato port
+            	my $sqlConnection ="dbi:mysql:$sqlDBLog:$sqlHost:$sqlPort";   # connection statement used in DBI->connect()
+
+		$dbh = DBI->connect($sqlConnection, $sqlUser, $sqlPass)
+                or die "Connection Error: $DBI::errstr\n";
+
+                my $sql_db_use = "use $sqlCSDB";
+                $sth = $dbh->prepare($sql_db_use);
+                $sth->execute() or die "\nCould not execute $sql_db_use: $!\n";
+
+                print "Loading array data into MySQL database $sqlCSDB:\n";
+
+                ## LOAD TABLES INTO MYSQL
+                # HoHoA need to be reduced to HoA before loading
+                foreach my $key ( keys %GeneTables){
+                	mysql_CS_Table(%{$GeneTables{$key}});
+                	mysql_CS_Table(%{$Ensembl_GeneTables{$key}});
+		}
+  } #end foreach array
+} #end sub
 
 ## FEATURE TO ARRAY #############################################################################
 # IN: An API key to a gene structure feature
