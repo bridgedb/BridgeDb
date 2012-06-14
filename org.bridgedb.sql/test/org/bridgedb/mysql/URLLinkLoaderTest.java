@@ -1,10 +1,7 @@
 package org.bridgedb.mysql;
 
-import org.bridgedb.mysql.URLMapperSQL;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.url.URLMapperTestBase;
 import org.junit.BeforeClass;
@@ -15,7 +12,7 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-@Ignore
+@Ignore //Would kill the 18 million links in
 public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
@@ -34,7 +31,7 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+        MysqlMapper urlMapperSQL = new MysqlMapper(true, sqlAccess);
         listener = urlMapperSQL;
     }
       

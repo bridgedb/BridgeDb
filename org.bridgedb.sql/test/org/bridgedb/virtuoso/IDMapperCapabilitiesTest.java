@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.virtuoso;
 
 import org.bridgedb.IDMapperException;
@@ -14,13 +10,12 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-@Ignore
 public class IDMapperCapabilitiesTest extends org.bridgedb.IDMapperCapabilitiesTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
-        URLMapperVirtuoso urlMapperVirtuoso = new URLMapperVirtuoso(sqlAccess);
+        VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(sqlAccess);
         capabilities = urlMapperVirtuoso;
     }
             

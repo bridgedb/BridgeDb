@@ -13,7 +13,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.mysql.MysqlMapper;
 import org.bridgedb.url.URLIterator;
 
 /*
@@ -28,12 +28,12 @@ import org.bridgedb.url.URLIterator;
 public class Transitive {
         
     SQLAccess sqlAccess;
-    URLMapperSQL urlMapperSQL;
+    MysqlMapper urlMapperSQL;
     String LINK_PREDICATE = "<http://www.bridgedb.org/transitiveMapping>";
     
     public Transitive() throws BridgeDbSqlException{
         sqlAccess = SqlFactory.createSQLAccess();
-        urlMapperSQL = new URLMapperSQL(false, sqlAccess);
+        urlMapperSQL = new MysqlMapper(false, sqlAccess);
     }
     
     public void createVoid(String filePath, String sourceNameSpace, String middleNameSpace, String targetNameSpace) 

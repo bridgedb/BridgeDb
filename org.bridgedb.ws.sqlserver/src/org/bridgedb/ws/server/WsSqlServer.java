@@ -22,7 +22,7 @@ import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.mysql.MysqlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.SourceTargetCounter;
@@ -46,7 +46,7 @@ public class WsSqlServer extends WSService{
     
     public WsSqlServer() throws BridgeDbSqlException  {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
-        URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
+        MysqlMapper urlMapperSQL = new MysqlMapper(sqlAccess);
         idMapper = urlMapperSQL;
         urlMapper = urlMapperSQL;
         provenanceMapper = urlMapperSQL;

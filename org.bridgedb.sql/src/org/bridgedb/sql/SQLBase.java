@@ -201,7 +201,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     @Override
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
-        String query = "SELECT DISTINCT targetNameSpace as nameSpace "
+        String query = "SELECT DISTINCT(targetNameSpace) as nameSpace "
                 + "FROM provenance ";
         Statement statement = this.createStatement();
         try {
@@ -213,6 +213,27 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         }
     }
 
+    @Override
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
+        StringBuilder query = new StringBuilder ("SELECT ");
+        appendVirtuosoTopConditions(query, 0, 1);
+        query.append(" * FROM provenance ");
+        query.append("WHERE sourceNameSpace = '");
+        query.append(src.getNameSpace());
+        query.append("' AND targetNameSpace = '");
+        query.append(tgt.getNameSpace());
+        query.append("'");
+        this.appendMySQLLimitConditions(query,0, 1);
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return (rs.next());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query.toString(), ex);
+        }
+    }
+    
     @Override
     public String getProperty(String key) {
         String query = "SELECT DISTINCT property "
@@ -235,9 +256,9 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     @Override
     public Set<String> getKeys() {
         HashSet<String> results = new HashSet<String>();
-        String query = "SELECT DISTINCT thekey "
+        String query = "SELECT thekey "
                 + "FROM properties "
-                + "WHERE isPublic = true";
+                + "WHERE isPublic = 1"; //one works where isPublic is a boolean
         try {
             Statement statement = this.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -408,6 +429,53 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query, ex);
+        }
+    }
+
+    @Override
+    public boolean uriExists(String URL) throws IDMapperException {
+        if (URL == null) return false;
+        if (URL.isEmpty()) return false;
+        StringBuilder query = new StringBuilder("SELECT ");
+        appendVirtuosoTopConditions(query, 0, 1); 
+        query.append(" * FROM link ");
+        query.append(" where ");
+        query.append("       sourceURL = '");
+        query.append(URL);
+        query.append("'"); 
+        this.appendMySQLLimitConditions(query,0, 1);
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            if (rs.next()) return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query.toString(), ex);
+        }
+        return false;
+    }
+
+    @Override
+    public Set<String> urlSearch(String text, int limit) throws IDMapperException {
+        //Try source using index so no joker at the front
+        StringBuilder query = new StringBuilder("SELECT ");
+        appendVirtuosoTopConditions(query, 0, limit); 
+        query.append(" sourceURL as url ");
+        query.append("FROM link ");
+        query.append("where ");
+        query.append("   sourceURL LIKE '%");
+        query.append(text); 
+        query.append("%' ");
+        query.append(" group by sourceurl"); //This is to provide distinct as top and distinct appear not to go together
+        appendMySQLLimitConditions(query, 0, limit);
+        Statement statement = this.createStatement();
+        Set<String> foundSoFar;
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToURLSet(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query.toString(), ex);
         }
     }
 
@@ -587,8 +655,22 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     }
     
     @Override
-    public abstract List<String> getSampleSourceURLs() throws IDMapperException;
-    
+    public List<String> getSampleSourceURLs() throws IDMapperException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        appendVirtuosoTopConditions(query, 0, 5);
+        query.append(" sourceURL as url FROM link ");
+        appendMySQLLimitConditions(query, 0, 5);
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToURLList(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }        
+    }
+
     @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {
         int numberOfMappings = getMappingsCount();
@@ -1119,15 +1201,82 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
  		dropTable("properties");
      }
     
-	abstract protected void dropTable(String table) throws BridgeDbSqlException;
+     private void dropTable(String name) throws BridgeDbSqlException{
+        //"IF NOT EXISTS" is unsupported 
+        String query = "select * from information_schema.tables where table_name='" + name + "'";
+        Statement sh = createStatement();
+        try 
+        {
+            sh.execute("DROP TABLE " + name);
+            sh.close();
+        } catch (SQLException e) {
+            System.err.println("Unable to drop table " + name + " assuming it does not exist");
+        }
+    }
 
     /**
 	 * Excecutes several SQL statements to create the tables and indexes in the database the given
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	abstract protected void createSQLTables() throws BridgeDbSqlException;
-
+	private void createSQLTables() throws BridgeDbSqlException
+	{
+        //"IF NOT EXISTS " is not supported
+		try 
+		{
+			Statement sh = createStatement();
+ 			sh.execute("CREATE TABLE                            "
+					+ "info                                     " 
+					+ "(    schemaversion INTEGER PRIMARY KEY	"
+                    + ")");
+  			sh.execute( //Add compatibility version of GDB
+					"INSERT INTO info VALUES ( " + SQL_COMPAT_VERSION + ")");
+            //TODO add organism as required
+            sh.execute("CREATE TABLE  "
+                    + "     DataSource "
+                    + "  (  sysCode VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
+                    + "     isPrimary SMALLINT,                                  "
+                    + "     fullName VARCHAR(" + FULLNAME_LENGTH + "),      "
+                    + "     mainUrl VARCHAR(" + MAINURL_LENGTH + "),        "
+                    + "     urlPattern VARCHAR(" + URLPATTERN_LENGTH + "),  "
+                    + "     idExample VARCHAR(" + ID_LENGTH + "),           "
+                    + "     type VARCHAR(" + TYPE_LENGTH + "),              "
+                    + "     urnBase VARCHAR(" + URNBASE_LENGTH + ")         "
+                    + "  ) ");
+ 			sh.execute("CREATE TABLE                                                    "
+                    + "link                                                             " 
+                            //As most search are on full url full url is stored in one column
+					+ " (   id INT IDENTITY PRIMARY KEY,                          " 
+					+ "     sourceURL VARCHAR(150) NOT NULL,                            "
+                            //Again a speed for space choice.
+					+ "     targetURL VARCHAR(150) NOT NULL,                            " 
+					+ "     provenance_id VARCHAR(" + PROVENANCE_ID_LENGTH + ")         "
+					+ " )									                            ");
+            sh.execute("CREATE INDEX sourceFind ON link (sourceURL) ");
+            sh.execute("CREATE INDEX sourceProvenaceFind ON link (sourceURL, provenance_id) ");
+         	sh.execute(	"CREATE TABLE                                                       "    
+					+ "		provenance                                                      " 
+					+ " (   id VARCHAR(" + PROVENANCE_ID_LENGTH + ") PRIMARY KEY,           " 
+                    + "     sourceNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ") NOT NULL,    "
+                    + "     linkPredicate VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,       "
+                    + "     targetNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ")  NOT NULL,    "
+                    + "     linkCount INT                                                   "
+					+ " ) "); 
+            sh.execute ("CREATE TABLE  "
+                    + "    properties "
+                    + "(   thekey      VARCHAR(" + KEY_LENGTH + ") NOT NULL, "
+                    + "    property    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
+                    + "    isPublic    SMALLINT "
+					+ " ) "); 
+            sh.close();
+		} catch (SQLException e)
+		{
+            System.err.println(e);
+            e.printStackTrace();
+			throw new BridgeDbSqlException ("Error creating the tables ", e);
+		}
+	}
+     
     void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();

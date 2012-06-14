@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.mysql.URLMapperSQL;
+import org.bridgedb.mysql.MysqlMapper;
 import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SqlFactory;
 import org.openrdf.OpenRDFException;
@@ -77,11 +77,11 @@ public class LinksetLoader {
         System.out.println(SqlFactory.configSource());
         SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
         if (args.length == 1){
-            URLMapperSQL urlMapperSQL = new URLMapperSQL(sqlAccess);
+            MysqlMapper urlMapperSQL = new MysqlMapper(sqlAccess);
             parse (urlMapperSQL, args[0]);
         } else if (args.length == 2){
             if (args[1].equals("new")){
-                URLMapperSQL urlMapperSQL = new URLMapperSQL(true, sqlAccess);
+                MysqlMapper urlMapperSQL = new MysqlMapper(true, sqlAccess);
                 clearAndParse(urlMapperSQL, args[0]);
         } else {
                 usage();
