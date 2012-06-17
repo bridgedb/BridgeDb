@@ -88,14 +88,28 @@ public class BatchMapper
 				"		[-g <gene database>] \n " +
 				"		[-t <biomart text file>] \n " +
 				"		[-i <input file>] \n" +
-				"		-is <input system code> \n" +
-				"		-os <output system code> \n" +
+				"		-is <input system code or datasource name> \n" +
+				"		-os <output system code or datasource name> \n" +
 				"		[-o <output file>] \n" +
 				"		[-c <input column, 0-based>]\n" +
 				"		[-r <report file>] \n" +
 				"\n" +
 				"You should specify at least one -g or -t option.\n" +
 				"Multiple -g or -t options will be combined transitively.\n");
+	}
+	
+	private DataSource dsFromArg(String arg)
+	{
+		for (DataSource ds : DataSource.getDataSources())
+		{
+			if (arg.equals (ds.getSystemCode()) 
+					|| arg.equals(ds.getFullName()))
+			{
+				return ds;
+			}
+		}
+		System.out.println ("WARNING: " + arg + " is not a standard system code or DataSource name");
+		return DataSource.getByFullName(arg);
 	}
 	
 	public String parseArgs(Settings settings, String[] args)
@@ -173,13 +187,13 @@ public class BatchMapper
 			{
 				pos++;
 				if (pos > args.length) return "System code expected after -is";
-				settings.is = DataSource.getBySystemCode(args[pos]);
+				settings.is = dsFromArg(args[pos]);
 			}			
 			else if (args[pos].equals("-os"))
 			{
 				pos++;
 				if (pos > args.length) return "System code expected after -os";
-				settings.os = DataSource.getBySystemCode(args[pos]);
+				settings.os = dsFromArg(args[pos]);
 			}
 			else if (args[pos].equals("-mm"))
 			{
