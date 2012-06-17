@@ -51,7 +51,7 @@ public class Test
 	{
 		Xref ref = new Xref ("3643", BioDataSource.ENTREZ_GENE);
 		Xref ref2 = new Xref ("GO:00001", BioDataSource.GENE_ONTOLOGY);
-		assertEquals ("urn:miriam:entrez.gene:3643", ref.getURN());
+		assertEquals ("urn:miriam:ncbigene:3643", ref.getURN());
 		assertEquals ("urn:miriam:obo.go:GO%3A00001", ref2.getURN());
 		
 	}
@@ -142,12 +142,12 @@ public class Test
 	@org.junit.Test
 	public void testFromUrn()
 	{
-		Xref ref = Xref.fromUrn("urn:miriam:entrez.gene:3643");
+		Xref ref = Xref.fromUrn("urn:miriam:ncbigene:3643");
 		assertEquals (BioDataSource.ENTREZ_GENE, ref.getDataSource());
 		assertEquals ("3643", ref.getId());
 
 		ref = Xref.fromUrn("urn:miriam:blahblahblah:abc");
-		assertNull (ref);
+		assertEquals (DataSource.getByFullName("blahblahblah"), ref.getDataSource());
 
 		ref = Xref.fromUrn("blahblahblha");
 		assertNull (ref);
