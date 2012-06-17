@@ -284,4 +284,9 @@ public class IDMapperText extends IDMapperFile
                 .setIDDelimiters(idDelimiters);
         this.idDelimiters = idDelimiters;
     }
+    
+    public String toString()
+    {
+    	return url.toString();
+    }
 }

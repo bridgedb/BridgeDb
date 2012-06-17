@@ -58,4 +58,19 @@ public class PgdbParameterModel extends SimpleParameterModel implements BridgeDb
 		return Category.DATABASE;
 	}
 
+	private boolean enabled = false;
+	
+	@Override
+	public void loadClass() throws ClassNotFoundException
+	{
+		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
+		enabled = true;
+	}
+
+	@Override
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+
 }
