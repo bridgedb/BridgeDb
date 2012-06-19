@@ -130,4 +130,9 @@ public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabil
         query.append("TOP " + position + ", " + limit + " ");       
     }
 
+    @Override
+    protected String getAUTO_INCREMENT() {
+        return "IDENTITY";
+    }
+
 }

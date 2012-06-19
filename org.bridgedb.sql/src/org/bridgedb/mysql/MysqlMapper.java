@@ -144,4 +144,9 @@ public class MysqlMapper extends SQLBase implements IDMapper, IDMapperCapabiliti
         //do nothing at all!
     }
 
+    @Override
+    protected String getAUTO_INCREMENT() {
+        return "AUTO_INCREMENT";
+    }
+
 }

@@ -8,6 +8,7 @@ import org.bridgedb.sql.*;
 import java.util.Date;
 import org.bridgedb.IDMapperException;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * This class depends on URLasIDMapperSQLTest having loaded the data.
