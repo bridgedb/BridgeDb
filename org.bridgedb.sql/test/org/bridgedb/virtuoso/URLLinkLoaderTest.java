@@ -35,6 +35,6 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
       
     @Test
     public void loadData() throws IDMapperException{
-        defaultLoadData();        
+        defaultLoadData();   
     }
 }

@@ -12,7 +12,7 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-@Ignore //Would kill the 18 million links in
+//@Ignore //Would kill the 18 million links in
 public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
