@@ -187,7 +187,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     @Override
     public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
-        String query = "SELECT DISTINCT sourceNameSpace as nameSpace "
+        String query = "SELECT DISTINCT(sourceNameSpace) as nameSpace "
                 + "FROM provenance";
         Statement statement = this.createStatement();
         try {
@@ -466,7 +466,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         query.append("   sourceURL LIKE '%");
         query.append(text); 
         query.append("%' ");
-        query.append(" group by sourceurl"); //This is to provide distinct as top and distinct appear not to go together
+        query.append(" group by sourceurl "); //This is to provide distinct as top and distinct appear not to go together
         appendMySQLLimitConditions(query, 0, limit);
         Statement statement = this.createStatement();
         Set<String> foundSoFar;
@@ -729,6 +729,27 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
             throw new IDMapperException("Unable to run query. " + query, ex);
         }
     }
+
+    @Override
+    public ProvenanceInfo getProvenanceInfo(String id) throws IDMapperException {
+        String query = ("SELECT * FROM provenance where id = \"" + id + "\"");
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            List<ProvenanceInfo> results = resultSetToProvenanceInfos(rs);
+            if (results.size() == 1){
+                return results.get(0);
+            } else if (results.isEmpty()){
+                throw new IDMapperException("No provenance with id " + id + " found");
+            } else {
+                throw new IDMapperException("Unexpected mutliple return from " + query);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }
+    }
+
 
 
     /*** ProvenanceMapper methods ***/
@@ -1243,15 +1264,24 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
                     + "     type VARCHAR(" + TYPE_LENGTH + "),              "
                     + "     urnBase VARCHAR(" + URNBASE_LENGTH + ")         "
                     + "  ) ");
- 			sh.execute("CREATE TABLE                                                    "
-                    + "link                                                             " 
-                            //As most search are on full url full url is stored in one column
-					+ " (   id INT IDENTITY PRIMARY KEY,                          " 
-					+ "     sourceURL VARCHAR(150) NOT NULL,                            "
-                            //Again a speed for space choice.
-					+ "     targetURL VARCHAR(150) NOT NULL,                            " 
-					+ "     provenance_id VARCHAR(" + PROVENANCE_ID_LENGTH + ")         "
-					+ " )									                            ");
+            StringBuilder query = new StringBuilder ("CREATE TABLE link ");
+			query.append("( id INT ");
+            query.append(getAUTO_INCREMENT());
+            query.append(" PRIMARY KEY, "); 
+             //As most search are on full url full url is stored in one column
+			query.append("     sourceURL VARCHAR(");
+            query.append(NAME_SPACE_LENGTH);
+            query.append(") NOT NULL, ");
+            //Again a speed for space choice.
+			query.append(" targetURL VARCHAR(");
+            query.append(NAME_SPACE_LENGTH);
+            query.append(") NOT NULL, "); 
+			query.append(" provenance_id VARCHAR(");
+            query.append(PROVENANCE_ID_LENGTH);
+            query.append(") ");
+			query.append(" ) ");
+            System.out.println(query);
+ 			sh.execute(query.toString());
             sh.execute("CREATE INDEX sourceFind ON link (sourceURL) ");
             sh.execute("CREATE INDEX sourceProvenaceFind ON link (sourceURL, provenance_id) ");
          	sh.execute(	"CREATE TABLE                                                       "    
@@ -1277,6 +1307,8 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 		}
 	}
      
+    protected abstract String getAUTO_INCREMENT();
+    
     void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();
