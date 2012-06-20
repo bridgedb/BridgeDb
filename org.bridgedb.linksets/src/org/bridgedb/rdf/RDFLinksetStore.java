@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.IDMapperException;
 import org.bridgedb.ops.Triple;
 import org.bridgedb.ops.LinkSetStore;
 import java.util.ArrayList;
@@ -270,5 +271,10 @@ public class RDFLinksetStore implements LinkSetStore{
         System.out.println("Test");
         linksetStore = RDFLinksetStore.testFactory();
         linksetStore.showAll();
+    }
+
+    @Override
+    public String getRDF(int id) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

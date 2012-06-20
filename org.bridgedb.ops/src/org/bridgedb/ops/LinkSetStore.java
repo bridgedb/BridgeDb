@@ -12,7 +12,10 @@ import org.bridgedb.IDMapperException;
  * @author Christian
  */
 public interface LinkSetStore {
-    public List<Triple> getTriples (String graphId) throws IDMapperException;
+ //   public List<Triple> getTriples (String graphId) throws IDMapperException;
 
     public List<String> getLinksetNames() throws IDMapperException;
+
+    public String getRDF (int id) throws IDMapperException;
+
 }
