@@ -151,6 +151,15 @@ public class WSClient extends WSCoreClient implements WSInterface{
     }
 
     @Override
+    public ProvenanceBean getProvenanceInfo(String id) throws IDMapperException {
+        ProvenanceBean result = 
+                webResource.path("getProvenanceInfo/" + id)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<ProvenanceBean>() {});
+        return result;        
+    }
+
+    @Override
     public List<URLBean> getSampleSourceURLs() throws IDMapperException {
         List<URLBean> result = 
                 webResource.path("getSampleSourceURLs")

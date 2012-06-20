@@ -224,6 +224,15 @@ public class WSService extends WSCoreService implements WSInterface {
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getProvenanceInfo/{id}")
+    public ProvenanceBean getProvenanceInfo(@PathParam("id") String idString) throws IDMapperException{
+        ProvenanceInfo info = opsMapper.getProvenanceInfo(idString);
+        return ProvenanceFactory.asBean(info);
+    }
+
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getSampleSourceURLs") 
     public List<URLBean> getSampleSourceURLs() throws IDMapperException {
         List<String> URLs = opsMapper.getSampleSourceURLs();

@@ -42,5 +42,6 @@ public interface OpsMapper {
     
     public List<ProvenanceInfo> getProvenanceInfos() throws IDMapperException;
 
+    public ProvenanceInfo getProvenanceInfo(String id) throws IDMapperException;
 
 }
