@@ -281,6 +281,17 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     }
 
     @Test
+    public void testGetProvenanceInfo() throws IDMapperException{
+        report("GetProvenanceInfo");
+        ProvenanceInfo info = opsMapper.getProvenanceInfo(link1to2);
+        assertEquals(link1to2, info.getId());
+        assertEquals(TEST_PREDICATE, info.getPredicate());
+        assertEquals(nameSpace1, info.getSourceNameSpace());
+        assertEquals(nameSpace2, info.getTargetNameSpace());
+        assertEquals(new Integer(3), info.getNumberOfLinks());
+    }
+
+    @Test
     public void testGetProvenanceInfos() throws IDMapperException{
         report("GetProvenanceInfos");
         List<ProvenanceInfo> results = opsMapper.getProvenanceInfos();
