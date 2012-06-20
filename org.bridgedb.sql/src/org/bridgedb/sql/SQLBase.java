@@ -732,7 +732,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     @Override
     public ProvenanceInfo getProvenanceInfo(String id) throws IDMapperException {
-        String query = ("SELECT * FROM provenance where id = \"" + id + "\"");
+        String query = ("SELECT * FROM provenance where id = '" + id + "'");
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
