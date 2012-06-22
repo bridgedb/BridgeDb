@@ -40,42 +40,56 @@ public class HoldingRDFStore implements RdfLoader{
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
 
-    public HoldingRDFStore(RdfStoreType type){
+    public HoldingRDFStore(RdfStoreType type) throws IDMapperLinksetException{
         this.type = type;
+        setContext();
     }
-    
+        
+    private synchronized void setContext() throws IDMapperLinksetException{     
+        try {
+            RepositoryConnection connection = RdfWrapper.setupConnection(type);
+            Resource subject = new URIImpl(RdfWrapper.getBaseURI() + "/MetaData");
+            RepositoryResult<Statement> rr = RdfWrapper.getStatements(connection, 
+                    subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
+            Value linksetId = extractLinksetId(connection, rr, subject);
+            rr = RdfWrapper.getStatements(connection, 
+                    subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
+            RdfWrapper.remove(connection, rr);
+            RdfWrapper.add(connection, subject, HIGHEST_LINKSET_ID_PREDICATE, linksetId, ANY_RESOURCE);
+            rr = RdfWrapper.getStatements(connection, 
+                    subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
+            linksetContext = RdfWrapper.getLinksetURL(linksetId);       
+            RdfWrapper.shutdown(connection);
+        } catch (RDFHandlerException ex) {
+            throw new IDMapperLinksetException("Error setting the context");
+        }
+     }
+
     public void clear() throws IDMapperLinksetException {
         RdfWrapper.clear(type);
     }
 
     public String getDefaultBaseURI() {
-        return RdfWrapper.getBaseURI() + "/voidInfo/";        
+        return linksetContext.stringValue() + "/";        
     }
 
     @Override
     public void addStatement(Statement st) throws RDFHandlerException {
+        if (statements == null){
+            throw new RDFHandlerException ("Illegal call to addStatement after validateAndSaveVoid() called.");
+        }
         statements.add(st);
     }
     
     @Override
-    public void validateAndSaveVoid(Statement firstMap) throws RDFHandlerException{
+    public synchronized void validateAndSaveVoid(Statement firstMap) throws RDFHandlerException{
         Reporter.report("Validation started");
         validate(firstMap);
         RepositoryConnection connection = RdfWrapper.setupConnection(type);
-        Resource subject = new URIImpl(RdfWrapper.getBaseURI() + "/MetaData");
-        RepositoryResult<Statement> rr = RdfWrapper.getStatements(connection, 
-                subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
-        Value linksetId = extractLinksetId(connection, rr, subject);
-        rr = RdfWrapper.getStatements(connection, 
-                subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
-        RdfWrapper.remove(connection, rr);
-        RdfWrapper.add(connection, subject, HIGHEST_LINKSET_ID_PREDICATE, linksetId, ANY_RESOURCE);
-        rr = RdfWrapper.getStatements(connection, 
-                subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
-        linksetContext = RdfWrapper.getLinksetURL(linksetId);       
         for (Statement st:statements){
             RdfWrapper.add(connection, st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
         }
+        statements = null;
         RdfWrapper.shutdown(connection);
      }
 
