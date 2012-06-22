@@ -18,11 +18,8 @@ public class IDMapperCapabilitiesTest  extends org.bridgedb.IDMapperCapabilities
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {
-        System.out.println("in setup 1");
         WSCoreInterface webService = WSCoreClientFactory.createTestWSClient();
-        System.out.println("in setup 2");
         capabilities = new WSCoreMapper(webService).getCapabilities();
-        System.out.println("in setup 3");
     }
 
 }
