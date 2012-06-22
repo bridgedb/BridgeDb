@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.mysql.MysqlMapper;
+import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SqlFactory;
 import org.openrdf.OpenRDFException;
@@ -22,7 +23,7 @@ public class LinksetLoader {
     public static void parse(SQLBase urlMapperSQL, String fileName) throws IDMapperLinksetException{
         File file = new File(fileName);
         if (file.isFile()){
-            LinksetHandler.parse (urlMapperSQL,fileName);
+            LinksetHandler.parse (urlMapperSQL,fileName, RdfStoreType.MAIN);
         } else if (file.isDirectory()) {
             parse(urlMapperSQL, file);
         } else {
@@ -33,7 +34,7 @@ public class LinksetLoader {
     private static void parse(SQLBase urlMapperSQL, File file){
         if (file.isFile()){
             try {
-                LinksetHandler.parse (urlMapperSQL,file.getAbsolutePath());
+                LinksetHandler.parse (urlMapperSQL,file.getAbsolutePath(), RdfStoreType.MAIN);
             } catch (IDMapperLinksetException ex) {
                 System.err.println("Unable to parse " + file.getAbsolutePath() + " cause: " + ex);
             }
@@ -48,7 +49,7 @@ public class LinksetLoader {
     protected static void clearAndParse(SQLBase urlMapperSQL, String fileName) throws IDMapperLinksetException{
         File file = new File(fileName);
         if (file.isFile()){
-            LinksetHandler.clearAndParse (urlMapperSQL,fileName);
+            LinksetHandler.clearAndParse (urlMapperSQL,fileName, RdfStoreType.MAIN);
         } else if (file.isDirectory()) {
             clearAndParse(urlMapperSQL, file);
         } else {
@@ -59,7 +60,7 @@ public class LinksetLoader {
     private static void clearAndParse(SQLBase urlMapperSQL, File file){
         if (file.isFile()){
             try {
-                LinksetHandler.clearAndParse (urlMapperSQL,file.getAbsolutePath());
+                LinksetHandler.clearAndParse (urlMapperSQL, file.getAbsolutePath(), RdfStoreType.MAIN);
             } catch (IDMapperLinksetException ex) {
                 System.err.println("Unable to parse " + file.getAbsolutePath() + " cause: " + ex.getMessage());
             }

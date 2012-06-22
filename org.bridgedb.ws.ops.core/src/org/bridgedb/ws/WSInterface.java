@@ -80,4 +80,8 @@ public interface WSInterface extends WSCoreInterface {
 
     public ProvenanceBean getProvenanceInfo(String id) throws IDMapperException;
 
+    public List<URLBean> getLinksetNames() throws IDMapperException;
+
+    public String linkset(String idString) throws IDMapperException;
+
 }
