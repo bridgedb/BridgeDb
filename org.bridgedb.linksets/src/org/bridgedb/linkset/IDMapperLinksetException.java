@@ -31,7 +31,7 @@ public class IDMapperLinksetException extends IDMapperException {
      * @param msg the detail message.
      * @param ex Exception thrown and wrapped
      */
-    public IDMapperLinksetException(String msg, Exception ex) {
+    public IDMapperLinksetException(String msg, Throwable ex) {
         super(msg, ex);
     }
 }
