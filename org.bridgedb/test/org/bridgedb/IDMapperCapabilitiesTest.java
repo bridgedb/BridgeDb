@@ -22,8 +22,6 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
         
         Set<DataSource> dataSources = capabilities.getSupportedSrcDataSources();
         
-        DataSource expected = dataSources.iterator().next();
-        
         assertTrue(dataSources.contains(DataSource1));
         assertTrue(dataSources.contains(DataSource2));
         assertTrue(dataSources.contains(DataSource3));
@@ -63,8 +61,6 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
         report("KeysHaveProperties");
         for (String key : capabilities.getKeys())
 		{	
-            System.out.println("key: " + key);
-            System.out.println("property: " + capabilities.getProperty(key));
 			assertNotNull (capabilities.getProperty(key));
 		}
     }
