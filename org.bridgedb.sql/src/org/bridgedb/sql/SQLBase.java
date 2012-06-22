@@ -1280,8 +1280,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
             query.append(PROVENANCE_ID_LENGTH);
             query.append(") ");
 			query.append(" ) ");
-            System.out.println(query);
- 			sh.execute(query.toString());
+			sh.execute(query.toString());
             sh.execute("CREATE INDEX sourceFind ON link (sourceURL) ");
             sh.execute("CREATE INDEX sourceProvenaceFind ON link (sourceURL, provenance_id) ");
          	sh.execute(	"CREATE TABLE                                                       "    

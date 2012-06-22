@@ -14,7 +14,11 @@ import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
-import org.bridgedb.rdf.RDFLinksetStore;
+//import org.bridgedb.rdf.RDFLinksetStore;
+import org.bridgedb.ops.LinkSetStore;
+import org.bridgedb.rdf.HoldingRDFStore;
+import org.bridgedb.rdf.RdfLoader;
+import org.bridgedb.rdf.RdfStoreType;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -35,45 +39,31 @@ public class LinksetHandler extends RDFHandlerBase{
     boolean processingHeader = true;
     private List<String> datasets = new ArrayList<String>(2);
     URI linkPredicate;
-    URI linksetId;
-    URI inverseLinksetId;
-    URLLinkListener listener;
-    //Repository myRepository;
-    RDFLinksetStore linksetStore;
-   //final Resource[] NO_RESOURCES = new Resource[0];
-    final Resource linkSetGraph;
+    String linksetId;
+    String inverseLinksetId;       
+    boolean loaded = false;
     
-    public static void parse (URLLinkListener listener, String fileName) 
+//    URI linksetId;
+//    URI inverseLinksetId;
+    URLLinkListener listener;
+    RdfLoader rdfLoader;
+    
+    public static void parse (URLLinkListener listener, String fileName, RdfStoreType type) 
             throws IDMapperLinksetException  {
-        RDFLinksetStore linksetStore = RDFLinksetStore.factory();
-        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
-        parse (handler, fileName);
+        RdfLoader rdfLoader = new HoldingRDFStore(type);
+        LinksetHandler handler = new LinksetHandler(listener, rdfLoader);
+        parse (handler, fileName, type);
     }
 
-    public static void testParse (URLLinkListener listener, String fileName) 
+    public static void clearAndParse (URLLinkListener listener, String fileName, RdfStoreType type) 
             throws IDMapperLinksetException  {
-        RDFLinksetStore linksetStore = RDFLinksetStore.testFactory();
-        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
-        parse (handler, fileName);
+        RdfLoader rdfLoader = new HoldingRDFStore(type);
+        rdfLoader.clear();
+        LinksetHandler handler = new LinksetHandler(listener, rdfLoader);
+        parse (handler, fileName, type);
     }
 
-    public static void testClearAndParse (URLLinkListener listener, String fileName) 
-            throws IDMapperLinksetException  {
-        RDFLinksetStore linksetStore = RDFLinksetStore.testFactory();
-        linksetStore.clear();
-        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
-        parse (handler, fileName);
-    }
-
-    public static void clearAndParse (URLLinkListener listener, String fileName) 
-            throws IDMapperLinksetException  {
-        RDFLinksetStore linksetStore = RDFLinksetStore.factory();
-        linksetStore.clear();
-        LinksetHandler handler = new LinksetHandler(listener, linksetStore);
-        parse (handler, fileName);
-    }
-
-    private static void parse (LinksetHandler handler, String fileName) 
+    private static void parse (LinksetHandler handler, String fileName, RdfStoreType type) 
             throws IDMapperLinksetException  {
         Reporter.report("Parsing " + fileName);
         FileReader reader = null;
@@ -99,13 +89,12 @@ public class LinksetHandler extends RDFHandlerBase{
         }
     }
 
-    private LinksetHandler(URLLinkListener listener, RDFLinksetStore linksetStore) throws IDMapperLinksetException  {
+    private LinksetHandler(URLLinkListener listener, RdfLoader rdfLoader) throws IDMapperLinksetException  {
         try {
             this.listener = listener;
             listener.openInput();
-            this.linksetStore = linksetStore;                
-            linkSetGraph = linksetStore.createNewGraph();
-        } catch (Exception ex) {
+            this.rdfLoader = rdfLoader;                
+         } catch (Exception ex) {
             throw new IDMapperLinksetException ("Unable to create LinksetHandler ", ex);
         }
     }
@@ -123,7 +112,7 @@ public class LinksetHandler extends RDFHandlerBase{
     }
     
     public String getDefaultBaseURI(){
-        return linkSetGraph.stringValue() + "/";
+        return rdfLoader.getDefaultBaseURI();
     }
     
     /**
@@ -155,26 +144,28 @@ public class LinksetHandler extends RDFHandlerBase{
                 throw new RDFHandlerException("Linkset can only be declared to have one link predicate.");
             }
             linkPredicate = (URI) object;
-            linksetId = (URI) subject;
-            inverseLinksetId = new URIImpl(subject.stringValue() + "/inverted");
+//            linksetId = (URI) subject;
+//            inverseLinksetId = new URIImpl(subject.stringValue() + "/inverted");
         }
-        linksetStore.addStatement(subject, predicate, object, linkSetGraph);
+        rdfLoader.addStatement(st);
     }
    
     private void finishProcessingHeader(Statement firstMap) throws RDFHandlerException {
         processingHeader = false;
-        String subjectUriSpace = linksetStore.getSubjectUriSpace(firstMap, linkSetGraph).stringValue();
-        String objectUriSpace =  linksetStore.getObjectUriSpace(firstMap, linkSetGraph).stringValue();
+        rdfLoader.validateAndSaveVoid(firstMap);
+        String subjectUriSpace = rdfLoader.getSubjectUriSpace();
+        String targetUriSpace = rdfLoader.getTargetUriSpace();
         DataSource subjectDataSource = DataSource.getByNameSpace(subjectUriSpace);
-        DataSource objectDataSource = DataSource.getByNameSpace(objectUriSpace);
+        DataSource targetDataSource = DataSource.getByNameSpace(targetUriSpace);
+        linksetId = rdfLoader.getLinksetid();
+        inverseLinksetId = rdfLoader.getInverseLinksetid();       
         try {
-            listener.registerProvenanceLink(linksetId.stringValue(), 
-                    subjectDataSource, linkPredicate.stringValue(), objectDataSource);
-            listener.registerProvenanceLink(inverseLinksetId.stringValue(), 
-                    objectDataSource, linkPredicate.stringValue(), subjectDataSource);
+            listener.registerProvenanceLink(linksetId, subjectDataSource, linkPredicate.stringValue(), targetDataSource);
+            listener.registerProvenanceLink(inverseLinksetId, targetDataSource, linkPredicate.stringValue(), subjectDataSource);
         } catch (IDMapperException ex) {
             throw new RDFHandlerException ("Unable to register header info ", ex);
         }
+        loaded = true;
     }
 
     /**
@@ -189,7 +180,7 @@ public class LinksetHandler extends RDFHandlerBase{
                         + linkPredicate);
             }
             listener.insertLink(st.getSubject().stringValue(), st.getObject().stringValue(), 
-                    linksetId.stringValue(), inverseLinksetId.stringValue());
+                    linksetId, inverseLinksetId);
         } catch (ClassCastException ex) {
             throw new RDFHandlerException ("Unepected statement " + st, ex);
         } catch (IDMapperException ex){
@@ -208,6 +199,9 @@ public class LinksetHandler extends RDFHandlerBase{
             listener.closeInput();
         } catch (IDMapperException ex) {
             throw new RDFHandlerException("Error endingRDF ", ex);
+        }
+        if (!loaded){
+            throw new RDFHandlerException("Linkset not saved as end of void hdeaer not found");
         }
     }
 

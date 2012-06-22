@@ -98,6 +98,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.linksets</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>

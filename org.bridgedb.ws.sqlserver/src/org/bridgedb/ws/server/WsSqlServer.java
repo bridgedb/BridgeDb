@@ -12,17 +12,21 @@ import java.util.List;
 import java.util.Set;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.mysql.MysqlMapper;
+import org.bridgedb.rdf.RdfReader;
+import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.SourceTargetCounter;
@@ -44,7 +48,7 @@ public class WsSqlServer extends WSService{
     private static final ArrayList<String> ALL_PROVENANCE_IDS = ALL_URLs;
     private NumberFormat formatter;
     
-    public WsSqlServer() throws BridgeDbSqlException  {
+    public WsSqlServer() throws BridgeDbSqlException, IDMapperLinksetException  {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         MysqlMapper urlMapperSQL = new MysqlMapper(sqlAccess);
         idMapper = urlMapperSQL;
@@ -57,9 +61,10 @@ public class WsSqlServer extends WSService{
             dfs.setGroupingSeparator(',');
             ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
         }
-
+        linksetStore = new RdfReader(RdfStoreType.MAIN) ;
+        System.out.println("WsSqlServer setup");
     }
-
+            
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response welcomeMessage() throws IDMapperException, UnsupportedEncodingException {
@@ -75,7 +80,7 @@ public class WsSqlServer extends WSService{
         sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
         sb.append("<p>Welcome to the prototype Identity Mapping Service. </p>");
-        
+       
         OverallStatistics overallStatistics = opsMapper.getOverallStatistics();
         sb.append("<p>Currently the service includes: ");
         sb.append("<ul>");

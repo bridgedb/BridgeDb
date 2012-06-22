@@ -21,6 +21,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.ops.LinkSetStore;
 import org.bridgedb.ops.OpsMapper;
 import org.bridgedb.ops.ProvenanceInfo;
 import org.bridgedb.result.URLMapping;
@@ -35,6 +36,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
 public class WSService extends WSCoreService implements WSInterface {
 
     protected OpsMapper opsMapper;
+    protected LinkSetStore linksetStore;
     
     /**
      * Defuault constuctor for super classes.
@@ -44,9 +46,10 @@ public class WSService extends WSCoreService implements WSInterface {
     protected WSService(){
     }
     
-    public WSService(IDMapper idMapper) {
+    public WSService(IDMapper idMapper, LinkSetStore linksetStore) {
         super(idMapper);
         this.opsMapper = (OpsMapper)idMapper;    
+        this.linksetStore = linksetStore;
     }
     
     @Context 
@@ -245,4 +248,62 @@ public class WSService extends WSCoreService implements WSInterface {
         return beans;
     }
 
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getLinksetNames") 
+    public List<URLBean> getLinksetNames() throws IDMapperException {
+        List<String> URLs = linksetStore.getLinksetNames();
+        List<URLBean> beans = new ArrayList<URLBean>();
+        for (String URL:URLs){
+            URLBean bean = new URLBean();
+            bean.setURL(URL);
+            beans.add(bean);
+        }
+        return beans;
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/linkset")
+    public String linkset() throws IDMapperException {
+        throw new IDMapperException("Parameter id is missing");
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/linkset/{id}")
+    public String linkset(@PathParam("id") String idString) throws IDMapperException {
+        if (idString == null || idString.isEmpty()){
+            throw new IDMapperException("Parameter id is missing");
+        }
+        Integer id = Integer.parseInt(idString);
+        return linksetStore.getRDF(id);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/linkset/{id}/{name}")
+    public String linkset(@PathParam("id") String idString,
+            @PathParam("name") String name) throws IDMapperException {
+        if (idString == null || idString.isEmpty()){
+            throw new IDMapperException("Parameter id is missing");
+        }
+        Integer id = Integer.parseInt(idString);
+        return linksetStore.getRDF(id);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/linkset/{id}/{name}/{inverted}")
+    public String linkset(@PathParam("id") String idString,
+            @PathParam("name") String name,
+            @PathParam("inverted") String inverted) throws IDMapperException {
+        if (idString == null || idString.isEmpty()){
+            throw new IDMapperException("Parameter id is missing");
+        }
+        Integer id = Integer.parseInt(idString);
+        return linksetStore.getRDF(id);
+    }
+    
 }

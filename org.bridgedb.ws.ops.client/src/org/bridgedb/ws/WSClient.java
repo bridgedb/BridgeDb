@@ -23,7 +23,7 @@ import org.bridgedb.ws.bean.XrefBean;
  *
  * @author Christian
  */
-public class WSClient extends WSCoreClient implements WSInterface{
+public  class WSClient extends WSCoreClient implements WSInterface{
 
     public WSClient(String serviceAddress) {
         super(serviceAddress);
@@ -165,6 +165,24 @@ public class WSClient extends WSCoreClient implements WSInterface{
                 webResource.path("getSampleSourceURLs")
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<URLBean>>() {});
+        return result;        
+    }
+
+    @Override
+    public List<URLBean> getLinksetNames() throws IDMapperException {
+        List<URLBean> result = 
+                webResource.path("getLinksetNames")
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<URLBean>>() {});
+        return result;        
+    }
+
+    @Override
+    public String linkset(String idString) throws IDMapperException {
+        String result = 
+                webResource.path("getRDF/" + idString)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<String>() {});
         return result;        
     }
 

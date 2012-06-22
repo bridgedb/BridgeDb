@@ -56,6 +56,12 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.linksetS</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ws.api</artifactId>
