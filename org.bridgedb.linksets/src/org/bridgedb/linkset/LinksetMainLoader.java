@@ -30,8 +30,7 @@ public class LinksetMainLoader {
         //URLMapperLinkset mapper = new URLMapperLinkset(); 
         listener = urlMapperSQL;
         Reporter.report("sample2to1.ttl");
-        LinksetHandler.clearAndParse (listener, "../org.bridgedb.linksets/test-data/sample1to2b.ttl", RdfStoreType.MAIN);
-        LinksetHandler.parse (listener, "../org.bridgedb.linksets/test-data/sample1to2c.ttl", RdfStoreType.MAIN);
+        LinksetHandler.clearAndParse (listener, "../org.bridgedb.linksets/test-data/sample1to2.ttl", RdfStoreType.MAIN);
         Reporter.report("sample1to3.ttl");
         LinksetHandler.parse (listener, "../org.bridgedb.linksets/test-data/sample1to3.ttl", RdfStoreType.MAIN);
         Reporter.report("sample2to3.ttl");
