@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class LinkSetStoreTest {
     
-    static LinkSetStore instance;
+    protected static LinkSetStore instance;
     
     public LinkSetStoreTest() {
     }
@@ -46,7 +46,6 @@ public class LinkSetStoreTest {
      */
     @Test
     public void testGetLinksetNames() throws Exception {
-        System.out.println("getLinksetNames");
         List result = instance.getLinksetNames();
         assertTrue(result.size() >= 3);
     }
@@ -56,7 +55,6 @@ public class LinkSetStoreTest {
      */
     @Test
     public void testGetRDF() throws Exception {
-        System.out.println("getRDF");
         int id = 0;
         String result = instance.getRDF(id);
         assertNotNull(result);

@@ -15,6 +15,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
+import org.bridgedb.ops.LinkSetStore;
 import org.bridgedb.ops.OpsMapper;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.url.URLIterator;
@@ -31,7 +32,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
  *
  * @author Christian
  */
-public class WSMapper extends WSCoreMapper implements OpsMapper {
+public class WSMapper extends WSCoreMapper implements OpsMapper, LinkSetStore {
     //removed due to scale issues XrefIterator, URLIterator, 
 
     WSInterface webService;
@@ -341,8 +342,21 @@ public class WSMapper extends WSCoreMapper implements OpsMapper {
         throw new IDMapperException("More than one url received from getURLByPosition at position " + position);
     }
     
-
-
 */
+
+    @Override
+    public List<String> getLinksetNames() throws IDMapperException {
+        List<URLBean> beans = webService.getLinksetNames();
+        ArrayList<String> results = new ArrayList<String>();
+        for (URLBean bean:beans){
+            results.add(bean.getURL());
+        }
+        return results;
+    }
+
+    @Override
+    public String getRDF(int id) throws IDMapperException {
+        return webService.linkset(""+id);
+    }
 
 }
