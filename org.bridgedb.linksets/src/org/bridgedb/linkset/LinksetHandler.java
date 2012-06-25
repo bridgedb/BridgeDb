@@ -4,6 +4,7 @@
  */
 package org.bridgedb.linkset;
 
+import org.bridgedb.linkset.constants.VoidConstants;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
