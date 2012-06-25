@@ -61,7 +61,7 @@ public class HoldingRDFStore implements RdfLoader{
             linksetContext = RdfWrapper.getLinksetURL(linksetId);       
             RdfWrapper.shutdown(connection);
         } catch (RDFHandlerException ex) {
-            throw new IDMapperLinksetException("Error setting the context");
+            throw new IDMapperLinksetException("Error setting the context", ex);
         }
      }
 
