@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import info.aduna.concurrent.locks.Lock;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +17,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.linkset.IDMapperLinksetException;
+import org.bridgedb.linkset.MyDirectoryLockManager;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -28,6 +30,8 @@ import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
+import org.openrdf.sail.SailLockedException;
+import org.openrdf.sail.helpers.DirectoryLockManager;
 import org.openrdf.sail.nativerdf.NativeStore;
 
 /**
@@ -84,12 +88,19 @@ public class RdfWrapper {
         try {
             repository.initialize();
         } catch (Throwable ex) {
+            File testLockDir = new File(dataDir, "lock");
+            if (!testLockDir.canWrite()){
+                throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
+                        testLockDir.getAbsolutePath());
+            }
             try {
                 repository.shutDown();
+                repository = new SailRepository(new NativeStore(dataDir));
+                repository.initialize();
             } catch (Throwable ex1) {
                 throw new IDMapperLinksetException ("Error initializing and now shutting down repository ", ex1);
             }
-            throw new IDMapperLinksetException ("Error initializing repository ", ex);
+            //throw new IDMapperLinksetException ("Error initializing repository ", ex);
         }
         return repository;
     }

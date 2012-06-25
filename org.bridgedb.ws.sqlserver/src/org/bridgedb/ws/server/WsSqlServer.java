@@ -7,6 +7,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +38,7 @@ import org.bridgedb.ws.WSService;
  *
  * @author Christian
  */
-public class WsSqlServer extends WSService{
+public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>{
     
     private static final ArrayList<DataSource> ALL_DATA_SOURCES = new ArrayList<DataSource>();
     private static final ArrayList<String> ALL_URLs = new ArrayList<String>(); 
@@ -974,6 +976,59 @@ public class WsSqlServer extends WSService{
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
     public Response mappingInfoPage() throws IDMapperException, UnsupportedEncodingException {
+        StringBuilder sb = new StringBuilder();
+        List<ProvenanceInfo> provenaceinfos = opsMapper.getProvenanceInfos();
+        Collections.sort(provenaceinfos, this);
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<h1>Open PHACTS Identity Mapping Counter per NameSpaces</h1>");
+        sb.append("<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
+        sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
+        sb.append("<p>");
+        sb.append("<table border=\"1\">");
+        sb.append("<tr>");
+        sb.append("<th>Source NameSpace</th>");
+        sb.append("<th>Target NameSpace</th>");
+        sb.append("<th>Sum of Mappings</th>");
+        sb.append("<th>Id</th>");
+        sb.append("</tr>");
+        for (ProvenanceInfo info:provenaceinfos){
+            sb.append("<tr>");
+            sb.append("<td>");
+            sb.append(info.getSourceNameSpace());
+            sb.append("</td>");
+            sb.append("<td>");
+            sb.append(info.getTargetNameSpace());
+            sb.append("</td>");
+            sb.append("<td align=\"right\">");
+            sb.append(formatter.format(info.getNumberOfLinks()));
+            sb.append("</td>");
+            sb.append("<td><a href=\"");
+            sb.append(info.getId());
+            sb.append("\">");
+            sb.append(info.getId());
+            sb.append("</a></td>");
+            sb.append("</tr>");
+        }
+        sb.append("</table>"); 
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @Override
+    public int compare(ProvenanceInfo o1, ProvenanceInfo o2) {
+        int test = o1.getSourceNameSpace().compareTo(o2.getSourceNameSpace());
+        if (test != 0) return test;
+        return o1.getTargetNameSpace().compareTo(o2.getTargetNameSpace());
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/getMappingTotal")
+    public Response mappingTotal() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         List<ProvenanceInfo> rawProvenaceinfos = opsMapper.getProvenanceInfos();
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
