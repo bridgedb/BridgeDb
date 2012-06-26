@@ -24,21 +24,21 @@ public class LinksetMainLoader {
     private static final boolean IS_TEST = true;
     
     public static void main(String[] args) throws IDMapperException, IOException, OpenRDFException  {
-        setup();
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
-        MysqlMapper urlMapperSQL = new MysqlMapper(true, sqlAccess);
-        //URLMapperLinkset mapper = new URLMapperLinkset(); 
-        listener = urlMapperSQL;
+        setupDatasources();
+        
         Reporter.report("sample2to1.ttl");
-        LinksetHandler.clearAndParse (listener, "../org.bridgedb.linksets/test-data/sample1to2.ttl", RdfStoreType.MAIN);
+        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "new"};
+        LinksetLoader.main (args1);
         Reporter.report("sample1to3.ttl");
-        LinksetHandler.parse (listener, "../org.bridgedb.linksets/test-data/sample1to3.ttl", RdfStoreType.MAIN);
+        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "load"};
+        LinksetLoader.main (args2);
         Reporter.report("sample2to3.ttl");
-        LinksetHandler.parse (listener, "../org.bridgedb.linksets/test-data/sample2to3.ttl", RdfStoreType.MAIN);
+        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "load"};
+        LinksetLoader.main (args3);
 	}
 
     //copied from IDMapperTestBase
-    private static void setup() throws IDMapperException{
+    private static void setupDatasources() throws IDMapperException{
         String goodId1 = "123";
         DataSource DataSource1 = DataSource.register("TestDS1", "TestDS1"). urlPattern("http://www.foo.com/$id")
                 .idExample(goodId1).asDataSource();

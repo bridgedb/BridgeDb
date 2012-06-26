@@ -17,7 +17,6 @@ import org.openrdf.OpenRDFException;
  *
  * @author Christian
  */
-@Ignore
 public class SQLLinksetHandlerTest extends LinksetHandlerTest {
     
     @BeforeClass
