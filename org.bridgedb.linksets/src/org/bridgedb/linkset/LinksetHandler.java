@@ -4,6 +4,7 @@
  */
 package org.bridgedb.linkset;
 
+import java.io.File;
 import org.bridgedb.linkset.constants.VoidConstants;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -49,48 +50,7 @@ public class LinksetHandler extends RDFHandlerBase{
     URLLinkListener listener;
     RdfLoader rdfLoader;
     
-    public static void parse (URLLinkListener listener, String fileName, RdfStoreType type) 
-            throws IDMapperLinksetException  {
-        RdfLoader rdfLoader = new HoldingRDFStore(type);
-        LinksetHandler handler = new LinksetHandler(listener, rdfLoader);
-        parse (handler, fileName, type);
-    }
-
-    public static void clearAndParse (URLLinkListener listener, String fileName, RdfStoreType type) 
-            throws IDMapperLinksetException  {
-        RdfLoader rdfLoader = new HoldingRDFStore(type);
-        rdfLoader.clear();
-        LinksetHandler handler = new LinksetHandler(listener, rdfLoader);
-        parse (handler, fileName, type);
-    }
-
-    private static void parse (LinksetHandler handler, String fileName, RdfStoreType type) 
-            throws IDMapperLinksetException  {
-        Reporter.report("Parsing " + fileName);
-        FileReader reader = null;
-        try {
-            RDFParser parser = new TurtleParser();
-            parser.setRDFHandler(handler);
-            parser.setParseErrorListener(new LinksetParserErrorListener());
-            parser.setVerifyData(true);
-            reader = new FileReader(fileName);
-            parser.parse (reader, handler.getDefaultBaseURI());
-        } catch (IOException ex) {
-            throw new IDMapperLinksetException("Error reading file " + fileName + " " + ex.getMessage(), ex);
-        } catch (OpenRDFException ex) {
-            throw new IDMapperLinksetException("Error parsing file " + fileName+ " " + ex.getMessage(), ex);
-        } finally {
-            try {
-                if (reader != null){
-                    reader.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    private LinksetHandler(URLLinkListener listener, RdfLoader rdfLoader) throws IDMapperLinksetException  {
+    LinksetHandler(URLLinkListener listener, RdfLoader rdfLoader) throws IDMapperLinksetException  {
         try {
             this.listener = listener;
             listener.openInput();
@@ -100,6 +60,43 @@ public class LinksetHandler extends RDFHandlerBase{
         }
     }
     
+    void parse (String fileName) throws IDMapperLinksetException  {
+        File file = new File(fileName);
+        parse(file);
+    }
+    
+    void parse (File file) throws IDMapperLinksetException  {
+        if (file.isDirectory()){
+            File[] children = file.listFiles();
+            for (File child:children){
+                parse(child);
+            }
+        } else {
+            Reporter.report("Parsing " + file.getAbsolutePath());
+            FileReader reader = null;
+            try {
+                RDFParser parser = new TurtleParser();
+                parser.setRDFHandler(this);
+                parser.setParseErrorListener(new LinksetParserErrorListener());
+                parser.setVerifyData(true);
+                reader = new FileReader(file);
+                parser.parse (reader, getDefaultBaseURI());
+            } catch (IOException ex) {
+                throw new IDMapperLinksetException("Error reading file " + file.getAbsolutePath() + " " + ex.getMessage(), ex);
+            } catch (OpenRDFException ex) {
+                throw new IDMapperLinksetException("Error parsing file " + file.getAbsolutePath()+ " " + ex.getMessage(), ex);
+            } finally {
+                try {
+                    if (reader != null){
+                        reader.close();
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
     @Override
     public void handleStatement(Statement st) throws RDFHandlerException {
         if (processingHeader) {
@@ -131,22 +128,18 @@ public class LinksetHandler extends RDFHandlerBase{
     private void processHeaderStatement(Statement st) throws RDFHandlerException{
         Resource subject = st.getSubject();
         final URI predicate = st.getPredicate();
-        final String predicateStr = predicate.stringValue();
         final Value object = st.getObject();
         if (linkPredicate != null && predicate.equals(linkPredicate)) {
             /* Assumes all metadata is declared before the links */
             finishProcessingHeader(st);
-            checkStatement(st);
             insertLink(st);
             return;
         }
-        if (predicateStr.equals(VoidConstants.LINK_PREDICATE)) {
+        if (predicate.equals(VoidConstants.LINK_PREDICATE)) {
             if (linkPredicate != null) {
                 throw new RDFHandlerException("Linkset can only be declared to have one link predicate.");
             }
             linkPredicate = (URI) object;
-//            linksetId = (URI) subject;
-//            inverseLinksetId = new URIImpl(subject.stringValue() + "/inverted");
         }
         rdfLoader.addStatement(st);
     }
@@ -202,14 +195,53 @@ public class LinksetHandler extends RDFHandlerBase{
             throw new RDFHandlerException("Error endingRDF ", ex);
         }
         if (!loaded){
-            throw new RDFHandlerException("Linkset not saved as end of void hdeaer not found");
+            throw new RDFHandlerException("Linkset not saved as end of void headder not found");
         }
     }
 
-    private void checkStatement(Statement st) throws RDFHandlerException{
+    private void checkStatementX(Statement st) throws RDFHandlerException{
      if (!linkPredicate.equals(st.getPredicate())){
             throw new RDFHandlerException("predicateURL " + st.getPredicate()
                     + " does not match the expected pattern " + linkPredicate);            
         }
     }
+    public static void parseX (URLLinkListener listener, RdfLoader rdfLoader, String fileName, RdfStoreType type) 
+            throws IDMapperLinksetException  {
+        LinksetHandler handler = new LinksetHandler(listener, rdfLoader);
+        parse (handler, fileName, type);
+    }
+
+    public static void clearAndParseX (URLLinkListener listener, RdfLoader rdfLoader, String fileName, RdfStoreType type) 
+            throws IDMapperLinksetException  {
+        rdfLoader.clear();
+        LinksetHandler handler = new LinksetHandler(listener, rdfLoader);
+        parse (handler, fileName, type);
+    }
+
+    private static void parse (LinksetHandler handler, String fileName, RdfStoreType type) 
+            throws IDMapperLinksetException  {
+        Reporter.report("Parsing " + fileName);
+        FileReader reader = null;
+        try {
+            RDFParser parser = new TurtleParser();
+            parser.setRDFHandler(handler);
+            parser.setParseErrorListener(new LinksetParserErrorListener());
+            parser.setVerifyData(true);
+            reader = new FileReader(fileName);
+            parser.parse (reader, handler.getDefaultBaseURI());
+        } catch (IOException ex) {
+            throw new IDMapperLinksetException("Error reading file " + fileName + " " + ex.getMessage(), ex);
+        } catch (OpenRDFException ex) {
+            throw new IDMapperLinksetException("Error parsing file " + fileName+ " " + ex.getMessage(), ex);
+        } finally {
+            try {
+                if (reader != null){
+                    reader.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
 }
