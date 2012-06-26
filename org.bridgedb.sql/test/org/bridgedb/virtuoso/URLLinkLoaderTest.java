@@ -16,12 +16,12 @@ public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     @BeforeClass
     public static void setupURLs() throws IDMapperException{
         URLMapperTestBase.setupURLs();
-        link1to2 = "http://localhost:8080/OPS-IMS/linkset/1/#Test1_2";
-        link1to3 = "http://localhost:8080/OPS-IMS/linkset/2/#Test1_3";
-        link2to1 = "http://localhost:8080/OPS-IMS/linkset/1/#Test1_2/inverted";
-        link2to3 = "http://localhost:8080/OPS-IMS/linkset/3/#Test2_3";
-        link3to1 = "http://localhost:8080/OPS-IMS/linkset/2/#Test1_3/inverted";
-        link3to2 = "http://localhost:8080/OPS-IMS/linkset/3/#Test2_3/inverted";
+        link1to2 = "http://localhost:8080/OPS-IMS/linkset/1";
+        link1to3 = "http://localhost:8080/OPS-IMS/linkset/3";
+        link2to1 = "http://localhost:8080/OPS-IMS/linkset/2";
+        link2to3 = "http://localhost:8080/OPS-IMS/linkset/5";
+        link3to1 = "http://localhost:8080/OPS-IMS/linkset/4";
+        link3to2 = "http://localhost:8080/OPS-IMS/linkset/6";
     }
     
     @BeforeClass
