@@ -19,10 +19,7 @@ import org.openrdf.OpenRDFException;
  * @author Christian
  */
 public class LinksetMainLoader {
-    
-    protected static URLLinkListener listener;
-    private static final boolean IS_TEST = true;
-    
+        
     public static void main(String[] args) throws IDMapperException, IOException, OpenRDFException  {
         setupDatasources();
         
