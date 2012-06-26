@@ -1,12 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.linkset;
 
 import java.io.File;
 import org.bridgedb.linkset.constants.VoidConstants;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,9 +11,6 @@ import java.util.logging.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
-//import org.bridgedb.rdf.RDFLinksetStore;
-import org.bridgedb.ops.LinkSetStore;
-import org.bridgedb.rdf.HoldingRDFStore;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfStoreType;
 import org.openrdf.OpenRDFException;
@@ -26,8 +18,6 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.helpers.RDFHandlerBase;
