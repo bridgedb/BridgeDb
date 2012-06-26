@@ -77,7 +77,7 @@ public class RdfWrapper {
      * @throws IDMapperLinksetException 
      */
     private static Repository getRepository(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
-        File dataDir =getDataDir(rdfStoreType);
+        File dataDir = getDataDir(rdfStoreType);
         if (!dataDir.exists()){
            throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " does not exist");
         }
@@ -113,7 +113,7 @@ public class RdfWrapper {
                 return new File(getLoadSailNativeStore());
             case TEST:
                 return new File(getTestSailNativeStore());
-            default:
+             default:
                 throw new IDMapperLinksetException ("Unepected RdfStoreType " + rdfStoreType);
         }
     }
