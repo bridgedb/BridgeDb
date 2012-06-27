@@ -1046,7 +1046,8 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
             while (rs.next()){
                 Integer count = rs.getInt("linkCount");
                 results.add(new LinkSetInfo(rs.getString("id"), rs.getString("sourceNameSpace"), 
-                        rs.getString("linkPredicate"), rs.getString("targetNameSpace"), count));
+                        rs.getString("linkPredicate"), rs.getString("targetNameSpace"), count, 
+                        rs.getBoolean("isTransitive")));
             }
         } catch (SQLException ex) {
             throw new IDMapperException("Unable to parse results.", ex);
