@@ -27,7 +27,8 @@ public class IgnoreLinkListener implements URLLinkListener{
     }
 
     @Override
-    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target) throws IDMapperException {
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target,
+            boolean isTransitive) throws IDMapperException {
         //Do nothing
     }
 

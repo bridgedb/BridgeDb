@@ -33,4 +33,5 @@ public interface RdfLoader {
 
     public void addStatement(Statement st) throws RDFHandlerException;
 
+    public boolean isTransative() throws RDFHandlerException;
 }

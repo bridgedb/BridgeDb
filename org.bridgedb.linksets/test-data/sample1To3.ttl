@@ -19,6 +19,10 @@
 :Test1_3 a void:Linkset  ;
     void:subjectsTarget :TestDS1 ;
     void:objectsTarget :TestDS3 ;
+    pav:derivedFrom :Test1_2 ;
+    pav:derivedFrom :Test2_3 ;
+    pav:derivedOn "2012-02-22"^^xsd:date ;
+    pav:derivedBy <http://www.cs.man.ac.uk/~brenninc> ;
     dcterms:license "Who cares this is a test" ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
     dcterms:created "2012-02-22"^^xsd:date ;

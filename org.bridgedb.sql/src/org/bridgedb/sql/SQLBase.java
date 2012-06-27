@@ -275,7 +275,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     /**** URLLinkListener Methods ****/
     
     @Override
-    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target) 
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target, boolean isTransitive) 
             throws BridgeDbSqlException{
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
@@ -305,12 +305,13 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
                 return;
             }
             query = "INSERT INTO linkSet "
-                    + "(id, sourceNameSpace, linkPredicate, targetNameSpace ) " 
+                    + "(id, sourceNameSpace, linkPredicate, targetNameSpace, isTransitive) " 
                     + "VALUES (" 
                     + "'" + linkSetId + "', " 
                     + "'" + source.getNameSpace() + "', " 
                     + "'" + predicate + "', " 
-                    + "'" + target.getNameSpace() + "')";
+                    + "'" + target.getNameSpace() + "',"
+                    + "'" + booleanIntoQuery(isTransitive) + "')";
             statement.executeUpdate(query);
         } catch (SQLException ex) {
             System.err.println(ex);
@@ -1430,14 +1431,14 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         }
     }
 
+    private String booleanIntoQuery(boolean bool){
+        if (bool) return "1";
+        return "0";
+    }
     private void updateDataSource(DataSource source) throws BridgeDbSqlException{
         StringBuilder update = new StringBuilder("UPDATE DataSource ");
         update.append ("SET isPrimary = ");
-        if (source.isPrimary()){
-            update.append (1);
-        } else {
-           update.append (0);
-        }
+        update.append (booleanIntoQuery(source.isPrimary()));
         update.append (" ");       
         String value = source.getFullName();
         if (value != null && !value.isEmpty()){

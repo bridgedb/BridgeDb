@@ -15,8 +15,8 @@ import org.bridgedb.IDMapperException;
  */
 public interface URLLinkListener {
     
-    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target) 
-            throws IDMapperException;
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target, 
+            boolean isTransitive) throws IDMapperException;
     
     public void insertLink(String source, String target, String forwardLinkSetId, String inverseLinkSetId) 
             throws IDMapperException;
