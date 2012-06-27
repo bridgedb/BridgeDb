@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.provenance.XrefProvenance;
+import org.bridgedb.linkset.XrefLinkSet;
 
 public class XrefBeanFactory {
     

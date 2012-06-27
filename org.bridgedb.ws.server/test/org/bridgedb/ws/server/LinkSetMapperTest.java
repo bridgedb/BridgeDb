@@ -17,14 +17,14 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-public class ProvenanceMapperTest extends org.bridgedb.provenance.ProvenanceMapperTest{
+public class LinkSetMapperTest extends org.bridgedb.linkset.LinkSetMapperTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
         File INTERFACE_TEST_FILE = new File ("../org.bridgedb/test-data/interfaceTest.txt");
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
         WSCoreService webService = new WSCoreService(inner, TEST_PREDICATE);
-        provenaceMapper = new WSCoreMapper(webService);
+        linkSetMapper = new WSCoreMapper(webService);
     }
 
 }

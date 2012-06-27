@@ -30,7 +30,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     private static final ArrayList<String> ALL_SOURCE_NAME_SPACES = ALL_URLs; 
     private static final ArrayList<String> ALL_TARGET_NAME_SPACES = ALL_URLs; 
     private static final ArrayList<DataSource> ALL_DATA_SOURCES = new ArrayList<DataSource>();
-    private static final ArrayList<String> ALL_PROVENANCE_IDS = ALL_URLs;
+    private static final ArrayList<String> ALL_LINK_SET_IDS = ALL_URLs;
     private static final ArrayList<String> NONE_BY_ID = ALL_URLs; 
     private static final int JUST_ONE = 1;
 
@@ -49,7 +49,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     public void testGetMappings() throws IDMapperException{
         report ("testGetMappings");
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 10);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 10);
         assertEquals(10, mappings.size());
     }
     
@@ -59,7 +59,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         ArrayList<String> URLs = new ArrayList<String>();
         URLs.add(map1URL1);
         List<URLMapping> mappings = opsMapper.getMappings(URLs , ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 3);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 3);
         assertEquals(3, mappings.size());
         for (URLMapping mapping: mappings){
             assertThat(map1URL1, anyOf(equalTo(mapping.getSourceURL()), equalTo(mapping.getTargetURL())));
@@ -72,7 +72,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(map1URL1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, sourceURLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 2);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 2);
         assertEquals(2, mappings.size());
         for (URLMapping mapping: mappings){
             assertEquals(map1URL1, mapping.getSourceURL());
@@ -85,7 +85,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         ArrayList<String> targetURLs = new ArrayList<String>();
         targetURLs.add(map1URL1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, targetURLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 2);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 2);
         assertEquals(2, mappings.size());
         for (URLMapping mapping: mappings){
             assertEquals(map1URL1, mapping.getTargetURL());
@@ -98,7 +98,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         ArrayList<String> nameSpaces = new ArrayList<String>();
         nameSpaces.add(nameSpace1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                nameSpaces, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 12);
+                nameSpaces, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 12);
         assertEquals(12, mappings.size());
         for (URLMapping mapping: mappings){
             assertTrue(mapping.getSourceURL().startsWith(nameSpace1) || mapping.getTargetURL().startsWith(nameSpace1));
@@ -111,7 +111,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         ArrayList<String> sourceNameSpaces = new ArrayList<String>();
         sourceNameSpaces.add(nameSpace1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, sourceNameSpaces, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 6);
+                ALL_NAME_SPACES, sourceNameSpaces, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 6);
         assertEquals(6, mappings.size());
         for (URLMapping mapping: mappings){
             assertTrue(mapping.getSourceURL().startsWith(nameSpace1));
@@ -124,7 +124,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         ArrayList<String> targetNameSpaces = new ArrayList<String>();
         targetNameSpaces.add(nameSpace1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, targetNameSpaces, ALL_PROVENANCE_IDS, 0, 6);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, targetNameSpaces, ALL_LINK_SET_IDS, 0, 6);
         assertEquals(6, mappings.size());
         for (URLMapping mapping: mappings){
             assertTrue(mapping.getTargetURL().startsWith(nameSpace1));
@@ -132,15 +132,15 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     }
 
     @Test 
-    public void testGetMappingsByProvenanceId() throws IDMapperException{
-        report ("testGetMappingsByProvenanceId");
-        ArrayList<String> provenanceIds = new ArrayList<String>();
-        provenanceIds.add(link1to2);
+    public void testGetMappingsByLinkSetId() throws IDMapperException{
+        report ("testGetMappingsByLinkSetId");
+        ArrayList<String> linkSetIds = new ArrayList<String>();
+        linkSetIds.add(link1to2);
          List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, provenanceIds, 0, 3);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, linkSetIds, 0, 3);
         assertEquals(3, mappings.size());
         for (URLMapping mapping: mappings){
-            assertEquals(link1to2, mapping.getProvenanceId());
+            assertEquals(link1to2, mapping.getLinkSetId());
         }
     }
 
@@ -148,7 +148,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     public void testGetMapping() throws IDMapperException{
         report ("testGetMapping");
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 1);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 1);
         URLMapping first = mappings.get(0);
         URLMapping mapping = opsMapper.getMapping(first.getId());
         assertEquals(first, mapping);
@@ -158,11 +158,11 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     @Test
     public void testGetURLsByPosition() throws IDMapperException{
         report("testGetURLsByPosition");
-        String result0 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_PROVENANCE_IDS, 0, JUST_ONE).get(0);
+        String result0 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
         assertNotNull(result0);
-        String result1 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_PROVENANCE_IDS, 1, JUST_ONE).get(0);
+        String result1 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_LINK_SET_IDS, 1, JUST_ONE).get(0);
         assertThat(result1, not(result0));
-        String result2 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_PROVENANCE_IDS, 2, JUST_ONE).get(0);
+        String result2 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_LINK_SET_IDS, 2, JUST_ONE).get(0);
         assertThat(result2, not(result0));
         assertThat(result2, not(result1));
     }
@@ -170,10 +170,10 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     @Test
     public void testGetURLsByPositionAndLimit() throws IDMapperException{
         report("testGetURLsByPositionAndLimit");
-        List<String> results1 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 5);
+        List<String> results1 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_LINK_SET_IDS, 0, 5);
         assertEquals(5, results1.size());
         //Only 4 in the seocnd ones as there may be only 9 mappings
-        List<String> results2 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_PROVENANCE_IDS, 5, 4);
+        List<String> results2 = opsMapper.getURLs(ALL_NAME_SPACES, ALL_LINK_SET_IDS, 5, 4);
         assertEquals(4, results2.size());
         for (String url: results2){
             assertFalse(results1.contains(url));
@@ -185,15 +185,15 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         report("testGetURLsByPositionAndDataSource");
         ArrayList<String> nameSpaces2 = new ArrayList<String>();
         nameSpaces2.add(nameSpace2);
-        String result0 = opsMapper.getURLs(nameSpaces2, ALL_PROVENANCE_IDS, 0, JUST_ONE).get(0);
+        String result0 = opsMapper.getURLs(nameSpaces2, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
         assertNotNull(result0);
         assertThat(result0, startsWith(nameSpace2));
         ArrayList<String> nameSpaces3 = new ArrayList<String>();
         nameSpaces3.add(nameSpace3);
-        String result1 = opsMapper.getURLs(nameSpaces3, ALL_PROVENANCE_IDS, 0, JUST_ONE).get(0);
+        String result1 = opsMapper.getURLs(nameSpaces3, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
         assertThat(result1, startsWith(nameSpace3));
         assertThat(result1, not(result0));
-        String result2 = opsMapper.getURLs(nameSpaces2, ALL_PROVENANCE_IDS, 1, JUST_ONE).get(0);
+        String result2 = opsMapper.getURLs(nameSpaces2, ALL_LINK_SET_IDS, 1, JUST_ONE).get(0);
         assertThat(result2, not(result0));
         assertThat(result2, not(result1));
         assertThat(result2, startsWith(nameSpace2));
@@ -205,7 +205,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         ArrayList<String> nameSpaces2 = new ArrayList<String>();
         nameSpaces2.add(nameSpace2);
         //There may be only three for 
-        List<String> results = opsMapper.getURLs(nameSpaces2, ALL_PROVENANCE_IDS, 0, 3);
+        List<String> results = opsMapper.getURLs(nameSpaces2, ALL_LINK_SET_IDS, 0, 3);
         assertEquals(3, results.size());
         for (String url: results){
             assertThat(url, startsWith(nameSpace2));
@@ -215,11 +215,11 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     @Test
     public void testbyPosition() throws IDMapperException{
         report("testbyPosition");
-        Xref result0 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 0, JUST_ONE).get(0);
+        Xref result0 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
         assertNotNull(result0);
-        Xref result1 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 1, JUST_ONE).get(0);
+        Xref result1 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_LINK_SET_IDS, 1, JUST_ONE).get(0);
         assertFalse(result1.equals(result0));
-        Xref result2 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 2, JUST_ONE).get(0);
+        Xref result2 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_LINK_SET_IDS, 2, JUST_ONE).get(0);
         assertFalse(result2.equals(result0));
         assertFalse(result2.equals(result1));
     }
@@ -227,10 +227,10 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     @Test
     public void testbyPositionAndLimit() throws IDMapperException{
         report("testbyPositionAndLimit");
-        List<Xref> results1 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 0, 5);
+        List<Xref> results1 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_LINK_SET_IDS, 0, 5);
         assertEquals(5, results1.size());
         //Only 4 in the seocnd ones as there may be only 9 mappings
-        List<Xref> results2 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_PROVENANCE_IDS, 5, 4);
+        List<Xref> results2 = opsMapper.getXrefs(ALL_DATA_SOURCES, ALL_LINK_SET_IDS, 5, 4);
         assertEquals(4, results2.size());
         for (Xref xref: results2){
             assertFalse(results1.contains(xref));
@@ -242,15 +242,15 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         report("testbyPositionAndDataSource");
         ArrayList<DataSource> dataSources1 = new ArrayList<DataSource>();
         dataSources1.add(DataSource1);
-        Xref result0 = opsMapper.getXrefs(dataSources1, ALL_PROVENANCE_IDS, 0, JUST_ONE).get(0);
+        Xref result0 = opsMapper.getXrefs(dataSources1, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
         assertNotNull(result0);
         assertEquals(DataSource1, result0.getDataSource());
         ArrayList<DataSource> dataSources2 = new ArrayList<DataSource>();
         dataSources2.add(DataSource2);
-        Xref result1 = opsMapper.getXrefs(dataSources2, ALL_PROVENANCE_IDS, 0, JUST_ONE).get(0);
+        Xref result1 = opsMapper.getXrefs(dataSources2, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
         assertEquals(result1.getDataSource(), DataSource2);
         assertFalse(result1.equals(result0));
-        Xref result2 = opsMapper.getXrefs(dataSources1, ALL_PROVENANCE_IDS, 1, JUST_ONE).get(0);
+        Xref result2 = opsMapper.getXrefs(dataSources1, ALL_LINK_SET_IDS, 1, JUST_ONE).get(0);
         assertFalse(result2.equals(result0));
         assertFalse(result2.equals(result1));
         assertEquals(result2.getDataSource(), DataSource1);
@@ -262,7 +262,7 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         //There may be only three for 
         ArrayList<DataSource> dataSources1 = new ArrayList<DataSource>();
         dataSources1.add(DataSource1);
-        List<Xref> results = opsMapper.getXrefs(dataSources1, ALL_PROVENANCE_IDS, 0, 10);
+        List<Xref> results = opsMapper.getXrefs(dataSources1, ALL_LINK_SET_IDS, 0, 10);
         assertEquals(3, results.size());
         for (Xref xref: results){
             assertEquals(xref.getDataSource(), DataSource1);
@@ -275,15 +275,15 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         OverallStatistics results = opsMapper.getOverallStatistics();
         assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(6));
         assertThat (results.getNumberOfPredicates(), greaterThanOrEqualTo(1));
-        assertThat (results.getNumberOfProvenances(), greaterThan(1));
+        assertThat (results.getNumberOfLinkSets(), greaterThan(1));
         assertThat (results.getNumberOfTargetDataSources(), greaterThanOrEqualTo(3));
         assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
     }
 
     @Test
-    public void testGetProvenanceInfo() throws IDMapperException{
-        report("GetProvenanceInfo");
-        ProvenanceInfo info = opsMapper.getProvenanceInfo(link1to2);
+    public void testGetLinkSetInfo() throws IDMapperException{
+        report("GetLinkSetInfo");
+        LinkSetInfo info = opsMapper.getLinkSetInfo(link1to2);
         assertEquals(link1to2, info.getId());
         assertEquals(TEST_PREDICATE, info.getPredicate());
         assertEquals(nameSpace1, info.getSourceNameSpace());
@@ -292,12 +292,12 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     }
 
     @Test
-    public void testGetProvenanceInfos() throws IDMapperException{
-        report("GetProvenanceInfos");
-        List<ProvenanceInfo> results = opsMapper.getProvenanceInfos();
+    public void testGetLinkSetInfos() throws IDMapperException{
+        report("GetLinkSetInfos");
+        List<LinkSetInfo> results = opsMapper.getLinkSetInfos();
         assertThat (results.size(), greaterThanOrEqualTo(6));
         boolean found = false;
-        for (ProvenanceInfo info:results){
+        for (LinkSetInfo info:results){
             if (info.getId().equals(link3to2)){
                 found = true;
                 assertEquals(TEST_PREDICATE, info.getPredicate());

@@ -22,9 +22,9 @@ import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.linkset.URLLinkListener;
 import org.bridgedb.ops.OpsMapper;
-import org.bridgedb.ops.ProvenanceInfo;
-import org.bridgedb.provenance.ProvenanceMapper;
-import org.bridgedb.provenance.XrefProvenance;
+import org.bridgedb.ops.LinkSetInfo;
+import org.bridgedb.linkset.LinkSetMapper;
+import org.bridgedb.linkset.XrefLinkSet;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.ByNameSpaceIterable;
@@ -38,7 +38,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URLIterator, XrefIterator,
-public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
+public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
         OpsMapper, URLIterator {
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
@@ -275,7 +275,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     /**** URLLinkListener Methods ****/
     
     @Override
-    public void registerProvenanceLink(String linkSetId, DataSource source, String predicate, DataSource target) 
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target) 
             throws BridgeDbSqlException{
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
@@ -337,7 +337,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     }
 
     @Override
-    public Set<String> getProvenanceIds() throws IDMapperException {
+    public Set<String> getLinkSetIds() throws IDMapperException {
         String query = ("SELECT id FROM linkSet ");
         Statement statement = this.createStatement();
         try {
@@ -718,7 +718,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     }
 
     @Override
-    public List<ProvenanceInfo> getProvenanceInfos() throws IDMapperException {
+    public List<LinkSetInfo> getLinkSetInfos() throws IDMapperException {
         String query = ("SELECT * FROM linkSet ");
         Statement statement = this.createStatement();
         try {
@@ -731,12 +731,12 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     }
 
     @Override
-    public ProvenanceInfo getProvenanceInfo(String id) throws IDMapperException {
+    public LinkSetInfo getLinkSetInfo(String id) throws IDMapperException {
         String query = ("SELECT * FROM linkset where id = '" + id + "'");
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
-            List<ProvenanceInfo> results = resultSetToLinkSetInfos(rs);
+            List<LinkSetInfo> results = resultSetToLinkSetInfos(rs);
             if (results.size() == 1){
                 return results.get(0);
             } else if (results.isEmpty()){
@@ -752,22 +752,22 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
 
 
-    /*** ProvenanceMapper methods ***/
+    /*** LinkSetMapper methods ***/
     @Override
-    public Map<Xref, Set<XrefProvenance>> mapIDProvenance(List<Xref> srcXrefs, 
+    public Map<Xref, Set<XrefLinkSet>> mapIDwithLinkSet(List<Xref> srcXrefs, 
             List<String> linkSetIds, List<DataSource> targetDataSources) throws IDMapperException {
-        Map<Xref, Set<XrefProvenance>> results = new HashMap<Xref, Set<XrefProvenance>>();
+        Map<Xref, Set<XrefLinkSet>> results = new HashMap<Xref, Set<XrefLinkSet>>();
         for (Xref ref: srcXrefs){
-            Set<XrefProvenance> result = mapIDProvenance(ref, linkSetIds, targetDataSources);
+            Set<XrefLinkSet> result = mapIDwithLinkSet(ref, linkSetIds, targetDataSources);
             if (!result.isEmpty()){
-                results.put(ref, mapIDProvenance(ref, linkSetIds, targetDataSources));
+                results.put(ref, mapIDwithLinkSet(ref, linkSetIds, targetDataSources));
             }
         }
         return results;
     }
 
     @Override
-    public Set<XrefProvenance> mapIDProvenance(Xref ref, List<String> linkSetIds, 
+    public Set<XrefLinkSet> mapIDwithLinkSet(Xref ref, List<String> linkSetIds, 
             List<DataSource> targetDataSources) throws IDMapperException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT link.id as linkId, sourceURL, targetURL, linkSet.id as linkSetId, sourceNameSpace, linkPredicate, ");
@@ -782,7 +782,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
             ResultSet rs = statement.executeQuery(query.toString());
             return resultSetToXrefLinkSets(rs);
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to run mapIDProvenance", ex, query.toString());
+            throw new BridgeDbSqlException("Unable to run mapIDwithLinkSet", ex, query.toString());
         }
     }
 
@@ -1039,12 +1039,12 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         return results;
     }
 
-    private List<ProvenanceInfo> resultSetToLinkSetInfos(ResultSet rs ) throws IDMapperException{
-        ArrayList<ProvenanceInfo> results = new ArrayList<ProvenanceInfo>();
+    private List<LinkSetInfo> resultSetToLinkSetInfos(ResultSet rs ) throws IDMapperException{
+        ArrayList<LinkSetInfo> results = new ArrayList<LinkSetInfo>();
         try {
             while (rs.next()){
                 Integer count = rs.getInt("linkCount");
-                results.add(new ProvenanceInfo(rs.getString("id"), rs.getString("sourceNameSpace"), 
+                results.add(new LinkSetInfo(rs.getString("id"), rs.getString("sourceNameSpace"), 
                         rs.getString("linkPredicate"), rs.getString("targetNameSpace"), count));
             }
         } catch (SQLException ex) {
@@ -1109,17 +1109,17 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         return results;
     }
 
-    private Set<XrefProvenance> resultSetToXrefLinkSets(ResultSet rs ) throws SQLException, IDMapperException {
-        HashSet<XrefProvenance> results = new HashSet<XrefProvenance>();
+    private Set<XrefLinkSet> resultSetToXrefLinkSets(ResultSet rs ) throws SQLException, IDMapperException {
+        HashSet<XrefLinkSet> results = new HashSet<XrefLinkSet>();
         while (rs.next()){
             results.add(resultSetToXrefLinkSet(rs));
         }
         return results;
     }
 
-    private XrefProvenance resultSetToXrefLinkSet(ResultSet rs) throws SQLException, IDMapperException {
+    private XrefLinkSet resultSetToXrefLinkSet(ResultSet rs) throws SQLException, IDMapperException {
         Xref xref = DataSource.uriToXref(rs.getString("targetURL"));
-        return new XrefProvenance(xref, rs.getString("LinkSetId"), rs.getString("linkPredicate"));
+        return new XrefLinkSet(xref, rs.getString("LinkSetId"), rs.getString("linkPredicate"));
     }
 
     private List<Xref> resultSetToXrefList(ResultSet rs ) throws IDMapperException{

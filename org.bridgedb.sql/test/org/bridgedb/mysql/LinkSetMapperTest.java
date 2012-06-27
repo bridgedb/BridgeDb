@@ -1,4 +1,4 @@
-package org.bridgedb.virtuoso;
+package org.bridgedb.mysql;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
@@ -11,8 +11,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-@Ignore
-public class ProvenanceMapperTest extends org.bridgedb.provenance.ProvenanceMapperTest {
+public class LinkSetMapperTest extends org.bridgedb.linkset.LinkSetMapperTest {
     
     @BeforeClass
     public static void setupURLs() throws IDMapperException{
@@ -28,10 +27,10 @@ public class ProvenanceMapperTest extends org.bridgedb.provenance.ProvenanceMapp
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
-        VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(sqlAccess);
-        provenaceMapper = urlMapperVirtuoso;
+        MysqlMapper urlMapperSQL = new MysqlMapper(sqlAccess);
+        linkSetMapper = urlMapperSQL;
     }
             
 }

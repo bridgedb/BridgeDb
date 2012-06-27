@@ -13,17 +13,17 @@ import org.bridgedb.DataSource;
 public class DataSourceStatistics {
     private DataSource dataSource;
     private int numberOfVersions;
-    private int numberOfSourceProvenances;
-    private int numberOfTargetProvenances;
+    private int numberOfSourceLinkSets;
+    private int numberOfTargetLinkSets;
     private int numberOfSourceMappings;
     private int numberOfTargetMappings;
     
-    public DataSourceStatistics (DataSource dataSource, int numberOfSourceProvenances, 
-            int numberOfTargetProvenances, int numberOfSourceMappings, int numberOfTargetMappings){
+    public DataSourceStatistics (DataSource dataSource, int numberOfSourceLinkSets, 
+            int numberOfTargetLinkSets, int numberOfSourceMappings, int numberOfTargetMappings){
         this.dataSource = dataSource;
         this.numberOfVersions = 1; //TODO add versions
-        this.numberOfSourceProvenances = numberOfSourceProvenances;
-        this.numberOfTargetProvenances = numberOfTargetProvenances;
+        this.numberOfSourceLinkSets = numberOfSourceLinkSets;
+        this.numberOfTargetLinkSets = numberOfTargetLinkSets;
         this.numberOfSourceMappings = numberOfSourceMappings;
         this.numberOfTargetMappings = numberOfTargetMappings;
     }
@@ -43,17 +43,17 @@ public class DataSourceStatistics {
     }
 
     /**
-     * @return the numberOfSourceProvenances
+     * @return the numberOfSourceLinkSets
      */
-    public int getNumberOfSourceProvenances() {
-        return numberOfSourceProvenances;
+    public int getNumberOfSourceLinkSets() {
+        return numberOfSourceLinkSets;
     }
 
     /**
-     * @return the numberOfTargetProvenances
+     * @return the numberOfTargetLinkSets
      */
-    public int getNumberOfTargetProvenances() {
-        return numberOfTargetProvenances;
+    public int getNumberOfTargetLinkSets() {
+        return numberOfTargetLinkSets;
     }
 
     /**

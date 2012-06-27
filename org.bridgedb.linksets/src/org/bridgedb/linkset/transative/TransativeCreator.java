@@ -32,9 +32,9 @@ public class TransativeCreator {
         query.append("<http://www/bridgebd.org/mapsTo> <\", link2.targetURL, \"> .\") ");
         query.append(" from link link1, link link2 ");
         query.append(" where link1.targetURL = link2.sourceURL");
-        query.append(" and link1.provenance_id = \"");
+        query.append(" and link1.linkSetId = \"");
         query.append("http://openphacts.cs.man.ac.uk:9090/OPS-IMS/linkset/27/#conceptwiki_swissprot");
-        query.append("\" and link2.provenance_id = \"");
+        query.append("\" and link2.linkSetId = \"");
         query.append("http://openphacts.cs.man.ac.uk:9090/OPS-IMS/linkset/21/#chembl_uniprot/inverted");
         query.append("\" into outfile \"");
         query.append("/var/local/ims/linksets/cw_chembl-target.ttl");

@@ -15,8 +15,8 @@ import org.bridgedb.statistics.DataSourceStatistics;
 public class DataSourceStatisticsBean {
     private DataSourceBean dataSource;
     private Integer numberOfVersions;
-    private Integer numberOfSourceProvenances;
-    private Integer numberOfTargetProvenances;
+    private Integer numberOfSourceLinkSets;
+    private Integer numberOfTargetLinkSets;
     private Integer numberOfSourceMappings;
     private Integer numberOfTargetMappings;
 
@@ -27,13 +27,13 @@ public class DataSourceStatisticsBean {
         this.dataSource = DataSourceBeanFactory.asBean(statistics.getDataSource());
         this.numberOfSourceMappings = statistics.getNumberOfSourceMappings();
         this.numberOfTargetMappings = statistics.getNumberOfTargetMappings();
-        this.numberOfSourceProvenances = statistics.getNumberOfSourceProvenances();
-        this.numberOfTargetProvenances = statistics.getNumberOfTargetProvenances();
+        this.numberOfSourceLinkSets = statistics.getNumberOfSourceLinkSets();
+        this.numberOfTargetLinkSets = statistics.getNumberOfTargetLinkSets();
     }
 
     public DataSourceStatistics asDataSourceStatistics() {
         return new DataSourceStatistics(DataSourceBeanFactory.asDataSource(dataSource), 
-                numberOfSourceProvenances, numberOfTargetProvenances, 
+                numberOfSourceLinkSets, numberOfTargetLinkSets, 
                 numberOfSourceMappings, numberOfTargetMappings);   
     }
 
@@ -66,31 +66,31 @@ public class DataSourceStatisticsBean {
     }
 
     /**
-     * @return the numberOfSourceProvenances
+     * @return the numberOfSourceLinkSets
      */
-    public Integer getNumberOfSourceProvenances() {
-        return numberOfSourceProvenances;
+    public Integer getNumberOfSourceLinkSets() {
+        return numberOfSourceLinkSets;
     }
 
     /**
-     * @param numberOfSourceProvenances the numberOfSourceProvenances to set
+     * @param numberOfSourceLinkSets the numberOfSourceLinkSets to set
      */
-    public void setNumberOfSourceProvenances(Integer numberOfSourceProvenances) {
-        this.numberOfSourceProvenances = numberOfSourceProvenances;
+    public void setNumberOfSourceLinkSets(Integer numberOfSourceLinkSets) {
+        this.numberOfSourceLinkSets = numberOfSourceLinkSets;
     }
 
     /**
-     * @return the numberOfTargetProvenances
+     * @return the numberOfTargetLinkSets
      */
-    public Integer getNumberOfTargetProvenances() {
-        return numberOfTargetProvenances;
+    public Integer getNumberOfTargetLinkSets() {
+        return numberOfTargetLinkSets;
     }
 
     /**
-     * @param numberOfTargetProvenances the numberOfTargetProvenances to set
+     * @param numberOfTargetLinkSets the numberOfTargetLinkSets to set
      */
-    public void setNumberOfTargetProvenances(Integer numberOfTargetProvenances) {
-        this.numberOfTargetProvenances = numberOfTargetProvenances;
+    public void setNumberOfTargetLinkSets(Integer numberOfTargetLinkSets) {
+        this.numberOfTargetLinkSets = numberOfTargetLinkSets;
     }
 
     /**

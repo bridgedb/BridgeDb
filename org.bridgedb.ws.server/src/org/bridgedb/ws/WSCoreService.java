@@ -19,9 +19,9 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.provenance.ProvenanceMapper;
-import org.bridgedb.provenance.WrappedProvenanceMapper;
-import org.bridgedb.provenance.XrefProvenance;
+import org.bridgedb.linkset.LinkSetMapper;
+import org.bridgedb.linkset.WrappedLinkSetMapper;
+import org.bridgedb.linkset.XrefLinkSet;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.WrapperURLMapper;
@@ -45,7 +45,7 @@ public class WSCoreService implements WSCoreInterface {
 
     protected IDMapper idMapper;
     protected URLMapper urlMapper;
-    protected ProvenanceMapper provenanceMapper;
+    protected LinkSetMapper linkSetMapper;
 
     /**
      * Defuault constuctor for super classes.
@@ -62,10 +62,10 @@ public class WSCoreService implements WSCoreInterface {
         } else {
             urlMapper = new WrapperURLMapper(idMapper);
         }
-        if (idMapper instanceof ProvenanceMapper){
-            provenanceMapper = (ProvenanceMapper)idMapper;
+        if (idMapper instanceof LinkSetMapper){
+            linkSetMapper = (LinkSetMapper)idMapper;
         } else {
-            provenanceMapper = new WrappedProvenanceMapper(idMapper);
+            linkSetMapper = new WrappedLinkSetMapper(idMapper);
         }
     }
     
@@ -76,10 +76,10 @@ public class WSCoreService implements WSCoreInterface {
         } else {
             urlMapper = new WrapperURLMapper(idMapper);
         }
-        if (idMapper instanceof ProvenanceMapper){
-            provenanceMapper = (ProvenanceMapper)idMapper;
+        if (idMapper instanceof LinkSetMapper){
+            linkSetMapper = (LinkSetMapper)idMapper;
         } else {
-            provenanceMapper = new WrappedProvenanceMapper(idMapper, predicate);
+            linkSetMapper = new WrappedLinkSetMapper(idMapper, predicate);
         }
     }
     
@@ -95,7 +95,7 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam("targetNameSpace") List<String> targetNameSpace) throws IDMapperException {
         if (sourceURL == null) throw new IDMapperException("sourceURL parameter missig");
         if (sourceURL.isEmpty()) throw new IDMapperException("sourceURL parameter missig");
-        Set<URLMapping> mappings = provenanceMapper.mapURL(sourceURL, provenaceId, targetNameSpace);
+        Set<URLMapping> mappings = linkSetMapper.mapURL(sourceURL, provenaceId, targetNameSpace);
         ArrayList<URLMappingBean> results = new ArrayList<URLMappingBean>();
         for (URLMapping mapping: mappings){
             results.add(URLMappingBeanFactory.asBean(mapping, false));
@@ -208,7 +208,7 @@ public class WSCoreService implements WSCoreInterface {
     public List<XrefMapBean> mapID(
             @QueryParam("id") List<String> id,
             @QueryParam("code") List<String> scrCode,
-            @QueryParam("provenanceId") List<String> provenaceIds,
+            @QueryParam("linkSetId") List<String> linkSetIds,
             @QueryParam("targetCode") List<String> targetCodes) throws IDMapperException {
         if (id == null) throw new IDMapperException("id parameter missig");
         if (id.isEmpty()) throw new IDMapperException("id parameter missig");
@@ -225,10 +225,10 @@ public class WSCoreService implements WSCoreInterface {
         for (String targetCode: targetCodes){
              targetDataSources.add(DataSource.getBySystemCode(targetCode));
         }
-        Map<Xref, Set<XrefProvenance>>  mappings = provenanceMapper.mapIDProvenance(srcXrefs,  provenaceIds, targetDataSources);
+        Map<Xref, Set<XrefLinkSet>>  mappings = linkSetMapper.mapIDwithLinkSet(srcXrefs,  linkSetIds, targetDataSources);
         ArrayList<XrefMapBean> results = new ArrayList<XrefMapBean>();
         for (Xref source:mappings.keySet()){
-            for (XrefProvenance target:mappings.get(source)){
+            for (XrefLinkSet target:mappings.get(source)){
                 results.add(XrefMapBeanFactory.asBean(source, target));
             }
         }

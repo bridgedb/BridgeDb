@@ -13,5 +13,5 @@ public class MapperStatistics {
     int numberOfMappings;
     int numberOfDataSources;
     int numberOfDataVersions;
-    int numberOfProvenances;
+    int numberOfLinkSets;
 }

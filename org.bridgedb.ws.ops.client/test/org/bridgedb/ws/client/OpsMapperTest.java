@@ -3,7 +3,7 @@ package org.bridgedb.ws.client;
 import org.junit.Ignore;
 import java.util.List;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.ops.ProvenanceInfo;
+import org.bridgedb.ops.LinkSetInfo;
 import org.bridgedb.url.URLMapperTestBase;
 import org.bridgedb.ws.WSClientFactory;
 import org.bridgedb.ws.WSInterface;

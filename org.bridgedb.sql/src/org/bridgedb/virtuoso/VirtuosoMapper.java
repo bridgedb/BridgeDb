@@ -25,9 +25,9 @@ import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.linkset.URLLinkListener;
 import org.bridgedb.ops.OpsMapper;
-import org.bridgedb.ops.ProvenanceInfo;
-import org.bridgedb.provenance.ProvenanceMapper;
-import org.bridgedb.provenance.XrefProvenance;
+import org.bridgedb.ops.LinkSetInfo;
+import org.bridgedb.linkset.LinkSetMapper;
+import org.bridgedb.linkset.XrefLinkSet;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -44,7 +44,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URLIterator, XrefIterator,
-public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
+public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
         OpsMapper, URLIterator {
     
     private PreparedStatement pstLink;
@@ -67,12 +67,12 @@ public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabil
     }
 
     @Override
-    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId)
+    public void insertLink(String source, String target, String forwardLinkSetId, String inverseLinkSetId)
             throws IDMapperException {
         try {
             pstLink.setString(1, source);
 			pstLink.setString(2, target);
-			pstLink.setString(3, forwardProvenanceId);
+			pstLink.setString(3, forwardLinkSetId);
 			pstLink.executeUpdate();
         } catch (SQLException ex) {
 			throw new BridgeDbSqlException ("Error inserting forward link ", ex);
@@ -81,7 +81,7 @@ public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabil
         try {
             pstLink.setString(1, target);
 			pstLink.setString(2, source);
-			pstLink.setString(3, inverseProvenanceId);
+			pstLink.setString(3, inverseLinkSetId);
 			pstLink.executeUpdate();
         } catch (SQLException ex) {
 			throw new BridgeDbSqlException ("Error inserting inverse link ", ex);
@@ -96,7 +96,7 @@ public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabil
     public void openInput() throws BridgeDbSqlException {
         try {
             pstLink = sqlAccess.getAConnection().prepareStatement(
-                	"INSERT INTO link (sourceURL, targetURL, provenance_id) VALUES  (?, ?, ?)");
+                	"INSERT INTO link (sourceURL, targetURL, linkSetId) VALUES  (?, ?, ?)");
         } catch (SQLException ex) {
 			throw new BridgeDbSqlException ("Error preparing inserting link statement", ex);
         }

@@ -1,5 +1,6 @@
-package org.bridgedb.provenance;
+package org.bridgedb.linkset;
 
+import org.bridgedb.linkset.LinkSetMapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import org.bridgedb.url.WrapperURLMapper;
  *
  * @author Christian
  */
-public class WrappedProvenanceMapper implements ProvenanceMapper{
+public class WrappedLinkSetMapper implements LinkSetMapper{
 
     private IDMapper idMapper;
     private URLMapper urlMapper;
@@ -27,83 +28,83 @@ public class WrappedProvenanceMapper implements ProvenanceMapper{
     public static final String ID_DIVIDER = "->";
     private final String predicate;
     
-    public WrappedProvenanceMapper(IDMapper idMapper){
+    public WrappedLinkSetMapper(IDMapper idMapper){
         this(idMapper, DEFAULT_PREDICATE);
     }
     
-    public WrappedProvenanceMapper(IDMapper idMapper, String provenance){
+    public WrappedLinkSetMapper(IDMapper idMapper, String linkSet){
         this.idMapper = idMapper;
         if (idMapper instanceof URLMapper){
             urlMapper = (URLMapper)idMapper;
         } else {
             urlMapper = new WrapperURLMapper(idMapper);
         }
-        this.predicate = provenance;
+        this.predicate = linkSet;
     }
 
     @Override
-    public Map<Xref, Set<XrefProvenance>> mapIDProvenance(List<Xref> srcXrefs, 
-            List<String> provenanceIds, List<DataSource> tgtDataSources) throws IDMapperException {
+    public Map<Xref, Set<XrefLinkSet>> mapIDwithLinkSet(List<Xref> srcXrefs, 
+            List<String> linksetIds, List<DataSource> tgtDataSources) throws IDMapperException {
         Map<Xref, Set<Xref>> plainResults = idMapper.mapID(srcXrefs, tgtDataSources.toArray(new DataSource[0]));
-        Map<Xref, Set<XrefProvenance>> results = new HashMap<Xref, Set<XrefProvenance>>();
+        Map<Xref, Set<XrefLinkSet>> results = new HashMap<Xref, Set<XrefLinkSet>>();
         for (Xref key:plainResults.keySet()){
             Set<Xref> plain = plainResults.get(key);
-            results.put(key, convertToXrefProvenance(key, plain, provenanceIds));
+            results.put(key, convertToXrefLinkSet(key, plain, linksetIds));
         }
         return results;
     }
 
-    private Set<XrefProvenance> convertToXrefProvenance(Xref ref, Set<Xref> plainResults,
-            List<String> provenanceIds){
-        Set<XrefProvenance> with = new HashSet<XrefProvenance>();
+    private Set<XrefLinkSet> convertToXrefLinkSet(Xref ref, Set<Xref> plainResults,
+            List<String> linkSetIds){
+        Set<XrefLinkSet> with = new HashSet<XrefLinkSet>();
         for (Xref xref:plainResults){
-            String provenanceId = createProvenaceId(ref.getDataSource(), xref.getDataSource());
-            if (provenanceIds.isEmpty() || provenanceIds.contains(provenanceId)){
-                with.add(new XrefProvenance(xref, provenanceId, predicate));
+            String linkSetId = createLinkSetId(ref.getDataSource(), xref.getDataSource());
+            if (linkSetIds.isEmpty() || linkSetIds.contains(linkSetId)){
+                with.add(new XrefLinkSet(xref, linkSetId, predicate));
             }
         }
         return with;
     }
     
     @Override
-    public Set<XrefProvenance> mapIDProvenance(Xref ref, List<String> provenanceIds, 
+    public Set<XrefLinkSet> mapIDwithLinkSet(Xref ref, List<String> linkSetIds, 
             List<DataSource> tgtDataSources) throws IDMapperException {
         Set<Xref> plain = idMapper.mapID(ref, tgtDataSources.toArray(new DataSource[0]));
-        return convertToXrefProvenance(ref, plain, provenanceIds);
+        return convertToXrefLinkSet(ref, plain, linkSetIds);
     }
 
     @Override
-    public Set<URLMapping> mapURL(List<String> sourceURLs, List<String> provenanceIds, 
+    public Set<URLMapping> mapURL(List<String> sourceURLs, List<String> linkSetIds, 
             List<String> targetNameSpaces) throws IDMapperException {
         Map<String, Set<String>> plainResults = urlMapper.mapURL(sourceURLs, targetNameSpaces.toArray(new String[0]));
         Set<URLMapping> results = new HashSet<URLMapping>();
         for (String key:plainResults.keySet()){
             Set<String> plain = plainResults.get(key);
-            results.addAll(convertToURLMapping(key, plain, provenanceIds));
+            results.addAll(convertToURLMapping(key, plain, linkSetIds));
         }
         return results;
     }
 
     private Set<URLMapping> convertToURLMapping(String ref, Set<String> plainResults,
-            Collection<String> provenanceIds){
+            Collection<String> linkSetIds){
         Set<URLMapping> with = new HashSet<URLMapping>();
         for (String url:plainResults){
             DataSource sourceDS = DataSource.getByURL(ref);
             DataSource targetDS = DataSource.getByURL(url);
-            String provenanceId = createProvenaceId(sourceDS, targetDS);
-            if (provenanceIds.isEmpty() || provenanceIds.contains(provenanceId)){
-                with.add(new URLMapping(0, ref, url, provenanceId, predicate));
+            String linkSetId = createLinkSetId(sourceDS, targetDS);
+            if (linkSetIds.isEmpty() || linkSetIds.contains(linkSetId)){
+                with.add(new URLMapping(0, ref, url, linkSetId, predicate));
             } 
         }
         return with;
     }
 
     //@Override
-    public Set<String> getProvenanceIds() throws IDMapperException {
+    public Set<String> getLinkSetIds() throws IDMapperException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private String createProvenaceId(DataSource source, DataSource target){
+    private String createLinkSetId(DataSource source, DataSource target){
         return source.getNameSpace() + ID_DIVIDER + target.getNameSpace();
     }
  }

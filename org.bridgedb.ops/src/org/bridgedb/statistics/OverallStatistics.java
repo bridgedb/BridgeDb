@@ -10,15 +10,15 @@ package org.bridgedb.statistics;
  */
 public class OverallStatistics {
     private final int numberOfMappings;
-    private final int numberOfProvenances;
+    private final int numberOfLinkSets;
     private final int numberOfSourceDataSources;
     private final int numberOfPredicates;
     private final int numberOfTargetDataSources;
     
-    public OverallStatistics(int numberOfMappings, int numberOfProvenances, 
+    public OverallStatistics(int numberOfMappings, int numberOfLinkSets, 
             int numberOfSourceDataSources, int numberOfPredicates, int numberOfTargetDataSources){
         this.numberOfMappings = numberOfMappings;
-        this.numberOfProvenances = numberOfProvenances;
+        this.numberOfLinkSets = numberOfLinkSets;
         this.numberOfSourceDataSources = numberOfSourceDataSources;
         this.numberOfPredicates = numberOfPredicates;
         this.numberOfTargetDataSources = numberOfTargetDataSources;
@@ -32,10 +32,10 @@ public class OverallStatistics {
     }
 
     /**
-     * @return the numberOfProvenances
+     * @return the numberOfLinkSets
      */
-    public int getNumberOfProvenances() {
-        return numberOfProvenances;
+    public int getNumberOfLinkSets() {
+        return numberOfLinkSets;
     }
 
     /**
