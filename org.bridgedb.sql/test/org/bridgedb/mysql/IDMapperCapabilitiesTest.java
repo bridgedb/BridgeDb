@@ -4,6 +4,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * 

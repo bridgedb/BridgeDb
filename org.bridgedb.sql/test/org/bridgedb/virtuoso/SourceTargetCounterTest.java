@@ -11,6 +11,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
+@Ignore
 public class SourceTargetCounterTest extends org.bridgedb.statistics.SourceTargetCounterTest {
     
     @BeforeClass
