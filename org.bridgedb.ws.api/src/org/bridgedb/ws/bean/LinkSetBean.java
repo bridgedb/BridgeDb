@@ -18,6 +18,7 @@ public class LinkSetBean {
     private String sourceNameSpace;
     private String targetNameSpace;
     private Integer linkCount;
+    private Boolean isTransitive;
 
     public LinkSetBean(){
     }
@@ -91,5 +92,19 @@ public class LinkSetBean {
     public void setLinkCount(Integer linkCount) {
         this.linkCount = linkCount;
      }
+
+    /**
+     * @return the isTransitive
+     */
+    public Boolean getIsTransitive() {
+        return isTransitive;
+    }
+
+    /**
+     * @param isTransitive the isTransitive to set
+     */
+    public void setIsTransitive(Boolean isTransitive) {
+        this.isTransitive = isTransitive;
+    }
 
  }
