@@ -69,11 +69,11 @@ public class MysqlMapper extends SQLBase implements IDMapper, IDMapperCapabiliti
     
  
     @Override
-    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId)
+    public void insertLink(String source, String target, String forwardLinkSetId, String inverseLinkSetId)
             throws IDMapperException {
         if (blockCount >= BLOCK_SIZE){
             runInsert();
-            insertQuery = new StringBuilder("INSERT INTO link (sourceURL, targetURL, provenance_id) VALUES ");
+            insertQuery = new StringBuilder("INSERT INTO link (sourceURL, targetURL, linkSetId) VALUES ");
         } else {
             insertQuery.append(", ");        
         }
@@ -83,7 +83,7 @@ public class MysqlMapper extends SQLBase implements IDMapper, IDMapperCapabiliti
         insertQuery.append("', '");
         insertQuery.append(target);
         insertQuery.append("', '");
-        insertQuery.append(forwardProvenanceId);
+        insertQuery.append(forwardLinkSetId);
         insertQuery.append("'),");
         blockCount++;
         insertQuery.append("('");
@@ -91,7 +91,7 @@ public class MysqlMapper extends SQLBase implements IDMapper, IDMapperCapabiliti
         insertQuery.append("', '");
         insertQuery.append(source);
         insertQuery.append("', '");
-        insertQuery.append(inverseProvenanceId);
+        insertQuery.append(inverseLinkSetId);
         insertQuery.append("')");
     }
 

@@ -5,12 +5,14 @@ import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.url.URLMapperTestBase;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * 
  * @author Christian
  */
+@Ignore
 public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
