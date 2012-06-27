@@ -9,46 +9,46 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.bridgedb.ops.ProvenanceInfo;
+import org.bridgedb.ops.LinkSetInfo;
 
 /**
  *
  * @author Christian
  */
-public class SourceTargetCounter implements Comparator<ProvenanceInfo>{
+public class SourceTargetCounter implements Comparator<LinkSetInfo>{
     
-    private ArrayList<ProvenanceInfo> collectedInfos;
+    private ArrayList<LinkSetInfo> collectedInfos;
     
-    public SourceTargetCounter(Collection<ProvenanceInfo> provenanceInfos){
-        collectedInfos = new ArrayList<ProvenanceInfo>();
-        for (ProvenanceInfo provenanceInfo:provenanceInfos){
-            addin(provenanceInfo);
+    public SourceTargetCounter(Collection<LinkSetInfo> linkSetInfos){
+        collectedInfos = new ArrayList<LinkSetInfo>();
+        for (LinkSetInfo linkSetInfo:linkSetInfos){
+            addin(linkSetInfo);
         }
         Collections.sort(collectedInfos, this);
     }
 
-    private void addin(ProvenanceInfo provenanceInfo) {
-        for (ProvenanceInfo collectedInfo:collectedInfos){
-            boolean equals = provenanceInfo.getSourceNameSpace().equals(collectedInfo.getSourceNameSpace());
+    private void addin(LinkSetInfo linkSetInfo) {
+        for (LinkSetInfo collectedInfo:collectedInfos){
+            boolean equals = linkSetInfo.getSourceNameSpace().equals(collectedInfo.getSourceNameSpace());
             if (equals) {
-                equals = provenanceInfo.getTargetNameSpace().equals(collectedInfo.getTargetNameSpace());
+                equals = linkSetInfo.getTargetNameSpace().equals(collectedInfo.getTargetNameSpace());
             }
             if (equals){
-                collectedInfo.setNumberOfLinks(collectedInfo.getNumberOfLinks() + provenanceInfo.getNumberOfLinks());
+                collectedInfo.setNumberOfLinks(collectedInfo.getNumberOfLinks() + linkSetInfo.getNumberOfLinks());
                 return;
             }
         }
-        ProvenanceInfo summary = new ProvenanceInfo("various", provenanceInfo.getSourceNameSpace(), "various", 
-                provenanceInfo.getTargetNameSpace(), provenanceInfo.getNumberOfLinks());
+        LinkSetInfo summary = new LinkSetInfo("various", linkSetInfo.getSourceNameSpace(), "various", 
+                linkSetInfo.getTargetNameSpace(), linkSetInfo.getNumberOfLinks());
         collectedInfos.add(summary);
     }
     
-    public List<ProvenanceInfo> getSummaryInfos(){
+    public List<LinkSetInfo> getSummaryInfos(){
         return collectedInfos;
     }
 
     @Override
-    public int compare(ProvenanceInfo o1, ProvenanceInfo o2) {
+    public int compare(LinkSetInfo o1, LinkSetInfo o2) {
         int test = o1.getSourceNameSpace().compareTo(o2.getSourceNameSpace());
         if (test != 0) return test;
         return o1.getTargetNameSpace().compareTo(o2.getTargetNameSpace());

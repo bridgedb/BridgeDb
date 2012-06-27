@@ -1,6 +1,6 @@
 package org.bridgedb.statistics;
 
-import org.bridgedb.ops.ProvenanceInfo;
+import org.bridgedb.ops.LinkSetInfo;
 import org.bridgedb.ops.OpsMapper;
 import org.junit.BeforeClass;
 import org.bridgedb.DataSource;
@@ -32,14 +32,14 @@ public abstract class SourceTargetCounterTest extends URLMapperTestBase {
     }
     
     @Test
-    public void testGetProvenanceInfos() throws IDMapperException{
-        report("GetProvenanceInfos");
-        List<ProvenanceInfo> results = opsMapper.getProvenanceInfos();
+    public void testGetLinkSetInfos() throws IDMapperException{
+        report("GetLinkSetInfos");
+        List<LinkSetInfo> results = opsMapper.getLinkSetInfos();
         SourceTargetCounter counter = new SourceTargetCounter(results);
-        List<ProvenanceInfo> result = counter.getSummaryInfos();
+        List<LinkSetInfo> result = counter.getSummaryInfos();
         assertThat (results.size(), greaterThanOrEqualTo(6));
         boolean found = false;
-        for (ProvenanceInfo info:results){
+        for (LinkSetInfo info:results){
             if (info.getId().equals(link3to2)){
                 found = true;
                 assertEquals(nameSpace3, info.getSourceNameSpace());

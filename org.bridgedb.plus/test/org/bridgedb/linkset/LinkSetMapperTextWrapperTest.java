@@ -1,6 +1,7 @@
-package org.bridgedb.provenance;
+package org.bridgedb.linkset;
 
 //import buildsystem.Measure;
+import org.bridgedb.linkset.WrappedLinkSetMapper;
 import org.bridgedb.url.*;
 import org.bridgedb.file.*;
 
@@ -14,14 +15,14 @@ import org.junit.BeforeClass;
  * 
  * @author Christian
  */
-public class ProvenaceMapperTextWrapperTest extends ProvenanceMapperTest {
+public class LinkSetMapperTextWrapperTest extends LinkSetMapperTest {
 	
 	private static final File INTERFACE_TEST_FILE = new File ("../org.bridgedb/test-data/interfaceTest.txt");
 	
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
 		IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
-        provenaceMapper = new WrappedProvenanceMapper(inner, TEST_PREDICATE);
+        linkSetMapper = new WrappedLinkSetMapper(inner, TEST_PREDICATE);
 	}
 	
 	

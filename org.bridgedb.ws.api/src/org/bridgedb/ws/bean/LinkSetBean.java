@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Christian
  */
-@XmlRootElement(name="Property")
-public class ProvenanceBean {
+@XmlRootElement(name="LinkSet")
+public class LinkSetBean {
     
     private String id;
     private String predicate;
@@ -19,7 +19,7 @@ public class ProvenanceBean {
     private String targetNameSpace;
     private Integer linkCount;
 
-    public ProvenanceBean(){
+    public LinkSetBean(){
     }
 
     /**

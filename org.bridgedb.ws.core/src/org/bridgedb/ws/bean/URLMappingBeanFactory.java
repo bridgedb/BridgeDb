@@ -13,12 +13,8 @@ public class URLMappingBeanFactory extends URLMappingBean{
             bean.id = mapping.getId();
             bean.sourceURL = mapping.getSourceURL();
             bean.targetURL = mapping.getTargetURL();
-            //if (full){
-            //    bean.provenance =  ProvenanceBeanFactory.asBean(mapping.getProvenanceLink());
-            //} else {
-                bean.provenanceId = mapping.getProvenanceId();
-                bean.predicate = mapping.getPredicate();
-            //}
+            bean.linkSetId = mapping.getLinkSetId();
+             bean.predicate = mapping.getPredicate();
         } else {
             bean.Error = mapping.getErrorMessage();
         }
@@ -35,7 +31,7 @@ public class URLMappingBeanFactory extends URLMappingBean{
         if (bean.Error != null && !bean.Error.isEmpty()){
             return new URLMapping(bean.Error);
         }
-        return new URLMapping(bean.getId(), bean.getSourceURL(), bean.getTargetURL(), bean.provenanceId, bean.predicate);
+        return new URLMapping(bean.getId(), bean.getSourceURL(), bean.getTargetURL(), bean.linkSetId, bean.predicate);
     }
          
     

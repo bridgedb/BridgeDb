@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.ProvenanceBean;
+import org.bridgedb.ws.bean.LinkSetBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -33,7 +33,7 @@ public  class WSClient extends WSCoreClient implements WSInterface{
     public List<URLMappingBean> getMappings(
             List<String> URLs, List<String> sourceURLs, List<String> targetURLs, 
             List<String> nameSpaces, List<String> sourceNameSpaces, List<String> targetNameSpaces,
-            List<String> provenanceIdStrings, String positionString, String limitString, Boolean full){
+            List<String> linkSetIdStrings, String positionString, String limitString, Boolean full){
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String URL:URLs){
             params.add("URL", URL);
@@ -53,8 +53,8 @@ public  class WSClient extends WSCoreClient implements WSInterface{
         for (String targetNameSpace:targetNameSpaces){
             params.add("targetNameSpace", targetNameSpace);
         }
-        for (String provenanceIdString:provenanceIdStrings){
-            params.add("provenanceId", provenanceIdString);
+        for (String linkSetIdString:linkSetIdStrings){
+            params.add("linkSetId", linkSetIdString);
         }
         if (positionString != null){
            params.add("position", positionString);            
@@ -94,14 +94,14 @@ public  class WSClient extends WSCoreClient implements WSInterface{
 
     /* Removed due to scale issues
     @Override
-    public List<XrefBean> getXrefs(ArrayList<String> dataSourceSysCodes, List<String> provenanceIdStrings, 
+    public List<XrefBean> getXrefs(ArrayList<String> dataSourceSysCodes, List<String> linkSetIdStrings, 
             String positionString, String limitString) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String dataSourceSysCode:dataSourceSysCodes){
             params.add("dataSourceSysCode", dataSourceSysCode);
         }
-        for (String provenanceIdString:provenanceIdStrings){
-            params.add("provenanceId", provenanceIdString);
+        for (String linkSetIdString:linkSetIdStrings){
+            params.add("linkSetId", linkSetIdString);
         }
         if (positionString != null){
            params.add("position", positionString);            
@@ -118,14 +118,14 @@ public  class WSClient extends WSCoreClient implements WSInterface{
     }
 
     @Override
-    public List<URLBean> getURLs(List<String> nameSpaces, List<String> provenanceIdStrings, 
+    public List<URLBean> getURLs(List<String> nameSpaces, List<String> linkSetIdStrings, 
             String positionString, String limitString) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String nameSpace:nameSpaces){
             params.add("nameSpace", nameSpace);
         }
-        for (String provenanceIdString:provenanceIdStrings){
-            params.add("provenanceId", provenanceIdString);
+        for (String linkSetIdString:linkSetIdStrings){
+            params.add("linkSetId", linkSetIdString);
         }
         if (positionString != null){
            params.add("position", positionString);            
@@ -142,20 +142,20 @@ public  class WSClient extends WSCoreClient implements WSInterface{
     }*/
 
     @Override
-    public List<ProvenanceBean> getProvenanceInfos() throws IDMapperException {
-        List<ProvenanceBean> result = 
-                webResource.path("getProvenanceInfos")
+    public List<LinkSetBean> getLinkSetInfos() throws IDMapperException {
+        List<LinkSetBean> result = 
+                webResource.path("getLinkSetInfos")
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<ProvenanceBean>>() {});
+                .get(new GenericType<List<LinkSetBean>>() {});
         return result;        
     }
 
     @Override
-    public ProvenanceBean getProvenanceInfo(String id) throws IDMapperException {
-        ProvenanceBean result = 
-                webResource.path("getProvenanceInfo/" + id)
+    public LinkSetBean getLinkSetInfo(String id) throws IDMapperException {
+        LinkSetBean result = 
+                webResource.path("getLinkSetInfo/" + id)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<ProvenanceBean>() {});
+                .get(new GenericType<LinkSetBean>() {});
         return result;        
     }
 

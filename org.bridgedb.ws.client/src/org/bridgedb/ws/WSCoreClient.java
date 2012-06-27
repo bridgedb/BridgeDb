@@ -47,14 +47,14 @@ public class WSCoreClient implements WSCoreInterface{
     
     //*** URLMapper functions methods *****
     @Override
-    public List<URLMappingBean> mapByURLs(List<String> sourceURL, List<String> provenanceId, List<String> targetNameSpace) 
+    public List<URLMappingBean> mapByURLs(List<String> sourceURL, List<String> linkSetId, List<String> targetNameSpace) 
             throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String asourceURL:sourceURL){
             params.add("sourceURL", asourceURL);
         }
-        for (String id:provenanceId){
-            params.add("provenanceId", id);
+        for (String id:linkSetId){
+            params.add("linkSetId", id);
         }
         for (String target:targetNameSpace){
             params.add("targetNameSpace", target);
@@ -192,7 +192,7 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> provenanceId, 
+    public List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> linkSetId, 
             List<String> targetCodes) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String one:id){
@@ -201,8 +201,8 @@ public class WSCoreClient implements WSCoreInterface{
         for (String one:scrCode){
             params.add("code", one);
         }
-        for (String provId:provenanceId){
-            params.add("provenanceId", provId);
+        for (String provId:linkSetId){
+            params.add("linkSetId", provId);
         }
         for (String target:targetCodes){
             params.add("targetCode", target);

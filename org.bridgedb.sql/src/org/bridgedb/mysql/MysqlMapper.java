@@ -22,9 +22,9 @@ import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.linkset.URLLinkListener;
 import org.bridgedb.ops.OpsMapper;
-import org.bridgedb.ops.ProvenanceInfo;
-import org.bridgedb.provenance.ProvenanceMapper;
-import org.bridgedb.provenance.XrefProvenance;
+import org.bridgedb.ops.LinkSetInfo;
+import org.bridgedb.linkset.LinkSetMapper;
+import org.bridgedb.linkset.XrefLinkSet;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -41,7 +41,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URLIterator, XrefIterator,
-public class MysqlMapper extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, ProvenanceMapper, 
+public class MysqlMapper extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
         OpsMapper, URLIterator {
     
     private static final int SQL_TIMEOUT = 2;

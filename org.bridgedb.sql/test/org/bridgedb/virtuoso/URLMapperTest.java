@@ -18,7 +18,7 @@ import org.junit.Ignore;
 @Ignore
 public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
     
-    private static final String CREATOR1 = "testCreateProvenance";
+    private static final String CREATOR1 = "testCreator";
     private static final String PREDICATE1 = "testMapping";
     private static final long CREATION1 = new Date().getTime();
 

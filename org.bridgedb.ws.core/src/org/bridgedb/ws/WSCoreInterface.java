@@ -40,19 +40,18 @@ public interface WSCoreInterface {
 
     MappingSupportedBean isMappingSupported( String sourceSysCode, String targetCode) throws IDMapperException;
 
-    List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> provenanceId, 
+    List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> linkSetId, 
             List<String> targetCodes) throws IDMapperException;
 
     XrefExistsBean xrefExists(String id, String scrCode) throws IDMapperException;
  
     CapabilitiesBean getCapabilities();
 
-    public List<URLMappingBean> mapByURLs(List<String> sourceURL, List<String> provenanceId, List<String> targetNameSpace) 
+    public List<URLMappingBean> mapByURLs(List<String> sourceURL, List<String> linkSetId, List<String> targetNameSpace) 
             throws IDMapperException;
 
     public URLExistsBean urlExists(String URL) throws IDMapperException;
 
     public URLSearchBean URLSearch(String text, Integer limit) throws IDMapperException;
 
-    //public ProvenanceBean getProvenance(String provenanceId);
 }
