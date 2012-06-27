@@ -164,8 +164,8 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
     }
 
     @Override
-    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target)
-            throws IDMapperException {
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target, 
+            boolean isTransitive) throws IDMapperException {
         String oldPredicate = predicates.get(linkSetId);
         if (oldPredicate != null && !oldPredicate.equals(predicate)){
             throw new IDMapperException ("LinkSet " + linkSetId + " already has predicate " + oldPredicate + 

@@ -144,8 +144,10 @@ public class LinksetHandler extends RDFHandlerBase{
         linksetId = rdfLoader.getLinksetid();
         inverseLinksetId = rdfLoader.getInverseLinksetid();       
         try {
-            listener.registerLinkSet(linksetId, subjectDataSource, linkPredicate.stringValue(), targetDataSource);
-            listener.registerLinkSet(inverseLinksetId, targetDataSource, linkPredicate.stringValue(), subjectDataSource);
+            listener.registerLinkSet(linksetId, subjectDataSource, linkPredicate.stringValue(), targetDataSource, 
+                    rdfLoader.isTransative());
+            listener.registerLinkSet(inverseLinksetId, targetDataSource, linkPredicate.stringValue(), subjectDataSource, 
+                    rdfLoader.isTransative());
         } catch (IDMapperException ex) {
             throw new RDFHandlerException ("Unable to register header info ", ex);
         }

@@ -37,5 +37,10 @@ public class LinksetValidator extends RDFBase implements RdfLoader{
     public String getInverseLinksetid() throws RDFHandlerException {
         return "inverse";
     }
+
+    @Override
+    public boolean isTransative() throws RDFHandlerException {
+        return false;
+    }
     
 }
