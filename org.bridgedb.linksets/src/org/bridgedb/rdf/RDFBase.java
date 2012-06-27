@@ -23,7 +23,7 @@ public abstract class RDFBase implements RdfLoader{
     private String subjectURISpace;
     private String targetURISpace;
     private Resource linksetResource;
-    
+    private boolean isTransative;
 
     public RDFBase() {
         System.out.println("Statements created");
@@ -58,6 +58,7 @@ public abstract class RDFBase implements RdfLoader{
         validateLinksetProvenance();
         subjectURISpace = validateDataSetAndExtractUriSpace(firstMap.getSubject(), VoidConstants.SUBJECTSTARGET);
         targetURISpace = validateDataSetAndExtractUriSpace(firstMap.getObject(), VoidConstants.OBJECTSTARGET);
+        isTransative = checkIsTransative();
     }
     
     private void validateLinksetProvenance() throws RDFHandlerException {
@@ -152,8 +153,21 @@ public abstract class RDFBase implements RdfLoader{
                 + PavConstants.DERIVED_ON + ", " + PavConstants.IMPORTED_ON + ", " + PavConstants.MODIFIED_ON + ", " +
                 PavConstants.RETRIEVED_ON);
    }
-       
-   private Resource findPossibleSingletonSubject (URI predicate) throws RDFHandlerException{
+    
+       @Override
+    public boolean isTransative() throws RDFHandlerException {
+        return isTransative;
+    }
+
+    private boolean checkIsTransative() throws RDFHandlerException {
+        Value derivedFrom = findPossibleObject(linksetResource, PavConstants.DERIVED_FROM);
+        if (derivedFrom == null) return false;
+        Value derivedOn = findPossibleObject(linksetResource, PavConstants.DERIVED_ON);
+        Value derivedBy = findPossibleObject(linksetResource, PavConstants.DERIVED_BY);
+        return true;
+    }
+   
+    private Resource findPossibleSingletonSubject (URI predicate) throws RDFHandlerException{
         Resource subject = null;
         for (Statement st:statements){
             if (st.getPredicate().equals(predicate)){
@@ -262,38 +276,6 @@ public abstract class RDFBase implements RdfLoader{
         return subject;
     }
 
-   /* private String createNewGraph(RdfStoreType type) throws IDMapperLinksetException {
-        Repository repository = getRepository(type);
-        RepositoryConnection connection = getConnection(repository);
-        Resource subject = new URIImpl(getBaseURI() + "/MetaData");
-        List<Statement> list;
-        int linksetId;
-        try {
-            RepositoryResult<Statement> rr = connection.getStatements(subject, HIGHEST_LINKSET_ID_PREDICATE, null, false, ANY_RESOURCE);
-            list = rr.asList();
-            Value lastLinksetId;
-            if (list.size() == 1){
-                lastLinksetId = list.get(0).getObject();
-                linksetId = Integer.parseInt(lastLinksetId.stringValue()) + 1;
-            } else if (list.isEmpty()){
-                linksetId = 1;
-            } else {
-                shutdownAfterError(repository, connection);
-                throw new IDMapperLinksetException("Found more than one statement with subject " + subject + 
-                    " and predicate " + HIGHEST_LINKSET_ID_PREDICATE);            
-            }           
-            connection.remove(rr, ANY_RESOURCE);
-            lastLinksetId = new LiteralImpl("" + linksetId);
-            connection.add(subject, HIGHEST_LINKSET_ID_PREDICATE, lastLinksetId, ANY_RESOURCE);
-        } catch (RepositoryException ex) {
-            shutdownAfterError(repository, connection);
-            throw new IDMapperLinksetException ("Error clearing the Reposotory. ", ex);
-        } 
-        shutdown(repository, connection);
-        return getBaseURI() + "/linkset/" + linksetId;        
-   }
-*/
-
     @Override
     public String getSubjectUriSpace() throws RDFHandlerException {
         if (subjectURISpace != null){
@@ -309,5 +291,6 @@ public abstract class RDFBase implements RdfLoader{
         }
         throw new RDFHandlerException("run validateAndSaveVoid before calling getTargetUriSpace()");
     }
+    
 
  }
