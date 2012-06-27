@@ -34,13 +34,15 @@ public class SourceTargetCounter implements Comparator<LinkSetInfo>{
                 equals = linkSetInfo.getTargetNameSpace().equals(collectedInfo.getTargetNameSpace());
             }
             if (equals){
+                collectedInfo.multipleIds();
                 collectedInfo.setNumberOfLinks(collectedInfo.getNumberOfLinks() + linkSetInfo.getNumberOfLinks());
+                if (!linkSetInfo.isTransitive()){
+                    collectedInfo.setTransitive(false);
+                }
                 return;
             }
         }
-        LinkSetInfo summary = new LinkSetInfo("various", linkSetInfo.getSourceNameSpace(), "various", 
-                linkSetInfo.getTargetNameSpace(), linkSetInfo.getNumberOfLinks());
-        collectedInfos.add(summary);
+        collectedInfos.add(linkSetInfo);
     }
     
     public List<LinkSetInfo> getSummaryInfos(){
