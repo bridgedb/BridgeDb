@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="XrefMapping")
 public class XrefMapBean {
-    String provenanceId;
+    String linkSetId;
     XrefBean source;
     String predicate;
     XrefBean target;
@@ -12,17 +12,17 @@ public class XrefMapBean {
     public XrefMapBean(){}
 
     /**
-     * @return the provenanceId
+     * @return the linkSetId
      */
-    public String getProvenanceId() {
-        return provenanceId;
+    public String getLinkSetId() {
+        return linkSetId;
     }
 
     /**
-     * @param provenanceId the provenanceId to set
+     * @param linkSetId the linkSetId to set
      */
-    public void setProvenanceId(String provenanceId) {
-        this.provenanceId = provenanceId;
+    public void setLinkSetId(String linkSetId) {
+        this.linkSetId = linkSetId;
     }
 
     /**
@@ -68,6 +68,6 @@ public class XrefMapBean {
     }
 
     public String toString(){
-        return provenanceId + " " + source + " " + predicate + " " + target;
+        return linkSetId + " " + source + " " + predicate + " " + target;
     }
 }

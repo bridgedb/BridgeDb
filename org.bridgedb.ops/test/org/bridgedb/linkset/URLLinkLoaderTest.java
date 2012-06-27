@@ -26,27 +26,27 @@ public abstract class URLLinkLoaderTest extends URLMapperTestBase {
     protected static void defaultLoadData() throws IDMapperException{
         listener.openInput();
 
-        listener.registerProvenanceLink(link1to2, DataSource1, TEST_PREDICATE, DataSource2);
-        listener.registerProvenanceLink(link2to1, DataSource2, TEST_PREDICATE, DataSource1);
+        listener.registerLinkSet(link1to2, DataSource1, TEST_PREDICATE, DataSource2);
+        listener.registerLinkSet(link2to1, DataSource2, TEST_PREDICATE, DataSource1);
         listener.insertLink(map1URL1, map1URL2, link1to2, link2to1);
         listener.insertLink(map2URL1, map2URL2, link1to2, link2to1);
         listener.insertLink(map3URL1, map3URL2, link1to2, link2to1);
 
-        listener.registerProvenanceLink(link1to3, DataSource1, TEST_PREDICATE, DataSource3);
-        listener.registerProvenanceLink(link3to1, DataSource3, TEST_PREDICATE, DataSource1);
+        listener.registerLinkSet(link1to3, DataSource1, TEST_PREDICATE, DataSource3);
+        listener.registerLinkSet(link3to1, DataSource3, TEST_PREDICATE, DataSource1);
         listener.insertLink(map1URL1, map1URL3, link1to3, link3to1);
         listener.insertLink(map2URL1, map2URL3, link1to3, link3to1);
         listener.insertLink(map3URL1, map3URL3, link1to3, link3to1);
         
-        listener.registerProvenanceLink(link2to3, DataSource2, TEST_PREDICATE, DataSource3);
-        listener.registerProvenanceLink(link3to2, DataSource3, TEST_PREDICATE, DataSource2);
+        listener.registerLinkSet(link2to3, DataSource2, TEST_PREDICATE, DataSource3);
+        listener.registerLinkSet(link3to2, DataSource3, TEST_PREDICATE, DataSource2);
         listener.insertLink(map1URL2, map1URL3, link2to3, link3to2);
         listener.insertLink(map2URL2, map2URL3, link2to3, link3to2);
         listener.insertLink(map3URL2, map3URL3, link2to3, link3to2);
 
         listener.closeInput();
  
-        Set<String> results = listener.getProvenanceIds();
+        Set<String> results = listener.getLinkSetIds();
         assertTrue(results.contains(link1to2));
         assertTrue(results.contains(link1to3));
         assertTrue(results.contains(link2to1));

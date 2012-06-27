@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.ProvenanceBean;
+import org.bridgedb.ws.bean.LinkSetBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.XrefBean;
 import java.util.List;
@@ -23,11 +23,11 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.ops.LinkSetStore;
 import org.bridgedb.ops.OpsMapper;
-import org.bridgedb.ops.ProvenanceInfo;
+import org.bridgedb.ops.LinkSetInfo;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
-import org.bridgedb.ws.bean.ProvenanceFactory;
+import org.bridgedb.ws.bean.LinkSetFactory;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.XrefBeanFactory;
@@ -66,12 +66,12 @@ public class WSService extends WSCoreService implements WSInterface {
             @QueryParam("nameSpace") List<String> nameSpaces,
             @QueryParam("sourceNameSpace") List<String> sourceNameSpaces,
             @QueryParam("targetNameSpace") List<String> targetNameSpaces,
-            @QueryParam("provenanceId") List<String> provenanceIds,
+            @QueryParam("linkSetId") List<String> LinkSetIds,
             @DefaultValue("0") @QueryParam("position") String positionString, 
             @DefaultValue("100") @QueryParam("limit") String limitString,
             @DefaultValue("false") @QueryParam("full") Boolean full) {
-        if (provenanceMapper == null){
-            throw new UnsupportedOperationException("Underlying IDMapper does not support URLMapperProvenance.");
+        if (linkSetMapper == null){
+            throw new UnsupportedOperationException("Underlying IDMapper does not support URLMapperwithLinkSet");
         }
         List<URLMapping> mappings = new ArrayList<URLMapping>();
         boolean ok = true;;
@@ -93,7 +93,7 @@ public class WSService extends WSCoreService implements WSInterface {
         }       
         if (ok){
             mappings.addAll(opsMapper.getMappings(URLs, sourceURLs, targetURLs, 
-                    nameSpaces, sourceNameSpaces, targetNameSpaces, provenanceIds, position, limit));
+                    nameSpaces, sourceNameSpaces, targetNameSpaces, LinkSetIds, position, limit));
         }
         if (mappings.isEmpty()){
             StringBuilder parameters = new StringBuilder();
@@ -121,9 +121,9 @@ public class WSService extends WSCoreService implements WSInterface {
                parameters.append(" targetNameSpace="); 
                parameters.append(targetNameSpace);
             }
-            for (String provenanceId:provenanceIds){
-               parameters.append(" provenanceId="); 
-               parameters.append(provenanceId);
+            for (String linkSetId:LinkSetIds){
+               parameters.append(" linkSetId="); 
+               parameters.append(linkSetId);
             }
             if (position != null){
                parameters.append(" position="); 
@@ -164,7 +164,7 @@ public class WSService extends WSCoreService implements WSInterface {
     @Path("/getXrefs")
     public List<XrefBean> getXrefs(
             @QueryParam("dataSourceSysCode") ArrayList<String> dataSourceSysCodes, 
-            @QueryParam("provenanceId")  List<String> provenanceIds, 
+            @QueryParam("linkSetId")  List<String> linkSetIds, 
             @DefaultValue("0") @QueryParam("position") String positionString, 
             @DefaultValue("100") @QueryParam("limit") String limitString) throws IDMapperException{
         ArrayList<DataSource> dataSources = new ArrayList<DataSource>();
@@ -173,7 +173,7 @@ public class WSService extends WSCoreService implements WSInterface {
         }
         Integer position = new Integer(positionString);
         Integer limit = new Integer(limitString);
-        List<Xref> xrefs = opsMapper.getXrefs(dataSources, provenanceIds, position, limit);
+        List<Xref> xrefs = opsMapper.getXrefs(dataSources, linkSetIds, position, limit);
         List<XrefBean> beans = new ArrayList<XrefBean>();
         for (Xref xref:xrefs){
             beans.add(XrefBeanFactory.asBean(xref));
@@ -187,12 +187,12 @@ public class WSService extends WSCoreService implements WSInterface {
     @Path("/getURLs")
     public List<URLBean> getURLs(
             @QueryParam("nameSpace")List<String> nameSpaces,             
-            @QueryParam("provenanceId")  List<String> provenanceIds, 
+            @QueryParam("linkSetId")  List<String> linkSetIds, 
             @DefaultValue("0") @QueryParam("position") String positionString, 
             @DefaultValue("100") @QueryParam("limit") String limitString) throws IDMapperException{
         Integer position = new Integer(positionString);
         Integer limit = new Integer(limitString);
-        List<String> URLs = opsMapper.getURLs(nameSpaces, provenanceIds, position, limit);
+        List<String> URLs = opsMapper.getURLs(nameSpaces, linkSetIds, position, limit);
         List<URLBean> beans = new ArrayList<URLBean>();
         for (String URL:URLs){
             URLBean bean = new URLBean();
@@ -214,12 +214,12 @@ public class WSService extends WSCoreService implements WSInterface {
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getProvenanceInfos") 
-    public List<ProvenanceBean> getProvenanceInfos() throws IDMapperException {
-        List<ProvenanceInfo> infos = opsMapper.getProvenanceInfos();
-        ArrayList<ProvenanceBean> beans = new ArrayList<ProvenanceBean>();
-        for (ProvenanceInfo info:infos){
-            beans.add(ProvenanceFactory.asBean(info));
+    @Path("/getLinkSetInfos") 
+    public List<LinkSetBean> getLinkSetInfos() throws IDMapperException {
+        List<LinkSetInfo> infos = opsMapper.getLinkSetInfos();
+        ArrayList<LinkSetBean> beans = new ArrayList<LinkSetBean>();
+        for (LinkSetInfo info:infos){
+            beans.add(LinkSetFactory.asBean(info));
         }
         return beans;
     }
@@ -227,10 +227,10 @@ public class WSService extends WSCoreService implements WSInterface {
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getProvenanceInfo/{id}")
-    public ProvenanceBean getProvenanceInfo(@PathParam("id") String idString) throws IDMapperException{
-        ProvenanceInfo info = opsMapper.getProvenanceInfo(idString);
-        return ProvenanceFactory.asBean(info);
+    @Path("/getLinkSetInfo/{id}")
+    public LinkSetBean getLinkSetInfo(@PathParam("id") String idString) throws IDMapperException{
+        LinkSetInfo info = opsMapper.getLinkSetInfo(idString);
+        return LinkSetFactory.asBean(info);
     }
 
     @Override

@@ -15,16 +15,16 @@ import org.bridgedb.IDMapperException;
  */
 public interface URLLinkListener {
     
-    public void registerProvenanceLink(String provenanceId, DataSource source, String predicate, DataSource target) 
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target) 
             throws IDMapperException;
     
-    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId) 
+    public void insertLink(String source, String target, String forwardLinkSetId, String inverseLinkSetId) 
             throws IDMapperException;
 
     public void openInput() throws IDMapperException;
 
     public void closeInput() throws IDMapperException;
     
-    public Set<String> getProvenanceIds() throws IDMapperException;
+    public Set<String> getLinkSetIds() throws IDMapperException;
 
  }

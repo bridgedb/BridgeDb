@@ -13,11 +13,11 @@ public class URLMapping extends ResultBase{
     private int id;
     private String sourceURL;
     private String targetURL;
-    private String provenanceId;
+    private String linkSetId;
     private String predicate;
     private static String SAFE_MESSAGE = "Error generating Mapping. The administrstor has been informed";
     
-    public URLMapping (int id, String sourceURL, String targetURL, String provenanceId, String predicate){
+    public URLMapping (int id, String sourceURL, String targetURL, String linkSetId, String predicate){
         errorMessage = "";
         this.id = id;
         if (sourceURL == null || targetURL == null){
@@ -25,7 +25,7 @@ public class URLMapping extends ResultBase{
         } 
         this.sourceURL = sourceURL;
         this.targetURL = targetURL;
-        this.provenanceId = provenanceId;
+        this.linkSetId = linkSetId;
         this.predicate = predicate;
     }
 
@@ -65,7 +65,7 @@ public class URLMapping extends ResultBase{
     public String toString(){
         if (isValid()){
             return this.id  + ": " + this.sourceURL + " " + this.getPredicate() + " " + this.targetURL + 
-                    " provenance: " + this.getProvenanceId();
+                    " linkSet: " + this.getLinkSetId();
         } else {
             return "URLMapping: Error " + errorMessage;
         }
@@ -87,7 +87,7 @@ public class URLMapping extends ResultBase{
             if (otherMapping.id != id) return false;
             if (!otherMapping.sourceURL.equals(sourceURL)) return false;
             if (!otherMapping.targetURL.equals(targetURL)) return false;
-            if (!otherMapping.getProvenanceId().equals(getProvenanceId())) return false;
+            if (!otherMapping.getLinkSetId().equals(getLinkSetId())) return false;
             //No need to check predicate as by defintion one id has one predicate
             return true;
          } else {
@@ -96,10 +96,10 @@ public class URLMapping extends ResultBase{
     }
 
     /**
-     * @return the provenanceId
+     * @return the linkSetId
      */
-    public String getProvenanceId() {
-        return provenanceId;
+    public String getLinkSetId() {
+        return linkSetId;
     }
 
     /**

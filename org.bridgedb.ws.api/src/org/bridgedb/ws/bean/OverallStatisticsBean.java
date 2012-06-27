@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="Statistics")
 public class OverallStatisticsBean {
     private int numberOfMappings;
-    private int numberOfProvenances;
+    private int numberOfLinkSets;
     private int numberOfSourceDataSources;
     private int numberOfPredicates;
     private int numberOfTargetDataSources;
@@ -33,17 +33,17 @@ public class OverallStatisticsBean {
     }
 
     /**
-     * @return the numberOfProvenances
+     * @return the numberOfLinkSets
      */
-    public int getNumberOfProvenances() {
-        return numberOfProvenances;
+    public int getNumberOfLinkSets() {
+        return numberOfLinkSets;
     }
 
     /**
-     * @param numberOfProvenances the numberOfProvenances to set
+     * @param numberOfLinkSets the numberOfLinkSets to set
      */
-    public void setNumberOfProvenances(int numberOfProvenances) {
-        this.numberOfProvenances = numberOfProvenances;
+    public void setNumberOfLinkSets(int numberOfLinkSets) {
+        this.numberOfLinkSets = numberOfLinkSets;
     }
 
     /**

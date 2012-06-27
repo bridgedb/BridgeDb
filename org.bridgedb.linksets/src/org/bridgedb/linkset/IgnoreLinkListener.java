@@ -27,17 +27,17 @@ public class IgnoreLinkListener implements URLLinkListener{
     }
 
     @Override
-    public void registerProvenanceLink(String provenanceId, DataSource source, String predicate, DataSource target) throws IDMapperException {
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target) throws IDMapperException {
         //Do nothing
     }
 
     @Override
-    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId) throws IDMapperException {
+    public void insertLink(String source, String target, String forwardlinkSetId, String inverselinkSetId) throws IDMapperException {
         //Do nothing
     }
 
     @Override
-    public Set<String> getProvenanceIds() throws IDMapperException {
+    public Set<String> getLinkSetIds() throws IDMapperException {
         return new HashSet<String>();
     }
     

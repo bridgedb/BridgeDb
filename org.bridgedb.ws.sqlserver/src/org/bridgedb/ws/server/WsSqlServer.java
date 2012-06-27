@@ -22,7 +22,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.linkset.IDMapperLinksetException;
-import org.bridgedb.ops.ProvenanceInfo;
+import org.bridgedb.ops.LinkSetInfo;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -38,7 +38,7 @@ import org.bridgedb.ws.WSService;
  *
  * @author Christian
  */
-public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>{
+public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
     
     private static final ArrayList<DataSource> ALL_DATA_SOURCES = new ArrayList<DataSource>();
     private static final ArrayList<String> ALL_URLs = new ArrayList<String>(); 
@@ -47,7 +47,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
     private static final ArrayList<String> ALL_NAME_SPACES = ALL_URLs; 
     private static final ArrayList<String> ALL_SOURCE_NAME_SPACES = ALL_URLs; 
     private static final ArrayList<String> ALL_TARGET_NAME_SPACES = ALL_URLs; 
-    private static final ArrayList<String> ALL_PROVENANCE_IDS = ALL_URLs;
+    private static final ArrayList<String> ALL_LINK_SET_IDS = ALL_URLs;
     private NumberFormat formatter;
     
     public WsSqlServer() throws BridgeDbSqlException, IDMapperLinksetException  {
@@ -55,7 +55,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
         MysqlMapper urlMapperSQL = new MysqlMapper(sqlAccess);
         idMapper = urlMapperSQL;
         urlMapper = urlMapperSQL;
-        provenanceMapper = urlMapperSQL;
+        linkSetMapper = urlMapperSQL;
         opsMapper = urlMapperSQL;
         formatter = NumberFormat.getInstance();
         if (formatter instanceof DecimalFormat) {
@@ -90,7 +90,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
                 sb.append(formatter.format(overallStatistics.getNumberOfMappings()));
                 sb.append(" Mappings</li>");
             sb.append("<li>From ");
-                sb.append(formatter.format(overallStatistics.getNumberOfProvenances()));
+                sb.append(formatter.format(overallStatistics.getNumberOfLinkSets()));
                 sb.append(" LinkSets</li>");
             sb.append("<li>Covering ");
                 sb.append(formatter.format(overallStatistics.getNumberOfSourceDataSources()));
@@ -136,7 +136,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
         Set<String> keys = idMapper.getCapabilities().getKeys();
         System.out.println("Done keys "+ (new Date().getTime() - start));
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_PROVENANCE_IDS, 0, 10);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 10);
         System.out.println("Done mappings "+ (new Date().getTime() - start));
         URLMapping mapping1 = mappings.get(0);
         System.out.println("Done mapping1 "+ (new Date().getTime() - start));
@@ -229,7 +229,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
             sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"provenanceId\">provenanceId</a></dt>");
+        sb.append("<dt><a name=\"linkSetId\">linkSetId</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to only those with this provenace Id.</li>");
             sb.append("<li>For URLs and Xrefs that will be ones that exist in a mapping with this provenace.</li>");
@@ -336,7 +336,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("<li><a href=\"#linkSetId\">linkSetId</a></li> ");
                 sb.append("<li><a href=\"#targetNameSpace\">targetNameSpace</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
@@ -452,15 +452,15 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
         sb.append("<dt><a href=\"#getMappings\">getMappings</a></dt>");
         sb.append("<dd>Lists a number of mappings based on some parameters</dd>");
         sb.append("<dt><a href=\"#getMapping\">getMapping</a></dt>");
-        sb.append("<dd>Retreives a Mapping based on its Id. (In the future plus provenance)</dd>");       
+        sb.append("<dd>Retreives a Mapping based on its Id. (In the future plus linkSet)</dd>");       
         sb.append("<dt><a href=\"#getOverallStatistics\">getOverallStatistics</a></dt>");
         sb.append("<dd>Returns some high level statistics. (Same as shown on homepage)</dd>");
         //sb.append("<dt><a href=\"#getXrefs\">getXrefs</a></dt>");
         //sb.append("<dd>Lists a number of Xrefs based on some parameters.</dd>");
         //sb.append("<dt><a href=\"#getURLs\">getURLs</a></dt>");
         //sb.append("<dd>Lists a number of URLs based on some parameters.</dd>");
-        sb.append("<dt><a href=\"#getProvenanceInfos\">getProvenanceInfos</a></dt>");
-        sb.append("<dd>Lists all the Provenance with some basic information.</dd>");
+        sb.append("<dt><a href=\"#getLinkSetInfos\">getLinkSetInfos</a></dt>");
+        sb.append("<dd>Lists all the LinkSet with some basic information.</dd>");
     }
 
     protected void describe_OpsMapper(StringBuilder sb, Xref first, URLMapping mapping1, Xref second) throws UnsupportedEncodingException{
@@ -471,7 +471,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
         describe_getOverallStatistics(sb);
         //describe_getXrefs(sb, first, mapping1); 
         //describe_getURLs(sb, first, mapping1); 
-        describe_getProvenanceInfos(sb);    
+        describe_getLinkSetInfos(sb);    
    }
     
    private void describe_getMappings(StringBuilder sb, Xref first, URLMapping mapping1, Xref second) 
@@ -492,7 +492,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
                 sb.append("<li><a href=\"#nameSpace\">nameSpace</a></li> ");
                 sb.append("<li><a href=\"#sourceNameSpace\">sourceNameSpace</a></li> ");
                 sb.append("<li><a href=\"#targetNameSpace\">targetNameSpace</a></li> ");
-                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("<li><a href=\"#linkSetId\">linkSetId</a></li> ");
                 sb.append("<li><a href=\"#full\">full</a> (Currently has no effect)</li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
@@ -599,7 +599,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
             sb.append("<li>Optional arguments </li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#dataSourceSysCode\">dataSourceSysCode</a></li> ");
-                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("<li><a href=\"#linkSetId\">linkSetId</a></li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
@@ -613,15 +613,15 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
-                    sb.append("getXrefs?provenanceId=");
-                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append("getXrefs?linkSetId=");
+                    sb.append(URLEncoder.encode(mapping1.getLinkSetId(), "UTF-8"));
                     sb.append("&targetURL=");
-                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append(URLEncoder.encode(mapping1.getLinkSetId(), "UTF-8"));
                     sb.append("\">");
-                    sb.append("getXrefs?provenanceId=");
-                    sb.append(mapping1.getProvenanceId());
+                    sb.append("getXrefs?linkSetId=");
+                    sb.append(mapping1.getLinkSetId());
                     sb.append("&targetURL=");
-                    sb.append(mapping1.getProvenanceId());
+                    sb.append(mapping1.getLinkSetId());
                     sb.append("</a></li>");    
             sb.append("</ul>");        
    }
@@ -639,7 +639,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
             sb.append("<li>Optional arguments </li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#nameSpace\">nameSpace</a></li> ");
-                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("<li><a href=\"#linkSetId\">linkSetId</a></li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
@@ -653,29 +653,29 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
-                    sb.append("getURLs?provenanceId=");
-                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append("getURLs?linkSetId=");
+                    sb.append(URLEncoder.encode(mapping1.getLinkSetId(), "UTF-8"));
                     sb.append("&targetURL=");
-                    sb.append(URLEncoder.encode(mapping1.getProvenanceId(), "UTF-8"));
+                    sb.append(URLEncoder.encode(mapping1.getLinkSetId(), "UTF-8"));
                     sb.append("\">");
-                    sb.append("getURLs?provenanceId=");
-                    sb.append(mapping1.getProvenanceId());
+                    sb.append("getURLs?linkSetId=");
+                    sb.append(mapping1.getLinkSetId());
                     sb.append("&targetURL=");
-                    sb.append(mapping1.getProvenanceId());
+                    sb.append(mapping1.getLinkSetId());
                     sb.append("</a></li>");    
             sb.append("</ul>");        
    }*/
 
-   private void describe_getProvenanceInfos(StringBuilder sb) 
+   private void describe_getLinkSetInfos(StringBuilder sb) 
             throws UnsupportedEncodingException{
-         sb.append("<h3><a name=\"getProvenanceInfos\">getProvenanceInfos</h3>");
+         sb.append("<h3><a name=\"getLinkSetInfos\">getLinkSetInfos</h3>");
             sb.append("<ul>");
-            sb.append("<li>Lists all the Provenances with some basic information </li>");
+            sb.append("<li>Lists all the LinkSets with some basic information </li>");
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
-                    sb.append("getProvenanceInfos");
+                    sb.append("getLinkSetInfos");
                     sb.append("\">");
-                    sb.append("getProvenanceInfos");
+                    sb.append("getLinkSetInfos");
                     sb.append("</a></li>");    
             sb.append("</ul>");        
    }
@@ -733,7 +733,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#provenanceId\">provenanceId</a></li> ");
+                sb.append("<li><a href=\"#linkSetId\">linkSetId</a></li> ");
                 sb.append("<li><a href=\"#targetSysCode\">targetSysCode</a></li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
@@ -977,7 +977,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
     @Path("/getMappingInfo")
     public Response mappingInfoPage() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
-        List<ProvenanceInfo> provenaceinfos = opsMapper.getProvenanceInfos();
+        List<LinkSetInfo> provenaceinfos = opsMapper.getLinkSetInfos();
         Collections.sort(provenaceinfos, this);
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
@@ -996,7 +996,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
         sb.append("<th>Sum of Mappings</th>");
         sb.append("<th>Id</th>");
         sb.append("</tr>");
-        for (ProvenanceInfo info:provenaceinfos){
+        for (LinkSetInfo info:provenaceinfos){
             sb.append("<tr>");
             sb.append("<td>");
             sb.append(info.getSourceNameSpace());
@@ -1019,7 +1019,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
     }
     
     @Override
-    public int compare(ProvenanceInfo o1, ProvenanceInfo o2) {
+    public int compare(LinkSetInfo o1, LinkSetInfo o2) {
         int test = o1.getSourceNameSpace().compareTo(o2.getSourceNameSpace());
         if (test != 0) return test;
         return o1.getTargetNameSpace().compareTo(o2.getTargetNameSpace());
@@ -1030,7 +1030,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
     @Path("/getMappingTotal")
     public Response mappingTotal() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
-        List<ProvenanceInfo> rawProvenaceinfos = opsMapper.getProvenanceInfos();
+        List<LinkSetInfo> rawProvenaceinfos = opsMapper.getLinkSetInfos();
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
@@ -1048,7 +1048,7 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
         sb.append("<th>Target NameSpace</th>");
         sb.append("<th>Sum of Mappings</th>");
         sb.append("</tr>");
-        for (ProvenanceInfo info:sourceTargetCounter.getSummaryInfos()){
+        for (LinkSetInfo info:sourceTargetCounter.getSummaryInfos()){
             sb.append("<tr>");
             sb.append("<td>");
             sb.append(info.getSourceNameSpace());
@@ -1070,10 +1070,10 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
     @Path("/graphviz")
     public Response graphvizDot() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
-        List<ProvenanceInfo> rawProvenaceinfos = opsMapper.getProvenanceInfos();
+        List<LinkSetInfo> rawProvenaceinfos = opsMapper.getLinkSetInfos();
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
         sb.append("digraph G {");
-        for (ProvenanceInfo info:sourceTargetCounter.getSummaryInfos()){
+        for (LinkSetInfo info:sourceTargetCounter.getSummaryInfos()){
             if (info.getSourceNameSpace().compareTo(info.getTargetNameSpace()) < 0 ){
                 sb.append("\"");
                 sb.append(info.getSourceNameSpace());
@@ -1174,11 +1174,11 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
 
     //getMapping/{id}
     //getURLMappings String URL,List<String> "targetNameSpace"
-    //getProvenance/{id}
-    //getProvenanceByPosition position
-    //getProvenancesByPosition") position""limit")
-    //getSourceProvenanceByNameSpace nameSpace
-    //getTargetProvenanceByNameSpace nameSpace
+    //getLinkSet/{id}
+    //getLinkSetByPosition position
+    //getLinkSetsByPosition") position""limit")
+    //getSourceLinkSetByNameSpace nameSpace
+    //getTargetLinkSetByNameSpace nameSpace
     //getDataSourceStatistics "code"
     //getDataSourceStatisticsByAPosition" position
     //getDataSourceStatisticsByPosition position""limit"
@@ -1287,16 +1287,16 @@ public class WsSqlServer extends WSService implements Comparator<ProvenanceInfo>
         sb.append("<dd>Returns a mapping by its id.</dd>");
         sb.append("<dt><a href=\"#getURLMappings\"></a>getURLMappings</dt>");
         sb.append("<dd>Gets a full mapping for a URL and possible target nameSpaces.</dd>");
-        sb.append("<dt><a href=\"#getProvenance\"><getProvenance/a></dt>");
-        sb.append("<dd>Returns a provenance by its id.</dd>");
-        sb.append("<dt><a href=\"#getProvenanceByPosition\">getProvenanceByPosition</a></dt>");
-        sb.append("<dd>Returns a provenance by its possition.</dd>");
-        sb.append("<dt><a href=\"#getProvenancesByPosition\">getProvenancesByPosition</a></dt>");
-        sb.append("<dd>Retruns a list of provenances based on possition and limit.</dd>");
-        sb.append("<dt><a href=\"#getSourceProvenanceByNameSpace\">getSourceProvenanceByNameSpace</a></dt>");
-        sb.append("<dd>List provenances with this nameSpace as the source.</dd>");
-        sb.append("<dt><a href=\"#getTargetProvenanceByNameSpace\">getTargetProvenanceByNameSpace</a></dt>");
-        sb.append("<dd>List provenances with this nameSpace as the target.</dd>");
+        sb.append("<dt><a href=\"#getLinkSet\"><getLinkSet/a></dt>");
+        sb.append("<dd>Returns a linkSet by its id.</dd>");
+        sb.append("<dt><a href=\"#getLinkSetByPosition\">getLinkSetByPosition</a></dt>");
+        sb.append("<dd>Returns a linkSet by its possition.</dd>");
+        sb.append("<dt><a href=\"#getLinkSetsByPosition\">getLinkSetsByPosition</a></dt>");
+        sb.append("<dd>Retruns a list of linkSets based on possition and limit.</dd>");
+        sb.append("<dt><a href=\"#getSourceLinkSetByNameSpace\">getSourceLinkSetByNameSpace</a></dt>");
+        sb.append("<dd>List linkSets with this nameSpace as the source.</dd>");
+        sb.append("<dt><a href=\"#getTargetLinkSetByNameSpace\">getTargetLinkSetByNameSpace</a></dt>");
+        sb.append("<dd>List linkSets with this nameSpace as the target.</dd>");
         sb.append("<dt><a href=\"#getDataSourceStatistics\"></a>getDataSourceStatistics</dt>");
         sb.append("<dd>Returns the statistics for a single DataSource by code</dd>");
         sb.append("<dt><a href=\"#getDataSourceStatisticsByAPosition\"></a>getDataSourceStatisticsByAPosition</dt>");

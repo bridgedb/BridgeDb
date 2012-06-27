@@ -15,7 +15,7 @@ public class URLMappingBean {
     Integer id;
     String sourceURL;
     String targetURL;
-    String provenanceId;
+    String linkSetId;
     String predicate;
     String Error; 
     
@@ -28,7 +28,7 @@ public class URLMappingBean {
            return "URLMappingBean: Error " +  getError();
         } else { 
            return  "URLMapping: id: " + this.getId() + this.getSourceURL() + " " + this.getPredicate() + 
-                   " " + this.getTargetURL() + " id: " + this.getId() + " Provenance: " + this.getProvenanceId();
+                   " " + this.getTargetURL() + " id: " + this.getId() + " linkSet: " + this.getLinkSetId();
         } 
     }
 
@@ -75,17 +75,17 @@ public class URLMappingBean {
     }
 
     /**
-     * @return the provenanceId
+     * @return the linkSetId
      */
-    public String getProvenanceId() {
-        return provenanceId;
+    public String getLinkSetId() {
+        return linkSetId;
     }
 
     /**
-     * @param provenanceId the provenanceId to set
+     * @param linkSetId the linkSetId to set
      */
-    public void setProvenanceId(String provenanceId) {
-        this.provenanceId = provenanceId;
+    public void setLinkSetId(String linkSetId) {
+        this.linkSetId = linkSetId;
     }
 
     /**

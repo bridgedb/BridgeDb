@@ -1,5 +1,7 @@
-package org.bridgedb.provenance;
+package org.bridgedb.linkset;
 
+import org.bridgedb.linkset.XrefLinkSet;
+import org.bridgedb.linkset.LinkSetMapper;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,10 +21,10 @@ import static org.hamcrest.number.OrderingComparison.*;
  *
  * @author Christian
  */
-public abstract class ProvenanceMapperTest extends URLMapperTestBase{
+public abstract class LinkSetMapperTest extends URLMapperTestBase{
     
     //Must be instantiated by implementation of these tests.
-    protected static ProvenanceMapper provenaceMapper;
+    protected static LinkSetMapper linkSetMapper;
     
     protected final List<String> ALL_PROVENACE = new ArrayList<String>();
     protected final List<DataSource> ALL_TARGET_DATA_SOURCE = new ArrayList<DataSource>();
@@ -35,7 +37,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         sourceURLs.add(map1URL1);
         sourceURLs.add(map2URL2);
         sourceURLs.add(mapBadURL1);
-        Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, ALL_PROVENACE, ALL_TARGET_NAME_SPACES);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, ALL_TARGET_NAME_SPACES);
         assertThat(results.size(), greaterThanOrEqualTo(4));
         for (URLMapping result:results){
             assertTrue(result.isValid());
@@ -55,7 +57,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         report("MapIDOneToManyNoDataSources");
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(map1URL1);
-        Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, ALL_PROVENACE, ALL_TARGET_NAME_SPACES);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, ALL_TARGET_NAME_SPACES);
         assertThat(results.size(), greaterThanOrEqualTo(2));
         for (URLMapping result:results){
             assertTrue(result.isValid());
@@ -70,7 +72,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         report("MapIDOneToManyNoDataSources");
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(mapBadURL1);
-        Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, ALL_PROVENACE, ALL_TARGET_NAME_SPACES);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, ALL_TARGET_NAME_SPACES);
         assertEquals(0, results.size());
     }
 
@@ -81,7 +83,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         sourceURLs.add(map1URL1);
         ArrayList<String> trgNameSpaces = new ArrayList<String>();
         trgNameSpaces.add(nameSpace2);
-        Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, ALL_PROVENACE, trgNameSpaces);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, trgNameSpaces);
         assertEquals(1, results.size());
         for (URLMapping result:results){
             assertTrue(result.isValid());
@@ -99,7 +101,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         ArrayList<String> trgNameSpaces = new ArrayList<String>();
         trgNameSpaces.add(nameSpace2);
         trgNameSpaces.add(nameSpace3);
-        Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, ALL_PROVENACE, trgNameSpaces);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, trgNameSpaces);
         assertEquals(results.size(), 2);
         for (URLMapping result:results){
             assertTrue(result.isValid());
@@ -110,13 +112,13 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
     }
  
     @Test
-    public void testMapURLOneProvenance() throws IDMapperException{
-        report("MapMapURLOneProvenance");
+    public void testMapURLOneLinkSet() throws IDMapperException{
+        report("MapMapURLOneLinkSet");
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(map1URL1);
-        ArrayList<String> provenanceIds = new ArrayList<String>();
-        provenanceIds.add(link1to2);
-        Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, provenanceIds, ALL_TARGET_NAME_SPACES);
+        ArrayList<String> linkSetIds = new ArrayList<String>();
+        linkSetIds.add(link1to2);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, linkSetIds, ALL_TARGET_NAME_SPACES);
         assertEquals(results.size(), 1);
         for (URLMapping result:results){
             assertTrue(result.isValid());
@@ -127,14 +129,14 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
     }
     
     @Test
-    public void testMapURLTwoProvenance() throws IDMapperException{
-        report("MapMapURLTwoProvenance");
+    public void testMapURLTwoLinkSet() throws IDMapperException{
+        report("MapMapURLTwoLinkSet");
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(map1URL1);
-        ArrayList<String> provenanceIds = new ArrayList<String>();
-        provenanceIds.add(link1to2);
-        provenanceIds.add(link1to3);
-        Set<URLMapping> results = provenaceMapper.mapURL(sourceURLs, provenanceIds, ALL_TARGET_NAME_SPACES);
+        ArrayList<String> linkSetIds = new ArrayList<String>();
+        linkSetIds.add(link1to2);
+        linkSetIds.add(link1to3);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, linkSetIds, ALL_TARGET_NAME_SPACES);
         assertEquals(results.size(), 2);
         for (URLMapping result:results){
             assertTrue(result.isValid());
@@ -151,19 +153,19 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         refs.add(map1xref1);
         refs.add(map2xref2);
         refs.add(mapBadxref1);
-        Map<Xref, Set<XrefProvenance>> results = provenaceMapper.mapIDProvenance(refs, ALL_PROVENACE, ALL_TARGET_DATA_SOURCE);
+        Map<Xref, Set<XrefLinkSet>> results = linkSetMapper.mapIDwithLinkSet(refs, ALL_PROVENACE, ALL_TARGET_DATA_SOURCE);
         assertEquals(results.size(), 2);
-        Set<XrefProvenance> results1 = results.get(map1xref1);
+        Set<XrefLinkSet> results1 = results.get(map1xref1);
         assertThat(results1.size(), greaterThanOrEqualTo(2));
-        Set<XrefProvenance> results2 = results.get(map2xref2);
+        Set<XrefLinkSet> results2 = results.get(map2xref2);
         assertThat(results2.size(), greaterThanOrEqualTo(2));
-        for (XrefProvenance result:results1){
+        for (XrefLinkSet result:results1){
             assertThat(result.getId(), anyOf(equalTo(map1xref1.getId()), equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref1.getDataSource()), 
                     equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
             assertEquals(result.getPredicate(), TEST_PREDICATE);
         }
-        for (XrefProvenance result:results2){
+        for (XrefLinkSet result:results2){
             assertThat(result.getId(), anyOf(equalTo(map2xref1.getId()), equalTo(map2xref2.getId()), equalTo(map2xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map2xref1.getDataSource()), 
                     equalTo(map2xref2.getDataSource()), equalTo(map2xref3.getDataSource())));
@@ -174,9 +176,9 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
     @Test
     public void testMapIDOneToManyNoDataSources() throws IDMapperException{
         report("MapIDOneToManyNoDataSources");
-        Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(map1xref1, ALL_PROVENACE, ALL_TARGET_DATA_SOURCE);
+        Set<XrefLinkSet> results = linkSetMapper.mapIDwithLinkSet(map1xref1, ALL_PROVENACE, ALL_TARGET_DATA_SOURCE);
         assertThat(results.size(), greaterThanOrEqualTo(2));
-        for (XrefProvenance result:results){
+        for (XrefLinkSet result:results){
             assertThat(result.getId(), anyOf(equalTo(map1xref1.getId()), equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref1.getDataSource()), 
                     equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
@@ -188,7 +190,7 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
     public void testMapIDOneBad() throws IDMapperException{
         report("MapIDOneToManyNoDataSources");
         ArrayList<String> sourceURLs = new ArrayList<String>();
-        Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(mapBadxref1, ALL_PROVENACE, ALL_TARGET_DATA_SOURCE);
+        Set<XrefLinkSet> results = linkSetMapper.mapIDwithLinkSet(mapBadxref1, ALL_PROVENACE, ALL_TARGET_DATA_SOURCE);
         assertEquals(0, results.size());
     }
 
@@ -197,13 +199,13 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         report("MapIDOneToManyWithOneDataSource");
         ArrayList<DataSource> trgDataSources = new ArrayList<DataSource>();
         trgDataSources.add(DataSource2);
-        Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(map1xref1, ALL_PROVENACE, trgDataSources);
+        Set<XrefLinkSet> results = linkSetMapper.mapIDwithLinkSet(map1xref1, ALL_PROVENACE, trgDataSources);
         assertEquals(results.size(), 1);
-        for (XrefProvenance result:results){
+        for (XrefLinkSet result:results){
             assertEquals(result.getId(), map1xref2.getId());
             assertEquals(result.getDataSource(), map1xref2.getDataSource());
             assertEquals(result.getPredicate(), TEST_PREDICATE);
-            assertEquals(link1to2, result.getProvenanceId());
+            assertEquals(link1to2, result.getLinkSetId());
         }
     }
  
@@ -213,54 +215,47 @@ public abstract class ProvenanceMapperTest extends URLMapperTestBase{
         ArrayList<DataSource> trgDataSources = new ArrayList<DataSource>();
         trgDataSources.add(DataSource2);
         trgDataSources.add(DataSource3);
-        Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(map1xref1, ALL_PROVENACE, trgDataSources);
+        Set<XrefLinkSet> results = linkSetMapper.mapIDwithLinkSet(map1xref1, ALL_PROVENACE, trgDataSources);
         assertEquals(results.size(), 2);
-        for (XrefProvenance result:results){
+        for (XrefLinkSet result:results){
             assertThat(result.getId(), anyOf(equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
             assertEquals(result.getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceId(), anyOf(equalTo(link1to2), equalTo(link1to3)));
+            assertThat(result.getLinkSetId(), anyOf(equalTo(link1to2), equalTo(link1to3)));
         }
     }
  
     @Test
-    public void testMapOneProvenanceOneDataSource() throws IDMapperException{
-        report("MapMapOneProvenanceOneDataSource");
-        ArrayList<String> provenanceIds = new ArrayList<String>();
-        provenanceIds.add(link1to2);
-        Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(map1xref1, provenanceIds, ALL_TARGET_DATA_SOURCE);
+    public void testMapOneLinkSetOneDataSource() throws IDMapperException{
+        report("MapMapOnelinkSetOneDataSource");
+        ArrayList<String> linkSetIds = new ArrayList<String>();
+        linkSetIds.add(link1to2);
+        Set<XrefLinkSet> results = linkSetMapper.mapIDwithLinkSet(map1xref1, linkSetIds, ALL_TARGET_DATA_SOURCE);
         assertEquals(1, results.size());
-        for (XrefProvenance result:results){
+        for (XrefLinkSet result:results){
             assertEquals(map1xref2.getId(), result.getId());
             assertEquals(map1xref2.getDataSource(), result.getDataSource());
             assertEquals(TEST_PREDICATE, result.getPredicate());
-            assertEquals(link1to2, result.getProvenanceId());
+            assertEquals(link1to2, result.getLinkSetId());
         }
     }
     
     @Test
-    public void testMapTwoProvenanceOneDataSource() throws IDMapperException{
-        report("MapMapOneProvenanceOneDataSource");
+    public void testMapTwoLinkSetOneDataSource() throws IDMapperException{
+        report("MapMapOneLinkSetOneDataSource");
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(map1URL1);
-        ArrayList<String> provenanceIds = new ArrayList<String>();
-        provenanceIds.add(link1to2);
-        provenanceIds.add(link1to3);
-        Set<XrefProvenance> results = provenaceMapper.mapIDProvenance(map1xref1, provenanceIds, ALL_TARGET_DATA_SOURCE);
+        ArrayList<String> linkSetIds = new ArrayList<String>();
+        linkSetIds.add(link1to2);
+        linkSetIds.add(link1to3);
+        Set<XrefLinkSet> results = linkSetMapper.mapIDwithLinkSet(map1xref1, linkSetIds, ALL_TARGET_DATA_SOURCE);
         assertEquals(results.size(), 2);
-        for (XrefProvenance result:results){
+        for (XrefLinkSet result:results){
             assertThat(result.getId(), anyOf(equalTo(map1xref2.getId()), equalTo(map1xref3.getId())));
             assertThat(result.getDataSource(), anyOf(equalTo(map1xref2.getDataSource()), equalTo(map1xref3.getDataSource())));
             assertEquals(result.getPredicate(), TEST_PREDICATE);
-            assertThat(result.getProvenanceId(), anyOf(equalTo(link1to2), equalTo(link1to3)));
+            assertThat(result.getLinkSetId(), anyOf(equalTo(link1to2), equalTo(link1to3)));
         }
     }
-    
-    //@Test
-    //public void testGetProvenance() throws IDMapperException{
-    //    report("GetProvenance");
-    //    ProvenanceLink result = provenaceMapper.getProvenance(link1to2.getId());
-    //    assertEquals(result, link1to2);
-    // }
-    
+        
 }

@@ -18,7 +18,6 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
 import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
-import org.bridgedb.provenance.XrefProvenance;
 
 /**
  * @author Christian
@@ -27,7 +26,7 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
 
     private Set<DataSource> sources;
     private Set<DataSource> targets;
-    private Map<Xref,Set<XrefProvenance>> sourceToTarget;
+    private Map<Xref,Set<XrefLinkSet>> sourceToTarget;
     private Map<String, String> predicates;
     int linkCount;
     
@@ -36,7 +35,7 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
         isConnected = true; 
         sources = new HashSet<DataSource>();
         targets = new HashSet<DataSource>();
-        sourceToTarget = new HashMap<Xref,Set<XrefProvenance>>();
+        sourceToTarget = new HashMap<Xref,Set<XrefLinkSet>>();
         predicates = new HashMap<String, String>();
         linkCount = 0;
     }
@@ -46,7 +45,7 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
     }
 
     @Override
-    public void insertLink(String source, String target, String forwardProvenanceId, String inverseProvenanceId)
+    public void insertLink(String source, String target, String forwardLinkSetId, String inverseLinkSetId)
             throws IDMapperException{
         linkCount ++;
         if (linkCount % 100000 == 0){
@@ -55,21 +54,21 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
         Xref sourceXref = DataSource.uriToXref(source);
         Xref targetXref = DataSource.uriToXref(target);
   
-        insertLink(sourceXref, targetXref, forwardProvenanceId);
+        insertLink(sourceXref, targetXref, forwardLinkSetId);
         //No add the inverse
-        insertLink(targetXref, sourceXref, inverseProvenanceId);
+        insertLink(targetXref, sourceXref, inverseLinkSetId);
     }
 
-    private void insertLink (Xref sourceXref, Xref targetXref, String provenanceId){
+    private void insertLink (Xref sourceXref, Xref targetXref, String linkSetId){
         sources.add(sourceXref.getDataSource());
         targets.add(targetXref.getDataSource());
-        Set<XrefProvenance> targetSet = sourceToTarget.get(sourceXref);
+        Set<XrefLinkSet> targetSet = sourceToTarget.get(sourceXref);
         //ystem.out.println(targetSet);
         if (targetSet == null){
-            targetSet = new HashSet<XrefProvenance>();
+            targetSet = new HashSet<XrefLinkSet>();
             sourceToTarget.put(sourceXref, targetSet);
         }        
-        targetSet.add(new XrefProvenance(targetXref, provenanceId, predicates.get(provenanceId)));   
+        targetSet.add(new XrefLinkSet(targetXref, linkSetId, predicates.get(linkSetId)));   
     }
     
     @Override
@@ -77,17 +76,17 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
         return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
     }
 
-    private Set<XrefProvenance> filterByTargetDataSources (Set<XrefProvenance> possible, DataSource... tgtDataSources){
+    private Set<XrefLinkSet> filterByTargetDataSources (Set<XrefLinkSet> possible, DataSource... tgtDataSources){
         if (possible == null){
-            return new HashSet<XrefProvenance>();
+            return new HashSet<XrefLinkSet>();
         }
         if (tgtDataSources.length == 0){
             //returns a shallow clone
             return new HashSet(possible);
         }
-        Set<XrefProvenance> result = new HashSet<XrefProvenance>();
+        Set<XrefLinkSet> result = new HashSet<XrefLinkSet>();
         Set<DataSource> tgtDss = new HashSet<DataSource>(Arrays.asList(tgtDataSources));
-        for (XrefProvenance destRef : possible)
+        for (XrefLinkSet destRef : possible)
         {
             if (tgtDss.contains(destRef.getDataSource()))
             {
@@ -99,10 +98,10 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
     
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
-        Set<XrefProvenance> possible = sourceToTarget.get(ref);
-        Set<XrefProvenance> filtered =  filterByTargetDataSources(possible, tgtDataSources);
+        Set<XrefLinkSet> possible = sourceToTarget.get(ref);
+        Set<XrefLinkSet> filtered =  filterByTargetDataSources(possible, tgtDataSources);
         Set<Xref> results = new HashSet<Xref>();
-        for (XrefProvenance xref:filtered){
+        for (XrefLinkSet xref:filtered){
             results.add(xref);
         }
         return results;
@@ -149,11 +148,11 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
         //ystem.out.println ("Found " + sourceToTarget.values().size() + " links");
         Reporter.report(sourceToTarget.size() + " source Xrefs");
         
-        Collection<Set<XrefProvenance>> targetsXrefs = sourceToTarget.values();
+        Collection<Set<XrefLinkSet>> targetsXrefs = sourceToTarget.values();
         HashSet<Xref> targetHash = new HashSet (targetsXrefs);
         Reporter.report(targetHash.size() + " targets groups");
         targetHash = new HashSet<Xref>();
-        for (Set<XrefProvenance> xrefs:targetsXrefs){
+        for (Set<XrefLinkSet> xrefs:targetsXrefs){
             targetHash.addAll(xrefs);
         }
         Reporter.report(targetHash.size() + " targets xrefs found");       
@@ -165,18 +164,18 @@ public class URLMapperLinkset implements IDMapper, URLLinkListener{
     }
 
     @Override
-    public void registerProvenanceLink(String provenanceId, DataSource source, String predicate, DataSource target)
+    public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target)
             throws IDMapperException {
-        String oldPredicate = predicates.get(provenanceId);
+        String oldPredicate = predicates.get(linkSetId);
         if (oldPredicate != null && !oldPredicate.equals(predicate)){
-            throw new IDMapperException ("Provenance " + provenanceId + " already has predicate " + oldPredicate + 
+            throw new IDMapperException ("LinkSet " + linkSetId + " already has predicate " + oldPredicate + 
                     " so can not be registered with " + predicate);
         }
-        predicates.put(provenanceId, predicate);
+        predicates.put(linkSetId, predicate);
     }
 
     @Override
-    public Set<String> getProvenanceIds() {
+    public Set<String> getLinkSetIds() {
         return predicates.keySet();
     }
 
