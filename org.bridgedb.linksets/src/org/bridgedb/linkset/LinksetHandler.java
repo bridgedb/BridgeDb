@@ -203,13 +203,6 @@ public class LinksetHandler extends RDFHandlerBase{
         parse (handler, fileName, type);
     }
 
-    public static void clearAndParseX (URLLinkListener listener, RdfLoader rdfLoader, String fileName, RdfStoreType type) 
-            throws IDMapperLinksetException  {
-        rdfLoader.clear();
-        LinksetHandler handler = new LinksetHandler(listener, rdfLoader);
-        parse (handler, fileName, type);
-    }
-
     private static void parse (LinksetHandler handler, String fileName, RdfStoreType type) 
             throws IDMapperLinksetException  {
         Reporter.report("Parsing " + fileName);

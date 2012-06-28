@@ -19,11 +19,6 @@ public class LinksetValidator extends RDFBase implements RdfLoader{
     }
 
     @Override
-    public void clear() throws IDMapperLinksetException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public String getDefaultBaseURI() {
         return "http://www.bridgebd.org/valiator/";
     }

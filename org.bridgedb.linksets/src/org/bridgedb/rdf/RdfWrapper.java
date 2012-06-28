@@ -26,6 +26,7 @@ import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.RDFHandlerException;
@@ -131,7 +132,7 @@ public class RdfWrapper {
         }      
     }
     
-    protected static RepositoryConnection setupConnection(RdfStoreType rdfStoreType) throws RDFHandlerException{
+    public static RepositoryConnection setupConnection(RdfStoreType rdfStoreType) throws RDFHandlerException{
         Repository repository;
         try {
             repository = getRepository (rdfStoreType);
@@ -150,7 +151,7 @@ public class RdfWrapper {
         }      
     }
 
-    protected static RepositoryResult<Statement> getStatements(RepositoryConnection connection, 
+    public static RepositoryResult<Statement> getStatements(RepositoryConnection connection, 
             Resource subject, URI predicate, Value object, Resource... contexts) throws RDFHandlerException {
         try {
             return connection.getStatements(subject, predicate, object, false, contexts);
@@ -158,6 +159,90 @@ public class RdfWrapper {
             shutdownAfterError(connection);
             throw new RDFHandlerException("Error getting statement ", ex);
         }
+    }
+    
+    public static List<Statement> getStatementList(RepositoryConnection connection, 
+            Value subject, URI predicate, Value object, Resource... contexts) throws RDFHandlerException {
+        try {
+            Resource subjectResource = (Resource)subject;
+            RepositoryResult<Statement> rr = connection.getStatements(subjectResource, predicate, object, false, contexts);
+            return rr.asList();
+        } catch (Throwable ex) {
+            shutdownAfterError(connection);
+            throw new RDFHandlerException("Error getting statement ", ex);
+        }
+    }
+    
+    public static Resource getPossibleSingeltonSubject(RepositoryConnection connection, 
+            URI predicate, Value object, Resource... contexts) throws RDFHandlerException {
+        try {
+            RepositoryResult<Statement> rr = connection.getStatements(null, predicate, object, false, contexts);
+            List<Statement> statements = rr.asList();
+            if (statements.size() == 1) {
+                Statement statement = statements.get(0);
+                return statement.getSubject();
+            } else if (statements.size() == 0) {
+                return null;
+            }
+        } catch (Throwable ex) {
+            shutdownAfterError(connection);
+            throw new RDFHandlerException("Error getting statement ", ex);
+        }
+        shutdownAfterError(connection);
+        throw new RDFHandlerException ("Found more than one Subject with Predicate " + predicate + " Object " + object +
+                " in context(s) " + toString(contexts));
+    }
+
+    public static Resource getTheSingeltonSubject(RepositoryConnection connection, URI predicate, Value object, 
+            Resource... contexts) throws RDFHandlerException {
+        Resource possible = getPossibleSingeltonSubject(connection, predicate, object, contexts);
+        if (possible != null) return possible;
+        shutdownAfterError(connection);
+        throw new RDFHandlerException ("Found no Subject with Predicate " + predicate + " Object " + object +
+                " in context(s) " + toString(contexts));
+    }
+    
+    public static Value getPossibleSingeltonObject(RepositoryConnection connection, 
+            Value subject, URI predicate, Resource... contexts) throws RDFHandlerException {
+        try {
+            Resource subjectResource = (Resource)subject;
+            RepositoryResult<Statement> rr = connection.getStatements(subjectResource, predicate, null, false, contexts);
+            List<Statement> statements = rr.asList();
+            if (statements.size() == 1) {
+                Statement statement = statements.get(0);
+                return statement.getObject();
+            } else if (statements.size() == 0) {
+                return null;
+            }
+        } catch (Throwable ex) {
+            shutdownAfterError(connection);
+            throw new RDFHandlerException("Error getting statement ", ex);
+        }
+        shutdownAfterError(connection);
+        throw new RDFHandlerException ("Found more than one Object with Subject " + subject + 
+                " and Predicate " + predicate + " in context(s) " + toString(contexts));
+    }
+
+    public static Value getTheSingeltonObject(RepositoryConnection connection, Value subject, URI predicate, 
+            Resource... contexts) throws RDFHandlerException {
+        Value possible = getPossibleSingeltonObject(connection, subject, predicate, contexts);
+        if (possible != null) return possible;
+        shutdownAfterError(connection);
+        throw new RDFHandlerException ("Found no Object with Subject " + subject + " and Predicate " + predicate + 
+                " in context(s) " + toString(contexts));
+    }
+    
+    private static String toString (Resource... contexts){
+        if (contexts.length == 0){
+            return "all";
+        }
+        StringBuilder toString = new StringBuilder("[");
+        for (Resource context: contexts){
+            toString.append(context);
+            toString.append(", ");
+        }
+        toString.append("] ");  
+        return toString.toString();
     }
     
     protected static void add(RepositoryConnection connection, 
@@ -188,7 +273,7 @@ public class RdfWrapper {
         }        
     }
     
-    static void shutdown(RepositoryConnection connection) throws RDFHandlerException{
+    public static void shutdown(RepositoryConnection connection) throws RDFHandlerException{
         try {
             shutdown(connection.getRepository(), connection);
         } catch (IDMapperLinksetException ex) {
@@ -305,11 +390,11 @@ public class RdfWrapper {
         }
     }
 
-    static URI getLinksetURL(Value linksetId){
+    public static URI getLinksetURL(Value linksetId){
         return new URIImpl(RdfWrapper.getBaseURI() + "/linkset/" + linksetId.stringValue());  
     }
     
-    static URI getLinksetURL(int linksetId){
+    public static URI getLinksetURL(int linksetId){
         return new URIImpl(RdfWrapper.getBaseURI() + "/linkset/" + linksetId);  
     }
   

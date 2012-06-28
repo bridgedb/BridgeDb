@@ -29,9 +29,12 @@ public class HoldingRDFStore extends RDFBase implements RdfLoader{
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
 
-    public HoldingRDFStore(RdfStoreType type) throws IDMapperLinksetException{
+    public HoldingRDFStore(RdfStoreType type, boolean clear) throws IDMapperLinksetException{
         this.type = type;
-             setContext();
+        if (clear) {
+            RdfWrapper.clear(type);
+        }
+        setContext();
     }
         
     private synchronized void setContext() throws IDMapperLinksetException{     
@@ -41,6 +44,7 @@ public class HoldingRDFStore extends RDFBase implements RdfLoader{
             RepositoryResult<Statement> rr = RdfWrapper.getStatements(connection, 
                     subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
             int linksetId = extractLinksetId(connection, rr, subject);
+            System.out.println("linksetID = " + linksetId);
             rr = RdfWrapper.getStatements(connection, 
                     subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
             RdfWrapper.remove(connection, rr);
@@ -50,7 +54,7 @@ public class HoldingRDFStore extends RDFBase implements RdfLoader{
             rr = RdfWrapper.getStatements(connection, 
                     subject, HIGHEST_LINKSET_ID_PREDICATE, null, ANY_RESOURCE);
             linksetContext = RdfWrapper.getLinksetURL(linksetId);       
-            inverseContext = RdfWrapper.getLinksetURL(linksetId + 1);       
+            inverseContext = RdfWrapper.getLinksetURL(linksetId + 1); 
             RdfWrapper.shutdown(connection);
         } catch (RDFHandlerException ex) {
             throw new IDMapperLinksetException("Error setting the context", ex);
@@ -82,18 +86,15 @@ public class HoldingRDFStore extends RDFBase implements RdfLoader{
             if (st.getPredicate().equals(VoidConstants.SUBJECTSTARGET)){
                 RdfWrapper.add(connection, st.getSubject(), VoidConstants.OBJECTSTARGET, st.getObject(), inverseContext);    
             } else if (st.getPredicate().equals(VoidConstants.OBJECTSTARGET)){
-                RdfWrapper.add(connection, st.getSubject(), VoidConstants.SUBJECTSTARGET, st.getObject(), inverseContext);                    
+                RdfWrapper.add(connection, st.getSubject(), VoidConstants.SUBJECTSTARGET, st.getObject(), inverseContext); 
+                System.out.println("***");
+                System.out.println( st.getSubject() + ", " + VoidConstants.SUBJECTSTARGET + ", " + st.getObject() + ", " + inverseContext);
             } else {
                 RdfWrapper.add(connection, st.getSubject(), st.getPredicate(), st.getObject(), inverseContext);                
             }
         }
         statements = null;
         RdfWrapper.shutdown(connection);
-    }
-
-    @Override
-    public void clear() throws IDMapperLinksetException {
-        RdfWrapper.clear(type);
     }
 
     @Override

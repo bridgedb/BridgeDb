@@ -26,22 +26,19 @@ public abstract class LinksetHandlerTest extends IDMapperTest {
     private static RdfLoader rdfLoader;
     private static final boolean IS_TEST = true;
     
-    private static void parse(String fileName) throws BridgeDbSqlException, IDMapperLinksetException{        
-        rdfLoader = new HoldingRDFStore(RdfStoreType.TEST);
+    private static void parse(String fileName, boolean clear) throws BridgeDbSqlException, IDMapperLinksetException{        
+        rdfLoader = new HoldingRDFStore(RdfStoreType.TEST, clear);
         LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
         handler.parse (fileName);
     }
     
     public static void loadMappings() throws IDMapperException, IOException, OpenRDFException{
-        rdfLoader = new HoldingRDFStore(RdfStoreType.TEST);
-        rdfLoader.clear();
-        //ystem.out.println("sample1to2.ttl");
         report("sample1to2.ttl");
-        parse ("../org.bridgedb.linksets/test-data/sample1to2.ttl");
+        parse ("../org.bridgedb.linksets/test-data/sample1to2.ttl", true);
         report("sample1to3.ttl");
-        parse ("../org.bridgedb.linksets/test-data/sample1to3.ttl");
+        parse ("../org.bridgedb.linksets/test-data/sample1to3.ttl", false);
         report("sample2to3.ttl");
-        parse ("../org.bridgedb.linksets/test-data/sample2to3.ttl");
+        parse ("../org.bridgedb.linksets/test-data/sample2to3.ttl", false);
 	}
 
 }
