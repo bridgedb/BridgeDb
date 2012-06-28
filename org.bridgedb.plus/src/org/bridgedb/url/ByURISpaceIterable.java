@@ -10,34 +10,34 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
-import org.bridgedb.url.URLIterator;
+import org.bridgedb.url.URISpace;
 
 /**
  *
  * @author Christian
  */
-public class ByNameSpaceIterable implements Iterable<String> {
+public class ByURISpaceIterable implements Iterable<String> {
     
-    private Set<String> nameSpaces;
-    private URLIterator inner;
-    private ByNameSpaceIterator first;
+    private Set<String> URISpaces;
+    private URISpace inner;
+    private ByURISpaceIterator first;
     
-    public ByNameSpaceIterable(Set<String> nameSpaces, URLIterator inner) throws IDMapperException{
-        this.nameSpaces =  nameSpaces;
+    public ByURISpaceIterable(Set<String> URISpaces, URISpace inner) throws IDMapperException{
+        this.URISpaces =  URISpaces;
         this.inner = inner;
         //Lets get the first Iterator so we can return any exceptions
-        first = new ByNameSpaceIterator(nameSpaces, inner);
+        first = new ByURISpaceIterator(URISpaces, inner);
     }
 
     @Override
     public Iterator<String> iterator() {
         if (first != null){
-           ByNameSpaceIterator temp = first;
+           ByURISpaceIterator temp = first;
            first = null;
            return temp;
         }
         try {
-            return new ByNameSpaceIterator(nameSpaces, inner);
+            return new ByURISpaceIterator(URISpaces, inner);
         } catch (IDMapperException ex) {
             Reporter.report(ex.getMessage());
             //Can't throw an exception so best we can do is return an empty Iterator.
@@ -45,22 +45,22 @@ public class ByNameSpaceIterable implements Iterable<String> {
         }
     }
 
-    private static class ByNameSpaceIterator implements Iterator<String> {
+    private static class ByURISpaceIterator implements Iterator<String> {
 
-        Iterator<String> nameSpaces;
-        URLIterator inner;
+        Iterator<String> URISpaces;
+        URISpace inner;
         Iterator<String> innerData;
         
-        public ByNameSpaceIterator(Set<String> nameSpaces, URLIterator inner) throws IDMapperException {
-            //Make a copy so we can remove namespaces
-            this.nameSpaces =  nameSpaces.iterator();
+        public ByURISpaceIterator(Set<String> URISpaces, URISpace inner) throws IDMapperException {
+            //Make a copy so we can remove URISpaces
+            this.URISpaces =  URISpaces.iterator();
             this.inner = inner;
-            nextNameSpace();
+            nextURISpace();
         }
 
-        private boolean nextNameSpace() throws IDMapperException{
-            if (nameSpaces.hasNext()){
-                this.innerData = inner.getURLIterator(nameSpaces.next()).iterator();
+        private boolean nextURISpace() throws IDMapperException{
+            if (URISpaces.hasNext()){
+                this.innerData = inner.getURLIterator(URISpaces.next()).iterator();
                 return true;
             }
             return false;
@@ -70,7 +70,7 @@ public class ByNameSpaceIterable implements Iterable<String> {
         public boolean hasNext() {
             if (innerData.hasNext()) return true;
             try {
-                return nextNameSpace();
+                return nextURISpace();
             } catch (IDMapperException ex) {
                 //Don't expect this as query ran successfuly once but best we can do is return false;
                 Reporter.report(ex.getMessage());
@@ -84,14 +84,14 @@ public class ByNameSpaceIterable implements Iterable<String> {
                 return innerData.next();
             }
             try {
-                if (nextNameSpace()){
+                if (nextURISpace()){
                     return innerData.next();
                 } else {
-                    throw new NoSuchElementException("No more nameSpaces to iterate over");
+                    throw new NoSuchElementException("No more URISpaces to iterate over");
                 }
             } catch (IDMapperException ex) {
                 Reporter.report(ex.getMessage());
-                throw new NoSuchElementException("Error getting next nameSpace. " + ex.getMessage());
+                throw new NoSuchElementException("Error getting next URISpace. " + ex.getMessage());
             }
         }
 

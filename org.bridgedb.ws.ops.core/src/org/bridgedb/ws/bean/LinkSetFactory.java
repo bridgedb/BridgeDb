@@ -12,9 +12,9 @@ public class LinkSetFactory {
     public static LinkSetBean asBean(LinkSetInfo linkSetInfo){
         LinkSetBean bean = new LinkSetBean();
         bean.setId(linkSetInfo.getId());
-        bean.setSourceNameSpace(linkSetInfo.getSourceNameSpace());
+        bean.setSourceNameSpace(linkSetInfo.getSourceURISpace());
         bean.setPredicate(linkSetInfo.getPredicate());
-        bean.setTargetNameSpace(linkSetInfo.getTargetNameSpace());
+        bean.setTargetNameSpace(linkSetInfo.getTargetURISpace());
         bean.setLinkCount(linkSetInfo.getNumberOfLinks());
         bean.setIsTransitive(linkSetInfo.isTransitive());
         return bean;

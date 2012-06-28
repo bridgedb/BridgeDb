@@ -33,8 +33,8 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLBase;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.ByNameSpaceIterable;
-import org.bridgedb.url.URLIterator;
+import org.bridgedb.url.ByURISpaceIterable;
+import org.bridgedb.url.URISpace;
 import org.bridgedb.url.URLMapper;
 
 /**
@@ -43,9 +43,9 @@ import org.bridgedb.url.URLMapper;
  * 
  * @author Christian
  */
-// removed Iterators due to scale issues URLIterator, XrefIterator,
+// removed Iterators due to scale issues URISpace, XrefIterator,
 public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
-        OpsMapper, URLIterator {
+        OpsMapper, URISpace {
     
     private PreparedStatement pstLink;
     

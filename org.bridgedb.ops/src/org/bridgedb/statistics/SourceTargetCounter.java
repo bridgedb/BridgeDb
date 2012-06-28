@@ -29,9 +29,9 @@ public class SourceTargetCounter implements Comparator<LinkSetInfo>{
 
     private void addin(LinkSetInfo linkSetInfo) {
         for (LinkSetInfo collectedInfo:collectedInfos){
-            boolean equals = linkSetInfo.getSourceNameSpace().equals(collectedInfo.getSourceNameSpace());
+            boolean equals = linkSetInfo.getSourceURISpace().equals(collectedInfo.getSourceURISpace());
             if (equals) {
-                equals = linkSetInfo.getTargetNameSpace().equals(collectedInfo.getTargetNameSpace());
+                equals = linkSetInfo.getTargetURISpace().equals(collectedInfo.getTargetURISpace());
             }
             if (equals){
                 collectedInfo.multipleIds();
@@ -51,9 +51,9 @@ public class SourceTargetCounter implements Comparator<LinkSetInfo>{
 
     @Override
     public int compare(LinkSetInfo o1, LinkSetInfo o2) {
-        int test = o1.getSourceNameSpace().compareTo(o2.getSourceNameSpace());
+        int test = o1.getSourceURISpace().compareTo(o2.getSourceURISpace());
         if (test != 0) return test;
-        return o1.getTargetNameSpace().compareTo(o2.getTargetNameSpace());
+        return o1.getTargetURISpace().compareTo(o2.getTargetURISpace());
     }
 }
     

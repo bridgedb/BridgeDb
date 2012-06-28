@@ -357,9 +357,9 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
                     sb.append(uriInfo.getBaseUri());
                     for (Xref map:firstMaps){
                         sbInnerPure.append("&targetNameSpace=");
-                        sbInnerPure.append(map.getDataSource().getNameSpace());
+                        sbInnerPure.append(map.getDataSource().getURISpace());
                         sbInnerEncoded.append("&targetNameSpace=");
-                        sbInnerEncoded.append(URLEncoder.encode(map.getDataSource().getNameSpace(), "UTF-8"));
+                        sbInnerEncoded.append(URLEncoder.encode(map.getDataSource().getURISpace(), "UTF-8"));
                     }
                     sb.append(sbInnerEncoded.toString());
                     sb.append("\">");
@@ -524,26 +524,26 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
                     sb.append("getMappings?nameSpace=");
-                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append(URLEncoder.encode(first.getDataSource().getURISpace(), "UTF-8"));
                     sb.append("\">");
                     sb.append("getMappings?nameSpace=");
-                    sb.append(first.getDataSource().getNameSpace());
+                    sb.append(first.getDataSource().getURISpace());
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
                     sb.append("getMappings?sourceNameSpace=");
-                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append(URLEncoder.encode(first.getDataSource().getURISpace(), "UTF-8"));
                     sb.append("\">");
                     sb.append("getMappings?sourceNameSpace=");
-                    sb.append(first.getDataSource().getNameSpace());
+                    sb.append(first.getDataSource().getURISpace());
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
                     sb.append("getMappings?targetNameSpace=");
-                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append(URLEncoder.encode(first.getDataSource().getURISpace(), "UTF-8"));
                     sb.append("\">");
                     sb.append("getMappings?targetNameSpace=");
-                    sb.append(first.getDataSource().getNameSpace());
+                    sb.append(first.getDataSource().getURISpace());
                     sb.append("</a></li>");    
             sb.append("</ul>");        
     }
@@ -644,11 +644,11 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
             sb.append("<li>Example: <a href=\"");
                 sb.append(uriInfo.getBaseUri());
                     sb.append("getURLs?nameSpace=");
-                    sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                    sb.append(URLEncoder.encode(first.getDataSource().getURISpace(), "UTF-8"));
                     sb.append("&limit=10");
                     sb.append("\">");
                     sb.append("getURLs?nameSpace=");
-                    sb.append(first.getDataSource().getNameSpace());
+                    sb.append(first.getDataSource().getURISpace());
                     sb.append("&limit=10");
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
@@ -1000,10 +1000,10 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
         for (LinkSetInfo info:provenaceinfos){
             sb.append("<tr>");
             sb.append("<td>");
-            sb.append(info.getSourceNameSpace());
+            sb.append(info.getSourceURISpace());
             sb.append("</td>");
             sb.append("<td>");
-            sb.append(info.getTargetNameSpace());
+            sb.append(info.getTargetURISpace());
             sb.append("</td>");
             sb.append("<td align=\"right\">");
             sb.append(formatter.format(info.getNumberOfLinks()));
@@ -1024,9 +1024,9 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
     
     @Override
     public int compare(LinkSetInfo o1, LinkSetInfo o2) {
-        int test = o1.getSourceNameSpace().compareTo(o2.getSourceNameSpace());
+        int test = o1.getSourceURISpace().compareTo(o2.getSourceURISpace());
         if (test != 0) return test;
-        return o1.getTargetNameSpace().compareTo(o2.getTargetNameSpace());
+        return o1.getTargetURISpace().compareTo(o2.getTargetURISpace());
     }
 
     @GET
@@ -1055,10 +1055,10 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
         for (LinkSetInfo info:sourceTargetCounter.getSummaryInfos()){
             sb.append("<tr>");
             sb.append("<td>");
-            sb.append(info.getSourceNameSpace());
+            sb.append(info.getSourceURISpace());
             sb.append("</td>");
             sb.append("<td>");
-            sb.append(info.getTargetNameSpace());
+            sb.append(info.getTargetURISpace());
             sb.append("</td>");
             sb.append("<td align=\"right\">");
             sb.append(formatter.format(info.getNumberOfLinks()));
@@ -1078,11 +1078,11 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
         sb.append("digraph G {");
         for (LinkSetInfo info:sourceTargetCounter.getSummaryInfos()){
-            if (info.getSourceNameSpace().compareTo(info.getTargetNameSpace()) < 0 ){
+            if (info.getSourceURISpace().compareTo(info.getTargetURISpace()) < 0 ){
                 sb.append("\"");
-                sb.append(info.getSourceNameSpace());
+                sb.append(info.getSourceURISpace());
                 sb.append("\" -> \"");
-                sb.append(info.getTargetNameSpace());
+                sb.append(info.getTargetURISpace());
                 sb.append("\" [dir = both, label=\"");
                 sb.append(formatter.format(info.getNumberOfLinks()));            
                 sb.append("\"];\n");
@@ -1163,10 +1163,10 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
                 sb.append("<li>Example: <a href=\"");
                         sb.append(uriInfo.getBaseUri());
                         sb.append("getURLByposition?position=0&limit=20&nameSpace=");
-                        sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                        sb.append(URLEncoder.encode(first.getDataSource().getURISpace(), "UTF-8"));
                         sb.append("\">");
                         sb.append("getURLByposition?position=0&limit=20&nameSpace=");
-                        sb.append(first.getDataSource().getNameSpace());
+                        sb.append(first.getDataSource().getURISpace());
                         sb.append("</a></li>");    
                 sb.append("</ul>");
          }        
@@ -1218,10 +1218,10 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
                 sb.append("<li>Example: <a href=\"");
                         sb.append(uriInfo.getBaseUri());
                         sb.append("getURLByposition?position=0&limit=20&nameSpace=");
-                        sb.append(URLEncoder.encode(first.getDataSource().getNameSpace(), "UTF-8"));
+                        sb.append(URLEncoder.encode(first.getDataSource().getURISpace(), "UTF-8"));
                         sb.append("\">");
                         sb.append("getURLByposition?position=0&limit=20&nameSpace=");
-                        sb.append(first.getDataSource().getNameSpace());
+                        sb.append(first.getDataSource().getURISpace());
                         sb.append("</a></li>");    
                 sb.append("</ul>");
          }        

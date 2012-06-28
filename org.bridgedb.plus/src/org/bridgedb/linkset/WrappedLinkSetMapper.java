@@ -75,8 +75,8 @@ public class WrappedLinkSetMapper implements LinkSetMapper{
 
     @Override
     public Set<URLMapping> mapURL(List<String> sourceURLs, List<String> linkSetIds, 
-            List<String> targetNameSpaces) throws IDMapperException {
-        Map<String, Set<String>> plainResults = urlMapper.mapURL(sourceURLs, targetNameSpaces.toArray(new String[0]));
+            List<String> targetURISpaces) throws IDMapperException {
+        Map<String, Set<String>> plainResults = urlMapper.mapURL(sourceURLs, targetURISpaces.toArray(new String[0]));
         Set<URLMapping> results = new HashSet<URLMapping>();
         for (String key:plainResults.keySet()){
             Set<String> plain = plainResults.get(key);
@@ -105,6 +105,6 @@ public class WrappedLinkSetMapper implements LinkSetMapper{
     }
 
     private String createLinkSetId(DataSource source, DataSource target){
-        return source.getNameSpace() + ID_DIVIDER + target.getNameSpace();
+        return source.getURISpace() + ID_DIVIDER + target.getURISpace();
     }
  }

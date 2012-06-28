@@ -33,9 +33,9 @@ public class ValidatingLinkListener implements URLLinkListener{
     @Override
     public void registerLinkSet(String linkSetId, DataSource source, String predicate, DataSource target,
             boolean isTransitive) throws IDMapperException {
-        String sourceNameSpace = source.getNameSpace();
+        String sourceNameSpace = source.getURISpace();
         sourceNameSpaces.put(linkSetId, sourceNameSpace);
-        String targetNameSpace = target.getNameSpace();
+        String targetNameSpace = target.getURISpace();
         targetNameSpaces.put(linkSetId, targetNameSpace);    
     }
 

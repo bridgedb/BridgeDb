@@ -10,18 +10,18 @@ package org.bridgedb.ops;
  */
 public class LinkSetInfo {
     private String id;
-    private final String sourceNameSpace;
+    private final String sourceURISpace;
     private final String predicate;
-    private final String targetNameSpace;
+    private final String targetURISpace;
     private Integer numberOfLinks;
     private boolean isTransitive;
 
-    public LinkSetInfo(String id, String sourceNameSpace, String predicate, String targetNameSpace, 
+    public LinkSetInfo(String id, String sourceURISpace, String predicate, String targetURISpace, 
             Integer numberOfLinks, boolean isTransitive){
         this.id = id;
         this.predicate = predicate;
-        this.sourceNameSpace = sourceNameSpace;
-        this.targetNameSpace = targetNameSpace;
+        this.sourceURISpace = sourceURISpace;
+        this.targetURISpace = targetURISpace;
         this.numberOfLinks = numberOfLinks;
         this.isTransitive = isTransitive;
     }
@@ -45,17 +45,17 @@ public class LinkSetInfo {
     }
 
     /**
-     * @return the sourceNameSpace
+     * @return the sourceURISpace
      */
-    public String getSourceNameSpace() {
-        return sourceNameSpace;
+    public String getSourceURISpace() {
+        return sourceURISpace;
     }
 
     /**
-     * @return the targetNameSpace
+     * @return the targetURISpace
      */
-    public String getTargetNameSpace() {
-        return targetNameSpace;
+    public String getTargetURISpace() {
+        return targetURISpace;
     }
 
     /**
@@ -73,8 +73,8 @@ public class LinkSetInfo {
     }
     
     public String toString(){
-        return this.id + "\n\tsourceNameSpace:" + this.sourceNameSpace + "\n\tpredicate:" + this.predicate + 
-                "\n\ttargetNameSpace:" +this.targetNameSpace + "\n\tnumberOfLinks:" + this.numberOfLinks + "\n";
+        return this.id + "\n\tsourceURISpace:" + this.sourceURISpace + "\n\tpredicate:" + this.predicate + 
+                "\n\ttargetURISpace:" +this.targetURISpace + "\n\tnumberOfLinks:" + this.numberOfLinks + "\n";
     }
 
     /**

@@ -18,7 +18,7 @@ import org.bridgedb.XrefIterator;
 import org.bridgedb.ops.LinkSetStore;
 import org.bridgedb.ops.OpsMapper;
 import org.bridgedb.result.URLMapping;
-import org.bridgedb.url.URLIterator;
+import org.bridgedb.url.URISpace;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.LinkSetBean;
@@ -33,7 +33,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
  * @author Christian
  */
 public class WSMapper extends WSCoreMapper implements OpsMapper, LinkSetStore {
-    //removed due to scale issues XrefIterator, URLIterator, 
+    //removed due to scale issues XrefIterator, URISpace, 
 
     WSInterface webService;
     final static List<String> NO_IDS = new ArrayList<String>();

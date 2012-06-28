@@ -139,8 +139,8 @@ public class LinksetHandler extends RDFHandlerBase{
         rdfLoader.validateAndSaveVoid(firstMap);
         String subjectUriSpace = rdfLoader.getSubjectUriSpace();
         String targetUriSpace = rdfLoader.getTargetUriSpace();
-        DataSource subjectDataSource = DataSource.getByNameSpace(subjectUriSpace);
-        DataSource targetDataSource = DataSource.getByNameSpace(targetUriSpace);
+        DataSource subjectDataSource = DataSource.getByURISpace(subjectUriSpace);
+        DataSource targetDataSource = DataSource.getByURISpace(targetUriSpace);
         linksetId = rdfLoader.getLinksetid();
         inverseLinksetId = rdfLoader.getInverseLinksetid();       
         try {
