@@ -34,7 +34,7 @@ public class LinksetLoader {
                 handler.parse (args[0]);
                 System.out.println("Loading of " + args[0] + " successful");
             } else if (args[1].equals("validate")){
-                URLLinkListener listener = new IgnoreLinkListener();
+                URLLinkListener listener = new ValidatingLinkListener();
                 RdfLoader rdfLoader = new LinksetValidator();
                 LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
                 handler.parse (args[0]);

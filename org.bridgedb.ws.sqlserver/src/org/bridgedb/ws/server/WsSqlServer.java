@@ -995,6 +995,7 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
         sb.append("<th>Target NameSpace</th>");
         sb.append("<th>Sum of Mappings</th>");
         sb.append("<th>Id</th>");
+        sb.append("<th>Transative</th>");
         sb.append("</tr>");
         for (LinkSetInfo info:provenaceinfos){
             sb.append("<tr>");
@@ -1012,6 +1013,9 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
             sb.append("\">");
             sb.append(info.getId());
             sb.append("</a></td>");
+            sb.append("<td>");
+            sb.append(info.isTransitive());
+            sb.append("</td>");
             sb.append("</tr>");
         }
         sb.append("</table>"); 
