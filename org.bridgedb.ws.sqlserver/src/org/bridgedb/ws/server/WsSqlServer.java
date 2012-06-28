@@ -1084,8 +1084,12 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
                 sb.append("\" -> \"");
                 sb.append(info.getTargetURISpace());
                 sb.append("\" [dir = both, label=\"");
-                sb.append(formatter.format(info.getNumberOfLinks()));            
-                sb.append("\"];\n");
+                sb.append(formatter.format(info.getNumberOfLinks())); 
+                sb.append("\"");
+                if (info.isTransitive()){
+                    sb.append(", style=dashed");
+                }
+                sb.append("];\n");
             }
         }
         sb.append("}"); 
