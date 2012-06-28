@@ -187,13 +187,13 @@ public final class DataSource
     /**
      * Returns the prefix for this DataSource.
      * <p>
-     * Used by the URI based methods to go from a DataSource to a namespace.
+     * Used by the URI based methods to go from a DataSource to a URISpace.
      * <p>
      * This method ignores the postfix so application that use postfix should be careful here.
      * @since 2.0.0
      * @return The postfix
      */
-    public String getNameSpace() {
+    public String getURISpace() {
         return prefix;
     }
 
@@ -237,10 +237,10 @@ public final class DataSource
          * Since 2.0.0 this method keeps a register of urlPatterns to DataSources.
          * <p>
          * If more than one DataSource source is set with the same urlPattern than the last datasource set 
-         *    using this method will be returned by the meothods getByURLPattern and getByNameSpace.
+         *    using this method will be returned by the meothods getByURLPattern and getByURISpace.
          * The behaviour of allowing two or more DataSources to share a URLPattern is historical.
          * <p>
-         * Warning this method and nameSpace(String) has almost the same functionality.(see above)
+         * Warning this method and getURISpace(String) has almost the same functionality.(see above)
          * Calling both will result in the second call overwriting the setting of the first call.
          * Similarly calling this function more than once will have the same effect. 
          * Only the last urlPattern will be valid.
@@ -278,36 +278,36 @@ public final class DataSource
 		}
 	
         /**
-         * Uses this nameSpace to construct url where th id will be the localName 
+         * Uses this URISpace to construct url where th id will be the localName 
          * <p>
-         * If more than one DataSource source is set with the same nameSpace this methond will throw an exception.
-         * However the namespace information can be overwritten using the urlPattern method.
+         * If more than one DataSource source is set with the same URISpace this methond will throw an exception.
+         * However the URISpace information can be overwritten using the urlPattern method.
          * Only the last datasource set using either method will be returned 
-         *    by the meothods getByURLPattern and getByNameSpace.
-         * For Historical reason the method urlPattern can not enforce that no two DataSources share the same namespace.
+         *    by the meothods getByURLPattern and getByURISpace.
+         * For Historical reason the method urlPattern can not enforce that no two DataSources share the same URISpace.
          * This method is new so can and does.
          * <p>
          * Warning this method and urlPattern(String) has almost (see above) the same functionality. 
-         * It is equivellent to calling urlPattern(nameSpace + "$id").
+         * It is equivellent to calling urlPattern(URISpace + "$id").
          * Calling both will result in the second call overwriting the setting of the first call.
          * Similarly calling this function more than once will have the same effect. 
-         * Only the last nameSpace will be valid.
+         * Only the last URISpace will be valid.
        * 
          * @param prefix
          * @return 
          * @since 2.0.0
          */
-        public Builder nameSpace(String nameSpace) throws IDMapperException{
+        public Builder URISpace(String URISpace) throws IDMapperException{
             //Clear any previously registered values
             byPrefix.values().remove(current);
             withPrefixAndPostfix.remove(current);
 
-            if (nameSpace != null && !nameSpace.isEmpty()){
-                if (byPrefix.get(nameSpace) != null){
-                    throw new IDMapperException("Unable to set nameSpace for DataSoucrce: " + current + 
-                            " because is has already been used by DataSource: " + byPrefix.get(nameSpace));
+            if (URISpace != null && !URISpace.isEmpty()){
+                if (byPrefix.get(URISpace) != null){
+                    throw new IDMapperException("Unable to set URISpace for DataSoucrce: " + current + 
+                            " because is has already been used by DataSource: " + byPrefix.get(URISpace));
                 }
-                current.setFixes(nameSpace, "");
+                current.setFixes(URISpace, "");
             }
             return this;
         }
@@ -579,7 +579,7 @@ public final class DataSource
      * <p>
      * The first attempt is to use URLPattern where the id is exactly the String "$id".
      * <p>
-     * The second attempt is to assume the uri has a nameSpace followed by the ID.
+     * The second attempt is to assume the uri has a URISpace followed by the ID.
      * This is where the urlPattern used in Builder.urlPattern ends with "#$ID", "/$ID" or ":#$ID", 
      * and "$ID" does not contain the characters '#', '/', or ':' 
      * <p>
@@ -593,7 +593,7 @@ public final class DataSource
      * <p>
      * If no DataSource exists with this URL a new one is created.
      * <p>
-     * Note the methods getByURL(String)  and getByNameSpace(String) are semantic sugar for getByURLPattern(String).
+     * Note the methods getByURL(String)  and getByURISpace(String) are semantic sugar for getByURLPattern(String).
      * All work with the same internal data 
      *    so where they referer to the same URLPattern they will return the same DataSource
      * @param url A 
@@ -633,7 +633,7 @@ public final class DataSource
      * <p>
      * If no DataSource exists with this URL a new one is created.
      * <p>
-     * Note the methods getByURL(String)  and getByNameSpace(String) are semantic sugar for getByURLPattern(String).
+     * Note the methods getByURL(String)  and getByURISpace(String) are semantic sugar for getByURLPattern(String).
      * All work with the same internal data 
      *    so where they referer to the same URLPattern they will return the same DataSource
      * @param url A 
@@ -650,29 +650,29 @@ public final class DataSource
     }
     
     /**
-     * Attempts to find a DataSource with this nameSpace.
+     * Attempts to find a DataSource with this URISpace.
      * <p>
-     * Equivellent (but faster) to calling getByURLPattern (nameSpace + "$id").
+     * Equivellent (but faster) to calling getByURLPattern (URISpace + "$id").
      * <p>
      * If no DataSource exists with this URL a new one is created.
      * <p>
-     * Note the methods getByURL(String) and getByNameSpace(String) are semantic sugar for getByURLPattern(String).
+     * Note the methods getByURL(String) and getByURISpace(String) are semantic sugar for getByURLPattern(String).
      * All work with the same internal data 
      *    so where they referer to the same URLPattern they will return the same DataSource
      * @param url A 
-     * @return A DataSource whose urlPattern is nameSpace + "$id". 
+     * @return A DataSource whose urlPattern is URISpace + "$id". 
      * @since 2.0.0
      */
-    public static DataSource getByNameSpace(String nameSpace){
-        if (nameSpace == null){
-            throw new IllegalArgumentException("nameSpace may not be null.");
+    public static DataSource getByURISpace(String URISpace){
+        if (URISpace == null){
+            throw new IllegalArgumentException("URISpace may not be null.");
         }
-        if (nameSpace.isEmpty()){
-            throw new IllegalArgumentException("nameSpace may not be empty.");            
+        if (URISpace.isEmpty()){
+            throw new IllegalArgumentException("URISpace may not be empty.");            
         }
-        DataSource result = byPrefix.get(nameSpace);
+        DataSource result = byPrefix.get(URISpace);
         if (result == null){
-            return createDataSource(nameSpace);
+            return createDataSource(URISpace);
         } else {
             return result;
         }

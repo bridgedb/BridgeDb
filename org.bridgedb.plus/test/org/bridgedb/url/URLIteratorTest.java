@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  */
 public abstract class URLIteratorTest extends URLMapperTestBase{
     //Must be set by supclasses.
-    protected static URLIterator urlIterator;
+    protected static URISpace urlIterator;
     
     @Test
     public void TestAllDataSourcesIterator() throws IDMapperException{
@@ -39,7 +39,7 @@ public abstract class URLIteratorTest extends URLMapperTestBase{
     @Test
     public void TestOneDataSourcesIterator() throws IDMapperException{
         report("TestOneDataSourcesIterator");
-        Iterable<String> iterable = urlIterator.getURLIterator(nameSpace2);
+        Iterable<String> iterable = urlIterator.getURLIterator(URISpace2);
         Iterator<String> iterator = iterable.iterator();
         HashSet<String> asSet = new HashSet<String>();
         while (iterator.hasNext()){

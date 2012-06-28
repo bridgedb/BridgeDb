@@ -42,8 +42,8 @@ public abstract class SourceTargetCounterTest extends URLMapperTestBase {
         for (LinkSetInfo info:results){
             if (info.getId().equals(link3to2)){
                 found = true;
-                assertEquals(nameSpace3, info.getSourceNameSpace());
-                assertEquals(nameSpace2, info.getTargetNameSpace());
+                assertEquals(URISpace3, info.getSourceURISpace());
+                assertEquals(URISpace2, info.getTargetURISpace());
                 assertEquals(new Integer(3), info.getNumberOfLinks());
             }
         }

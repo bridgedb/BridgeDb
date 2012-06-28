@@ -81,9 +81,9 @@ public abstract class LinkSetMapperTest extends URLMapperTestBase{
         report("MapIDOneToManyWithOneDataSource");
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(map1URL1);
-        ArrayList<String> trgNameSpaces = new ArrayList<String>();
-        trgNameSpaces.add(nameSpace2);
-        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, trgNameSpaces);
+        ArrayList<String> trgURISpaces = new ArrayList<String>();
+        trgURISpaces.add(URISpace2);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, trgURISpaces);
         assertEquals(1, results.size());
         for (URLMapping result:results){
             assertTrue(result.isValid());
@@ -98,10 +98,10 @@ public abstract class LinkSetMapperTest extends URLMapperTestBase{
         report("MapIDOneToManyWithTwoDataSources");
         ArrayList<String> sourceURLs = new ArrayList<String>();
         sourceURLs.add(map1URL1);
-        ArrayList<String> trgNameSpaces = new ArrayList<String>();
-        trgNameSpaces.add(nameSpace2);
-        trgNameSpaces.add(nameSpace3);
-        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, trgNameSpaces);
+        ArrayList<String> trgURISpaces = new ArrayList<String>();
+        trgURISpaces.add(URISpace2);
+        trgURISpaces.add(URISpace3);
+        Set<URLMapping> results = linkSetMapper.mapURL(sourceURLs, ALL_PROVENACE, trgURISpaces);
         assertEquals(results.size(), 2);
         for (URLMapping result:results){
             assertTrue(result.isValid());

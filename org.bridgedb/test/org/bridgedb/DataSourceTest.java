@@ -102,13 +102,13 @@ public class DataSourceTest {
      * Test of getByURLPattern method, of class DataSource.
      */
     @Test
-    public void testGetByNameSpace() throws Exception {
-        String nameSpace= "http://www.example1.com/";
+    public void testGetByURISpace() throws Exception {
+        String URISpace= "http://www.example1.com/";
         String urlProfile = "http://www.example1.com/$id";
-        DataSource expResult = DataSource.register("test1", "test1").nameSpace(nameSpace).asDataSource();
+        DataSource expResult = DataSource.register("test1", "test1").URISpace(URISpace).asDataSource();
         DataSource result = DataSource.getByURL(urlProfile);
         assertEquals(expResult, result);
-        result = DataSource.getByNameSpace(nameSpace);
+        result = DataSource.getByURISpace(URISpace);
         assertEquals(expResult, result);
     }
 
@@ -349,25 +349,25 @@ public class DataSourceTest {
         assertFalse(expected.equals(result));
     }
     
-    public void testNameSpace() throws IDMapperException{
-       String nameSpace = "http://www.example15.com/";
-       DataSource expResult = DataSource.register("test1", "test1").nameSpace(nameSpace).asDataSource();
-       DataSource result =  DataSource.getByNameSpace(nameSpace);
+    public void testURISpace() throws IDMapperException{
+       String URISpace = "http://www.example15.com/";
+       DataSource expResult = DataSource.register("test1", "test1").URISpace(URISpace).asDataSource();
+       DataSource result =  DataSource.getByURISpace(URISpace);
        assertEquals(expResult, result);
-       result =  DataSource.getByURL(nameSpace + "1234");
+       result =  DataSource.getByURL(URISpace + "1234");
        assertEquals(expResult, result);
-       result =  DataSource.getByURLPattern(nameSpace + "$1d");
+       result =  DataSource.getByURLPattern(URISpace + "$1d");
        assertEquals(expResult, result);
     }
 
-    public void testByNameSpace(){
-       String nameSpace = "http://www.example16.com/";
-       DataSource expResult = DataSource.getByNameSpace(nameSpace);
-       DataSource result =  DataSource.getByNameSpace(nameSpace);
+    public void testByURISpace(){
+       String URISpace = "http://www.example16.com/";
+       DataSource expResult = DataSource.getByURISpace(URISpace);
+       DataSource result =  DataSource.getByURISpace(URISpace);
        assertEquals(expResult, result);
-       result =  DataSource.getByURL(nameSpace + "1234");
+       result =  DataSource.getByURL(URISpace + "1234");
        assertEquals(expResult, result);
-       result =  DataSource.getByURLPattern(nameSpace + "$1d");
+       result =  DataSource.getByURLPattern(URISpace + "$1d");
        assertEquals(expResult, result);
     }
 

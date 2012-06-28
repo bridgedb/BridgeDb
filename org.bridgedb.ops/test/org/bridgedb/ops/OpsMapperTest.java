@@ -93,41 +93,41 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     }
 
     @Test 
-    public void testGetMappingsByNameSpace() throws IDMapperException{
-        report ("testGetMappingsByNameSpace");
-        ArrayList<String> nameSpaces = new ArrayList<String>();
-        nameSpaces.add(nameSpace1);
+    public void testGetMappingsByURISpace() throws IDMapperException{
+        report ("testGetMappingsByURISpace");
+        ArrayList<String> URISpaces = new ArrayList<String>();
+        URISpaces.add(URISpace1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                nameSpaces, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 12);
+                URISpaces, ALL_SOURCE_NAME_SPACES, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 12);
         assertEquals(12, mappings.size());
         for (URLMapping mapping: mappings){
-            assertTrue(mapping.getSourceURL().startsWith(nameSpace1) || mapping.getTargetURL().startsWith(nameSpace1));
+            assertTrue(mapping.getSourceURL().startsWith(URISpace1) || mapping.getTargetURL().startsWith(URISpace1));
         }
     }
 
     @Test 
-    public void testGetMappingsBySourceNameSpace() throws IDMapperException{
-        report ("testGetMappingsBySourceNameSpace");
-        ArrayList<String> sourceNameSpaces = new ArrayList<String>();
-        sourceNameSpaces.add(nameSpace1);
+    public void testGetMappingsBySourceURISpace() throws IDMapperException{
+        report ("testGetMappingsBySourceURISpace");
+        ArrayList<String> sourceURISpaces = new ArrayList<String>();
+        sourceURISpaces.add(URISpace1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, sourceNameSpaces, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 6);
+                ALL_NAME_SPACES, sourceURISpaces, ALL_TARGET_NAME_SPACES, ALL_LINK_SET_IDS, 0, 6);
         assertEquals(6, mappings.size());
         for (URLMapping mapping: mappings){
-            assertTrue(mapping.getSourceURL().startsWith(nameSpace1));
+            assertTrue(mapping.getSourceURL().startsWith(URISpace1));
         }
     }
 
     @Test 
-    public void testGetMappingsByTargetNameSpace() throws IDMapperException{
-        report ("testGetMappingsByTargetNameSpace");
-        ArrayList<String> targetNameSpaces = new ArrayList<String>();
-        targetNameSpaces.add(nameSpace1);
+    public void testGetMappingsByTargetURISpace() throws IDMapperException{
+        report ("testGetMappingsByTargetURISpace");
+        ArrayList<String> targetURISpaces = new ArrayList<String>();
+        targetURISpaces.add(URISpace1);
         List<URLMapping> mappings = opsMapper.getMappings(ALL_URLs, ALL_SOURCE_URLs, ALL_TARGET_URLs,
-                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, targetNameSpaces, ALL_LINK_SET_IDS, 0, 6);
+                ALL_NAME_SPACES, ALL_SOURCE_NAME_SPACES, targetURISpaces, ALL_LINK_SET_IDS, 0, 6);
         assertEquals(6, mappings.size());
         for (URLMapping mapping: mappings){
-            assertTrue(mapping.getTargetURL().startsWith(nameSpace1));
+            assertTrue(mapping.getTargetURL().startsWith(URISpace1));
         }
     }
 
@@ -183,32 +183,32 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
     @Test
     public void testGetURLsByPositionAndDataSource() throws IDMapperException{
         report("testGetURLsByPositionAndDataSource");
-        ArrayList<String> nameSpaces2 = new ArrayList<String>();
-        nameSpaces2.add(nameSpace2);
-        String result0 = opsMapper.getURLs(nameSpaces2, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
+        ArrayList<String> URISpaces2 = new ArrayList<String>();
+        URISpaces2.add(URISpace2);
+        String result0 = opsMapper.getURLs(URISpaces2, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
         assertNotNull(result0);
-        assertThat(result0, startsWith(nameSpace2));
-        ArrayList<String> nameSpaces3 = new ArrayList<String>();
-        nameSpaces3.add(nameSpace3);
-        String result1 = opsMapper.getURLs(nameSpaces3, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
-        assertThat(result1, startsWith(nameSpace3));
+        assertThat(result0, startsWith(URISpace2));
+        ArrayList<String> URISpaces3 = new ArrayList<String>();
+        URISpaces3.add(URISpace3);
+        String result1 = opsMapper.getURLs(URISpaces3, ALL_LINK_SET_IDS, 0, JUST_ONE).get(0);
+        assertThat(result1, startsWith(URISpace3));
         assertThat(result1, not(result0));
-        String result2 = opsMapper.getURLs(nameSpaces2, ALL_LINK_SET_IDS, 1, JUST_ONE).get(0);
+        String result2 = opsMapper.getURLs(URISpaces2, ALL_LINK_SET_IDS, 1, JUST_ONE).get(0);
         assertThat(result2, not(result0));
         assertThat(result2, not(result1));
-        assertThat(result2, startsWith(nameSpace2));
+        assertThat(result2, startsWith(URISpace2));
     }
         
     @Test
     public void testGetURLsByPositionLimitAndDataSource() throws IDMapperException{
         report("testGetURLsByPositionLimitAndDataSource");
-        ArrayList<String> nameSpaces2 = new ArrayList<String>();
-        nameSpaces2.add(nameSpace2);
+        ArrayList<String> URISpaces2 = new ArrayList<String>();
+        URISpaces2.add(URISpace2);
         //There may be only three for 
-        List<String> results = opsMapper.getURLs(nameSpaces2, ALL_LINK_SET_IDS, 0, 3);
+        List<String> results = opsMapper.getURLs(URISpaces2, ALL_LINK_SET_IDS, 0, 3);
         assertEquals(3, results.size());
         for (String url: results){
-            assertThat(url, startsWith(nameSpace2));
+            assertThat(url, startsWith(URISpace2));
         }
     }
     
@@ -286,8 +286,8 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         LinkSetInfo info = opsMapper.getLinkSetInfo(link1to2);
         assertEquals(link1to2, info.getId());
         assertEquals(TEST_PREDICATE, info.getPredicate());
-        assertEquals(nameSpace1, info.getSourceNameSpace());
-        assertEquals(nameSpace2, info.getTargetNameSpace());
+        assertEquals(URISpace1, info.getSourceURISpace());
+        assertEquals(URISpace2, info.getTargetURISpace());
         assertEquals(new Integer(3), info.getNumberOfLinks());
     }
 
@@ -301,15 +301,15 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
             if (info.getId().equals(link3to1)){
                 found = true;
                 assertEquals(TEST_PREDICATE, info.getPredicate());
-                assertEquals(nameSpace3, info.getSourceNameSpace());
-                assertEquals(nameSpace1, info.getTargetNameSpace());
+                assertEquals(URISpace3, info.getSourceURISpace());
+                assertEquals(URISpace1, info.getTargetURISpace());
                 assertTrue(info.isTransitive());
                 assertEquals(new Integer(3), info.getNumberOfLinks());
             }
             if (info.getId().equals(link1to2)){
                 assertEquals(TEST_PREDICATE, info.getPredicate());
-                assertEquals(nameSpace1, info.getSourceNameSpace());
-                assertEquals(nameSpace2, info.getTargetNameSpace());
+                assertEquals(URISpace1, info.getSourceURISpace());
+                assertEquals(URISpace2, info.getTargetURISpace());
                 assertFalse(info.isTransitive());
                 assertEquals(new Integer(3), info.getNumberOfLinks());
             }

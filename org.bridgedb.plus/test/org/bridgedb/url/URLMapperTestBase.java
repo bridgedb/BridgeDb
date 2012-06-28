@@ -17,9 +17,9 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     //If set to false will skip testClose(). 
     protected static boolean connectionOk = true;
     
-    protected static String nameSpace1;
-    protected static String nameSpace2;
-    protected static String nameSpace3;
+    protected static String URISpace1;
+    protected static String URISpace2;
+    protected static String URISpace3;
     
     protected static String link1to2;
     protected static String link1to3;
@@ -52,16 +52,16 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     @BeforeClass
     public static void setupURLs() throws IDMapperException{
       
-        nameSpace1 = DataSource1.getNameSpace(); 
-        nameSpace2 = DataSource2.getNameSpace(); 
-        nameSpace3 = DataSource3.getNameSpace(); 
+        URISpace1 = DataSource1.getURISpace(); 
+        URISpace2 = DataSource2.getURISpace(); 
+        URISpace3 = DataSource3.getURISpace(); 
          
-        link1to2 = nameSpace1 + "->" + nameSpace2;
-        link1to3 = nameSpace1 + "->" + nameSpace3;
-        link2to1 = nameSpace2 + "->" + nameSpace1;
-        link2to3 = nameSpace2 + "->" + nameSpace3;
-        link3to1 = nameSpace3 + "->" + nameSpace1;
-        link3to2 = nameSpace3 + "->" + nameSpace3;
+        link1to2 = URISpace1 + "->" + URISpace2;
+        link1to3 = URISpace1 + "->" + URISpace3;
+        link2to1 = URISpace2 + "->" + URISpace1;
+        link2to3 = URISpace2 + "->" + URISpace3;
+        link3to1 = URISpace3 + "->" + URISpace1;
+        link3to2 = URISpace3 + "->" + URISpace3;
 
         map1URL1 = map1xref1.getUrl();
         map1URL2 = map1xref2.getUrl();
@@ -76,7 +76,7 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
         map3URL3 = map3xref3.getUrl();
          //And a few URLs also not used
         mapBadURL1 = "www.notInURLMapper.com#" + goodId1;
-        mapBadURL2 = nameSpace2 + badID;
+        mapBadURL2 = URISpace2 + badID;
         mapBadURL3 = "www.notInURLMapper.com#789";
     }
     

@@ -14,7 +14,7 @@ import org.bridgedb.statistics.OverallStatistics;
  */
 public interface OpsMapper {
     public List<URLMapping> getMappings(List<String> URLs, List<String> sourceURLs, List<String> targetURLs, 
-            List<String> nameSpaces, List<String> sourceNameSpaces, List<String> targetNameSpaces, 
+            List<String> URISpaces, List<String> sourceURISpaces, List<String> targetURISpaces, 
             List<String> linkSetIds, Integer position, Integer limit);
 
     public URLMapping getMapping(int id);

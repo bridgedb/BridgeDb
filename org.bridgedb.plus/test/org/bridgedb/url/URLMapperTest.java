@@ -101,7 +101,7 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     @Test
     public void testMapIDOneToManyWithOneDataSource() throws IDMapperException{
         report("MapIDOneToManyWithOneDataSource");
-        Set<String> results = urlMapper.mapURL(map1URL1, nameSpace2);
+        Set<String> results = urlMapper.mapURL(map1URL1, URISpace2);
         assertTrue(results.contains(map1URL2));
         assertFalse(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -112,7 +112,7 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     @Test
     public void testMapIDOneToManyWithTwoDataSources() throws IDMapperException{
         report("MapIDOneToManyWithTwoDataSources");
-        Set<String> results = urlMapper.mapURL(map1URL1, nameSpace2, nameSpace3);
+        Set<String> results = urlMapper.mapURL(map1URL1, URISpace2, URISpace3);
         assertTrue(results.contains(map1URL2));
         assertTrue(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));

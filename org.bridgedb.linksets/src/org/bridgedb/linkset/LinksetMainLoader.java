@@ -41,10 +41,10 @@ public class LinksetMainLoader {
                 .idExample(goodId1).asDataSource();
         DataSource DataSource2 = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id")
                 .idExample(goodId1).asDataSource();
-        DataSource DataSource3 = DataSource.register("TestDS3", "TestDS3").nameSpace("http://www.example.org#")
+        DataSource DataSource3 = DataSource.register("TestDS3", "TestDS3").URISpace("http://www.example.org#")
                 .idExample(goodId1).asDataSource();
         //This DataSource MUST not be supported
         DataSource DataSourceBad = DataSource.register("TestDSBad", "TestDSBad")
-                .nameSpace("www.NotInTheURlMapper.com#").asDataSource();
+                .URISpace("www.NotInTheURlMapper.com#").asDataSource();
     }
 }

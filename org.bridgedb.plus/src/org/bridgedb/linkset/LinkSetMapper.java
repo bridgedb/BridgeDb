@@ -21,6 +21,6 @@ public interface LinkSetMapper {
             List<DataSource> targetDataSources) throws IDMapperException;
 	
     public Set<URLMapping> mapURL(List<String> sourceURLs, List<String> linkSetIds, 
-            List<String> targetNameSpaces) throws IDMapperException;
+            List<String> targetURISpaces) throws IDMapperException;
 
 }
