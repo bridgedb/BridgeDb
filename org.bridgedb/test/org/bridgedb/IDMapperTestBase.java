@@ -59,11 +59,11 @@ public abstract class IDMapperTestBase {
                 .idExample(goodId1).asDataSource();
         DataSource2 = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id")
                 .idExample(goodId1).asDataSource();
-        DataSource3 = DataSource.register("TestDS3", "TestDS3").nameSpace("http://www.example.org#")
+        DataSource3 = DataSource.register("TestDS3", "TestDS3").URISpace("http://www.example.org#")
                 .idExample(goodId1).asDataSource();
         //This DataSource MUST not be supported
         DataSourceBad = DataSource.register("TestDSBad", "TestDSBad")
-                .nameSpace("www.NotInTheURlMapper.com#").asDataSource();
+                .URISpace("www.NotInTheURlMapper.com#").asDataSource();
 
         //Set of Xrefs that are expected to map together.
         //Note: Ids intentionally equals for testing of DataCollection

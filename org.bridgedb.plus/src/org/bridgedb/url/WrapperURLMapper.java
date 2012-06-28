@@ -25,14 +25,14 @@ public class WrapperURLMapper implements URLMapper{
     }
     
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetNameSpaces) throws IDMapperException {
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws IDMapperException {
         HashSet<Xref> srcXrefs = new HashSet<Xref>();
         for (String sourceURL: sourceURLs){
             srcXrefs.add(DataSource.uriToXref(sourceURL));
         }
-        DataSource[] tgtDataSources = new DataSource[targetNameSpaces.length];
-        for (int i = 0; i < targetNameSpaces.length; i++){
-            tgtDataSources[i] = DataSource.getByNameSpace(targetNameSpaces[i]);
+        DataSource[] tgtDataSources = new DataSource[targetURISpaces.length];
+        for (int i = 0; i < targetURISpaces.length; i++){
+            tgtDataSources[i] = DataSource.getByURISpace(targetURISpaces[i]);
         }
         Map<Xref, Set<Xref>> mapID = idMapper.mapID(srcXrefs, tgtDataSources);
         HashMap<String, Set<String>> result = new HashMap<String, Set<String>>();
@@ -48,11 +48,11 @@ public class WrapperURLMapper implements URLMapper{
     }
 
     @Override
-    public Set<String> mapURL(String sourceURL, String... targetNameSpaces) throws IDMapperException {
+    public Set<String> mapURL(String sourceURL, String... targetURISpaces) throws IDMapperException {
         Xref ref = DataSource.uriToXref(sourceURL);
-        DataSource[] tgtDataSources = new DataSource[targetNameSpaces.length];
-        for (int i = 0; i < targetNameSpaces.length; i++){
-            tgtDataSources[i] = DataSource.getByNameSpace(targetNameSpaces[i]);
+        DataSource[] tgtDataSources = new DataSource[targetURISpaces.length];
+        for (int i = 0; i < targetURISpaces.length; i++){
+            tgtDataSources[i] = DataSource.getByURISpace(targetURISpaces[i]);
         }
         Set<Xref> mapID = idMapper.mapID(ref, tgtDataSources);
         HashSet<String> result = new HashSet<String>();

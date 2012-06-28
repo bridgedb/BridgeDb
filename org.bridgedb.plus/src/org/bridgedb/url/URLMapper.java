@@ -39,14 +39,14 @@ public interface URLMapper {
      * Similar to the mapID method in IDMapper.
      * 
      * @param sourceURLs source URLs, Strings that DataSource can split into prefix, id and postfix
-     * @param targetNameSpaces target name spaces (prefix) that can be included in the resulst. Set this to null
+     * @param targetURISpaces target name spaces (prefix) that can be included in the resulst. Set this to null
      *   if you want to retrieve all results.
      * @return a map from source URIs to target URIs's. The map is not guaranteed
      *    to contain a result for each srcURIs you pass in. This method will never
      *    return null however.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
      */
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetNameSpaces) throws IDMapperException;
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws IDMapperException;
 
 	/**
 	 * Get all cross-references for the given entity, restricting the
@@ -55,13 +55,13 @@ public interface URLMapper {
      * Similar to the mapID method in IDMapper.
      * 
 	 * @param sourceURL the entity to get cross-references for. 
-     * @param targetNameSpaces target name spaces (prefix) that can be included in the resulst. Set this to null
+     * @param targetURISpaces target name spaces (prefix) that can be included in the resulst. Set this to null
      *   if you want to retrieve all results.
 	 * @return A Set containing the cross references, or an empty
 	 * Set when no cross references could be found. This method does not return null.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public Set<String> mapURL (String sourceURL, String... targetNameSpaces) throws IDMapperException;
+	public Set<String> mapURL (String sourceURL, String... targetURISpaces) throws IDMapperException;
 	
     /**
      * Check whether an URL is known by the given mapping source. This is an optionally supported operation.

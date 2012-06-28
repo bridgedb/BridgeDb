@@ -27,8 +27,8 @@ import org.bridgedb.linkset.LinkSetMapper;
 import org.bridgedb.linkset.XrefLinkSet;
 import org.bridgedb.result.URLMapping;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.ByNameSpaceIterable;
-import org.bridgedb.url.URLIterator;
+import org.bridgedb.url.ByURISpaceIterable;
+import org.bridgedb.url.URISpace;
 import org.bridgedb.url.URLMapper;
 
 /**
@@ -37,9 +37,9 @@ import org.bridgedb.url.URLMapper;
  * 
  * @author Christian
  */
-// removed Iterators due to scale issues URLIterator, XrefIterator,
+// removed Iterators due to scale issues URISpace, XrefIterator,
 public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
-        OpsMapper, URLIterator {
+        OpsMapper, URISpace {
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	protected static final int SQL_COMPAT_VERSION = 4;
@@ -187,7 +187,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     @Override
     public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
-        String query = "SELECT DISTINCT(sourceNameSpace) as nameSpace "
+        String query = "SELECT DISTINCT(sourceURISpace) as URISpace "
                 + "FROM linkSet";
         Statement statement = this.createStatement();
         try {
@@ -201,7 +201,7 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     @Override
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
-        String query = "SELECT DISTINCT(targetNameSpace) as nameSpace "
+        String query = "SELECT DISTINCT(targetURISpace) as URISpace "
                 + "FROM linkSet ";
         Statement statement = this.createStatement();
         try {
@@ -218,10 +218,10 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         StringBuilder query = new StringBuilder ("SELECT ");
         appendVirtuosoTopConditions(query, 0, 1);
         query.append(" * FROM linkSet ");
-        query.append("WHERE sourceNameSpace = '");
-        query.append(src.getNameSpace());
-        query.append("' AND targetNameSpace = '");
-        query.append(tgt.getNameSpace());
+        query.append("WHERE sourceURISpace = '");
+        query.append(src.getURISpace());
+        query.append("' AND targetURISpace = '");
+        query.append(tgt.getURISpace());
         query.append("'");
         this.appendMySQLLimitConditions(query,0, 1);
         Statement statement = this.createStatement();
@@ -287,9 +287,9 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()) {
                 String foundID = rs.getString("linkPredicate");
-                DataSource foundSource = DataSource.getByNameSpace(rs.getString("sourceNameSpace"));
+                DataSource foundSource = DataSource.getByURISpace(rs.getString("sourceURISpace"));
                 String foundPredicate = rs.getString("linkPredicate");
-                DataSource foundTarget = DataSource.getByNameSpace(rs.getString("targetNameSpace"));
+                DataSource foundTarget = DataSource.getByURISpace(rs.getString("targetURISpace"));
                 if (foundSource != source){
                     throw new BridgeDbSqlException("Error regeitering provenaceId " + linkSetId + 
                             " with source " + source + " it clashes with " + foundSource);
@@ -305,12 +305,12 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
                 return;
             }
             query = "INSERT INTO linkSet "
-                    + "(id, sourceNameSpace, linkPredicate, targetNameSpace, isTransitive) " 
+                    + "(id, sourceURISpace, linkPredicate, targetURISpace, isTransitive) " 
                     + "VALUES (" 
                     + "'" + linkSetId + "', " 
-                    + "'" + source.getNameSpace() + "', " 
+                    + "'" + source.getURISpace() + "', " 
                     + "'" + predicate + "', " 
-                    + "'" + target.getNameSpace() + "',"
+                    + "'" + target.getURISpace() + "',"
                     + "'" + booleanIntoQuery(isTransitive) + "')";
             statement.executeUpdate(query);
         } catch (SQLException ex) {
@@ -382,17 +382,17 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     
     //***** URLMapper funtctions  *****
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetNameSpaces) throws IDMapperException {
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws IDMapperException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>>();
         for (String ref:sourceURLs){
-            Set<String> mapped = this.mapURL(ref, targetNameSpaces);
+            Set<String> mapped = this.mapURL(ref, targetURISpaces);
             results.put(ref, mapped);
         }
         return results;
     }
 
     @Override
-    public Set<String> mapURL(String ref, String... targetNameSpaces) throws IDMapperException {
+    public Set<String> mapURL(String ref, String... targetURISpaces) throws IDMapperException {
         if (ref == null) throw new IDMapperException ("Illegal null ref. Please use a URL");
         if (ref.isEmpty()) throw new IDMapperException ("Illegal empty ref. Please use a URL");
         StringBuilder query = new StringBuilder();
@@ -402,13 +402,13 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         query.append("AND sourceURL = '");
             query.append(ref);
             query.append("' ");
-        if (targetNameSpaces.length > 0){    
-            query.append("AND ( targetNameSpace = '");
-                query.append(targetNameSpaces[0]);
+        if (targetURISpaces.length > 0){    
+            query.append("AND ( targetURISpace = '");
+                query.append(targetURISpaces[0]);
                 query.append("' ");
-            for (int i = 1; i < targetNameSpaces.length; i++){
-                query.append("OR targetNameSpace = '");
-                    query.append(targetNameSpaces[i]);
+            for (int i = 1; i < targetURISpaces.length; i++){
+                query.append("OR targetURISpace = '");
+                    query.append(targetURISpaces[i]);
                     query.append("'");
             }
             query.append(")");
@@ -417,11 +417,11 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         try {
             ResultSet rs = statement.executeQuery(query.toString());
             Set<String> results = resultSetToURLSet(rs);
-            if (targetNameSpaces.length == 0){
+            if (targetURISpaces.length == 0){
                results.add(ref); 
             } else {
-                for (String targetNameSpace: targetNameSpaces){
-                    if (ref.startsWith(targetNameSpace)){
+                for (String targetURISpace: targetURISpaces){
+                    if (ref.startsWith(targetURISpace)){
                         results.add(ref);
                     }
                 }
@@ -497,13 +497,13 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     //*** UrlIterator methods ****
 
     @Override
-    public Iterable<String> getURLIterator(String nameSpace) throws IDMapperException {
+    public Iterable<String> getURLIterator(String URISpace) throws IDMapperException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT sourceURL as url ");
         query.append("FROM link, linkSet ");
         query.append("WHERE linkSetId = linkSet.id ");
-        query.append("AND sourceNameSpace = '");
-        query.append(nameSpace);
+        query.append("AND sourceURISpace = '");
+        query.append(URISpace);
         query.append("'");
         Statement statement = this.createStatement();
         try {
@@ -517,37 +517,37 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     @Override
     public Iterable<String> getURLIterator() throws IDMapperException {
-        String query = "SELECT sourceNameSpace as nameSpace FROM linkSet";
+        String query = "SELECT sourceURISpace as URISpace FROM linkSet";
         Statement statement = this.createStatement();
-        Set<String> nameSpaces;
+        Set<String> URISpaces;
         try {
             ResultSet rs = statement.executeQuery(query.toString());
-            nameSpaces = resultSetToNameSpaceSet(rs);
+            URISpaces = resultSetToURISpaceSet(rs);
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IDMapperException("Unable to run query. " + query.toString(), ex);
         }
-        return new ByNameSpaceIterable(nameSpaces, this);
+        return new ByURISpaceIterable(URISpaces, this);
     }
 
     //**** OpsMapper Methods  **/ 
     @Override
     public List<URLMapping> getMappings(List<String> URLs, List<String> sourceURLs, List<String> targetURLs, 
-            List<String> nameSpaces, List<String> sourceNameSpaces, List<String> targetNameSpaces, 
+            List<String> URISpaces, List<String> sourceURISpaces, List<String> targetURISpaces, 
             List<String> linkSetIds, Integer position, Integer limit){
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
         appendVirtuosoTopConditions(query, position, limit);
-        query.append("link.id as linkId, sourceURL, targetURL, linkSetId, sourceNameSpace, linkPredicate, ");
-        query.append("targetNameSpace ");
+        query.append("link.id as linkId, sourceURL, targetURL, linkSetId, sourceURISpace, linkPredicate, ");
+        query.append("targetURISpace ");
         query.append("FROM link, linkSet ");
         query.append("WHERE linkSetId = linkSet.id ");
         appendAllURLconditions(query, URLs);
         appendSourceURLConditions(query, sourceURLs);
         appendTargetURLConditions(query, targetURLs);
-        appendAllNameSpaceConditions(query, nameSpaces);
-        appendSourceNameSpaceConditions(query, sourceNameSpaces);
-        appendTargetNameSpaceConditions(query, targetNameSpaces);
+        appendAllURISpaceConditions(query, URISpaces);
+        appendSourceURISpaceConditions(query, sourceURISpaces);
+        appendTargetURISpaceConditions(query, targetURISpaces);
         appendLinkSetConditions(query, linkSetIds);
         appendMySQLLimitConditions(query, position, limit);
         try {
@@ -564,8 +564,8 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     @Override
     public URLMapping getMapping(int id) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT link.id as linkId, sourceURL, targetURL, linkSetId, sourceNameSpace, linkPredicate, ");
-            query.append("targetNameSpace ");
+        query.append("SELECT link.id as linkId, sourceURL, targetURL, linkSetId, sourceURISpace, linkPredicate, ");
+            query.append("targetURISpace ");
         query.append("FROM link, linkSet ");
         query.append("WHERE linkSetId = linkSet.id ");
         query.append("AND link.id  = ");
@@ -621,14 +621,14 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     /**
      * DOES NOT SCALE
-     * @param nameSpaces
+     * @param URISpaces
      * @param linkSetIds
      * @param position
      * @param limit
      * @return
      * @throws IDMapperException 
      */
-    public List<String> getURLs(List<String> nameSpaces, List<String> linkSetIds, Integer position, Integer limit) 
+    public List<String> getURLs(List<String> URISpaces, List<String> linkSetIds, Integer position, Integer limit) 
             throws IDMapperException{
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
@@ -636,13 +636,13 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         query.append("sourceURL as url ");
         query.append("FROM link, linkSet ");
         query.append("WHERE linkSetId = linkSet.id ");
-        appendSourceNameSpaceConditions(query, nameSpaces);
+        appendSourceURISpaceConditions(query, URISpaces);
         appendLinkSetConditions(query, linkSetIds);
         query.append("UNION ");
         query.append("SELECT targetURL as url ");
         query.append("FROM link, linkSet ");
         query.append("WHERE linkSetId = linkSet.id ");
-        appendTargetNameSpaceConditions(query, nameSpaces);
+        appendTargetURISpaceConditions(query, URISpaces);
         appendLinkSetConditions(query, linkSetIds);
         appendMySQLLimitConditions(query, position, limit);
         Statement statement = this.createStatement();
@@ -676,9 +676,9 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     public OverallStatistics getOverallStatistics() throws IDMapperException {
         int numberOfMappings = getMappingsCount();
         String linkSetQuery = "SELECT count(distinct(id)) as numberOfLinkSets, "
-                + "count(distinct(linkSet.sourceNameSpace)) as numberOfSourceDataSources, "
+                + "count(distinct(linkSet.sourceURISpace)) as numberOfSourceDataSources, "
                 + "count(distinct(linkSet.linkPredicate)) as numberOfPredicates, "
-                + "count(distinct(linkSet.targetNameSpace)) as numberOfTargetDataSources "
+                + "count(distinct(linkSet.targetURISpace)) as numberOfTargetDataSources "
                 + "FROM linkSet ";
         Statement statement = this.createStatement();
         try {
@@ -771,8 +771,8 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     public Set<XrefLinkSet> mapIDwithLinkSet(Xref ref, List<String> linkSetIds, 
             List<DataSource> targetDataSources) throws IDMapperException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT link.id as linkId, sourceURL, targetURL, linkSet.id as linkSetId, sourceNameSpace, linkPredicate, ");
-            query.append("targetNameSpace ");
+        query.append("SELECT link.id as linkId, sourceURL, targetURL, linkSet.id as linkSetId, sourceURISpace, linkPredicate, ");
+            query.append("targetURISpace ");
         query.append("FROM link, linkSet ");
         query.append("WHERE linkSetId = linkSet.id ");
         appendSourceXref(query, ref);
@@ -789,14 +789,14 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
 
     @Override
     public Set<URLMapping> mapURL(List<String> sourceURLs, 
-            List<String> linkSetIds, List<String> targetNameSpaces) throws IDMapperException {
+            List<String> linkSetIds, List<String> targetURISpaces) throws IDMapperException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT link.id as linkId, sourceURL, targetURL, linkSetId, sourceNameSpace, linkPredicate, ");
-            query.append("targetNameSpace ");
+        query.append("SELECT link.id as linkId, sourceURL, targetURL, linkSetId, sourceURISpace, linkPredicate, ");
+            query.append("targetURISpace ");
         query.append("FROM link, linkSet ");
         query.append("WHERE linkSetId = linkSet.id ");
         appendSourceURLConditions(query, sourceURLs);
-        appendTargetNameSpaceConditions(query, targetNameSpaces);
+        appendTargetURISpaceConditions(query, targetURISpaces);
         appendLinkSetConditions(query, linkSetIds);
         try {
             Statement statement = this.createAStatement();
@@ -831,18 +831,18 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     
     private void appendAllDataSourceConditions(StringBuilder query, List<DataSource> dataSources){
         if (!dataSources.isEmpty()){
-            query.append("AND (sourceNameSpace = '");
-                query.append(dataSources.get(0).getNameSpace());
+            query.append("AND (sourceURISpace = '");
+                query.append(dataSources.get(0).getURISpace());
                 query.append("' ");
-            query.append("OR targetNameSpace = '");
-                query.append(dataSources.get(0).getNameSpace());
+            query.append("OR targetURISpace = '");
+                query.append(dataSources.get(0).getURISpace());
                 query.append("' ");
             for (int i = 1; i < dataSources.size(); i++){
-                query.append("OR sourceNameSpace = '");
-                    query.append(dataSources.get(i).getNameSpace());
+                query.append("OR sourceURISpace = '");
+                    query.append(dataSources.get(i).getURISpace());
                     query.append("' ");                
-                query.append("OR targetNameSpace = '");
-                    query.append(dataSources.get(i).getNameSpace());
+                query.append("OR targetURISpace = '");
+                    query.append(dataSources.get(i).getURISpace());
                     query.append("' ");
             }
             query.append(") ");
@@ -852,12 +852,12 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     private void appendSourceDataSources(StringBuilder query, List<DataSource> sourceDataSources){ 
         if (!sourceDataSources.isEmpty()){    
             Iterator<DataSource> iterator = sourceDataSources.iterator();
-            query.append("AND (sourceNameSpace = '");
-                query.append(iterator.next().getNameSpace());
+            query.append("AND (sourceURISpace = '");
+                query.append(iterator.next().getURISpace());
                 query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR sourceNameSpace = '");
-                query.append(iterator.next().getNameSpace());
+                query.append("OR sourceURISpace = '");
+                query.append(iterator.next().getURISpace());
                     query.append("' ");
             }
             query.append(")");
@@ -867,12 +867,12 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     private void appendTargetDataSources(StringBuilder query, Collection<DataSource> targetDataSources){
         if (!targetDataSources.isEmpty()){    
             Iterator<DataSource> iterator = targetDataSources.iterator();
-            query.append("AND (targetNameSpace = '");
-                query.append(iterator.next().getNameSpace());
+            query.append("AND (targetURISpace = '");
+                query.append(iterator.next().getURISpace());
                 query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR targetNameSpace = '");
-                query.append(iterator.next().getNameSpace());
+                query.append("OR targetURISpace = '");
+                query.append(iterator.next().getURISpace());
                     query.append("' ");
             }
             query.append(")");
@@ -928,48 +928,48 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         } 
     }
     
-    private void appendAllNameSpaceConditions(StringBuilder query,List<String> nameSpaces){
-        if (!nameSpaces.isEmpty()){
-            query.append("AND (sourceNameSpace = '");
-                query.append(nameSpaces.get(0));
+    private void appendAllURISpaceConditions(StringBuilder query,List<String> URISpaces){
+        if (!URISpaces.isEmpty()){
+            query.append("AND (sourceURISpace = '");
+                query.append(URISpaces.get(0));
                 query.append("' ");
-            query.append("OR targetNameSpace = '");
-                query.append(nameSpaces.get(0));
+            query.append("OR targetURISpace = '");
+                query.append(URISpaces.get(0));
                 query.append("' ");
-            for (int i = 1; i < nameSpaces.size(); i++){
-                query.append("OR sourceNameSpace = '");
-                    query.append(nameSpaces.get(i));
+            for (int i = 1; i < URISpaces.size(); i++){
+                query.append("OR sourceURISpace = '");
+                    query.append(URISpaces.get(i));
                     query.append("' ");                
-                query.append("OR targetNameSpace = '");
-                    query.append(nameSpaces.get(i));
+                query.append("OR targetURISpace = '");
+                    query.append(URISpaces.get(i));
                     query.append("' ");
             }
             query.append(") ");
         }
     }
 
-    private void appendSourceNameSpaceConditions(StringBuilder query, List<String> sourceNameSpaces){
-        if (!sourceNameSpaces.isEmpty()){
-            query.append("AND (sourceNameSpace = '");
-                query.append(sourceNameSpaces.get(0));
+    private void appendSourceURISpaceConditions(StringBuilder query, List<String> sourceURISpaces){
+        if (!sourceURISpaces.isEmpty()){
+            query.append("AND (sourceURISpace = '");
+                query.append(sourceURISpaces.get(0));
                 query.append("' ");
-            for (int i = 1; i < sourceNameSpaces.size(); i++){
-                query.append("OR sourceNameSpace = '");
-                    query.append(sourceNameSpaces.get(i));
+            for (int i = 1; i < sourceURISpaces.size(); i++){
+                query.append("OR sourceURISpace = '");
+                    query.append(sourceURISpaces.get(i));
                     query.append("' ");                
             }
             query.append(")");
         }
     }
     
-    private void appendTargetNameSpaceConditions(StringBuilder query, Collection<String> targetNameSpaces){
-        if (!targetNameSpaces.isEmpty()){
-            Iterator<String> iterator = targetNameSpaces.iterator();
-            query.append("AND (targetNameSpace = '");
+    private void appendTargetURISpaceConditions(StringBuilder query, Collection<String> targetURISpaces){
+        if (!targetURISpaces.isEmpty()){
+            Iterator<String> iterator = targetURISpaces.iterator();
+            query.append("AND (targetURISpace = '");
                 query.append(iterator.next());
                 query.append("' ");
             while (iterator.hasNext()){
-                query.append("OR targetNameSpace = '");
+                query.append("OR targetURISpace = '");
                     query.append(iterator.next());
                     query.append("' ");                
             }
@@ -1006,8 +1006,8 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         HashSet<DataSource> results = new HashSet<DataSource>();
         try {
             while (rs.next()){
-                String nameSpace = rs.getString("nameSpace");
-                DataSource ds = DataSource.getByNameSpace(nameSpace);
+                String URISpace = rs.getString("URISpace");
+                DataSource ds = DataSource.getByURISpace(URISpace);
                 results.add(ds);
             }
         } catch (SQLException ex) {
@@ -1016,11 +1016,11 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         return results;
     }
 
-    private Set<String> resultSetToNameSpaceSet(ResultSet rs ) throws IDMapperException{
+    private Set<String> resultSetToURISpaceSet(ResultSet rs ) throws IDMapperException{
         HashSet<String> results = new HashSet<String>();
         try {
             while (rs.next()){
-                results.add(rs.getString("nameSpace"));
+                results.add(rs.getString("URISpace"));
             }
         } catch (SQLException ex) {
             throw new IDMapperException("Unable to parse results.", ex);
@@ -1045,8 +1045,8 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
         try {
             while (rs.next()){
                 Integer count = rs.getInt("linkCount");
-                results.add(new LinkSetInfo(rs.getString("id"), rs.getString("sourceNameSpace"), 
-                        rs.getString("linkPredicate"), rs.getString("targetNameSpace"), count, 
+                results.add(new LinkSetInfo(rs.getString("id"), rs.getString("sourceURISpace"), 
+                        rs.getString("linkPredicate"), rs.getString("targetURISpace"), count, 
                         rs.getBoolean("isTransitive")));
             }
         } catch (SQLException ex) {
@@ -1287,9 +1287,9 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
          	sh.execute(	"CREATE TABLE                                                       "    
 					+ "		linkSet                                                      " 
 					+ " (   id VARCHAR(" + LINK_SET_ID_LENGTH + ") PRIMARY KEY,           " 
-                    + "     sourceNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ") NOT NULL,    "
+                    + "     sourceURISpace VARCHAR(" + NAME_SPACE_LENGTH + ") NOT NULL,    "
                     + "     linkPredicate   VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL,       "
-                    + "     targetNameSpace VARCHAR(" + NAME_SPACE_LENGTH + ")  NOT NULL,   "
+                    + "     targetURISpace VARCHAR(" + NAME_SPACE_LENGTH + ")  NOT NULL,   "
                     + "     isTransitive    SMALLINT, "
                     + "     linkCount INT                                                   "
 					+ " ) "); 
