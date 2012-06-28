@@ -40,6 +40,7 @@
   	<module>org.bridgedb.ws.sqlserver</module>
   	<module>org.bridgedb.ws.client</module>
   	<module>org.bridgedb.ws.ops.client</module>
+  	<module>org.bridgedb.transitive</module>
   </modules>
   
   	<build>
