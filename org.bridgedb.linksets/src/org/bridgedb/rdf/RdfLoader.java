@@ -17,8 +17,6 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public interface RdfLoader {
     
-    public void clear() throws IDMapperLinksetException;
-    
     public String getDefaultBaseURI();
 
     public void validateAndSaveVoid(Statement firstMap) throws RDFHandlerException;

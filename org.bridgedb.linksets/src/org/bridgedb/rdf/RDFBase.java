@@ -41,6 +41,9 @@ public abstract class RDFBase implements RdfLoader{
     public synchronized void validateAndSaveVoid(Statement firstMap) throws RDFHandlerException{
         Reporter.report("Validation started");
         validate(firstMap);
+        for (Statement st:statements){
+            System.out.println(st);
+        }
         saveStatements();
         System.out.println("Statements closed");
     }
@@ -48,9 +51,6 @@ public abstract class RDFBase implements RdfLoader{
     abstract void saveStatements() throws RDFHandlerException;
 
     private void validate(Statement firstMap) throws RDFHandlerException {
-        for (Statement st:statements){
-            System.out.println(st);
-        }
         linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, VoidConstants.LINKSET);
         //Provide details of the licence under which the dataset is published using the dcterms:license property.
         findOneofManyObject(linksetResource, DctermsConstants.LICENSE);
@@ -59,7 +59,7 @@ public abstract class RDFBase implements RdfLoader{
         subjectURISpace = validateDataSetAndExtractUriSpace(firstMap.getSubject(), VoidConstants.SUBJECTSTARGET);
         targetURISpace = validateDataSetAndExtractUriSpace(firstMap.getObject(), VoidConstants.OBJECTSTARGET);
         isTransative = checkIsTransative();
-    }
+     }
     
     private void validateLinksetProvenance() throws RDFHandlerException {
         Value by = findPossibleObject(linksetResource, PavConstants.AUTHORED_BY);
@@ -123,7 +123,7 @@ public abstract class RDFBase implements RdfLoader{
                     System.out.println(st);
                     Resource dataSetId =  st.getSubject();
                     checkStatementExists(linksetResource, VoidConstants.TARGET, dataSetId);
-                    Statement newStatement = new StatementImpl(dataSetId, targetPredicate, uriValue);
+                    Statement newStatement = new StatementImpl(dataSetId, targetPredicate, dataSetId);
                     System.out.println(newStatement);
                     statements.add(newStatement);
                     System.out.println(dataSetId);
