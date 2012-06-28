@@ -298,11 +298,19 @@ public abstract class OpsMapperTest extends URLMapperTestBase {
         assertThat (results.size(), greaterThanOrEqualTo(6));
         boolean found = false;
         for (LinkSetInfo info:results){
-            if (info.getId().equals(link3to2)){
+            if (info.getId().equals(link3to1)){
                 found = true;
                 assertEquals(TEST_PREDICATE, info.getPredicate());
                 assertEquals(nameSpace3, info.getSourceNameSpace());
+                assertEquals(nameSpace1, info.getTargetNameSpace());
+                assertTrue(info.isTransitive());
+                assertEquals(new Integer(3), info.getNumberOfLinks());
+            }
+            if (info.getId().equals(link1to2)){
+                assertEquals(TEST_PREDICATE, info.getPredicate());
+                assertEquals(nameSpace1, info.getSourceNameSpace());
                 assertEquals(nameSpace2, info.getTargetNameSpace());
+                assertFalse(info.isTransitive());
                 assertEquals(new Integer(3), info.getNumberOfLinks());
             }
         }
