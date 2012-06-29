@@ -1,0 +1,27 @@
+@prefix : <#> .
+
+:linkset2Transitive3 a <http://rdfs.org/ns/void#Linkset> ;
+   <http://rdfs.org/ns/void#subjectsTarget> <http://localhost:8080/OPS-IMS/linkset/1/#TestDS2> ; 
+   <http://rdfs.org/ns/void#objectsTarget> <http://localhost:8080/OPS-IMS/linkset/3/#TestDS3> ; 
+   <http://rdfs.org/ns/void#linkPredicate> <http://www.bridgedb.org/test#testPredicate> ; 
+   <http://purl.org/dc/terms/license> "Who cares this is a test" ; 
+   <http://purl.org/pav/2.0/derivedOn> "2012-06-29T14:44:25.835+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime>  ; 
+   <http://purl.org/pav/2.0/derivedBy> "TransativeCreator" ;
+   <http://purl.org/pav/2.0/derivedFrom> <http://localhost:8080/OPS-IMS/linkset/1/#Test1_2> ; 
+   <http://purl.org/pav/2.0/derivedFrom> <http://localhost:8080/OPS-IMS/linkset/3/#Test1_3> . 
+
+<http://localhost:8080/OPS-IMS/linkset/1/#TestDS2> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://rdfs.org/ns/void#Dataset>  . 
+<http://localhost:8080/OPS-IMS/linkset/1/#TestDS2> <http://purl.org/dc/terms/license> "Who cares this is a test"  . 
+<http://localhost:8080/OPS-IMS/linkset/1/#TestDS2> <http://purl.org/dc/terms/subject> "absolutely nothing"  . 
+<http://localhost:8080/OPS-IMS/linkset/1/#TestDS2> <http://rdfs.org/ns/void#uriSpace> <http://www.example.com/>  . 
+<http://localhost:8080/OPS-IMS/linkset/1/#TestDS2> <http://purl.org/pav/2.0/importedOn> "2012-02-22"^^<http://www.w3.org/2001/XMLSchema#date>  . 
+
+<http://localhost:8080/OPS-IMS/linkset/3/#TestDS3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://rdfs.org/ns/void#Dataset>  . 
+<http://localhost:8080/OPS-IMS/linkset/3/#TestDS3> <http://purl.org/dc/terms/license> "Who cares this is a test"  . 
+<http://localhost:8080/OPS-IMS/linkset/3/#TestDS3> <http://purl.org/dc/terms/subject> "absolutely nothing"  . 
+<http://localhost:8080/OPS-IMS/linkset/3/#TestDS3> <http://rdfs.org/ns/void#uriSpace> <http://www.example.org#>  . 
+<http://localhost:8080/OPS-IMS/linkset/3/#TestDS3> <http://purl.org/pav/2.0/retrievedOn> "2012-02-22"^^<http://www.w3.org/2001/XMLSchema#date>  . 
+
+<http://www.example.com/123> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#123> . 
+<http://www.example.com/456> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#456> . 
+<http://www.example.com/789> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#789> . 
