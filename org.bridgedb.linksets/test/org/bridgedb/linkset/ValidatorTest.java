@@ -30,9 +30,6 @@ public class ValidatorTest {
         Reporter.report("sample1to3.ttl");
         String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "validate"};
         LinksetLoader.main (args2);
-        Reporter.report("sample2to3.ttl");
-        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "validate"};
-        LinksetLoader.main (args3);
     }
 
     @Test

@@ -12,6 +12,10 @@ import org.openrdf.rio.RDFHandlerException;
  * @author Christian
  */
 public class LinksetValidator extends RDFBase implements RdfLoader{
+    
+    public LinksetValidator(){
+        super(true);
+    }
 
     @Override
     void saveStatements() throws RDFHandlerException {
