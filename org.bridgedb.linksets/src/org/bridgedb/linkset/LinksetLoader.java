@@ -29,7 +29,14 @@ public class LinksetLoader {
             if (args[1].equals("load")){
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
                 URLLinkListener listener = new MysqlMapper(sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, false);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, true, false);
+                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
+                handler.parse (args[0]);
+                System.out.println("Loading of " + args[0] + " successful");
+            } else if (args[1].equals("force")){
+                SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
+                URLLinkListener listener = new MysqlMapper(sqlAccess);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, false, false);
                 LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
                 handler.parse (args[0]);
                 System.out.println("Loading of " + args[0] + " successful");
@@ -42,7 +49,15 @@ public class LinksetLoader {
             } else if (args[1].equals("new")){
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
                 URLLinkListener listener = new MysqlMapper(true, sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, true);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, true, true);
+                System.out.println("rdf clear");
+                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
+                handler.parse (args[0]);
+                System.out.println("Clear Loading of " + args[0] + " successful");
+            } else if (args[1].equals("forcenew")){
+                SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
+                URLLinkListener listener = new MysqlMapper(true, sqlAccess);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, false, true);
                 System.out.println("rdf clear");
                 LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
                 handler.parse (args[0]);

@@ -10,6 +10,7 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.rio.RDFHandlerException;
 
@@ -24,9 +25,11 @@ public abstract class RDFBase implements RdfLoader{
     private String targetURISpace;
     private Resource linksetResource;
     private boolean isTransative;
-
-    public RDFBase() {
-        System.out.println("Statements created");
+    private boolean strict;
+    private final Value UNSPECIFIED = new LiteralImpl("Unspecified");
+   
+    public RDFBase(boolean strict) {
+        this.strict = strict;
     }
         
     @Override
@@ -53,7 +56,7 @@ public abstract class RDFBase implements RdfLoader{
     private void validate(Statement firstMap) throws RDFHandlerException {
         linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, VoidConstants.LINKSET);
         //Provide details of the licence under which the dataset is published using the dcterms:license property.
-        findOneofManyObject(linksetResource, DctermsConstants.LICENSE);
+        checkObject(linksetResource, DctermsConstants.LICENSE);
         //The linkset authorship, i.e. the agent that generated the intellectual knowledge
         validateLinksetProvenance();
         subjectURISpace = validateDataSetAndExtractUriSpace(firstMap.getSubject(), VoidConstants.SUBJECTSTARGET);
@@ -82,8 +85,12 @@ public abstract class RDFBase implements RdfLoader{
             findTheSingletonObject(linksetResource, DctermsConstants.CREATED);
             return;
         }
-        throw new RDFHandlerException(linksetResource + " must have " + PavConstants.AUTHORED_BY + ", " + 
-                PavConstants.DERIVED_BY + ", " + PavConstants.CREATED_BY + " or " + DctermsConstants.CREATOR);
+        if (strict){
+            throw new RDFHandlerException(linksetResource + " must have " + PavConstants.AUTHORED_BY + ", " + 
+                    PavConstants.DERIVED_BY + ", " + PavConstants.CREATED_BY + " or " + DctermsConstants.CREATOR);
+        }
+        Statement licenseStatement = new StatementImpl(linksetResource, PavConstants.CREATED_BY, UNSPECIFIED);
+        statements.add(licenseStatement);
     }
 
 
@@ -104,11 +111,11 @@ public abstract class RDFBase implements RdfLoader{
         System.out.println(targetPredicate + " -> " + dataSetId);
         checkStatementExists(dataSetId, RdfConstants.TYPE_URI, VoidConstants.DATASET);
         //Provide details of the licence under which the dataset is published using the dcterms:license property.
-        findOneofManyObject(dataSetId, DctermsConstants.LICENSE);
+        checkObject(dataSetId, DctermsConstants.LICENSE);
         //There must be a version or a Date
         checkHasVersionOrDate(dataSetId);
         //The type of the resource being linked is declared with the dcterm:subject predicate.
-        findOneofManyObject(dataSetId, DctermsConstants.SUBJECT);        
+        checkObject(dataSetId, DctermsConstants.SUBJECT);      
         //The URI namespace for the resources being linked is declared using the void:uriSpace property
         Value uriValue = findTheSingletonObject(dataSetId, VoidConstants.URI_SPACE);
         String uriSpace = uriValue.stringValue();
@@ -153,10 +160,15 @@ public abstract class RDFBase implements RdfLoader{
         if (date != null) return;
         date = findPossibleSingletonObject (dataSetId, PavConstants.RETRIEVED_ON);
         if (date != null) return;
-        throw new RDFHandlerException ("Could not find a Version for DataSet " + dataSetId + 
-                " Please include at least one of " + PavConstants.VERSION + ", " + PavConstants.CREATED_ON + ", " 
-                + PavConstants.DERIVED_ON + ", " + PavConstants.IMPORTED_ON + ", " + PavConstants.MODIFIED_ON + ", " +
-                PavConstants.RETRIEVED_ON);
+        if (strict || !(dataSetId instanceof Resource)) {
+            throw new RDFHandlerException ("Could not find a Version for DataSet " + dataSetId + 
+                    " Please include at least one of " + PavConstants.VERSION + ", " + PavConstants.CREATED_ON + ", " 
+                    + PavConstants.DERIVED_ON + ", " + PavConstants.IMPORTED_ON + ", " + 
+                    PavConstants.MODIFIED_ON + ", " + PavConstants.RETRIEVED_ON);
+        }
+        Resource subjectR = (Resource)dataSetId;
+        Statement versionStatement = new StatementImpl(subjectR, PavConstants.VERSION, UNSPECIFIED);
+        statements.add(versionStatement);
    }
     
        @Override
@@ -244,13 +256,19 @@ public abstract class RDFBase implements RdfLoader{
         return object;
     }
 
-    private Value findOneofManyObject (Value subject, URI predicate) throws RDFHandlerException{
+    private void checkObject (Value subject, URI predicate) throws RDFHandlerException{
         for (Statement st:statements){
             if (st.getSubject().equals(subject) && st.getPredicate().equals(predicate)){
-                return st.getObject();
+                return ;
             }
         }
-        throw new RDFHandlerException ("Found no statement with subject " + subject +  " and predicate " + predicate);
+        if (strict || (!(subject instanceof Resource))){
+            throw new RDFHandlerException (subject + " does not have a " + predicate);
+        } else {
+            Resource subjectR = (Resource)subject;
+            Statement newStatement = new StatementImpl(subjectR, predicate, UNSPECIFIED);
+            statements.add(newStatement);
+        }
    }
 
    private void checkStatementExists (Value subject, URI predicate, Value object) throws RDFHandlerException{
