@@ -1,5 +1,10 @@
 package org.bridgedb.linkset.transative;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,12 +50,38 @@ public class TransativeCreator {
     Value targetDataSet;
     StringBuilder output;
     Value newPredicate;
+    BufferedWriter buffer;
     
     private Resource ANY_SUBJECT = null;
     
-    public TransativeCreator(int leftId, int rightId) throws BridgeDbSqlException, RDFHandlerException{
+    public TransativeCreator(int leftId, int rightId, String possibleFileName) 
+            throws BridgeDbSqlException, RDFHandlerException, IOException{
+        if (possibleFileName != null && !possibleFileName.isEmpty()){
+            createBufferedWriter(possibleFileName);
+        } else {
+             createBufferedWriter(leftId, rightId);
+        }
         leftContext = RdfWrapper.getLinksetURL(leftId);
         rightContext = RdfWrapper.getLinksetURL(rightId);
+        getVoid(leftId, rightId);
+        getSQL();
+    }
+ 
+    private void createBufferedWriter(String fileName) throws IOException {
+        File file = new File(fileName);
+        //if (!file.canWrite()){
+        //    throw new IOException("Unable to write to " + file.getAbsolutePath());
+        //}
+        FileWriter writer = new FileWriter(file);
+        buffer = new BufferedWriter(writer);
+        buffer.flush();
+    }
+
+    private void createBufferedWriter(int leftId, int rightId) throws IOException {
+        createBufferedWriter ("linkset " + leftId + "Transitive" + rightId + ".ttl");
+    }
+
+    private synchronized void getVoid(int leftId, int rightId) throws RDFHandlerException, IOException{
         connection = RdfWrapper.setupConnection(RdfStoreType.MAIN);
         leftLinkSet = getLinkSet(leftContext);
         rightLinkSet = getLinkSet(rightContext);
@@ -68,8 +99,9 @@ public class TransativeCreator {
         
         RdfWrapper.shutdown(connection);
         System.out.println(output.toString());
+        buffer.write(output.toString());
     }
- 
+    
     private void showContext(URI context) throws RDFHandlerException{
         List<Statement> statements = RdfWrapper.getStatementList(connection, null, null, null, context);
         for (Statement statement:statements){
@@ -100,12 +132,13 @@ public class TransativeCreator {
     }
     
     private void registerNewLinkset(int left, int right) throws RDFHandlerException {
+        output.append("\n");
         output.append(":linkset");
             output.append(left);
             output.append("Transitive");
             output.append(right);
             output.append(" a ");
-            writeValue(VoidConstants.DATASET);
+            writeValue(VoidConstants.LINKSET);
             output.append(";\n");
         output.append("   ");   
             writeValue(VoidConstants.SUBJECTSTARGET);
@@ -117,7 +150,7 @@ public class TransativeCreator {
             output.append("; \n");  
         addPredicate();
         addLiscence(leftLinkSet, leftContext);
-        addCreated();
+        addDrived();
     }
 
     private void writeValue(Value value){
@@ -155,12 +188,12 @@ public class TransativeCreator {
             output.append("; \n");      
     }
     
-    private void addCreated() throws RDFHandlerException {
+    private void addDrived() throws RDFHandlerException {
         try {
             GregorianCalendar c = new GregorianCalendar();
             XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
             output.append("   ");
-                writeValue(PavConstants.CREATED_ON);  
+                writeValue(PavConstants.DERIVED_ON);  
                 writeValue(new CalendarLiteralImpl(date2));
                 output.append(" ; \n");
         } catch (DatatypeConfigurationException ex) {
@@ -168,11 +201,20 @@ public class TransativeCreator {
             throw new RDFHandlerException ("Date conversion exception ", ex);
         }
         output.append("   ");
-            writeValue(PavConstants.CREATED_BY);   
-            output.append("TransativeCreator ;\n");
+            writeValue(PavConstants.DERIVED_BY);   
+            output.append("\"TransativeCreator\" ;\n");
+        output.append("   ");   
+            writeValue(PavConstants.DERIVED_FROM);
+            writeValue(leftLinkSet);   
+            output.append("; \n");   
+        output.append("   ");   
+            writeValue(PavConstants.DERIVED_FROM);
+            writeValue(rightLinkSet);   
+            output.append(". \n");   
     }
 
     private void registerDataSet(Value dataSet, URI context) throws RDFHandlerException {
+        output.append("\n");
         List<Statement> statements = 
                 RdfWrapper.getStatementList(connection, dataSet, null, null, context);
         for (Statement statemement:statements){
@@ -183,37 +225,59 @@ public class TransativeCreator {
         }
     }
 
-   /* public void createTransative(String SourceLinkset, String TargetLinkset, String outfile) throws BridgeDbSqlException{
+    private void getSQL() throws BridgeDbSqlException, IOException {
+        buffer.newLine();
+        StringBuilder query = new StringBuilder("SELECT link1.sourceURL, link2.targetURL ");
+        query.append("FROM link link1, link link2 ");
+        query.append("WHERE link1.targetURL = link2.sourceURL ");
+        query.append("AND link1.linkSetId = \"");
+            query.append(leftContext);
+            query.append("\"");
+        query.append("AND link2.linkSetId = \"");
+            query.append(rightContext);
+            query.append("\"");
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         Connection connection = sqlAccess.getConnection();
-        StringBuilder query = new StringBuilder("select concat(\"<\", link1.sourceURL,\"> ");
-        query.append("<http://www/bridgebd.org/mapsTo> <\", link2.targetURL, \"> .\") ");
-        query.append(" from link link1, link link2 ");
-        query.append(" where link1.targetURL = link2.sourceURL");
-        query.append(" and link1.linkSetId = \"");
-        query.append("http://openphacts.cs.man.ac.uk:9090/OPS-IMS/linkset/27/#conceptwiki_swissprot");
-        query.append("\" and link2.linkSetId = \"");
-        query.append("http://openphacts.cs.man.ac.uk:9090/OPS-IMS/linkset/21/#chembl_uniprot/inverted");
-        query.append("\" into outfile \"");
-        query.append("/var/local/ims/linksets/cw_chembl-target.ttl");
-        query.append("\";");
-        Statement statement;
+        java.sql.Statement statement;
         try {
             statement = connection.createStatement();
         } catch (SQLException ex) {
            throw new BridgeDbSqlException("Unable to get statement. ", ex);
         }
         try {
+            System.out.println("Running " + query.toString());
             ResultSet rs = statement.executeQuery(query.toString());
-            return;
+            System.out.println("processing results");
+            while (rs.next()){
+                String sourceUrl = rs.getString("sourceUrl");
+                String targetUrl = rs.getString("targetUrl");
+                buffer.write("<" + sourceUrl + "> <" + newPredicate + "> <" + targetUrl + "> . "); 
+                buffer.newLine();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }
-
-    }*/
+        buffer.flush();
+        buffer.close();
+    }
     
-    public static void main(String[] args) throws BridgeDbSqlException, RDFHandlerException  {
-        new TransativeCreator(2,3);
+    private static void usage() {
+        System.out.println("Welcome to the OPS Transative Linkset Creator.");
+        System.out.println("This methods requires the number of the two linksest being combined.");
+        System.out.println ("Optional third parameter if the file name to write to.");
+        System.out.println ("If no filename provided output file will be linkset(leftid)Transitive(rightid).ttl");
+        System.out.println("Please run this again with two paramters");
+        System.exit(1);
+    }
+
+    public static void main(String[] args) throws BridgeDbSqlException, RDFHandlerException, IOException  {
+        if (args.length < 2 || args.length > 3){
+            usage();    
+        }
+        int leftId = Integer.parseInt(args[0]);
+        int rightId = Integer.parseInt(args[1]);
+        new TransativeCreator(leftId, rightId, args[2]);
     }
 
 }
