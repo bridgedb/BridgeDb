@@ -72,13 +72,18 @@ public abstract class RDFBase implements RdfLoader{
             findTheSingletonObject(linksetResource, PavConstants.CREATED_ON);
             return;
         }
+        by = findPossibleObject(linksetResource, PavConstants.DERIVED_BY);
+        if (by != null){
+            findTheSingletonObject(linksetResource, PavConstants.DERIVED_ON);
+            return;
+        }
         by = findPossibleObject(linksetResource, DctermsConstants.CREATOR);
         if (by != null){
             findTheSingletonObject(linksetResource, DctermsConstants.CREATED);
             return;
         }
         throw new RDFHandlerException(linksetResource + " must have " + PavConstants.AUTHORED_BY + ", " + 
-                PavConstants.CREATED_BY + " or " + DctermsConstants.CREATOR);
+                PavConstants.DERIVED_BY + ", " + PavConstants.CREATED_BY + " or " + DctermsConstants.CREATOR);
     }
 
 
