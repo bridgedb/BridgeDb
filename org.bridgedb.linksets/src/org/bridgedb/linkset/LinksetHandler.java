@@ -43,46 +43,37 @@ public class LinksetHandler extends RDFHandlerBase{
     LinksetHandler(URLLinkListener listener, RdfLoader rdfLoader) throws IDMapperLinksetException  {
         try {
             this.listener = listener;
-            listener.openInput();
             this.rdfLoader = rdfLoader;                
          } catch (Exception ex) {
             throw new IDMapperLinksetException ("Unable to create LinksetHandler ", ex);
         }
     }
     
-    void parse (String fileName) throws IDMapperLinksetException  {
-        File file = new File(fileName);
-        parse(file);
-    }
-    
-    void parse (File file) throws IDMapperLinksetException  {
-        if (file.isDirectory()){
-            File[] children = file.listFiles();
-            for (File child:children){
-                parse(child);
-            }
-        } else {
-            Reporter.report("Parsing " + file.getAbsolutePath());
-            FileReader reader = null;
+    void parse (File file) throws IDMapperException  {
+        if (!file.isFile()){
+            throw new IDMapperException (file.getAbsolutePath() + " is not a file");
+        }
+        Reporter.report("Parsing " + file.getAbsolutePath());
+        listener.openInput();
+        FileReader reader = null;
+        try {
+            RDFParser parser = new TurtleParser();
+            parser.setRDFHandler(this);
+            parser.setParseErrorListener(new LinksetParserErrorListener());
+            parser.setVerifyData(true);
+            reader = new FileReader(file);
+            parser.parse (reader, getDefaultBaseURI());
+        } catch (IOException ex) {
+            throw new IDMapperLinksetException("Error reading file " + file.getAbsolutePath() + " " + ex.getMessage(), ex);
+        } catch (OpenRDFException ex) {
+            throw new IDMapperLinksetException("Error parsing file " + file.getAbsolutePath()+ " " + ex.getMessage(), ex);
+        } finally {
             try {
-                RDFParser parser = new TurtleParser();
-                parser.setRDFHandler(this);
-                parser.setParseErrorListener(new LinksetParserErrorListener());
-                parser.setVerifyData(true);
-                reader = new FileReader(file);
-                parser.parse (reader, getDefaultBaseURI());
-            } catch (IOException ex) {
-                throw new IDMapperLinksetException("Error reading file " + file.getAbsolutePath() + " " + ex.getMessage(), ex);
-            } catch (OpenRDFException ex) {
-                throw new IDMapperLinksetException("Error parsing file " + file.getAbsolutePath()+ " " + ex.getMessage(), ex);
-            } finally {
-                try {
-                    if (reader != null){
-                        reader.close();
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
+                if (reader != null){
+                    reader.close();
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
