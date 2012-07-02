@@ -3,35 +3,37 @@
  * and open the template in the editor.
  */
 package org.bridgedb.linkset;
+import org.bridgedb.linkset.*;
 
 import java.io.IOException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
+import org.junit.Test;
 import org.openrdf.OpenRDFException;
 
 /**
- * WARNING overwrites the live database
  * @author Christian
  */
-public class LinksetMainLoader {
+public class LinksetLoaderTest {
         
-    public static void main(String[] args) throws IDMapperException, IOException, OpenRDFException  {
+    @Test
+    public void testLoader() throws IDMapperException, IOException, OpenRDFException  {
         setupDatasources();
         
         Reporter.report("sample2to1.ttl");
-        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "new"};
+        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "testnew"};
         LinksetLoader.main (args1);
         Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "load"};
+        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "test"};
         LinksetLoader.main (args2);
         Reporter.report("sample2to3.ttl");
-        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "force"};
+        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "testforce"};
         LinksetLoader.main (args3);
 	}
 
     //copied from IDMapperTestBase
-    private static void setupDatasources() throws IDMapperException{
+    private void setupDatasources() throws IDMapperException{
         String goodId1 = "123";
         DataSource DataSource1 = DataSource.register("TestDS1", "TestDS1"). urlPattern("http://www.foo.com/$id")
                 .idExample(goodId1).asDataSource();
