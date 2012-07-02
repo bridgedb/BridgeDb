@@ -29,12 +29,9 @@ public class HoldingRDFStore extends RDFBase implements RdfLoader{
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
 
-    public HoldingRDFStore(RdfStoreType type, boolean strict, boolean clear) throws IDMapperLinksetException{
+    public HoldingRDFStore(RdfStoreType type, boolean strict) throws IDMapperLinksetException{
         super(strict);
         this.type = type;
-        if (clear) {
-            RdfWrapper.clear(type);
-        }
         setContext();
     }
         
