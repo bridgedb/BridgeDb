@@ -82,7 +82,7 @@ public class TransativeCreator {
     }
 
     private synchronized void getVoid(int leftId, int rightId) throws RDFHandlerException, IOException{
-        connection = RdfWrapper.setupConnection(RdfStoreType.MAIN);
+        connection = RdfWrapper.setupConnection(RdfStoreType.LOAD);
         leftLinkSet = getLinkSet(leftContext);
         rightLinkSet = getLinkSet(rightContext);
         //showContext(rightContext);
@@ -236,7 +236,7 @@ public class TransativeCreator {
         query.append("AND link2.linkSetId = \"");
             query.append(rightContext);
             query.append("\"");
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
+        SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
         Connection connection = sqlAccess.getConnection();
         java.sql.Statement statement;
         try {

@@ -29,14 +29,28 @@ public class LinksetLoader {
             if (args[1].equals("load")){
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
                 URLLinkListener listener = new MysqlMapper(sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, true, false);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.LOAD, true, false);
+                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
+                handler.parse (args[0]);
+                System.out.println("Loading of " + args[0] + " successful");
+            } else if (args[1].equals("test")){
+                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+                URLLinkListener listener = new MysqlMapper(sqlAccess);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.TEST, true, false);
                 LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
                 handler.parse (args[0]);
                 System.out.println("Loading of " + args[0] + " successful");
             } else if (args[1].equals("force")){
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
                 URLLinkListener listener = new MysqlMapper(sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, false, false);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.LOAD, false, false);
+                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
+                handler.parse (args[0]);
+                System.out.println("Loading of " + args[0] + " successful");
+            } else if (args[1].equals("testforce")){
+                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+                URLLinkListener listener = new MysqlMapper(sqlAccess);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.TEST, false, false);
                 LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
                 handler.parse (args[0]);
                 System.out.println("Loading of " + args[0] + " successful");
@@ -49,7 +63,7 @@ public class LinksetLoader {
             } else if (args[1].equals("new")){
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
                 URLLinkListener listener = new MysqlMapper(true, sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, true, true);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.LOAD, true, true);
                 System.out.println("rdf clear");
                 LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
                 handler.parse (args[0]);
@@ -57,7 +71,15 @@ public class LinksetLoader {
             } else if (args[1].equals("forcenew")){
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
                 URLLinkListener listener = new MysqlMapper(true, sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.MAIN, false, true);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.LOAD, false, true);
+                System.out.println("rdf clear");
+                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
+                handler.parse (args[0]);
+                System.out.println("Clear Loading of " + args[0] + " successful");
+            } else if (args[1].equals("testnew")){
+                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+                URLLinkListener listener = new MysqlMapper(true, sqlAccess);
+                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.TEST, true, true);
                 System.out.println("rdf clear");
                 LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
                 handler.parse (args[0]);
