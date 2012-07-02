@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bridgedb.Reporter;
 import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.linkset.MyDirectoryLockManager;
 import org.openrdf.model.Resource;
@@ -59,7 +60,7 @@ public class RdfWrapper {
     private static Properties properties;
 
     public synchronized static void clear(RdfStoreType type) throws IDMapperLinksetException{
-        Repository repository = getRepository(type);
+        Repository repository = getRepository(type, false);
         RepositoryConnection connection = getConnection(repository);
         try {
             connection.clear();
@@ -67,7 +68,7 @@ public class RdfWrapper {
         } catch (Throwable ex) {
             shutdownAfterError(repository, connection);
             throw new IDMapperLinksetException ("Error clearing the Reposotory. ", ex);
-        } 
+        }
     }
 
     /**
@@ -77,13 +78,15 @@ public class RdfWrapper {
      * @return
      * @throws IDMapperLinksetException 
      */
-    private static Repository getRepository(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
+    private static Repository getRepository(RdfStoreType rdfStoreType, boolean exisiting) throws IDMapperLinksetException {
         File dataDir = getDataDir(rdfStoreType);
-        if (!dataDir.exists()){
-           throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " does not exist");
-        }
-        if (!dataDir.isDirectory()){
-           throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " is not a directory");
+        if (exisiting) {
+            if (!dataDir.exists()){
+                throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " does not exist");
+            }
+            if (!dataDir.isDirectory()){
+               throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " is not a directory");
+            }
         }
         Repository repository = new SailRepository(new NativeStore(dataDir));
         try {
@@ -91,8 +94,14 @@ public class RdfWrapper {
         } catch (Throwable ex) {
             File testLockDir = new File(dataDir, "lock");
             if (!testLockDir.canWrite()){
-                throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
-                        testLockDir.getAbsolutePath());
+                try {
+                    String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
+                    String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
+                    throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
+                            testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
+                } catch (IOException ex1) {
+                    Logger.getLogger(RdfWrapper.class.getName()).log(Level.SEVERE, null, ex1);
+                }
             }
             try {
                 repository.shutDown();
@@ -106,7 +115,12 @@ public class RdfWrapper {
         return repository;
     }
 
-     private static File getDataDir(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
+    private static boolean repositoryExists(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
+        File dataDir = getDataDir(rdfStoreType);
+        return dataDir.exists();
+    }
+    
+    private static File getDataDir(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
         switch (rdfStoreType){
             case MAIN: 
                 return new File(getSailNativeStore());
@@ -135,9 +149,15 @@ public class RdfWrapper {
     public static RepositoryConnection setupConnection(RdfStoreType rdfStoreType) throws RDFHandlerException{
         Repository repository;
         try {
-            repository = getRepository (rdfStoreType);
+            repository = getRepository (rdfStoreType, true);
         } catch (IDMapperLinksetException ex) {
-           throw new RDFHandlerException("Setup error ", ex);
+            try {
+                String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
+                String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
+                throw new RDFHandlerException("Setup error " + ex + " Please check " + path + " set by " + source, ex);
+            } catch (IOException ex1) {
+                throw new RDFHandlerException("Setup error " + ex + " unable to dettermine source", ex);
+            }
         }
         try {
             return repository.getConnection();
@@ -373,7 +393,7 @@ public class RdfWrapper {
     }
     
     static List<String> getContextNames(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
-        Repository repository = getRepository(rdfStoreType);
+        Repository repository = getRepository(rdfStoreType, true);
         RepositoryConnection connection = getConnection(repository);
         try {
             RepositoryResult<Resource> rr = connection.getContextIDs();
@@ -399,7 +419,7 @@ public class RdfWrapper {
     }
   
     static String getRDF(RdfStoreType rdfStoreType, int linksetId) throws IDMapperLinksetException {
-        Repository repository = getRepository(rdfStoreType);
+        Repository repository = getRepository(rdfStoreType, true);
         RepositoryConnection connection = getConnection(repository);
         StringOutputStream stringOutputStream = new StringOutputStream();            
         RDFXMLWriter writer = new RDFXMLWriter(stringOutputStream);

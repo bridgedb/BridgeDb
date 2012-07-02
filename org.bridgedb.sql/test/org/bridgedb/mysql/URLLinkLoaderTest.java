@@ -9,10 +9,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * 
+ * This test is used to load the sql without the rdf so the unit tests can pass before the linkset modules builds with rdf
  * @author Christian
  */
-//@Ignore 
+@Ignore //Only comment out the ignore to change the test databases. 
 public class URLLinkLoaderTest extends org.bridgedb.linkset.URLLinkLoaderTest {
     
     @BeforeClass
