@@ -15,11 +15,12 @@ public class LinksetValidator extends RDFBase implements RdfLoader{
     
     public LinksetValidator(){
         super(true);
+        System.out.println("new LinksetValidator");
     }
 
     @Override
     void saveStatements() throws RDFHandlerException {
-        //Do nothing
+        statements = null;
     }
 
     @Override

@@ -44,11 +44,10 @@ public abstract class RDFBase implements RdfLoader{
     public synchronized void validateAndSaveVoid(Statement firstMap) throws RDFHandlerException{
         Reporter.report("Validation started");
         validate(firstMap);
-        for (Statement st:statements){
-            System.out.println(st);
-        }
+        //for (Statement st:statements){
+            //ystem.out.println(st);
+        //}
         saveStatements();
-        System.out.println("Statements closed");
     }
  
     abstract void saveStatements() throws RDFHandlerException;
@@ -108,7 +107,6 @@ public abstract class RDFBase implements RdfLoader{
             dataSetId = findAndRegisterDataSetIdBasedOnUriSpace(fullURI, targetPredicate);
         }
         //Declare that we have a dataset using void:dataset.
-        System.out.println(targetPredicate + " -> " + dataSetId);
         checkStatementExists(dataSetId, RdfConstants.TYPE_URI, VoidConstants.DATASET);
         //Provide details of the licence under which the dataset is published using the dcterms:license property.
         checkObject(dataSetId, DctermsConstants.LICENSE);
@@ -131,14 +129,10 @@ public abstract class RDFBase implements RdfLoader{
                 Value uriValue = st.getObject();
                 String uriSpace = uriValue.stringValue();
                 if (fullURI.stringValue().startsWith(uriSpace)){
-                    System.out.println("Found ");
-                    System.out.println(st);
                     Resource dataSetId =  st.getSubject();
                     checkStatementExists(linksetResource, VoidConstants.TARGET, dataSetId);
                     Statement newStatement = new StatementImpl(dataSetId, targetPredicate, dataSetId);
-                    System.out.println(newStatement);
                     statements.add(newStatement);
-                    System.out.println(dataSetId);
                     return dataSetId;
                 }
             }
