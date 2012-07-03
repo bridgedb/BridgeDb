@@ -93,6 +93,9 @@ public final class DataSource
  	 */
 	public String getUrl(String id)
 	{
+        if (id == null){
+            return null;
+        }
 		return prefix + id + postfix;
 	}
 				
