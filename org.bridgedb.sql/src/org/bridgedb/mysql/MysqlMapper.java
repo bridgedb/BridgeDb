@@ -41,7 +41,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URISpace, XrefIterator,
-public class MysqlMapper extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
+public class MysqlMapper extends SQLBase implements IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
         OpsMapper, URISpace {
     
     private static final int SQL_TIMEOUT = 2;

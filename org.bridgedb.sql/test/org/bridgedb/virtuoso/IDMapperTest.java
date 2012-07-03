@@ -3,6 +3,7 @@ package org.bridgedb.virtuoso;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.url.WrappedIDMapper;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 
@@ -19,7 +20,7 @@ public class IDMapperTest extends org.bridgedb.IDMapperTest {
         SQLAccess sqlAccess = TestSqlFactory.createTestVirtuosoAccess();
         connectionOk = true;
         VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(sqlAccess);
-        idMapper = urlMapperVirtuoso;
+        idMapper = new  WrappedIDMapper(urlMapperVirtuoso);
     }
             
 }

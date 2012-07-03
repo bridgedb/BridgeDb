@@ -9,6 +9,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.mysql.MysqlMapper;
+import org.bridgedb.url.WrappedIDMapper;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.openrdf.OpenRDFException;
@@ -25,7 +26,7 @@ public class SQLLinksetHandlerTest extends LinksetHandlerTest {
         MysqlMapper urlMapperSQL = new MysqlMapper(true, sqlAccess);
         //URLMapperLinkset mapper = new URLMapperLinkset(); 
         listener = urlMapperSQL;
-        idMapper = urlMapperSQL;
+        idMapper = new WrappedIDMapper(urlMapperSQL);
         LinksetHandlerTest.loadMappings();
         //mapper.printStats();
     }

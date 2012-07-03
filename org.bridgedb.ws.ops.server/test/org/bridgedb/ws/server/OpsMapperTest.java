@@ -14,6 +14,7 @@ import org.bridgedb.ops.LinkSetStore;
 import org.bridgedb.ops.StubLinkSetStore;
 import org.bridgedb.rdf.RdfReader;
 import org.bridgedb.rdf.RdfStoreType;
+import org.bridgedb.url.WrappedIDMapper;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
 import org.bridgedb.ws.WSCoreService;
@@ -33,9 +34,10 @@ public class OpsMapperTest extends org.bridgedb.ops.OpsMapperTest{
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
-        IDMapper inner = new MysqlMapper(sqlAccess);
+        MysqlMapper mysqlMapper = new MysqlMapper(sqlAccess);
+        IDMapper idMapper = new WrappedIDMapper(mysqlMapper);
         LinkSetStore linksetStore = new RdfReader(RdfStoreType.TEST);
-        WSInterface webService = new WSService(inner, linksetStore);
+        WSInterface webService = new WSService(idMapper, mysqlMapper, linksetStore);
         opsMapper = new WSMapper(webService);
     }
 

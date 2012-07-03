@@ -9,6 +9,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.mysql.MysqlMapper;
+import org.bridgedb.url.WrappedIDMapper;
 import org.bridgedb.virtuoso.VirtuosoMapper;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -27,7 +28,7 @@ public class VirtusosLinksetHandlerTest extends LinksetHandlerTest {
         VirtuosoMapper urlMapperVirtuoso = new VirtuosoMapper(true, sqlAccess);
         //URLMapperLinkset mapper = new URLMapperLinkset(); 
         listener = urlMapperVirtuoso;
-        idMapper = urlMapperVirtuoso;
+        idMapper = new WrappedIDMapper(urlMapperVirtuoso);
         LinksetHandlerTest.loadMappings();
         //mapper.printStats();
     }

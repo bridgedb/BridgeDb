@@ -38,7 +38,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URISpace, XrefIterator,
-public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
+public abstract class SQLBase implements IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
         OpsMapper, URISpace {
     
     //Numbering should not clash with any GDB_COMPAT_VERSION;
@@ -93,51 +93,6 @@ public abstract class SQLBase implements IDMapper, IDMapperCapabilities, URLLink
     }   
 
     //***** IDMapper funtctions  *****
-    @Override
-    public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
-        return InternalUtils.mapMultiFromSingle(this, srcXrefs, tgtDataSources);
-    }
-    
-    @Override
-    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
-        if (ref.getId() == null || ref.getDataSource() == null){
-            return new HashSet<Xref>();
-        }
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT targetURL as url ");
-        query.append("FROM link, linkSet ");
-        query.append("WHERE linkSetId = linkSet.id ");
-        appendSourceXref(query, ref);
-        Collection<DataSource> targetDataSources = java.util.Arrays.asList(tgtDataSources);
-        appendTargetDataSources(query, targetDataSources);
-        Statement statement = this.createStatement();
-        try {
-            ResultSet rs = statement.executeQuery(query.toString());
-            return resultSetToXrefSet(rs);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
-        }
-    }
-    
-    @Override
-    public boolean xrefExists(Xref xref) throws IDMapperException {
-        if (xref.getId() == null || xref.getDataSource() == null){
-            return false;
-        }
-        return uriExists(xref.getUrl());
-    }
-
-    @Override
-    public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
-        Set<String> URLS = urlSearch(text, limit);
-        HashSet<Xref> results = new HashSet<Xref>();
-        for (String URL:URLS){
-            results.add(DataSource.uriToXref(URL));
-        }
-        return results;
-    }
-
     @Override
     public IDMapperCapabilities getCapabilities() {
         return this;
