@@ -719,14 +719,7 @@ public final class DataSource
         }
     }
 
-    /**
-     * 
-     * @param url
-     * @return 
-     * @since 2.0.0
-     */
-    //Changes made here should also be maded to uriToXrefByNonPattern
-    private static DataSource getByNonPattern(String url) {
+    public final static String getUriSpace(String url){
         String prefix = null;
         url = url.trim();
         if (url.contains("#")){
@@ -743,6 +736,30 @@ public final class DataSource
         if (prefix.isEmpty()){
             throw new IllegalArgumentException("Url should not start with a '#', '/, or a ':'.");            
         }
+        return prefix;
+    }
+    
+    public final static String getId(String url){
+        url = url.trim();
+        if (url.contains("#")){
+            return url.substring(url.lastIndexOf("#")+1, url.length());
+        } else if (url.contains("/")){
+            return url.substring(url.lastIndexOf("/")+1, url.length());
+        } else if (url.contains(":")){
+            return url.substring(url.lastIndexOf(":")+1, url.length());
+        }
+        throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
+    }
+    
+    /**
+     * 
+     * @param url
+     * @return 
+     * @since 2.0.0
+     */
+    //Changes made here should also be maded to uriToXrefByNonPattern
+    private static DataSource getByNonPattern(String url) {
+        String prefix = getUriSpace(url);
         DataSource result = byPrefix.get(prefix);
         if (result != null){
             return result;
@@ -763,26 +780,8 @@ public final class DataSource
      */
     //Changes made here should also be maded to getByNonPattern
     private static Xref uriToXrefByNonPattern(String url) {
-        String prefix = null;
-        String id = null;
-        url = url.trim();
-        if (url.contains("#")){
-            prefix = url.substring(0, url.lastIndexOf("#")+1);
-            id = url.substring(url.lastIndexOf("#")+1, url.length());
-        } else if (url.contains("/")){
-            prefix = url.substring(0, url.lastIndexOf("/")+1);
-            id = url.substring(url.lastIndexOf("/")+1, url.length());
-        } else if (url.contains(":")){
-            prefix = url.substring(0, url.lastIndexOf(":")+1);
-            id = url.substring(url.lastIndexOf(":")+1, url.length());
-        }
-        //ystem.out.println(lookupPrefix);
-        if (prefix == null){
-            throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
-        }
-        if (prefix.isEmpty()){
-            throw new IllegalArgumentException("Url should not start with a '#', '/, or a ':'.");            
-        }
+        String prefix = getUriSpace(url);
+        String id = getId(url);
         DataSource dataSource = byPrefix.get(prefix);
         if (dataSource != null){
             return new Xref(id, dataSource);
