@@ -54,8 +54,8 @@ public class TransativeCreator {
     
     private Resource ANY_SUBJECT = null;
     
-    public TransativeCreator(int leftId, int rightId, String possibleFileName, RdfStoreType type) 
-            throws BridgeDbSqlException, RDFHandlerException, IOException{
+    public TransativeCreator(int leftId, int rightId, String diffLeft, String diffRight, String possibleFileName, 
+            RdfStoreType type) throws BridgeDbSqlException, RDFHandlerException, IOException{
         if (possibleFileName != null && !possibleFileName.isEmpty()){
             createBufferedWriter(possibleFileName);
         } else {
@@ -63,8 +63,8 @@ public class TransativeCreator {
         }
         leftContext = RdfWrapper.getLinksetURL(leftId);
         rightContext = RdfWrapper.getLinksetURL(rightId);
-        getVoid(leftId, rightId, type);
-        getSQL(type);
+        getVoid(leftId, rightId, diffLeft, diffRight, type);
+        getSQL(diffLeft, diffRight, type);
     }
  
     private void createBufferedWriter(String fileName) throws IOException {
@@ -81,12 +81,12 @@ public class TransativeCreator {
         createBufferedWriter ("linkset " + leftId + "Transitive" + rightId + ".ttl");
     }
 
-    private synchronized void getVoid(int leftId, int rightId, RdfStoreType type) throws RDFHandlerException, IOException{
+    private synchronized void getVoid(int leftId, int rightId, String diffLeft, String diffRight, RdfStoreType type) throws RDFHandlerException, IOException{
         connection = RdfWrapper.setupConnection(type);
         leftLinkSet = getLinkSet(leftContext);
         rightLinkSet = getLinkSet(rightContext);
         //showContext(rightContext);
-        checkMiddle();
+        checkMiddle(diffLeft, diffRight);
         sourceDataSet = 
                 RdfWrapper.getTheSingeltonObject(connection, leftLinkSet, VoidConstants.SUBJECTSTARGET, leftContext);
         targetDataSet = 
@@ -112,7 +112,7 @@ public class TransativeCreator {
         return RdfWrapper.getTheSingeltonSubject (connection, RdfConstants.TYPE_URI, VoidConstants.LINKSET, context);
     }
     
-    private void checkMiddle() throws RDFHandlerException{
+    private void checkMiddle(String leftDiff, String rightDiff) throws RDFHandlerException{
         Value leftTarget = 
                 RdfWrapper.getTheSingeltonObject(connection, leftLinkSet, VoidConstants.OBJECTSTARGET, leftContext);
         System.out.println (leftTarget);
@@ -123,14 +123,24 @@ public class TransativeCreator {
         System.out.println (rightSubject);
         Value rightURISpace =
                 RdfWrapper.getTheSingeltonObject(connection, rightSubject, VoidConstants.URI_SPACE, rightContext);
-        if (!rightURISpace.equals(leftURISpace)){
-            //TODO handle differences here
-            RdfWrapper.shutdown(connection);
-            throw new RDFHandlerException("Target URISpace " + leftURISpace + " of the left linkset " + leftContext + 
-                    " does not match the subject URISpace " + rightURISpace + " of the right linkset " + rightContext);
+        if (rightURISpace.equals(leftURISpace)){
+            return; //ok
         }
+        if (leftDiff != null || rightDiff != null){
+            String newRight = rightURISpace.stringValue().replace(rightDiff, leftDiff);
+            if (newRight.equals(leftURISpace.stringValue())){
+                return; //ok;
+            } else {
+                System.err.println(leftDiff);
+                System.err.println(rightDiff);
+                System.err.println(newRight);
+            }
+        } 
+        RdfWrapper.shutdown(connection);
+        throw new RDFHandlerException("Target URISpace " + leftURISpace + " of the left linkset " + leftContext + 
+                " does not match the subject URISpace " + rightURISpace + " of the right linkset " + rightContext);
     }
-    
+
     private void registerNewLinkset(int left, int right) throws RDFHandlerException {
         output.append("\n");
         output.append(":linkset");
@@ -225,7 +235,7 @@ public class TransativeCreator {
         }
     }
 
-    private void getSQL(RdfStoreType type) throws BridgeDbSqlException, IOException {
+    private void getSQL(String diffLeft, String diffRight, RdfStoreType type) throws BridgeDbSqlException, IOException {
         SQLAccess sqlAccess;
         switch (type){
             case LOAD: 
@@ -243,13 +253,21 @@ public class TransativeCreator {
         buffer.newLine();
         StringBuilder query = new StringBuilder("SELECT link1.sourceURL, link2.targetURL ");
         query.append("FROM link link1, link link2 ");
-        query.append("WHERE link1.targetURL = link2.sourceURL ");
-        query.append("AND link1.linkSetId = \"");
+        if (diffLeft != null){
+            query.append("WHERE REPLACE(link2.sourceURL, '");
+            query.append(diffRight);
+            query.append("', '");
+            query.append(diffLeft);
+            query.append("') = link1.targetURL ");            
+        } else {
+            query.append("WHERE link1.targetURL = link2.sourceURL ");
+        }
+        query.append("AND link1.linkSetId = '");
             query.append(leftContext);
-            query.append("\"");
-        query.append("AND link2.linkSetId = \"");
+            query.append("' ");
+        query.append("AND link2.linkSetId = ' ");
             query.append(rightContext);
-            query.append("\"");
+            query.append("' ");
         Connection connection = sqlAccess.getConnection();
         java.sql.Statement statement;
         try {
@@ -280,9 +298,11 @@ public class TransativeCreator {
         System.out.println("Welcome to the OPS Transative Linkset Creator.");
         System.out.println("This methods requires the number of the two linksest being combined.");
         System.out.println("The next parameter should be one of \"load\", \"main\" or \"test\" to idntify which dataset to use.");
-        System.out.println ("Optional fourth parameter if the file name to write to.");
+        System.out.println("Optional fourth AND fifth parameter describe the different in the middle UriSpaces");
+        System.out.println("    Must provide both even if one is blank.");
+        System.out.println ("Optional final parameter if the file name to write to.");
         System.out.println ("If no filename provided output file will be linkset(leftid)Transitive(rightid).ttl");
-        System.out.println("Please run this again with three or four paramters");
+        System.out.println("Please run this again with three to six paramters");
         System.exit(1);
     }
 
@@ -295,13 +315,28 @@ public class TransativeCreator {
     }
     
     public static void main(String[] args) throws BridgeDbSqlException, RDFHandlerException, IOException  {
-        if (args.length < 3 || args.length > 4){
+        if (args.length < 3 || args.length > 6){
             usage();    
         }
         int leftId = Integer.parseInt(args[0]);
         int rightId = Integer.parseInt(args[1]);
         RdfStoreType type = getType(args[2]);
-        new TransativeCreator(leftId, rightId, args[3], type);
+        switch (args.length){
+            case 3:
+                new TransativeCreator(leftId, rightId, null, null, null, type);
+                break;
+            case 4:    
+                new TransativeCreator(leftId, rightId, null, null, args[3], type);
+                break;
+            case 5:
+                new TransativeCreator(leftId, rightId, args[3], args[4], null, type);            
+                break;
+            case 6:
+                new TransativeCreator(leftId, rightId, args[3], args[4], args[5], type);            
+                break;
+            default:
+                usage();
+        }
     }
 
 }
