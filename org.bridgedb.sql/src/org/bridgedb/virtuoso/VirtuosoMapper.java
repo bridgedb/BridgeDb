@@ -44,7 +44,7 @@ import org.bridgedb.url.URLMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URISpace, XrefIterator,
-public class VirtuosoMapper extends SQLBase implements IDMapper, IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
+public class VirtuosoMapper extends SQLBase implements IDMapperCapabilities, URLLinkListener, URLMapper, LinkSetMapper, 
         OpsMapper, URISpace {
     
     private PreparedStatement pstLink;

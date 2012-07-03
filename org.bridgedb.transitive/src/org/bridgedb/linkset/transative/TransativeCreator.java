@@ -265,7 +265,7 @@ public class TransativeCreator {
         query.append("AND link1.linkSetId = '");
             query.append(leftContext);
             query.append("' ");
-        query.append("AND link2.linkSetId = ' ");
+        query.append("AND link2.linkSetId = '");
             query.append(rightContext);
             query.append("' ");
         Connection connection = sqlAccess.getConnection();
