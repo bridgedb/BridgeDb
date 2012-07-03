@@ -54,7 +54,7 @@ public class TransativeCreator {
     
     private Resource ANY_SUBJECT = null;
     
-    public TransativeCreator(int leftId, int rightId, String possibleFileName) 
+    public TransativeCreator(int leftId, int rightId, String possibleFileName, RdfStoreType type) 
             throws BridgeDbSqlException, RDFHandlerException, IOException{
         if (possibleFileName != null && !possibleFileName.isEmpty()){
             createBufferedWriter(possibleFileName);
@@ -63,8 +63,8 @@ public class TransativeCreator {
         }
         leftContext = RdfWrapper.getLinksetURL(leftId);
         rightContext = RdfWrapper.getLinksetURL(rightId);
-        getVoid(leftId, rightId);
-        getSQL();
+        getVoid(leftId, rightId, type);
+        getSQL(type);
     }
  
     private void createBufferedWriter(String fileName) throws IOException {
@@ -81,8 +81,8 @@ public class TransativeCreator {
         createBufferedWriter ("linkset " + leftId + "Transitive" + rightId + ".ttl");
     }
 
-    private synchronized void getVoid(int leftId, int rightId) throws RDFHandlerException, IOException{
-        connection = RdfWrapper.setupConnection(RdfStoreType.LOAD);
+    private synchronized void getVoid(int leftId, int rightId, RdfStoreType type) throws RDFHandlerException, IOException{
+        connection = RdfWrapper.setupConnection(type);
         leftLinkSet = getLinkSet(leftContext);
         rightLinkSet = getLinkSet(rightContext);
         //showContext(rightContext);
@@ -225,7 +225,21 @@ public class TransativeCreator {
         }
     }
 
-    private void getSQL() throws BridgeDbSqlException, IOException {
+    private void getSQL(RdfStoreType type) throws BridgeDbSqlException, IOException {
+        SQLAccess sqlAccess;
+        switch (type){
+            case LOAD: 
+                sqlAccess = SqlFactory.createLoadSQLAccess();
+                break;
+            case MAIN: 
+                sqlAccess = SqlFactory.createSQLAccess();
+                break;           
+            case TEST: 
+                sqlAccess = SqlFactory.createTestSQLAccess();
+                break;
+            default:
+                throw new BridgeDbSqlException ("Unable to get SQL for type " + type);
+        }
         buffer.newLine();
         StringBuilder query = new StringBuilder("SELECT link1.sourceURL, link2.targetURL ");
         query.append("FROM link link1, link link2 ");
@@ -236,7 +250,6 @@ public class TransativeCreator {
         query.append("AND link2.linkSetId = \"");
             query.append(rightContext);
             query.append("\"");
-        SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
         Connection connection = sqlAccess.getConnection();
         java.sql.Statement statement;
         try {
@@ -251,6 +264,7 @@ public class TransativeCreator {
             while (rs.next()){
                 String sourceUrl = rs.getString("sourceUrl");
                 String targetUrl = rs.getString("targetUrl");
+                //ystem.out.println("<" + sourceUrl + "> <" + newPredicate + "> <" + targetUrl + "> . "); 
                 buffer.write("<" + sourceUrl + "> <" + newPredicate + "> <" + targetUrl + "> . "); 
                 buffer.newLine();
             }
@@ -265,19 +279,29 @@ public class TransativeCreator {
     private static void usage() {
         System.out.println("Welcome to the OPS Transative Linkset Creator.");
         System.out.println("This methods requires the number of the two linksest being combined.");
-        System.out.println ("Optional third parameter if the file name to write to.");
+        System.out.println("The next parameter should be one of \"load\", \"main\" or \"test\" to idntify which dataset to use.");
+        System.out.println ("Optional fourth parameter if the file name to write to.");
         System.out.println ("If no filename provided output file will be linkset(leftid)Transitive(rightid).ttl");
-        System.out.println("Please run this again with two paramters");
+        System.out.println("Please run this again with three or four paramters");
         System.exit(1);
     }
 
+    private static RdfStoreType getType(String typeString) throws RDFHandlerException{
+        if ("load".equalsIgnoreCase(typeString)) return RdfStoreType.LOAD;
+        if ("main".equalsIgnoreCase(typeString)) return RdfStoreType.MAIN;
+        if ("test".equalsIgnoreCase(typeString)) return RdfStoreType.TEST;
+        throw new RDFHandlerException ("Unable to dettermine the RDF type based on " + typeString + 
+                " Plase check the third paramters is one of \"load\", \"main\" or \"test\"");
+    }
+    
     public static void main(String[] args) throws BridgeDbSqlException, RDFHandlerException, IOException  {
-        if (args.length < 2 || args.length > 3){
+        if (args.length < 3 || args.length > 4){
             usage();    
         }
         int leftId = Integer.parseInt(args[0]);
         int rightId = Integer.parseInt(args[1]);
-        new TransativeCreator(leftId, rightId, args[2]);
+        RdfStoreType type = getType(args[2]);
+        new TransativeCreator(leftId, rightId, args[3], type);
     }
 
 }
