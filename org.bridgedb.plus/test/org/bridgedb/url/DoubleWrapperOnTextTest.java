@@ -22,7 +22,7 @@ public class DoubleWrapperOnTextTest extends IDMapperTest {
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
 		IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
         URLMapper urlMapper = new WrapperURLMapper(inner);
-        idMapper = new WappedIDMapper(urlMapper);
+        idMapper = new WrappedIDMapper(urlMapper);
 	}
 	
 }

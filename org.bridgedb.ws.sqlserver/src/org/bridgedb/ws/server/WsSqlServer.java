@@ -32,6 +32,7 @@ import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.SourceTargetCounter;
+import org.bridgedb.url.WrappedIDMapper;
 import org.bridgedb.ws.WSService;
 
 /**
@@ -53,7 +54,7 @@ public class WsSqlServer extends WSService implements Comparator<LinkSetInfo>{
     public WsSqlServer() throws BridgeDbSqlException, IDMapperLinksetException  {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         MysqlMapper urlMapperSQL = new MysqlMapper(sqlAccess);
-        idMapper = urlMapperSQL;
+        idMapper = new WrappedIDMapper(urlMapperSQL);
         urlMapper = urlMapperSQL;
         linkSetMapper = urlMapperSQL;
         opsMapper = urlMapperSQL;

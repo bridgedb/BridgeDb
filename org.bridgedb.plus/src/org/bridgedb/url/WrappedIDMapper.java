@@ -16,11 +16,11 @@ import org.bridgedb.Xref;
  * 
  * @author Christian
  */
-public class WappedIDMapper implements IDMapper{
+public class WrappedIDMapper implements IDMapper{
 
     private URLMapper urlMapper;
     
-    public WappedIDMapper(URLMapper urlMapper){
+    public WrappedIDMapper(URLMapper urlMapper){
         this.urlMapper = urlMapper;
     }
     

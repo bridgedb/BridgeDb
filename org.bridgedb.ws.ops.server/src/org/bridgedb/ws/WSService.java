@@ -46,9 +46,9 @@ public class WSService extends WSCoreService implements WSInterface {
     protected WSService(){
     }
     
-    public WSService(IDMapper idMapper, LinkSetStore linksetStore) {
+    public WSService(IDMapper idMapper, OpsMapper  opsMapper, LinkSetStore linksetStore) {
         super(idMapper);
-        this.opsMapper = (OpsMapper)idMapper;    
+        this.opsMapper = opsMapper;    
         this.linksetStore = linksetStore;
     }
     
