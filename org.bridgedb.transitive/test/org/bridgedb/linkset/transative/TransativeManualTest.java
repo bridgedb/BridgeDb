@@ -16,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class TransativeCreatorTest {
+public class TransativeManualTest {
     
-    public TransativeCreatorTest() {
+    public TransativeManualTest() {
     }
 
     @BeforeClass
@@ -44,10 +44,10 @@ public class TransativeCreatorTest {
     public void testMain() throws Exception {
         System.out.println("main");
         String[] args = new String[4];
-        args[0] = "2";
-        args[1] = "3";
-        args[2] = "test";
-        String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
+        args[0] = "21";
+        args[1] = "17";
+        args[2] = "load";
+        String fileName = "D:/OpenPhacts/ondex2linksets/JulyTransitive/cw-drugbankDrugs-transitive.ttl";
 //        String fileName = "test-data/linkset2To3.ttl";
         args[3] = fileName;
         TransativeCreator.main(args);
