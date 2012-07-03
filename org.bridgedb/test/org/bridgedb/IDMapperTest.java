@@ -53,8 +53,11 @@ public abstract class IDMapperTest extends IDMapperTestBase{
         resultSet = results.get(map3xref1);
         assertNull(resultSet);
         resultSet = results.get(mapBadxref1);
-        //Assuming either theer 
-        assertTrue(resultSet == null || resultSet.isEmpty());
+        //Could be a result with just self. 
+        if (resultSet != null && !resultSet.isEmpty()){
+            assertEquals(1, resultSet.size());
+            assertTrue(resultSet.contains(mapBadxref1));
+        }
     }
     
     @Test
@@ -72,7 +75,10 @@ public abstract class IDMapperTest extends IDMapperTestBase{
     public void testMapIDOneBad() throws IDMapperException{
         report("MapIDOneToManyNoDataSources");
         Set<Xref> results = idMapper.mapID(mapBadxref1);
-        assertEquals(0, results.size());
+        if (results != null && !results.isEmpty()){
+            assertEquals(1, results.size());
+            assertTrue(results.contains(mapBadxref1));
+        }
     }
 
     @Test
