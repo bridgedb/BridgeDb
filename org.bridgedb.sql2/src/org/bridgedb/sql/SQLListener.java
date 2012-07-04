@@ -73,9 +73,9 @@ public abstract class SQLListener implements MappingListener{
         String query = "INSERT INTO mappingSet "
                     + "(sourceDataSource, predicate, targetDataSource, isTransitive) " 
                     + "VALUES (" 
-                    + "'" + source.getURISpace() + "', " 
+                    + "'" + source.getSystemCode() + "', " 
                     + "'" + predicate + "', " 
-                    + "'" + target.getURISpace() + "',"
+                    + "'" + target.getSystemCode() + "',"
                     + "'" + booleanIntoQuery(isTransitive) + "')";
         Statement statement = createStatement();
         try {
