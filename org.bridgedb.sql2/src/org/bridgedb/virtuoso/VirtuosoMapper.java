@@ -10,7 +10,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.newSQLBase;
+import org.bridgedb.sql.SQLIdMapper;
 
 /**
  * UNDER DEVELOPMENT
@@ -19,7 +19,7 @@ import org.bridgedb.sql.newSQLBase;
  * @author Christian
  */
 // removed Iterators due to scale issues URISpace, XrefIterator,
-public class VirtuosoMapper extends newSQLBase {
+public class VirtuosoMapper extends SQLIdMapper {
     
     private PreparedStatement pstLink;
     
