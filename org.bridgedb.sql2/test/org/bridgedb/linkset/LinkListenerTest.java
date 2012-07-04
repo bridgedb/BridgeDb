@@ -23,7 +23,7 @@ public abstract class LinkListenerTest extends IDMapperTestBase{
         listener.openInput();
         int mappingSet = listener.registerMappingSet(DataSource1, DataSource2, TEST_PREDICATE, SYMETRIC, ORIGINAL);
         listener.insertLink(map1xref1.getId(), map1xref2.getId(), mappingSet, SYMETRIC);
-        listener.insertLink(map2xref1.getId(), map1xref2.getId(), mappingSet, SYMETRIC);
+        listener.insertLink(map2xref1.getId(), map2xref2.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map3xref1.getId(), map3xref2.getId(), mappingSet, SYMETRIC);
         mappingSet = listener.registerMappingSet(DataSource2, DataSource3, TEST_PREDICATE, SYMETRIC, ORIGINAL);
         listener.insertLink(map1xref2.getId(), map1xref3.getId(), mappingSet, SYMETRIC);
