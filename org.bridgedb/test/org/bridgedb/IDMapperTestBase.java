@@ -17,6 +17,8 @@ public abstract class IDMapperTestBase {
       
     //The id for map1xref1
     protected static String goodId1;
+    protected static String goodId2;
+    protected static String goodId3;
     //Set of Xrefs that are expected to map together.
     protected static Xref map1xref1;
     protected static Xref map1xref2;
