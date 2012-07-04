@@ -10,7 +10,7 @@ import org.bridgedb.Reporter;
 import org.bridgedb.Xref;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.newSQLBase;
+import org.bridgedb.sql.SQLIdMapper;
 
 /**
  * UNDER DEVELOPMENT
@@ -19,7 +19,7 @@ import org.bridgedb.sql.newSQLBase;
  * @author Christian
  */
 // removed Iterators due to scale issues URISpace, XrefIterator,
-public class MySQLMapper extends newSQLBase {
+public class MySQLMapper extends SQLIdMapper {
     
     private static final int SQL_TIMEOUT = 2;
     StringBuilder insertQuery;

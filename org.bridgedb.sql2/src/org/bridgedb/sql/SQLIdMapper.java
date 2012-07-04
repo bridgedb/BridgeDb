@@ -18,7 +18,7 @@ import org.bridgedb.impl.InternalUtils;
  *
  * @author Christian
  */
-public abstract class newSQLBase extends SQLListener implements IDMapper, IDMapperCapabilities {
+public abstract class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabilities {
 
     private static final int FREESEARCH_CUTOFF = 100000;      
     //Internal parameters
@@ -28,7 +28,7 @@ public abstract class newSQLBase extends SQLListener implements IDMapper, IDMapp
     protected int insertCount = 0;
     protected int doubleCount = 0;    
     
-    public newSQLBase(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public SQLIdMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(dropTables, sqlAccess);
      }   
 
