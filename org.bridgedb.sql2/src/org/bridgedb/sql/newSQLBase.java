@@ -167,27 +167,92 @@ public abstract class newSQLBase extends SQLListener implements IDMapper, IDMapp
 
     @Override
     public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT sourceDataSource as sysCode ");
+        query.append("FROM mappingSet ");
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }    
+        return resultSetToDataSourceSet(rs);        
     }
 
     @Override
     public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT targetDataSource as sysCode ");
+        query.append("FROM mappingSet ");
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }    
+        return resultSetToDataSourceSet(rs);        
     }
 
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT predicate ");
+        query.append("FROM mappingSet ");
+        query.append("WHERE sourceDataSource = '");
+            query.append(src.getSystemCode());
+            query.append("' ");        
+        query.append("AND targetDataSource = '");
+            query.append(tgt.getSystemCode());
+            query.append("' ");        
+        
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+            return rs.next();
+        } catch (SQLException ex) {
+            throw new IDMapperException("Unable to run query. " + query, ex);
+        }    
     }
 
     @Override
     public String getProperty(String key) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String query = "SELECT DISTINCT property "
+                + "FROM properties "
+                + "WHERE theKey = '" + key + "'";
+        try {
+            Statement statement = this.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            if (rs.next()){
+                return rs.getString("property");
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public Set<String> getKeys() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<String> results = new HashSet<String>();
+        String query = "SELECT theKey "
+                + "FROM properties "
+                + "WHERE isPublic = 1"; //one works where isPublic is a boolean
+        try {
+            Statement statement = this.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                results.add(rs.getString("theKey"));
+            }
+            return results;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     //**** Support methods 
@@ -217,6 +282,20 @@ public abstract class newSQLBase extends SQLListener implements IDMapper, IDMapp
                 DataSource dataSource = DataSource.getBySystemCode(sysCode);
                 Xref xref = new Xref(id, dataSource);
                 results.add(xref);
+            }
+            return results;
+       } catch (SQLException ex) {
+            throw new IDMapperException("Unable to parse results.", ex);
+       }
+    }
+
+    private Set<DataSource> resultSetToDataSourceSet(ResultSet rs) throws IDMapperException {
+        HashSet<DataSource> results = new HashSet<DataSource>();
+        try {
+            while (rs.next()){
+                String sysCode = rs.getString("sysCode");
+                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                results.add(dataSource);
             }
             return results;
        } catch (SQLException ex) {
