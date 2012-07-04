@@ -3,6 +3,7 @@ package org.bridgedb.mysql;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Reporter;
