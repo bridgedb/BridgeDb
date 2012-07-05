@@ -58,7 +58,7 @@ public abstract class SQLIdMapper extends SQLListener implements IDMapper, IDMap
             }
             query.append(")");
         }
-        System.out.println(query);
+        //ystem.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
