@@ -81,6 +81,8 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     public void testMapIDOneToManyNoDataSources() throws IDMapperException{
         report("MapIDOneToManyNoDataSources");
         Set<String> results = urlMapper.mapURL(map1URL1);
+        System.out.println(results);
+        System.out.println(map1URL2);
         assertTrue(results.contains(map1URL2));
         assertTrue(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -90,7 +92,7 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     
     @Test
     public void testMapIDOneBad() throws IDMapperException{
-        report("MapIDOneToManyNoDataSources");
+        report("MapIDOneBad");
         Set<String> results = urlMapper.mapURL(mapBadURL1);
         //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
         //Still optional as I am not sure text does.
@@ -131,8 +133,8 @@ public abstract class URLMapperTest extends URLMapperTestBase{
      }
 
     @Test
-    public void testXrefSupported() throws Exception {
-        report("XrefSupported");
+    public void testURLSupported() throws Exception {
+        report("URLSupported");
         assertTrue(urlMapper.uriExists(map1URL1));
         assertTrue(urlMapper.uriExists(map1URL2));
         assertTrue(urlMapper.uriExists(map1URL3));
