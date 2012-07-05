@@ -11,6 +11,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
+@Ignore
 public class LinkListenerTest extends org.bridgedb.linkset.LinkListenerTest {
     
     @BeforeClass

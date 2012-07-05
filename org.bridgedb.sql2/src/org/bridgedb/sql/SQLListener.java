@@ -27,7 +27,7 @@ public abstract class SQLListener implements MappingListener{
 	protected static final int SQL_COMPAT_VERSION = 4;
   
     //Maximumn size in database
-    private static final int SYSCODE_LENGTH = 100;
+    protected static final int SYSCODE_LENGTH = 100;
     private static final int FULLNAME_LENGTH = 100;
     private static final int MAINURL_LENGTH = 100;
     private static final int URLPATTERN_LENGTH = 100;
@@ -36,7 +36,6 @@ public abstract class SQLListener implements MappingListener{
     private static final int URNBASE_LENGTH = 100;
     private static final int PREDICATE_LENGTH = 100;
     private static final int LINK_SET_ID_LENGTH = 100;
-    private static final int DATA_SOURCE_LENGTH = 100;
     private static final int KEY_LENGTH= 100; 
     private static final int PROPERTY_LENGTH = 100;
     
@@ -132,7 +131,7 @@ public abstract class SQLListener implements MappingListener{
 	 * Excecutes several SQL statements to drop the tables 
 	 * @throws IDMapperException 
 	 */
-	private void dropSQLTables() throws BridgeDbSqlException
+	protected void dropSQLTables() throws BridgeDbSqlException
 	{
  		dropTable("info");
  		dropTable("mapping");
@@ -141,7 +140,7 @@ public abstract class SQLListener implements MappingListener{
  		dropTable("properties");
      }
     
-     private void dropTable(String name) throws BridgeDbSqlException{
+     protected void dropTable(String name) throws BridgeDbSqlException{
         //"IF NOT EXISTS" is unsupported 
        Statement sh = createStatement();
         try 
@@ -158,7 +157,7 @@ public abstract class SQLListener implements MappingListener{
 	 * connection is connected to
 	 * @throws IDMapperException 
 	 */
-	private void createSQLTables() throws BridgeDbSqlException
+	protected void createSQLTables() throws BridgeDbSqlException
 	{
         //"IF NOT EXISTS " is not supported
 		try 
@@ -183,8 +182,8 @@ public abstract class SQLListener implements MappingListener{
                     + "  ) ");
             String query = "CREATE TABLE mapping " 
                     + "( id INT " + getAUTO_INCREMENT() + " PRIMARY KEY, " 
-                    + "  sourceId VARCHAR(" + DATA_SOURCE_LENGTH + ") NOT NULL, "
-        			+ "  targetId VARCHAR(" + DATA_SOURCE_LENGTH + ") NOT NULL, " 
+                    + "  sourceId VARCHAR(" + ID_LENGTH + ") NOT NULL, "
+        			+ "  targetId VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
                     + "  mappingSetId INT(" + LINK_SET_ID_LENGTH + ") "
                     + " ) ";
 			sh.execute(query);
@@ -192,9 +191,9 @@ public abstract class SQLListener implements MappingListener{
             sh.execute("CREATE INDEX sourceMappingSetFind ON mapping (mappingSetId, sourceId) ");
          	query =	"CREATE TABLE mappingSet " 
                     + "( id INT " + getAUTO_INCREMENT() + " PRIMARY KEY, " 
-                    + "     sourceDataSource VARCHAR(" + DATA_SOURCE_LENGTH + ") NOT NULL, "
+                    + "     sourceDataSource VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
                     + "     predicate   VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
-                    + "     targetDataSource VARCHAR(" + DATA_SOURCE_LENGTH + ")  NOT NULL, "
+                    + "     targetDataSource VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
                     + "     isTransitive    SMALLINT, "
                     + "     mappingCount INT "
 					+ " ) "; 

@@ -11,7 +11,6 @@ import org.bridgedb.Xref;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
-import org.bridgedb.sql.SQLUrlMapper;
 
 /**
  * UNDER DEVELOPMENT
@@ -20,16 +19,16 @@ import org.bridgedb.sql.SQLUrlMapper;
  * @author Christian
  */
 // removed Iterators due to scale issues URISpace, XrefIterator,
-public class MySQLMapper extends SQLUrlMapper {
+public class MySQLIdMapper extends SQLIdMapper {
     
     private static final int SQL_TIMEOUT = 2;
     StringBuilder insertQuery;
 
-    public MySQLMapper(SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public MySQLIdMapper(SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(false, sqlAccess);
      }   
 
-    public MySQLMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public MySQLIdMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(dropTables, sqlAccess);
     }   
 
@@ -124,6 +123,5 @@ public class MySQLMapper extends SQLUrlMapper {
     protected String getAUTO_INCREMENT() {
         return "AUTO_INCREMENT";
     }
-
 
  }
