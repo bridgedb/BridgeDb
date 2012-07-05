@@ -17,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ops</artifactId>
+			<artifactId>org.bridgedb</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

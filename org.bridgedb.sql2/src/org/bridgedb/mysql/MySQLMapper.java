@@ -6,12 +6,12 @@ import java.util.Date;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Reporter;
 import org.bridgedb.Xref;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.utils.Reporter;
 
 /**
  * UNDER DEVELOPMENT
