@@ -12,10 +12,10 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Reporter;
 import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.mapping.MappingListener;
+import org.bridgedb.utils.Reporter;
 
 /**
  *
