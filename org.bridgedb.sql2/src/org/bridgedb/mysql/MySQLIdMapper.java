@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Reporter;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.Xref;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;

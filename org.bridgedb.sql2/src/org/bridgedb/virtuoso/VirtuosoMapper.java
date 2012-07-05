@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Reporter;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
