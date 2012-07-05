@@ -11,17 +11,23 @@ import org.bridgedb.Reporter;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
-import org.bridgedb.sql.SQLUrlMapper;
 
-public class VirtuosoMapper extends SQLUrlMapper {
+/**
+ * UNDER DEVELOPMENT
+ * See package.html
+ * 
+ * @author Christian
+ */
+// removed Iterators due to scale issues URISpace, XrefIterator,
+public class VirtuosoIdMapper extends SQLIdMapper {
     
     private PreparedStatement pstLink;
     
-    public VirtuosoMapper(SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public VirtuosoIdMapper(SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(false, sqlAccess);
      }   
 
-    public VirtuosoMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+    public VirtuosoIdMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(dropTables, sqlAccess);
     }   
     
