@@ -7,7 +7,7 @@ package org.bridgedb.linkset;
 import java.io.IOException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Reporter;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
 
 /**

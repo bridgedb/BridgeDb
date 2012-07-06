@@ -6,7 +6,7 @@ package org.bridgedb.rdf;
 
 import java.util.List;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.ops.LinkSetStore;
+import org.bridgedb.linkset.LinkSetStore;
 
 /**
  *
