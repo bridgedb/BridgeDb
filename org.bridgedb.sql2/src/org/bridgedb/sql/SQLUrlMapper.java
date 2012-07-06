@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.sql;
 
 import java.sql.ResultSet;
@@ -13,9 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
+import org.bridgedb.mapping.UriSpaceMapper;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
 
@@ -29,6 +24,16 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
 
     public SQLUrlMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
         super(dropTables, sqlAccess);
+        if (dropTables){
+            try {
+                Map<String,DataSource> mappings = UriSpaceMapper.getUriSpaceMappings();
+                for (String uriSpace:mappings.keySet()){
+                    this.registerUriSpace(mappings.get(uriSpace), uriSpace);
+                }
+            } catch (IDMapperException ex) {
+                throw new BridgeDbSqlException("Error setting up urispace mappings");
+            }
+        }
     }   
     
 	protected void dropSQLTables() throws BridgeDbSqlException
@@ -79,10 +84,10 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         query.append("AND mappingSet.targetDataSource = target.dataSource ");
         query.append("AND sourceId = '");
             query.append(id);
-        query.append("' ");
+            query.append("' ");
         query.append("AND source.uriSpace = '");
             query.append(uriSpace);
-        query.append("' ");
+            query.append("' ");
          if (targetURISpaces.length > 0){    
             query.append("AND ( target.uriSpace = '");
                 query.append(targetURISpaces[0]);
@@ -129,10 +134,10 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         query.append("AND mappingSet.sourceDataSource = source.dataSource ");
         query.append("AND sourceId = '");
             query.append(id);
-        query.append("' ");
+            query.append("' ");
         query.append("AND source.uriSpace = '");
             query.append(uriSpace);
-        query.append("' ");
+            query.append("' ");
         appendMySQLLimitConditions(query,0, 1);
         System.out.println(query);
         Statement statement = this.createStatement();
@@ -149,15 +154,15 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
     public Set<String> urlSearch(String text, int limit) throws IDMapperException {
         //ystem.out.println("mapping: " + sourceURL);
         StringBuilder query = new StringBuilder();
-        appendVirtuosoTopConditions(query, 0, limit); 
         query.append("SELECT ");
+        appendVirtuosoTopConditions(query, 0, limit); 
         query.append(" targetId as id, target.uriSpace as uriSpace ");
         query.append("FROM mapping, mappingSet, url as target ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND mappingSet.targetDataSource = target.dataSource ");
         query.append("AND sourceId = '");
             query.append(text);
-        query.append("' ");
+            query.append("' ");
         //use grouop by as do not know how to do distinct in Virtuoso
         query.append("GROUP BY targetId, target.uriSpace ");        
         appendMySQLLimitConditions(query,0, limit);
@@ -175,11 +180,12 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
     
     @Override
     public void registerUriSpace(DataSource source, String uriSpace) throws IDMapperException {
+        checkDataSourceInDatabase(source);
         String sysCode = getSystCode(uriSpace);
         if (sysCode != null){
-            if (source.getSystemCode().equals(uriSpace)) return; //Already known so fine.
+            if (source.getSystemCode().equals(sysCode)) return; //Already known so fine.
             throw new IDMapperException ("UriSpace " + uriSpace + " already mapped to " + sysCode 
-                    + " Which does not match " + source);
+                    + " Which does not match " + source.getSystemCode());
         }
         String query = "INSERT INTO url (dataSource, uriSpace) VALUES "
                 + " ('" + source.getSystemCode() + "', "
@@ -192,6 +198,22 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
             throw new BridgeDbSqlException ("Error inserting UriSpace ", ex, query);
         }
     }
+
+    @Override
+    public int registerMappingSet(String sourceUriSpace, String targetUriSpace, String predicate, boolean symetric, boolean transative) 
+            throws IDMapperException {
+        DataSource source = getDataSource(sourceUriSpace);
+        DataSource target = getDataSource(targetUriSpace);      
+        return registerMappingSet(source, target, predicate, symetric, transative);
+    }
+
+    @Override
+    public void insertURLMapping(String sourceURL, String targetURL, int mappingSet, boolean symetric) throws IDMapperException {
+        String sourceId = getId(sourceURL);
+        String targetId = getId(targetURL);
+        insertLink(sourceId, targetId, mappingSet, symetric);
+    }
+
 
     public final static String getUriSpace(String url){
         String prefix = null;
@@ -257,12 +279,40 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         }    
         try {
             if (rs.next()){
-                return rs.getString("uriSpace");
+                return rs.getString("dataSource");
             }
             return null;
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to get uriSpace. " + query, ex);
         }    
+    }
+
+    private DataSource getDataSource(String uriSpace) throws BridgeDbSqlException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT dataSource ");
+        query.append("FROM url ");
+        query.append("WHERE uriSpace = '");
+            query.append(uriSpace);
+            query.append("' ");
+        System.out.println(query);
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+        }    
+        HashSet<String> results = new HashSet<String>();
+        try {
+            if (rs.next()){
+                String sysCode = rs.getString("dataSource");
+                System.out.println(sysCode);
+                return DataSource.getBySystemCode(sysCode);
+            }
+            throw new BridgeDbSqlException("No DataSource known for " + uriSpace);
+       } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to parse results.", ex);
+       }
     }
 
 
