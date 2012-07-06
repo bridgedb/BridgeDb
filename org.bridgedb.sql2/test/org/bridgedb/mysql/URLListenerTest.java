@@ -11,13 +11,12 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-    @Ignore
 public class URLListenerTest extends org.bridgedb.url.URLListenerTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
-        listener = new MySQLMapper(sqlAccess);
+        listener = new MySQLMapper(true, sqlAccess);
         System.out.println("setup");
     }
             
