@@ -22,7 +22,7 @@ public class UriSpaceMapper {
        map.put("http://www.foo.com/", dataSource);
        dataSource = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id")
                 .idExample("123").asDataSource();
-       map.put("http://www.example.com", dataSource);
+       map.put("http://www.example.com/", dataSource);
        dataSource = DataSource.register("TestDS3", "TestDS3").URISpace("http://www.example.org#")
                 .idExample("123").asDataSource();
        map.put("http://www.example.org#", dataSource);

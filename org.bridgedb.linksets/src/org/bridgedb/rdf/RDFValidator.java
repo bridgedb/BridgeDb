@@ -1,11 +1,12 @@
 package org.bridgedb.rdf;
 
 import java.util.ArrayList;
-import org.bridgedb.Reporter;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.constants.DctermsConstants;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -18,22 +19,23 @@ import org.openrdf.rio.RDFHandlerException;
  *
  * @author Christian
  */
-public abstract class RDFBase implements RdfLoader{
+public class RDFValidator implements RdfLoader{
 
     ArrayList<Statement> statements = new ArrayList<Statement>();
     private String subjectURISpace;
     private String targetURISpace;
     private Resource linksetResource;
+    Value linksetPredicate;
     private boolean isTransative;
     private boolean strict;
     private final Value UNSPECIFIED = new LiteralImpl("Unspecified");
    
-    public RDFBase(boolean strict) {
+    public RDFValidator(boolean strict) {
         this.strict = strict;
     }
         
     @Override
-    public void addStatement(Statement st) throws RDFHandlerException {
+    public void addHeaderStatement(Statement st) throws RDFHandlerException {
         if (statements == null){
             throw new RDFHandlerException ("Illegal call to addStatement after validateAndSaveVoid() called.");
         }
@@ -41,19 +43,10 @@ public abstract class RDFBase implements RdfLoader{
     }
     
     @Override
-    public synchronized void validateAndSaveVoid(Statement firstMap) throws RDFHandlerException{
+    public void processFirstNoneHeader(Statement firstMap) throws RDFHandlerException{
         Reporter.report("Validation started");
-        validate(firstMap);
-        //for (Statement st:statements){
-            //ystem.out.println(st);
-        //}
-        saveStatements();
-    }
- 
-    abstract void saveStatements() throws RDFHandlerException;
-
-    private void validate(Statement firstMap) throws RDFHandlerException {
         linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, VoidConstants.LINKSET);
+        linksetPredicate = findTheSingletonObject (linksetResource, VoidConstants.LINK_PREDICATE);
         //Provide details of the licence under which the dataset is published using the dcterms:license property.
         checkObject(linksetResource, DctermsConstants.LICENSE);
         //The linkset authorship, i.e. the agent that generated the intellectual knowledge
@@ -165,7 +158,6 @@ public abstract class RDFBase implements RdfLoader{
         statements.add(versionStatement);
    }
     
-       @Override
     public boolean isTransative() throws RDFHandlerException {
         return isTransative;
     }
@@ -293,7 +285,6 @@ public abstract class RDFBase implements RdfLoader{
         return subject;
     }
 
-    @Override
     public String getSubjectUriSpace() throws RDFHandlerException {
         if (subjectURISpace != null){
             return this.subjectURISpace;
@@ -301,12 +292,44 @@ public abstract class RDFBase implements RdfLoader{
         throw new RDFHandlerException("run validateAndSaveVoid before calling getSubjectUriSpace()");
      }
 
-    @Override
     public String getTargetUriSpace() throws RDFHandlerException {
         if (targetURISpace != null){
             return this.targetURISpace;
         }
         throw new RDFHandlerException("run validateAndSaveVoid before calling getTargetUriSpace()");
+    }
+
+    String getPredicate() {
+        return linksetPredicate.stringValue();
+    }
+
+    boolean isSymmetric() {
+        //current assumption is all linksets are semaantic
+        return true;
+    }
+
+    @Override
+    public void insertURLMapping(Statement st) throws RDFHandlerException{
+        String sourceURL = st.getSubject().stringValue();
+        if (!sourceURL.startsWith(subjectURISpace)){
+            throw new RDFHandlerException("Subject " + sourceURL + " does not begin with the declared uriSpace " 
+                    + subjectURISpace);
+        }
+        Value predicate = st.getPredicate();
+        if (!predicate.equals(linksetPredicate)){
+            throw new RDFHandlerException("Predicate " + predicate + " does not begin with the declared predicate " 
+                    + linksetPredicate);            
+        }
+        String targetURL = st.getObject().stringValue();
+        if (!targetURL.startsWith(targetURISpace)){
+            throw new RDFHandlerException("Target " + targetURL + " does not begin with the declared uriSpace " 
+                    + targetURISpace);
+        }
+    }
+
+    @Override
+    public void closeInput() throws IDMapperException {
+        //do nothing
     }
     
 

@@ -7,17 +7,18 @@ package org.bridgedb.linkset;
 import java.io.File;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Reporter;
+import org.bridgedb.mapping.MappingListener;
+import org.bridgedb.mysql.MySQLMapper;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.mysql.MysqlMapper;
-import org.bridgedb.rdf.HoldingRDFStore;
-import org.bridgedb.rdf.LinksetValidator;
+import org.bridgedb.rdf.RDFWriter;
+import org.bridgedb.rdf.RDFValidator;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
-import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.url.URLListener;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
 
 /**
@@ -33,40 +34,29 @@ public class LinksetLoader {
                 parse(child, arg);
             }
         } else {    
+            Reporter.report("Validating " + file.getAbsolutePath());
+            RDFValidator validator = new RDFValidator(true);
+            LinksetHandler handler = new LinksetHandler(validator);
+            handler.parse(file);
+            Reporter.report("Validation of " + file.getAbsolutePath() + " successful");                
             if (arg.equals("load")){
+                Reporter.report("Started loading " + file.getAbsolutePath());                
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-                URLLinkListener listener = new MysqlMapper(sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.LOAD, true);
-                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
+                URLListener listener = new MySQLMapper(sqlAccess);
+                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.LOAD, validator, listener);
+                handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
                 Reporter.report("Loading of " + file.getAbsolutePath() + " successful");
             } else if (arg.equals("test")){
+                Reporter.report("Started test loading " + file.getAbsolutePath());                
                 SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-                URLLinkListener listener = new MysqlMapper(sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.TEST, true);
-                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
+                URLListener listener = new MySQLMapper(sqlAccess);
+                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.TEST, validator, listener);
+                handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
-                Reporter.report("Test loading of " + file.getAbsolutePath() + " successful");
-            } else if (arg.equals("force")){
-                SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-                URLLinkListener listener = new MysqlMapper(sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.LOAD, false);
-                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
-                handler.parse(file);
-                Reporter.report("Loading (with limited validation) of " + file.getAbsolutePath() + " successful");
-            } else if (arg.equals("testforce")){
-                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-                URLLinkListener listener = new MysqlMapper(sqlAccess);
-                RdfLoader rdfLoader = new HoldingRDFStore(RdfStoreType.TEST, false);
-                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
-                handler.parse(file);
-                Reporter.report("Test loading (with limited validation) of " + file.getAbsolutePath() + " successful");
+                Reporter.report("Loading of " + file.getAbsolutePath() + " successful");
             } else if (arg.equals("validate")){
-                URLLinkListener listener = new ValidatingLinkListener();
-                RdfLoader rdfLoader = new LinksetValidator();
-                LinksetHandler handler = new LinksetHandler (listener, rdfLoader);
-                handler.parse(file);
-                Reporter.report("Validation of " + file.getAbsolutePath() + " successful");
+                //Already validated.
             } else {
                  usage();
             }
@@ -84,14 +74,14 @@ public class LinksetLoader {
                 RdfWrapper.clear(RdfStoreType.LOAD);
                 Reporter.report("Laod RDF cleared");
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-                URLLinkListener listener = new MysqlMapper(true, sqlAccess);
+                MappingListener listener = new MySQLMapper(true, sqlAccess);
                 Reporter.report("Load SQL cleared");
                 parse(args[0], "load");
             } else if (args[1].equals("testnew")){
                 RdfWrapper.clear(RdfStoreType.TEST);
                 Reporter.report("Laod RDF cleared");
                 SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-                URLLinkListener listener = new MysqlMapper(true, sqlAccess);
+                MappingListener listener = new MySQLMapper(true, sqlAccess);
                 Reporter.report("Test SQL cleared");
                 parse(args[0], "test");
             } else {
