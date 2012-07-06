@@ -13,7 +13,7 @@ public abstract class LinkListenerTest extends IDMapperTestBase{
     
     protected static final String TEST_PREDICATE = "http://www.bridgedb.org/test#testPredicate";
     private static final boolean SYMETRIC = true;
-    private static final boolean ORIGINAL = true;
+    private static final boolean ORIGINAL = false;
     private static final boolean TRANSATIVE = true;
     
     protected static MappingListener listener;
