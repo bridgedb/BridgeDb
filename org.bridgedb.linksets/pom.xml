@@ -32,7 +32,7 @@
     <dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.sql</artifactId>
+			<artifactId>org.bridgedb.sql2</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -103,7 +103,7 @@
  		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.sql</artifactId>
+			<artifactId>org.bridgedb.sql2</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>

@@ -4,11 +4,9 @@
  */
 package org.bridgedb.rdf;
 
-import org.bridgedb.linkset.IDMapperLinksetException;
-import org.openrdf.model.Resource;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.url.URLListener;
 import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -17,19 +15,12 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public interface RdfLoader {
     
-    public String getDefaultBaseURI();
+    public void processFirstNoneHeader(Statement firstMap) throws RDFHandlerException;
 
-    public void validateAndSaveVoid(Statement firstMap) throws RDFHandlerException;
+    public void addHeaderStatement(Statement st) throws RDFHandlerException;
 
-    public String getSubjectUriSpace() throws RDFHandlerException;
+    public void insertURLMapping(Statement st) throws RDFHandlerException;
 
-    public String getTargetUriSpace() throws RDFHandlerException;
+    public void closeInput()throws IDMapperException;
 
-    public String getLinksetid() throws RDFHandlerException;
-
-    public String getInverseLinksetid() throws RDFHandlerException;
-
-    public void addStatement(Statement st) throws RDFHandlerException;
-
-    public boolean isTransative() throws RDFHandlerException;
 }

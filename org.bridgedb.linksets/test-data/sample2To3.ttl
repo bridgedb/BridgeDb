@@ -8,10 +8,19 @@
 
 #Intentional very minimal info to test force;
 :TestDS2 a void:Dataset ;
+    pav:derivedOn "2012-02-22"^^xsd:date ;
+    dcterms:license "Who cares this is a test" ;
+    dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.example.com/>.
 :TestDS3 a void:Dataset ;
+    pav:derivedOn "2012-02-22"^^xsd:date ;
+    dcterms:license "Who cares this is a test" ;
+    dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.example.org#>.
 :Test2_3 a void:Linkset  ;
+    dcterms:license "Who cares this is a test" ;
+    dcterms:created "2012-02-22"^^xsd:date ;
+    dcterms:creator <http://www.cs.man.ac.uk/~brenninc> ;
     void:target :TestDS2 ;
     void:target :TestDS3 ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> .

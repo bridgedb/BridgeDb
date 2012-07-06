@@ -4,6 +4,7 @@
  */
 package org.bridgedb.linkset;
 
+import org.junit.Ignore;
 import org.bridgedb.linkset.constants.PavConstants;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
