@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.mapping.UriSpaceMapper;
+import org.bridgedb.url.UriSpaceMapper;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
 
