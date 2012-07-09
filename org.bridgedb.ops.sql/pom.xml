@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
   <artifactId>org.bridgedb.ops.sql</artifactId>
-  <name>BridgeDb OPS SQL 2</name>
+  <name>BridgeDb OPS SQL</name>
   
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
@@ -17,7 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.sql2</artifactId>
+			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -43,7 +43,7 @@
 		</dependency>
         <dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.sql2</artifactId>
+			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
