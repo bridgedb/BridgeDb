@@ -1,0 +1,66 @@
+<project 
+    xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+        http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bridgedb</groupId>
+    <artifactId>org.bridgedb.ws2.service</artifactId>
+    <packaging>war</packaging>
+    <name>BridgeDb Websever 2 Service</name>
+
+    <parent>
+        <artifactId>bridgedb-bundle</artifactId>
+        <groupId>org.bridgedb</groupId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <cxf.version>2.4.3</cxf.version>
+        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+    </properties>
+
+    <build>
+        <finalName>BridgeDb</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <version>1.1</version>
+            </plugin>
+        </plugins>
+	</build>
+	
+	<dependencies>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.sql2</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws2.core</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws2.server</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+	</dependencies>
+  
+</project>
