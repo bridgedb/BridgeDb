@@ -20,7 +20,6 @@ public abstract class URLListenerTest extends URLMapperTestBase{
 
     @Test
     public void testRegisterUriSpace() throws IDMapperException{
-        System.out.println(DataSource1);
         listener.registerUriSpace(DataSource1, URISpace1);
         listener.registerUriSpace(DataSource2, URISpace2);
         listener.registerUriSpace(DataSource3, URISpace3);
