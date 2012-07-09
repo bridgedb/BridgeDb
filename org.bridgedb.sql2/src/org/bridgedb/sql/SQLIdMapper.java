@@ -18,18 +18,18 @@ import org.bridgedb.impl.InternalUtils;
  *
  * @author Christian
  */
-public abstract class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabilities {
+public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabilities {
 
     private static final int FREESEARCH_CUTOFF = 100000;      
     //Internal parameters
     protected static final int DEFAULT_LIMIT = 1000;
-    protected static final int BLOCK_SIZE = 1000;
-    protected int blockCount = 0;
-    protected int insertCount = 0;
-    protected int doubleCount = 0;    
+    private final boolean useLimit;
+    private final boolean useTop;
     
-    public SQLIdMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
-        super(dropTables, sqlAccess);
+    public SQLIdMapper(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws BridgeDbSqlException{
+        super(dropTables, sqlAccess, specific);
+        useLimit = specific.supportsLimit();
+        useTop = specific.supportsTop();
      }   
 
     //*** IDMapper Methods 
@@ -76,8 +76,6 @@ public abstract class SQLIdMapper extends SQLListener implements IDMapper, IDMap
                 }
             }
         }
-        System.out.println(ref);
-        System.out.println(results);
         return results;
     }
 
@@ -86,12 +84,12 @@ public abstract class SQLIdMapper extends SQLListener implements IDMapper, IDMap
         if (badXref(xref)) return false;
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
-        appendVirtuosoTopConditions(query, 0, 1); 
+        appendTopConditions(query, 0, 1); 
         query.append("targetId ");
         query.append("FROM mapping, mappingSet ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         appendSourceXref(query, xref);
-        appendMySQLLimitConditions(query,0, 1);
+        appendLimitConditions(query,0, 1);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -106,14 +104,14 @@ public abstract class SQLIdMapper extends SQLListener implements IDMapper, IDMap
     public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
-        appendVirtuosoTopConditions(query, 0, limit); 
+        appendTopConditions(query, 0, limit); 
         query.append(" targetId as id, targetDataSource as sysCode ");
         query.append("FROM mapping, mappingSet ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND sourceId = '");
             query.append(text);
             query.append("' ");
-        appendMySQLLimitConditions(query,0, limit);
+        appendLimitConditions(query,0, limit);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -303,9 +301,29 @@ public abstract class SQLIdMapper extends SQLListener implements IDMapper, IDMap
        }
     }
 
-    protected abstract void appendMySQLLimitConditions(StringBuilder query, Integer position, Integer limit);
+    protected void appendLimitConditions(StringBuilder query, Integer position, Integer limit){
+        if (useLimit){
+            if (position == null) {
+                position = 0;
+            }
+            if (limit == null){
+                limit = DEFAULT_LIMIT;
+            }
+            query.append("LIMIT " + position + ", " + limit);       
+        }
+    }
 
-    protected abstract void appendVirtuosoTopConditions(StringBuilder query, Integer position, Integer limit);
+    protected void appendTopConditions(StringBuilder query, Integer position, Integer limit){
+        if (useTop){
+            if (position == null) {
+                position = 0;
+            }
+            if (limit == null){
+                limit = DEFAULT_LIMIT;
+            }
+            query.append("TOP " + position + ", " + limit + " ");                
+        }
+    }
 
 
 
