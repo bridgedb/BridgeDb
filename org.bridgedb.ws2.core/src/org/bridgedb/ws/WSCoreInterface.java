@@ -18,8 +18,7 @@ import org.bridgedb.ws.bean.XrefMapBean;
  */
 public interface WSCoreInterface {
 
-    List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> linkSetId, 
-            List<String> targetCodes) throws IDMapperException;
+    List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> targetCodes) throws IDMapperException;
 
     XrefExistsBean xrefExists(String id, String scrCode) throws IDMapperException;
 
