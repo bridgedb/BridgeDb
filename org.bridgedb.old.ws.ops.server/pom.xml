@@ -5,9 +5,9 @@
         http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bridgedb</groupId>
-    <artifactId>org.bridgedb.ws.ops.client</artifactId>
+    <artifactId>org.bridgedb.ws.ops.server</artifactId>
     <packaging>jar</packaging>
-    <name>BridgeDb Websever OPS Client</name>
+    <name>OLD BridgeDb Websever OPS Server</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
@@ -15,8 +15,8 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <build>
-        <plugins>
+     <build>
+         <plugins>
         </plugins>
 	</build>
 	
@@ -29,10 +29,21 @@
 		</dependency>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ws.client</artifactId>
+			<artifactId>org.bridgedb.ws.server</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ops</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
         <dependency>
         	<groupId>com.sun.jersey</groupId>
         	<artifactId>jersey-core</artifactId>
@@ -60,13 +71,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ops</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ws.core</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
@@ -79,24 +83,51 @@
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ops</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.sql</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.linksets</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.sql</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.ws.server</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
         <dependency>
         	<groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
-            <version>1.2</version>
+            <version>${hamcrest.version}</version>
 			<scope>test</scope>
         </dependency>    
-         <dependency>
+        <dependency>
         	<groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <version>${hamcrest.version}</version>
 			<scope>test</scope>
         </dependency>    
 	</dependencies>
-    <pluginRepositories>
-        <pluginRepository> 
-            <id>onejar-maven-plugin.googlecode.com</id>
-            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
-        </pluginRepository>
-    </pluginRepositories>
   
 </project>

@@ -1,24 +1,36 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
-  <artifactId>org.bridgedb.plus</artifactId>
-  <name>BridgeDb Plus</name>
+  <artifactId>org.bridgedb.ops</artifactId>
+  <name>OLD BridgeDb OPS Exstensions</name>
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
   	<groupId>org.bridgedb</groupId>
   	<version>2.0.0-SNAPSHOT</version>
   </parent>
 
-     <dependencies>
+     <build>
+        <plugins>
+        </plugins>
+	</build>
+	
+    <dependencies>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb</artifactId>
+			<artifactId>org.bridgedb.plus</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.plus</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
