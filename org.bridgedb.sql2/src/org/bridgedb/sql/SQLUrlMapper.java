@@ -18,12 +18,12 @@ import org.bridgedb.url.URLMapper;
  *
  * @author Christian
  */
-public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener {
+public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener {
 
     private static final int URI_SPACE_LENGTH = 100;
 
-    public SQLUrlMapper(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
-        super(dropTables, sqlAccess);
+    public SQLUrlMapper(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws BridgeDbSqlException{
+        super(dropTables, sqlAccess, specific);
         if (dropTables){
             try {
                 Map<String,DataSource> mappings = UriSpaceMapper.getUriSpaceMappings();
@@ -99,7 +99,6 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
             }
             query.append(")");
         }
-        System.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -122,12 +121,11 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
 
     @Override
     public boolean uriExists(String URL) throws IDMapperException {
-        System.out.println("mapping: " + URL);
         String id = getId(URL);
         String uriSpace = getUriSpace(URL);
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
-        appendVirtuosoTopConditions(query, 0, 1); 
+        appendTopConditions(query, 0, 1); 
         query.append("targetId ");
         query.append("FROM mapping, mappingSet, url as source ");
         query.append("WHERE mappingSetId = mappingSet.id ");
@@ -138,8 +136,7 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         query.append("AND source.uriSpace = '");
             query.append(uriSpace);
             query.append("' ");
-        appendMySQLLimitConditions(query,0, 1);
-        System.out.println(query);
+        appendLimitConditions(query,0, 1);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -155,7 +152,7 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         //ystem.out.println("mapping: " + sourceURL);
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
-        appendVirtuosoTopConditions(query, 0, limit); 
+        appendTopConditions(query, 0, limit); 
         query.append(" targetId as id, target.uriSpace as uriSpace ");
         query.append("FROM mapping, mappingSet, url as target ");
         query.append("WHERE mappingSetId = mappingSet.id ");
@@ -165,8 +162,7 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
             query.append("' ");
         //use grouop by as do not know how to do distinct in Virtuoso
         query.append("GROUP BY targetId, target.uriSpace ");        
-        appendMySQLLimitConditions(query,0, limit);
-        System.out.println(query);
+        appendLimitConditions(query,0, limit);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -269,7 +265,6 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         query.append("WHERE uriSpace = '");
         query.append(uriSpace);
         query.append("' ");
-        System.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -294,7 +289,6 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         query.append("WHERE uriSpace = '");
             query.append(uriSpace);
             query.append("' ");
-        System.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -306,7 +300,6 @@ public abstract class SQLUrlMapper extends SQLIdMapper implements URLMapper, URL
         try {
             if (rs.next()){
                 String sysCode = rs.getString("dataSource");
-                System.out.println(sysCode);
                 return DataSource.getBySystemCode(sysCode);
             }
             throw new BridgeDbSqlException("No DataSource known for " + uriSpace);

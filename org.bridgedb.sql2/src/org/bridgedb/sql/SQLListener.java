@@ -21,7 +21,7 @@ import org.bridgedb.utils.Reporter;
  *
  * @author Christian
  */
-public abstract class SQLListener implements MappingListener{
+public class SQLListener implements MappingListener{
 
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	protected static final int SQL_COMPAT_VERSION = 4;
@@ -38,15 +38,26 @@ public abstract class SQLListener implements MappingListener{
     private static final int LINK_SET_ID_LENGTH = 100;
     private static final int KEY_LENGTH= 100; 
     private static final int PROPERTY_LENGTH = 100;
+    private static final int SQL_TIMEOUT = 2;
+    private static final int MAX_BLOCK_SIZE = 1000;
     
     protected SQLAccess sqlAccess;
     protected Connection possibleOpenConnection;
-
-    SQLListener(boolean dropTables, SQLAccess sqlAccess) throws BridgeDbSqlException{
+    private final int blockSize;
+    private int blockCount = 0;
+    private int insertCount = 0;
+    private int doubleCount = 0;  
+    private StringBuilder insertQuery;
+    private final boolean supportsIsValid;
+    private final String autoIncrement;
+    
+    public SQLListener(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws BridgeDbSqlException{
         if (sqlAccess == null){
             throw new IllegalArgumentException("sqlAccess can not be null");
         }
         this.sqlAccess = sqlAccess;
+        this.supportsIsValid = specific.supportsIsValid();
+        this.autoIncrement = specific.getAutoIncrementCommand();
         if (dropTables){
             this.dropSQLTables();
             this.createSQLTables();
@@ -54,7 +65,13 @@ public abstract class SQLListener implements MappingListener{
             checkVersion();
             loadDataSources();
         }
+        if (specific.supportsMultipleInserts()){
+            blockSize = MAX_BLOCK_SIZE;
+        } else {
+            blockSize = 1;
+        }
     }   
+    
     @Override
     public synchronized int registerMappingSet(DataSource source, DataSource target, String predicate, 
             boolean symetric, boolean isTransitive) throws BridgeDbSqlException {
@@ -101,7 +118,9 @@ public abstract class SQLListener implements MappingListener{
 
     @Override
     public void closeInput() throws IDMapperException {
-        Reporter.report ("FInished processing linkset");
+        runInsert();
+        insertQuery = null;
+        Reporter.report ("Finished processing linkset");
         countLinks();
         if (possibleOpenConnection != null){
             try {
@@ -112,6 +131,14 @@ public abstract class SQLListener implements MappingListener{
             }
         }
     }
+    
+    //@Override
+    public void openInput() throws BridgeDbSqlException {
+        //Starting with a block will cause a new query to start.
+        blockCount = blockSize ;
+        insertCount = 0;
+        doubleCount = 0;    
+ 	}
 
     @Override
     public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws IDMapperException {
@@ -121,8 +148,47 @@ public abstract class SQLListener implements MappingListener{
         }
     }
 
-    protected abstract void insertLink(String sourceId, String targetId, int mappingSetId) throws IDMapperException;
+    private void insertLink(String sourceId, String targetId, int mappingSetId) throws IDMapperException{
+        if (blockCount >= blockSize){
+            runInsert();
+            insertQuery = new StringBuilder("INSERT INTO mapping (sourceId, targetId, mappingSetId) VALUES ");
+        } else {
+            try {
+                insertQuery.append(", ");        
+            } catch (NullPointerException ex){
+                throw new BridgeDbSqlException("Please run openInput() before insertLink");
+            }
+        }
+        blockCount++;
+        insertQuery.append("('");
+        insertQuery.append(sourceId);
+        insertQuery.append("', '");
+        insertQuery.append(targetId);
+        insertQuery.append("', ");
+        insertQuery.append(mappingSetId);
+        insertQuery.append(")");
 
+    }
+
+    private void runInsert() throws BridgeDbSqlException{
+        if (insertQuery != null) {
+           try {
+                Statement statement = createStatement();
+                long start = new Date().getTime();
+                int changed = statement.executeUpdate(insertQuery.toString());
+                Reporter.report("insertTook " + (new Date().getTime() - start));
+                insertCount += changed;
+                doubleCount += blockCount - changed;
+                Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
+            } catch (SQLException ex) {
+                System.err.println(ex);
+                throw new BridgeDbSqlException ("Error inserting link ", ex, insertQuery.toString());
+            }
+        }   
+        insertQuery = null;
+        blockCount = 0;
+    }
+    
     /**
 	 * Excecutes several SQL statements to drop the tables 
 	 * @throws IDMapperException 
@@ -181,7 +247,7 @@ public abstract class SQLListener implements MappingListener{
                     + "     urnBase VARCHAR(" + URNBASE_LENGTH + ")         "
                     + "  ) ");
             String query = "CREATE TABLE mapping " 
-                    + "( id INT " + getAUTO_INCREMENT() + " PRIMARY KEY, " 
+                    + "( id INT " + autoIncrement + " PRIMARY KEY, " 
                     + "  sourceId VARCHAR(" + ID_LENGTH + ") NOT NULL, "
         			+ "  targetId VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
                     + "  mappingSetId INT(" + LINK_SET_ID_LENGTH + ") "
@@ -190,7 +256,7 @@ public abstract class SQLListener implements MappingListener{
             sh.execute("CREATE INDEX sourceFind ON mapping (sourceid) ");
             sh.execute("CREATE INDEX sourceMappingSetFind ON mapping (mappingSetId, sourceId) ");
          	query =	"CREATE TABLE mappingSet " 
-                    + "( id INT " + getAUTO_INCREMENT() + " PRIMARY KEY, " 
+                    + "( id INT " + autoIncrement + " PRIMARY KEY, " 
                     + "     sourceDataSource VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
                     + "     predicate   VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
                     + "     targetDataSource VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
@@ -213,8 +279,6 @@ public abstract class SQLListener implements MappingListener{
 		}
 	}
      
-    protected abstract String getAUTO_INCREMENT();
-
     /**
      * Checks that the schema is for this version.
      * 
@@ -258,8 +322,18 @@ public abstract class SQLListener implements MappingListener{
         }
     }
    
-    protected abstract Statement createAStatement() throws SQLException;
-
+    protected Statement createAStatement() throws SQLException{
+        if (possibleOpenConnection == null){
+            possibleOpenConnection = sqlAccess.getAConnection();
+        } else if (possibleOpenConnection.isClosed()){
+            possibleOpenConnection = sqlAccess.getAConnection();
+        } else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
+            possibleOpenConnection.close();
+            possibleOpenConnection = sqlAccess.getAConnection();
+        }  
+        return possibleOpenConnection.createStatement();
+    }
+    
     void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();

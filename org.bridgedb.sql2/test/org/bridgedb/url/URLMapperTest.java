@@ -31,7 +31,7 @@ public abstract class URLMapperTest extends URLMapperTestBase{
 
     @AfterClass
     public static void stopTime() throws IDMapperException{
-        System.out.println("Test took " + ((new Date()).getTime() - start.getTime()));
+        report("Test took " + ((new Date()).getTime() - start.getTime()));
     }
 
     @AfterClass //Setup as an afterclass so it is run last.
@@ -54,7 +54,6 @@ public abstract class URLMapperTest extends URLMapperTestBase{
         assertNotNull(map2URL2);
         assertNotNull(mapBadURL1);
         Map<String, Set<String>> results = urlMapper.mapURL(sourceURLs);
-        System.out.println(results);
         Set<String> resultSet = results.get(map1URL1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1URL2));
@@ -81,8 +80,6 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     public void testMapIDOneToManyNoDataSources() throws IDMapperException{
         report("MapIDOneToManyNoDataSources");
         Set<String> results = urlMapper.mapURL(map1URL1);
-        System.out.println(results);
-        System.out.println(map1URL2);
         assertTrue(results.contains(map1URL2));
         assertTrue(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));

@@ -284,19 +284,5 @@ public class SqlFactory {
             out.print(ex);
         }
     }
-    
-    public static void main(String[] args) throws IOException {
-        //ystem.out.println(new File(".").getAbsolutePath());
-        list(System.out);
-        //Map<String, String> env = System.getenv();
-        //for (String envName : env.keySet()) {
-        //    ystem.out.format("%s=%s%n",
-        //                      envName,
-        //                      env.get(envName));
-        //}
-    }
-
-
-
-    
+      
 }
