@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
   <artifactId>org.bridgedb.sql</artifactId>
-  <name>BridgeDb SQL</name>
+  <name>OLD BridgeDb SQL</name>
   
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
