@@ -28,19 +28,17 @@
   	<!--module>org.bridgedb.webservice.synergizer</module-->
   	<!--module>examples</module-->
     <!--module>org.bridgedb.server</module-->
-  	<module>org.bridgedb.plus</module>
-  	<module>org.bridgedb.ops</module>
   	<module>org.bridgedb.sql</module>
+  	<module>org.bridgedb.ops.sql</module>
   	<module>org.bridgedb.linksets</module>
-  	<module>org.bridgedb.ws.api</module>
   	<module>org.bridgedb.ws.core</module>
-  	<module>org.bridgedb.ws.ops.core</module>
+  	<!--module>org.bridgedb.ws.ops.core</module-->
   	<module>org.bridgedb.ws.server</module>
-  	<module>org.bridgedb.ws.ops.server</module>
-  	<module>org.bridgedb.ws.sqlserver</module>
+  	<!--module>org.bridgedb.ws.ops.server</module-->
+  	<module>org.bridgedb.ws.service</module>
   	<module>org.bridgedb.ws.client</module>
-  	<module>org.bridgedb.ws.ops.client</module>
-  	<module>org.bridgedb.transitive</module>
+  	<!--module>org.bridgedb.ws.ops.client</module-->
+  	<!--module>org.bridgedb.transitive</module-->
   </modules>
   
   	<build>

@@ -5,9 +5,9 @@
         http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bridgedb</groupId>
-    <artifactId>org.bridgedb.ws2.client</artifactId>
+    <artifactId>org.bridgedb.ws.core</artifactId>
     <packaging>jar</packaging>
-    <name>BridgeDb Websever 2 Client</name>
+    <name>BridgeDb Websever Core</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
@@ -23,31 +23,20 @@
 	<dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ws2.core</artifactId>
+			<artifactId>org.bridgedb</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
-        <dependency>
-        	<groupId>com.sun.jersey</groupId>
-        	<artifactId>jersey-core</artifactId>
-        	<version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
-            <type>jar</type>
-        </dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ws2.core</artifactId>
+			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
