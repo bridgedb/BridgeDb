@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mapping.MappingListener;
-import org.bridgedb.mysql.MySQLMapper;
+import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.rdf.RDFWriter;
@@ -16,6 +16,7 @@ import org.bridgedb.rdf.RDFValidator;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.Reporter;
@@ -42,7 +43,7 @@ public class LinksetLoader {
             if (arg.equals("load")){
                 Reporter.report("Started loading " + file.getAbsolutePath());                
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-                URLListener listener = new MySQLMapper(sqlAccess);
+                URLListener listener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
                 RdfLoader rdfLoader = new RDFWriter(RdfStoreType.LOAD, validator, listener);
                 handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
@@ -50,7 +51,7 @@ public class LinksetLoader {
             } else if (arg.equals("test")){
                 Reporter.report("Started test loading " + file.getAbsolutePath());                
                 SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-                URLListener listener = new MySQLMapper(sqlAccess);
+                URLListener listener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
                 RdfLoader rdfLoader = new RDFWriter(RdfStoreType.TEST, validator, listener);
                 handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
@@ -74,14 +75,14 @@ public class LinksetLoader {
                 RdfWrapper.clear(RdfStoreType.LOAD);
                 Reporter.report("Laod RDF cleared");
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-                MappingListener listener = new MySQLMapper(true, sqlAccess);
+                URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
                 Reporter.report("Load SQL cleared");
                 parse(args[0], "load");
             } else if (args[1].equals("testnew")){
                 RdfWrapper.clear(RdfStoreType.TEST);
                 Reporter.report("Laod RDF cleared");
                 SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-                MappingListener listener = new MySQLMapper(true, sqlAccess);
+                URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
                 Reporter.report("Test SQL cleared");
                 parse(args[0], "test");
             } else {

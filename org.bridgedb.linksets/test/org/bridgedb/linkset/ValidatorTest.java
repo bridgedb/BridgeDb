@@ -4,11 +4,11 @@
  */
 package org.bridgedb.linkset;
 
+import org.bridgedb.utils.Reporter;
 import org.junit.Ignore;
 import org.bridgedb.linkset.constants.PavConstants;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Reporter;
 import org.bridgedb.linkset.constants.DctermsConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
 import org.junit.Test;
