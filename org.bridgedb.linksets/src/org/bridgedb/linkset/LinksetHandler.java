@@ -14,7 +14,6 @@ import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
-import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Resource;
