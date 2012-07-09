@@ -27,7 +27,6 @@ import org.bridgedb.ws.bean.XrefMapBean;
 public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
 
     WSCoreInterface webService;
-    public static final ArrayList<String> ALL_LINK_SET_IDS = new ArrayList<String>();
     
     public WSCoreMapper(WSCoreInterface webService){
         this.webService = webService;
@@ -50,7 +49,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         }
         HashMap<Xref, Set<Xref>> results = new HashMap<Xref, Set<Xref>>();
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
-        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_LINK_SET_IDS, targetCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, targetCodes);
         for (XrefMapBean bean:beans){
             Xref source = XrefBeanFactory.asXref(bean.getSource());
             Set<Xref> targets = results.get(source);
@@ -74,7 +73,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         for (int i = 0 ; i < tgtDataSources.length; i++){
             targetCodes.add(tgtDataSources[i].getSystemCode());
         }
-        List<XrefMapBean>  beans = webService.mapID(ids, codes, ALL_LINK_SET_IDS, targetCodes);
+        List<XrefMapBean>  beans = webService.mapID(ids, codes, targetCodes);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefMapBean bean:beans){
             results.add(XrefBeanFactory.asXref(bean.getTarget()));
