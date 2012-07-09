@@ -7,7 +7,7 @@
     <groupId>org.bridgedb</groupId>
     <artifactId>org.bridgedb.ws.api</artifactId>
     <packaging>jar</packaging>
-    <name>BridgeDb Websever API</name>
+    <name>OLD BridgeDb Websever API</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
