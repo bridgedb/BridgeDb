@@ -40,7 +40,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     }
 
     @Override
-    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
+    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws BridgeDbSqlException {
         if (badXref(ref)) return new HashSet<Xref>();
         StringBuilder query = new StringBuilder();
         query.append("SELECT targetId as id, targetDataSource as sysCode ");
@@ -64,7 +64,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         Set<Xref> results = resultSetToXrefSet(rs);
         if (tgtDataSources.length == 0){
@@ -80,7 +80,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     }
 
     @Override
-    public boolean xrefExists(Xref xref) throws IDMapperException {
+    public boolean xrefExists(Xref xref) throws BridgeDbSqlException {
         if (badXref(xref)) return false;
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
@@ -96,12 +96,12 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             rs = statement.executeQuery(query.toString());
             return rs.next();
         } catch (SQLException ex) {
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
    }
 
     @Override
-    public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
+    public Set<Xref> freeSearch(String text, int limit) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
         appendTopConditions(query, 0, limit); 
@@ -117,7 +117,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         return resultSetToXrefSet(rs);
     }
@@ -132,7 +132,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     
     @Override
     /** {@inheritDoc} */
-    public void close() throws IDMapperException { 
+    public void close() throws BridgeDbSqlException { 
         isConnected = false;
         if (this.possibleOpenConnection != null){
             try {
@@ -164,7 +164,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     }
 
     @Override
-    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedSrcDataSources() throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT sourceDataSource as sysCode ");
         query.append("FROM mappingSet ");
@@ -173,13 +173,13 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         return resultSetToDataSourceSet(rs);        
     }
 
     @Override
-    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedTgtDataSources() throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT targetDataSource as sysCode ");
         query.append("FROM mappingSet ");
@@ -188,13 +188,13 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         return resultSetToDataSourceSet(rs);        
     }
 
     @Override
-    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT predicate ");
         query.append("FROM mappingSet ");
@@ -211,7 +211,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             rs = statement.executeQuery(query.toString());
             return rs.next();
         } catch (SQLException ex) {
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
     }
 
@@ -271,7 +271,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append("' ");        
     }
     
-    private Set<Xref> resultSetToXrefSet(ResultSet rs) throws IDMapperException {
+    private Set<Xref> resultSetToXrefSet(ResultSet rs) throws BridgeDbSqlException {
         HashSet<Xref> results = new HashSet<Xref>();
         try {
             while (rs.next()){
@@ -283,11 +283,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             }
             return results;
        } catch (SQLException ex) {
-            throw new IDMapperException("Unable to parse results.", ex);
+            throw new BridgeDbSqlException("Unable to parse results.", ex);
        }
     }
 
-    private Set<DataSource> resultSetToDataSourceSet(ResultSet rs) throws IDMapperException {
+    private Set<DataSource> resultSetToDataSourceSet(ResultSet rs) throws BridgeDbSqlException {
         HashSet<DataSource> results = new HashSet<DataSource>();
         try {
             while (rs.next()){
@@ -297,7 +297,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             }
             return results;
        } catch (SQLException ex) {
-            throw new IDMapperException("Unable to parse results.", ex);
+            throw new BridgeDbSqlException("Unable to parse results.", ex);
        }
     }
 

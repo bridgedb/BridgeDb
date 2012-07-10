@@ -1,8 +1,10 @@
 package org.bridgedb.url;
 
+import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.Xref;
 import org.junit.Ignore;
 import java.util.Date;
-import org.bridgedb.DataSource;
 import org.junit.BeforeClass;
 import org.bridgedb.IDMapperException;
 import org.junit.AfterClass;
@@ -11,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -87,6 +90,26 @@ public abstract class URLMapperTest extends URLMapperTestBase{
         assertFalse(results.contains(map2URL2));
     }
     
+    @Test
+    public void testMapFullOneToManyNoDataSources() throws IDMapperException{
+        report("MapFullOneToManyNoDataSources");
+        Set<URLMapping> results = urlMapper.mapURLFull(map3URL3);
+        for (URLMapping URLMapping:results){
+            if (URLMapping.getTargetURL().equals(map3URL3)){
+                assertNull(URLMapping.getId());
+                assertNull(URLMapping.getMappingSetId());        
+                assertNull(URLMapping.getPredicate() );
+            } else {
+                String[] expectedMatches = {map3URL1, map3URL2};
+                assertThat(URLMapping.getTargetURL(), isOneOf( expectedMatches ) );
+                assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
+                assertNotNull(URLMapping.getId());
+                assertNotNull(URLMapping.getMappingSetId());
+            }
+            assertEquals(map3URL3, URLMapping.getSourceURL());
+        }
+    }
+
     @Test
     public void testMapIDOneBad() throws IDMapperException{
         report("MapIDOneBad");
@@ -176,4 +199,67 @@ public abstract class URLMapperTest extends URLMapperTestBase{
         Set<String> results = urlMapper.urlSearch(goodId1, 2);
         assertEquals (2, results.size());
      }
+
+    @Test
+    public void testGetXrefGood() throws IDMapperException {
+        report("GetXrefGood");
+        Xref result = urlMapper.toXref(map2URL2);
+        assertEquals(map2xref2, result);
+    }
+
+    @Test
+    (expected=BridgeDbSqlException.class)
+    public void testGetXrefBad() throws IDMapperException {
+        report("GetXrefBad");
+        Xref result = urlMapper.toXref(mapBadURL1);
+    }
+    
+    
+    @Test
+    public void testGetMapping() throws IDMapperException {
+        report("GetMapping");
+        Set<URLMapping> results = urlMapper.mapURLFull(map3URL3);
+        Integer mappingId = null;
+        Integer setId = null;
+        for (URLMapping URLMapping:results){
+            if (URLMapping.getTargetURL().equals(map3URL2)){
+                mappingId = URLMapping.getId();
+                setId = URLMapping.getMappingSetId();        
+            }
+        }
+        URLMapping result = urlMapper.getMapping(mappingId);
+        assertEquals(mappingId, result.getId());
+        assertEquals(map3URL3, result.getSourceURL());
+        assertEquals(TEST_PREDICATE, result.getPredicate());
+        assertEquals(map3URL2, result.getTargetURL());
+        assertEquals(setId, result.getMappingSetId());
+    }
+    
+    @Test
+    public void testGetSampleSourceURL() throws IDMapperException {
+        report("GetSampleSourceURL");
+        Set<String> results = urlMapper.getSampleSourceURLs();
+        assertEquals(5, results.size());
+        for (String url:results){
+            assertTrue(urlMapper.uriExists(url));
+        }
+    }
+
+    @Test
+    public void testGetOverallStatistics() throws IDMapperException {
+        report("GetOverallStatistics()");
+        MappingSetStatistics results = urlMapper.getOverallStatistics();
+        assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
+        assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(6));
+        assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
+        assertThat (results.getNumberOfTargetDataSources(), greaterThanOrEqualTo(3));
+        assertThat (results.getNumberOfPredicates(), greaterThanOrEqualTo(1));
+    }
+
+    @Test
+    public void testGetUriSpaces() throws IDMapperException {
+        report("GetUriSpaces");
+        Set<String> results = urlMapper.getUriSpaces(map2xref3.getDataSource().getSystemCode());
+        assertTrue (results.contains(URISpace3));
+    }
 }
