@@ -140,7 +140,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         Set<URLMapping> results = resultSetToURLMappingSet(sourceURL, rs);
-        URLMapping toSelf = new URLMapping(null, sourceURL, sourceURL, null, null);
+        URLMapping toSelf = new URLMapping(null, sourceURL, null, sourceURL, null);
         if (targetURISpaces.length == 0){
            results.add(toSelf); 
         } else {
@@ -257,7 +257,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public MappingSetStatistics getOverallStatistics() throws BridgeDbSqlException {
+    public MappingSetStatistics getMappingSetStatistics() throws BridgeDbSqlException {
         int numberOfMappings = getMappingsCount();
         String linkSetQuery = "SELECT count(distinct(id)) as numberOfMappingSets, "
                 + "count(distinct(mappingSet.sourceDataSource)) as numberOfSourceDataSources, "
@@ -303,7 +303,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Set<MappingSetInfo> getLinkSetInfos() throws BridgeDbSqlException {
+    public Set<MappingSetInfo> getMappingSetInfos() throws BridgeDbSqlException {
         String query = ("SELECT * FROM mappingSet ");
         Statement statement = this.createStatement();
         try {
@@ -362,11 +362,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public int registerMappingSet(String sourceUriSpace, String targetUriSpace, String predicate, boolean symetric, boolean transative) 
+    public int registerMappingSet(String sourceUriSpace, String predicate, String targetUriSpace, boolean symetric, boolean transative) 
             throws BridgeDbSqlException {
         DataSource source = getDataSource(sourceUriSpace);
         DataSource target = getDataSource(targetUriSpace);      
-        return registerMappingSet(source, target, predicate, symetric, transative);
+        return registerMappingSet(source, predicate, target, symetric, transative);
     }
 
     @Override
@@ -432,7 +432,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 String targetURL = rs.getString("uriSpace") + rs.getString("id");
                 Integer mappingSetId = rs.getInt("mappingSetId");
                 String predicate = rs.getString("predicate");
-                URLMapping urlMapping = new URLMapping (mappingId, sourceURL, targetURL, mappingSetId, predicate);       
+                URLMapping urlMapping = new URLMapping (mappingId, sourceURL, predicate, targetURL, mappingSetId);       
                 results.add(urlMapping);
             }
             return results;
@@ -449,7 +449,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 String targetURL = rs.getString("target.uriSpace") + rs.getString("targetId");
                 Integer mappingSetId = rs.getInt("mappingSet.id");
                 String predicate = rs.getString("predicate");
-                return new URLMapping (mappingId, sourceURL, targetURL, mappingSetId, predicate);       
+                return new URLMapping (mappingId, sourceURL, predicate, targetURL, mappingSetId);       
             }
             return null;
        } catch (SQLException ex) {
