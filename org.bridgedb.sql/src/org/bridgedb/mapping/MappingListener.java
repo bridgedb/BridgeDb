@@ -9,7 +9,7 @@ import org.bridgedb.IDMapperException;
  */
 public interface MappingListener {
     
-    public int registerMappingSet(DataSource source, DataSource target, String predicate, 
+    public int registerMappingSet(DataSource source, String predicate, DataSource target, 
             boolean symetric, boolean transative) throws IDMapperException;
     
     public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws IDMapperException;
