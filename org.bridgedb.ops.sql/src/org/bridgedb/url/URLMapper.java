@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -33,7 +34,7 @@ import org.bridgedb.statistics.MappingSetStatistics;
  * Similar to the IDMapper interface except treats URLs as first class citizens.
  * To keep code size small URLs are represented as Strings.
  */
-public interface URLMapper {
+public interface URLMapper extends IDMapper{
 
 	/**
 	 * Get all cross-references for a set of entities, restricting the
@@ -121,9 +122,9 @@ public interface URLMapper {
      */
     public Set<String> getSampleSourceURLs() throws IDMapperException;
     
-    public  MappingSetStatistics getOverallStatistics() throws IDMapperException;
+    public  MappingSetStatistics getMappingSetStatistics() throws IDMapperException;
 
-    public Set<MappingSetInfo> getLinkSetInfos() throws IDMapperException;
+    public Set<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
     
     public Set<String> getUriSpaces(String sysCode) throws IDMapperException;
 

@@ -14,7 +14,7 @@ import org.bridgedb.IDMapperException;
 public interface URLListener {
     public void registerUriSpace(DataSource source, String uriSpace) throws IDMapperException;
 
-    public int registerMappingSet(String sourceUriSpace, String targetUriSpace, String predicate, 
+    public int registerMappingSet(String sourceUriSpace, String predicate, String targetUriSpace, 
         boolean symetric, boolean transative) throws IDMapperException;
 
     public void insertURLMapping(String sourceURL, String targetURL, int mappingSet, boolean symetric) 

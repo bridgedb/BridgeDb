@@ -25,17 +25,17 @@ public abstract class URLListenerTest extends URLMapperTestBase{
         listener.registerUriSpace(DataSource3, URISpace3);
 
         listener.openInput();
-        int mappingSet = listener.registerMappingSet(URISpace1, URISpace2, TEST_PREDICATE, SYMETRIC, ORIGINAL);
+        int mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, URISpace2, SYMETRIC, ORIGINAL);
         listener.insertURLMapping(map1URL1, map1URL2, mappingSet, SYMETRIC);
         listener.insertURLMapping(map2URL1, map2URL2, mappingSet, SYMETRIC);
         listener.insertURLMapping(map3URL1, map3URL2, mappingSet, SYMETRIC);
         
-        mappingSet = listener.registerMappingSet(URISpace2, URISpace3, TEST_PREDICATE, SYMETRIC, ORIGINAL);
+        mappingSet = listener.registerMappingSet(URISpace2, TEST_PREDICATE, URISpace3, SYMETRIC, ORIGINAL);
         listener.insertURLMapping(map1URL2, map1URL3, mappingSet, SYMETRIC);
         listener.insertURLMapping(map2URL2, map2URL3, mappingSet, SYMETRIC);
         listener.insertURLMapping(map3URL2, map3URL3, mappingSet, SYMETRIC);
 
-        mappingSet = listener.registerMappingSet(URISpace1, URISpace3, TEST_PREDICATE, SYMETRIC, TRANSATIVE);
+        mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, URISpace3, SYMETRIC, TRANSATIVE);
         listener.insertURLMapping(map1URL1, map1URL3, mappingSet, SYMETRIC);
         listener.insertURLMapping(map2URL1, map2URL3, mappingSet, SYMETRIC);
         listener.insertURLMapping(map3URL1, map3URL3, mappingSet, SYMETRIC);
