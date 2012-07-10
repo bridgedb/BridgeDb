@@ -17,10 +17,14 @@
 package org.bridgedb.url;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
+import org.bridgedb.statistics.MappingSetInfo;
+import org.bridgedb.statistics.MappingSetStatistics;
 
 /**
  * Base interface for all URL mapping methods.
@@ -48,7 +52,9 @@ public interface URLMapper {
      */
     public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws IDMapperException;
 
-	/**
+    public Set<URLMapping> mapURLFull(String sourceURL, String... targetURISpaces) throws IDMapperException;
+
+    /**
 	 * Get all cross-references for the given entity, restricting the
 	 * result to contain only references from the given set of name spaces.
      * 
@@ -102,4 +108,23 @@ public interface URLMapper {
      * @return false after the close() method is called on this object, true otherwise 
      */
     public boolean isConnected();
+    
+    public Xref toXref(String URL) throws IDMapperException;
+    
+    public URLMapping getMapping(int id)  throws IDMapperException;
+    
+    /**
+     * Gets a Sample of Source URls.
+     * 
+     * Main use is for writing the api description page
+     * @return 
+     */
+    public Set<String> getSampleSourceURLs() throws IDMapperException;
+    
+    public  MappingSetStatistics getOverallStatistics() throws IDMapperException;
+
+    public Set<MappingSetInfo> getLinkSetInfos() throws IDMapperException;
+    
+    public Set<String> getUriSpaces(String sysCode) throws IDMapperException;
+
 }

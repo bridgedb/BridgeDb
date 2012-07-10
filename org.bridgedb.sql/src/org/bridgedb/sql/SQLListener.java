@@ -4,16 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperCapabilities;
-import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
-import org.bridgedb.impl.InternalUtils;
 import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.utils.Reporter;
 
@@ -117,7 +109,7 @@ public class SQLListener implements MappingListener{
     }
 
     @Override
-    public void closeInput() throws IDMapperException {
+    public void closeInput() throws BridgeDbSqlException {
         runInsert();
         insertQuery = null;
         Reporter.report ("Finished processing linkset");
@@ -141,14 +133,14 @@ public class SQLListener implements MappingListener{
  	}
 
     @Override
-    public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws IDMapperException {
+    public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws BridgeDbSqlException {
         insertLink(sourceId, targetId, mappingSet);
         if (symetric){
             insertLink(targetId, sourceId, mappingSet + 1);
         }
     }
 
-    private void insertLink(String sourceId, String targetId, int mappingSetId) throws IDMapperException{
+    private void insertLink(String sourceId, String targetId, int mappingSetId) throws BridgeDbSqlException{
         if (blockCount >= blockSize){
             runInsert();
             insertQuery = new StringBuilder("INSERT INTO mapping (sourceId, targetId, mappingSetId) VALUES ");
@@ -585,7 +577,7 @@ public class SQLListener implements MappingListener{
         }
     }
     
-    private void countLinks () throws IDMapperException{
+    private void countLinks () throws BridgeDbSqlException{
         Reporter.report ("Updating link count. Please Wait!");
         Statement countStatement = this.createStatement();
         Statement updateStatement = this.createStatement();
@@ -601,16 +593,16 @@ public class SQLListener implements MappingListener{
                 try {
                     int updateCount = updateStatement.executeUpdate(update);
                     if (updateCount != 1){
-                        throw new IDMapperException("Updated rows <> ! when running " + update);
+                        throw new BridgeDbSqlException("Updated rows <> ! when running " + update);
                     }
                 } catch (SQLException ex) {
-                     throw new IDMapperException("Unable to run update. " + update, ex);
+                     throw new BridgeDbSqlException("Unable to run update. " + update, ex);
                 }
             }
             Reporter.report ("Updating counts finished!");
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new IDMapperException("Unable to run query. " + query, ex);
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }
     }
     
