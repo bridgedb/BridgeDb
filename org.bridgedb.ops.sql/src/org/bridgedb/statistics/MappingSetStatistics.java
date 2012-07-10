@@ -9,11 +9,11 @@ package org.bridgedb.statistics;
  * @author Christian
  */
 public class MappingSetStatistics {
-    private final int numberOfMappings;
-    private final int numberOfMappingSets;
-    private final int numberOfSourceDataSources;
-    private final int numberOfPredicates;
-    private final int numberOfTargetDataSources;
+    private int numberOfMappings;
+    private int numberOfMappingSets;
+    private int numberOfSourceDataSources;
+    private int numberOfPredicates;
+    private int numberOfTargetDataSources;
     
     public MappingSetStatistics(int numberOfMappings, int numberOfMappingSets, 
             int numberOfSourceDataSources, int numberOfPredicates, int numberOfTargetDataSources){
@@ -57,5 +57,40 @@ public class MappingSetStatistics {
      */
     public int getNumberOfPredicates() {
         return numberOfPredicates;
+    }
+
+    /**
+     * @param numberOfMappings the numberOfMappings to set
+     */
+    public void setNumberOfMappings(int numberOfMappings) {
+        this.numberOfMappings = numberOfMappings;
+    }
+
+    /**
+     * @param numberOfMappingSets the numberOfMappingSets to set
+     */
+    public void setNumberOfMappingSets(int numberOfMappingSets) {
+        this.numberOfMappingSets = numberOfMappingSets;
+    }
+
+    /**
+     * @param numberOfSourceDataSources the numberOfSourceDataSources to set
+     */
+    public void setNumberOfSourceDataSources(int numberOfSourceDataSources) {
+        this.numberOfSourceDataSources = numberOfSourceDataSources;
+    }
+
+    /**
+     * @param numberOfPredicates the numberOfPredicates to set
+     */
+    public void setNumberOfPredicates(int numberOfPredicates) {
+        this.numberOfPredicates = numberOfPredicates;
+    }
+
+    /**
+     * @param numberOfTargetDataSources the numberOfTargetDataSources to set
+     */
+    public void setNumberOfTargetDataSources(int numberOfTargetDataSources) {
+        this.numberOfTargetDataSources = numberOfTargetDataSources;
     }
 }

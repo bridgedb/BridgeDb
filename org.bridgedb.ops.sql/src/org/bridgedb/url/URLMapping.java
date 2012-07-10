@@ -16,7 +16,7 @@ public class URLMapping {
     private Integer mappingSetId;
     private String predicate;
     
-    public URLMapping (Integer id, String sourceURL, String targetURL, Integer mappingSetId, String predicate){
+    public URLMapping (Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId){
         this.id = id;
         this.sourceURL = sourceURL;
         this.targetURL = targetURL;
