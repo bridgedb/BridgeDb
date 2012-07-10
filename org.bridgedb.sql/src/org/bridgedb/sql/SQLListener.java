@@ -65,7 +65,7 @@ public class SQLListener implements MappingListener{
     }   
     
     @Override
-    public synchronized int registerMappingSet(DataSource source, DataSource target, String predicate, 
+    public synchronized int registerMappingSet(DataSource source, String predicate, DataSource target, 
             boolean symetric, boolean isTransitive) throws BridgeDbSqlException {
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
