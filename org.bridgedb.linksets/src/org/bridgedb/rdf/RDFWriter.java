@@ -45,7 +45,7 @@ public class RDFWriter implements RdfLoader{
             String predicate = validator.getPredicate();
             symmetric = validator.isSymmetric();
             boolean transative = validator.isTransative();
-            mappingId = urlListener.registerMappingSet(subjectUriSpace, targetUriSpace, targetUriSpace, 
+            mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, targetUriSpace, 
                     symmetric, transative);            
             linksetContext = RdfWrapper.getLinksetURL(mappingId);
             if (symmetric) {

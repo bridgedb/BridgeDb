@@ -12,7 +12,7 @@ import org.junit.Ignore;
  * @author Christian
  */
 @Ignore //done by URLIstener
-public class LinkListenerTest extends org.bridgedb.linkset.LinkListenerTest {
+public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTest {
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
