@@ -68,4 +68,17 @@ public class MappingSupportedBean {
         this.target = target;
     }
     
+    @Override
+    public String toString(){
+        String toString = "";
+        if (isMappingSupported) {
+           toString = "mapping supported:\n\t";
+        } else {
+           toString = "mapping unknown:\n\t";            
+        }
+        toString+= source.toString();
+        toString+= "\n\t";
+        toString+= target.toString();
+        return toString;
+    }
 }
