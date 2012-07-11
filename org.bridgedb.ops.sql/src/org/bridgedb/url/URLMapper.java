@@ -126,6 +126,6 @@ public interface URLMapper extends IDMapper{
 
     public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
     
-    public Set<String> getUriSpaces(String code) throws IDMapperException;
+    public Set<String> getUriSpaces(String dataSource) throws IDMapperException;
 
 }

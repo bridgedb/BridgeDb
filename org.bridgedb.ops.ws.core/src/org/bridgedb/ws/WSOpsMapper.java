@@ -14,6 +14,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.MappingSetStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.MappingSetStatisticsBean;
@@ -22,7 +23,7 @@ import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
-import org.bridgedb.ws.bean.UriSpacesBean;
+import org.bridgedb.ws.bean.UriSpaceBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 
@@ -121,9 +122,14 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public Set<String> getUriSpaces(String sysCode) throws IDMapperException {
-        UriSpacesBean bean = opsService.getUriSpaces(sysCode);
-        return bean.getUriSpaceSet();
+    public Set<String> getUriSpaces(String dataSource) throws IDMapperException {
+        DataSourceUriSpacesBean bigBean = opsService.getDataSource(dataSource);
+        List<UriSpaceBean> beans = bigBean.getUriSpace(); 
+        HashSet<String> results = new HashSet<String>();
+        for (UriSpaceBean bean:beans){
+            results.add(bean.getUriSpace());
+        }
+        return results;
     }
 
 }
