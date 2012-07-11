@@ -13,18 +13,20 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.MappingSetStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
+import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.MappingSetStatisticsBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
-import org.bridgedb.ws.bean.UriSpacesBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 
@@ -101,10 +103,17 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return XrefBeanFactory.asBean(xref);
     }
 
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/Amapping")
+    public URLMappingBean getMapping() throws IDMapperException {
+        throw new IDMapperException("id path parameter missing.");
+    }
+
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getMapping/{id}")
+    @Path("/mapping/{id}")
     public URLMappingBean getMapping(@PathParam("id") String idString) throws IDMapperException {
         if (idString == null) throw new IDMapperException("id path parameter missing.");
         if (idString.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
@@ -113,6 +122,18 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return URLMappingBeanFactory.asBean(mapping);
     }
 
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/Amapping/{id}")
+    public DataSourceUriSpacesBean getDataSourceX(@PathParam("id") String id) throws IDMapperException {
+        if (id == null) throw new IDMapperException("id path parameter missing.");
+        if (id.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
+        Set<String> urls = urlMapper.getUriSpaces(id);
+        DataSource ds = DataSource.getBySystemCode(id);
+        DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);
+        return bean;
+    }
+ 
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
@@ -154,15 +175,22 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getUriSpaces")
-    @Override
-    public UriSpacesBean getUriSpaces(@QueryParam("code") String code) throws IDMapperException {
-        if (code == null) throw new IDMapperException("code parameter missing.");
-        if (code.isEmpty()) throw new IDMapperException("code parameter may not be null.");
-        Set<String> urls = urlMapper.getUriSpaces(code);
-        return new UriSpacesBean(code, urls);
+    @Path("/dataSource")
+    public DataSourceUriSpacesBean getDataSource() throws IDMapperException {
+        throw new IDMapperException("id path parameter missing.");
     }
 
- 
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Override
+    @Path("/dataSource/{id}")
+    public DataSourceUriSpacesBean getDataSource(@PathParam("id") String id) throws IDMapperException {
+        if (id == null) throw new IDMapperException("id path parameter missing.");
+        if (id.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
+        Set<String> urls = urlMapper.getUriSpaces(id);
+        DataSource ds = DataSource.getBySystemCode(id);
+        DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);
+        return bean;
+    }
  
 }

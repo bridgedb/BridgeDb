@@ -317,9 +317,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
     
     @Override
-    public Set<String> getUriSpaces(String code) throws BridgeDbSqlException {
+    public Set<String> getUriSpaces(String dataSource) throws BridgeDbSqlException {
         String query = ("SELECT uriSpace FROM url "
-                + " WHERE dataSource = '" + code + "'");
+                + " WHERE dataSource = '" + dataSource + "'");
         Statement statement = this.createStatement();
         ResultSet rs;
         try {

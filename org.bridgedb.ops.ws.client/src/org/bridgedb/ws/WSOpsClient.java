@@ -18,6 +18,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
+import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetStatisticsBean;
@@ -27,7 +28,6 @@ import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLSearchBean;
-import org.bridgedb.ws.bean.UriSpacesBean;
 import org.bridgedb.ws.bean.XrefMapBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
@@ -100,11 +100,9 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 
     @Override
     public URLMappingBean getMapping(String id) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         URLMappingBean result = 
-                webResource.path("getMapping/" + id)
-                .queryParams(params)
+                webResource.path("mapping/" + id)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<URLMappingBean>() {});
          return result;
@@ -147,15 +145,12 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public UriSpacesBean getUriSpaces(String code) throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("code", code);
+    public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException{
         //Make service call
-        UriSpacesBean result = 
-                webResource.path("getUriSpaces")
-                .queryParams(params)
+        DataSourceUriSpacesBean result = 
+                webResource.path("dataSource/" + dataSource)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<UriSpacesBean>() {});
+                .get(new GenericType<DataSourceUriSpacesBean>() {});
          return result;
     }
         
