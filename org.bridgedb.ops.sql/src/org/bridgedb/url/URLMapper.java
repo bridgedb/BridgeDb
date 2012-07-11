@@ -124,7 +124,7 @@ public interface URLMapper extends IDMapper{
     
     public  MappingSetStatistics getMappingSetStatistics() throws IDMapperException;
 
-    public Set<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
+    public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
     
     public Set<String> getUriSpaces(String sysCode) throws IDMapperException;
 

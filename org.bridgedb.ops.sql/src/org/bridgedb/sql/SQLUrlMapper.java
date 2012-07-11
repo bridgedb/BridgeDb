@@ -3,6 +3,7 @@ package org.bridgedb.sql;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -303,7 +304,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Set<MappingSetInfo> getMappingSetInfos() throws BridgeDbSqlException {
+    public List<MappingSetInfo> getMappingSetInfos() throws BridgeDbSqlException {
         String query = ("SELECT * FROM mappingSet ");
         Statement statement = this.createStatement();
         try {
@@ -457,8 +458,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
-    private Set<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs ) throws BridgeDbSqlException{
-        HashSet<MappingSetInfo> results = new HashSet<MappingSetInfo>();
+    private List<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs ) throws BridgeDbSqlException{
+        ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
         try {
             while (rs.next()){
                 Integer count = rs.getInt("mappingCount");

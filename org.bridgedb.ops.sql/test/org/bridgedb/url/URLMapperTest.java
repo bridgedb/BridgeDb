@@ -1,5 +1,6 @@
 package org.bridgedb.url;
 
+import java.util.List;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.MappingSetStatistics;
 import org.bridgedb.sql.BridgeDbSqlException;
@@ -260,7 +261,7 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     @Test
     public void testGetMappingSetInfos() throws IDMapperException {
         report("GetUriSpaces");
-        Set<MappingSetInfo> results = urlMapper.getMappingSetInfos();
+        List<MappingSetInfo> results = urlMapper.getMappingSetInfos();
         assertThat (results.size(), greaterThanOrEqualTo(6));
     }
 

@@ -111,9 +111,9 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public Set<MappingSetInfo> getMappingSetInfos() throws IDMapperException {
+    public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException {
         List<MappingSetInfoBean> beans = opsService.getMappingSetInfos();
-        HashSet<MappingSetInfo> results = new HashSet<MappingSetInfo>(); 
+        ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 
         for (MappingSetInfoBean bean:beans){
             results.add(MappingSetInfoBeanFactory.asMappingSetInfo(bean));
         }

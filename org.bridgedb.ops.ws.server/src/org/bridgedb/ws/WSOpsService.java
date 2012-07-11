@@ -31,7 +31,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
 @Path("/")
 public class WSOpsService extends WSCoreService implements WSOpsInterface {
 
-    URLMapper urlMapper;
+    protected URLMapper urlMapper;
     
     public WSOpsService() {
     }
@@ -128,7 +128,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getMappingSetInfos") 
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException {
-        Set<MappingSetInfo> infos = urlMapper.getMappingSetInfos();
+        List<MappingSetInfo> infos = urlMapper.getMappingSetInfos();
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
             results.add(MappingSetInfoBeanFactory.asBean(info));
