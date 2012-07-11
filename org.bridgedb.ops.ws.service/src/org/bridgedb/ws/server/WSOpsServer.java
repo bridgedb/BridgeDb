@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -22,6 +23,8 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.rdf.RdfReader;
+import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -966,7 +969,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
-    public Response mappingInfoPage() throws IDMapperException, UnsupportedEncodingException {
+    public Response getMappingInfo() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos();
         Collections.sort(mappingSetInfos, this);
@@ -1000,6 +1003,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             sb.append(formatter.format(info.getNumberOfLinks()));
             sb.append("</td>");
             sb.append("<td><a href=\"");
+            sb.append(RdfWrapper.getBaseURI());
+            sb.append("/mappingSet/");
             sb.append(info.getId());
             sb.append("\">");
             sb.append(info.getId());
@@ -1085,6 +1090,24 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         }
         sb.append("}"); 
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/mappingSet")
+    public String mappingSet() throws IDMapperException {
+        throw new IDMapperException("Parameter id is missing");
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/mappingSet/{id}")
+    public String mappingSet(@PathParam("id") String idString) throws IDMapperException {
+        if (idString == null || idString.isEmpty()){
+            throw new IDMapperException("Parameter id is missing");
+        }
+        Integer id = Integer.parseInt(idString);
+        return new RdfReader(RdfStoreType.MAIN).getRDF(id);
     }
 
     /*private void describe_byXrefPosition(StringBuilder sb, Xref first) throws UnsupportedEncodingException{
