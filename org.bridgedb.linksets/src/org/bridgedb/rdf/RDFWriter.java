@@ -67,8 +67,6 @@ public class RDFWriter implements RdfLoader{
                 RdfWrapper.add(connection, st.getSubject(), VoidConstants.OBJECTSTARGET, st.getObject(), inverseContext);    
             } else if (st.getPredicate().equals(VoidConstants.OBJECTSTARGET)){
                 RdfWrapper.add(connection, st.getSubject(), VoidConstants.SUBJECTSTARGET, st.getObject(), inverseContext); 
-                System.out.println("***");
-                System.out.println( st.getSubject() + ", " + VoidConstants.SUBJECTSTARGET + ", " + st.getObject() + ", " + inverseContext);
             } else {
                 RdfWrapper.add(connection, st.getSubject(), st.getPredicate(), st.getObject(), inverseContext);                
             }
