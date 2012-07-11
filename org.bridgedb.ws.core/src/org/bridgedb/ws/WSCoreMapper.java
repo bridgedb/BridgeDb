@@ -92,7 +92,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
 
     @Override
     public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
-        List<XrefBean>  beans = webService.freeSearch(text, limit);
+        List<XrefBean>  beans = webService.freeSearch(text, "" + limit);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefBean bean:beans){
             results.add(XrefBeanFactory.asXref(bean));

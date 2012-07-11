@@ -64,10 +64,10 @@ public class WSCoreClient implements WSCoreInterface{
     }
         
     @Override
-    public List<XrefBean> freeSearch(String text, Integer limit) throws IDMapperException {
+    public List<XrefBean> freeSearch(String text, String limit) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add("text", text);
-        params.add("limit", limit.toString());
+        params.add("limit", limit);
         //Make service call
         List<XrefBean> result = 
                 webResource.path("freeSearch")

@@ -22,7 +22,7 @@ public interface WSCoreInterface {
 
     XrefExistsBean xrefExists(String id, String scrCode) throws IDMapperException;
 
-    List<XrefBean> freeSearch(String text, Integer limit) throws IDMapperException;
+    List<XrefBean> freeSearch(String text, String limit) throws IDMapperException;
 
     CapabilitiesBean getCapabilities();
 
