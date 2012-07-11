@@ -32,12 +32,6 @@
     <dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.sql</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
- 		<dependency>
-			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.linksets</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
@@ -51,21 +45,7 @@
  		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.plus</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
- 		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.sql</artifactId>
-			<version>${project.version}</version>
-            <type>test-jar</type>
-			<scope>test</scope>
- 		</dependency>
-		<dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ops</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
