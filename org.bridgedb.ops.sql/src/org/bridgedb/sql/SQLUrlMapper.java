@@ -68,9 +68,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	}
     
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws BridgeDbSqlException {
+    public Map<String, Set<String>> mapURL(Collection<String> URLs, String... targetURISpaces) throws BridgeDbSqlException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>>();
-        for (String ref:sourceURLs){
+        for (String ref:URLs){
             Set<String> mapped = this.mapURL(ref, targetURISpaces);
             results.put(ref, mapped);
         }
@@ -78,9 +78,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Set<String> mapURL(String sourceURL, String... targetURISpaces) throws BridgeDbSqlException {
+    public Set<String> mapURL(String URL, String... targetURISpaces) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder("SELECT targetId as id, target.uriSpace as uriSpace ");
-        finishMappingQuery(query, sourceURL, targetURISpaces); 
+        finishMappingQuery(query, URL, targetURISpaces); 
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -90,22 +90,22 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }    
         Set<String> results = resultSetToURLsSet(rs);
         if (targetURISpaces.length == 0){
-           results.add(sourceURL); 
+           results.add(URL); 
         } else {
-            String uriSpace = getUriSpace(sourceURL);
+            String uriSpace = getUriSpace(URL);
             for (String targetURISpace: targetURISpaces){
                 if (uriSpace.equals(targetURISpaces)){
-                    results.add(sourceURL);
+                    results.add(URL);
                 }
             }
         }
         return results;       
     }
 
-    private void finishMappingQuery(StringBuilder query, String sourceURL, String... targetURISpaces) {
-        //ystem.out.println("mapping: " + sourceURL);
-        String id = getId(sourceURL);
-        String uriSpace = getUriSpace(sourceURL);
+    private void finishMappingQuery(StringBuilder query, String URL, String... targetURISpaces) {
+        //ystem.out.println("mapping: " + URL);
+        String id = getId(URL);
+        String uriSpace = getUriSpace(URL);
         query.append("FROM mapping, mappingSet, url as source, url as target ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND mappingSet.sourceDataSource = source.dataSource ");
@@ -129,10 +129,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
-    public Set<URLMapping> mapURLFull(String sourceURL, String... targetURISpaces) throws BridgeDbSqlException {
+    public Set<URLMapping> mapURLFull(String URL, String... targetURISpaces) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
         query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
-        finishMappingQuery(query, sourceURL, targetURISpaces); 
+        finishMappingQuery(query, URL, targetURISpaces); 
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -140,12 +140,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
-        Set<URLMapping> results = resultSetToURLMappingSet(sourceURL, rs);
-        URLMapping toSelf = new URLMapping(null, sourceURL, null, sourceURL, null);
+        Set<URLMapping> results = resultSetToURLMappingSet(URL, rs);
+        URLMapping toSelf = new URLMapping(null, URL, null, URL, null);
         if (targetURISpaces.length == 0){
            results.add(toSelf); 
         } else {
-            String uriSpace = getUriSpace(sourceURL);
+            String uriSpace = getUriSpace(URL);
             for (String targetURISpace: targetURISpaces){
                 if (uriSpace.equals(targetURISpaces)){
                     results.add(toSelf);
@@ -317,9 +317,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
     
     @Override
-    public Set<String> getUriSpaces(String sysCode) throws BridgeDbSqlException {
+    public Set<String> getUriSpaces(String code) throws BridgeDbSqlException {
         String query = ("SELECT uriSpace FROM url "
-                + " WHERE dataSource = '" + sysCode + "'");
+                + " WHERE dataSource = '" + code + "'");
         Statement statement = this.createStatement();
         ResultSet rs;
         try {

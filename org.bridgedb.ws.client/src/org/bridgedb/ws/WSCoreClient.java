@@ -136,9 +136,9 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public MappingSupportedBean isMappingSupported(String sourceSysCode, String targetCode) throws IDMapperException {
+    public MappingSupportedBean isMappingSupported(String sourceCode, String targetCode) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("sourceSysCode", sourceSysCode);
+        params.add("sourceCode", sourceCode);
         params.add("targetCode", targetCode);
         //Make service call
         MappingSupportedBean result = 

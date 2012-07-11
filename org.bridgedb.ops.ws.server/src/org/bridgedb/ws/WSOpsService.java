@@ -43,17 +43,17 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/mapByURLs")
+    @Path("/mapURL")
     @Override
-    public List<URLMappingBean> mapURL(@QueryParam("sourceURL") String sourceURL,
+    public List<URLMappingBean> mapURL(@QueryParam("URL") String URL,
             @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
-        if (sourceURL == null) throw new IDMapperException("sourceURL parameter missing.");
-        if (sourceURL.isEmpty()) throw new IDMapperException("sourceURL parameter may not be null.");
+        if (URL == null) throw new IDMapperException("URL parameter missing.");
+        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
         String[] targetURISpaces = new String[targetURISpace.size()];
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
         }
-        Set<URLMapping> urlMappings = urlMapper.mapURLFull(sourceURL, targetURISpaces);
+        Set<URLMapping> urlMappings = urlMapper.mapURLFull(URL, targetURISpaces);
         ArrayList<URLMappingBean> results = new ArrayList<URLMappingBean>(); 
         for (URLMapping urlMapping:urlMappings){
             results.add(URLMappingBeanFactory.asBean(urlMapping));
@@ -65,7 +65,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/URLExists")
     @Override
-    public URLExistsBean urlExists(@QueryParam("URL") String URL) throws IDMapperException {
+    public URLExistsBean URLExists(@QueryParam("URL") String URL) throws IDMapperException {
         if (URL == null) throw new IDMapperException("URL parameter missing.");
         if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
         boolean exists = urlMapper.uriExists(URL);
@@ -156,11 +156,11 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getUriSpaces")
     @Override
-    public UriSpacesBean getUriSpaces(@QueryParam("sysCode") String sysCode) throws IDMapperException {
-        if (sysCode == null) throw new IDMapperException("sysCode parameter missing.");
-        if (sysCode.isEmpty()) throw new IDMapperException("sysCode parameter may not be null.");
-        Set<String> urls = urlMapper.getUriSpaces(sysCode);
-        return new UriSpacesBean(sysCode, urls);
+    public UriSpacesBean getUriSpaces(@QueryParam("code") String code) throws IDMapperException {
+        if (code == null) throw new IDMapperException("code parameter missing.");
+        if (code.isEmpty()) throw new IDMapperException("code parameter may not be null.");
+        Set<String> urls = urlMapper.getUriSpaces(code);
+        return new UriSpacesBean(code, urls);
     }
 
  
