@@ -22,9 +22,9 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSOpsInterface extends WSCoreInterface{
 
-    public List<URLMappingBean> mapURL(String sourceURL, List<String> targetUriSpace) throws IDMapperException;
+    public List<URLMappingBean> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException;
     
-    public URLExistsBean urlExists(String URL) throws IDMapperException;
+    public URLExistsBean URLExists(String URL) throws IDMapperException;
 
     public URLSearchBean URLSearch(String text, String limitString) throws IDMapperException;
 
@@ -38,5 +38,5 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException;
 
-    public UriSpacesBean getUriSpaces(String sysCode) throws IDMapperException;
+    public UriSpacesBean getUriSpaces(String code) throws IDMapperException;
 }

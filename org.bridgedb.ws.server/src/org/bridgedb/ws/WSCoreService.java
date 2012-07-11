@@ -163,11 +163,11 @@ public class WSCoreService implements WSCoreInterface {
     @Path("/isMappingSupported")
     @Override
     public MappingSupportedBean isMappingSupported(
-            @QueryParam("sourceSysCode") String sourceSysCode, 
+            @QueryParam("sourceCode") String sourceCode, 
             @QueryParam("targetCode") String targetCode) throws IDMapperException {
-        if (sourceSysCode == null) throw new IDMapperException ("\"sourceSysCode\" parameter can not be null");
+        if (sourceCode == null) throw new IDMapperException ("\"sourceCode\" parameter can not be null");
         if (targetCode == null) throw new IDMapperException ("\"targetCode\" parameter can not be null");
-        DataSource src = DataSource.getBySystemCode(sourceSysCode);
+        DataSource src = DataSource.getBySystemCode(sourceCode);
         DataSource tgt = DataSource.getBySystemCode(targetCode);
         return MappingSupportedBeanFactory.asBean(src, tgt, idMapper.getCapabilities().isMappingSupported(src, tgt));
     }
