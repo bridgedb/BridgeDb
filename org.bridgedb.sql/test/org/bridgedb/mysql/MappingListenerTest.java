@@ -11,7 +11,7 @@ import org.junit.Ignore;
  * 
  * @author Christian
  */
-@Ignore //done by URLIstener
+//@Ignore 
 public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTest {
     
     @BeforeClass

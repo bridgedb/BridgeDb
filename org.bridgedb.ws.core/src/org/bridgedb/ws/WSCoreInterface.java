@@ -32,7 +32,7 @@ public interface WSCoreInterface {
 
     List<DataSourceBean> getSupportedTgtDataSources() throws IDMapperException;
 
-    MappingSupportedBean isMappingSupported( String sourceSysCode, String targetCode) throws IDMapperException;
+    MappingSupportedBean isMappingSupported( String sourceCode, String targetCode) throws IDMapperException;
 
     PropertyBean getProperty(String key);
 

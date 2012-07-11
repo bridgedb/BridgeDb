@@ -63,7 +63,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public boolean uriExists(String URL) throws IDMapperException {
-        return opsService.urlExists(URL).exists();
+        return opsService.URLExists(URL).exists();
     }
 
     @Override

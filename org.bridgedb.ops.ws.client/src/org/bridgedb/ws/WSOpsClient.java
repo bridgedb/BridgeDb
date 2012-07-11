@@ -43,15 +43,15 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public List<URLMappingBean> mapURL(String sourceURL, List<String> targetUriSpace) throws IDMapperException {
+    public List<URLMappingBean> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("sourceURL", sourceURL);
+        params.add("URL", URL);
         for (String target:targetUriSpace){
             params.add("targetURISpace", target);
         }
         //Make service call
         List<URLMappingBean> result = 
-                webResource.path("mapByURLs")
+                webResource.path("mapURL")
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<URLMappingBean>>() {});
@@ -59,7 +59,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public URLExistsBean urlExists(String URL) throws IDMapperException {
+    public URLExistsBean URLExists(String URL) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add("URL", URL);
         //Make service call
@@ -147,9 +147,9 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public UriSpacesBean getUriSpaces(String sysCode) throws IDMapperException {
+    public UriSpacesBean getUriSpaces(String code) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("sysCode", sysCode);
+        params.add("code", code);
         //Make service call
         UriSpacesBean result = 
                 webResource.path("getUriSpaces")
