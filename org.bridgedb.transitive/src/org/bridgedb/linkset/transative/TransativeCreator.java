@@ -48,6 +48,8 @@ public class TransativeCreator {
     RepositoryConnection connection;
     Value sourceDataSet;
     Value targetDataSet;
+    Value sourceUriSpace;
+    Value targetUriSpace;
     StringBuilder output;
     Value newPredicate;
     BufferedWriter buffer;
@@ -64,7 +66,7 @@ public class TransativeCreator {
         leftContext = RdfWrapper.getLinksetURL(leftId);
         rightContext = RdfWrapper.getLinksetURL(rightId);
         getVoid(leftId, rightId, diffLeft, diffRight, type);
-        getSQL(diffLeft, diffRight, type);
+        getSQL(leftId, rightId, type);
     }
  
     private void createBufferedWriter(String fileName) throws IOException {
@@ -96,9 +98,13 @@ public class TransativeCreator {
         registerNewLinkset(leftId, rightId);
         registerDataSet(sourceDataSet, leftContext);
         registerDataSet(targetDataSet, rightContext);
-        
+        sourceUriSpace = RdfWrapper.getTheSingeltonObject(connection, sourceDataSet, VoidConstants.URI_SPACE, leftContext);
+        targetUriSpace = RdfWrapper.getTheSingeltonObject(connection, targetDataSet, VoidConstants.URI_SPACE, rightContext);
+
         RdfWrapper.shutdown(connection);
         System.out.println(output.toString());
+        System.out.println(sourceUriSpace);
+        System.out.println(targetUriSpace);
         buffer.write(output.toString());
     }
     
@@ -231,43 +237,36 @@ public class TransativeCreator {
             writeValue(statemement.getSubject());
             writeValue(statemement.getPredicate());
             writeValue(statemement.getObject());
-             output.append(" . \n");
+            output.append(" . \n");
         }
     }
 
-    private void getSQL(String diffLeft, String diffRight, RdfStoreType type) throws BridgeDbSqlException, IOException {
-        SQLAccess sqlAccess;
+    private SQLAccess getSQLAccess(RdfStoreType type) throws BridgeDbSqlException {
         switch (type){
             case LOAD: 
-                sqlAccess = SqlFactory.createLoadSQLAccess();
-                break;
+                return SqlFactory.createLoadSQLAccess();
             case MAIN: 
-                sqlAccess = SqlFactory.createSQLAccess();
-                break;           
+                return SqlFactory.createSQLAccess();
             case TEST: 
-                sqlAccess = SqlFactory.createTestSQLAccess();
-                break;
+                return SqlFactory.createTestSQLAccess();
             default:
                 throw new BridgeDbSqlException ("Unable to get SQL for type " + type);
         }
+    }
+        
+    private void getSQL(int leftId, int rightId, RdfStoreType type) throws BridgeDbSqlException, IOException {
+        SQLAccess sqlAccess = getSQLAccess(type);
         buffer.newLine();
-        StringBuilder query = new StringBuilder("SELECT link1.sourceURL, link2.targetURL ");
-        query.append("FROM link link1, link link2 ");
-        if (diffLeft != null){
-            query.append("WHERE REPLACE(link2.sourceURL, '");
-            query.append(diffRight);
-            query.append("', '");
-            query.append(diffLeft);
-            query.append("') = link1.targetURL ");            
-        } else {
-            query.append("WHERE link1.targetURL = link2.sourceURL ");
-        }
-        query.append("AND link1.linkSetId = '");
-            query.append(leftContext);
-            query.append("' ");
-        query.append("AND link2.linkSetId = '");
-            query.append(rightContext);
-            query.append("' ");
+        StringBuilder query = new StringBuilder(
+                "SELECT mapping1.sourceId, mapping2.targetId ");
+        query.append("FROM mapping as mapping1, mapping as mapping2 ");
+        query.append("WHERE mapping1.targetId = mapping2.sourceId ");
+        query.append("AND mapping1.mappingSetId = ");
+            query.append(leftId);
+            query.append(" ");
+        query.append("AND mapping2.mappingSetId = ");
+            query.append(rightId);
+            query.append(" ");
         Connection connection = sqlAccess.getConnection();
         java.sql.Statement statement;
         try {
@@ -280,10 +279,18 @@ public class TransativeCreator {
             ResultSet rs = statement.executeQuery(query.toString());
             System.out.println("processing results");
             while (rs.next()){
-                String sourceUrl = rs.getString("sourceUrl");
-                String targetUrl = rs.getString("targetUrl");
+                String sourceId = rs.getString("mapping1.sourceId");
+                String targetId = rs.getString("mapping2.targetId");
                 //ystem.out.println("<" + sourceUrl + "> <" + newPredicate + "> <" + targetUrl + "> . "); 
-                buffer.write("<" + sourceUrl + "> <" + newPredicate + "> <" + targetUrl + "> . "); 
+                buffer.write("<");
+                    buffer.write(sourceUriSpace.stringValue());
+                    buffer.write(sourceId);
+                buffer.write("> <");
+                    buffer.write(newPredicate.stringValue());
+                buffer.write( "> <");
+                    buffer.write(targetUriSpace.stringValue());
+                    buffer.write(targetId);
+                buffer.write("> . "); 
                 buffer.newLine();
             }
         } catch (SQLException ex) {
