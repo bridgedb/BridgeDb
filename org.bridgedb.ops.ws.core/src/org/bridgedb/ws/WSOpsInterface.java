@@ -7,13 +7,13 @@ package org.bridgedb.ws;
 import java.util.ArrayList;
 import java.util.List;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetStatisticsBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLSearchBean;
-import org.bridgedb.ws.bean.UriSpacesBean;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**
@@ -38,5 +38,5 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException;
 
-    public UriSpacesBean getUriSpaces(String code) throws IDMapperException;
+    public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
 }
