@@ -68,12 +68,13 @@ public class WSCoreService implements WSCoreInterface {
     @Override
     public List<XrefBean> freeSearch(
             @QueryParam("text") String text,
-            @QueryParam("limit") Integer limit) throws IDMapperException {
-        if (text == null) throw new IDMapperException("text parameter missig");
-        if (limit == null){
+            @QueryParam("limit") String limitString) throws IDMapperException {
+        if (text == null) throw new IDMapperException("text parameter missing");
+        if (limitString == null || limitString.isEmpty()){
             Set<Xref> mappings = idMapper.freeSearch(text, Integer.MAX_VALUE);
             return setXrefToListXrefBeans(mappings);
         } else {
+            int limit = Integer.parseInt(limitString);
             Set<Xref> mappings = idMapper.freeSearch(text,limit);
             return setXrefToListXrefBeans(mappings);
         }
@@ -95,10 +96,10 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam("id") List<String> id,
             @QueryParam("code") List<String> scrCode,
             @QueryParam("targetCode") List<String> targetCodes) throws IDMapperException {
-        if (id == null) throw new IDMapperException("id parameter missig");
-        if (id.isEmpty()) throw new IDMapperException("id parameter missig");
-        if (scrCode == null) throw new IDMapperException("code parameter missig");
-        if (scrCode.isEmpty()) throw new IDMapperException("code parameter missig");
+        if (id == null) throw new IDMapperException("id parameter missing");
+        if (id.isEmpty()) throw new IDMapperException("id parameter missing");
+        if (scrCode == null) throw new IDMapperException("code parameter missing");
+        if (scrCode.isEmpty()) throw new IDMapperException("code parameter missing");
         if (id.size() != scrCode.size()) throw new IDMapperException("Must have same number of id and code parameters");
         ArrayList<Xref> srcXrefs = new ArrayList<Xref>();
         for (int i = 0; i < id.size() ;i++){

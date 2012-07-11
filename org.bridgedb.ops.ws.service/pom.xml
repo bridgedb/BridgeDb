@@ -7,7 +7,7 @@
     <groupId>org.bridgedb</groupId>
     <artifactId>org.bridgedb.ops.ws.service</artifactId>
     <packaging>war</packaging>
-    <name>BridgeDb OPS Websever Server</name>
+    <name>BridgeDb OPS Websever Service</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
