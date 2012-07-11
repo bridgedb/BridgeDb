@@ -61,4 +61,7 @@ public class UriSpacesBean {
         this.UriSpace = UriSpace;
     }
    
+    public String toString(){
+        return sysCode.toString() + UriSpace.toString();
+    }
 }

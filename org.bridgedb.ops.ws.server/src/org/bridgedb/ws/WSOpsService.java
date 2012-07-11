@@ -46,7 +46,9 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/mapByURLs")
     @Override
     public List<URLMappingBean> mapURL(@QueryParam("sourceURL") String sourceURL,
-            @QueryParam("targetNameSpace") List<String> targetURISpace) throws IDMapperException {
+            @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
+        if (sourceURL == null) throw new IDMapperException("sourceURL parameter missing.");
+        if (sourceURL.isEmpty()) throw new IDMapperException("sourceURL parameter may not be null.");
         String[] targetURISpaces = new String[targetURISpace.size()];
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
@@ -61,9 +63,11 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/urlExists")
+    @Path("/URLExists")
     @Override
     public URLExistsBean urlExists(@QueryParam("URL") String URL) throws IDMapperException {
+        if (URL == null) throw new IDMapperException("URL parameter missing.");
+        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
         boolean exists = urlMapper.uriExists(URL);
         return new URLExistsBean(URL, exists);
     }
@@ -74,9 +78,16 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Override
     public URLSearchBean URLSearch(@QueryParam("text") String text,
             @QueryParam("limit") String limitString) throws IDMapperException {
-        int limit = Integer.parseInt(limitString);
-        Set<String> urls = urlMapper.urlSearch(text, limit);
-        return new URLSearchBean(text, urls);
+        if (text == null) throw new IDMapperException("text parameter missing.");
+        if (text.isEmpty()) throw new IDMapperException("text parameter may not be null.");
+        if (limitString == null || limitString.isEmpty()){
+            Set<String> urls = urlMapper.urlSearch(text, Integer.MAX_VALUE);
+            return new URLSearchBean(text, urls);
+        } else {
+            int limit = Integer.parseInt(limitString);
+            Set<String> urls = urlMapper.urlSearch(text, limit);
+            return new URLSearchBean(text, urls);
+        }
     }
 
     @GET
@@ -84,6 +95,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/toXref")
     @Override
     public XrefBean toXref(@QueryParam("URL") String URL) throws IDMapperException {
+        if (URL == null) throw new IDMapperException("URL parameter missing.");
+        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
         Xref xref = urlMapper.toXref(URL);
         return XrefBeanFactory.asBean(xref);
     }
@@ -93,6 +106,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getMapping/{id}")
     public URLMappingBean getMapping(@PathParam("id") String idString) throws IDMapperException {
+        if (idString == null) throw new IDMapperException("id path parameter missing.");
+        if (idString.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
         int id = Integer.parseInt(idString);
         URLMapping mapping = urlMapper.getMapping(id);
         return URLMappingBeanFactory.asBean(mapping);
@@ -116,10 +131,11 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getOverallStatistics") 
+    @Path("/getMappingStatistics") 
     public MappingSetStatisticsBean getMappingSetStatistics() throws IDMapperException {
         MappingSetStatistics overallStatistics = urlMapper.getMappingSetStatistics();
-        return MappingSetStatisticsBeanFactory.asBean(overallStatistics);
+        MappingSetStatisticsBean bean = MappingSetStatisticsBeanFactory.asBean(overallStatistics);
+        return bean;
     }
 
 
@@ -141,6 +157,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/getUriSpaces")
     @Override
     public UriSpacesBean getUriSpaces(@QueryParam("sysCode") String sysCode) throws IDMapperException {
+        if (sysCode == null) throw new IDMapperException("sysCode parameter missing.");
+        if (sysCode.isEmpty()) throw new IDMapperException("sysCode parameter may not be null.");
         Set<String> urls = urlMapper.getUriSpaces(sysCode);
         return new UriSpacesBean(sysCode, urls);
     }
