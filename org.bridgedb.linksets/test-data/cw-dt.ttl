@@ -1,0 +1,29 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/2.0/> .
+
+:conceptwiki_drugbank_targets a void:Linkset ;
+    dcterms:license "unknown" ;
+    void:subjectsTarget :conceptwiki ;
+    void:objectsTarget :drugbank_targets ;
+    void:subset :conceptwiki ;
+    void:linkPredicate skos:exactMatch ;
+    dcterms:created "2012-02-14"^^xsd:date ;
+    dcterms:creator <http://www.conceptwiki.org> .
+:conceptwiki a void:Dataset ;
+    dcterms:license "unknown" ;
+    dcterms:subject "unknown" ;
+    pav:retrievedOn "2012-02-14"^^xsd:date ;
+    void:uriSpace <http://www.conceptwiki.org/concept/> .
+:drugbank_targets a void:Dataset ;
+    dcterms:license "unknown" ;
+    dcterms:subject "unknown" ;
+    pav:version "unknown" ;
+    void:uriSpace <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/> .
+
+<http://www.conceptwiki.org/concept/516c9a26-885c-4920-9a13-d0a68cf99084> skos:exactMatch <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/6131>.
+<http://www.conceptwiki.org/concept/ccd4a66b-c18c-48d3-947e-6845360c024b> skos:exactMatch <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/5455>.
+<http://www.conceptwiki.org/concept/4be70bb8-444f-470b-b7a5-85e185a63885> skos:exactMatch <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/346>.
