@@ -38,15 +38,6 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     public static void stopTime() throws IDMapperException{
         report("Test took " + ((new Date()).getTime() - start.getTime()));
     }
-
-    @AfterClass //Setup as an afterclass so it is run last.
-    public static void testClose() throws IDMapperException{
-        if (connectionOk){        
-            assertTrue (urlMapper.isConnected());
-            urlMapper.close();
-            assertFalse (urlMapper.isConnected());
-        }
-    }
     
     @Test
     public void testMapIDManyToManyNoDataSources() throws IDMapperException{
