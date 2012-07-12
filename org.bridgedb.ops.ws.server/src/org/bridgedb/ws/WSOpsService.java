@@ -122,18 +122,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return URLMappingBeanFactory.asBean(mapping);
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/Amapping/{id}")
-    public DataSourceUriSpacesBean getDataSourceX(@PathParam("id") String id) throws IDMapperException {
-        if (id == null) throw new IDMapperException("id path parameter missing.");
-        if (id.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
-        Set<String> urls = urlMapper.getUriSpaces(id);
-        DataSource ds = DataSource.getBySystemCode(id);
-        DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);
-        return bean;
-    }
- 
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
