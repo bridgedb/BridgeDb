@@ -1,3 +1,27 @@
+Configuration
+-------------
+BridgeDB looks for the configuration file in the following locations. Once it 
+finds a configuration files the other locations are ignored. 
+* Can be anywhere pointed to by EnvironmentVariable OPS-IMS-CONFIG
+* Can be Tomcat/conf/OPS-IMS
+For loading files easiest is in same directory as jar.
+Copy the configuration files into that directory
+org.bridgedb.linksets/resources/rdfConfig.txt
+org.bridgedb.sql/resources/sqlConfig.txt
+These files also show the defaults that will be used if no config files are found.
+Edit the above to match your local setup.
+BaseURI Should be the base of the Webserver you will drop it into
+
+Database Dependency
+-------------------
+MySQL version 5 or above must be installed and running
+MySQL databases and users must be created with read, create and write permissions
+
+
+RDF Repository Dependency
+-------------------------
+SailNativeStore(s) will be created automatically as long as loader can create/find the directory
+
 Compilation
 -----------
 
@@ -9,6 +33,7 @@ able to compile with a simple:
 or (experimental, makes not all jars) - 
 
 	mvn clean install
+
 
 Library dependencies
 --------------------
