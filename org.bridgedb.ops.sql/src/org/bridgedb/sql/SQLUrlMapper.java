@@ -246,7 +246,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append("FROM mapping, mappingSet, url as source ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND mappingSet.sourceDataSource = source.dataSource ");
+        query.append("GROUP BY sourceId, source.uriSpace ");
         this.appendLimitConditions(query, 0, 5);
+        System.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -383,6 +385,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         url = url.trim();
         if (url.contains("#")){
             prefix = url.substring(0, url.lastIndexOf("#")+1);
+        } else if (url.contains("=")){
+            prefix = url.substring(0, url.lastIndexOf("=")+1);
         } else if (url.contains("/")){
             prefix = url.substring(0, url.lastIndexOf("/")+1);
         } else if (url.contains(":")){
@@ -402,6 +406,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         url = url.trim();
         if (url.contains("#")){
             return url.substring(url.lastIndexOf("#")+1, url.length());
+        } else if (url.contains("=")){
+            return url.substring(url.lastIndexOf("=")+1, url.length());
         } else if (url.contains("/")){
             return url.substring(url.lastIndexOf("/")+1, url.length());
         } else if (url.contains(":")){
