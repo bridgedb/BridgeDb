@@ -30,6 +30,21 @@ public class LinksetLoaderTest {
         Reporter.report("sample2to3.ttl");
         String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "test"};
         LinksetLoader.main (args3);
+        Reporter.report("cw-cs.ttl");
+        String[] args4 = {"../org.bridgedb.linksets/test-data/cw-cs.ttl", "test"};
+        LinksetLoader.main (args4);
+        Reporter.report("cw-cm.ttl");
+        String[] args5 = {"../org.bridgedb.linksets/test-data/cw-cm.ttl", "test"};
+        LinksetLoader.main (args5);
+        Reporter.report("cw-dd.ttl");
+        String[] args6 = {"../org.bridgedb.linksets/test-data/cw-dd.ttl", "test"};
+        LinksetLoader.main (args6);
+        Reporter.report("cw-ct.ttl");
+        String[] args7 = {"../org.bridgedb.linksets/test-data/cw-ct.ttl", "test"};
+        LinksetLoader.main (args7);
+        Reporter.report("cw-dt.ttl");
+        String[] args8 = {"../org.bridgedb.linksets/test-data/cw-dt.ttl", "test"};
+        LinksetLoader.main (args8);
 	}
 
 }
