@@ -9,11 +9,13 @@ import org.bridgedb.ws.WSCoreClientFactory;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  *
  * @author Christian
  */
+@Ignore //repeated in OPS client and depends on the specific BridgeBD.war
 public class IDMapperTest  extends org.bridgedb.IDMapperTest{
     
     @BeforeClass
