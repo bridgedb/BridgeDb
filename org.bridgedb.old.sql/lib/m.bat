@@ -1,1 +1,0 @@
-mvn install:install-file -Dfile=virtjdbc4.jar -DgroupId=my.virtuoso -DartifactId=jdbc4 -Dversion=1.0 -Dpackaging=jar
