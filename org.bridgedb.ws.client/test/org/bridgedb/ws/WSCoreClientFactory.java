@@ -23,8 +23,9 @@ public class WSCoreClientFactory extends IDMapperTestBase{
             System.out.println("in WSCoreInterface 3");
         } catch (Exception ex) {
             ex.printStackTrace();
-            report("***** SKIPPING WSClientTest ******");
-            report("Please make sure the server is running");
+            report("***** SKIPPING BridgeDB WSClientTest ******");
+            report("These test are repeated in the OPS client so normally not needed here.");
+            report("Please make sure the specicifc bridgeDB.war based server is running");
             org.junit.Assume.assumeTrue(false);        
         }
         System.out.println("in WSCoreInterface 4");
