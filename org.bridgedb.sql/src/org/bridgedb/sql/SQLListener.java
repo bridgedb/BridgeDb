@@ -10,7 +10,11 @@ import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.utils.Reporter;
 
 /**
- *
+ * This is the root class of the SQL stack.
+ * It handles the creation of all the tables and handles all inserts, except those only required for URL and UriSpaces
+ * 
+ * See CreateSQLTables method for an explanation of the tables.
+ * 
  * @author Christian
  */
 public class SQLListener implements MappingListener{
@@ -211,10 +215,32 @@ public class SQLListener implements MappingListener{
     }
 
     /**
-	 * Excecutes several SQL statements to create the tables and indexes in the database the given
-	 * connection is connected to
-	 * @throws IDMapperException 
-	 */
+	  * Excecutes several SQL statements to create the tables and indexes in the database.
+      * <p>
+      * Table "info" is a control table used by all database version of BridgeDB, inlcuing none OPS ones.
+      * If verifies that database is called with the code that matches the schema version.
+      * <p>
+      * Table DataSource holds the org.bridgedb.DataSource registry between deployments of the service.
+      * The whole table is loaded into the DataSource.class regisrty in the constructor.
+      * @See org.bridgedb.DataSource.
+      * <p>
+      * Table "mapping" holds the Id part of the mapping. (The DataSource part is handled by MappingSet)
+      * The "id" field is purely for provenace tracking. Ie getting a particular mapping based on its Id.
+      * Mappings are only looked up in one direction, so ids are specically source and target.
+      * "mappingSetId" is a foreign key to the "mappingSet" table.
+      * <p>
+      * Table "mappingSet" holds the DataSource part of each Mapping.
+      * Specifically it holds the SysCodes for which org.bridgedb.DataSource objects can be looked up.
+      * The Ops version will also map SysCodes to UriSpace(s).
+      * "predicate" is purely for provenace. (but could be used for Ops Profiles)
+      * "isTransitive" is a flag set at the time of loading to identify mappinSet generated using transativity of other sets.
+      *     Currently only used by OPS to draw a different line in the graphviz but could be used by profiles.
+      * "mappingCount" is a precomputed value @see countLinks() method.
+      * <p>
+      * Table "properties" underpins bridgeDB properties methods.
+      * "isPublic" field dettermines if the key will be returned by the getKeys() method.
+	  * @throws IDMapperException 
+	  */
 	protected void createSQLTables() throws BridgeDbSqlException
 	{
         //"IF NOT EXISTS " is not supported
