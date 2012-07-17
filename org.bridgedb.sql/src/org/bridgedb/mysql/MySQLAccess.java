@@ -1,19 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import com.mysql.jdbc.SQLError;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
+
 /**
- *
+ * MYSQL specific wrapper.
+ * 
  * @author Christian
  */
 public class MySQLAccess implements SQLAccess{
@@ -68,16 +63,4 @@ public class MySQLAccess implements SQLAccess{
         }
     }
     
-    /**
-     * Retrieve an active connection to the database
-     * 
-     * @return database connection
-     * @throws IMSException if there is a problem establishing a connection
-     */
-    @Override
-    public Connection getAConnection() throws SQLException {
-        Connection conn = DriverManager.getConnection(dbUrl, username, password);
-        return conn;
-    }
-
 }

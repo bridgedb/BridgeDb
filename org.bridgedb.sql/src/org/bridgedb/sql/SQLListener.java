@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.utils.Reporter;
 
@@ -47,6 +48,13 @@ public class SQLListener implements MappingListener{
     private final boolean supportsIsValid;
     private final String autoIncrement;
     
+    /**
+     * 
+     * @param dropTables Flag to dettermine if all tables should be dropped adnd recreated.
+     * @param sqlAccess Access to the specific SQL database being used including if it is the test,load or love.
+     * @param specific Class that hold the parts that are different between different SLQ implementations.
+     * @throws BridgeDbSqlException 
+     */
     public SQLListener(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws BridgeDbSqlException{
         if (sqlAccess == null){
             throw new IllegalArgumentException("sqlAccess can not be null");
@@ -66,6 +74,11 @@ public class SQLListener implements MappingListener{
         } else {
             blockSize = 1;
         }
+        //Starting with a block will cause a new query to start.
+        blockCount = blockSize ;
+        insertCount = 0;
+        doubleCount = 0;    
+
     }   
     
     @Override
@@ -80,6 +93,10 @@ public class SQLListener implements MappingListener{
         return forwardId;
     }
 
+    /**
+     * One way regiistration of Mapping Set.
+     * 
+     */
     private int registerMappingSet(DataSource source, DataSource target, String predicate, boolean isTransitive) 
             throws BridgeDbSqlException {
         String query = "INSERT INTO mappingSet "
@@ -126,16 +143,12 @@ public class SQLListener implements MappingListener{
                throw new BridgeDbSqlException ("Error closing connection ", ex);
             }
         }
-    }
-    
-    //@Override
-    public void openInput() throws BridgeDbSqlException {
         //Starting with a block will cause a new query to start.
         blockCount = blockSize ;
         insertCount = 0;
         doubleCount = 0;    
- 	}
-
+    }
+    
     @Override
     public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws BridgeDbSqlException {
         insertLink(sourceId, targetId, mappingSet);
@@ -143,7 +156,12 @@ public class SQLListener implements MappingListener{
             insertLink(targetId, sourceId, mappingSet + 1);
         }
     }
-
+    
+    /**
+     * One way insertion of a link.
+     * <p>
+     * May store link updates in a StringBuilder to make one large call rather than many small calls.
+     */
     private void insertLink(String sourceId, String targetId, int mappingSetId) throws BridgeDbSqlException{
         if (blockCount >= blockSize){
             runInsert();
@@ -166,6 +184,10 @@ public class SQLListener implements MappingListener{
 
     }
 
+    /**
+     * Runs the insert using the StringBuilder built up by one or more Insert calls.
+     * @throws BridgeDbSqlException 
+     */
     private void runInsert() throws BridgeDbSqlException{
         if (insertQuery != null) {
            try {
@@ -185,10 +207,6 @@ public class SQLListener implements MappingListener{
         blockCount = 0;
     }
     
-    /**
-	 * Excecutes several SQL statements to drop the tables 
-	 * @throws IDMapperException 
-	 */
      /**
 	 * Excecutes several SQL statements to drop the tables 
 	 * @throws IDMapperException 
@@ -202,7 +220,14 @@ public class SQLListener implements MappingListener{
  		dropTable("properties");
      }
     
-     protected void dropTable(String name) throws BridgeDbSqlException{
+    /**
+     * Drops a single table if it exists.
+     * <p>
+     * Virtuosos appears not to have the if exists syntax so errors are assumed to be table not found.
+     * @param name
+     * @throws BridgeDbSqlException 
+     */
+    protected void dropTable(String name) throws BridgeDbSqlException{
         //"IF NOT EXISTS" is unsupported 
        Statement sh = createStatement();
         try 
@@ -332,26 +357,35 @@ public class SQLListener implements MappingListener{
 		}		
 	}
   
+    /**
+     * 
+     * @return
+     * @throws BridgeDbSqlException 
+     */
     protected Statement createStatement() throws BridgeDbSqlException{
         try {
-            return createAStatement();
+            if (possibleOpenConnection == null){
+                possibleOpenConnection = sqlAccess.getConnection();
+            } else if (possibleOpenConnection.isClosed()){
+                possibleOpenConnection = sqlAccess.getConnection();
+            }    else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
+                possibleOpenConnection.close();
+                possibleOpenConnection = sqlAccess.getConnection();
+            }  
+            return possibleOpenConnection.createStatement();
         } catch (SQLException ex) {
             throw new BridgeDbSqlException ("Error creating a new statement ", ex);
         }
     }
-   
-    protected Statement createAStatement() throws SQLException{
-        if (possibleOpenConnection == null){
-            possibleOpenConnection = sqlAccess.getAConnection();
-        } else if (possibleOpenConnection.isClosed()){
-            possibleOpenConnection = sqlAccess.getAConnection();
-        } else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
-            possibleOpenConnection.close();
-            possibleOpenConnection = sqlAccess.getAConnection();
-        }  
-        return possibleOpenConnection.createStatement();
-    }
     
+    /**
+     * Verifies that the Data Source is saved in the database.
+     * Updating or adding the Data Source as required.
+     * <p>
+     * This is required to allow the DataSource registry to be rebuilt if the service is restarted.
+     * @param source A DataSource to check
+     * @throws BridgeDbSqlException 
+     */
     void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();
@@ -379,6 +413,13 @@ public class SQLListener implements MappingListener{
         }
     }
     
+    /**
+     * Adds a DataSource to the SQL database.
+     * <p>
+     * By the time this methods is called the assumption is that the DataSource did not yet exist in the database.
+     * @param source DataSource to save.
+     * @throws BridgeDbSqlException 
+     */
     private void writeDataSource(DataSource source) throws BridgeDbSqlException{
         StringBuilder insert = new StringBuilder ("INSERT INTO DataSource ( sysCode , isPrimary ");
         StringBuilder values = new StringBuilder ("Values ( ");
@@ -474,11 +515,23 @@ public class SQLListener implements MappingListener{
         }
     }
 
+    /**
+     * Writes all booleans as 1 or 0 because Virtuoso appears not able to handle the boolean type.
+     * 1 and 0 can be read as booleans even when saved as integers.
+     * @param bool Value to be saved.
+     * @return 
+     */
     private String booleanIntoQuery(boolean bool){
         if (bool) return "1";
         return "0";
     }
     
+    /**
+     * Updates the DataBase record assoicated with a DataSource that has previous been dettermined to already exist.
+     * 
+     * @param source DataSource whose info will be updated/ confirmed.
+     * @throws BridgeDbSqlException 
+     */
     private void updateDataSource(DataSource source) throws BridgeDbSqlException{
         StringBuilder update = new StringBuilder("UPDATE DataSource ");
         update.append ("SET isPrimary = ");
@@ -564,6 +617,11 @@ public class SQLListener implements MappingListener{
         }
     }
 
+    /**
+     * Updates the property LastUpdayes with the current date and time.
+     * 
+     * @throws BridgeDbSqlException 
+     */
     private void updateLastUpdated() throws BridgeDbSqlException {
         String delete = "DELETE from properties where theKey = 'LastUpdates'";
         Statement statement = this.createStatement();
@@ -583,6 +641,12 @@ public class SQLListener implements MappingListener{
         }
     }
 
+    /**
+     * Loads all the DataSources stored in the database into the DataSource registry.
+     * <p>
+     * This together with checkDataSourceInDatabase ensures that the DataSource registry is constant between runs.
+     * @throws BridgeDbSqlException 
+     */
     private void loadDataSources() throws BridgeDbSqlException{
         try {
             Statement statement = this.createStatement();
@@ -603,6 +667,12 @@ public class SQLListener implements MappingListener{
         }
     }
     
+    /**
+     * Updates the count variable for each Mapping Sets.
+     * <p>
+     * This allows the counts of the mappings in each Mapping Set to be quickly returned.
+     * @throws BridgeDbSqlException 
+     */
     private void countLinks () throws BridgeDbSqlException{
         Reporter.report ("Updating link count. Please Wait!");
         Statement countStatement = this.createStatement();

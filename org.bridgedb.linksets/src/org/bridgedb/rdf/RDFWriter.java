@@ -72,11 +72,6 @@ public class RDFWriter implements RdfLoader{
             }
         }
         RdfWrapper.shutdown(connection);
-        try {
-            urlListener.openInput();
-        } catch (IDMapperException ex) {
-            throw new RDFHandlerException(ex.getMessage(), ex);
-        }
     }
 
     @Override
