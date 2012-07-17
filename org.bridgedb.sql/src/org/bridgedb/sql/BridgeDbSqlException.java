@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.sql;
 
 import org.bridgedb.IDMapperException;
 
 /**
- *
+ * A BridgeDB Exception thrown by the SQL modules.
  * @author Christian
  */
 public class BridgeDbSqlException extends IDMapperException{

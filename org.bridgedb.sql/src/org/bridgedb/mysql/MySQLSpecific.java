@@ -3,7 +3,8 @@ package org.bridgedb.mysql;
 import org.bridgedb.sql.SQLSpecific;
 
 /**
- *
+ * The MYSQL specific settings of SQLSpecific
+ * 
  * @author Christian
  */
 public class MySQLSpecific implements SQLSpecific{
