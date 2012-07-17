@@ -1,11 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.utils;
 
 /**
- *
+ * Util functions that allows messages to be output.
+ * <p>
+ * Allows the output format to be changed in one place so chaning everywhere.
+ * <p>
+ * All other System.out calls can then be considered debug commands that should not have stayed in.
+ * 
  * @author Christian
  */
 public class Reporter {

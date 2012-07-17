@@ -20,8 +20,6 @@ public interface URLListener {
     public void insertURLMapping(String sourceURL, String targetURL, int mappingSet, boolean symetric) 
             throws IDMapperException;
     
-    public void openInput() throws IDMapperException;
-
     public void closeInput()throws IDMapperException;
 
 }

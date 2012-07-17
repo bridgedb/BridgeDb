@@ -15,17 +15,36 @@ import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
 
 /**
- *
+ * Builds on the SQLListener to implements the Standard BridgeDB functions of IDMapper and IDMapperCapabilities.
+ * This Allows the OPS version to function as any other BridgeDB implementation.
  * @author Christian
  */
 public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabilities {
 
+    /** 
+     * FreeSearch has proven to be very slow over large database so for large database we say it is unsupported.
+     */
     private static final int FREESEARCH_CUTOFF = 100000;      
     //Internal parameters
     protected static final int DEFAULT_LIMIT = 1000;
+    /**
+     * This identifies version of SQL such as MySQL that use "LIMIT" to restrict the number of tuples returned.
+     */
     private final boolean useLimit;
+    /**
+     * This identifies version of SQL such as Virtuoso that use "TOP" to restrict the number of tuples returned.
+     */
     private final boolean useTop;
     
+    /**
+     * Creates a new BridgeDB implementation based on a connection to the SQL Database.
+     * 
+     * @param dropTables Flag to dettermine if any existing tables should be dropped and new empty tables created.
+     * @param sqlAccess The connection to the actual database. This could be MySQL, Virtuoso ect. 
+     *       It could also be the live database, the loading database or the test database.
+     * @param specific Code to hold the things that are different between different SQL implementaions.
+     * @throws BridgeDbSqlException 
+     */
     public SQLIdMapper(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws BridgeDbSqlException{
         super(dropTables, sqlAccess, specific);
         useLimit = specific.supportsLimit();
@@ -255,6 +274,13 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
 
     //**** Support methods 
     
+    /**
+     * Check if the Xref is invalid in some way.
+     * <p>
+     * For example if it is null or if either the Id or DataSource part is null. 
+     * @param ref
+     * @return 
+     */
     private final boolean badXref(Xref ref) {
         if (ref == null) return true;
         if (ref.getId() == null || ref.getId().isEmpty()) return true;
@@ -262,6 +288,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         return false;
     }
 
+    /**
+     * Add a condition to the query that only mappings with a specific source Xref should be used.
+     * @param query Query to add to.
+     * @param ref Xref that forms the base of the condition.
+     */
     private final void appendSourceXref(StringBuilder query, Xref ref){
         query.append("AND sourceId = '");
             query.append(ref.getId());
@@ -271,6 +302,10 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append("' ");        
     }
     
+    /**
+     * Converts a ResultSet to a Set of individual Xrefs.
+     * @throws BridgeDbSqlException 
+     */
     private Set<Xref> resultSetToXrefSet(ResultSet rs) throws BridgeDbSqlException {
         HashSet<Xref> results = new HashSet<Xref>();
         try {
@@ -287,6 +322,15 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
        }
     }
 
+    /**
+     * Converts a ResultSet to a Set of BridgeDB DataSources by obtaining the SysCode from the ResultsSet a
+     * and looking the DataSource up in the DataSource Registry.
+     * <p>
+     * All DataSources have been preloaded by loadDataSources() called during the super constructor.
+     * @param rs
+     * @return
+     * @throws BridgeDbSqlException 
+     */
     private Set<DataSource> resultSetToDataSourceSet(ResultSet rs) throws BridgeDbSqlException {
         HashSet<DataSource> results = new HashSet<DataSource>();
         try {
@@ -301,6 +345,14 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
        }
     }
 
+    /**
+     * Adds the limit condition if this is the support method for limitng the number of results.
+     * <p>
+     * System such as MYSQL use a Limit clause at the end of the query. Where applicable this is added here.
+     * @param query Query to add Limit to
+     * @param position The offset of the fragment of results to return
+     * @param limit The size of the fragment of results to return
+     */
     protected void appendLimitConditions(StringBuilder query, Integer position, Integer limit){
         if (useLimit){
             if (position == null) {
@@ -313,6 +365,14 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         }
     }
 
+    /**
+     * Adds the top condition if this is the support method for limitng the number of results.
+     * <p>
+     * System such as Virtuosos use a Top clause directly after the select. Where applicable this is added here.
+     * @param query Query to add TOP to
+     * @param position The offset of the fragment of results to return
+     * @param limit The size of the fragment of results to return
+     */
     protected void appendTopConditions(StringBuilder query, Integer position, Integer limit){
         if (useTop){
             if (position == null) {

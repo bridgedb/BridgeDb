@@ -20,7 +20,6 @@ public abstract class MappingListenerTest extends IDMapperTestBase{
 
     @Test
     public void testLinkListener() throws IDMapperException{
-        listener.openInput();
         int mappingSet = listener.registerMappingSet(DataSource1, TEST_PREDICATE, DataSource2, SYMETRIC, ORIGINAL);
         listener.insertLink(map1xref1.getId(), map1xref2.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map2xref1.getId(), map2xref2.getId(), mappingSet, SYMETRIC);
