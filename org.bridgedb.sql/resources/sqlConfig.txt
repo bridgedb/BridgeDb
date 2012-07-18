@@ -8,7 +8,7 @@ SqlDatabase         ims
 SqlUser             ims
 SqlPassword         ims
 
-#This give the option of having a seperate load database to reload all data while he service stays live.
+#This give the option of having a separate load database to reload all data while the service stays live.
 #Note: You will have to stop start the service (or drop in a new war) after swapping load and production servers
 LoadSqlDatabase     ims
      #Defaults to SqlDatabase if not set
