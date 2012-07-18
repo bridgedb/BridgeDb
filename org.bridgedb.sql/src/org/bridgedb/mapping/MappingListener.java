@@ -45,6 +45,8 @@ public interface MappingListener {
      * Closes the input, flushing any links into storage.
      * <p>
      * May also update any cashed counts ext.
+     * <p>
+     * This method and URLListener method are intended to be duplicates of each other.
      * @throws IDMapperException 
      */
     public void closeInput()throws IDMapperException;
