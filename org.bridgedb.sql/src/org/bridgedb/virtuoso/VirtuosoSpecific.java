@@ -3,7 +3,8 @@ package org.bridgedb.virtuoso;
 import org.bridgedb.sql.SQLSpecific;
 
 /**
- *
+ * The Virtusos specific version of SQLSpecific
+ * 
  * @author Christian
  */
 public class VirtuosoSpecific implements SQLSpecific{

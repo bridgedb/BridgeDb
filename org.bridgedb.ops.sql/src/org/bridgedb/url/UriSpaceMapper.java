@@ -10,7 +10,12 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 
 /**
- *
+ * Warning this is a hack.
+ * Only taken into consideration when the database is reset by loading using the "new" parameter.
+ * After that the only way to get this information in is to hack the SQL database.
+ * 
+ * Urgently needs replacing with indentifiers.org methods.
+ * 
  * @author Christian
  */
 public class UriSpaceMapper {

@@ -24,7 +24,6 @@ public abstract class URLListenerTest extends URLMapperTestBase{
         listener.registerUriSpace(DataSource2, URISpace2);
         listener.registerUriSpace(DataSource3, URISpace3);
 
-        listener.openInput();
         int mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, URISpace2, SYMETRIC, ORIGINAL);
         listener.insertURLMapping(map1URL1, map1URL2, mappingSet, SYMETRIC);
         listener.insertURLMapping(map2URL1, map2URL2, mappingSet, SYMETRIC);
