@@ -18,7 +18,7 @@ public class URLMappingBeanFactory {
     }
 
     public static URLMappingBean asBean(URLMapping urlMapping) {
-        return new URLMappingBean (urlMapping.getId(), urlMapping.getSourceURL(), urlMapping.getPredicate(), 
-                urlMapping.getTargetURL(), urlMapping.getMappingSetId());              
+        return new URLMappingBean (urlMapping.getId(), urlMapping.getSourceURLs(), urlMapping.getPredicate(), 
+                urlMapping.getTargetURLs(), urlMapping.getMappingSetId());              
     }
 }

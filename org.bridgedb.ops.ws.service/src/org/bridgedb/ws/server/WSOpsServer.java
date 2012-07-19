@@ -131,7 +131,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             if (mapping.getId() != null){
                 mappingId = mapping.getId();
             }
-            String targetURL = mapping.getTargetURL();
+            String targetURL = mapping.getTargetURLs().iterator().next();
             URI2Spaces.add(SQLUrlMapper.getUriSpace(targetURL));            
         }
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
