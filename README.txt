@@ -23,13 +23,18 @@ we recommend copying the file to the tomcat configuration folder.
 Database Dependency
 -------------------
 MySQL version 5 or above must be installed and running
-MySQL databases and users must be created with read, create and write permissions
+MySQL databases and users must be created with CREATE, DROP, INDEX, INSERT, 
+UPDATE, DELETE, and SELECT permissions.
 
 Consult the sqlConfig file for the defaults, or amend the configuration file
 to your own setup.
 
-If you are using the default settings then execute the file mysqlConfig.sql
+If you are using the default accounts and databases then execute the file 
+mysqlConfig.sql to create the accounts with appropriate permissions and the 
+databases
 	mysql -u root -p < mysqlConfig.sql
+Note that the sql script will fail, without reverting changes made up to the 
+point of failure, if any of the user accounts or databases already exist.
 
 
 RDF Repository Dependency
