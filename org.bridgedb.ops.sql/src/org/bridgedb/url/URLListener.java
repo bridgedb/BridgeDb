@@ -5,6 +5,9 @@ import org.bridgedb.IDMapperException;
 
 /**
  * Import Interface that supports the adding of URLs.
+ * <p>
+ * This is similar to MappingListener allowing UriSpaces and URLs to be used directly.
+ * But also with added support for multiple UriSpaces version like Identifiers.org does.
  * 
  * @author Christian
  */
@@ -73,6 +76,7 @@ public interface URLListener {
      * May also update any cashed counts ext.
      * <p>
      * This method and MappingListener method are intended to be duplicates of each other.
+     * A single actual method can implement closeInput() for both interfaces. 
      * @throws IDMapperException 
      */
    public void closeInput()throws IDMapperException;

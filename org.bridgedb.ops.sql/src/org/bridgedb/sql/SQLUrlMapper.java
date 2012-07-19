@@ -14,7 +14,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.UriSpaceMapper;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
@@ -260,7 +260,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public MappingSetStatistics getMappingSetStatistics() throws BridgeDbSqlException {
+    public OverallStatistics getOverallStatistics() throws BridgeDbSqlException {
         int numberOfMappings = getMappingsCount();
         String linkSetQuery = "SELECT count(distinct(id)) as numberOfMappingSets, "
                 + "count(distinct(mappingSet.sourceDataSource)) as numberOfSourceDataSources, "
@@ -275,7 +275,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 int numberOfSourceDataSources = rs.getInt("numberOfSourceDataSources");
                 int numberOfPredicates= rs.getInt("numberOfPredicates");
                 int numberOfTargetDataSources = rs.getInt("numberOfTargetDataSources");
-                return new MappingSetStatistics(numberOfMappings, numberOfMappingSets, 
+                return new OverallStatistics(numberOfMappings, numberOfMappingSets, 
                         numberOfSourceDataSources, numberOfPredicates, numberOfTargetDataSources);
             } else {
                 System.err.println(linkSetQuery);
