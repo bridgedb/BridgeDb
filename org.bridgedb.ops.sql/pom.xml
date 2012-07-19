@@ -60,14 +60,14 @@
             <version>${hamcrest.version}</version>
 			<scope>test</scope>
         </dependency>  
-        <dependency>
+<!--         <dependency>
             <groupId>my.virtuoso</groupId>
             <artifactId>jdbc4</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
-            <!--scope>system</scope>
-            <systemPath>${project.basedir}/lib/virtjdbc4.jar</systemPath-->
-        </dependency>
+            scope>system</scope>
+            <systemPath>${project.basedir}/lib/virtjdbc4.jar</systemPath
+        </dependency> -->
 	</dependencies>
     <pluginRepositories>
         <pluginRepository> 
