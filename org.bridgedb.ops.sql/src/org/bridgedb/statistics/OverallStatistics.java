@@ -8,14 +8,14 @@ package org.bridgedb.statistics;
  *
  * @author Christian
  */
-public class MappingSetStatistics {
+public class OverallStatistics {
     private int numberOfMappings;
     private int numberOfMappingSets;
     private int numberOfSourceDataSources;
     private int numberOfPredicates;
     private int numberOfTargetDataSources;
     
-    public MappingSetStatistics(int numberOfMappings, int numberOfMappingSets, 
+    public OverallStatistics(int numberOfMappings, int numberOfMappingSets, 
             int numberOfSourceDataSources, int numberOfPredicates, int numberOfTargetDataSources){
         this.numberOfMappings = numberOfMappings;
         this.numberOfMappingSets = numberOfMappingSets;

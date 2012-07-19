@@ -25,7 +25,7 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.statistics.OverallStatistics;
 
 /**
  * Base interface for all URL mapping methods.
@@ -36,42 +36,56 @@ import org.bridgedb.statistics.MappingSetStatistics;
  */
 public interface URLMapper extends IDMapper{
 
-	/**
-	 * Get all cross-references for a set of entities, restricting the
-	 * result to contain only references from the given set of name spaces.
-     * Supports one-to-one mapping and one-to-many mapping.
-     * 
-     * Similar to the mapID method in IDMapper.
-     * 
-     * @param sourceURLs source URLs, Strings that DataSource can split into prefix, id and postfix
-     * @param targetURISpaces target name spaces (prefix) that can be included in the resulst. Set this to null
-     *   if you want to retrieve all results.
-     * @return a map from source URIs to target URIs's. The map is not guaranteed
-     *    to contain a result for each srcURIs you pass in. This method will never
-     *    return null however.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+    /**
+     * Similar to mapURL(String URL, String... targetURISpaces) except that more that one sourceURL can be provided 
+     *   and the result is a mapping from each input sourceURL to the set off its mapped URLs.
+     * <p>
+     * @See mapURL(String URL, String... targetURISpaces) for more details
+     * @param sourceURLs One or more URL as a String
+     * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result.
+     *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned. 
+     * @return A map of each of the sourceURLs to the Set of URLs (as String) that would have been returned byu calling
+     *    mapURL(sourceURL, targetURISpaces) individually.
+	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Map<String, Set<String>> mapURL(Collection<String> URLs, String... targetURISpaces) throws IDMapperException;
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws IDMapperException;
 
+    /**
+     * Similar to mapURL(String URL, String... targetURISpaces) except that the result will be a set of URLMappings.
+     * <p>
+     * @See mapURL(String URL, String... targetURISpaces) for more details or the method.
+     * @See URLMappings for details of what is included in the Results.
+	 * @param sourceURL the URL to get mappings/cross-references for. 
+     * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
+     *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
+	 * @return A Set containing the URL (in URLMapping Objects) that have been mapped/ cross referenced.
+	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
+     */
     public Set<URLMapping> mapURLFull(String URL, String... targetURISpaces) throws IDMapperException;
 
     /**
-	 * Get all cross-references for the given entity, restricting the
-	 * result to contain only references from the given set of name spaces.
-     * 
+	 * Get all mappings/cross-references for the given URL, restricting the
+	 * result to contain only URLs from the given set of UriSpaces.
+     * <p>
+     * Result will include the sourceURL (even if uriExists(sourceUrl) would return null),
+     *    if and only it has one of the targetURISpaces (or targetURISpaces is empty)
+     *    Result will be empty if no mapping/ cross references could be found. 
+     *    This method should never return null.
+     * <p>
      * Similar to the mapID method in IDMapper.
      * 
-	 * @param sourceURL the entity to get cross-references for. 
-     * @param targetURISpaces target name spaces (prefix) that can be included in the resulst. Set this to null
-     *   if you want to retrieve all results.
-	 * @return A Set containing the cross references, or an empty
-	 * Set when no cross references could be found. This method does not return null.
-	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 * @param sourceURL the URL to get mappings/cross-references for. 
+     * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
+     *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
+	 * @return A Set containing the URL (as Strings) that have been mapped/ cross referenced.
+	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
 	 */
 	public Set<String> mapURL (String URL, String... targetURISpaces) throws IDMapperException;
 	
     /**
-     * Check whether an URL is known by the given mapping source. This is an optionally supported operation.
+     * Check whether an URL is known by the given mapping source. 
+     * <p>
+     * This is an optionally supported operation.
      * @param url URL to check
      * @return if the URL exists, false if not
      * @throws IDMapperException if failed, UnsupportedOperationException if it's not supported by the Driver.
@@ -79,9 +93,10 @@ public interface URLMapper extends IDMapper{
     public boolean uriExists(String URL) throws IDMapperException;
 
     /**
-     * free text search for matching symbols or identifiers.
+     * Free text search for matching symbols or identifiers.
      * 
-     * Similar to the freeSearch meathod in IDMapper
+     * Similar to the freeSearch meathod in IDMapper.
+     * 
      * @param text text to search
      * @param limit up limit of number of hits
      * @return a set of hit references
@@ -110,19 +125,38 @@ public interface URLMapper extends IDMapper{
      */
     public boolean isConnected();
     
+    /**
+     * Service to convert a URL to its BridgeDB Xref version.
+     * <p>
+     * Behaviour of this method in cases where the UriSpace of the URL has not yet been registered is still to be dettermined.
+     * @param URL A URL as a String
+     * @return The Xref implementation of this URL. 
+     * @throws IDMapperException 
+     */
     public Xref toXref(String URL) throws IDMapperException;
     
+    /**
+     * Obtains the URLMapping information of the mapping of this id.
+     * <p>
+     * @See URLMappings for details of what is included in the Results.
+     * <p>
+     * The behaviour of this method if called with a non existance id is still to be determinded.
+     * @param id Identifier of the mapping
+     * @return a URLMapping with information about this mapping
+     * @throws IDMapperException 
+     */
     public URLMapping getMapping(int id)  throws IDMapperException;
     
     /**
      * Gets a Sample of Source URls.
      * 
      * Main use is for writing the api description page
-     * @return 
+     * @return 5 URLs that would return true for the method urlExists(URL)
      */
     public Set<String> getSampleSourceURLs() throws IDMapperException;
     
-    public  MappingSetStatistics getMappingSetStatistics() throws IDMapperException;
+    
+    public  OverallStatistics getOverallStatistics() throws IDMapperException;
 
     public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
     

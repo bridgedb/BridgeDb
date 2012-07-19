@@ -2,7 +2,6 @@ package org.bridgedb.ws;
 
 import java.util.ArrayList;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
-import org.bridgedb.ws.bean.MappingSetStatisticsBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import java.util.List;
@@ -17,13 +16,14 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
-import org.bridgedb.ws.bean.MappingSetStatisticsBeanFactory;
+import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
@@ -140,10 +140,10 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/getMappingStatistics") 
-    public MappingSetStatisticsBean getMappingSetStatistics() throws IDMapperException {
-        MappingSetStatistics overallStatistics = urlMapper.getMappingSetStatistics();
-        MappingSetStatisticsBean bean = MappingSetStatisticsBeanFactory.asBean(overallStatistics);
+    @Path("/getOverallStatistics") 
+    public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
+        OverallStatistics overallStatistics = urlMapper.getOverallStatistics();
+        OverallStatisticsBean bean = OverallStatisticsBeanFactory.asBean(overallStatistics);
         return bean;
     }
 
