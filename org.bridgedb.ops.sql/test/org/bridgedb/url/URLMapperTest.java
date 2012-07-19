@@ -88,18 +88,18 @@ public abstract class URLMapperTest extends URLMapperTestBase{
         report("MapFullOneToManyNoDataSources");
         Set<URLMapping> results = urlMapper.mapURLFull(map3URL3);
         for (URLMapping URLMapping:results){
-            if (URLMapping.getTargetURL().equals(map3URL3)){
+            if (URLMapping.getTargetURLs().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
                 String[] expectedMatches = {map3URL1, map3URL2};
-                assertThat(URLMapping.getTargetURL(), isOneOf( expectedMatches ) );
+                assertThat(URLMapping.getTargetURLs().iterator().next(), isOneOf( expectedMatches ) );
                 assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
                 assertNotNull(URLMapping.getId());
                 assertNotNull(URLMapping.getMappingSetId());
             }
-            assertEquals(map3URL3, URLMapping.getSourceURL());
+            assertTrue(URLMapping.getSourceURLs().contains(map3URL3));
         }
     }
 
@@ -215,16 +215,16 @@ public abstract class URLMapperTest extends URLMapperTestBase{
         Integer mappingId = null;
         Integer setId = null;
         for (URLMapping URLMapping:results){
-            if (URLMapping.getTargetURL().equals(map3URL2)){
+            if (URLMapping.getTargetURLs().contains(map3URL2)){
                 mappingId = URLMapping.getId();
                 setId = URLMapping.getMappingSetId();        
             }
         }
         URLMapping result = urlMapper.getMapping(mappingId);
         assertEquals(mappingId, result.getId());
-        assertEquals(map3URL3, result.getSourceURL());
+        assertTrue(result.getSourceURLs().contains(map3URL3));
         assertEquals(TEST_PREDICATE, result.getPredicate());
-        assertEquals(map3URL2, result.getTargetURL());
+        assertTrue(result.getTargetURLs().contains(map3URL2));
         assertEquals(setId, result.getMappingSetId());
     }
     

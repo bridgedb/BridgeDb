@@ -450,15 +450,24 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     private URLMapping resultSetToURLMapping(ResultSet rs) throws BridgeDbSqlException {
         try {
+            URLMapping urlMapping;
             if (rs.next()){
                 Integer mappingId = rs.getInt("mapping.id"); 
                 String sourceURL = rs.getString("source.uriSpace") + rs.getString("sourceId");
                 String targetURL = rs.getString("target.uriSpace") + rs.getString("targetId");
                 Integer mappingSetId = rs.getInt("mappingSet.id");
                 String predicate = rs.getString("predicate");
-                return new URLMapping (mappingId, sourceURL, predicate, targetURL, mappingSetId);       
+                urlMapping = new URLMapping (mappingId, sourceURL, predicate, targetURL, mappingSetId);       
+            } else {
+                return null;
             }
-            return null;
+            while (rs.next()){
+                String sourceURL = rs.getString("source.uriSpace") + rs.getString("sourceId");
+                urlMapping.addSourceURL(sourceURL);
+                String targetURL = rs.getString("target.uriSpace") + rs.getString("targetId"); 
+                urlMapping.addTargetURL(targetURL);
+            }
+            return urlMapping;
        } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to parse results.", ex);
        }
