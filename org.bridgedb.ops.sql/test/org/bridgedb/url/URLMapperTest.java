@@ -2,7 +2,7 @@ package org.bridgedb.url;
 
 import java.util.List;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.Xref;
 import org.junit.Ignore;
@@ -241,7 +241,7 @@ public abstract class URLMapperTest extends URLMapperTestBase{
     @Test
     public void testGetOverallStatistics() throws IDMapperException {
         report("GetOverallStatistics()");
-        MappingSetStatistics results = urlMapper.getMappingSetStatistics();
+        OverallStatistics results = urlMapper.getOverallStatistics();
         assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
         assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(6));
         assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));

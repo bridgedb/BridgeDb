@@ -31,7 +31,7 @@ import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.ws.WSOpsService;
 

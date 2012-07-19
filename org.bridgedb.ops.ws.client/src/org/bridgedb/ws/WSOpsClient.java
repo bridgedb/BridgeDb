@@ -21,7 +21,7 @@ import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
-import org.bridgedb.ws.bean.MappingSetStatisticsBean;
+import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.MappingSupportedBean;
 import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.URLBean;
@@ -121,14 +121,14 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public MappingSetStatisticsBean getMappingSetStatistics() throws IDMapperException {
+    public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
-        MappingSetStatisticsBean result = 
-                webResource.path("getMappingStatistics")
+        OverallStatisticsBean result = 
+                webResource.path("getOverallStatistics")
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<MappingSetStatisticsBean>() {});
+                .get(new GenericType<OverallStatisticsBean>() {});
          return result;
     }
 

@@ -11,14 +11,14 @@ import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
-import org.bridgedb.ws.bean.MappingSetStatisticsBean;
-import org.bridgedb.ws.bean.MappingSetStatisticsBeanFactory;
+import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
@@ -106,9 +106,9 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public MappingSetStatistics getMappingSetStatistics() throws IDMapperException {
-        MappingSetStatisticsBean bean = opsService.getMappingSetStatistics();
-        return MappingSetStatisticsBeanFactory.asMappingSetStatistics(bean);
+    public OverallStatistics getOverallStatistics() throws IDMapperException {
+        OverallStatisticsBean bean = opsService.getOverallStatistics();
+        return OverallStatisticsBeanFactory.asOverallStatistics(bean);
     }
 
     @Override

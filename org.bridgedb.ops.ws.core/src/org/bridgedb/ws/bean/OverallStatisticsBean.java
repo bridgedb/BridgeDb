@@ -6,15 +6,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Christian
  */
-@XmlRootElement(name="MappingSetStatistics")
-public class MappingSetStatisticsBean {
+@XmlRootElement(name="OverallStatistics")
+public class OverallStatisticsBean {
     Integer numberOfMappings;
     Integer numberOfMappingSets;
     Integer numberOfSourceDataSources;
     Integer numberOfPredicates;
     Integer numberOfTargetDataSources;
     
-    public MappingSetStatisticsBean(Integer numberOfMappings, Integer numberOfMappingSets, 
+    public OverallStatisticsBean(Integer numberOfMappings, Integer numberOfMappingSets, 
             Integer numberOfSourceDataSources, Integer numberOfPredicates, Integer numberOfTargetDataSources){
         this.numberOfMappings = numberOfMappings;
         this.numberOfMappingSets = numberOfMappingSets;
@@ -24,11 +24,11 @@ public class MappingSetStatisticsBean {
     }
 
     //Webservice constructor
-    public MappingSetStatisticsBean(){
+    public OverallStatisticsBean(){
     }
     
     public String toString(){
-           return  "MappingSetStatistics: \n\tnumberOfMappings: " + numberOfMappings  
+           return  "OverallStatistics: \n\tnumberOfMappings: " + numberOfMappings  
                    + " \n\tnumberOfMappingSets: " + numberOfMappingSets
                    + "\n\tnumberOfSourceDataSources: " + numberOfSourceDataSources
                    + "\n\tnumberOfPredicates: " + numberOfPredicates

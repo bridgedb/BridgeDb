@@ -32,7 +32,7 @@ import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.MappingSetStatistics;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.ws.WSOpsService;
 
@@ -73,7 +73,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
         sb.append("<p>Welcome to the prototype Identity Mapping Service. </p>");
        
-        MappingSetStatistics statistics = urlMapper.getMappingSetStatistics();
+        OverallStatistics statistics = urlMapper.getOverallStatistics();
         sb.append("<p>Currently the service includes: ");
         sb.append("<ul>");
             sb.append("<li>");
