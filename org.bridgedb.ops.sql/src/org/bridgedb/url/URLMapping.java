@@ -1,26 +1,41 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.url;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- *
+ * Contains the information held for a particular mapping.
+ * <p>
+ * @See getMethods for what is returned.
+ * <p>
+ * A few things that are not returned and why included:
+ * <ul>
+ * <li>UriSpace: 
  * @author Christian
  */
 public class URLMapping {
  
     private Integer id;
-    private String sourceURL;
-    private String targetURL;
+    private Set<String> sourceURLs;
+    private Set<String> targetURLs;
     private Integer mappingSetId;
     private String predicate;
     
     public URLMapping (Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId){
         this.id = id;
-        this.sourceURL = sourceURL;
-        this.targetURL = targetURL;
+        this.sourceURLs = new HashSet<String>();
+        sourceURLs.add(sourceURL);
+        this.targetURLs = new HashSet<String>();
+        targetURLs.add(targetURL);
         this.mappingSetId = mappingSetId;
+        this.predicate = predicate;
+    }
+
+    public URLMapping (Integer id, Set<String> sourceURLs, String predicate, Set<String> targetURLs, Integer mappingSetId){
+        this.id = id;
+        this.sourceURLs = sourceURLs;
+        this.mappingSetId = mappingSetId;
+        this.targetURLs = targetURLs;
         this.predicate = predicate;
     }
 
@@ -32,22 +47,43 @@ public class URLMapping {
     }
 
     /**
-     * @return the source
+     * @return the sourceURLs
      */
-    public String getSourceURL() {
-        return sourceURL;
+    public Set<String> getSourceURLs() {
+        return sourceURLs;
     }
 
+    public void addSourceURL(String sourceURL){
+        sourceURLs.add(sourceURL);
+    }
+    
     /**
-     * @return the target
+     * @return the target URLs
      */
-    public String getTargetURL() {
-        return targetURL;
+    public Set<String> getTargetURLs() {
+        return targetURLs;
+    }
+
+    public void addTargetURL(String targetURL){
+        targetURLs.add(targetURL);
     }
 
     public String toString(){
-        return this.id  + ": " + this.sourceURL + " " + this.getPredicate() + " " + this.targetURL + 
-                " mappingSet: " + this.getMappingSetId();
+        StringBuilder output = new StringBuilder("mapping ");
+        output.append(this.id);
+        for (String sourceURL:sourceURLs){
+            output.append("\n\tSourceURL: ");
+            output.append(sourceURL);
+        }
+        output.append("\n\tPredicate(): ");
+        output.append(predicate);
+        for (String targetURL:targetURLs){
+            output.append("\n\tTargetURL: ");
+            output.append(targetURL);
+        }
+        output.append("\n\tMappingSet(id): ");
+        output.append(mappingSetId);
+        return output.toString();
     }
    
     @Override
@@ -56,8 +92,8 @@ public class URLMapping {
         if (other instanceof URLMapping){
             URLMapping otherMapping = (URLMapping)other;
             if (otherMapping.id != id) return false;
-            if (!otherMapping.sourceURL.equals(sourceURL)) return false;
-            if (!otherMapping.targetURL.equals(targetURL)) return false;
+            if (!otherMapping.sourceURLs.equals(sourceURLs)) return false;
+            if (!otherMapping.targetURLs.equals(targetURLs)) return false;
             if (!otherMapping.getMappingSetId().equals(getMappingSetId())) return false;
             //No need to check predicate as by defintion one id has one predicate
             return true;

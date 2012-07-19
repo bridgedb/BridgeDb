@@ -4,6 +4,7 @@
  */
 package org.bridgedb.ws.bean;
 
+import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -13,8 +14,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="URLMapping")
 public class URLMappingBean {
     Integer id;
-    String sourceURL;
-    String targetURL;
+    //Name is single as XML looks better this way
+    Set<String> sourceURL;
+    //Name is single as XML looks better this way
+    Set<String> targetURL;
     private Integer mappingSetId;
     String predicate;
     
@@ -22,11 +25,11 @@ public class URLMappingBean {
     public URLMappingBean(){
     }
 
-    URLMappingBean(Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId) {
+    URLMappingBean(Integer id, Set<String> sourceURLs, String predicate, Set<String> targetURLs, Integer mappingSetId) {
         this.id = id;
-        this.sourceURL = sourceURL;
+        this.sourceURL = sourceURLs;
         this.predicate = predicate;
-        this.targetURL = targetURL;
+        this.targetURL = targetURLs;
         this.mappingSetId = mappingSetId;
     }
     
@@ -52,29 +55,29 @@ public class URLMappingBean {
     /**
      * @return the sourceURL
      */
-    public String getSourceURL() {
+    public Set<String> getSourceURL() {
         return sourceURL;
     }
 
     /**
      * @param sourceURL the sourceURL to set
      */
-    public void setSourceURL(String sourceURL) {
-        this.sourceURL = sourceURL;
+    public void setSourceURL(Set<String> sourceURLs) {
+        this.sourceURL = sourceURLs;
     }
 
     /**
      * @return the targetURL
      */
-    public String getTargetURL() {
+    public Set<String> getTargetURL() {
         return targetURL;
     }
 
     /**
      * @param targetURL the targetURL to set
      */
-    public void setTargetURL(String targetURL) {
-        this.targetURL = targetURL;
+    public void setTargetURL(Set<String> targetURLs) {
+        this.targetURL = targetURLs;
     }
 
     /**

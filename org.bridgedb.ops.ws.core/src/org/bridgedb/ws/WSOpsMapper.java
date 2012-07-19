@@ -56,7 +56,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
         List<URLMappingBean> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
         HashSet<String> targetURLS = new HashSet<String>(); 
         for (URLMappingBean bean:beans){
-            targetURLS.add(bean.getTargetURL());
+            targetURLS.addAll(bean.getTargetURL());
         }
         return targetURLS;
     }
