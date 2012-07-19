@@ -28,6 +28,9 @@ MySQL databases and users must be created with read, create and write permission
 Consult the sqlConfig file for the defaults, or amend the configuration file
 to your own setup.
 
+If you are using the default settings then execute the file mysqlConfig.sql
+	mysql -u root -p < mysqlConfig.sql
+
 
 RDF Repository Dependency
 -------------------------
