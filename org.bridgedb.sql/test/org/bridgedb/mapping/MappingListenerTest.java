@@ -1,7 +1,7 @@
 package org.bridgedb.mapping;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperWithCapabilitiesTest;
+import org.bridgedb.IDMapperTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -9,7 +9,7 @@ import org.junit.Test;
  *
  * @author Christian
  */
-public abstract class MappingListenerTest extends IDMapperWithCapabilitiesTest{
+public abstract class MappingListenerTest extends IDMapperTest{
     
     protected static final String TEST_PREDICATE = "http://www.bridgedb.org/test#testPredicate";
     private static final boolean SYMETRIC = true;
