@@ -1,6 +1,6 @@
 package org.bridgedb.ws.client;
 
-import org.bridgedb.IDMapperCapabilitiesTest;
+import org.bridgedb.IDMapperWithCapabilitiesTest;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.WSOpsClientFactory;
 import org.bridgedb.ws.WSOpsInterface;
@@ -12,7 +12,7 @@ import org.junit.Ignore;
  *
  * @author Christian
  */
-public class WSClientAsCapabilitiesTest  extends IDMapperCapabilitiesTest{
+public class WSClientAsCapabilitiesTest  extends IDMapperWithCapabilitiesTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {

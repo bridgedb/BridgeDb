@@ -1,15 +1,15 @@
 package org.bridgedb.mapping;
 
-import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTestBase;
+import org.bridgedb.IDMapperWithCapabilitiesTest;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  *
  * @author Christian
  */
-public abstract class MappingListenerTest extends IDMapperTestBase{
+public abstract class MappingListenerTest extends IDMapperWithCapabilitiesTest{
     
     protected static final String TEST_PREDICATE = "http://www.bridgedb.org/test#testPredicate";
     private static final boolean SYMETRIC = true;
@@ -18,8 +18,7 @@ public abstract class MappingListenerTest extends IDMapperTestBase{
     
     protected static MappingListener listener;
 
-    @Test
-    public void testLinkListener() throws IDMapperException{
+    public static void loadData() throws IDMapperException{
         int mappingSet = listener.registerMappingSet(DataSource1, TEST_PREDICATE, DataSource2, SYMETRIC, ORIGINAL);
         listener.insertLink(map1xref1.getId(), map1xref2.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map2xref1.getId(), map2xref2.getId(), mappingSet, SYMETRIC);
