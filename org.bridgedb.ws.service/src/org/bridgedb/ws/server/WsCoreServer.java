@@ -11,6 +11,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.ws.WSCoreService;
 
 /**
@@ -22,7 +23,7 @@ public class WsCoreServer extends WSCoreService {
     public WsCoreServer() throws BridgeDbSqlException {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess();
         idMapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
-        System.out.println("WsCoreServer setup");
+        Reporter.report("WsCoreServer setup");
     }
             
     @GET

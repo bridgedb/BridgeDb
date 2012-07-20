@@ -20,8 +20,6 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
         report("DataSourceSupported");
         
         Set<DataSource> dataSources = capabilities.getSupportedSrcDataSources();
-        System.out.println(DataSource1);
-        System.out.println(dataSources);
         assertTrue(dataSources.contains(DataSource1));
         assertTrue(dataSources.contains(DataSource2));
         assertTrue(dataSources.contains(DataSource3));
