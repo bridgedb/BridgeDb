@@ -4,6 +4,7 @@
  */
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -42,7 +43,7 @@ public class TransativeCreatorTest {
      */
     @Test
     public void testMain() throws Exception {
-        System.out.println("main");
+        Reporter.report("main");
         String[] args = new String[4];
         args[0] = "2";
         args[1] = "3";

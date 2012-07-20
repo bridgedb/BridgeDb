@@ -15,27 +15,27 @@ import org.bridgedb.IDMapperTestBase;
 public class WSOpsClientFactory extends IDMapperTestBase{
     
     public static WSOpsInterface createTestWSClient() throws IDMapperException{
-        System.out.println("in WSCoreInterface 1");
+        //ystem.out.println("in WSCoreInterface 1");
         WSOpsInterface webService = new WSOpsClient("http://localhost:8080/OPS-IMS");
-        System.out.println("in WSCoreInterface 2");
+        //ystem.out.println("in WSCoreInterface 2");
         try { 
             webService.isFreeSearchSupported();
-            System.out.println("in WSCoreInterface 3");
+            //ystem.out.println("in WSCoreInterface 3");
         } catch (Exception ex) {
             System.err.println(ex);
-            System.out.println ("***** SKIPPING WSClientTest ******");
-            System.out.println ("Please make sure the server is running");
+            System.err.println ("***** SKIPPING WSClientTest ******");
+            System.err.println ("Please make sure the server is running");
             org.junit.Assume.assumeTrue(false);        
         }
-        System.out.println("in WSCoreInterface 4");
+        //ystem.out.println("in WSCoreInterface 4");
         if (!webService.isMappingSupported(DataSource1.getSystemCode(), DataSource2.getSystemCode()).isMappingSupported()){
-        System.out.println("in WSCoreInterface 5a");
-            System.out.println ("***** SKIPPING WSClientTest ******");
-            System.out.println ("It appears the Test data is not loaded");
-            System.out.println ("remove ignore in TestDataToMainServerTest (org.bridgedb.ws.sqlserver) ");            
+        //ystem.out.println("in WSCoreInterface 5a");
+            System.err.println ("***** SKIPPING WSClientTest ******");
+            System.err.println ("It appears the Test data is not loaded");
+            System.err.println ("remove ignore in TestDataToMainServerTest (org.bridgedb.ws.sqlserver) ");            
             org.junit.Assume.assumeTrue(false);        
         }
-        System.out.println("in WSCoreInterface 5b");
+        //ystem.out.println("in WSCoreInterface 5b");
         return webService;
     }
 }

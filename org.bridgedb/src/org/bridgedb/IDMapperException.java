@@ -48,7 +48,6 @@ public class IDMapperException extends Exception
 	public IDMapperException (String msg, Throwable t)
 	{
 		super (msg, t);
-        t.printStackTrace();
 	}
 	
 	/** 
