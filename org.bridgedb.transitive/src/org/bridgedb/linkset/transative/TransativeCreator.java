@@ -74,6 +74,10 @@ public class TransativeCreator {
         //if (!file.canWrite()){
         //    throw new IOException("Unable to write to " + file.getAbsolutePath());
         //}
+        if (!file.getParentFile().exists()){
+            throw new IOException("Unable to create file " + fileName + " because the requested directory " 
+                    + file.getParent() + " does not yet exist. Please create the directory and try again.");
+        }
         FileWriter writer = new FileWriter(file);
         buffer = new BufferedWriter(writer);
         buffer.flush();
