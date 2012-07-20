@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-public class IDMapperCapabilitiesTest  extends org.bridgedb.IDMapperWithCapabilitiesTest{
+public class IDMapperCapabilitiesTest  extends org.bridgedb.IDMapperCapabilitiesTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {

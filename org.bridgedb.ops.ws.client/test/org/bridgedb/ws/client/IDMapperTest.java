@@ -18,6 +18,7 @@ public class IDMapperTest  extends org.bridgedb.IDMapperTest{
         WSOpsInterface webService = WSOpsClientFactory.createTestWSClient();
         connectionOk = true;
         idMapper = new WSOpsMapper(webService);
+        capabilities = idMapper.getCapabilities();
     }
 
 }

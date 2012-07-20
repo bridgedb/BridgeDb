@@ -1,5 +1,6 @@
 package org.bridgedb;
 
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import java.util.Set;
 import org.junit.Test;
@@ -9,7 +10,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public abstract class IDMapperWithCapabilitiesTest extends IDMapperTest{
+public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     
     //Must be instantiated by implementation of these tests.
     protected static IDMapperCapabilities capabilities;

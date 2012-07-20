@@ -21,6 +21,7 @@ public class TestIDMapperText extends IDMapperTest {
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException, MalformedURLException{
 		idMapper = new IDMapperText(INTERFACE_TEST_FILE.toURL());
+        capabilities = idMapper.getCapabilities();
 	}
 	
 	@Test 
