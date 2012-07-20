@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
  *
  * @author Christian
  */
-public abstract class URLMapperTest extends URLMapperTestBase{
+public abstract class URLMapperTest extends URLListenerTest{
             
     //Used by subsets during settup to check connection is ok.
     //If set to false will skip testClose(). 

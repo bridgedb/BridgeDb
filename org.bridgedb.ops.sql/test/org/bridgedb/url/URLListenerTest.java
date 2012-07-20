@@ -1,10 +1,6 @@
 package org.bridgedb.url;
 
-import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTestBase;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  *
@@ -18,8 +14,7 @@ public abstract class URLListenerTest extends URLMapperTestBase{
     private static final boolean ORIGINAL = false;
     private static final boolean TRANSATIVE = true;
 
-    @Test
-    public void testRegisterUriSpace() throws IDMapperException{
+    public static void loadData() throws IDMapperException{
         listener.registerUriSpace(DataSource1, URISpace1);
         listener.registerUriSpace(DataSource2, URISpace2);
         listener.registerUriSpace(DataSource3, URISpace3);
