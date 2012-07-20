@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public abstract class IDMapperTest extends IDMapperTestBase{
+public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
             
     static protected IDMapper idMapper;
     
