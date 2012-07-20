@@ -24,6 +24,7 @@ import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -106,16 +107,16 @@ public class TransativeCreator {
         targetUriSpace = RdfWrapper.getTheSingeltonObject(connection, targetDataSet, VoidConstants.URI_SPACE, rightContext);
 
         RdfWrapper.shutdown(connection);
-        System.out.println(output.toString());
-        System.out.println(sourceUriSpace);
-        System.out.println(targetUriSpace);
+        //ystem.out.println(output.toString());
+        //ystem.out.println(sourceUriSpace);
+        //ystem.out.println(targetUriSpace);
         buffer.write(output.toString());
     }
     
     private void showContext(URI context) throws RDFHandlerException{
         List<Statement> statements = RdfWrapper.getStatementList(connection, null, null, null, context);
         for (Statement statement:statements){
-            System.out.println(statement);
+            Reporter.report(statement.toString());
         }
     }
     private Resource getLinkSet(URI context) throws RDFHandlerException{
@@ -125,12 +126,12 @@ public class TransativeCreator {
     private void checkMiddle(String leftDiff, String rightDiff) throws RDFHandlerException{
         Value leftTarget = 
                 RdfWrapper.getTheSingeltonObject(connection, leftLinkSet, VoidConstants.OBJECTSTARGET, leftContext);
-        System.out.println (leftTarget);
+        //ystem.out.println (leftTarget);
         Value leftURISpace =
                 RdfWrapper.getTheSingeltonObject(connection, leftTarget, VoidConstants.URI_SPACE, leftContext);
         Value rightSubject = 
                 RdfWrapper.getTheSingeltonObject(connection, rightLinkSet, VoidConstants.SUBJECTSTARGET, rightContext);
-        System.out.println (rightSubject);
+        //ystem.out.println (rightSubject);
         Value rightURISpace =
                 RdfWrapper.getTheSingeltonObject(connection, rightSubject, VoidConstants.URI_SPACE, rightContext);
         if (rightURISpace.equals(leftURISpace)){
@@ -279,9 +280,9 @@ public class TransativeCreator {
            throw new BridgeDbSqlException("Unable to get statement. ", ex);
         }
         try {
-            System.out.println("Running " + query.toString());
+            Reporter.report("Running " + query.toString());
             ResultSet rs = statement.executeQuery(query.toString());
-            System.out.println("processing results");
+            Reporter.report("processing results");
             while (rs.next()){
                 String sourceId = rs.getString("mapping1.sourceId");
                 String targetId = rs.getString("mapping2.targetId");

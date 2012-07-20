@@ -248,7 +248,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append("AND mappingSet.sourceDataSource = source.dataSource ");
         query.append("GROUP BY sourceId, source.uriSpace ");
         this.appendLimitConditions(query, 0, 5);
-        System.out.println(query);
+        //ystem.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {

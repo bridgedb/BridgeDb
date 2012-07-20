@@ -34,6 +34,7 @@ import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.ws.WSOpsService;
 
 /**
@@ -54,7 +55,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             dfs.setGroupingSeparator(',');
             ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
         }
-        System.out.println("WsOpsServer setup");        
+        Reporter.report("WsOpsServer setup");        
       }
             
     @GET
@@ -111,7 +112,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
     public Response apiPage() throws IDMapperException, UnsupportedEncodingException {
-        Long start = new Date().getTime();
+        //Long start = new Date().getTime();
         StringBuilder sb = new StringBuilder();
  
         Set<String> urls = urlMapper.getSampleSourceURLs();  
@@ -165,7 +166,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         api.describe_Info(sb);
         
         sb.append("</body></html>");
-        System.out.println("Done "+ (new Date().getTime() - start));
+        //ystem.out.println("Done "+ (new Date().getTime() - start));
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
            
