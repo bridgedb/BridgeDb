@@ -2,6 +2,7 @@ package org.bridgedb.mysql;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
@@ -18,6 +19,9 @@ public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTes
     public static void setupIDMapper() throws IDMapperException{
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         listener = new SQLListener(true, sqlAccess, new MySQLSpecific());
+        loadData();
+        idMapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
+        capabilities = idMapper.getCapabilities(); 
         report("setup");
     }
             

@@ -1,8 +1,6 @@
 package org.bridgedb;
 
 import org.junit.Ignore;
-import java.util.Map;
-import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -11,7 +9,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
+public abstract class IDMapperWithCapabilitiesTest extends IDMapperTest{
     
     //Must be instantiated by implementation of these tests.
     protected static IDMapperCapabilities capabilities;
@@ -21,7 +19,8 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
         report("DataSourceSupported");
         
         Set<DataSource> dataSources = capabilities.getSupportedSrcDataSources();
-        
+        System.out.println(DataSource1);
+        System.out.println(dataSources);
         assertTrue(dataSources.contains(DataSource1));
         assertTrue(dataSources.contains(DataSource2));
         assertTrue(dataSources.contains(DataSource3));
