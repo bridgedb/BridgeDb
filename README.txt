@@ -39,11 +39,12 @@ point of failure, if any of the user accounts or databases already exist.
 RDF Repository Dependency
 -------------------------
 SailNativeStore(s) will be created automatically as long as loader can 
-create/find the directory.
+create/find the directory, 
 
-The default relative directory for Main and Load should be changed to absolute directories.
-Please ensure the parent(s) of main and load exist and have the correct permissions. 
-The default directory is fine for testing (it already exists) 
+We recommend changing the relative directories to absolute directories.
+Please ensure the parent directories exist and have the correct permissions. 
+
+The settings for testing (and therefor compilation) can be left as is.
 
 The BaseURI variable in the RDF configuration file should be the base of the 
 Webserver you will drop the web service into.
@@ -89,9 +90,8 @@ Run $BridgeDb\org.bridgedb.linksets\target\org.bridgedb.linksets-2.0.0-SNAPSHOT.
 (OPTIONAL) To create a transative linkset:
 Run $BridgeDB\BridgeDb\org.bridgedb.transitive\target\org.bridgedb.transitive-2.0.0-SNAPSHOT.one-jar.jar
 
-Library dependencies (This section is about CORE BridgeDB elements currently not in the OPS Build)
+Library dependencies 
 --------------------
-
 If you don't use all mappers, you do not need to include all
 libraries in the dist directory in your project.
 
