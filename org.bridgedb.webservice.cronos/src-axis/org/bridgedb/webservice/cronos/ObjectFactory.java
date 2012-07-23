@@ -45,14 +45,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link IsinRedListResponse }
-     * 
-     */
-    public IsinRedListResponse createIsinRedListResponse() {
-        return new IsinRedListResponse();
-    }
-
-    /**
      * Create an instance of {@link IsinRedList }
      * 
      */
@@ -66,6 +58,14 @@ public class ObjectFactory {
      */
     public CronosWS_Type createCronosWS_Type() {
         return new CronosWS_Type();
+    }
+
+    /**
+     * Create an instance of {@link IsinRedListResponse }
+     * 
+     */
+    public IsinRedListResponse createIsinRedListResponse() {
+        return new IsinRedListResponse();
     }
 
     /**
