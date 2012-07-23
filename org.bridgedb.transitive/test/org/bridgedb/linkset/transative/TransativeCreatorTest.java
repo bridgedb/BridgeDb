@@ -4,6 +4,7 @@
  */
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.linkset.LinksetLoaderTest;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
 import org.junit.After;
@@ -17,7 +18,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class TransativeCreatorTest {
+public class TransativeCreatorTest extends LinksetLoaderTest{
     
     public TransativeCreatorTest() {
     }
