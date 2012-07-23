@@ -1,7 +1,5 @@
 package org.bridgedb;
 
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -64,9 +62,9 @@ public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     }
     
     @Test
-    @Ignore
     public void testBadKeyNoProperties(){
         report ("BadKeyNoProperties");
+        System.out.println(capabilities.getProperty(badKey));
         assertNull(capabilities.getProperty(badKey));
     }
 
