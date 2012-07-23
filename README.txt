@@ -41,7 +41,7 @@ RDF Repository Dependency
 SailNativeStore(s) will be created automatically as long as loader can 
 create/find the directory.
 
-The dewfault relative directory for Main and Load should be changed to absolute directories.
+The default relative directory for Main and Load should be changed to absolute directories.
 Please ensure the parent(s) of main and load exist and have the correct permissions. 
 The default directory is fine for testing (it already exists) 
 
