@@ -274,7 +274,6 @@ public class SqlFactory {
     private static void load() throws IOException{
         if (loadByEnviromentVariable()) return;
         if (loadByCatalinaHomeConfigs()) return;
-        System.out.println("here");
         if (loadDirectly()) return;
         if (loadFromConfigs()) return;
         if (loadFromParentConfigs()) return;

@@ -5,14 +5,13 @@ finds a configuration file the other locations are ignored.
 * Environment Variable OPS-IMS-CONFIG: can be used to point to any location
 * Tomcat configuration folder: $CATALINA_HOME/conf/OPS-IMS
 * Class loader directory: The directory containing the jar files
+* /conf/OPS-IMS subdirectory of Class loader directory 
+     (For Tomcat this is TomcatXXX/conf/OPS-IMS)
+* ../conf/OPS-IMS sister directory of Class loader directory (Mainly for junit tests)
 
-The default database configuration file can be found at
-	org.bridgedb.sql/resources/sqlConfig.txt
-
-The default triplestore (used for linkset metadata) configuration file can be
-found at
-	org.bridgedb.linksets/resources/rdfConfig.txt
-	
+The default configuration files can be found at
+	$BRIDGEDB_HOME/conf/OPS-IMS
+		
 The default configuration files show the defaults that will be used if no 
 configuration files are found. 
 
@@ -26,7 +25,7 @@ MySQL version 5 or above must be installed and running
 MySQL databases and users must be created with CREATE, DROP, INDEX, INSERT, 
 UPDATE, DELETE, and SELECT permissions.
 
-Consult the sqlConfig file for the defaults, or amend the configuration file
+Consult the sqlConfig file for the defaults, or copy and amend the configuration file
 to your own setup.
 
 If you are using the default accounts and databases then execute the file 
@@ -40,7 +39,11 @@ point of failure, if any of the user accounts or databases already exist.
 RDF Repository Dependency
 -------------------------
 SailNativeStore(s) will be created automatically as long as loader can 
-create/find the directory
+create/find the directory.
+
+The dewfault relative directory for Main and Load should be changed to absolute directories.
+Please ensure the parent(s) of main and load exist and have the correct permissions. 
+The default directory is fine for testing (it already exists) 
 
 The BaseURI variable in the RDF configuration file should be the base of the 
 Webserver you will drop the web service into.
@@ -51,7 +54,7 @@ Compilation
 -----------
 
 If you've obtained the source code of BridgeDb, you should be
-able to compile with a simple:
+able to compile with a simple: (Ant build is broken in OPS branches)
 
 	ant
 	
@@ -59,11 +62,34 @@ or (experimental, makes not all jars) -
 
 	mvn clean install
 	
-Note that the maven build will fail if either the MySQL database is not running
-or the configuration in the sqlConfig file is not present.
+Note that for the maven build to run all tests 
+1) The MySQL database must be running and configured as above.
+2) http://localhost:8080/OPS-IMS to be running and include the test data
+3) http://localhost:8080/BridgeDb to be running and include the test data
+  3 is optional as all Core client tests are repeated in OPS Client
 
+OPS Webservice Setup.
+--------------------
 
-Library dependencies
+Make sure config files, SQL database and rdf parent directory are setup (and accessible) as above.
+
+Deploy $BridgeDb/org.bridgedb.ops.ws.service/target/OPS-IMS.war to something like tomcat/webapps
+To setup databases and add test data run org.bridgedb.linkset.SetupLoaderWithTestData
+(Optional) Depoly $BridgeDb/org.bridgedb.ws.service/target/BridgeDb.war
+   Both wars share the same SQL data.
+
+OPS Load Linksets
+-----------------
+Make sure config files, SQL database and rdf parent directory are setup (and accessible) as above.
+
+To load a linkset:
+Run $BridgeDb\org.bridgedb.linksets\target\org.bridgedb.linksets-2.0.0-SNAPSHOT.one-jar.jar
+   (Run without parameters for usage information)
+
+(OPTIONAL) To create a transative linkset:
+Run $BridgeDB\BridgeDb\org.bridgedb.transitive\target\org.bridgedb.transitive-2.0.0-SNAPSHOT.one-jar.jar
+
+Library dependencies (This section is about CORE BridgeDB elements currently not in the OPS Build)
 --------------------
 
 If you don't use all mappers, you do not need to include all
