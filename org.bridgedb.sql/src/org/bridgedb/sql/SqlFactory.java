@@ -326,7 +326,6 @@ public class SqlFactory {
      */
     private static boolean loadByCatalinaHomeConfigs() throws IOException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
-        catalinaHomePath = "c:/temp";
         if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
         File catalineHomeDir = new File(catalinaHomePath);
         if (!catalineHomeDir.exists()){
