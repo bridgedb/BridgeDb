@@ -28,8 +28,10 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
         connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         connectionOk = true;
+        listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+        loadData();
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         urlMapper = new WSOpsMapper(new WSOpsService(sqlUrlMapper)); 
     }
-            
+      
 }
