@@ -8,7 +8,10 @@ import org.bridgedb.linkset.*;
 import java.io.IOException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.Reporter;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
@@ -18,8 +21,10 @@ import org.openrdf.OpenRDFException;
  */
 public class LinksetLoaderTest {
         
-    @Test
-    public void testLoader() throws IDMapperException, IOException, OpenRDFException  {
+    @BeforeClass
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException  {
+        //Check database is running and settup correctly or kill the test. 
+        TestSqlFactory.createTestSQLAccess();
         
         Reporter.report("sample2to1.ttl");
         String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "testnew"};
@@ -47,4 +52,8 @@ public class LinksetLoaderTest {
         LinksetLoader.main (args8);
 	}
 
+    @Test
+    public void testRunLoader() throws IDMapperException, IOException, OpenRDFException  {
+        //empty test to force before to run,
+    }
 }

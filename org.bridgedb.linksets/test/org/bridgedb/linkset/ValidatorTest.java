@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author Christian
  */
-public class ValidatorTest {
+public class ValidatorTest extends LinksetLoaderTest{
     
     @Test
     public void testValidateGood() throws IDMapperException, OpenRDFException, IOException{

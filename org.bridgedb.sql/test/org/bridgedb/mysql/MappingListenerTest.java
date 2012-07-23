@@ -17,10 +17,12 @@ public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTes
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
+        connectionOk = false;
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
         listener = new SQLListener(true, sqlAccess, new MySQLSpecific());
         loadData();
         idMapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
+        connectionOk = true;
         capabilities = idMapper.getCapabilities(); 
         report("setup");
     }
