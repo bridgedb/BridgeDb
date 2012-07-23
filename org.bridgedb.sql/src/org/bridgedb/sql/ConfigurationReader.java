@@ -15,7 +15,7 @@ import java.util.Properties;
  * @See load() for where and in which order the file will be looked for.
  * @author Christian
  */
-public class SqlFactory {
+public class ConfigurationReader {
     /**
      * Name of the file assumed to hold the SQl configurations.
      */
@@ -78,7 +78,6 @@ public class SqlFactory {
      * @throws BridgeDbSqlException 
      */
     public static SQLAccess createTestSQLAccess() throws BridgeDbSqlException {
-        System.out.println(testSqlPassword());
         SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
         sqlAccess.getConnection();
         return sqlAccess;
@@ -273,8 +272,6 @@ public class SqlFactory {
      */
     private static void load() throws IOException{
         if (loadByEnviromentVariable()) return;
-        if (loadByCatalinaHomeConfigs()) return;
-        System.out.println("here");
         if (loadDirectly()) return;
         if (loadFromConfigs()) return;
         if (loadFromParentConfigs()) return;
@@ -293,18 +290,14 @@ public class SqlFactory {
         if (envPath == null || envPath.isEmpty()) return false;
         File envDir = new File(envPath);
         if (!envDir.exists()){
-            String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
-                    " but no directory found there";
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new FileNotFoundException ("Environment Variable OPS-IMS-CONFIG points to " + envPath + 
+                    " but no directory found there");
         }
         if (envDir.isDirectory()){
             File envFile = new File(envDir, CONFIG_FILE_NAME);
             if (!envFile.exists()){
-                String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
-                        " but no " + CONFIG_FILE_NAME + " file found there";
-                properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-                throw new FileNotFoundException (error);
+                throw new FileNotFoundException ("Environment Variable OPS-IMS-CONFIG points to " + envPath + 
+                        " but no " + CONFIG_FILE_NAME + " file found there");
             }
             FileInputStream configs = new FileInputStream(envFile);
             properties.load(configs);
@@ -312,10 +305,8 @@ public class SqlFactory {
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "OPS-IMS-CONFIG Enviroment Variable");
             return true;
         } else {
-            String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
-                    " but is not a directory";
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new FileNotFoundException ("Environment Variable OPS-IMS-CONFIG points to " + envPath + 
+                    " but is not a directory");            
         }
     }
 
@@ -327,42 +318,33 @@ public class SqlFactory {
      */
     private static boolean loadByCatalinaHomeConfigs() throws IOException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
-        catalinaHomePath = "c:/temp";
         if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
         File catalineHomeDir = new File(catalinaHomePath);
         if (!catalineHomeDir.exists()){
-            String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
-                    " but no directory found there";
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new FileNotFoundException ("Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
+                    " but no directory found there");
         }
         if (!catalineHomeDir.isDirectory()){
-            String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
-                    " but is not a directory";
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new FileNotFoundException ("Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
+                    " but is not a directory");            
         }
         File envDir = new File (catalineHomeDir + "/conf/OPS-IMS");
         if (!envDir.exists()) return false; //No hard requirements that catalineHome has a /conf/OPS-IMS
-         if (envDir.isDirectory()){
-            File envFile = new File(envDir, CONFIG_FILE_NAME);
-            if (!envFile.exists()){
-                String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
-                        " but subdirectory /conf/OPS-IMS has no " + CONFIG_FILE_NAME + " file.";
-                properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-                throw new FileNotFoundException (error);
+        if (envDir.isDirectory()){
+            File envFile = new File(catalineHomeDir, CONFIG_FILE_NAME);
+            if (!catalineHomeDir.exists()){
+                throw new FileNotFoundException ("Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
+                        " but subdirectory /conf/OPS-IMS has no " + CONFIG_FILE_NAME + " file.");
             }
-            FileInputStream configs = new FileInputStream(envFile);
+            FileInputStream configs = new FileInputStream(catalineHomeDir);
             properties.load(configs);
-            properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "CATALINA_HOME/conf/OPS-IMS");
+            properties.put(CONFIG_FILE_PATH_PROPERTY, catalineHomeDir.getAbsolutePath());
+            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "OPS-IMS-CONFIG Enviroment Variable");
             return true;
         } else {
-            String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath  + 
-                    " but $CATALINA_HOME/conf/OPS-IMS is not a directory";
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
-       }
+            throw new FileNotFoundException ("Environment Variable CATALINA_HOME points to " + catalinaHomePath  + 
+                    " but $CATALINA_HOME/conf/OPS-IMS is not a directory");            
+        }
     }
 
     /**
@@ -391,9 +373,7 @@ public class SqlFactory {
         File confFolder = new File ("conf/OPS-IMS");
         if (!confFolder.exists()) return false;
         if (!confFolder.isDirectory()){
-            String error = "Expected " + confFolder.getAbsolutePath() + " to be a directory";
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IOException("Expected " + confFolder.getAbsolutePath() + " to be a directory");
         }
         File envFile = new File(confFolder, CONFIG_FILE_NAME);
         if (!envFile.exists()) return false;
@@ -415,9 +395,7 @@ public class SqlFactory {
         File confFolder = new File ("../conf/OPS-IMS");
         if (!confFolder.exists()) return false;
         if (!confFolder.isDirectory()){
-            String error = "Expected " + confFolder.getAbsolutePath() + " to be a directory";
-            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IOException("Expected " + confFolder.getAbsolutePath() + " to be a directory");
         }
         File envFile = new File(confFolder, CONFIG_FILE_NAME);
         if (!envFile.exists()) return false;
