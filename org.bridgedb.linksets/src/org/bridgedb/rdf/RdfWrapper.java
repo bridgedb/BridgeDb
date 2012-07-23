@@ -356,7 +356,7 @@ public class RdfWrapper {
             return ex.getMessage();
         }
         if (result != null) return result;
-        return "rdf/linksets";
+        return "../rdf/linksets";
     }
 
     public static String getLoadSailNativeStore(){
@@ -378,7 +378,7 @@ public class RdfWrapper {
             return ex.getMessage();
         }
         if (result != null) return result;
-        return "rdf/testLinksets";
+        return "../rdf/testLinksets";
     }
 
     public static String getBaseURI() {
@@ -527,8 +527,7 @@ public class RdfWrapper {
      */
     private static boolean loadByCatalinaHomeConfigs() throws IOException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
-        catalinaHomePath = "c:/temp";
-        if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
+         if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
         File catalineHomeDir = new File(catalinaHomePath);
         if (!catalineHomeDir.exists()){
             String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
