@@ -1,26 +1,31 @@
-This is an example sqlConfig.txt file with the default values in it.
-#To set your own file copy this file to conf/OPS-IMS and edit it there.
-#If not found in the projects conf/OPS-IMS or resource folders it will be looked for in the SQL project
-#Also place it in tomcatX/conf/OPS-IMS
+#This is an example sqlConfig.txt file with the default values in it.
+#To set your own file copy this file for example to $CATALINA_HOME/conf/OPS-IMS and edit it there.
+#Ideally point Environment variable OPS-IMS-CONFIG to the folder containing your config files.
 
+
+#Main SQL Database and user settings
 SqlPort             jdbc:mysql://localhost:3306
 SqlDatabase         ims
 SqlUser             ims
 SqlPassword         ims
 
+
+#Load SQL Database (OPTIONAL)
 #This give the option of having a separate load database to reload all data while the service stays live.
 #Note: You will have to stop start the service (or drop in a new war) after swapping load and production servers
 LoadSqlDatabase     ims
      #Defaults to SqlDatabase if not set
-#Load Database is assumed to have the same user as production database so they can be swapped.
+#Load Database should have the same user as production database so they can be swapped.
 
-#Test Database MUST NOT be the same one tests drops and recreates all tables!
-TestSqlDatabase     imstest
+
+#Test Database (REQUIRED)
+#Test Database MUST NOT be the main or load Database as tests drops and recreates all tables!
 #Test user may be the same but having a different users adds security
+
+TestSqlDatabase     imstest
 TestSqlUser         imstest
     #Defaults to SqlUser if not set
 TestSqlPassword     imstest
     #Defaults to sqlPassword if not set
 
 #Warning you will also need a rdfConfig.txt file
-#See Linkset Project resource directory
