@@ -18,16 +18,16 @@
 
   <modules>
   	<module>org.bridgedb</module>
-    <!-- Commented out modules still work (may need a version number bump) but are not required by OPS -->
-  	<!--module>org.bridgedb.bio</module-->
-    <!--module>org.bridgedb.rdb</module-->
-  	<!--module>org.bridgedb.webservice.bridgerest</module-->
-  	<!--module>org.bridgedb.webservice.biomart</module-->
-  	<!--module>org.bridgedb.webservice.cronos</module-->
-  	<!--module>org.bridgedb.webservice.picr</module-->
-  	<!--module>org.bridgedb.webservice.synergizer</module-->
-  	<!--module>examples</module-->
-    <!--module>org.bridgedb.server</module-->
+    <!--Commented out core modules all do build-->
+  	<!--module>org.bridgedb.bio</module>
+    <module>org.bridgedb.rdb</module>
+  	<module>org.bridgedb.webservice.bridgerest</module>
+  	<module>org.bridgedb.webservice.biomart</module>
+  	<module>org.bridgedb.webservice.cronos</module>
+  	<module>org.bridgedb.webservice.picr</module>
+  	<module>org.bridgedb.webservice.synergizer</module>
+  	<module>examples</module>
+    <module>org.bridgedb.server</module-->
   	<module>org.bridgedb.sql</module>
   	<module>org.bridgedb.ops.sql</module>
   	<module>org.bridgedb.linksets</module>
