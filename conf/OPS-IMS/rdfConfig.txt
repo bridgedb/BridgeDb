@@ -13,12 +13,15 @@ BaseURI                 http://localhost:8080/OPS-IMS
 #Main RDF store
 SailNativeStore         ../rdf/linksets
 
+#Load RDF Store
 #This give the option of having a seperate load database to reload all data while he service stays live.
 #Note: You will have to stop start the service (or drop in a new war) after swapping load and production servers
 LoadSailNativeStore     ../rdf/linksets
 #Defaults to SailNativeStore if not set
 
+#Test RDF store
 #WARNING do not set the test store to be the same as the production store as one of the tests erases the store!
+#the default relative directory will use the RDF directory directly below $BridgeDB
 TestSailNativeStore     ../rdf/testLinksets
 
 #Warning you will also need a sqlConfig.txt file
