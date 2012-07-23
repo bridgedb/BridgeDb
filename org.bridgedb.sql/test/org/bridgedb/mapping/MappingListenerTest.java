@@ -2,8 +2,6 @@ package org.bridgedb.mapping;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *

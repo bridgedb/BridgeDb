@@ -178,12 +178,6 @@ public class WSCoreService implements WSCoreInterface {
     @Override
     public PropertyBean getProperty(@PathParam("key")String key) {
         String property = idMapper.getCapabilities().getProperty(key);
-        if (property == null){
-            property = "key was \"" + key + "\"";
-        }
-        if (property == null){
-            property = "key was \"" + key + "\"";
-        }
         return new PropertyBean(key, property);
     }
     

@@ -6,7 +6,6 @@ import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 
 /**
  * 
