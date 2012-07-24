@@ -8,6 +8,8 @@ import org.bridgedb.linkset.*;
 import java.io.IOException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.rdf.RdfReader;
+import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.Reporter;
 import org.junit.Before;
@@ -52,8 +54,4 @@ public class LinksetLoaderTest {
         LinksetLoader.main (args8);
 	}
 
-    @Test
-    public void testRunLoader() throws IDMapperException, IOException, OpenRDFException  {
-        //empty test to force before to run,
-    }
 }

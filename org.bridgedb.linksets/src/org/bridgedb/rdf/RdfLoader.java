@@ -23,4 +23,6 @@ public interface RdfLoader {
 
     public void closeInput()throws IDMapperException;
 
+    public void setSourceFile(String absolutePath);
+
 }
