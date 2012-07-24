@@ -28,6 +28,8 @@ import org.openrdf.OpenRDFException;
  */
 public class LinksetLoader {
     
+    private static String CALLER_NAME = "org.bridgedb.linkset.LinksetLoader" ;
+    
     private static void parse(File file, String arg) throws BridgeDbSqlException, IDMapperException {
         if (file.isDirectory()){
             File[] children = file.listFiles();
@@ -44,7 +46,7 @@ public class LinksetLoader {
                 Reporter.report("Started loading " + file.getAbsolutePath());                
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
                 URLListener listener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
-                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.LOAD, validator, listener);
+                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.LOAD, validator, listener, CALLER_NAME);
                 handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
                 Reporter.report("Loading of " + file.getAbsolutePath() + " successful");
@@ -52,7 +54,7 @@ public class LinksetLoader {
                 Reporter.report("Started test loading " + file.getAbsolutePath());                
                 SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
                 URLListener listener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
-                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.TEST, validator, listener);
+                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.TEST, validator, listener, CALLER_NAME);
                 handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
                 Reporter.report("Loading of " + file.getAbsolutePath() + " successful");
