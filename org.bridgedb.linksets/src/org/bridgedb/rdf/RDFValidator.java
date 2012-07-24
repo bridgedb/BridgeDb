@@ -303,6 +303,10 @@ public class RDFValidator implements RdfLoader{
         return linksetPredicate.stringValue();
     }
 
+    Resource getLinksetResource() {
+        return linksetResource;
+    }
+    
     boolean isSymmetric() {
         //current assumption is all linksets are semaantic
         return true;
@@ -331,6 +335,10 @@ public class RDFValidator implements RdfLoader{
     public void closeInput() throws IDMapperException {
         //do nothing
     }
-    
+
+    @Override
+    public void setSourceFile(String absolutePath) {
+        //Do nothing does not need validating.
+    }
 
  }

@@ -4,6 +4,8 @@
  */
 package org.bridgedb.linkset;
 
+import org.bridgedb.rdf.RdfStoreType;
+import org.bridgedb.rdf.RdfReader;
 import org.bridgedb.utils.Reporter;
 import org.junit.Ignore;
 import org.bridgedb.linkset.constants.PavConstants;
@@ -131,4 +133,15 @@ public class ValidatorTest extends LinksetLoaderTest{
             assertThat(ex.getMessage(), containsString(PavConstants.CREATED_BY.stringValue()));
         }
     }
+    
+    //@Test
+    //public void testRunLoader() throws IDMapperException, IOException, OpenRDFException  {
+         //RdfReader reader = new RdfReader(RdfStoreType.TEST);
+         //ystem.out.println("linkset 1");
+         //ystem.out.println(reader.getRDF(1));
+         //ystem.out.println("linkset 2");
+         //ystem.out.println(reader.getRDF(2));
+        //empty test to force before to run,
+    //}
+
 }
