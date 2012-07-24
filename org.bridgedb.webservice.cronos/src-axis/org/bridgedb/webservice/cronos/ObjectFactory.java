@@ -37,19 +37,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CronosWSResponse }
-     * 
-     */
-    public CronosWSResponse createCronosWSResponse() {
-        return new CronosWSResponse();
-    }
-
-    /**
      * Create an instance of {@link IsinRedList }
      * 
      */
     public IsinRedList createIsinRedList() {
         return new IsinRedList();
+    }
+
+    /**
+     * Create an instance of {@link IsinRedListResponse }
+     * 
+     */
+    public IsinRedListResponse createIsinRedListResponse() {
+        return new IsinRedListResponse();
     }
 
     /**
@@ -61,11 +61,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link IsinRedListResponse }
+     * Create an instance of {@link CronosWSResponse }
      * 
      */
-    public IsinRedListResponse createIsinRedListResponse() {
-        return new IsinRedListResponse();
+    public CronosWSResponse createCronosWSResponse() {
+        return new CronosWSResponse();
     }
 
     /**
