@@ -1,5 +1,7 @@
 package org.bridgedb.sql;
 
+import org.junit.Test;
+
 /**
  *
  * @author Christian
@@ -37,5 +39,10 @@ public class TestSqlFactory {
             org.junit.Assume.assumeTrue(false);        
             return null;
          }
-    } 
+    }
+
+    @Test
+    public void testNothing(){
+    }
+
 }

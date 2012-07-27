@@ -129,4 +129,9 @@ public class Test2 {
 		// undeclared systemcodes if necessary.
 		Assert.assertNotNull (DataSource.getBySystemCode ("##"));		
 	}
+
+	@org.junit.Test
+    public void testNothing(){
+    }
+
 }
