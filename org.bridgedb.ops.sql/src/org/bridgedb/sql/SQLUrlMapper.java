@@ -160,7 +160,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         String id = getId(URL);
         String uriSpace = getUriSpace(URL);
         StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
+        query.append("SELECT DISTINCT ");
+        //TODO get DISTINCT working on Virtuosos
         appendTopConditions(query, 0, 1); 
         query.append("targetId ");
         query.append("FROM mapping, mappingSet, url as source ");
@@ -187,7 +188,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     public Set<String> urlSearch(String text, int limit) throws BridgeDbSqlException {
         //ystem.out.println("mapping: " + sourceURL);
         StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
+        query.append("SELECT DISTINCT ");
+        //TODO get DISTINCT working on Virtuosos
         appendTopConditions(query, 0, limit); 
         query.append(" targetId as id, target.uriSpace as uriSpace ");
         query.append("FROM mapping, mappingSet, url as target ");
@@ -196,8 +198,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append("AND sourceId = '");
             query.append(text);
             query.append("' ");
-        //use grouop by as do not know how to do distinct in Virtuoso
-        query.append("GROUP BY targetId, target.uriSpace ");        
         appendLimitConditions(query,0, limit);
         Statement statement = this.createStatement();
         ResultSet rs;
@@ -240,13 +240,13 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Set<String> getSampleSourceURLs() throws BridgeDbSqlException {
-        StringBuilder query = new StringBuilder("SELECT ");
+        StringBuilder query = new StringBuilder("SELECT DISTINCT ");
+        //TODO get DISTINCT working on Virtuosos
         this.appendTopConditions(query, 0, 5);
         query.append("sourceId as id, source.uriSpace as uriSpace ");
         query.append("FROM mapping, mappingSet, url as source ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND mappingSet.sourceDataSource = source.dataSource ");
-        query.append("GROUP BY sourceId, source.uriSpace ");
         this.appendLimitConditions(query, 0, 5);
         //ystem.out.println(query);
         Statement statement = this.createStatement();
