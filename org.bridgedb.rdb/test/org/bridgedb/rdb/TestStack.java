@@ -120,4 +120,9 @@ public class TestStack {
 		Map<Xref, Set<Xref>> result2 = stack.mapID(set1);
 		Assert.assertTrue (result2.get(ENTREZ).contains(NUGO));
 	}
+
+    @org.junit.Test
+    public void testNothing(){
+    }
+
 }
