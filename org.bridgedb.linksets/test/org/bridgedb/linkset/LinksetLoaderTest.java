@@ -54,4 +54,8 @@ public class LinksetLoaderTest {
         LinksetLoader.main (args8);
 	}
 
+    @Test
+    public void testNothing(){
+    }
+
 }
