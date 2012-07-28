@@ -52,6 +52,7 @@ public enum Organism
 	EquusCaballus("Equus caballus", "Qc", "Horse"),
 	
 	GallusGallus("Gallus gallus", "Gg", "Chicken"),
+	GlycineMax("Glycine max", "Gm", "Soybean"),
 	GibberellaZeae("Gibberella zeae", "Gz", "Fusarium graminearum"),
 	HomoSapiens("Homo sapiens", "Hs", "Human"),
 	LoxodontaAfricana ("Loxodonta africana", "La", "Elephant"),
@@ -65,6 +66,7 @@ public enum Organism
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish"),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit"),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee"),
+	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato"),
 	SusScrofa("Sus scrofa", "Ss", "Pig"),
 	
 	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	
