@@ -14,6 +14,7 @@ Echinops	telfairi	Hedgehog	Et
 Equus	caballus	Horse	Qc
 Escherichia	coli	Ecoli	Ec
 Gallus	gallus	Chicken	Gg
+Glycine	max	Soybean	Gm
 Gibberella	zeae	Fusarium graminearum	Gz
 Homo	sapiens	Human	Hs
 Loxodonta	africana	Elephant	La
@@ -29,6 +30,7 @@ Pan	troglodytes	Chimp	Pt
 Populus	trichocarpa	Western Balsam Poplar	Pi
 Rattus	norvegicus	Rat	Rn
 Saccharomyces	cerevisiae	Yeast	Sc
+Solanum	lycopersicum	Tomato	Sl
 Sorex	araneus	Shrew	Sa
 Sorghum	bicolor	Sorghum	Sb
 Sus	scrofa	Pig	Ss
