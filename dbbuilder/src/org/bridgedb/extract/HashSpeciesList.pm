@@ -25,22 +25,12 @@ if (!$speciesFile) {
 }
 my %speciesTable = ();                # Hash of Arrays for storing species table in Perl
 
-unless( open( SPECIES, $speciesFile)){
-	# if attempting with custom file, then quit
-	if ($speciesFile != 'SpeciesList'){
-		print "Could not open file $speciesFile: $!\n";
-                exit; 
-	} else {
-		# download the file from BridgeDb
-		# should update with http://svn.bigcat.unimaas.nl/bridgedb/trunk/org.bridgedb.bio/resources/org/bridgedb/bio/organisms.txt
-		`wget http://svn.bigcat.unimaas.nl/bridgedb/trunk/dbbuilder/src/org/bridgedb/extract/SpeciesList`;
+# download the file from BridgeDb
+`wget http://svn.bigcat.unimaas.nl/bridgedb/trunk/dbbuilder/src/org/bridgedb/extract/SpeciesList`;
 
-		# now try again
-		unless( open( SPECIES, $speciesFile)){
-			print "Could not open file $speciesFile: $!\n";
-			exit;
-		} 
-	}
+unless( open( SPECIES, $speciesFile)){
+                print "Could not open file $speciesFile: $!\n";
+                exit;
 }
 
 
