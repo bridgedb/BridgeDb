@@ -39,6 +39,9 @@ public class UriSpaceMapper {
        dataSource = DataSource.register("Chemb 13 Internal", "Chemb 13 Internal ids").URISpace("http://data.kasabi.com/dataset/chembl-rdf/chemblid/")
                 .idExample("CHEMBL6329").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/chemblid/", dataSource);
+       dataSource = DataSource.register("Chemb 2 Target", "Chemb 2 Target").URISpace("http://chem2bio2rdf.org/chembl/resource/chembl_targets/")
+                .idExample("698788").asDataSource();
+       map.put("http://chem2bio2rdf.org/chembl/resource/chembl_targets/", dataSource);
        dataSource = DataSource.register("Chembl 13 Molecule", "Chembl 13 Molecule").URISpace("http://data.kasabi.com/dataset/chembl-rdf/molecule/")
                 .idExample("m1").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/molecule/", dataSource);
