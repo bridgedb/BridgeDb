@@ -93,8 +93,19 @@ public class RDFWriter implements RdfLoader{
                 addInverse(connection, st.getSubject(), st.getPredicate(), st.getObject());                
             }
         }
-        RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_FROM, new URIImpl(accessedFrom), linksetContext);
-        addInverse(connection, linksetResource, PavConstants.ACCESSED_FROM, new URIImpl(accessedFrom));
+        Value from;
+        try {
+            from =  new URIImpl(accessedFrom);
+            try {
+                from =  new URIImpl("file:///" +accessedFrom);
+            } catch (Exception e){
+                from = new LiteralImpl(accessedFrom);
+            }
+        } catch (Exception e){
+            from = new LiteralImpl(accessedFrom);
+        }
+        RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_FROM, from, linksetContext);
+        addInverse(connection, linksetResource, PavConstants.ACCESSED_FROM, from);
         GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
         try {
             XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
