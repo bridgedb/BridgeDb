@@ -94,7 +94,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } else {
             String uriSpace = getUriSpace(URL);
             for (String targetURISpace: targetURISpaces){
-                if (uriSpace.equals(targetURISpaces)){
+                if (uriSpace.equals(targetURISpace)){
                     results.add(URL);
                 }
             }
@@ -147,7 +147,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } else {
             String uriSpace = getUriSpace(URL);
             for (String targetURISpace: targetURISpaces){
-                if (uriSpace.equals(targetURISpaces)){
+                if (uriSpace.equals(targetURISpace)){
                     results.add(toSelf);
                 }
             }
