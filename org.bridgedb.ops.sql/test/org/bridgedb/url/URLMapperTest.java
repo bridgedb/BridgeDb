@@ -125,6 +125,17 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
  
     @Test
+    public void testMapToSelfWithOneDataSource() throws IDMapperException{
+        report("MapToSelfWithOneDataSource");
+        Set<String> results = urlMapper.mapURL(map1URL2, URISpace2);
+        assertTrue(results.contains(map1URL2));
+        assertFalse(results.contains(map1URL3));
+        assertFalse(results.contains(map2URL1));
+        assertFalse(results.contains(map2URL2));
+        assertFalse(results.contains(map2URL2));
+    }
+
+    @Test
     public void testMapIDOneToManyWithTwoDataSources() throws IDMapperException{
         report("MapIDOneToManyWithTwoDataSources");
         Set<String> results = urlMapper.mapURL(map1URL1, URISpace2, URISpace3);
