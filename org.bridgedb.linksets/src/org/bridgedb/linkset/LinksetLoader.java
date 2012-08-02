@@ -5,6 +5,7 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mapping.MappingListener;
@@ -30,8 +31,16 @@ public class LinksetLoader {
     
     private static String CALLER_NAME = "org.bridgedb.linkset.LinksetLoader" ;
     
-    private static void parse(File file, String arg) throws BridgeDbSqlException, IDMapperException {
-        if (file.isDirectory()){
+    LinksetLoader() {
+    	
+    }
+    
+    private static void parse(File file, String arg) 
+    		throws BridgeDbSqlException, IDMapperException, FileNotFoundException {
+    	if (!file.exists()) {
+    		Reporter.report("File not found: " + file.getAbsolutePath());
+    		throw new FileNotFoundException();
+    	} else if (file.isDirectory()){
             File[] children = file.listFiles();
             for (File child:children){
                 parse(child, arg);
@@ -66,33 +75,39 @@ public class LinksetLoader {
         }
     }
 
-    private static void parse (String fileName, String arg) throws IDMapperException  {
+    void parse (String fileName, String arg) 
+    		throws IDMapperException, FileNotFoundException  {
         File file = new File(fileName);
         parse(file, arg);
     }
             
     public static void main(String[] args) throws BridgeDbSqlException, IDMapperException {
-        if (args.length == 2){
-            if (args[1].equals("new")){
-                RdfWrapper.clear(RdfStoreType.LOAD);
-                Reporter.report("Laod RDF cleared");
-                SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-                URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-                Reporter.report("Load SQL cleared");
-                parse(args[0], "load");
-            } else if (args[1].equals("testnew")){
-                RdfWrapper.clear(RdfStoreType.TEST);
-                Reporter.report("Laod RDF cleared");
-                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-                URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-                Reporter.report("Test SQL cleared");
-                parse(args[0], "test");
-            } else {
-                parse(args[0], args[1]);
-            }
-        } else {
-            usage();
-        }
+    	try {
+    		if (args.length == 2){
+    			LinksetLoader loader = new LinksetLoader();
+    			if (args[1].equals("new")){
+    				RdfWrapper.clear(RdfStoreType.LOAD);
+    				Reporter.report("Laod RDF cleared");
+    				SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
+    				URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+    				Reporter.report("Load SQL cleared");                
+    				loader.parse(args[0], "load");
+    			} else if (args[1].equals("testnew")){
+    				RdfWrapper.clear(RdfStoreType.TEST);
+    				Reporter.report("Laod RDF cleared");
+    				SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+    				URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+    				Reporter.report("Test SQL cleared");
+    				loader.parse(args[0], "test");
+    			} else {
+    				loader.parse(args[0], args[1]);
+    			}
+    		} else {
+    			usage();
+    		}
+    	} catch (FileNotFoundException e) {
+    		System.exit(1);
+    	}
     }
 
     private static void usage() {

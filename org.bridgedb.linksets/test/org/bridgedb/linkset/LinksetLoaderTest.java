@@ -5,6 +5,7 @@
 package org.bridgedb.linkset;
 import org.bridgedb.linkset.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
@@ -54,8 +55,16 @@ public class LinksetLoaderTest {
         LinksetLoader.main (args8);
 	}
 
+    @Test(expected=FileNotFoundException.class)
+    public void testFileNotFound() throws IDMapperException, FileNotFoundException {
+    	LinksetLoader loader = new LinksetLoader();
+    	loader.parse("noFile.xyz", "validate");
+    }
+
     @Test
-    public void testNothing(){
+    public void testFileExists() throws IDMapperException, FileNotFoundException {
+    	LinksetLoader loader = new LinksetLoader();
+    	loader.parse("test-data/cw-dd.ttl", "validate");
     }
 
 }
