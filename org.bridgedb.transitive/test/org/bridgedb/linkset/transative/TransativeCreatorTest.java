@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class TransativeCreatorTest extends LinksetLoaderTest{
+public class TransativeCreatorTest {
     
     public TransativeCreatorTest() {
     }
