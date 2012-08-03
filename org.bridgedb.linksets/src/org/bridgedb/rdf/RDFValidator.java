@@ -1,6 +1,8 @@
 package org.bridgedb.rdf;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.constants.DctermsConstants;
 import org.bridgedb.linkset.constants.PavConstants;
@@ -21,7 +23,7 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class RDFValidator implements RdfLoader{
 
-    ArrayList<Statement> statements = new ArrayList<Statement>();
+    List<Statement> statements = new ArrayList<Statement>();
     private String subjectURISpace;
     private String targetURISpace;
     private Resource linksetResource;
@@ -44,7 +46,8 @@ public class RDFValidator implements RdfLoader{
     
     @Override
     public void processFirstNoneHeader(Statement firstMap) throws RDFHandlerException{
-        Reporter.report("Validation started");
+    	//TODO: Rename method to validateHeader?
+        Reporter.report("Validating linkset VoID header");
         linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, VoidConstants.LINKSET);
         linksetPredicate = findTheSingletonObject (linksetResource, VoidConstants.LINK_PREDICATE);
         //Provide details of the licence under which the dataset is published using the dcterms:license property.
@@ -54,6 +57,8 @@ public class RDFValidator implements RdfLoader{
         subjectURISpace = validateDataSetAndExtractUriSpace(firstMap.getSubject(), VoidConstants.SUBJECTSTARGET);
         targetURISpace = validateDataSetAndExtractUriSpace(firstMap.getObject(), VoidConstants.OBJECTSTARGET);
         isTransative = checkIsTransative();
+        Reporter.report("\tLinkset VoID header is valid!");
+        Reporter.report("Validating linkset links");
      }
     
     private void validateLinksetProvenance() throws RDFHandlerException {
@@ -333,6 +338,7 @@ public class RDFValidator implements RdfLoader{
 
     @Override
     public void closeInput() throws IDMapperException {
+    	Reporter.report("\tLinkset links are valid");
         //do nothing
     }
 
