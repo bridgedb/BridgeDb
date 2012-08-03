@@ -52,7 +52,7 @@ public class LinksetHandler extends RDFHandlerBase{
         if (!file.isFile()){
             throw new IDMapperException (file.getAbsolutePath() + " is not a file");
         }
-        Reporter.report("Parsing " + file.getAbsolutePath());
+        Reporter.report("Parsing file:\n\t" + file.getAbsolutePath());
         rdfLoader.setSourceFile(file.getAbsolutePath());
         FileReader reader = null;
         try {

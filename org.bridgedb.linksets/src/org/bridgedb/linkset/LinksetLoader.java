@@ -46,11 +46,10 @@ public class LinksetLoader {
                 parse(child, arg);
             }
         } else {    
-            Reporter.report("Validating " + file.getAbsolutePath());
             RDFValidator validator = new RDFValidator(true);
             LinksetHandler handler = new LinksetHandler(validator);
             handler.parse(file);
-            Reporter.report("Validation of " + file.getAbsolutePath() + " successful");                
+            Reporter.report("Validation successful");                
             if (arg.equals("load")){
                 Reporter.report("Started loading " + file.getAbsolutePath());                
                 SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
