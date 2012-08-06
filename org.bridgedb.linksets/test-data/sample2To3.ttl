@@ -5,6 +5,14 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix pav: <http://purl.org/pav/2.0/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "Dataset Description Title"^^xsd:string ;
+    dcterms:description """Dataset description description"""^^xsd:string;
+    dcterms:creator <http://www.foo.com/> ;
+    dcterms:created "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :Test2_3 .
 
 #Intentional very minimal info to test force;
 :TestDS2 a void:Dataset ;

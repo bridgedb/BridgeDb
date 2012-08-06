@@ -4,6 +4,15 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix pav: <http://purl.org/pav/2.0/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "ConceptWiki to DrugBank targets Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting ConceptWiki concepts 
+    	with DrugBank targets."""^^xsd:string;
+    dcterms:creator <http://www.foo.com/> ;
+    dcterms:created "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :conceptwiki_drugbank_targets .
 
 :conceptwiki_drugbank_targets a void:Linkset ;
     dcterms:license "unknown" ;
