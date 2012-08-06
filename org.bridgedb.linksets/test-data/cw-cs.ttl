@@ -4,6 +4,15 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix pav: <http://purl.org/pav/2.0/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "ConceptWiki to ChemSpider Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting ConceptWiki concepts 
+    	with ChemSpider Molecules."""^^xsd:string;
+    dcterms:creator <http://www.foo.com/> ;
+    dcterms:created "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :conceptwiki_chemspider .
 
 :conceptwiki_chemspider a void:Linkset ;
     dcterms:license "unknown" ;
