@@ -6,9 +6,18 @@
 @prefix foo: <http://www.foo.com/>.
 @prefix pav: <http://purl.org/pav/2.0/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "Dataset Description Title"^^xsd:string ;
+    dcterms:description """Dataset description description"""^^xsd:string;
+    dcterms:creator <http://www.foo.com/> ;
+    dcterms:created "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :Test1_2 .
 
 # a void:Dataset  ; missing intentionally
 :TestDS1 pav:derivedOn "2012-02-22"^^xsd:date ;
+	dcterms:title "title"^^xsd:string;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.foo.com/>.
