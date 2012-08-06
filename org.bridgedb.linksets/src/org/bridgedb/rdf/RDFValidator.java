@@ -15,6 +15,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -31,6 +32,9 @@ public class RDFValidator implements RdfLoader{
     private boolean isTransative;
     private boolean strict;
     private final Value UNSPECIFIED = new LiteralImpl("Unspecified");
+    private final Resource UNDEFINED = new URIImpl("http://www.example.org/UNDEFINED");
+    private boolean headerError = false;
+    private boolean linkError = false;
    
     public RDFValidator(boolean strict) {
         this.strict = strict;
@@ -38,14 +42,14 @@ public class RDFValidator implements RdfLoader{
         
     @Override
     public void addHeaderStatement(Statement st) throws RDFHandlerException {
-        if (statements == null){
+        if (statements == null) {
             throw new RDFHandlerException ("Illegal call to addStatement after validateAndSaveVoid() called.");
         }
         statements.add(st);
     }
     
     @Override
-    public void processFirstNoneHeader(Statement firstMap) throws RDFHandlerException{
+    public void processFirstNoneHeader(Statement firstMap) {//throws RDFHandlerException{
     	//TODO: Rename method to validateHeader?
         Reporter.report("Validating linkset VoID header");
         linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, VoidConstants.LINKSET);
@@ -57,11 +61,15 @@ public class RDFValidator implements RdfLoader{
         subjectURISpace = validateDataSetAndExtractUriSpace(firstMap.getSubject(), VoidConstants.SUBJECTSTARGET);
         targetURISpace = validateDataSetAndExtractUriSpace(firstMap.getObject(), VoidConstants.OBJECTSTARGET);
         isTransative = checkIsTransative();
-        Reporter.report("\tLinkset VoID header is valid!");
+        if (headerError) {
+        	
+        } else {
+        	Reporter.report("\tLinkset VoID header is valid!");
+        }
         Reporter.report("Validating linkset links");
      }
     
-    private void validateLinksetProvenance() throws RDFHandlerException {
+    private void validateLinksetProvenance() {
         Value by = findPossibleObject(linksetResource, PavConstants.AUTHORED_BY);
         if (by != null){
             findTheSingletonObject(linksetResource, PavConstants.AUTHORED_ON);
@@ -82,11 +90,14 @@ public class RDFValidator implements RdfLoader{
             findTheSingletonObject(linksetResource, DctermsConstants.CREATED);
             return;
         }
-        if (strict){
-            throw new RDFHandlerException(linksetResource + " must have " + PavConstants.AUTHORED_BY + ", " + 
-                    PavConstants.DERIVED_BY + ", " + PavConstants.CREATED_BY + " or " + DctermsConstants.CREATOR);
+        if (strict) {
+        	headerError = true;
+            Reporter.report(linksetResource + " must have " + PavConstants.AUTHORED_BY + ", " + 
+                    PavConstants.DERIVED_BY + ", " + PavConstants.CREATED_BY + 
+                    " or " + DctermsConstants.CREATOR);
         }
-        Statement licenseStatement = new StatementImpl(linksetResource, PavConstants.CREATED_BY, UNSPECIFIED);
+        Statement licenseStatement = new StatementImpl(linksetResource, 
+        		PavConstants.CREATED_BY, UNSPECIFIED);
         statements.add(licenseStatement);
     }
 
@@ -99,7 +110,7 @@ public class RDFValidator implements RdfLoader{
      * @return
      * @throws RDFHandlerException 
      */
-    private String validateDataSetAndExtractUriSpace(Value fullURI, URI targetPredicate) throws RDFHandlerException{
+    private String validateDataSetAndExtractUriSpace(Value fullURI, URI targetPredicate) {
         Value dataSetId = findPossibleSingletonObject(targetPredicate);
         if (dataSetId == null){
             dataSetId = findAndRegisterDataSetIdBasedOnUriSpace(fullURI, targetPredicate);
@@ -114,14 +125,20 @@ public class RDFValidator implements RdfLoader{
         checkObject(dataSetId, DctermsConstants.SUBJECT);      
         //The URI namespace for the resources being linked is declared using the void:uriSpace property
         Value uriValue = findTheSingletonObject(dataSetId, VoidConstants.URI_SPACE);
-        String uriSpace = uriValue.stringValue();
-        if (fullURI.stringValue().startsWith(uriSpace)){
-            return uriSpace;
+        String uriSpace = null;
+        if (uriValue != null) {
+        	uriSpace = uriValue.stringValue();
+        	if (fullURI.stringValue().startsWith(uriSpace)){
+        		return uriSpace;
+        	}
         }
-        throw new RDFHandlerException("Declared URISpace " + uriSpace + " and uri in first link " + fullURI + " do not match");
+        headerError = true;
+        Reporter.report("Declared URISpace " + uriSpace + 
+        		" and uri in first link " + fullURI + " do not match");
+        return UNSPECIFIED.stringValue();
     }
 
-    private Value findAndRegisterDataSetIdBasedOnUriSpace(Value fullURI, URI targetPredicate) throws RDFHandlerException {
+    private Value findAndRegisterDataSetIdBasedOnUriSpace(Value fullURI, URI targetPredicate) {
         for (Statement st:statements){
             if (st.getPredicate().equals(VoidConstants.URI_SPACE)){
                 Value uriValue = st.getObject();
@@ -135,11 +152,13 @@ public class RDFValidator implements RdfLoader{
                 }
             }
         }
-        throw new RDFHandlerException ("Unable to find a " + VoidConstants.TARGET + " with " 
+        headerError = true;
+        Reporter.report("Unable to find a " + VoidConstants.TARGET + " with " 
                 + VoidConstants.URI_SPACE + " that covers " + fullURI);
+        return UNSPECIFIED;
     }
 
-   private void checkHasVersionOrDate(Value dataSetId) throws RDFHandlerException {
+   private void checkHasVersionOrDate(Value dataSetId) {
         Value license = findPossibleSingletonObject (dataSetId, PavConstants.VERSION);
         if (license != null) return;
         Value date = findPossibleSingletonObject (dataSetId, PavConstants.CREATED_ON);
@@ -153,13 +172,19 @@ public class RDFValidator implements RdfLoader{
         date = findPossibleSingletonObject (dataSetId, PavConstants.RETRIEVED_ON);
         if (date != null) return;
         if (strict || !(dataSetId instanceof Resource)) {
-            throw new RDFHandlerException ("Could not find a Version for DataSet " + dataSetId + 
-                    " Please include at least one of " + PavConstants.VERSION + ", " + PavConstants.CREATED_ON + ", " 
-                    + PavConstants.DERIVED_ON + ", " + PavConstants.IMPORTED_ON + ", " + 
-                    PavConstants.MODIFIED_ON + ", " + PavConstants.RETRIEVED_ON);
+        	headerError = true;
+            Reporter.report("Could not find a Version for DataSet " + dataSetId + 
+                    " Please include at least one of:\n\t" + 
+            		PavConstants.VERSION + "\n\t" + 
+                    PavConstants.CREATED_ON + "\n\t" + 
+                    PavConstants.DERIVED_ON + "\n\t" + 
+                    PavConstants.IMPORTED_ON + "\n\t" + 
+                    PavConstants.MODIFIED_ON + "\n\t" + 
+                    PavConstants.RETRIEVED_ON);
         }
         Resource subjectR = (Resource)dataSetId;
-        Statement versionStatement = new StatementImpl(subjectR, PavConstants.VERSION, UNSPECIFIED);
+        Statement versionStatement = 
+        		new StatementImpl(subjectR, PavConstants.VERSION, UNSPECIFIED);
         statements.add(versionStatement);
    }
     
@@ -167,7 +192,7 @@ public class RDFValidator implements RdfLoader{
         return isTransative;
     }
 
-    private boolean checkIsTransative() throws RDFHandlerException {
+    private boolean checkIsTransative() {
         Value derivedFrom = findPossibleObject(linksetResource, PavConstants.DERIVED_FROM);
         if (derivedFrom == null) return false;
         Value derivedOn = findPossibleObject(linksetResource, PavConstants.DERIVED_ON);
@@ -175,12 +200,13 @@ public class RDFValidator implements RdfLoader{
         return true;
     }
    
-    private Resource findPossibleSingletonSubject (URI predicate) throws RDFHandlerException{
+    private Resource findPossibleSingletonSubject (URI predicate) {
         Resource subject = null;
         for (Statement st:statements){
             if (st.getPredicate().equals(predicate)){
                 if (subject != null){
-                    throw new RDFHandlerException ("Found more than one statement with predicate " + predicate);
+                	headerError = true;
+                    Reporter.report("Found more than one statement with predicate " + predicate);
                 }
                 subject = st.getSubject();
             }
@@ -188,12 +214,13 @@ public class RDFValidator implements RdfLoader{
         return subject;
     }
     
-   private Resource findPossibleSingletonSubject (URI predicate, Value object) throws RDFHandlerException{
+   private Resource findPossibleSingletonSubject (URI predicate, Value object) {
         Resource subject = null;
         for (Statement st:statements){
             if (st.getPredicate().equals(predicate) && st.getObject().equals(object)){
                 if (subject != null){
-                    throw new RDFHandlerException ("Found more than one statement with predicate " + predicate + 
+                	headerError = true;
+                    Reporter.report("Found more than one statement with predicate " + predicate + 
                             " and object " + object);
                 }
                 subject = st.getSubject();
@@ -202,12 +229,13 @@ public class RDFValidator implements RdfLoader{
         return subject;
     }
 
-    private Value findPossibleSingletonObject (URI predicate) throws RDFHandlerException{
+    private Value findPossibleSingletonObject (URI predicate) {
         Value object = null;
         for (Statement st:statements){
             if (st.getPredicate().equals(predicate)){
                 if (object != null){
-                    throw new RDFHandlerException ("Found more than one statement with predicate " + predicate);
+                	headerError = true;
+                    Reporter.report("Found more than one statement with predicate " + predicate);
                 }
                 object = st.getObject();
             }
@@ -215,12 +243,13 @@ public class RDFValidator implements RdfLoader{
         return object;
     }
     
-    private Value findPossibleSingletonObject (Value subject, URI predicate) throws RDFHandlerException{
+    private Value findPossibleSingletonObject (Value subject, URI predicate) {
         Value object = null;
         for (Statement st:statements){
             if (st.getSubject().equals(subject) && st.getPredicate().equals(predicate)){
                 if (object != null){
-                    throw new RDFHandlerException ("Found more than one statement with subject " + subject + 
+                	headerError = true;
+                    Reporter.report("Found more than one statement with subject " + subject + 
                             " and predicate " + predicate);
                 }
                 object = st.getObject();
@@ -229,7 +258,7 @@ public class RDFValidator implements RdfLoader{
         return object;
     }
 
-    private Value findPossibleObject (Value subject, URI predicate) throws RDFHandlerException{
+    private Value findPossibleObject (Value subject, URI predicate) {
         Value object = null;
         for (Statement st:statements){
             if (st.getSubject().equals(subject) && st.getPredicate().equals(predicate)){
@@ -239,22 +268,26 @@ public class RDFValidator implements RdfLoader{
         return object;
     }
 
-    private Value findTheSingletonObject (Value subject, URI predicate) throws RDFHandlerException{
+    private Value findTheSingletonObject (Value subject, URI predicate) {
         Value object = findPossibleSingletonObject(subject, predicate);
-        if (object == null){
-            throw new RDFHandlerException ("Found no statement with subject " + subject +  " and predicate " + predicate);
+        if (object == null) {
+        	headerError = true;
+            Reporter.report("Found no statement with subject " + subject +  
+            		" and predicate " + predicate);
+            object = UNSPECIFIED;
         }
         return object;
     }
 
-    private void checkObject (Value subject, URI predicate) throws RDFHandlerException{
+    private void checkObject (Value subject, URI predicate) {
         for (Statement st:statements){
             if (st.getSubject().equals(subject) && st.getPredicate().equals(predicate)){
                 return ;
             }
         }
         if (strict || (!(subject instanceof Resource))){
-            throw new RDFHandlerException (subject + " does not have a " + predicate);
+        	headerError = true;
+            Reporter.report(subject + " does not have a " + predicate);
         } else {
             Resource subjectR = (Resource)subject;
             Statement newStatement = new StatementImpl(subjectR, predicate, UNSPECIFIED);
@@ -262,30 +295,38 @@ public class RDFValidator implements RdfLoader{
         }
    }
 
-   private void checkStatementExists (Value subject, URI predicate, Value object) throws RDFHandlerException{
+   private void checkStatementExists (Value subject, URI predicate, Value object) {
          for (Statement st:statements){
-            if (st.getSubject().equals(subject) && st.getPredicate().equals(predicate) && st.getObject().equals(object)){
+            if (st.getSubject().equals(subject) && 
+            		st.getPredicate().equals(predicate) && 
+            		st.getObject().equals(object)){
                 return;
             }
         }
-        throw new RDFHandlerException ("Found no statement with subject " + subject +  " predicate " + predicate + 
+        headerError = true;
+        Reporter.report("Found no statement with subject " + subject +  
+        		" predicate " + predicate + 
                 " and object " + object);
     }
 
-    private Resource findTheSingletonSubject (URI predicate, Value object) throws RDFHandlerException{
+    private Resource findTheSingletonSubject (URI predicate, Value object) {
         Resource subject = null;
         for (Statement st:statements){
             if (st.getObject().equals(object) && st.getPredicate().equals(predicate)){
                 if (subject != null){
-                    throw new RDFHandlerException ("Found more than one statement with predicate " + predicate + 
+                	headerError = true;
+                    Reporter.report("Found more than one statement with the " +
+                    		"predicate " + predicate + 
                             " and Object " + object);
                 }
                 subject = st.getSubject();
             }
         }
         if (subject == null){
-            throw new RDFHandlerException ("Found no statement with predicate " + predicate + 
+            headerError = true;
+        	Reporter.report("Found no statement with predicate " + predicate + 
                             " and Object " + object);
+        	subject = UNDEFINED; 
         }
         return subject;
     }
@@ -318,27 +359,39 @@ public class RDFValidator implements RdfLoader{
     }
 
     @Override
-    public void insertURLMapping(Statement st) throws RDFHandlerException{
+    public void insertURLMapping(Statement st) {
         String sourceURL = st.getSubject().stringValue();
         if (!sourceURL.startsWith(subjectURISpace)){
-            throw new RDFHandlerException("Subject " + sourceURL + " does not begin with the declared uriSpace " 
+            linkError = true;
+        	Reporter.report("Subject " + sourceURL + 
+            		" does not begin with the declared uriSpace " 
                     + subjectURISpace);
         }
         Value predicate = st.getPredicate();
         if (!predicate.equals(linksetPredicate)){
-            throw new RDFHandlerException("Predicate " + predicate + " does not begin with the declared predicate " 
+        	linkError = true;
+            Reporter.report("Predicate " + predicate + 
+            		" does not begin with the declared predicate " 
                     + linksetPredicate);            
         }
         String targetURL = st.getObject().stringValue();
         if (!targetURL.startsWith(targetURISpace)){
-            throw new RDFHandlerException("Target " + targetURL + " does not begin with the declared uriSpace " 
+        	linkError = true;
+            Reporter.report("Target " + targetURL + 
+            		" does not begin with the declared uriSpace " 
                     + targetURISpace);
         }
     }
 
     @Override
     public void closeInput() throws IDMapperException {
-    	Reporter.report("\tLinkset links are valid");
+    	if (headerError || linkError) {
+    		Reporter.report("Linkset not valid");
+    		throw new IDMapperException("Linkset not valid!");
+    	}
+    	if (!linkError) {
+    		Reporter.report("\tLinkset links are valid");
+    	}
         //do nothing
     }
 

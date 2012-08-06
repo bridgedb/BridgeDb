@@ -1,147 +1,107 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.linkset;
 
-import org.bridgedb.rdf.RdfStoreType;
-import org.bridgedb.rdf.RdfReader;
-import org.bridgedb.utils.Reporter;
-import org.junit.Ignore;
-import org.bridgedb.linkset.constants.PavConstants;
 import java.io.IOException;
+
 import org.bridgedb.IDMapperException;
-import org.bridgedb.linkset.constants.DctermsConstants;
-import org.bridgedb.linkset.constants.VoidConstants;
+import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.utils.Reporter;
+import org.junit.Before;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  *
  * @author Christian
  */
-public class ValidatorTest extends LinksetLoaderTest{
-    
+public class ValidatorTest {
+	    
     @Test
-    public void testValidateGood() throws IDMapperException, OpenRDFException, IOException{
-        Reporter.report("sample2to1.ttl");
-        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "validate"};
-        LinksetLoader.main (args1);
+    public void testValidateGood2to1() 
+    		throws IDMapperException, OpenRDFException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
+    }
+
+    @Test
+    public void testValidateGood1to3() 
+    		throws IDMapperException, OpenRDFException, IOException {
         Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "validate"};
-        LinksetLoader.main (args2);
+        String filename = "../org.bridgedb.linksets/test-data/sample1to3.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingDataSetDeclaration() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingDatasetDeclaration.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(VoidConstants.DATASET.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingDataSetDeclaration() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingDatasetDeclaration.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingDataSetLiscense() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingDatasetLicense.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(DctermsConstants.LICENSE.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingDataSetLiscense() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingDatasetLicense.ttl";
+                LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingDataSetVersion() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingDatasetVersion.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(PavConstants.VERSION.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingDataSetVersion() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingDatasetVersion.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingDataSetURISpace() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingDatasetUrispace.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(VoidConstants.URI_SPACE.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingDataSetURISpace() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingDatasetUrispace.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
     
-    @Test
-    public void testValidateIncorrectURISpace() {
-        String[] args = {"../org.bridgedb.linksets/test-data/incorrectUrispace.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString("Declared URISpace"));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateIncorrectURISpace() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/incorrectUrispace.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingDataSetSubject() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingDatasetSubject.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(DctermsConstants.SUBJECT.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingDataSetSubject() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingDatasetSubject.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingLinksetDeclaration() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingLinksetDeclaration.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(VoidConstants.LINKSET.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingLinksetDeclaration() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingLinksetDeclaration.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingLinksetLiscense() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingLinksetLicense.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(DctermsConstants.LICENSE.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingLinksetLiscense() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingLinksetLicense.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
 
-    @Test
-    public void testValidateMissingLinksetCreatedBy() {
-        String[] args = {"../org.bridgedb.linksets/test-data/missingLinksetCreatedBy.ttl", "validate"};
-        try {
-            LinksetLoader.main (args);
-            assertTrue(false);
-        } catch (IDMapperException ex) {
-            assertThat(ex.getMessage(), containsString(PavConstants.CREATED_BY.stringValue()));
-        }
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingLinksetCreatedBy() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingLinksetCreatedBy.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
     }
-    
-    //@Test
-    //public void testRunLoader() throws IDMapperException, IOException, OpenRDFException  {
-         //RdfReader reader = new RdfReader(RdfStoreType.TEST);
-         //ystem.out.println("linkset 1");
-         //ystem.out.println(reader.getRDF(1));
-         //ystem.out.println("linkset 2");
-         //ystem.out.println(reader.getRDF(2));
-        //empty test to force before to run,
-    //}
 
 }
