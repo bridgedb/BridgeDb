@@ -10,13 +10,15 @@
 
 <> a void:DatasetDescription ;
     dcterms:title "Dataset Description Title"^^xsd:string ;
-    dcterms:description """Dataset description description"""^^xsd:string;
-    dcterms:creator <http://www.foo.com/> ;
-    dcterms:created "2012-08-06"^^xsd:date;
-    foaf:primaryTopic :Test1_2 .
-    
-:TestDS1 a void:Dataset  ;
-    pav:derivedOn "2012-02-22"^^xsd:date ;
+    dcterms:description """Example description of the VoID document"""^^xsd:string ;
+    dcterms:creator <http://www.chemspider.com/> ;
+    #missing dcterms:created "2012-08-06"^^xsd:date ;
+    foaf:primaryTopic :chemSpiderDataset .
+
+
+
+:TestDS1 a void:Dataset;
+	pav:derivedOn "2012-02-22"^^xsd:date ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.foo.com/>.
@@ -34,6 +36,6 @@
     dcterms:created "2012-02-22"^^xsd:date ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
 
-foo:T123 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/123> .
-foo:T456 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/456> .
-foo:T789 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/789> .
+foo:123 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/123> .
+foo:456 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/456> .
+foo:789 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/789> .
