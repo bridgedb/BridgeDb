@@ -14,6 +14,7 @@ public class VoidConstants {
 
     private static final String voidns = "http://rdfs.org/ns/void#";
     
+    public static final URI DATASET_DESCRIPTION = new URIImpl(voidns + "DatasetDescription");
     public static final URI DATASET = new URIImpl(voidns + "Dataset");
     public static final URI LINK_PREDICATE = new URIImpl(voidns + "linkPredicate");
     public static final URI LINKSET = new URIImpl(voidns + "Linkset");
@@ -22,6 +23,7 @@ public class VoidConstants {
     public static final URI OBJECTSTARGET = new URIImpl(voidns + "objectsTarget");
     //public static final String SUBSET = voidns + "subset";
     public static final URI URI_SPACE = new URIImpl(voidns + "uriSpace");
+
     
 
 }

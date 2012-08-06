@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.constants.DctermsConstants;
+import org.bridgedb.linkset.constants.FoafConstants;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
@@ -52,9 +53,10 @@ public class RDFValidator implements RdfLoader{
     public void processFirstNoneHeader(Statement firstMap) {//throws RDFHandlerException{
     	//TODO: Rename method to validateHeader?
         Reporter.report("Validating linkset VoID header");
+        validateVoidDescription();
         linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, VoidConstants.LINKSET);
         linksetPredicate = findTheSingletonObject (linksetResource, VoidConstants.LINK_PREDICATE);
-        //Provide details of the licence under which the dataset is published using the dcterms:license property.
+        //Provide details of the license under which the dataset is published using the dcterms:license property.
         checkObject(linksetResource, DctermsConstants.LICENSE);
         //The linkset authorship, i.e. the agent that generated the intellectual knowledge
         validateLinksetProvenance();
@@ -68,6 +70,16 @@ public class RDFValidator implements RdfLoader{
         }
         Reporter.report("Validating linkset links");
      }
+
+	private void validateVoidDescription() {
+		linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, 
+				VoidConstants.DATASET_DESCRIPTION);
+        checkObject(linksetResource, DctermsConstants.TITLE);
+        checkObject(linksetResource, DctermsConstants.DESCRIPTION);
+        checkObject(linksetResource, DctermsConstants.CREATOR);
+        checkObject(linksetResource, DctermsConstants.CREATED);
+        checkObject(linksetResource, FoafConstants.PRIMARY_TOPIC);
+	}
     
     private void validateLinksetProvenance() {
         Value by = findPossibleObject(linksetResource, PavConstants.AUTHORED_BY);
@@ -92,9 +104,11 @@ public class RDFValidator implements RdfLoader{
         }
         if (strict) {
         	headerError = true;
-            Reporter.report(linksetResource + " must have " + PavConstants.AUTHORED_BY + ", " + 
-                    PavConstants.DERIVED_BY + ", " + PavConstants.CREATED_BY + 
-                    " or " + DctermsConstants.CREATOR);
+            Reporter.report(linksetResource + " must have one of:\n\t" + 
+            		PavConstants.AUTHORED_BY + "\n\t" + 
+                    PavConstants.DERIVED_BY + "\n\t" + 
+            		PavConstants.CREATED_BY + "\n\t" + 
+                    DctermsConstants.CREATOR);
         }
         Statement licenseStatement = new StatementImpl(linksetResource, 
         		PavConstants.CREATED_BY, UNSPECIFIED);
