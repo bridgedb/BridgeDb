@@ -16,11 +16,13 @@
 
 #Intentional very minimal info to test force;
 :TestDS2 a void:Dataset ;
+	dcterms:title "Test Dataset 2"^^xsd:string ;
     pav:derivedOn "2012-02-22"^^xsd:date ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.example.com/>.
 :TestDS3 a void:Dataset ;
+	dcterms:title "Test Dataset 3"^^xsd:string ;
     pav:derivedOn "2012-02-22"^^xsd:date ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;

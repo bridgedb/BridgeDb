@@ -131,6 +131,8 @@ public class RDFValidator implements RdfLoader{
         }
         //Declare that we have a dataset using void:dataset.
         checkStatementExists(dataSetId, RdfConstants.TYPE_URI, VoidConstants.DATASET);
+        //Dataset title
+        checkObject(dataSetId, DctermsConstants.TITLE);
         //Provide details of the licence under which the dataset is published using the dcterms:license property.
         checkObject(dataSetId, DctermsConstants.LICENSE);
         //There must be a version or a Date

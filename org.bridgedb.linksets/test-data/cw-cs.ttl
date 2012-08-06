@@ -23,11 +23,13 @@
     dcterms:created "2012-02-28"^^xsd:date ;
     dcterms:creator <http://www.conceptwiki.org> .
 :conceptwiki a void:Dataset ;
+	dcterms:title "ConceptWiki"^^xsd:string ;
     dcterms:license "unknown" ;
     dcterms:subject "unknown" ;
     pav:retrievedOn "2012-02-28"^^xsd:date ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chemspider a void:Dataset ;
+	dcterms:title "ChemSpider"^^xsd:string ;
     dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
     dcterms:subject "unknown" ;
      pav:version "unknown" ;

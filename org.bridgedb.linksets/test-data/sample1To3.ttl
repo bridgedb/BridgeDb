@@ -15,11 +15,13 @@
     foaf:primaryTopic :Test1_3 .
 
 :TestDS1 a void:Dataset  ;
+	dcterms:title "Test Dataset 1"^^xsd:string ;
     pav:version 0 ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.foo.com/>.
 :TestDS3 a void:Dataset ;
+	dcterms:title "Test Dataset 3"^^xsd:string ;
     pav:retrievedOn "2012-02-22"^^xsd:date ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
