@@ -16,7 +16,10 @@ public class DctermsConstants {
     
     public static final URI CREATED = new URIImpl(dctermns + "created");
     public static final URI CREATOR = new URIImpl(dctermns + "creator");
+    public static final URI DESCRIPTION = new URIImpl(dctermns + "description");
     public static final URI LICENSE = new URIImpl(dctermns + "license");
     public static final URI SUBJECT = new URIImpl(dctermns + "subject");
+	public static final URI TITLE = new URIImpl(dctermns + "title");
+
     
 }
