@@ -80,7 +80,7 @@ public class LinksetLoader {
         parse(file, arg);
     }
             
-    public static void main(String[] args) throws BridgeDbSqlException, IDMapperException {
+    public static void main(String[] args) throws BridgeDbSqlException {
     	try {
     		if (args.length == 2){
     			LinksetLoader loader = new LinksetLoader();
@@ -106,15 +106,19 @@ public class LinksetLoader {
     		}
     	} catch (FileNotFoundException e) {
     		System.exit(1);
+    	} catch (IDMapperException e) {
+    		System.exit(1);
     	}
     }
 
     private static void usage() {
         Reporter.report("Welcome to the OPS Linkset Loader.");
-        Reporter.report("This methods requires the file name (incl path) of the linkset to be loaded.");
+        Reporter.report("This methods requires the file name (incl path) " +
+        		"of the linkset to be loaded.");
         Reporter.report("Please run this again with two paramters");
         Reporter.report("The file name (including path of the linkset");
-        Reporter.report("Either  \"validate\" or \"load\" to pick if the file(s) should be just validated or also loaded.");
+        Reporter.report("Either  \"validate\" or \"load\" to pick if the " +
+        		"file(s) should be just validated or also loaded.");
         System.exit(1);
     }
 }

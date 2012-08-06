@@ -63,9 +63,11 @@ public class LinksetHandler extends RDFHandlerBase{
             reader = new FileReader(file);
             parser.parse (reader, RdfWrapper.getBaseURI());
         } catch (IOException ex) {
-            throw new IDMapperLinksetException("Error reading file " + file.getAbsolutePath() + " " + ex.getMessage(), ex);
+            throw new IDMapperLinksetException("Error reading file " + 
+            		file.getAbsolutePath() + " " + ex.getMessage(), ex);
         } catch (OpenRDFException ex) {
-            throw new IDMapperLinksetException("Error parsing file " + file.getAbsolutePath()+ " " + ex.getMessage(), ex);
+            throw new IDMapperLinksetException("Error parsing file " + 
+            		file.getAbsolutePath()+ " " + ex.getMessage(), ex);
         } finally {
             try {
                 if (reader != null){
@@ -99,7 +101,6 @@ public class LinksetHandler extends RDFHandlerBase{
      * 
      * @param st an RDF statement
      * @throws RDFHandlerException
-     * @throws IRSException 
      */
     private void processHeaderStatement(Statement st) throws RDFHandlerException{
         Resource subject = st.getSubject();
@@ -107,7 +108,7 @@ public class LinksetHandler extends RDFHandlerBase{
         final Value object = st.getObject();
         if (linkPredicate != null && predicate.equals(linkPredicate)) {
             /* Assumes all metadata is declared before the links */
-            finishProcessingHeader(st);
+            finishProcessingHeader(st);            
             rdfLoader.insertURLMapping(st);
             return;
         }
