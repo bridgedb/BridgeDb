@@ -23,11 +23,13 @@
     dcterms:created "2012-02-14"^^xsd:date ;
     dcterms:creator <http://www.conceptwiki.org> .
 :conceptwiki a void:Dataset ;
+	dcterms:title "ConceptWiki"^^xsd:string ;
     dcterms:license "unknown" ;
     dcterms:subject "unknown" ;
     pav:retrievedOn "2012-02-14"^^xsd:date ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :drugbank_targets a void:Dataset ;
+	dcterms:title "DrugBank Targets"^^xsd:string ;
     dcterms:license "unknown" ;
     dcterms:subject "unknown" ;
     pav:version "unknown" ;

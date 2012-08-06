@@ -18,6 +18,10 @@ import org.openrdf.OpenRDFException;
  *
  * @author Christian
  */
+/**
+ * @author Alasdair
+ *
+ */
 public class ValidatorTest {
 	    
     @Test
@@ -36,6 +40,10 @@ public class ValidatorTest {
         validator.parse(filename, "validate");
     }
 
+    /**************************************************************************
+     * Validate VoID Header Description
+     *************************************************************************/
+    
     @Test(expected=IDMapperException.class)
     public void testValidateMissingVoidDescription() 
     		throws IDMapperException, IOException {
@@ -91,11 +99,23 @@ public class ValidatorTest {
     	LinksetLoader validator = new LinksetLoader();
     	validator.parse(filename, "validate");
     }
+
+    /**************************************************************************
+     * Validate VoID Header 
+     *************************************************************************/
     
     @Test(expected=IDMapperException.class)
     public void testValidateMissingDataSetDeclaration() 
     		throws BridgeDbSqlException, IDMapperException, IOException {
         String filename = "../org.bridgedb.linksets/test-data/missingDatasetDeclaration.ttl";
+        LinksetLoader validator = new LinksetLoader();
+        validator.parse(filename, "validate");
+    }
+
+    @Test(expected=IDMapperException.class)
+    public void testValidateMissingDataSetTitle() 
+    		throws BridgeDbSqlException, IDMapperException, IOException {
+        String filename = "../org.bridgedb.linksets/test-data/missingDatasetTitle.ttl";
         LinksetLoader validator = new LinksetLoader();
         validator.parse(filename, "validate");
     }
