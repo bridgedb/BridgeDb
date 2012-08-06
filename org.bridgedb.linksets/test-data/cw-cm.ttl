@@ -4,11 +4,20 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix pav: <http://purl.org/pav/2.0/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
-:conceptwiki_chembleMolecule a void:Linkset ;
+<> a void:DatasetDescription ;
+    dcterms:title "ConceptWiki to ChEMBL Molecule Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting ConceptWiki concepts 
+    	with ChEMBL-RDF Molecules."""^^xsd:string;
+    dcterms:creator <http://www.foo.com/> ;
+    dcterms:created "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :conceptwiki_chemblMolecule .
+
+:conceptwiki_chemblMolecule a void:Linkset ;
     dcterms:license "unknown" ;
     void:subjectsTarget :conceptwiki ;
-    void:objectsTarget :chembleMolecule ;
+    void:objectsTarget :chemblMolecule ;
     void:subset :conceptwiki ;
     void:linkPredicate skos:exactMatch ;
     dcterms:created "2012-02-28"^^xsd:date ;
@@ -18,7 +27,7 @@
     dcterms:subject "unknown" ;
     pav:retrievedOn "2012-02-28"^^xsd:date ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
-:chembleMolecule a void:Dataset ;
+:chemblMolecule a void:Dataset ;
     dcterms:license "unknown" ;
     dcterms:subject "unknown" ;
     pav:version "unknown" ;
