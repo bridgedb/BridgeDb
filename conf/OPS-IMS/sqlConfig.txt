@@ -24,8 +24,6 @@ LoadSqlDatabase     ims
 
 TestSqlDatabase     imstest
 TestSqlUser         imstest
-    #Defaults to SqlUser if not set
 TestSqlPassword     imstest
-    #Defaults to sqlPassword if not set
 
 #Warning you will also need a rdfConfig.txt file
