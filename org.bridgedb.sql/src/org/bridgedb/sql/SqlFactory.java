@@ -214,7 +214,7 @@ public class SqlFactory {
 
     /**
      * Identifies the password to use for the test databases
-     * @return Password specified or defaults to live password
+     * @return Password specified or the default of "imstest"
      */
     private static String testSqlPassword(){
         String result;
@@ -224,12 +224,12 @@ public class SqlFactory {
             return ex.getMessage();
         }
         if (result != null) return result;
-        return sqlPassword();
-    }
+        return "imstest";
+       }
             
     /**
      * Identifies the user name to use for the test databases
-     * @return User name specified or defaults to live user name
+     * @return User name specified or the default of "imstest"
      */
     private static String testSqlUser(){
         String result;
@@ -239,8 +239,8 @@ public class SqlFactory {
             return ex.getMessage();
         }
         if (result != null) return result;
-        return sqlUser();
-    }
+     return "imstest";
+       }
 
     /**
      * Returns all the properties found in the config file as well as those set during loading.
