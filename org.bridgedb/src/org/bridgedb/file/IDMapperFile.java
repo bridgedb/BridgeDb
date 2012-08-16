@@ -1,5 +1,5 @@
 // BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
+// An abstraction layer for identifer mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -158,7 +158,7 @@ public abstract class IDMapperFile implements IDMapper {
     }
 
     private boolean isConnected = true;
-    // In the case of DataCollection, there is no need to discard associated resources.
+    // In the case of IDMapperFile, there is no need to discard associated resources.
     
     /** {@inheritDoc} */
     public void close() throws IDMapperException { isConnected = false; }
