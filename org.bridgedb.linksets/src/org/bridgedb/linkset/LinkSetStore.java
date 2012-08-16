@@ -22,14 +22,31 @@ import java.util.List;
 import org.bridgedb.IDMapperException;
 
 /**
+ * Interface for retrieving the RDF MetaData related to LinkSets.
+ *
+ * The purpose is to isolute the WebService methods from any actual RDF implementation
+ *
+ * Note only retreives the MetaData not the actuall mappings.
  *
  * @author Christian
  */
 public interface LinkSetStore {
- //   public List<Triple> getTriples (String graphId) throws IDMapperException;
-
+    
+    /**
+     * Obtains a list of all the Linksets in the system.
+     *
+     * Currently not used.
+     * @return list of linksets
+     * @throws IDMapperException
+     */
     public List<String> getLinksetNames() throws IDMapperException;
 
+    /**
+     * Converts all the rdf for this linkset into well formatted text
+     * @param id Id of the linkset for which metadata is required
+     * @return Well formatted text that can be returned to a user
+     * @throws IDMapperException
+     */
     public String getRDF (int id) throws IDMapperException;
 
 }
