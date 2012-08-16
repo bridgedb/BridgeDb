@@ -42,6 +42,11 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
 import org.openrdf.rio.turtle.TurtleParser;
 
 /**
+ * Reads and RDF linkset file and passes the information on to a RdfLoader.
+ *
+ * Sperates the data into the different types supported by RDFLoader abd calls the appropriate methods
+ *
+ * What actually happens then is RDFLoader specific.
  *
  * @author Christian
  */
@@ -55,15 +60,25 @@ public class LinksetHandler extends RDFHandlerBase{
     RdfLoader rdfLoader;
     
     private final boolean SYMETRIC = true;
-    
-    LinksetHandler(RdfLoader rdfLoader) throws IDMapperLinksetException  {
-        try {
-            this.rdfLoader = rdfLoader;                
-         } catch (Exception ex) {
-            throw new IDMapperLinksetException ("Unable to create LinksetHandler ", ex);
-        }
+
+    /**
+     * Creates the Handler based on the RdfLoader to receive the data
+     * @param rdfLoader
+     */
+    LinksetHandler(RdfLoader rdfLoader) {
+        this.rdfLoader = rdfLoader;
     }
-    
+
+    /**
+     * Parse file called by LinkSetLoader.parse to parse the file.
+     *
+     * It is not recommended to call this method directly so it is not public.
+     *
+     * Uses the BaseURI found in the configs read by the RdfWrapper
+     *
+     * @param file
+     * @throws IDMapperException
+     */
     void parse (File file) throws IDMapperException  {
         if (!file.isFile()){
             throw new IDMapperException (file.getAbsolutePath() + " is not a file");
@@ -124,7 +139,8 @@ public class LinksetHandler extends RDFHandlerBase{
         final Value object = st.getObject();
         if (linkPredicate != null && predicate.equals(linkPredicate)) {
             /* Assumes all metadata is declared before the links */
-            finishProcessingHeader(st);            
+            processingHeader = false;
+            rdfLoader.processFirstNoneHeader(st);
             rdfLoader.insertURLMapping(st);
             return;
         }
@@ -137,16 +153,12 @@ public class LinksetHandler extends RDFHandlerBase{
         rdfLoader.addHeaderStatement(st);
     }
    
-    private void finishProcessingHeader(Statement firstMap) throws RDFHandlerException {
-        processingHeader = false;
-        rdfLoader.processFirstNoneHeader(firstMap);
-    }
-
     @Override
     public void startRDF() throws RDFHandlerException{
         super.startRDF();
     } 
     
+    @Override
     public void endRDF() throws RDFHandlerException{
         super.endRDF();
         try {
@@ -156,32 +168,6 @@ public class LinksetHandler extends RDFHandlerBase{
         }
         if (this.processingHeader){
             throw new RDFHandlerException("Linkset error! End of void headder not found");
-        }
-    }
-
-    private static void parse (LinksetHandler handler, String fileName, RdfStoreType type) 
-            throws IDMapperLinksetException  {
-        Reporter.report("Parsing " + fileName);
-        FileReader reader = null;
-        try {
-            RDFParser parser = new TurtleParser();
-            parser.setRDFHandler(handler);
-            parser.setParseErrorListener(new LinksetParserErrorListener());
-            parser.setVerifyData(true);
-            reader = new FileReader(fileName);
-            parser.parse (reader, RdfWrapper.getBaseURI());
-        } catch (IOException ex) {
-            throw new IDMapperLinksetException("Error reading file " + fileName + " " + ex.getMessage(), ex);
-        } catch (OpenRDFException ex) {
-            throw new IDMapperLinksetException("Error parsing file " + fileName+ " " + ex.getMessage(), ex);
-        } finally {
-            try {
-                if (reader != null){
-                    reader.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 
