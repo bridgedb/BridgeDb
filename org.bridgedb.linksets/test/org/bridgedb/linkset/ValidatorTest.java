@@ -112,7 +112,7 @@ public class ValidatorTest {
         validator.parse(filename, "validate");
     }
 
-    @Test(expected=IDMapperException.class)
+    @Test(expected=FileNotFoundException.class)
     public void testValidateMissingDataSetTitle() 
     		throws BridgeDbSqlException, IDMapperException, IOException {
         String filename = "../org.bridgedb.linksets/test-data/missingDatasetTitle.ttl";
