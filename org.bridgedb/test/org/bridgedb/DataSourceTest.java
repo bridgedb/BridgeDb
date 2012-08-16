@@ -74,27 +74,5 @@ public class DataSourceTest {
 		Assert.assertEquals("metabolite", source.getType());
 		Assert.assertTrue(source.isMetabolite());
 	}
-
-    /*
-     * Test of getByURLPattern method, of class DataSource.
-     * Test fails as due to Historical reasons multiple DataSources can share the same URL pattern.
-     * /
-    @Test(expected = IllegalArgumentException.class)
-    public void testByURLNoDuplicates() throws Exception {
-        String urlProfile = "http://www.example4.com/$id";
-        String url = "http://www.example4.com/12345";
-        DataSource.register("testx1", "testx1").urlPattern("http://www.example4.com/Pizza#$id").asDataSource();
-        DataSource.register("testx2", "testx2").urlPattern("http://www.example4.com/Pizza#$id").asDataSource();
-    }*/
-
-    /*
-     * Test of getByURLPattern method, of class DataSource.
-     * Test fails as due to Historical reasons multiple DataSources can have the same urlPattern
-     * /
-    @Test(expected = IllegalArgumentException.class)
-    public void testByRegisterNoDuplicatesWithPostFix() throws Exception {
-        DataSource.register("testx1", "testx1").urlPattern("http://www.example9.com/Pizza#$id/more").asDataSource();
-        DataSource.register("testx2", "testx2").urlPattern("http://www.example9.com/Pizza#$id/more").asDataSource();
-    }*/
     
 }
