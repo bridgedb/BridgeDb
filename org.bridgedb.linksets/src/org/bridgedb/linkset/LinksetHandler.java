@@ -159,13 +159,6 @@ public class LinksetHandler extends RDFHandlerBase{
         }
     }
 
-    private void checkStatementX(Statement st) throws RDFHandlerException{
-     if (!linkPredicate.equals(st.getPredicate())){
-            throw new RDFHandlerException("predicateURL " + st.getPredicate()
-                    + " does not match the expected pattern " + linkPredicate);            
-        }
-    }
-
     private static void parse (LinksetHandler handler, String fileName, RdfStoreType type) 
             throws IDMapperLinksetException  {
         Reporter.report("Parsing " + fileName);
