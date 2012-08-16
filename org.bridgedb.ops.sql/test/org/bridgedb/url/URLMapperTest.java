@@ -35,7 +35,10 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 /**
+ * Tests the URLMapper interface (and by loading the URLListener interface)
  *
+ * Should be passable by any implementation of URLMapper that has the test data loaded.
+ * 
  * @author Christian
  */
 public abstract class URLMapperTest extends URLListenerTest{

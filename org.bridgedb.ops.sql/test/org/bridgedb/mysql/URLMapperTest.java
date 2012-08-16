@@ -26,8 +26,10 @@ import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
 
 /**
- * This class depends on URLListenerTest having loaded the data.
+ * Runs the URLMapper interface tests over SQLURLMapper class
  * 
+ * Creates the mapper, loads in the test data and then runs the tests.
+ *
  * @author Christian
  */
 //@Ignore
