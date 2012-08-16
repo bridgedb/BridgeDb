@@ -26,7 +26,8 @@ import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
 
 /**
- * 
+ * Loads the test data in and then runs the IDmapper and IDCapabiliies tests
+ *
  * @author Christian
  */
 //@Ignore 

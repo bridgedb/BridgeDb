@@ -23,6 +23,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
+ * Test to be run on any class that implements IDMapperCapabilities
+ * Severs both as a base for IdMapperTest
+ * and to test class that implement IDMapperCapabilities such as WSClient
+ *
+ * Implementing tests have to set capabilities
+ *
+ * Should be passed by any class loaded with the test data.
  *
  * @author Christian
  */

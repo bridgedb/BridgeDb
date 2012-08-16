@@ -21,6 +21,10 @@ package org.bridgedb.sql;
 import org.junit.Test;
 
 /**
+ * Methods to generate the SQLAccess for MYSQl and Virtuso
+ *
+ * Set up in such a way that if the SQL connections fails the Tests will abort with a warning
+ * WARNING: Due to the way JUnits work this will not generate a Fauilure, error or skipped count!
  *
  * @author Christian
  */

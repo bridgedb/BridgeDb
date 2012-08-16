@@ -18,8 +18,6 @@
 //
 package org.bridgedb.file;
 
-//import buildsystem.Measure;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import org.bridgedb.IDMapperException;
@@ -29,7 +27,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * 
+ * Class to run the IDMapper Tests using the IDMapperText class
  * @author Christian
  */
 public class TestIDMapperText extends IDMapperTest {
