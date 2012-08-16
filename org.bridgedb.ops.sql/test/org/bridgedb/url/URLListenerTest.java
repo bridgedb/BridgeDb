@@ -21,7 +21,9 @@ package org.bridgedb.url;
 import org.bridgedb.IDMapperException;
 
 /**
+ * Base class of all Test using URLs
  *
+ * Adds a method for loading the test data.
  * @author Christian
  */
 public abstract class URLListenerTest extends URLMapperTestBase{
@@ -32,6 +34,12 @@ public abstract class URLListenerTest extends URLMapperTestBase{
     private static final boolean ORIGINAL = false;
     private static final boolean TRANSATIVE = true;
 
+    /**
+     * Method for loading the Test data
+     * Should eb called in a @beforeClass method after setting listener
+     * 
+     * @throws IDMapperException
+     */
     public static void loadData() throws IDMapperException{
         listener.registerUriSpace(DataSource1, URISpace1);
         listener.registerUriSpace(DataSource2, URISpace2);

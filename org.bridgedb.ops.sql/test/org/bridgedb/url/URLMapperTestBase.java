@@ -23,7 +23,8 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTestBase;
 
 /**
- *
+ * Extends the Test base to include URL variables.
+ * 
  * @author Christian
  */
 public abstract class URLMapperTestBase extends IDMapperTestBase {
