@@ -1,5 +1,5 @@
 // BridgeDb,
-// An abstraction layer for identifier mapping services, both local and online.
+// An abstraction layer for identifer mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,9 +60,7 @@ public final class DataSource
 	private static Set<DataSource> registry = new HashSet<DataSource>();
 	private static Map<String, DataSource> byAlias = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byMiriamBase = new HashMap<String, DataSource>();
-	private static HashMap<String, DataSource> byPrefix = new HashMap<String, DataSource>();
-	private static Set<DataSource> withPrefixAndPostfix = new HashSet<DataSource>();
-
+	
 	private String sysCode = null;
 	private String fullName = null;
 	private String mainUrl = null;
@@ -85,17 +83,11 @@ public final class DataSource
 	
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
-     * <p>
-     * Used by URL based methods to convert an Xref into a URL
-     * 
 	 * @param id identifier to use in url
 	 * @return Url
- 	 */
+	 */
 	public String getUrl(String id)
 	{
-        if (id == null){
-            return null;
-        }
 		return prefix + id + postfix;
 	}
 				
@@ -169,37 +161,7 @@ public final class DataSource
 		} catch (UnsupportedEncodingException ex) { idPart = id; }
 		return urnBase + ":" + idPart;
 	}
-
-    /**
-     * Sets the prefix and postfix for this DataSource.
-     * <p>
-     * 
-     * @param prefix
-     * @param postfix 
-     */
-    private void setFixes(String prefix, String postfix) {
-        this.prefix = prefix;
-        this.postfix = postfix;
-        if (postfix.isEmpty()){ 
-            byPrefix.put(prefix, this);
-        } else {
-            withPrefixAndPostfix.add(this);
-        }
-    }
-
-    /**
-     * Returns the prefix for this DataSource.
-     * <p>
-     * Used by the URI based methods to go from a DataSource to a URISpace.
-     * <p>
-     * This method ignores the postfix so application that use postfix should be careful here.
-     * @since 2.0.0
-     * @return The postfix
-     */
-    public String getURISpace() {
-        return prefix;
-    }
-
+	
 	/**
 	 * Uses builder pattern to set optional attributes for a DataSource. For example, this allows you to use the 
 	 * following code:
@@ -235,29 +197,13 @@ public final class DataSource
 		
 		/**
 		 * 
-		 * The pattern should contain the substring "$id", which will be replaced by the actual identifier.
-         * <p>
-         * Since 2.0.0 this method keeps a register of urlPatterns to DataSources.
-         * <p>
-         * If more than one DataSource source is set with the same urlPattern than the last datasource set 
-         *    using this method will be returned by the meothods getByURLPattern and getByURISpace.
-         * The behaviour of allowing two or more DataSources to share a URLPattern is historical.
-         * <p>
-         * Warning this method and getURISpace(String) has almost the same functionality.(see above)
-         * Calling both will result in the second call overwriting the setting of the first call.
-         * Similarly calling this function more than once will have the same effect. 
-         * Only the last urlPattern will be valid.
-         * <p>
 		 * @param urlPattern is a template for generating valid URL's for identifiers. 
+		 * 	The pattern should contain the substring "$ID", which will be replaced by the actual identifier.
 		 * @return the same Builder object so you can chain setters
 		 */
-		public Builder urlPattern (String urlPattern) 
+		public Builder urlPattern (String urlPattern)
 		{
-            //Clear any previously registered values
-            byPrefix.values().remove(current);
-            withPrefixAndPostfix.remove(current);
-            
- 			if (urlPattern == null || urlPattern.isEmpty())
+			if (urlPattern == null || "".equals (urlPattern))
 			{
 				current.prefix = "";
 				current.postfix = "";
@@ -265,57 +211,14 @@ public final class DataSource
 			else
 			{
 				int pos = urlPattern.indexOf("$id");
-				if (pos == -1) {
-                    throw new IllegalArgumentException("Url maker pattern for " + current + 
-                        "' should have $id in it");
-                }
-                if (urlPattern.equals("$id")){
-                    throw new IllegalArgumentException("Url maker pattern for " + current + 
-                        "' should be more than just \"$id\".");
-                }
-                //Can not check for previous as existing code allows two or more DataSoruces to share a URL pattern.
-                //FOr example BIO.
-                current.setFixes(urlPattern.substring(0, pos), urlPattern.substring(pos + 3));
+				if (pos == -1) throw new IllegalArgumentException("Url maker pattern for " + current + "' should have $id in it");
+				current.prefix = urlPattern.substring(0, pos);
+				current.postfix = urlPattern.substring(pos + 3);
 			}
 			return this;
 		}
-	
-        /**
-         * Uses this URISpace to construct url where th id will be the localName 
-         * <p>
-         * If more than one DataSource source is set with the same URISpace this methond will throw an exception.
-         * However the URISpace information can be overwritten using the urlPattern method.
-         * Only the last datasource set using either method will be returned 
-         *    by the meothods getByURLPattern and getByURISpace.
-         * For Historical reason the method urlPattern can not enforce that no two DataSources share the same URISpace.
-         * This method is new so can and does.
-         * <p>
-         * Warning this method and urlPattern(String) has almost (see above) the same functionality. 
-         * It is equivellent to calling urlPattern(URISpace + "$id").
-         * Calling both will result in the second call overwriting the setting of the first call.
-         * Similarly calling this function more than once will have the same effect. 
-         * Only the last URISpace will be valid.
-       * 
-         * @param prefix
-         * @return 
-         * @since 2.0.0
-         */
-        public Builder URISpace(String URISpace) throws IDMapperException{
-            //Clear any previously registered values
-            byPrefix.values().remove(current);
-            withPrefixAndPostfix.remove(current);
-
-            if (URISpace != null && !URISpace.isEmpty()){
-                if (byPrefix.get(URISpace) != null){
-                    throw new IDMapperException("Unable to set URISpace for DataSoucrce: " + current + 
-                            " because is has already been used by DataSource: " + byPrefix.get(URISpace));
-                }
-                current.setFixes(URISpace, "");
-            }
-            return this;
-        }
-        
- 		/**
+		
+		/**
 		 * @param mainUrl url of homepage
 		 * @return the same Builder object so you can chain setters
 		 */
@@ -528,11 +431,7 @@ public final class DataSource
 	 */
 	public String toString()
 	{
-        if (fullName != null){
-            return fullName + ":" + prefix;
-        } else {
-            return sysCode + ":" + prefix;
-        }
+		return fullName;
 	}
 	
 	/**
@@ -598,238 +497,4 @@ public final class DataSource
 		return current;
 	}
 
-    /**
-     * Attempts to find a DataSource that fits this URL otherwise registers a new URL
-     * <p>
-     * The first attempt is to use URLPattern where the id is exactly the String "$id".
-     * <p>
-     * The second attempt is to assume the uri has a URISpace followed by the ID.
-     * This is where the urlPattern used in Builder.urlPattern ends with "#$ID", "/$ID" or ":#$ID", 
-     * and "$ID" does not contain the characters '#', '/', or ':' 
-     * <p>
-     * The url is Split after the first occurrence of the '#' character,
-     * If this fails, split after the last occurrence of the '/' character,
-     * If this fails, split after the last occurrence of the ':' character. 
-     * The first part of the split is assumed to be the prefix and a DataSource with that prefix is looked.
-     * <p>
-     * If that fails the method iterates through all know DataSources (with a urlPattern) 
-     * and checks to see it the URL's start and ends match the pattern.
-     * <p>
-     * If no DataSource exists with this URL a new one is created.
-     * <p>
-     * Note the methods getByURL(String)  and getByURISpace(String) are semantic sugar for getByURLPattern(String).
-     * All work with the same internal data 
-     *    so where they referer to the same URLPattern they will return the same DataSource
-     * @param url A 
-     * @return A DataSource whoe urlPattern matches the url. 
-     * @Since 2.0.0
-     */
-    public static DataSource getByURL(String url) {
-        int pos = url.indexOf("$id");
-        if (pos == -1){
-            return getByNonPattern(url);
-        } else {
-            return getByURLPatternOnly(url, true);
-        }
-    }
-    
-    /**
-     * Converts a URL to an Xref.
-     * 
-     * @param url
-     * @return
-     * @throws IDMapperException 
-     * @since 2.0.0
-     */
-    public static Xref uriToXref(String url) throws IDMapperException{
-        int pos = url.indexOf("$id");
-        if (pos == -1){
-            return uriToXrefByNonPattern(url);
-        } else {
-            throw new IDMapperException ("URLs with $id are considered to be patterns and not");
-        }        
-    }
-    
-    /**
-     * Attempts to find a DataSource that fits this URL Patternotherwise registers a new URL
-     * <p>
-     * The URLPattern must contain the String "$id".
-     * <p>
-     * If no DataSource exists with this URL a new one is created.
-     * <p>
-     * Note the methods getByURL(String)  and getByURISpace(String) are semantic sugar for getByURLPattern(String).
-     * All work with the same internal data 
-     *    so where they referer to the same URLPattern they will return the same DataSource
-     * @param url A 
-     * @return A DataSource whose urlPattern matches the urlPattern.
-     * @since 2.0.0 
-     */
-    public static DataSource getByURLPattern(String urlPattern) {    
-        int pos = urlPattern.indexOf("$id");
-        if (pos == -1){
-            throw new IllegalArgumentException("Url pattern should have $id in it");
-        } else {
-            return getByURLPatternOnly(urlPattern, true);
-        }
-    }
-    
-    /**
-     * Attempts to find a DataSource with this URISpace.
-     * <p>
-     * Equivellent (but faster) to calling getByURLPattern (URISpace + "$id").
-     * <p>
-     * If no DataSource exists with this URL a new one is created.
-     * <p>
-     * Note the methods getByURL(String) and getByURISpace(String) are semantic sugar for getByURLPattern(String).
-     * All work with the same internal data 
-     *    so where they referer to the same URLPattern they will return the same DataSource
-     * @param url A 
-     * @return A DataSource whose urlPattern is URISpace + "$id". 
-     * @since 2.0.0
-     */
-    public static DataSource getByURISpace(String URISpace){
-        if (URISpace == null){
-            throw new IllegalArgumentException("URISpace may not be null.");
-        }
-        if (URISpace.isEmpty()){
-            throw new IllegalArgumentException("URISpace may not be empty.");            
-        }
-        DataSource result = byPrefix.get(URISpace);
-        if (result == null){
-            return createDataSource(URISpace);
-        } else {
-            return result;
-        }
-    }
-
-    /**
-     * 
-     * @param urlPattern
-     * @param createNew
-     * @return 
-     * @since 2.0.0
-     */
-    private static DataSource getByURLPatternOnly(String urlPattern, boolean createNew) {
-        urlPattern = urlPattern.trim();
-        int pos = urlPattern.indexOf("$id");
-        String prefix = urlPattern.substring(0, pos);
-        String postfix = urlPattern.substring(pos + 3);
-        if (postfix.isEmpty()){
-            DataSource result = byPrefix.get(prefix);
-            if (result != null){
-                return result;
-            } else {
-                if (createNew){
-                return createDataSource(prefix);
-                } else {
-                    return null;
-                }
-            }
-        }      
-        for (DataSource source:withPrefixAndPostfix){
-            if (prefix.equals(source.prefix) && postfix.equals(source.postfix)){
-                return source;
-            }
-        }
-        if (createNew){
-            DataSource result = register(urlPattern, urlPattern).asDataSource();
-            result.setFixes(prefix, postfix);
-            return result;
-        } else {
-            return null;
-        }
-    }
-
-    public final static String getUriSpace(String url){
-        String prefix = null;
-        url = url.trim();
-        if (url.contains("#")){
-            prefix = url.substring(0, url.lastIndexOf("#")+1);
-        } else if (url.contains("/")){
-            prefix = url.substring(0, url.lastIndexOf("/")+1);
-        } else if (url.contains(":")){
-            prefix = url.substring(0, url.lastIndexOf(":")+1);
-        }
-        //ystem.out.println(lookupPrefix);
-        if (prefix == null){
-            throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
-        }
-        if (prefix.isEmpty()){
-            throw new IllegalArgumentException("Url should not start with a '#', '/, or a ':'.");            
-        }
-        return prefix;
-    }
-    
-    public final static String getId(String url){
-        url = url.trim();
-        if (url.contains("#")){
-            return url.substring(url.lastIndexOf("#")+1, url.length());
-        } else if (url.contains("/")){
-            return url.substring(url.lastIndexOf("/")+1, url.length());
-        } else if (url.contains(":")){
-            return url.substring(url.lastIndexOf(":")+1, url.length());
-        }
-        throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
-    }
-    
-    /**
-     * 
-     * @param url
-     * @return 
-     * @since 2.0.0
-     */
-    //Changes made here should also be maded to uriToXrefByNonPattern
-    private static DataSource getByNonPattern(String url) {
-        String prefix = getUriSpace(url);
-        DataSource result = byPrefix.get(prefix);
-        if (result != null){
-            return result;
-        }
-        for (DataSource source:withPrefixAndPostfix){
-            if (url.startsWith(source.prefix) && url.endsWith(source.postfix)){
-                return source;
-            }
-        }
-        return createDataSource(prefix);
-    }
-    
-    /**
-     * 
-     * @param url
-     * @return 
-     * @since 2.0.0
-     */
-    //Changes made here should also be maded to getByNonPattern
-    private static Xref uriToXrefByNonPattern(String url) {
-        String prefix = getUriSpace(url);
-        String id = getId(url);
-        DataSource dataSource = byPrefix.get(prefix);
-        if (dataSource != null){
-            return new Xref(id, dataSource);
-        }
-        for (DataSource source:withPrefixAndPostfix){
-            if (url.startsWith(source.prefix) && url.endsWith(source.postfix)){
-                id = url.substring(source.prefix.length(), url.length() -  source.postfix.length());
-                return new Xref(id, source);
-            }
-        }
-        dataSource = createDataSource(prefix);
-        return new Xref(id, dataSource);
-    }
-
-
-    /**
-     * 
-     * @param prefix
-     * @return 
-     * @since 2.0.0
-     */
-    private static DataSource createDataSource(String prefix) {
-        DataSource result = register(prefix, prefix).asDataSource();
-        //ystem.out.println(prefix);
-        //Calls setFixes directly as there is no need to check for conflicts with other 
-        result.setFixes(prefix, "");
-        return result;
-    }
-	
 }
