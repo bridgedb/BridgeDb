@@ -108,7 +108,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
-    @GET
+/*
+ //TODO add method to get sample xref
+ @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
     public Response apiPage() throws IDMapperException, UnsupportedEncodingException {
@@ -169,7 +171,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         //ystem.out.println("Done "+ (new Date().getTime() - start));
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
-           
+*/
+    
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
