@@ -33,8 +33,10 @@ import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
 
 /**
- * Builds on the SQLListener to implements the Standard BridgeDB functions of IDMapper and IDMapperCapabilities.
- * This Allows the OPS version to function as any other BridgeDB implementation.
+ * Builds on the SQLListener to implement the Standard BridgeDB functions of IDMapper and IDMapperCapabilities.
+ *
+ * This Allows the OPS version to function as any other BridgeDB implementation
+ *
  * @author Christian
  */
 public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabilities {

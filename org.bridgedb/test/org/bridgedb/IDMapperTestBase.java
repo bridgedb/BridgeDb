@@ -21,7 +21,7 @@ package org.bridgedb;
 import org.junit.BeforeClass;
 
 /**
- *
+ * Base which sets up the static variables used by Tests such as IDMapperTest and IDMapperCapabilitiesTest
  * @author Christian
  */
 public abstract class IDMapperTestBase {
@@ -63,8 +63,9 @@ public abstract class IDMapperTestBase {
     protected static String badKey;
     
     @BeforeClass
+
     /**
-     * Class to set up the variables.
+     * Method to set up the variables.
      * 
      * Should be overrided to change all of the variables.
      * To change some over write it. Call super.setupVariables() and then change the few that need fixing.
