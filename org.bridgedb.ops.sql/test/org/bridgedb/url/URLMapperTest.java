@@ -157,6 +157,14 @@ public abstract class URLMapperTest extends URLListenerTest{
      }
 
     @Test
+    public void testMapNoneExistingDataSource() throws IDMapperException{
+        report("MapNoneExistingDataSource");
+        Set<String> results = urlMapper.mapURL(map1URL2, "http://wwww.THIS.should.NOT.Be.InThe.Data.zzz");
+        System.out.println(results);
+        assertEquals(0,results.size());
+    }
+
+    @Test
     public void testURLSupported() throws Exception {
         report("URLSupported");
         assertTrue(urlMapper.uriExists(map1URL1));
