@@ -39,6 +39,9 @@ import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
 
 /**
+ * Implements the URLMapper and URLListener interfaces using SQL.
+ *
+ * Takes into accounts the specific factors for teh SQL version being used.
  *
  * @author Christian
  */
@@ -46,7 +49,16 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     private static final int URI_SPACE_LENGTH = 100;
 
-    public SQLUrlMapper(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws IDMapperException{
+    /**
+     * Creates a new URLMapper including BridgeDB implementation based on a connection to the SQL Database.
+     *
+     * @param dropTables Flag to determine if any existing tables should be dropped and new empty tables created.
+     * @param sqlAccess The connection to the actual database. This could be MySQL, Virtuoso ect.
+     *       It could also be the live database, the loading database or the test database.
+     * @param specific Code to hold the things that are different between different SQL implementaions.
+     * @throws BridgeDbSqlException
+     */
+     public SQLUrlMapper(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws IDMapperException{
         super(dropTables, sqlAccess, specific);
         if (dropTables){
             try {
@@ -60,12 +72,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }   
     
+    @Override
 	protected void dropSQLTables() throws BridgeDbSqlException
 	{
         super.dropSQLTables();
  		dropTable("url");
     }
  
+    @Override
 	protected void createSQLTables() throws BridgeDbSqlException
 	{
         super.createSQLTables();
@@ -120,10 +134,17 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;       
     }
 
-    private void finishMappingQuery(StringBuilder query, String URL, String... targetURISpaces) {
-        //ystem.out.println("mapping: " + URL);
-        String id = getId(URL);
-        String uriSpace = getUriSpace(URL);
+    /**
+     * Adds the FROM and Where clauses to queries to get mappings.
+     *
+     * @param query Query with the select clause only
+	 * @param sourceURL the sourceURL to get mappings/cross-references for.
+     * @param target URISpaces
+     */
+    private void finishMappingQuery(StringBuilder query, String sourceURL, String... targetURISpaces) {
+        //ystem.out.println("mapping: " + sourceURL);
+        String id = getId(sourceURL);
+        String uriSpace = getUriSpace(sourceURL);
         query.append("FROM mapping, mappingSet, url as source, url as target ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND mappingSet.sourceDataSource = source.dataSource ");
@@ -147,6 +168,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
+    @Override
     public Set<URLMapping> mapURLFull(String URL, String... targetURISpaces) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
         query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
@@ -398,6 +420,16 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
 
+    /**
+     * Method to split a URL into an URISpace and an ID.
+     *
+     * Based on OPENRDF version with ":" added as and extra splitter.
+     *
+     * Ideally this would be replaced by a method from Identifiers.org
+     *    based on their knoweldge or ULI/URLs
+     * @param url URL to split
+     * @return The URISpace of the URL
+     */
     public final static String getUriSpace(String url){
         String prefix = null;
         url = url.trim();
@@ -419,7 +451,17 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
         return prefix;
     }
-    
+
+    /**
+     * Method to split a URL into an URISpace and an ID.
+     *
+     * Based on OPENRDF version with ":" added as and extra splitter.
+     *
+     * Ideally this would be replaced by a method from Identifiers.org
+     *    based on their knoweldge or ULI/URLs
+     * @param url URL to split
+     * @return The URISpace of the URL
+     */
     public final static String getId(String url){
         url = url.trim();
         if (url.contains("#")){
@@ -434,6 +476,19 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
     }
 
+    /**
+     * Generates a set of URl from a ResultSet.
+     *
+     * This implementation just concats the URISpace and Id
+     *
+     * Ideally this would be replaced by a method from Identifiers.org
+     *    based on their knoweldge or ULI/URLs
+     * This may require the method to be exstended with the Target NameSpaces.
+     *
+     * @param rs Result Set holding the information
+     * @return URLs generated
+     * @throws BridgeDbSqlException
+     */
     private Set<String> resultSetToURLsSet(ResultSet rs) throws BridgeDbSqlException {
         HashSet<String> results = new HashSet<String>();
         try {
@@ -449,6 +504,21 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
+    /**
+     *
+     * Generates a set of mappings from a ResultSet.
+     *
+     * This implementation just concats the URISpace and Id
+     *
+     * Ideally this would be replaced by a method from Identifiers.org
+     *    based on their knoweldge or ULI/URLs
+     * This may require the method to be exstended with the Target NameSpaces.
+     *
+     * @param sourceURL URL to be mapped to
+     * @param rs Result Set holding the information
+     * @return Set of mappings from the source to thie URL in the results.
+     * @throws BridgeDbSqlException
+     */
     private Set<URLMapping> resultSetToURLMappingSet(String sourceURL, ResultSet rs) throws BridgeDbSqlException {
         HashSet<URLMapping> results = new HashSet<URLMapping>();
         try {
@@ -466,6 +536,15 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
+    /**
+     * Generates a single mapping from an id.
+     *
+     * This method (an probaly the calling methods) needs replacing with one created by identifiers.org
+     *
+     * @param rs Result set with exactky one result
+     * @return The mapping or null
+     * @throws BridgeDbSqlException
+     */
     private URLMapping resultSetToURLMapping(ResultSet rs) throws BridgeDbSqlException {
         try {
             URLMapping urlMapping;
@@ -491,6 +570,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
+    /**
+     * Generates the meta info from the result of a query
+     * @param rs
+     * @return
+     * @throws BridgeDbSqlException
+     */
     private List<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs ) throws BridgeDbSqlException{
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
         try {
@@ -506,6 +591,15 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
+    /**
+     * Finds the SysCode of the DataSource which includes this URISpace
+     *
+     * Should be replaced by a more complex method from identifiers.org
+     *
+     * @param uriSpace to find DataSource for
+     * @return sysCode of an existig DataSource or null
+     * @throws BridgeDbSqlException
+     */
     private String getSysCode(String uriSpace) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT dataSource ");
@@ -530,6 +624,15 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }    
     }
 
+    /**
+     * Returns the DataSource associated with a URISpace.
+     *
+     * Throws an exception if the URISpace is unknown.
+     *
+     * @param uriSpace A Known URISpace
+     * @return A DataSource. Never null, instead an Exception is thrown
+     * @throws BridgeDbSqlException For example if the uriSpace is not known.
+     */
     private DataSource getDataSource(String uriSpace) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT dataSource ");
