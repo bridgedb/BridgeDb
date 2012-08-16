@@ -18,7 +18,6 @@
 //
 package org.bridgedb.linkset.transative;
 
-import org.bridgedb.linkset.LinksetLoaderTest;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
 import org.junit.After;
@@ -26,7 +25,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

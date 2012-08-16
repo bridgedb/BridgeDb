@@ -19,7 +19,6 @@
 package org.bridgedb.sql;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * A wrapper around the individual SQL DataBase Drivers.

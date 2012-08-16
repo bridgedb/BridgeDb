@@ -18,7 +18,6 @@
 //
 package org.bridgedb.ws;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;

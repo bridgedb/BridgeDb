@@ -20,12 +20,9 @@ package org.bridgedb.rdf;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.linkset.constants.PavConstants;
