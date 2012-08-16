@@ -52,9 +52,9 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     @BeforeClass
     public static void setupURLs() throws IDMapperException{
       
-        URISpace1 = DataSource1.getURISpace(); 
-        URISpace2 = DataSource2.getURISpace(); 
-        URISpace3 = DataSource3.getURISpace(); 
+        URISpace1 = "http://www.foo.com/";
+        URISpace2 = "http://www.example.com/";
+        URISpace3 = "http://www.example.org#";
          
         link1to2 = URISpace1 + "->" + URISpace2;
         link1to3 = URISpace1 + "->" + URISpace3;
