@@ -19,7 +19,9 @@
 package org.bridgedb.statistics;
 
 /**
+ * Holder class for the main Meta Data of MappingSet.
  *
+ * Does not include everything in the void header but only what is captured in the SQL.
  * @author Christian
  */
 public class MappingSetInfo {
