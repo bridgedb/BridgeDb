@@ -19,8 +19,6 @@ import java.security.AccessControlException;
 
 import info.aduna.concurrent.locks.Lock;
 
-import org.openrdf.sail.LockManager;
-
 /**
  * Used to create a lock in a directory.
  * 

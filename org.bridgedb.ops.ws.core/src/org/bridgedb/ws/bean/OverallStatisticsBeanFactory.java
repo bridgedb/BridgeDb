@@ -19,7 +19,6 @@
 package org.bridgedb.ws.bean;
 
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.URLMapping;
 
 /**
  *

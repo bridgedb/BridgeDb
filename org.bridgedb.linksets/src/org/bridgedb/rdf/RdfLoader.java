@@ -19,7 +19,6 @@
 package org.bridgedb.rdf;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.url.URLListener;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
 

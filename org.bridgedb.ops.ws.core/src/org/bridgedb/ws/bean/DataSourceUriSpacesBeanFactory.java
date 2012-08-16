@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.DataSource;
-import org.bridgedb.DataSource.Builder;
 
 public class DataSourceUriSpacesBeanFactory{
 

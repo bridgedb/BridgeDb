@@ -24,7 +24,6 @@ import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 
 /**
  * This class depends on URLListenerTest having loaded the data.

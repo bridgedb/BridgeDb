@@ -27,7 +27,6 @@ import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.ws.WSOpsMapper;
 import org.bridgedb.ws.WSOpsService;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 
 /**
  * This class depends on URLListenerTest having loaded the data.

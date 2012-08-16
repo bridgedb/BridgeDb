@@ -18,17 +18,11 @@
 //
 package org.bridgedb.linkset;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.PrintStream;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.rdf.RDFValidator;
 import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.utils.Reporter;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
 

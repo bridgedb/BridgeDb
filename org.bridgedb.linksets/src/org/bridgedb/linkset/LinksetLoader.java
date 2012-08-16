@@ -20,9 +20,7 @@ package org.bridgedb.linkset;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -35,7 +33,6 @@ import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.OpenRDFException;
 
 /**
  *

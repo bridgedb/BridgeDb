@@ -17,19 +17,13 @@
 // limitations under the License.
 //
 package org.bridgedb.linkset;
-import org.bridgedb.linkset.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.rdf.RdfReader;
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.Reporter;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
 
