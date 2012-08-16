@@ -35,17 +35,33 @@ import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.Reporter;
 
 /**
+ * Main class for loading linksets.
  *
+ * The Main method can parse and either input or validate a linkset.
+ *
+ * @see usage() for a description of the paramters.
  * @author Christian
  */
 public class LinksetLoader {
     
     private static String CALLER_NAME = "org.bridgedb.linkset.LinksetLoader" ;
-    
+
+    /**
+     * Constructor for main and test classes
+     */
     LinksetLoader() {
-    	
     }
-    
+
+
+    /**
+     * Loads the linkset into existing data
+     * @param file Could be either a File or a directory
+     * @param arg "load" to add to the load data, "test" to add to the test data
+     *     anything else just validates
+     * @throws BridgeDbSqlException
+     * @throws IDMapperException
+     * @throws FileNotFoundException
+     */
     private static void parse(File file, String arg) 
     		throws BridgeDbSqlException, IDMapperException, FileNotFoundException {
     	if (!file.exists()) {
@@ -85,12 +101,34 @@ public class LinksetLoader {
         }
     }
 
+    /**
+     * Converts the fileName into a file and then calls parse
+     * Should only be called by main() or tests
+     *
+     * @param fileName name of a file or directory
+     * @param arg "load" to add to the load data, "test" to add to the test data
+     *     anything else just validates
+     * @throws IDMapperException
+     * @throws FileNotFoundException
+     */
     void parse (String fileName, String arg) 
     		throws IDMapperException, FileNotFoundException  {
         File file = new File(fileName);
         parse(file, arg);
     }
-            
+
+    /**
+     * Main entry poit for loading linksets.
+     *
+     * @seem usage() fr explanation of the paramters.
+     *
+     * Unpublisted second arguements of "new" and "testnew" will cause the clearing of all existing data.
+     * These will also recreate the database and rdf store.
+     * USE WITH CAUTION previous data can not be recovered!
+     *
+     * @param args
+     * @throws BridgeDbSqlException
+     */
     public static void main(String[] args) throws BridgeDbSqlException {
     	try {
     		if (args.length == 2){
