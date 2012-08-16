@@ -21,7 +21,7 @@ package org.bridgedb.linkset;
 import org.bridgedb.IDMapperException;
 
 /**
- *
+ * Exception thrown while working with Linksets
  * @author Christian
  */
 public class IDMapperLinksetException extends IDMapperException {
