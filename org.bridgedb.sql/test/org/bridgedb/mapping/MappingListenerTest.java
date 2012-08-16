@@ -22,6 +22,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTest;
 
 /**
+ * Extends the IDMapper Tests with a method to load the test data before running the tests.
  *
  * @author Christian
  */
@@ -34,6 +35,13 @@ public abstract class MappingListenerTest extends IDMapperTest{
     
     protected static MappingListener listener;
 
+    /**
+     * Method to load the test data.
+     *
+     * Should be called by a beforeClass method but only after it has set listener.
+     * 
+     * @throws IDMapperException
+     */
     public static void loadData() throws IDMapperException{
         int mappingSet = listener.registerMappingSet(DataSource1, TEST_PREDICATE, DataSource2, SYMETRIC, ORIGINAL);
         listener.insertLink(map1xref1.getId(), map1xref2.getId(), mappingSet, SYMETRIC);

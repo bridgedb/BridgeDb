@@ -26,6 +26,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
+ * Tests to be run on any class that implements IDMapper interface.
+ * Also tests the IDMapperCapabilities.
+ *
+ * Implementing tests have to set idMapper and capabilities
+ *
+ * Should be passed by any class loaded with the test data.
  *
  * @author Christian
  */
