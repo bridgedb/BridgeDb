@@ -18,7 +18,6 @@
 //
 package org.bridgedb.ws;
 
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperTestBase;
 

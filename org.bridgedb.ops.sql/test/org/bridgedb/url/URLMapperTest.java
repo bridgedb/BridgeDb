@@ -23,7 +23,6 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.Xref;
-import org.junit.Ignore;
 import java.util.Date;
 import org.junit.BeforeClass;
 import org.bridgedb.IDMapperException;

@@ -20,31 +20,19 @@ package org.bridgedb.ws;
 
 import java.util.List;
 
-import com.sun.jersey.api.client.Client;
-
 import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.ws.bean.CapabilitiesBean;
-import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
-import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.MappingSupportedBean;
-import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLSearchBean;
-import org.bridgedb.ws.bean.XrefMapBean;
 import org.bridgedb.ws.bean.XrefBean;
-import org.bridgedb.ws.bean.XrefExistsBean;
 
 /**
  *
