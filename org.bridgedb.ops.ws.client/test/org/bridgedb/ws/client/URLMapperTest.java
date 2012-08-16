@@ -38,4 +38,9 @@ public class URLMapperTest  extends org.bridgedb.url.URLMapperTest{
         Xref result = urlMapper.toXref(mapBadURL1);
     }
 
+    @Test
+    @Override //TOO slow
+    public void testGetOverallStatistics() throws IDMapperException {
+    }
+
 }
