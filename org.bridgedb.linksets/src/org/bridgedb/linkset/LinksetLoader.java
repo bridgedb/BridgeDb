@@ -49,7 +49,7 @@ public class LinksetLoader {
     /**
      * Constructor for main and test classes
      */
-    LinksetLoader() {
+    public LinksetLoader() {
     }
 
 
@@ -111,7 +111,7 @@ public class LinksetLoader {
      * @throws IDMapperException
      * @throws FileNotFoundException
      */
-    void parse (String fileName, String arg) 
+    public void parse (String fileName, String arg) 
     		throws IDMapperException, FileNotFoundException  {
         File file = new File(fileName);
         parse(file, arg);
