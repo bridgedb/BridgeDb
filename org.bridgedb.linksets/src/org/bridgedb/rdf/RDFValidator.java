@@ -91,7 +91,7 @@ public class RDFValidator implements RdfLoader{
 
 	private void validateVoidDescription() {
 		linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, 
-				VoidConstants.DATASET_DESCRIPTION);
+				VoidConstants.DATASET);
         checkObject(linksetResource, DctermsConstants.TITLE);
         checkObject(linksetResource, DctermsConstants.DESCRIPTION);
         checkObject(linksetResource, DctermsConstants.CREATOR);
