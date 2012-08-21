@@ -21,12 +21,15 @@ package org.bridgedb.linkset.constants;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
-public class FoafConstants {
+/**
+ *
+ */
+public class VoagConstants {
 
-	private static final String foafns = "http://xmlns.com/foaf/0.1/";
-	
-	public static final URI PRIMARY_TOPIC = new URIImpl(foafns + "primaryTopic");
-	public static final URI HOMEPAGE = new URIImpl(foafns + "homepage");
-	public static final URI PAGE = new URIImpl(foafns + "page");
+    private static final String voigns = "http://voag.linkedmodel.org/schema/voag#";
     
+    public static final URI FREQUENCY_OF_CHANGE = new URIImpl(voigns + "frequencyOfChange");
+
+    
+
 }

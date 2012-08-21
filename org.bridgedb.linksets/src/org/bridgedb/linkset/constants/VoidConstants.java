@@ -28,15 +28,18 @@ public class VoidConstants {
 
     private static final String voidns = "http://rdfs.org/ns/void#";
     
-    public static final URI DATASET_DESCRIPTION = new URIImpl(voidns + "DatasetDescription");
+    public static final URI DATA_DUMP = new URIImpl(voidns + "	void:dataDump");
     public static final URI DATASET = new URIImpl(voidns + "Dataset");
+    public static final URI EXAMPLE_RESOURCE = new URIImpl(voidns + "exampleResource");
     public static final URI LINK_PREDICATE = new URIImpl(voidns + "linkPredicate");
     public static final URI LINKSET = new URIImpl(voidns + "Linkset");
     public static final URI TARGET = new URIImpl(voidns + "target");
     public static final URI SUBJECTSTARGET = new URIImpl(voidns + "subjectsTarget");
     public static final URI OBJECTSTARGET = new URIImpl(voidns + "objectsTarget");
     //public static final String SUBSET = voidns + "subset";
+    public static final URI SPARQL_ENDPOINT = new URIImpl(voidns + "sparqlEndpoin");
     public static final URI URI_SPACE = new URIImpl(voidns + "uriSpace");
+    public static final URI VOCABULARY = new URIImpl(voidns + "vocabulary");
 
     
 
