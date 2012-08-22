@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: org.bridgedb.util.hmdb.Hmdb2Gdb
+Class-Path: org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar
+  derby.jar org.bridgedb.rdb.construct.jar
+
