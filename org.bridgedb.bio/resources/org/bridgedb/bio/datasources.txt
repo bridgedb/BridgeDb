@@ -25,8 +25,7 @@ BeetleBase		http://beetlebase.org/	http://beetlebase.org/cgi-bin/gbrowse/BeetleB
 BIND		http://www.bind.ca/	http://www.bind.ca/Action?identifier=bindid&idsearch=$id		pathway		1	urn:miriam:bind	^\d+$	BIND
 BindingDB		http://www.bindingdb.org/bind/index.jsp	http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=$id	22360			1	urn:miriam:bindingDB	^\d+$	BindingDB
 BioCatalogue		http://www.biocatalogue.org/	http://www.biocatalogue.org/services/$id	614			1	urn:miriam:biocatalogue.service	^\d+$	BioCatalogue
-BioCyc		http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX			1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc
-BioCyc	Bc	http://www.biocyc.org	http://www.biocyc.org/getid?id=$id	EcoCyc:MON0-2657	gene		1	Bc	(Meta|Eco)Cyc:.+	
+BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPLX			1	urn:miriam:biocyc	^\w+\:[A-Za-z0-9-]+$	BioCyc
 BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	probe		1	urn:miriam:biogrid	^\d+$	BioGRID
 BioModels Database		http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database
 BioNumbers		http://www.bionumbers.hms.harvard.edu/search.aspx	http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=$id&ver=1	104674	experiment		1	urn:miriam:bionumbers	^\d+$	BioNumbers

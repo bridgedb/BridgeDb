@@ -134,7 +134,7 @@ public class Hmdb2Gdb
 
 	private void addCompound (Compound c) throws IDMapperException
 	{
-		Xref ref = new Xref (c.idHmdb, BioDataSource.HMDB);
+		Xref ref = c.idHmdb;
 		error += simpleGdb.addGene(ref);
 		error += simpleGdb.addLink(ref, ref);
 		error += simpleGdb.addAttribute(ref, "Symbol", c.symbol);
@@ -143,7 +143,7 @@ public class Hmdb2Gdb
 		if (c.symbol != null)
 		{
 			// hmdb id is actually also the NUGOWIKI id.
-			Xref right = new Xref (c.idHmdb, BioDataSource.NUGOWIKI);
+			Xref right = c.idHmdb;
 			error += simpleGdb.addGene (right);
 			error += simpleGdb.addLink (ref, right);
 		}
@@ -153,37 +153,32 @@ public class Hmdb2Gdb
 			error += simpleGdb.addAttribute(ref, "InChI", c.inchi);
 		}
 		
-		if (c.idKegg != null) for (String id : c.idKegg)
+		for (Xref right : c.idKegg)
 		{
-			Xref right = new Xref (id, BioDataSource.KEGG_COMPOUND);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idChebi != null) for (String id : c.idChebi)
+		for (Xref right : c.idChebi)
 		{
-			Xref right = new Xref ("CHEBI:" + id, BioDataSource.CHEBI);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idPubchem != null) for (String id : c.idPubchem)
+		for (Xref right : c.idPubchem)
 		{
-			Xref right = new Xref (id, BioDataSource.PUBCHEM);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idCas != null) for (String id : c.idCas)
+		for (Xref right : c.idCas)
 		{
-			Xref right = new Xref (id, BioDataSource.CAS);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idWikipedia != null) for (String id : c.idWikipedia)
+		for (Xref right : c.idWikipedia)
 		{
-			Xref right = new Xref (id, BioDataSource.WIKIPEDIA);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
