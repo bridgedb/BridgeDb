@@ -30,7 +30,7 @@ public class ParseHmdb
 	 * represents some information from
 	 * a single HMDB metabocard
 	 */
-	static class Compound
+	public static class Compound
 	{
 		/** store a key, value field */
 		void storeField (String key, String value)
@@ -86,18 +86,18 @@ public class ParseHmdb
 			}
 		}
 
-		String idHmdb = null;
-		String symbol = null;
-		String formula = null;
-		String[] idKegg = null;
-		String[] idPubchem = null;
-		String[] idChebi = null;
-		String[] idCas = null;
-		String[] idBioc = null;
-		String[] idWikipedia = null;
-		String smiles = null;
-		String[] synonyms = null;
-		String inchi = null;
+		public String idHmdb = null;
+		public String symbol = null;
+		public String formula = null;
+		public String[] idKegg = null;
+		public String[] idPubchem = null;
+		public String[] idChebi = null;
+		public String[] idCas = null;
+		public String[] idBioc = null;
+		public String[] idWikipedia = null;
+		public String smiles = null;
+		public String[] synonyms = null;
+		public String inchi = null;
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class ParseHmdb
 	 * not a valid metabocards file, or (possibly)
 	 * that the metabocards format has changed.
 	 */
-	static class ParseException extends Exception
+	public static class ParseException extends Exception
 	{
 		ParseException (String message)
 		{
@@ -123,7 +123,7 @@ public class ParseHmdb
 	 * Reads a single metabocard from a text file.
 	 * returns null if there are no more records to read.
 	 */
-	Compound readNext (LineNumberReader reader) throws IOException, ParseException
+	public Compound readNext (LineNumberReader reader) throws IOException, ParseException
 	{
 		Compound result = new Compound();;
 
