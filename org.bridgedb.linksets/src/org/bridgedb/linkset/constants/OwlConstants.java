@@ -30,9 +30,9 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class OwlConstants {
 
-    private static final String owlns = "http://www.w3.org/2002/07/owl#";
+    private static final String xmlschemans = "http://www.w3.org/2002/07/owl#";
     
-    public static final URI EQUIVALENT_CLASS = new URIImpl(owlns + "equivalentClass");
-    public static final URI SAME_AS = new URIImpl(owlns + "sameAs");
+    public static final URI EQUIVALENT_CLASS = new URIImpl(xmlschemans + "equivalentClass");
+    public static final URI SAME_AS = new URIImpl(xmlschemans + "sameAs");
 
 }

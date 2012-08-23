@@ -46,9 +46,25 @@ public class SingletonValue extends ValueBase{
     }
 
     @Override
-    boolean hasValue() {
+    boolean hasValue(){
         return value != null;
     }
+
+    @Override
+    boolean correctType() {
+        if (value == null) { return false; }
+        return correctType(value);
+    }
     
-    
+    @Override
+    public String toString(){
+        return super.toString() + "\n\tValue: " + value;
+    }
+
+    @Override
+    void appendFormatReport(StringBuilder builder) {
+        builder.append("ERROR: " + name + " has a Value: " + value + "\n"
+                + "\tValue has the class " + Value.class + "\n"
+                + "\tThe Expected Type was " + type + ".\n");
+    }
 }

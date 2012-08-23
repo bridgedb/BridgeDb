@@ -55,4 +55,24 @@ public class MultipleValue extends ValueBase{
         return results;
     }
 
+    @Override
+    boolean correctType() {
+        if (values == null){ return true; } //no type issue if there is nothing to type
+        for (Value value:values){
+            if (!correctType(value)) { return false; }
+        }
+        return true;
+    }
+
+    @Override
+    void appendFormatReport(StringBuilder builder) {
+        builder.append("ERROR: " + name + " has an expected type of " + type + "\n");
+        builder.append("\tThe following Values where found to be incorrect\n");
+        for (Value value:values){
+            if (!correctType(value)) { 
+                 builder.append("\t" + value + " of class " + value.getClass() + "\n");
+            }
+        }
+    }
+
 }
