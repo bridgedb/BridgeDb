@@ -174,7 +174,7 @@ public class TransativeCreator {
     private void registerVoIDDescription(String linksetURI) throws RDFHandlerException {
     	output.append("<> ");
     	writeValue(RdfConstants.TYPE_URI);
-    	writeValue(VoidConstants.DATASET_DESCRIPTION);
+    	writeValue(VoidConstants.DATASET);
     	output.append(";\n");
     	output.append("\t");
     	writeValue(DctermsConstants.TITLE);

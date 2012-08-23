@@ -75,27 +75,5 @@ public class DataSetMetaData extends MetaData{
         values.add(new SingletonValue("Sparql End Point",VoidConstants.SPARQL_ENDPOINT, URI.class, RequirementLevel.MAY));
         values.add(new SingletonValue("Frequency Of Change",VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.class, RequirementLevel.SHOULD));        
     }
-    
-    @Override
-    public boolean isMinimallyValid() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isValid() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean isFullValid() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String validityReport(boolean full) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-   
-
 
 }

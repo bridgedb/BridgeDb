@@ -4,6 +4,9 @@
  */
 package org.bridgedb.metadata;
 
+import java.lang.reflect.Field;
+import org.bridgedb.linkset.constants.FrequencyOfChange;
+import org.bridgedb.linkset.constants.HasURI;
 import org.bridgedb.linkset.constants.RdfConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
 import org.openrdf.model.Resource;
@@ -29,5 +32,10 @@ public class tester {
    //     metaData.addStatement(statement);
    //     metaData.initialise();
   //      System.out.println(metaData.showAll());
+        Class testClass = String.class;
+        String test = "hello";
+        System.out.println(Value.class.isAssignableFrom(subject.getClass()));
+        FrequencyOfChange x = FrequencyOfChange.DAILY;
+        System.out.println (x);
     }
 }
