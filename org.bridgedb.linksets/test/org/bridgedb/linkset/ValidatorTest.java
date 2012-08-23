@@ -23,17 +23,17 @@ import java.io.IOException;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.BridgeDbSqlException;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
 
 /**
  *
  * @author Christian
- */
-/**
  * @author Alasdair
  *
  */
+@Ignore
 public class ValidatorTest {
 	    
     @Test

@@ -21,7 +21,9 @@ public class RDFData {
     }
        
     public void addStatement(Statement statement){
-        otherStatements.add(statement);
+        if (statement != null) {
+            otherStatements.add(statement);
+        }
     }
     
     final void addOthers(StringBuilder builder){

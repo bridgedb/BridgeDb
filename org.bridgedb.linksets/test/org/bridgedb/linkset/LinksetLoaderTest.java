@@ -24,12 +24,14 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.Reporter;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
 
 /**
  * @author Christian
  */
+@Ignore
 public class LinksetLoaderTest {
         
     @BeforeClass

@@ -6,6 +6,7 @@ package org.bridgedb.metadata;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.openrdf.model.Resource;
@@ -25,6 +26,8 @@ public abstract class MetaData extends RDFData {
     Set<Statement> rawStatements;
     
     List<ValueBase> values;
+    
+    static final String CLEAR_REPORT = "No issues found";
 
     public MetaData(Resource id, RDFData input){
         rawStatements = new HashSet<Statement>();
@@ -55,16 +58,36 @@ public abstract class MetaData extends RDFData {
         otherStatements.add(statement);
     }
     
-    //Check if the minimal information to load the linkset is provided.
-    public abstract boolean isMinimallyValid();
-
-    //Check if all the MUST information is provided.
-    public abstract boolean isValid();
+    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
+        for (ValueBase valueBase:values){
+            if ((valueBase.level.compareTo(forceLevel) <= 0) && !valueBase.hasValue(exceptAlternatives)){
+                return false;
+            }
+        }
+        return true;
+    }
     
-    //Check if all the SHOULD information is provided.
-    public abstract boolean isFullValid();
+    public boolean hasCorrectTypes(){
+        for (ValueBase valueBase:values){
+            if (valueBase.hasValue()){
+                if (!valueBase.correctType()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     
-    public abstract String validityReport(boolean full);
+    public String validityReport(RequirementLevel forceLevel, boolean exceptAlternatives, boolean includeWarnings){
+        StringBuilder builder = new StringBuilder();
+        for (ValueBase valueBase:values){
+            valueBase.appendValidityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+        }
+        if (builder.length() == 0){
+            return CLEAR_REPORT;
+        }
+        return builder.toString();
+    }
 
     public String showAllAsRDF(){
         StringBuilder builder = new StringBuilder();
@@ -141,10 +164,11 @@ public abstract class MetaData extends RDFData {
 
     Set<Value> getAllByIdPredicate(RDFData input, URI predicate){
         HashSet<Value> results = new HashSet<Value>();
-        for (Statement statement: input.otherStatements){
+        for (Iterator<Statement> iterator = input.otherStatements.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
             if (statement.getSubject().equals(id)){
                 if (statement.getPredicate().equals(predicate)){
-                    input.otherStatements.remove(statement);
+                    iterator.remove();
                     rawStatements.add(statement);
                     results.add (statement.getObject());
                 }

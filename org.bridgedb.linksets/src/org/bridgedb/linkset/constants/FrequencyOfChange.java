@@ -11,7 +11,7 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
-public enum FrequencyOfChange {
+public enum FrequencyOfChange implements HasURI {
     TRIENIAL ("triennial"),
     BIENNIAL ("biennial"),
     ANNUAL ("annual"),
@@ -32,10 +32,16 @@ public enum FrequencyOfChange {
     
     private URI uri;
     
-    private static final String freqns = "http://purl.org/cld/freq/";
+    public static final String NAME_SPACE = "http://purl.org/cld/freq/";
     
     private FrequencyOfChange(String localName){
-        uri = new URIImpl (freqns + localName);
+        uri = new URIImpl (NAME_SPACE + localName);
     }
-
+    
+    @Override
+    public URI getURI(){
+        this.values();
+        return uri;
+    }
+    
 }
