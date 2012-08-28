@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.bridgedb.linkset.constants.RdfConstants;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -37,7 +38,17 @@ public abstract class MetaData extends RDFData {
         readFromInput(input);
     }
        
+    public MetaData(RDFData input){
+        rawStatements = new HashSet<Statement>();
+        values = new ArrayList<ValueBase> ();
+        setupValues();
+        id = getByPredicateObject(input, RdfConstants.TYPE_URI, getResourceType());
+        readFromInput(input);
+    }
+
     abstract void setupValues();
+    
+    abstract URI getResourceType();
     
     private void readFromInput(RDFData input) {
         for (ValueBase valueBase:values){
@@ -122,19 +133,23 @@ public abstract class MetaData extends RDFData {
         return builder.toString();
     }
     
-    /*Resource getByPredicateObject(URI predicate, Value object){
-        for (Statement statement: otherStatements){
+    Resource getByPredicateObject(URI predicate, Value object){
+        return getByPredicateObject(this, predicate, object);
+    }
+    
+    Resource getByPredicateObject(RDFData input, URI predicate, Value object){
+        for (Statement statement: input.otherStatements){
             if (statement.getPredicate().equals(predicate)){
                 if (statement.getObject().equals(object)){
-                    otherStatements.remove(statement);
+                    input.otherStatements.remove(statement);
                     rawStatements.add(statement);
                     return statement.getSubject();
                 }
             }
         }  
         return null;
-    }*/
-    
+    }
+
     Value getByIdPredicate(RDFData input, URI predicate){
         for (Statement statement: input.otherStatements){
             if (statement.getSubject().equals(id)){
@@ -147,7 +162,7 @@ public abstract class MetaData extends RDFData {
         }  
         return null;
     }
-
+    
     /*Set<Value> getAllBySubjectPredicate(Resource subject, URI predicate){
         HashSet<Value> results = new HashSet<Value>();
         for (Statement statement: otherStatements){

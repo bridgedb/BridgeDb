@@ -33,6 +33,10 @@ public class DataSetMetaData extends MetaData{
         super(id, input);
     }
     
+    public DataSetMetaData(RDFData input){
+        super(input);
+    }
+
     void setupValues(){   
         //Type is used seperately to extract the id
         values.add(new SingletonValue("Title", DctermsConstants.TITLE, String.class, RequirementLevel.MUST));
@@ -74,6 +78,11 @@ public class DataSetMetaData extends MetaData{
         values.add(new SingletonValue("Data Dump",VoidConstants.DATA_DUMP, URI.class, RequirementLevel.MUST));
         values.add(new SingletonValue("Sparql End Point",VoidConstants.SPARQL_ENDPOINT, URI.class, RequirementLevel.MAY));
         values.add(new SingletonValue("Frequency Of Change",VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.class, RequirementLevel.SHOULD));        
+    }
+
+    @Override
+    URI getResourceType() {
+        return VoidConstants.DATASET;
     }
 
 }
