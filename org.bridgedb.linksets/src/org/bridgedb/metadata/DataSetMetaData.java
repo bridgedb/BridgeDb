@@ -26,6 +26,8 @@ import org.openrdf.model.Value;
  */
 public class DataSetMetaData extends MetaData{
 
+    public static final URI RESOURCE_TYPE = VoidConstants.DATASET;
+            
     DataSetMetaData parent;
     Set<DataSetMetaData> subsets;
     
@@ -82,7 +84,7 @@ public class DataSetMetaData extends MetaData{
 
     @Override
     URI getResourceType() {
-        return VoidConstants.DATASET;
+        return RESOURCE_TYPE;
     }
 
 }

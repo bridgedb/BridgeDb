@@ -133,4 +133,6 @@ public abstract class ValueBase {
     }
 
     abstract void appendFormatReport (StringBuilder builder);
+
+    abstract void show(StringBuilder builder);
  }

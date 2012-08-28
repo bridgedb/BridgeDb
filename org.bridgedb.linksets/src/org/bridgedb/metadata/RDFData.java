@@ -28,13 +28,18 @@ public class RDFData {
     
     final void addOthers(StringBuilder builder){
         for (Statement statememt: otherStatements){
+            tab(builder);
             builder.append(statememt);
             newLine(builder);
         }        
     }
        
-    final void newLine(StringBuilder builder){
+    static final void newLine(StringBuilder builder){
         builder.append("\n");
+    }
+
+    static final void tab(StringBuilder builder){
+        builder.append("\t");
     }
 
     void addStatement(StringBuilder builder, Statement statement){
