@@ -67,4 +67,13 @@ public class SingletonValue extends ValueBase{
                 + "\tValue has the class " + Value.class + "\n"
                 + "\tThe Expected Type was " + type + ".\n");
     }
+
+    @Override
+    void show(StringBuilder builder) {
+        MetaData.tab(builder);
+        builder.append(name);
+        builder.append(": ");
+        builder.append(getValueAsString());
+        MetaData.newLine(builder);        
+    }
 }

@@ -124,5 +124,37 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
         assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }
     
-    //Extra statemement
+    @Test
+    public void testMissingRequiredValue(){
+        Reporter.report("HasMissingRequiredValues");
+        licenseStatement = null;
+        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+    } 
+
+    @Test
+    public void testAlternativengRequiredValue(){
+        Reporter.report("HasRequiredValues");
+        versionStatement = null;
+        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
+    } 
+    
+    @Test
+    public void testHasCorrectTypesBadDate(){
+        Reporter.report("isHasCorrectTypesBadDate");
+        modifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, TITLE);  
+        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        assertFalse(metaData.hasCorrectTypes());
+    }
+ 
+    @Test
+    public void testMissingValidityReport(){
+        Reporter.report("MissingValidityReport");
+        titleStatement = null;
+        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+    }
 }

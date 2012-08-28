@@ -75,4 +75,20 @@ public class MultipleValue extends ValueBase{
         }
     }
 
+    @Override
+    void show(StringBuilder builder) {
+        MetaData.tab(builder);
+        builder.append(name);
+        builder.append(": ");
+        String[] values = getValuesAsString();
+        builder.append(values[0]);
+        MetaData.newLine(builder);        
+        for (int i = 1; i< values.length; i++){
+            MetaData.tab(builder);
+            MetaData.tab(builder);
+            builder.append(values[i]);
+            MetaData.newLine(builder);        
+        }
+    }
+
 }
