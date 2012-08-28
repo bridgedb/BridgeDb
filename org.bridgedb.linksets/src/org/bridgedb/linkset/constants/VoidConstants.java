@@ -30,6 +30,7 @@ public class VoidConstants {
     
     public static final URI DATA_DUMP = new URIImpl(voidns + "	void:dataDump");
     public static final URI DATASET = new URIImpl(voidns + "Dataset");
+    public static final URI DATASET_DESCRIPTION = new URIImpl(voidns + "DatasetDescription");
     public static final URI EXAMPLE_RESOURCE = new URIImpl(voidns + "exampleResource");
     public static final URI LINK_PREDICATE = new URIImpl(voidns + "linkPredicate");
     public static final URI LINKSET = new URIImpl(voidns + "Linkset");
