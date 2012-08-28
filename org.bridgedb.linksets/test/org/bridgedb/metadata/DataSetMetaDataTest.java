@@ -132,6 +132,14 @@ public class DataSetMetaDataTest {
     } 
 
     @Test
+    public void testAutoFindId(){
+        Reporter.report("AutoFindId");
+        DataSetMetaData metaData = new DataSetMetaData(loadRDFData());
+        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+    } 
+
+    @Test
     public void testMissingRequiredValue(){
         Reporter.report("HasMissingRequiredValues");
         licenseStatement = null;
