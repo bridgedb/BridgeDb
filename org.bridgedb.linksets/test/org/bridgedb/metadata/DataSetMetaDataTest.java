@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -78,11 +79,6 @@ public class DataSetMetaDataTest {
     Statement exampleStatement3 = new StatementImpl(ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE3);
     Statement focStatement = new StatementImpl(ID, VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.QUARTERLY.getURI());
     
-       //values.add(new MultipleValue("Vocabularies",VoidConstants.VOCABULARY, URI.class, RequirementLevel.SHOULD));
-        //values.add(new MultipleValue("Topics",DctermsConstants.SUBJECT, URI.class, RequirementLevel.SHOULD));
-        //values.add(new MultipleValue("Examples",VoidConstants.EXAMPLE_RESOURCE, Resource.class, RequirementLevel.SHOULD));
-        //values.add(new SingletonValue("Frequency Of Change",VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.class, RequirementLevel.SHOULD));        
-
     public DataSetMetaDataTest() throws DatatypeConfigurationException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
@@ -94,7 +90,7 @@ public class DataSetMetaDataTest {
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    private RDFData loadRDFData(){
+    RDFData loadRDFData(){
         RDFData data = new RDFData();
         data.addStatement(idStatement);
         data.addStatement(titleStatement);

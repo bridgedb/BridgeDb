@@ -193,12 +193,23 @@ public abstract class MetaData extends RDFData {
     }
 
     void copyById(RDFData input){
-        for (Statement statement: input.otherStatements){
+        for (Iterator<Statement> iterator = input.otherStatements.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
             if (statement.getSubject().equals(id)){
-                input.otherStatements.remove(statement);
+                iterator.remove();
                 rawStatements.add(statement);
             }
         }  
     }
 
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        for (Statement statement: otherStatements){
+            addStatement(builder, statement);
+        } 
+        for (Statement statement: rawStatements){
+            addStatement(builder, statement);
+        } 
+        return builder.toString();
+    }
 }
