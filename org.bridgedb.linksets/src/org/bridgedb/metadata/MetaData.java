@@ -50,7 +50,7 @@ public abstract class MetaData extends RDFData {
     
     abstract URI getResourceType();
     
-    private void readFromInput(RDFData input) {
+    void readFromInput(RDFData input) {
         for (ValueBase valueBase:values){
             if (valueBase.multipleValuesAllowed()){
                Set<Value> values = getAllByIdPredicate(input, valueBase.predicate);
@@ -89,11 +89,16 @@ public abstract class MetaData extends RDFData {
         return true;
     }
     
-    public String validityReport(RequirementLevel forceLevel, boolean exceptAlternatives, boolean includeWarnings){
-        StringBuilder builder = new StringBuilder();
+    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
+            boolean includeWarnings){
         for (ValueBase valueBase:values){
             valueBase.appendValidityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
-        }
+        }        
+    }
+    
+    public String validityReport(RequirementLevel forceLevel, boolean exceptAlternatives, boolean includeWarnings){
+        StringBuilder builder = new StringBuilder();
+        validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
         if (builder.length() == 0){
             return CLEAR_REPORT;
         }
@@ -110,26 +115,26 @@ public abstract class MetaData extends RDFData {
         return builder.toString();
     }
     
-    public String showAll(RequirementLevel forceLevel){
-        StringBuilder builder = new StringBuilder();
+    void addInfo(StringBuilder builder, RequirementLevel forceLevel){
         builder.append("ID: ");
         builder.append(id);
         newLine(builder);
         for (ValueBase valueBase:values){
             if ((valueBase.level.compareTo(forceLevel) <= 0) || valueBase.hasValue()){
-                if (valueBase instanceof SingletonValue){
-                    builder.append(valueBase.name);
-                    builder.append(": ");
-                    builder.append(((SingletonValue)valueBase).getValueAsString());
-                    newLine(builder);        
-                } else if (valueBase instanceof  MultipleValue){
-                    
-                } else {
-                    throw new UnsupportedOperationException("Unexpected ValueBase Class " + valueBase.getClass());
-                }
+                valueBase.show(builder);
             }
         }
-        addOthers(builder);
+        addChildren(builder, forceLevel);
+        addOthers(builder);        
+    }
+    
+    void addChildren(StringBuilder builder,  RequirementLevel forceLevel) {
+        //No children here
+    }
+
+    public String showAll(RequirementLevel forceLevel){
+        StringBuilder builder = new StringBuilder();
+        addInfo(builder, forceLevel);
         return builder.toString();
     }
     
@@ -212,4 +217,5 @@ public abstract class MetaData extends RDFData {
         } 
         return builder.toString();
     }
+
 }

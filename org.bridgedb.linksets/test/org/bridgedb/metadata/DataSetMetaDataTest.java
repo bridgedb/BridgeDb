@@ -16,13 +16,8 @@ import org.bridgedb.linkset.constants.RdfConstants;
 import org.bridgedb.linkset.constants.VoagConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
 import org.bridgedb.utils.Reporter;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -173,5 +168,13 @@ public class DataSetMetaDataTest {
         Reporter.report("ValidityReport");
         DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
         assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+    }
+
+    @Test
+    public void testMissingValidityReport(){
+        Reporter.report("MissingValidityReport");
+        titleStatement = null;
+        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }
 }
