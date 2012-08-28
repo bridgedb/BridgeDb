@@ -37,4 +37,20 @@ public class RDFData {
         builder.append("\n");
     }
 
+    void addStatement(StringBuilder builder, Statement statement){
+        builder.append(statement.getSubject());
+        builder.append(" ");
+        builder.append(statement.getPredicate());
+        builder.append(" ");
+        builder.append(statement.getObject());
+        builder.append("\n");        
+    }
+    
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        for (Statement statement: otherStatements){
+            addStatement(builder, statement);
+        } 
+        return builder.toString();
+    }
 }
