@@ -4,6 +4,7 @@
  */
 package org.bridgedb.linkset.constants;
 
+import org.bridgedb.utils.Reporter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,7 +44,7 @@ public class HasURITest {
      */
     @Test
     public void testGetURI() {
-        System.out.println("getURI");
+        Reporter.report("getURI");
         HasURI instance = FrequencyOfChange.DAILY;
         URI expResult = new URIImpl (FrequencyOfChange.NAME_SPACE + "daily");
         URI result = instance.getURI();
@@ -55,7 +56,7 @@ public class HasURITest {
      */
     @Test
     public void testLegalValueTest() {
-        System.out.println("LegalValueTest");
+        Reporter.report("LegalValueTest");
         Class checkClass = FrequencyOfChange.class;
         URI check = new URIImpl (FrequencyOfChange.NAME_SPACE + "daily");
         Object[] hasUris = checkClass.getEnumConstants();
@@ -74,7 +75,7 @@ public class HasURITest {
      */
     @Test
     public void testIlegalValueTest() {
-        System.out.println("IlegalValueTest");
+        Reporter.report("IlegalValueTest");
         Class checkClass = FrequencyOfChange.class;
         URI check = new URIImpl (FrequencyOfChange.NAME_SPACE + "NOTVALID");
         Object[] hasUris = checkClass.getEnumConstants();

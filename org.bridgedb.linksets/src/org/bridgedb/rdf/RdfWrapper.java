@@ -480,7 +480,6 @@ public class RdfWrapper {
     private static void load() throws IOException{
         if (loadByEnviromentVariable()) return;
         if (loadByCatalinaHomeConfigs()) return;
-//        System.out.println("RdfWrapper.load(): here");
         if (loadDirectly()) return;
         if (loadFromConfigs()) return;
         if (loadFromParentConfigs()) return;
