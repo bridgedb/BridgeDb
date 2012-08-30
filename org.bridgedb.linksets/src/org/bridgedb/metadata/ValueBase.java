@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -88,6 +89,20 @@ public abstract class ValueBase {
                     XMLGregorianCalendar test = literal.calendarValue();
                     return true;
                 } catch (IllegalArgumentException e){
+                    Reporter.report(type + " != " + value.getClass() + " ~ " + e);
+                    return false;
+                }
+            } else {
+                Reporter.report(type + " != " + value.getClass()+ " not Literal");
+                return false; 
+            }
+        } else if (type == Integer.class){
+            if (value instanceof Literal) {
+                Literal literal = (Literal)value;
+                try {
+                    BigInteger test = literal.integerValue();
+                    return true;
+                } catch (NumberFormatException e){
                     Reporter.report(type + " != " + value.getClass() + " ~ " + e);
                     return false;
                 }
