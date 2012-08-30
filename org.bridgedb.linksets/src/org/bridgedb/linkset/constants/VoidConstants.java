@@ -35,6 +35,7 @@ public class VoidConstants {
     public static final URI LINK_PREDICATE = new URIImpl(voidns + "linkPredicate");
     public static final URI LINKSET = new URIImpl(voidns + "Linkset");
     public static final URI TARGET = new URIImpl(voidns + "target");
+    public static final URI TRIPLES = new URIImpl(voidns + "triples");
     public static final URI SUBJECTSTARGET = new URIImpl(voidns + "subjectsTarget");
     public static final URI OBJECTSTARGET = new URIImpl(voidns + "objectsTarget");
     //public static final String SUBSET = voidns + "subset";

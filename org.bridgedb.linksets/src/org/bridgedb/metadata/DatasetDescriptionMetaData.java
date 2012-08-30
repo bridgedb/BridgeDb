@@ -19,9 +19,7 @@ import org.openrdf.model.URI;
  *
  * @author Christian
  */
-public class DatasetDescriptionMetaData extends MetaData{
-
-    Set<DataSetMetaData> dataSets;
+public class DatasetDescriptionMetaData extends DataSetCollectionMetaData{
     
     public DatasetDescriptionMetaData(Resource id, RDFData input){
         super(id, input);
@@ -48,7 +46,9 @@ public class DatasetDescriptionMetaData extends MetaData{
     @Override
     void readFromInput(RDFData input) {
         super.readFromInput(input);
-        dataSets = new HashSet<DataSetMetaData>(); 
+        if (dataSets == null){
+            dataSets = new HashSet<DataSetMetaData>(); 
+        }
         Resource datasetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE);
         while (datasetId != null){
             dataSets.add(new DataSetMetaData(datasetId, input));
@@ -56,35 +56,4 @@ public class DatasetDescriptionMetaData extends MetaData{
         }
     }
     
-    @Override
-    void addChildren(StringBuilder builder, RequirementLevel forceLevel) {
-        for (DataSetMetaData dataset:dataSets){
-            dataset.addInfo(builder, forceLevel);
-        }
-        //No children here
-    }
-
-    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
-        if (!super.hasRequiredValues(forceLevel, exceptAlternatives)) { return false; }
-        for (DataSetMetaData dataset:dataSets){
-            if (!dataset.hasRequiredValues(forceLevel, exceptAlternatives)) { return false; }
-        }
-        return true;
-    }
-
-    public boolean hasCorrectTypes(){
-        if (!super.hasCorrectTypes()) { return false; }
-        for (DataSetMetaData dataset:dataSets){
-            if (!dataset.hasCorrectTypes()) { return false; }
-        }
-        return true;
-    }
-
-    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
-            boolean includeWarnings){
-        super.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
-        for (DataSetMetaData dataset:dataSets){
-            dataset.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
-        }
-    }
 }
