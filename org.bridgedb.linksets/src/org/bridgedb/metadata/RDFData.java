@@ -7,6 +7,7 @@ package org.bridgedb.metadata;
 import java.util.HashSet;
 import java.util.Set;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
 
 /**
  *
@@ -49,6 +50,15 @@ public class RDFData {
         builder.append(" ");
         builder.append(statement.getObject());
         builder.append("\n");        
+    }
+
+    public boolean hasPredicate(URI predicate){
+        for (Statement statement: otherStatements){
+            if (statement.getPredicate().equals(predicate)){
+                return true;
+            }
+        }   
+        return false;
     }
     
     public String toString(){
