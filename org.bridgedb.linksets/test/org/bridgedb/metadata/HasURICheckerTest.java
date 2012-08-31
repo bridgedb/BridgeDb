@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.junit.Ignore;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.model.Value;

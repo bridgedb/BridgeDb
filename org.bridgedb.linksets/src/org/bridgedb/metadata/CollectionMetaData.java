@@ -11,37 +11,44 @@ import org.openrdf.model.Resource;
  *
  * @author Christian
  */
-public abstract class DataSetCollectionMetaData extends MetaData{
+public abstract class CollectionMetaData extends MetaData{
 
-    Set<DataSetMetaData> dataSets; 
+    private Set<MetaData> collection; 
     
-    public DataSetCollectionMetaData(Resource id, RDFData input){
+    public CollectionMetaData(Resource id, RDFData input){
         super(id, input);
     }
     
-    public DataSetCollectionMetaData(RDFData input){
+    public CollectionMetaData(RDFData input){
         super(input);
     }
 
+    final Set<MetaData> getCollection(){
+        if (collection == null){
+            collection = new HashSet<MetaData>();
+        }
+        return collection;
+    }
+    
     @Override
     void addChildren(StringBuilder builder, RequirementLevel forceLevel) {
-        for (DataSetMetaData dataset:dataSets){
-            dataset.addInfo(builder, forceLevel);
+        for (MetaData metaData:collection){
+            metaData.addInfo(builder, forceLevel);
         }
     }
 
     public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
         if (!super.hasRequiredValues(forceLevel, exceptAlternatives)) { return false; }
-        for (DataSetMetaData dataset:dataSets){
-            if (!dataset.hasRequiredValues(forceLevel, exceptAlternatives)) { return false; }
+        for (MetaData metaData:collection){
+            if (!metaData.hasRequiredValues(forceLevel, exceptAlternatives)) { return false; }
         }
         return true;
     }
 
     public boolean hasCorrectTypes(){
         if (!super.hasCorrectTypes()) { return false; }
-        for (DataSetMetaData dataset:dataSets){
-            if (!dataset.hasCorrectTypes()) { return false; }
+        for (MetaData metaData:collection){
+            if (!metaData.hasCorrectTypes()) { return false; }
         }
         return true;
     }
@@ -49,8 +56,8 @@ public abstract class DataSetCollectionMetaData extends MetaData{
     void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
             boolean includeWarnings){
         super.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
-        for (DataSetMetaData dataset:dataSets){
-            dataset.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+        for (MetaData metaData:collection){
+            metaData.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
         }
     }
 }

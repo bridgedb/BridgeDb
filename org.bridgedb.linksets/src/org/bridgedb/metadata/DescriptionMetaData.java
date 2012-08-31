@@ -19,13 +19,13 @@ import org.openrdf.model.URI;
  *
  * @author Christian
  */
-public class DatasetDescriptionMetaData extends DataSetCollectionMetaData{
+public class DescriptionMetaData extends CollectionMetaData{
     
-    public DatasetDescriptionMetaData(Resource id, RDFData input){
+    public DescriptionMetaData(Resource id, RDFData input){
         super(id, input);
     }
     
-    public DatasetDescriptionMetaData(RDFData input){
+    public DescriptionMetaData(RDFData input){
         super(input);
     }
 
@@ -46,12 +46,15 @@ public class DatasetDescriptionMetaData extends DataSetCollectionMetaData{
     @Override
     void readFromInput(RDFData input) {
         super.readFromInput(input);
-        if (dataSets == null){
-            dataSets = new HashSet<DataSetMetaData>(); 
+        Set<MetaData> collection = getCollection();
+        Resource linksetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, LinkSetMetaData.RESOURCE_TYPE);
+        while (linksetId != null){
+            collection.add(new LinkSetMetaData(linksetId, input));
+            linksetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, LinkSetMetaData.RESOURCE_TYPE);
         }
         Resource datasetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE);
         while (datasetId != null){
-            dataSets.add(new DataSetMetaData(datasetId, input));
+            collection.add(new DataSetMetaData(datasetId, input));
             datasetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE);
         }
     }
