@@ -36,9 +36,9 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
-public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
+public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
     
-    static final Resource DESCRIPTION_ID = new URIImpl ("http://www.example.com/test/desc");
+    static final Resource DESCRIPTION_ID = new URIImpl ("http://www.example.com/test/linksetdesc");
     static final Value DESCRIPTION_TITLE = new LiteralImpl("The Void description");
     static final String DESCRIPTION_DESCRIPTION_STRING = "The void header stuff.";
     static final Value DESCRIPTION_DESCRIPTION_VALUE = new LiteralImpl(DESCRIPTION_DESCRIPTION_STRING);
@@ -53,7 +53,7 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     Statement descriptionPrimaryTopicStatement = new StatementImpl(DESCRIPTION_ID, FoafConstants.PRIMARY_TOPIC, PRIMARY_TOPIC);
     
 
-    public DataSetDescriptionMetaDataTest() throws DatatypeConfigurationException {
+    public LinksetDescriptionMetaDataTest() throws DatatypeConfigurationException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         Value now = new CalendarLiteralImpl(date2);
@@ -88,21 +88,12 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     @Test
     public void testMissingRequiredValue(){
         Reporter.report("HasMissingRequiredValues");
-        descriptionTitleStatement = null;
+        licenseStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
     } 
 
-    @Test
-    public void testAlternativengRequiredValue(){
-        Reporter.report("HasRequiredValues");
-        versionStatement = null;
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
-    } 
-    
     @Test
     public void testHasCorrectTypesBadDate(){
         Reporter.report("isHasCorrectTypesBadDate");
@@ -114,8 +105,8 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     @Test
     public void testMissingValidityReport(){
         Reporter.report("MissingValidityReport");
-        descriptionTitleStatement = null;
+        titleStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
-        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MAY, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }
 }

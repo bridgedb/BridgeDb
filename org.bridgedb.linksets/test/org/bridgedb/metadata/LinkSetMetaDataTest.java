@@ -20,6 +20,7 @@ import org.bridgedb.linkset.constants.VoidConstants;
 import org.bridgedb.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -36,7 +37,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     
-    static final Resource D2_ID = new URIImpl ("http://www.example.com/test/d2");
+    static final Resource D2_ID = new URIImpl ("http://www.example.com/test/dataset2");
     static final Value D2_TITLE = new LiteralImpl("The second data set");
     static final String D2_DESCRIPTION_STRING = "The second dataset description";
     static final Value D2_DESCRIPTION_VALUE = new LiteralImpl(D2_DESCRIPTION_STRING);
@@ -63,7 +64,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     Statement d2ExampleStatement3 = new StatementImpl(D2_ID, VoidConstants.EXAMPLE_RESOURCE, D2_EXAMPLE3);
     Statement d2FocStatement = new StatementImpl(D2_ID, VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.ANNUAL.getURI());
     
-    static final Resource LINK_ID = new URIImpl ("http://www.example.com/test/LinkId");
+    static final Resource LINK_ID = new URIImpl ("http://www.example.com/test/linkset1");
     static final Value LINK_TITLE = new LiteralImpl("The linkset");
     static final String LINK_DESCRIPTION_STRING = "The linkset tester";
     static final Value LINK_DESCRIPTION_VALUE = new LiteralImpl(LINK_DESCRIPTION_STRING);
@@ -134,22 +135,6 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     }
     
     @Test
-    public void testShowAll(){
-        Reporter.report("ShowAll");
-        LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        String showAll = metaData.showAll(RequirementLevel.MAY);
-        System.out.println(showAll);
-    } 
-
-    @Test
-    public void testHasRequiredValues(){
-        Reporter.report("HasRequiredValues");
-        LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
-    } 
-
-    @Test
     public void testHasNoSubject(){
         Reporter.report("HasNoSubject");
         subjectStatement = null;
@@ -168,14 +153,6 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     } 
 
     @Test
-    public void testAutoFindId(){
-        Reporter.report("AutoFindId");
-        LinkSetMetaData metaData = new LinkSetMetaData(loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
-    } 
-
-    @Test
     public void testMissingRequiredValue(){
         Reporter.report("HasMissingRequiredValues");
         linkPredicateStatement = null;
@@ -187,7 +164,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     @Test
     public void testMissingRequiredValue2(){
         Reporter.report("HasMissingRequiredValues2");
-        licenseStatement = null;
+        d2LicenseStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
@@ -196,38 +173,24 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     @Test
     public void testAlternativengRequiredValue(){
         Reporter.report("HasRequiredValues");
-        versionStatement = null;
+        d2VersionStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
     } 
 
     @Test
-    public void testHasCorrectTypes(){
-        Reporter.report("HasCorrectTypes");
-        LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertTrue(metaData.hasCorrectTypes());
-    }
-    
-    @Test
     public void testHasCorrectTypesBadDate(){
         Reporter.report("isHasCorrectTypesBadDate");
-        modifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, TITLE);  
+        d2ModifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, TITLE);  
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
         assertFalse(metaData.hasCorrectTypes());
     }
  
     @Test
-    public void testValidityReport(){
-        Reporter.report("ValidityReport");
-        LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
-    }
-
-    @Test
     public void testMissingValidityReport(){
         Reporter.report("MissingValidityReport");
-        titleStatement = null;
+        linkCreatedOnStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
         assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }

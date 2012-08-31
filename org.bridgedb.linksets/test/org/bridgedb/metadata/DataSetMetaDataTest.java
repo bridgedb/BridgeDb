@@ -18,6 +18,7 @@ import org.bridgedb.linkset.constants.VoidConstants;
 import org.bridgedb.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -33,7 +34,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class DataSetMetaDataTest {
     
-    static final Resource ID = new URIImpl ("http://www.example.com/test/id");
+    static final Resource ID = new URIImpl ("http://www.example.com/test/dataset1");
     static final Value TITLE = new LiteralImpl("The title");
     static final String DESCRIPTION_STRING = "The dataset description";
     static final Value DESCRIPTION_VALUE = new LiteralImpl(DESCRIPTION_STRING);

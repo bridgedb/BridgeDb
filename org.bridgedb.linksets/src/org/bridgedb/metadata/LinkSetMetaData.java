@@ -6,6 +6,7 @@ package org.bridgedb.metadata;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 import org.bridgedb.linkset.constants.DctermsConstants;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
@@ -17,11 +18,13 @@ import org.openrdf.model.Value;
  *
  * @author Christian
  */
-public class LinkSetMetaData extends DataSetCollectionMetaData{
+public class LinkSetMetaData extends CollectionMetaData{
+    
+    static URI RESOURCE_TYPE = VoidConstants.LINKSET;
 
     DataSetMetaData sourceDataSet;
     DataSetMetaData objectDataSet;
-    //Add them to DataSetCollectionMetaData.dataSets as well to pick up code there
+    //Add them to CollectionMetaData.dataSets as well to pick up code there
     
     public LinkSetMetaData(Resource id, RDFData input){
         super(id, input);        
@@ -46,21 +49,19 @@ public class LinkSetMetaData extends DataSetCollectionMetaData{
 
     @Override
     void readFromInput(RDFData input) {
-        if (dataSets == null){
-            dataSets = new HashSet<DataSetMetaData>(); 
-        }
+        Set<MetaData> collection = getCollection();
         //Read source And Object DataSets first to stop super from reading them as just datasets. 
         Value sourceId = this.getByIdPredicate(input, VoidConstants.SUBJECTSTARGET);   
         if (sourceId != null && sourceId instanceof Resource){
             sourceDataSet = new DataSetMetaData((Resource)sourceId, input);
-            dataSets.add(sourceDataSet);
+            collection.add(sourceDataSet);
         } else {
             sourceDataSet = null;
         }
         Value objectId = this.getByIdPredicate(input, VoidConstants.OBJECTSTARGET);   
         if (objectId != null && objectId instanceof Resource){
             objectDataSet = new DataSetMetaData((Resource)objectId, input);
-            dataSets.add(objectDataSet);
+            collection.add(objectDataSet);
         } else {
             objectDataSet = null;
         }
@@ -69,7 +70,7 @@ public class LinkSetMetaData extends DataSetCollectionMetaData{
 
     @Override
     URI getResourceType() {
-         return VoidConstants.LINKSET;
+         return RESOURCE_TYPE;
     }
     
     public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
@@ -88,5 +89,15 @@ public class LinkSetMetaData extends DataSetCollectionMetaData{
             builder.append("ERROR: objectDataSet not found. \n");
         }
         super.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+    }
+    
+    void addInfo(StringBuilder builder, RequirementLevel forceLevel){
+        super.addInfo(builder, forceLevel);
+        builder.append("Source: ");
+        newLine(builder);
+        sourceDataSet.addInfo(builder, forceLevel);
+        builder.append("Object: ");
+        newLine(builder);
+        sourceDataSet.addInfo(builder, forceLevel);
     }
 }
