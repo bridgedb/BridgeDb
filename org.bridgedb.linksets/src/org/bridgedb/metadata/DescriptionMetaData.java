@@ -21,6 +21,8 @@ import org.openrdf.model.URI;
  */
 public class DescriptionMetaData extends CollectionMetaData{
     
+    static URI RESOURCE_TYPE = VoidConstants.DATASET_DESCRIPTION;
+    
     public DescriptionMetaData(Resource id, RDFData input){
         super(id, input);
     }
@@ -40,7 +42,7 @@ public class DescriptionMetaData extends CollectionMetaData{
 
     @Override
     URI getResourceType() {
-        return VoidConstants.DATASET_DESCRIPTION;
+        return RESOURCE_TYPE;
     }
 
     @Override
