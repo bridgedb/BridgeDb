@@ -1,3 +1,4 @@
+package org.bridgedb.util.hmdb;
 
 import org.bridgedb.impl.InternalUtils;
 import java.io.*;
