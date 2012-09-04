@@ -6,6 +6,7 @@
 # ignore target files #
 target/
 bin/
+build/
 
 # ignore log files #
 *.log
