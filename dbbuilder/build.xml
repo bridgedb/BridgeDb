@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="dbbuilder" default="jar" basedir=".">
 
-  <property name="jar.name" value="../dist/dbbuilder.jar"/>
+  <property name="jar.name" value="../dist/org.bridgedb.tools.dbbuilder.jar"/>
 
   <path id="absolute.deps">
     <pathelement location="../dist/org.bridgedb.jar"/>
