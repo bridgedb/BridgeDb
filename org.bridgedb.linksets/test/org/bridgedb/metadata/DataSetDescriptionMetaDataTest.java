@@ -15,6 +15,7 @@ import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
 import org.bridgedb.linkset.constants.VoagConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
+import org.bridgedb.metadata.reader.MetaDataFactory;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -88,16 +89,16 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testMissingRequiredValue(){
         Reporter.report("HasMissingRequiredValues");
         descriptionTitleStatement = null;
-        DescriptionMetaData metaData = new DescriptionMetaData(ID, loadRDFData());
+        DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
 
     @Test
-    public void testAlternativengRequiredValue(){
-        Reporter.report("HasRequiredValues");
+    public void testAlternativeRequiredValue(){
+        Reporter.report("AlternativeRequiredValue");
         versionStatement = null;
-        DescriptionMetaData metaData = new DescriptionMetaData(ID, loadRDFData());
+        DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
     } 
@@ -105,8 +106,8 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     @Test
     public void testHasCorrectTypesBadDate(){
         Reporter.report("isHasCorrectTypesBadDate");
-        modifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, TITLE);  
-        DescriptionMetaData metaData = new DescriptionMetaData(ID, loadRDFData());
+        d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
+        DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
         assertFalse(metaData.hasCorrectTypes());
     }
  
@@ -114,7 +115,7 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testMissingValidityReport(){
         Reporter.report("MissingValidityReport");
         descriptionTitleStatement = null;
-        DescriptionMetaData metaData = new DescriptionMetaData(ID, loadRDFData());
+        DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
         assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MAY, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }
 }

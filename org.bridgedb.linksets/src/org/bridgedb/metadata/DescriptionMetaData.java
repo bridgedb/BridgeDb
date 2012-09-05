@@ -21,7 +21,7 @@ import org.openrdf.model.URI;
  */
 public class DescriptionMetaData extends CollectionMetaData{
     
-    static URI RESOURCE_TYPE = VoidConstants.DATASET_DESCRIPTION;
+    public static URI RESOURCE_TYPE = VoidConstants.DATASET_DESCRIPTION;
     
     public DescriptionMetaData(Resource id, RDFData input){
         super(id, input);

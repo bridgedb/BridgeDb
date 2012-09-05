@@ -81,7 +81,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     Statement linkPredicateStatement = new StatementImpl(LINK_ID, VoidConstants.LINK_PREDICATE, SkosConstants.CLOSE_MATCH);
     BigInteger TEN = new BigInteger("10");
     Statement linkNumberStatement = new StatementImpl(LINK_ID, VoidConstants.TRIPLES, new IntegerLiteralImpl(TEN));
-    Statement subjectStatement = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, ID);
+    Statement subjectStatement = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D1_ID);
     Statement objectStatement = new StatementImpl(LINK_ID, VoidConstants.OBJECTSTARGET, D2_ID);
     
     public LinkSetMetaDataTest() throws DatatypeConfigurationException {
@@ -182,7 +182,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     @Test
     public void testHasCorrectTypesBadDate(){
         Reporter.report("isHasCorrectTypesBadDate");
-        d2ModifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, TITLE);  
+        d2ModifiedStatement = new StatementImpl(D2_ID, DctermsConstants.MODIFIED, TITLE);  
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
         assertFalse(metaData.hasCorrectTypes());
     }

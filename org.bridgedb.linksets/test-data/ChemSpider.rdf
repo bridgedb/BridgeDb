@@ -1,0 +1,28 @@
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:void="http://rdfs.org/ns/void#"
+        xmlns:scovo="http://purl.org/NET/scovo#">
+  <void:dataset rdf:about="http://rdf.chemspider.com/void.rdf#chemSpiderDataset">
+    <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChemSpider</dcterms:title>
+    <dcterms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChemSpider's Public Dataset</dcterms:description>
+    <dcterms:source rdf:resource="http://www.chemspider.com/"/>
+    <dcterms:license rdf:resource="http://www.chemspider.com/Disclaimer.aspx"/>
+    <dcterms:publisher rdf:resource="http://www.chemspider.com/"/>
+    <dcterms:subject rdf:resource="http://dbpedia.org/resource/Molecule"/>
+    <void:statItem>
+      <scovo:Item>
+        <scovo:dimension rdf:resource="http://rdfs.org/ns/void#noOfTriples"/>
+        <rdf:value rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1157624328</rdf:value>
+      </scovo:Item>
+    </void:statItem>
+    <void:exampleResource rdf:resource="http://www.chemspider.com/Chemical-Structure.2157.rdf"/>
+    <void:sparqlEndpoint rdf:resource="http://rdf.chemspider.com/sparql"/>
+    <void:vocabulary rdf:resource="http://purl.org/dc/terms/"/>
+    <void:vocabulary rdf:resource="http://purl.org/dc/elements/1.1/"/>
+    <void:vocabulary rdf:resource="http://xmlns.com/foaf/0.1/"/>
+    <void:vocabulary rdf:resource="http://www.openarchives.org/ore/terms/"/>
+    <void:vocabulary rdf:resource="http://www.polymerinformatics.com/ChemAxiom/ChemDomain.owl#"/>
+  </void:dataset>
+</rdf:RDF>   
