@@ -134,6 +134,8 @@ public abstract class MetaData extends RDFData {
 
     public String showAll(RequirementLevel forceLevel){
         StringBuilder builder = new StringBuilder();
+        builder.append(this.getClass().toString());
+        newLine(builder);
         addInfo(builder, forceLevel);
         return builder.toString();
     }
