@@ -80,7 +80,7 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
     //public void testMissingRequiredValue(){
     //    Reporter.report("HasMissingRequiredValues");
     //    licenseStatement = null;
-    //    DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+    //    DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
     //    assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
     //    assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
     //} 
@@ -89,7 +89,7 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testMissingRequiredValue(){
         Reporter.report("HasMissingRequiredValues");
         licenseStatement = null;
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
     } 
@@ -97,8 +97,8 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
     @Test
     public void testHasCorrectTypesBadDate(){
         Reporter.report("isHasCorrectTypesBadDate");
-        modifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, TITLE);  
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertFalse(metaData.hasCorrectTypes());
     }
  
@@ -106,7 +106,7 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testMissingValidityReport(){
         Reporter.report("MissingValidityReport");
         titleStatement = null;
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }
 }

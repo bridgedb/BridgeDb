@@ -34,7 +34,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class DataSetMetaDataTest {
     
-    static final Resource ID = new URIImpl ("http://www.example.com/test/dataset1");
+    static final Resource D1_ID = new URIImpl ("http://www.example.com/test/dataset1");
     static final Value TITLE = new LiteralImpl("The title");
     static final String DESCRIPTION_STRING = "The dataset description";
     static final Value DESCRIPTION_VALUE = new LiteralImpl(DESCRIPTION_STRING);
@@ -58,28 +58,28 @@ public class DataSetMetaDataTest {
     static final boolean INCLUDE_WARNINGS = true;
     static final boolean NO_WARNINGS = false;;
       
-    Statement idStatement = new StatementImpl(ID, RdfConstants.TYPE_URI, VoidConstants.DATASET); 
-    Statement titleStatement = new StatementImpl(ID, DctermsConstants.TITLE, TITLE);
-    Statement descriptionStatement = new StatementImpl(ID, DctermsConstants.DESCRIPTION, DESCRIPTION_VALUE);
-    Statement homePageStatement = new StatementImpl(ID, FoafConstants.HOMEPAGE, HOME_PAGE);
-    Statement licenseStatement = new StatementImpl(ID, DctermsConstants.LICENSE, LICENSE);
-    Statement nameSpaceStatement = new StatementImpl(ID, VoidConstants.URI_SPACE, NAME_SPACE_VALUE);
-    Statement versionStatement = new StatementImpl(ID, PavConstants.VERSION, VERSION_VALUE);
-    Statement dataDumpStatement = new StatementImpl(ID, VoidConstants.DATA_DUMP, DATA_DUMP);  
-    Statement modifiedStatement;  // incontrustor due to date!
-    Statement vocabularyStatement1 = new StatementImpl(ID, VoidConstants.VOCABULARY, VOCABULARY1);
-    Statement vocabularyStatement2 = new StatementImpl(ID, VoidConstants.VOCABULARY, VOCABULARY2);
-    Statement topicStatement = new StatementImpl(ID, DctermsConstants.SUBJECT, TOPIC);
-    Statement exampleStatement1 = new StatementImpl(ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE1);
-    Statement exampleStatement2 = new StatementImpl(ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE2);
-    Statement exampleStatement3 = new StatementImpl(ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE3);
-    Statement focStatement = new StatementImpl(ID, VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.QUARTERLY.getURI());
+    Statement idStatement = new StatementImpl(D1_ID, RdfConstants.TYPE_URI, VoidConstants.DATASET); 
+    Statement titleStatement = new StatementImpl(D1_ID, DctermsConstants.TITLE, TITLE);
+    Statement descriptionStatement = new StatementImpl(D1_ID, DctermsConstants.DESCRIPTION, DESCRIPTION_VALUE);
+    Statement homePageStatement = new StatementImpl(D1_ID, FoafConstants.HOMEPAGE, HOME_PAGE);
+    Statement licenseStatement = new StatementImpl(D1_ID, DctermsConstants.LICENSE, LICENSE);
+    Statement nameSpaceStatement = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, NAME_SPACE_VALUE);
+    Statement versionStatement = new StatementImpl(D1_ID, PavConstants.VERSION, VERSION_VALUE);
+    Statement dataDumpStatement = new StatementImpl(D1_ID, VoidConstants.DATA_DUMP, DATA_DUMP);  
+    Statement d1ModifiedStatement;  // incontrustor due to date!
+    Statement vocabularyStatement1 = new StatementImpl(D1_ID, VoidConstants.VOCABULARY, VOCABULARY1);
+    Statement vocabularyStatement2 = new StatementImpl(D1_ID, VoidConstants.VOCABULARY, VOCABULARY2);
+    Statement topicStatement = new StatementImpl(D1_ID, DctermsConstants.SUBJECT, TOPIC);
+    Statement exampleStatement1 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE1);
+    Statement exampleStatement2 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE2);
+    Statement exampleStatement3 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE3);
+    Statement focStatement = new StatementImpl(D1_ID, VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.QUARTERLY.getURI());
     
     public DataSetMetaDataTest() throws DatatypeConfigurationException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         Value now = new CalendarLiteralImpl(date2);
-        modifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, now);  
+        d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, now);  
     }
 
     /**
@@ -96,7 +96,7 @@ public class DataSetMetaDataTest {
         data.addStatement(nameSpaceStatement);
         data.addStatement(versionStatement);
         data.addStatement(dataDumpStatement);
-        data.addStatement(modifiedStatement);
+        data.addStatement(d1ModifiedStatement);
         data.addStatement(vocabularyStatement1);
         data.addStatement(vocabularyStatement2);
         data.addStatement(topicStatement);
@@ -110,7 +110,7 @@ public class DataSetMetaDataTest {
     @Test
     public void testShowAll(){
         Reporter.report("ShowAll");
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         String showAll = metaData.showAll(RequirementLevel.MAY);
         System.out.println(showAll);
     } 
@@ -118,7 +118,7 @@ public class DataSetMetaDataTest {
     @Test
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
@@ -135,7 +135,7 @@ public class DataSetMetaDataTest {
     public void testMissingRequiredValue(){
         Reporter.report("HasMissingRequiredValues");
         licenseStatement = null;
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
     } 
@@ -144,7 +144,7 @@ public class DataSetMetaDataTest {
     public void testAlternativengRequiredValue(){
         Reporter.report("HasRequiredValues");
         versionStatement = null;
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
     } 
@@ -152,22 +152,22 @@ public class DataSetMetaDataTest {
     @Test
     public void testHasCorrectTypes(){
         Reporter.report("HasCorrectTypes");
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertTrue(metaData.hasCorrectTypes());
     }
     
     @Test
     public void testHasCorrectTypesBadDate(){
         Reporter.report("isHasCorrectTypesBadDate");
-        modifiedStatement = new StatementImpl(ID, DctermsConstants.MODIFIED, TITLE);  
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertFalse(metaData.hasCorrectTypes());
     }
  
     @Test
     public void testValidityReport(){
         Reporter.report("ValidityReport");
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }
 
@@ -175,7 +175,7 @@ public class DataSetMetaDataTest {
     public void testMissingValidityReport(){
         Reporter.report("MissingValidityReport");
         titleStatement = null;
-        DataSetMetaData metaData = new DataSetMetaData(ID, loadRDFData());
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
     }
 }
