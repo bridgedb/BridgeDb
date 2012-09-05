@@ -32,6 +32,7 @@ public abstract class ValueBase {
     protected final RequirementLevel level;
     protected List<ValueBase> alternatives;
     private static RequirementLevel ALLWAYS_WARN_LEVEL = RequirementLevel.SHOULD;
+   // protected ValueBase requirementDepency
     
     public ValueBase(String name, URI predicate, Class type, RequirementLevel level){
         this.name = name;

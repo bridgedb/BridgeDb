@@ -4,7 +4,7 @@
         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
         xmlns:void="http://rdfs.org/ns/void#"
         xmlns:scovo="http://purl.org/NET/scovo#">
-  <void:dataset rdf:about="http://rdf.chemspider.com/void.rdf#chemSpiderDataset">
+  <void:Dataset rdf:about="http://rdf.chemspider.com/void.rdf#chemSpiderDataset">
     <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChemSpider</dcterms:title>
     <dcterms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChemSpider's Public Dataset</dcterms:description>
     <dcterms:source rdf:resource="http://www.chemspider.com/"/>
@@ -24,5 +24,5 @@
     <void:vocabulary rdf:resource="http://xmlns.com/foaf/0.1/"/>
     <void:vocabulary rdf:resource="http://www.openarchives.org/ore/terms/"/>
     <void:vocabulary rdf:resource="http://www.polymerinformatics.com/ChemAxiom/ChemDomain.owl#"/>
-  </void:dataset>
+  </void:Dataset>
 </rdf:RDF>   
