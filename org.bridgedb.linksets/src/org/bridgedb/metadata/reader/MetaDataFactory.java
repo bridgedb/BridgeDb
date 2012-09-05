@@ -13,6 +13,7 @@ import javax.activation.FileDataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.linkset.LinksetParserErrorListener;
+import org.bridgedb.linkset.constants.RdfConstants;
 import org.bridgedb.metadata.DataSetMetaData;
 import org.bridgedb.metadata.DescriptionMetaData;
 import org.bridgedb.metadata.LinkSetMetaData;
@@ -37,15 +38,16 @@ public class MetaDataFactory extends RDFHandlerBase{
     public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.RDFXML;
     
     public static MetaData makeSpecific(RDFData input){
-        if (input.hasPredicate(DescriptionMetaData.RESOURCE_TYPE)){
+        if (input.hasPredicateObject(RdfConstants.TYPE_URI, DescriptionMetaData.RESOURCE_TYPE)){
             return new DescriptionMetaData(input);
         }
-        if (input.hasPredicate(LinkSetMetaData.RESOURCE_TYPE)){
+        if (input.hasPredicateObject(RdfConstants.TYPE_URI, LinkSetMetaData.RESOURCE_TYPE)){
             return new LinkSetMetaData(input);
         }
-        if (input.hasPredicate(DataSetMetaData.RESOURCE_TYPE)){
+        if (input.hasPredicateObject(RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE)){
             return new DataSetMetaData(input);
         }       
+        Reporter.report("Did not find an expected type will try DescriptionMetaData");
         //Will b=nearly certainly be invalid but last ditch effort
         return new DescriptionMetaData(input);
     }
