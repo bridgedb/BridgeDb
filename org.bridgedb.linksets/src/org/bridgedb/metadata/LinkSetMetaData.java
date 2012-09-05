@@ -20,7 +20,7 @@ import org.openrdf.model.Value;
  */
 public class LinkSetMetaData extends CollectionMetaData{
     
-    static URI RESOURCE_TYPE = VoidConstants.LINKSET;
+    public static URI RESOURCE_TYPE = VoidConstants.LINKSET;
 
     DataSetMetaData sourceDataSet;
     DataSetMetaData objectDataSet;
