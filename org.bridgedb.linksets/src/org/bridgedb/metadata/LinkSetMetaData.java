@@ -109,25 +109,20 @@ public class LinkSetMetaData extends CollectionMetaData{
         super.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
     }
     
-    void addInfo(StringBuilder builder, RequirementLevel forceLevel){
-        super.addInfo(builder, forceLevel);
-        builder.append("Source: ");
-        newLine(builder);
+    void addNamedChildren(StringBuilder builder) {
+        builder.append("\tSource: ");
         if (sourceDataSet != null){
-            sourceDataSet.addInfo(builder, forceLevel);
+            builder.append(sourceDataSet.id);
         } else {
-            tab(builder);
-            builder.append("No Source Dataset define.");
-            newLine(builder);
+            builder.append("NOT Defined.");
         }
-        builder.append("Object: ");
         newLine(builder);
+        builder.append("\tObject: ");
         if (objectDataSet != null){
-            objectDataSet.addInfo(builder, forceLevel);
+            builder.append(objectDataSet.id);
         } else {
-            tab(builder);
-            builder.append("No Object Dataset define.");
-            newLine(builder);
+            builder.append("NOT Defined.");
         }
+        newLine(builder);
     }
 }

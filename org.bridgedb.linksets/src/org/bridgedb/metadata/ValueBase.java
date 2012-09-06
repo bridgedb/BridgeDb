@@ -118,7 +118,7 @@ public abstract class ValueBase {
         }
     }
 
-    void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
+    void appendValidityReport(StringBuilder builder, MetaData parent, RequirementLevel forceLevel, boolean exceptAlternatives, 
             boolean includeWarnings) {
         if (hasValue()){
             if (!correctType()){
@@ -129,11 +129,20 @@ public abstract class ValueBase {
         } else if (level.compareTo(forceLevel) <= 0){
             if (hasValue(exceptAlternatives)){
                 if (includeWarnings){
-                    builder.append("\tWARNING: " + name + " not found but an alternative is available.\n");
+                    builder.append("\tWARNING in  ");
+                    builder.append(parent.id);
+                    builder.append("\n\t\t");
+                    builder.append(name);
+                    builder.append(" not found but an alternative is available.\n");
                 }
             } else {
-                builder.append("ERROR: " + name + " not found. \n"
-                        + "\tPlease add a statment with the predicate " + predicate + ".\n");
+                builder.append("ERROR in ");
+                builder.append(parent.id);
+                builder.append("\n\t");
+                builder.append(name);
+                builder.append(" not found. \n\tPlease add a statment with the predicate ");
+                builder.append(predicate);
+                builder.append(".\n");
             }
         } else {
             if (includeWarnings){
@@ -141,7 +150,13 @@ public abstract class ValueBase {
                     if (hasValue(exceptAlternatives)){
                         return; //Alterntive below forceLevel so fine
                     } else {
-                        builder.append("\tWARNING: " + name + " not found and is listed as a " + level + "\n");                
+                        builder.append("\tWARNING in  ");
+                        builder.append(parent.id);
+                        builder.append("\n\t\t");
+                        builder.append(name);
+                        builder.append(" not found and is listed as a ");
+                        builder.append(level);
+                        builder.append("\n");                
                     }
                 }
             }

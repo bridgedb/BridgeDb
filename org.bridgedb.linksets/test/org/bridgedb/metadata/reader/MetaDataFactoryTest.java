@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.reader;
 
+import org.bridgedb.metadata.DataSetMetaDataTest;
 import org.junit.Ignore;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.utils.Reporter;
@@ -51,12 +52,11 @@ public class MetaDataFactoryTest {
 
     private void checkAFile(String fileName) throws IDMapperException{
         File file = new File (fileName);
-        MetaData result = MetaDataFactory.readVoid(file);
-        String showAll = result.showAll(RequirementLevel.SHOULD);
-        String report = result.validityReport(RequirementLevel.SHOULD, ALLOW_ALTERATIVES, NO_WARNINGS);
-        System.out.println(report);
-        assertTrue(result.hasCorrectTypes());
-        assertTrue(result.hasRequiredValues(RequirementLevel.MUST, true));        
+        MetaData metaData = MetaDataFactory.readVoid(file);
+        String showAll = metaData.showAll(RequirementLevel.SHOULD);
+        String report = metaData.validityReport(RequirementLevel.MAY, ALLOW_ALTERATIVES, NO_WARNINGS);
+        assertTrue(metaData.hasCorrectTypes());
+        DataSetMetaDataTest.checkRequiredValues(metaData, RequirementLevel.SHOULD, ALLOW_ALTERATIVES);        
     }
     
     /**
@@ -83,7 +83,7 @@ public class MetaDataFactoryTest {
      * Test of readVoid method, of class MetaDataFactory.
      */
     @Test
-    @Ignore
+    //@Ignore
     public void testchebiHasPartsLinkset() throws Exception {
         Reporter.report("chebiHasPartsLinkset");
         checkAFile("test-data/chebiHasPartsLinkset.ttl");

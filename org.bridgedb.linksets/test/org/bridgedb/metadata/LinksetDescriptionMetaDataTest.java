@@ -80,7 +80,6 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        System.out.println(metaData.getClass());
         checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
