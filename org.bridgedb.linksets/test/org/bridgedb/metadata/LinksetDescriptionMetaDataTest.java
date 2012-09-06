@@ -80,8 +80,8 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
@@ -89,16 +89,16 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasMissingRequiredValues");
         licenseStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
     } 
 
     @Test
     public void testAutoFindId(){
         Reporter.report("AutoFindId");
         DescriptionMetaData metaData = new DescriptionMetaData(loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
@@ -121,6 +121,6 @@ public class LinksetDescriptionMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("MissingValidityReport");
         titleStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
     }
 }

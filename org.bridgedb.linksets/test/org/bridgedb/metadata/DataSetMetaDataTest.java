@@ -54,8 +54,6 @@ public class DataSetMetaDataTest {
     static final URI EXAMPLE3 = new URIImpl("http://www.example.com/data#C3");
 
     //Flags for easy reading of tests
-    static final boolean ALLOW_ALTERATIVES = true;
-    static final boolean NO_ALTERATIVES = false;;
     static final boolean INCLUDE_WARNINGS = true;
     static final boolean NO_WARNINGS = false;;
       
@@ -116,12 +114,12 @@ public class DataSetMetaDataTest {
         //ystem.out.println(showAll);
     } 
     
-    public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel, boolean exceptAlternatives){
-        boolean ok = metaData.hasRequiredValues(forceLevel, ALLOW_ALTERATIVES);
+    public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
+        boolean ok = metaData.hasRequiredValues(forceLevel);
         if (!ok){
             //This test will fail but with extra info
             assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(
-                    forceLevel, exceptAlternatives, NO_WARNINGS));
+                    forceLevel, NO_WARNINGS));
             assertTrue(ok);
         }        
     }
@@ -130,16 +128,16 @@ public class DataSetMetaDataTest {
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
     public void testAutoFindId(){
         Reporter.report("AutoFindId");
         DataSetMetaData metaData = new DataSetMetaData(loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
@@ -147,17 +145,8 @@ public class DataSetMetaDataTest {
         Reporter.report("HasMissingRequiredValues");
         licenseStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
-    } 
-
-    @Test
-    public void testAlternativengRequiredValue(){
-        Reporter.report("HasRequiredValues");
-        versionStatement = null;
-        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
     } 
 
     @Test
@@ -179,7 +168,7 @@ public class DataSetMetaDataTest {
     public void testValidityReport(){
         Reporter.report("ValidityReport");
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+        assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
     }
 
     @Test
@@ -187,6 +176,6 @@ public class DataSetMetaDataTest {
         Reporter.report("MissingValidityReport");
         titleStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
     }
 }

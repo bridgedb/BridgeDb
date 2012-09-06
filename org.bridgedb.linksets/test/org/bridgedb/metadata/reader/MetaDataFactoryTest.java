@@ -26,8 +26,6 @@ import static org.junit.Assert.*;
 public class MetaDataFactoryTest {
     
     //Flags for easy reading of tests
-    static final boolean ALLOW_ALTERATIVES = true;
-    static final boolean NO_ALTERATIVES = false;;
     static final boolean INCLUDE_WARNINGS = true;
     static final boolean NO_WARNINGS = false;;
 
@@ -54,9 +52,9 @@ public class MetaDataFactoryTest {
         File file = new File (fileName);
         MetaData metaData = MetaDataFactory.readVoid(file);
         String showAll = metaData.showAll(RequirementLevel.SHOULD);
-        String report = metaData.validityReport(RequirementLevel.MAY, ALLOW_ALTERATIVES, NO_WARNINGS);
+        String report = metaData.validityReport(RequirementLevel.MAY, NO_WARNINGS);
         assertTrue(metaData.hasCorrectTypes());
-        DataSetMetaDataTest.checkRequiredValues(metaData, RequirementLevel.SHOULD, ALLOW_ALTERATIVES);        
+        DataSetMetaDataTest.checkRequiredValues(metaData, RequirementLevel.SHOULD);        
     }
     
     /**

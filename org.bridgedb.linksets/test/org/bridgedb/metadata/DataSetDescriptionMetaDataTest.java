@@ -89,8 +89,8 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
@@ -98,16 +98,16 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasMissingRequiredValues");
         descriptionTitleStatement = null;
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
     public void testAutoFindId(){
         Reporter.report("AutoFindId");
         DescriptionMetaData metaData = new DescriptionMetaData(loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
@@ -115,8 +115,8 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("AlternativeRequiredValue");
         versionStatement = null;
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
     } 
     
     @Test
@@ -139,6 +139,6 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("MissingValidityReport");
         descriptionTitleStatement = null;
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MAY, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MAY, INCLUDE_WARNINGS));
     }
 }
