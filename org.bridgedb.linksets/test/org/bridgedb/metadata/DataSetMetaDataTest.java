@@ -32,6 +32,7 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
+@Ignore
 public class DataSetMetaDataTest {
     
     static final Resource D1_ID = new URIImpl ("http://www.example.com/test/dataset1");
@@ -114,12 +115,23 @@ public class DataSetMetaDataTest {
         String showAll = metaData.showAll(RequirementLevel.MAY);
         System.out.println(showAll);
     } 
+    
+    protected void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel, boolean exceptAlternatives){
+        boolean ok = metaData.hasRequiredValues(forceLevel, ALLOW_ALTERATIVES);
+        if (!ok){
+            //This test will fail but with extra info
+            assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(
+                    forceLevel, exceptAlternatives, NO_WARNINGS));
+            assertTrue(ok);
+        }        
+    }
 
     @Test
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        System.out.println(metaData.getClass());
+        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
 
@@ -127,7 +139,7 @@ public class DataSetMetaDataTest {
     public void testAutoFindId(){
         Reporter.report("AutoFindId");
         DataSetMetaData metaData = new DataSetMetaData(loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
 
@@ -136,7 +148,7 @@ public class DataSetMetaDataTest {
         Reporter.report("HasMissingRequiredValues");
         licenseStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
     } 
 
@@ -145,7 +157,7 @@ public class DataSetMetaDataTest {
         Reporter.report("HasRequiredValues");
         versionStatement = null;
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
     } 
 
