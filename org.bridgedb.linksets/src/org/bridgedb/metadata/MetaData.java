@@ -5,17 +5,12 @@
 package org.bridgedb.metadata;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import org.bridgedb.linkset.constants.DulConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
 import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.query.algebra.StatementPattern;
 
 /**
  *
@@ -23,19 +18,17 @@ import org.openrdf.query.algebra.StatementPattern;
  */
 public abstract class MetaData extends RDFData {
     
-    List<ValueBase> values;
-    
+    List<MetaPart> metaParts = new ArrayList<MetaPart> ();
+   
     static final String CLEAR_REPORT = "No issues found";
 
     public MetaData(Resource id, RDFData input){
-        values = new ArrayList<ValueBase> ();
         setupValues();
         this.id = id;
         readFromInput(input);
     }
        
     public MetaData(RDFData input){
-        values = new ArrayList<ValueBase> ();
         setupValues();
         id = getAnyByPredicateObject(input, RdfConstants.TYPE_URI, getResourceType());
         readFromInput(input);
@@ -46,23 +39,15 @@ public abstract class MetaData extends RDFData {
     abstract URI getResourceType();
     
     void readFromInput(RDFData input) {
-        for (ValueBase valueBase:values){
-            if (valueBase.multipleValuesAllowed()){
-               Set<Value> values = getAllByIdPredicate(input, valueBase.predicate);
-               for (Value value:values){
-                    valueBase.addValue(value);
-               }
-            } else {
-                Value value = getByIdPredicate(input, valueBase.predicate);
-                valueBase.addValue(value);
-            }
+        for (MetaPart metaPart:metaParts){
+            metaPart.loadFromInput(this, input);
         }
         copyUnusedStatements(input);
     }
 
     public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
-        for (ValueBase valueBase:values){
-            if ((valueBase.level.compareTo(forceLevel) <= 0) && !valueBase.hasValue(exceptAlternatives)){
+        for (MetaPart metaPart:metaParts){
+            if (!metaPart.hasRequiredValues(forceLevel, exceptAlternatives)) {
                 return false;
             }
         }
@@ -70,11 +55,10 @@ public abstract class MetaData extends RDFData {
     }
     
     public boolean hasCorrectTypes(){
-        for (ValueBase valueBase:values){
-            if (valueBase.hasValue()){
-                if (!valueBase.correctType()){
-                    return false;
-                }
+        for (MetaPart metaPart:metaParts){
+            if (!metaPart.hasCorrectTypes()){
+                System.out.println(metaPart);
+                return false;
             }
         }
         return true;
@@ -82,8 +66,8 @@ public abstract class MetaData extends RDFData {
     
     void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
             boolean includeWarnings){
-        for (ValueBase valueBase:values){
-            valueBase.appendValidityReport(builder, this, forceLevel, exceptAlternatives, includeWarnings);
+        for (MetaPart metaPart:metaParts){
+            metaPart.appendValidityReport(builder, this, forceLevel, exceptAlternatives, includeWarnings);
         }        
     }
     
@@ -100,10 +84,8 @@ public abstract class MetaData extends RDFData {
         builder.append("ID: ");
         builder.append(id);
         newLine(builder);
-        for (ValueBase valueBase:values){
-            if ((valueBase.level.compareTo(forceLevel) <= 0) || valueBase.hasValue()){
-                valueBase.show(builder);
-            }
+        for (MetaPart metaPart:metaParts){
+            metaPart.addInfo(builder, forceLevel);
         }
         addNamedChildren(builder);
         addUnusedStatements(builder);        
