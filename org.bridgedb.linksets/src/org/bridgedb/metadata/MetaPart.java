@@ -14,24 +14,13 @@ import org.openrdf.model.Value;
 public interface MetaPart {
 
     public void loadFromInput(MetaData metaData, RDFData input);
-    /*
-           if (valueBase.multipleValuesAllowed()){
-             } else {
-            }
 
-     */
-
-    public boolean hasRequiredValues(RequirementLevel requirementLevel, boolean forceLevel);
-    //if ((valueBase.level.compareTo(forceLevel) <= 0) && !valueBase.hasValue(exceptAlternatives)){
+    public boolean hasRequiredValues(RequirementLevel requirementLevel);
 
     public boolean hasCorrectTypes();
-    //            if (valueBase.hasValue()){
-    //            if (!valueBase.correctType()){
-    //                return false;
-    //            }
-    //        }
 
-    public void appendValidityReport(StringBuilder builder, MetaData aThis, RequirementLevel requirementLevel, boolean forceLevel, boolean exceptAlternatives);
+    public void appendValidityReport(StringBuilder builder, MetaData parent, RequirementLevel forceLevel, 
+            boolean includeWarnings);
 
     public void addInfo(StringBuilder builder, RequirementLevel requirementLevel);
 

@@ -143,16 +143,16 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
     public void testAutoFindId(){
         Reporter.report("AutoFindId");
         LinkSetMetaData metaData = new LinkSetMetaData(loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 
     @Test
@@ -160,7 +160,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasNoSubject");
         subjectStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
     } 
 
     @Test
@@ -168,7 +168,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasNoObject");
         objectStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
     } 
 
     @Test
@@ -176,7 +176,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasMissingRequiredValues");
         linkPredicateStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST));
      } 
 
     @Test
@@ -184,8 +184,8 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasMissingRequiredValues2");
         d2LicenseStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
     } 
 
     @Test
@@ -193,8 +193,8 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasRequiredValues");
         d2VersionStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
     } 
 
     @Test
@@ -216,7 +216,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     public void testValidityReport(){
         Reporter.report("ValidityReport");
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+        assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
     }
     
     @Test
@@ -224,6 +224,6 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("MissingValidityReport");
         linkCreatedOnStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+        assertNotSame(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
     }
 }
