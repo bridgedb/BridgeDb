@@ -23,7 +23,7 @@ import org.openrdf.model.impl.URIImpl;
 
 public class DulConstants {
 
-	private static final String dulns = "<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl";
+	private static final String dulns = "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#";
 	
 	public static final URI EXPRESSES = new URIImpl(dulns + "expresses");
     
