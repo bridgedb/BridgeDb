@@ -52,7 +52,7 @@ public class LinkSetMetaData extends CollectionMetaData{
             values.add(createdBy); 
             SingletonValue createdOn = new SingletonValue("Created On",PavConstants.CREATED_ON, Date.class, RequirementLevel.MUST);
             values.add(createdOn); 
-        values.add(new SingletonValue("Number of Links",VoidConstants.TRIPLES, Integer.class, RequirementLevel.MUST));
+        values.add(new SingletonValue("Number of Links",VoidConstants.TRIPLES, Integer.class, RequirementLevel.SHOULD));
     }
 
     @Override
