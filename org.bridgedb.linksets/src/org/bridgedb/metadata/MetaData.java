@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.bridgedb.linkset.constants.DulConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -22,16 +23,11 @@ import org.openrdf.query.algebra.StatementPattern;
  */
 public abstract class MetaData extends RDFData {
     
-    Resource id; 
-
-    Set<Statement> rawStatements;
-    
     List<ValueBase> values;
     
     static final String CLEAR_REPORT = "No issues found";
 
     public MetaData(Resource id, RDFData input){
-        rawStatements = new HashSet<Statement>();
         values = new ArrayList<ValueBase> ();
         setupValues();
         this.id = id;
@@ -39,10 +35,9 @@ public abstract class MetaData extends RDFData {
     }
        
     public MetaData(RDFData input){
-        rawStatements = new HashSet<Statement>();
         values = new ArrayList<ValueBase> ();
         setupValues();
-        id = getByPredicateObject(input, RdfConstants.TYPE_URI, getResourceType());
+        id = getAnyByPredicateObject(input, RdfConstants.TYPE_URI, getResourceType());
         readFromInput(input);
     }
 
@@ -62,13 +57,9 @@ public abstract class MetaData extends RDFData {
                 valueBase.addValue(value);
             }
         }
-        copyById(input);
+        copyUnusedStatements(input);
     }
 
-    public void addStatement(Statement statement){
-        otherStatements.add(statement);
-    }
-    
     public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
         for (ValueBase valueBase:values){
             if ((valueBase.level.compareTo(forceLevel) <= 0) && !valueBase.hasValue(exceptAlternatives)){
@@ -92,7 +83,7 @@ public abstract class MetaData extends RDFData {
     void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
             boolean includeWarnings){
         for (ValueBase valueBase:values){
-            valueBase.appendValidityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+            valueBase.appendValidityReport(builder, this, forceLevel, exceptAlternatives, includeWarnings);
         }        
     }
     
@@ -105,16 +96,6 @@ public abstract class MetaData extends RDFData {
         return builder.toString();
     }
 
-    public String showAllAsRDF(){
-        StringBuilder builder = new StringBuilder();
-        for (Statement statememt: rawStatements){
-            builder.append(statememt);
-            builder.append("\n");
-        }
-        addOthers(builder);
-        return builder.toString();
-    }
-    
     void addInfo(StringBuilder builder, RequirementLevel forceLevel){
         builder.append("ID: ");
         builder.append(id);
@@ -124,10 +105,15 @@ public abstract class MetaData extends RDFData {
                 valueBase.show(builder);
             }
         }
+        addNamedChildren(builder);
+        addUnusedStatements(builder);        
         addChildren(builder, forceLevel);
-        addOthers(builder);        
     }
     
+    void addNamedChildren(StringBuilder builder) {
+        //No named children here
+    }
+
     void addChildren(StringBuilder builder,  RequirementLevel forceLevel) {
         //No children here
     }
@@ -138,36 +124,6 @@ public abstract class MetaData extends RDFData {
         newLine(builder);
         addInfo(builder, forceLevel);
         return builder.toString();
-    }
-    
-    Resource getByPredicateObject(URI predicate, Value object){
-        return getByPredicateObject(this, predicate, object);
-    }
-    
-    Resource getByPredicateObject(RDFData input, URI predicate, Value object){
-        for (Statement statement: input.otherStatements){
-            if (statement.getPredicate().equals(predicate)){
-                if (statement.getObject().equals(object)){
-                    input.otherStatements.remove(statement);
-                    rawStatements.add(statement);
-                    return statement.getSubject();
-                }
-            }
-        }  
-        return null;
-    }
-
-    Value getByIdPredicate(RDFData input, URI predicate){
-        for (Statement statement: input.otherStatements){
-            if (statement.getSubject().equals(id)){
-                if (statement.getPredicate().equals(predicate)){
-                    input.otherStatements.remove(statement);
-                    rawStatements.add(statement);
-                    return statement.getObject();
-                }
-            }
-        }  
-        return null;
     }
     
     /*Set<Value> getAllBySubjectPredicate(Resource subject, URI predicate){
@@ -184,40 +140,7 @@ public abstract class MetaData extends RDFData {
         return results;
     }*/
 
-    Set<Value> getAllByIdPredicate(RDFData input, URI predicate){
-        HashSet<Value> results = new HashSet<Value>();
-        for (Iterator<Statement> iterator = input.otherStatements.iterator(); iterator.hasNext();) {
-            Statement statement = iterator.next();
-            if (statement.getSubject().equals(id)){
-                if (statement.getPredicate().equals(predicate)){
-                    iterator.remove();
-                    rawStatements.add(statement);
-                    results.add (statement.getObject());
-                }
-            }
-        }  
-        return results;
-    }
 
-    void copyById(RDFData input){
-        for (Iterator<Statement> iterator = input.otherStatements.iterator(); iterator.hasNext();) {
-            Statement statement = iterator.next();
-            if (statement.getSubject().equals(id)){
-                iterator.remove();
-                rawStatements.add(statement);
-            }
-        }  
-    }
-
-    public String toString(){
-        StringBuilder builder = new StringBuilder();
-        for (Statement statement: otherStatements){
-            addStatement(builder, statement);
-        } 
-        for (Statement statement: rawStatements){
-            addStatement(builder, statement);
-        } 
-        return builder.toString();
-    }
+ 
 
 }
