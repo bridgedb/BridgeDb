@@ -37,6 +37,7 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
+@Ignore
 public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     
     static final Resource DESCRIPTION_ID = new URIImpl ("http://www.example.com/test/desc");
@@ -86,11 +87,28 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     } 
 
     @Test
+    public void testHasRequiredValues(){
+        Reporter.report("HasRequiredValues");
+        DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
+        System.out.println(metaData.getClass());
+        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+    } 
+
+    @Test
     public void testMissingRequiredValue(){
         Reporter.report("HasMissingRequiredValues");
         descriptionTitleStatement = null;
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+    } 
+
+    @Test
+    public void testAutoFindId(){
+        Reporter.report("AutoFindId");
+        DescriptionMetaData metaData = new DescriptionMetaData(loadRDFData());
+        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
 
@@ -99,9 +117,16 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("AlternativeRequiredValue");
         versionStatement = null;
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
     } 
+    
+    @Test
+    public void testHasCorrectTypes(){
+        Reporter.report("HasCorrectTypes");
+        DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
+        assertTrue(metaData.hasCorrectTypes());
+    }
     
     @Test
     public void testHasCorrectTypesBadDate(){

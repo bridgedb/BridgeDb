@@ -10,6 +10,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.linkset.constants.DctermsConstants;
+import org.bridgedb.linkset.constants.DulConstants;
 import org.bridgedb.linkset.constants.FoafConstants;
 import org.bridgedb.linkset.constants.FrequencyOfChange;
 import org.bridgedb.linkset.constants.PavConstants;
@@ -69,6 +70,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     static final String LINK_DESCRIPTION_STRING = "The linkset tester";
     static final Value LINK_DESCRIPTION_VALUE = new LiteralImpl(LINK_DESCRIPTION_STRING);
     static final URI LINK_PERSON = new URIImpl ("http://www.example.com/test/LinkPerson");
+    static final URI JUSTIFICATION = new URIImpl ("http://www.example.com/test/Justification");
 
     Statement linkIdStatement = new StatementImpl(LINK_ID, RdfConstants.TYPE_URI, VoidConstants.LINKSET); 
     Statement linkTitleStatement = new StatementImpl(LINK_ID, DctermsConstants.TITLE, LINK_TITLE);
@@ -79,6 +81,8 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     Statement linkCreatedByStatement = new StatementImpl(LINK_ID, PavConstants.CREATED_BY, LINK_PERSON);
     Statement linkCreatedOnStatement;
     Statement linkPredicateStatement = new StatementImpl(LINK_ID, VoidConstants.LINK_PREDICATE, SkosConstants.CLOSE_MATCH);
+    Statement linkJustificationStatement = new StatementImpl(LINK_ID, DulConstants.EXPRESSES, JUSTIFICATION);
+    
     BigInteger TEN = new BigInteger("10");
     Statement linkNumberStatement = new StatementImpl(LINK_ID, VoidConstants.TRIPLES, new IntegerLiteralImpl(TEN));
     Statement subjectStatement = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D1_ID);
@@ -128,6 +132,7 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         data.addStatement(linkCreatedByStatement);
         data.addStatement(linkCreatedOnStatement);
         data.addStatement(linkPredicateStatement);
+        data.addStatement(linkJustificationStatement);
         data.addStatement(linkNumberStatement);
         data.addStatement(subjectStatement);
         data.addStatement(objectStatement);
@@ -135,12 +140,27 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
     }
     
     @Test
+    public void testHasRequiredValues(){
+        Reporter.report("HasRequiredValues");
+        LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
+        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+    } 
+
+    @Test
+    public void testAutoFindId(){
+        Reporter.report("AutoFindId");
+        LinkSetMetaData metaData = new LinkSetMetaData(loadRDFData());
+        checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
+    } 
+
+    @Test
     public void testHasNoSubject(){
         Reporter.report("HasNoSubject");
         subjectStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
 
     @Test
@@ -149,7 +169,6 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         objectStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
 
     @Test
@@ -158,15 +177,14 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         linkPredicateStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
         assertFalse(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
-    } 
+     } 
 
     @Test
     public void testMissingRequiredValue2(){
         Reporter.report("HasMissingRequiredValues2");
         d2LicenseStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, ALLOW_ALTERATIVES));
     } 
 
@@ -175,10 +193,17 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         Reporter.report("HasRequiredValues");
         d2VersionStatement = null;
         LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
-        assertTrue(metaData.hasRequiredValues(RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES));
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST, NO_ALTERATIVES));
     } 
 
+    @Test
+    public void testHasCorrectTypes(){
+        Reporter.report("HasCorrectTypes");
+        LinkSetMetaData metaData = new LinkSetMetaData(LINK_ID, loadRDFData());
+        assertTrue(metaData.hasCorrectTypes());
+    }
+    
     @Test
     public void testHasCorrectTypesBadDate(){
         Reporter.report("isHasCorrectTypesBadDate");
@@ -187,6 +212,13 @@ public class LinkSetMetaDataTest extends DataSetMetaDataTest{
         assertFalse(metaData.hasCorrectTypes());
     }
  
+    @Test
+    public void testValidityReport(){
+        Reporter.report("ValidityReport");
+        DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
+        assertEquals(MetaData.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, ALLOW_ALTERATIVES, INCLUDE_WARNINGS));
+    }
+    
     @Test
     public void testMissingValidityReport(){
         Reporter.report("MissingValidityReport");
