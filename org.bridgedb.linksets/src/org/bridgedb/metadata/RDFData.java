@@ -25,7 +25,7 @@ public class RDFData {
        
     public void addStatement(Statement statement){
         if (statement != null) {
-            System.out.println(statement);
+            //ystem.out.println(statement);
             otherStatements.add(statement);
         }
     }
