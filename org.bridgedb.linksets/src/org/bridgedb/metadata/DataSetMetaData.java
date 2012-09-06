@@ -56,22 +56,22 @@ public class DataSetMetaData extends MetaData{
             metaParts.add(created);
             SingletonValue modified = new SingletonValue("Modified", DctermsConstants.MODIFIED, Date.class, RequirementLevel.MAY);
             metaParts.add(modified);
-            modified.addAlternative(created);
-            version.addAlternative(modified);
+//            modified.addAlternative(created);
+//            version.addAlternative(modified);
             metaParts.add(new SingletonValue("Retrieved From",PavConstants.RETRIEVED_FROM, URI.class, RequirementLevel.MAY));
             SingletonValue retrievedOn = new SingletonValue("Retrieved On", PavConstants.RETRIEVED_ON , Date.class, RequirementLevel.MAY);
             metaParts.add(retrievedOn);
-            version.addAlternative(retrievedOn);
+//            version.addAlternative(retrievedOn);
             metaParts.add(new SingletonValue("Retrieved By",PavConstants.RETRIEVED_BY, URI.class, RequirementLevel.MAY));
             metaParts.add(new SingletonValue("Imported From",PavConstants.IMPORTED_FROM, URI.class, RequirementLevel.MAY));
             SingletonValue importedOn = new SingletonValue("Imported On", PavConstants.IMPORTED_ON , Date.class, RequirementLevel.MAY);
             metaParts.add(importedOn);
-            version.addAlternative(importedOn);
+//            version.addAlternative(importedOn);
             metaParts.add(new SingletonValue("Imported By",PavConstants.IMPORTED_BY, URI.class, RequirementLevel.MAY));
             metaParts.add(new SingletonValue("Derived From",PavConstants.DERIVED_FROM, URI.class, RequirementLevel.MAY));
             SingletonValue derivedOn = new SingletonValue("Derived On", PavConstants.DERIVED_ON , Date.class, RequirementLevel.MAY);
             metaParts.add(derivedOn);
-            version.addAlternative(derivedOn);
+//            version.addAlternative(derivedOn);
             metaParts.add(new SingletonValue("Derived By",PavConstants.DERIVED_BY, URI.class, RequirementLevel.MAY));
         //Distinguishing Subsets is handled seperately  
         metaParts.add(new MultipleValue("Vocabularies",VoidConstants.VOCABULARY, URI.class, RequirementLevel.SHOULD));

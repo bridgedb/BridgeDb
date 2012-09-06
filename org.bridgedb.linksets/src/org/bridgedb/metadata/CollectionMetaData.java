@@ -37,10 +37,11 @@ public abstract class CollectionMetaData extends MetaData{
         }
     }
 
-    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
-        if (!super.hasRequiredValues(forceLevel, exceptAlternatives)) { return false; }
+    @Override
+    public boolean hasRequiredValues(RequirementLevel forceLevel){
+        if (!super.hasRequiredValues(forceLevel)) { return false; }
         for (MetaData metaData:collection){
-            if (!metaData.hasRequiredValues(forceLevel, exceptAlternatives)) { return false; }
+            if (!metaData.hasRequiredValues(forceLevel)) { return false; }
         }
         return true;
     }
@@ -53,11 +54,10 @@ public abstract class CollectionMetaData extends MetaData{
         return true;
     }
 
-    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
-            boolean includeWarnings){
-        super.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings){
+        super.validityReport(builder, forceLevel, includeWarnings);
         for (MetaData metaData:collection){
-            metaData.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+            metaData.validityReport(builder, forceLevel, includeWarnings);
         }
     }
 }

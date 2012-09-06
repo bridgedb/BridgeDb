@@ -87,14 +87,13 @@ public class LinkSetMetaData extends CollectionMetaData{
          return RESOURCE_TYPE;
     }
     
-    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
+    public boolean hasRequiredValues(RequirementLevel forceLevel){
         if (getCollection().size() != 2){ return false; }
         //Super will check the datasets as long as they are there.
-        return super.hasRequiredValues(forceLevel, exceptAlternatives);
+        return super.hasRequiredValues(forceLevel);
     }
 
-    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
-            boolean includeWarnings){
+    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings){
         if (getCollection().size() != 2){
             builder.append("ERROR: Found ");
             builder.append(getCollection().size());
@@ -106,7 +105,7 @@ public class LinkSetMetaData extends CollectionMetaData{
         if (this.objectDataSet == null){         
             builder.append("WARNING: objectDataSet not found. \n");
         }
-        super.validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+        super.validityReport(builder, forceLevel, includeWarnings);
     }
     
     void addNamedChildren(StringBuilder builder) {

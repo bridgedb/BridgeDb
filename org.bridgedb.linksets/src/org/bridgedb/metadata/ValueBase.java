@@ -30,34 +30,13 @@ public abstract class ValueBase implements MetaPart{
     protected URI predicate;
     protected final Class type;
     protected final RequirementLevel level;
-    protected List<ValueBase> alternatives;
     private static RequirementLevel ALLWAYS_WARN_LEVEL = RequirementLevel.SHOULD;
-   // protected ValueBase requirementDepency
     
     public ValueBase(String name, URI predicate, Class type, RequirementLevel level){
         this.name = name;
         this.type = type;
         this.level = level;
         this.predicate = predicate;
-    }
-    
-    public void addAlternative(ValueBase alternative){
-        if (alternatives == null){
-            alternatives = new ArrayList<ValueBase>();
-        }
-        alternatives.add(alternative);
-    }
-
-    public boolean hasValue(boolean exceptAlternatives){
-        if (hasValue()) { return true; }
-        if (!exceptAlternatives) { return false; }
-        if (alternatives == null) { return false; }
-        for (ValueBase alternative: alternatives){
-            if (alternative.hasValue()){
-                return true;
-            }
-        }
-        return false;
     }
     
     abstract boolean hasValue();
@@ -114,7 +93,7 @@ public abstract class ValueBase implements MetaPart{
         }
     }
 
-    public void appendValidityReport(StringBuilder builder, MetaData parent, RequirementLevel forceLevel, boolean exceptAlternatives, 
+    public void appendValidityReport(StringBuilder builder, MetaData parent, RequirementLevel forceLevel, 
             boolean includeWarnings) {
         if (hasValue()){
             if (!hasCorrectTypes()){
@@ -123,37 +102,23 @@ public abstract class ValueBase implements MetaPart{
                 return; //YEAH all ok
             }
         } else if (level.compareTo(forceLevel) <= 0){
-            if (hasValue(exceptAlternatives)){
-                if (includeWarnings){
+            builder.append("ERROR in ");
+            builder.append(parent.id);
+            builder.append("\n\t");
+            builder.append(name);
+            builder.append(" not found. \n\tPlease add a statment with the predicate ");
+            builder.append(predicate);
+            builder.append(".\n");
+        } else {
+            if (includeWarnings){
+                if (level.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
                     builder.append("\tWARNING in  ");
                     builder.append(parent.id);
                     builder.append("\n\t\t");
                     builder.append(name);
-                    builder.append(" not found but an alternative is available.\n");
-                }
-            } else {
-                builder.append("ERROR in ");
-                builder.append(parent.id);
-                builder.append("\n\t");
-                builder.append(name);
-                builder.append(" not found. \n\tPlease add a statment with the predicate ");
-                builder.append(predicate);
-                builder.append(".\n");
-            }
-        } else {
-            if (includeWarnings){
-                if (level.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
-                    if (hasValue(exceptAlternatives)){
-                        return; //Alterntive below forceLevel so fine
-                    } else {
-                        builder.append("\tWARNING in  ");
-                        builder.append(parent.id);
-                        builder.append("\n\t\t");
-                        builder.append(name);
-                        builder.append(" not found and is listed as a ");
-                        builder.append(level);
-                        builder.append("\n");                
-                    }
+                    builder.append(" not found and is listed as a ");
+                    builder.append(level);
+                    builder.append("\n");                
                 }
             }
         }

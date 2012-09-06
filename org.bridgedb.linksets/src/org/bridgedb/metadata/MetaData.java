@@ -45,9 +45,9 @@ public abstract class MetaData extends RDFData {
         copyUnusedStatements(input);
     }
 
-    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives){
+    public boolean hasRequiredValues(RequirementLevel forceLevel){
         for (MetaPart metaPart:metaParts){
-            if (!metaPart.hasRequiredValues(forceLevel, exceptAlternatives)) {
+            if (!metaPart.hasRequiredValues(forceLevel)) {
                 return false;
             }
         }
@@ -64,16 +64,15 @@ public abstract class MetaData extends RDFData {
         return true;
     }
     
-    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean exceptAlternatives, 
-            boolean includeWarnings){
+    void validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings){
         for (MetaPart metaPart:metaParts){
-            metaPart.appendValidityReport(builder, this, forceLevel, exceptAlternatives, includeWarnings);
+            metaPart.appendValidityReport(builder, this, forceLevel, includeWarnings);
         }        
     }
     
-    public String validityReport(RequirementLevel forceLevel, boolean exceptAlternatives, boolean includeWarnings){
+    public String validityReport(RequirementLevel forceLevel, boolean includeWarnings){
         StringBuilder builder = new StringBuilder();
-        validityReport(builder, forceLevel, exceptAlternatives, includeWarnings);
+        validityReport(builder, forceLevel, includeWarnings);
         if (builder.length() == 0){
             return CLEAR_REPORT;
         }

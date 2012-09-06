@@ -35,9 +35,9 @@ public class MultipleValue extends ValueBase{
     }
 
     @Override
-    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives) {
+    public boolean hasRequiredValues(RequirementLevel forceLevel) {
         if (level.compareTo(forceLevel) > 0) { return true; }
-        return hasValue(exceptAlternatives);
+        return hasValue();
     }
 
     @Override
