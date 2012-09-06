@@ -22,16 +22,22 @@ public class MultipleValue extends ValueBase{
     }
     
     @Override
-    public boolean multipleValuesAllowed() {
-        return true;
+    public void loadFromInput(MetaData metaData, RDFData input) {
+        Set<Value> newValues = metaData.getAllByIdPredicate(input, predicate);
+        if (newValues.isEmpty()){ 
+            values = null;
+        } else {
+            values = new HashSet<Value>();
+            for (Value value:values){
+                values.add(value);
+            }
+        }
     }
 
     @Override
-    void addValue(Value value) {
-        if (values == null){
-            values = new HashSet<Value>();
-        }
-        values.add(value);
+    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives) {
+        if (level.compareTo(forceLevel) > 0) { return true; }
+        return hasValue(exceptAlternatives);
     }
 
     @Override
@@ -56,10 +62,13 @@ public class MultipleValue extends ValueBase{
     }
 
     @Override
-    boolean correctType() {
+    public boolean hasCorrectTypes() {
         if (values == null){ return true; } //no type issue if there is nothing to type
         for (Value value:values){
-            if (!correctType(value)) { return false; }
+            if (!correctType(value)) { 
+                System.out.println("£"+ value);
+                return false; 
+            }
         }
         return true;
     }
@@ -76,18 +85,20 @@ public class MultipleValue extends ValueBase{
     }
 
     @Override
-    void show(StringBuilder builder) {
-        MetaData.tab(builder);
-        builder.append(name);
-        builder.append(": ");
-        String[] values = getValuesAsString();
-        builder.append(values[0]);
-        MetaData.newLine(builder);        
-        for (int i = 1; i< values.length; i++){
+    public void addInfo(StringBuilder builder, RequirementLevel forceLevel) {
+        if ((level.compareTo(forceLevel) <= 0) || hasValue()){
             MetaData.tab(builder);
-            MetaData.tab(builder);
-            builder.append(values[i]);
+            builder.append(name);
+            builder.append(": ");
+            String[] values = getValuesAsString();
+            builder.append(values[0]);
             MetaData.newLine(builder);        
+            for (int i = 1; i< values.length; i++){
+                MetaData.tab(builder);
+                MetaData.tab(builder);
+                builder.append(values[i]);
+                MetaData.newLine(builder);        
+            }
         }
     }
 

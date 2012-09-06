@@ -24,7 +24,7 @@ import org.openrdf.sail.memory.model.CalendarMemLiteral;
  *
  * @author Christian
  */
-public abstract class ValueBase {
+public abstract class ValueBase implements MetaPart{
     
     protected final String name;
     protected URI predicate;
@@ -41,8 +41,6 @@ public abstract class ValueBase {
         this.predicate = predicate;
     }
     
-    public abstract boolean multipleValuesAllowed();
-    
     public void addAlternative(ValueBase alternative){
         if (alternatives == null){
             alternatives = new ArrayList<ValueBase>();
@@ -50,8 +48,6 @@ public abstract class ValueBase {
         alternatives.add(alternative);
     }
 
-    abstract void addValue(Value value);
-   
     public boolean hasValue(boolean exceptAlternatives){
         if (hasValue()) { return true; }
         if (!exceptAlternatives) { return false; }
@@ -67,11 +63,9 @@ public abstract class ValueBase {
     abstract boolean hasValue();
     
     public String toString(){
-        return ("ValueBase : " + name + "\n\ttype: " + type + "\n\tlevel: " + level + "\n\tpredicate: " + predicate);
+        return (this.getClass() + " : " + name + "\n\ttype: " + type + "\n\tlevel: " + level + "\n\tpredicate: " + predicate);
     }
 
-    abstract boolean correctType();
-    
     boolean correctType (Value value){
         if (type.isAssignableFrom(value.getClass())){
             return true;
@@ -82,7 +76,9 @@ public abstract class ValueBase {
         }
         if (type == String.class){
             String temp = value.stringValue();
-            return (temp != null && !temp.isEmpty());
+            if (temp != null && !temp.isEmpty()) return true;
+            Reporter.report("EXpected a none empty String but found " + value.stringValue());
+            return false;
         } else if (type == Date.class){
             if (value instanceof Literal) {
                 Literal literal = (Literal)value;
@@ -118,10 +114,10 @@ public abstract class ValueBase {
         }
     }
 
-    void appendValidityReport(StringBuilder builder, MetaData parent, RequirementLevel forceLevel, boolean exceptAlternatives, 
+    public void appendValidityReport(StringBuilder builder, MetaData parent, RequirementLevel forceLevel, boolean exceptAlternatives, 
             boolean includeWarnings) {
         if (hasValue()){
-            if (!correctType()){
+            if (!hasCorrectTypes()){
                 appendFormatReport(builder);
             } else {
                 return; //YEAH all ok
@@ -165,5 +161,4 @@ public abstract class ValueBase {
 
     abstract void appendFormatReport (StringBuilder builder);
 
-    abstract void show(StringBuilder builder);
  }

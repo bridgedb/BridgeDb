@@ -33,11 +33,11 @@ public class DescriptionMetaData extends CollectionMetaData{
 
     @Override
     void setupValues() {
-        values.add(new SingletonValue("Title", DctermsConstants.TITLE, String.class, RequirementLevel.MAY));
-        values.add(new SingletonValue("Description", DctermsConstants.DESCRIPTION, String.class, RequirementLevel.MAY));
-        values.add(new SingletonValue("Created By", PavConstants.CREATED_BY, String.class, RequirementLevel.MAY));
-        values.add(new SingletonValue("Created On", PavConstants.CREATED_ON, Date.class, RequirementLevel.MAY));
-        values.add(new SingletonValue("Primary Topic", FoafConstants.PRIMARY_TOPIC, String.class, RequirementLevel.MAY));
+        metaParts.add(new SingletonValue("Title", DctermsConstants.TITLE, String.class, RequirementLevel.MAY));
+        metaParts.add(new SingletonValue("Description", DctermsConstants.DESCRIPTION, String.class, RequirementLevel.MAY));
+        metaParts.add(new SingletonValue("Created By", PavConstants.CREATED_BY, String.class, RequirementLevel.MAY));
+        metaParts.add(new SingletonValue("Created On", PavConstants.CREATED_ON, Date.class, RequirementLevel.MAY));
+        metaParts.add(new SingletonValue("Primary Topic", FoafConstants.PRIMARY_TOPIC, String.class, RequirementLevel.MAY));
     }
 
     @Override

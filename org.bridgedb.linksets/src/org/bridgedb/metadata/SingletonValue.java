@@ -22,18 +22,14 @@ public class SingletonValue extends ValueBase{
     }
     
     @Override
-    public boolean multipleValuesAllowed() {
-        return false;
-    }
-
-    @Override
-    void addValue(Value value) {
+    public void loadFromInput(MetaData metaData, RDFData input) {
+        Value value = metaData.getByIdPredicate(input, predicate);
         if (this.value != null){
             throw new IllegalStateException("Value has already been set to " + this.value);
         }
         this.value = value;
     }
-
+    
     Value getValue(){
         return value;
     }
@@ -46,16 +42,22 @@ public class SingletonValue extends ValueBase{
     }
 
     @Override
+    public boolean hasRequiredValues(RequirementLevel forceLevel, boolean exceptAlternatives) {
+        if (level.compareTo(forceLevel) > 0) { return true; }
+        return hasValue(exceptAlternatives);
+    }
+
+    @Override
     boolean hasValue(){
         return value != null;
     }
 
     @Override
-    boolean correctType() {
-        if (value == null) { return false; }
+    public boolean hasCorrectTypes() {
+        if (value == null) { return true; }
         return correctType(value);
     }
-    
+
     @Override
     public String toString(){
         return super.toString() + "\n\tValue: " + value;
@@ -69,11 +71,15 @@ public class SingletonValue extends ValueBase{
     }
 
     @Override
-    void show(StringBuilder builder) {
-        MetaData.tab(builder);
-        builder.append(name);
-        builder.append(": ");
-        builder.append(getValueAsString());
-        MetaData.newLine(builder);        
+    public void addInfo(StringBuilder builder, RequirementLevel forceLevel) {
+        if ((level.compareTo(forceLevel) <= 0) || hasValue()){
+            MetaData.tab(builder);
+            builder.append(name);
+            builder.append(": ");
+            builder.append(getValueAsString());
+            MetaData.newLine(builder);        
+        }
     }
+
+
 }
