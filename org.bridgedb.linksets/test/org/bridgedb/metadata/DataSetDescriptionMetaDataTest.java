@@ -82,7 +82,6 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testLoadWithfactory(){
         Reporter.report("LoadWithfactory");
         MetaData metaData = MetaDataFactory.makeSpecific(loadRDFData());
-        System.out.println(metaData.getClass());
         assertTrue(metaData instanceof DescriptionMetaData);
     } 
 
@@ -90,7 +89,6 @@ public class DataSetDescriptionMetaDataTest extends DataSetMetaDataTest{
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         DescriptionMetaData metaData = new DescriptionMetaData(DESCRIPTION_ID, loadRDFData());
-        System.out.println(metaData.getClass());
         checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 

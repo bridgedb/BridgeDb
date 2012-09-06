@@ -49,15 +49,15 @@ public class DescriptionMetaData extends CollectionMetaData{
     void readFromInput(RDFData input) {
         super.readFromInput(input);
         Set<MetaData> collection = getCollection();
-        Resource linksetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, LinkSetMetaData.RESOURCE_TYPE);
+        Resource linksetId = getUnusedByPredicateObject(input,  RdfConstants.TYPE_URI, LinkSetMetaData.RESOURCE_TYPE);
         while (linksetId != null){
             collection.add(new LinkSetMetaData(linksetId, input));
-            linksetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, LinkSetMetaData.RESOURCE_TYPE);
+            linksetId = getUnusedByPredicateObject(input,  RdfConstants.TYPE_URI, LinkSetMetaData.RESOURCE_TYPE);
         }
-        Resource datasetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE);
+        Resource datasetId = getUnusedByPredicateObject(input,  RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE);
         while (datasetId != null){
             collection.add(new DataSetMetaData(datasetId, input));
-            datasetId = getByPredicateObject(input,  RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE);
+            datasetId = getUnusedByPredicateObject(input,  RdfConstants.TYPE_URI, DataSetMetaData.RESOURCE_TYPE);
         }
     }
     

@@ -113,10 +113,10 @@ public class DataSetMetaDataTest {
         Reporter.report("ShowAll");
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
         String showAll = metaData.showAll(RequirementLevel.MAY);
-        System.out.println(showAll);
+        //ystem.out.println(showAll);
     } 
     
-    protected void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel, boolean exceptAlternatives){
+    public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel, boolean exceptAlternatives){
         boolean ok = metaData.hasRequiredValues(forceLevel, ALLOW_ALTERATIVES);
         if (!ok){
             //This test will fail but with extra info
@@ -130,7 +130,6 @@ public class DataSetMetaDataTest {
     public void testHasRequiredValues(){
         Reporter.report("HasRequiredValues");
         DataSetMetaData metaData = new DataSetMetaData(D1_ID, loadRDFData());
-        System.out.println(metaData.getClass());
         checkRequiredValues(metaData, RequirementLevel.MUST, ALLOW_ALTERATIVES);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY, ALLOW_ALTERATIVES));
     } 
