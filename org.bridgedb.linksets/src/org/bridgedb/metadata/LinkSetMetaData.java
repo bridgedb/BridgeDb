@@ -37,22 +37,22 @@ public class LinkSetMetaData extends CollectionMetaData{
 
     @Override
     void setupValues() {
-        values.add(new SingletonValue("Title", DctermsConstants.TITLE, String.class, RequirementLevel.MUST));
-        values.add(new SingletonValue("Description", DctermsConstants.DESCRIPTION, String.class, RequirementLevel.MUST));
-        values.add(new SingletonValue("License", DctermsConstants.LICENSE, URI.class, RequirementLevel.MUST));
+        metaParts.add(new SingletonValue("Title", DctermsConstants.TITLE, String.class, RequirementLevel.MUST));
+        metaParts.add(new SingletonValue("Description", DctermsConstants.DESCRIPTION, String.class, RequirementLevel.MUST));
+        metaParts.add(new SingletonValue("License", DctermsConstants.LICENSE, URI.class, RequirementLevel.MUST));
         //Target Datasets added in readFromInput
-        values.add(new SingletonValue("Link Relationship",VoidConstants.LINK_PREDICATE, URI.class, RequirementLevel.TECHNICAL_MUST));
-        values.add(new SingletonValue("Link Justification",DulConstants.EXPRESSES, URI.class, RequirementLevel.MUST));
+        metaParts.add(new SingletonValue("Link Relationship",VoidConstants.LINK_PREDICATE, URI.class, RequirementLevel.TECHNICAL_MUST));
+        metaParts.add(new SingletonValue("Link Justification",DulConstants.EXPRESSES, URI.class, RequirementLevel.MUST));
         //Link Source
             SingletonValue authoredBy = new SingletonValue("Authored By",PavConstants.AUTHORED_BY, URI.class, RequirementLevel.MUST);
-            values.add(authoredBy);        
+            metaParts.add(authoredBy);        
             SingletonValue authoredOn = new SingletonValue("Authored On",PavConstants.AUTHORED_ON, Date.class, RequirementLevel.MUST);
-            values.add(authoredOn); 
+            metaParts.add(authoredOn); 
             SingletonValue createdBy = new SingletonValue("Created By",PavConstants.CREATED_BY, URI.class, RequirementLevel.MUST);
-            values.add(createdBy); 
+            metaParts.add(createdBy); 
             SingletonValue createdOn = new SingletonValue("Created On",PavConstants.CREATED_ON, Date.class, RequirementLevel.MUST);
-            values.add(createdOn); 
-        values.add(new SingletonValue("Number of Links",VoidConstants.TRIPLES, Integer.class, RequirementLevel.SHOULD));
+            metaParts.add(createdOn); 
+        metaParts.add(new SingletonValue("Number of Links",VoidConstants.TRIPLES, Integer.class, RequirementLevel.SHOULD));
     }
 
     @Override
