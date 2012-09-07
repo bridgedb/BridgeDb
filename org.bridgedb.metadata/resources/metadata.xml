@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="windows-1252"?>
+
+<metadata>
+    <resource name="DatasetDescription" type="http://rdfs.org/ns/void#Dataset">
+        <propery
+            name="title"
+            predicate="http://purl.org/dc/terms/title"
+            class="URI"
+        />          
+    </resource>
+</metadata>
