@@ -36,7 +36,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
              unusedStatements.add(statement);
         }
         Set<Resource> ids = findResourceByPredicate(RdfConstants.TYPE_URI);
-       for (Resource id:ids){
+        for (Resource id:ids){
             if (!resourcesMap.containsKey(id)){
                ResourceMetaData resourceMetaData =  getResourceMetaData(id);
                if (resourceMetaData == null){
@@ -109,10 +109,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
     @Override
-    void appendToString(StringBuilder builder, int tabLevel) {
+    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
-             resouce.appendToString(builder, 0);
+             resouce.appendShowAll(builder, forceLevel, 0);
          }
          for (Statement statement: unusedStatements){
              builder.append("\n");
