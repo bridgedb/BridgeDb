@@ -5,7 +5,7 @@
         <propery
             name="title"
             predicate="http://purl.org/dc/terms/title"
-            class="URI"
+            class="String"
             requirementLevel = "MUST"
         />          
     </resource>
