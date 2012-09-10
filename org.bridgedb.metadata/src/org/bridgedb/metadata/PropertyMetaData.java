@@ -22,6 +22,8 @@ import org.w3c.dom.Element;
  */
 public class PropertyMetaData extends MetaDataBase implements MetaData{
 
+    public static RequirementLevel ALLWAYS_WARN_LEVEL = RequirementLevel.SHOULD;
+
     private final String name;      
     private final URI predicate;
     private final MetaDataType metaDataType;
@@ -132,7 +134,49 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
 
     @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (values.isEmpty()){
+            if (requirementLevel.compareTo(forceLevel) <= 0){
+                tab(builder, tabLevel);
+                builder.append("ERROR: ");
+                builder.append(id );
+                builder.append(":");
+                builder.append(name);
+                builder.append(" is missing. ");
+                newLine(builder, tabLevel + 1);
+                builder.append("Please add a statment with the predicate ");
+                builder.append(predicate);
+                newLine(builder);
+            } else if (requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
+                tab(builder, tabLevel);
+                builder.append("ERROR: ");
+                builder.append(id );
+                builder.append(":");
+                builder.append(name);
+                builder.append(" is missing. ");
+                newLine(builder, tabLevel + 1);
+                builder.append("This has a RequirementLevel of ");
+                builder.append(requirementLevel);
+                newLine(builder);
+            }
+        } else if (!hasCorrectTypes()){
+            tab(builder, tabLevel);
+            builder.append("ERROR: Incorrect type for ");
+            builder.append(id );
+            builder.append(":");
+            builder.append(name);            
+            for (Value value: values){
+                if (!metaDataType.correctType(value)){
+                    newLine(builder, tabLevel + 1);
+                    builder.append("Expected ");
+                    builder.append(metaDataType.getCorrectType());
+                    builder.append(" Found ");
+                    builder.append(value);
+                    builder.append(" Which is a  ");
+                    builder.append(value.getClass());
+                }
+            }
+            newLine(builder);
+        }
     }
     
 }

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
+import org.bridgedb.metadata.AppendBase;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
@@ -21,5 +22,11 @@ public class StringType implements MetaDataType{
         }
         return !stringValue.isEmpty();
     }
-    
+
+    @Override
+    public String getCorrectType() {
+        return " A String";
+    }
+
+  
 }

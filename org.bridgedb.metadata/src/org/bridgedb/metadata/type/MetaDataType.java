@@ -13,4 +13,6 @@ import org.openrdf.model.Value;
 public interface MetaDataType {
     
     boolean correctType(Value value);
+
+    String getCorrectType();
 }
