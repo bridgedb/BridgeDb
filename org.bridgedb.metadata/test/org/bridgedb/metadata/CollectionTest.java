@@ -13,6 +13,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.metadata.constants.*;
 import org.bridgedb.metadata.utils.Reporter;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -22,6 +23,7 @@ import org.openrdf.model.impl.CalendarLiteralImpl;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
+
 
 /**
  *
@@ -99,12 +101,22 @@ public class CollectionTest {
         return data;
     }
     
+    public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
+        boolean ok = metaData.hasRequiredValues(forceLevel);
+        if (!ok){
+            //This test will fail but with extra info
+            assertEquals(MetaDataBase.CLEAR_REPORT, metaData.validityReport(
+                    forceLevel, NO_WARNINGS));
+            assertTrue(ok);
+        }        
+    }
     @Test
     public void testShowDataSet() throws Exception {
         Reporter.report("ShowDataSet");
         MetaDataCollection metaDataCollection = new MetaDataCollection(loadDataSet1());
         System.out.println(metaDataCollection.Schema());
         System.out.println(metaDataCollection.toString());
+        assertTrue(metaDataCollection.hasRequiredValues(RequirementLevel.MUST));
     }
 
 }

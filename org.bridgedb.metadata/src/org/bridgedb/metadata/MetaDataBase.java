@@ -18,6 +18,8 @@ import org.openrdf.model.Value;
  */
 public abstract class MetaDataBase implements MetaData{
     
+    static final String CLEAR_REPORT = "No issues found";
+
     Set<Statement> rawRDF;
     Resource id;
     MetaData parent;
@@ -68,5 +70,12 @@ public abstract class MetaDataBase implements MetaData{
 
     abstract MetaDataBase getSchemaClone();
 
+    public String validityReport(RequirementLevel forceLevel, boolean includeWarnings) {
+         StringBuilder builder = new StringBuilder();
+         appendValidityReport(builder, forceLevel, includeWarnings, 0);
+         return builder.toString();
+    }
+
+    abstract void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel);
 
 }
