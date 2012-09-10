@@ -20,8 +20,6 @@ interface MetaData {
     
     boolean hasCorrectTypes();
 
-    String validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings);
+    String validityReport(RequirementLevel forceLevel, boolean includeWarnings);
     
-    void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel);
-
 }

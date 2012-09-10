@@ -24,6 +24,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     private final String name;      
     private final URI predicate;
     private final String objectClass;
+    private final RequirementLevel requirementLevel;
     private Set<Value> values;
 
     public PropertyMetaData(Element element) throws MetaDataException {
@@ -31,6 +32,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
         predicate = new URIImpl(predicateSt);
         objectClass = element.getAttribute(SchemaConstants.CLASS);
+        String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
+        requirementLevel = RequirementLevel.parse(requirementLevelSt);
         values = new HashSet<Value>();
     }
     
@@ -38,6 +41,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         name = other.name;
         predicate = other.predicate;
         objectClass = other.objectClass;
+        requirementLevel = other.requirementLevel;
         values = new HashSet<Value>();
     }
     
@@ -94,16 +98,15 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
 
     @Override
     public boolean hasRequiredValues(RequirementLevel requirementLevel) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (values.isEmpty()){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
     public boolean hasCorrectTypes() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

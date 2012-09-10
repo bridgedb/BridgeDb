@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
  */
 public class MetaDataCollection implements MetaData {
     
-    Map<Resource,ResourceMetaData> resources = new HashMap<Resource,ResourceMetaData>();
+    Map<Resource,ResourceMetaData> resourcesMap = new HashMap<Resource,ResourceMetaData>();
     Set<String> errors = new HashSet<String>();
     Set<Statement> unusedStatements;
     
@@ -37,40 +37,18 @@ public class MetaDataCollection implements MetaData {
         }
         Set<Resource> ids = findResourceByPredicate(RdfConstants.TYPE_URI);
        for (Resource id:ids){
-            if (!resources.containsKey(id)){
+            if (!resourcesMap.containsKey(id)){
                ResourceMetaData resourceMetaData =  getResourceMetaData(id);
                if (resourceMetaData == null){
                    Reporter.report(id + " has no known rdf:type ");
                    errors.add(id + " has no known rdf:type ");                   
                } else {
-                   resources.put(id, resourceMetaData);
+                   resourcesMap.put(id, resourceMetaData);
                }
             }
         }
     }
     
-    public String toString(){
-         StringBuilder builder = new StringBuilder();
-         Collection<ResourceMetaData> theResources = resources.values();
-         for (ResourceMetaData resouce:theResources){
-             resouce.appendToString(builder, 0);
-         }
-         for (Statement statement: unusedStatements){
-             builder.append("\n");
-             builder.append(statement);
-         }
-         return builder.toString();
-    }
-    
-    public String Schema(){
-         StringBuilder builder = new StringBuilder();
-         Collection<ResourceMetaData> theResources = resources.values();
-         for (ResourceMetaData resouce:theResources){
-             resouce.appendSchema(builder, 0);
-         }
-         return builder.toString();
-    }
-
     private ResourceMetaData getResourceMetaData (Resource id) throws MetaDataException{
         Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI);
         ResourceMetaData resourceMetaData = null;
@@ -112,21 +90,54 @@ public class MetaDataCollection implements MetaData {
 
     @Override
     public boolean hasRequiredValues(RequirementLevel requirementLevel) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (ResourceMetaData resouce:resourcesMap.values()){
+            if (!resouce.hasRequiredValues(requirementLevel)){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean hasCorrectTypes() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (ResourceMetaData resouce:resourcesMap.values()){
+            if (!resouce.hasCorrectTypes()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String toString(){
+         StringBuilder builder = new StringBuilder();
+         Collection<ResourceMetaData> theResources = resourcesMap.values();
+         for (ResourceMetaData resouce:theResources){
+             resouce.appendToString(builder, 0);
+         }
+         for (Statement statement: unusedStatements){
+             builder.append("\n");
+             builder.append(statement);
+         }
+         return builder.toString();
+    }
+    
+    public String Schema(){
+         StringBuilder builder = new StringBuilder();
+         Collection<ResourceMetaData> theResources = resourcesMap.values();
+         for (ResourceMetaData resouce:theResources){
+             resouce.appendSchema(builder, 0);
+         }
+         return builder.toString();
     }
 
     @Override
-    public String validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String validityReport(RequirementLevel forceLevel, boolean includeWarnings) {
+         StringBuilder builder = new StringBuilder();
+         Collection<ResourceMetaData> theResources = resourcesMap.values();
+         for (ResourceMetaData resouce:theResources){
+             resouce.appendValidityReport(builder, forceLevel, includeWarnings, 0);
+         }
+         return builder.toString();
     }
 
-    @Override
-    public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

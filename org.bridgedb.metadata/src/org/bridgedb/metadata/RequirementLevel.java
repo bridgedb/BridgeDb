@@ -10,4 +10,13 @@ package org.bridgedb.metadata;
  */
 public enum RequirementLevel {
     TECHNICAL_MUST, MUST, SHOULD, MAY, SHOULD_NOT, MUST_NOT;
+    
+    public static RequirementLevel parse(String text) throws MetaDataException{
+        for (RequirementLevel requirementLevel: RequirementLevel.values()){
+            if (text.equalsIgnoreCase(requirementLevel.name())) {
+                return requirementLevel;
+            }
+        }
+        throw new MetaDataException("Unexpected RequirementLevel text "+ text);
+    }
 }
