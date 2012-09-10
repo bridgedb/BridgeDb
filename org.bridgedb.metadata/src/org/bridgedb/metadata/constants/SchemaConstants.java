@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.metadata;
+package org.bridgedb.metadata.constants;
 
 /**
  *
  * @author Christian
  */
-public class Schema {
+public class SchemaConstants {
 
     public static final String RESOURCE = "resource";
     public static final String PROPERTY = "propery";
