@@ -12,6 +12,7 @@ public class SchemaConstants {
 
     public static final String RESOURCE = "resource";
     public static final String PROPERTY = "propery";
+    public static final String GROUP = "group";
     public static final String NAME = "name";
     public static final String TYPE = "type";
     public static final String PREDICATE = "predicate";

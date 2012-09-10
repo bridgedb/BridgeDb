@@ -61,25 +61,27 @@
             predicate="http://purl.org/dc/terms/modified"
             class="Date"
             requirementLevel = "MAY"
-        />          
-        <propery
-            name="Retrieved From"
-            predicate="http://purl.org/pav/2.0/retrievedFrom"
-            class="Uri"
-            requirementLevel = "MAY"
-        />          
-        <propery
-            name="Retrieved On"
-            predicate="http://purl.org/pav/2.0/retrievedOn"
-            class="Date"
-            requirementLevel = "MAY"
-        />          
-        <propery
-            name="Retrieved By"
-            predicate="http://purl.org/pav/2.0/retrievedBy"
-            class="Uri"
-            requirementLevel = "MAY"
-        />          
+        />   
+        <group name = "Retrieved">
+            <propery
+                name="Retrieved From"
+                predicate="http://purl.org/pav/2.0/retrievedFrom"
+                class="Uri"
+                requirementLevel = "MAY"
+            />          
+            <propery
+                name="Retrieved On"
+                predicate="http://purl.org/pav/2.0/retrievedOn"
+                class="Date"
+                requirementLevel = "MAY"
+            />          
+            <propery
+                name="Retrieved By"
+                predicate="http://purl.org/pav/2.0/retrievedBy"
+                class="Uri"
+                requirementLevel = "MAY"
+            />     
+        </group>
         <propery
             name="Imported From"
             predicate="http://purl.org/pav/2.0/importedFrom"
