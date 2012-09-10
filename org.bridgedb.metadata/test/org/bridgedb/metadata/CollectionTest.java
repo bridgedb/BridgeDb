@@ -100,9 +100,11 @@ public class CollectionTest {
     }
     
     @Test
-    public void testDataSet() throws Exception {
-        Reporter.report("DataSet");
+    public void testShowDataSet() throws Exception {
+        Reporter.report("ShowDataSet");
         MetaDataCollection metaDataCollection = new MetaDataCollection(loadDataSet1());
+        System.out.println(metaDataCollection.Schema());
+        System.out.println(metaDataCollection.toString());
     }
 
 }

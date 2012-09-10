@@ -6,6 +6,7 @@ package org.bridgedb.metadata;
 
 import org.bridgedb.metadata.constants.SchemaConstants;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.openrdf.model.Resource;
@@ -23,8 +24,7 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
     private final String name;
     private final URI type;
     private final List<MetaDataBase> childMetaData;
-    private Resource id;
-    
+
     ResourceMetaData(Element element) throws MetaDataException {
         name = element.getAttribute(SchemaConstants.NAME);
         String typeSt = element.getAttribute(SchemaConstants.TYPE);
@@ -38,9 +38,38 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
         childMetaData = children;
     }
     
+    @Override
+    public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
+        setupValues(id, parent);
+        for (MetaDataBase child:childMetaData){
+            child.loadValues(id, data, this);
+        }
+        for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
+            if (statement.getSubject().equals(id)){
+                 iterator.remove();
+                 rawRDF.add(statement);
+            }
+        }  
+    }
  
     @Override
     public void appendToString(StringBuilder builder, int tabLevel) {
+        tab(builder, tabLevel);
+        builder.append("Resource ");
+        builder.append(name);
+        newLine(builder);
+        for (MetaDataBase child:childMetaData){
+            child.appendToString(builder, tabLevel + 1);
+        }
+        for (Statement statement: rawRDF){
+            newLine(builder, tabLevel + 1);
+            builder.append(statement);
+        }
+    }
+
+    @Override
+    public void appendSchema(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append("Resource ");
         builder.append(name);
@@ -49,20 +78,12 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
         builder.append(type);
         newLine(builder);
         for (MetaDataBase child:childMetaData){
-            child.appendToString(builder, tabLevel + 1);
+            child.appendSchema(builder, tabLevel + 1);
         }
     }
 
     URI getType() {
         return type;
-    }
-
-    @Override
-    public void loadValues(Resource id, Set<Statement> data) {
-        this.id = id;
-        for (MetaData child:childMetaData){
-            child.loadValues(id, data);
-        }
     }
 
     public ResourceMetaData getSchemaClone() {
