@@ -47,27 +47,31 @@ public class MetaDataRegistry {
     private static Map<URI, ResourceMetaData> getResources() throws MetaDataException{
         if (resources == null){
             String fileName = "resources/metadata.xml";
-            try {        
-                Document root = readDomFromFile(fileName);
-                List<MetaDataBase> metaDatas = getChildMetaData(root.getDocumentElement());
-                resources = new HashMap<URI, ResourceMetaData>();
-                for (MetaData metaData:metaDatas){
-                    ResourceMetaData resource = (ResourceMetaData)metaData;
-                    URI type = resource.getType();
-                    resources.put(type, resource);
-                }
-            } catch (Exception ex) {
-                throw new MetaDataException ("Unable to read schema description from " + fileName, ex);
+            Document root = readDomFromFile(fileName);
+            List<MetaDataBase> metaDatas = getChildMetaData(root.getDocumentElement());
+            resources = new HashMap<URI, ResourceMetaData>();
+            for (MetaData metaData:metaDatas){
+                ResourceMetaData resource = (ResourceMetaData)metaData;
+                URI type = resource.getType();
+                resources.put(type, resource);
             }
         }
         return resources;
     }
     
-    private static Document readDomFromFile(String fileName) throws SAXException, ParserConfigurationException, IOException{
-        File xmlFile = new File(fileName);
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(xmlFile);        
+    private static Document readDomFromFile(String fileName) throws MetaDataException  {
+        try {
+            File xmlFile = new File(fileName);
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            return builder.parse(xmlFile);
+        } catch (IOException ex) {
+            throw new MetaDataException("Exception reading MetaData document", ex);
+        } catch (SAXException ex) {
+            throw new MetaDataException("Unable to Parse MetaData document", ex);
+        } catch (ParserConfigurationException ex) {
+            throw new MetaDataException("Unable to Parse MetaData document", ex);
+        }
     }
 
     public static List<MetaDataBase> getChildMetaData(Element parent) throws MetaDataException{
@@ -111,6 +115,9 @@ public class MetaDataRegistry {
         }
         if (tagName.equals(SchemaConstants.PROPERTY)){
             return new PropertyMetaData(element);
+        }
+        if (tagName.equals(SchemaConstants.GROUP)){
+            return new MetaDataGroup(element);
         }
         throw new MetaDataException ("Unexpected Element with tagName " + tagName); 
     }
