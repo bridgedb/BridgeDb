@@ -20,7 +20,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     
     Set<Statement> rawRDF;
     Resource id;
-    MetaData parent;
+   // MetaData parent;
     
     MetaDataBase(){
         rawRDF = new HashSet<Statement>();
@@ -30,7 +30,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
 
     void setupValues(Resource id, MetaData parent){
         this.id = id;
-        this.parent = parent;
+ //       this.parent = parent;
     }
     
     abstract MetaDataBase getSchemaClone();
