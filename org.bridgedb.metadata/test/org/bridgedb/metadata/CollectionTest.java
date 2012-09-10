@@ -105,18 +105,28 @@ public class CollectionTest {
         boolean ok = metaData.hasRequiredValues(forceLevel);
         if (!ok){
             //This test will fail but with extra info
-            assertEquals(MetaDataBase.CLEAR_REPORT, metaData.validityReport(
-                    forceLevel, NO_WARNINGS));
+            assertEquals(MetaDataBase.CLEAR_REPORT, metaData.validityReport(forceLevel, NO_WARNINGS));
             assertTrue(ok);
         }        
     }
+
+    public static void checkCorrectTypes(MetaData metaData){
+        boolean ok = metaData.hasCorrectTypes();
+        if (!ok){
+            //This test will fail but with extra info
+            assertEquals(MetaDataBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.TECHNICAL_MUST, NO_WARNINGS));
+            assertTrue(ok);
+        }        
+    }
+    
     @Test
     public void testShowDataSet() throws Exception {
         Reporter.report("ShowDataSet");
         MetaDataCollection metaDataCollection = new MetaDataCollection(loadDataSet1());
         System.out.println(metaDataCollection.Schema());
         System.out.println(metaDataCollection.toString());
-        assertTrue(metaDataCollection.hasRequiredValues(RequirementLevel.MUST));
+        checkRequiredValues(metaDataCollection, RequirementLevel.MUST);
+        checkCorrectTypes(metaDataCollection);
     }
 
 }

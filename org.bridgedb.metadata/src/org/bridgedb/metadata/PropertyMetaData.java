@@ -8,6 +8,7 @@ import org.bridgedb.metadata.constants.SchemaConstants;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.bridgedb.metadata.type.*;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -23,7 +24,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
 
     private final String name;      
     private final URI predicate;
-    private final String objectClass;
+    private final MetaDataType metaDataType;
     private final RequirementLevel requirementLevel;
     private Set<Value> values;
 
@@ -31,7 +32,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         name = element.getAttribute("name");
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
         predicate = new URIImpl(predicateSt);
-        objectClass = element.getAttribute(SchemaConstants.CLASS);
+        String objectClass = element.getAttribute(SchemaConstants.CLASS);
+        metaDataType = getMetaDataType(objectClass);
         String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
         requirementLevel = RequirementLevel.parse(requirementLevelSt);
         values = new HashSet<Value>();
@@ -40,9 +42,19 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     private PropertyMetaData(PropertyMetaData other) {
         name = other.name;
         predicate = other.predicate;
-        objectClass = other.objectClass;
+        metaDataType = other.metaDataType;
         requirementLevel = other.requirementLevel;
         values = new HashSet<Value>();
+    }
+    
+    private MetaDataType getMetaDataType(String objectClass) throws MetaDataException{
+        if (SchemaConstants.CLASS_String.equalsIgnoreCase(objectClass)){
+            return new StringType();
+        }
+        if (SchemaConstants.CLASS_URI.equalsIgnoreCase(objectClass)){
+            return new UriType();
+        }
+        throw new MetaDataException ("Unexpected " + SchemaConstants.CLASS + " " + objectClass);
     }
     
     @Override
@@ -61,7 +73,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
                 builder.append(value);
             }
         }
-   }
+    }
 
     @Override
     public void appendSchema(StringBuilder builder, int tabLevel) {
@@ -73,7 +85,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         builder.append(predicate);        
         newLine(builder, tabLevel + 1);
         builder.append("class ");
-        builder.append(objectClass);        
+        builder.append(metaDataType);        
         newLine(builder);
     }
 
@@ -107,8 +119,16 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
 
     @Override
     public boolean hasCorrectTypes() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (Value value: values){
+            if (!metaDataType.correctType(value)){
+                return false;
+            }
+        }
+        //If no incorrect values return true. Even if there are No values.
+        return true;
     }
+
+
 
     @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
