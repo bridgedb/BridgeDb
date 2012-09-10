@@ -6,6 +6,7 @@
             name="title"
             predicate="http://purl.org/dc/terms/title"
             class="URI"
+            requirementLevel = "MUST"
         />          
     </resource>
 </metadata>

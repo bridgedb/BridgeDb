@@ -96,17 +96,22 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
 
     @Override
     public boolean hasRequiredValues(RequirementLevel requirementLevel) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (MetaDataBase child:childMetaData){
+            if (!child.hasRequiredValues(requirementLevel)){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean hasCorrectTypes() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (MetaDataBase child:childMetaData){
+            if (!child.hasCorrectTypes()){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
