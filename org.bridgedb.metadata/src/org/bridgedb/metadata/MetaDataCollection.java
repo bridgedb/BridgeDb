@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
  *
  * @author Christian
  */
-public class MetaDataCollection implements MetaData {
+public class MetaDataCollection extends AppendBase implements MetaData {
     
     Map<Resource,ResourceMetaData> resourcesMap = new HashMap<Resource,ResourceMetaData>();
     Set<String> errors = new HashSet<String>();
@@ -108,8 +108,8 @@ public class MetaDataCollection implements MetaData {
         return true;
     }
 
-    public String toString(){
-         StringBuilder builder = new StringBuilder();
+    @Override
+    void appendToString(StringBuilder builder, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
              resouce.appendToString(builder, 0);
@@ -118,26 +118,22 @@ public class MetaDataCollection implements MetaData {
              builder.append("\n");
              builder.append(statement);
          }
-         return builder.toString();
     }
     
-    public String Schema(){
-         StringBuilder builder = new StringBuilder();
+    @Override
+    void appendSchema(StringBuilder builder, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
              resouce.appendSchema(builder, 0);
          }
-         return builder.toString();
     }
 
     @Override
-    public String validityReport(RequirementLevel forceLevel, boolean includeWarnings) {
-         StringBuilder builder = new StringBuilder();
+    void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
              resouce.appendValidityReport(builder, forceLevel, includeWarnings, 0);
          }
-         return builder.toString();
     }
 
 }

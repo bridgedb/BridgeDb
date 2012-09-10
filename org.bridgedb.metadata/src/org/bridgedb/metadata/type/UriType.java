@@ -17,5 +17,10 @@ public class UriType implements MetaDataType{
     public boolean correctType(Value value) {
         return value instanceof URI;
     }
+
+    @Override
+    public String getCorrectType() {
+        return "A URI.";
+    }
     
 }
