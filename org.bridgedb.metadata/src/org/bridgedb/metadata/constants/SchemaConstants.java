@@ -16,7 +16,8 @@ public class SchemaConstants {
     public static final String TYPE = "type";
     public static final String PREDICATE = "predicate";
     public static final String CLASS = "class";
-    public static final String CLASS_String = "String";
+    public static final String CLASS_DATE = "Date";
+    public static final String CLASS_STRING = "String";
     public static final String CLASS_URI = "uri";
     
     public static final String REQUIREMENT_LEVEL = "requirementLevel";

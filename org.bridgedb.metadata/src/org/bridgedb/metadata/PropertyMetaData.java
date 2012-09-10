@@ -50,7 +50,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     }
     
     private MetaDataType getMetaDataType(String objectClass) throws MetaDataException{
-        if (SchemaConstants.CLASS_String.equalsIgnoreCase(objectClass)){
+        if (SchemaConstants.CLASS_DATE.equalsIgnoreCase(objectClass)){
+            return new DateType();
+        }
+        if (SchemaConstants.CLASS_STRING.equalsIgnoreCase(objectClass)){
             return new StringType();
         }
         if (SchemaConstants.CLASS_URI.equalsIgnoreCase(objectClass)){
@@ -60,7 +63,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     }
     
     @Override
-    public void appendToString(StringBuilder builder, int tabLevel) {
+    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
+        if (values.isEmpty() && requirementLevel.compareTo(forceLevel) > 0) { 
+            //No value and low enough level not too care
+            return; 
+        } 
         tab(builder, tabLevel);
         builder.append("Property ");
         builder.append(name);
@@ -111,9 +118,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     }
 
     @Override
-    public boolean hasRequiredValues(RequirementLevel requirementLevel) {
+    public boolean hasRequiredValues(RequirementLevel forceLevel) {
         if (values.isEmpty()){
-            return false;
+            //Is the level so low that is does not matter
+            return (requirementLevel.compareTo(forceLevel) > 0);          
         } else {
             return true;
         }

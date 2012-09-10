@@ -4,7 +4,6 @@
  */
 package org.bridgedb.metadata;
 
-import org.bridgedb.metadata.constants.PavConstants;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,8 +12,9 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.metadata.constants.*;
 import org.bridgedb.metadata.utils.Reporter;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -24,12 +24,12 @@ import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
 
-
 /**
  *
  * @author Christian
  */
-public class CollectionTest {
+public class DataSetMetaDataTest {
+    
     static final Resource D1_ID = new URIImpl ("http://www.example.com/test/dataset1");
     static final Value TITLE = new LiteralImpl("The title");
     static final String DESCRIPTION_STRING = "The dataset description";
@@ -69,43 +69,50 @@ public class CollectionTest {
     Statement exampleStatement3 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE3);
     //Statement focStatement = new StatementImpl(D1_ID, VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.QUARTERLY.getURI());
     
-    public CollectionTest() throws DatatypeConfigurationException {
+    public DataSetMetaDataTest() throws DatatypeConfigurationException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         Value now = new CalendarLiteralImpl(date2);
         d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, now);  
     }
 
+    private void addStatement(Set<Statement> data, Statement statement){
+        if (statement != null){
+            data.add(statement);
+        }
+    }
+    
     /**
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
     Set<Statement> loadDataSet1(){
         Set<Statement> data = new HashSet<Statement>();
-        data.add(idStatement);
-        data.add(titleStatement);
-        data.add(descriptionStatement);
-        data.add(homePageStatement);
-        data.add(licenseStatement);
-        data.add(nameSpaceStatement);
-        data.add(versionStatement);
-        data.add(dataDumpStatement);
-        data.add(d1ModifiedStatement);
-        data.add(vocabularyStatement1);
-        data.add(vocabularyStatement2);
-        data.add(topicStatement);
-        data.add(exampleStatement1);
-        data.add(exampleStatement2);
-        data.add(exampleStatement3);
-        //data.add(focStatement);
+        addStatement(data, idStatement);
+        addStatement(data, titleStatement);
+        addStatement(data, descriptionStatement);
+        addStatement(data, homePageStatement);
+        addStatement(data, licenseStatement);
+        addStatement(data, nameSpaceStatement);
+        addStatement(data, versionStatement);
+        addStatement(data, dataDumpStatement);
+        addStatement(data, d1ModifiedStatement);
+        addStatement(data, vocabularyStatement1);
+        addStatement(data, vocabularyStatement2);
+        addStatement(data, topicStatement);
+        addStatement(data, exampleStatement1);
+        addStatement(data, exampleStatement2);
+        addStatement(data, exampleStatement3);
+//        data.add(focStatement);
         return data;
     }
     
-    public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
+     public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
         boolean ok = metaData.hasRequiredValues(forceLevel);
         if (!ok){
             //This test will fail but with extra info
-            assertEquals(MetaDataBase.CLEAR_REPORT, metaData.validityReport(forceLevel, NO_WARNINGS));
+            assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(
+                    forceLevel, NO_WARNINGS));
             assertTrue(ok);
         }        
     }
@@ -120,13 +127,65 @@ public class CollectionTest {
     }
     
     @Test
-    public void testShowDataSet() throws Exception {
-        Reporter.report("ShowDataSet");
-        MetaDataCollection metaDataCollection = new MetaDataCollection(loadDataSet1());
-        System.out.println(metaDataCollection.Schema());
-        System.out.println(metaDataCollection.toString());
-        checkRequiredValues(metaDataCollection, RequirementLevel.MUST);
-        checkCorrectTypes(metaDataCollection);
+    public void testShowAll() throws MetaDataException{
+        Reporter.report("ShowAll");
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        String showAll = metaData.showAll(RequirementLevel.MAY);
+        //ystem.out.println(showAll);
+    } 
+    
+    @Test
+    public void testHasRequiredValues() throws MetaDataException{
+        Reporter.report("HasRequiredValues");
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
+    } 
+
+    @Test
+    public void testAutoFindId() throws MetaDataException{
+        Reporter.report("AutoFindId");
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
+    } 
+
+    @Test
+    public void testMissingRequiredValue() throws MetaDataException{
+        Reporter.report("HasMissingRequiredValues");
+        licenseStatement = null;
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        checkRequiredValues(metaData, RequirementLevel.TECHNICAL_MUST);
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
+    } 
+
+    @Test
+    public void testHasCorrectTypes() throws MetaDataException{
+        Reporter.report("HasCorrectTypes");
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        checkCorrectTypes(metaData);
+    }
+    
+    @Test
+    public void testHasCorrectTypesBadDate() throws MetaDataException{
+        Reporter.report("isHasCorrectTypesBadDate");
+        d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        assertFalse(metaData.hasCorrectTypes());
+    }
+ 
+    @Test
+    public void testValidityReport() throws MetaDataException{
+        Reporter.report("ValidityReport");
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
     }
 
+    @Test
+    public void testMissingValidityReport() throws MetaDataException{
+        Reporter.report("MissingValidityReport");
+        titleStatement = null;
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
+    }
 }

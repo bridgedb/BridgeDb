@@ -3,10 +3,151 @@
 <metadata>
     <resource name="DatasetDescription" type="http://rdfs.org/ns/void#Dataset">
         <propery
-            name="title"
+            name="Title"
             predicate="http://purl.org/dc/terms/title"
             class="String"
             requirementLevel = "MUST"
         />          
+        <propery
+            name="Description"
+            predicate="http://purl.org/dc/terms/description"
+            class="String"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Homepage"
+            predicate="http://xmlns.com/foaf/0.1/homepage"
+            class="Uri"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Page"
+            predicate="http://xmlns.com/foaf/0.1/page"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="License"
+            predicate="http://purl.org/dc/terms/license"
+            class="Uri"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Namespace"
+            predicate="http://rdfs.org/ns/void#uriSpace"
+            class="String"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Version"
+            predicate="http://purl.org/pav/2.0/version"
+            class="String"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Publisher"
+            predicate="http://purl.org/dc/terms/publisher"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Created"
+            predicate="http://purl.org/dc/terms/created"
+            class="Date"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Modified"
+            predicate="http://purl.org/dc/terms/modified"
+            class="Date"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Retrieved From"
+            predicate="http://purl.org/pav/2.0/retrievedFrom"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Retrieved On"
+            predicate="http://purl.org/pav/2.0/retrievedOn"
+            class="Date"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Retrieved By"
+            predicate="http://purl.org/pav/2.0/retrievedBy"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Imported From"
+            predicate="http://purl.org/pav/2.0/importedFrom"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Imported On"
+            predicate="http://purl.org/pav/2.0/importedOn"
+            class="Date"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Imported By"
+            predicate="http://purl.org/pav/2.0/importedBy"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Derived From"
+            predicate="http://purl.org/pav/2.0/derivedFrom"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Derived On"
+            predicate="http://purl.org/pav/2.0/derivedOn"
+            class="Date"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Derived By"
+            predicate="http://purl.org/pav/2.0/derivedBy"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
+        <propery
+            name="Vocabularies"
+            predicate="http://rdfs.org/ns/void#vocabulary"
+            class="Uri"
+            requirementLevel = "SHOULD"
+        />          
+        <propery
+            name="Topics"
+            predicate="http://purl.org/dc/terms/subject"
+            class="URI"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Examples"
+            predicate="http://rdfs.org/ns/void#exampleResource"
+            class="URI"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Data Dump"
+            predicate="http://rdfs.org/ns/void#dataDump"
+            class="URI"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Sparql End Point"
+            predicate="http://rdfs.org/ns/void#sparqlEndpoint"
+            class="Uri"
+            requirementLevel = "MAY"
+        />          
     </resource>
 </metadata>
+<!--        //Distinguishing Subsets is handled seperately  
+        metaParts.add(new SingletonValue("Frequency Of Change",VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.class, RequirementLevel.SHOULD));        
+-->

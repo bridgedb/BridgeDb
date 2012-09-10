@@ -14,10 +14,16 @@ public abstract class AppendBase {
     
     public synchronized String toString(){
          StringBuilder builder = new StringBuilder();
-         appendToString(builder, 0);
+         appendShowAll(builder, RequirementLevel.SHOULD, 0);
          return builder.toString();
     }
     
+    String showAll(RequirementLevel requirementLevel) {
+         StringBuilder builder = new StringBuilder();
+         appendShowAll(builder, requirementLevel, 0);
+         return builder.toString();
+    }
+
     public String Schema(){
         StringBuilder builder = new StringBuilder();
         appendSchema(builder, 0);
@@ -26,7 +32,7 @@ public abstract class AppendBase {
 
     abstract void appendSchema(StringBuilder builder, int tabLevel);
     
-    abstract void appendToString(StringBuilder builder, int tabLevel);
+    abstract void appendShowAll(StringBuilder builder, RequirementLevel requirementLevel, int tabLevel);
     
     public String validityReport(RequirementLevel forceLevel, boolean includeWarnings) {
          StringBuilder builder = new StringBuilder();

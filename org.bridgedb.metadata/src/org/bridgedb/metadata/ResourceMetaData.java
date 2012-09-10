@@ -54,13 +54,13 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
     }
  
     @Override
-    public void appendToString(StringBuilder builder, int tabLevel) {
+    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
         tab(builder, tabLevel);
         builder.append("Resource ");
         builder.append(name);
         newLine(builder);
         for (MetaDataBase child:childMetaData){
-            child.appendToString(builder, tabLevel + 1);
+            child.appendShowAll(builder, forceLevel, tabLevel + 1);
         }
         for (Statement statement: rawRDF){
             newLine(builder, tabLevel + 1);
