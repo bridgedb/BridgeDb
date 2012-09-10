@@ -6,6 +6,7 @@ package org.bridgedb.metadata;
 
 import org.bridgedb.metadata.constants.SchemaConstants;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -45,6 +46,24 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         tab(builder, tabLevel);
         builder.append("Property ");
         builder.append(name);
+        if (values.isEmpty()){
+            builder.append(" not Set ");
+        } else if (values.size() == 1){
+            builder.append(" == ");
+            builder.append(values.iterator().next());
+        } else {
+            for (Value value: values){
+                newLine(builder, tabLevel + 1);
+                builder.append(value);
+            }
+        }
+   }
+
+    @Override
+    public void appendSchema(StringBuilder builder, int tabLevel) {
+        tab(builder, tabLevel);
+        builder.append("Property ");
+        builder.append(name);
         newLine(builder, tabLevel + 1);
         builder.append("predicate ");
         builder.append(predicate);        
@@ -52,11 +71,20 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         builder.append("class ");
         builder.append(objectClass);        
         newLine(builder);
-   }
+    }
 
     @Override
-    public void loadValues(Resource id, Set<Statement> data) {
-        values = MetaDataCollection.getBySubjectPredicate(data, id, predicate);
+    public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
+        setupValues(id, parent);
+        values = new HashSet<Value>();
+        for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
+            if (statement.getPredicate().equals(predicate)){
+                 iterator.remove();
+                 rawRDF.add(statement);
+                 values.add(statement.getObject());
+            }
+        }  
     }
 
     @Override

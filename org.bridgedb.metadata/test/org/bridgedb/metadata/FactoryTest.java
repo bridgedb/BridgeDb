@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.metadata.utils.Reporter;
 import org.junit.Test;
 
@@ -13,8 +14,8 @@ import org.junit.Test;
  */
 public class FactoryTest {
     @Test
-    public void testDataSet() throws Exception {
-        Reporter.report("DataSet");
+    public void testFindDataSet() throws Exception {
+        Reporter.report("FindDataSet");
         ResourceMetaData resource = MetaDataRegistry.getResourceByType(VoidConstants.DATASET);
         System.out.println(resource);
     }
