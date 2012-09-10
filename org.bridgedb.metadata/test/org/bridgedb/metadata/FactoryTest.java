@@ -15,7 +15,7 @@ public class FactoryTest {
     @Test
     public void testDataSet() throws Exception {
         Reporter.report("DataSet");
-        ResourceMetaData resource = MetaDataClassFactory.getResourceByType(VoidConstants.DATASET);
-        System.out.println(resource.schema());
+        ResourceMetaData resource = MetaDataRegistry.getResourceByType(VoidConstants.DATASET);
+        System.out.println(resource);
     }
 }

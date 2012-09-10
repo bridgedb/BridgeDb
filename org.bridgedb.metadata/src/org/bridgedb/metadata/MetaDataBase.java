@@ -8,13 +8,15 @@ package org.bridgedb.metadata;
  *
  * @author Christian
  */
-public abstract class MetaDataBase implements MetaDataClass{
+public abstract class MetaDataBase implements MetaData{
     
-    public synchronized String schema(){
+    public synchronized String toString(){
          StringBuilder builder = new StringBuilder();
-         appendToSchema(builder, 0);
+         appendToString(builder, 0);
          return builder.toString();
     }
+    
+    abstract void appendToString(StringBuilder builder, int tabLevel);
     
     final void tab(StringBuilder builder, int tab){
         for (int i = 0; i < tab; i++){
@@ -32,4 +34,7 @@ public abstract class MetaDataBase implements MetaDataClass{
             builder.append("\t");
         }        
     }
+
+    abstract MetaDataBase getSchemaClone();
+
 }

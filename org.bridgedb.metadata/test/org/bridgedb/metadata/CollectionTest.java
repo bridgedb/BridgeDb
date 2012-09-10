@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.metadata.constants.PavConstants;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.metadata.constants.SchemaConstants;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import org.xml.sax.SAXException;
  *
  * @author Christian
  */
-public class MetaDataClassFactory {
+public class MetaDataRegistry {
     
     static Map<URI, ResourceMetaData> resources;
     
@@ -48,9 +49,9 @@ public class MetaDataClassFactory {
             String fileName = "resources/metadata.xml";
             try {        
                 Document root = readDomFromFile(fileName);
-                List<MetaDataClass> metaDatas = getChildMetaData(root.getDocumentElement());
+                List<MetaDataBase> metaDatas = getChildMetaData(root.getDocumentElement());
                 resources = new HashMap<URI, ResourceMetaData>();
-                for (MetaDataClass metaData:metaDatas){
+                for (MetaData metaData:metaDatas){
                     ResourceMetaData resource = (ResourceMetaData)metaData;
                     URI type = resource.getType();
                     resources.put(type, resource);
@@ -69,7 +70,7 @@ public class MetaDataClassFactory {
         return builder.parse(xmlFile);        
     }
 
-     public static List<MetaDataClass> getChildMetaData(Element parent) throws MetaDataException{
+    public static List<MetaDataBase> getChildMetaData(Element parent) throws MetaDataException{
         List<Element> childElements = getChildElements(parent);
         return getMetaData(childElements);
     }
@@ -94,22 +95,22 @@ public class MetaDataClassFactory {
         return children;
     }
     
-    private static List<MetaDataClass> getMetaData(List<Element> elements) throws MetaDataException{
-        ArrayList<MetaDataClass> metaDatas = new ArrayList<MetaDataClass>();
+    private static List<MetaDataBase> getMetaData(List<Element> elements) throws MetaDataException{
+        ArrayList<MetaDataBase> metaDatas = new ArrayList<MetaDataBase>();
         for (Element element:elements){
-            MetaDataClass metaData = createMetaData(element);
+            MetaDataBase metaData = createMetaData(element);
             metaDatas.add(metaData);
         }
         return metaDatas;
     }
     
-    private static MetaDataClass createMetaData(Element element) throws MetaDataException {
+    private static MetaDataBase createMetaData(Element element) throws MetaDataException {
         String tagName = element.getTagName();
-        if (tagName.equals(Schema.RESOURCE)){
+        if (tagName.equals(SchemaConstants.RESOURCE)){
             return new ResourceMetaData(element);
         }
-        if (tagName.equals(Schema.PROPERTY)){
-            return new Property(element);
+        if (tagName.equals(SchemaConstants.PROPERTY)){
+            return new PropertyMetaData(element);
         }
         throw new MetaDataException ("Unexpected Element with tagName " + tagName); 
     }
@@ -118,9 +119,9 @@ public class MetaDataClassFactory {
         Document doc = readDomFromFile("resources/metadata.xml");
         Element root = doc.getDocumentElement();
         List<Element> elements = getChildElements(root);
-        List<MetaDataClass> metaDatas = getMetaData(elements);
-        for (MetaDataClass metaData:metaDatas){
-            String schema = metaData.schema();
+        List<MetaDataBase> metaDatas = getMetaData(elements);
+        for (MetaData metaData:metaDatas){
+            String schema = metaData.toString();
             System.out.println(schema);
         }
     }
