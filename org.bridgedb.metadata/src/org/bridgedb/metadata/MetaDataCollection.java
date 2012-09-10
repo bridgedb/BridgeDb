@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
  *
  * @author Christian
  */
-public class MetaDataCollection {
+public class MetaDataCollection implements MetaData {
     
     Map<Resource,ResourceMetaData> resources = new HashMap<Resource,ResourceMetaData>();
     Set<String> errors = new HashSet<String>();
@@ -45,7 +45,7 @@ public class MetaDataCollection {
         Set<Value> types = getBySubjectPredicate(data, id, RdfConstants.TYPE_URI);
         ResourceMetaData resourceMetaData = null;
         for (Value type:types){
-            ResourceMetaData rmd =  MetaDataClassFactory.getResourceByType(type);
+            ResourceMetaData rmd =  MetaDataRegistry.getResourceByType(type);
             if (rmd != null){
                 if (resourceMetaData == null){
                    resourceMetaData = rmd; 
@@ -77,5 +77,30 @@ public class MetaDataCollection {
             }
         }  
         return values;
+    }
+
+    @Override
+    public void loadValues(Resource id, Set<Statement> data) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean hasRequiredValues(RequirementLevel requirementLevel) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean hasCorrectTypes() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String validityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
