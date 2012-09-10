@@ -116,7 +116,9 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
 
     @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (MetaDataBase child:childMetaData){
+            child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+        }
     }
 
 }
