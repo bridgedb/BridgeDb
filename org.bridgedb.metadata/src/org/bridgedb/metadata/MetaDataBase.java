@@ -4,17 +4,48 @@
  */
 package org.bridgedb.metadata;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+
 /**
  *
  * @author Christian
  */
 public abstract class MetaDataBase implements MetaData{
     
+    Set<Statement> rawRDF;
+    Resource id;
+    MetaData parent;
+    
+    MetaDataBase(){
+        rawRDF = new HashSet<Statement>();
+    }
+    
+    abstract void loadValues(Resource id, Set<Statement> data, MetaData parent);
+
+    void setupValues(Resource id, MetaData parent){
+        this.id = id;
+        this.parent = parent;
+    }
+    
     public synchronized String toString(){
          StringBuilder builder = new StringBuilder();
          appendToString(builder, 0);
          return builder.toString();
     }
+    
+    public String Schema(){
+        StringBuilder builder = new StringBuilder();
+        appendSchema(builder, 0);
+        return builder.toString();
+    }
+
+    abstract void appendSchema(StringBuilder builder, int tabLevel);
     
     abstract void appendToString(StringBuilder builder, int tabLevel);
     
@@ -36,5 +67,6 @@ public abstract class MetaDataBase implements MetaData{
     }
 
     abstract MetaDataBase getSchemaClone();
+
 
 }

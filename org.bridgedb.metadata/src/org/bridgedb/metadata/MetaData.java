@@ -13,9 +13,9 @@ import org.openrdf.model.Statement;
  * @author Christian
  */
 interface MetaData {
-
-    void loadValues(Resource id, Set<Statement> data);
     
+    String Schema();
+
     boolean hasRequiredValues(RequirementLevel requirementLevel);
     
     boolean hasCorrectTypes();
