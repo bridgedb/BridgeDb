@@ -44,6 +44,7 @@
             class="String"
             requirementLevel = "MAY"
         />          
+        <alternatives name = "Provenance" requirementLevel = "MUST">
         <group name = "Original Location">
             <propery
                 name="Publisher"
@@ -84,46 +85,47 @@
                 requirementLevel = "MAY"
             />     
         </group>
-        <group name = "imported">
-            <propery
-                name="Imported From"
-                predicate="http://purl.org/pav/2.0/importedFrom"
-                class="Uri"
-                requirementLevel = "MAY"
-            />          
-            <propery
-                name="Imported On"
-                predicate="http://purl.org/pav/2.0/importedOn"
-                class="Date"
-                requirementLevel = "MAY"
-            />          
-            <propery
-                name="Imported By"
-                predicate="http://purl.org/pav/2.0/importedBy"
-                class="Uri"
-                requirementLevel = "MAY"
-            />
-        </group>
-        <group name = "Derived">
-            <propery
-                name="Derived From"
-                predicate="http://purl.org/pav/2.0/derivedFrom"
-                class="Uri"
-                requirementLevel = "MAY"
-            />          
-            <propery
-                name="Derived On"
-                predicate="http://purl.org/pav/2.0/derivedOn"
-                class="Date"
-                requirementLevel = "MAY"
-            />              
-            <propery
-                name="Derived By"
-                predicate="http://purl.org/pav/2.0/derivedBy"
-                class="Uri"
-                requirementLevel = "MAY"
-            /> 
-        </group>
+            <group name = "imported">
+                <propery
+                    name="Imported From"
+                    predicate="http://purl.org/pav/2.0/importedFrom"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                />          
+                <propery
+                    name="Imported On"
+                    predicate="http://purl.org/pav/2.0/importedOn"
+                    class="Date"
+                    requirementLevel = "MAY"
+                />          
+                <propery
+                    name="Imported By"
+                    predicate="http://purl.org/pav/2.0/importedBy"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                />
+            </group>
+            <group name = "Derived">
+                <propery
+                    name="Derived From"
+                    predicate="http://purl.org/pav/2.0/derivedFrom"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                />          
+                <propery
+                    name="Derived On"
+                    predicate="http://purl.org/pav/2.0/derivedOn"
+                    class="Date"
+                    requirementLevel = "MAY"
+                />              
+                <propery
+                    name="Derived By"
+                    predicate="http://purl.org/pav/2.0/derivedBy"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                /> 
+            </group>
+        </alternatives>
         <propery
             name="Vocabularies"
             predicate="http://rdfs.org/ns/void#vocabulary"
