@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.bridgedb.metadata.utils.Reporter;
+import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.w3c.dom.Comment;
@@ -33,7 +34,8 @@ import org.xml.sax.SAXException;
  */
 public class MetaDataRegistry {
     
-    static Map<URI, ResourceMetaData> resources;
+    static Map<URI, ResourceMetaData> resourcesByType;
+    static Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
     
     public static ResourceMetaData getResourceByType(Value type) throws MetaDataException{
         Map<URI, ResourceMetaData> theResources = getResources();
@@ -44,20 +46,28 @@ public class MetaDataRegistry {
             return resourceMetaData.getSchemaClone();
         }
     }
+   
+    public static ResourceMetaData getResourceByID(Resource type) {
+        return resourcesById.get(type);
+    }
     
+    public static void registerResource (ResourceMetaData resourceMetaData){
+        resourcesById.put(resourceMetaData.id, resourceMetaData);
+    }
+            
     private static Map<URI, ResourceMetaData> getResources() throws MetaDataException{
-        if (resources == null){
+        if (resourcesByType == null){
             String fileName = "resources/metadata.xml";
             Document root = readDomFromFile(fileName);
             List<MetaDataBase> metaDatas = getChildMetaData(root.getDocumentElement());
-            resources = new HashMap<URI, ResourceMetaData>();
+            resourcesByType = new HashMap<URI, ResourceMetaData>();
             for (MetaData metaData:metaDatas){
                 ResourceMetaData resource = (ResourceMetaData)metaData;
                 URI type = resource.getType();
-                resources.put(type, resource);
+                resourcesByType.put(type, resource);
             }
         }
-        return resources;
+        return resourcesByType;
     }
     
     private static Document readDomFromFile(String fileName) throws MetaDataException  {
@@ -124,6 +134,9 @@ public class MetaDataRegistry {
         }
         if (tagName.equals(SchemaConstants.ALTERNATIVES)){
             return new MetaDataAlternatives(element);
+        }
+        if (tagName.equals(SchemaConstants.LINKED_RESOURCE)){
+            return new LinkedResource(element);
         }
         throw new MetaDataException ("Unexpected Element with tagName " + tagName); 
     }

@@ -69,6 +69,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
             return; 
         } 
         tab(builder, tabLevel);
+        builder.append(id);
         builder.append("Property ");
         builder.append(name);
         if (values.isEmpty()){
@@ -82,6 +83,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
                 builder.append(value);
             }
         }
+        newLine(builder);
     }
 
     @Override
