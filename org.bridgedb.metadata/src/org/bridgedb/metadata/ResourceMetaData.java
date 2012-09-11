@@ -51,6 +51,7 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
                  rawRDF.add(statement);
             }
         }  
+        MetaDataRegistry.registerResource(this);
     }
  
     @Override
@@ -58,13 +59,16 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
         tab(builder, tabLevel);
         builder.append("Resource ");
         builder.append(name);
+        builder.append(" id ");
+        builder.append(id);
         newLine(builder);
         for (MetaDataBase child:childMetaData){
             child.appendShowAll(builder, forceLevel, tabLevel + 1);
         }
         for (Statement statement: rawRDF){
-            newLine(builder, tabLevel + 1);
+            tab(builder, tabLevel + 1);
             builder.append(statement);
+            newLine(builder);
         }
     }
 

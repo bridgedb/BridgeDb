@@ -199,8 +199,31 @@ public class MetaDataTestBase {
         //data.addStatement(d2FocStatement);
         return data;
     }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadLinkSet(){
+        Set<Statement> data = loadDataSet1();
+        data.addAll(loadDataSet2());
+        addStatement(data, linkIdStatement); 
+        addStatement(data, linkTitleStatement);
+        addStatement(data, linkDescriptionStatement );
+        addStatement(data, linkLicenseStatement);
+        addStatement(data, linkAuthoredByStatement);
+        addStatement(data, linkAuthoredOnStatement);
+        addStatement(data, linkCreatedByStatement);
+        addStatement(data, linkCreatedOnStatement);
+        addStatement(data, linkPredicateStatement);
+        addStatement(data, linkJustificationStatement);
+        addStatement(data, linkNumberStatement);
+        addStatement(data, subjectStatement);
+        addStatement(data, objectStatement);
+        return data;
+    }
 
-     public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
+    public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
         boolean ok = metaData.hasRequiredValues(forceLevel);
         if (!ok){
             //This test will fail but with extra info
