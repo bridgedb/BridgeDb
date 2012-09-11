@@ -157,6 +157,14 @@
             requirementLevel = "MAY"
         />          
     </resource>
+    <resource name="DatasetDescription" type="http://rdfs.org/ns/void#Linkset">
+        <linkedResource 
+            name = "subject"
+            predicate = "http://rdfs.org/ns/void#subjectsTarget"
+            type="http://rdfs.org/ns/void#Dataset"
+            requirementLevel = "MUST"
+        />      
+    </resource>
 </metadata>
 <!--        //Distinguishing Subsets is handled seperately  
         metaParts.add(new SingletonValue("Frequency Of Change",VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.class, RequirementLevel.SHOULD));        
