@@ -34,5 +34,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     }
     
     abstract MetaDataBase getSchemaClone();
+    
+    abstract boolean hasValues();
 
 }
