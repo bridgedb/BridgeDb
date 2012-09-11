@@ -75,6 +75,9 @@ public class MetaDataGroup extends MetaDataBase implements MetaData{
         for (MetaDataBase child:childMetaData){
             child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
         }
+        if (!includeWarnings){
+            return;
+        }
         //check if any item in the group has a value
         boolean valueFound = false;
         boolean valueMissing = false;

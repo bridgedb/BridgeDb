@@ -47,6 +47,7 @@ public class DataSetMetaDataTest {
     static final URI EXAMPLE1 = new URIImpl("http://www.example.com/data#A1");
     static final URI EXAMPLE2 = new URIImpl("http://www.example.com/data#B2");
     static final URI EXAMPLE3 = new URIImpl("http://www.example.com/data#C3");
+    static final URI PERSON = new URIImpl("http://www.example.com/person#Joe");
 
     //Flags for easy reading of tests
     static final boolean INCLUDE_WARNINGS = true;
@@ -60,20 +61,26 @@ public class DataSetMetaDataTest {
     Statement nameSpaceStatement = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, NAME_SPACE_VALUE);
     Statement versionStatement = new StatementImpl(D1_ID, PavConstants.VERSION, VERSION_VALUE);
     Statement dataDumpStatement = new StatementImpl(D1_ID, VoidConstants.DATA_DUMP, DATA_DUMP);  
+    Statement d1PublishedStatement = new StatementImpl(D1_ID, DctermsConstants.PUBLISHER, DATA_DUMP);  
     Statement d1ModifiedStatement;  // incontrustor due to date!
+    Statement d1CreatedStatement;  // incontrustor due to date!
+    Statement d1RetreivedFromStatement = new StatementImpl(D1_ID, PavConstants.RETRIEVED_FROM, HOME_PAGE);
+    Statement d1RetreivedOn;  // incontrustor due to date!
+    Statement d1RetreivedByStatement = new StatementImpl(D1_ID, PavConstants.RETRIEVED_BY, PERSON);
     Statement vocabularyStatement1 = new StatementImpl(D1_ID, VoidConstants.VOCABULARY, VOCABULARY1);
     Statement vocabularyStatement2 = new StatementImpl(D1_ID, VoidConstants.VOCABULARY, VOCABULARY2);
     Statement topicStatement = new StatementImpl(D1_ID, DctermsConstants.SUBJECT, TOPIC);
     Statement exampleStatement1 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE1);
     Statement exampleStatement2 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE2);
     Statement exampleStatement3 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE3);
-    //Statement focStatement = new StatementImpl(D1_ID, VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.QUARTERLY.getURI());
-    
+
     public DataSetMetaDataTest() throws DatatypeConfigurationException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         Value now = new CalendarLiteralImpl(date2);
         d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, now);  
+        d1CreatedStatement = new StatementImpl(D1_ID, DctermsConstants.CREATED, now);  
+        d1RetreivedOn = new StatementImpl(D1_ID, PavConstants.RETRIEVED_ON, now);          
     }
 
     private void addStatement(Set<Statement> data, Statement statement){
@@ -96,7 +103,12 @@ public class DataSetMetaDataTest {
         addStatement(data, nameSpaceStatement);
         addStatement(data, versionStatement);
         addStatement(data, dataDumpStatement);
+        addStatement(data, d1PublishedStatement);
         addStatement(data, d1ModifiedStatement);
+        addStatement(data, d1CreatedStatement);
+        addStatement(data, d1RetreivedFromStatement);
+        addStatement(data, d1RetreivedOn);
+        addStatement(data, d1RetreivedByStatement);
         addStatement(data, vocabularyStatement1);
         addStatement(data, vocabularyStatement2);
         addStatement(data, topicStatement);
@@ -187,5 +199,14 @@ public class DataSetMetaDataTest {
         titleStatement = null;
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
         assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
+    }
+
+    @Test
+    public void testGroupValidityReport() throws MetaDataException{
+        Reporter.report("MissingValidityReport");
+        d1ModifiedStatement = null;
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());        
+        assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
+        assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, NO_WARNINGS));
     }
 }

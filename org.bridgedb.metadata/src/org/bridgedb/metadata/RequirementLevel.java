@@ -9,7 +9,7 @@ package org.bridgedb.metadata;
  * @author Christian
  */
 public enum RequirementLevel {
-    TECHNICAL_MUST, MUST, SHOULD, MAY, SHOULD_NOT, MUST_NOT;
+    TECHNICAL_MUST, MUST, SHOULD, MAY; //Negative requirement not programmed, SHOULD_NOT, MUST_NOT;
     
     public static RequirementLevel parse(String text) throws MetaDataException{
         for (RequirementLevel requirementLevel: RequirementLevel.values()){
