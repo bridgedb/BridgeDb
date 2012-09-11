@@ -119,6 +119,9 @@ public class MetaDataRegistry {
         if (tagName.equals(SchemaConstants.GROUP)){
             return new MetaDataGroup(element);
         }
+        if (tagName.equals(SchemaConstants.ALTERNATIVES)){
+            return new MetaDataAlternatives(element);
+        }
         throw new MetaDataException ("Unexpected Element with tagName " + tagName); 
     }
 

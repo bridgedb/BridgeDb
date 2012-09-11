@@ -172,6 +172,23 @@ public class DataSetMetaDataTest {
     } 
 
     @Test
+    public void testAlternative1MissingRequiredValue() throws MetaDataException{
+        Reporter.report("HasMissingRequiredValues");
+        d1PublishedStatement = null;
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        checkRequiredValues(metaData, RequirementLevel.MUST);
+    } 
+
+    @Test
+    public void testAlternativeAllMissingRequiredValue() throws MetaDataException{
+        Reporter.report("HasMissingRequiredValues");
+        d1PublishedStatement = null;
+        d1RetreivedOn = null;
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        assertFalse(metaData.hasRequiredValues(RequirementLevel.MUST));
+    } 
+
+    @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
@@ -208,5 +225,14 @@ public class DataSetMetaDataTest {
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());        
         assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, INCLUDE_WARNINGS));
         assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, NO_WARNINGS));
+    }
+
+    @Test
+    public void testAlternativeValidityReport() throws MetaDataException{
+        Reporter.report("MissingValidityReport");
+        d1ModifiedStatement = null;
+        d1RetreivedOn = null;
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());        
+        assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, NO_WARNINGS));
     }
 }
