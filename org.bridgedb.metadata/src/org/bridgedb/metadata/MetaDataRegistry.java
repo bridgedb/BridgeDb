@@ -19,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.bridgedb.metadata.utils.Reporter;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -92,8 +93,10 @@ public class MetaDataRegistry {
                 if (!check.isEmpty()){
                     throw new MetaDataException("found non empty text " + check); 
                 }
+            } else if (node instanceof Comment) {
+                //comments can of course be ignored
             } else {
-                throw new MetaDataException("found non element" + node);            
+                throw new MetaDataException("found non element" + node + node.getClass());            
             }
         }
         return children;

@@ -131,6 +131,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     }
 
     @Override
+    boolean hasValues() {
+        return !values.isEmpty();
+    }
+    
+    @Override
     public boolean hasCorrectTypes() {
         for (Value value: values){
             if (!metaDataType.correctType(value)){
@@ -157,9 +162,9 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
                 builder.append("Please add a statment with the predicate ");
                 builder.append(predicate);
                 newLine(builder);
-            } else if (requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
+            } else if (includeWarnings && requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
                 tab(builder, tabLevel);
-                builder.append("ERROR: ");
+                builder.append("Warning: ");
                 builder.append(id );
                 builder.append(":");
                 builder.append(name);
@@ -189,5 +194,5 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
             newLine(builder);
         }
     }
-    
+
 }

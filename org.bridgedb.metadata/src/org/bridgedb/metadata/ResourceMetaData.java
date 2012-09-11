@@ -105,6 +105,17 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
     }
 
     @Override
+    boolean hasValues() {
+        //A Resource has values if any of the children have values.
+        for (MetaDataBase child:childMetaData){
+            if (child.hasValues()) { 
+                return true; 
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean hasCorrectTypes() {
         for (MetaDataBase child:childMetaData){
             if (!child.hasCorrectTypes()){

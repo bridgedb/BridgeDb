@@ -113,6 +113,17 @@ public class MetaDataGroup extends MetaDataBase implements MetaData{
     }
 
     @Override
+    boolean hasValues() {
+        //A group has values only if all children do.
+        for (MetaDataBase child:childMetaData){
+            if (!child.hasValues()) { 
+                return false; 
+            }
+        }
+        return true;
+    }
+    
+    @Override
     public boolean hasCorrectTypes() {
         for (MetaDataBase child:childMetaData){
             if (!child.hasCorrectTypes()){
