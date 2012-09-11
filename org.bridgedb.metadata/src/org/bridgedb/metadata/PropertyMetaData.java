@@ -95,6 +95,9 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         newLine(builder, tabLevel + 1);
         builder.append("class ");
         builder.append(metaDataType);        
+        newLine(builder, tabLevel + 1);
+        builder.append("Requirement Level ");
+        builder.append(requirementLevel);        
         newLine(builder);
     }
 
