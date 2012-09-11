@@ -79,7 +79,7 @@ public class MetaDataAlternatives extends MetaDataBase implements MetaData{
 
     @Override
     void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
-        if (!hasRequiredValues(forceLevel)){
+        if (noChildernWithValue()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
             builder.append(id);
@@ -95,21 +95,42 @@ public class MetaDataAlternatives extends MetaDataBase implements MetaData{
         }
     }
 
-    @Override
-    public boolean hasRequiredValues(RequirementLevel forceLevel) {
-        //Alternatives are expected to have a higher lvel or requirement that the individual options
-        if (requirementLevel.compareTo(forceLevel) > 0){
-            return true;
-        }
+    private boolean noChildernWithValue(){
         for (MetaDataBase child:childMetaData){
             //Ok if a single child has valuies
-            if (child.hasRequiredValues(RequirementLevel.MAY)){
-                return true;
+            if (child.hasValues()){
+                return false;
             }
         }
-        //At least one child must have values so false;
-        return false;
+        return true;
+    }
+    
+    @Override
+    public boolean hasRequiredValues(RequirementLevel forceLevel) {
+        if (requirementLevel.compareTo(forceLevel) <= 0){
+            if (noChildernWithValue()){
+            //At least one child must have values so false;
+                return false;
+            }
+        }
+        for (MetaDataBase child:childMetaData){
+            if (!child.hasRequiredValues(requirementLevel)){
+                return false;
+            }
+        }
+        return true;        
      }
+
+    @Override
+    boolean hasValues() {
+        //An Alternatives has values if any of the children have values.
+        for (MetaDataBase child:childMetaData){
+            if (child.hasValues()) { 
+                return true; 
+            }
+        }
+        return false;
+    }
 
     @Override
     public boolean hasCorrectTypes() {
