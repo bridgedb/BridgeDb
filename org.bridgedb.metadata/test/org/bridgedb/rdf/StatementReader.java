@@ -27,7 +27,7 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
 public class StatementReader extends RDFHandlerBase{
  
     public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.RDFXML;
-    public static String DEFAULT_BASE_URI = "http://example.com#";
+    public static String DEFAULT_BASE_URI = "http://example.co.uk/";
     
     private Set<Statement> statements = new HashSet<Statement>();
     
