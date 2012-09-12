@@ -49,6 +49,20 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         values = new HashSet<Value>();
     }
     
+    @Override
+    public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
+        setupValues(id, parent);
+        values = new HashSet<Value>();
+        for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
+            if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
+                 iterator.remove();
+                 rawRDF.add(statement);
+                 values.add(statement.getObject());
+            }
+        }  
+    }
+
     private MetaDataType getMetaDataType(String objectClass) throws MetaDataException{
         if (SchemaConstants.CLASS_DATE.equalsIgnoreCase(objectClass)){
             return new DateType();
@@ -70,10 +84,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         } 
         tab(builder, tabLevel);
         builder.append(id);
-        builder.append("Property ");
+        builder.append(" Property ");
         builder.append(name);
         if (values.isEmpty()){
-            builder.append(" not Set ");
+            builder.append(" MISSING!  Set with ");
+            builder.append(predicate);
         } else if (values.size() == 1){
             builder.append(" == ");
             builder.append(values.iterator().next());
@@ -101,20 +116,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         builder.append("Requirement Level ");
         builder.append(requirementLevel);        
         newLine(builder);
-    }
-
-    @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
-        setupValues(id, parent);
-        values = new HashSet<Value>();
-        for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
-            Statement statement = iterator.next();
-            if (statement.getPredicate().equals(predicate)){
-                 iterator.remove();
-                 rawRDF.add(statement);
-                 values.add(statement.getObject());
-            }
-        }  
     }
 
     @Override
@@ -195,6 +196,16 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
             }
             newLine(builder);
         }
+    }
+
+    @Override
+    public boolean allStatementsUsed() {
+        return true;
+    }
+    
+    @Override
+    void appendUnusedStatements(StringBuilder builder) {
+        //rawRDF here is used
     }
 
 }

@@ -158,12 +158,89 @@
         />          
     </resource>
     <resource name="DatasetDescription" type="http://rdfs.org/ns/void#Linkset">
-        <linkedResource 
+         <propery
+            name="Title"
+            predicate="http://purl.org/dc/terms/title"
+            class="String"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Description"
+            predicate="http://purl.org/dc/terms/description"
+            class="String"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="License"
+            predicate="http://purl.org/dc/terms/license"
+            class="Uri"
+            requirementLevel = "MUST"
+        />          
+       <linkedResource 
             name = "subject"
             predicate = "http://rdfs.org/ns/void#subjectsTarget"
             type="http://rdfs.org/ns/void#Dataset"
             requirementLevel = "MUST"
         />      
+       <linkedResource 
+            name = "object"
+            predicate = "http://rdfs.org/ns/void#objectsTarget"
+            type="http://rdfs.org/ns/void#Dataset"
+            requirementLevel = "MUST"
+        />      
+        <propery
+            name="Link Relationship"
+            predicate="http://rdfs.org/ns/void#linkPredicate"
+            class="Uri"
+            requirementLevel = "MUST"
+        />          
+        <propery
+            name="Link Justification"
+            predicate="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses"
+            class="Uri"
+            requirementLevel = "MUST"
+        />          
+        <!-- subset -->
+        <alternatives name = "Link Source" requirementLevel = "MUST">
+            <group name = "authored" >
+                <propery
+                    name="authored By"
+                    predicate="http://purl.org/pav/2.0/authoredBy"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                />          
+                <propery
+                    name="authored On"
+                    predicate="http://purl.org/pav/2.0/authoredOn"
+                    class="Date"
+                    requirementLevel = "MAY"
+                />          
+            </group>
+            <propery
+                name="Created with"
+                predicate="http://purl.org/pav/2.0/createdwith"
+                class="Uri"
+                requirementLevel = "MAY"
+            />          
+        <propery
+            name="Created By"
+            predicate="http://purl.org/pav/2.0/createdBy"
+            class="Uri"
+            requirementLevel = "MUST"
+            />          
+        <propery
+            name="Created On"
+            predicate="http://purl.org/pav/2.0/createdOn"
+            class="Date"
+            requirementLevel = "MUST"
+            />          
+        </alternatives>
+        <!--propery
+            name="Linkset Statistics"
+            predicate="http://rdfs.org/ns/void#triples"
+            class="Integer"
+            requirementLevel = "SHOULD"
+        /-->          
     </resource>
 </metadata>
 <!--        //Distinguishing Subsets is handled seperately  

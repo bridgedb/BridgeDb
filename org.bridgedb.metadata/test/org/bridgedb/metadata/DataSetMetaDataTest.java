@@ -4,30 +4,19 @@
  */
 package org.bridgedb.metadata;
 
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.metadata.constants.*;
 import org.bridgedb.metadata.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.CalendarLiteralImpl;
-import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
 
 /**
  *
  * @author Christian
  */
+@Ignore
 public class DataSetMetaDataTest extends MetaDataTestBase{
     
     public DataSetMetaDataTest() throws DatatypeConfigurationException{        
@@ -130,4 +119,12 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());        
         assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.MUST, NO_WARNINGS));
     }
+    
+    @Test
+    public void testAllStatementsUsed() throws MetaDataException{
+        Reporter.report("AllStatementsUsed");
+         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        checkAllStatementsUsed(metaData);
+    }
+    
 }

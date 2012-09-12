@@ -114,12 +114,21 @@ public class MetaDataCollection extends AppendBase implements MetaData {
          for (ResourceMetaData resouce:theResources){
              resouce.appendShowAll(builder, forceLevel, 0);
          }
-         for (Statement statement: unusedStatements){
-             builder.append("\n");
-             builder.append(statement);
-         }
+         appendUnusedStatements(builder);
     }
     
+    @Override
+    void appendUnusedStatements(StringBuilder builder) {
+         for (Statement statement: unusedStatements){
+             builder.append(statement);
+             newLine(builder);
+         }
+         Collection<ResourceMetaData> theResources = resourcesMap.values();
+         for (ResourceMetaData resouce:theResources){
+             resouce.appendUnusedStatements(builder);
+         }
+    }
+   
     @Override
     void appendSchema(StringBuilder builder, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
@@ -135,5 +144,16 @@ public class MetaDataCollection extends AppendBase implements MetaData {
              resouce.appendValidityReport(builder, forceLevel, includeWarnings, 0);
          }
     }
+
+    @Override
+    public boolean allStatementsUsed() {
+        for (ResourceMetaData resouce:resourcesMap.values()){
+            if (!resouce.allStatementsUsed()){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 }
