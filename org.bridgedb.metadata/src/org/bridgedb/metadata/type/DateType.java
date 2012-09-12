@@ -5,9 +5,7 @@
 package org.bridgedb.metadata.type;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-import org.bridgedb.metadata.AppendBase;
 import org.openrdf.model.Literal;
-import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
 /**

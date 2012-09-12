@@ -64,6 +64,7 @@ public class MetaDataTestBase {
     static final Value LINK_DESCRIPTION_VALUE = new LiteralImpl(LINK_DESCRIPTION_STRING);
     static final URI LINK_PERSON = new URIImpl ("http://www.example.com/test/LinkPerson");
     static final URI JUSTIFICATION = new URIImpl ("http://www.example.com/test/Justification");
+    static final URI BIWEEKLY = new URIImpl ("http://purl.org/cld/freq/biennial");
 
     //Flags for easy reading of tests
     static final boolean INCLUDE_WARNINGS = true;
@@ -107,7 +108,7 @@ public class MetaDataTestBase {
     Statement d2ExampleStatement1 = new StatementImpl(D2_ID, VoidConstants.EXAMPLE_RESOURCE, D2_EXAMPLE1);
     Statement d2ExampleStatement2 = new StatementImpl(D2_ID, VoidConstants.EXAMPLE_RESOURCE, D2_EXAMPLE2);
     Statement d2ExampleStatement3 = new StatementImpl(D2_ID, VoidConstants.EXAMPLE_RESOURCE, D2_EXAMPLE3);
-    //Statement d2FocStatement = new StatementImpl(D2_ID, VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.ANNUAL.getURI());
+    Statement d2FocStatement = new StatementImpl(D2_ID, VoagConstants.FREQUENCY_OF_CHANGE, BIWEEKLY);
 
     //Linkset
     Statement linkIdStatement = new StatementImpl(LINK_ID, RdfConstants.TYPE_URI, VoidConstants.LINKSET); 
@@ -169,7 +170,7 @@ public class MetaDataTestBase {
         addStatement(data, d1ExampleStatement1);
         addStatement(data, d1ExampleStatement2);
         addStatement(data, d1ExampleStatement3);
-//        data.add(focStatement);
+//        data.add(d1FocStatement);
         return data;
     }
     
@@ -196,7 +197,7 @@ public class MetaDataTestBase {
         addStatement(data, d2ExampleStatement1);
         addStatement(data, d2ExampleStatement2);
         addStatement(data, d2ExampleStatement3);
-        //data.addStatement(d2FocStatement);
+        addStatement(data, d2FocStatement);
         return data;
     }
     
