@@ -30,7 +30,7 @@
 	pav:retrievedFrom <ftp://ftp.ebi.ac.uk/pub/databases/chebi/ontology/chebi.owl>;
 	pav:retrievedOn "2012-07-13"^^xsd:date;
 	pav:retrievedBy <http://www.cs.man.ac.uk/~graya/me.ttl>;
-	void:subset :chebiHasPartLinkset;
+#	void:subset :chebiHasPartLinkset;
 	void:vocabulary <http://purl.obolibrary.org/obo/>,
 		<http://www.w3.org/2001/XMLSchema#>,
 		<http://purl.obolibrary.org/obo#>,
