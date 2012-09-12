@@ -66,12 +66,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
 
     private MetaDataType getMetaDataType(String objectClass, Element element) throws MetaDataException{
         if (SchemaConstants.CLASS_ALLOWED_URIS.equalsIgnoreCase(objectClass)){
-            NodeList list = element.getElementsByTagName(SchemaConstants.ALLOWED_VALUE);
-            return new AllowedUriType(list);
+            return new AllowedUriType(element);
         }
         if (SchemaConstants.CLASS_ALLOWED_VALUES.equalsIgnoreCase(objectClass)){
-            NodeList list = element.getElementsByTagName(SchemaConstants.ALLOWED_VALUE);
-            return new AllowedValueType(list);
+            return new AllowedValueType(element);
         }
         if (SchemaConstants.CLASS_DATE.equalsIgnoreCase(objectClass)){
             return new DateType();
