@@ -15,6 +15,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -35,7 +36,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
         predicate = new URIImpl(predicateSt);
         String objectClass = element.getAttribute(SchemaConstants.CLASS);
-        metaDataType = getMetaDataType(objectClass);
+        metaDataType = getMetaDataType(objectClass, element);
         String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
         requirementLevel = RequirementLevel.parse(requirementLevelSt);
         values = new HashSet<Value>();
@@ -63,7 +64,15 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         }  
     }
 
-    private MetaDataType getMetaDataType(String objectClass) throws MetaDataException{
+    private MetaDataType getMetaDataType(String objectClass, Element element) throws MetaDataException{
+        if (SchemaConstants.CLASS_ALLOWED_URIS.equalsIgnoreCase(objectClass)){
+            NodeList list = element.getElementsByTagName(SchemaConstants.ALLOWED_VALUE);
+            return new AllowedUriType(list);
+        }
+        if (SchemaConstants.CLASS_ALLOWED_VALUES.equalsIgnoreCase(objectClass)){
+            NodeList list = element.getElementsByTagName(SchemaConstants.ALLOWED_VALUE);
+            return new AllowedValueType(list);
+        }
         if (SchemaConstants.CLASS_DATE.equalsIgnoreCase(objectClass)){
             return new DateType();
         }
@@ -191,6 +200,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
                     newLine(builder, tabLevel + 1);
                     builder.append("Expected ");
                     builder.append(metaDataType.getCorrectType());
+                    newLine(builder, tabLevel + 1);
                     builder.append(" Found ");
                     builder.append(value);
                     builder.append(" Which is a  ");
