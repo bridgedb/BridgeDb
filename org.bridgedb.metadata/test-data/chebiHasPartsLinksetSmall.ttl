@@ -1,0 +1,61 @@
+@prefix : <>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix freq: <http://purl.org/cld/freq/> .
+@prefix pav: <http://purl.org/pav/2.0/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix voag: <http://voag.linkedmodel.org/schema/voag#> .
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix obo: <http://purl.obolibrary.org/obo/>.
+@prefix obo2: <http://purl.obolibrary.org/obo#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+<http://rdf.chemspider.com/void-example.rdf> 
+	a void:DatasetDescription;
+	dcterms:title "Description of ChEBI has parts linkset"@en;
+	foaf:primaryTopic :chebiHasPartLinkset.
+
+:chebi a void:Dataset;
+	dcterms:title "Chemical Entities of Biological Interest (ChEBI)"@en;
+	dcterms:description "Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds."@en;
+	foaf:homepage <ftp://ftp.ebi.ac.uk/pub/databases/chebi/ontology/chebi.owl>;
+	foaf:page <http://www.ebi.ac.uk/chebi/>;
+	dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+	void:uriSpace "http://purl.obolibrary.org/obo/"^^xsd:string;
+	pav:version "93"^^xsd:integer;
+	pav:retrievedFrom <ftp://ftp.ebi.ac.uk/pub/databases/chebi/ontology/chebi.owl>;
+	pav:retrievedOn "2012-07-13"^^xsd:date;
+	pav:retrievedBy <http://www.cs.man.ac.uk/~graya/me.ttl>;
+	void:subset :chebiHasPartLinkset;
+	void:vocabulary <http://purl.obolibrary.org/obo/>,
+		<http://www.w3.org/2001/XMLSchema#>,
+		<http://purl.obolibrary.org/obo#>,
+		<http://purl.org/dc/elements/1.1/>,
+		<http://www.w3.org/2000/01/rdf-schema#>,
+		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>,
+		<http://www.w3.org/2002/07/owl#>;
+	dcterms:subject <http://purl.obolibrary.org/obo/CHEBI_24431>,
+		<http://purl.obolibrary.org/obo/CHEBI_50906>,
+		<http://purl.obolibrary.org/obo/CHEBI_36342>;
+	void:exampleResource <http://purl.obolibrary.org/obo/CHEBI_100>;
+	void:dataDump <ftp://ftp.ebi.ac.uk/pub/databases/chebi/ontology/chebi.owl>;
+	voag:frequencyOfChange freq:monthly.
+
+:chebiHasPartLinkset a void:Linkset;
+	dcterms:title "ChEBI hasParts Linkset"@en;
+	dcterms:description "A linkset that equates parts of chemicals with their parent."@en;
+	dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+	void:subjectsTarget :chebi;
+	void:objectsTarget :chebi;
+	void:linkPredicate skos:closeMatch;
+	dul:expresses <http://purl.obolibrary.org/obo#has_part>;
+	pav:authoredBy <http://www.ebi.ac.uk/chebi/>;
+	pav:authoredOn "2012-06-28"^^xsd:date;
+	pav:createdBy <http://www.cs.man.ac.uk/~graya/me.ttl>;
+	pav:createdOn "2012-09-06"^^xsd:date;
+	void:triples "1639"^^xsd:integer.
+
