@@ -217,7 +217,7 @@ public class MetaDataTestBase {
         addStatement(data, linkCreatedOnStatement);
         addStatement(data, linkPredicateStatement);
         addStatement(data, linkJustificationStatement);
- //       addStatement(data, linkNumberStatement);
+        addStatement(data, linkNumberStatement);
         addStatement(data, subjectStatement);
         addStatement(data, objectStatement);
         return data;
