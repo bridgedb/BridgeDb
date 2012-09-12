@@ -67,6 +67,9 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         if (SchemaConstants.CLASS_DATE.equalsIgnoreCase(objectClass)){
             return new DateType();
         }
+        if (SchemaConstants.CLASS_INTEGER.equalsIgnoreCase(objectClass)){
+            return new IntegerType();
+        }
         if (SchemaConstants.CLASS_STRING.equalsIgnoreCase(objectClass)){
             return new StringType();
         }
