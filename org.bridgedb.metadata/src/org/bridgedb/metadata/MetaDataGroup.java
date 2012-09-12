@@ -133,4 +133,23 @@ public class MetaDataGroup extends MetaDataBase implements MetaData{
         return true;
     }
     
+    @Override
+    public boolean allStatementsUsed() {
+        //A group has values only if all children do.
+        for (MetaDataBase child:childMetaData){
+            if (!child.allStatementsUsed()) { 
+                return false; 
+            }
+        }
+        return true;
+    }
+
+    @Override
+    void appendUnusedStatements(StringBuilder builder) {
+        for (MetaDataBase child:childMetaData){
+            child.appendUnusedStatements(builder);
+        }
+    }
+    
+    
 }

@@ -22,4 +22,7 @@ interface MetaData {
 
     String validityReport(RequirementLevel forceLevel, boolean includeWarnings);
     
+    boolean allStatementsUsed();
+    
+    String unusedStatements();
 }

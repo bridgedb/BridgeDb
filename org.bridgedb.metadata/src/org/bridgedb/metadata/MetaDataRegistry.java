@@ -47,8 +47,8 @@ public class MetaDataRegistry {
         }
     }
    
-    public static ResourceMetaData getResourceByID(Resource type) {
-        return resourcesById.get(type);
+    public static ResourceMetaData getResourceByID(Resource id) {
+        return resourcesById.get(id);
     }
     
     public static void registerResource (ResourceMetaData resourceMetaData){
@@ -148,7 +148,7 @@ public class MetaDataRegistry {
         List<MetaDataBase> metaDatas = getMetaData(elements);
         for (MetaData metaData:metaDatas){
             String schema = metaData.toString();
-            System.out.println(schema);
+            Reporter.report(schema);
         }
     }
 

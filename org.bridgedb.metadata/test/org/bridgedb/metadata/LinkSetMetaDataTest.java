@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.junit.Ignore;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.metadata.utils.Reporter;
 import org.junit.Test;
@@ -22,7 +23,6 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("Linkset HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
-        System.out.println(metaData.toString());
         checkRequiredValues(metaData, RequirementLevel.MUST);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
@@ -33,5 +33,12 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
         MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
         checkCorrectTypes(metaData);
     }
-    
+ 
+    @Test
+    public void testAllStatementsUsed() throws MetaDataException{
+        Reporter.report("LinkSet AllStatementsUsed");
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        checkAllStatementsUsed(metaData);
+    }
+
 }
