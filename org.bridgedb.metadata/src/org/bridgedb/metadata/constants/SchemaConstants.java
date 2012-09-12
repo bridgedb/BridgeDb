@@ -11,7 +11,7 @@ package org.bridgedb.metadata.constants;
 public class SchemaConstants {
 
     public static final String RESOURCE = "resource";
-    public static final String PROPERTY = "propery";
+    public static final String PROPERTY = "property";
     public static final String GROUP = "group";
     public static final String ALTERNATIVES = "alternatives";
     public static final String LINKED_RESOURCE = "linkedResource";
