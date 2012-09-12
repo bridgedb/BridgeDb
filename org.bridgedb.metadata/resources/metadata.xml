@@ -155,7 +155,32 @@
             predicate="http://rdfs.org/ns/void#sparqlEndpoint"
             class="Uri"
             requirementLevel = "MAY"
-        />          
+        />      
+        <propery
+            name = "Update Frequency"
+            predicate = "http://voag.linkedmodel.org/schema/voag#frequencyOfChange"
+            class = "AllowedUris"
+            requirementLevel = "SHOULD"
+        >
+            <AllowedValue>http://purl.org/cld/freq/triennial</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/biennial</AllowedValue>,
+            <AllowedValue>http://purl.org/cld/freq/annual</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/semiannual</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/threeTimesAYear</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/quarterly</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/bimonthly</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/monthly</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/semimonthly</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/biweekly</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/threeTimesAMonth</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/weekly</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/semiweekly</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/threeTimesAWeek</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/daily</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/continuous</AllowedValue>
+            <AllowedValue>http://purl.org/cld/freq/irregular</AllowedValue>
+        </propery>
+  
     </resource>
     <resource name="DatasetDescription" type="http://rdfs.org/ns/void#Linkset">
          <propery
