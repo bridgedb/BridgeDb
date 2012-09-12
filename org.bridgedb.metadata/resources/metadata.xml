@@ -235,12 +235,12 @@
             requirementLevel = "MUST"
             />          
         </alternatives>
-        <!--propery
+        <propery
             name="Linkset Statistics"
             predicate="http://rdfs.org/ns/void#triples"
             class="Integer"
             requirementLevel = "SHOULD"
-        /-->          
+        />          
     </resource>
 </metadata>
 <!--        //Distinguishing Subsets is handled seperately  
