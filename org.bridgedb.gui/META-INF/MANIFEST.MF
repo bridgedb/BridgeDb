@@ -5,6 +5,11 @@ Bundle-SymbolicName: org.bridgedb.gui
 Bundle-Version: 1.1.0
 Export-Package: org.bridgedb.gui
 Require-Bundle: org.bridgedb;bundle-version="1.1.0",
- org.bridgedb.webservice.bridgerest;bundle-version="1.1.0";resolution:=optional,
  org.pathvisio.jgoodies.forms;bundle-version="1.2.0",
- org.bridgedb.rdb;bundle-version="1.1.0";resolution:=optional
+ org.bridgedb.rdb;bundle-version="1.1.0";resolution:=optional,
+ org.bridgedb.webservice.bridgerest;bundle-version="1.1.0";resolution:=optional,
+ org.bridgedb.webservice.biomart;bundle-version="1.1.0";resolution:=optional,
+ org.bridgedb.webservice.cronos;bundle-version="1.1.0";resolution:=optional,
+ org.bridgedb.webservice.picr;bundle-version="1.1.0";resolution:=optional,
+ org.bridgedb.webservice.synergizer;bundle-version="1.1.0";resolution:=optional
+Import-Package: com.mysql.jdbc;resolution:=optional
