@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.bridgedb.metadata.constants.RdfConstants;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -41,19 +42,24 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
     @Override
     public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
         setupValues(id, parent);
+        
         for (MetaDataBase child:childMetaData){
             child.loadValues(id, data, this);
         }
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id)){
-                 iterator.remove();
-                 rawRDF.add(statement);
+                iterator.remove();
+                if (statement.getObject().equals(type) && statement.getPredicate().equals(RdfConstants.TYPE_URI)){
+                    //Type statement can be rrecreated so is not needed 
+                } else {
+                    rawRDF.add(statement);
+                }
             }
         }  
         MetaDataRegistry.registerResource(this);
     }
- 
+
     @Override
     void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
         tab(builder, tabLevel);
@@ -67,6 +73,14 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
         }
         for (Statement statement: rawRDF){
             tab(builder, tabLevel + 1);
+            builder.append(statement);
+            newLine(builder);
+        }
+    }
+ 
+    @Override
+    void appendUnusedStatements(StringBuilder builder) {
+         for (Statement statement: rawRDF){
             builder.append(statement);
             newLine(builder);
         }
@@ -133,6 +147,20 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
         for (MetaDataBase child:childMetaData){
             child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+        }
+    }
+    
+    @Override
+    public boolean allStatementsUsed() {
+        if (rawRDF.isEmpty()) {
+            for (MetaDataBase child:childMetaData){
+                if (!child.allStatementsUsed()){
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 

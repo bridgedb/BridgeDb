@@ -16,7 +16,6 @@ import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
 import org.w3c.dom.Element;
 
-
 /**
  *
  * @author Christian
@@ -228,4 +227,32 @@ public class LinkedResource extends MetaDataBase implements MetaData{
         }
     }
     
+    @Override
+    public boolean allStatementsUsed() {
+        for (Resource id: ids){
+            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            if (rmd == null){
+                //No Statements here so ok
+                return true;
+            } else {
+                if (!rmd.allStatementsUsed()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void appendUnusedStatements(StringBuilder builder) {
+        for (Resource id: ids){
+            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            if (rmd == null){
+                //No Statements here
+            } else {
+                rmd.appendUnusedStatements(builder);
+            }
+        }
+    }
+
 }

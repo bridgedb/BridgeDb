@@ -46,6 +46,14 @@ public abstract class AppendBase {
 
     abstract void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel);
 
+    public String unusedStatements(){
+        StringBuilder builder = new StringBuilder();
+        appendUnusedStatements(builder);
+        return builder.toString();        
+    }
+    
+    abstract void appendUnusedStatements(StringBuilder builder);
+
     static public void tab(StringBuilder builder, int tab){
         for (int i = 0; i < tab; i++){
             builder.append("\t");

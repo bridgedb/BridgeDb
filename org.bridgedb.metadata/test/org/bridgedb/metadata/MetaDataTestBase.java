@@ -100,7 +100,7 @@ public class MetaDataTestBase {
     Statement d2DataDumpStatement = new StatementImpl(D2_ID, VoidConstants.DATA_DUMP, DATA_DUMP);  
     Statement d2ImportedFromStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_FROM, HOME_PAGE);
     Statement d2ImportedOnStatement;  // incontrustor due to date!
-    Statement d2ImportedByStatement = new StatementImpl(D1_ID, PavConstants.IMPORTED_BY, PERSON);
+    Statement d2ImportedByStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_BY, PERSON);
     Statement d2VocabularyStatement1 = new StatementImpl(D2_ID, VoidConstants.VOCABULARY, VOCABULARY1);
     Statement d2VocabularyStatement2 = new StatementImpl(D2_ID, VoidConstants.VOCABULARY, VOCABULARY2);
     Statement d2TopicStatement = new StatementImpl(D2_ID, DctermsConstants.SUBJECT, TOPIC);
@@ -217,13 +217,13 @@ public class MetaDataTestBase {
         addStatement(data, linkCreatedOnStatement);
         addStatement(data, linkPredicateStatement);
         addStatement(data, linkJustificationStatement);
-        addStatement(data, linkNumberStatement);
+ //       addStatement(data, linkNumberStatement);
         addStatement(data, subjectStatement);
         addStatement(data, objectStatement);
         return data;
     }
 
-    public static void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
+    void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
         boolean ok = metaData.hasRequiredValues(forceLevel);
         if (!ok){
             //This test will fail but with extra info
@@ -233,7 +233,7 @@ public class MetaDataTestBase {
         }        
     }
 
-    public static void checkCorrectTypes(MetaData metaData){
+    void checkCorrectTypes(MetaData metaData){
         boolean ok = metaData.hasCorrectTypes();
         if (!ok){
             //This test will fail but with extra info
@@ -242,6 +242,14 @@ public class MetaDataTestBase {
         }        
     }
     
- 
+    void checkAllStatementsUsed(MetaDataCollection metaData) {
+        boolean ok = metaData.allStatementsUsed();
+        if (!ok){
+            //This test will fail but with extra info
+            assertEquals("", metaData.unusedStatements());
+            assertTrue(ok);
+        }        
+    }
+
     
 }
