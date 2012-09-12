@@ -27,7 +27,7 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
-public class MetaDataTestBase {
+public class MetaDataTestBase extends TestUtils{
     
     static final BigInteger TEN = new BigInteger("10");
 
@@ -65,10 +65,6 @@ public class MetaDataTestBase {
     static final URI LINK_PERSON = new URIImpl ("http://www.example.com/test/LinkPerson");
     static final URI JUSTIFICATION = new URIImpl ("http://www.example.com/test/Justification");
     static final URI BIWEEKLY = new URIImpl ("http://purl.org/cld/freq/biennial");
-
-    //Flags for easy reading of tests
-    static final boolean INCLUDE_WARNINGS = true;
-    static final boolean NO_WARNINGS = false;;
       
     Statement d1IdStatement = new StatementImpl(D1_ID, RdfConstants.TYPE_URI, VoidConstants.DATASET); 
     Statement d1TitleStatement = new StatementImpl(D1_ID, DctermsConstants.TITLE, TITLE);
@@ -224,33 +220,5 @@ public class MetaDataTestBase {
         return data;
     }
 
-    void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
-        boolean ok = metaData.hasRequiredValues(forceLevel);
-        if (!ok){
-            //This test will fail but with extra info
-            assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(
-                    forceLevel, NO_WARNINGS));
-            assertTrue(ok);
-        }        
-    }
 
-    void checkCorrectTypes(MetaData metaData){
-        boolean ok = metaData.hasCorrectTypes();
-        if (!ok){
-            //This test will fail but with extra info
-            assertEquals(MetaDataBase.CLEAR_REPORT, metaData.validityReport(RequirementLevel.TECHNICAL_MUST, NO_WARNINGS));
-            assertTrue(ok);
-        }        
-    }
-    
-    void checkAllStatementsUsed(MetaDataCollection metaData) {
-        boolean ok = metaData.allStatementsUsed();
-        if (!ok){
-            //This test will fail but with extra info
-            assertEquals("", metaData.unusedStatements());
-            assertTrue(ok);
-        }        
-    }
-
-    
 }
