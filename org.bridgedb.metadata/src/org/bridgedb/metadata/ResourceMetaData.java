@@ -6,6 +6,7 @@ package org.bridgedb.metadata;
 
 import org.bridgedb.metadata.constants.SchemaConstants;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -20,32 +21,25 @@ import org.w3c.dom.Element;
  *
  * @author Christian
  */
-public class ResourceMetaData extends MetaDataBase implements MetaData{
+public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
-    private final String name;
     private final URI type;
-    private final List<MetaDataBase> childMetaData;
-
+    private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
+    
     ResourceMetaData(Element element) throws MetaDataException {
-        name = element.getAttribute(SchemaConstants.NAME);
+        super(element);
         String typeSt = element.getAttribute(SchemaConstants.TYPE);
         type = new URIImpl(typeSt);
-        childMetaData = MetaDataRegistry.getChildMetaData(element);
     }
 
     private ResourceMetaData(String theName, URI theType, List<MetaDataBase> children) {
-        this.name = theName;
+        super(theName, children);
         this.type = theType;
-        childMetaData = children;
     }
     
     @Override
     public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
-        setupValues(id, parent);
-        
-        for (MetaDataBase child:childMetaData){
-            child.loadValues(id, data, this);
-        }
+        super.loadValues(id, data, parent);
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id)){
@@ -60,17 +54,17 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
         MetaDataRegistry.registerResource(this);
     }
 
-    @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
+    void appendSpecific(StringBuilder builder, int tabLevel){
         tab(builder, tabLevel);
         builder.append("Resource ");
         builder.append(name);
         builder.append(" id ");
         builder.append(id);
-        newLine(builder);
-        for (MetaDataBase child:childMetaData){
-            child.appendShowAll(builder, forceLevel, tabLevel + 1);
-        }
+        newLine(builder);        
+    }
+    @Override
+    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
+        super.appendShowAll(builder, forceLevel, tabLevel);
         for (Statement statement: rawRDF){
             tab(builder, tabLevel + 1);
             builder.append(statement);
@@ -113,16 +107,6 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
     }
 
     @Override
-    public boolean hasRequiredValues(RequirementLevel requirementLevel) {
-        for (MetaDataBase child:childMetaData){
-            if (!child.hasRequiredValues(requirementLevel)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
     boolean hasValues() {
         //A Resource has values if any of the children have values.
         for (MetaDataBase child:childMetaData){
@@ -133,17 +117,7 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
         return false;
     }
 
-    @Override
-    public boolean hasCorrectTypes() {
-        for (MetaDataBase child:childMetaData){
-            if (!child.hasCorrectTypes()){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
+   @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
         for (MetaDataBase child:childMetaData){
             child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
@@ -162,6 +136,10 @@ public class ResourceMetaData extends MetaDataBase implements MetaData{
         } else {
             return false;
         }
+    }
+
+    void addParent(ResourceMetaData parent) {
+        parents.add(parent);
     }
 
 }

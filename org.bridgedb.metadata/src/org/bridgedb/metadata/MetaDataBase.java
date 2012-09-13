@@ -7,10 +7,12 @@ package org.bridgedb.metadata;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.bridgedb.metadata.constants.SchemaConstants;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -20,10 +22,17 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     
     Set<Statement> rawRDF;
     Resource id;
+    final String name;
+
    // MetaData parent;
     
-    MetaDataBase(){
+    MetaDataBase(Element element){
+        name = element.getAttribute(SchemaConstants.NAME);
+    }
+    
+    MetaDataBase(String name){
         rawRDF = new HashSet<Statement>();
+        this.name = name;
     }
     
     abstract void loadValues(Resource id, Set<Statement> data, MetaData parent);

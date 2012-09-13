@@ -6,39 +6,23 @@ package org.bridgedb.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.bridgedb.metadata.constants.SchemaConstants;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
 import org.w3c.dom.Element;
 
 /**
  *
  * @author Christian
  */
-public class MetaDataGroup extends MetaDataBase implements MetaData{
-
-    private final List<MetaDataBase> childMetaData;
-    private final String name;
+public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
 
     public MetaDataGroup(Element element) throws MetaDataException {
-        name = element.getAttribute(SchemaConstants.NAME);
-        childMetaData = MetaDataRegistry.getChildMetaData(element);
+        super(element);
     }
     
-    public MetaDataGroup(String name, List<MetaDataBase> children){
-        this.name = name;
-        this.childMetaData = children;
+    public MetaDataGroup(String name, List<MetaDataBase> childMetaData){
+        super(name, childMetaData);
     }
     
-    @Override
-    void loadValues(Resource id, Set<Statement> data, MetaData parent) {
-        setupValues(id, parent);
-        for (MetaDataBase child:childMetaData){
-            child.loadValues(id, data, this);
-        }
-    }
-
     @Override
     MetaDataGroup getSchemaClone() {
         List<MetaDataBase> children = new ArrayList<MetaDataBase>();
@@ -49,28 +33,14 @@ public class MetaDataGroup extends MetaDataBase implements MetaData{
     }
 
     @Override
-    void appendSchema(StringBuilder builder, int tabLevel) {
+    void appendSpecific(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append("Group ");
         builder.append(name);
         newLine(builder);
-        for (MetaDataBase child:childMetaData){
-            child.appendSchema(builder, tabLevel + 1);
-        }
     }
-
-    @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
-        tab(builder, tabLevel);
-        builder.append("Group ");
-        builder.append(name);
-        newLine(builder);
-        for (MetaDataBase child:childMetaData){
-            child.appendShowAll(builder, forceLevel, tabLevel + 1);
-        }
-    }
-
-    @Override
+    
+     @Override
     void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
         for (MetaDataBase child:childMetaData){
             child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
@@ -102,54 +72,5 @@ public class MetaDataGroup extends MetaDataBase implements MetaData{
         }
     }
 
-    @Override
-    public boolean hasRequiredValues(RequirementLevel requirementLevel) {
-        for (MetaDataBase child:childMetaData){
-            if (!child.hasRequiredValues(requirementLevel)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    boolean hasValues() {
-        //A group has values only if all children do.
-        for (MetaDataBase child:childMetaData){
-            if (!child.hasValues()) { 
-                return false; 
-            }
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean hasCorrectTypes() {
-        for (MetaDataBase child:childMetaData){
-            if (!child.hasCorrectTypes()){
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean allStatementsUsed() {
-        //A group has values only if all children do.
-        for (MetaDataBase child:childMetaData){
-            if (!child.allStatementsUsed()) { 
-                return false; 
-            }
-        }
-        return true;
-    }
-
-    @Override
-    void appendUnusedStatements(StringBuilder builder) {
-        for (MetaDataBase child:childMetaData){
-            child.appendUnusedStatements(builder);
-        }
-    }
-    
     
 }
