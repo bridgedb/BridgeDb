@@ -27,6 +27,13 @@ interface MetaData {
     boolean allStatementsUsed();
     
     String unusedStatements();
-    
+ 
+    /**
+     * 
+     * @param predicate 
+     * @return A set of Values for this Predicate. 
+     *       Empty if predicate is known but no values are.
+     *       Null if predicate is unknown.
+     */
     Set<Value> getValuesByPredicate(URI predicate);
 }
