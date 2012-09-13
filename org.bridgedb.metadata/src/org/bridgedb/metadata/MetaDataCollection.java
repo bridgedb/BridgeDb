@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import org.bridgedb.metadata.constants.RdfConstants;
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.metadata.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -35,6 +36,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         for (Statement statement:statements){
              unusedStatements.add(statement);
         }
+        Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET);
         Set<Resource> ids = findResourceByPredicate(RdfConstants.TYPE_URI);
         for (Resource id:ids){
             if (!resourcesMap.containsKey(id)){
@@ -47,6 +49,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
                }
             }
         }
+        addSubsets(subsetStatements);
     }
     
     private ResourceMetaData getResourceMetaData (Resource id) throws MetaDataException{
@@ -76,6 +79,18 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return results;
     }
     
+    private Set<Statement> extractStatementsByPredicate(URI predicate){
+        HashSet<Statement> results = new HashSet<Statement>();
+        for (Iterator<Statement> iterator = unusedStatements.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
+            if (statement.getPredicate().equals(predicate)){
+                iterator.remove();
+                results.add(statement);
+            }
+        }  
+        return results;
+    }
+
     private Set<Value> findBySubjectPredicate(Resource subject, URI predicate){
         HashSet<Value> values = new HashSet<Value>();         
         for (Statement statement: unusedStatements){
@@ -86,6 +101,14 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             }
         }  
         return values;
+    }
+
+    private void addSubsets(Set<Statement> subsetStatements) {
+        for (Statement statement: subsetStatements){
+            ResourceMetaData parent = MetaDataRegistry.getResourceByID(statement.getSubject());
+            ResourceMetaData child = MetaDataRegistry.getResourceByID(statement.getSubject());
+            child.addParent(parent);
+        }
     }
 
     // ** Retreival Methods
@@ -173,6 +196,22 @@ public class MetaDataCollection extends AppendBase implements MetaData {
          for (ResourceMetaData resouce:theResources){
              resouce.appendValidityReport(builder, forceLevel, includeWarnings, 0);
          }
+    }
+
+    @Override
+    public Set<Value> getValuesByPredicate(URI predicate) {
+        HashSet<Value> result = null;
+        for (Resource id: resourcesMap.keySet()){
+            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            Set<Value> moreResults = rmd.getValuesByPredicate(predicate);
+            if (moreResults != null){
+                if (result == null){
+                    result = new HashSet<Value>();
+                }
+                result.addAll(moreResults);
+            }
+        }
+        return result;
     }
 
 }

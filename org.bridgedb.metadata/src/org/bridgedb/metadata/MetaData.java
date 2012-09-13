@@ -7,6 +7,8 @@ package org.bridgedb.metadata;
 import java.util.Set;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
 
 /**
  *
@@ -25,4 +27,6 @@ interface MetaData {
     boolean allStatementsUsed();
     
     String unusedStatements();
+    
+    Set<Value> getValuesByPredicate(URI predicate);
 }

@@ -16,32 +16,21 @@ import org.w3c.dom.Element;
  *
  * @author Christian
  */
-public class MetaDataAlternatives extends MetaDataBase implements MetaData{
+public class MetaDataAlternatives extends HasChildrenMetaData implements MetaData{
 
-    private final List<MetaDataBase> childMetaData;
-    private final String name;
     private final RequirementLevel requirementLevel;
 
     public MetaDataAlternatives(Element element) throws MetaDataException {
-        name = element.getAttribute(SchemaConstants.NAME);
+        super(element);
         String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
         requirementLevel = RequirementLevel.parse(requirementLevelSt);
-        childMetaData = MetaDataRegistry.getChildMetaData(element);
     }
     
     public MetaDataAlternatives(String name, RequirementLevel requirementLevel, List<MetaDataBase> children){
-        this.name = name;
+        super(name, children);
         this.requirementLevel = requirementLevel;
-        this.childMetaData = children;
     }
     
-    @Override
-    void loadValues(Resource id, Set<Statement> data, MetaData parent) {
-        setupValues(id, parent);
-        for (MetaDataBase child:childMetaData){
-            child.loadValues(id, data, this);
-        }
-    }
 
     @Override
     MetaDataAlternatives getSchemaClone() {
@@ -67,14 +56,11 @@ public class MetaDataAlternatives extends MetaDataBase implements MetaData{
     }
 
     @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
+    void appendSpecific(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append("Alternatives ");
         builder.append(name);
         newLine(builder);
-        for (MetaDataBase child:childMetaData){
-            child.appendShowAll(builder, forceLevel, tabLevel + 1);
-        }
     }
 
     @Override
@@ -130,34 +116,6 @@ public class MetaDataAlternatives extends MetaDataBase implements MetaData{
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean hasCorrectTypes() {
-        for (MetaDataBase child:childMetaData){
-            if (!child.hasCorrectTypes()){
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean allStatementsUsed() {
-        //A group has values only if all children do.
-        for (MetaDataBase child:childMetaData){
-            if (!child.allStatementsUsed()) { 
-                return false; 
-            }
-        }
-        return true;
-    }
-    
-    @Override
-    void appendUnusedStatements(StringBuilder builder) {
-        for (MetaDataBase child:childMetaData){
-            child.appendUnusedStatements(builder);
-        }
     }
 
 }

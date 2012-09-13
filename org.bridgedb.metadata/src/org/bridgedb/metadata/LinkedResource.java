@@ -22,7 +22,6 @@ import org.w3c.dom.Element;
  */
 public class LinkedResource extends MetaDataBase implements MetaData{
 
-    private final String name;      
     private final URI predicate;
     private final URI resourceType;
     private Set<Resource> ids = new HashSet<Resource>();
@@ -30,7 +29,7 @@ public class LinkedResource extends MetaDataBase implements MetaData{
     private final RequirementLevel requirementLevel;
 
     LinkedResource(Element element) throws MetaDataException {
-        name = element.getAttribute("name");
+        super(element);
         String typeSt = element.getAttribute(SchemaConstants.TYPE);
         resourceType = new URIImpl(typeSt);
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
@@ -40,7 +39,7 @@ public class LinkedResource extends MetaDataBase implements MetaData{
     }
  
     LinkedResource(LinkedResource other){
-        name = other.name;
+        super(other.name);
         predicate = other.predicate;
         resourceType = other.resourceType;
         requirementLevel = other.requirementLevel;
@@ -253,6 +252,22 @@ public class LinkedResource extends MetaDataBase implements MetaData{
                 rmd.appendUnusedStatements(builder);
             }
         }
+    }
+
+    @Override
+    public Set<Value> getValuesByPredicate(URI predicate) {
+        HashSet<Value> result = null;
+        for (Resource id: ids){
+            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            Set<Value> moreResults = rmd.getValuesByPredicate(predicate);
+            if (moreResults != null){
+                if (result == null){
+                    result = new HashSet<Value>();
+                }
+                result.addAll(moreResults);
+            }
+        }
+        return result;
     }
 
 }

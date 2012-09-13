@@ -25,14 +25,13 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
 
     public static RequirementLevel ALLWAYS_WARN_LEVEL = RequirementLevel.SHOULD;
 
-    private final String name;      
-    private final URI predicate;
+   private final URI predicate;
     private final MetaDataType metaDataType;
     private final RequirementLevel requirementLevel;
     private Set<Value> values;
 
     public PropertyMetaData(Element element) throws MetaDataException {
-        name = element.getAttribute("name");
+        super(element);
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
         predicate = new URIImpl(predicateSt);
         String objectClass = element.getAttribute(SchemaConstants.CLASS);
@@ -43,7 +42,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     }
     
     private PropertyMetaData(PropertyMetaData other) {
-        name = other.name;
+        super(other.name);
         predicate = other.predicate;
         metaDataType = other.metaDataType;
         requirementLevel = other.requirementLevel;
@@ -217,6 +216,15 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
     @Override
     void appendUnusedStatements(StringBuilder builder) {
         //rawRDF here is used
+    }
+
+    @Override
+    public Set<Value> getValuesByPredicate(URI predicate) {
+        if (this.predicate.equals(predicate)){
+            return values;
+        } else {
+            return null;
+        }
     }
 
 }
