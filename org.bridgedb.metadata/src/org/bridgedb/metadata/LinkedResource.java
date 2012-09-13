@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
  *
  * @author Christian
  */
-public class LinkedResource extends MetaDataBase implements MetaData{
+public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaData{
 
     private final URI predicate;
     private final URI resourceType;
@@ -256,18 +256,34 @@ public class LinkedResource extends MetaDataBase implements MetaData{
 
     @Override
     public Set<Value> getValuesByPredicate(URI predicate) {
-        HashSet<Value> result = null;
-        for (Resource id: ids){
-            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
-            Set<Value> moreResults = rmd.getValuesByPredicate(predicate);
-            if (moreResults != null){
-                if (result == null){
-                    result = new HashSet<Value>();
-                }
-                result.addAll(moreResults);
-            }
-        }
-        return result;
+        //We don't want Values from linked resources.
+        return null;
     }
+
+    @Override
+    LinkedResource getLeafByPredicate(URI predicate) {
+        if (this.predicate.equals( predicate)){
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    Set<? extends LeafMetaData> getLeaves() {
+        HashSet<LinkedResource> results = new HashSet<LinkedResource>();
+        results.add(this);
+        return results;
+    }
+
+    @Override
+    public URI getPredicate() {
+        return predicate;
+    }
+
+    @Override
+    public void addParent(LeafMetaData parentLeaf) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

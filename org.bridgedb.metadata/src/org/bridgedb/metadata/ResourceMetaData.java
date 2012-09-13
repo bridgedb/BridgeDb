@@ -140,6 +140,12 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     void addParent(ResourceMetaData parent) {
         parents.add(parent);
+        Set<LeafMetaData> leaves = getLeaves();
+        for (LeafMetaData leaf: leaves){
+            URI predicate = leaf.getPredicate();
+            LeafMetaData parentLeaf = parent.getLeafByPredicate(predicate);
+            leaf.addParent(parentLeaf);
+        }
     }
 
 }

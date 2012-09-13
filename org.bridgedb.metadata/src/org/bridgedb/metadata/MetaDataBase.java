@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -45,5 +46,9 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     abstract MetaDataBase getSchemaClone();
     
     abstract boolean hasValues();
+
+    abstract Set<? extends LeafMetaData> getLeaves();
+
+    abstract LeafMetaData getLeafByPredicate(URI predicate);
 
 }
