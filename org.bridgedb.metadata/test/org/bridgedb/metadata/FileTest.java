@@ -11,6 +11,7 @@ import org.bridgedb.rdf.StatementReader;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 
 /**
@@ -23,11 +24,12 @@ public class FileTest extends TestUtils{
     public static boolean FILE_HAS_ONLY_EXPECTED_RDF = true;
     
     
-    private void checkFile(String fileName, boolean checkAllStatements) throws MetaDataException{
+    private void checkFile(String fileName, int numberOfIds, boolean checkAllStatements) throws MetaDataException{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
         MetaDataCollection metaData = new MetaDataCollection(statements);
+        checkCorrectNumberOfIds (metaData, numberOfIds);
         checkRequiredValues(metaData, RequirementLevel.MUST);
         checkCorrectTypes(metaData);
         if (checkAllStatements){
@@ -37,11 +39,11 @@ public class FileTest extends TestUtils{
     
     @Test
     public void testChebiHasPartsLinkset() throws MetaDataException{
-        checkFile("test-data/chebiHasPartsLinkset.ttl", FILE_HAS_EXTRA_RDF);
+        checkFile("test-data/chebiHasPartsLinkset.ttl", 3, FILE_HAS_EXTRA_RDF);
     } 
 
     @Test
     public void testChebiHasPartsLinksetSmall() throws MetaDataException{
-        checkFile("test-data/chebiHasPartsLinksetSmall.ttl", FILE_HAS_ONLY_EXPECTED_RDF);
+        checkFile("test-data/chebiHasPartsLinksetSmall.ttl", 3, FILE_HAS_ONLY_EXPECTED_RDF);
     } 
 }

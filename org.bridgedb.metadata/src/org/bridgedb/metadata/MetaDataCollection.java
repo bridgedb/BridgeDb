@@ -76,7 +76,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return results;
     }
     
-    public final Set<Value> findBySubjectPredicate(Resource subject, URI predicate){
+    private Set<Value> findBySubjectPredicate(Resource subject, URI predicate){
         HashSet<Value> values = new HashSet<Value>();         
         for (Statement statement: unusedStatements){
             if (statement.getSubject().equals(subject)){
@@ -88,6 +88,24 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return values;
     }
 
+    // ** Retreival Methods
+    public Set<Resource> getIds(){
+        return resourcesMap.keySet();
+    }
+    
+    public Set<Resource> getIdsOfType(URI type){
+        Set<Resource> result = new HashSet<Resource>();
+        Set<Resource>  keys =  resourcesMap.keySet();
+        for (Resource key: keys){
+            ResourceMetaData resourceMetaData = resourcesMap.get(key);
+            if (resourceMetaData.getType().equals(type)){
+                result.add(key);
+            }
+        }
+        return result;
+    }
+
+    // ** MetaData Methods 
     @Override
     public boolean hasRequiredValues(RequirementLevel requirementLevel) {
         for (ResourceMetaData resouce:resourcesMap.values()){
@@ -108,6 +126,18 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return true;
     }
 
+    @Override
+    public boolean allStatementsUsed() {
+        for (ResourceMetaData resouce:resourcesMap.values()){
+            if (!resouce.allStatementsUsed()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+   //** AppendBase Methods 
+    
     @Override
     void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
@@ -144,16 +174,5 @@ public class MetaDataCollection extends AppendBase implements MetaData {
              resouce.appendValidityReport(builder, forceLevel, includeWarnings, 0);
          }
     }
-
-    @Override
-    public boolean allStatementsUsed() {
-        for (ResourceMetaData resouce:resourcesMap.values()){
-            if (!resouce.allStatementsUsed()){
-                return false;
-            }
-        }
-        return true;
-    }
-
 
 }
