@@ -21,14 +21,15 @@ import org.w3c.dom.NodeList;
  *
  * @author Christian
  */
-public class PropertyMetaData extends MetaDataBase implements MetaData{
+public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMetaData{
 
     public static RequirementLevel ALLWAYS_WARN_LEVEL = RequirementLevel.SHOULD;
 
-   private final URI predicate;
+    private final URI predicate;
     private final MetaDataType metaDataType;
     private final RequirementLevel requirementLevel;
     private Set<Value> values;
+    private final Set<PropertyMetaData> parents = new HashSet<PropertyMetaData>();
 
     public PropertyMetaData(Element element) throws MetaDataException {
         super(element);
@@ -158,8 +159,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
         return true;
     }
 
-
-
     @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
         if (values.isEmpty()){
@@ -226,5 +225,32 @@ public class PropertyMetaData extends MetaDataBase implements MetaData{
             return null;
         }
     }
+
+    @Override
+    PropertyMetaData getLeafByPredicate(URI predicate) {
+        if (this.predicate.equals( predicate)){
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    Set<? extends LeafMetaData> getLeaves() {
+        HashSet<PropertyMetaData> results = new HashSet<PropertyMetaData>();
+        results.add(this);
+        return results;
+    }
+
+    @Override
+    public URI getPredicate() {
+        return predicate;
+    }
+
+    @Override
+    public void addParent(LeafMetaData parentLeaf) {
+        parents.add((PropertyMetaData)parentLeaf);
+    }
+
+
 
 }

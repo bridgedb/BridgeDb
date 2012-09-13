@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.openrdf.model.Resource;
@@ -75,7 +76,6 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     }
     
     // ** MetaDataBase methods 
-    
     @Override
     void loadValues(Resource id, Set<Statement> data, MetaData parent) {
         setupValues(id, parent);
@@ -92,6 +92,24 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
             }
         }
         return true;
+    }
+    
+    Set<LeafMetaData> getLeaves() {
+        Set<LeafMetaData> leaves = new HashSet<LeafMetaData>();
+        for (MetaDataBase child:childMetaData){
+            leaves.addAll(child.getLeaves());
+        }
+        return leaves;
+    }
+
+    LeafMetaData getLeafByPredicate(URI predicate) {
+        for (MetaDataBase child:childMetaData){
+            LeafMetaData leaf = child.getLeafByPredicate(predicate);
+            if (leaf != null){
+                return leaf;
+            }
+        }
+        return null;
     }
     
     // ** AppendBase methods 
@@ -133,5 +151,5 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
         throw new UnsupportedOperationException("Not supported yet.");
     }
     */
-    
+
 }

@@ -6,7 +6,9 @@ package org.bridgedb.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.bridgedb.metadata.constants.SchemaConstants;
+import org.openrdf.model.URI;
 import org.w3c.dom.Element;
 
 /**
@@ -72,5 +74,4 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         }
     }
 
-    
 }
