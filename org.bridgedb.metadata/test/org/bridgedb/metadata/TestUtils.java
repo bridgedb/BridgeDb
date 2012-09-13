@@ -4,6 +4,8 @@
  */
 package org.bridgedb.metadata;
 
+import java.util.Set;
+import org.openrdf.model.Resource;
 import javax.xml.datatype.DatatypeConfigurationException;
 import static org.junit.Assert.*;
 
@@ -17,6 +19,16 @@ public class TestUtils {
     static final boolean INCLUDE_WARNINGS = true;
     static final boolean NO_WARNINGS = false;;
      
+    void checkCorrectNumberOfIds(MetaDataCollection metaData, int numberOfIds){
+        Set<Resource> ids = metaData.getIds();
+        boolean ok = (ids.size() == numberOfIds);
+        if (!ok){
+            //This test will fail but with extra info
+            assertEquals(numberOfIds + " ids Expected ", ids);
+            assertTrue(ok);
+        }        
+    }
+
     void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
         boolean ok = metaData.hasRequiredValues(forceLevel);
         if (!ok){
