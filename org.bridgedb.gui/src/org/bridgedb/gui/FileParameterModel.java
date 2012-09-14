@@ -22,7 +22,7 @@ public class FileParameterModel extends SimpleParameterModel implements BridgeDb
 	@Override
 	public String getConnectionString()
 	{
-		return "idmapper-text:file://" + getFile(0).getAbsolutePath();
+		return "idmapper-text:" + getFile(0).toURI();
 	}
 
 	@Override
