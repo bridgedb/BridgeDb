@@ -86,6 +86,7 @@ public class MetaDataTestBase extends TestUtils{
     Statement d1ExampleStatement1 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE1);
     Statement d1ExampleStatement2 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE2);
     Statement d1ExampleStatement3 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE3);
+    Statement d1FocStatement = new StatementImpl(D1_ID, VoagConstants.FREQUENCY_OF_CHANGE, BIWEEKLY);
     //Data Set 2
     Statement d2IdStatement = new StatementImpl(D2_ID, RdfConstants.TYPE_URI, VoidConstants.DATASET); 
     Statement d2TitleStatement = new StatementImpl(D2_ID, DctermsConstants.TITLE, D2_TITLE);
@@ -166,7 +167,7 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1ExampleStatement1);
         addStatement(data, d1ExampleStatement2);
         addStatement(data, d1ExampleStatement3);
-//        data.add(d1FocStatement);
+        data.add(d1FocStatement);
         return data;
     }
     
