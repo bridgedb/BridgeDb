@@ -21,6 +21,11 @@
 		</fileset>
 	</path>
 
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
+	</path>
+
   <!-- override main class in manifest -->
   <target name="jar" depends="jar-common">
 	<jar jarfile="${jar.name}" update="true">
