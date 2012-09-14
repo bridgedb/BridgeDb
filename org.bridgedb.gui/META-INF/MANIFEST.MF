@@ -11,5 +11,6 @@ Require-Bundle: org.bridgedb;bundle-version="1.1.0",
  org.bridgedb.webservice.biomart;bundle-version="1.1.0";resolution:=optional,
  org.bridgedb.webservice.cronos;bundle-version="1.1.0";resolution:=optional,
  org.bridgedb.webservice.picr;bundle-version="1.1.0";resolution:=optional,
+ org.bridgedb.file.orthoxml;bundle-version="1.1.0";resolution:=optional,
  org.bridgedb.webservice.synergizer;bundle-version="1.1.0";resolution:=optional
 Import-Package: com.mysql.jdbc;resolution:=optional

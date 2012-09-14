@@ -46,6 +46,7 @@ public class ConnectionStringParameterModel extends SimpleParameterModel impleme
 		// all of these are optional.
 		for (String className : new String[] {
 				"org.bridgedb.webservice.picr.IDMapperPicr",
+				"org.bridgedb.file.orthoxml.IDMapperOrthoXml",
 				"org.bridgedb.webservice.picr.IDMapperPicrRest",
 				"org.bridgedb.webservice.cronos.IDMapperCronos",
 				"org.bridgedb.webservice.synergizer.IDMapperSynergizer",
