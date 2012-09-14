@@ -9,7 +9,7 @@
 			<include name="org.bridgedb.rdb.jar"/>
 			<include name="org.bridgedb.rdb.construct.jar"/>
 		</fileset>
-		<fileset dir="../lib">
+		<fileset dir="../common-bundles">
 			<include name="com.google.collect_1.0.0.v201105210816.jar"/>
 		</fileset>
 	</path>
