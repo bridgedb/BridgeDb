@@ -32,13 +32,18 @@
 			   includes="**"
 			   debug="true"
 			   destdir="build">
-			   <classpath refid="absolute.and.libs"/>
+			   <classpath>
+					<path refid="embed.jars"/>
+				</classpath>
 		</javac>
 		<javac srcdir="src"
 			   includes="**"
 			   debug="true"
 			   destdir="build">
-			   <classpath refid="absolute.and.libs"/>
+			   <classpath>
+					<path refid="embed.jars"/>
+					<path refid="absolute.deps"/>
+				</classpath>
 		</javac>
 	</target>
 
