@@ -11,6 +11,11 @@
 	<path id="transient.deps">
 	</path>
 
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
+	</path>
+
 	<!-- test deps are only used for testing -->
 	<path id="test.deps">
 	</path>

@@ -29,8 +29,6 @@
 	<target name="prepare"/> <!-- designed to be overriden by project build file -->
 
 	<target name="build" depends="prepare, prepare-common, prepare-jar-name">
-		<property name="myclasspath" refid="absolute.and.libs"/>
-		<echo>classpath: ${myclasspath}</echo>
 		<javac srcdir="src"
 			   includes="**"
 			   debug="true"
@@ -39,7 +37,15 @@
 		</javac>
 	</target>
 
-	<target name="jar-common" depends="build"> 
+	<!-- if the embed.jars property is specified, unjar those jars into the build directory -->
+	<target name="unjar-embedded" depends="build">
+		<echo>Hello world</echo>
+		<unjar dest="build">
+			<path refid="embed.jars"/>
+		</unjar>
+	</target>
+	
+	<target name="jar-common" depends="build, unjar-embedded"> 
 		<echo>Creating JAR: ${jar.name}</echo>
 		<manifestclasspath property="manifest.cp" jarfile="${jar.name}">
 			<classpath>
@@ -58,6 +64,13 @@
 			<fileset dir="build">
 				<include name="**/*.class"/>
 			</fileset>
+		</jar>
+		<jar jarfile="${jar.name}" update="true">
+			<manifest>
+				<!-- the trick is to remove any Bundle-ClassPath entries, in a separate update step,
+				otherwise the Bundle won't start if libs are missing-->
+				<attribute name="Bundle-ClassPath" value=""/>
+			</manifest>
 		</jar>
 	</target>
 

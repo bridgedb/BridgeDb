@@ -9,6 +9,11 @@
 		<!-- no dependencies -->
 	</path>
 
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
+	</path>
+
 	<path id="transient.deps">
 		<!-- no dependencies -->
 	</path>

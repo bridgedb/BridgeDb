@@ -12,6 +12,7 @@
 					<!-- NOTE: order is important! -->
 					<file name="org.bridgedb/build.xml"/>
 					<file name="org.bridgedb.bio/build.xml"/>
+					<file name="org.bridgedb.file.orthoxml/build.xml"/>
 					<file name="org.bridgedb.rdb/build.xml"/>
 					<file name="org.bridgedb.rdb.construct/build.xml"/>
 					<file name="org.bridgedb.tools.batchmapper/build.xml"/>
