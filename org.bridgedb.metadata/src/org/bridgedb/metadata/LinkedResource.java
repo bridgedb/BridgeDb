@@ -24,7 +24,8 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
 
     private final URI predicate;
     private final URI resourceType;
-    private Set<Resource> ids = new HashSet<Resource>();
+    private final Set<Resource> ids = new HashSet<Resource>();
+    private final Set<Statement> rawRDF = new HashSet<Statement>();
 
     private final RequirementLevel requirementLevel;
 

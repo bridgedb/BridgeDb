@@ -21,7 +21,6 @@ import org.w3c.dom.Element;
  */
 public abstract class MetaDataBase extends AppendBase implements MetaData{
     
-    Set<Statement> rawRDF;
     Resource id;
     final String name;
 
@@ -32,7 +31,6 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     }
     
     MetaDataBase(String name){
-        rawRDF = new HashSet<Statement>();
         this.name = name;
     }
     
