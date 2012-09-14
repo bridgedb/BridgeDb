@@ -25,35 +25,57 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     private final URI type;
     private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
+    private boolean isParent = false;
     
     ResourceMetaData(Element element) throws MetaDataException {
         super(element);
+        childMetaData.add(PropertyMetaData.getTypeProperty());
         String typeSt = element.getAttribute(SchemaConstants.TYPE);
         type = new URIImpl(typeSt);
     }
-
+    
+    /*public static ResourceMetaData getUntypedResource(Resource id){
+        String name;
+        if (id instanceof URI){
+            name = ((URI)id).getLocalName();
+        } else {
+            name = id.stringValue();
+        }
+        return new ResourceMetaData(name);
+    }*/
+    
     private ResourceMetaData(String theName, URI theType, List<MetaDataBase> children) {
         super(theName, children);
         this.type = theType;
     }
     
+    /*private ResourceMetaData(String name){
+        super(name, new ArrayList<MetaDataBase>());
+        type = null;
+    }*/
+    
     @Override
     public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
         super.loadValues(id, data, parent);
-        for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
-            Statement statement = iterator.next();
-            if (statement.getSubject().equals(id)){
-                iterator.remove();
-                if (statement.getObject().equals(type) && statement.getPredicate().equals(RdfConstants.TYPE_URI)){
-                    //Type statement can be rrecreated so is not needed 
-                } else {
-                    rawRDF.add(statement);
-                }
-            }
-        }  
+        Set<URI> predicates = getUsedPredicates(data);
+        for (URI predicate:predicates){
+            PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate);
+            metaData.loadValues(id, data, parent);
+            childMetaData.add(metaData);
+        }
         MetaDataRegistry.registerResource(this);
     }
 
+    private Set<URI> getUsedPredicates(Set<Statement> data){
+        Set<URI> results = new HashSet<URI>();
+        for (Statement statement: data){
+            if (statement.getSubject().equals(id)){
+                results.add(statement.getPredicate());
+            }
+        }        
+        return results;
+    }
+    
     void appendSpecific(StringBuilder builder, int tabLevel){
         tab(builder, tabLevel);
         builder.append("Resource ");
@@ -62,24 +84,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         builder.append(id);
         newLine(builder);        
     }
-    @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
-        super.appendShowAll(builder, forceLevel, tabLevel);
-        for (Statement statement: rawRDF){
-            tab(builder, tabLevel + 1);
-            builder.append(statement);
-            newLine(builder);
-        }
-    }
- 
-    @Override
-    void appendUnusedStatements(StringBuilder builder) {
-         for (Statement statement: rawRDF){
-            builder.append(statement);
-            newLine(builder);
-        }
-    }
-
+    
     @Override
     public void appendSchema(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
@@ -117,27 +122,13 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return false;
     }
 
-   @Override
+    @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
         for (MetaDataBase child:childMetaData){
             child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
         }
     }
     
-    @Override
-    public boolean allStatementsUsed() {
-        if (rawRDF.isEmpty()) {
-            for (MetaDataBase child:childMetaData){
-                if (!child.allStatementsUsed()){
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     void addParent(ResourceMetaData parent) {
         parents.add(parent);
         Set<LeafMetaData> leaves = getLeaves();
@@ -146,6 +137,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             LeafMetaData parentLeaf = parent.getLeafByPredicate(predicate);
             leaf.addParent(parentLeaf);
         }
+        parent.isParent = true;
     }
 
 }

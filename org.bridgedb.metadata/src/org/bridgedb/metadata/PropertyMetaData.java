@@ -8,6 +8,7 @@ import org.bridgedb.metadata.constants.SchemaConstants;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.type.*;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -28,9 +29,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private final URI predicate;
     private final MetaDataType metaDataType;
     private final RequirementLevel requirementLevel;
-    private Set<Value> values;
+    private final Set<Value> values = new HashSet<Value>();
     private final Set<PropertyMetaData> parents = new HashSet<PropertyMetaData>();
-
+    private final Set<Statement> rawRDF = new HashSet<Statement>();
+    private final boolean specifiedProperty;
+    
     public PropertyMetaData(Element element) throws MetaDataException {
         super(element);
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
@@ -39,21 +42,46 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         metaDataType = getMetaDataType(objectClass, element);
         String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
         requirementLevel = RequirementLevel.parse(requirementLevelSt);
-        values = new HashSet<Value>();
+        specifiedProperty = true;
     }
     
+    public static PropertyMetaData getUnspecifiedProperty(URI predicate){
+        PropertyMetaData result = new PropertyMetaData(predicate);
+        return result;
+    }
+    
+    public static PropertyMetaData getTypeProperty(){
+        PropertyMetaData result = new PropertyMetaData();
+        return result;
+    }
+
     private PropertyMetaData(PropertyMetaData other) {
         super(other.name);
         predicate = other.predicate;
         metaDataType = other.metaDataType;
         requirementLevel = other.requirementLevel;
-        values = new HashSet<Value>();
+        specifiedProperty = true;
     }
     
+    private PropertyMetaData(URI predicate){
+        super(predicate.getLocalName());
+        this.predicate = predicate;
+        metaDataType = null;
+        requirementLevel = null;
+        specifiedProperty = false;
+    }
+    
+    private PropertyMetaData(){
+        super("Type");
+        this.predicate = RdfConstants.TYPE_URI;
+        metaDataType = new UriType();
+        requirementLevel = RequirementLevel.MUST;
+        specifiedProperty = true;
+    }
+
     @Override
     public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
         setupValues(id, parent);
-        values = new HashSet<Value>();
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
@@ -88,13 +116,17 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     
     @Override
     void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
-        if (values.isEmpty() && requirementLevel.compareTo(forceLevel) > 0) { 
+        if (values.isEmpty() && specifiedProperty && requirementLevel.compareTo(forceLevel) > 0) { 
             //No value and low enough level not too care
             return; 
         } 
         tab(builder, tabLevel);
-        builder.append(id);
-        builder.append(" Property ");
+        //builder.append(id);
+        if (specifiedProperty){
+            builder.append("Property ");
+        } else {
+            builder.append("RawRDF ");            
+        }
         builder.append(name);
         if (values.isEmpty()){
             builder.append(" MISSING!  Set with ");
@@ -120,12 +152,17 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         builder.append("predicate ");
         builder.append(predicate);        
         newLine(builder, tabLevel + 1);
-        builder.append("class ");
-        builder.append(metaDataType);        
-        newLine(builder, tabLevel + 1);
-        builder.append("Requirement Level ");
-        builder.append(requirementLevel);        
-        newLine(builder);
+        if (specifiedProperty){
+            builder.append("class ");
+            builder.append(metaDataType);        
+            newLine(builder, tabLevel + 1);
+            builder.append("Requirement Level ");
+            builder.append(requirementLevel);        
+            newLine(builder);
+        } else {
+            builder.append("Unspecified RDF found in the data. ");
+            newLine(builder);
+        }
     }
 
     @Override
@@ -136,8 +173,12 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     @Override
     public boolean hasRequiredValues(RequirementLevel forceLevel) {
         if (values.isEmpty()){
-            //Is the level so low that is does not matter
-            return (requirementLevel.compareTo(forceLevel) > 0);          
+            if (specifiedProperty){
+                //Is the level so low that is does not matter
+                return (requirementLevel.compareTo(forceLevel) > 0);          
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
@@ -150,9 +191,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     
     @Override
     public boolean hasCorrectTypes() {
-        for (Value value: values){
-            if (!metaDataType.correctType(value)){
-                return false;
+        if (specifiedProperty) {
+            for (Value value: values){
+                if (!metaDataType.correctType(value)){
+                    return false;
+                }
             }
         }
         //If no incorrect values return true. Even if there are No values.
@@ -161,60 +204,87 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
 
     @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
-        if (values.isEmpty()){
-            if (requirementLevel.compareTo(forceLevel) <= 0){
-                tab(builder, tabLevel);
-                builder.append("ERROR: ");
-                builder.append(id );
-                builder.append(":");
-                builder.append(name);
-                builder.append(" is missing. ");
-                newLine(builder, tabLevel + 1);
-                builder.append("Please add a statment with the predicate ");
-                builder.append(predicate);
-                newLine(builder);
-            } else if (includeWarnings && requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
-                tab(builder, tabLevel);
-                builder.append("Warning: ");
-                builder.append(id );
-                builder.append(":");
-                builder.append(name);
-                builder.append(" is missing. ");
-                newLine(builder, tabLevel + 1);
-                builder.append("This has a RequirementLevel of ");
-                builder.append(requirementLevel);
-                newLine(builder);
+        if (specifiedProperty) {
+            if (values.isEmpty()){
+                appendEmptyReport(builder, forceLevel, includeWarnings, tabLevel);
+            } else if (!hasCorrectTypes()){
+                appendIncorrectTypeReport(builder, tabLevel);
+            } else {
+                //Ok so nothing to append
             }
-        } else if (!hasCorrectTypes()){
-            tab(builder, tabLevel);
-            builder.append("ERROR: Incorrect type for ");
-            builder.append(id );
-            builder.append(":");
-            builder.append(name);            
-            for (Value value: values){
-                if (!metaDataType.correctType(value)){
-                    newLine(builder, tabLevel + 1);
-                    builder.append("Expected ");
-                    builder.append(metaDataType.getCorrectType());
-                    newLine(builder, tabLevel + 1);
-                    builder.append(" Found ");
-                    builder.append(value);
-                    builder.append(" Which is a  ");
-                    builder.append(value.getClass());
-                }
-            }
-            newLine(builder);
+        } else {
+            appendUnspecifiedReport(builder, includeWarnings, tabLevel);            
         }
     }
 
+    private void appendEmptyReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+        if (requirementLevel.compareTo(forceLevel) <= 0){
+            tab(builder, tabLevel);
+            builder.append("ERROR: ");
+            builder.append(id );
+            builder.append(":");
+            builder.append(name);
+            builder.append(" is missing. ");
+            newLine(builder, tabLevel + 1);
+            builder.append("Please add a statment with the predicate ");
+            builder.append(predicate);
+            newLine(builder);
+        } else if (includeWarnings && requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
+            tab(builder, tabLevel);
+            builder.append("Warning: ");
+            builder.append(id );
+            builder.append(":");
+            builder.append(name);
+            builder.append(" is missing. ");
+            newLine(builder, tabLevel + 1);
+            builder.append("This has a RequirementLevel of ");
+            builder.append(requirementLevel);
+            newLine(builder);
+        }
+    }
+    
+    private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel) {
+        tab(builder, tabLevel);
+        builder.append("ERROR: Incorrect type for ");
+        builder.append(id );
+        builder.append(":");
+        builder.append(name);            
+        for (Value value: values){
+            if (!metaDataType.correctType(value)){
+                newLine(builder, tabLevel + 1);
+                builder.append("Expected ");
+                builder.append(metaDataType.getCorrectType());
+                newLine(builder, tabLevel + 1);
+                builder.append(" Found ");
+                builder.append(value);
+                builder.append(" Which is a  ");
+                builder.append(value.getClass());
+            }
+        }
+        newLine(builder);
+    }
+    
+    private void appendUnspecifiedReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
+        if (includeWarnings){
+            tab(builder, tabLevel);
+            builder.append("WARNING: Unexpected Predicate ");
+            builder.append(predicate);
+        }
+    }
+    
     @Override
     public boolean allStatementsUsed() {
-        return true;
+        return specifiedProperty;
     }
     
     @Override
     void appendUnusedStatements(StringBuilder builder) {
-        //rawRDF here is used
+        if (!specifiedProperty){
+            for (Statement statement: rawRDF){
+                builder.append(statement);
+                newLine(builder);
+            }
+        }
     }
 
     @Override
@@ -235,7 +305,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    Set<? extends LeafMetaData> getLeaves() {
+    Set<PropertyMetaData> getLeaves() {
         HashSet<PropertyMetaData> results = new HashSet<PropertyMetaData>();
         results.add(this);
         return results;
@@ -250,7 +320,5 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     public void addParent(LeafMetaData parentLeaf) {
         parents.add((PropertyMetaData)parentLeaf);
     }
-
-
 
 }
