@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.bio" default="dist" basedir=".">
 	
-	<property name="jar.name" value="../dist/org.bridgedb.bio.jar"/>
-
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
 		<pathelement location="../dist/org.bridgedb.jar"/>

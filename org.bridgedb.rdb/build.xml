@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.rdb" default="dist" basedir=".">
 	
-	<property name="jar.name" value="../dist/org.bridgedb.rdb.jar"/>
-  
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
 		<fileset dir="../dist">
