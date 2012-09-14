@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.tools.batchmapper" default="jar" basedir=".">
-	
-	<property name="jar.file" value="../dist/org.bridgedb.tools.batchmapper.jar"/>
-	
+		
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
 		<fileset dir="../dist">
@@ -20,13 +18,12 @@
 		<!-- nothing yet... -->
 	</path>	
 
-	<target name="jar" depends="build">
-		<jar jarfile="${jar.file}">
+	<!-- override main class attribute -->
+	<target name="jar" depends="jar-common">
+		<jar jarfile="${jar.name}" update="true">
 			<manifest>
 				<attribute name="Main-Class" value="org.bridgedb.tools.batchmapper.BatchMapper"/>
-				<attribute name="Class-Path" value="org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar derby.jar"/>
 			</manifest>
-			<fileset dir="build" includes="**/*.class"/>
 		</jar>
 	</target>
 

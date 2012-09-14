@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb" default="dist" basedir=".">
 	
-  <property name="jar.name" value="../dist/org.bridgedb.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
   <property file="version.props"/>

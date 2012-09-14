@@ -1,9 +1,16 @@
 <?xml version="1.0"?>
-<project name="common" basedir=".">
-	
+<project name="BridgeDb-common" basedir=".">
+
 	<property name="checkstyle.output.file" value="warnings.txt"/>
 
 	<property file="version.props"/>
+
+	<property name="bundle.dest" value="../dist"/>
+
+	<target name="prepare-jar-name">
+		<!-- the name of the plug-in jar uses the project name of the calling build file -->
+		<property name="jar.name" value="${bundle.dest}/${ant.project.name}.jar"/>
+	</target>
 
 	<target name="prepare-common">
 		<mkdir dir="build"/>
@@ -21,7 +28,7 @@
 
 	<target name="prepare"/> <!-- designed to be overriden by project build file -->
 
-	<target name="build" depends="prepare, prepare-common">
+	<target name="build" depends="prepare, prepare-common, prepare-jar-name">
 		<property name="myclasspath" refid="absolute.and.libs"/>
 		<echo>classpath: ${myclasspath}</echo>
 		<javac srcdir="src"
@@ -32,10 +39,19 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="build"> 
+	<target name="jar-common" depends="build"> 
 		<echo>Creating JAR: ${jar.name}</echo>
+		<manifestclasspath property="manifest.cp" jarfile="${jar.name}">
+			<classpath>
+				<path refid="absolute.deps"/>
+				<path refid="transient.deps"/>
+			</classpath>
+		</manifestclasspath>
 		<jar jarfile="${jar.name}"
 			manifest="META-INF/MANIFEST.MF">
+			<manifest>
+				<attribute name="Class-Path" value="${manifest.cp}"/>
+			</manifest>
 			<fileset dir="resources" erroronmissingdir="false">
 				<include name="**/*"/>
 			</fileset>
@@ -45,11 +61,13 @@
 		</jar>
 	</target>
 
+	<target name="jar" depends="jar-common"/> <!-- may be overriden by project build file -->
+
 	<target name="clean">
 		<delete dir="build"/>
 	</target>
 
-	<target name="dist-clean" depends="clean">
+	<target name="dist-clean" depends="clean, prepare-jar-name">
 		<delete file="${jar.name}"/>
 	</target>
 

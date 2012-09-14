@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.webservice.bridgerest" default="dist" basedir=".">
 	
-	<property name="jar.name" value="../dist/org.bridgedb.webservice.bridgerest.jar"/>
-  
 	<path id="absolute.deps">
 		<pathelement location="../dist/org.bridgedb.jar"/>
 		<pathelement location="../dist/org.bridgedb.bio.jar"/>
