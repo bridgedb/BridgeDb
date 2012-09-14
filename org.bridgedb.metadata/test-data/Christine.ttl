@@ -1,0 +1,58 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix pav: <http://purl.org/pav/2.0/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <#> .
+
+## CW VoID description 
+<> rdf:type void:DatasetDescription ;
+     dcterms:title "ConceptWiki Void Header"^^xsd:string ;
+     dcterms:description """ConceptWiki Void dataset description"""^^xsd:string ;
+     pav:createdBy <http://www.conceptwiki.org> ;
+     pav:createdOn "2012-09-04"^^xsd:date ;
+     foaf:primaryTopic :ConceptWiki_dataset  .
+
+## CW dataset description 
+:ConceptWiki_dataset rdf:type void:Dataset ;
+     foaf:homepage <http://www.conceptwiki.org> ;
+     dcterms:title "ConceptWiki Dataset"^^xsd:string ;
+     dcterms:description """Concepts with UUIDs found in ConceptWiki """^^xsd:string ;
+     pav:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+     void:uriSpace "http://www.conceptwiki.org/concept/"^^xsd:string ;
+     dcterms:publisher <http://www.conceptwiki.org> ;
+     pav:accessedOn "2012-09-04"^^xsd:date ;
+     dcterms:created "2012-08-24"^^xsd:date ;
+     pav:accessedBy <http://www.nbic.nl> ;
+     pav:version "1"^^xsd:string ;
+     dcterms:subject <http://ops.conceptwiki.org/web-ws/concept/get/?uuid=a7c96ac1-7584-451d-b0b9-78282b30b69e> ;
+     void:subset :SwissProt_dataset, :UMLS_dataset, <http://rdf.chemspider.com/void.rdf#chemSpiderDataset> .
+
+:SwissProt_dataset a void:Dataset;
+    foaf:homepage <http://www.uniprot.org/>;
+    dcterms:title "SwissProt";
+    dcterms:description "The SwissProt data slice.";
+    pav:version "UniProt release 2012_07";
+    dcterms:license <http://creativecommons.org/licenses/by-nd/3.0/> ;
+    pav:importedFrom :SwissProt_dataset;
+    pav:importedBy <http://www.nbic.nl/support/bet/> ;
+    pav:importedOn "2012-09-13"^^xsd:date .
+
+:UMLS_dataset a void:Dataset;
+    foaf:homepage <http://www.nlm.nih.gov/research/umls/>;
+    dcterms:title "UMLS";
+    dcterms:description "Mesh, GO datasets";
+    pav:version "2012AA Release";
+    dcterms:license <https://uts.nlm.nih.gov/help/license/LicenseAgreement.pdf> ;
+    pav:importedFrom :UMLS_dataset;
+    pav:importedBy <http://www.nbic.nl/support/bet/> ;
+    pav:importedOn "2012-02-21"^^xsd:date .
+    
+<http://rdf.chemspider.com/void.rdf#chemSpiderDatase>
+	pav:accessedOn "2012-08-22"^^xsd:date;
+ 	pav:importedBy <http://www.nbic.nl/support/bet/> ;
+    pav:importedOn "2012-08-23"^^xsd:date .
+    

@@ -46,4 +46,10 @@ public class FileTest extends TestUtils{
     public void testChebiHasPartsLinksetSmall() throws MetaDataException{
         checkFile("test-data/chebiHasPartsLinksetSmall.ttl", 3, FILE_HAS_ONLY_EXPECTED_RDF);
     } 
+
+    @Test
+    @Ignore
+    public void testChristine() throws MetaDataException{
+        checkFile("test-data/Christine.ttl", 5, FILE_HAS_ONLY_EXPECTED_RDF);
+    } 
 }
