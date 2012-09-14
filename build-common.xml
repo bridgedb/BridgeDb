@@ -39,7 +39,6 @@
 
 	<!-- if the embed.jars property is specified, unjar those jars into the build directory -->
 	<target name="unjar-embedded" depends="build">
-		<echo>Hello world</echo>
 		<unjar dest="build">
 			<path refid="embed.jars"/>
 		</unjar>
