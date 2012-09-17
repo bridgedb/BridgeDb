@@ -106,8 +106,22 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     private void addSubsets(Set<Statement> subsetStatements) {
         for (Statement statement: subsetStatements){
             ResourceMetaData parent = MetaDataRegistry.getResourceByID(statement.getSubject());
-            ResourceMetaData child = MetaDataRegistry.getResourceByID(statement.getSubject());
-            child.addParent(parent);
+            if (parent == null){
+                errors.add("No resource found for " + statement.getSubject());                
+            } 
+            Value object = statement.getObject();
+            if (object instanceof Resource){
+                ResourceMetaData child = MetaDataRegistry.getResourceByID((Resource)object);
+                if (child == null){
+                    errors.add("No resource found for " + object);
+                } else {
+                    if (parent != null){
+                        child.addParent(parent);                           
+                    }
+                }
+            } else {
+                errors.add("Unexpected Object in subset statement " + object);                
+            }
         }
     }
 
