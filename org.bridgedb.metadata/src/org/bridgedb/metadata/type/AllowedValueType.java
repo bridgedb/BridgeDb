@@ -28,7 +28,6 @@ public class AllowedValueType implements MetaDataType{
             Node node = list.item(i);
             allowedValues.add(node.getFirstChild().getNodeValue());
         }
-        System.out.println(allowedValues);
     }
     
     @Override

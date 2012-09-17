@@ -57,7 +57,7 @@ public class IntegerTypeTest {
      */
     @Test
     public void testGetCorrectType() {
-        System.out.println("getCorrectType");
+        Reporter.report("getCorrectType");
         IntegerType instance = new IntegerType();
         String expResult = " An Integer";
         String result = instance.getCorrectType();

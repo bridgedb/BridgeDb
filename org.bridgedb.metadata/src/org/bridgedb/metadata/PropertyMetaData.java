@@ -33,7 +33,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private final Set<PropertyMetaData> parents = new HashSet<PropertyMetaData>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
     private final boolean specifiedProperty;
-    
+
     public PropertyMetaData(Element element) throws MetaDataException {
         super(element);
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
@@ -318,7 +318,15 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
 
     @Override
     public void addParent(LeafMetaData parentLeaf) {
-        parents.add((PropertyMetaData)parentLeaf);
+        if (parentLeaf == null){
+            return;
+        }
+        if (parentLeaf instanceof PropertyMetaData){
+            PropertyMetaData pmd = (PropertyMetaData)parentLeaf;
+            values.addAll(pmd.values);
+        } else {
+            throw new UnsupportedOperationException("Unexpected LeafMetaData type of " + parentLeaf.getClass());
+        }
     }
 
 }
