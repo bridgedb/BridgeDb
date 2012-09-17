@@ -124,8 +124,27 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     @Override
     public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
-        for (MetaDataBase child:childMetaData){
-            child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+        if (isParent){
+            if (this.hasCorrectTypes()){
+                if (this.hasRequiredValues(forceLevel)){
+                    //Do nothing
+                } else {
+                    tab(builder, tabLevel);
+                    builder.append("WARNING: ");
+                    builder.append(id);
+                    builder.append(" is incomplete so can only be used as a superset ");
+                    newLine(builder);
+                }
+            } else {
+                //Incorrect types show the whole vlaidity report anyway
+                for (MetaDataBase child:childMetaData){
+                    child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+                }    
+            }
+        } else {
+            for (MetaDataBase child:childMetaData){
+                child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+            }
         }
     }
     

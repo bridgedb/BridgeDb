@@ -72,6 +72,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
             builder.append(" Alternatives ");
             builder.append(name);
             builder.append(" None of the alternatives have a value.");
+            newLine(builder);
             for (MetaDataBase child:childMetaData){
                  child.appendShowAll(builder, RequirementLevel.MAY, tabLevel + 1);
             }
