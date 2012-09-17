@@ -4,13 +4,17 @@
  */
 package org.bridgedb.metadata;
 
+import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.metadata.constants.*;
 import org.bridgedb.metadata.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import org.openrdf.model.Statement;
+import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  *
@@ -122,8 +126,30 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     @Test
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
-         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
         checkAllStatementsUsed(metaData);
     }
     
+    @Test
+    public void testNotAllStatementsUsedDifferentPredicate() throws MetaDataException{
+        Reporter.report("NotAllStatementsUsedDifferentPredicate");
+        Set<Statement> data = loadDataSet1();
+        Statement unusedStatement = 
+                new StatementImpl(D1_ID, new URIImpl("http://www.example.org/NotARealURI"), NAME_SPACE_VALUE);
+        data.add(unusedStatement);
+        MetaDataCollection metaData = new MetaDataCollection(data);
+        assertFalse(metaData.allStatementsUsed());
+    }
+
+    @Test
+    public void testNotAllStatementsUsedDifferentResource() throws MetaDataException{
+        Reporter.report("NotAllStatementsUsedDifferentResource");
+        Set<Statement> data = loadDataSet1();
+        Statement unusedStatement = new StatementImpl(
+                new URIImpl("http://www.example.org/NotARealURI"), DctermsConstants.TITLE, NAME_SPACE_VALUE);
+        data.add(unusedStatement);
+        MetaDataCollection metaData = new MetaDataCollection(data);
+        assertFalse(metaData.allStatementsUsed());
+    }
+
 }
