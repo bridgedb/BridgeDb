@@ -52,8 +52,10 @@
 				<path refid="transient.deps"/>
 			</classpath>
 		</manifestclasspath>
-		<jar jarfile="${jar.name}"
-			manifest="META-INF/MANIFEST.MF">
+		<copy file="META-INF/MANIFEST.MF" toDir="build/META-INF"/>
+		<!-- The trick is to ignore the bundle-classpath used by eclipse, we embed these jars instead -->
+		<replaceregexp file="build/META-INF/MANIFEST.MF" match="^Bundle-ClassPath:" replace="Ignore-this:" flags="m"/>
+		<jar jarfile="${jar.name}">
 			<manifest>
 				<attribute name="Class-Path" value="${manifest.cp}"/>
 			</manifest>
@@ -63,13 +65,6 @@
 			<fileset dir="build">
 				<include name="**/*.class"/>
 			</fileset>
-		</jar>
-		<jar jarfile="${jar.name}" update="true">
-			<manifest>
-				<!-- the trick is to remove any Bundle-ClassPath entries, in a separate update step,
-				otherwise the Bundle won't start if libs are missing-->
-				<attribute name="Bundle-ClassPath" value=""/>
-			</manifest>
 		</jar>
 	</target>
 

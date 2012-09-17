@@ -96,10 +96,7 @@ public class IDMapperOrthoXml implements IDMapper
 		Group group;
 		
 		while ((group = reader.next()) != null)
-		{
-			//print group identifier and members
-			System.out.printf(group.getId() + "\t");
-			
+		{		
 			Set<Xref> groupRefs = new HashSet<Xref>();
 			
 			for(Gene gene : group.getNestedGenes())
@@ -111,8 +108,7 @@ public class IDMapperOrthoXml implements IDMapper
 				
 				dataSources.add(ds);
 				groupRefs.add (new Xref(gene.getGeneIdentifier(), ds));
-				groupRefs.add (new Xref(gene.getProteinIdentifier(), ds));
-				
+				groupRefs.add (new Xref(gene.getProteinIdentifier(), ds));		
 			}
 			
 			for (Xref ref : groupRefs)
