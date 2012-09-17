@@ -37,7 +37,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
              unusedStatements.add(statement);
         }
         Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET);
-        Set<Resource> ids = findResourceByPredicate(RdfConstants.TYPE_URI);
+        Set<Resource> ids = extractIds();
         for (Resource id:ids){
             if (!resourcesMap.containsKey(id)){
                ResourceMetaData resourceMetaData =  getResourceMetaData(id);
@@ -69,11 +69,19 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return resourceMetaData;
     }
     
-    private Set<Resource> findResourceByPredicate(URI predicate){
+    private Set<Resource> extractIds(){
         HashSet<Resource> results = new HashSet<Resource>();
         for (Statement statement: unusedStatements) {
-            if (statement.getPredicate().equals(predicate)){
+            if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
                  results.add(statement.getSubject());
+            }
+            if (statement.getPredicate().equals(VoidConstants.SUBSET)){
+                 results.add(statement.getSubject());
+                 Value object = statement.getObject();
+                 if (object instanceof Resource){
+                     results.add((Resource)object);
+                     errors.add(VoidConstants.SUBSET + " has unexpected non resource object " + object);
+                 }
             }
         }  
         return results;
@@ -209,6 +217,11 @@ public class MetaDataCollection extends AppendBase implements MetaData {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
              resouce.appendValidityReport(builder, forceLevel, includeWarnings, 0);
+         }
+         for (String error:errors){
+             tab(builder, tabLevel);
+             builder.append(error);
+             newLine(builder);
          }
     }
 
