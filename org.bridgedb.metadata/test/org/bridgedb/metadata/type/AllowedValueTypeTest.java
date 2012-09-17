@@ -79,7 +79,7 @@ public class AllowedValueTypeTest {
      */
     @Test
     public void testGetCorrectType() {
-        System.out.println("getCorrectType");
+        Reporter.report("getCorrectType");
         AllowedValueType instance = new AllowedValueType(property);
         String expResult = " One of [first, second, third]";
         String result = instance.getCorrectType();

@@ -30,7 +30,6 @@ public class AllowedUriType implements MetaDataType{
             String stringValue = node.getFirstChild().getNodeValue();
             allowedValues.add(new URIImpl(stringValue));
         }
-        System.out.println(allowedValues);
     }
     
     @Override

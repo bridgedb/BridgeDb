@@ -37,19 +37,31 @@ public class FileTest extends TestUtils{
         }
     }
     
+    private void validateFile(String fileName, int numberOfIds, boolean checkAllStatements) throws MetaDataException{
+        Reporter.report("Checking " + fileName);
+        File input = new File(fileName);
+        Set<Statement> statements = StatementReader.extractStatements(input);
+        MetaDataCollection metaData = new MetaDataCollection(statements);
+        checkCorrectNumberOfIds (metaData, numberOfIds);
+        if (checkAllStatements){
+            checkAllStatementsUsed(metaData);
+        }
+    }
+
     @Test
+    @Ignore
     public void testChebiHasPartsLinkset() throws MetaDataException{
         checkFile("test-data/chebiHasPartsLinkset.ttl", 3, FILE_HAS_EXTRA_RDF);
     } 
 
     @Test
+    @Ignore
     public void testChebiHasPartsLinksetSmall() throws MetaDataException{
         checkFile("test-data/chebiHasPartsLinksetSmall.ttl", 3, FILE_HAS_ONLY_EXPECTED_RDF);
     } 
 
     @Test
-    @Ignore
     public void testChristine() throws MetaDataException{
-        checkFile("test-data/Christine.ttl", 5, FILE_HAS_ONLY_EXPECTED_RDF);
+        validateFile("test-data/Christine.ttl", 5, FILE_HAS_EXTRA_RDF);
     } 
 }
