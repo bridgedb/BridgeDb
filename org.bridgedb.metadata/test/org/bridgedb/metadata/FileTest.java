@@ -43,9 +43,7 @@ public class FileTest extends TestUtils{
         Set<Statement> statements = StatementReader.extractStatements(input);
         MetaDataCollection metaData = new MetaDataCollection(statements);
         checkCorrectNumberOfIds (metaData, numberOfIds);
-        if (checkAllStatements){
-            checkAllStatementsUsed(metaData);
-        }
+        Reporter.report(metaData.validityReport(RequirementLevel.SHOULD, INCLUDE_WARNINGS));
     }
 
     @Test

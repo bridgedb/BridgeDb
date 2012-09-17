@@ -226,7 +226,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             builder.append(name);
             builder.append(" is missing. ");
             newLine(builder, tabLevel + 1);
-            builder.append("Please add a statment with the predicate ");
+            builder.append("Please add a statement with the predicate ");
             builder.append(predicate);
             newLine(builder);
         } else if (includeWarnings && requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
@@ -267,8 +267,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private void appendUnspecifiedReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (includeWarnings){
             tab(builder, tabLevel);
-            builder.append("WARNING: Unexpected Predicate ");
+            builder.append("WARNING: ");
+            builder.append(id);
+            builder.append(" has an unexpected Predicate ");
             builder.append(predicate);
+            newLine(builder);
         }
     }
     
