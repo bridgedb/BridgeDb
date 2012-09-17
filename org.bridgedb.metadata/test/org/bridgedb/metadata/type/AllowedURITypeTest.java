@@ -80,7 +80,7 @@ public class AllowedURITypeTest {
      */
     @Test
     public void testGetCorrectType() {
-        System.out.println("getCorrectType");
+        Reporter.report("getCorrectType");
         AllowedUriType instance = new AllowedUriType(property);
         String expResult = " URI in [http://example.com#first, http://example.com#second, http://example.com#third]";
         String result = instance.getCorrectType();
