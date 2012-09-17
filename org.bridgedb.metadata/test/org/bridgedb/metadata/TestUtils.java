@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.metadata.utils.Reporter;
 import java.util.Set;
 import org.openrdf.model.Resource;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -25,6 +26,7 @@ public class TestUtils {
         if (!ok){
             //This test will fail but with extra info
             assertEquals(numberOfIds + " ids Expected ", ids);
+            Reporter.report(metaData.toString());
             assertTrue(ok);
         }        
     }
@@ -53,6 +55,7 @@ public class TestUtils {
         if (!ok){
             //This test will fail but with extra info
             assertEquals("", metaData.unusedStatements());
+            Reporter.report(metaData.toString());
             assertTrue(ok);
         }        
     }

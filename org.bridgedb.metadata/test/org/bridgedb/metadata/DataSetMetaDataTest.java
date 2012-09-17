@@ -16,7 +16,6 @@ import org.openrdf.model.impl.StatementImpl;
  *
  * @author Christian
  */
-@Ignore
 public class DataSetMetaDataTest extends MetaDataTestBase{
     
     public DataSetMetaDataTest() throws DatatypeConfigurationException{        
