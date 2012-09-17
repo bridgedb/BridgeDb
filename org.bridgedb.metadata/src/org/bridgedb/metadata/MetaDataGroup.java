@@ -67,6 +67,7 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
             builder.append(" Group ");
             builder.append(name);
             builder.append(" Some but not all items in the group found.");
+            newLine(builder);
             //check all items in the group have a value
             for (MetaDataBase child:childMetaData){
                  child.appendShowAll(builder, RequirementLevel.MAY, tabLevel + 1);
