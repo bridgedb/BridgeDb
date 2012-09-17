@@ -29,18 +29,14 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     
     Map<Resource,ResourceMetaData> resourcesMap = new HashMap<Resource,ResourceMetaData>();
     Set<String> errors = new HashSet<String>();
-    Set<Statement> unusedStatements;
+    Set<Statement> unusedStatements = new HashSet<Statement>();
     
     public MetaDataCollection(Set<Statement> statements) throws MetaDataException {
-        unusedStatements = new HashSet<Statement>(0);
-        for (Statement statement:statements){
-             unusedStatements.add(statement);
-        }
-        Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET);
-        Set<Resource> ids = extractIds();
+        Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
+        Set<Resource> ids = findIds(statements);
         for (Resource id:ids){
             if (!resourcesMap.containsKey(id)){
-               ResourceMetaData resourceMetaData =  getResourceMetaData(id);
+               ResourceMetaData resourceMetaData =  getResourceMetaData(id, statements);
                if (resourceMetaData == null){
                    Reporter.report(id + " has no known rdf:type ");
                    errors.add(id + " has no known rdf:type ");                   
@@ -50,17 +46,18 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             }
         }
         addSubsets(subsetStatements);
+        checkAllRemainingAreLinks(statements);
     }
     
-    private ResourceMetaData getResourceMetaData (Resource id) throws MetaDataException{
-        Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI);
+    private ResourceMetaData getResourceMetaData (Resource id, Set<Statement> statements) throws MetaDataException{
+        Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI, statements);
         ResourceMetaData resourceMetaData = null;
         for (Value type:types){
             ResourceMetaData rmd =  MetaDataRegistry.getResourceByType(type);
             if (rmd != null){
                 if (resourceMetaData == null){
                    resourceMetaData = rmd; 
-                   resourceMetaData.loadValues(id, unusedStatements, this);
+                   resourceMetaData.loadValues(id, statements, this);
                 } else {
                    errors.add(id + " has a second known rdf:type " + type);
                 }
@@ -69,9 +66,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return resourceMetaData;
     }
     
-    private Set<Resource> extractIds(){
+    private Set<Resource> findIds(Set<Statement> statements){
         HashSet<Resource> results = new HashSet<Resource>();
-        for (Statement statement: unusedStatements) {
+        for (Statement statement: statements) {
             if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
                  results.add(statement.getSubject());
             }
@@ -87,9 +84,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return results;
     }
     
-    private Set<Statement> extractStatementsByPredicate(URI predicate){
+    private Set<Statement> extractStatementsByPredicate(URI predicate, Set<Statement> statements){
         HashSet<Statement> results = new HashSet<Statement>();
-        for (Iterator<Statement> iterator = unusedStatements.iterator(); iterator.hasNext();) {
+        for (Iterator<Statement> iterator = statements.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getPredicate().equals(predicate)){
                 iterator.remove();
@@ -99,9 +96,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return results;
     }
 
-    private Set<Value> findBySubjectPredicate(Resource subject, URI predicate){
+    private Set<Value> findBySubjectPredicate(Resource subject, URI predicate, Set<Statement> statements){
         HashSet<Value> values = new HashSet<Value>();         
-        for (Statement statement: unusedStatements){
+        for (Statement statement: statements){
             if (statement.getSubject().equals(subject)){
                 if (statement.getPredicate().equals(predicate)){
                     values.add(statement.getObject());
@@ -132,6 +129,16 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             }
         }
     }
+
+    private void checkAllRemainingAreLinks(Set<Statement> statements) {
+        Set<Value> linkPredicates = getValuesByPredicate(VoidConstants.LINK_PREDICATE);
+        for (Statement statement:statements){
+            if (linkPredicates == null || !linkPredicates.contains(statement.getPredicate())){
+                unusedStatements.add(statement);     
+            }
+        }
+    }
+
 
     // ** Retreival Methods
     public Set<Resource> getIds(){
@@ -173,6 +180,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
 
     @Override
     public boolean allStatementsUsed() {
+        if (!unusedStatements.isEmpty()) {
+            return false;
+        }
         for (ResourceMetaData resouce:resourcesMap.values()){
             if (!resouce.allStatementsUsed()){
                 return false;
@@ -194,13 +204,13 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     
     @Override
     void appendUnusedStatements(StringBuilder builder) {
-         for (Statement statement: unusedStatements){
-             builder.append(statement);
-             newLine(builder);
-         }
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
              resouce.appendUnusedStatements(builder);
+         }
+         for (Statement statement:unusedStatements){
+             builder.append(statement);
+             newLine(builder);
          }
     }
    
