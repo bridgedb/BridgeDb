@@ -51,8 +51,7 @@
     pav:importedBy <http://www.nbic.nl/support/bet/> ;
     pav:importedOn "2012-02-21"^^xsd:date .
     
-<http://rdf.chemspider.com/void.rdf#chemSpiderDataset>
-    a void:Dataset;
+<http://rdf.chemspider.com/void.rdf#chemSpiderDatase>
 	pav:accessedOn "2012-08-22"^^xsd:date;
  	pav:importedBy <http://www.nbic.nl/support/bet/> ;
     pav:importedOn "2012-08-23"^^xsd:date .
