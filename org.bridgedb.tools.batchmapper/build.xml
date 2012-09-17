@@ -11,6 +11,10 @@
 
 	<!-- transient deps are optional, they are used only in the manifest classpath -->
 	<path id="transient.deps">
+		<fileset dir="../dist">
+			<include name="derby.jar"/>
+			<include name="org.bridgedb.rdb.jar"/>
+		</fileset>
 	</path>
 
 	<!-- embedded jars are embedded in the resulting bundle -->
