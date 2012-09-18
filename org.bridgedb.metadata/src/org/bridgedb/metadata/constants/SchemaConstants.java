@@ -27,6 +27,8 @@ public class SchemaConstants {
     public static final String CLASS_STRING = "String";
     public static final String CLASS_URI = "uri";
     
+    public static final String DOCUMENTATION_ROOT = "documentationRoot";
+    public static final String DOCUMENTATION = "documentation";
     public static final String REQUIREMENT_LEVEL = "requirementLevel";
   
 }

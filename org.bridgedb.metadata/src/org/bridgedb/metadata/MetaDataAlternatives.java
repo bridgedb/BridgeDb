@@ -4,12 +4,7 @@
  */
 package org.bridgedb.metadata;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import org.bridgedb.metadata.constants.SchemaConstants;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
 import org.w3c.dom.Element;
 
 /**
@@ -26,19 +21,15 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         requirementLevel = RequirementLevel.parse(requirementLevelSt);
     }
     
-    public MetaDataAlternatives(String name, RequirementLevel requirementLevel, List<MetaDataBase> children){
-        super(name, children);
-        this.requirementLevel = requirementLevel;
+    public MetaDataAlternatives(MetaDataAlternatives other){
+        super(other);
+        this.requirementLevel = other.requirementLevel;
     }
     
 
     @Override
     MetaDataAlternatives getSchemaClone() {
-        List<MetaDataBase> children = new ArrayList<MetaDataBase>();
-        for (MetaDataBase child:childMetaData){
-            children.add(child.getSchemaClone());
-        }
-        return new MetaDataAlternatives(name, requirementLevel, children);
+        return new MetaDataAlternatives(this);
     }
 
     @Override
@@ -73,6 +64,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
             builder.append(name);
             builder.append(" None of the alternatives have a value.");
             newLine(builder);
+            addDocumentationLink(builder, tabLevel);
             for (MetaDataBase child:childMetaData){
                  child.appendShowAll(builder, RequirementLevel.MAY, tabLevel + 1);
             }

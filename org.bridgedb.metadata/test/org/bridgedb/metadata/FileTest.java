@@ -46,6 +46,14 @@ public class FileTest extends TestUtils{
         Reporter.report(metaData.validityReport(RequirementLevel.SHOULD, INCLUDE_WARNINGS));
     }
 
+    private void validateFile(String fileName, boolean checkAllStatements) throws MetaDataException{
+        Reporter.report("Checking " + fileName);
+        File input = new File(fileName);
+        Set<Statement> statements = StatementReader.extractStatements(input);
+        MetaDataCollection metaData = new MetaDataCollection(statements);
+        Reporter.report(metaData.validityReport(RequirementLevel.SHOULD, INCLUDE_WARNINGS));
+    }
+
     @Test
     @Ignore
     public void testChebiHasPartsLinkset() throws MetaDataException{
@@ -62,4 +70,9 @@ public class FileTest extends TestUtils{
     public void testChristine() throws MetaDataException{
         validateFile("test-data/Christine.ttl", 5, FILE_HAS_EXTRA_RDF);
     } 
+
+    //@Test
+    //public void testAndra() throws MetaDataException{
+    //    validateFile("test-data/Andra.ttl", FILE_HAS_EXTRA_RDF);
+    //} 
 }
