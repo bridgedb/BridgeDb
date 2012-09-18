@@ -36,6 +36,7 @@ public class MetaDataRegistry {
     
     static Map<URI, ResourceMetaData> resourcesByType;
     static Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
+    static String documentationRoot = "";
     
     public static ResourceMetaData getResourceByType(Value type) throws MetaDataException{
         Map<URI, ResourceMetaData> theResources = getResources();
@@ -55,6 +56,10 @@ public class MetaDataRegistry {
         resourcesById.put(resourceMetaData.id, resourceMetaData);
     }
             
+    public static String getDocumentationRoot(){
+        return documentationRoot;
+    }
+    
     private static Map<URI, ResourceMetaData> getResources() throws MetaDataException{
         if (resourcesByType == null){
             String fileName = "resources/metadata.xml";
@@ -115,32 +120,26 @@ public class MetaDataRegistry {
     private static List<MetaDataBase> getMetaData(List<Element> elements) throws MetaDataException{
         ArrayList<MetaDataBase> metaDatas = new ArrayList<MetaDataBase>();
         for (Element element:elements){
-            MetaDataBase metaData = createMetaData(element);
-            metaDatas.add(metaData);
+            String tagName = element.getTagName();
+            if (tagName.equals(SchemaConstants.RESOURCE)){
+                metaDatas.add(new ResourceMetaData(element));
+            } else if (tagName.equals(SchemaConstants.PROPERTY)){
+                metaDatas.add(new PropertyMetaData(element));
+            } else if (tagName.equals(SchemaConstants.GROUP)){
+                metaDatas.add(new MetaDataGroup(element));
+            } else if (tagName.equals(SchemaConstants.ALTERNATIVES)){
+                metaDatas.add(new MetaDataAlternatives(element));
+            } else if (tagName.equals(SchemaConstants.LINKED_RESOURCE)){
+                metaDatas.add(new LinkedResource(element));
+            } else if (tagName.equals(SchemaConstants.DOCUMENTATION_ROOT)){
+                documentationRoot = element.getFirstChild().getTextContent();
+            } else {
+                throw new MetaDataException ("Unexpected Element with tagName " + tagName); 
+            }
         }
         return metaDatas;
     }
     
-    private static MetaDataBase createMetaData(Element element) throws MetaDataException {
-        String tagName = element.getTagName();
-        if (tagName.equals(SchemaConstants.RESOURCE)){
-            return new ResourceMetaData(element);
-        }
-        if (tagName.equals(SchemaConstants.PROPERTY)){
-            return new PropertyMetaData(element);
-        }
-        if (tagName.equals(SchemaConstants.GROUP)){
-            return new MetaDataGroup(element);
-        }
-        if (tagName.equals(SchemaConstants.ALTERNATIVES)){
-            return new MetaDataAlternatives(element);
-        }
-        if (tagName.equals(SchemaConstants.LINKED_RESOURCE)){
-            return new LinkedResource(element);
-        }
-        throw new MetaDataException ("Unexpected Element with tagName " + tagName); 
-    }
-
     static public void main(String[] arg) throws SAXException, ParserConfigurationException, IOException, MetaDataException{
         Document doc = readDomFromFile("resources/metadata.xml");
         Element root = doc.getDocumentElement();

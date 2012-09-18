@@ -56,7 +56,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     private PropertyMetaData(PropertyMetaData other) {
-        super(other.name);
+        super(other);
         predicate = other.predicate;
         metaDataType = other.metaDataType;
         requirementLevel = other.requirementLevel;
@@ -229,6 +229,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             builder.append("Please add a statement with the predicate ");
             builder.append(predicate);
             newLine(builder);
+            addDocumentationLink(builder, tabLevel);
         } else if (includeWarnings && requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
             tab(builder, tabLevel);
             builder.append("Warning: ");
@@ -240,6 +241,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             builder.append("This has a RequirementLevel of ");
             builder.append(requirementLevel);
             newLine(builder);
+            addDocumentationLink(builder, tabLevel);
         }
     }
     
@@ -262,6 +264,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             }
         }
         newLine(builder);
+        addDocumentationLink(builder, tabLevel);
     }
     
     private void appendUnspecifiedReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
@@ -331,5 +334,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             throw new UnsupportedOperationException("Unexpected LeafMetaData type of " + parentLeaf.getClass());
         }
     }
+
 
 }

@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="windows-1252"?>
 
 <metadata>
-    
-    <resource name="Decription void" type="http://rdfs.org/ns/void#DatasetDescription">
-        <property
-            name="Title"
-            predicate="http://purl.org/dc/terms/title"
-            class="String"
-            requirementLevel = "MAY"
-            />          
-        <property
-            name="Description"
-            predicate="http://purl.org/dc/terms/description"
-            class="String"
-            requirementLevel = "MAY"
-            />
+    <documentationRoot>http://www.openphacts.org/specs/2012/WD-datadesc-20120816/</documentationRoot>
+    <resource name="Decription void" type="http://rdfs.org/ns/void#DatasetDescription" requirementLevel = "MUST">
         <property
             name="Created By"
             predicate="http://purl.org/pav/2.0/createdBy"
             class="Uri"
-            requirementLevel = "MAY"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
             />          
         <property
             name="Created On"
             predicate="http://purl.org/pav/2.0/createdOn"
             class="Date"
-            requirementLevel = "MAY"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
+            />          
+        <property
+            name="Last Updated"
+            predicate="http://purl.org/pav/2.0/lastUpdateOn"
+            class="Date"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
             />          
         <property
             name="Primary Topic"
             predicate="http://xmlns.com/foaf/0.1/primaryTopic"
             class="URI"
-            requirementLevel = "MAY"
+            requirementLevel = "SHOULD"
+            documentation = "#exchanging-descriptions"
             />          
     </resource>
     <resource name="Dataset void" type="http://rdfs.org/ns/void#Dataset">
@@ -40,122 +38,141 @@
             predicate="http://purl.org/dc/terms/title"
             class="String"
             requirementLevel = "MUST"
+            documentation = "#dataset-metadata"
             />          
         <property
             name="Description"
             predicate="http://purl.org/dc/terms/description"
             class="String"
             requirementLevel = "MUST"
+            documentation = "#dataset-metadata"
             />          
         <property
             name="Homepage"
             predicate="http://xmlns.com/foaf/0.1/homepage"
             class="Uri"
             requirementLevel = "MUST"
+            documentation = "#dataset-metadata"
             />          
         <property
             name="Page"
             predicate="http://xmlns.com/foaf/0.1/page"
             class="Uri"
             requirementLevel = "MAY"
+            documentation = "#dataset-metadata"
             />          
         <property
             name="License"
             predicate="http://purl.org/dc/terms/license"
             class="Uri"
             requirementLevel = "MUST"
+            documentation = "#dataset-metadata"
             />          
         <property
             name="Namespace"
             predicate="http://rdfs.org/ns/void#uriSpace"
             class="String"
             requirementLevel = "MUST"
+            documentation = "#dataset-metadata"
             />          
         <property
             name="Version"
             predicate="http://purl.org/pav/2.0/version"
             class="String"
             requirementLevel = "MAY"
+            documentation = "#dataset-prov-version"
             />          
-        <alternatives name = "Provenance" requirementLevel = "MUST">
-        <group name = "Original Location">
-            <property
-                name="Publisher"
-                predicate="http://purl.org/dc/terms/publisher"
-                class="Uri"
-                requirementLevel = "MAY"
-                />          
-            <property
-                name="Created"
-                predicate="http://purl.org/dc/terms/created"
-                class="Date"
-                requirementLevel = "MAY"
-                />          
-            <property
-                name="Modified"
-                predicate="http://purl.org/dc/terms/modified"
-                class="Date"
-                requirementLevel = "MAY"
-                />
-        </group>
-        <group name = "Retrieved">
-            <property
-                name="Retrieved From"
-                predicate="http://purl.org/pav/2.0/retrievedFrom"
-                class="Uri"
-                requirementLevel = "MAY"
-                />          
-            <property
-                name="Retrieved On"
-                predicate="http://purl.org/pav/2.0/retrievedOn"
-                class="Date"
-                requirementLevel = "MAY"
-                />          
-            <property
-                name="Retrieved By"
-                predicate="http://purl.org/pav/2.0/retrievedBy"
-                class="Uri"
-                requirementLevel = "MAY"
-                />     
-        </group>
-            <group name = "imported">
+        <alternatives name = "Provenance" requirementLevel = "MUST" documentation = "#dataset-prov-version">
+            <group name = "Original Location" documentation = "#dataset-prov-version">
+                <property
+                    name="Publisher"
+                    predicate="http://purl.org/dc/terms/publisher"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
+                    />          
+                <property
+                    name="Created"
+                    predicate="http://purl.org/dc/terms/created"
+                    class="Date"
+                    requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
+                    />          
+                <property
+                    name="Modified"
+                    predicate="http://purl.org/dc/terms/modified"
+                    class="Date"
+                    requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
+                    />
+            </group>
+            <group name = "Retrieved" documentation = "#dataset-prov-version">
+                <property
+                    name="Retrieved From"
+                    predicate="http://purl.org/pav/2.0/retrievedFrom"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
+                    />          
+                <property
+                    name="Retrieved On"
+                    predicate="http://purl.org/pav/2.0/retrievedOn"
+                    class="Date"
+                    requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
+                    />          
+                <property
+                    name="Retrieved By"
+                    predicate="http://purl.org/pav/2.0/retrievedBy"
+                    class="Uri"
+                    requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
+                    />     
+            </group>
+            <group name = "imported" documentation = "#dataset-prov-version">
                 <property
                     name="Imported From"
                     predicate="http://purl.org/pav/2.0/importedFrom"
                     class="Uri"
                     requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Imported On"
                     predicate="http://purl.org/pav/2.0/importedOn"
                     class="Date"
                     requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Imported By"
                     predicate="http://purl.org/pav/2.0/importedBy"
                     class="Uri"
                     requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
                     />
             </group>
-            <group name = "Derived">
+            <group name = "Derived" documentation = "#dataset-prov-version">
                 <property
                     name="Derived From"
                     predicate="http://purl.org/pav/2.0/derivedFrom"
                     class="Uri"
                     requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Derived On"
                     predicate="http://purl.org/pav/2.0/derivedOn"
                     class="Date"
                     requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
                     />              
                 <property
                     name="Derived By"
                     predicate="http://purl.org/pav/2.0/derivedBy"
                     class="Uri"
                     requirementLevel = "MAY"
+                    documentation = "#dataset-prov-version"
                     /> 
             </group>
         </alternatives>
@@ -164,36 +181,42 @@
             predicate="http://rdfs.org/ns/void#vocabulary"
             class="Uri"
             requirementLevel = "SHOULD"
+            documentation = "#dataset-topic-resources"
             />          
         <property
             name="Topics"
             predicate="http://purl.org/dc/terms/subject"
             class="URI"
             requirementLevel = "MUST"
+            documentation = "#dataset-topic-resources"
             />          
         <property
             name="Examples"
             predicate="http://rdfs.org/ns/void#exampleResource"
             class="URI"
             requirementLevel = "MUST"
+            documentation = "#dataset-topic-resources"
             />          
         <property
             name="Data Dump"
             predicate="http://rdfs.org/ns/void#dataDump"
             class="URI"
             requirementLevel = "MUST"
+            documentation = "#dataset-access"
             />          
         <property
             name="Sparql End Point"
             predicate="http://rdfs.org/ns/void#sparqlEndpoint"
             class="Uri"
             requirementLevel = "MAY"
+            documentation = "#dataset-access"
             />      
         <property
             name = "Update Frequency"
             predicate = "http://voag.linkedmodel.org/schema/voag#frequencyOfChange"
             class = "AllowedUris"
             requirementLevel = "SHOULD"
+            documentation = "#dataset-update-frequency"
             >
             <AllowedValue>http://purl.org/cld/freq/triennial</AllowedValue>
             <AllowedValue>http://purl.org/cld/freq/biennial</AllowedValue>,
@@ -221,57 +244,66 @@
             predicate="http://purl.org/dc/terms/title"
             class="String"
             requirementLevel = "MUST"
+            documentation = "#linkset-metadata"
             />          
         <property
             name="Description"
             predicate="http://purl.org/dc/terms/description"
             class="String"
             requirementLevel = "MUST"
+            documentation = "#linkset-metadata"
             />          
         <property
             name="License"
             predicate="http://purl.org/dc/terms/license"
             class="Uri"
             requirementLevel = "MUST"
+            documentation = "#linkset-metadata"
             />          
        <linkedResource 
             name = "subject"
             predicate = "http://rdfs.org/ns/void#subjectsTarget"
             type="http://rdfs.org/ns/void#Dataset"
             requirementLevel = "MUST"
+            documentation = "#link-info"
             />      
        <linkedResource 
             name = "object"
             predicate = "http://rdfs.org/ns/void#objectsTarget"
             type="http://rdfs.org/ns/void#Dataset"
             requirementLevel = "MUST"
+            documentation = "#link-info"
             />      
         <property
             name="Link Relationship"
             predicate="http://rdfs.org/ns/void#linkPredicate"
             class="Uri"
             requirementLevel = "MUST"
+            documentation = "#link-info"
             />          
         <property
             name="Link Justification"
             predicate="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses"
             class="Uri"
             requirementLevel = "MUST"
+            documentation = "#link-info"
             />          
         <!-- subset -->
-        <alternatives name = "Link Source" requirementLevel = "MUST">
-            <group name = "authored" >
+        <alternatives name = "Link Source" requirementLevel = "MUST" documentation = "#linkset-provenance">
+            <group name = "authored" documentation = "#linkset-provenance">
                 <property
                     name="authored By"
                     predicate="http://purl.org/pav/2.0/authoredBy"
                     class="Uri"
                     requirementLevel = "MAY"
+                    documentation = "#linkset-provenance"
                     />          
                 <property
                     name="authored On"
                     predicate="http://purl.org/pav/2.0/authoredOn"
                     class="Date"
                     requirementLevel = "MAY"
+                    documentation = "#linkset-provenance"
                     />          
             </group>
             <property
@@ -279,25 +311,29 @@
                 predicate="http://purl.org/pav/2.0/createdwith"
                 class="Uri"
                 requirementLevel = "MAY"
+                documentation = "#linkset-provenance"
                 />          
         <property
             name="Created By"
             predicate="http://purl.org/pav/2.0/createdBy"
             class="Uri"
             requirementLevel = "MUST"
-                />          
+            documentation = "#linkset-provenance"
+            />          
         <property
             name="Created On"
             predicate="http://purl.org/pav/2.0/createdOn"
             class="Date"
             requirementLevel = "MUST"
-                />          
+            documentation = "#linkset-provenance"
+            />          
         </alternatives>
         <property
             name="Linkset Statistics"
             predicate="http://rdfs.org/ns/void#triples"
             class="Integer"
             requirementLevel = "SHOULD"
+            documentation = "#linkset-stats"
             />          
     </resource>
 </metadata>
