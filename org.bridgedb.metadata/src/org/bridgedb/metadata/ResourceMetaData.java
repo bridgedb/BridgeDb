@@ -44,9 +44,9 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return new ResourceMetaData(name);
     }*/
     
-    private ResourceMetaData(String theName, URI theType, List<MetaDataBase> children) {
-        super(theName, children);
-        this.type = theType;
+    private ResourceMetaData(ResourceMetaData other) {
+        super(other);
+        this.type = other.type;
     }
     
     /*private ResourceMetaData(String name){
@@ -104,11 +104,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }
 
     public ResourceMetaData getSchemaClone() {
-        List<MetaDataBase> children = new ArrayList<MetaDataBase>();
-        for (MetaDataBase child:childMetaData){
-            children.add(child.getSchemaClone());
-        }
-        return new ResourceMetaData(name, type, children);
+        return new ResourceMetaData(this);
     }
 
     @Override

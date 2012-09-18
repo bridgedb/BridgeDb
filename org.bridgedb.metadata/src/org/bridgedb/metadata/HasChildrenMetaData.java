@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,9 +27,13 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
         childMetaData = MetaDataRegistry.getChildMetaData(element);
     }
 
-    HasChildrenMetaData(String name, List<MetaDataBase> childMetaData){
-        super(name);
-        this.childMetaData = childMetaData;
+    HasChildrenMetaData(HasChildrenMetaData other){
+        super(other);
+        childMetaData = new ArrayList<MetaDataBase>();
+        for (MetaDataBase child:other.childMetaData){
+            childMetaData.add(child.getSchemaClone());
+        }
+
     }
     
     // ** MetaData methods 

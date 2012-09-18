@@ -23,15 +23,23 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     
     Resource id;
     final String name;
+    final String documentation;
 
    // MetaData parent;
     
     MetaDataBase(Element element){
         name = element.getAttribute(SchemaConstants.NAME);
+        documentation = MetaDataRegistry.getDocumentationRoot() + element.getAttribute(SchemaConstants.DOCUMENTATION);
     }
     
     MetaDataBase(String name){
         this.name = name;
+        this.documentation = MetaDataRegistry.getDocumentationRoot();
+    }
+    
+    MetaDataBase(MetaDataBase other){
+        this.name = other.name;
+        this.documentation = other.documentation;
     }
     
     abstract void loadValues(Resource id, Set<Statement> data, MetaData parent);
@@ -41,6 +49,13 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
  //       this.parent = parent;
     }
     
+    final void addDocumentationLink(StringBuilder builder, int tabLevel) {
+        tab(builder, tabLevel + 1);
+        builder.append("See: ");
+        builder.append(documentation);
+        newLine(builder);
+    }
+
     abstract MetaDataBase getSchemaClone();
     
     abstract boolean hasValues();

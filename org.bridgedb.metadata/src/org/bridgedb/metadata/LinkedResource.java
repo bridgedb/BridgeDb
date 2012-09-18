@@ -40,7 +40,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
  
     LinkedResource(LinkedResource other){
-        super(other.name);
+        super(other);
         predicate = other.predicate;
         resourceType = other.resourceType;
         requirementLevel = other.requirementLevel;

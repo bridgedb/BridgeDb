@@ -21,8 +21,8 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         super(element);
     }
     
-    public MetaDataGroup(String name, List<MetaDataBase> childMetaData){
-        super(name, childMetaData);
+    public MetaDataGroup(MetaDataGroup other){
+        super(other);
     }
     
     @Override
@@ -31,7 +31,7 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         for (MetaDataBase child:childMetaData){
             children.add(child.getSchemaClone());
         }
-        return new MetaDataGroup(name, children);
+        return new MetaDataGroup(this);
     }
 
     @Override
@@ -68,6 +68,7 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
             builder.append(name);
             builder.append(" Some but not all items in the group found.");
             newLine(builder);
+            addDocumentationLink(builder, tabLevel);
             //check all items in the group have a value
             for (MetaDataBase child:childMetaData){
                  child.appendShowAll(builder, RequirementLevel.MAY, tabLevel + 1);
