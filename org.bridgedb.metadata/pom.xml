@@ -16,7 +16,7 @@
                 <artifactId>onejar-maven-plugin</artifactId>
                 <version>1.4.4</version>
                 <configuration>
-                    <mainClass>org.bridgedb.linkset.LinksetLoader</mainClass>
+                    <mainClass>org.bridgedb.metadata.validator.Validator</mainClass>
                 </configuration>
                <executions>
                     <execution>

@@ -10,13 +10,16 @@ package org.bridgedb.metadata;
  */
 public enum RequirementLevel {
     TECHNICAL_MUST, MUST, SHOULD, MAY; //Negative requirement not programmed, SHOULD_NOT, MUST_NOT;
-    
+
+    public static String legalValues(){
+        return "\"MUST\", \"SHOULD\", \"MAY\"";
+    }
     public static RequirementLevel parse(String text) throws MetaDataException{
         for (RequirementLevel requirementLevel: RequirementLevel.values()){
             if (text.equalsIgnoreCase(requirementLevel.name())) {
                 return requirementLevel;
             }
         }
-        throw new MetaDataException("Unexpected RequirementLevel text "+ text);
+        throw new MetaDataException("Unexpected RequirementLevel text\""+ text +"\" Please pick from " + legalValues());
     }
 }

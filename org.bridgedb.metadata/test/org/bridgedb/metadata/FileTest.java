@@ -50,7 +50,9 @@ public class FileTest extends TestUtils{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
+        Reporter.report("Read " + fileName);
         MetaDataCollection metaData = new MetaDataCollection(statements);
+        Reporter.report("Loaded " + fileName);
         Reporter.report(metaData.validityReport(RequirementLevel.SHOULD, INCLUDE_WARNINGS));
     }
 
@@ -73,6 +75,6 @@ public class FileTest extends TestUtils{
 
     //@Test
     //public void testAndra() throws MetaDataException{
-    //    validateFile("test-data/Andra.ttl", FILE_HAS_EXTRA_RDF);
+    //    validateFile("test-data/Andra.ttl", FILE_HAS_ONLY_EXPECTED_RDF);
     //} 
 }

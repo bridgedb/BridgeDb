@@ -270,9 +270,9 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private void appendUnspecifiedReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (includeWarnings){
             tab(builder, tabLevel);
-            builder.append("WARNING: ");
+            builder.append("INFO: ");
             builder.append(id);
-            builder.append(" has an unexpected Predicate ");
+            builder.append(" has an extra Predicate ");
             builder.append(predicate);
             newLine(builder);
         }

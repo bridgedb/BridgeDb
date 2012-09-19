@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.utils.Reporter;
+import org.bridgedb.rdf.LinksetParserErrorListener;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFFormat;
@@ -28,6 +29,11 @@ public class StatementReader extends RDFHandlerBase{
  
     public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.RDFXML;
     public static String DEFAULT_BASE_URI = "http://example.co.uk/";
+
+    public static Set<RDFFormat> getSupportedFormats() {
+        RDFParserRegistry reg = RDFParserRegistry.getInstance();
+        return reg.getKeys();
+    }
     
     private Set<Statement> statements = new HashSet<Statement>();
     

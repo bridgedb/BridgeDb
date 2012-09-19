@@ -186,7 +186,7 @@
         <property
             name="Topics"
             predicate="http://purl.org/dc/terms/subject"
-            class="URI"
+            class="String"
             requirementLevel = "MUST"
             documentation = "#dataset-topic-resources"
             />          
