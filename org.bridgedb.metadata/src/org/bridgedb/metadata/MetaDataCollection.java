@@ -157,6 +157,14 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return result;
     }
 
+    public String summary() {
+        StringBuilder builder = new StringBuilder();
+        for (ResourceMetaData resource:resourcesMap.values()){
+            resource.appendSummary(builder, 0);
+        }
+        return builder.toString();
+    }
+
     // ** MetaData Methods 
     @Override
     public boolean hasRequiredValues(RequirementLevel requirementLevel) {
@@ -199,6 +207,15 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         }
         return true;
     }
+
+    @Override
+    public Set<Statement> getRDF(){
+        HashSet results = new HashSet<Statement>();
+        for (ResourceMetaData resouce:resourcesMap.values()){
+            results.addAll(resouce.getRDF());
+        }
+        return results;
+     }
 
    //** AppendBase Methods 
     
@@ -258,6 +275,15 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             }
         }
         return result;
+    }
+
+    public void validate(RequirementLevel forceLevel) throws MetaDataException {
+        String report = this.validityReport(forceLevel, false);
+        if (report.equals(CLEAR_REPORT)){
+            //OK 
+        } else {
+            throw new MetaDataException(report);
+        }
     }
 
 }

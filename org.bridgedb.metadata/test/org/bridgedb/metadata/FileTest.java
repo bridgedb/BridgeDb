@@ -28,11 +28,7 @@ public class FileTest extends TestUtils{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
-        for (Statement statement:statements){
-            System.out.println(statement);
-        }
         MetaDataCollection metaData = new MetaDataCollection(statements);
-        System.out.println(metaData);
         checkCorrectNumberOfIds (metaData, numberOfIds);
         checkRequiredValues(metaData, RequirementLevel.SHOULD);
         checkCorrectTypes(metaData);

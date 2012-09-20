@@ -286,5 +286,10 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public Set<Statement> getRDF() {
+        return rawRDF;
+    }
+
 
 }

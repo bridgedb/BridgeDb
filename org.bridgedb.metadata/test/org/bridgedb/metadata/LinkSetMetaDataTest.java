@@ -41,4 +41,21 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
         checkAllStatementsUsed(metaData);
     }
 
+    @Test
+    public void testValidateOk() throws MetaDataException{
+        Reporter.report("LinkSet Validate OK");
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        metaData.validate(RequirementLevel.SHOULD);
+    }
+
+    @Test
+    public void testSummary() throws MetaDataException{
+        Reporter.report("LinkSet Summary");
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        String expected = "Linkset Void id http://www.example.com/test/linkset1 OK!\n"
+                + "Dataset void id http://www.example.com/test/dataset2 OK!\n"
+                + "Dataset void id http://www.example.com/test/dataset1 OK!\n";
+        String summary = metaData.summary();
+        assertEquals(expected, summary);
+    }
 }

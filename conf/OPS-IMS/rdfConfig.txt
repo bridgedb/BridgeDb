@@ -3,7 +3,7 @@
 #Ideally point Environment variable OPS-IMS-CONFIG to the folder containing your config files.
 
 #BaseURI should match the localing the war will be propped to or links will not work.
-BaseURI                 http://localhost:8080/OPS-IMS
+BaseURI                 http://localhost:8080/OPS-IMS/
 
 #WARNING leaving the default relative links is not recommeneded especially for Main and Load RDF.
 #Relative links will fail if loading and running is not done from the same directory.

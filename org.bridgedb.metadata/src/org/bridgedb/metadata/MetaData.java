@@ -36,4 +36,6 @@ interface MetaData {
      *       Null if predicate is unknown.
      */
     Set<Value> getValuesByPredicate(URI predicate);
+    
+    Set<Statement> getRDF();
 }

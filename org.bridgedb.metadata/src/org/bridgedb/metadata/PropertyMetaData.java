@@ -340,5 +340,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }
     }
 
+    @Override
+    public Set<Statement> getRDF() {
+        return rawRDF;
+    }
+
 
 }

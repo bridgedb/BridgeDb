@@ -83,7 +83,6 @@ public class MetaDataRegistry {
     }
     
     private static Document readDomFromFile(File xmlFile) throws MetaDataException  {
-        System.out.println(xmlFile);
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -187,7 +186,6 @@ public class MetaDataRegistry {
         if (test != null) { 
             return test;
         }
-        System.out.println("woops");
         throw new MetaDataException("Unable to find the metadata.xml file");
     }
     
@@ -221,9 +219,7 @@ public class MetaDataRegistry {
             zip = new ZipInputStream( jar.openStream());
             ZipEntry ze = null;
             while( ( ze = zip.getNextEntry() ) != null ) {
-                System.out.println(ze);
                 if (name.equals(ze.getName())){
-                    System.out.println("found");
                     return zip;
                 }
             }

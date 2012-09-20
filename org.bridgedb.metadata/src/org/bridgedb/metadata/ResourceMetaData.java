@@ -161,4 +161,24 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return isParent;
     }
 
+    public void appendSummary(StringBuilder builder, int tabLevel) {
+        tab(builder, tabLevel);
+        builder.append(name);
+        builder.append(" id ");
+        builder.append(id);
+        if (this.hasCorrectTypes()){
+            if (this.hasRequiredValues(RequirementLevel.SHOULD)){
+                builder.append(" OK!");
+            } else if (this.hasRequiredValues(RequirementLevel.MUST)){
+                builder.append(" has MUST values.");
+            } else if (isParent){
+                builder.append(" can only be used as a superset.");
+            } else {
+                builder.append(" incomplete!");
+            }
+        } else {
+            builder.append(" has incorrect typed statements.");
+        }
+        newLine(builder);        
+    }
 }

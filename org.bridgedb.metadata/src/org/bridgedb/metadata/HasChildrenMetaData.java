@@ -79,6 +79,14 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
         }
         return true;
     }
+
+    public Set<Statement> getRDF(){
+        HashSet results = new HashSet<Statement>();
+        for (MetaDataBase child:childMetaData){
+            results.addAll(child.getRDF());
+        }
+        return results;
+     }
     
     // ** MetaDataBase methods 
     @Override

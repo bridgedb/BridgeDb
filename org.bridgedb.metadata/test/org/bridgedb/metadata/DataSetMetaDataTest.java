@@ -152,4 +152,12 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         assertFalse(metaData.allStatementsUsed());
     }
 
+    @Test
+    public void testGetRDF() throws MetaDataException{
+        Reporter.report("getRdf");
+        Set<Statement> data = loadDataSet1();
+        MetaDataCollection metaData = new MetaDataCollection(data);
+        Set<Statement> rewriteData = metaData.getRDF();
+        assertEquals(loadDataSet1(), rewriteData);
+    }
 }
