@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.metadata.constants.RdfConstants;
+import org.bridgedb.metadata.constants.XsdConstants;
 import org.bridgedb.metadata.type.*;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -110,6 +111,9 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }
         if (SchemaConstants.CLASS_URI.equalsIgnoreCase(objectClass)){
             return new UriType();
+        }
+        if (objectClass.startsWith(XsdConstants.PREFIX)){
+            return new XsdType(objectClass);
         }
         throw new MetaDataException ("Unexpected " + SchemaConstants.CLASS + " " + objectClass);
     }

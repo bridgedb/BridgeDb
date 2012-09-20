@@ -5,22 +5,22 @@
     <resource name="Decription void" type="http://rdfs.org/ns/void#DatasetDescription" requirementLevel = "MUST">
         <property
             name="Created By"
-            predicate="http://purl.org/pav/2.0/createdBy"
+            predicate="http://purl.org/pav/createdBy"
             class="Uri"
             requirementLevel = "MUST"
             documentation = "#exchanging-descriptions"
             />          
         <property
             name="Created On"
-            predicate="http://purl.org/pav/2.0/createdOn"
-            class="Date"
+            predicate="http://purl.org/pav/createdOn"
+            class="http://www.w3.org/2001/XMLSchema#dateTime"
             requirementLevel = "MUST"
             documentation = "#exchanging-descriptions"
             />          
         <property
             name="Last Updated"
-            predicate="http://purl.org/pav/2.0/lastUpdateOn"
-            class="Date"
+            predicate="http://purl.org/pav/lastUpdateOn"
+            class="http://www.w3.org/2001/XMLSchema#dateTime"
             requirementLevel = "MUST"
             documentation = "#exchanging-descriptions"
             />          
@@ -77,7 +77,7 @@
             />          
         <property
             name="Version"
-            predicate="http://purl.org/pav/2.0/version"
+            predicate="http://purl.org/pav/version"
             class="String"
             requirementLevel = "MAY"
             documentation = "#dataset-prov-version"
@@ -94,14 +94,14 @@
                 <property
                     name="Created"
                     predicate="http://purl.org/dc/terms/created"
-                    class="Date"
+                    class="http://www.w3.org/2001/XMLSchema#dateTime"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Modified"
                     predicate="http://purl.org/dc/terms/modified"
-                    class="Date"
+                    class="http://www.w3.org/2001/XMLSchema#dateTime"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />
@@ -109,21 +109,21 @@
             <group name = "Retrieved" documentation = "#dataset-prov-version">
                 <property
                     name="Retrieved From"
-                    predicate="http://purl.org/pav/2.0/retrievedFrom"
+                    predicate="http://purl.org/pav/retrievedFrom"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Retrieved On"
-                    predicate="http://purl.org/pav/2.0/retrievedOn"
-                    class="Date"
+                    predicate="http://purl.org/pav/retrievedOn"
+                    class="http://www.w3.org/2001/XMLSchema#dateTime"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Retrieved By"
-                    predicate="http://purl.org/pav/2.0/retrievedBy"
+                    predicate="http://purl.org/pav/retrievedBy"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
@@ -132,21 +132,21 @@
             <group name = "imported" documentation = "#dataset-prov-version">
                 <property
                     name="Imported From"
-                    predicate="http://purl.org/pav/2.0/importedFrom"
+                    predicate="http://purl.org/pav/importedFrom"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Imported On"
-                    predicate="http://purl.org/pav/2.0/importedOn"
-                    class="Date"
+                    predicate="http://purl.org/pav/importedOn"
+                    class="http://www.w3.org/2001/XMLSchema#dateTime"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Imported By"
-                    predicate="http://purl.org/pav/2.0/importedBy"
+                    predicate="http://purl.org/pav/importedBy"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
@@ -155,21 +155,21 @@
             <group name = "Derived" documentation = "#dataset-prov-version">
                 <property
                     name="Derived From"
-                    predicate="http://purl.org/pav/2.0/derivedFrom"
+                    predicate="http://purl.org/pav/derivedFrom"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />          
                 <property
                     name="Derived On"
-                    predicate="http://purl.org/pav/2.0/derivedOn"
-                    class="Date"
+                    predicate="http://purl.org/pav/derivedOn"
+                    class="http://www.w3.org/2001/XMLSchema#dateTime"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />              
                 <property
                     name="Derived By"
-                    predicate="http://purl.org/pav/2.0/derivedBy"
+                    predicate="http://purl.org/pav/derivedBy"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
@@ -293,37 +293,37 @@
             <group name = "authored" documentation = "#linkset-provenance">
                 <property
                     name="authored By"
-                    predicate="http://purl.org/pav/2.0/authoredBy"
+                    predicate="http://purl.org/pav/authoredBy"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#linkset-provenance"
                     />          
                 <property
                     name="authored On"
-                    predicate="http://purl.org/pav/2.0/authoredOn"
-                    class="Date"
+                    predicate="http://purl.org/pav/authoredOn"
+                    class="http://www.w3.org/2001/XMLSchema#dateTime"
                     requirementLevel = "MAY"
                     documentation = "#linkset-provenance"
                     />          
             </group>
             <property
                 name="Created with"
-                predicate="http://purl.org/pav/2.0/createdwith"
+                predicate="http://purl.org/pav/createdwith"
                 class="Uri"
                 requirementLevel = "MAY"
                 documentation = "#linkset-provenance"
                 />          
         <property
             name="Created By"
-            predicate="http://purl.org/pav/2.0/createdBy"
+            predicate="http://purl.org/pav/createdBy"
             class="Uri"
             requirementLevel = "MUST"
             documentation = "#linkset-provenance"
             />          
         <property
             name="Created On"
-            predicate="http://purl.org/pav/2.0/createdOn"
-            class="Date"
+            predicate="http://purl.org/pav/createdOn"
+            class="http://www.w3.org/2001/XMLSchema#dateTime"
             requirementLevel = "MUST"
             documentation = "#linkset-provenance"
             />          

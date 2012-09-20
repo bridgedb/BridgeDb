@@ -5,7 +5,6 @@
 package org.bridgedb.metadata;
 
 import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
 import org.bridgedb.metadata.constants.SchemaConstants;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +13,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -232,13 +230,8 @@ public class MetaDataRegistry {
             return null;
         } catch (IOException ex) {
             Logger.getLogger(MetaDataRegistry.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-      //      try {
-      //          zip.close();
-      //      } catch (IOException ex) {
-      //          Logger.getLogger(MetaDataRegistry.class.getName()).log(Level.SEVERE, null, ex);
-      //      }
         }
+        //NOTE: Stream must be left OPEN!
         return null;
     }
 }

@@ -73,8 +73,4 @@ public class FileTest extends TestUtils{
         validateFile("test-data/Christine.ttl", 5, FILE_HAS_EXTRA_RDF);
     } 
 
-    //@Test
-    //public void testAndra() throws MetaDataException{
-    //    validateFile("test-data/Andra.ttl", FILE_HAS_ONLY_EXPECTED_RDF);
-    //} 
-}
+ }

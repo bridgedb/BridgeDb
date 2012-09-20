@@ -26,7 +26,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class PavConstants {
     
-    private static final String pavTermns = "http://purl.org/pav/2.0/";
+    private static final String pavTermns = "http://purl.org/pav/";
     
     public static final URI ACCESSED_BY = new URIImpl(pavTermns + "sourceAccessedBy");
     public static final URI ACCESSED_FROM = new URIImpl(pavTermns + "sourceAccessedAt");
