@@ -23,7 +23,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("Linkset HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
-        checkRequiredValues(metaData, RequirementLevel.MUST);
+        checkRequiredValues(metaData, RequirementLevel.SHOULD);
         assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
     } 
 

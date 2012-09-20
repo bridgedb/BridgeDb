@@ -128,10 +128,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         //builder.append(id);
         if (specifiedProperty){
             builder.append("Property ");
+            builder.append(name);
         } else {
             builder.append("RawRDF ");            
+            builder.append(predicate);
         }
-        builder.append(name);
         if (values.isEmpty()){
             builder.append(" MISSING!  Set with ");
             builder.append(predicate);

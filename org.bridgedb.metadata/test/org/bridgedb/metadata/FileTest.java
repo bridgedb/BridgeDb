@@ -28,9 +28,13 @@ public class FileTest extends TestUtils{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
+        for (Statement statement:statements){
+            System.out.println(statement);
+        }
         MetaDataCollection metaData = new MetaDataCollection(statements);
+        System.out.println(metaData);
         checkCorrectNumberOfIds (metaData, numberOfIds);
-        checkRequiredValues(metaData, RequirementLevel.MUST);
+        checkRequiredValues(metaData, RequirementLevel.SHOULD);
         checkCorrectTypes(metaData);
         if (checkAllStatements){
             checkAllStatementsUsed(metaData);
@@ -57,20 +61,24 @@ public class FileTest extends TestUtils{
     }
 
     @Test
-    @Ignore
-    public void testChebiHasPartsLinkset() throws MetaDataException{
-        checkFile("test-data/chebiHasPartsLinkset.ttl", 3, FILE_HAS_EXTRA_RDF);
+    public void testChemspider() throws MetaDataException{
+        checkFile("test-data/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF);
+    } 
+
+    @Test
+    public void testChemspiderSmall() throws MetaDataException{
+        checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF);
     } 
 
     @Test
     @Ignore
-    public void testChebiHasPartsLinksetSmall() throws MetaDataException{
-        checkFile("test-data/chebiHasPartsLinksetSmall.ttl", 3, FILE_HAS_ONLY_EXPECTED_RDF);
+    public void testChemblRdfVoidTtl() throws MetaDataException{
+        checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_ONLY_EXPECTED_RDF);
     } 
 
     @Test
-    public void testChristine() throws MetaDataException{
-        validateFile("test-data/Christine.ttl", 5, FILE_HAS_EXTRA_RDF);
+    @Ignore
+    public void testchemspider2chemblrdfLinksetTtl() throws MetaDataException{
+        checkFile("test-data/chemspider2chemblrdf-linkset.ttl", 2, FILE_HAS_ONLY_EXPECTED_RDF);
     } 
-
  }

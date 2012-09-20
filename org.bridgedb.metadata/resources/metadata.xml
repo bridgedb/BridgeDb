@@ -1,37 +1,7 @@
 <?xml version="1.0" encoding="windows-1252"?>
 
 <metadata>
-    <documentationRoot>http://www.openphacts.org/specs/2012/WD-datadesc-20120816/</documentationRoot>
-    <resource name="Decription void" type="http://rdfs.org/ns/void#DatasetDescription" requirementLevel = "MUST">
-        <property
-            name="Created By"
-            predicate="http://purl.org/pav/createdBy"
-            class="Uri"
-            requirementLevel = "MUST"
-            documentation = "#exchanging-descriptions"
-            />          
-        <property
-            name="Created On"
-            predicate="http://purl.org/pav/createdOn"
-            class="http://www.w3.org/2001/XMLSchema#dateTime"
-            requirementLevel = "MUST"
-            documentation = "#exchanging-descriptions"
-            />          
-        <property
-            name="Last Updated"
-            predicate="http://purl.org/pav/lastUpdateOn"
-            class="http://www.w3.org/2001/XMLSchema#dateTime"
-            requirementLevel = "MUST"
-            documentation = "#exchanging-descriptions"
-            />          
-        <property
-            name="Primary Topic"
-            predicate="http://xmlns.com/foaf/0.1/primaryTopic"
-            class="URI"
-            requirementLevel = "SHOULD"
-            documentation = "#exchanging-descriptions"
-            />          
-    </resource>
+    <documentationRoot>http://www.cs.man.ac.uk/~graya/ops/2012/ED-datadesc/</documentationRoot>
     <resource name="Dataset void" type="http://rdfs.org/ns/void#Dataset">
         <property
             name="Title"
@@ -78,6 +48,13 @@
         <property
             name="Version"
             predicate="http://purl.org/pav/version"
+            class="String"
+            requirementLevel = "MAY"
+            documentation = "#dataset-prov-version"
+            />          
+        <property
+            name="Previous Version"
+            predicate="http://purl.org/pav/previousVersion"
             class="String"
             requirementLevel = "MAY"
             documentation = "#dataset-prov-version"
@@ -161,21 +138,28 @@
                     documentation = "#dataset-prov-version"
                     />          
                 <property
-                    name="Derived On"
-                    predicate="http://purl.org/pav/derivedOn"
+                    name="Created On"
+                    predicate="http://purl.org/pav/createdOn"
                     class="http://www.w3.org/2001/XMLSchema#dateTime"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     />              
                 <property
-                    name="Derived By"
-                    predicate="http://purl.org/pav/derivedBy"
+                    name="Created By"
+                    predicate="http://purl.org/pav/createdBy"
                     class="Uri"
                     requirementLevel = "MAY"
                     documentation = "#dataset-prov-version"
                     /> 
             </group>
         </alternatives>
+        <property
+            name="Created With"
+            predicate="http://purl.org/pav/createdWith"
+            class="Uri"
+            requirementLevel = "SHOULD"
+            documentation = "#dataset-prov-version"
+            /> 
         <property
             name="Vocabularies"
             predicate="http://rdfs.org/ns/void#vocabulary"
@@ -235,9 +219,11 @@
             <AllowedValue>http://purl.org/cld/freq/daily</AllowedValue>
             <AllowedValue>http://purl.org/cld/freq/continuous</AllowedValue>
             <AllowedValue>http://purl.org/cld/freq/irregular</AllowedValue>
+            <!--http://dublincore.org/groups/collections/frequency/2007-03-09/#freqirregular also refers to http://purl.org/cld/freq/completelyIrregular -->
+            <AllowedValue>http://purl.org/cld/freq/completelyIrregular </AllowedValue>
         </property>
-  
     </resource>
+    
     <resource name="Linkset Void" type="http://rdfs.org/ns/void#Linkset">
          <property
             name="Title"
@@ -274,6 +260,7 @@
             requirementLevel = "MUST"
             documentation = "#link-info"
             />      
+        <!-- todo   http://rdfs.org/ns/void#target -->  
         <property
             name="Link Relationship"
             predicate="http://rdfs.org/ns/void#linkPredicate"
@@ -288,7 +275,7 @@
             requirementLevel = "MUST"
             documentation = "#link-info"
             />          
-        <!-- subset -->
+        <!-- subset handled in code as very different -->
         <alternatives name = "Link Source" requirementLevel = "MUST" documentation = "#linkset-provenance">
             <group name = "authored" documentation = "#linkset-provenance">
                 <property
@@ -329,6 +316,20 @@
             />          
         </alternatives>
         <property
+            name="Version"
+            predicate="http://purl.org/pav/version"
+            class="String"
+            requirementLevel = "MAY"
+            documentation = "#dataset-prov-version"
+            />          
+        <property
+            name="Previous Version"
+            predicate="http://purl.org/pav/previousVersion"
+            class="String"
+            requirementLevel = "MAY"
+            documentation = "#dataset-prov-version"
+            />          
+        <property
             name="Linkset Statistics"
             predicate="http://rdfs.org/ns/void#triples"
             class="Integer"
@@ -336,7 +337,73 @@
             documentation = "#linkset-stats"
             />          
     </resource>
+    <!-- Dataset Access
+
+    Must declare, for each dataset that is not a parent for the linkset, when and by whom it was accessed using:
+        pav:sourceAccessedBy
+        pav:sourceAccessedOn
+    -->
+    
+    <resource name="Decription void" type="http://rdfs.org/ns/void#DatasetDescription" requirementLevel = "MUST">
+        <property
+            name="Created By"
+            predicate="http://purl.org/pav/createdBy"
+            class="Uri"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
+            />          
+        <property
+            name="Created On"
+            predicate="http://purl.org/pav/createdOn"
+            class="http://www.w3.org/2001/XMLSchema#dateTime"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
+            />          
+        <property
+            name="Last Updated"
+            predicate="http://purl.org/pav/lastUpdateOn"
+            class="http://www.w3.org/2001/XMLSchema#dateTime"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
+            />          
+        <property
+            name="Primary Topic"
+            predicate="http://xmlns.com/foaf/0.1/primaryTopic"
+            class="URI"
+            requirementLevel = "SHOULD"
+            documentation = "#exchanging-descriptions"
+            />          
+    </resource>
+    
+    <resource name="Decription void" type="http://rdfs.org/ns/void#DatasetDescription" requirementLevel = "MUST">
+        <property
+            name="Created By"
+            predicate="http://purl.org/pav/createdBy"
+            class="Uri"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
+            />          
+        <property
+            name="Created On"
+            predicate="http://purl.org/pav/createdOn"
+            class="http://www.w3.org/2001/XMLSchema#dateTime"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
+            />          
+        <property
+            name="Last Updated"
+            predicate="http://purl.org/pav/lastUpdateOn"
+            class="http://www.w3.org/2001/XMLSchema#dateTime"
+            requirementLevel = "MUST"
+            documentation = "#exchanging-descriptions"
+            />          
+        <property
+            name="Primary Topic"
+            predicate="http://xmlns.com/foaf/0.1/primaryTopic"
+            class="URI"
+            requirementLevel = "SHOULD"
+            documentation = "#exchanging-descriptions"
+            />          
+    </resource>
+
 </metadata>
-<!--        //Distinguishing Subsets is handled seperately  
-        metaParts.add(new SingletonValue("Frequency Of Change",VoagConstants.FREQUENCY_OF_CHANGE, FrequencyOfChange.class, RequirementLevel.SHOULD));        
--->

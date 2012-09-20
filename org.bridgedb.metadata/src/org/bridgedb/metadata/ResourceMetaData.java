@@ -125,11 +125,13 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
                 if (this.hasRequiredValues(forceLevel)){
                     //Do nothing
                 } else {
-                    tab(builder, tabLevel);
-                    builder.append("WARNING: ");
-                    builder.append(id);
-                    builder.append(" is incomplete so can only be used as a superset ");
-                    newLine(builder);
+                    if (includeWarnings) {
+                        tab(builder, tabLevel);
+                        builder.append("WARNING: ");
+                        builder.append(id);
+                        builder.append(" is incomplete so can only be used as a superset ");
+                        newLine(builder);
+                    }
                 }
             } else {
                 //Incorrect types show the whole vlaidity report anyway
@@ -153,6 +155,10 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             leaf.addParent(parentLeaf);
         }
         parent.isParent = true;
+    }
+
+    boolean isSuperset() {
+        return isParent;
     }
 
 }

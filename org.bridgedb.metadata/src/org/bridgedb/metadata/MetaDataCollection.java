@@ -168,6 +168,15 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return true;
     }
 
+    public boolean hasRequiredValuesOrIsSuperset(RequirementLevel requirementLevel) {
+        for (ResourceMetaData resource:resourcesMap.values()){
+            if (!resource.isSuperset() && !resource.hasRequiredValues(requirementLevel)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean hasCorrectTypes() {
         for (ResourceMetaData resouce:resourcesMap.values()){

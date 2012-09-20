@@ -31,12 +31,13 @@ public class TestUtils {
         }        
     }
 
-    void checkRequiredValues(MetaData metaData, RequirementLevel forceLevel){
-        boolean ok = metaData.hasRequiredValues(forceLevel);
+    void checkRequiredValues(MetaDataCollection metaData, RequirementLevel forceLevel){
+        boolean ok = metaData.hasRequiredValuesOrIsSuperset(forceLevel);
         if (!ok){
             //This test will fail but with extra info
             assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(
                     forceLevel, NO_WARNINGS));
+            Reporter.report(metaData.toString());
             assertTrue(ok);
         }        
     }

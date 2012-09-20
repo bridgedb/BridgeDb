@@ -45,6 +45,7 @@ public class MetaDataTestBase extends TestUtils{
     static final URI VOCABULARY1 = new URIImpl("http://www.example.com/test/vocab/foo");
     static final URI VOCABULARY2 = new URIImpl("http://www.example.com/test/vocab/bar");
     static final URI TOPIC = new URIImpl("http://www.example.com/test/topic/bar");
+    static final URI SOFTWARE = new URIImpl("http://www.example.com/SomeSoftware");
     static final URI EXAMPLE1 = new URIImpl("http://www.example.com/data#A1");
     static final URI EXAMPLE2 = new URIImpl("http://www.example.com/data#B2");
     static final URI EXAMPLE3 = new URIImpl("http://www.example.com/data#C3");
@@ -80,6 +81,7 @@ public class MetaDataTestBase extends TestUtils{
     Statement d1RetreivedFromStatement = new StatementImpl(D1_ID, PavConstants.RETRIEVED_FROM, HOME_PAGE);
     Statement d1RetreivedOn;  // incontrustor due to date!
     Statement d1RetreivedByStatement = new StatementImpl(D1_ID, PavConstants.RETRIEVED_BY, PERSON);
+    Statement d1CreatedWithStatement = new StatementImpl(D1_ID, PavConstants.CREATED_WITH, SOFTWARE);
     Statement d1VocabularyStatement1 = new StatementImpl(D1_ID, VoidConstants.VOCABULARY, VOCABULARY1);
     Statement d1VocabularyStatement2 = new StatementImpl(D1_ID, VoidConstants.VOCABULARY, VOCABULARY2);
     Statement d1TopicStatement = new StatementImpl(D1_ID, DctermsConstants.SUBJECT, TOPIC);
@@ -99,6 +101,7 @@ public class MetaDataTestBase extends TestUtils{
     Statement d2ImportedFromStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_FROM, HOME_PAGE);
     Statement d2ImportedOnStatement;  // incontrustor due to date!
     Statement d2ImportedByStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_BY, PERSON);
+    Statement d2CreatedWithStatement = new StatementImpl(D2_ID, PavConstants.CREATED_WITH, SOFTWARE);
     Statement d2VocabularyStatement1 = new StatementImpl(D2_ID, VoidConstants.VOCABULARY, VOCABULARY1);
     Statement d2VocabularyStatement2 = new StatementImpl(D2_ID, VoidConstants.VOCABULARY, VOCABULARY2);
     Statement d2TopicStatement = new StatementImpl(D2_ID, DctermsConstants.SUBJECT, TOPIC);
@@ -161,6 +164,7 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1RetreivedFromStatement);
         addStatement(data, d1RetreivedOn);
         addStatement(data, d1RetreivedByStatement);
+        addStatement(data, d1CreatedWithStatement);
         addStatement(data, d1VocabularyStatement1);
         addStatement(data, d1VocabularyStatement2);
         addStatement(data, d1TopicStatement);
@@ -188,6 +192,7 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d2ImportedOnStatement);
         addStatement(data, d2ImportedByStatement);
         addStatement(data, d2ImportedFromStatement);
+        addStatement(data, d2CreatedWithStatement);
         addStatement(data, d2VocabularyStatement1);
         addStatement(data, d2VocabularyStatement2);
         addStatement(data, d2TopicStatement);

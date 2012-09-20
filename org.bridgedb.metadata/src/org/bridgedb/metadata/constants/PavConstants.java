@@ -35,6 +35,7 @@ public class PavConstants {
     public static final URI AUTHORED_ON = new URIImpl(pavTermns + "authoredOn");
     public static final URI CREATED_BY = new URIImpl(pavTermns + "createdBy");
     public static final URI CREATED_ON = new URIImpl(pavTermns + "createdOn");
+    public static final URI CREATED_WITH = new URIImpl(pavTermns + "createdWith");
     public static final URI DERIVED_BY = new URIImpl(pavTermns + "derivedBy");
     public static final URI DERIVED_FROM = new URIImpl(pavTermns + "derivedFrom");
     public static final URI DERIVED_ON = new URIImpl(pavTermns + "derivedOn");
