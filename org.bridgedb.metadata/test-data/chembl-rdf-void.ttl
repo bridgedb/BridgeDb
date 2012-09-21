@@ -21,7 +21,10 @@
     pav:createdOn "2012-08-12T16:56:07Z"^^xsd:dateTime;
     pav:lastUpdatedOn "2012-09-14T12:21:12Z"^^xsd:dateTime;
     pav:previousVersion <http://semantics.bigcat.unimaas.nl/chembl/v13_ops/chembl-rdf-void.ttl>;
-    foaf:primaryTopic :chemblrdf_dataset.
+    foaf:primaryTopic :chemblrdf_dataset;
+# ADDED BY CHRISTIAN
+    <http://purl.org/pav/lastUpdateOn> "2012-09-14T12:21:12Z"^^xsd:dateTime;
+.
 
 :chemblrdf_dataset
 # General metadata
@@ -62,6 +65,9 @@
 	voag:frequencyOfChange freq:semiannual;
 # Other metadata
     void:distinctSubjects "18018451"^^xsd:integer ;
+# ADDED BY CHRISTIAN
+    <http://purl.org/pav/createdWith> <http://missingInfo.com>;
+    void:subset :chembl_dataset;
 	.
 
 :chembl_dataset
@@ -75,6 +81,11 @@
     dcterms:publisher <http://www.ebi.ac.uk/chembl/>;
     dcterms:created "2012-02-29T00:00:00Z"^^xsd:dateTime;
     dcterms:modified "2012-02-29T00:00:00Z"^^xsd:dateTime;
+# ADDED BY CHRISTIAN
+    <http://rdfs.org/ns/void#uriSpace> "missingInfo";
+    dcterms:subject <http://missingInfo.com>;
+    void:exampleResource <http://missingInfo.com>;
+    void:dataDump <http://missingInfo.com>;
     .
 
 :chemblrdf_compounds

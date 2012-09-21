@@ -67,9 +67,8 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
-    @Ignore
     public void testChemblRdfVoidTtl() throws MetaDataException{
-        checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_ONLY_EXPECTED_RDF);
+        checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF);
     } 
 
     @Test
