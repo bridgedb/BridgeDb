@@ -209,15 +209,15 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         for (MappingSetInfo info:mappingSetInfos){
             sb.append("<tr>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getSourceSysCode());
             sb.append("\">");
             sb.append(info.getSourceSysCode());
             sb.append("</a></td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getTargetSysCode());
             sb.append("\">");
             sb.append(info.getTargetSysCode());
@@ -226,8 +226,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             sb.append(formatter.format(info.getNumberOfLinks()));
             sb.append("</td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/mappingSet/");
+            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append("mappingSet/");
             sb.append(info.getId());
             sb.append("\">");
             sb.append(info.getId());
@@ -274,15 +274,15 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){
             sb.append("<tr>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getSourceSysCode());
             sb.append("\">");
             sb.append(info.getSourceSysCode());
             sb.append("</a></td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getTargetSysCode());
             sb.append("\">");
             sb.append(info.getTargetSysCode());

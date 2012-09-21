@@ -92,7 +92,7 @@ public class LinksetHandler extends RDFHandlerBase{
             parser.setParseErrorListener(new LinksetParserErrorListener());
             parser.setVerifyData(true);
             reader = new FileReader(file);
-            parser.parse (reader, RdfWrapper.getBaseURI());
+            parser.parse (reader, RdfWrapper.getTheBaseURI());
         } catch (IOException ex) {
             throw new IDMapperLinksetException("Error reading file " + 
             		file.getAbsolutePath() + " " + ex.getMessage(), ex);

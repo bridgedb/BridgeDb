@@ -105,7 +105,7 @@ public class RdfWrapper {
                     String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
                     throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
                             testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
-                } catch (IOException ex1) {
+                } catch (IDMapperLinksetException ex1) {
                     Logger.getLogger(RdfWrapper.class.getName()).log(Level.SEVERE, null, ex1);
                 }
             }
@@ -161,7 +161,7 @@ public class RdfWrapper {
                 String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
                 String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
                 throw new RDFHandlerException("Setup error " + ex + " Please check " + path + " set by " + source, ex);
-            } catch (IOException ex1) {
+            } catch (IDMapperLinksetException ex1) {
                 throw new RDFHandlerException("Setup error " + ex + " unable to dettermine source", ex);
             }
         }
@@ -341,7 +341,7 @@ public class RdfWrapper {
     public static String configFilePath(){
         try {
             return getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
-        } catch (IOException ex) {
+        } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
     }
@@ -349,7 +349,7 @@ public class RdfWrapper {
     public static String configSource(){
         try {
             return getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
-        } catch (IOException ex) {
+        } catch (IDMapperLinksetException ex) {
            return ex.getMessage();
         }
     }
@@ -358,7 +358,7 @@ public class RdfWrapper {
         String result;
         try {
             result = getProperties().getProperty(SAIL_NATIVE_STORE_PROPERTY);
-        } catch (IOException ex) {
+        } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
         if (result != null) return result;
@@ -369,7 +369,7 @@ public class RdfWrapper {
         String result;
         try {
             result = getProperties().getProperty(LOAD_SAIL_NATIVE_STORE_PROPERTY);
-        } catch (IOException ex) {
+        } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
         if (result != null) return result;
@@ -380,18 +380,18 @@ public class RdfWrapper {
         String result;
         try {
             result = getProperties().getProperty(TEST_SAIL_NATIVE_STORE_PROPERTY);
-        } catch (IOException ex) {
+        } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
         if (result != null) return result;
         return "../rdf/testLinksets";
     }
 
-    public static String getBaseURI() {
+    public static String getTheBaseURI() {
         String result;
         try {
             result = getProperties().getProperty(BASE_URI_PROPERTY);
-        } catch (IOException ex) {
+        } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
         if (result != null) return result;
@@ -417,11 +417,11 @@ public class RdfWrapper {
     }
 
     public static URI getLinksetURL(Value linksetId){
-        return new URIImpl(RdfWrapper.getBaseURI() + "/linkset/" + linksetId.stringValue());  
+        return new URIImpl(RdfWrapper.getTheBaseURI() + "linkset/" + linksetId.stringValue());  
     }
     
     public static URI getLinksetURL(int linksetId){
-        return new URIImpl(RdfWrapper.getBaseURI() + "/linkset/" + linksetId);  
+        return new URIImpl(RdfWrapper.getTheBaseURI() + "linkset/" + linksetId);  
     }
   
     static String getRDF(RdfStoreType rdfStoreType, int linksetId) throws IDMapperLinksetException {
@@ -453,7 +453,7 @@ public class RdfWrapper {
         }
     }
  
-    private static Properties getProperties() throws IOException{
+    private static Properties getProperties() throws IDMapperLinksetException{
         if (properties == null){
             properties = new Properties();
             load();
@@ -477,7 +477,7 @@ public class RdfWrapper {
      * </ul>
      * @throws IOException 
      */
-    private static void load() throws IOException{
+    private static void load() throws IDMapperLinksetException{
         if (loadByEnviromentVariable()) return;
         if (loadByCatalinaHomeConfigs()) return;
         if (loadDirectly()) return;
@@ -493,7 +493,7 @@ public class RdfWrapper {
      * @throws IOException Thrown if the environment variable is not null, 
      *    and the config file is not found as indicated, or could not be read.
      */
-    private static boolean loadByEnviromentVariable() throws IOException {
+    private static boolean loadByEnviromentVariable() throws IDMapperLinksetException {
         String envPath = System.getenv().get("OPS-IMS-CONFIG");
         if (envPath == null || envPath.isEmpty()) return false;
         File envDir = new File(envPath);
@@ -501,7 +501,7 @@ public class RdfWrapper {
             String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
                     " but no directory found there";
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IDMapperLinksetException (error);
         }
         if (envDir.isDirectory()){
             File envFile = new File(envDir, CONFIG_FILE_NAME);
@@ -509,18 +509,16 @@ public class RdfWrapper {
                 String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
                         " but no " + CONFIG_FILE_NAME + " file found there";
                 properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-                throw new FileNotFoundException (error);
+                throw new IDMapperLinksetException (error);
             }
-            FileInputStream configs = new FileInputStream(envFile);
-            properties.load(configs);
-            properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
+            loadProperties(envFile);
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "OPS-IMS-CONFIG Enviroment Variable");
             return true;
         } else {
             String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
                     " but is not a directory";
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IDMapperLinksetException (error);
         }
     }
 
@@ -530,7 +528,7 @@ public class RdfWrapper {
      * @throws IOException Thrown if the environment variable is not null, 
      *    and the config file is not found as indicated, or could not be read.
      */
-    private static boolean loadByCatalinaHomeConfigs() throws IOException {
+    private static boolean loadByCatalinaHomeConfigs() throws IDMapperLinksetException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
          if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
         File catalineHomeDir = new File(catalinaHomePath);
@@ -538,13 +536,13 @@ public class RdfWrapper {
             String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
                     " but no directory found there";
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IDMapperLinksetException (error);
         }
         if (!catalineHomeDir.isDirectory()){
             String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
                     " but is not a directory";
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IDMapperLinksetException(error);
         }
         File envDir = new File (catalineHomeDir + "/conf/OPS-IMS");
         if (!envDir.exists()) return false; //No hard requirements that catalineHome has a /conf/OPS-IMS
@@ -554,18 +552,16 @@ public class RdfWrapper {
                 String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
                         " but subdirectory /conf/OPS-IMS has no " + CONFIG_FILE_NAME + " file.";
                 properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-                throw new FileNotFoundException (error);
+                throw new IDMapperLinksetException (error);
             }
-            FileInputStream configs = new FileInputStream(envFile);
-            properties.load(configs);
-            properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
+            loadProperties(envFile);
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "CATALINA_HOME/conf/OPS-IMS");
             return true;
         } else {
             String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath  + 
                     " but $CATALINA_HOME/conf/OPS-IMS is not a directory";
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IDMapperLinksetException (error);
        }
     }
 
@@ -574,12 +570,10 @@ public class RdfWrapper {
      * @return True if the file was found, False if it was not found.
      * @throws IOException If there is an error reading the file.
      */
-    private static boolean loadDirectly() throws IOException {
+    private static boolean loadDirectly() throws IDMapperLinksetException {
         File envFile = new File(CONFIG_FILE_NAME);
         if (!envFile.exists()) return false;
-        FileInputStream configs = new FileInputStream(envFile);
-        properties.load(configs);
-        properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
+        loadProperties(envFile);
         properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "From main Directory");
         return true;
     }
@@ -591,19 +585,17 @@ public class RdfWrapper {
      * @return True if the file was found, False if it was not found.
      * @throws IOException If there is an error reading the file.
      */
-    private static boolean loadFromConfigs() throws IOException {
+    private static boolean loadFromConfigs() throws IDMapperLinksetException {
         File confFolder = new File ("conf/OPS-IMS");
         if (!confFolder.exists()) return false;
         if (!confFolder.isDirectory()){
             String error = "Expected " + confFolder.getAbsolutePath() + " to be a directory";
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IDMapperLinksetException (error);
         }
         File envFile = new File(confFolder, CONFIG_FILE_NAME);
         if (!envFile.exists()) return false;
-        FileInputStream configs = new FileInputStream(envFile);
-        properties.load(configs);
-        properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
+        loadProperties(envFile);
         properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "From conf/OPS-IMS");
         return true;
     }
@@ -615,27 +607,48 @@ public class RdfWrapper {
      * @return True if the file was found, False if it was not found.
      * @throws IOException If there is an error reading the file.
      */
-    private static boolean loadFromParentConfigs() throws IOException {
+    private static boolean loadFromParentConfigs() throws IDMapperLinksetException {
         File confFolder = new File ("../conf/OPS-IMS");
         if (!confFolder.exists()) return false;
         if (!confFolder.isDirectory()){
             String error = "Expected " + confFolder.getAbsolutePath() + " to be a directory";
             properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-            throw new FileNotFoundException (error);
+            throw new IDMapperLinksetException (error);
         }
         File envFile = new File(confFolder, CONFIG_FILE_NAME);
         if (!envFile.exists()) return false;
-        FileInputStream configs = new FileInputStream(envFile);
-        properties.load(configs);
-        properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
+        loadProperties(envFile);
         properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "From ../conf/OPS-IMS");
         return true;
     }
 
+    private static void loadProperties(File propertyFile) throws IDMapperLinksetException{
+        FileInputStream configs = null;
+        try {
+            configs = new FileInputStream(propertyFile);
+            properties.load(configs);
+            properties.put(CONFIG_FILE_PATH_PROPERTY, propertyFile.getAbsolutePath());
+            String baseURI = properties.getProperty(BASE_URI_PROPERTY);
+            if (!(baseURI.endsWith("/") || baseURI.endsWith("#"))){
+                throw new IDMapperLinksetException("baseURI " + baseURI 
+                        + " does not end with expected seperator ('/' or '#') It was found in" 
+                        + propertyFile.getAbsolutePath() + " using  " + BASE_URI_PROPERTY);
+            }
+        } catch (IOException ex) {
+            throw new IDMapperLinksetException ("Exception reading " + propertyFile.getAbsolutePath());
+        } finally {
+            try {
+                configs.close();
+            } catch (IOException ex) {
+                throw new IDMapperLinksetException ("Exception reading " + propertyFile.getAbsolutePath());
+            }
+        }
+    }
+    
     public static void list(PrintStream out){
         try {
             getProperties().list(out);
-        } catch (IOException ex) {
+        } catch (IDMapperLinksetException ex) {
             out.print(ex);
         }
     }
