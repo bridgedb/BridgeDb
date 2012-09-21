@@ -123,7 +123,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/Amapping")
+    @Path("/mapping")
     public URLMappingBean getMapping() throws IDMapperException {
         throw new IDMapperException("id path parameter missing.");
     }
