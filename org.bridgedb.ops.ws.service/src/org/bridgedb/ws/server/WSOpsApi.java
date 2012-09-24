@@ -116,7 +116,7 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("mapURL?URL=");
                 sb.append(URLEncoder.encode(URL2, "UTF-8"));
                 for (String URISpace:URI2Spaces){
-                    sb.append("&targetURIpace=");
+                    sb.append("&targetURISpace=");
                     sb.append(URLEncoder.encode(URISpace, "UTF-8"));
                 }
                 sb.append("\">");

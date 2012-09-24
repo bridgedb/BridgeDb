@@ -25,14 +25,19 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.RdfReader;
 import org.bridgedb.rdf.RdfStoreType;
@@ -42,6 +47,7 @@ import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.ws.WSOpsService;
 
@@ -116,8 +122,6 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
-/*
- //TODO add method to get sample xref
  @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
@@ -127,9 +131,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
  
         Set<String> urls = urlMapper.getSampleSourceURLs();  
         Iterator<String> urlsIt = urls.iterator();
-        Xref first = DataSource.uriToXref(urlsIt.next());
+        Xref first = urlMapper.toXref(urlsIt.next());
         String sysCode = first.getDataSource().getSystemCode();
-        Xref second =  DataSource.uriToXref(urlsIt.next());
+        Xref second =  urlMapper.toXref(urlsIt.next());
         Set<Xref> firstMaps = idMapper.mapID(first);
         Set<String> keys = idMapper.getCapabilities().getKeys();
         String URL1 = urlsIt.next();
@@ -179,7 +183,6 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         //ystem.out.println("Done "+ (new Date().getTime() - start));
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
-*/
     
     @GET
     @Produces(MediaType.TEXT_HTML)
