@@ -63,6 +63,17 @@
             <artifactId>sesame-rio-rdfxml</artifactId>
             <version>${sesame.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-api</artifactId>
+            <version>${owlapi-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-apibinding</artifactId>
+            <version>${owlapi-api.version}</version>
+        </dependency>
+
         <!--dependency>
             <groupId>org.openrdf.sesame</groupId>
             <artifactId>sesame-rio-N3</artifactId>

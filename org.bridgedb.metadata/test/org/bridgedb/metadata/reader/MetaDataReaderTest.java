@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.reader;
 
+import org.junit.Ignore;
 import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RepositoryFactory;
@@ -18,6 +19,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
+@Ignore //Slow but working
 public class MetaDataReaderTest {
     
     public MetaDataReaderTest() {
