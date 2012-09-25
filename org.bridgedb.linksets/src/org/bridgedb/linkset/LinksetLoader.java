@@ -117,12 +117,20 @@ public class LinksetLoader {
         parse(file, arg);
     }
 
+    void clearLinksets(RdfStoreType storeType) throws IDMapperException {
+    	RdfWrapper.clear(storeType);
+    	Reporter.report("RDF cleared");
+		SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
+		URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+		Reporter.report("SQL cleared");
+    }
+    
     /**
-     * Main entry poit for loading linksets.
+     * Main entry point for loading linksets.
      *
-     * @seem usage() fr explanation of the paramters.
+     * @seem usage() fr explanation of the parameters.
      *
-     * Unpublisted second arguements of "new" and "testnew" will cause the clearing of all existing data.
+     * Unpublished second arguments of "new" and "testnew" will cause the clearing of all existing data.
      * These will also recreate the database and rdf store.
      * USE WITH CAUTION previous data can not be recovered!
      *
@@ -133,22 +141,16 @@ public class LinksetLoader {
     	try {
     		if (args.length == 2){
     			LinksetLoader loader = new LinksetLoader();
-    			if (args[1].equals("new")){
-    				RdfWrapper.clear(RdfStoreType.LOAD);
-    				Reporter.report("Laod RDF cleared");
-    				SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-    				URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-    				Reporter.report("Load SQL cleared");                
-    				loader.parse(args[0], "load");
-    			} else if (args[1].equals("testnew")){
-    				RdfWrapper.clear(RdfStoreType.TEST);
-    				Reporter.report("Laod RDF cleared");
-    				SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-    				URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-    				Reporter.report("Test SQL cleared");
-    				loader.parse(args[0], "test");
+    			String fileName = args[0];
+    			String clearDataFlag = args[1];
+				if (clearDataFlag.equals("new")){
+    				loader.clearLinksets(RdfStoreType.LOAD);    				                
+    				loader.parse(fileName, "load");
+    			} else if (clearDataFlag.equals("testnew")){
+    				loader.clearLinksets(RdfStoreType.TEST);
+    				loader.parse(fileName, "test");
     			} else {
-    				loader.parse(args[0], args[1]);
+    				loader.parse(fileName, clearDataFlag);
     			}
     		} else {
     			usage();

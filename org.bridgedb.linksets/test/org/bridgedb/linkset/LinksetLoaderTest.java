@@ -21,6 +21,7 @@ package org.bridgedb.linkset;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.Reporter;
 import org.junit.BeforeClass;
@@ -37,30 +38,32 @@ public class LinksetLoaderTest {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         
+        LinksetLoader loader = new LinksetLoader();
+        loader.clearLinksets(RdfStoreType.TEST);
+        
         Reporter.report("sample2to1.ttl");
-        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "testnew"};
-        LinksetLoader.main (args1);
+        loader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", "test");
+        
         Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "test"};
-        LinksetLoader.main (args2);
+        loader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", "test");
+
         Reporter.report("sample2to3.ttl");
-        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "test"};
-        LinksetLoader.main (args3);
+        loader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", "test");
+        
         Reporter.report("cw-cs.ttl");
-        String[] args4 = {"../org.bridgedb.linksets/test-data/cw-cs.ttl", "test"};
-        LinksetLoader.main (args4);
+        loader.parse("../org.bridgedb.linksets/test-data/cw-cs.ttl", "test");
+        
         Reporter.report("cw-cm.ttl");
-        String[] args5 = {"../org.bridgedb.linksets/test-data/cw-cm.ttl", "test"};
-        LinksetLoader.main (args5);
+        loader.parse("../org.bridgedb.linksets/test-data/cw-cm.ttl", "test");
+        
         Reporter.report("cw-dd.ttl");
-        String[] args6 = {"../org.bridgedb.linksets/test-data/cw-dd.ttl", "test"};
-        LinksetLoader.main (args6);
+        loader.parse("../org.bridgedb.linksets/test-data/cw-dd.ttl", "test");
+        
         Reporter.report("cw-ct.ttl");
-        String[] args7 = {"../org.bridgedb.linksets/test-data/cw-ct.ttl", "test"};
-        LinksetLoader.main (args7);
+        loader.parse("../org.bridgedb.linksets/test-data/cw-ct.ttl", "test");
+        
         Reporter.report("cw-dt.ttl");
-        String[] args8 = {"../org.bridgedb.linksets/test-data/cw-dt.ttl", "test"};
-        LinksetLoader.main (args8);
+        loader.parse("../org.bridgedb.linksets/test-data/cw-dt.ttl", "test");
 	}
 
     @Test(expected=FileNotFoundException.class)
