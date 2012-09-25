@@ -405,11 +405,13 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public int registerMappingSet(String sourceUriSpace, String predicate, String targetUriSpace, boolean symetric, boolean transative) 
+    public int registerMappingSet(String sourceUriSpace, String predicate, 
+    		String justification, String targetUriSpace, boolean symetric, 
+    		boolean transative) 
             throws BridgeDbSqlException {
         DataSource source = getDataSource(sourceUriSpace);
         DataSource target = getDataSource(targetUriSpace);      
-        return registerMappingSet(source, predicate, target, symetric, transative);
+        return registerMappingSet(source, predicate, justification, target, symetric, transative);
     }
 
     @Override

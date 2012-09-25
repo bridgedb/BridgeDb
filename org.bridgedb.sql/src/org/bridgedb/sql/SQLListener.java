@@ -100,28 +100,31 @@ public class SQLListener implements MappingListener{
     }   
     
     @Override
-    public synchronized int registerMappingSet(DataSource source, String predicate, DataSource target, 
+    public synchronized int registerMappingSet(DataSource source, String predicate, 
+    		String justification, DataSource target, 
             boolean symetric, boolean isTransitive) throws BridgeDbSqlException {
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
-        int forwardId = registerMappingSet(source, target, predicate, isTransitive);
+        int forwardId = registerMappingSet(source, target, predicate, justification, isTransitive);
         if (symetric){
-            registerMappingSet(target, source, predicate, isTransitive);
+            registerMappingSet(target, source, predicate, justification, isTransitive);
         }
         return forwardId;
     }
 
     /**
-     * One way regiistration of Mapping Set.
+     * One way registration of Mapping Set.
+     * @param justification 
      * 
      */
-    private int registerMappingSet(DataSource source, DataSource target, String predicate, boolean isTransitive) 
+    private int registerMappingSet(DataSource source, DataSource target, String predicate, String justification, boolean isTransitive) 
             throws BridgeDbSqlException {
         String query = "INSERT INTO mappingSet "
-                    + "(sourceDataSource, predicate, targetDataSource, isTransitive) " 
+                    + "(sourceDataSource, predicate, justification, targetDataSource, isTransitive) " 
                     + "VALUES (" 
                     + "'" + source.getSystemCode() + "', " 
                     + "'" + predicate + "', " 
+                    + "'" + justification + "', "
                     + "'" + target.getSystemCode() + "',"
                     + "'" + booleanIntoQuery(isTransitive) + "')";
         Statement statement = createStatement();
@@ -320,6 +323,7 @@ public class SQLListener implements MappingListener{
                     + "( id INT " + autoIncrement + " PRIMARY KEY, " 
                     + "     sourceDataSource VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
                     + "     predicate   VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
+                    + "     justification VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
                     + "     targetDataSource VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
                     + "     isTransitive    SMALLINT, "
                     + "     mappingCount INT "

@@ -58,6 +58,8 @@ public class RDFWriter implements RdfLoader{
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
 
+    private static final String JUSTIFICATION = "http://www.bridgedb.org/prototype#justification";
+    
     public RDFWriter(RdfStoreType type, RDFValidator validator, URLListener listener, String mainCaller) throws IDMapperException{
         this.type = type;
         urlListener = listener;
@@ -67,12 +69,13 @@ public class RDFWriter implements RdfLoader{
             String subjectUriSpace = validator.getSubjectUriSpace();
             String targetUriSpace = validator.getTargetUriSpace();
             String predicate = validator.getPredicate();
+            String justification = JUSTIFICATION;
             symmetric = validator.isSymmetric();
             boolean transative = validator.isTransative();
             linksetResource = validator.getLinksetResource();
             inverseResource = invertResource(linksetResource);
-            mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, targetUriSpace, 
-                    symmetric, transative);            
+            mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, 
+            		justification, targetUriSpace, symmetric, transative);            
             linksetContext = RdfWrapper.getLinksetURL(mappingId);
             if (symmetric) {
                 inverseContext = RdfWrapper.getLinksetURL(mappingId + 1);             

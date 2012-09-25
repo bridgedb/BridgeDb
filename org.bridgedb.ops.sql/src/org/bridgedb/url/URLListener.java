@@ -54,6 +54,7 @@ public interface URLListener {
      * In fact implementations are encouraged to obtain the DataSources and call the MappingListener method.
      * @param sourceUriSpace A registered UriSpace used by the source URLS
       * @param predicate The predicate to be associated. Can be null
+      * @param justification The URI that states why the link holds. Can be null
      * @param targetUriSpace A registered UriSpace used by the source URLS
      * @param symetric Flag to say if mapping should be loaded one way of both ways. 
      *     Creates two mapping sets this one and the inverse with one number higher.
@@ -61,7 +62,9 @@ public interface URLListener {
      * @return Id of the forward mappingSet.
      * @throws IDMapperException Thrown if either UriSpace has not previously been registered using registerUriSpace
      */
-   public int registerMappingSet(String sourceUriSpace, String predicate, String targetUriSpace, 
+    //XXX-AG: Asssuming justification can be null if the predicate can be null!
+   public int registerMappingSet(String sourceUriSpace, String predicate, 
+		   String justification,String targetUriSpace, 
         boolean symetric, boolean transative) throws IDMapperException;
 
     /**
