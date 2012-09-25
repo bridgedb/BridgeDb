@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <owl:Ontology rdf:about="openphacts.cs.man.ac.uk:9090/Void/ontology.owl">
+    <owl:imports rdf:resource="http://purl.org/dc/terms/"/>
+    <owl:imports rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#"/>
+    <owl:imports rdf:resource="http://xmlns.com/foaf/0.1/"/>
+    <owl:imports rdf:resource="http://purl.org/cld/freq/"/>
+    <owl:imports rdf:resource="http://www.w3.org/2002/07/owl#"/>
+    <owl:imports rdf:resource="http://purl.org/pav/2.0/"/>
+    <owl:imports rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <owl:imports rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+    <owl:imports rdf:resource="http://www.w3.org/2004/02/skos/core#"/>
+    <owl:imports rdf:resource="http://voag.linkedmodel.org/schema/voag#"/>
+    <!-- voag rdf:imports rdf:resource="http://rdfs.org/ns/void#"/ -->
+    <owl:imports rdf:resource="http://www.w3.org/2001/XMLSchema#"/>
+  </owl:Ontology>
+</rdf:RDF>
+
+

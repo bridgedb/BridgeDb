@@ -210,54 +210,62 @@ public class OwlFileTester
     public static void main( String[] args ) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException
     {
         //@prefix dcterms: <http://purl.org/dc/terms/> .
+        //testOwl("http://purl.org/dc/terms/");
         //testOwl("http://bloody-byte.net/rdf/dc_owl2dl/dcterms_od.rdf");
-        testOwl("file:resources/dcterms_od.rdf");
+//        testOwl("file:resources/dcterms_od.rdf");
 
-        //@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl> .
-        //testOwl("http://www.ontologydesignpatterns.org/ont/dul/DUL.owl");
-        testOwl("file:resources/DUL.owl");
+        //@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+        //testOwl("http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#");
+        //testOwl("file:resources/DUL.owl");
         
         //@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+        //testOwl("http://xmlns.com/foaf/0.1/");
         //testOwl("http://xmlns.com/foaf/spec/index.rdf");
-        testOwl("file:resources/foaf.rdf");
+//        testOwl("file:resources/foaf.rdf");
         
         //@prefix freq: <http://purl.org/cld/freq/> .
-        //testOwl("http://dublincore.org/groups/collections/frequency/2007-03-09/freq.rdf");
-        testOwl("file:resources/freq.rdf");
+//        testOwl("http://purl.org/cld/freq/");
+ //       testOwl("http://dublincore.org/groups/collections/frequency/2007-03-09/freq.rdf");
+//        testOwl("file:resources/freq.rdf");
         
         //@prefix owl: <http://www.w3.org/2002/07/owl#> .
-        //testOwl("http://www.w3.org/2002/07/owl");
-        testOwl("file:resources/owl.rdf");
+        //testOwl("http://www.w3.org/2002/07/owl#");
+//        testOwl("file:resources/owl.rdf");
         
         //@prefix pav: <http://purl.org/pav/2.0/> .
+ //       testOwl("http://purl.org/pav/2.0/");
         //testOwl("http://pav-ontology.googlecode.com/svn/trunk/pav.owl");
-        testOwl("file:resources/pav.owl");
+//        testOwl("file:resources/pav.owl");
 
         //@prefix prov: <http://www.w3.org/ns/prov-o/> . 
+        //FAILS testOwl("http://www.w3.org/ns/prov-o/");
         //Unused and not working
         
         //@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-        //testOwl("http://www.w3.org/1999/02/22-rdf-syntax-ns");
-        testOwl("file:resources/22-rdf-syntax-ns.rdf");
+        //testOwl("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+//        testOwl("file:resources/22-rdf-syntax-ns.rdf");
 
         //@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-        //testOwl("http://www.w3.org/2000/01/rdf-schema");
-        testOwl("file:resources/rdf-schema.rdf");
+        //testOwl("http://www.w3.org/2000/01/rdf-schema#");
+//        testOwl("file:resources/rdf-schema.rdf");
 
         //@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-        //testOwl("http://www.w3.org/2009/08/skos-reference/skos.rdf");
-        testOwl("file:resources/skos.rdf");
+        //testOwl("http://www.w3.org/2004/02/skos/core#");
+        //testOwl("http://www.w3.org/2009/08/skos-reference/skos.rdf#");
+//        testOwl("file:resources/skos.rdf");
         
         //@prefix voag: <http://voag.linkedmodel.org/schema/voag#> .
-        //testOwl("http://voag.linkedmodel.org/schema/voag");
-        testOwl("file:resources/voag.rdf");
+        //testOwl("http://voag.linkedmodel.org/schema/voag#");
+//        testOwl("file:resources/voag.rdf");
         
         //@prefix void: <http://rdfs.org/ns/void#> .
-        //testOwl("http://rdfs.org/ns/void");
-        testOwl("file:resources/void.rdf");
+        //testOwl("http://rdfs.org/ns/void#");
+//        testOwl("file:resources/void.rdf");
         
         //@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-        //testOwl("http://www.w3.org/TR/xmlschema-1/");
+       // testOwl("http://www.w3.org/2001/XMLSchema#"); //works but empty
+        //testOwl("http://www.w3.org/TR/xmlschema-1/"); //works but empty
+        
 //        slide26();
     }
  /*
