@@ -18,13 +18,19 @@
 //
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.sql.TestSqlFactory;
+import org.openrdf.OpenRDFException;
+import org.bridgedb.IDMapperException;
+import java.io.IOException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.linkset.LinksetLoaderTest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -32,30 +38,25 @@ import org.junit.Test;
  */
 public class TransativeCreatorTest {
     
-    public TransativeCreatorTest() {
-    }
-
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException  {
+        //Check database is running and settup correctly or kill the test. 
+        TestSqlFactory.createTestSQLAccess();
+        
+        Reporter.report("sample1to2.ttl");
+        String[] args1 = {"../org.bridgedb.transitive/test-data/sample1to2.ttl", "testnew"};
+        LinksetLoader.main (args1);
+        Reporter.report("sample1to3.ttl");
+        String[] args2 = {"../org.bridgedb.transitive/test-data/sample1to3.ttl", "test"};
+        LinksetLoader.main (args2);
+	}
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
+    //TODO cleanup this test!
     /**
      * Test of main method, of class TransativeCreator.
      */
     @Test
-    public void testMain() throws Exception {
+    public void testMain() {
         Reporter.report("main");
         String[] args = new String[4];
         args[0] = "2";
@@ -64,10 +65,20 @@ public class TransativeCreatorTest {
         String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
 //        String fileName = "test-data/linkset2To3.ttl";
         args[3] = fileName;
-        TransativeCreator.main(args);
+        try {
+            TransativeCreator.main(args);
+        } catch (Exception e){
+            e.printStackTrace();
+            assertTrue(false);
+        }
         args = new String[2];
         args[0] = fileName;
         args[1] = "validate";
-        LinksetLoader.main (args);
+        try {
+            LinksetLoader.main (args);
+        } catch (Exception e){
+            e.printStackTrace();
+            assertTrue(false);
+        }
     }
 }
