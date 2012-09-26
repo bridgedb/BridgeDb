@@ -18,6 +18,9 @@
 //
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.openrdf.OpenRDFException;
 import org.bridgedb.IDMapperException;
@@ -42,6 +45,9 @@ public class TransativeCreatorTest {
     public static void testLoader() throws IDMapperException, IOException, OpenRDFException  {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        //Clear the SQL where linkset ids come from
+        new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
         
         Reporter.report("sample1to2.ttl");
         String[] args1 = {"../org.bridgedb.transitive/test-data/sample1to2.ttl", "testnew"};
