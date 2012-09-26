@@ -1,0 +1,43 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/2.0/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "Dataset Description Title"^^xsd:string ;
+    dcterms:description """Dataset description description"""^^xsd:string;
+    dcterms:creator <http://www.foo.com/> ;
+    dcterms:created "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :Test1_3 .
+
+:TestDS1 a void:Dataset  ;
+	dcterms:title "Test Dataset 1"^^xsd:string ;
+    pav:version 0 ;
+    dcterms:license "Who cares this is a test" ;
+    dcterms:subject "absolutely nothing" ;
+    void:uriSpace <http://www.foo.com/>.
+:TestDS3 a void:Dataset ;
+	dcterms:title "Test Dataset 3"^^xsd:string ;
+    pav:retrievedOn "2012-02-22"^^xsd:date ;
+    dcterms:license "Who cares this is a test" ;
+    dcterms:subject "absolutely nothing" ;
+    void:uriSpace <http://www.example.org#>.
+:Test1_3 a void:Linkset  ;
+    void:subjectsTarget :TestDS1 ;
+    void:objectsTarget :TestDS3 ;
+    pav:derivedFrom :Test1_2 ;
+    pav:derivedFrom :Test2_3 ;
+    pav:derivedOn "2012-02-22"^^xsd:date ;
+    pav:derivedBy <http://www.cs.man.ac.uk/~brenninc> ;
+    dcterms:license "Who cares this is a test" ;
+    void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
+    dcterms:created "2012-02-22"^^xsd:date ;
+    dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
+
+<http://www.foo.com/123> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#123>  .
+<http://www.foo.com/456> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#456> .
+<http://www.foo.com/789> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#789> .
