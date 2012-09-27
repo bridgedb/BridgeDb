@@ -77,45 +77,63 @@ public class BioDataSource
 		"Ec", "Ecoli").asDataSource();
 	public static final DataSource EMBL = DataSource.register (
 		"Em", "EMBL").asDataSource();
-	/** @deprecated use one of the organism-specific system codes instead */ 
 	public static final DataSource ENSEMBL = DataSource.register (
 		"En", "Ensembl").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_MOSQUITO = DataSource.register (
 		"EnAg", "Ensembl Mosquito").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource GRAMENE_ARABIDOPSIS = DataSource.register (
 		"EnAt", "Gramene Arabidopsis").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_BSUBTILIS = DataSource.register (
 		"EnBs", "Ensembl B. subtilis").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_COW = DataSource.register (
 		"EnBt", "Ensembl Cow").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_CELEGANS = DataSource.register (
 		"EnCe", "Ensembl C. elegans").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_DOG = DataSource.register (
 		"EnCf", "Ensembl Dog").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_FRUITFLY = DataSource.register (
 		"EnDm", "Ensembl Fruitfly").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_ZEBRAFISH = DataSource.register (
 		"EnDr", "Ensembl Zebrafish").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_ECOLI = DataSource.register (
 		"EnEc", "Ensembl E. coli").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_CHICKEN = DataSource.register (
 		"EnGg", "Ensembl Chicken").asDataSource(); 
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_HUMAN = DataSource.register (
 		"EnHs", "Ensembl Human").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_MOUSE = DataSource.register (
 		"EnMm", "Ensembl Mouse").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_MTUBERCULOSIS = DataSource.register (
 		"EnMx", "Ensembl M. tuberculosis").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource GRAMENE_RICE = DataSource.register (
 		"EnOj", "Gramene Rice").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_CHIMP = DataSource.register (
 		"EnPt", "Ensembl Chimp").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_HORSE = DataSource.register (
 		"EnQc", "Ensembl Horse").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_RAT = DataSource.register (
 		"EnRn", "Ensembl Rat").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_SCEREVISIAE = DataSource.register (
 		"EnSc", "Ensembl Yeast").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_XENOPUS = DataSource.register (
 		"EnXt", "Ensembl Xenopus").asDataSource();
 	public static final DataSource FLYBASE = DataSource.register (
