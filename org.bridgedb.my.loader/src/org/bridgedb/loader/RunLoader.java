@@ -5,8 +5,10 @@
 
 package org.bridgedb.loader;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.linkset.transative.TransativeCreator;
 import org.bridgedb.sql.BridgeDbSqlException;
@@ -19,7 +21,8 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class RunLoader {
 
-    private static void loadFile (String fileName) throws IDMapperException{
+    private static void loadFile (String fileName) 
+            throws IDMapperException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException{
         Reporter.report(fileName);
         String[] args = new String[2];
         args[0] = fileName;
