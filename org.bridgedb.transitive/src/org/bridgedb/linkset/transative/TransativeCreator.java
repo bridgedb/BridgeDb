@@ -31,6 +31,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.linkset.constants.DctermsConstants;
+import org.bridgedb.linkset.constants.DulConstants;
 import org.bridgedb.linkset.constants.FoafConstants;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
@@ -47,6 +48,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.CalendarLiteralImpl;
 import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -106,6 +108,7 @@ public class TransativeCreator {
         connection = RdfWrapper.setupConnection(type);
         leftLinkSet = getLinkSet(leftContext);
         rightLinkSet = getLinkSet(rightContext);
+//        showContext(leftContext);
         //showContext(rightContext);
         checkMiddle(diffLeft, diffRight);
         sourceDataSet = 
@@ -201,6 +204,7 @@ public class TransativeCreator {
         writeValue(targetDataSet);   
         output.append("; \n\t");  
         addPredicate();
+        addJustification();
         addLicense(leftLinkSet, leftContext);
         addDrived();
     }
@@ -236,6 +240,18 @@ public class TransativeCreator {
         writeValue(VoidConstants.LINK_PREDICATE);
         writeValue(newPredicate);   
         output.append("; \n\t");      
+    }
+    
+    private void addJustification() throws RDFHandlerException {
+    	Value leftPredicate = 
+    			RdfWrapper.getTheSingeltonObject(connection, leftLinkSet, DulConstants.EXPRESSES, leftContext);
+    	Value rightPredicate = 
+                RdfWrapper.getTheSingeltonObject(connection, rightLinkSet, DulConstants.EXPRESSES, rightContext);  
+        Value justification = 
+        		JustificationMaker.combine(leftPredicate, rightPredicate);
+        writeValue(DulConstants.EXPRESSES);
+        writeValue(justification);   
+        output.append("; \n\t");
     }
     
     private void addDrived() throws RDFHandlerException {
@@ -337,7 +353,7 @@ public class TransativeCreator {
     
     private static void usage() {
         System.out.println("Welcome to the OPS Transative Linkset Creator.");
-        System.out.println("This methods requires the number of the two linksest being combined.");
+        System.out.println("This method requires the number of the two linksest being combined.");
         System.out.println("The next parameter should be one of \"load\", \"main\" or \"test\" to idntify which dataset to use.");
         System.out.println("Optional fourth AND fifth parameter describe the different in the middle UriSpaces");
         System.out.println("    Must provide both even if one is blank.");

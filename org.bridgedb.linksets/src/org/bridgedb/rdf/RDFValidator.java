@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.constants.DctermsConstants;
+import org.bridgedb.linkset.constants.DulConstants;
 import org.bridgedb.linkset.constants.FoafConstants;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
@@ -48,6 +49,7 @@ public class RDFValidator implements RdfLoader{
     private String targetURISpace;
     private Resource linksetResource;
     Value linksetPredicate;
+    Value linksetJustification;
     private boolean isTransative;
     private boolean strict;
     private final Value UNSPECIFIED = new LiteralImpl("Unspecified");
@@ -74,6 +76,7 @@ public class RDFValidator implements RdfLoader{
         validateVoidDescription();
         linksetResource = findTheSingletonSubject(RdfConstants.TYPE_URI, VoidConstants.LINKSET);
         linksetPredicate = findTheSingletonObject (linksetResource, VoidConstants.LINK_PREDICATE);
+        linksetJustification = findTheSingletonObject(linksetResource, DulConstants.EXPRESSES);
         //Provide details of the license under which the dataset is published using the dcterms:license property.
         checkObject(linksetResource, DctermsConstants.LICENSE);
         //The linkset authorship, i.e. the agent that generated the intellectual knowledge
@@ -383,7 +386,11 @@ public class RDFValidator implements RdfLoader{
         return linksetPredicate.stringValue();
     }
 
-    Resource getLinksetResource() {
+    String getJustification() {
+		return linksetJustification.stringValue();
+	}
+
+	Resource getLinksetResource() {
         return linksetResource;
     }
     

@@ -117,7 +117,7 @@ public class LinksetLoader {
         parse(file, arg);
     }
 
-    void clearLinksets(RdfStoreType storeType) throws IDMapperException {
+    public void clearLinksets(RdfStoreType storeType) throws IDMapperException {
     	RdfWrapper.clear(storeType);
     	Reporter.report("RDF cleared");
 		SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();

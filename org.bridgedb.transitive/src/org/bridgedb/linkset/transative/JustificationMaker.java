@@ -18,26 +18,20 @@
 //
 package org.bridgedb.linkset.transative;
 
-import org.bridgedb.linkset.LinksetLoader;
+import org.openrdf.model.Value;
+import org.openrdf.rio.RDFHandlerException;
 
 /**
  *
  * @author Christian
  */
-public class TransativeManual {
-    
-    public static void main(String[] args) throws Exception {
-        String[] args1 = new String[6];
-        args1[0] = "33";
-        args1[1] = "14";
-        args1[2] = "load";
-        args1[3] = "www";
-        args1[4] = "purl";
-        String fileName = "D:/OpenPhacts/ondex2linksets/JulyTransitive/cw-drugbankDrugs-transitive.ttl";
-//        String fileName = "test-data/linkset2To3.ttl";
-        args1[5] = fileName;
-        TransativeCreator.main(args1);
-        LinksetLoader linksetLoader = new LinksetLoader();
-        linksetLoader.parse(fileName, "validate");
+public class JustificationMaker {
+
+    public static Value combine(Value left, Value right) throws RDFHandlerException{
+        if (left.equals(right)){
+            return left;
+        }
+        throw new RDFHandlerException("unable to combine " + left + " with " + right);
     }
+    
 }

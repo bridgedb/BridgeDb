@@ -1,6 +1,7 @@
 @prefix : <#> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://ontologydesignpatterns.org/ont/dul/DUL.owl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix pav: <http://purl.org/pav/2.0/> .
@@ -35,6 +36,7 @@
     pav:derivedBy <http://www.cs.man.ac.uk/~brenninc> ;
     dcterms:license "Who cares this is a test" ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
+    dul:expresses <http://www.bridgedb.org/test#justification2> ;
     dcterms:created "2012-02-22"^^xsd:date ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
 
