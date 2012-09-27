@@ -57,8 +57,6 @@ public class RDFWriter implements RdfLoader{
     private final URLListener urlListener;
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
-
-    private static final String JUSTIFICATION = "http://www.bridgedb.org/prototype#justification";
     
     public RDFWriter(RdfStoreType type, RDFValidator validator, URLListener listener, String mainCaller) throws IDMapperException{
         this.type = type;
@@ -69,7 +67,7 @@ public class RDFWriter implements RdfLoader{
             String subjectUriSpace = validator.getSubjectUriSpace();
             String targetUriSpace = validator.getTargetUriSpace();
             String predicate = validator.getPredicate();
-            String justification = JUSTIFICATION;
+            String justification = validator.getJustification();
             symmetric = validator.isSymmetric();
             boolean transative = validator.isTransative();
             linksetResource = validator.getLinksetResource();

@@ -18,22 +18,19 @@
 //
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.openrdf.OpenRDFException;
+import org.openrdf.rio.RDFHandlerException;
 import org.bridgedb.IDMapperException;
 import java.io.IOException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
-import org.bridgedb.linkset.LinksetLoaderTest;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -49,21 +46,25 @@ public class TransativeCreatorTest {
         //Clear the SQL where linkset ids come from
         new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
         
+        LinksetLoader linksetLoader = new LinksetLoader();
+        linksetLoader.clearLinksets(RdfStoreType.TEST);
         Reporter.report("sample1to2.ttl");
-        String[] args1 = {"../org.bridgedb.transitive/test-data/sample1to2.ttl", "testnew"};
-        LinksetLoader.main (args1);
+        linksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to2.ttl", "test");
         Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.transitive/test-data/sample1to3.ttl", "test"};
-        LinksetLoader.main (args2);
+        linksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to3.ttl", "test");
 	}
 
     //TODO cleanup this test!
     /**
      * Test of main method, of class TransativeCreator.
+     * @throws IOException 
+     * @throws RDFHandlerException 
+     * @throws IDMapperException 
      */
     @Test
-    public void testMain() {
-        Reporter.report("main");
+    public void testSuccessfulTransitiveCreation() 
+    		throws RDFHandlerException, IOException, IDMapperException {
+        Reporter.report("testSuccessfulTransiitiveCreation()");
         String[] args = new String[4];
         args[0] = "2";
         args[1] = "3";
@@ -71,20 +72,10 @@ public class TransativeCreatorTest {
         String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
 //        String fileName = "test-data/linkset2To3.ttl";
         args[3] = fileName;
-        try {
-            TransativeCreator.main(args);
-        } catch (Exception e){
-            e.printStackTrace();
-            assertTrue(false);
-        }
-        args = new String[2];
-        args[0] = fileName;
-        args[1] = "validate";
-        try {
-            LinksetLoader.main (args);
-        } catch (Exception e){
-            e.printStackTrace();
-            assertTrue(false);
-        }
+        TransativeCreator.main(args);
+        Reporter.report("Transtitive file created: " + fileName);
+        LinksetLoader linksetLoader = new LinksetLoader();
+        linksetLoader.parse(fileName, "validate");
     }
+
 }
