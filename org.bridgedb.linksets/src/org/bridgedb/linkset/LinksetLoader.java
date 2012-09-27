@@ -129,35 +129,30 @@ public class LinksetLoader {
      * @param args
      * @throws BridgeDbSqlException
      */
-    public static void main(String[] args) throws BridgeDbSqlException {
-    	try {
-    		if (args.length == 2){
-    			LinksetLoader loader = new LinksetLoader();
-    			if (args[1].equals("new")){
-    				RdfWrapper.clear(RdfStoreType.LOAD);
-    				Reporter.report("Laod RDF cleared");
-    				SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
-    				URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-    				Reporter.report("Load SQL cleared");                
-    				loader.parse(args[0], "load");
-    			} else if (args[1].equals("testnew")){
-    				RdfWrapper.clear(RdfStoreType.TEST);
-    				Reporter.report("Laod RDF cleared");
-    				SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
-    				URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-    				Reporter.report("Test SQL cleared");
-    				loader.parse(args[0], "test");
-    			} else {
-    				loader.parse(args[0], args[1]);
-    			}
-    		} else {
-    			usage();
-    		}
-    	} catch (FileNotFoundException e) {
-    		System.exit(1);
-    	} catch (IDMapperException e) {
-    		System.exit(1);
-    	}
+    public static void main(String[] args) 
+            throws BridgeDbSqlException, IDMapperLinksetException, IDMapperException, FileNotFoundException {
+        if (args.length == 2){
+            LinksetLoader loader = new LinksetLoader();
+            if (args[1].equals("new")){
+                RdfWrapper.clear(RdfStoreType.LOAD);
+                Reporter.report("Laod RDF cleared");
+                SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
+                URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+                Reporter.report("Load SQL cleared");                
+                loader.parse(args[0], "load");
+            } else if (args[1].equals("testnew")){
+                RdfWrapper.clear(RdfStoreType.TEST);
+                Reporter.report("Laod RDF cleared");
+                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+                URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+                Reporter.report("Test SQL cleared");
+                loader.parse(args[0], "test");
+            } else {
+                loader.parse(args[0], args[1]);
+            }
+        } else {
+            usage();
+        }
     }
 
     private static void usage() {
