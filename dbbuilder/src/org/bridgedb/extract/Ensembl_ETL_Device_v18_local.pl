@@ -413,10 +413,22 @@ foreach my $db_adaptor (@db_adaptors) {
 }
 
 # switch per database convention
+print "$gs, $twoLetterSpecies, $species\n";
 my $temp_species = $species;
 if ($gs =~ /(Y|Yes)/i){
 	$species = $genus_species;
+	if ($twoLetterSpecies eq 'Ec'){
+		$species = 'Escherichia coli K12';
+	}
+	elsif ($twoLetterSpecies eq 'Bs' ){
+		$species = 'Bacillus subtilis';
+	}
+	elsif ($twoLetterSpecies eq 'Mx'){
+		$species = 'Mycobacterium tuberculosis H37Rv';
+	}	
 }
+print "$species\n";
+
 	
 ## API: GET ADAPTORS 
 # get gene adaptor to query gene information
@@ -2579,6 +2591,9 @@ sub pickFromArray {
 #################################################################################################
 sub mysql_quotes {
     my $string = shift;
+
+    # Escape backslashes
+    $string =~ s/\\/\\\\/g;
 
     # Escape single quotes for mysql compatibility
     $string =~ s/\'/\\\'/g;
