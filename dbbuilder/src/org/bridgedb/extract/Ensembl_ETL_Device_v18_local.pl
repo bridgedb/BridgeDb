@@ -529,7 +529,7 @@ my %ADMIN_Xrefs = ('NAME' => ['ADMIN_Xrefs'],
 # Basic information for each species database, used by GenMAPP
 my %Info = ('NAME' => ['Info'], 
 	    'HEADER' => ['Owner VARCHAR(128) DEFAULT NULL', 
-			 'Series VARCHAR(31) NOT NULL DEFAULT \'\'',
+			 'Series VARCHAR(127) NOT NULL DEFAULT \'\'',
 			 'Version INT(10) UNSIGNED NOT NULL DEFAULT \'0\'', 
 			 'MODSystem VARCHAR(128)  NOT NULL DEFAULT \'\'', 
 			 'Species VARCHAR(255)  NOT NULL DEFAULT \'\'', 
