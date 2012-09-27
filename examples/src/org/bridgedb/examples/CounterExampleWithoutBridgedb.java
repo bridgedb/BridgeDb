@@ -6,6 +6,7 @@ import javax.xml.rpc.ServiceException;
 
 import org.bridgedb.webservice.cronos.CronosWS;
 import org.bridgedb.webservice.cronos.CronosWSService;
+import org.bridgedb.webservice.cronos.CronosWSServiceLocator;
 
 //import org.json.JSONException;
 //import synergizer.SynergizerClient;
@@ -33,10 +34,10 @@ public class CounterExampleWithoutBridgedb
 		// This example shows how to map an identifier
 		// using the Cronos service directly
 		// Call Web Service Operation
-		//CronosWSServiceLocator locator = new CronosWSServiceLocator();
-		//CronosWS port = locator.getCronosWSPort();
-		CronosWSService service = new CronosWSService();
-		CronosWS port = service.getCronosWSPort();
+		CronosWSServiceLocator locator = new CronosWSServiceLocator();
+		CronosWS port = locator.getCronosWSPort();
+//		CronosWSService service = new CronosWSService();
+//		CronosWS port = service.getCronosWSPort();
 		
 		String organismCode = "hsa";
 		int source = 9; //Entrez Gene
