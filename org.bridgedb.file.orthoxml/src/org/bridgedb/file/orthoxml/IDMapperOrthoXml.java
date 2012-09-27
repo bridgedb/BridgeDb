@@ -29,7 +29,6 @@ import org.bridgedb.impl.InternalUtils;
 import sbc.orthoxml.Database;
 import sbc.orthoxml.Gene;
 import sbc.orthoxml.Group;
-import sbc.orthoxml.ScoreDefinition;
 import sbc.orthoxml.Species;
 import sbc.orthoxml.io.OrthoXMLReader;
 
@@ -161,10 +160,13 @@ public class IDMapperOrthoXml implements IDMapper
 		{
 			Set<DataSource> filter = new HashSet<DataSource>();
 			for (DataSource ds : tgtDataSources) filter.add(ds);
-			for (Xref dest : allIds.get(ref))
+			if (allIds.containsKey(ref))
 			{
-				if (filter.contains(dest.getDataSource()))
-					result.add(dest);
+				for (Xref dest : allIds.get(ref))
+				{
+					if (filter.contains(dest.getDataSource()))
+						result.add(dest);
+				}
 			}
 		}
 		return result;
