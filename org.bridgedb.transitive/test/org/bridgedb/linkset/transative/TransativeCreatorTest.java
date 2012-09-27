@@ -18,6 +18,8 @@
 //
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.linkset.IDMapperLinksetException;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.SQLAccess;
@@ -34,6 +36,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openrdf.rio.RDFHandlerException;
 
 /**
  *
@@ -62,29 +65,18 @@ public class TransativeCreatorTest {
      * Test of main method, of class TransativeCreator.
      */
     @Test
-    public void testMain() {
+    public void testMain() throws BridgeDbSqlException, RDFHandlerException, IDMapperLinksetException, IDMapperException, IOException {
         Reporter.report("main");
         String[] args = new String[4];
         args[0] = "2";
         args[1] = "3";
         args[2] = "test";
         String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
-//        String fileName = "test-data/linkset2To3.ttl";
         args[3] = fileName;
-        try {
-            TransativeCreator.main(args);
-        } catch (Exception e){
-            e.printStackTrace();
-            assertTrue(false);
-        }
+        TransativeCreator.main(args);
         args = new String[2];
         args[0] = fileName;
         args[1] = "validate";
-        try {
-            LinksetLoader.main (args);
-        } catch (Exception e){
-            e.printStackTrace();
-            assertTrue(false);
-        }
+        LinksetLoader.main (args);
     }
 }

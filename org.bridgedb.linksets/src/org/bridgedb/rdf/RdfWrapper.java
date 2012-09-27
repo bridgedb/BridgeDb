@@ -480,7 +480,6 @@ public class RdfWrapper {
     private static void load() throws IOException{
         if (loadByEnviromentVariable()) return;
         if (loadByCatalinaHomeConfigs()) return;
-//        System.out.println("RdfWrapper.load(): here");
         if (loadDirectly()) return;
         if (loadFromConfigs()) return;
         if (loadFromParentConfigs()) return;
@@ -646,7 +645,7 @@ public class RdfWrapper {
         list(System.out);
         //Map<String, String> env = System.getenv();
         //for (String envName : env.keySet()) {
-        //    System.out.format("%s=%s%n",
+        //   ystem.out.format("%s=%s%n",
         //                      envName,
         //                      env.get(envName));
         //}
