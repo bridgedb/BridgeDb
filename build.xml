@@ -24,7 +24,6 @@
 					<file name="org.bridgedb.webservice.biomart/build.xml"/>
 					<file name="org.bridgedb.webservice.bridgerest/build.xml"/>
 					<file name="org.bridgedb.gui/build.xml"/>
-                                        <file name="org.bridgedb.ops/build.xml"/>
                                         <file name="org.bridgedb.sql/build.xml"/>
                                         <file name="org.bridgedb.linksets/build.xml"/>
 				</filelist>
