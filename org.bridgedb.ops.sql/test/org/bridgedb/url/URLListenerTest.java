@@ -38,7 +38,7 @@ public abstract class URLListenerTest extends URLMapperTestBase{
 
     /**
      * Method for loading the Test data
-     * Should eb called in a @beforeClass method after setting listener
+     * Should be called in a @beforeClass method after setting listener
      * 
      * @throws IDMapperException
      */
