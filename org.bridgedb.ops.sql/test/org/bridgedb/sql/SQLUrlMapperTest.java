@@ -15,18 +15,9 @@ import org.junit.Test;
 
 public class SQLUrlMapperTest {
 	
-	@Test
-	public void testRegisterProfile() throws IDMapperException, SQLException {
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
-		SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-		List<String> justificationUris = new ArrayList<String>();
-		justificationUris.add("http://www.example.com/test#predicate");
-		sqlUrlMapper.registerProfile("2012-09-28 16:02", "http://www.cs.man.ac.uk/~graya/me.ttl", justificationUris);
-		validateResult(sqlAccess, "SELECT COUNT(*) FROM profile", 1);
-		validateResult(sqlAccess, "SELECT COUNT(*) FROM profileJustifications", 1);
-	}
-
-	private void validateResult(SQLAccess sqlAccess, String query, int expectedResult)
+	private SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+	
+	private void validateResult(String query, int expectedResult)
 			throws BridgeDbSqlException, SQLException {
 		Connection connection = sqlAccess.getConnection();
 		Statement statement = connection.createStatement();
@@ -35,5 +26,19 @@ public class SQLUrlMapperTest {
 			assertEquals(expectedResult, resultSet.getInt(1));
 		}
 	}
-
+	
+	@Test
+	public void testRegisterProfile() throws IDMapperException, SQLException {
+		SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+		List<String> justificationUris = new ArrayList<String>();
+		justificationUris.add("http://www.example.com/test#predicate");
+		sqlUrlMapper.registerProfile("2012-09-28 16:02", "http://www.cs.man.ac.uk/~graya/me.ttl", justificationUris);
+		validateResult("SELECT COUNT(*) FROM profile", 1);
+		validateResult("SELECT COUNT(*) FROM profileJustifications", 1);
+	}
+//
+//	@Test
+//	public void testGetMappingWithProfile() {
+//		
+//	}
 }
