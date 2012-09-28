@@ -19,12 +19,11 @@
 					<file name="org.bridgedb.server/build.xml"/>
 					<file name="org.bridgedb.webservice.uniprot/build.xml"/>
 					<file name="org.bridgedb.webservice.picr/build.xml"/>
-					<file name="org.bridgedb.webservice.cronos/build.xml"/>
+					<!-- file name="org.bridgedb.webservice.cronos/build.xml"/ -->
 					<file name="org.bridgedb.webservice.synergizer/build.xml"/>
 					<file name="org.bridgedb.webservice.biomart/build.xml"/>
 					<file name="org.bridgedb.webservice.bridgerest/build.xml"/>
 					<file name="org.bridgedb.gui/build.xml"/>
-                                        <file name="org.bridgedb.plus/build.xml"/>
                                         <file name="org.bridgedb.ops/build.xml"/>
                                         <file name="org.bridgedb.sql/build.xml"/>
                                         <file name="org.bridgedb.linksets/build.xml"/>
