@@ -10,6 +10,7 @@ import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -207,6 +208,27 @@ public class OwlFileTester
         }
     }
     
+    private static void readOwl(String location) throws OWLOntologyCreationException{
+        OWLOntologyManager m = create();
+        IRI pav = IRI.create(location);
+        OWLOntology o = m.loadOntologyFromOntologyDocument(pav);
+        System.out.println(o);
+        //Set<OWLAxiom> all = o.getAxioms();
+        //for (OWLAxiom axiom:all){
+        //    System.out.println(axiom);
+        //}
+        
+        Set<OWLClass> theClasses = o.getClassesInSignature();
+        for (OWLClass theClass:theClasses){
+            System.out.println(theClass);
+            Set<OWLClassExpression> exprs = theClass. getSuperClasses(o);
+            for (OWLClassExpression expr:exprs){
+                System.out.println("  " + expr);
+            }
+        }
+        
+    }
+
     public static void main( String[] args ) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException
     {
         //@prefix dcterms: <http://purl.org/dc/terms/> .
@@ -267,6 +289,8 @@ public class OwlFileTester
         //testOwl("http://www.w3.org/TR/xmlschema-1/"); //works but empty
         
 //        slide26();
+        
+        readOwl("file:resources/myops.owl");
     }
  /*
      * 
