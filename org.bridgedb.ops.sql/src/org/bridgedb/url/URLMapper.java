@@ -37,7 +37,7 @@ import org.bridgedb.statistics.OverallStatistics;
  * To keep code size small URLs are represented as Strings.
  */
 public interface URLMapper extends IDMapper{
-
+//TODO: Improve javadoc!
     /**
      * Similar to mapURL(String URL, String... targetURISpaces) except that more that one sourceURL can be provided 
      *   and the result is a mapping from each input sourceURL to the set off its mapped URLs.
