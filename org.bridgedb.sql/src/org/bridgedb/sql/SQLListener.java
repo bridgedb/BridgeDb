@@ -19,6 +19,7 @@
 package org.bridgedb.sql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -39,17 +40,17 @@ import org.bridgedb.utils.Reporter;
 public class SQLListener implements MappingListener{
 
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	protected static final int SQL_COMPAT_VERSION = 4;
+	protected static final int SQL_COMPAT_VERSION = 5;
   
     //Maximumn size in database
     protected static final int SYSCODE_LENGTH = 100;
     private static final int FULLNAME_LENGTH = 100;
     private static final int MAINURL_LENGTH = 100;
     private static final int URLPATTERN_LENGTH = 100;
-    private static final int ID_LENGTH = 100;
+    protected static final int ID_LENGTH = 100;
     private static final int TYPE_LENGTH = 100;
     private static final int URNBASE_LENGTH = 100;
-    private static final int PREDICATE_LENGTH = 100;
+    protected static final int PREDICATE_LENGTH = 100;
     private static final int LINK_SET_ID_LENGTH = 100;
     private static final int KEY_LENGTH= 100; 
     private static final int PROPERTY_LENGTH = 100;
@@ -64,7 +65,7 @@ public class SQLListener implements MappingListener{
     private int doubleCount = 0;  
     private StringBuilder insertQuery;
     private final boolean supportsIsValid;
-    private final String autoIncrement;
+    protected final String autoIncrement;
     
     /**
      * 
@@ -378,6 +379,17 @@ public class SQLListener implements MappingListener{
 					"version of this software and databases");
 		}		
 	}
+	
+	private void checkConnection() throws BridgeDbSqlException, SQLException {
+		if (possibleOpenConnection == null){
+			possibleOpenConnection = sqlAccess.getConnection();
+		} else if (possibleOpenConnection.isClosed()){
+			possibleOpenConnection = sqlAccess.getConnection();
+		}    else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
+			possibleOpenConnection.close();
+			possibleOpenConnection = sqlAccess.getConnection();
+		}
+	}
   
     /**
      * 
@@ -386,18 +398,45 @@ public class SQLListener implements MappingListener{
      */
     protected Statement createStatement() throws BridgeDbSqlException{
         try {
-            if (possibleOpenConnection == null){
-                possibleOpenConnection = sqlAccess.getConnection();
-            } else if (possibleOpenConnection.isClosed()){
-                possibleOpenConnection = sqlAccess.getConnection();
-            }    else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
-                possibleOpenConnection.close();
-                possibleOpenConnection = sqlAccess.getConnection();
-            }  
+            checkConnection();  
             return possibleOpenConnection.createStatement();
         } catch (SQLException ex) {
             throw new BridgeDbSqlException ("Error creating a new statement ", ex);
         }
+    }
+    
+    protected PreparedStatement createPreparedStatement(String sql) throws BridgeDbSqlException {
+    	try {
+    		checkConnection();
+    		return possibleOpenConnection.prepareStatement(sql);
+    	} catch (SQLException ex) {
+    		throw new BridgeDbSqlException ("Error creating a new prepared statement " + sql, ex);
+    	}
+    }
+    
+    protected void startTransaction() throws BridgeDbSqlException {
+    	try {
+			checkConnection();
+			possibleOpenConnection.setAutoCommit(false);
+		} catch (SQLException ex) {
+			throw new BridgeDbSqlException("Error starting transaction.", ex);
+		}
+    }
+    
+    protected void commitTransaction() throws BridgeDbSqlException {
+    	try {
+			possibleOpenConnection.commit();
+		} catch (SQLException ex) {
+			throw new BridgeDbSqlException("Error commiting transaction.", ex);
+		}
+    }
+    
+    protected void rollbackTransaction() throws BridgeDbSqlException {
+    	try {
+    		possibleOpenConnection.rollback();    		
+    	} catch (SQLException ex) {
+    		throw new BridgeDbSqlException("Error rolling back transaction.", ex);
+    	}
     }
     
     /**

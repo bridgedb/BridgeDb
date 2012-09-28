@@ -18,6 +18,7 @@
 //
 package org.bridgedb.sql;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -77,6 +78,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	{
         super.dropSQLTables();
  		dropTable("url");
+ 		dropTable("profileJustifications");
+ 		dropTable("profile");
     }
  
     @Override
@@ -90,6 +93,16 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                     + "  (  dataSource VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
                     + "     uriSpace VARCHAR(" + URI_SPACE_LENGTH + ")  "
                     + "  ) ");
+            sh.execute("CREATE TABLE profile ( " +
+            		"profileId INT " + autoIncrement + " PRIMARY KEY, " +
+            		"createdOn DATETIME, " +
+            		"createdBy VARCHAR(" + PREDICATE_LENGTH + ") " +
+            		")");
+            sh.execute("CREATE TABLE profileJustifications ( " +
+            		"profileId VARCHAR(" + ID_LENGTH + ") NOT NULL, " +
+            		"justificationURI VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
+//            		"CONSTRAINT fk_profileId FOREIGN KEY (profileId) REFERENCES profile(profileId) ON DELETE CASCADE " +
+            		")");
             sh.close();
 		} catch (SQLException e)
 		{
@@ -661,4 +674,65 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
+    public int registerProfile(String createdOn, String createdBy, 
+    		List<String> justificationUris) 
+            throws BridgeDbSqlException {
+    	//TODO: Need to validate that createdOn is a date
+    	//TODO: Need to validate that createdBy is a URI
+    	//TODO: Need to validate that justifcationUris is a List of URIs
+    	startTransaction();
+    	int profileId = createProfile(createdOn, createdBy);
+    	insertJustifications(profileId, justificationUris);
+    	commitTransaction();
+    	return profileId;
+    }
+
+	private int createProfile(String createdOn, String createdBy)
+			throws BridgeDbSqlException {
+		String insertStatement = "INSERT INTO profile "
+                    + "(createdOn, createdBy) " 
+                    + "VALUES (" 
+                    + "'" + createdOn + "', " 
+                    + "'" + createdBy + "')";
+		int profileId = 0;
+        try {
+        	Statement statement = createStatement();
+            statement.executeUpdate(insertStatement, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next())
+            {
+            	profileId = rs.getInt(1);
+            } else {
+            	rollbackTransaction();
+            	throw new BridgeDbSqlException ("No result registering new profile " + insertStatement);
+            }            
+        } catch (BridgeDbSqlException ex) {
+        	rollbackTransaction();
+        	throw ex;
+        } catch (SQLException ex) {
+        	rollbackTransaction();
+            throw new BridgeDbSqlException ("Error registering new profile " + insertStatement, ex);
+        }
+        return profileId;
+	}
+	
+	private void insertJustifications(int profileId,
+			List<String> justificationUris) throws BridgeDbSqlException {
+		String sql = "INSERT INTO profileJustifications " +
+				"(profileId, justificationURI) " +
+				"VALUES ( " + profileId + ", " + "?)";
+		try {
+			PreparedStatement statement = createPreparedStatement(sql);
+			for (String uri : justificationUris) {
+				statement.setString(1, uri);
+				statement.execute();
+			}
+		} catch (BridgeDbSqlException ex) {
+			rollbackTransaction();
+			throw ex;
+		} catch (SQLException ex) {
+			rollbackTransaction();
+			throw new BridgeDbSqlException("Error inserting justification.", ex);
+		}
+	}
 }
