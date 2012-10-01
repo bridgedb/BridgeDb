@@ -10,9 +10,7 @@ import org.bridgedb.metadata.constants.*;
 import org.bridgedb.metadata.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.openrdf.model.Statement;
-import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
 
@@ -88,7 +86,6 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
  
     @Test
-    @Ignore
     public void testValidityReport() throws MetaDataException{
         Reporter.report("ValidityReport");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
@@ -122,7 +119,6 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
-    @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);

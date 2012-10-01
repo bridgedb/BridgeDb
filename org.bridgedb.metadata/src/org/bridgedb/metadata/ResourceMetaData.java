@@ -29,6 +29,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
         super(type.stringValue(), childMetaData);
+        childMetaData.add(PropertyMetaData.getTypeProperty());
         this.type = type;
     }
     

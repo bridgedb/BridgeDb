@@ -132,7 +132,7 @@ public class MetaDataTestBase extends TestUtils{
          
     @BeforeClass
     public static void loadRegistries() throws MetaDataException{
-        dataSetRegistry = new MetaDataRegistry("file:resources/shouldOwl.owl");        
+        dataSetRegistry = new MetaDataRegistry("file:resources/shouldDataSet.owl");        
     }
     
     public MetaDataTestBase() throws DatatypeConfigurationException, MetaDataException {
@@ -165,7 +165,7 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1HomePageStatement);
         addStatement(data, d1LlicenseStatement);
         addStatement(data, d1NnameSpaceStatement);
-        addStatement(data, d1VersionStatement);
+        //addStatement(data, d1VersionStatement);
         addStatement(data, d1DataDumpStatement);
         addStatement(data, d1PublishedStatement);
         addStatement(data, d1ModifiedStatement);
@@ -196,7 +196,7 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d2HomePageStatement);
         addStatement(data, d2LicenseStatement);
         addStatement(data, d2NameSpaceStatement);
-        addStatement(data, d2VersionStatement);
+        //addStatement(data, d2VersionStatement);
         addStatement(data, d2DataDumpStatement);
         addStatement(data, d2ImportedOnStatement);
         addStatement(data, d2ImportedByStatement);
