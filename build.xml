@@ -28,6 +28,8 @@
                                         <file name="org.bridgedb.sql/build.xml"/>
                                         <file name="org.bridgedb.ops.sql/build.xml"/>
                                         <file name="org.bridgedb.linksets/build.xml"/>
+                                        <file name="org.bridgedb.ws.core/build.xml"/>
+                                        <file name="org.bridgedb.ops.ws.core/build.xml"/>
 				</filelist>
 			</subant>
 		</sequential>
