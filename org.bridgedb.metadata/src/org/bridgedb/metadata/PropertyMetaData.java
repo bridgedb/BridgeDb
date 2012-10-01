@@ -25,11 +25,8 @@ import org.w3c.dom.NodeList;
  */
 public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMetaData{
 
-    public static RequirementLevel ALLWAYS_WARN_LEVEL = RequirementLevel.SHOULD;
-
     private final URI predicate;
     private final MetaDataType metaDataType;
-    private final RequirementLevel requirementLevel;
     private final Set<Value> values = new HashSet<Value>();
     private final Set<PropertyMetaData> parents = new HashSet<PropertyMetaData>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
@@ -42,7 +39,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         String objectClass = element.getAttribute(SchemaConstants.CLASS);
         metaDataType = getMetaDataType(objectClass, element);
         String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
-        requirementLevel = RequirementLevel.parse(requirementLevelSt);
         specifiedProperty = true;
     }
     
@@ -60,7 +56,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         super(other);
         predicate = other.predicate;
         metaDataType = other.metaDataType;
-        requirementLevel = other.requirementLevel;
         specifiedProperty = true;
     }
     
@@ -68,7 +63,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         super(predicate.getLocalName());
         this.predicate = predicate;
         metaDataType = null;
-        requirementLevel = null;
         specifiedProperty = false;
     }
     
@@ -76,7 +70,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         super("Type");
         this.predicate = RdfConstants.TYPE_URI;
         metaDataType = new UriType();
-        requirementLevel = RequirementLevel.MUST;
         specifiedProperty = true;
     }
 
@@ -119,11 +112,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
     
     @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
-        if (values.isEmpty() && specifiedProperty && requirementLevel.compareTo(forceLevel) > 0) { 
-            //No value and low enough level not too care
-            return; 
-        } 
+    void appendShowAll(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         //builder.append(id);
         if (specifiedProperty){
@@ -160,9 +149,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         if (specifiedProperty){
             builder.append("class ");
             builder.append(metaDataType);        
-            newLine(builder, tabLevel + 1);
-            builder.append("Requirement Level ");
-            builder.append(requirementLevel);        
             newLine(builder);
         } else {
             builder.append("Unspecified RDF found in the data. ");
@@ -176,11 +162,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public boolean hasRequiredValues(RequirementLevel forceLevel) {
+    public boolean hasRequiredValues() {
         if (values.isEmpty()){
             if (specifiedProperty){
-                //Is the level so low that is does not matter
-                return (requirementLevel.compareTo(forceLevel) > 0);          
+                return false;          
             } else {
                 return true;
             }
@@ -208,10 +193,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+    public void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (specifiedProperty) {
             if (values.isEmpty()){
-                appendEmptyReport(builder, forceLevel, includeWarnings, tabLevel);
+                appendEmptyReport(builder, tabLevel);
             } else if (!hasCorrectTypes()){
                 appendIncorrectTypeReport(builder, tabLevel);
             } else {
@@ -222,33 +207,19 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }
     }
 
-    private void appendEmptyReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
-        if (requirementLevel.compareTo(forceLevel) <= 0){
-            tab(builder, tabLevel);
-            builder.append("ERROR: ");
-            builder.append(id );
-            builder.append(":");
-            builder.append(name);
-            builder.append(" is missing. ");
-            newLine(builder, tabLevel + 1);
-            builder.append("Please add a statement with the predicate ");
-            builder.append(predicate);
-            newLine(builder);
-            addDocumentationLink(builder, tabLevel);
-        } else if (includeWarnings && requirementLevel.compareTo(ALLWAYS_WARN_LEVEL) <= 0){
-            tab(builder, tabLevel);
-            builder.append("Warning: ");
-            builder.append(id );
-            builder.append(":");
-            builder.append(name);
-            builder.append(" is missing. ");
-            newLine(builder, tabLevel + 1);
-            builder.append("This has a RequirementLevel of ");
-            builder.append(requirementLevel);
-            newLine(builder);
-            addDocumentationLink(builder, tabLevel);
-        }
-    }
+    private void appendEmptyReport(StringBuilder builder, int tabLevel) {
+        tab(builder, tabLevel);
+        builder.append("ERROR: ");
+        builder.append(id );
+        builder.append(":");
+        builder.append(name);
+        builder.append(" is missing. ");
+        newLine(builder, tabLevel + 1);
+        builder.append("Please add a statement with the predicate ");
+        builder.append(predicate);
+        newLine(builder);
+        addDocumentationLink(builder, tabLevel);
+   }
     
     private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);

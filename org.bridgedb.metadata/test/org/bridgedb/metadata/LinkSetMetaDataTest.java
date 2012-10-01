@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
+@Ignore
 public class LinkSetMetaDataTest extends MetaDataTestBase{
     
     public LinkSetMetaDataTest() throws DatatypeConfigurationException{        
@@ -23,8 +24,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("Linkset HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
-        checkRequiredValues(metaData, RequirementLevel.SHOULD);
-        assertFalse(metaData.hasRequiredValues(RequirementLevel.MAY));
+        checkRequiredValues(metaData);
     } 
 
     @Test
@@ -45,7 +45,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     public void testValidateOk() throws MetaDataException{
         Reporter.report("LinkSet Validate OK");
         MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
-        metaData.validate(RequirementLevel.SHOULD);
+        metaData.validate();
     }
 
     @Test

@@ -13,17 +13,13 @@ import org.w3c.dom.Element;
  */
 public class MetaDataAlternatives extends HasChildrenMetaData implements MetaData{
 
-    private final RequirementLevel requirementLevel;
-
     public MetaDataAlternatives(Element element) throws MetaDataException {
         super(element);
         String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
-        requirementLevel = RequirementLevel.parse(requirementLevelSt);
     }
     
     public MetaDataAlternatives(MetaDataAlternatives other){
         super(other);
-        this.requirementLevel = other.requirementLevel;
     }
     
 
@@ -37,9 +33,6 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         tab(builder, tabLevel);
         builder.append("Alternatives ");
         builder.append(name);
-        newLine(builder, tabLevel + 1);
-        builder.append("Requirement Level ");
-        builder.append(requirementLevel);        
         newLine(builder);
         for (MetaDataBase child:childMetaData){
             child.appendSchema(builder, tabLevel + 1);
@@ -55,7 +48,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (noChildernWithValue()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
@@ -66,11 +59,11 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
             newLine(builder);
             addDocumentationLink(builder, tabLevel);
             for (MetaDataBase child:childMetaData){
-                 child.appendShowAll(builder, RequirementLevel.MAY, tabLevel + 1);
+                 child.appendShowAll(builder, tabLevel + 1);
             }
         }
         for (MetaDataBase child:childMetaData){
-            child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+            child.appendValidityReport(builder, includeWarnings, tabLevel);
         }
     }
 
@@ -85,15 +78,13 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     }
     
     @Override
-    public boolean hasRequiredValues(RequirementLevel forceLevel) {
-        if (requirementLevel.compareTo(forceLevel) <= 0){
-            if (noChildernWithValue()){
+    public boolean hasRequiredValues() {
+        if (noChildernWithValue()){
             //At least one child must have values so false;
                 return false;
-            }
         }
         for (MetaDataBase child:childMetaData){
-            if (!child.hasRequiredValues(requirementLevel)){
+            if (!child.hasRequiredValues()){
                 return false;
             }
         }

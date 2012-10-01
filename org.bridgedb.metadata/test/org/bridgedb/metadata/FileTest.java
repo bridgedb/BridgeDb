@@ -18,6 +18,7 @@ import org.openrdf.model.Statement;
  *
  * @author Christian
  */
+@Ignore
 public class FileTest extends TestUtils{
     
     public static boolean FILE_HAS_EXTRA_RDF = false;
@@ -30,7 +31,7 @@ public class FileTest extends TestUtils{
         Set<Statement> statements = StatementReader.extractStatements(input);
         MetaDataCollection metaData = new MetaDataCollection(statements);
         checkCorrectNumberOfIds (metaData, numberOfIds);
-        checkRequiredValues(metaData, RequirementLevel.SHOULD);
+        checkRequiredValues(metaData);
         checkCorrectTypes(metaData);
         if (checkAllStatements){
             checkAllStatementsUsed(metaData);
@@ -43,7 +44,7 @@ public class FileTest extends TestUtils{
         Set<Statement> statements = StatementReader.extractStatements(input);
         MetaDataCollection metaData = new MetaDataCollection(statements);
         checkCorrectNumberOfIds (metaData, numberOfIds);
-        Reporter.report(metaData.validityReport(RequirementLevel.SHOULD, INCLUDE_WARNINGS));
+        Reporter.report(metaData.validityReport(INCLUDE_WARNINGS));
     }
 
     private void validateFile(String fileName, boolean checkAllStatements) throws MetaDataException{
@@ -53,7 +54,7 @@ public class FileTest extends TestUtils{
         Reporter.report("Read " + fileName);
         MetaDataCollection metaData = new MetaDataCollection(statements);
         Reporter.report("Loaded " + fileName);
-        Reporter.report(metaData.validityReport(RequirementLevel.SHOULD, INCLUDE_WARNINGS));
+        Reporter.report(metaData.validityReport(INCLUDE_WARNINGS));
     }
 
     @Test

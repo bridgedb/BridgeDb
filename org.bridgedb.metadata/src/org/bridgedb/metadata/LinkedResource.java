@@ -27,8 +27,6 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private final Set<Resource> ids = new HashSet<Resource>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
 
-    private final RequirementLevel requirementLevel;
-
     LinkedResource(Element element) throws MetaDataException {
         super(element);
         String typeSt = element.getAttribute(SchemaConstants.TYPE);
@@ -36,14 +34,12 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
         predicate = new URIImpl(predicateSt);
         String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
-        requirementLevel = RequirementLevel.parse(requirementLevelSt);
     }
  
     LinkedResource(LinkedResource other){
         super(other);
         predicate = other.predicate;
         resourceType = other.resourceType;
-        requirementLevel = other.requirementLevel;
     }
 
     @Override
@@ -77,9 +73,6 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
             newLine(builder, tabLevel + 1);
             builder.append("predicate ");
             builder.append(predicate);        
-            newLine(builder, tabLevel + 1);
-            builder.append("Requirement Level ");
-            builder.append(requirementLevel);        
             newLine(builder);
             resource.appendSchema(builder, tabLevel + 1);
         } catch (MetaDataException ex) {
@@ -101,7 +94,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
     
     @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel requirementLevel, int tabLevel) {
+    void appendShowAll(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append("Resource Link ");
         builder.append(name);
@@ -117,7 +110,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 if (rmd == null){
                     resourceNotFound(builder, id, tabLevel + 1);
                 } else {
-                    rmd.appendShowAll(builder, requirementLevel, tabLevel + 1);
+                    rmd.appendShowAll(builder, tabLevel + 1);
                 }
             }
         }
@@ -153,10 +146,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
-    public boolean hasRequiredValues(RequirementLevel forceLevel) {
-        if (requirementLevel.compareTo(forceLevel) > 0) {
-            return true; //Not required
-        }
+    public boolean hasRequiredValues() {
         if (ids.isEmpty()){
             return false;
         } else {
@@ -165,7 +155,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 if (rmd == null){
                     return false;
                 } else {
-                    if (!rmd.hasRequiredValues(requirementLevel)){
+                    if (!rmd.hasRequiredValues()){
                         return false;
                     }
                 }
@@ -183,7 +173,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 //However if there is an id not found it is false;
                 return false;
             } else {
-                if (!rmd.hasRequiredValues(requirementLevel)){
+                if (!rmd.hasRequiredValues()){
                     return false;
                 }
             }
@@ -192,20 +182,18 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (ids.isEmpty()){
-            if (requirementLevel.compareTo(forceLevel) <= 0) {
-                tab(builder, tabLevel);
-                builder.append("ERROR: ");
-                builder.append(id );
-                builder.append(":");
-                builder.append(name);
-                builder.append(" is missing. ");
-                newLine(builder, tabLevel + 1);
-                builder.append("Please add a statment with the predicate ");
-                builder.append(predicate);
-                newLine(builder);
-            }
+            tab(builder, tabLevel);
+            builder.append("ERROR: ");
+            builder.append(id );
+            builder.append(":");
+            builder.append(name);
+            builder.append(" is missing. ");
+            newLine(builder, tabLevel + 1);
+            builder.append("Please add a statment with the predicate ");
+            builder.append(predicate);
+            newLine(builder);
         } else {
             for (Resource id: ids){
                 ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
@@ -216,12 +204,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     builder.append(id);
                     builder.append(" is missing. ");
                 } else {
-                    if (requirementLevel.compareTo(forceLevel) <= 0) {
-                        rmd.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel + 1);
-                    } else {
-                        //Not actually required so set level high to only append correct type info
-                        rmd.appendValidityReport(builder, RequirementLevel.TECHNICAL_MUST, includeWarnings, tabLevel + 1);                        
-                    }
+                    rmd.appendValidityReport(builder, includeWarnings, tabLevel + 1);
                 }
             }
         }

@@ -60,9 +60,9 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     }
     
     @Override
-    public boolean hasRequiredValues(RequirementLevel requirementLevel) {
+    public boolean hasRequiredValues() {
         for (MetaDataBase child:childMetaData){
-            if (!child.hasRequiredValues(requirementLevel)){
+            if (!child.hasRequiredValues()){
                 return false;
             }
         }
@@ -136,10 +136,10 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     }
 
    @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
+    void appendShowAll(StringBuilder builder, int tabLevel) {
         appendSpecific(builder, tabLevel);
         for (MetaDataBase child:childMetaData){
-            child.appendShowAll(builder, forceLevel, tabLevel + 1);
+            child.appendShowAll(builder, tabLevel + 1);
         }
     }
 

@@ -167,18 +167,18 @@ public class MetaDataCollection extends AppendBase implements MetaData {
 
     // ** MetaData Methods 
     @Override
-    public boolean hasRequiredValues(RequirementLevel requirementLevel) {
+    public boolean hasRequiredValues() {
         for (ResourceMetaData resouce:resourcesMap.values()){
-            if (!resouce.hasRequiredValues(requirementLevel)){
+            if (!resouce.hasRequiredValues()){
                 return false;
             }
         }
         return true;
     }
 
-    public boolean hasRequiredValuesOrIsSuperset(RequirementLevel requirementLevel) {
+    public boolean hasRequiredValuesOrIsSuperset() {
         for (ResourceMetaData resource:resourcesMap.values()){
-            if (!resource.isSuperset() && !resource.hasRequiredValues(requirementLevel)){
+            if (!resource.isSuperset() && !resource.hasRequiredValues()){
                 return false;
             }
         }
@@ -220,10 +220,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
    //** AppendBase Methods 
     
     @Override
-    void appendShowAll(StringBuilder builder, RequirementLevel forceLevel, int tabLevel) {
+    void appendShowAll(StringBuilder builder, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
-             resouce.appendShowAll(builder, forceLevel, 0);
+             resouce.appendShowAll(builder, 0);
          }
          appendUnusedStatements(builder);
     }
@@ -249,10 +249,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
-             resouce.appendValidityReport(builder, forceLevel, includeWarnings, 0);
+             resouce.appendValidityReport(builder, includeWarnings, 0);
          }
          for (String error:errors){
              tab(builder, tabLevel);
@@ -277,8 +277,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return result;
     }
 
-    public void validate(RequirementLevel forceLevel) throws MetaDataException {
-        String report = this.validityReport(forceLevel, false);
+    public void validate() throws MetaDataException {
+        String report = this.validityReport(false);
         if (report.equals(CLEAR_REPORT)){
             //OK 
         } else {

@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.Set;
 import org.bridgedb.metadata.MetaDataCollection;
 import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.RequirementLevel;
 import org.bridgedb.rdf.RdfException;
 import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.StatementReader;
@@ -30,7 +29,7 @@ public class MetaDataReader {
         String validatebase = RdfController.getValidateBase();
         Set<Statement> statements = StatementReader.extractStatements(input, validatebase);
         MetaDataCollection metaData = new MetaDataCollection(statements);
-        metaData.validate(RequirementLevel.SHOULD);
+        metaData.validate();
         String contextString = RdfController.getNextContext(rdfStoreType);
         validatebase = contextString + "/";
         statements = StatementReader.extractStatements(input, validatebase);

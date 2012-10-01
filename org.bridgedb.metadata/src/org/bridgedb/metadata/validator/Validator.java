@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.Set;
 import org.bridgedb.metadata.MetaDataCollection;
 import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.RequirementLevel;
 import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.rdf.StatementReader;
 import org.openrdf.model.Statement;
@@ -26,14 +25,10 @@ public class Validator {
         }
         String fileName = arg[0];
         Reporter.report("Checking " + fileName);
-        RequirementLevel forceLevel  = RequirementLevel.SHOULD;
-        if (arg.length > 1){
-            forceLevel = RequirementLevel.parse(arg[1]);
-        }
         Reporter.report("    Up to Level " + fileName);
         boolean includeWarnings = true;
-        if (arg.length > 2){
-            includeWarnings = Boolean.parseBoolean(arg[2]);
+        if (arg.length > 1){
+            includeWarnings = Boolean.parseBoolean(arg[1]);
         }
         if (includeWarnings){
             Reporter.report("    Including warnings ");
@@ -43,7 +38,7 @@ public class Validator {
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
         MetaDataCollection metaData = new MetaDataCollection(statements);
-        Reporter.report(metaData.validityReport(RequirementLevel.SHOULD, true));
+        Reporter.report(metaData.validityReport(true));
     }
 
     private static void usage() {
@@ -57,11 +52,6 @@ public class Validator {
         for (RDFFormat format: formats){
             Reporter.report("        " + format.toString());
         }
-        Reporter.report("RequirementLevel: ");
-        Reporter.report("   This determines how strict the validator should be.");
-        Reporter.report("   Expected values are: " + RequirementLevel.legalValues());
-        Reporter.report("   Note: Type of ALL known included properties is always check!");
-        Reporter.report("   Default is SHOULD.");
         Reporter.report("Include Warnings: ");
         Reporter.report("   This determines if the validator will include warnings.");
         Reporter.report("   Any non null value other than \"true\" ignoring case will remove warnings.");

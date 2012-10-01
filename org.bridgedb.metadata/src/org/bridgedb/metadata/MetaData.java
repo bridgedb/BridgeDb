@@ -18,11 +18,11 @@ interface MetaData {
     
     String Schema();
 
-    boolean hasRequiredValues(RequirementLevel requirementLevel);
+    boolean hasRequiredValues();
     
     boolean hasCorrectTypes();
 
-    String validityReport(RequirementLevel forceLevel, boolean includeWarnings);
+    String validityReport(boolean includeWarnings);
     
     boolean allStatementsUsed();
     

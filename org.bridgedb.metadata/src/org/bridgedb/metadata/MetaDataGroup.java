@@ -43,9 +43,9 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
     }
     
      @Override
-    void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         for (MetaDataBase child:childMetaData){
-            child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+            child.appendValidityReport(builder, includeWarnings, tabLevel);
         }
         if (!includeWarnings){
             return;
@@ -54,7 +54,7 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         boolean valueFound = false;
         boolean valueMissing = false;
         for (MetaDataBase child:childMetaData){
-            if (child.hasRequiredValues(RequirementLevel.MAY)){
+            if (child.hasRequiredValues()){
                 valueFound = true;
             } else {
                 valueMissing = true;
@@ -71,7 +71,7 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
             addDocumentationLink(builder, tabLevel);
             //check all items in the group have a value
             for (MetaDataBase child:childMetaData){
-                 child.appendShowAll(builder, RequirementLevel.MAY, tabLevel + 1);
+                 child.appendShowAll(builder, tabLevel + 1);
             }
         }
     }

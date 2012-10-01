@@ -14,13 +14,13 @@ public abstract class AppendBase {
     
     public synchronized String toString(){
          StringBuilder builder = new StringBuilder();
-         appendShowAll(builder, RequirementLevel.SHOULD, 0);
+         appendShowAll(builder, 0);
          return builder.toString();
     }
     
-    String showAll(RequirementLevel requirementLevel) {
+    String showAll() {
          StringBuilder builder = new StringBuilder();
-         appendShowAll(builder, requirementLevel, 0);
+         appendShowAll(builder, 0);
          return builder.toString();
     }
 
@@ -32,11 +32,11 @@ public abstract class AppendBase {
 
     abstract void appendSchema(StringBuilder builder, int tabLevel);
     
-    abstract void appendShowAll(StringBuilder builder, RequirementLevel requirementLevel, int tabLevel);
+    abstract void appendShowAll(StringBuilder builder, int tabLevel);
     
-    public String validityReport(RequirementLevel forceLevel, boolean includeWarnings) {
+    public String validityReport(boolean includeWarnings) {
          StringBuilder builder = new StringBuilder();
-         appendValidityReport(builder, forceLevel, includeWarnings, 0);
+         appendValidityReport(builder, includeWarnings, 0);
          if (builder.length() > 0){
             return builder.toString();
          } else {
@@ -44,7 +44,7 @@ public abstract class AppendBase {
          }
     }
 
-    abstract void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel);
+    abstract void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel);
 
     public String unusedStatements(){
         StringBuilder builder = new StringBuilder();

@@ -119,10 +119,10 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }
 
     @Override
-    public void appendValidityReport(StringBuilder builder, RequirementLevel forceLevel, boolean includeWarnings, int tabLevel) {
+    public void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (isParent){
             if (this.hasCorrectTypes()){
-                if (this.hasRequiredValues(forceLevel)){
+                if (this.hasRequiredValues()){
                     //Do nothing
                 } else {
                     if (includeWarnings) {
@@ -136,12 +136,12 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             } else {
                 //Incorrect types show the whole vlaidity report anyway
                 for (MetaDataBase child:childMetaData){
-                    child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+                    child.appendValidityReport(builder, includeWarnings, tabLevel);
                 }    
             }
         } else {
             for (MetaDataBase child:childMetaData){
-                child.appendValidityReport(builder, forceLevel, includeWarnings, tabLevel);
+                child.appendValidityReport(builder, includeWarnings, tabLevel);
             }
         }
     }
@@ -167,9 +167,9 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         builder.append(" id ");
         builder.append(id);
         if (this.hasCorrectTypes()){
-            if (this.hasRequiredValues(RequirementLevel.SHOULD)){
+            if (this.hasRequiredValues()){
                 builder.append(" OK!");
-            } else if (this.hasRequiredValues(RequirementLevel.MUST)){
+            } else if (this.hasRequiredValues()){
                 builder.append(" has MUST values.");
             } else if (isParent){
                 builder.append(" can only be used as a superset.");
