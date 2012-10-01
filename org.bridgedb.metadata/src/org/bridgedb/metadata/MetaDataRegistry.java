@@ -46,8 +46,7 @@ public class MetaDataRegistry {
     static String documentationRoot = "";
     
     public static ResourceMetaData getResourceByType(Value type) throws MetaDataException{
-        Map<URI, ResourceMetaData> theResources = getResources();
-        ResourceMetaData resourceMetaData = theResources.get(type);
+        ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
             return null;
         } else {
@@ -67,22 +66,7 @@ public class MetaDataRegistry {
         return documentationRoot;
     }
     
-    private static Map<URI, ResourceMetaData> getResources() throws MetaDataException{
-        if (resourcesByType == null){
-            InputStream xmlStream = findXmlStream();
-            Document root = readDomFromInputStream(xmlStream);
-            List<MetaDataBase> metaDatas = getChildMetaData(root.getDocumentElement());
-            resourcesByType = new HashMap<URI, ResourceMetaData>();
-            for (MetaData metaData:metaDatas){
-                ResourceMetaData resource = (ResourceMetaData)metaData;
-                URI type = resource.getType();
-                resourcesByType.put(type, resource);
-            }
-        }
-        return resourcesByType;
-    }
-    
-    private static Document readDomFromFile(File xmlFile) throws MetaDataException  {
+   private static Document readDomFromFile(File xmlFile) throws MetaDataException  {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -118,10 +102,10 @@ public class MetaDataRegistry {
         return result;
     }
 
-    public static List<MetaDataBase> getChildMetaData(Element parent) throws MetaDataException{
-        List<Element> childElements = getChildElements(parent);
-        return getMetaData(childElements);
-    }
+    //public static List<MetaDataBase> getChildMetaData(Element parent) throws MetaDataException{
+    //    List<Element> childElements = getChildElements(parent);
+    //    return getMetaData(childElements);
+    //}
     
     private static List<Element> getChildElements(Element parent) throws MetaDataException{
         ArrayList<Element> children = new ArrayList<Element>();
@@ -145,7 +129,7 @@ public class MetaDataRegistry {
         return children;
     }
     
-    private static List<MetaDataBase> getMetaData(List<Element> elements) throws MetaDataException{
+    /*private static List<MetaDataBase> getMetaData(List<Element> elements) throws MetaDataException{
         ArrayList<MetaDataBase> metaDatas = new ArrayList<MetaDataBase>();
         for (Element element:elements){
             String tagName = element.getTagName();
@@ -166,7 +150,7 @@ public class MetaDataRegistry {
             }
         }
         return metaDatas;
-    }
+    }*/
 
     //TODO work this out more including looking in configs
     private static InputStream findXmlStream() throws MetaDataException {

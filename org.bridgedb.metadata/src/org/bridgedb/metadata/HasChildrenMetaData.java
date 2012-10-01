@@ -22,10 +22,10 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     
     final List<MetaDataBase> childMetaData;
 
-    HasChildrenMetaData(Element element) throws MetaDataException{
-        super(element);
-        childMetaData = MetaDataRegistry.getChildMetaData(element);
-    }
+    //HasChildrenMetaData(Element element) throws MetaDataException{
+    //    super(element);
+    //    childMetaData = MetaDataRegistry.getChildMetaData(element);
+    //}
 
     HasChildrenMetaData(HasChildrenMetaData other){
         super(other);

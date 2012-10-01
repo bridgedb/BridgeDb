@@ -27,14 +27,14 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private final Set<Resource> ids = new HashSet<Resource>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
 
-    LinkedResource(Element element) throws MetaDataException {
-        super(element);
-        String typeSt = element.getAttribute(SchemaConstants.TYPE);
-        resourceType = new URIImpl(typeSt);
-        String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
-        predicate = new URIImpl(predicateSt);
-        String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
-    }
+    //LinkedResource(Element element) throws MetaDataException {
+    //    super(element);
+    //    String typeSt = element.getAttribute(SchemaConstants.TYPE);
+    //    resourceType = new URIImpl(typeSt);
+    //    String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
+    //    predicate = new URIImpl(predicateSt);
+    //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
+    //}
  
     LinkedResource(LinkedResource other){
         super(other);

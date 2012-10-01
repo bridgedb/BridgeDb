@@ -27,10 +27,10 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
 
    // MetaData parent;
     
-    MetaDataBase(Element element){
-        name = element.getAttribute(SchemaConstants.NAME);
-        documentation = MetaDataRegistry.getDocumentationRoot() + element.getAttribute(SchemaConstants.DOCUMENTATION);
-    }
+    //MetaDataBase(Element element){
+    //    name = element.getAttribute(SchemaConstants.NAME);
+    //    documentation = MetaDataRegistry.getDocumentationRoot() + element.getAttribute(SchemaConstants.DOCUMENTATION);
+    //}
     
     MetaDataBase(String name){
         this.name = name;

@@ -13,10 +13,10 @@ import org.w3c.dom.Element;
  */
 public class MetaDataAlternatives extends HasChildrenMetaData implements MetaData{
 
-    public MetaDataAlternatives(Element element) throws MetaDataException {
-        super(element);
-        String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
-    }
+    //public MetaDataAlternatives(Element element) throws MetaDataException {
+    //    super(element);
+    //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
+    //}
     
     public MetaDataAlternatives(MetaDataAlternatives other){
         super(other);

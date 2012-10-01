@@ -17,9 +17,9 @@ import org.w3c.dom.Element;
  */
 public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
 
-    public MetaDataGroup(Element element) throws MetaDataException {
-        super(element);
-    }
+    //public MetaDataGroup(Element element) throws MetaDataException {
+    //    super(element);
+    //}
     
     public MetaDataGroup(MetaDataGroup other){
         super(other);

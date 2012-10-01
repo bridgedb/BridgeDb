@@ -32,15 +32,15 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private final Set<Statement> rawRDF = new HashSet<Statement>();
     private final boolean specifiedProperty;
     
-    public PropertyMetaData(Element element) throws MetaDataException {
-        super(element);
-        String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
-        predicate = new URIImpl(predicateSt);
-        String objectClass = element.getAttribute(SchemaConstants.CLASS);
-        metaDataType = getMetaDataType(objectClass, element);
-        String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
-        specifiedProperty = true;
-    }
+    //public PropertyMetaData(Element element) throws MetaDataException {
+    //    super(element);
+    //    String predicateSt = element.getAttribute(SchemaConstants.PREDICATE);
+    //    predicate = new URIImpl(predicateSt);
+    //    String objectClass = element.getAttribute(SchemaConstants.CLASS);
+    //   metaDataType = getMetaDataType(objectClass, element);
+    //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
+    //    specifiedProperty = true;
+    //}
     
     public static PropertyMetaData getUnspecifiedProperty(URI predicate){
         PropertyMetaData result = new PropertyMetaData(predicate);

@@ -27,12 +27,12 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
     private boolean isParent = false;
     
-    ResourceMetaData(Element element) throws MetaDataException {
-        super(element);
-        childMetaData.add(PropertyMetaData.getTypeProperty());
-        String typeSt = element.getAttribute(SchemaConstants.TYPE);
-        type = new URIImpl(typeSt);
-    }
+    //ResourceMetaData(Element element) throws MetaDataException {
+    //    super(element);
+    //    childMetaData.add(PropertyMetaData.getTypeProperty());
+    //    String typeSt = element.getAttribute(SchemaConstants.TYPE);
+    //    type = new URIImpl(typeSt);
+    //}
     
     /*public static ResourceMetaData getUntypedResource(Resource id){
         String name;
