@@ -2,49 +2,33 @@ package org.bridgedb;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
-import org.bridgedb.BridgeDb;
-import org.bridgedb.DataSource;
-import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperStack;
-import org.bridgedb.Xref;
 import junit.framework.TestCase;
 
 public class IDMapperStackTest extends TestCase 
 {
-	public static HashMap<String, IDMapper> Mappers;
-	public static String FILENAMES [] = { "AB", "BC", "CD", "DE", "XY", "XZ", "YW", "YZ" };
+	public static Map<String, IDMapper> mappers;
+	public static final String FILENAMES [] = { "AB", "BC", "CD", "DE", "XY", "XZ", "YW", "YZ" };
 	private static IDMapperStack stack;
 	
-	private static DataSource dsW, dsX, dsY, dsZ, dsA, dsE;
+	private static DataSource dsW, dsX, dsY, dsZ, dsA, dsE, dsB, dsC, dsD;
 	
-	protected void setUp() throws Exception 
+	protected void setUp() throws ClassNotFoundException, IDMapperException
 	{
-		super.setUp();
+		Class.forName("org.bridgedb.file.IDMapperText");
 			
-		try {
-			Class.forName("org.bridgedb.file.IDMapperText");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-		Mappers = new HashMap<String,IDMapper>();
+		mappers = new HashMap<String,IDMapper>();
 		stack = new IDMapperStack();
 		stack.setTransitive(true);
 		
 		for (String fileName : FILENAMES) {                  // Load all IDMappers for test data files
 			URL url = IDMapperStackTest.class.getResource("/org/bridgedb/" + fileName + ".csv");
-			try {
-				IDMapper m = BridgeDb.connect("idmapper-text:" + url);
-				Mappers.put(fileName, m);
-				stack.addIDMapper(m);
-			} catch (IDMapperException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			IDMapper m = BridgeDb.connect("idmapper-text:" + url);
+			mappers.put(fileName, m);
+			stack.addIDMapper(m);
 		}
 		
 		dsW = DataSource.getByFullName("W");
@@ -52,29 +36,24 @@ public class IDMapperStackTest extends TestCase
 		dsY = DataSource.getByFullName("Y");
 		dsZ = DataSource.getByFullName("Z");
 		dsA = DataSource.getByFullName("A");
+		dsB = DataSource.getByFullName("B");
+		dsC = DataSource.getByFullName("C");
+		dsD = DataSource.getByFullName("D");
 		dsE = DataSource.getByFullName("E");
 	}
-	
-	public void testRebuildDataStack() throws IDMapperException 
-	{
-		stack.rebuildDataSourcesMap();
-		assertTrue( true );
-	}
-	
-	
+		
 	public void testMapIDXrefDataSourceArray() throws IDMapperException {
 				
 		Xref src = new Xref ("e1", dsE );
 		Set<Xref> results = stack.mapID(src);
 		System.out.println("src Xref: " + src);
-		System.out.println("results.size(): " + results.size());
-		for( Xref x : results ) {
-			System.out.println(x);
-		}
+		assertEquals (4, results.size());
+		assertTrue (results.contains (new Xref("a1", dsA)));
+		assertTrue (results.contains (new Xref("b1", dsB)));
+		assertTrue (results.contains (new Xref("c1", dsC)));
+		assertTrue (results.contains (new Xref("d1", dsD)));
 		assertTrue(true);
 	}
-	
-	
 	
 	public void testSimpleMapID() throws IDMapperException{
 		
@@ -90,8 +69,8 @@ public class IDMapperStackTest extends TestCase
 	}
 	
 	public void testMapID_A_to_E () throws IDMapperException 
-	{
-		Xref src = new Xref ("a1", dsX );
+	{		
+		Xref src = new Xref ("a1", dsA );
 		Set<Xref> results = stack.mapID( src, dsE );		
 		System.out.println("results.size(): " + results.size());
 		for( Xref x : results ) {
@@ -109,12 +88,17 @@ public class IDMapperStackTest extends TestCase
 		assertTrue (results.contains (new Xref("w2", dsW )));
 	}
 	
+	/** do an untargetted mapping */
 	public void testMapID_all () throws IDMapperException
 	{
 		Xref src = new Xref ("x2", dsX );
-		Set<Xref> results = stack.mapID( src );		
-		assertEquals (2, results.size());
+		Set<Xref> results = stack.mapID( src );
+		System.out.println ("RESULTS");
+		for (Xref ref : results)
+			System.out.println (ref);
+		assertEquals (3, results.size());
 		assertTrue (results.contains (new Xref("y2", dsY )));
+		assertTrue (results.contains (new Xref("z2", dsZ )));
 		assertTrue (results.contains (new Xref("w2", dsW )));
 	}
 
