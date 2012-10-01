@@ -30,23 +30,22 @@ public class EnsemblCompatibilityMapper implements IDMapper
 		
 		if (!allDataSources.contains(ref.getDataSource())) return result;
 		
-		if (tgtDataSources == null || tgtDataSources.length == 0 ||
-				Arrays.asList(tgtDataSources).contains(BioDataSource.ENSEMBL))
+		Set<DataSource> dest = new HashSet<DataSource>();
+		
+		// either from old to new or new to old, but not both at the same time...
+		if (ref.getDataSource() == BioDataSource.ENSEMBL)
+			dest.addAll (oldDataSources);
+		else
+			dest.add(BioDataSource.ENSEMBL);	
+		
+		// keep only tgtDataSources that were asked for, if defined
+		if (tgtDataSources != null && tgtDataSources.length > 0)
+			dest.retainAll(Arrays.asList(tgtDataSources));
+		
+		for (DataSource ds : dest)
 		{
-			for (DataSource ds : allDataSources)
-			{
-				if (ds == ref.getDataSource()) continue;
-				result.add(new Xref(ref.getId(), ds));
-			}
-		}
-		else	
-		{
-			for (DataSource ds : tgtDataSources)
-			{
-				if (ds == ref.getDataSource()) continue;
-				if (!allDataSources.contains(ds)) continue;
-				result.add(new Xref(ref.getId(), ds));
-			}
+			if (ds == ref.getDataSource()) continue;
+			result.add(new Xref(ref.getId(), ds));
 		}
 		
 		return result;
@@ -101,9 +100,9 @@ public class EnsemblCompatibilityMapper implements IDMapper
 			@Override
 			public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException
 			{
-				return (allDataSources.contains(src)
-						&& 
-						allDataSources.contains(tgt));
+				return (oldDataSources.contains(src) && tgt == BioDataSource.ENSEMBL)
+						||
+					(oldDataSources.contains(tgt) && src == BioDataSource.ENSEMBL);
 			}
 			
 			@Override
@@ -152,4 +151,9 @@ public class EnsemblCompatibilityMapper implements IDMapper
 		return !closed;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "old-ensembl-systemcode-compatbility-mapper";
+	}
 }
