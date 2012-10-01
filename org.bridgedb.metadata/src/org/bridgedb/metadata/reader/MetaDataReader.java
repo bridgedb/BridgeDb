@@ -24,7 +24,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class MetaDataReader {
     
-    public String readMetaData(String fileName, RdfStoreType rdfStoreType) throws MetaDataException, RdfException{
+ /*   public String readMetaData(String fileName, RdfStoreType rdfStoreType) throws MetaDataException, RdfException{
         File input = new File(fileName);
         String validatebase = RdfController.getValidateBase();
         Set<Statement> statements = StatementReader.extractStatements(input, validatebase);
@@ -41,5 +41,5 @@ public class MetaDataReader {
         String loadSummary = "Loaded " + context + "\n";
         String summary = metaData.summary();
         return loadSummary + summary;
-    }
+    }*/
 }

@@ -126,7 +126,10 @@ public class MetaDataTestBase extends TestUtils{
     Statement subjectStatement = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D1_ID);
     Statement objectStatement = new StatementImpl(LINK_ID, VoidConstants.OBJECTSTARGET, D2_ID);
 
-    public MetaDataTestBase() throws DatatypeConfigurationException {
+    MetaDataRegistry dataSetRegistry;
+    MetaDataRegistry linksetSetRegistry;
+            
+    public MetaDataTestBase() throws DatatypeConfigurationException, MetaDataException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         Value now = new CalendarLiteralImpl(date2);
@@ -135,7 +138,8 @@ public class MetaDataTestBase extends TestUtils{
         d1RetreivedOn = new StatementImpl(D1_ID, PavConstants.RETRIEVED_ON, now);          
         d2ImportedOnStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_ON, now);          
         linkAuthoredOnStatement = new StatementImpl(LINK_ID, PavConstants.AUTHORED_ON, now);  
-        linkCreatedOnStatement = new StatementImpl(LINK_ID, PavConstants.CREATED_ON, now);  
+        linkCreatedOnStatement = new StatementImpl(LINK_ID, PavConstants.CREATED_ON, now);
+        dataSetRegistry = new MetaDataRegistry("file:resources/shouldOwl.owl");
     }
 
     private void addStatement(Set<Statement> data, Statement statement){

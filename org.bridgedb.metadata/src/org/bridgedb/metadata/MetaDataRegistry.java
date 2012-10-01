@@ -34,8 +34,11 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLNaryBooleanClassExpression;
 import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
+import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -127,23 +130,46 @@ public class MetaDataRegistry {
     private MetaDataBase parseExpression(OWLClassExpression expr) throws MetaDataException {
         System.out.println(expr);
         System.out.println("  class = " + expr.getClass());
-        URI predicate;
-        OWLPropertyRange range;
         if (expr instanceof OWLQuantifiedRestriction){
-           OWLQuantifiedRestriction owlQuantifiedRestriction = (OWLQuantifiedRestriction) expr;
-           range = owlQuantifiedRestriction.getFiller();
-           System.out.println("  range = " + range);
-        } else {
-            throw new MetaDataException ("Unexpected expression " + expr);
+            return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr);
         }
-        if (expr instanceof OWLRestriction){
-           OWLRestriction restriction = (OWLRestriction) expr;
-           OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
-           predicate = toURI(owlPropertyExpression);
-           System.out.println("  predicate = " + predicate);
-        } else {
-            throw new MetaDataException ("Unexpected expression " + expr);
+        if (expr instanceof OWLNaryBooleanClassExpression){
+            return parseOWLNaryBooleanClassExpression ((OWLNaryBooleanClassExpression) expr);
         }
+        throw new MetaDataException("Unexpected expression." + expr);
+    }
+        
+    private MetaDataBase parseOWLNaryBooleanClassExpression(OWLNaryBooleanClassExpression expression) throws MetaDataException{
+        ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
+        Set<OWLClassExpression> operands = expression.getOperands();
+        for (OWLClassExpression expr:operands){
+            MetaDataBase child = parseExpression(expr);
+            children.add(child);
+        }
+        if (expression instanceof OWLObjectIntersectionOf){
+            String name = children.get(0).name;
+            for (int i = 1; i < children.size(); i++){
+                name = name + " and " + children.get(i).name;
+            }
+            return new MetaDataGroup(name, children);
+        } 
+        if (expression instanceof OWLObjectUnionOf){
+            String name = children.get(0).name;
+            for (int i = 1; i < children.size(); i++){
+                name = name + " or " + children.get(i).name;
+            }
+            return new MetaDataAlternatives(name, children);
+        } 
+        throw new MetaDataException("Unexpected expression." + expression);
+    }
+    
+    private PropertyMetaData parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction) throws MetaDataException{
+        URI predicate;
+        OWLPropertyRange range = restriction.getFiller();
+        System.out.println("  range = " + range);
+        OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
+        predicate = toURI(owlPropertyExpression);
+        System.out.println("  predicate = " + predicate);
         return new PropertyMetaData(predicate, range.toString());
     }
 

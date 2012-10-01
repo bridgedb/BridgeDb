@@ -23,13 +23,13 @@ import org.openrdf.model.impl.URIImpl;
 @Ignore
 public class DataSetMetaDataTest extends MetaDataTestBase{
     
-    public DataSetMetaDataTest() throws DatatypeConfigurationException{        
+    public DataSetMetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
     }
     
     @Test
     public void testShowAll() throws MetaDataException{
         Reporter.report("ShowAll");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         String showAll = metaData.showAll();
         //ystem.out.println(showAll);
     } 
@@ -37,14 +37,14 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     @Test
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("HasRequiredValues");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testAutoFindId() throws MetaDataException{
         Reporter.report("AutoFindId");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         checkRequiredValues(metaData);
     } 
 
@@ -52,7 +52,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testMissingRequiredValue() throws MetaDataException{
         Reporter.report("HasMissingRequiredValues");
         d1LlicenseStatement = null;
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         checkRequiredValues(metaData);
     } 
 
@@ -60,7 +60,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testAlternative1MissingRequiredValue() throws MetaDataException{
         Reporter.report("HasMissingRequiredValues");
         d1PublishedStatement = null;
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         checkRequiredValues(metaData);
     } 
 
@@ -69,14 +69,14 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Reporter.report("HasMissingRequiredValues");
         d1PublishedStatement = null;
         d1RetreivedOn = null;
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         assertFalse(metaData.hasRequiredValues());
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("HasCorrectTypes");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         checkCorrectTypes(metaData);
     }
     
@@ -84,14 +84,14 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testHasCorrectTypesBadDate() throws MetaDataException{
         Reporter.report("isHasCorrectTypesBadDate");
         d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         assertFalse(metaData.hasCorrectTypes());
     }
  
     @Test
     public void testValidityReport() throws MetaDataException{
         Reporter.report("ValidityReport");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(INCLUDE_WARNINGS));
     }
 
@@ -99,7 +99,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testMissingValidityReport() throws MetaDataException{
         Reporter.report("MissingValidityReport");
         d1TitleStatement = null;
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(INCLUDE_WARNINGS));
     }
 
@@ -107,7 +107,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testGroupValidityReport() throws MetaDataException{
         Reporter.report("MissingValidityReport");
         d1ModifiedStatement = null;
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());        
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);        
         assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(INCLUDE_WARNINGS));
         assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
     }
@@ -117,14 +117,14 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Reporter.report("MissingValidityReport");
         d1ModifiedStatement = null;
         d1RetreivedOn = null;
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());        
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);        
         assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
     }
     
     @Test
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         checkAllStatementsUsed(metaData);
     }
     
@@ -135,7 +135,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Statement unusedStatement = 
                 new StatementImpl(D1_ID, new URIImpl("http://www.example.org/NotARealURI"), NAME_SPACE_VALUE);
         data.add(unusedStatement);
-        MetaDataCollection metaData = new MetaDataCollection(data);
+        MetaDataCollection metaData = new MetaDataCollection(data, dataSetRegistry);
         assertFalse(metaData.allStatementsUsed());
     }
 
@@ -146,7 +146,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Statement unusedStatement = new StatementImpl(
                 new URIImpl("http://www.example.org/NotARealURI"), DctermsConstants.TITLE, NAME_SPACE_VALUE);
         data.add(unusedStatement);
-        MetaDataCollection metaData = new MetaDataCollection(data);
+        MetaDataCollection metaData = new MetaDataCollection(data, dataSetRegistry);
         assertFalse(metaData.allStatementsUsed());
     }
 
@@ -154,7 +154,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testGetRDF() throws MetaDataException{
         Reporter.report("getRdf");
         Set<Statement> data = loadDataSet1();
-        MetaDataCollection metaData = new MetaDataCollection(data);
+        MetaDataCollection metaData = new MetaDataCollection(data, dataSetRegistry);
         Set<Statement> rewriteData = metaData.getRDF();
         assertEquals(loadDataSet1(), rewriteData);
     }

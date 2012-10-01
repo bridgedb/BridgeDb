@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import java.util.List;
 import org.bridgedb.metadata.constants.SchemaConstants;
 import org.w3c.dom.Element;
 
@@ -17,6 +18,10 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     //    super(element);
     //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
     //}
+    
+    public MetaDataAlternatives(String name, List<MetaDataBase> childMetaData){
+        super(name, childMetaData);
+    }
     
     public MetaDataAlternatives(MetaDataAlternatives other){
         super(other);

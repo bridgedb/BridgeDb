@@ -17,41 +17,41 @@ import static org.junit.Assert.*;
 @Ignore
 public class LinkSetMetaDataTest extends MetaDataTestBase{
     
-    public LinkSetMetaDataTest() throws DatatypeConfigurationException{        
+    public LinkSetMetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
     }
     
     @Test
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("Linkset HasRequiredValues");
-        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("Linkset HasCorrectTypes");
-        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);
         checkCorrectTypes(metaData);
     }
  
     @Test
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("LinkSet AllStatementsUsed");
-        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);
         checkAllStatementsUsed(metaData);
     }
 
     @Test
     public void testValidateOk() throws MetaDataException{
         Reporter.report("LinkSet Validate OK");
-        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);
         metaData.validate();
     }
 
     @Test
     public void testSummary() throws MetaDataException{
         Reporter.report("LinkSet Summary");
-        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet());
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);
         String expected = "Linkset Void id http://www.example.com/test/linkset1 OK!\n"
                 + "Dataset void id http://www.example.com/test/dataset2 OK!\n"
                 + "Dataset void id http://www.example.com/test/dataset1 OK!\n";

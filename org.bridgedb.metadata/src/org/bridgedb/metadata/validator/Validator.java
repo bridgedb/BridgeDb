@@ -19,7 +19,7 @@ import org.openrdf.rio.RDFFormat;
  */
 public class Validator {
     
-    static public void main(String[] arg) throws MetaDataException {
+ /*   static public void main(String[] arg) throws MetaDataException {
         if (arg.length == 0 || arg.length > 3){
             usage();
         }
@@ -40,7 +40,7 @@ public class Validator {
         MetaDataCollection metaData = new MetaDataCollection(statements);
         Reporter.report(metaData.validityReport(true));
     }
-
+*/
     private static void usage() {
         Reporter.report("Welecome to the Void Validator.");
         Reporter.report("Please run it again with three parameters");

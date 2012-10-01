@@ -17,27 +17,27 @@ import static org.junit.Assert.*;
 @Ignore
 public class DataSet2MetaDataTest extends MetaDataTestBase{
     
-    public DataSet2MetaDataTest() throws DatatypeConfigurationException{        
+    public DataSet2MetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
     }
     
     @Test
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("HasRequiredValues");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2(), dataSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("HasCorrectTypes");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2(), dataSetRegistry);
         checkCorrectTypes(metaData);
     }
 
     @Test
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2());
+        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2(), dataSetRegistry);
         checkAllStatementsUsed(metaData);
     }
 
