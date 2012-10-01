@@ -298,7 +298,7 @@ public class OwlFileTester
         //testOwl("http://voag.linkedmodel.org/schema/voag#");
 //        testOwl("file:resources/voag.rdf");
         
-        //@prefix void: <http://rdfs.org/ns/void#> .
+        // .
         //testOwl("http://rdfs.org/ns/void#");
 //        testOwl("file:resources/void.rdf");
         
@@ -308,7 +308,7 @@ public class OwlFileTester
         
 //        slide26();
         
-        readOwl("file:resources/myops.owl");
+        readOwl("file:resources/shouldOwl.owl");
     }
  /*
      * 

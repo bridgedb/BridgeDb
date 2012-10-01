@@ -21,13 +21,13 @@ import org.w3c.dom.Element;
  *
  * @author Christian
  */
-public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
+public class OldResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     private final URI type;
-    private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
+    private final Set<OldResourceMetaData> parents = new HashSet<OldResourceMetaData>();
     private boolean isParent = false;
 
-    ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
+    OldResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
         super(type.stringValue(), childMetaData);
         this.type = type;
     }
@@ -49,7 +49,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return new ResourceMetaData(name);
     }*/
     
-    private ResourceMetaData(ResourceMetaData other) {
+    private OldResourceMetaData(OldResourceMetaData other) {
         super(other);
         this.type = other.type;
     }
@@ -107,8 +107,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return type;
     }
 
-    public ResourceMetaData getSchemaClone() {
-        return new ResourceMetaData(this);
+    public OldResourceMetaData getSchemaClone() {
+        return new OldResourceMetaData(this);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         }
     }
     
-    void addParent(ResourceMetaData parent) {
+    void addParent(OldResourceMetaData parent) {
         parents.add(parent);
         Set<LeafMetaData> leaves = getLeaves();
         for (LeafMetaData leaf: leaves){

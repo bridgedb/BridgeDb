@@ -33,7 +33,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     MetaDataRegistry metaDataRegistry;
     
     public MetaDataCollection(Set<Statement> statements) throws MetaDataException {
-        metaDataRegistry = new MetaDataRegistry();
+        metaDataRegistry = new MetaDataRegistry(null);
         Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
         Set<Resource> ids = findIds(statements);
         for (Resource id:ids){

@@ -8,7 +8,9 @@ import org.bridgedb.metadata.constants.SchemaConstants;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.bridgedb.linkset.constants.OwlConstants;
 import org.bridgedb.metadata.constants.RdfConstants;
+import org.bridgedb.metadata.constants.RdfsConstants;
 import org.bridgedb.metadata.constants.XsdConstants;
 import org.bridgedb.metadata.type.*;
 import org.openrdf.model.Resource;
@@ -41,6 +43,13 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
     //    specifiedProperty = true;
     //}
+    
+    public PropertyMetaData(URI predicate, String objectClass) throws MetaDataException{
+        super(predicate.getLocalName());
+        this.predicate = predicate;
+        metaDataType = getMetaDataType(objectClass);
+        specifiedProperty = true;
+    }
     
     public static PropertyMetaData getUnspecifiedProperty(URI predicate){
         PropertyMetaData result = new PropertyMetaData(predicate);
@@ -86,24 +95,27 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }  
     }
 
-    private MetaDataType getMetaDataType(String objectClass, Element element) throws MetaDataException{
-        if (SchemaConstants.CLASS_ALLOWED_URIS.equalsIgnoreCase(objectClass)){
-            return new AllowedUriType(element);
-        }
-        if (SchemaConstants.CLASS_ALLOWED_VALUES.equalsIgnoreCase(objectClass)){
-            return new AllowedValueType(element);
-        }
-        if (SchemaConstants.CLASS_DATE.equalsIgnoreCase(objectClass)){
-            return new DateType();
-        }
-        if (SchemaConstants.CLASS_INTEGER.equalsIgnoreCase(objectClass)){
-            return new IntegerType();
-        }
-        if (SchemaConstants.CLASS_STRING.equalsIgnoreCase(objectClass)){
-            return new StringType();
-        }
-        if (SchemaConstants.CLASS_URI.equalsIgnoreCase(objectClass)){
+    private MetaDataType getMetaDataType(String objectClass) throws MetaDataException{
+        //if (SchemaConstants.CLASS_ALLOWED_URIS.equalsIgnoreCase(objectClass)){
+        //    return new AllowedUriType(element);
+        //}
+        //if (SchemaConstants.CLASS_ALLOWED_VALUES.equalsIgnoreCase(objectClass)){
+        //    return new AllowedValueType(element);
+        //}
+        //if (SchemaConstants.CLASS_DATE.equalsIgnoreCase(objectClass)){
+        //    return new DateType();
+        // }
+        //if (SchemaConstants.CLASS_INTEGER.equalsIgnoreCase(objectClass)){
+        //    return new IntegerType();
+        //}
+        //if (SchemaConstants.CLASS_STRING.equalsIgnoreCase(objectClass)){
+        //    return new StringType();
+        //}
+        if (OwlConstants.THING.equalsIgnoreCase(objectClass)){
             return new UriType();
+        }
+        if (RdfsConstants.LITERAL.equalsIgnoreCase(objectClass)){
+            return new LiteralType();
         }
         if (objectClass.startsWith(XsdConstants.PREFIX)){
             return new XsdType(objectClass);
@@ -148,7 +160,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         newLine(builder, tabLevel + 1);
         if (specifiedProperty){
             builder.append("class ");
-            builder.append(metaDataType);        
+            builder.append(metaDataType.getCorrectType());        
             newLine(builder);
         } else {
             builder.append("Unspecified RDF found in the data. ");

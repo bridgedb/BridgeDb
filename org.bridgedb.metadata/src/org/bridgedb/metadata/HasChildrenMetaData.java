@@ -27,6 +27,11 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     //    childMetaData = MetaDataRegistry.getChildMetaData(element);
     //}
 
+    HasChildrenMetaData(String name, List<MetaDataBase> childMetaData){
+        super(name);
+        this.childMetaData = childMetaData;
+    }
+    
     HasChildrenMetaData(HasChildrenMetaData other){
         super(other);
         childMetaData = new ArrayList<MetaDataBase>();

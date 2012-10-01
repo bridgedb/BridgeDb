@@ -16,24 +16,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.bridgedb.linkset.constants;
-
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
+package org.bridgedb.metadata.constants;
 
 /**
  *
  */
-public class OwlConstants {
+public class RdfsConstants {
 
-    private static final String xmlschemans = "http://www.w3.org/2002/07/owl#";
-    
-    public static final URI EQUIVALENT_CLASS = new URIImpl(xmlschemans + "equivalentClass");
-    public static final URI SAME_AS = new URIImpl(xmlschemans + "sameAs");
-    public static final String THING = "owl:Thing";
-
+    public static final String LITERAL = "rdfs:Literal";
 }

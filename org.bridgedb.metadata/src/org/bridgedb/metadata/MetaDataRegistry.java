@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -27,6 +28,21 @@ import org.bridgedb.metadata.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLObject;
+import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLPropertyExpression;
+import org.semanticweb.owlapi.model.OWLPropertyRange;
+import org.semanticweb.owlapi.model.OWLQuantifiedRestriction;
+import org.semanticweb.owlapi.model.OWLRestriction;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,10 +56,50 @@ import org.xml.sax.SAXException;
  * @author Christian
  */
 public class MetaDataRegistry {
+    private OWLOntology ontology;
     
     Map<URI, ResourceMetaData> resourcesByType;
    // Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
     static String documentationRoot = "";
+    private static String THING_ID = "http://www.w3.org/2002/07/owl#Thing";
+        
+    public MetaDataRegistry(String location) throws MetaDataException{
+        resourcesByType = new HashMap<URI, ResourceMetaData>();
+        OWLOntologyManager m = OWLManager.createOWLOntologyManager();
+        IRI pav = IRI.create(location);
+        try {
+            ontology = m.loadOntologyFromOntologyDocument(pav);
+        } catch (OWLOntologyCreationException ex) {
+            Logger.getLogger(MetaDataRegistry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Set<OWLClass> theClasses = ontology.getClassesInSignature();
+        for (OWLClass theClass:theClasses){
+            String id = theClass.toStringID();
+             if (id.equals(THING_ID)){
+                //ignore thing;
+            } else {
+                URI type = new URIImpl(id);
+                List<MetaDataBase> childMetaData = getChildren(theClass);
+                ResourceMetaData resourceMetaData = new ResourceMetaData(type, childMetaData);
+                resourcesByType.put(type, resourceMetaData);
+             }
+        }
+    }
+    
+    private URI toURI(OWLObject object) throws MetaDataException{
+        OWLEntity entity;
+        if (object instanceof OWLEntity){
+            entity = (OWLEntity)object;
+        } else {
+            Set<OWLEntity> signature = object.getSignature();
+            if (signature.size() != 1){
+                throw new MetaDataException ("Object " + object + " has unexpected signature " + signature);
+            }
+            entity = signature.iterator().next();
+        }
+        String id = entity.toStringID();
+        return new URIImpl(id);
+    }
     
     public ResourceMetaData getResourceByType(Value type) throws MetaDataException{
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
@@ -54,124 +110,49 @@ public class MetaDataRegistry {
         }
     }
    
-    //public ResourceMetaData getResourceByID(Resource id) {
-    //    return resourcesById.get(id);
-    //}
-    
-    //public void registerResource (ResourceMetaData resourceMetaData){
-    //    resourcesById.put(resourceMetaData.id, resourceMetaData);
-    //}
-            
-    
     public static String getDocumentationRoot(){
         return documentationRoot;
     }
     
-    private static List<Element> getChildElements(Element parent) throws MetaDataException{
-        ArrayList<Element> children = new ArrayList<Element>();
-        NodeList list = parent.getChildNodes();
-        for (int i=0; i<list.getLength(); i++) {
-            Node node = list.item(i);
-            if (node instanceof Element){
-                children.add((Element)node);
-            } else if (node instanceof Text) {
-                String check = ((Text)node).getWholeText();
-                check = check.trim();
-                if (!check.isEmpty()){
-                    throw new MetaDataException("found non empty text " + check); 
-                }
-            } else if (node instanceof Comment) {
-                //comments can of course be ignored
-            } else {
-                throw new MetaDataException("found non element" + node + node.getClass());            
-            }
+    private List<MetaDataBase> getChildren(OWLClass theClass) throws MetaDataException {
+        ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
+        Set<OWLClassExpression> exprs = theClass.getSuperClasses(ontology);
+        for (OWLClassExpression expr:exprs){
+            MetaDataBase child = parseExpression(expr);
+            children.add(child);
         }
         return children;
     }
-    
-    /*private static List<MetaDataBase> getMetaData(List<Element> elements) throws MetaDataException{
-        ArrayList<MetaDataBase> metaDatas = new ArrayList<MetaDataBase>();
-        for (Element element:elements){
-            String tagName = element.getTagName();
-            if (tagName.equals(SchemaConstants.RESOURCE)){
-                metaDatas.add(new ResourceMetaData(element));
-            } else if (tagName.equals(SchemaConstants.PROPERTY)){
-                metaDatas.add(new PropertyMetaData(element));
-            } else if (tagName.equals(SchemaConstants.GROUP)){
-                metaDatas.add(new MetaDataGroup(element));
-            } else if (tagName.equals(SchemaConstants.ALTERNATIVES)){
-                metaDatas.add(new MetaDataAlternatives(element));
-            } else if (tagName.equals(SchemaConstants.LINKED_RESOURCE)){
-                metaDatas.add(new LinkedResource(element));
-            } else if (tagName.equals(SchemaConstants.DOCUMENTATION_ROOT)){
-                documentationRoot = element.getFirstChild().getTextContent();
-            } else {
-                throw new MetaDataException ("Unexpected Element with tagName " + tagName); 
-            }
-        }
-        return metaDatas;
-    }*/
 
-    //TODO work this out more including looking in configs
-    private static InputStream findXmlStream() throws MetaDataException {
-        InputStream test = getInputStreamFromPath("metadata.xml");
-        if (test != null) { 
-            return test;
+    private MetaDataBase parseExpression(OWLClassExpression expr) throws MetaDataException {
+        System.out.println(expr);
+        System.out.println("  class = " + expr.getClass());
+        URI predicate;
+        OWLPropertyRange range;
+        if (expr instanceof OWLQuantifiedRestriction){
+           OWLQuantifiedRestriction owlQuantifiedRestriction = (OWLQuantifiedRestriction) expr;
+           range = owlQuantifiedRestriction.getFiller();
+           System.out.println("  range = " + range);
+        } else {
+            throw new MetaDataException ("Unexpected expression " + expr);
         }
-        test = getInputStreamFromPath("resources/metadata.xml");
-        if (test != null) { 
-            return test;
+        if (expr instanceof OWLRestriction){
+           OWLRestriction restriction = (OWLRestriction) expr;
+           OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
+           predicate = toURI(owlPropertyExpression);
+           System.out.println("  predicate = " + predicate);
+        } else {
+            throw new MetaDataException ("Unexpected expression " + expr);
         }
-        test = getInputStreamFromResource("metadata.xml");
-        if (test != null) { 
-            return test;
-        }
-        test = getInputStreamFromJar("metadata.xml");
-        if (test != null) { 
-            return test;
-        }
-        throw new MetaDataException("Unable to find the metadata.xml file");
-    }
-    
-    private static InputStream getInputStreamFromPath(String filePath){
-        File file = new File(filePath);
-        if (file.isFile()) {
-            try {
-                InputStream stream = new FileInputStream(file);
-                return stream;
-            } catch (FileNotFoundException ex) {
-                Reporter.report(ex.toString());
-            }
-        }
-        return null;
+        return new PropertyMetaData(predicate, range.toString());
     }
 
-    private static InputStream getInputStreamFromResource(String resourcePath){
-        java.net.URL url = MetaDataRegistry.class.getResource(resourcePath);
-        if (url != null){
-            String fileName = url.getFile();
-            return getInputStreamFromPath(fileName);
-        }
-        return null;
-    }
 
-    private static InputStream getInputStreamFromJar(String name){
-        ZipInputStream zip = null;
-        try {
-            CodeSource src = MetaDataRegistry.class.getProtectionDomain().getCodeSource();
-            URL jar = src.getLocation();
-            zip = new ZipInputStream( jar.openStream());
-            ZipEntry ze = null;
-            while( ( ze = zip.getNextEntry() ) != null ) {
-                if (name.equals(ze.getName())){
-                    return zip;
-                }
-            }
-            return null;
-        } catch (IOException ex) {
-            Logger.getLogger(MetaDataRegistry.class.getName()).log(Level.SEVERE, null, ex);
+    public static void main( String[] args ) throws MetaDataException 
+    {
+        MetaDataRegistry test = new MetaDataRegistry("file:resources/shouldOwl.owl");
+        for (ResourceMetaData resource:test.resourcesByType.values()){
+            System.out.println(resource.Schema());
         }
-        //NOTE: Stream must be left OPEN!
-        return null;
     }
 }
