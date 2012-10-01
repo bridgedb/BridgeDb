@@ -49,6 +49,8 @@ import org.bridgedb.url.URLMapping;
 public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener {
 
     private static final int URI_SPACE_LENGTH = 100;
+    private PreparedStatement profileQuery = 
+    		createPreparedStatement("SELECT justificationURI FROM profileJustifications WHERE profileId = ?");
 
     /**
      * Creates a new URLMapper including BridgeDB implementation based on a connection to the SQL Database.
@@ -124,9 +126,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Set<String> mapURL(String URL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
-    	if (!profileURL.equals("0")) throw new BridgeDbSqlException("Only profile permitted is 0");
         StringBuilder query = new StringBuilder("SELECT targetId as id, target.uriSpace as uriSpace ");
-        finishMappingQuery(query, URL, targetURISpaces); 
+        finishMappingQuery(query, URL, profileURL, targetURISpaces); 
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -153,9 +154,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      *
      * @param query Query with the select clause only
 	 * @param sourceURL the sourceURL to get mappings/cross-references for.
+     * @param profileURL the URL of the profile to use
      * @param target URISpaces
+     * @throws BridgeDbSqlException profile does not exist
      */
-    private void finishMappingQuery(StringBuilder query, String sourceURL, String... targetURISpaces) {
+    private void finishMappingQuery(StringBuilder query, String sourceURL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
         //ystem.out.println("mapping: " + sourceURL);
         String id = getId(sourceURL);
         String uriSpace = getUriSpace(sourceURL);
@@ -180,14 +183,33 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             }
             query.append(")");
         }
+         if (!profileURL.equals("0")) query.append(addProfileClause(profileURL));
     }
 
-    @Override
-    public Set<URLMapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
-    	if (!profileURL.equals("0")) throw new BridgeDbSqlException("Only profile permitted is 0");
+    /**
+     * Adds the WHERE clause conditions for ensuring that the returned mappings
+     * are from active linksets.
+     * 
+     * @param profileURL URL of the profile to use
+     * @return where clause condition as a string
+     * @throws BridgeDbSqlException if the profile does not exist
+     */
+    private String addProfileClause(String profileURL) throws BridgeDbSqlException {
+    	try {
+			profileQuery.setString(1, profileURL);
+			ResultSet rs = profileQuery.executeQuery();
+			if (!rs.next()) throw new BridgeDbSqlException("Unknown profile identifier " + profileURL);
+		} catch (SQLException ex) {
+			throw new BridgeDbSqlException("Error retrieving profile justifications for profileId " + profileURL, ex);
+		}
+		return "";
+	}
+
+	@Override
+    public Set<URLMapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {    	
         StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
         query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
-        finishMappingQuery(query, URL, targetURISpaces); 
+        finishMappingQuery(query, URL, profileURL, targetURISpaces); 
         Statement statement = this.createStatement();
         ResultSet rs;
         try {

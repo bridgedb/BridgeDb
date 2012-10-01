@@ -58,4 +58,10 @@ public class SQLUrlMapperTest extends URLMapperTestBase {
 		assertEquals(1, mapURL.size());
 	}
 
+	@Test
+	public void testGetMappingProfileValid() throws BridgeDbSqlException {
+		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, "1");
+		assertEquals(1, mapURL.size());
+	}
+
 }
