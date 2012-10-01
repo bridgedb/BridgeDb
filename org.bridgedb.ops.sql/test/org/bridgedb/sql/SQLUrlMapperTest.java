@@ -7,24 +7,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.url.URLMapperTestBase;
+import org.bridgedb.url.URLListenerTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SQLUrlMapperTest extends URLMapperTestBase {
-	
+public class SQLUrlMapperTest extends URLListenerTest {
+		
 	private static SQLAccess sqlAccess;
 	private static SQLUrlMapper sqlUrlMapper;
-	
+
 	@BeforeClass
 	public static void beforeClassInitialisation() throws IDMapperException {
 		sqlAccess = TestSqlFactory.createTestSQLAccess();
-		sqlUrlMapper = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+		listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+		loadData();
+		sqlUrlMapper = (SQLUrlMapper) listener;
 	}
 	
 	private void validateResult(String query, int expectedResult)
@@ -40,16 +43,26 @@ public class SQLUrlMapperTest extends URLMapperTestBase {
 	@Test
 	public void testRegisterProfile() throws IDMapperException, SQLException {
 		List<String> justificationUris = new ArrayList<String>();
-		justificationUris.add("http://www.example.com/test#predicate");
+		justificationUris.add(TEST_JUSTIFICATION1);
 		sqlUrlMapper.registerProfile("2012-09-28 16:02", "http://www.cs.man.ac.uk/~graya/me.ttl", justificationUris);
 		validateResult("SELECT COUNT(*) FROM profile", 1);
 		validateResult("SELECT COUNT(*) FROM profileJustifications", 1);
+		justificationUris.add(TEST_JUSTIFICATION2);
+		sqlUrlMapper.registerProfile("2012-10-01 16:15", "http://www.cs.man.ac.uk/~brennic", justificationUris);
+		validateResult("SELECT COUNT(*) FROM profile", 2);
+		validateResult("SELECT COUNT(*) FROM profileJustifications", 3);
 	}
 
 	@Test
 	public void testGetMappingNoProfile() throws BridgeDbSqlException {
+		Set<String> expectedURL = new HashSet<String>();
+		expectedURL.add("http://www.foo.com/123");
+		expectedURL.add("http://www.example.com/123");
+		expectedURL.add("http://www.example.org#123");
+		
 		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, "0");
-		assertEquals(1, mapURL.size());
+		assertEquals(3, mapURL.size());
+		assertEquals(expectedURL, mapURL);
 	}
 
 	@Test(expected=BridgeDbSqlException.class)
@@ -59,9 +72,26 @@ public class SQLUrlMapperTest extends URLMapperTestBase {
 	}
 
 	@Test
-	public void testGetMappingProfileValid() throws BridgeDbSqlException {
+	public void testGetMappingsProfile1() throws BridgeDbSqlException {
+		Set<String> expectedURL = new HashSet<String>();
+		expectedURL.add("http://www.foo.com/123");
+		expectedURL.add("http://www.example.com/123");
+		
 		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, "1");
-		assertEquals(1, mapURL.size());
+		assertEquals(2, mapURL.size());
+		assertEquals(expectedURL, mapURL);
+	}
+
+	@Test
+	public void testGetMappingsProfile2() throws BridgeDbSqlException {
+		Set<String> expectedURL = new HashSet<String>();
+		expectedURL.add("http://www.foo.com/456");
+		expectedURL.add("http://www.example.com/456");
+		expectedURL.add("http://www.example.org#456");
+		
+		Set<String> mapURL = sqlUrlMapper.mapURL(map2URL1, "2");
+		assertEquals(3, mapURL.size());
+		assertEquals(expectedURL, mapURL);
 	}
 
 }

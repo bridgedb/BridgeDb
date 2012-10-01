@@ -64,7 +64,7 @@ public interface URLListener {
      */
     //XXX-AG: Asssuming justification can be null if the predicate can be null!
    public int registerMappingSet(String sourceUriSpace, String predicate, 
-		   String justification,String targetUriSpace, 
+		   String justification, String targetUriSpace, 
         boolean symetric, boolean transative) throws IDMapperException;
 
     /**
