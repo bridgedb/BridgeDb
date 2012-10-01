@@ -113,17 +113,18 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	}
     
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> URLs, String... targetURISpaces) throws BridgeDbSqlException {
+    public Map<String, Set<String>> mapURL(Collection<String> URLs, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>>();
         for (String ref:URLs){
-            Set<String> mapped = this.mapURL(ref, targetURISpaces);
+            Set<String> mapped = this.mapURL(ref, profileURL, targetURISpaces);
             results.put(ref, mapped);
         }
         return results;
     }
 
     @Override
-    public Set<String> mapURL(String URL, String... targetURISpaces) throws BridgeDbSqlException {
+    public Set<String> mapURL(String URL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
+    	if (!profileURL.equals("0")) throw new BridgeDbSqlException("Only profile permitted is 0");
         StringBuilder query = new StringBuilder("SELECT targetId as id, target.uriSpace as uriSpace ");
         finishMappingQuery(query, URL, targetURISpaces); 
         Statement statement = this.createStatement();
@@ -182,7 +183,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Set<URLMapping> mapURLFull(String URL, String... targetURISpaces) throws BridgeDbSqlException {
+    public Set<URLMapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
+    	if (!profileURL.equals("0")) throw new BridgeDbSqlException("Only profile permitted is 0");
         StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
         query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
         finishMappingQuery(query, URL, targetURISpaces); 

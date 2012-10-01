@@ -35,7 +35,7 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSOpsInterface extends WSCoreInterface{
 
-    public List<URLMappingBean> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException;
+    public List<URLMappingBean> mapURL(String URL, String profileURL, List<String> targetUriSpace) throws IDMapperException;
     
     public URLExistsBean URLExists(String URL) throws IDMapperException;
 

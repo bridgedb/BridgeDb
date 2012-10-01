@@ -139,7 +139,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         String URL1 = urlsIt.next();
         String text = SQLUrlMapper.getId(URL1);
         String URL2 = urlsIt.next();
-        Set<URLMapping> mappings2 = urlMapper.mapURLFull(URL2);
+        //FIXME: Note sure where the second value should come from here!
+        Set<URLMapping> mappings2 = urlMapper.mapURLFull(URL2, "0");
         HashSet<String> URI2Spaces = new HashSet<String>();
         int mappingId = 0;
         for (URLMapping mapping:mappings2){

@@ -66,14 +66,16 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/mapURL")
     @Override
     public List<URLMappingBean> mapURL(@QueryParam("URL") String URL,
+    		@QueryParam("profileURL") String profileURL,
             @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
-        if (URL == null) throw new IDMapperException("URL parameter missing.");
-        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
+        if (URL == null) throw new IDMapperException("URL parameter missing.");        
+        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");        
+        if (profileURL == null || profileURL.isEmpty())  profileURL = "0";
         String[] targetURISpaces = new String[targetURISpace.size()];
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
         }
-        Set<URLMapping> urlMappings = urlMapper.mapURLFull(URL, targetURISpaces);
+        Set<URLMapping> urlMappings = urlMapper.mapURLFull(URL, profileURL, targetURISpaces);
         ArrayList<URLMappingBean> results = new ArrayList<URLMappingBean>(); 
         for (URLMapping urlMapping:urlMappings){
             results.add(URLMappingBeanFactory.asBean(urlMapping));

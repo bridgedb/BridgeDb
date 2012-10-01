@@ -45,9 +45,11 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public List<URLMappingBean> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException {
+    public List<URLMappingBean> mapURL(String URL, String profileURL, 
+    		List<String> targetUriSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add("URL", URL);
+        params.add("profileURL", profileURL);
         for (String target:targetUriSpace){
             params.add("targetURISpace", target);
         }

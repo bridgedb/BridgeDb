@@ -59,19 +59,21 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws IDMapperException {
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, 
+    		String profileURL, String... targetURISpaces) throws IDMapperException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>> ();
         if (sourceURLs.isEmpty()) return results; //No valid srcrefs so return empty set
         for (String sourceURL:sourceURLs){
-            Set<String> urls = mapURL(sourceURL, targetURISpaces);
+            Set<String> urls = mapURL(sourceURL, profileURL, targetURISpaces);
             results.put(sourceURL, urls);
         }
         return results;
     }
 
     @Override
-    public Set<String> mapURL(String sourceURL, String... targetURISpaces) throws IDMapperException {
-        List<URLMappingBean> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
+    public Set<String> mapURL(String sourceURL, String profileURL,
+    		String... targetURISpaces) throws IDMapperException {
+        List<URLMappingBean> beans = opsService.mapURL(sourceURL, profileURL, Arrays.asList(targetURISpaces));
         HashSet<String> targetURLS = new HashSet<String>(); 
         for (URLMappingBean bean:beans){
             targetURLS.addAll(bean.getTargetURL());
@@ -92,8 +94,8 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public Set<URLMapping> mapURLFull(String sourceURL, String... targetURISpaces) throws IDMapperException {
-        List<URLMappingBean> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
+    public Set<URLMapping> mapURLFull(String sourceURL, String profileURL, String... targetURISpaces) throws IDMapperException {
+        List<URLMappingBean> beans = opsService.mapURL(sourceURL, profileURL, Arrays.asList(targetURISpaces));
         HashSet<URLMapping> results = new HashSet<URLMapping>();
         for (URLMappingBean bean:beans){
             results.add(URLMappingBeanFactory.asURLMapping(bean));

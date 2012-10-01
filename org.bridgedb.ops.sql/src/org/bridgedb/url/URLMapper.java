@@ -44,13 +44,14 @@ public interface URLMapper extends IDMapper{
      * <p>
      * @See mapURL(String URL, String... targetURISpaces) for more details
      * @param sourceURLs One or more URL as a String
+     * @param profileURL the URL of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result.
      *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned. 
      * @return A map of each of the sourceURLs to the Set of URLs (as String) that would have been returned byu calling
      *    mapURL(sourceURL, targetURISpaces) individually.
 	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws IDMapperException;
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String profileURL, String... targetURISpaces) throws IDMapperException;
 
     /**
      * Similar to mapURL(String URL, String... targetURISpaces) except that the result will be a set of URLMappings.
@@ -58,12 +59,13 @@ public interface URLMapper extends IDMapper{
      * @See mapURL(String URL, String... targetURISpaces) for more details or the method.
      * @See URLMappings for details of what is included in the Results.
 	 * @param sourceURL the URL to get mappings/cross-references for. 
+	 * @param profileURL the URL of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
      *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
 	 * @return A Set containing the URL (in URLMapping Objects) that have been mapped/ cross referenced.
 	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Set<URLMapping> mapURLFull(String URL, String... targetURISpaces) throws IDMapperException;
+    public Set<URLMapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws IDMapperException;
 
     /**
 	 * Get all mappings/cross-references for the given URL, restricting the
@@ -77,12 +79,13 @@ public interface URLMapper extends IDMapper{
      * Similar to the mapID method in IDMapper.
      * 
 	 * @param sourceURL the URL to get mappings/cross-references for. 
+	 * @param profileURL the URL of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
      *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
 	 * @return A Set containing the URL (as Strings) that have been mapped/ cross referenced.
 	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
 	 */
-	public Set<String> mapURL (String URL, String... targetURISpaces) throws IDMapperException;
+	public Set<String> mapURL (String URL, String profileURL, String... targetURISpaces) throws IDMapperException;
 	
     /**
      * Check whether an URL is known by the given mapping source. 
