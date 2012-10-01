@@ -117,6 +117,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         if (RdfsConstants.LITERAL.equalsIgnoreCase(objectClass)){
             return new LiteralType();
         }
+        if (objectClass.startsWith("xsd:")){
+            String full = XsdConstants.PREFIX + objectClass.substring(4);
+            return new XsdType(full);
+        }
         if (objectClass.startsWith(XsdConstants.PREFIX)){
             return new XsdType(objectClass);
         }
