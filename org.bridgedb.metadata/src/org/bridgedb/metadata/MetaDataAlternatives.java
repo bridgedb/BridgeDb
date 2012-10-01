@@ -19,6 +19,8 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
     //}
     
+    private final boolean PRESENCE_OPTIONAL = false;
+    
     public MetaDataAlternatives(String name, List<MetaDataBase> childMetaData){
         super(name, childMetaData);
     }
@@ -53,7 +55,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         if (noChildernWithValue()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
@@ -68,7 +70,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
             }
         }
         for (MetaDataBase child:childMetaData){
-            child.appendValidityReport(builder, includeWarnings, tabLevel);
+            child.appendValidityReport(builder, PRESENCE_OPTIONAL, includeWarnings, tabLevel);
         }
     }
 
@@ -87,11 +89,6 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         if (noChildernWithValue()){
             //At least one child must have values so false;
                 return false;
-        }
-        for (MetaDataBase child:childMetaData){
-            if (!child.hasRequiredValues()){
-                return false;
-            }
         }
         return true;        
      }

@@ -251,10 +251,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resouce:theResources){
-             resouce.appendValidityReport(builder, includeWarnings, 0);
+             resouce.appendValidityReport(builder, checkAllpresent, includeWarnings, 0);
          }
          for (String error:errors){
              tab(builder, tabLevel);

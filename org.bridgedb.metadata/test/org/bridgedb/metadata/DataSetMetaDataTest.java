@@ -20,7 +20,6 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
-@Ignore
 public class DataSetMetaDataTest extends MetaDataTestBase{
     
     public DataSetMetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
@@ -53,7 +52,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Reporter.report("HasMissingRequiredValues");
         d1LlicenseStatement = null;
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
-        checkRequiredValues(metaData);
+        assertFalse(metaData.hasRequiredValues());
     } 
 
     @Test
@@ -89,6 +88,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
  
     @Test
+    @Ignore
     public void testValidityReport() throws MetaDataException{
         Reporter.report("ValidityReport");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
@@ -122,6 +122,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
+    @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);

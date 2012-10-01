@@ -13,6 +13,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.metadata.constants.*;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -126,9 +127,14 @@ public class MetaDataTestBase extends TestUtils{
     Statement subjectStatement = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D1_ID);
     Statement objectStatement = new StatementImpl(LINK_ID, VoidConstants.OBJECTSTARGET, D2_ID);
 
-    MetaDataRegistry dataSetRegistry;
-    MetaDataRegistry linksetSetRegistry;
-            
+    static MetaDataRegistry dataSetRegistry;
+    static MetaDataRegistry linksetSetRegistry;
+         
+    @BeforeClass
+    public static void loadRegistries() throws MetaDataException{
+        dataSetRegistry = new MetaDataRegistry("file:resources/shouldOwl.owl");        
+    }
+    
     public MetaDataTestBase() throws DatatypeConfigurationException, MetaDataException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
@@ -139,7 +145,6 @@ public class MetaDataTestBase extends TestUtils{
         d2ImportedOnStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_ON, now);          
         linkAuthoredOnStatement = new StatementImpl(LINK_ID, PavConstants.AUTHORED_ON, now);  
         linkCreatedOnStatement = new StatementImpl(LINK_ID, PavConstants.CREATED_ON, now);
-        dataSetRegistry = new MetaDataRegistry("file:resources/shouldOwl.owl");
     }
 
     private void addStatement(Set<Statement> data, Statement statement){

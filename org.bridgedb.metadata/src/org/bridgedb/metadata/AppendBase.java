@@ -11,6 +11,7 @@ package org.bridgedb.metadata;
 public abstract class AppendBase {
     
     static final String CLEAR_REPORT = "No issues found";
+    static final boolean CHECK_ALL_PRESENT = true;
     
     public synchronized String toString(){
          StringBuilder builder = new StringBuilder();
@@ -36,7 +37,7 @@ public abstract class AppendBase {
     
     public String validityReport(boolean includeWarnings) {
          StringBuilder builder = new StringBuilder();
-         appendValidityReport(builder, includeWarnings, 0);
+         appendValidityReport(builder, CHECK_ALL_PRESENT, includeWarnings, 0);
          if (builder.length() > 0){
             return builder.toString();
          } else {
@@ -44,7 +45,7 @@ public abstract class AppendBase {
          }
     }
 
-    abstract void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel);
+    abstract void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel);
 
     public String unusedStatements(){
         StringBuilder builder = new StringBuilder();

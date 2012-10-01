@@ -11,4 +11,5 @@ package org.bridgedb.metadata.constants;
 public class XsdConstants {
     
     public final static String PREFIX = "http://www.w3.org/2001/XMLSchema#";
+    public static final String STRING = PREFIX + "string";
 }

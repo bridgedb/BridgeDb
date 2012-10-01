@@ -128,8 +128,6 @@ public class MetaDataRegistry {
     }
 
     private MetaDataBase parseExpression(OWLClassExpression expr) throws MetaDataException {
-        System.out.println(expr);
-        System.out.println("  class = " + expr.getClass());
         if (expr instanceof OWLQuantifiedRestriction){
             return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr);
         }
@@ -166,10 +164,8 @@ public class MetaDataRegistry {
     private PropertyMetaData parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction) throws MetaDataException{
         URI predicate;
         OWLPropertyRange range = restriction.getFiller();
-        System.out.println("  range = " + range);
         OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
         predicate = toURI(owlPropertyExpression);
-        System.out.println("  predicate = " + predicate);
         return new PropertyMetaData(predicate, range.toString());
     }
 

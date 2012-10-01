@@ -123,7 +123,7 @@ public class OldResourceMetaData extends HasChildrenMetaData implements MetaData
     }
 
     @Override
-    public void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
+    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         if (isParent){
             if (this.hasCorrectTypes()){
                 if (this.hasRequiredValues()){
@@ -140,12 +140,12 @@ public class OldResourceMetaData extends HasChildrenMetaData implements MetaData
             } else {
                 //Incorrect types show the whole vlaidity report anyway
                 for (MetaDataBase child:childMetaData){
-                    child.appendValidityReport(builder, includeWarnings, tabLevel);
+                    child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
                 }    
             }
         } else {
             for (MetaDataBase child:childMetaData){
-                child.appendValidityReport(builder, includeWarnings, tabLevel);
+                child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
             }
         }
     }

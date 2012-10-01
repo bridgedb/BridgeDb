@@ -118,8 +118,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             return new LiteralType();
         }
         if (objectClass.startsWith("xsd:")){
-            String full = XsdConstants.PREFIX + objectClass.substring(4);
-            return new XsdType(full);
+            objectClass = XsdConstants.PREFIX + objectClass.substring(4);
+        }
+        if (objectClass.equalsIgnoreCase(XsdConstants.STRING)){
+            return new StringType();
         }
         if (objectClass.startsWith(XsdConstants.PREFIX)){
             return new XsdType(objectClass);
@@ -209,9 +211,9 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
+    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         if (specifiedProperty) {
-            if (values.isEmpty()){
+            if (checkAllpresent && values.isEmpty()){
                 appendEmptyReport(builder, tabLevel);
             } else if (!hasCorrectTypes()){
                 appendIncorrectTypeReport(builder, tabLevel);

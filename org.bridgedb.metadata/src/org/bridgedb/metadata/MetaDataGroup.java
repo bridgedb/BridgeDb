@@ -47,9 +47,9 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
     }
     
      @Override
-    void appendValidityReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         for (MetaDataBase child:childMetaData){
-            child.appendValidityReport(builder, includeWarnings, tabLevel);
+            child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
         }
         if (!includeWarnings){
             return;
