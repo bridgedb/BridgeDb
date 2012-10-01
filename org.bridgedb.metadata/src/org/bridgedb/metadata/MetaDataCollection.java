@@ -30,8 +30,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     Map<Resource,ResourceMetaData> resourcesMap = new HashMap<Resource,ResourceMetaData>();
     Set<String> errors = new HashSet<String>();
     Set<Statement> unusedStatements = new HashSet<Statement>();
+    MetaDataRegistry metaDataRegistry;
     
     public MetaDataCollection(Set<Statement> statements) throws MetaDataException {
+        metaDataRegistry = new MetaDataRegistry();
         Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
         Set<Resource> ids = findIds(statements);
         for (Resource id:ids){
@@ -53,7 +55,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI, statements);
         ResourceMetaData resourceMetaData = null;
         for (Value type:types){
-            ResourceMetaData rmd =  MetaDataRegistry.getResourceByType(type);
+            ResourceMetaData rmd =  metaDataRegistry.getResourceByType(type);
             if (rmd != null){
                 if (resourceMetaData == null){
                    resourceMetaData = rmd; 
@@ -110,13 +112,13 @@ public class MetaDataCollection extends AppendBase implements MetaData {
 
     private void addSubsets(Set<Statement> subsetStatements) {
         for (Statement statement: subsetStatements){
-            ResourceMetaData parent = MetaDataRegistry.getResourceByID(statement.getSubject());
+            ResourceMetaData parent = resourcesMap.get(statement.getSubject());
             if (parent == null){
                 errors.add("No resource found for " + statement.getSubject());                
             } 
             Value object = statement.getObject();
             if (object instanceof Resource){
-                ResourceMetaData child = MetaDataRegistry.getResourceByID((Resource)object);
+                ResourceMetaData child = resourcesMap.get((Resource)object);
                 if (child == null){
                     errors.add("No resource found for " + object);
                 } else {
@@ -265,7 +267,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     public Set<Value> getValuesByPredicate(URI predicate) {
         HashSet<Value> result = null;
         for (Resource id: resourcesMap.keySet()){
-            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            ResourceMetaData rmd = resourcesMap.get(id);
             Set<Value> moreResults = rmd.getValuesByPredicate(predicate);
             if (moreResults != null){
                 if (result == null){
@@ -284,6 +286,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         } else {
             throw new MetaDataException(report);
         }
+    }
+
+    ResourceMetaData getResourceByID(Resource id) {
+        return resourcesMap.get(id);
     }
 
 }

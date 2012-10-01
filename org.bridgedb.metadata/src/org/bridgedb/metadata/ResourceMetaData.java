@@ -26,7 +26,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private final URI type;
     private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
     private boolean isParent = false;
-    
+
     //ResourceMetaData(Element element) throws MetaDataException {
     //    super(element);
     //    childMetaData.add(PropertyMetaData.getTypeProperty());
@@ -63,7 +63,6 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             metaData.loadValues(id, data, parent);
             childMetaData.add(metaData);
         }
-        MetaDataRegistry.registerResource(this);
     }
 
     private Set<URI> getUsedPredicates(Set<Statement> data){

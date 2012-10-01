@@ -27,6 +27,9 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private final Set<Resource> ids = new HashSet<Resource>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
 
+    MetaDataCollection collection;
+    MetaDataRegistry registry;
+    
     //LinkedResource(Element element) throws MetaDataException {
     //    super(element);
     //    String typeSt = element.getAttribute(SchemaConstants.TYPE);
@@ -66,7 +69,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     @Override
     void appendSchema(StringBuilder builder, int tabLevel) {
         try {
-            ResourceMetaData resource = MetaDataRegistry.getResourceByType(resourceType);
+            ResourceMetaData resource = registry.getResourceByType(resourceType);
             tab(builder, tabLevel);
             builder.append("Resource Link ");
             builder.append(name);
@@ -106,7 +109,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
             builder.append(" not set ");
         } else {
             for (Resource id: ids){
-                ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+                ResourceMetaData rmd = collection.getResourceByID(id);
                 if (rmd == null){
                     resourceNotFound(builder, id, tabLevel + 1);
                 } else {
@@ -132,7 +135,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
             return false;
         } else {
             for (Resource id: ids){
-                ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+                ResourceMetaData rmd = collection.getResourceByID(id);
                 if (rmd == null){
                     return false;
                 } else {
@@ -151,7 +154,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
             return false;
         } else {
             for (Resource id: ids){
-                ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+                ResourceMetaData rmd = collection.getResourceByID(id);
                 if (rmd == null){
                     return false;
                 } else {
@@ -168,7 +171,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     public boolean hasCorrectTypes() {
         //If there are no links it is true;
         for (Resource id: ids){
-            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            ResourceMetaData rmd = collection.getResourceByID(id);
             if (rmd == null){
                 //However if there is an id not found it is false;
                 return false;
@@ -196,7 +199,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
             newLine(builder);
         } else {
             for (Resource id: ids){
-                ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+                ResourceMetaData rmd = collection.getResourceByID(id);
                 if (rmd == null){
                     //If it is declared but missing that is an error
                     tab(builder, tabLevel);
@@ -213,7 +216,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     @Override
     public boolean allStatementsUsed() {
         for (Resource id: ids){
-            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            ResourceMetaData rmd = collection.getResourceByID(id);
             if (rmd == null){
                 //No Statements here so ok
                 return true;
@@ -229,7 +232,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     @Override
     public void appendUnusedStatements(StringBuilder builder) {
         for (Resource id: ids){
-            ResourceMetaData rmd = MetaDataRegistry.getResourceByID(id);
+            ResourceMetaData rmd = collection.getResourceByID(id);
             if (rmd == null){
                 //No Statements here
             } else {

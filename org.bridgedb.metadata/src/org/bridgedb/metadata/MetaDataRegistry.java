@@ -41,11 +41,11 @@ import org.xml.sax.SAXException;
  */
 public class MetaDataRegistry {
     
-    static Map<URI, ResourceMetaData> resourcesByType;
-    static Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
+    Map<URI, ResourceMetaData> resourcesByType;
+   // Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
     static String documentationRoot = "";
     
-    public static ResourceMetaData getResourceByType(Value type) throws MetaDataException{
+    public ResourceMetaData getResourceByType(Value type) throws MetaDataException{
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
             return null;
@@ -54,58 +54,18 @@ public class MetaDataRegistry {
         }
     }
    
-    public static ResourceMetaData getResourceByID(Resource id) {
-        return resourcesById.get(id);
-    }
+    //public ResourceMetaData getResourceByID(Resource id) {
+    //    return resourcesById.get(id);
+    //}
     
-    public static void registerResource (ResourceMetaData resourceMetaData){
-        resourcesById.put(resourceMetaData.id, resourceMetaData);
-    }
+    //public void registerResource (ResourceMetaData resourceMetaData){
+    //    resourcesById.put(resourceMetaData.id, resourceMetaData);
+    //}
             
+    
     public static String getDocumentationRoot(){
         return documentationRoot;
     }
-    
-   private static Document readDomFromFile(File xmlFile) throws MetaDataException  {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            return builder.parse(xmlFile);
-        } catch (IOException ex) {
-            throw new MetaDataException("Exception reading MetaData document", ex);
-        } catch (SAXException ex) {
-            throw new MetaDataException("Unable to Parse MetaData document", ex);
-        } catch (ParserConfigurationException ex) {
-            throw new MetaDataException("Unable to Parse MetaData document", ex);
-        }
-    }
-
-    private static Document readDomFromInputStream(InputStream stream) throws MetaDataException  {
-        Document result = null;
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            result = builder.parse(stream);
-        } catch (SAXException ex) {
-            throw new MetaDataException("Error parsing the DOM ", ex);
-        } catch (IOException ex) {
-            throw new MetaDataException("Error reading the DOM ", ex);
-        } catch (ParserConfigurationException ex) {
-            throw new MetaDataException("Unable to configure DOM parser", ex);
-        } finally {
-            try {
-                stream.close();
-            } catch (IOException ex) {
-                throw new MetaDataException("Error closing the stream ", ex);
-            }
-        }
-        return result;
-    }
-
-    //public static List<MetaDataBase> getChildMetaData(Element parent) throws MetaDataException{
-    //    List<Element> childElements = getChildElements(parent);
-    //    return getMetaData(childElements);
-    //}
     
     private static List<Element> getChildElements(Element parent) throws MetaDataException{
         ArrayList<Element> children = new ArrayList<Element>();
