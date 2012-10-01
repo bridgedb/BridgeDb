@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.StringDocumentTarget;
 import org.semanticweb.owlapi.model.AddAxiom;
@@ -207,26 +209,42 @@ public class OwlFileTester
             }
         }
     }
+        
+    private static URI getType(OWLOntology o, OWLClass theClass){
+        Set<OWLClassExpression> exprs = theClass.getSuperClasses(o);
+        for (OWLClassExpression expr:exprs){
+            if (!expr.isAnonymous()){
+                OWLClass parent = expr.asOWLClass();
+                return getType(o, parent);
+            }
+        }
+        return new URIImpl(theClass.toStringID());
+    }
     
+//    private static Set
+            
     private static void readOwl(String location) throws OWLOntologyCreationException{
         OWLOntologyManager m = create();
         IRI pav = IRI.create(location);
         OWLOntology o = m.loadOntologyFromOntologyDocument(pav);
         System.out.println(o);
-        //Set<OWLAxiom> all = o.getAxioms();
-        //for (OWLAxiom axiom:all){
-        //    System.out.println(axiom);
-        //}
+        Set<OWLAxiom> all = o.getAxioms();
+        for (OWLAxiom axiom:all){
+            System.out.println(axiom);
+            System.out.println("   " + axiom.getClass());
+            
+        }
         
         Set<OWLClass> theClasses = o.getClassesInSignature();
         for (OWLClass theClass:theClasses){
             System.out.println(theClass);
-            Set<OWLClassExpression> exprs = theClass. getSuperClasses(o);
+            Set<OWLClassExpression> exprs = theClass.getSuperClasses(o);
             for (OWLClassExpression expr:exprs){
                 System.out.println("  " + expr);
+                System.out.println("     " + expr.getClass());
             }
-        }
-        
+            System.out.println(getType(o, theClass));
+        }        
     }
 
     public static void main( String[] args ) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException
