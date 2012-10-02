@@ -1,0 +1,4 @@
+Bundle-Name: org.bridgedb.ops.ws.service
+Bundle-Version: 1.1.0
+Bundle-SymbolicName: org.bridgedb.ops.ws.service
+Export-Package: * 
