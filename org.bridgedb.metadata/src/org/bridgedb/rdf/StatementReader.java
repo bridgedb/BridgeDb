@@ -39,6 +39,11 @@ public class StatementReader extends RDFHandlerBase{
     private StatementReader(){
     }
    
+    public static Set<Statement> extractStatements (String  fileName) throws MetaDataException {
+        File file = new File(fileName);
+        return extractStatements(file);
+    }
+    
     public static Set<Statement> extractStatements (File file) throws MetaDataException {
         return extractStatements(file, DEFAULT_BASE_URI);
     }

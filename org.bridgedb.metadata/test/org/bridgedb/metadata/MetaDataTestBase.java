@@ -132,13 +132,13 @@ public class MetaDataTestBase extends TestUtils{
     Statement subjectStatement = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D1_ID);
     Statement objectStatement = new StatementImpl(LINK_ID, VoidConstants.OBJECTSTARGET, D2_ID);
 
-    static MetaDataRegistry dataSetRegistry;
-    static MetaDataRegistry linksetSetRegistry;
+    static MetaDataSpecification dataSetRegistry;
+    static MetaDataSpecification linksetSetRegistry;
          
     @BeforeClass
     public static void loadRegistries() throws MetaDataException{
-        dataSetRegistry = new MetaDataRegistry("file:resources/shouldDataSet.owl");        
-        linksetSetRegistry = new MetaDataRegistry("file:resources/shouldLinkSet.owl");        
+        dataSetRegistry = new MetaDataSpecification("file:resources/shouldDataSet.owl");        
+        linksetSetRegistry = new MetaDataSpecification("file:resources/shouldLinkSet.owl");        
     }
     
     public MetaDataTestBase() throws DatatypeConfigurationException, MetaDataException {

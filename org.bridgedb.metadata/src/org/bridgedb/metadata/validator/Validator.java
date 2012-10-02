@@ -19,15 +19,16 @@ import org.openrdf.rio.RDFFormat;
  */
 public class Validator {
     
- /*   static public void main(String[] arg) throws MetaDataException {
-        if (arg.length == 0 || arg.length > 3){
+/*    static public void main(String[] arg) throws MetaDataException {
+        if (arg.length < 2 || arg.length > 3){
             usage();
         }
         String fileName = arg[0];
         Reporter.report("Checking " + fileName);
         Reporter.report("    Up to Level " + fileName);
         boolean includeWarnings = true;
-        if (arg.length > 1){
+        
+        if (arg.length > 2){
             includeWarnings = Boolean.parseBoolean(arg[1]);
         }
         if (includeWarnings){

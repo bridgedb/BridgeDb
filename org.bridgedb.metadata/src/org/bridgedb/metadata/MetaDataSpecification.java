@@ -1,17 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.bridgedb.metadata;
 
-import java.io.FileNotFoundException;
-import org.bridgedb.metadata.constants.SchemaConstants;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,13 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.bridgedb.metadata.utils.Reporter;
-import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
@@ -37,7 +19,6 @@ import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLNaryBooleanClassExpression;
 import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
-import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLObjectUnionOf;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -45,36 +26,41 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.model.OWLPropertyRange;
 import org.semanticweb.owlapi.model.OWLQuantifiedRestriction;
-import org.semanticweb.owlapi.model.OWLRestriction;
-import org.w3c.dom.Comment;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
 
 /**
  *
  * @author Christian
  */
-public class MetaDataRegistry {
+public class MetaDataSpecification {
     private OWLOntology ontology;
     
-    Map<URI, ResourceMetaData> resourcesByType;
+    Map<URI, ResourceMetaData> resourcesByType = new HashMap<URI, ResourceMetaData>();
    // Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
     static String documentationRoot = "";
     private static String THING_ID = "http://www.w3.org/2002/07/owl#Thing";
         
-    public MetaDataRegistry(String location) throws MetaDataException{
-        resourcesByType = new HashMap<URI, ResourceMetaData>();
+    public MetaDataSpecification(String location) throws MetaDataException{
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         IRI pav = IRI.create(location);
         try {
             ontology = m.loadOntologyFromOntologyDocument(pav);
         } catch (OWLOntologyCreationException ex) {
-            Logger.getLogger(MetaDataRegistry.class.getName()).log(Level.SEVERE, null, ex);
+            throw new MetaDataException("Unable to read owl file from " + location, ex);
         }
+        loadSpecification();
+    }
+    
+    public MetaDataSpecification(InputStream stream) throws MetaDataException{
+        OWLOntologyManager m = OWLManager.createOWLOntologyManager();
+        try {
+            ontology = m.loadOntologyFromOntologyDocument(stream);
+        } catch (OWLOntologyCreationException ex) {
+            throw new MetaDataException("Unable to read owl from inputStream", ex);
+        }
+        loadSpecification();
+    }
+    
+    private void loadSpecification() throws MetaDataException{
         Set<OWLClass> theClasses = ontology.getClassesInSignature();
         for (OWLClass theClass:theClasses){
             String id = theClass.toStringID();
@@ -88,7 +74,7 @@ public class MetaDataRegistry {
              }
         }
     }
-    
+
     private URI toURI(OWLObject object) throws MetaDataException{
         OWLEntity entity;
         if (object instanceof OWLEntity){
@@ -184,7 +170,7 @@ public class MetaDataRegistry {
 
     public static void main( String[] args ) throws MetaDataException 
     {
-        MetaDataRegistry test = new MetaDataRegistry("file:resources/shouldLinkSet.owl");
+        MetaDataSpecification test = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
         for (ResourceMetaData resource:test.resourcesByType.values()){
             System.out.println(resource.Schema());
         }

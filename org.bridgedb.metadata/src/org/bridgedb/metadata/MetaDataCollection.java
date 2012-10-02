@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.metadata.utils.Reporter;
+import org.bridgedb.rdf.StatementReader;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -30,9 +32,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     Map<Resource,ResourceMetaData> resourcesMap = new HashMap<Resource,ResourceMetaData>();
     Set<String> errors = new HashSet<String>();
     Set<Statement> unusedStatements = new HashSet<Statement>();
-    MetaDataRegistry metaDataRegistry;
+    MetaDataSpecification metaDataRegistry;
     
-    public MetaDataCollection(Set<Statement> statements, MetaDataRegistry metaDataRegistry) throws MetaDataException {
+    public MetaDataCollection(Set<Statement> statements, MetaDataSpecification metaDataRegistry) throws MetaDataException {
         this.metaDataRegistry = metaDataRegistry;
         Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
         Set<Resource> ids = findIds(statements);
@@ -51,6 +53,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         checkAllRemainingAreLinks(statements);
     }
     
+    public MetaDataCollection (String dataFileName, MetaDataSpecification metaDataRegistry) throws MetaDataException{
+        this(StatementReader.extractStatements(dataFileName), metaDataRegistry);
+    }
+        
     private ResourceMetaData getResourceMetaData (Resource id, Set<Statement> statements) throws MetaDataException{
         Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI, statements);
         ResourceMetaData resourceMetaData = null;

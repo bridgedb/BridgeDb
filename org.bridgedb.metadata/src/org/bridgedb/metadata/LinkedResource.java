@@ -27,9 +27,9 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private final Set<Resource> ids = new HashSet<Resource>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
     private MetaDataCollection collection;
-    private final MetaDataRegistry registry;
+    private final MetaDataSpecification registry;
     
-    LinkedResource(URI predicate, URI resourceType, MetaDataRegistry registry){
+    LinkedResource(URI predicate, URI resourceType, MetaDataSpecification registry){
         super(predicate.getLocalName());
         this.predicate = predicate;
         this.resourceType = resourceType;

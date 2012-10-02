@@ -34,7 +34,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     
     MetaDataBase(String name){
         this.name = name;
-        this.documentation = MetaDataRegistry.getDocumentationRoot();
+        this.documentation = MetaDataSpecification.getDocumentationRoot();
     }
     
     MetaDataBase(MetaDataBase other){
