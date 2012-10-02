@@ -156,11 +156,11 @@ public class LinksetLoader {
     			usage();
     		}
     	} catch (FileNotFoundException e) {
-    		e.printStackTrace(System.out);
+//    		e.printStackTrace(System.out);
     		Reporter.report(e.getLocalizedMessage());
     		System.exit(1);
     	} catch (IDMapperException e) {
-    		e.printStackTrace(System.out);
+//    		e.printStackTrace(System.out);
     		Reporter.report(e.getLocalizedMessage());
     		System.exit(1);
     	}

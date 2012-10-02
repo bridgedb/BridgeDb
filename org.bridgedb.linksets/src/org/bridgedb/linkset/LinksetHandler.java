@@ -167,7 +167,9 @@ public class LinksetHandler extends RDFHandlerBase{
             throw new RDFHandlerException("Error endingRDF ", ex);
         }
         if (this.processingHeader){
-            throw new RDFHandlerException("Linkset error! End of void headder not found");
+            throw new RDFHandlerException("Linkset error! End of void header not found.\n" +
+            		"\t If the linkset file contains links, check that the declared link " +
+            		"predicate and the used link predicate are the same.");
         }
     }
 

@@ -56,6 +56,7 @@ public class RDFValidator implements RdfLoader{
     private final Resource UNDEFINED = new URIImpl("http://www.example.org/UNDEFINED");
     private boolean headerError = false;
     private boolean linkError = false;
+	private boolean processingLinks = false;
    
     public RDFValidator(boolean strict) {
         this.strict = strict;
@@ -89,6 +90,7 @@ public class RDFValidator implements RdfLoader{
         } else {
         	Reporter.report("\tLinkset VoID header is valid!");
         }
+        processingLinks  = true;
         Reporter.report("Validating linkset links");
      }
 
@@ -430,7 +432,7 @@ public class RDFValidator implements RdfLoader{
     		Reporter.report("Linkset not valid");
     		throw new IDMapperException("Linkset not valid!");
     	}
-    	if (!linkError) {
+    	if (processingLinks && !linkError) {
     		Reporter.report("\tLinkset links are valid");
     	}
         //do nothing
