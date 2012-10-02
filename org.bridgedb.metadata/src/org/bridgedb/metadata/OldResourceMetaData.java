@@ -60,12 +60,12 @@ public class OldResourceMetaData extends HasChildrenMetaData implements MetaData
     }*/
     
     @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
-        super.loadValues(id, data, parent);
+    public void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
+        super.loadValues(id, data, parent, collection);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
             PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate);
-            metaData.loadValues(id, data, parent);
+            metaData.loadValues(id, data, parent, collection);
             childMetaData.add(metaData);
         }
     }

@@ -26,9 +26,15 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private final URI resourceType;
     private final Set<Resource> ids = new HashSet<Resource>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
-
-    MetaDataCollection collection;
-    MetaDataRegistry registry;
+    private MetaDataCollection collection;
+    private final MetaDataRegistry registry;
+    
+    LinkedResource(URI predicate, URI resourceType, MetaDataRegistry registry){
+        super(predicate.getLocalName());
+        this.predicate = predicate;
+        this.resourceType = resourceType;
+        this.registry = registry;
+    }
     
     //LinkedResource(Element element) throws MetaDataException {
     //    super(element);
@@ -43,11 +49,14 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         super(other);
         predicate = other.predicate;
         resourceType = other.resourceType;
+        this.collection = other.collection;
+        this.registry = other.registry;
     }
 
     @Override
-    void loadValues(Resource id, Set<Statement> data, MetaData parent) {
+    void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
         setupValues(id, parent);
+        this.collection = collection;
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getPredicate().equals(predicate)){

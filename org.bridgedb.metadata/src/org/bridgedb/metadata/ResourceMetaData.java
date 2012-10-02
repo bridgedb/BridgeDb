@@ -28,7 +28,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private boolean isParent = false;
 
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
-        super(type.stringValue(), childMetaData);
+        super(type.getLocalName(), childMetaData);
         childMetaData.add(PropertyMetaData.getTypeProperty());
         this.type = type;
     }
@@ -61,12 +61,12 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }*/
     
     @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
-        super.loadValues(id, data, parent);
+    public void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
+        super.loadValues(id, data, parent, collection);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
             PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate);
-            metaData.loadValues(id, data, parent);
+            metaData.loadValues(id, data, parent, collection);
             childMetaData.add(metaData);
         }
     }

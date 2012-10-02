@@ -90,6 +90,9 @@ public class MetaDataTestBase extends TestUtils{
     Statement d1ExampleStatement2 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE2);
     Statement d1ExampleStatement3 = new StatementImpl(D1_ID, VoidConstants.EXAMPLE_RESOURCE, EXAMPLE3);
     Statement d1FocStatement = new StatementImpl(D1_ID, VoagConstants.FREQUENCY_OF_CHANGE, BIWEEKLY);
+    Statement d1SourceAccessedByStatement = new StatementImpl(D1_ID, PavConstants.SOURCE_ACCESSED_BY, PERSON);
+    Statement d1SourceAccessedOnStatement;
+    
     //Data Set 2
     Statement d2IdStatement = new StatementImpl(D2_ID, RdfConstants.TYPE_URI, VoidConstants.DATASET); 
     Statement d2TitleStatement = new StatementImpl(D2_ID, DctermsConstants.TITLE, D2_TITLE);
@@ -110,6 +113,8 @@ public class MetaDataTestBase extends TestUtils{
     Statement d2ExampleStatement2 = new StatementImpl(D2_ID, VoidConstants.EXAMPLE_RESOURCE, D2_EXAMPLE2);
     Statement d2ExampleStatement3 = new StatementImpl(D2_ID, VoidConstants.EXAMPLE_RESOURCE, D2_EXAMPLE3);
     Statement d2FocStatement = new StatementImpl(D2_ID, VoagConstants.FREQUENCY_OF_CHANGE, BIWEEKLY);
+    Statement d2SourceAccessedByStatement = new StatementImpl(D2_ID, PavConstants.SOURCE_ACCESSED_BY, PERSON);
+    Statement d2SourceAccessedOnStatement;
 
     //Linkset
     Statement linkIdStatement = new StatementImpl(LINK_ID, RdfConstants.TYPE_URI, VoidConstants.LINKSET); 
@@ -133,6 +138,7 @@ public class MetaDataTestBase extends TestUtils{
     @BeforeClass
     public static void loadRegistries() throws MetaDataException{
         dataSetRegistry = new MetaDataRegistry("file:resources/shouldDataSet.owl");        
+        linksetSetRegistry = new MetaDataRegistry("file:resources/shouldLinkSet.owl");        
     }
     
     public MetaDataTestBase() throws DatatypeConfigurationException, MetaDataException {
@@ -145,6 +151,8 @@ public class MetaDataTestBase extends TestUtils{
         d2ImportedOnStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_ON, now);          
         linkAuthoredOnStatement = new StatementImpl(LINK_ID, PavConstants.AUTHORED_ON, now);  
         linkCreatedOnStatement = new StatementImpl(LINK_ID, PavConstants.CREATED_ON, now);
+        d1SourceAccessedOnStatement =  new StatementImpl(D1_ID, PavConstants.SOURCE_ACCESSED_ON, now);
+        d2SourceAccessedOnStatement =  new StatementImpl(D2_ID, PavConstants.SOURCE_ACCESSED_ON, now);
     }
 
     private void addStatement(Set<Statement> data, Statement statement){
@@ -157,7 +165,7 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadDataSet1(){
+    private Set<Statement> loadCodeDataSet1(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d1IdStatement);
         addStatement(data, d1TitleStatement);
@@ -166,7 +174,6 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1LlicenseStatement);
         addStatement(data, d1NnameSpaceStatement);
         //addStatement(data, d1VersionStatement);
-        addStatement(data, d1DataDumpStatement);
         addStatement(data, d1PublishedStatement);
         addStatement(data, d1ModifiedStatement);
         addStatement(data, d1CreatedStatement);
@@ -174,6 +181,16 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1RetreivedOn);
         addStatement(data, d1RetreivedByStatement);
         addStatement(data, d1CreatedWithStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadDataSet1(){
+        Set<Statement> data = loadCodeDataSet1();
+        addStatement(data, d1DataDumpStatement);
         addStatement(data, d1VocabularyStatement1);
         addStatement(data, d1VocabularyStatement2);
         addStatement(data, d1TopicStatement);
@@ -188,7 +205,18 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadDataSet2(){
+    private Set<Statement> loadDataSet1ForLinks(){
+        Set<Statement> data = loadCodeDataSet1();
+        data.add(d1SourceAccessedByStatement);
+        data.add(d1SourceAccessedOnStatement);
+        return data;
+    }
+
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    private Set<Statement> loadCodeDataSet2(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d2IdStatement);
         addStatement(data, d2TitleStatement);
@@ -197,11 +225,20 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d2LicenseStatement);
         addStatement(data, d2NameSpaceStatement);
         //addStatement(data, d2VersionStatement);
-        addStatement(data, d2DataDumpStatement);
         addStatement(data, d2ImportedOnStatement);
         addStatement(data, d2ImportedByStatement);
         addStatement(data, d2ImportedFromStatement);
         addStatement(data, d2CreatedWithStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadDataSet2(){
+        Set<Statement> data =loadCodeDataSet2();
+        addStatement(data, d2DataDumpStatement);
         addStatement(data, d2VocabularyStatement1);
         addStatement(data, d2VocabularyStatement2);
         addStatement(data, d2TopicStatement);
@@ -216,9 +253,20 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
+    private Set<Statement> loadDataSet2ForLinks(){
+        Set<Statement> data = loadCodeDataSet2();
+        data.add(d2SourceAccessedByStatement);
+        data.add(d2SourceAccessedOnStatement);
+        return data;
+    }
+
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
     Set<Statement> loadLinkSet(){
-        Set<Statement> data = loadDataSet1();
-        data.addAll(loadDataSet2());
+        Set<Statement> data = loadDataSet1ForLinks();
+        data.addAll(loadDataSet2ForLinks());
         addStatement(data, linkIdStatement); 
         addStatement(data, linkTitleStatement);
         addStatement(data, linkDescriptionStatement );

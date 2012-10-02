@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-@Ignore
 public class LinkSetMetaDataTest extends MetaDataTestBase{
     
     public LinkSetMetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
@@ -52,10 +51,12 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     public void testSummary() throws MetaDataException{
         Reporter.report("LinkSet Summary");
         MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);
-        String expected = "Linkset Void id http://www.example.com/test/linkset1 OK!\n"
-                + "Dataset void id http://www.example.com/test/dataset2 OK!\n"
-                + "Dataset void id http://www.example.com/test/dataset1 OK!\n";
+        String expected = "Linkset id http://www.example.com/test/linkset1 OK!\n"
+                + "Dataset id http://www.example.com/test/dataset2 OK!\n"
+                + "Dataset id http://www.example.com/test/dataset1 OK!\n";
         String summary = metaData.summary();
+        System.out.println(expected);
+        System.out.println(summary);
         assertEquals(expected, summary);
     }
 }

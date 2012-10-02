@@ -76,6 +76,12 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
+    public void testl() throws MetaDataException{
+        MetaDataRegistry dataSetRegistry = new MetaDataRegistry("file:resources/shouldLinkSet.owl");
+        checkFile("C://temp/cs-chebi-stereo_2012-07-31.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
+    } 
+
+    @Test
     @Ignore
     public void testchemspider2chemblrdfLinksetTtl() throws MetaDataException{
         MetaDataRegistry dataSetRegistry = new MetaDataRegistry("file:resources/shouldOwl.owl");

@@ -42,7 +42,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
         this.documentation = other.documentation;
     }
     
-    abstract void loadValues(Resource id, Set<Statement> data, MetaData parent);
+    abstract void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection);
 
     void setupValues(Resource id, MetaData parent){
         this.id = id;
@@ -50,10 +50,10 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     }
     
     final void addDocumentationLink(StringBuilder builder, int tabLevel) {
-        tab(builder, tabLevel + 1);
-        builder.append("See: ");
-        builder.append(documentation);
-        newLine(builder);
+        //tab(builder, tabLevel + 1);
+        //builder.append("See: ");
+        //builder.append(documentation);
+        //newLine(builder);
     }
 
     abstract MetaDataBase getSchemaClone();

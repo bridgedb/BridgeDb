@@ -59,7 +59,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (rmd != null){
                 if (resourceMetaData == null){
                    resourceMetaData = rmd; 
-                   resourceMetaData.loadValues(id, statements, this);
+                   //First this is as the direct parent, second this as the collection to get other objects from
+                   resourceMetaData.loadValues(id, statements, this, this);
                 } else {
                    errors.add(id + " has a second known rdf:type " + type);
                 }

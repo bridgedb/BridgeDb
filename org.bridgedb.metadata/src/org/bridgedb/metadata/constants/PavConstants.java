@@ -28,9 +28,9 @@ public class PavConstants {
     
     private static final String pavTermns = "http://purl.org/pav/";
     
-    public static final URI ACCESSED_BY = new URIImpl(pavTermns + "sourceAccessedBy");
-    public static final URI ACCESSED_FROM = new URIImpl(pavTermns + "sourceAccessedAt");
-    public static final URI ACCESSED_ON = new URIImpl(pavTermns + "sourceAccessedOn");
+    public static final URI SOURCE_ACCESSED_BY = new URIImpl(pavTermns + "sourceAccessedBy");
+    //public static final URI SOURCE_ACCESSED_FROM = new URIImpl(pavTermns + "sourceAccessedAt");
+    public static final URI SOURCE_ACCESSED_ON = new URIImpl(pavTermns + "sourceAccessedOn");
     public static final URI AUTHORED_BY = new URIImpl(pavTermns + "authoredBy");
     public static final URI AUTHORED_ON = new URIImpl(pavTermns + "authoredOn");
     public static final URI CREATED_BY = new URIImpl(pavTermns + "createdBy");

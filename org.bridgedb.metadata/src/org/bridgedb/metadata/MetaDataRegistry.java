@@ -105,6 +105,7 @@ public class MetaDataRegistry {
     }
     
     public ResourceMetaData getResourceByType(Value type) throws MetaDataException{
+        System.out.println("keys"+  resourcesByType.keySet());
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
             return null;
@@ -128,6 +129,7 @@ public class MetaDataRegistry {
     }
 
     private MetaDataBase parseExpression(OWLClassExpression expr) throws MetaDataException {
+        System.out.println(expr);
         if (expr instanceof OWLQuantifiedRestriction){
             return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr);
         }
@@ -161,18 +163,28 @@ public class MetaDataRegistry {
         throw new MetaDataException("Unexpected expression." + expression);
     }
     
-    private PropertyMetaData parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction) throws MetaDataException{
+    private MetaDataBase parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction) throws MetaDataException{
         URI predicate;
         OWLPropertyRange range = restriction.getFiller();
         OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
         predicate = toURI(owlPropertyExpression);
+        if (range instanceof OWLClass){
+            OWLClass owlClass = (OWLClass)range;
+            if (owlClass.isOWLThing()){
+                return new PropertyMetaData(predicate, range.toString());
+            }
+            IRI iri = owlClass.getIRI();
+            ontology.containsClassInSignature(iri);
+            System.out.println(owlClass);
+            return new LinkedResource(predicate, new URIImpl(iri.toString()), this);
+        }
         return new PropertyMetaData(predicate, range.toString());
     }
 
 
     public static void main( String[] args ) throws MetaDataException 
     {
-        MetaDataRegistry test = new MetaDataRegistry("file:resources/shouldOwl.owl");
+        MetaDataRegistry test = new MetaDataRegistry("file:resources/shouldLinkSet.owl");
         for (ResourceMetaData resource:test.resourcesByType.values()){
             System.out.println(resource.Schema());
         }

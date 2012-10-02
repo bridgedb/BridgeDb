@@ -83,7 +83,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaData parent) {
+    public void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
         setupValues(id, parent);
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();

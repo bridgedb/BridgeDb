@@ -26,8 +26,15 @@ public class XsdType implements MetaDataType{
     public boolean correctType(Value value) {
         if (value instanceof Literal){
             Literal literal = (Literal)value;
-            return datatype.equals(literal.getDatatype());
-         }
+            URI literalType = literal.getDatatype();
+            if (literalType == null){
+                return false;
+            }
+            if (datatype.equals(literalType)){
+                return true;
+            }
+            return (datatype.stringValue().equalsIgnoreCase(literalType.stringValue()));
+        }
         return false;
     }
 
