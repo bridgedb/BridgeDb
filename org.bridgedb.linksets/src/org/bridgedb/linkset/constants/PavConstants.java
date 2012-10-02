@@ -26,13 +26,13 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class PavConstants {
     
-    private static final String pavTermns = "http://purl.org/pav/2.0/";
+    private static final String pavTermns = "http://purl.org/pav/";
     
     public static final URI ACCESSED_BY = new URIImpl(pavTermns + "sourceAccessedBy");
     public static final URI ACCESSED_FROM = new URIImpl(pavTermns + "sourceAccessedAt");
     public static final URI ACCESSED_ON = new URIImpl(pavTermns + "sourceAccessedOn");
     public static final URI AUTHORED_BY = new URIImpl(pavTermns + "authoredBy");
-    public static final URI AUTHORED_ON = new URIImpl(pavTermns + "authorOn");
+    public static final URI AUTHORED_ON = new URIImpl(pavTermns + "authoredOn");
     public static final URI CREATED_BY = new URIImpl(pavTermns + "createdBy");
     public static final URI CREATED_ON = new URIImpl(pavTermns + "created");
     public static final URI DERIVED_BY = new URIImpl(pavTermns + "derivedBy");
