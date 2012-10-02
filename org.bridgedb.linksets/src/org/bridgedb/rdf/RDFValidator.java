@@ -19,14 +19,20 @@
 package org.bridgedb.rdf;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bridgedb.IDMapperException;
+import org.bridgedb.linkset.constants.BridgeDBConstants;
 import org.bridgedb.linkset.constants.DctermsConstants;
 import org.bridgedb.linkset.constants.DulConstants;
 import org.bridgedb.linkset.constants.FoafConstants;
+import org.bridgedb.linkset.constants.OwlConstants;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
+import org.bridgedb.linkset.constants.SkosConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
@@ -50,18 +56,27 @@ public class RDFValidator implements RdfLoader{
     private Resource linksetResource;
     Value linksetPredicate;
     Value linksetJustification;
-    private boolean isTransative;
+    private boolean isSymmetric;
+	private boolean isTransative;
     private boolean strict;
     private final Value UNSPECIFIED = new LiteralImpl("Unspecified");
     private final Resource UNDEFINED = new URIImpl("http://www.example.org/UNDEFINED");
     private boolean headerError = false;
     private boolean linkError = false;
 	private boolean processingLinks = false;
-   
-    public RDFValidator(boolean strict) {
+	public RDFValidator(boolean strict) {
         this.strict = strict;
     }
-        
+
+	private Set<URI> symmetricPredicates = new HashSet<URI>(Arrays.asList( new URI[] {
+			OwlConstants.EQUIVALENT_CLASS,
+			OwlConstants.SAME_AS,
+			SkosConstants.EXACT_MATCH,
+			SkosConstants.CLOSE_MATCH,
+			SkosConstants.RELATED_MATCH,
+			BridgeDBConstants.TEST_PREDICATE
+		}));
+	
     @Override
     public void addHeaderStatement(Statement st) throws RDFHandlerException {
         if (statements == null) {
@@ -84,6 +99,7 @@ public class RDFValidator implements RdfLoader{
         validateLinksetProvenance();
         subjectURISpace = validateDataSetAndExtractUriSpace(firstMap.getSubject(), VoidConstants.SUBJECTSTARGET);
         targetURISpace = validateDataSetAndExtractUriSpace(firstMap.getObject(), VoidConstants.OBJECTSTARGET);
+        isSymmetric = checkIsSymmetric();
         isTransative = checkIsTransative();
         if (headerError) {
         	
@@ -227,7 +243,20 @@ public class RDFValidator implements RdfLoader{
         statements.add(versionStatement);
    }
     
-    public boolean isTransative() throws RDFHandlerException {
+   boolean isSymmetric() {
+	   //current assumption is all linksets are semaantic
+	   return isSymmetric;
+   }
+   
+   private boolean checkIsSymmetric() {
+	   if (symmetricPredicates.contains(linksetPredicate)) {
+		   return true;
+	   } else {
+		return false;
+	   }
+   }
+
+	public boolean isTransative() throws RDFHandlerException {
         return isTransative;
     }
 
@@ -396,11 +425,6 @@ public class RDFValidator implements RdfLoader{
         return linksetResource;
     }
     
-    boolean isSymmetric() {
-        //current assumption is all linksets are semaantic
-        return true;
-    }
-
     @Override
     public void insertURLMapping(Statement st) {
         String sourceURL = st.getSubject().stringValue();

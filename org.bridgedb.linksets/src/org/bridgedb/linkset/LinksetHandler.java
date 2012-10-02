@@ -59,8 +59,6 @@ public class LinksetHandler extends RDFHandlerBase{
     
     RdfLoader rdfLoader;
     
-    private final boolean SYMETRIC = true;
-
     /**
      * Creates the Handler based on the RdfLoader to receive the data
      * @param rdfLoader
