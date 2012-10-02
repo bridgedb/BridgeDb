@@ -29,7 +29,10 @@
                                         <file name="org.bridgedb.ops.sql/build.xml"/>
                                         <file name="org.bridgedb.linksets/build.xml"/>
                                         <file name="org.bridgedb.ws.core/build.xml"/>
+                                        <file name="org.bridgedb.ws.server/build.xml"/>
                                         <file name="org.bridgedb.ops.ws.core/build.xml"/>
+                                        <file name="org.bridgedb.ops.ws.server/build.xml"/>
+                                        <file name="org.bridgedb.ops.ws.service/build.xml"/>
 				</filelist>
 			</subant>
 		</sequential>
