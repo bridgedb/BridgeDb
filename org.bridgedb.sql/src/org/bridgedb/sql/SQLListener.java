@@ -216,10 +216,10 @@ public class SQLListener implements MappingListener{
                 Statement statement = createStatement();
                 long start = new Date().getTime();
                 int changed = statement.executeUpdate(insertQuery.toString());
-                Reporter.report("insertTook " + (new Date().getTime() - start));
+//                Reporter.report("insertTook " + (new Date().getTime() - start));
                 insertCount += changed;
                 doubleCount += blockCount - changed;
-                Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
+//                Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
             } catch (SQLException ex) {
                 System.err.println(ex);
                 throw new BridgeDbSqlException ("Error inserting link ", ex, insertQuery.toString());
