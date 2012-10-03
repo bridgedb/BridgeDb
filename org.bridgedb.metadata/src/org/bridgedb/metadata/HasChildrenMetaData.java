@@ -68,7 +68,6 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     public boolean hasRequiredValues() {
         for (MetaDataBase child:childMetaData){
             if (!child.hasRequiredValues()){
-                System.out.println("bad " + child);
                 return false;
             }
         }

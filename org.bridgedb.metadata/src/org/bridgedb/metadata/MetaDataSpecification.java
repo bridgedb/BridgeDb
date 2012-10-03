@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bridgedb.metadata.utils.Reporter;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
@@ -91,9 +92,9 @@ public class MetaDataSpecification {
     }
     
     public ResourceMetaData getResourceByType(Value type) throws MetaDataException{
-        System.out.println("keys"+  resourcesByType.keySet());
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
+            Reporter.report("Unable to find specifications for type: " + type);
             return null;
         } else {
             return resourceMetaData.getSchemaClone();
@@ -115,7 +116,6 @@ public class MetaDataSpecification {
     }
 
     private MetaDataBase parseExpression(OWLClassExpression expr) throws MetaDataException {
-        System.out.println(expr);
         if (expr instanceof OWLQuantifiedRestriction){
             return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr);
         }
@@ -161,7 +161,6 @@ public class MetaDataSpecification {
             }
             IRI iri = owlClass.getIRI();
             ontology.containsClassInSignature(iri);
-            System.out.println(owlClass);
             return new LinkedResource(predicate, new URIImpl(iri.toString()), this);
         }
         return new PropertyMetaData(predicate, range.toString());
@@ -172,7 +171,7 @@ public class MetaDataSpecification {
     {
         MetaDataSpecification test = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
         for (ResourceMetaData resource:test.resourcesByType.values()){
-            System.out.println(resource.Schema());
+            Reporter.report(resource.Schema());
         }
     }
 }

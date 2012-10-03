@@ -38,11 +38,11 @@ public class InputStreamFinder {
             return test;
         }
         
-        test = getInputStreamFromResource("metadata.xml", caller);
+        test = getInputStreamFromResource(name, caller);
         if (test != null) { 
             return test;
         }
-        test = getInputStreamFromJar("metadata.xml", caller);
+        test = getInputStreamFromJar(name, caller);
         if (test != null) { 
             return test;
         }

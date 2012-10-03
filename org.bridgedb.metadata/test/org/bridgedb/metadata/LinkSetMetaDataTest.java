@@ -55,8 +55,6 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
                 + "Dataset id http://www.example.com/test/dataset2 OK!\n"
                 + "Dataset id http://www.example.com/test/dataset1 OK!\n";
         String summary = metaData.summary();
-        System.out.println(expected);
-        System.out.println(summary);
         assertEquals(expected, summary);
     }
 }

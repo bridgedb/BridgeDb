@@ -35,9 +35,9 @@
 
     <module>org.bridgedb.my.loader</module>
     <!-- The modules below this comment are not actively used by OPS but are part of BridgeDB -->
-   	<!--module>org.bridgedb.bio</module>
+   	<module>org.bridgedb.bio</module>
     <module>org.bridgedb.rdb</module>
-  	<module>org.bridgedb.webservice.bridgerest</module>
+  	<!--module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.webservice.cronos</module>
   	<module>org.bridgedb.webservice.picr</module>
