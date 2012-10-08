@@ -34,7 +34,6 @@ import org.openrdf.OpenRDFException;
 /**
  * @author Christian
  */
-@Ignore
 public class LinksetLoaderTest {
         
     @BeforeClass
@@ -43,28 +42,28 @@ public class LinksetLoaderTest {
         TestSqlFactory.createTestSQLAccess();
         
         Reporter.report("sample2to1.ttl");
-        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "testnew"};
+        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "testnew!"};
         LinksetLoader.main (args1);
         Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "test"};
+        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "test!"};
         LinksetLoader.main (args2);
         Reporter.report("sample2to3.ttl");
-        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "test"};
+        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "test!"};
         LinksetLoader.main (args3);
         Reporter.report("cw-cs.ttl");
-        String[] args4 = {"../org.bridgedb.linksets/test-data/cw-cs.ttl", "test"};
+        String[] args4 = {"../org.bridgedb.linksets/test-data/cw-cs.ttl", "test!"};
         LinksetLoader.main (args4);
         Reporter.report("cw-cm.ttl");
-        String[] args5 = {"../org.bridgedb.linksets/test-data/cw-cm.ttl", "test"};
+        String[] args5 = {"../org.bridgedb.linksets/test-data/cw-cm.ttl", "test!"};
         LinksetLoader.main (args5);
         Reporter.report("cw-dd.ttl");
-        String[] args6 = {"../org.bridgedb.linksets/test-data/cw-dd.ttl", "test"};
+        String[] args6 = {"../org.bridgedb.linksets/test-data/cw-dd.ttl", "test!"};
         LinksetLoader.main (args6);
         Reporter.report("cw-ct.ttl");
-        String[] args7 = {"../org.bridgedb.linksets/test-data/cw-ct.ttl", "test"};
+        String[] args7 = {"../org.bridgedb.linksets/test-data/cw-ct.ttl", "test!"};
         LinksetLoader.main (args7);
         Reporter.report("cw-dt.ttl");
-        String[] args8 = {"../org.bridgedb.linksets/test-data/cw-dt.ttl", "test"};
+        String[] args8 = {"../org.bridgedb.linksets/test-data/cw-dt.ttl", "test!"};
         LinksetLoader.main (args8);
 	}
 

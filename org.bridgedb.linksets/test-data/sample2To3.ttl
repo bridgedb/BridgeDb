@@ -31,8 +31,8 @@
     dcterms:license "Who cares this is a test" ;
     dcterms:created "2012-02-22"^^xsd:date ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> ;
-    void:target :TestDS2 ;
-    void:target :TestDS3 ;
+    void:subjectsTarget :TestDS2 ;
+    void:objectsTarget :TestDS3 ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> .
 
 <http://www.example.com/123> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#123>  .
