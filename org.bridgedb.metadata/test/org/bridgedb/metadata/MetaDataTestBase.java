@@ -12,6 +12,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.metadata.constants.*;
+import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
+import org.bridgedb.metadata.validator.ValidationType;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.openrdf.model.Resource;
@@ -72,8 +74,8 @@ public class MetaDataTestBase extends TestUtils{
     Statement d1TitleStatement = new StatementImpl(D1_ID, DctermsConstants.TITLE, TITLE);
     Statement d1DescriptionStatement = new StatementImpl(D1_ID, DctermsConstants.DESCRIPTION, DESCRIPTION_VALUE);
     Statement d1HomePageStatement = new StatementImpl(D1_ID, FoafConstants.HOMEPAGE, HOME_PAGE);
-    Statement d1LlicenseStatement = new StatementImpl(D1_ID, DctermsConstants.LICENSE, LICENSE);
-    Statement d1NnameSpaceStatement = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, NAME_SPACE_VALUE);
+    Statement d1LicenseStatement = new StatementImpl(D1_ID, DctermsConstants.LICENSE, LICENSE);
+    Statement d1NameSpaceStatement = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, NAME_SPACE_VALUE);
     Statement d1VersionStatement = new StatementImpl(D1_ID, PavConstants.VERSION, VERSION_VALUE);
     Statement d1DataDumpStatement = new StatementImpl(D1_ID, VoidConstants.DATA_DUMP, DATA_DUMP);  
     Statement d1PublishedStatement = new StatementImpl(D1_ID, DctermsConstants.PUBLISHER, DATA_DUMP);  
@@ -134,11 +136,13 @@ public class MetaDataTestBase extends TestUtils{
 
     static MetaDataSpecification dataSetRegistry;
     static MetaDataSpecification linksetSetRegistry;
+    static MetaDataSpecification minLinksetSetRegistry;
          
     @BeforeClass
     public static void loadRegistries() throws MetaDataException{
-        dataSetRegistry = new MetaDataSpecification("file:resources/shouldDataSet.owl");        
-        linksetSetRegistry = new MetaDataSpecification("file:resources/shouldLinkSet.owl");        
+        dataSetRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);     
+        linksetSetRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSETVOID);        
+        minLinksetSetRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);        
     }
     
     public MetaDataTestBase() throws DatatypeConfigurationException, MetaDataException {
@@ -165,14 +169,23 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    private Set<Statement> loadCodeDataSet1(){
+    private Set<Statement> loadMinDataSet1(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d1IdStatement);
+        addStatement(data, d1NameSpaceStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    private Set<Statement> loadSharedDataSet1(){
+        Set<Statement> data = loadMinDataSet1();
         addStatement(data, d1TitleStatement);
         addStatement(data, d1DescriptionStatement);
         addStatement(data, d1HomePageStatement);
-        addStatement(data, d1LlicenseStatement);
-        addStatement(data, d1NnameSpaceStatement);
+        addStatement(data, d1LicenseStatement);
         //addStatement(data, d1VersionStatement);
         addStatement(data, d1PublishedStatement);
         addStatement(data, d1ModifiedStatement);
@@ -189,7 +202,7 @@ public class MetaDataTestBase extends TestUtils{
      * @return 
      */
     Set<Statement> loadDataSet1(){
-        Set<Statement> data = loadCodeDataSet1();
+        Set<Statement> data = loadSharedDataSet1();
         addStatement(data, d1DataDumpStatement);
         addStatement(data, d1VocabularyStatement1);
         addStatement(data, d1VocabularyStatement2);
@@ -206,7 +219,7 @@ public class MetaDataTestBase extends TestUtils{
      * @return 
      */
     private Set<Statement> loadDataSet1ForLinks(){
-        Set<Statement> data = loadCodeDataSet1();
+        Set<Statement> data = loadSharedDataSet1();
         data.add(d1SourceAccessedByStatement);
         data.add(d1SourceAccessedOnStatement);
         return data;
@@ -216,14 +229,23 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    private Set<Statement> loadCodeDataSet2(){
+    private Set<Statement> loadMinDataSet2(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d2IdStatement);
+        addStatement(data, d2NameSpaceStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    private Set<Statement> loadSharedDataSet2(){
+        Set<Statement> data = loadMinDataSet2();
         addStatement(data, d2TitleStatement);
         addStatement(data, d2DescriptionStatement);
         addStatement(data, d2HomePageStatement);
         addStatement(data, d2LicenseStatement);
-        addStatement(data, d2NameSpaceStatement);
         //addStatement(data, d2VersionStatement);
         addStatement(data, d2ImportedOnStatement);
         addStatement(data, d2ImportedByStatement);
@@ -237,7 +259,7 @@ public class MetaDataTestBase extends TestUtils{
      * @return 
      */
     Set<Statement> loadDataSet2(){
-        Set<Statement> data =loadCodeDataSet2();
+        Set<Statement> data =loadSharedDataSet2();
         addStatement(data, d2DataDumpStatement);
         addStatement(data, d2VocabularyStatement1);
         addStatement(data, d2VocabularyStatement2);
@@ -254,7 +276,7 @@ public class MetaDataTestBase extends TestUtils{
      * @return 
      */
     private Set<Statement> loadDataSet2ForLinks(){
-        Set<Statement> data = loadCodeDataSet2();
+        Set<Statement> data = loadSharedDataSet2();
         data.add(d2SourceAccessedByStatement);
         data.add(d2SourceAccessedOnStatement);
         return data;
@@ -264,10 +286,24 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadLinkSet(){
-        Set<Statement> data = loadDataSet1ForLinks();
-        data.addAll(loadDataSet2ForLinks());
+    Set<Statement> loadMinLinkSet(){
+        Set<Statement> data = loadMinDataSet1();
+        data.addAll(loadMinDataSet2());
         addStatement(data, linkIdStatement); 
+        addStatement(data, linkPredicateStatement);
+        addStatement(data, subjectStatement);
+        addStatement(data, objectStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadLinkSet(){
+        Set<Statement> data = loadMinLinkSet();
+        data.addAll(loadDataSet1ForLinks());
+        data.addAll(loadDataSet2ForLinks());
         addStatement(data, linkTitleStatement);
         addStatement(data, linkDescriptionStatement );
         addStatement(data, linkLicenseStatement);
@@ -275,13 +311,9 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, linkAuthoredOnStatement);
         addStatement(data, linkCreatedByStatement);
         addStatement(data, linkCreatedOnStatement);
-        addStatement(data, linkPredicateStatement);
         addStatement(data, linkJustificationStatement);
         addStatement(data, linkNumberStatement);
-        addStatement(data, subjectStatement);
-        addStatement(data, objectStatement);
         return data;
     }
-
 
 }

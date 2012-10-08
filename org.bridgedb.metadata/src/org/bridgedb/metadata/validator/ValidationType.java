@@ -11,7 +11,7 @@ public enum ValidationType {
     DATASETVOID ("shouldDataSet.owl", false),
     LINKS("shouldLinkSet.owl", true),
     //todo make minal set
-    LINKSMINIMAL("shouldLinkSet.owl", true);
+    LINKSMINIMAL("minLinkSet.owl", true);
    
     private String owlFile;
     private boolean linkset;

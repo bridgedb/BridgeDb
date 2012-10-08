@@ -50,7 +50,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     @Test
     public void testMissingRequiredValue() throws MetaDataException{
         Reporter.report("HasMissingRequiredValues");
-        d1LlicenseStatement = null;
+        d1LicenseStatement = null;
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
         assertFalse(metaData.hasRequiredValues());
     } 

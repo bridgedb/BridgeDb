@@ -29,7 +29,6 @@ import org.bridgedb.IDMapperException;
 import java.io.IOException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
-import org.bridgedb.linkset.LinksetLoaderTest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
