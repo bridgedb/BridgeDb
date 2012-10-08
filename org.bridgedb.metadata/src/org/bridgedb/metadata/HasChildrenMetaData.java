@@ -58,7 +58,7 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     public Set<ResourceMetaData> getResoucresByPredicate(URI predicate){
         for (MetaDataBase child:childMetaData){
             Set<ResourceMetaData> possible = child.getResoucresByPredicate(predicate);
-            if (possible != null){
+            if (possible != null && !possible.isEmpty()){
                 return possible;
             }
         }

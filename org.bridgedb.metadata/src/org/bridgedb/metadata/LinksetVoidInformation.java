@@ -34,6 +34,8 @@ public class LinksetVoidInformation implements MetaData {
     private String subjectExample;
     private int wrongTarget = 0;
     private String targetExample;
+    private boolean INCLUDE_WARNINGS = true;
+    private boolean NO_WARNINGS = false;
     
     public LinksetVoidInformation(String fileName,  ValidationType type) throws MetaDataException{
         this(new File(fileName), MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
@@ -52,6 +54,7 @@ public class LinksetVoidInformation implements MetaData {
         collection = new MetaDataCollection(reader.getVoidStatements(), specification);
         collection.validate();
         ResourceMetaData linkset = findLinkSet();
+        System.out.println("Linkset = " + linkset);
         predicate = extractSingleStringByPredicate(linkset, VoidConstants.LINK_PREDICATE);  
         transative =  checkIsTransative(linkset);
         ResourceMetaData source = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
@@ -59,10 +62,15 @@ public class LinksetVoidInformation implements MetaData {
         ResourceMetaData target = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.OBJECTSTARGET);
         targetUriSpace = extractSingleStringByPredicate(source, VoidConstants.URI_SPACE);
         validateLinks(reader.getLinkStatements());
+        validate();
     }
     
     private ResourceMetaData findLinkSet(){
         Set<ResourceMetaData> possibleResults = collection.getResourceMetaDataByType(VoidConstants.LINKSET);
+        if (possibleResults == null){
+            error = "No Resource found with the type " + VoidConstants.LINKSET + ". ";
+            return null;
+        }
         if (possibleResults.isEmpty()){
             error = "Found no Resource with the type " + VoidConstants.LINKSET + ". ";
             return null;
@@ -82,12 +90,16 @@ public class LinksetVoidInformation implements MetaData {
             return null;
         }
         Set<ResourceMetaData> possibleResults = linkset.getResoucresByPredicate(predicate);
+        if (possibleResults == null){
+            error = linkset.id + " Has no predicate " + predicate + ". ";
+            return null;
+        }
         if (possibleResults.isEmpty()){
-            error = linkset.id + "Has no predicate " + predicate + ". ";
+            error = linkset.id + " Contains no predicate " + predicate + ". ";
             return null;
         }
         if (possibleResults.size()> 1){
-            error = linkset.id + "Has has mpore than one predicate " + predicate + ". ";
+            error = linkset.id + " Has has mpore than one predicate " + predicate + ". ";
             return null;
         }
         return possibleResults.iterator().next();
@@ -98,7 +110,11 @@ public class LinksetVoidInformation implements MetaData {
             //Already in error mode.
             return null;
         }
-        Set<Value> possible = metaDataResource.getValuesByPredicate(VoidConstants.URI_SPACE);
+        Set<Value> possible = metaDataResource.getValuesByPredicate(predicate);
+        if (possible == null){
+            error = error + "Resource " + metaDataResource.getId() + " has no predicate " + predicate + ". ";
+            return null;
+        }
         if (possible.isEmpty()){
             error = error + "Resource " + metaDataResource.getId() + " does not have a predicate " + predicate + ". ";
             return null;
@@ -175,6 +191,15 @@ public class LinksetVoidInformation implements MetaData {
         return true;
     }
    
+    private void validate() throws MetaDataException {
+        if (!hasRequiredValues() || !hasCorrectTypes()){
+            throw new MetaDataException(validityReport(NO_WARNINGS));
+        }
+        if (!error.isEmpty()){
+            throw new MetaDataException(error);
+        }
+    }
+
     // Methods used to extract specific Linkset info
     
     public String getSubjectUriSpace() throws MetaDataException {
@@ -245,8 +270,15 @@ public class LinksetVoidInformation implements MetaData {
                 return report;
             }
         } else {
-            return validityReport(includeWarnings) + "\n" + error + 
+            String validityReport = collection.validityReport(includeWarnings);
+            if (validityReport.equals(AppendBase.CLEAR_REPORT)){
+                return "\nError getting linkset information:\n" + error +
                     "\n Found " + correctLinks + " protentional links but could not check them";
+            } else {
+                return "Validation Report:\n" + validityReport + 
+                        "\nWhich may have Errors getting linkset information:\n" + error +
+                    "\nFound " + correctLinks + " protentional links but could not check them";
+            }
         }
     }
 

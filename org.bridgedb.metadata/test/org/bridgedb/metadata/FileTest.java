@@ -22,7 +22,7 @@ public class FileTest extends TestUtils{
     
     public static boolean FILE_HAS_EXTRA_RDF = false;
     public static boolean FILE_HAS_ONLY_EXPECTED_RDF = true;
-    
+    public static String LINK_FILE = "test-data/chemspider2chemblrdf-linkset.ttl";
     
     private void checkFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
         Reporter.report("Checking " + fileName);
@@ -76,6 +76,6 @@ public class FileTest extends TestUtils{
     @Test
     public void testchemspider2chemblrdfLinksetTtl() throws MetaDataException{
         MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
-        checkFile("test-data/chemspider2chemblrdf-linkset.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+        checkFile(LINK_FILE, 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
  }

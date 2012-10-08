@@ -260,7 +260,9 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     public Set<ResourceMetaData> getResoucresByPredicate(URI predicate){
         HashSet<ResourceMetaData> results = new HashSet<ResourceMetaData>();
         for (Resource id: ids){
-            results.add(collection.getResourceByID(id));
+            if (predicate.equals(this.predicate)){
+                results.add(collection.getResourceByID(id));
+            }
         }
         return results;
     }
