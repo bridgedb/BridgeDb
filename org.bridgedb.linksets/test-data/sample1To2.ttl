@@ -4,7 +4,7 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix foo: <http://www.foo.com/>.
-@prefix pav: <http://purl.org/pav/2.0/> .
+@prefix pav: <http://purl.org/pav/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
@@ -12,18 +12,18 @@
     dcterms:title "Dataset Description Title"^^xsd:string ;
     dcterms:description """Dataset description description"""^^xsd:string;
     dcterms:creator <http://www.foo.com/> ;
-    dcterms:created "2012-08-06"^^xsd:date;
+    dcterms:created "2012-08-06T10:02:56Z"^^xsd:dateTime;
     foaf:primaryTopic :Test1_2 .
     
 :TestDS1 a void:Dataset  ;
 	dcterms:title "Test Dataset 1"^^xsd:string ;
-    pav:derivedOn "2012-02-22"^^xsd:date ;
+    pav:derivedOn "2012-02-22T10:23:00Z"^^xsd:dateTime ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.foo.com/>.
 :TestDS2 a void:Dataset  ;
 	dcterms:title "Test Dataset 2"^^xsd:string ;
-    pav:importedOn "2012-02-22"^^xsd:date ;
+    pav:importedOn "2012-02-22T15:23:56Z"^^xsd:dateTime ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.example.com/>.
@@ -33,7 +33,7 @@
     dcterms:license "Who cares this is a test" ;
     void:subset :TestDS1 ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
-    dcterms:created "2012-02-22"^^xsd:date ;
+    dcterms:created "2012-02-22T10:23:56Z"^^xsd:dateTime ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
 
 foo:T123 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/123> .
