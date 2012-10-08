@@ -108,10 +108,18 @@ public class Test {
      */
     public static void findDataSources(IDMapper mapper) throws IDMapperException{
         Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
-        System.out.println(srcDataSources);
+        for (DataSource dataSource:srcDataSources) {
+            if (dataSource != null && dataSource.getUrl("").trim().isEmpty()){
+                System.out.println(dataSource.getSystemCode() + ": " + dataSource + " " + dataSource.getMainUrl());
+            }
+        }
         allSource.addAll(srcDataSources);
         Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
-        System.out.println(tgtDataSources);
+        for (DataSource dataSource:tgtDataSources) {
+            if (dataSource != null && dataSource.getUrl("").trim().isEmpty()){
+                System.out.println(dataSource.getSystemCode() + ": " + dataSource + " " + dataSource.getMainUrl());
+            }
+        }
         allSource.addAll(tgtDataSources);
     }
 
@@ -130,6 +138,8 @@ public class Test {
                 System.out.println("SystemCode: " + ds.getSystemCode());
                 System.out.println("   Fullname: " + ds.getSystemCode());
                 System.out.println("   UriPattern :" + ds.getUrl("$id"));
+                System.out.println("   Main URL :" + ds.getMainUrl());
+                System.out.println("   Mairan base :" + ds.getURN(""));
             }
         }
         //IDMapper mapper = BridgeDb.connect("idmapper-pgdb:C:/OpenPhacts/andra/"+"Ag_Derby_20120602.bridge");
