@@ -27,6 +27,8 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
+import org.bridgedb.metadata.LinksetVoidInformation;
+import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.url.URLListener;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -58,18 +60,19 @@ public class RDFWriter implements RdfLoader{
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
 
-    public RDFWriter(RdfStoreType type, RDFValidator validator, URLListener listener, String mainCaller) throws IDMapperException{
+    public RDFWriter(RdfStoreType type, LinksetVoidInformation information, URLListener listener, String mainCaller) throws IDMapperException{
         this.type = type;
         urlListener = listener;
         statements = new ArrayList<Statement>();
         this.mainCaller = mainCaller;
         try {
-            String subjectUriSpace = validator.getSubjectUriSpace();
-            String targetUriSpace = validator.getTargetUriSpace();
-            String predicate = validator.getPredicate();
-            symmetric = validator.isSymmetric();
-            boolean transative = validator.isTransative();
-            linksetResource = validator.getLinksetResource();
+            String subjectUriSpace = information.getSubjectUriSpace();
+            String targetUriSpace = information.getTargetUriSpace();
+            String predicate = information.getPredicate();
+            //TODO work out way to do this
+            symmetric = true;
+            boolean transative = information.isTransative();
+            linksetResource = information.getLinksetResource();
             inverseResource = invertResource(linksetResource);
             mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, targetUriSpace, 
                     symmetric, transative);            
@@ -79,7 +82,7 @@ public class RDFWriter implements RdfLoader{
             } else {
                 inverseContext = null;
             }
-        } catch (RDFHandlerException ex) {
+        } catch (MetaDataException ex) {
             throw new IDMapperLinksetException("Error setting the context", ex);
         }
      }

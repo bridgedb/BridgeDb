@@ -52,11 +52,19 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         builder.append("Alternatives ");
         builder.append(name);
         newLine(builder);
+        tab(builder, tabLevel);
+        if (noChildernWithValue()){
+            builder.append("Not enough information found");
+        } else {
+            builder.append("Enough information found");            
+        }
+        newLine(builder);
     }
 
     @Override
     void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         if (noChildernWithValue()){
+            System.out.println("no validoity");
             tab(builder, tabLevel);
             builder.append("ERROR: ");
             builder.append(id);
@@ -81,6 +89,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
                 return false;
             }
         }
+        System.out.println ("Not Enough info: " + name);
         return true;
     }
     

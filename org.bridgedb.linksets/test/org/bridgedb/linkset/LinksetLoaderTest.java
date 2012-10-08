@@ -21,6 +21,9 @@ package org.bridgedb.linkset;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.Reporter;
 import org.junit.BeforeClass;
@@ -35,7 +38,7 @@ import org.openrdf.OpenRDFException;
 public class LinksetLoaderTest {
         
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException  {
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         
@@ -66,15 +69,15 @@ public class LinksetLoaderTest {
 	}
 
     @Test(expected=FileNotFoundException.class)
-    public void testFileNotFound() throws IDMapperException, FileNotFoundException {
+    public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
     	LinksetLoader loader = new LinksetLoader();
-    	loader.parse("noFile.xyz", "validate");
+    	loader.parse("noFile.xyz", "validate", ValidationType.LINKSMINIMAL);
     }
 
     @Test
-    public void testFileExists() throws IDMapperException, FileNotFoundException {
+    public void testFileExists() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
     	LinksetLoader loader = new LinksetLoader();
-    	loader.parse("test-data/cw-dd.ttl", "validate");
+    	loader.parse("test-data/cw-dd.ttl", "validate", ValidationType.LINKSMINIMAL);
     }
 
 }

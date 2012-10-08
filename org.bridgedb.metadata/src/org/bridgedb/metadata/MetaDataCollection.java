@@ -34,8 +34,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     Set<Statement> unusedStatements = new HashSet<Statement>();
     MetaDataSpecification metaDataRegistry;
     
-    public MetaDataCollection(Set<Statement> statements, MetaDataSpecification metaDataRegistry) throws MetaDataException {
-        this.metaDataRegistry = metaDataRegistry;
+    public MetaDataCollection(Set<Statement> statements, MetaDataSpecification specification) throws MetaDataException {
+        this.metaDataRegistry = specification;
         Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
         Set<Resource> ids = findIds(statements);
         for (Resource id:ids){
@@ -65,8 +65,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (rmd != null){
                 if (resourceMetaData == null){
                    resourceMetaData = rmd; 
-                   //First this is as the direct parent, second this as the collection to get other objects from
-                   resourceMetaData.loadValues(id, statements, this, this);
+                   resourceMetaData.loadValues(id, statements, this);
                 } else {
                    errors.add(id + " has a second known rdf:type " + type);
                 }
@@ -187,8 +186,14 @@ public class MetaDataCollection extends AppendBase implements MetaData {
 
     public boolean hasRequiredValuesOrIsSuperset() {
         for (ResourceMetaData resource:resourcesMap.values()){
-            if (!resource.isSuperset() && !resource.hasRequiredValues()){
-                return false;
+            if (!resource.isSuperset()){
+                System.out.println("not super: " + resource.id);
+                if (!resource.hasRequiredValues()){
+                    System.out.println("hasRequiredValuesOrIsSuperset() failed by " + resource.id);
+                    return false;
+                } else {
+                    System.out.println("ok");
+                }
             }
         }
         return true;
@@ -260,8 +265,12 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     @Override
     void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
-         for (ResourceMetaData resouce:theResources){
-             resouce.appendValidityReport(builder, checkAllpresent, includeWarnings, 0);
+         for (ResourceMetaData resource:theResources){
+             if (!resource.isSuperset()){
+                resource.appendValidityReport(builder, checkAllpresent, includeWarnings, 0);
+             } else {
+                resource.appendParentValidityReport(builder, checkAllpresent, includeWarnings, 0);
+             }
          }
          for (String error:errors){
              tab(builder, tabLevel);
@@ -286,6 +295,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return result;
     }
 
+     
     public void validate() throws MetaDataException {
         String report = this.validityReport(false);
         if (report.equals(CLEAR_REPORT)){
@@ -297,6 +307,32 @@ public class MetaDataCollection extends AppendBase implements MetaData {
 
     ResourceMetaData getResourceByID(Resource id) {
         return resourcesMap.get(id);
+    }
+
+    public Set<ResourceMetaData> getResourceMetaDataByType(URI type) {
+        HashSet<ResourceMetaData> results = new HashSet<ResourceMetaData>();
+        for (ResourceMetaData resultMetaData:resourcesMap.values()){
+            if(type.equals(resultMetaData.getType())){
+                results.add(resultMetaData);
+            }
+        }
+        return results;
+    }
+
+   @Override
+    public Set<ResourceMetaData> getResoucresByPredicate(URI predicate) {
+        HashSet<ResourceMetaData> result = null;
+        for (Resource id: resourcesMap.keySet()){
+            ResourceMetaData rmd = resourcesMap.get(id);
+            Set<ResourceMetaData> moreResults = rmd.getResoucresByPredicate(predicate);
+            if (moreResults != null){
+                if (result == null){
+                    result = new HashSet<ResourceMetaData>();
+                }
+                result.addAll(moreResults);
+            }
+        }
+        return result;
     }
 
 }

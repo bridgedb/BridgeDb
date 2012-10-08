@@ -19,6 +19,7 @@
 package org.bridgedb.linkset;
 import java.io.FileNotFoundException;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.utils.Reporter;
 
@@ -27,7 +28,7 @@ import org.bridgedb.utils.Reporter;
  */
 public class SetupLoaderWithTestData {
         
-   public static void main(String[] args) throws BridgeDbSqlException, IDMapperException, IDMapperLinksetException, FileNotFoundException {
+   public static void main(String[] args) throws BridgeDbSqlException, IDMapperException, IDMapperLinksetException, FileNotFoundException, MetaDataException {
         Reporter.report("sample2to1.ttl");
         String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "new"};
         LinksetLoader.main (args1);

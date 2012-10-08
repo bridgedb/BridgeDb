@@ -26,7 +26,6 @@
 	dcterms:title "ChemSpider"@en;
 	dcterms:description "ChemSpider's Public Dataset"@en;
 	foaf:homepage <http://rdf.chemspider.com/>;
-	foaf:page <http://www.chemspider.com/>;
 	dcterms:license <http://www.chemspider.com/Disclaimer.aspx>;
 	void:uriSpace "http://rdf.chemspider.com/"^^xsd:string;
 #Subsets
@@ -39,8 +38,6 @@
 		<http://xmlns.com/foaf/0.1/>;
 	dcterms:subject <http://dbpedia.org/resource/Molecule>;
 	void:exampleResource <http://rdf.chemspider.com/2157>;
-#Dataset Access	
-	void:sparqlEndpoint <http://rdf.chemspider.com/sparql>;
 #Update Frequency
 	voag:frequencyOfChange freq:continuous;
 	.

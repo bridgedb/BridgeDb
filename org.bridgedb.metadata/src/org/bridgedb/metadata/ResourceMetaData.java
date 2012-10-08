@@ -26,7 +26,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private final URI type;
     private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
     private boolean isParent = false;
-
+    private boolean directlyLinkedTo = false;
+    
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
         super(type.getLocalName(), childMetaData);
         childMetaData.add(PropertyMetaData.getTypeProperty());
@@ -61,12 +62,12 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }*/
     
     @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
-        super.loadValues(id, data, parent, collection);
+    public void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
+        super.loadValues(id, data, collection);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
             PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate);
-            metaData.loadValues(id, data, parent, collection);
+            metaData.loadValues(id, data, collection);
             childMetaData.add(metaData);
         }
     }
@@ -125,29 +126,28 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     @Override
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
-        if (isParent){
-            if (this.hasCorrectTypes()){
-                if (this.hasRequiredValues()){
-                    //Do nothing
-                } else {
-                    if (includeWarnings) {
-                        tab(builder, tabLevel);
-                        builder.append("WARNING: ");
-                        builder.append(id);
-                        builder.append(" is incomplete so can only be used as a superset ");
-                        newLine(builder);
-                    }
-                }
-            } else {
-                //Incorrect types show the whole vlaidity report anyway
-                for (MetaDataBase child:childMetaData){
-                    child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
-                }    
-            }
-        } else {
+        for (MetaDataBase child:childMetaData){
+            child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
+        }
+    }
+
+    public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel){
+        if (!isParent){
+            //Wrong method called 
+            appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
+        } else if (!this.hasCorrectTypes()) {
+            //Report all to pick up the incorrect type
             for (MetaDataBase child:childMetaData){
                 child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
             }
+        } else if (includeWarnings && hasRequiredValues()) {
+            tab(builder, tabLevel);
+            builder.append("WARNING: ");
+            builder.append(id);
+            builder.append(" is incomplete so can only be used as a superset ");
+            newLine(builder);
+        } else {
+            //Complete and corret values so noting to report.
         }
     }
     
@@ -185,5 +185,9 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             builder.append(" has incorrect typed statements.");
         }
         newLine(builder);        
+    }
+
+    public Resource getId() {
+        return id;
     }
 }

@@ -54,8 +54,8 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
-    void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
-        setupValues(id, parent);
+    void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
+        setupValues(id);
         this.collection = collection;
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
@@ -67,7 +67,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     ids.add((Resource)value);
                 }
             }
-        }  
+        } 
     }
 
     @Override
@@ -257,6 +257,15 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
+    public Set<ResourceMetaData> getResoucresByPredicate(URI predicate){
+        HashSet<ResourceMetaData> results = new HashSet<ResourceMetaData>();
+        for (Resource id: ids){
+            results.add(collection.getResourceByID(id));
+        }
+        return results;
+    }
+
+    @Override
     LinkedResource getLeafByPredicate(URI predicate) {
         if (this.predicate.equals( predicate)){
             return this;
@@ -278,7 +287,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
 
     @Override
     public void addParent(LeafMetaData parentLeaf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //Do nothing I think;
     }
 
     @Override

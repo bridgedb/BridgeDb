@@ -32,10 +32,13 @@ public class TestUtils {
     }
 
     void checkRequiredValues(MetaDataCollection metaData){
+        System.out.println("checkingRequiredValues");
         boolean ok = metaData.hasRequiredValuesOrIsSuperset();
         if (!ok){
+            System.out.println("superset passed");
             //This test will fail but with extra info
             assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
+            Reporter.report("hasRequiredValuesOrIsSuperset failed but validity report clear");
             Reporter.report(metaData.toString());
             assertTrue(ok);
         }        

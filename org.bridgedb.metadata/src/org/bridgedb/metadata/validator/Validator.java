@@ -6,9 +6,7 @@ package org.bridgedb.metadata.validator;
 
 import java.io.File;
 import java.util.Set;
-import org.bridgedb.metadata.MetaDataCollection;
-import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.MetaDataSpecification;
+import org.bridgedb.metadata.*;
 import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.rdf.StatementReader;
 import org.openrdf.model.Statement;
@@ -23,13 +21,18 @@ public class Validator {
     public static String validityReport (String dataFileName, ValidationType type, boolean includeWarnings) throws MetaDataException{
         MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type);
-        MetaDataCollection metaData = new MetaDataCollection(dataFileName, specification);
+        MetaData metaData;
+        if (type.isLinkset()){
+            metaData = new LinksetVoidInformation(dataFileName, specification);
+        } else {
+            metaData = new MetaDataCollection(dataFileName, specification);
+        }
         return metaData.validityReport(includeWarnings);
     }
     
     static public void main(String[] arg) throws MetaDataException {
         if (arg.length < 2 || arg.length > 3){
-            Reporter.report(validityReport("test-data/chemspider-void.ttl", ValidationType.DATASET, true));
+            Reporter.report(validityReport("test-data/chemspider-void.ttl", ValidationType.DATASETVOID, true));
             return;
             //usage();
         }
@@ -75,6 +78,5 @@ public class Validator {
         Reporter.report("   Default is to include warnings.");
         System.exit(1);
     }
-
 
 }

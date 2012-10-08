@@ -42,11 +42,11 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
         this.documentation = other.documentation;
     }
     
-    abstract void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection);
+    //abstract void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection);
+    abstract void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection);
 
-    void setupValues(Resource id, MetaData parent){
+    void setupValues(Resource id){
         this.id = id;
- //       this.parent = parent;
     }
     
     final void addDocumentationLink(StringBuilder builder, int tabLevel) {

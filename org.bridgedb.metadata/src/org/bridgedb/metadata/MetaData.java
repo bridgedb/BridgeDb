@@ -14,7 +14,7 @@ import org.openrdf.model.Value;
  *
  * @author Christian
  */
-interface MetaData {
+public interface MetaData {
     
     String Schema();
 
@@ -37,5 +37,7 @@ interface MetaData {
      */
     Set<Value> getValuesByPredicate(URI predicate);
     
+    Set<ResourceMetaData> getResoucresByPredicate(URI predicate);
+            
     Set<Statement> getRDF();
 }

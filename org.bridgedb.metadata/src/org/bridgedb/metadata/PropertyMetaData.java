@@ -83,8 +83,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
-        setupValues(id, parent);
+    public void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
+        setupValues(id);
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
@@ -296,6 +296,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }
     }
 
+    @Override
+    public Set<ResourceMetaData> getResoucresByPredicate(URI predicate){
+        return null;
+    }
+    
     @Override
     PropertyMetaData getLeafByPredicate(URI predicate) {
         if (this.predicate.equals( predicate)){

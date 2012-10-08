@@ -56,7 +56,6 @@ public class FileTest extends TestUtils{
         Reporter.report(metaData.validityReport(INCLUDE_WARNINGS));
     }
 
-    @Test
     public void testChemspider() throws MetaDataException{
         MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldDataSet.owl");
         checkFile("test-data/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
@@ -65,9 +64,8 @@ public class FileTest extends TestUtils{
     @Test
     public void testChemspiderSmall() throws MetaDataException{
         MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldDataSet.owl");
-        checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
-        //checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
-    } 
+        checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
+   } 
 
     @Test
     public void testChemblRdfVoidTtl() throws MetaDataException{
@@ -76,16 +74,8 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
-    @Ignore
-    public void testl() throws MetaDataException{
-        MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
-        checkFile("C://temp/cs-chebi-stereo_2012-07-31.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
-    } 
-
-    @Test
-    @Ignore
     public void testchemspider2chemblrdfLinksetTtl() throws MetaDataException{
-        MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldOwl.owl");
-        checkFile("test-data/chemspider2chemblrdf-linkset.ttl", 2, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
+        MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
+        checkFile("test-data/chemspider2chemblrdf-linkset.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
  }

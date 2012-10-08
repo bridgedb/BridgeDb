@@ -34,35 +34,22 @@ public class StatementReader extends RDFHandlerBase{
         return reg.getKeys();
     }
     
-    private Set<Statement> statements = new HashSet<Statement>();
+    Set<Statement> statements = new HashSet<Statement>();
+    boolean parsed = false;
     
-    private StatementReader(){
+    StatementReader() {
     }
    
-    public static Set<Statement> extractStatements (String  fileName) throws MetaDataException {
-        File file = new File(fileName);
-        return extractStatements(file);
-    }
-    
-    public static Set<Statement> extractStatements (File file) throws MetaDataException {
-        return extractStatements(file, DEFAULT_BASE_URI);
-    }
-        
-    public static Set<Statement> extractStatements (File file, String baseURI) throws MetaDataException {
-        if (!file.isFile()){
-            throw new MetaDataException (file.getAbsolutePath() + " is not a file");
-        }
-        Reporter.report("Parsing file:\n\t" + file.getAbsolutePath());
-        StatementReader handler = new StatementReader();
+    void parse(File file, String baseURI) throws MetaDataException{
         FileReader reader = null;
         try {
             RDFParser parser = getParser(file);
-            parser.setRDFHandler(handler);
+            parser.setRDFHandler(this);
             parser.setParseErrorListener(new LinksetParserErrorListener());
             parser.setVerifyData(true);
             reader = new FileReader(file);
             parser.parse (reader, baseURI);
-            return handler.statements;
+            parsed = true;
         } catch (IOException ex) {
             throw new MetaDataException("Error reading file " + 
             		file.getAbsolutePath() + " " + ex.getMessage(), ex);
@@ -77,7 +64,22 @@ public class StatementReader extends RDFHandlerBase{
             } catch (IOException ex) {
                 Reporter.report(ex.getMessage());
             }
-        }
+        }        
+    }
+    
+    public static Set<Statement> extractStatements (String  fileName) throws MetaDataException {
+        File file = new File(fileName);
+        return extractStatements(file);
+    }
+    
+    public static Set<Statement> extractStatements (File file) throws MetaDataException {
+        return extractStatements(file, DEFAULT_BASE_URI);
+    }
+        
+    public static Set<Statement> extractStatements (File file, String baseURI) throws MetaDataException {
+        StatementReader statementReader = new StatementReader();
+        statementReader.parse(file, baseURI);
+        return statementReader.statements;
     }
     
     private static RDFParser getParser(File file){

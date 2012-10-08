@@ -55,6 +55,18 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     }
     
     @Override
+    public Set<ResourceMetaData> getResoucresByPredicate(URI predicate){
+        for (MetaDataBase child:childMetaData){
+            Set<ResourceMetaData> possible = child.getResoucresByPredicate(predicate);
+            if (possible != null){
+                return possible;
+            }
+        }
+        return null;
+    }
+        
+
+    @Override
     public boolean hasCorrectTypes() {
         for (MetaDataBase child:childMetaData){
             if (!child.hasCorrectTypes()){
@@ -95,10 +107,10 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     
     // ** MetaDataBase methods 
     @Override
-    void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection) {
-        setupValues(id, parent);
+    void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
+        setupValues(id);
         for (MetaDataBase child:childMetaData){
-            child.loadValues(id, data, this, collection);
+            child.loadValues(id, data, collection);
         }
     }
 

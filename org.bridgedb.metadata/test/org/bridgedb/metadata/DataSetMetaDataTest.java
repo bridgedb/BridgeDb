@@ -10,6 +10,7 @@ import org.bridgedb.metadata.constants.*;
 import org.bridgedb.metadata.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.openrdf.model.Statement;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
@@ -24,6 +25,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
+    @Ignore
     public void testShowAll() throws MetaDataException{
         Reporter.report("ShowAll");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
