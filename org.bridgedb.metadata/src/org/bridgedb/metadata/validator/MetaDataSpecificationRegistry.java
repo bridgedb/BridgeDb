@@ -6,9 +6,9 @@ package org.bridgedb.metadata.validator;
 
 import java.io.InputStream;
 import java.util.HashMap;
-import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.MetaDataSpecification;
-import org.bridgedb.metadata.utils.InputStreamFinder;
+import org.bridgedb.utils.InputStreamFinder;
 
 /**
  *
@@ -19,7 +19,7 @@ public class MetaDataSpecificationRegistry {
     private static HashMap<ValidationType,MetaDataSpecification>  specificationByValidationType = 
             new HashMap<ValidationType,MetaDataSpecification>();
     
-    public static MetaDataSpecification getMetaDataSpecificationByValidatrionType(ValidationType type) throws MetaDataException{
+    public static MetaDataSpecification getMetaDataSpecificationByValidatrionType(ValidationType type) throws IDMapperException{
         if (!specificationByValidationType.containsKey(type)){
             InputStream stream = InputStreamFinder.findByName(type.getOwlFileName(), new MetaDataSpecificationRegistry());
             MetaDataSpecification specifation = new MetaDataSpecification(stream);

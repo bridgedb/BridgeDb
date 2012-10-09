@@ -4,10 +4,10 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.utils.Reporter;
 import java.util.Set;
 import org.bridgedb.metadata.constants.DctermsConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
-import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,7 +16,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
 import static org.hamcrest.Matchers.*;
 
 /**

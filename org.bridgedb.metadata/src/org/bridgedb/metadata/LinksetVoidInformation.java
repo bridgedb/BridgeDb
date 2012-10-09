@@ -6,6 +6,7 @@ package org.bridgedb.metadata;
 
 import java.io.File;
 import java.util.Set;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.constants.PavConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
@@ -37,11 +38,11 @@ public class LinksetVoidInformation implements MetaData {
     private boolean INCLUDE_WARNINGS = true;
     private boolean NO_WARNINGS = false;
     
-    public LinksetVoidInformation(String fileName,  ValidationType type) throws MetaDataException{
+    public LinksetVoidInformation(String fileName,  ValidationType type) throws IDMapperException{
         this(new File(fileName), MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
     }
     
-    public LinksetVoidInformation(File file,  ValidationType type) throws MetaDataException{
+    public LinksetVoidInformation(File file,  ValidationType type) throws IDMapperException{
         this(file, MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
     }
 

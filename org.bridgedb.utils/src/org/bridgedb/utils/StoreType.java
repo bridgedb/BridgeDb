@@ -18,6 +18,8 @@
 //
 package org.bridgedb.utils;
 
+import org.bridgedb.IDMapperException;
+
 /**
  *
  * @author Christian
@@ -25,13 +27,13 @@ package org.bridgedb.utils;
 public enum StoreType {
     LIVE, LOAD, TEST;
    
-    public static StoreType parseString(String string) throws Exception {
+    public static StoreType parseString(String string) throws IDMapperException {
        for(StoreType type:StoreType.values()){
            if (type.toString().equalsIgnoreCase(string)){
                return type;
            }
        }
-       throw new Exception ("Unable to parse " + string + " to a StoreTyp. "
+       throw new IDMapperException ("Unable to parse " + string + " to a StoreTyp. "
                + "Legal values are " + valuesString());
     }
     

@@ -7,7 +7,7 @@ package org.bridgedb.metadata;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.metadata.constants.*;
-import org.bridgedb.metadata.utils.Reporter;
+import org.bridgedb.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;

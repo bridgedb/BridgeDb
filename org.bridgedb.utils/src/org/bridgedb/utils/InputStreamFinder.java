@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.metadata.utils;
+package org.bridgedb.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,8 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.MetaDataSpecification;
+import org.bridgedb.IDMapperException;
 
 /**
  *
@@ -24,7 +23,7 @@ import org.bridgedb.metadata.MetaDataSpecification;
  */
 public class InputStreamFinder {
     
-    public static InputStream findByName(String name, Object caller) throws MetaDataException {
+    public static InputStream findByName(String name, Object caller) throws IDMapperException {
         //Look in call directory
         InputStream test = getInputStreamFromPath(name);
         if (test != null) { 
@@ -46,7 +45,7 @@ public class InputStreamFinder {
         if (test != null) { 
             return test;
         }
-        throw new MetaDataException("Unable to find the metadata.xml file");
+        throw new IDMapperException("Unable to find the metadata.xml file");
     }
     
     private static InputStream getInputStreamFromPath(String filePath){
@@ -85,7 +84,7 @@ public class InputStreamFinder {
             }
             return null;
         } catch (IOException ex) {
-            Logger.getLogger(MetaDataSpecification.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         //NOTE: Stream must be left OPEN!
         return null;

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.utils.Reporter;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFFormat;

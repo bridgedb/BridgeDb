@@ -4,24 +4,20 @@
  */
 package org.bridgedb.metadata;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.xml.parsers.ParserConfigurationException;
 import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
-import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.xml.sax.SAXException;
 
 /**
  *

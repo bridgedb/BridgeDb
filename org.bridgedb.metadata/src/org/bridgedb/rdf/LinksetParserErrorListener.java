@@ -18,7 +18,7 @@
 //
 package org.bridgedb.rdf;
 
-import org.bridgedb.metadata.utils.Reporter;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.rio.ParseErrorListener;
 
 /**

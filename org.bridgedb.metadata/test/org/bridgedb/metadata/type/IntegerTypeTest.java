@@ -4,7 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
-import org.bridgedb.metadata.utils.Reporter;
+import org.bridgedb.utils.Reporter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

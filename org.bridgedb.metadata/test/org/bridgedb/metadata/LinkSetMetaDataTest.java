@@ -4,9 +4,9 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.utils.Reporter;
 import org.junit.Ignore;
 import javax.xml.datatype.DatatypeConfigurationException;
-import org.bridgedb.metadata.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -4,10 +4,9 @@
  */
 package org.bridgedb.metadata.reader;
 
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.junit.Ignore;
-import org.bridgedb.metadata.utils.Reporter;
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RepositoryFactory;
 import org.junit.After;
 import org.junit.AfterClass;

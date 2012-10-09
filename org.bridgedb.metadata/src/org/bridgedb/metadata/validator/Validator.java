@@ -6,9 +6,10 @@ package org.bridgedb.metadata.validator;
 
 import java.io.File;
 import java.util.Set;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.*;
-import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFFormat;
 
@@ -18,7 +19,7 @@ import org.openrdf.rio.RDFFormat;
  */
 public class Validator {
     
-    public static String validityReport (String dataFileName, ValidationType type, boolean includeWarnings) throws MetaDataException{
+    public static String validityReport (String dataFileName, ValidationType type, boolean includeWarnings) throws IDMapperException{
         MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type);
         MetaData metaData;
@@ -30,7 +31,7 @@ public class Validator {
         return metaData.validityReport(includeWarnings);
     }
     
-    static public void main(String[] arg) throws MetaDataException {
+    static public void main(String[] arg) throws IDMapperException {
         if (arg.length < 2 || arg.length > 3){
             Reporter.report(validityReport("test-data/chemspider-void.ttl", ValidationType.DATASETVOID, true));
             return;

@@ -6,12 +6,11 @@ package org.bridgedb.metadata;
 
 import java.io.File;
 import java.util.Set;
-import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.utils.Reporter;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 
 /**
