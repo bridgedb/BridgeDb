@@ -24,7 +24,7 @@ public enum ValidationType {
         return owlFile;
     }
     
-    public ValidationType parseString(String string) throws MetaDataException{
+    public static ValidationType parseString(String string) throws MetaDataException{
        for(ValidationType type:ValidationType.values()){
            if (type.toString().equalsIgnoreCase(string)){
                return type;

@@ -26,6 +26,7 @@ import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,48 +36,30 @@ import org.openrdf.OpenRDFException;
  * @author Christian
  */
 public class LinksetLoaderTest {
-        
+       
+    private static StoreType VALIDATE_ONLY = null;
+    
     @BeforeClass
     public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         
-        Reporter.report("sample2to1.ttl");
-        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "testnew!"};
-        LinksetLoader.main (args1);
-        Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "test!"};
-        LinksetLoader.main (args2);
-        Reporter.report("sample2to3.ttl");
-        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "test!"};
-        LinksetLoader.main (args3);
-        Reporter.report("cw-cs.ttl");
-        String[] args4 = {"../org.bridgedb.linksets/test-data/cw-cs.ttl", "test!"};
-        LinksetLoader.main (args4);
-        Reporter.report("cw-cm.ttl");
-        String[] args5 = {"../org.bridgedb.linksets/test-data/cw-cm.ttl", "test!"};
-        LinksetLoader.main (args5);
-        Reporter.report("cw-dd.ttl");
-        String[] args6 = {"../org.bridgedb.linksets/test-data/cw-dd.ttl", "test!"};
-        LinksetLoader.main (args6);
-        Reporter.report("cw-ct.ttl");
-        String[] args7 = {"../org.bridgedb.linksets/test-data/cw-ct.ttl", "test!"};
-        LinksetLoader.main (args7);
-        Reporter.report("cw-dt.ttl");
-        String[] args8 = {"../org.bridgedb.linksets/test-data/cw-dt.ttl", "test!"};
-        LinksetLoader.main (args8);
+        LinksetLoader.clearExistingData(StoreType.TEST);
+        ValidationType validationType = ValidationType.LINKSMINIMAL;
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dd.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-ct.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dt.ttl", StoreType.TEST, validationType);
 	}
 
-    @Test(expected=FileNotFoundException.class)
+    @Test(expected=IDMapperLinksetException.class)
     public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
     	LinksetLoader loader = new LinksetLoader();
-    	loader.parse("noFile.xyz", "validate", ValidationType.LINKSMINIMAL);
-    }
-
-    @Test
-    public void testFileExists() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
-    	LinksetLoader loader = new LinksetLoader();
-    	loader.parse("test-data/cw-dd.ttl", "validate", ValidationType.LINKSMINIMAL);
+    	loader.parse("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
     }
 
 }

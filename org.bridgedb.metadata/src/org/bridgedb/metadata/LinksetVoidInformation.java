@@ -12,6 +12,7 @@ import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.rdf.LinksetStatementReader;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -51,6 +52,7 @@ public class LinksetVoidInformation implements MetaData {
     }
     
     public LinksetVoidInformation(File file, MetaDataSpecification specification) throws MetaDataException{
+        Reporter.report("Reading data from " + file.getAbsolutePath());
         LinksetStatementReader reader = new LinksetStatementReader(file);
         collection = new MetaDataCollection(reader.getVoidStatements(), specification);
         collection.validate();
