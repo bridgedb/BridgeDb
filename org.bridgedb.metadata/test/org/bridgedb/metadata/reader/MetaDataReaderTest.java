@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.reader;
 
+import org.bridgedb.utils.StoreType;
 import org.junit.Ignore;
 import org.bridgedb.metadata.utils.Reporter;
 import org.bridgedb.rdf.RdfStoreType;
@@ -47,7 +48,7 @@ public class MetaDataReaderTest {
     @Test
     public void testReadMetaData() throws Exception {
         Reporter.report("readMetaData");
-        RepositoryFactory.clear(RdfStoreType.TEST);
+        RepositoryFactory.clear(StoreType.TEST);
         String fileName = "test-data/chemspider-void-small.ttl";
         MetaDataReader instance = new MetaDataReader();
         String expResult = "Loaded http://localhost:8080/OPS-IMS/void/1\n"

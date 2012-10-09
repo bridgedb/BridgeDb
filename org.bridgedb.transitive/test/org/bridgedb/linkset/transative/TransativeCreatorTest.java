@@ -18,7 +18,9 @@
 //
 package org.bridgedb.linkset.transative;
 
+import java.io.FileNotFoundException;
 import org.bridgedb.linkset.IDMapperLinksetException;
+import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.mysql.MySQLSpecific;
@@ -46,7 +48,7 @@ import org.openrdf.rio.RDFHandlerException;
 public class TransativeCreatorTest {
     
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException  {
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
@@ -66,7 +68,7 @@ public class TransativeCreatorTest {
      * Test of main method, of class TransativeCreator.
      */
     @Test
-    public void testMain() throws BridgeDbSqlException, RDFHandlerException, IDMapperLinksetException, IDMapperException, IOException {
+    public void testMain() throws Exception {
         Reporter.report("main");
         String[] args = new String[4];
         args[0] = "2";

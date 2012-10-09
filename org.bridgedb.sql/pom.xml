@@ -22,6 +22,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.utils</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>

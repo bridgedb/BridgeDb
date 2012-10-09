@@ -64,44 +64,6 @@ public class ConfigurationReader {
     private static Properties properties;
     
     /**
-     * Create a wrapper around the live SQL Database, 
-     *     using the database name, user name and password found in the config file.
-     * @return 
-     * @throws BridgeDbSqlException 
-     */
-    public static SQLAccess createSQLAccess() throws BridgeDbSqlException {
-        SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlDatabase(), sqlUser(), sqlPassword());
-        sqlAccess.getConnection();
-        return sqlAccess;
-    }
-
-    /**
-     * Create a wrapper around the load SQL Database, 
-     *     using the database name, user name and password found in the config file.
-     * @See sqlLoadDatabase()
-     * @return
-     * @throws BridgeDbSqlException 
-     */
-    public static SQLAccess createLoadSQLAccess() throws BridgeDbSqlException {
-        SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlLoadDatabase(), sqlUser(), sqlPassword());
-        sqlAccess.getConnection();
-        return sqlAccess;
-    }
-
-    /**
-     * Create a wrapper around the load SQL Database, 
-     *     using the database name, user name and password found in the config file.
-     * @See sqlTestDatabase(), testSqlUser() and testSqlPassword()
-     * @return
-     * @throws BridgeDbSqlException 
-     */
-    public static SQLAccess createTestSQLAccess() throws BridgeDbSqlException {
-        SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
-        sqlAccess.getConnection();
-        return sqlAccess;
-    }
-
-    /**
      * Create a wrapper around the Test Virtuosos Database, 
      *     using the hardcoded database name, user name and password.
      * @return

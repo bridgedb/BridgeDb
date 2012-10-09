@@ -16,33 +16,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.rdf;
-
-import java.util.List;
-import org.bridgedb.IDMapperException;
-import org.bridgedb.linkset.LinkSetStore;
-import org.bridgedb.utils.StoreType;
+package org.bridgedb.utils;
 
 /**
- *
+ * Util functions that allows messages to be output.
+ * <p>
+ * Allows the output format to be changed in one place so changing everywhere.
+ * <p>
+ * All other System.out calls can then be considered debug commands that should not have stayed in.
+ * 
  * @author Christian
  */
-public class RdfReader implements LinkSetStore{
-
-    private final StoreType storeType;
+public class Reporter {
     
-    public RdfReader(StoreType storeType){
-        this.storeType = storeType;
+    //Should be logger but using System out for now
+    public static void report(String message){
+        System.out.println(message);
     }
-    
-    @Override
-    public List<String> getLinksetNames() throws IDMapperException {
-        return RdfWrapper.getContextNames(storeType);
-    }
-
-    @Override
-    public String getRDF(int id) throws IDMapperException {
-        return RdfWrapper.getRDF(storeType, id); 
-    }
-    
 }

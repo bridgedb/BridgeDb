@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
+import org.bridgedb.utils.StoreType;
 
 /**
  * Finds the SQL Configuration file and uses it to open the database with the correct database name, user name and password.
@@ -69,35 +70,21 @@ public class SqlFactory {
      * @return 
      * @throws BridgeDbSqlException 
      */
-    public static SQLAccess createSQLAccess() throws BridgeDbSqlException {
-        SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlDatabase(), sqlUser(), sqlPassword());
-        sqlAccess.getConnection();
-        return sqlAccess;
-    }
-
-    /**
-     * Create a wrapper around the load SQL Database, 
-     *     using the database name, user name and password found in the config file.
-     * @See sqlLoadDatabase()
-     * @return
-     * @throws BridgeDbSqlException 
-     */
-    public static SQLAccess createLoadSQLAccess() throws BridgeDbSqlException {
-        SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlLoadDatabase(), sqlUser(), sqlPassword());
-        sqlAccess.getConnection();
-        return sqlAccess;
-    }
-
-    /**
-     * Create a wrapper around the load SQL Database, 
-     *     using the database name, user name and password found in the config file.
-     * @See sqlTestDatabase(), testSqlUser() and testSqlPassword()
-     * @return
-     * @throws BridgeDbSqlException 
-     */
-    public static SQLAccess createTestSQLAccess() throws BridgeDbSqlException {
-        System.out.println(testSqlPassword());
-        SQLAccess sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
+    public static SQLAccess createSQLAccess(StoreType type) throws BridgeDbSqlException {
+        SQLAccess sqlAccess;
+        switch (type){
+            case LIVE:
+                sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlDatabase(), sqlUser(), sqlPassword());
+                break;
+            case LOAD:
+                sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlLoadDatabase(), sqlUser(), sqlPassword());
+                break;
+            case TEST:
+                sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
+                break;
+            default:     
+                throw new UnsupportedOperationException("Unexpected StoreType " + type);
+        }       
         sqlAccess.getConnection();
         return sqlAccess;
     }

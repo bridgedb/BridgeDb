@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -64,8 +65,8 @@ public class RepositoryFactory {
     
     private static Properties properties;
 
-    public synchronized static void clear(RdfStoreType type) throws RdfException{
-        WrappedRepository repository = getRepository(type, false);
+    public synchronized static void clear(StoreType storeType) throws RdfException{
+        WrappedRepository repository = getRepository(storeType, false);
         repository.clearAndClose();
      }
 
@@ -76,8 +77,8 @@ public class RepositoryFactory {
      * @return
      * @throws IDMapperLinksetException 
      */
-    public static WrappedRepository getRepository(RdfStoreType rdfStoreType) throws RdfException {
-        return getRepository(rdfStoreType, MUST_ALREADY_EXIST);
+    public static WrappedRepository getRepository(StoreType storeType) throws RdfException {
+        return getRepository(storeType, MUST_ALREADY_EXIST);
     }
     
     /**
@@ -87,8 +88,8 @@ public class RepositoryFactory {
      * @return
      * @throws IDMapperLinksetException 
      */
-    public static WrappedRepository getRepository(RdfStoreType rdfStoreType, boolean exisiting) throws RdfException {
-        File dataDir = getDataDir(rdfStoreType);
+    public static WrappedRepository getRepository(StoreType storeType, boolean exisiting) throws RdfException {
+        File dataDir = getDataDir(storeType);
         if (exisiting) {
             if (!dataDir.exists()){
                 throw new RdfException ("Please check RDF settings File " + dataDir + " does not exist");
@@ -101,16 +102,16 @@ public class RepositoryFactory {
         return new WrappedRepository(repository);
     }
 
-    private static File getDataDir(RdfStoreType rdfStoreType) throws RdfException {
-        switch (rdfStoreType){
-            case MAIN: 
+    private static File getDataDir(StoreType storeType) throws RdfException {
+        switch (storeType){
+            case LIVE: 
                 return new File(getSailNativeStore());
             case LOAD:
                 return new File(getLoadSailNativeStore());
             case TEST:
                 return new File(getTestSailNativeStore());
              default:
-                throw new RdfException ("Unepected RdfStoreType " + rdfStoreType);
+                throw new RdfException ("Unepected RdfStoreType " + storeType);
         }
     }
 
@@ -183,8 +184,8 @@ public class RepositoryFactory {
         return new URIImpl(RepositoryFactory.getBaseURI() + "/linkset/" + linksetId);  
     }
   
-    static String getRDF(RdfStoreType rdfStoreType, int linksetId) throws RdfException {
-        WrappedRepository repository = getRepository(rdfStoreType, true);
+    static String getRDF(StoreType storeType, int linksetId) throws RdfException {
+        WrappedRepository repository = getRepository(storeType, true);
         StringOutputStream stringOutputStream = new StringOutputStream();            
         RDFXMLWriter writer = new RDFXMLWriter(stringOutputStream);
         writer.startRDF();

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
@@ -18,8 +19,8 @@ public class RdfController {
     private static final URI NEXT_CONTEXT = new URIImpl(RepositoryFactory.getBaseURI() + "#nextContext");
     private static final boolean CAN_BE_NEW = false;
     
-    public static String getNextContext(RdfStoreType rdfStoreType) throws RdfException{
-        WrappedRepository repository = RepositoryFactory.getRepository(rdfStoreType, CAN_BE_NEW);
+    public static String getNextContext(StoreType storeType) throws RdfException{
+        WrappedRepository repository = RepositoryFactory.getRepository(storeType, CAN_BE_NEW);
         int nextContext = repository.getAndIncrementValue(CONTROLLER_RESOURCE, NEXT_CONTEXT, CONTROLLER_RESOURCE);
         return RepositoryFactory.getBaseURI() + "void/" + nextContext;
     }

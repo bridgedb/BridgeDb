@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.linkset.IDMapperLinksetException;
+import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -65,8 +66,8 @@ public class RdfWrapper {
     
     private static Properties properties;
 
-    public synchronized static void clear(RdfStoreType type) throws IDMapperLinksetException{
-        Repository repository = getRepository(type, false);
+    public synchronized static void clear(StoreType storeType) throws IDMapperLinksetException{
+        Repository repository = getRepository(storeType, false);
         RepositoryConnection connection = getConnection(repository);
         try {
             connection.clear();
@@ -84,8 +85,8 @@ public class RdfWrapper {
      * @return
      * @throws IDMapperLinksetException 
      */
-    private static Repository getRepository(RdfStoreType rdfStoreType, boolean exisiting) throws IDMapperLinksetException {
-        File dataDir = getDataDir(rdfStoreType);
+    private static Repository getRepository(StoreType storeType, boolean exisiting) throws IDMapperLinksetException {
+        File dataDir = getDataDir(storeType);
         if (exisiting) {
             if (!dataDir.exists()){
                 throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " does not exist");
@@ -121,21 +122,21 @@ public class RdfWrapper {
         return repository;
     }
 
-    private static boolean repositoryExists(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
-        File dataDir = getDataDir(rdfStoreType);
+    private static boolean repositoryExists(StoreType storeType) throws IDMapperLinksetException {
+        File dataDir = getDataDir(storeType);
         return dataDir.exists();
     }
     
-    private static File getDataDir(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
-        switch (rdfStoreType){
-            case MAIN: 
+    private static File getDataDir(StoreType storeType) throws IDMapperLinksetException {
+        switch (storeType){
+            case LIVE: 
                 return new File(getSailNativeStore());
             case LOAD:
                 return new File(getLoadSailNativeStore());
             case TEST:
                 return new File(getTestSailNativeStore());
              default:
-                throw new IDMapperLinksetException ("Unepected RdfStoreType " + rdfStoreType);
+                throw new IDMapperLinksetException ("Unepected RdfStoreType " + storeType);
         }
     }
 
@@ -152,10 +153,10 @@ public class RdfWrapper {
         }      
     }
     
-    public static RepositoryConnection setupConnection(RdfStoreType rdfStoreType) throws RDFHandlerException{
+    public static RepositoryConnection setupConnection(StoreType storeType) throws RDFHandlerException{
         Repository repository;
         try {
-            repository = getRepository (rdfStoreType, true);
+            repository = getRepository (storeType, true);
         } catch (IDMapperLinksetException ex) {
             try {
                 String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
@@ -398,8 +399,8 @@ public class RdfWrapper {
         return "http://openphacts.cs.man.ac.uk:9090/OPS-IMS";        
     }
     
-    static List<String> getContextNames(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
-        Repository repository = getRepository(rdfStoreType, true);
+    static List<String> getContextNames(StoreType storeType) throws IDMapperLinksetException {
+        Repository repository = getRepository(storeType, true);
         RepositoryConnection connection = getConnection(repository);
         try {
             RepositoryResult<Resource> rr = connection.getContextIDs();
@@ -424,8 +425,8 @@ public class RdfWrapper {
         return new URIImpl(RdfWrapper.getTheBaseURI() + "linkset/" + linksetId);  
     }
   
-    static String getRDF(RdfStoreType rdfStoreType, int linksetId) throws IDMapperLinksetException {
-        Repository repository = getRepository(rdfStoreType, true);
+    static String getRDF(StoreType storeType, int linksetId) throws IDMapperLinksetException {
+        Repository repository = getRepository(storeType, true);
         RepositoryConnection connection = getConnection(repository);
         StringOutputStream stringOutputStream = new StringOutputStream();            
         RDFXMLWriter writer = new RDFXMLWriter(stringOutputStream);

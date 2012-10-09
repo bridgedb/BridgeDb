@@ -18,6 +18,7 @@
 
 
   <modules>
+  	<module>org.bridgedb.utils</module>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.sql</module>
   	<module>org.bridgedb.ops.sql</module>

@@ -41,6 +41,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -72,7 +73,7 @@ public class TransativeCreator {
     private Resource ANY_SUBJECT = null;
     
     public TransativeCreator(int leftId, int rightId, String diffLeft, String diffRight, String possibleFileName, 
-            RdfStoreType type) throws BridgeDbSqlException, RDFHandlerException, IOException{
+            StoreType storeType) throws BridgeDbSqlException, RDFHandlerException, IOException{
         if (possibleFileName != null && !possibleFileName.isEmpty()){
             createBufferedWriter(possibleFileName);
         } else {
@@ -80,8 +81,8 @@ public class TransativeCreator {
         }
         leftContext = RdfWrapper.getLinksetURL(leftId);
         rightContext = RdfWrapper.getLinksetURL(rightId);
-        getVoid(leftId, rightId, diffLeft, diffRight, type);
-        getSQL(leftId, rightId, type);
+        getVoid(leftId, rightId, diffLeft, diffRight, storeType);
+        getSQL(leftId, rightId, storeType);
     }
  
     private void createBufferedWriter(String fileName) throws IOException {
@@ -102,8 +103,8 @@ public class TransativeCreator {
         createBufferedWriter ("linkset " + leftId + "Transitive" + rightId + ".ttl");
     }
 
-    private synchronized void getVoid(int leftId, int rightId, String diffLeft, String diffRight, RdfStoreType type) throws RDFHandlerException, IOException{
-        connection = RdfWrapper.setupConnection(type);
+    private synchronized void getVoid(int leftId, int rightId, String diffLeft, String diffRight, StoreType storeType) throws RDFHandlerException, IOException{
+        connection = RdfWrapper.setupConnection(storeType);
         leftLinkSet = getLinkSet(leftContext);
         rightLinkSet = getLinkSet(rightContext);
         //showContext(rightContext);
@@ -274,22 +275,9 @@ public class TransativeCreator {
             output.append(" . \n");
         }
     }
-
-    private SQLAccess getSQLAccess(RdfStoreType type) throws BridgeDbSqlException {
-        switch (type){
-            case LOAD: 
-                return SqlFactory.createLoadSQLAccess();
-            case MAIN: 
-                return SqlFactory.createSQLAccess();
-            case TEST: 
-                return SqlFactory.createTestSQLAccess();
-            default:
-                throw new BridgeDbSqlException ("Unable to get SQL for type " + type);
-        }
-    }
-        
-    private void getSQL(int leftId, int rightId, RdfStoreType type) throws BridgeDbSqlException, IOException {
-        SQLAccess sqlAccess = getSQLAccess(type);
+       
+    private void getSQL(int leftId, int rightId, StoreType storeType) throws BridgeDbSqlException, IOException {
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         buffer.newLine();
         StringBuilder query = new StringBuilder(
                 "SELECT mapping1.sourceId, mapping2.targetId ");
@@ -347,21 +335,13 @@ public class TransativeCreator {
         System.exit(1);
     }
 
-    private static RdfStoreType getType(String typeString) throws RDFHandlerException{
-        if ("load".equalsIgnoreCase(typeString)) return RdfStoreType.LOAD;
-        if ("main".equalsIgnoreCase(typeString)) return RdfStoreType.MAIN;
-        if ("test".equalsIgnoreCase(typeString)) return RdfStoreType.TEST;
-        throw new RDFHandlerException ("Unable to dettermine the RDF type based on " + typeString + 
-                " Plase check the third paramters is one of \"load\", \"main\" or \"test\"");
-    }
-    
-    public static void main(String[] args) throws BridgeDbSqlException, RDFHandlerException, IOException  {
+    public static void main(String[] args) throws Exception  {
         if (args.length < 3 || args.length > 6){
             usage();    
         }
         int leftId = Integer.parseInt(args[0]);
         int rightId = Integer.parseInt(args[1]);
-        RdfStoreType type = getType(args[2]);
+        StoreType type = StoreType.parseString(args[2]);
         switch (args.length){
             case 3:
                 new TransativeCreator(leftId, rightId, null, null, null, type);

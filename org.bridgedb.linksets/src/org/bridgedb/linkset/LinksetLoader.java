@@ -35,6 +35,7 @@ import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 
 /**
  * Main class for loading linksets.
@@ -79,17 +80,17 @@ public class LinksetLoader {
             Reporter.report("Validation successful");                
             if (arg.equals("load")){
                 Reporter.report("Started loading " + file.getAbsolutePath());                
-                SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
+                SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LOAD);
                 URLListener listener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
-                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.LOAD, validator, listener, CALLER_NAME);
+                RdfLoader rdfLoader = new RDFWriter(StoreType.LOAD, validator, listener, CALLER_NAME);
                 LinksetHandler handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
                 Reporter.report("Loading of " + file.getAbsolutePath() + " successful");
             } else if (arg.equals("test")){
                 Reporter.report("Started test loading " + file.getAbsolutePath());                
-                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+                SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.TEST);
                 URLListener listener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
-                RdfLoader rdfLoader = new RDFWriter(RdfStoreType.TEST, validator, listener, CALLER_NAME);
+                RdfLoader rdfLoader = new RDFWriter(StoreType.TEST, validator, listener, CALLER_NAME);
                 LinksetHandler handler = new LinksetHandler (rdfLoader);
                 handler.parse(file);
                 Reporter.report("Loading of " + file.getAbsolutePath() + " successful");
@@ -131,6 +132,7 @@ public class LinksetLoader {
      */
     public static void main(String[] args) 
             throws BridgeDbSqlException, IDMapperLinksetException, IDMapperException, FileNotFoundException, MetaDataException {
+         System.getProperties().list( System.out );
         if (args.length == 2){
             LinksetLoader loader = new LinksetLoader();
             String loadInstruction = args[1].trim().toLowerCase();
@@ -142,16 +144,16 @@ public class LinksetLoader {
                 type = ValidationType.LINKS;
             }
             if (loadInstruction.equals("new")){
-                RdfWrapper.clear(RdfStoreType.LOAD);
+                RdfWrapper.clear(StoreType.LOAD);
                 Reporter.report("Main RDF cleared");
-                SQLAccess sqlAccess = SqlFactory.createLoadSQLAccess();
+                SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LOAD);
                 URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
                 Reporter.report("Load SQL cleared");                
                 loader.parse(args[0], "load", type);
             } else if (loadInstruction.equals("testnew")){
-                RdfWrapper.clear(RdfStoreType.TEST);
+                RdfWrapper.clear(StoreType.TEST);
                 Reporter.report("Laod RDF cleared");
-                SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+                SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.TEST);
                 URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
                 Reporter.report("Test SQL cleared");
                 loader.parse(args[0], "test", type);

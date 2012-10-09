@@ -49,6 +49,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsService;
 
 /**
@@ -60,7 +61,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     private NumberFormat formatter;
     
     public WSOpsServer()  throws IDMapperException   {
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
         urlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         idMapper = urlMapper;
         formatter = NumberFormat.getInstance();
@@ -341,7 +342,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             throw new IDMapperException("Parameter id is missing");
         }
         Integer id = Integer.parseInt(idString);
-        return new RdfReader(RdfStoreType.MAIN).getRDF(id);
+        return new RdfReader(StoreType.LIVE).getRDF(id);
     }
 
 

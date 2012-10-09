@@ -16,12 +16,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.rdf;
+package org.bridgedb.utils;
 
 /**
  *
  * @author Christian
  */
-public enum RdfStoreType {
-    MAIN, LOAD, TEST;
+public enum StoreType {
+    LIVE, LOAD, TEST;
+   
+    public static StoreType parseString(String string) throws Exception {
+       for(StoreType type:StoreType.values()){
+           if (type.toString().equalsIgnoreCase(string)){
+               return type;
+           }
+       }
+       throw new Exception ("Unable to parse " + string + " to a StoreTyp. "
+               + "Legal values are " + valuesString());
+    }
+    
+    public static String valuesString(){
+        String result = StoreType.values()[0].toString();
+        for (int i = 1; i< StoreType.values().length; i++){
+            result = result + ", " + StoreType.values()[i].toString();
+        }
+        return result;
+    }
+
 }

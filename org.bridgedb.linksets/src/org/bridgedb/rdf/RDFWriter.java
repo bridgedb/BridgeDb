@@ -30,6 +30,7 @@ import org.bridgedb.linkset.constants.VoidConstants;
 import org.bridgedb.metadata.LinksetVoidInformation;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.url.URLListener;
+import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -46,7 +47,7 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class RDFWriter implements RdfLoader{
 
-    private final RdfStoreType type;
+    private final StoreType storeType;
     private final ArrayList<Statement> statements;
     private final int mappingId;
     private final URI linksetContext;
@@ -60,8 +61,8 @@ public class RDFWriter implements RdfLoader{
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
 
-    public RDFWriter(RdfStoreType type, LinksetVoidInformation information, URLListener listener, String mainCaller) throws IDMapperException{
-        this.type = type;
+    public RDFWriter(StoreType storeType, LinksetVoidInformation information, URLListener listener, String mainCaller) throws IDMapperException{
+        this.storeType = storeType;
         urlListener = listener;
         statements = new ArrayList<Statement>();
         this.mainCaller = mainCaller;
@@ -96,7 +97,7 @@ public class RDFWriter implements RdfLoader{
     
     @Override
     public void processFirstNoneHeader(Statement firstMap) throws RDFHandlerException {
-        RepositoryConnection connection = RdfWrapper.setupConnection(type);
+        RepositoryConnection connection = RdfWrapper.setupConnection(storeType);
         for (Statement st:statements){
             RdfWrapper.add(connection, st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
             if (st.getPredicate().equals(VoidConstants.SUBJECTSTARGET)){
