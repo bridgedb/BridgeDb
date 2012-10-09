@@ -25,10 +25,10 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.IDMapperLinksetException;
-import org.bridgedb.linkset.constants.PavConstants;
-import org.bridgedb.linkset.constants.VoidConstants;
 import org.bridgedb.metadata.LinksetVoidInformation;
 import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.metadata.constants.PavConstants;
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
@@ -119,19 +119,19 @@ public class RDFWriter implements RdfLoader{
         } catch (Exception e){
             from = new LiteralImpl(accessedFrom);
         }
-        RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_FROM, from, linksetContext);
-        addInverse(connection, linksetResource, PavConstants.ACCESSED_FROM, from);
+        RdfWrapper.add(connection, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from, linksetContext);
+        addInverse(connection, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from);
         GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
         try {
             XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-            RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_ON, new CalendarLiteralImpl(xgcal), linksetContext);
-            addInverse(connection, linksetResource, PavConstants.ACCESSED_ON, new CalendarLiteralImpl(xgcal));
+            RdfWrapper.add(connection, linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal), linksetContext);
+            addInverse(connection, linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal));
         } catch (DatatypeConfigurationException ex) {
             //Should never happen so basically ignore
             ex.printStackTrace();
         }
-        RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_BY, new LiteralImpl(mainCaller), linksetContext);
-        addInverse(connection, linksetResource, PavConstants.ACCESSED_BY, new LiteralImpl(mainCaller));
+        RdfWrapper.add(connection, linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller), linksetContext);
+        addInverse(connection, linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller));
         addInverse(connection, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
         RdfWrapper.shutdown(connection);
     }

@@ -19,7 +19,6 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
-import org.bridgedb.linkset.constants.VoidConstants;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.utils.Reporter;

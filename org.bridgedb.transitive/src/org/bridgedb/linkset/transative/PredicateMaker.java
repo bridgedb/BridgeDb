@@ -19,7 +19,7 @@
 package org.bridgedb.linkset.transative;
 
 import org.bridgedb.linkset.constants.OwlConstants;
-import org.bridgedb.linkset.constants.SkosConstants;
+import org.bridgedb.metadata.constants.SkosConstants;
 import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandlerException;
 
