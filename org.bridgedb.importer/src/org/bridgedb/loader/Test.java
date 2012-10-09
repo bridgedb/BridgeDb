@@ -24,6 +24,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.utils.StoreType;
 
 /**
  *
@@ -64,7 +65,7 @@ public class Test {
      * @param mapper MUST implement XrefIterator
      */
     public static void printLinksetLines(IDMapper mapper) throws IDMapperException{
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.TEST);
         SQLUrlMapper sqlMapper = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
 
         XrefIterator iterator = (XrefIterator)mapper;

@@ -35,7 +35,6 @@ import org.bridgedb.linkset.constants.FoafConstants;
 import org.bridgedb.linkset.constants.PavConstants;
 import org.bridgedb.linkset.constants.RdfConstants;
 import org.bridgedb.linkset.constants.VoidConstants;
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;

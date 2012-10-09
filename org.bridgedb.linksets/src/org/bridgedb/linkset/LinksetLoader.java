@@ -29,7 +29,6 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.rdf.RDFWriter;
 import org.bridgedb.rdf.RdfLoader;
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
