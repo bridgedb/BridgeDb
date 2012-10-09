@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.linkset.IDMapperLinksetException;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -95,6 +96,7 @@ public class RdfWrapper {
             }
         }
         Repository repository = new SailRepository(new NativeStore(dataDir));
+        Reporter.report("RDF data directory: " + dataDir.getAbsolutePath());
         try {
             repository.initialize();
         } catch (Throwable ex) {
@@ -106,7 +108,7 @@ public class RdfWrapper {
                     throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
                             testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
                 } catch (IOException ex1) {
-                    Logger.getLogger(RdfWrapper.class.getName()).log(Level.SEVERE, null, ex1);
+                    throw new IDMapperLinksetException("Error retrieving repository.", ex1);
                 }
             }
             try {

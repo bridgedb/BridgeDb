@@ -101,7 +101,8 @@ public class TransativeCreator {
     }
 
     private void createBufferedWriter(int leftId, int rightId) throws IOException {
-        createBufferedWriter ("linkset " + leftId + "Transitive" + rightId + ".ttl");
+        //FIXME: Need to capture a path
+        createBufferedWriter ("linkset" + leftId + "Transitive" + rightId + ".ttl");
     }
 
     private synchronized void getVoid(int leftId, int rightId, String diffLeft, String diffRight, RdfStoreType type) throws RDFHandlerException, IOException{
@@ -354,18 +355,18 @@ public class TransativeCreator {
     private static void usage() {
         System.out.println("Welcome to the OPS Transative Linkset Creator.");
         System.out.println("This method requires the number of the two linksest being combined.");
-        System.out.println("The next parameter should be one of \"load\", \"main\" or \"test\" to idntify which dataset to use.");
+        System.out.println("The next parameter should be one of \"load\", \"live\" or \"test\" to identify which database to use.");
         System.out.println("Optional fourth AND fifth parameter describe the different in the middle UriSpaces");
         System.out.println("    Must provide both even if one is blank.");
-        System.out.println ("Optional final parameter if the file name to write to.");
-        System.out.println ("If no filename provided output file will be linkset(leftid)Transitive(rightid).ttl");
-        System.out.println("Please run this again with three to six paramters");
+        System.out.println ("Final parameter is the file name to write to.");
+//        System.out.println ("If no filename provided output file will be linkset(leftid)Transitive(rightid).ttl");
+        System.out.println("Please run this again with four or six parameters");
         System.exit(1);
     }
 
     private static RdfStoreType getType(String typeString) throws RDFHandlerException{
         if ("load".equalsIgnoreCase(typeString)) return RdfStoreType.LOAD;
-        if ("main".equalsIgnoreCase(typeString)) return RdfStoreType.MAIN;
+        if ("live".equalsIgnoreCase(typeString)) return RdfStoreType.MAIN;
         if ("test".equalsIgnoreCase(typeString)) return RdfStoreType.TEST;
         throw new RDFHandlerException ("Unable to dettermine the RDF type based on " + typeString + 
                 " Plase check the third paramters is one of \"load\", \"main\" or \"test\"");
@@ -379,15 +380,15 @@ public class TransativeCreator {
         int rightId = Integer.parseInt(args[1]);
         RdfStoreType type = getType(args[2]);
         switch (args.length){
-            case 3:
-                new TransativeCreator(leftId, rightId, null, null, null, type);
-                break;
+//            case 3:
+//                new TransativeCreator(leftId, rightId, null, null, null, type);
+//                break;
             case 4:    
                 new TransativeCreator(leftId, rightId, null, null, args[3], type);
                 break;
-            case 5:
-                new TransativeCreator(leftId, rightId, args[3], args[4], null, type);            
-                break;
+//            case 5:
+//                new TransativeCreator(leftId, rightId, args[3], args[4], null, type);            
+//                break;
             case 6:
                 new TransativeCreator(leftId, rightId, args[3], args[4], args[5], type);            
                 break;
