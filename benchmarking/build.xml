@@ -1,77 +1,24 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.tools.benchmarking" default="jar" basedir=".">
-	
-	<path id="project.class.path">
-		<pathelement location="build"/>
-		<fileset dir="lib">
-			<include name="*.jar"/>
-		</fileset>
-		<pathelement location="../dist/org.bridgedb.jar"/>
-		<pathelement location="../dist/derby.jar"/>
-		<!--TODO make sure corelib build is called first -->
-	</path>
 
-	<path id="class.path">
-		<fileset dir="../dist">
-			<include name="*.jar"/>
+	<import file="../build-common.xml" />
+
+	<path id="absolute.deps">
+		<fileset dir="${bundle.dest}">
+			<include name="org.bridgedb.jar"/>
+			<include name="org.bridgedb.bio.jar"/>
+			<include name="org.bridgedb.server.jar"/>
+			<include name="derby.jar"/>
 		</fileset>
-		<fileset dir="lib">
-			<include name="*.jar"/>
+		<fileset dir="../common-bundles">
+			<include name="com.google.collect*.jar"/>
 		</fileset>
 	</path>
 
-	<target name="prepare">
-		<mkdir dir="build"/>
-	</target>
-	
-	<target name="clean" description="Remove all generated files.">
-		<delete dir="${build.dir}"/>
-	</target>
-	
-	<target name="build" depends="prepare" description="Compile all sources">
-		<javac srcdir="src" 
-			    debug="true"	
-			    destdir="build">
-			<classpath refid="class.path"/>
-		</javac>
-	</target>
-	
-	<target name="jar" depends="build">
-		<mkdir dir="dist"/>
-		<jar jarfile="dist/checker.jar">
-			<manifest>
-				<attribute name="Main-Class" value="org.bridgedb.checker.Checker"/>
-				<attribute name="Class-Path" value="bridgedb.jar google-collect-snapshot-20080820.jar"/>
-			</manifest>
-			<fileset dir="build" includes="**/*.class"/>
-		</jar>
-	</target>
-	
-	<target name="dist" depends="jar"/>
-
-	<target name="test" depends="build">
-		<path id="test.classpath">
-			<path refid="class.path"/>
-			<pathelement location="build"/>
-			<pathelement location="../corelib/build-lib/junit.jar"/>
-			<pathelement location="../corelib/build-lib/measure.jar"/>
-			<pathelement location="../corelib/build-lib/derbyclient.jar"/>
-		</path>
-		<javac srcdir="test" debug="true" 
-					includes="**"
-					destdir="build"
-					source="1.5">
-			<classpath refid="test.classpath"/>
-		</javac>		
-		<junit printsummary="on" haltonfailure="false" fork="true">
-			<formatter type="brief" usefile="false"/>
-			<classpath refid="test.classpath"/>
-			<batchtest>
-				<fileset dir="test">
-					<include name="**/*Test*.java"/>
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
+	<path id="test.deps">
+		<pathelement location="../corelib/build-lib/junit.jar"/>
+		<pathelement location="../corelib/build-lib/measure.jar"/>
+		<pathelement location="../corelib/build-lib/derbyclient.jar"/>
+	</path>
 	
 </project>

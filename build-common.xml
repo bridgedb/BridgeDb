@@ -5,14 +5,15 @@
 
 	<property file="version.props"/>
 
+	<!-- Override this to put the jars in a different target directory -->
 	<property name="bundle.dest" value="../dist"/>
 
 	<target name="prepare-jar-name">
-		<!-- the name of the plug-in jar uses the project name of the calling build file -->
+		<!-- the name of the plug-in jar is the project name of the calling build file with '.jar' appended -->
 		<property name="jar.name" value="${bundle.dest}/${ant.project.name}.jar"/>
 	</target>
 
-	<target name="prepare-common">
+	<target name="prepare-common" depends="prepare-jar-name">
 		<mkdir dir="build"/>
 
 		<!-- the following property is used to skip the "test" target if there is no test subdirectory -->
@@ -28,7 +29,7 @@
 
 	<target name="prepare"/> <!-- designed to be overriden by project build file -->
 
-	<target name="build" depends="prepare, prepare-common, prepare-jar-name">
+	<target name="build" depends="prepare, prepare-common">
 		<javac srcdir="src"
 			   includes="**"
 			   debug="true"
@@ -37,7 +38,7 @@
 		</javac>
 	</target>
 
-	<!-- if the embed.jars property is specified, unjar those jars into the build directory -->
+	<!-- if the embed.jars property is specified, those jars will be unjarred into the build directory -->
 	<target name="unjar-embedded" depends="build">
 		<unjar dest="build">
 			<path refid="embed.jars"/>
@@ -46,15 +47,23 @@
 	
 	<target name="jar-common" depends="build, unjar-embedded"> 
 		<echo>Creating JAR: ${jar.name}</echo>
-		<manifestclasspath property="manifest.cp" jarfile="${jar.name}">
-			<classpath>
-				<path refid="absolute.deps"/>
-				<path refid="transient.deps"/>
-			</classpath>
-		</manifestclasspath>
+		
+		<!-- convert classpath to a flat list/string for use as manifest classpath. 
+		We want a flat list, assuming all jars will end up in the same destination dir.
+		We can't use the manifestclasspath task for this, because it will try to figure 
+		out relative paths, which is not what we want because the jars are not in their 
+		final location -->
+		<pathconvert property="manifest.cp" pathsep=" ">
+			<path refid="absolute.deps"/>
+			<path refid="transient.deps"/>
+			<flattenmapper />
+		</pathconvert>
+		<!-- In eclipse, you need create a Bundle-ClassPath entry in MANIFEST.MF for each non-OSGI jar.
+		This causes trouble if we are running outside eclipse, because the jars usually end up in a different location.
+		The trick is to remove the bundle-classpath used by eclipse, we embed these jars instead -->
 		<copy file="META-INF/MANIFEST.MF" toDir="build/META-INF"/>
-		<!-- The trick is to ignore the bundle-classpath used by eclipse, we embed these jars instead -->
 		<replaceregexp file="build/META-INF/MANIFEST.MF" match="^Bundle-ClassPath:" replace="Ignore-this:" flags="m"/>
+		<!-- Finally, create the jar file. Include all resources, build results, and manifest. -->
 		<jar jarfile="${jar.name}" manifest="META-INF/MANIFEST.MF">
 			<manifest>
 				<attribute name="Class-Path" value="${manifest.cp}"/>
@@ -70,22 +79,24 @@
 
 	<target name="jar" depends="jar-common"/> <!-- may be overriden by project build file -->
 
+	<!-- just removes class files -->
 	<target name="clean">
 		<delete dir="build"/>
 	</target>
 
+	<!-- removes class files and generated jar -->
 	<target name="dist-clean" depends="clean, prepare-jar-name">
 		<delete file="${jar.name}"/>
 	</target>
 
+	<!-- creates the jar, and also places all dependencies in the bundle dest directory -->
 	<target name="dist" depends="jar">
-		<copy todir="../dist">
-			<fileset dir="lib" erroronmissingdir="false">
-				<include name="*.jar"/>
-			</fileset>
+		<copy todir="${bundle.dest}">
+			<path refid="absolute.deps"/>
 		</copy>
 	</target>
 
+	<!-- run all junit tests found in the test directory -->
 	<target name="test" depends="build" if="test.dir.exists">
 		<path id="test.classpath">
 			<path refid="absolute.deps"/>

@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.webservice.bridgerest" default="dist" basedir=".">
+
+	<import file="../build-common.xml" />
 	
 	<path id="absolute.deps">
 		<pathelement location="../dist/org.bridgedb.jar"/>
@@ -19,7 +21,5 @@
 	<!-- test deps are only used for testing -->
 	<path id="test.deps">
 	</path>
-
-	<import file="../build-common.xml" />
 
 </project>

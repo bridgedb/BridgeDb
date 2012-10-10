@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.tools.qc" default="dist" basedir=".">
   
+	<import file="../build-common.xml" />
+
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
-		<fileset dir="../dist">
+		<fileset dir="${bundle.dest}">
 			<include name="org.bridgedb.jar"/>
 			<include name="org.bridgedb.bio.jar"/>
 			<include name="org.bridgedb.rdb.jar"/>
@@ -34,7 +36,5 @@
 	  </manifest>
 	</jar>
   </target>
-
-	<import file="../build-common.xml" />
 
 </project>

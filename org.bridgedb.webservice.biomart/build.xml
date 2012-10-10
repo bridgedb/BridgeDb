@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.webservice.biomart" default="dist" basedir=".">
+
+	<import file="../build-common.xml" />
 	
 	<path id="absolute.deps">
 		<pathelement location="../dist/org.bridgedb.jar"/>
@@ -27,7 +29,5 @@
 		<copy file="src/org/bridgedb/webservice/biomart/util/filterconversion.txt"
 			todir="build/org/bridgedb/webservice/biomart/util" />
 	</target>
-
-	<import file="../build-common.xml" />
 
 </project>

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb" default="dist" basedir=".">
-	
+		
+	<import file="../build-common.xml" />
+
   <property name="svn.exec.svnversion" value="svnversion"/>
   
   <property file="version.props"/>
@@ -25,7 +27,7 @@
 
 	<target name="prepare">
 		<tstamp /> <!-- set ${TODAY} and ${TSTAMP} -->
-		<mkdir dir="../dist"/>
+		<mkdir dir="${bundle.dest}"/>
 		<exec executable="${svn.exec.svnversion}" outputproperty="subversion_revision" failifexecutionfails="false">
 			<arg line="-n ."/>
 		</exec>
@@ -37,7 +39,5 @@ COMPILE_DATE=${DSTAMP} ${TSTAMP}
 bridgedb.version=${bridgedb.version}
 		</echo>  
 	</target>
-		
-	<import file="../build-common.xml" />
 
 </project>

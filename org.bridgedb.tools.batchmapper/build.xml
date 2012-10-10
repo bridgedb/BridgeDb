@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.tools.batchmapper" default="jar" basedir=".">
-		
+
+	<import file="../build-common.xml" />
+
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
-		<fileset dir="../dist">
+		<fileset dir="${bundle.dest}">
 			<include name="org.bridgedb.jar"/>
 			<include name="org.bridgedb.bio.jar"/>
 		</fileset>
@@ -11,7 +13,7 @@
 
 	<!-- transient deps are optional, they are used only in the manifest classpath -->
 	<path id="transient.deps">
-		<fileset dir="../dist">
+		<fileset dir="${bundle.dest}">
 			<include name="derby.jar"/>
 			<include name="org.bridgedb.rdb.jar"/>
 		</fileset>
@@ -35,7 +37,5 @@
 			</manifest>
 		</jar>
 	</target>
-
-	<import file="../build-common.xml" />
 
 </project>

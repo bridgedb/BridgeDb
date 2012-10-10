@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.webservice.synergizer" default="dist" basedir=".">
 
+  <import file="../build-common.xml" />
+
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
 		<fileset dir="lib">
 			<include name="*.jar"/>
 		</fileset>
-		<fileset dir="../dist">
+		<fileset dir="${bundle.dest}">
 			<include name="org.bridgedb.jar"/>
 			<include name="org.bridgedb.bio.jar"/>
 		</fileset>
@@ -28,7 +30,5 @@
 		<pathelement location="../org.bridgedb/build-lib/hamcrest-core.jar"/>
 		<pathelement location="../org.bridgedb.rdb/lib/derby.jar"/>
 	</path>
-
-  <import file="../build-common.xml" />
 
 </project>

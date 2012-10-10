@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.bio" default="dist" basedir=".">
-	
+
+	<import file="../build-common.xml" />
+
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
-		<pathelement location="../dist/org.bridgedb.jar"/>
+		<pathelement location="${bundle.dest}/org.bridgedb.jar"/>
 	</path>
 
 	<!-- transient deps are optional, they are used only in the manifest classpath -->
@@ -21,7 +23,5 @@
 		<pathelement location="../org.bridgedb/build-lib/junit4.jar"/>
 		<pathelement location="../org.bridgedb/build-lib/hamcrest-core.jar"/>
 	</path>
-
-	<import file="../build-common.xml" />
 
 </project>

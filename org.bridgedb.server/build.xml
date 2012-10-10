@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.server" default="dist" basedir=".">
 
+	<import file="../build-common.xml" />
+
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
-		<pathelement location="../dist/org.bridgedb.jar"/>
-		<pathelement location="../dist/org.bridgedb.bio.jar"/>
-		<pathelement location="../dist/org.bridgedb.rdb.jar"/>
+		<fileset dir="${bundle.dest}">
+			<include name="org.bridgedb.jar"/>
+			<include name="org.bridgedb.bio.jar"/>
+			<include name="org.bridgedb.rdb.jar"/>
+		</fileset>
 	</path>
 
 	<!-- transient deps are optional, they are used only in the manifest classpath -->
@@ -24,16 +28,16 @@
 		<pathelement location="../org.bridgedb/build-lib/junit.jar"/>
 	</path>
 
+  <!-- override main class and classpath in manifest -->
+  <target name="jar" depends="jar-common">
+	<jar jarfile="${jar.name}" update="true">
+	  <manifest>
+		<attribute name="Main-Class" value="org.bridgedb.server.Server"/>
+		<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar commons-cli-1.2.jar"/>
+	  </manifest>
+	</jar>
+  </target>
   
-	<target name="jar" depends="build">
-		<jar jarfile="${jar.name}" update="true">
-		  <manifest>
-			<attribute name="Main-Class" value="org.bridgedb.server.Server"/>
-			<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar commons-cli-1.2.jar"/>
-		  </manifest>
-		</jar>
-	</target>
-
 	<target name="war" depends="jar">
 		<fail message="You must specify the bridgedb config file that specifies the database locations for the web application. Example: ant war -Dbridge.config=/home/thomas/data/bridgedb/bridge.config.">
 			<condition>
@@ -60,7 +64,5 @@
 	<target name="test" depends="build">
 		<!-- Disabled for now... -->
 	</target>
-
-	<import file="../build-common.xml" />
 
 </project>

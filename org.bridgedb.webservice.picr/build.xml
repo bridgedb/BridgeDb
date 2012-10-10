@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.webservice.picr" default="dist" basedir=".">
 
+	<import file="../build-common.xml" />
+
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
 		<fileset dir="lib">
@@ -25,7 +27,5 @@
 	<path id="test.deps">
 		<pathelement location="../org.bridgedb/build-lib/junit4.jar"/>
 	</path>
-
-	<import file="../build-common.xml" />
 
 </project>
