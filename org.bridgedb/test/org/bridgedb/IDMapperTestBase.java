@@ -94,13 +94,15 @@ public abstract class IDMapperTestBase {
         map1xref3 = new Xref(goodId1, DataSource3);
         //Second set of Xrefs that are expected to map together.
         //But these are not expected NOT to map to the first set
-        map2xref1 = new Xref("456", DataSource1);
-        map2xref2 = new Xref("456", DataSource2);
-        map2xref3 = new Xref("456", DataSource3);
+        goodId2 = "456";
+        map2xref1 = new Xref(goodId2, DataSource1);
+        map2xref2 = new Xref(goodId2, DataSource2);
+        map2xref3 = new Xref(goodId2, DataSource3);
         //Third Set of Xref which again should map to eachothe but not the above
-        map3xref1 = new Xref("789", DataSource1);
-        map3xref2 = new Xref("789", DataSource2);
-        map3xref3 = new Xref("789", DataSource3);
+        goodId3 = "789";
+        map3xref1 = new Xref(goodId3, DataSource1);
+        map3xref2 = new Xref(goodId3, DataSource2);
+        map3xref3 = new Xref(goodId3, DataSource3);
         //Add an id that does not exist and can not be used in freesearch
         //Or null if all Strings can be used.
         badID = "ThisIdIsNotinTheSystem";

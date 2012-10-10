@@ -113,7 +113,7 @@ public abstract class URLMapperTest extends URLListenerTest{
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
-                String[] expectedMatches = {map3URL1, map3URL2};
+                String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
                 assertThat(URLMapping.getTargetURLs().iterator().next(), isOneOf( expectedMatches ) );
                 assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
                 assertNotNull(URLMapping.getId());
@@ -289,8 +289,16 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
+    public void testGetMappingSetInfo() throws IDMapperException {
+        report("GetGetMappingSetInfo");
+        MappingSetInfo result = urlMapper.getMappingSetInfo(mappingSet2_3);
+        assertEquals(DataSource2.getSystemCode(), result.getSourceSysCode());
+        assertEquals(DataSource3.getSystemCode(), result.getTargetSysCode());
+    }
+
+    @Test
     public void testGetMappingSetInfos() throws IDMapperException {
-        report("GetUriSpaces");
+        report("GetGetMappingSetInfos");
         List<MappingSetInfo> results = urlMapper.getMappingSetInfos();
         assertThat (results.size(), greaterThanOrEqualTo(6));
     }
@@ -300,5 +308,31 @@ public abstract class URLMapperTest extends URLListenerTest{
         report("GetUriSpaces");
         Set<String> results = urlMapper.getUriSpaces(map2xref3.getDataSource().getSystemCode());
         assertTrue (results.contains(URISpace3));
+    }
+    
+    @Test
+    public void testGetSourceUriSpace() throws IDMapperException {
+        report("GetSourceUriSpace");
+        Set<String> results = urlMapper.getSourceUriSpace(mappingSet2_3);
+        assertFalse (results.contains(URISpace1));
+        assertTrue (results.contains(URISpace2));
+        assertTrue (results.contains(URISpace2a));
+        assertFalse (results.contains(URISpace3));
+        assertFalse (results.contains(URISpace3a));
+    }
+
+    @Test
+    public void testGetTargetUriSpace() throws IDMapperException {
+        report("GetTargetUriSpace");
+        MappingSetInfo result = urlMapper.getMappingSetInfo(mappingSet2_3);
+        System.out.println(result);
+        Set<String> results = urlMapper.getTargetUriSpace(mappingSet2_3);
+        System.out.println(results);
+        System.out.println(URISpace2);
+        assertFalse (results.contains(URISpace1));
+        assertFalse (results.contains(URISpace2));
+        assertFalse (results.contains(URISpace2a));
+        assertTrue (results.contains(URISpace3));
+        assertTrue (results.contains(URISpace3a));
     }
 }

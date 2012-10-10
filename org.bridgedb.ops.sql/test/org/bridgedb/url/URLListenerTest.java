@@ -33,7 +33,8 @@ public abstract class URLListenerTest extends URLMapperTestBase{
     private static final boolean SYMETRIC = true;
     private static final boolean ORIGINAL = false;
     private static final boolean TRANSATIVE = true;
-
+    protected static int mappingSet2_3;
+    
     /**
      * Method for loading the Test data
      * Should eb called in a @beforeClass method after setting listener
@@ -43,17 +44,19 @@ public abstract class URLListenerTest extends URLMapperTestBase{
     public static void loadData() throws IDMapperException{
         listener.registerUriSpace(DataSource1, URISpace1);
         listener.registerUriSpace(DataSource2, URISpace2);
+        listener.registerUriSpace(DataSource2, URISpace2a);
         listener.registerUriSpace(DataSource3, URISpace3);
+        listener.registerUriSpace(DataSource3, URISpace3a);
 
         int mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, URISpace2, SYMETRIC, ORIGINAL);
         listener.insertURLMapping(map1URL1, map1URL2, mappingSet, SYMETRIC);
         listener.insertURLMapping(map2URL1, map2URL2, mappingSet, SYMETRIC);
         listener.insertURLMapping(map3URL1, map3URL2, mappingSet, SYMETRIC);
         
-        mappingSet = listener.registerMappingSet(URISpace2, TEST_PREDICATE, URISpace3, SYMETRIC, ORIGINAL);
-        listener.insertURLMapping(map1URL2, map1URL3, mappingSet, SYMETRIC);
-        listener.insertURLMapping(map2URL2, map2URL3, mappingSet, SYMETRIC);
-        listener.insertURLMapping(map3URL2, map3URL3, mappingSet, SYMETRIC);
+        mappingSet2_3 = listener.registerMappingSet(URISpace2, TEST_PREDICATE, URISpace3, SYMETRIC, ORIGINAL);
+        listener.insertURLMapping(map1URL2, map1URL3, mappingSet2_3, SYMETRIC);
+        listener.insertURLMapping(map2URL2, map2URL3, mappingSet2_3, SYMETRIC);
+        listener.insertURLMapping(map3URL2, map3URL3, mappingSet2_3, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, URISpace3, SYMETRIC, TRANSATIVE);
         listener.insertURLMapping(map1URL1, map1URL3, mappingSet, SYMETRIC);

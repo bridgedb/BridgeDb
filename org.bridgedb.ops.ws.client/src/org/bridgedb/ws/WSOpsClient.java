@@ -135,6 +135,15 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
+    public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException {
+        MappingSetInfoBean result = 
+                webResource.path("getMappingSetInfo/" + mappingSetId)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<MappingSetInfoBean>() {});
+         return result;
+    }
+        
+    @Override
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
@@ -155,6 +164,6 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
                 .get(new GenericType<DataSourceUriSpacesBean>() {});
          return result;
     }
-        
+
 
 }

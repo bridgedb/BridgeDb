@@ -130,6 +130,12 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
+    public MappingSetInfo getMappingSetInfo(int mappingSetId) throws IDMapperException {
+        MappingSetInfoBean bean = opsService.getMappingSetInfo("" + mappingSetId);
+        return MappingSetInfoBeanFactory.asMappingSetInfo(bean);
+    }
+
+    @Override
     public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException {
         List<MappingSetInfoBean> beans = opsService.getMappingSetInfos();
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 
@@ -148,6 +154,19 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
             results.add(bean.getUriSpace());
         }
         return results;
+    }
+
+    @Override
+    public Set<String> getSourceUriSpace(int mappingSetId) throws IDMapperException {
+        MappingSetInfo info = getMappingSetInfo(mappingSetId);
+        return getUriSpaces(info.getSourceSysCode());
+    }
+
+    @Override
+    public Set<String> getTargetUriSpace(int mappingSetId) throws IDMapperException {
+        MappingSetInfo info = getMappingSetInfo(mappingSetId);
+        System.out.println(info);
+        return getUriSpaces(info.getTargetSysCode());
     }
 
 }

@@ -179,6 +179,18 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return results;
     }
 
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/getMappingSetInfo/{id}")
+    public MappingSetInfoBean getMappingSetInfo(@PathParam("id") String idString) throws IDMapperException {
+        if (idString == null) throw new IDMapperException("id path parameter missing.");
+        if (idString.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
+        int id = Integer.parseInt(idString);
+        MappingSetInfo info = urlMapper.getMappingSetInfo(id);
+        return MappingSetInfoBeanFactory.asBean(info);
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/dataSource")
@@ -198,5 +210,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);
         return bean;
     }
+
  
 }

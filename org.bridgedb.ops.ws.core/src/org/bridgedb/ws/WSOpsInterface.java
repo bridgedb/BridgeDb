@@ -51,5 +51,8 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException;
 
+    public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException;
+
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
+
 }
