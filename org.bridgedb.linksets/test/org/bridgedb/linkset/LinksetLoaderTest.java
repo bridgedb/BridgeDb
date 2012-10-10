@@ -39,6 +39,7 @@ public class LinksetLoaderTest {
        
     private static StoreType VALIDATE_ONLY = null;
     
+    //Unsure if this is still needed or even desirable!
     @BeforeClass
     public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
         //Check database is running and settup correctly or kill the test. 

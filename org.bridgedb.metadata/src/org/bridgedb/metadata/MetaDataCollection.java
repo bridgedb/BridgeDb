@@ -183,12 +183,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     public boolean hasRequiredValuesOrIsSuperset() {
         for (ResourceMetaData resource:resourcesMap.values()){
             if (!resource.isSuperset()){
-                System.out.println("not super: " + resource.id);
                 if (!resource.hasRequiredValues()){
-                    System.out.println("hasRequiredValuesOrIsSuperset() failed by " + resource.id);
                     return false;
                 } else {
-                    System.out.println("ok");
                 }
             }
         }

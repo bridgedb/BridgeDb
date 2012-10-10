@@ -39,7 +39,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.RdfReader;
-import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
@@ -211,14 +211,14 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         for (MappingSetInfo info:mappingSetInfos){
             sb.append("<tr>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append(RdfFactory.getTheBaseURI());
             sb.append("dataSource/");
             sb.append(info.getSourceSysCode());
             sb.append("\">");
             sb.append(info.getSourceSysCode());
             sb.append("</a></td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append(RdfFactory.getTheBaseURI());
             sb.append("dataSource/");
             sb.append(info.getTargetSysCode());
             sb.append("\">");
@@ -228,7 +228,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             sb.append(formatter.format(info.getNumberOfLinks()));
             sb.append("</td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append(RdfFactory.getTheBaseURI());
             sb.append("mappingSet/");
             sb.append(info.getId());
             sb.append("\">");
@@ -276,14 +276,14 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){
             sb.append("<tr>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append(RdfFactory.getTheBaseURI());
             sb.append("dataSource/");
             sb.append(info.getSourceSysCode());
             sb.append("\">");
             sb.append(info.getSourceSysCode());
             sb.append("</a></td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getTheBaseURI());
+            sb.append(RdfFactory.getTheBaseURI());
             sb.append("dataSource/");
             sb.append(info.getTargetSysCode());
             sb.append("\">");

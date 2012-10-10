@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.utils.Reporter;
@@ -91,7 +92,7 @@ public class LinksetHandler extends RDFHandlerBase{
             parser.setParseErrorListener(new LinksetParserErrorListener());
             parser.setVerifyData(true);
             reader = new FileReader(file);
-            parser.parse (reader, RdfWrapper.getTheBaseURI());
+            parser.parse (reader, RdfFactory.getTheBaseURI());
         } catch (IOException ex) {
             throw new IDMapperLinksetException("Error reading file " + 
             		file.getAbsolutePath() + " " + ex.getMessage(), ex);

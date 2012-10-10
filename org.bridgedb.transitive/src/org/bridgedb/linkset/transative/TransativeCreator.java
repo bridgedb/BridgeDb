@@ -35,6 +35,8 @@ import org.bridgedb.metadata.constants.FoafConstants;
 import org.bridgedb.metadata.constants.PavConstants;
 import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.RdfFactory;
+import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -60,7 +62,7 @@ public class TransativeCreator {
     URI rightContext;
     Resource leftLinkSet;
     Resource rightLinkSet;
-    RepositoryConnection connection;
+    //RdfWrapping rdfWrapper;
     Value sourceDataSet;
     Value targetDataSet;
     Value sourceUriSpace;
@@ -70,7 +72,9 @@ public class TransativeCreator {
     BufferedWriter buffer;
     
     private Resource ANY_SUBJECT = null;
-    
+    private static final URI ANY_PREDICATE = null;
+    private static final Value ANY_OBJECT = null;
+
     public TransativeCreator(int leftId, int rightId, String diffLeft, String diffRight, String possibleFileName, 
             StoreType storeType) throws BridgeDbSqlException, RDFHandlerException, IOException{
         if (possibleFileName != null && !possibleFileName.isEmpty()){
@@ -78,8 +82,8 @@ public class TransativeCreator {
         } else {
              createBufferedWriter(leftId, rightId);
         }
-        leftContext = RdfWrapper.getLinksetURL(leftId);
-        rightContext = RdfWrapper.getLinksetURL(rightId);
+        leftContext = RdfFactory.getLinksetURL(leftId);
+        rightContext = RdfFactory.getLinksetURL(rightId);
         getVoid(leftId, rightId, diffLeft, diffRight, storeType);
         getSQL(leftId, rightId, storeType);
     }
@@ -103,15 +107,13 @@ public class TransativeCreator {
     }
 
     private synchronized void getVoid(int leftId, int rightId, String diffLeft, String diffRight, StoreType storeType) throws RDFHandlerException, IOException{
-        connection = RdfWrapper.setupConnection(storeType);
-        leftLinkSet = getLinkSet(leftContext);
-        rightLinkSet = getLinkSet(rightContext);
+        RdfWrapper rdfWrapper = RdfFactory.setupConnection(storeType);
+        leftLinkSet = getLinkSet(rdfWrapper, leftContext);
+        rightLinkSet = getLinkSet(rdfWrapper, rightContext);
         //showContext(rightContext);
-        checkMiddle(diffLeft, diffRight);
-        sourceDataSet = 
-                RdfWrapper.getTheSingeltonObject(connection, leftLinkSet, VoidConstants.SUBJECTSTARGET, leftContext);
-        targetDataSet = 
-                RdfWrapper.getTheSingeltonObject(connection, rightLinkSet, VoidConstants.OBJECTSTARGET, rightContext);
+        checkMiddle(rdfWrapper, diffLeft, diffRight);
+        sourceDataSet = rdfWrapper.getTheSingeltonObject(leftLinkSet, VoidConstants.SUBJECTSTARGET, leftContext);
+        targetDataSet = rdfWrapper.getTheSingeltonObject(rightLinkSet, VoidConstants.OBJECTSTARGET, rightContext);
         
         output = new StringBuilder ("@prefix : <#> .\n");
         output.append("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n");
@@ -119,40 +121,38 @@ public class TransativeCreator {
         String linksetURI = ":linkset" + leftId + "Transitive" + rightId;
         
         registerVoIDDescription(linksetURI);
-        registerNewLinkset(linksetURI, leftId, rightId);
-        registerDataSet(sourceDataSet, leftContext);
-        registerDataSet(targetDataSet, rightContext);
-        sourceUriSpace = RdfWrapper.getTheSingeltonObject(connection, sourceDataSet, VoidConstants.URI_SPACE, leftContext);
-        targetUriSpace = RdfWrapper.getTheSingeltonObject(connection, targetDataSet, VoidConstants.URI_SPACE, rightContext);
+        registerNewLinkset(rdfWrapper, linksetURI, leftId, rightId);
+        registerDataSet(rdfWrapper, sourceDataSet, leftContext);
+        registerDataSet(rdfWrapper, targetDataSet, rightContext);
+        rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE, leftContext);
+        rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE, rightContext);
 
-        RdfWrapper.shutdown(connection);
+        rdfWrapper.shutdown();
         //ystem.out.println(output.toString());
         //ystem.out.println(sourceUriSpace);
         //ystem.out.println(targetUriSpace);
         buffer.write(output.toString());
     }
     
-    private void showContext(URI context) throws RDFHandlerException{
-        List<Statement> statements = RdfWrapper.getStatementList(connection, null, null, null, context);
-        for (Statement statement:statements){
-            Reporter.report(statement.toString());
-        }
-    }
-    private Resource getLinkSet(URI context) throws RDFHandlerException{
-        return RdfWrapper.getTheSingeltonSubject (connection, RdfConstants.TYPE_URI, VoidConstants.LINKSET, context);
+    //private void showContext(URI context) throws RDFHandlerException{
+    //    List<Statement> statements = RdfWrapper.getStatementList(rdfWrapper, null, null, null, context);
+    //    for (Statement statement:statements){
+    //        Reporter.report(statement.toString());
+    //    }
+    //}
+    
+    private Resource getLinkSet(RdfWrapper rdfWrapper, URI context) throws RDFHandlerException{
+        return rdfWrapper.getTheSingeltonSubject (RdfConstants.TYPE_URI, VoidConstants.LINKSET, context);
     }
     
-    private void checkMiddle(String leftDiff, String rightDiff) throws RDFHandlerException{
-        Value leftTarget = 
-                RdfWrapper.getTheSingeltonObject(connection, leftLinkSet, VoidConstants.OBJECTSTARGET, leftContext);
+    //TODO diff no longer used!
+    private void checkMiddle(RdfWrapper rdfWrapper, String leftDiff, String rightDiff) throws RDFHandlerException{
+        Value leftTarget = rdfWrapper.getTheSingeltonObject(leftLinkSet, VoidConstants.OBJECTSTARGET, leftContext);
         //ystem.out.println (leftTarget);
-        Value leftURISpace =
-                RdfWrapper.getTheSingeltonObject(connection, leftTarget, VoidConstants.URI_SPACE, leftContext);
-        Value rightSubject = 
-                RdfWrapper.getTheSingeltonObject(connection, rightLinkSet, VoidConstants.SUBJECTSTARGET, rightContext);
+        Value leftURISpace = rdfWrapper.getTheSingeltonObject(leftTarget, VoidConstants.URI_SPACE, leftContext);
+        Value rightSubject =  rdfWrapper.getTheSingeltonObject(rightLinkSet, VoidConstants.SUBJECTSTARGET, rightContext);
         //ystem.out.println (rightSubject);
-        Value rightURISpace =
-                RdfWrapper.getTheSingeltonObject(connection, rightSubject, VoidConstants.URI_SPACE, rightContext);
+        Value rightURISpace = rdfWrapper.getTheSingeltonObject(rightSubject, VoidConstants.URI_SPACE, rightContext);
         if (rightURISpace.equals(leftURISpace)){
             return; //ok
         }
@@ -166,7 +166,8 @@ public class TransativeCreator {
                 System.err.println(newRight);
             }
         } 
-        RdfWrapper.shutdown(connection);
+        //Error
+        rdfWrapper.shutdown();
         throw new RDFHandlerException("Target URISpace " + leftURISpace + " of the left linkset " + leftContext + 
                 " does not match the subject URISpace " + rightURISpace + " of the right linkset " + rightContext);
     }
@@ -188,7 +189,7 @@ public class TransativeCreator {
     	output.append(" " + linksetURI + " .\n");
     }
     
-    private void registerNewLinkset(String linksetUri, int left, int right) throws RDFHandlerException {
+    private void registerNewLinkset(RdfWrapper rdfWrapper, String linksetUri, int left, int right) throws RDFHandlerException {
         output.append("\n");
         output.append(linksetUri);
         output.append(" a ");
@@ -200,8 +201,8 @@ public class TransativeCreator {
         writeValue(VoidConstants.OBJECTSTARGET);
         writeValue(targetDataSet);   
         output.append("; \n\t");  
-        addPredicate();
-        addLicense(leftLinkSet, leftContext);
+        addPredicate(rdfWrapper);
+        addLicense(rdfWrapper, leftLinkSet, leftContext);
         addDrived();
     }
 
@@ -216,9 +217,8 @@ public class TransativeCreator {
         }
     }
     
-    private void addLicense(Value linkSet, URI context) throws RDFHandlerException{
-        List<Statement> statements = 
-                RdfWrapper.getStatementList(connection, linkSet, DctermsConstants.LICENSE, null, context);
+    private void addLicense(RdfWrapper rdfWrapper, Value linkSet, URI context) throws RDFHandlerException{
+        List<Statement> statements = rdfWrapper.getStatementList(linkSet, DctermsConstants.LICENSE, ANY_OBJECT, context);
         for (Statement statement:statements){
         	writeValue(DctermsConstants.LICENSE);
         	writeValue(statement.getObject());   
@@ -226,11 +226,9 @@ public class TransativeCreator {
         }        
     }
     
-    private void addPredicate() throws RDFHandlerException{
-        Value leftPredicate = 
-                RdfWrapper.getTheSingeltonObject(connection, leftLinkSet, VoidConstants.LINK_PREDICATE, leftContext);        
-        Value rightPredicate = 
-                RdfWrapper.getTheSingeltonObject(connection, rightLinkSet, VoidConstants.LINK_PREDICATE, rightContext);  
+    private void addPredicate(RdfWrapper rdfWrapper) throws RDFHandlerException{
+        Value leftPredicate = rdfWrapper.getTheSingeltonObject(leftLinkSet, VoidConstants.LINK_PREDICATE, leftContext);        
+        Value rightPredicate = rdfWrapper.getTheSingeltonObject(rightLinkSet, VoidConstants.LINK_PREDICATE, rightContext);  
         newPredicate = 
         		PredicateMaker.combine(leftPredicate, rightPredicate);
         writeValue(VoidConstants.LINK_PREDICATE);
@@ -258,15 +256,14 @@ public class TransativeCreator {
             writeValue(new CalendarLiteralImpl(date2));
             output.append(" ; \n\t");
         } catch (DatatypeConfigurationException ex) {
-            RdfWrapper.shutdown(connection);
+//            RdfWrapper.shutdown(rdfWrapper);
             throw new RDFHandlerException ("Date conversion exception ", ex);
         }
 	}
 
-    private void registerDataSet(Value dataSet, URI context) throws RDFHandlerException {
+    private void registerDataSet(RdfWrapper rdfWrapper, Value dataSet, URI context) throws RDFHandlerException {
         output.append("\n");
-        List<Statement> statements = 
-                RdfWrapper.getStatementList(connection, dataSet, null, null, context);
+        List<Statement> statements = rdfWrapper.getStatementList(dataSet, ANY_PREDICATE, ANY_OBJECT, context);
         for (Statement statemement:statements){
             writeValue(statemement.getSubject());
             writeValue(statemement.getPredicate());

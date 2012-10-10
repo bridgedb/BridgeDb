@@ -57,7 +57,6 @@ public class LinksetVoidInformation implements MetaData {
         collection = new MetaDataCollection(reader.getVoidStatements(), specification);
         collection.validate();
         ResourceMetaData linkset = findLinkSet();
-        System.out.println("Linkset = " + linkset);
         predicate = extractSingleStringByPredicate(linkset, VoidConstants.LINK_PREDICATE);  
         transative =  checkIsTransative(linkset);
         ResourceMetaData source = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);

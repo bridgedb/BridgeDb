@@ -77,9 +77,9 @@ public class RDFWriter implements RdfLoader{
             inverseResource = invertResource(linksetResource);
             mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, targetUriSpace, 
                     symmetric, transative);            
-            linksetContext = RdfWrapper.getLinksetURL(mappingId);
+            linksetContext = RdfFactory.getLinksetURL(mappingId);
             if (symmetric) {
-                inverseContext = RdfWrapper.getLinksetURL(mappingId + 1);             
+                inverseContext = RdfFactory.getLinksetURL(mappingId + 1);             
             } else {
                 inverseContext = null;
             }
@@ -97,15 +97,15 @@ public class RDFWriter implements RdfLoader{
     
     @Override
     public void processFirstNoneHeader(Statement firstMap) throws RDFHandlerException {
-        RepositoryConnection connection = RdfWrapper.setupConnection(storeType);
+        RdfWrapper rdfWrapper = RdfFactory.setupConnection(storeType);
         for (Statement st:statements){
-            RdfWrapper.add(connection, st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
+            rdfWrapper.add(st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
             if (st.getPredicate().equals(VoidConstants.SUBJECTSTARGET)){
-                addInverse(connection, st.getSubject(), VoidConstants.OBJECTSTARGET, st.getObject());    
+                addInverse(rdfWrapper, st.getSubject(), VoidConstants.OBJECTSTARGET, st.getObject());    
             } else if (st.getPredicate().equals(VoidConstants.OBJECTSTARGET)){
-                addInverse(connection, st.getSubject(), VoidConstants.SUBJECTSTARGET, st.getObject()); 
+                addInverse(rdfWrapper, st.getSubject(), VoidConstants.SUBJECTSTARGET, st.getObject()); 
             } else {
-                addInverse(connection, st.getSubject(), st.getPredicate(), st.getObject());                
+                addInverse(rdfWrapper, st.getSubject(), st.getPredicate(), st.getObject());                
             }
         }
         Value from;
@@ -119,29 +119,29 @@ public class RDFWriter implements RdfLoader{
         } catch (Exception e){
             from = new LiteralImpl(accessedFrom);
         }
-        RdfWrapper.add(connection, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from, linksetContext);
-        addInverse(connection, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from);
+        rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from, linksetContext);
+        addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from);
         GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
         try {
             XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-            RdfWrapper.add(connection, linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal), linksetContext);
-            addInverse(connection, linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal));
+            rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal), linksetContext);
+            addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal));
         } catch (DatatypeConfigurationException ex) {
             //Should never happen so basically ignore
             ex.printStackTrace();
         }
-        RdfWrapper.add(connection, linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller), linksetContext);
-        addInverse(connection, linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller));
-        addInverse(connection, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
-        RdfWrapper.shutdown(connection);
+        rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller), linksetContext);
+        addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller));
+        addInverse(rdfWrapper, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
+        rdfWrapper.shutdown();
     }
 
-    private void addInverse(RepositoryConnection connection, Resource subject, URI predicate, Value object) 
+    private void addInverse(RdfWrapper rdfWrapper, Resource subject, URI predicate, Value object) 
             throws RDFHandlerException{
         if (subject.equals(linksetResource)){
-            RdfWrapper.add(connection, inverseResource, predicate, object, inverseContext); 
+            rdfWrapper.add(inverseResource, predicate, object, inverseContext); 
         } else {
-            RdfWrapper.add(connection, subject, predicate, object, inverseContext);
+            rdfWrapper.add(subject, predicate, object, inverseContext);
         }
     }
     

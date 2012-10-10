@@ -39,7 +39,7 @@ public interface LinkSetStore {
      * @return list of linksets
      * @throws IDMapperException
      */
-    public List<String> getLinksetNames() throws IDMapperException;
+    //public List<String> getLinksetNames() throws IDMapperException;
 
     /**
      * Converts all the rdf for this linkset into well formatted text

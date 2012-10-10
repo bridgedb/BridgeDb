@@ -30,6 +30,7 @@ import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.rdf.RDFWriter;
+import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.SQLUrlMapper;
@@ -101,7 +102,7 @@ public class LinksetLoader {
      */
     public static void clearExistingData (StoreType storeType) 
     		throws IDMapperException  {
-        RdfWrapper.clear(storeType);
+        RdfFactory.clear(storeType);
         Reporter.report(storeType + " RDF cleared");
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
@@ -140,7 +141,6 @@ public class LinksetLoader {
          if (args.length > 0){
             usage("Please use -D format arguements only.");
         }
-        System.getProperties().list( System.out );
         String fileName = System.getProperty(FILE);
         if (fileName == null || fileName.isEmpty()){
             usage("No parameter " + FILE + " found");

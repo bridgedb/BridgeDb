@@ -23,7 +23,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
 import org.bridgedb.Xref;
-import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.rdf.RdfFactory;
+import org.bridgedb.rdf.RdfFactory;
 
 /**
  *
@@ -150,7 +151,7 @@ public class WSCoreApi {
                 sb.append("<li><a href=\"#targetCode\">targetCode</a></li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     StringBuilder sbInnerPure = new StringBuilder("mapID?id=");
                     StringBuilder sbInnerEncoded = new StringBuilder("mapID?id=");
                     sbInnerPure.append(first.getId());
@@ -172,7 +173,7 @@ public class WSCoreApi {
                     sb.append(sbInnerPure.toString());
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     for (Xref map:firstMaps){
                         sbInnerPure.append("&targetCode=");
                         sbInnerEncoded.append("&targetCode=");
@@ -198,7 +199,7 @@ public class WSCoreApi {
                 sb.append("<li>Currently on a single id and single code supported.</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     sb.append("xrefExists?id=");
                     sb.append(URLEncoder.encode(first.getId(), "UTF-8"));
                     sb.append("&code=");
@@ -223,7 +224,7 @@ public class WSCoreApi {
                 sb.append("<li><a href=\"#limit\">limit</a> (default available)</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     sb.append("freeSearch?text=");
                     sb.append(URLEncoder.encode(first.getId(), "UTF-8"));
                     sb.append("&limit=5");
@@ -268,7 +269,7 @@ public class WSCoreApi {
             sb.append("<li>Implements:  IDMapperCapabilities getCapabilities()</li>");
             sb.append("<li>Gives the Capabilitles as defined by BridgeDB.</li>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     sb.append("getCapabilities\">getCapabilities</a></li>");    
             sb.append("</ul>");
     }
@@ -293,7 +294,7 @@ public class WSCoreApi {
                 sb.append("<li>Returns False because underlying IDMappper does not support freeSearch or URLSearch.</li>");                
             }
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     sb.append("isFreeSearchSupported\">isFreeSearchSupported</a></li>");    
             sb.append("</ul>");
     }
@@ -304,7 +305,7 @@ public class WSCoreApi {
             sb.append("<li>Implements:  Set&ltDataSource&gt  getSupportedSrcDataSources()</li>");
             sb.append("<li>Returns Supported Source (BridgeDB)DataSource(s).</li>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     sb.append("getSupportedSrcDataSources\">getSupportedSrcDataSources</a></li>");    
             sb.append("</ul>");
           
@@ -313,7 +314,7 @@ public class WSCoreApi {
             sb.append("<li>Implements:  Set&ltDataSource&gt  getSupportedTgtDataSources()</li>");
             sb.append("<li>Returns Supported Target (BridgeDB)DataSource(s).</li>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     sb.append("getSupportedTgtDataSources\">getSupportedTgtDataSources</a></li>");    
             sb.append("</ul>");
     }
@@ -329,7 +330,7 @@ public class WSCoreApi {
                 sb.append("<li><a href=\"#targetCode\">targetCode</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getTheBaseURI());
+                sb.append(RdfFactory.getTheBaseURI());
                     sb.append("isMappingSupported?sourceCode=");
                     sb.append(first.getDataSource().getSystemCode());
                     sb.append("&targetCode=");
@@ -356,7 +357,7 @@ public class WSCoreApi {
                 sb.append("<li>There are currently no properties supported</li>");
             } else {
                 sb.append("<li>Example: <a href=\"");
-                    sb.append(RdfWrapper.getTheBaseURI());
+                    sb.append(RdfFactory.getTheBaseURI());
                         sb.append("property/");
                         sb.append(keys.iterator().next());
                         sb.append("\">");
@@ -376,7 +377,7 @@ public class WSCoreApi {
                 sb.append("<li>There are currently no properties supported</li>");
             } else {
                 sb.append("<li>Example: <a href=\"");
-                    sb.append(RdfWrapper.getTheBaseURI());
+                    sb.append(RdfFactory.getTheBaseURI());
                         sb.append("getKeys");
                         sb.append("\">");
                         sb.append("getKeys");
