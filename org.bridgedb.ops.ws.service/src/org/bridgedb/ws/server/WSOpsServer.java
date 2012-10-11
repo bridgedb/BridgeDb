@@ -71,7 +71,19 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         }
         Reporter.report("WsOpsServer setup");        
       }
-            
+    
+    private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/OPS-IMS/mapURL\">"
+    		+ "<fieldset>"
+    		+ "<legend>URL Mapper</legend>"
+            + " <p><label for=\"URL\">Input URI</label>"
+            + " <input type=\"text\" id=\"URL\" name=\"URL\" style=\"width:80%\"/></p>"
+//            + " <p>Graph/Context (Graph value to limit the returned URIs)"
+//            + "     (see <a href=\"/QueryExpander/api#graph\">API</a>)</p>"
+//            + " <p><input type=\"text\" name=\"graph\" style=\"width:80%\"/></p>"
+            + " <p><input type=\"submit\" value=\"Submit\"/></p>"
+            + "<p>Note: If the new page does not open click on the address bar and press enter</p>"
+            + "</fieldset></form>";
+    
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response welcomeMessage() throws IDMapperException, UnsupportedEncodingException {
@@ -84,7 +96,13 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
         sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
-        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<head>" +
+        		"<title>OPS IMS</title>" +
+        		"<style>" +
+        		"fieldset {border: 1px solid #781351;width: 20em}" + 
+        		"legend { color: #fff; background: #ffa20c; border: 1px solid #781351; padding: 2px 6px }" +
+        		"</style>" +
+        		"</head><body>");
         sb.append("<a href=\"http://www.cs.manchester.ac.uk/\">" +
         		"<img style=\"float: left; border: none; padding: 0px; margin: 0px;\" " +
         		"src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" " +
@@ -123,6 +141,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<p>A list of which mappings we currently have can be found at ");
         sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
         
+        sb.append(URI_MAPPING_FORM);
+        
+        sb.append("<h2>Usage Information</h2>");
         sb.append("<p>The main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
