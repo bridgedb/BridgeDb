@@ -455,7 +455,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     public int registerMappingSet(String sourceUriSpace, String predicate, String targetUriSpace, boolean symetric, boolean transative) 
             throws BridgeDbSqlException {
         DataSource source = getDataSource(sourceUriSpace);
-        DataSource target = getDataSource(targetUriSpace);      
+        DataSource target = getDataSource(targetUriSpace);  
+        if (source == target){
+            throw new BridgeDbSqlException("source == target");
+        }
         return registerMappingSet(source, predicate, target, symetric, transative);
     }
 

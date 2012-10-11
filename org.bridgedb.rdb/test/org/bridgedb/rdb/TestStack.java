@@ -53,7 +53,6 @@ public class TestStack {
 		expected.add (new Xref ("856831", BioDataSource.ENTREZ_GENE));
 		Assert.assertEquals (expected, refmap.get(RAD51));
 		
-		System.out.println (mapper.getCapabilities().getSupportedTgtDataSources());
 	}
 	
 	@Ignore public void testPgdb() throws IDMapperException

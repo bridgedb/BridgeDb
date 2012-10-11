@@ -165,7 +165,6 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     @Override
     public Set<String> getTargetUriSpace(int mappingSetId) throws IDMapperException {
         MappingSetInfo info = getMappingSetInfo(mappingSetId);
-        System.out.println(info);
         return getUriSpaces(info.getTargetSysCode());
     }
 

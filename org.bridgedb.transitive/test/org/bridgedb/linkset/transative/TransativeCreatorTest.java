@@ -31,6 +31,8 @@ import org.bridgedb.IDMapperException;
 import java.io.IOException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.StoreType;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -44,42 +46,52 @@ import org.openrdf.rio.RDFHandlerException;
  *
  * @author Christian
  */
-@Ignore //broken
 public class TransativeCreatorTest {
+    
+    private static StoreType VALIDATE_ONLY = null;
     
     @BeforeClass
     public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
-        //Clear the SQL where linkset ids come from
-        new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
-        
-        Reporter.report("sample1to2.ttl");
-        String[] args1 = {"../org.bridgedb.transitive/test-data/sample1to2.ttl", "testnew"};
-        LinksetLoader.main (args1);
-        Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.transitive/test-data/sample1to3.ttl", "test"};
-        LinksetLoader.main (args2);
+        LinksetLoader.clearExistingData( StoreType.TEST);        
+        LinksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        LinksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
-
-    //TODO cleanup this test!
-    /**
-     * Test of main method, of class TransativeCreator.
-     */
+    
     @Test
-    public void testMain() throws Exception {
-        Reporter.report("main");
-        String[] args = new String[4];
-        args[0] = "2";
-        args[1] = "3";
-        args[2] = "test";
-        String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
-        args[3] = fileName;
-        TransativeCreator.main(args);
-        args = new String[2];
-        args[0] = fileName;
-        args[1] = "validate";
-        LinksetLoader.main (args);
+    public void testNoLinkToSelf() throws RDFHandlerException, IOException, IDMapperException {
+        Reporter.report("NoLinkToSelf");
+        String fileName = null;
+        try {
+            TransativeCreator.createTransative(1, 2, fileName, StoreType.TEST);
+            assertFalse(true);
+        } catch (Exception e){
+            String error = "Source of mappingSet 1(TestDS2) is the same as the Target of 2. No need for a transative mapping";
+            assertEquals(error, e.getMessage());
+        }
     }
+
+    @Test
+    public void testNoLink() throws RDFHandlerException, IOException, IDMapperException {
+        Reporter.report("NoLink");
+        String fileName = null;
+        try {
+            TransativeCreator.createTransative(1, 3, fileName, StoreType.TEST);
+            assertFalse(true);
+        } catch (Exception e){
+            e.printStackTrace();
+            String error = "Target of mappingSet 1 is TestDS2 Which is not the same as the Source of 3 which is TestDS1";
+            assertEquals(error, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCreateTransative() throws RDFHandlerException, IOException, IDMapperException {
+        Reporter.report("CreateTransative");
+        String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
+        TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST);
+        LinksetLoader.parse(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
+    }
+
 }

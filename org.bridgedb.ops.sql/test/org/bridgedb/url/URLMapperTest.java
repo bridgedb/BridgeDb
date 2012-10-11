@@ -180,7 +180,6 @@ public abstract class URLMapperTest extends URLListenerTest{
     public void testMapNoneExistingDataSource() throws IDMapperException{
         report("MapNoneExistingDataSource");
         Set<String> results = urlMapper.mapURL(map1URL2, "http://wwww.THIS.should.NOT.Be.InThe.Data.zzz");
-        System.out.println(results);
         assertEquals(0,results.size());
     }
 
@@ -325,10 +324,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     public void testGetTargetUriSpace() throws IDMapperException {
         report("GetTargetUriSpace");
         MappingSetInfo result = urlMapper.getMappingSetInfo(mappingSet2_3);
-        System.out.println(result);
         Set<String> results = urlMapper.getTargetUriSpace(mappingSet2_3);
-        System.out.println(results);
-        System.out.println(URISpace2);
         assertFalse (results.contains(URISpace1));
         assertFalse (results.contains(URISpace2));
         assertFalse (results.contains(URISpace2a));

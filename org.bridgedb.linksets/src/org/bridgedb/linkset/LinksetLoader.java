@@ -74,7 +74,7 @@ public class LinksetLoader {
             for (File child:children){
                 parse(child, storeType, validationType);
             }
-        } else {    
+        } else { 
             LinksetVoidInformation validator = new LinksetVoidInformation(file, validationType);
             Reporter.report("Validation successful");       
             if (storeType == null){
@@ -119,8 +119,7 @@ public class LinksetLoader {
      * @throws IDMapperException
      * @throws FileNotFoundException
      */
-    public static void parse (String fileName, StoreType storeType, ValidationType type) 
-    		throws IDMapperException  {
+    public static void parse (String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
         File file = new File(fileName);
         parse(file, storeType, type);
     }
@@ -141,17 +140,12 @@ public class LinksetLoader {
          if (args.length > 0){
             usage("Please use -D format arguements only.");
         }
+
         String fileName = System.getProperty(FILE);
         if (fileName == null || fileName.isEmpty()){
             usage("No parameter " + FILE + " found");
         }
-        String validationString = System.getProperty(VALIDATION);
-        ValidationType validationType = null;
-        try {
-            validationType = ValidationType.parseString(validationString);
-        } catch (MetaDataException ex) {
-            usage(ex.getMessage());
-        }
+
         String storeString = System.getProperty(STORE);
         StoreType storeType = null;
         if (storeString != null || !storeString.isEmpty()){
@@ -161,6 +155,19 @@ public class LinksetLoader {
                 usage(ex.getMessage());
             }
         }
+
+        String validationString = System.getProperty(VALIDATION);
+        ValidationType validationType = null;
+        if (validationString == null || validationString.isEmpty()){
+            validationType = ValidationType.LINKS;
+        } else {
+            try {
+                validationType = ValidationType.parseString(validationString);
+            } catch (MetaDataException ex) {
+                usage(ex.getMessage());
+            }
+        }
+
         String clearExistingDataString = System.getProperty(CLEAR_EXISING_DATA, "false");
         boolean clearExistingData = Boolean.valueOf(clearExistingDataString);
         if (clearExistingData){
@@ -171,12 +178,30 @@ public class LinksetLoader {
 
     public static void usage(String issue) {
         Reporter.report("Welcome to the OPS Linkset Loader.");
-        Reporter.report("This methods requires the file name (incl path) " +
-        		"of the linkset to be loaded.");
-        Reporter.report("Please run this again with two paramters");
-        Reporter.report("The file name (including path of the linkset");
-        Reporter.report("Either  \"validate\" or \"load\" to pick if the " +
-        		"file(s) should be just validated or also loaded.");
+        Reporter.report("This method uses named (-D) style parameters");
+        Reporter.report("Required Parameter is:");
+        Reporter.report(FILE);
+        Reporter.report("   Name of the file to be loaded.");
+        Reporter.report("   Type of file will be dettermined based on the exstension.");
+        Reporter.report("   This may also be a directory if all files in it can be loaded. ");
+        Reporter.report("Optional Parameters are:");
+        Reporter.report(STORE);
+        Reporter.report("   Dettermines where (if at all) the data will be stored ");
+        Reporter.report("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
+        Reporter.report("   " + StoreType.LOAD + ": Writes into the secondary database and rdf store");
+        Reporter.report("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
+        Reporter.report("   " + StoreType.TEST + ": Writes into the test database and rdf store");
+        Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
+        Reporter.report("   Default is to Validate only.");
+        Reporter.report(VALIDATION);
+        Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
+        Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");
+        Reporter.report("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
+        Reporter.report("   Default is " + ValidationType.LINKS);
+        Reporter.report(CLEAR_EXISING_DATA);
+        Reporter.report("   true: clears the exisiting database and rdfstore.");
+        Reporter.report("        Only the database and rdf specified by " + STORE + " are cleared.");
+        Reporter.report("   default is to append to the existing database and rdf store");
         Reporter.report(issue);
         System.exit(1);
     }

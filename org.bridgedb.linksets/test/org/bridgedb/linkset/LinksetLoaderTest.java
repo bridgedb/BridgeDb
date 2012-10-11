@@ -23,14 +23,20 @@ import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Christian
@@ -50,13 +56,25 @@ public class LinksetLoaderTest {
         LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType);
         LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType);
         LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dd.ttl", StoreType.TEST, validationType);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-ct.ttl", StoreType.TEST, validationType);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dt.ttl", StoreType.TEST, validationType);
+        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
+        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
+        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dd.ttl", StoreType.TEST, validationType);
+        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-ct.ttl", StoreType.TEST, validationType);
+        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dt.ttl", StoreType.TEST, validationType);
 	}
 
+    @Test
+    public void testMappingInfo() throws IDMapperException {
+        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+        
+        MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
+        assertEquals ("TestDS1", info.getSourceSysCode());
+        assertEquals ("TestDS2", info.getTargetSysCode());
+        assertEquals ("http://www.bridgedb.org/test#testPredicate", info.getPredicate());
+        //ystem.out.println(info);
+    }
+    
     @Test(expected=IDMapperLinksetException.class)
     public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
     	LinksetLoader loader = new LinksetLoader();
