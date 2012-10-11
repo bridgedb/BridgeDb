@@ -78,7 +78,7 @@ public class LinksetVoidInformation implements MetaData {
             return null;
         }
         if (possibleResults.size()> 1){
-            error = "Found more than one Resource with the type " + VoidConstants.LINKSET + ". ";
+            error = "Found more than one Resource with the type " + VoidConstants.LINKSET + ". \n\t" + possibleResults;
             return null;
         }
         ResourceMetaData linkset = possibleResults.iterator().next();
@@ -101,7 +101,7 @@ public class LinksetVoidInformation implements MetaData {
             return null;
         }
         if (possibleResults.size()> 1){
-            error = linkset.id + " Has has mpore than one predicate " + predicate + ". ";
+            error = linkset.id + " Has has more than one predicate " + predicate + ". \n\t " + possibleResults;
             return null;
         }
         return possibleResults.iterator().next();
@@ -123,7 +123,8 @@ public class LinksetVoidInformation implements MetaData {
         }
         if (possible.size() > 1){
             error = error + "Resource " + metaDataResource.getId() + " has " + possible.size() + 
-                    " predicates " + predicate + ". When a unique one is required. ";
+                    " predicates " + predicate + ". When a unique one is required. \n\t" +
+                    possible;
         }
         return possible.iterator().next();
     }
