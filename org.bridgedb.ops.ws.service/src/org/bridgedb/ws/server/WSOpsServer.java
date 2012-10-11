@@ -85,8 +85,16 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
         sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<a href=\"http://www.cs.manchester.ac.uk/\">" +
+        		"<img style=\"float: left; border: none; padding: 0px; margin: 0px;\" " +
+        		"src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" " +
+        		"alt=\"The University of Manchester\" height=\"50\"></img></a>");
+        sb.append("<a href=\"http://www.openphacts.org/\">" +
+        		"<img style=\"float: right; border: none; padding: 0px; margin: 0px;\" " +
+        		"src=\"http://www.openphacts.org/images/stories/banner.jpg\" " +
+        		"alt=\"Open PHACTS\" height=\"50\"></img></a>");
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
-        sb.append("<p>Welcome to the prototype Identity Mapping Service. </p>");
+        sb.append("<p>Welcome to the Identity Mapping Service. </p>");
        
         OverallStatistics statistics = urlMapper.getOverallStatistics();
         sb.append("<p>Currently the service includes: ");
@@ -108,14 +116,14 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 sb.append(" Target Data Sources</li>");
         sb.append("</ul></p>");
         
-        sb.append("<p>The links where last updated ");
+        sb.append("<p>The links were last updated ");
         sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
         sb.append("</p>");
                 
-        sb.append("<p>A List of which mappings we current have can be found at ");
+        sb.append("<p>A list of which mappings we currently have can be found at ");
         sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
         
-        sb.append("<p>The Main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
+        sb.append("<p>The main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
         sb.append("</body></html>");
