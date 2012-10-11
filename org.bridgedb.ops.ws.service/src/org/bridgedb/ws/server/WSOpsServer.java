@@ -99,17 +99,23 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     		return sb.toString();
     }
     
-    private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/OPS-IMS/mapURL\">"
-    		+ "<fieldset>"
-    		+ "<legend>URL Mapper</legend>"
-            + " <p><label for=\"URL\">Input URI</label>"
-            + " <input type=\"text\" id=\"URL\" name=\"URL\" style=\"width:80%\"/></p>"
-//            + " <p>Graph/Context (Graph value to limit the returned URIs)"
-//            + "     (see <a href=\"/QueryExpander/api#graph\">API</a>)</p>"
-//            + " <p><input type=\"text\" name=\"graph\" style=\"width:80%\"/></p>"
-            + " <p><input type=\"submit\" value=\"Submit\"/></p>"
-            + "<p>Note: If the new page does not open click on the address bar and press enter</p>"
-            + "</fieldset></form>";
+    private final String uriMappingForm() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("<form method=\"get\" action=\"/OPS-IMS/mapURL\">");
+    	sb.append("<fieldset>");
+    	sb.append("<legend>URL Mapper</legend>");
+    	sb.append("<p><label for=\"URL\">Input URI</label>");
+    	sb.append("<input type=\"text\" id=\"URL\" name=\"URL\" style=\"width:80%\"/></p>");
+    	sb.append("<p><select name=\"profile\">");
+    	//TODO: Read profiles from database
+    	sb.append("<option value=\"0\">Default</option>");
+    	sb.append("<option value=\"1\">ChEBI has parts</option>");
+    	sb.append("</select>");
+    	sb.append("<p><input type=\"submit\" value=\"Submit\"/></p>");
+    	sb.append("<p>Note: If the new page does not open click on the address bar and press enter</p>");
+    	sb.append("</fieldset></form>");
+    	return sb.toString();
+    }
     
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -157,7 +163,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<p>A list of which mappings we currently have can be found at ");
         sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
         
-        sb.append(URI_MAPPING_FORM);
+        sb.append(uriMappingForm());
         
         sb.append("<h2>Usage Information</h2>");
         sb.append("<p>The main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
