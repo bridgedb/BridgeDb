@@ -72,6 +72,33 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         Reporter.report("WsOpsServer setup");        
       }
     
+    private final String statsBlock() throws IDMapperException {
+    		OverallStatistics statistics = urlMapper.getOverallStatistics();
+    		StringBuilder sb = new StringBuilder();
+    		sb.append("<div id=\"navBar\"><h2>Service statistics</h2>");
+    		sb.append("<ul>");
+    		sb.append("<li>");
+    		sb.append(formatter.format(statistics.getNumberOfMappings()));
+    		sb.append(" Mappings</li>");
+    		sb.append("<li>From ");
+    		sb.append(formatter.format(statistics.getNumberOfMappingSets()));
+    		sb.append(" Mapping Sets</li>");
+    		sb.append("<li>Covering ");
+    		sb.append(formatter.format(statistics.getNumberOfSourceDataSources()));
+    		sb.append(" Source Data Sources</li>");
+    		sb.append("<li>Using ");
+    		sb.append(formatter.format(statistics.getNumberOfPredicates()));
+    		sb.append(" Predicates</li>");
+    		sb.append("<li>Mapping to ");
+    		sb.append(formatter.format(statistics.getNumberOfTargetDataSources()));
+    		sb.append(" Target Data Sources</li>");
+    		sb.append("<li>Last update: ");
+    		sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
+    		sb.append("</li>");
+    		sb.append("</ul></p></div>");        
+    		return sb.toString();
+    }
+    
     private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/OPS-IMS/mapURL\">"
     		+ "<fieldset>"
     		+ "<legend>URL Mapper</legend>"
@@ -99,10 +126,18 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<head>" +
         		"<title>OPS IMS</title>" +
         		"<style>" +
+        		"#container { width: 90%; margin: 10px auto; background-color: #fff; color: #333; border: 1px solid gray; line-height: 130%; font-family: perpetua, garamond, serif; font-size: 110%; min-width: 40em; }" +
+        		"#top { padding: .5em; background-color: #808080; border-bottom: 1px solid gray; }" +
+        		"#top h1 { padding: .25em .5em .25em .5em; margin-left: 200px; margin-bottom: 0; margin-right: 0; margin-top: 0 }" +
+        		"#top a { text-decoration: none; color: #ffffff; }"+
+        		"#navBar { float: left; width: 200px; margin: 0em; padding: 5px; min-width: 200px; border-right: 1px solid gray; } " +
+        		"#content { margin-left: 210px; border-left: 1px solid gray; padding: 1em; min-width: 20em; min-height: 500px; }" +
         		"fieldset {border: 1px solid #781351;width: 20em}" + 
         		"legend { color: #fff; background: #ffa20c; border: 1px solid #781351; padding: 2px 6px }" +
         		"</style>" +
         		"</head><body>");
+        sb.append("<div id=\"container\">");
+        sb.append("<div id=\"top\">");
         sb.append("<a href=\"http://www.cs.manchester.ac.uk/\">" +
         		"<img style=\"float: left; border: none; padding: 0px; margin: 0px;\" " +
         		"src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" " +
@@ -112,31 +147,12 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         		"src=\"http://www.openphacts.org/images/stories/banner.jpg\" " +
         		"alt=\"Open PHACTS\" height=\"50\"></img></a>");
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
-        sb.append("<p>Welcome to the Identity Mapping Service. </p>");
-       
-        OverallStatistics statistics = urlMapper.getOverallStatistics();
-        sb.append("<p>Currently the service includes: ");
-        sb.append("<ul>");
-            sb.append("<li>");
-                sb.append(formatter.format(statistics.getNumberOfMappings()));
-                sb.append(" Mappings</li>");
-            sb.append("<li>From ");
-                sb.append(formatter.format(statistics.getNumberOfMappingSets()));
-                sb.append(" Mapping Sets</li>");
-            sb.append("<li>Covering ");
-                sb.append(formatter.format(statistics.getNumberOfSourceDataSources()));
-                sb.append(" Source Data Sources</li>");
-            sb.append("<li>Using ");
-                sb.append(formatter.format(statistics.getNumberOfPredicates()));
-                sb.append(" Predicates</li>");
-            sb.append("<li>Mapping to ");
-                sb.append(formatter.format(statistics.getNumberOfTargetDataSources()));
-                sb.append(" Target Data Sources</li>");
-        sb.append("</ul></p>");
+        sb.append("</div>");
         
-        sb.append("<p>The links were last updated ");
-        sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
-        sb.append("</p>");
+        sb.append(statsBlock());
+        
+        sb.append("<div id=\"content\">");
+        sb.append("<p>Welcome to the Identity Mapping Service. </p>");        
                 
         sb.append("<p>A list of which mappings we currently have can be found at ");
         sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
@@ -147,7 +163,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<p>The main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
-        sb.append("</body></html>");
+        sb.append("</div></div></body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
