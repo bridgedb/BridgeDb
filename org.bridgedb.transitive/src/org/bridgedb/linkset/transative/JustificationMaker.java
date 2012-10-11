@@ -18,6 +18,8 @@
 //
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.linkset.constants.ChemInf;
+import org.bridgedb.linkset.constants.OboConstants;
 import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandlerException;
 
@@ -30,6 +32,12 @@ public class JustificationMaker {
     public static Value combine(Value left, Value right) throws RDFHandlerException{
         if (left.equals(right)){
             return left;
+        }
+        if (left.equals(ChemInf.INCHI_KEY)) {
+        	if (right.equals(OboConstants.HAS_PART)) return OboConstants.HAS_PART;
+        }
+        if (left.equals(OboConstants.HAS_PART)) {
+        	if (right.equals(ChemInf.INCHI_KEY)) return OboConstants.HAS_PART;
         }
         throw new RDFHandlerException("unable to combine " + left + " with " + right);
     }
