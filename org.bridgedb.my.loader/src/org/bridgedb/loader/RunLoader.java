@@ -12,8 +12,10 @@ import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.linkset.transative.TransativeCreator;
 import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -22,9 +24,8 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class RunLoader {
 
-    private static void loadFile (String fileName) 
-            throws IDMapperException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException{
-        Reporter.report(fileName);
+ /*   private static void loadFile (String fileName) 
+        LinksetLoader
         String[] args = new String[2];
         args[0] = fileName;
         args[1] = "load";
@@ -42,7 +43,6 @@ public class RunLoader {
         TransativeCreator.main (args);
         loadFile (fileName);
     }
-
     private static void transtitive2(int leftId, int rightId, String fileName)
             throws Exception {
         Reporter.report(fileName);
@@ -56,32 +56,56 @@ public class RunLoader {
         TransativeCreator.main (args);
         loadFile (fileName);
     }
-
-    public static void main(String[] args) 
-            throws Exception  {
+*/
+    
+    public static void main(String[] args) throws IDMapperException, RDFHandlerException, IOException  {
 
         String root = "C:/Dropbox/linksets/";
-        
-        String[] args1 = {root + "originals/ConceptWiki-Chembl2Targets.ttl", "new"};
-        LinksetLoader.main (args1);
-        loadFile (root + "originals/ConceptWiki-ChemSpider.ttl");
-        loadFile (root + "originals/ConceptWiki-DrugbankTargets.ttl");
-        loadFile (root + "originals/ConceptWiki-GO.ttl");
-        loadFile (root + "originals/ConceptWiki-MSH.ttl");
-        loadFile (root + "originals/ConceptWiki-NCIM.ttl");
-        loadFile (root + "originals/ConceptWiki-Pdb.ttl");
-        loadFile (root + "originals/ConceptWiki-Swissprot.ttl");
-        loadFile (root + "originals/Chembl13Id-ChemSpider.ttl");
-        loadFile (root + "originals/Chembl13Molecule-Chembl13Id.ttl");
-        loadFile (root + "originals/Chembl13Targets-Enzyme.ttl");
-        loadFile (root + "originals/Chembl13Targets-Swissprot.ttl");
-        loadFile (root + "originals/ChemSpider-Chembl2Compounds.ttl");
-        loadFile (root + "originals/ChemSpider-DrugBankDrugs.ttl");
-        transtitive(18,20,root + "transitive1/ChemSpider-Chembl13Molecule-via-Chembl13Id.ttl");
-        transtitive(3,29,root + "transitive1/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl");
-        transtitive2(15,24,root + "transitive1/ConceptWiki-Chembl13Targets-via-Swissprot.ttl");
-        transtitive(3,25,root + "transitive1/ConceptWiki-Chembl2Compounds-via-ChemSpider.ttl");
-        transtitive(3,27,root + "transitive1/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl");
+        LinksetLoader.clearExistingData(StoreType.LOAD);
+        //1-2
+        LinksetLoader.parse(root + "originals/ConceptWiki-Chembl2Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //3-4
+        LinksetLoader.parse(root + "originals/ConceptWiki-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //5-6
+        LinksetLoader.parse(root + "originals/ConceptWiki-DrugbankTargets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //7-8
+        LinksetLoader.parse(root + "originals/ConceptWiki-GO.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //9-10
+        LinksetLoader.parse(root + "originals/ConceptWiki-MSH.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //11-12
+        LinksetLoader.parse(root + "originals/ConceptWiki-NCIM.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //13-14
+        LinksetLoader.parse(root + "originals/ConceptWiki-Pdb.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //15-16 
+        LinksetLoader.parse(root + "originals/ConceptWiki-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //17-18 
+        LinksetLoader.parse(root + "originals/Chembl13Id-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //19-20 
+        LinksetLoader.parse(root + "originals/Chembl13Molecule-Chembl13Id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //21-22
+        LinksetLoader.parse(root + "originals/Chembl13Targets-Enzyme.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //23-24 
+        LinksetLoader.parse(root + "originals/Chembl13Targets-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //25-26 
+        LinksetLoader.parse(root + "originals/ChemSpider-Chembl2Compounds.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //27-28
+        LinksetLoader.parse(root + "originals/ChemSpider-DrugBankDrugs.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+    
+        //29-30 
+        TransativeCreator.createTransative(18,20,root + "transitive/ChemSpider-Chembl13Molecule-via-Chembl13Id.ttl", StoreType.LOAD);
+        LinksetLoader.parse(root + "transitive/ChemSpider-Chembl13Molecule-via-Chembl13Id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //31-33
+        TransativeCreator.createTransative(3,29,root + "transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl", StoreType.LOAD);
+        LinksetLoader.parse(root + "transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //33-34
+        TransativeCreator.createTransative(15,24,root + "transitive/ConceptWiki-Chembl13Targets-via-Swissprot.ttl", StoreType.LOAD);
+        LinksetLoader.parse(root + "transitive/ConceptWiki-Chembl13Targets-via-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //35-36
+        TransativeCreator.createTransative(3,25,root + "transitive/ConceptWiki-Chembl2Compounds-via-ChemSpider.ttl", StoreType.LOAD);
+        LinksetLoader.parse(root + "transitive/ConceptWiki-Chembl2Compounds-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //37-38
+        TransativeCreator.createTransative(3,27,root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", StoreType.LOAD);
+        LinksetLoader.parse(root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
     }
 
 }

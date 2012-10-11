@@ -65,6 +65,8 @@ public class SQLListener implements MappingListener{
     private StringBuilder insertQuery;
     private final boolean supportsIsValid;
     private final String autoIncrement;
+    private final static long REPORT_DELAY = 10000;
+    private long lastUpdate = 0;
     
     /**
      * 
@@ -144,6 +146,7 @@ public class SQLListener implements MappingListener{
         } catch (SQLException ex) {
             throw new BridgeDbSqlException ("Error getting new indetity with " + query, ex);
         }
+        lastUpdate = new Date().getTime();
         return autoinc;
     }
 
@@ -210,12 +213,16 @@ public class SQLListener implements MappingListener{
         if (insertQuery != null) {
            try {
                 Statement statement = createStatement();
-                long start = new Date().getTime();
+                //long start = new Date().getTime();
                 int changed = statement.executeUpdate(insertQuery.toString());
-                Reporter.report("insertTook " + (new Date().getTime() - start));
+                //Reporter.report("insertTook " + (new Date().getTime() - start));
                 insertCount += changed;
                 doubleCount += blockCount - changed;
-                Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
+                long now = new Date().getTime();
+                if (now - lastUpdate > REPORT_DELAY){
+                    Reporter.report("Inserted " + insertCount + " links and ignored " + doubleCount + " so far");
+                    lastUpdate = now;
+                }
             } catch (SQLException ex) {
                 System.err.println(ex);
                 throw new BridgeDbSqlException ("Error inserting link ", ex, insertQuery.toString());

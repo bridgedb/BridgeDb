@@ -58,6 +58,7 @@ public class RdfWrapper {
     public synchronized void clear() throws IDMapperLinksetException{
         try {
             RepositoryConnection connection = this.getConnection();
+            connection.clear();
             shutdown();
         } catch (Throwable ex) {
             shutdownAfterError();
@@ -82,9 +83,10 @@ public class RdfWrapper {
     private Resource getPossibleSingeltonSubject(URI predicate, Value object, Resource... contexts) 
             throws RDFHandlerException {
         RepositoryConnection connection = this.getConnection();
+        List<Statement> statements;
         try {
             RepositoryResult<Statement> rr = connection.getStatements(null, predicate, object, false, contexts);
-            List<Statement> statements = rr.asList();
+            statements = rr.asList();
             if (statements.size() == 1) {
                 Statement statement = statements.get(0);
                 return statement.getSubject();
@@ -97,7 +99,7 @@ public class RdfWrapper {
         }
         shutdownAfterError();
         throw new RDFHandlerException ("Found more than one Subject with Predicate " + predicate + " Object " + object +
-                " in context(s) " + toString(contexts));
+                " in context(s) " + toString(contexts) + "\n" + statements);
     }
 
     public Resource getTheSingeltonSubject(URI predicate, Value object, Resource... contexts) throws RDFHandlerException {

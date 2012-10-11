@@ -20,6 +20,7 @@
     pav:derivedOn "2012-02-22"^^xsd:date ;
     dcterms:license "Who cares this is a test" ;
     dcterms:subject "absolutely nothing" ;
+#    void:subset :Test1_2 ;
     void:uriSpace <http://www.foo.com/>.
 :TestDS2 a void:Dataset  ;
 	dcterms:title "Test Dataset 2"^^xsd:string ;
@@ -31,7 +32,6 @@
     void:subjectsTarget :TestDS1 ;
     void:objectsTarget :TestDS2 ;
     dcterms:license "Who cares this is a test" ;
-    void:subset :TestDS1 ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
     dcterms:created "2012-02-22"^^xsd:date ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .

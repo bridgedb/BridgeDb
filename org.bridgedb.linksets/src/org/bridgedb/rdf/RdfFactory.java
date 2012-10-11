@@ -65,7 +65,7 @@ public class RdfFactory {
     public synchronized static void clear(StoreType storeType) throws IDMapperLinksetException{
         RdfWrapper rdfWrapper;
         try {
-            rdfWrapper = setupConnection(storeType);
+            rdfWrapper = setupConnection(storeType, false);
         } catch (RDFHandlerException ex) {
             throw new IDMapperLinksetException("Unable to clear repository ", ex);
         }
@@ -163,9 +163,13 @@ public class RdfFactory {
     }
     
     public static RdfWrapper setupConnection(StoreType storeType) throws RDFHandlerException{
+        return setupConnection(storeType, true);
+    }
+    
+    public static RdfWrapper setupConnection(StoreType storeType, boolean existing) throws RDFHandlerException{
         Repository repository;
         try {
-            repository = getRepository (storeType, true);
+            repository = getRepository (storeType, existing);
         } catch (IDMapperLinksetException ex) {
             try {
                 String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);

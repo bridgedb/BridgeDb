@@ -6,6 +6,9 @@ package org.bridgedb.metadata;
 
 import java.io.File;
 import java.util.Set;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.utils.Reporter;
 import static org.junit.Assert.*;
@@ -34,6 +37,7 @@ public class FileTest extends TestUtils{
         if (checkAllStatements){
             checkAllStatementsUsed(metaData);
         }
+        metaData.validate();
     }
     
     private void validateFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
@@ -73,8 +77,15 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
-    public void testchemspider2chemblrdfLinksetTtl() throws MetaDataException{
+    public void testLINK_FILE() throws MetaDataException{
         MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
         checkFile(LINK_FILE, 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
- }
+
+    @Test
+    public void testLinksetFirstTtl() throws MetaDataException, IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);
+        checkFile("test-data/linksetFirst.ttl", 3, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+}

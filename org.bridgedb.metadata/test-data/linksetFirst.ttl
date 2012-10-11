@@ -1,0 +1,32 @@
+@prefix : <#> . 
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/> .
+
+:ConceptWiki-Chembl2Targets a void:Linkset ;
+    dcterms:license "unknown" ;
+    void:subjectsTarget :ConceptWiki ;
+    void:objectsTarget :Chembl2Targets ;
+    void:linkPredicate skos:exactMatch ;
+    dcterms:created "2012-02-22"^^xsd:date ;
+    dcterms:creator <http://www.conceptwiki.org> .
+:ConceptWiki a void:Dataset ;
+    dcterms:license "unknown" ;
+    dcterms:subject "unknown" ;
+    pav:retrievedOn "2012-02-22"^^xsd:date ;
+    void:subset :ConceptWiki-Chembl2Targets ;
+    void:uriSpace <http://www.conceptwiki.org/concept/>.
+:Chembl2Targets a void:Dataset ;
+    dcterms:license "unknown" ;
+    dcterms:subject "unknown" ;
+    pav:version "unknown" ;
+    void:uriSpace <http://chem2bio2rdf.org/chembl/resource/chembl_targets/> ;
+    dcterms:publisher <http://www.unkown.com> ;
+    dcterms:created "2000-01-10T00:00:00Z"^^xsd:dateTime;
+    .
+
+<http://www.conceptwiki.org/concept/71310f88-2477-4cf7-85df-83fae8fba675> skos:exactMatch <http://chem2bio2rdf.org/chembl/resource/chembl_targets/12720>.
+<http://www.conceptwiki.org/concept/7646d2f4-2767-4415-93cf-516b098555fd> skos:exactMatch <http://chem2bio2rdf.org/chembl/resource/chembl_targets/10407>.
+<http://www.conceptwiki.org/concept/7a8d2cf1-4067-4a27-98ce-bab674ea2959> skos:exactMatch <http://chem2bio2rdf.org/chembl/resource/chembl_targets/12060>.
