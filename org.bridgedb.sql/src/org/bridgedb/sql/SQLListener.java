@@ -44,7 +44,7 @@ public class SQLListener implements MappingListener{
   
     //Maximumn size in database
     protected static final int SYSCODE_LENGTH = 100;
-    private static final int FULLNAME_LENGTH = 100;
+    protected static final int FULLNAME_LENGTH = 100;
     private static final int MAINURL_LENGTH = 100;
     private static final int URLPATTERN_LENGTH = 100;
     protected static final int ID_LENGTH = 100;

@@ -96,6 +96,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                     + "  ) ");
             sh.execute("CREATE TABLE profile ( " +
             		"profileId INT " + autoIncrement + " PRIMARY KEY, " +
+            		"name VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " +
             		"createdOn DATETIME, " +
             		"createdBy VARCHAR(" + PREDICATE_LENGTH + ") " +
             		")");
@@ -702,24 +703,25 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
-    public int registerProfile(String createdOn, String createdBy, 
+    public int registerProfile(String name, String createdOn, String createdBy, 
     		List<String> justificationUris) 
             throws BridgeDbSqlException {
     	//TODO: Need to validate that createdOn is a date
     	//TODO: Need to validate that createdBy is a URI
     	//TODO: Need to validate that justifcationUris is a List of URIs
     	startTransaction();
-    	int profileId = createProfile(createdOn, createdBy);
+    	int profileId = createProfile(name, createdOn, createdBy);
     	insertJustifications(profileId, justificationUris);
     	commitTransaction();
     	return profileId;
     }
 
-	private int createProfile(String createdOn, String createdBy)
+	private int createProfile(String name, String createdOn, String createdBy)
 			throws BridgeDbSqlException {
 		String insertStatement = "INSERT INTO profile "
-                    + "(createdOn, createdBy) " 
+                    + "(name, createdOn, createdBy) " 
                     + "VALUES (" 
+                    + "'" + name + "', "
                     + "'" + createdOn + "', " 
                     + "'" + createdBy + "')";
 		int profileId = 0;
