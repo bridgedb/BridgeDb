@@ -62,10 +62,10 @@ public class LinksetVoidInformation implements MetaData {
         ResourceMetaData source = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
         subjectUriSpace = extractSingleStringByPredicate(source, VoidConstants.URI_SPACE);
         ResourceMetaData target = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.OBJECTSTARGET);
-        targetUriSpace = extractSingleStringByPredicate(source, VoidConstants.URI_SPACE);
+        targetUriSpace = extractSingleStringByPredicate(target, VoidConstants.URI_SPACE);
         validateLinks(reader.getLinkStatements());
         validate();
-    }
+     }
     
     private ResourceMetaData findLinkSet(){
         Set<ResourceMetaData> possibleResults = collection.getResourceMetaDataByType(VoidConstants.LINKSET);

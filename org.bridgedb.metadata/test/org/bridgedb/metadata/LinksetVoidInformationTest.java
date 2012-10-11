@@ -4,6 +4,8 @@
  */
 package org.bridgedb.metadata;
 
+import org.openrdf.model.Statement;
+import org.openrdf.model.impl.URIImpl;
 import org.bridgedb.utils.Reporter;
 import java.util.Set;
 import org.bridgedb.metadata.constants.DctermsConstants;
@@ -53,7 +55,7 @@ public class LinksetVoidInformationTest {
     public void testGetSubjectUriSpace() throws Exception {
         Reporter.report("getSubjectUriSpace");
         String result = instance.getSubjectUriSpace();
-        assertNotNull(result);
+        assertEquals("http://data.kasabi.com/dataset/chembl-rdf/", result);
     }
 
     /**
@@ -63,7 +65,7 @@ public class LinksetVoidInformationTest {
     public void testGetTargetUriSpace() throws Exception {
         Reporter.report("getTargetUriSpace");
         String result = instance.getTargetUriSpace();
-        assertNotNull(result);
+        assertEquals("http://rdf.chemspider.com/", result);
     }
 
     /**
@@ -73,7 +75,7 @@ public class LinksetVoidInformationTest {
     public void testGetPredicate() throws Exception {
         Reporter.report("getPredicate");
         String result = instance.getPredicate();
-        assertNotNull(result);
+        assertEquals("http://www.w3.org/2004/02/skos/core#exactMatch", result);
     }
 
     /**
@@ -83,7 +85,8 @@ public class LinksetVoidInformationTest {
     public void testGetLinksetResource() throws Exception {
         Reporter.report("getLinksetResource");
         Resource result = instance.getLinksetResource();
-        assertNotNull(result);
+        Resource expected = new URIImpl("http://data.kasabi.com/dataset/chembl-rdf/void.ttl/chembl-rdf-compounds_cs_linkset");
+        assertEquals(expected, result);
     }
 
     /**
@@ -134,7 +137,7 @@ public class LinksetVoidInformationTest {
         Reporter.report("validityReport");
         boolean includeWarnings = false;
         String result = instance.validityReport(includeWarnings);
-        assertNotNull(result);
+        assertEquals("No issues foundFound 2 links", result);
     }
 
      /**
@@ -163,7 +166,14 @@ public class LinksetVoidInformationTest {
     @Test
     public void testGetRDF() {
         Reporter.report("getRDF");
-        Set results = instance.getRDF();
+        Set<Statement> results = instance.getRDF();
+        boolean found = false;
+        for (Statement statement:results){
+            if (statement.getObject().equals(VoidConstants.DATASET)){
+                found = true;
+            }
+        }
+        assertTrue(found);
         assertThat (results.size(), greaterThanOrEqualTo(20));
     }
 }
