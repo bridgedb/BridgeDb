@@ -75,18 +75,20 @@ public class TransativeCreator {
     
     public TransativeCreator(int leftId, int rightId, String diffLeft, String diffRight, String possibleFileName, 
             RdfStoreType type) throws BridgeDbSqlException, RDFHandlerException, IOException{
+    	String fileName;
         if (possibleFileName != null && !possibleFileName.isEmpty()){
-            createBufferedWriter(possibleFileName);
+            fileName = createBufferedWriter(possibleFileName);
         } else {
-             createBufferedWriter(leftId, rightId);
+        	fileName = createBufferedWriter(leftId, rightId);
         }
         leftContext = RdfWrapper.getLinksetURL(leftId);
         rightContext = RdfWrapper.getLinksetURL(rightId);
         getVoid(leftId, rightId, diffLeft, diffRight, type);
         getSQL(leftId, rightId, type);
+        Reporter.report("Generated transitive linkset file " + fileName);
     }
  
-    private void createBufferedWriter(String fileName) throws IOException {
+    private String createBufferedWriter(String fileName) throws IOException {
         File file = new File(fileName);
         //if (!file.canWrite()){
         //    throw new IOException("Unable to write to " + file.getAbsolutePath());
@@ -98,11 +100,12 @@ public class TransativeCreator {
         FileWriter writer = new FileWriter(file);
         buffer = new BufferedWriter(writer);
         buffer.flush();
+        return file.getAbsolutePath();
     }
 
-    private void createBufferedWriter(int leftId, int rightId) throws IOException {
+    private String createBufferedWriter(int leftId, int rightId) throws IOException {
         //FIXME: Need to capture a path
-        createBufferedWriter ("linkset" + leftId + "Transitive" + rightId + ".ttl");
+        return createBufferedWriter ("linkset" + leftId + "Transitive" + rightId + ".ttl");
     }
 
     private synchronized void getVoid(int leftId, int rightId, String diffLeft, String diffRight, RdfStoreType type) throws RDFHandlerException, IOException{
@@ -344,6 +347,7 @@ public class TransativeCreator {
                 buffer.write("> . "); 
                 buffer.newLine();
             }
+            Reporter.report("Result processing complete");
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
