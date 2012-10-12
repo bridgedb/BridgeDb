@@ -26,6 +26,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.LinksetVoidInformation;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.metadata.validator.Validator;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -50,9 +51,7 @@ import org.bridgedb.utils.StoreType;
 public class LinksetLoader {
     
     private static String CALLER_NAME = "org.bridgedb.linkset.LinksetLoader" ;
-    private static String FILE = "file";
     private static String STORE = "store";
-    private static String VALIDATION = "validation";
     private static String CLEAR_EXISING_DATA = "clearExistingData";
     
    /**
@@ -137,13 +136,13 @@ public class LinksetLoader {
      * @throws BridgeDbSqlException
      */
     public static void main(String[] args) throws IDMapperException {
-         if (args.length > 0){
-            usage("Please use -D format arguements only.");
+         if (args.length != 1){
+            usage("Please specify a file/directory and use -D format for all other arguements.");
         }
 
-        String fileName = System.getProperty(FILE);
+        String fileName = args[0];
         if (fileName == null || fileName.isEmpty()){
-            usage("No parameter " + FILE + " found");
+            usage("Please specify the file or directory top be loaded.");
         }
 
         String storeString = System.getProperty(STORE);
@@ -156,13 +155,16 @@ public class LinksetLoader {
             }
         }
 
-        String validationString = System.getProperty(VALIDATION);
+        String validationString = System.getProperty(Validator.VALIDATION);
         ValidationType validationType = null;
         if (validationString == null || validationString.isEmpty()){
             validationType = ValidationType.LINKS;
         } else {
             try {
                 validationType = ValidationType.parseString(validationString);
+                if (!validationType.isLinkset()){
+                    usage(Validator.VALIDATION + " setting " + validationType + " is not supported for loading linksets");
+                }
             } catch (MetaDataException ex) {
                 usage(ex.getMessage());
             }
@@ -171,6 +173,9 @@ public class LinksetLoader {
         String clearExistingDataString = System.getProperty(CLEAR_EXISING_DATA, "false");
         boolean clearExistingData = Boolean.valueOf(clearExistingDataString);
         if (clearExistingData){
+            if (storeType == null){
+                throw new IDMapperException("Unable to " + CLEAR_EXISING_DATA + "if no " + STORE + " specified!");
+            }
             clearExistingData(storeType);
         }
         parse (fileName, storeType, validationType);
@@ -178,13 +183,14 @@ public class LinksetLoader {
 
     public static void usage(String issue) {
         Reporter.report("Welcome to the OPS Linkset Loader.");
-        Reporter.report("This method uses named (-D) style parameters");
-        Reporter.report("Required Parameter is:");
-        Reporter.report(FILE);
-        Reporter.report("   Name of the file to be loaded.");
+        Reporter.report("This method uses a normal paramter and several (optional) named (-D) style parameters");
+        Reporter.report("Required Parameter (following the jar) is:");
+        Reporter.report("File or Directory to load");
+        Reporter.report("   Name (ideally with path) of the file to be loaded.");
         Reporter.report("   Type of file will be dettermined based on the exstension.");
         Reporter.report("   This may also be a directory if all files in it can be loaded. ");
-        Reporter.report("Optional Parameters are:");
+        Reporter.report("      Includes subdirectories with the same requirement of all loadable. ");
+        Reporter.report("Optional -D format (before the jar) Parameters are:");
         Reporter.report(STORE);
         Reporter.report("   Dettermines where (if at all) the data will be stored ");
         Reporter.report("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
@@ -193,7 +199,7 @@ public class LinksetLoader {
         Reporter.report("   " + StoreType.TEST + ": Writes into the test database and rdf store");
         Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
         Reporter.report("   Default is to Validate only.");
-        Reporter.report(VALIDATION);
+        Reporter.report(Validator.VALIDATION);
         Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
         Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");
         Reporter.report("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");

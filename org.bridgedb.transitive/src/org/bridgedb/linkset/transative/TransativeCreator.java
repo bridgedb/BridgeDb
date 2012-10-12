@@ -27,7 +27,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -39,7 +38,6 @@ import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.RdfFactory;
-import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -54,7 +52,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.CalendarLiteralImpl;
-import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -73,8 +71,6 @@ public class TransativeCreator {
     private Value targetDataSet;
     private Value sourceUriSpace;
     private Value targetUriSpace;
-//    private StringBuilder output;
-    private Value newPredicate;
     private BufferedWriter buffer;
     
     private Resource ANY_SUBJECT = null;
@@ -84,6 +80,9 @@ public class TransativeCreator {
     private static final String RIGHT_ID = "rightId";
     private static String STORE = "store";
     private static String FILE = "file";
+    private static String PREDICATE = "predicate";
+    private static String LICENSE = "lisense";
+    private static String DERIVED_BY = "derivedBy";
       
     private TransativeCreator(int leftId, int rightId, String possibleFileName, StoreType storeType) 
             throws IDMapperException, IOException{
@@ -94,37 +93,18 @@ public class TransativeCreator {
         rightContext = RdfFactory.getLinksetURL(rightId);
     }
             
-    public static void createTransative(int leftId, int rightId, String possibleFileName, StoreType storeType) 
+    public static void createTransative(int leftId, int rightId, String possibleFileName, StoreType storeType, 
+            URI predicate, URI license, URI derivedBy) 
             throws RDFHandlerException, IOException, IDMapperException{
+        if (license != null && derivedBy == null){
+            throw new IDMapperException("To change the " + LICENSE + " you must declare who you are using the " + 
+                    DERIVED_BY + " parameter.");
+        }
         TransativeCreator creator = new TransativeCreator(leftId, rightId, possibleFileName, storeType);
-        creator.getVoid(leftId, rightId, storeType);
-        creator.getSQL(leftId, rightId, storeType);
+        predicate = creator.getVoid(leftId, rightId, storeType, predicate, license, derivedBy);
+        creator.getSQL(leftId, rightId, storeType, predicate);
     }
  
-    private void createBufferedWriter(String fileName) throws IOException {
-        File file = new File(fileName);
-        //if (!file.canWrite()){
-        //    throw new IOException("Unable to write to " + file.getAbsolutePath());
-        //}
-        if (!file.getParentFile().exists()){
-            throw new IOException("Unable to create file " + fileName + " because the requested directory " 
-                    + file.getParent() + " does not yet exist. Please create the directory and try again.");
-        }
-        FileWriter writer = new FileWriter(file);
-        buffer = new BufferedWriter(writer);
-        buffer.flush();
-    }
-
-    private void createBufferedWriter(File file) throws IOException {
-        if (file.getParentFile() != null && !file.getParentFile().exists()){
-            throw new IOException("Unable to create file " + file.getName() + " because the requested directory " 
-                    + file.getParent() + " does not yet exist. Please create the directory and try again.");
-        }
-        FileWriter writer = new FileWriter(file);
-        buffer = new BufferedWriter(writer);
-        buffer.flush();
-    }
-
     private void createBufferedWriter(String possibleFileName, int leftId, int rightId) throws IOException {
         File file;
         if (possibleFileName == null || possibleFileName.isEmpty()){
@@ -135,14 +115,16 @@ public class TransativeCreator {
                 file = new File(file, "linkset " + leftId + "Transitive" + rightId + ".ttl");
             }
         }        
-        createBufferedWriter (file);
+        if (file.getParentFile() != null && !file.getParentFile().exists()){
+            throw new IOException("Unable to create file " + file.getName() + " because the requested directory " 
+                    + file.getParent() + " does not yet exist. Please create the directory and try again.");
+        }
+        FileWriter writer = new FileWriter(file);
+        buffer = new BufferedWriter(writer);
+        buffer.flush();
     }
 
-    private void createBufferedWriter(File dir, int leftId, int rightId) throws IOException {
-        createBufferedWriter ("linkset " + leftId + "Transitive" + rightId + ".ttl");
-    }
-    
-    private synchronized void getVoid(int leftId, int rightId, StoreType storeType) 
+    private synchronized URI getVoid(int leftId, int rightId, StoreType storeType, URI predicate, URI license, URI derivedBy) 
             throws RDFHandlerException, IOException, IDMapperException{
         checkMappable(leftId, rightId);
         RdfWrapper rdfWrapper = RdfFactory.setupConnection(storeType);
@@ -155,24 +137,15 @@ public class TransativeCreator {
         String linksetURI = ":linkset" + leftId + "Transitive" + rightId;
         
         registerVoIDDescription(linksetURI);
-        registerNewLinkset(rdfWrapper, linksetURI, leftId, rightId);
+        predicate = registerNewLinkset(rdfWrapper, linksetURI, leftId, rightId, predicate, license, derivedBy);
         registerDataSet(rdfWrapper, sourceDataSet, leftContext);
         registerDataSet(rdfWrapper, targetDataSet, rightContext);
         sourceUriSpace = rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE, leftContext);
         targetUriSpace = rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE, rightContext);
 
         rdfWrapper.shutdown();
-        //ystem.out.println(output.toString());
-        //ystem.out.println(sourceUriSpace);
-        //ystem.out.println(targetUriSpace);
+        return predicate;
     }
-    
-    //private void showContext(URI context) throws RDFHandlerException{
-    //    List<Statement> statements = RdfWrapper.getStatementList(rdfWrapper, null, null, null, context);
-    //    for (Statement statement:statements){
-    //        Reporter.report(statement.toString());
-    //    }
-    //}
     
     private Resource getLinkSet(RdfWrapper rdfWrapper, URI context) throws RDFHandlerException{
         return rdfWrapper.getTheSingeltonSubject (RdfConstants.TYPE_URI, VoidConstants.LINKSET, context);
@@ -191,32 +164,6 @@ public class TransativeCreator {
         }
     }
     
-    /*private void checkMiddle(RdfWrapper rdfWrapper, String leftDiff, String rightDiff) throws RDFHandlerException{
-        Value leftTarget = rdfWrapper.getTheSingeltonObject(leftLinkSet, VoidConstants.OBJECTSTARGET, leftContext);
-        //ystem.out.println (leftTarget);
-        Value leftURISpace = rdfWrapper.getTheSingeltonObject(leftTarget, VoidConstants.URI_SPACE, leftContext);
-        Value rightSubject =  rdfWrapper.getTheSingeltonObject(rightLinkSet, VoidConstants.SUBJECTSTARGET, rightContext);
-        //ystem.out.println (rightSubject);
-        Value rightURISpace = rdfWrapper.getTheSingeltonObject(rightSubject, VoidConstants.URI_SPACE, rightContext);
-        if (rightURISpace.equals(leftURISpace)){
-            return; //ok
-        }
-        if (leftDiff != null || rightDiff != null){
-            String newRight = rightURISpace.stringValue().replace(rightDiff, leftDiff);
-            if (newRight.equals(leftURISpace.stringValue())){
-                return; //ok;
-            } else {
-                System.err.println(leftDiff);
-                System.err.println(rightDiff);
-                System.err.println(newRight);
-            }
-        } 
-        //Error
-        rdfWrapper.shutdown();
-        throw new RDFHandlerException("Target URISpace " + leftURISpace + " of the left linkset " + leftContext + 
-                " does not match the subject URISpace " + rightURISpace + " of the right linkset " + rightContext);
-    }*/
-
     private void registerVoIDDescription(String linksetURI) throws RDFHandlerException, IOException {
         buffer.write("@prefix : <#> .");
         buffer.newLine();
@@ -251,7 +198,8 @@ public class TransativeCreator {
     	buffer.write("\t");        
     }
     
-    private void registerNewLinkset(RdfWrapper rdfWrapper, String linksetUri, int left, int right) throws RDFHandlerException, IOException {
+    private URI registerNewLinkset(RdfWrapper rdfWrapper, String linksetUri, int left, int right, 
+            URI predicate, URI license, URI derivedBy) throws RDFHandlerException, IOException {
         buffer.newLine();
         buffer.write(linksetUri);
         buffer.write(" a ");
@@ -263,9 +211,10 @@ public class TransativeCreator {
         writeValue(VoidConstants.OBJECTSTARGET);
         writeValue(targetDataSet);   
         semicolonNewlineTab();
-        addPredicate(rdfWrapper);
-        addLicense(rdfWrapper, leftLinkSet, leftContext);
-        addDrived();
+        predicate = addPredicate(rdfWrapper, predicate);
+        addLicense(rdfWrapper, leftLinkSet, leftContext, license);
+        addDrived(derivedBy);
+        return predicate;
     }
 
     private void writeValue(Value value) throws IOException{
@@ -279,25 +228,34 @@ public class TransativeCreator {
         }
     }
     
-    private void addLicense(RdfWrapper rdfWrapper, Value linkSet, URI context) throws RDFHandlerException, IOException{
-        List<Statement> statements = rdfWrapper.getStatementList(linkSet, DctermsConstants.LICENSE, ANY_OBJECT, context);
-        for (Statement statement:statements){
-        	writeValue(DctermsConstants.LICENSE);
-        	writeValue(statement.getObject());   
-   	        semicolonNewlineTab();  
-        }        
+    private void addLicense(RdfWrapper rdfWrapper, Value linkSet, URI context, Value license) throws RDFHandlerException, IOException{
+        if (license == null){
+            List<Statement> statements = rdfWrapper.getStatementList(linkSet, DctermsConstants.LICENSE, ANY_OBJECT, context);
+            for (Statement statement:statements){
+            	writeValue(DctermsConstants.LICENSE);
+                writeValue(statement.getObject());   
+                semicolonNewlineTab();  
+           }        
+        } else {
+            writeValue(DctermsConstants.LICENSE);
+            writeValue(license);   
+            semicolonNewlineTab();  
+        }
     }
     
-    private void addPredicate(RdfWrapper rdfWrapper) throws RDFHandlerException, IOException{
-        Value leftPredicate = rdfWrapper.getTheSingeltonObject(leftLinkSet, VoidConstants.LINK_PREDICATE, leftContext);        
-        Value rightPredicate = rdfWrapper.getTheSingeltonObject(rightLinkSet, VoidConstants.LINK_PREDICATE, rightContext);  
-        newPredicate = PredicateMaker.combine(leftPredicate, rightPredicate);
+    private URI addPredicate(RdfWrapper rdfWrapper, URI newPredicate) throws RDFHandlerException, IOException{
+        if (newPredicate == null){
+            Value leftPredicate = rdfWrapper.getTheSingeltonObject(leftLinkSet, VoidConstants.LINK_PREDICATE, leftContext);        
+            Value rightPredicate = rdfWrapper.getTheSingeltonObject(rightLinkSet, VoidConstants.LINK_PREDICATE, rightContext);  
+            newPredicate = PredicateMaker.combine(leftPredicate, rightPredicate);
+        }
         writeValue(VoidConstants.LINK_PREDICATE);
         writeValue(newPredicate);   
         semicolonNewlineTab();
+        return newPredicate;
     }
     
-    private void addDrived() throws RDFHandlerException, IOException {
+    private void addDrived(URI derivedBy) throws RDFHandlerException, IOException {
         addDate(PavConstants.DERIVED_ON);
         writeValue(PavConstants.DERIVED_BY);   
         buffer.write("\"TransativeCreator.java\"");
@@ -308,6 +266,11 @@ public class TransativeCreator {
         writeValue(PavConstants.DERIVED_FROM);
         writeValue(rightLinkSet);   
         buffer.write(". ");
+        if (derivedBy != null){
+            writeValue(PavConstants.DERIVED_BY);
+            writeValue(derivedBy);   
+            semicolonNewlineTab();  
+        }
         buffer.newLine();
     }
 
@@ -336,7 +299,7 @@ public class TransativeCreator {
         }
     }
        
-    private void getSQL(int leftId, int rightId, StoreType storeType) throws BridgeDbSqlException, IOException {
+    private void getSQL(int leftId, int rightId, StoreType storeType, URI newPredicate) throws BridgeDbSqlException, IOException {
         buffer.newLine();
         StringBuilder query = new StringBuilder(
                 "SELECT mapping1.sourceId, mapping2.targetId ");
@@ -362,7 +325,7 @@ public class TransativeCreator {
             while (rs.next()){
                 String sourceId = rs.getString("mapping1.sourceId");
                 String targetId = rs.getString("mapping2.targetId");
-                //ystem.out.println("<" + sourceUrl + "> <" + newPredicate + "> <" + targetUrl + "> . "); 
+                System.out.println("<" + sourceId + "> <" + newPredicate + "> <" + targetId + "> . "); 
                 buffer.write("<");
                     buffer.write(sourceUriSpace.stringValue());
                     buffer.write(sourceId);
@@ -383,34 +346,98 @@ public class TransativeCreator {
     }
     
     public static void usage(String issue) {
-        Reporter.report(issue);
-        int error = 1/0;
-        System.exit(1);
+        Reporter.report("Welcome to the OPS Transative Crestor.");
+        Reporter.report("This method uses two normal paramter and several  (optional) named (-D) style parameters");
+        Reporter.report("Required Parameter (following the jar) are:");
+        Reporter.report("Source mapping set Id");
+        Reporter.report("   Sources from this set will become the sources in the new set.");
+        Reporter.report("Target mapping set Id");
+        Reporter.report("   Targets from this set will become the targets in the new set.");
+        Reporter.report("Note: The Target Dataset of the first mappingset must be the same as the Source Dataset of the second.");
+        Reporter.report("   original linksets could have different UriSpaces, so long as they map to the same DataSet.");
+        
+        Reporter.report("Optional -D format (before the jar) Parameters are:");
+        Reporter.report(STORE);
+        Reporter.report("   Dettermines where the data will retreived from. ");
+        Reporter.report("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
+        Reporter.report("   " + StoreType.LOAD + ": Writes into the secondary database and rdf store");
+        Reporter.report("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
+        Reporter.report("   " + StoreType.TEST + ": Writes into the test database and rdf store");
+        Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
+        Reporter.report("   Default is to " + StoreType.LIVE);
+        
+        Reporter.report(FILE);
+        Reporter.report("   Name (ideally with path) of the file to be created.");
+        Reporter.report("   WARNING Please make sure it has a \".ttl\" exstention or resulting file may not be readable."); 
+        Reporter.report("   Alternatively provide only the directory to save to.");
+        Reporter.report("   Default is the leftId + \"Transitive\" + the rightId + \".ttl\".  ");
+        Reporter.report("      Which will be placed in the suggested directory if provided. ");
+ 
+        Reporter.report(PREDICATE);
+        Reporter.report("   Predicate to used in the new linkset.");
+        Reporter.report("   Defaults any predicate shared by both original linksets");
+        Reporter.report("       If orignals have different links the least specific one is used. If known");
+        Reporter.report("       Otherwise an error is thrown and user will have to provide a " + PREDICATE);
+        
+        Reporter.report(LICENSE); 
+        Reporter.report("   License to be used for the new Linkset.");
+        Reporter.report("       Requires the " + DERIVED_BY + " to be used to say who choose this " + LICENSE);
+        Reporter.report("   Users if Responsible for the suitablity of the new " + LICENSE);
+        Reporter.report("   Default is to include all " + LICENSE + " found in the original linksets");
+        
+        Reporter.report(DERIVED_BY);
+        Reporter.report("   Person who triggered the creation of the linkset.");
+        Reporter.report("   Also person who authorized a different " + LICENSE);
+        Reporter.report("   No Default value.");
+        
+        Reporter.report("WARNING:" + PREDICATE + ", " + LICENSE + " and " + DERIVED_BY + " Must be Uris");
+        Reporter.report("   As implemented by openrdf URIImpl");
+        Reporter.report("   Any leading < and trailing > characters are removed. So are not required but allowed.");
+    }
+
+    private static URI getURI(String property) {
+        if (property == null){
+            return null;
+        }
+        if (property.isEmpty()){
+            return null;
+        }
+        property = property.trim();
+        while (property.startsWith("<")){
+            property = property.substring(1);
+        }
+        while (property.endsWith(">")){
+            property = property.substring(0, property.length() - 1);
+        }
+        try{
+            return new URIImpl(property);
+        } catch (Exception e){
+            usage(e.getMessage());
+            return null; //never reached
+        }
     }
 
     public static void main(String[] args) throws RDFHandlerException, IOException, IDMapperException {
-         if (args.length > 0){
-            usage("Please use -D format arguements only.");
+         if (args.length != 2){
+            usage("Please provide the ids of the two mappingsets to combine and any farther -D format arguements.");
         }
-        String left = System.getProperty(LEFT_ID);
-        if (left == null || left.isEmpty()){
-            usage("No Parameter " + LEFT_ID + " found");
+        if (args[0] == null || args[0].isEmpty()){
+            usage("First Parameter must be the ID of the Source mappingset");
         }
-       String right = System.getProperty(RIGHT_ID);
-        if (left == null || left.isEmpty()){
-            usage("No Parameter " + RIGHT_ID + " found");
+        if (args[1] == null || args[1].isEmpty()){
+            usage("Second Parameter must be the ID of the Target mappingset");
         }
         int leftId = -1;
         int rightId = -1;
         try {
-            leftId = Integer.parseInt(left);
-            rightId = Integer.parseInt(right);
+            leftId = Integer.parseInt(args[0]);
+            rightId = Integer.parseInt(args[1]);
         } catch (Exception e){
             usage(e.getMessage());
         }
         
         String storeString = System.getProperty(STORE);
-        StoreType storeType = null;
+        StoreType storeType = StoreType.LIVE;
         if (storeString != null || !storeString.isEmpty()){
             try {
                 storeType = StoreType.parseString(storeString);
@@ -421,7 +448,10 @@ public class TransativeCreator {
 
         String fileName = System.getProperty(FILE);
 
-        createTransative(leftId, rightId, fileName, storeType);
+        URI predicate = getURI(System.getProperty(PREDICATE));
+        URI license = getURI(System.getProperty(LICENSE));
+        URI derivedBy = getURI(System.getProperty(DERIVED_BY));
+        createTransative(leftId, rightId, fileName, storeType, predicate, license, derivedBy);
     }
 
 }
