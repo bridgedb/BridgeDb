@@ -58,7 +58,7 @@ public class VirtuosoAccess implements SQLAccess{
         //    String msg = "Problem loading in MySQL JDBC driver.";
         //    throw new BridgeDbSqlException(msg);
         } catch (ClassNotFoundException ex) {
-            String msg = "Problem loading in MySQL JDBC driver.";
+            String msg = "Problem loading in virtuoso JDBC driver.";
             //Logger.getLogger(MySQLAccess.class.getName()).log(Level.SEVERE, msg, ex);
             throw new BridgeDbSqlException(msg, ex);
         }
