@@ -148,7 +148,7 @@ public class LinksetLoader {
 
         String storeString = System.getProperty(STORE);
         StoreType storeType = null;
-        if (storeString != null || !storeString.isEmpty()){
+        if (storeString != null && !storeString.isEmpty()){
             try {
                 storeType = StoreType.parseString(storeString);
             } catch (IDMapperException ex) {
