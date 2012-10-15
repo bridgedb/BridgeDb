@@ -28,8 +28,9 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private MetaDataCollection collection;
     private final MetaDataSpecification registry;
     
-    LinkedResource(URI predicate, String type, URI resourceType, MetaDataSpecification registry){
-        super(predicate.getLocalName(), type);
+    LinkedResource(URI predicate, String type, RequirementLevel requirementLevel, URI resourceType, 
+            MetaDataSpecification registry){
+        super(predicate.getLocalName(), type, requirementLevel);
         this.predicate = predicate;
         this.resourceType = resourceType;
         this.registry = registry;

@@ -21,8 +21,8 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
     //    super(element);
     //}
     
-    public MetaDataGroup(String name, String type, List<MetaDataBase> childMetaData){
-        super(name, type, childMetaData);
+    public MetaDataGroup(String name, String type, RequirementLevel requirementLevel, List<MetaDataBase> childMetaData){
+        super(name, type, requirementLevel, childMetaData);
     }
     
     public MetaDataGroup(MetaDataGroup other){

@@ -29,7 +29,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private boolean directlyLinkedTo = false;
     
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
-        super(type.getLocalName(), type.getLocalName(), childMetaData);
+        super(type.getLocalName(), type.getLocalName(), RequirementLevel.SHOULD, childMetaData);
         childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
         this.type = type;
     }

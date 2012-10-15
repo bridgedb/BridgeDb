@@ -41,8 +41,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     //    specifiedProperty = true;
     //}
     
-    public PropertyMetaData(URI predicate, String type, String objectClass) throws MetaDataException{
-        super(predicate.getLocalName(), type);
+    public PropertyMetaData(URI predicate, String type, RequirementLevel requirementLevel, String objectClass) throws MetaDataException{
+        super(predicate.getLocalName(), type, requirementLevel);
         this.predicate = predicate;
         metaDataType = getMetaDataType(objectClass);
         specifiedProperty = true;
@@ -66,14 +66,14 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
     
     private PropertyMetaData(URI predicate, String type){
-        super(predicate.getLocalName(), type);
+        super(predicate.getLocalName(), type, RequirementLevel.UNSPECIFIED);
         this.predicate = predicate;
         metaDataType = null;
         specifiedProperty = false;
     }
     
     private PropertyMetaData(String type){
-        super("Type", type);
+        super("Type", type, RequirementLevel.MUST);
         this.predicate = RdfConstants.TYPE_URI;
         metaDataType = new UriType();
         specifiedProperty = true;

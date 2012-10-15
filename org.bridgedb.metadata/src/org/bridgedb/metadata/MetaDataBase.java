@@ -27,7 +27,8 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     final String type;
     final String name;
     final String documentation;
-
+    final RequirementLevel requirementLevel;
+    
    // MetaData parent;
     
     //MetaDataBase(Element element){
@@ -35,9 +36,10 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     //    documentation = MetaDataRegistry.getDocumentationRoot() + element.getAttribute(SchemaConstants.DOCUMENTATION);
     //}
     
-    MetaDataBase(String name, String type){
+    MetaDataBase(String name, String type, RequirementLevel requirementLevel){
         this.name = name;
         this.type = type;
+        this.requirementLevel = requirementLevel;
         label = "(" + type + ") ";
         this.documentation = MetaDataSpecification.getDocumentationRoot();
     }
@@ -45,6 +47,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     MetaDataBase(MetaDataBase other){
         this.name = other.name;
         this.type = other.type;
+        this.requirementLevel = other.requirementLevel;
         label = "(" + type + ") ";
         this.documentation = other.documentation;
     }

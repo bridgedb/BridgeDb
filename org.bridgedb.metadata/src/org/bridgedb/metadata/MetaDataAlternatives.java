@@ -21,8 +21,8 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     
     private final boolean PRESENCE_OPTIONAL = false;
     
-    public MetaDataAlternatives(String name, String type, List<MetaDataBase> childMetaData){
-        super(name, type, childMetaData);
+    public MetaDataAlternatives(String name, String type, RequirementLevel requirementLevel, List<MetaDataBase> childMetaData){
+        super(name, type, requirementLevel, childMetaData);
     }
     
     public MetaDataAlternatives(MetaDataAlternatives other){
