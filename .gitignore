@@ -4,6 +4,7 @@
 .settings/
 nbactions-local.xml
 nbactions.xml
+catalog.xml
 
 # ignore target files #
 target/
