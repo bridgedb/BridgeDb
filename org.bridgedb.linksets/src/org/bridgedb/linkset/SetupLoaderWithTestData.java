@@ -20,8 +20,10 @@ package org.bridgedb.linkset;
 import java.io.FileNotFoundException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 
 /**
  * @author Christian
@@ -30,14 +32,11 @@ public class SetupLoaderWithTestData {
         
    public static void main(String[] args) throws BridgeDbSqlException, IDMapperException, IDMapperLinksetException, FileNotFoundException, MetaDataException {
         Reporter.report("sample2to1.ttl");
-        String[] args1 = {"../org.bridgedb.linksets/test-data/sample1to2.ttl", "new"};
-        LinksetLoader.main (args1);
-        Reporter.report("sample1to3.ttl");
-        String[] args2 = {"../org.bridgedb.linksets/test-data/sample1to3.ttl", "load"};
-        LinksetLoader.main (args2);
-        Reporter.report("sample2to3.ttl");
-        String[] args3 = {"../org.bridgedb.linksets/test-data/sample2to3.ttl", "load"};
-        LinksetLoader.main (args3);
+        //String[] args1 = {, "new"};
+        LinksetLoader.clearExistingData(StoreType.LOAD);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
 	}
 
 }
