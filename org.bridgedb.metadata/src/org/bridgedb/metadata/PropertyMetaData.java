@@ -192,29 +192,38 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
 
     @Override
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
-        if (requirementLevel != RequirementLevel.UNSPECIFIED){
-            if (checkAllpresent && values.isEmpty()){
-                appendEmptyReport(builder, tabLevel);
-            } else if (!hasCorrectTypes()){
-                appendIncorrectTypeReport(builder, tabLevel);
-            } else {
-                //Ok so nothing to append
-            }
-        } else {
+        if (requirementLevel == RequirementLevel.UNSPECIFIED){
             appendUnspecifiedReport(builder, includeWarnings, tabLevel);            
+        } else if (!hasCorrectTypes()){
+            appendIncorrectTypeReport(builder, tabLevel);
+        } else if (checkAllpresent && values.isEmpty()){
+            appendEmptyReport(builder, tabLevel, includeWarnings);
+        } else {
+            //Ok so nothing to append
         }
     }
 
-    private void appendEmptyReport(StringBuilder builder, int tabLevel) {
+    private void appendEmptyReport(StringBuilder builder, int tabLevel, boolean includeWarnings) {
         tab(builder, tabLevel);
-        builder.append("ERROR: ");
-        appendLabel(builder, ":");
-        builder.append(" is missing. ");
-        newLine(builder, tabLevel + 1);
-        builder.append("Please add a statement with the predicate ");
-        builder.append(predicate);
-        newLine(builder);
-        addDocumentationLink(builder, tabLevel);
+        if (requirementLevel == RequirementLevel.MUST){
+            builder.append("ERROR: ");
+            appendLabel(builder, ":");
+            builder.append(" is missing. ");
+            newLine(builder, tabLevel + 1);
+            builder.append("Please add a statement with the predicate ");
+            builder.append(predicate);
+            newLine(builder);
+            addDocumentationLink(builder, tabLevel);
+        } else if (requirementLevel == RequirementLevel.SHOULD || includeWarnings){
+            builder.append("WARNING: ");
+            appendLabel(builder, ":");
+            builder.append(" is missing. ");
+            newLine(builder, tabLevel + 1);
+            builder.append("Please consider adding a statement with the predicate ");
+            builder.append(predicate);
+            newLine(builder);
+            addDocumentationLink(builder, tabLevel);
+        }
    }
     
     private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel) {

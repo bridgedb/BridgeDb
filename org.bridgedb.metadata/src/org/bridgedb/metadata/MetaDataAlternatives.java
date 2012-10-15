@@ -64,15 +64,10 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     @Override
     void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         if (noChildernWithValue()){
-            tab(builder, tabLevel);
-            builder.append("ERROR: ");
-            appendLabel(builder, " Alternatives ");
-            builder.append(name);
-            builder.append(" None of the alternatives have a value.");
-            newLine(builder);
-            addDocumentationLink(builder, tabLevel);
-            for (MetaDataBase child:childMetaData){
-                 child.appendShowAll(builder, tabLevel + 1);
+            if (this.requirementLevel == RequirementLevel.MUST){
+                reportMissingValues(builder, "ERROR: ", tabLevel);
+            } else if (includeWarnings && this.requirementLevel == RequirementLevel.SHOULD){
+                reportMissingValues(builder, "WARNING: ", tabLevel);
             }
         }
         for (MetaDataBase child:childMetaData){
@@ -80,6 +75,19 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         }
     }
 
+    private void reportMissingValues(StringBuilder builder, String message, int tabLevel){
+        tab(builder, tabLevel);
+        builder.append(message);
+        appendLabel(builder, " Alternatives ");
+        builder.append(name);
+        builder.append(" None of the alternatives have a value.");
+        newLine(builder);
+        addDocumentationLink(builder, tabLevel);
+        for (MetaDataBase child:childMetaData){
+            child.appendShowAll(builder, tabLevel + 1);
+        }
+    }
+    
     private boolean noChildernWithValue(){
         for (MetaDataBase child:childMetaData){
             //Ok if a single child has valuies

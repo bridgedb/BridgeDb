@@ -9,5 +9,5 @@ package org.bridgedb.metadata;
  * @author Christian
  */
 public enum RequirementLevel {
-    MUST,SHOULD,MAY, UNSPECIFIED;
+    MUST, SHOULD, MAY, UNSPECIFIED;
 }

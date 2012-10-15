@@ -8,11 +8,12 @@ package org.bridgedb.metadata;
  *
  * @author Christian
  */
-public abstract class AppendBase {
+public abstract class AppendBase implements MetaData{
     
     static final String CLEAR_REPORT = "No issues found";
     static final boolean CHECK_ALL_PRESENT = true;
     
+    @Override
     public synchronized String toString(){
          StringBuilder builder = new StringBuilder();
          appendShowAll(builder, 0);
@@ -25,6 +26,7 @@ public abstract class AppendBase {
          return builder.toString();
     }
 
+    @Override
     public String Schema(){
         StringBuilder builder = new StringBuilder();
         appendSchema(builder, 0);
@@ -35,6 +37,7 @@ public abstract class AppendBase {
     
     abstract void appendShowAll(StringBuilder builder, int tabLevel);
     
+    @Override
     public String validityReport(boolean includeWarnings) {
          StringBuilder builder = new StringBuilder();
          appendValidityReport(builder, CHECK_ALL_PRESENT, includeWarnings, 0);
@@ -47,6 +50,7 @@ public abstract class AppendBase {
 
     abstract void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel);
 
+    @Override
     public String unusedStatements(){
         StringBuilder builder = new StringBuilder();
         appendUnusedStatements(builder);
