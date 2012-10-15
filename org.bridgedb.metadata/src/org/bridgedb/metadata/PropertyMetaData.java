@@ -17,9 +17,6 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.model.impl.URIImpl;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -44,20 +41,20 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     //    specifiedProperty = true;
     //}
     
-    public PropertyMetaData(URI predicate, String objectClass) throws MetaDataException{
-        super(predicate.getLocalName());
+    public PropertyMetaData(URI predicate, String type, String objectClass) throws MetaDataException{
+        super(predicate.getLocalName(), type);
         this.predicate = predicate;
         metaDataType = getMetaDataType(objectClass);
         specifiedProperty = true;
     }
     
-    public static PropertyMetaData getUnspecifiedProperty(URI predicate){
-        PropertyMetaData result = new PropertyMetaData(predicate);
+    public static PropertyMetaData getUnspecifiedProperty(URI predicate, String type){
+        PropertyMetaData result = new PropertyMetaData(predicate, type);
         return result;
     }
     
-    public static PropertyMetaData getTypeProperty(){
-        PropertyMetaData result = new PropertyMetaData();
+    public static PropertyMetaData getTypeProperty(String type){
+        PropertyMetaData result = new PropertyMetaData(type);
         return result;
     }
 
@@ -68,15 +65,15 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         specifiedProperty = true;
     }
     
-    private PropertyMetaData(URI predicate){
-        super(predicate.getLocalName());
+    private PropertyMetaData(URI predicate, String type){
+        super(predicate.getLocalName(), type);
         this.predicate = predicate;
         metaDataType = null;
         specifiedProperty = false;
     }
     
-    private PropertyMetaData(){
-        super("Type");
+    private PropertyMetaData(String type){
+        super("Type", type);
         this.predicate = RdfConstants.TYPE_URI;
         metaDataType = new UriType();
         specifiedProperty = true;
@@ -228,9 +225,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private void appendEmptyReport(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append("ERROR: ");
-        builder.append(id );
-        builder.append(":");
-        builder.append(name);
+        appendLabel(builder, ":");
         builder.append(" is missing. ");
         newLine(builder, tabLevel + 1);
         builder.append("Please add a statement with the predicate ");
@@ -242,9 +237,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append("ERROR: Incorrect type for ");
-        builder.append(id );
-        builder.append(":");
-        builder.append(name);            
+        appendLabel(builder, ":");
         for (Value value: values){
             if (!metaDataType.correctType(value)){
                 newLine(builder, tabLevel + 1);
@@ -265,7 +258,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         if (includeWarnings){
             tab(builder, tabLevel);
             builder.append("INFO: ");
-            builder.append(id);
+            appendLabel(builder);
             builder.append(" has an extra Predicate ");
             builder.append(predicate);
             newLine(builder);

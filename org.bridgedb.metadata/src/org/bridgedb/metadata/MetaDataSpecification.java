@@ -63,10 +63,13 @@ public class MetaDataSpecification {
         Set<OWLClass> theClasses = ontology.getClassesInSignature();
         for (OWLClass theClass:theClasses){
             String id = theClass.toStringID();
-             if (id.equals(THING_ID)){
+            if (id.equals(THING_ID)){
                 //ignore thing;
+            } else if (id.startsWith(ontology.getOntologyID().getDefaultDocumentIRI().getStart())){
+                    System.out.println("ignoring; " + theClass);
             } else {
                 URI type = new URIImpl(id);
+                //ystem.out.println(theClass);
                 List<MetaDataBase> childMetaData = getChildren(theClass);
                 ResourceMetaData resourceMetaData = new ResourceMetaData(type, childMetaData);
                 resourcesByType.put(type, resourceMetaData);
@@ -106,28 +109,29 @@ public class MetaDataSpecification {
     private List<MetaDataBase> getChildren(OWLClass theClass) throws MetaDataException {
         ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
         Set<OWLClassExpression> exprs = theClass.getSuperClasses(ontology);
+        //ystem.out.println(exprs);
         for (OWLClassExpression expr:exprs){
-            MetaDataBase child = parseExpression(expr);
+            MetaDataBase child = parseExpression(expr, theClass.toStringID());
             children.add(child);
         }
         return children;
     }
 
-    private MetaDataBase parseExpression(OWLClassExpression expr) throws MetaDataException {
+    private MetaDataBase parseExpression(OWLClassExpression expr, String type) throws MetaDataException {
         if (expr instanceof OWLQuantifiedRestriction){
-            return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr);
+            return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr, type);
         }
         if (expr instanceof OWLNaryBooleanClassExpression){
-            return parseOWLNaryBooleanClassExpression ((OWLNaryBooleanClassExpression) expr);
+            return parseOWLNaryBooleanClassExpression ((OWLNaryBooleanClassExpression) expr, type);
         }
-        throw new MetaDataException("Unexpected expression." + expr);
+        throw new MetaDataException("Unexpected expression." + expr + " " + expr.getClass());
     }
         
-    private MetaDataBase parseOWLNaryBooleanClassExpression(OWLNaryBooleanClassExpression expression) throws MetaDataException{
+    private MetaDataBase parseOWLNaryBooleanClassExpression(OWLNaryBooleanClassExpression expression, String type) throws MetaDataException{
         ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
         Set<OWLClassExpression> operands = expression.getOperands();
         for (OWLClassExpression expr:operands){
-            MetaDataBase child = parseExpression(expr);
+            MetaDataBase child = parseExpression(expr, type);
             children.add(child);
         }
         if (expression instanceof OWLObjectIntersectionOf){
@@ -135,19 +139,19 @@ public class MetaDataSpecification {
             for (int i = 1; i < children.size(); i++){
                 name = name + " and " + children.get(i).name;
             }
-            return new MetaDataGroup(name, children);
+            return new MetaDataGroup(name, type, children);
         } 
         if (expression instanceof OWLObjectUnionOf){
             String name = children.get(0).name;
             for (int i = 1; i < children.size(); i++){
                 name = name + " or " + children.get(i).name;
             }
-            return new MetaDataAlternatives(name, children);
+            return new MetaDataAlternatives(name, type, children);
         } 
         throw new MetaDataException("Unexpected expression." + expression);
     }
     
-    private MetaDataBase parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction) throws MetaDataException{
+    private MetaDataBase parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction, String type) throws MetaDataException{
         URI predicate;
         OWLPropertyRange range = restriction.getFiller();
         OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
@@ -155,13 +159,13 @@ public class MetaDataSpecification {
         if (range instanceof OWLClass){
             OWLClass owlClass = (OWLClass)range;
             if (owlClass.isOWLThing()){
-                return new PropertyMetaData(predicate, range.toString());
+                return new PropertyMetaData(predicate, type, range.toString());
             }
             IRI iri = owlClass.getIRI();
             ontology.containsClassInSignature(iri);
-            return new LinkedResource(predicate, new URIImpl(iri.toString()), this);
+            return new LinkedResource(predicate, type, new URIImpl(iri.toString()), this);
         }
-        return new PropertyMetaData(predicate, range.toString());
+        return new PropertyMetaData(predicate, type, range.toString());
     }
 
 

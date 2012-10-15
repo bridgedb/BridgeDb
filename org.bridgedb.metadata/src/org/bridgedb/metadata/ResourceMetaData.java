@@ -29,8 +29,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private boolean directlyLinkedTo = false;
     
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
-        super(type.getLocalName(), childMetaData);
-        childMetaData.add(PropertyMetaData.getTypeProperty());
+        super(type.getLocalName(), type.getLocalName(), childMetaData);
+        childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
         this.type = type;
     }
     
@@ -66,7 +66,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         super.loadValues(id, data, collection);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
-            PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate);
+            PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate, type.getLocalName());
             metaData.loadValues(id, data, collection);
             childMetaData.add(metaData);
         }
@@ -85,9 +85,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     void appendSpecific(StringBuilder builder, int tabLevel){
         tab(builder, tabLevel);
         builder.append("Resource ");
-        builder.append(name);
-        builder.append(" id ");
-        builder.append(id);
+        appendLabel(builder);
         newLine(builder);        
     }
     
@@ -143,7 +141,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         } else if (includeWarnings && hasRequiredValues()) {
             tab(builder, tabLevel);
             builder.append("WARNING: ");
-            builder.append(id);
+            appendLabel(builder);
             builder.append(" is incomplete so can only be used as a superset ");
             newLine(builder);
         } else {
@@ -168,9 +166,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     public void appendSummary(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
-        builder.append(name);
-        builder.append(" id ");
-        builder.append(id);
+        appendLabel(builder);
         if (this.hasCorrectTypes()){
             if (this.hasRequiredValues()){
                 builder.append(" OK!");

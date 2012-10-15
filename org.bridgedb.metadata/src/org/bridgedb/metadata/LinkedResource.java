@@ -28,8 +28,8 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private MetaDataCollection collection;
     private final MetaDataSpecification registry;
     
-    LinkedResource(URI predicate, URI resourceType, MetaDataSpecification registry){
-        super(predicate.getLocalName());
+    LinkedResource(URI predicate, String type, URI resourceType, MetaDataSpecification registry){
+        super(predicate.getLocalName(), type);
         this.predicate = predicate;
         this.resourceType = resourceType;
         this.registry = registry;
@@ -197,9 +197,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         if (ids.isEmpty()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
-            builder.append(id );
-            builder.append(":");
-            builder.append(name);
+            appendLabel(builder, ":");
             builder.append(" is missing. ");
             newLine(builder, tabLevel + 1);
             builder.append("Please add a statment with the predicate ");

@@ -21,8 +21,8 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
     //    super(element);
     //}
     
-    public MetaDataGroup(String name, List<MetaDataBase> childMetaData){
-        super(name, childMetaData);
+    public MetaDataGroup(String name, String type, List<MetaDataBase> childMetaData){
+        super(name, type, childMetaData);
     }
     
     public MetaDataGroup(MetaDataGroup other){
@@ -67,9 +67,7 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         if (valueFound && valueMissing){
             tab(builder, tabLevel);
             builder.append("WARNING: ");
-            builder.append(id);
-            builder.append(" Group ");
-            builder.append(name);
+            appendLabel(builder, " Group ");
             builder.append(" Some but not all items in the group found.");
             newLine(builder);
             addDocumentationLink(builder, tabLevel);

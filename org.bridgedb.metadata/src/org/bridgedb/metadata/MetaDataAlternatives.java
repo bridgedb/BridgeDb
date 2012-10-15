@@ -21,8 +21,8 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     
     private final boolean PRESENCE_OPTIONAL = false;
     
-    public MetaDataAlternatives(String name, List<MetaDataBase> childMetaData){
-        super(name, childMetaData);
+    public MetaDataAlternatives(String name, String type, List<MetaDataBase> childMetaData){
+        super(name, type, childMetaData);
     }
     
     public MetaDataAlternatives(MetaDataAlternatives other){
@@ -66,8 +66,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         if (noChildernWithValue()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
-            builder.append(id);
-            builder.append(" Alternatives ");
+            appendLabel(builder, " Alternatives ");
             builder.append(name);
             builder.append(" None of the alternatives have a value.");
             newLine(builder);

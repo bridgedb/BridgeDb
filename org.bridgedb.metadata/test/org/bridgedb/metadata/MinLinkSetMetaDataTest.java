@@ -51,9 +51,9 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
     public void testSummary() throws MetaDataException{
         Reporter.report("LinkSet Summary");
         MetaDataCollection metaData = new MetaDataCollection(loadMinLinkSet(), minLinksetSetRegistry);
-        String expected = "Linkset id http://www.example.com/test/linkset1 OK!\n"
-                + "Dataset id http://www.example.com/test/dataset2 OK!\n"
-                + "Dataset id http://www.example.com/test/dataset1 OK!\n";
+        String expected = "(Linkset) http://www.example.com/test/linkset1 OK!\n"
+                + "(Dataset) http://www.example.com/test/dataset2 OK!\n"
+                + "(Dataset) http://www.example.com/test/dataset1 OK!\n";
         String summary = metaData.summary();
         assertEquals(expected, summary);
     }
