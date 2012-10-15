@@ -182,4 +182,8 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     }
     */
 
+    void addChildren(List<MetaDataBase> childMetaData) {
+        this.childMetaData.addAll(childMetaData);
+    }
+
 }

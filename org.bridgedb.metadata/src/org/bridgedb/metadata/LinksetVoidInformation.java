@@ -93,15 +93,15 @@ public class LinksetVoidInformation implements MetaData {
         }
         Set<ResourceMetaData> possibleResults = linkset.getResoucresByPredicate(predicate);
         if (possibleResults == null){
-            error = linkset.id + " Has no predicate " + predicate + ". ";
+            error = error + linkset.id + " Has no predicate " + predicate + ". ";
             return null;
         }
         if (possibleResults.isEmpty()){
-            error = linkset.id + " Contains no predicate " + predicate + ". ";
+            error = error + linkset.id + " Contains no predicate " + predicate + ". ";
             return null;
         }
         if (possibleResults.size()> 1){
-            error = linkset.id + " Has has more than one predicate " + predicate + ". \n\t " + possibleResults;
+            error = error + linkset.id + " Has has more than one predicate " + predicate + ". \n\t " + possibleResults;
             return null;
         }
         return possibleResults.iterator().next();

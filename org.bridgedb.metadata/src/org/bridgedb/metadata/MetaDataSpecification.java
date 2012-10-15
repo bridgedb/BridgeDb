@@ -12,6 +12,8 @@ import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
@@ -25,12 +27,15 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.model.OWLPropertyRange;
 import org.semanticweb.owlapi.model.OWLQuantifiedRestriction;
+import uk.ac.manchester.cs.owl.owlapi.OWLAnnotationPropertyImpl;
 
 /**
  *
  * @author Christian
  */
 public class MetaDataSpecification {
+    private static OWLAnnotationProperty REQUIREMENT_LEVEL_PROPERTY = new OWLAnnotationPropertyImpl(
+            IRI.create("http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"));
     private OWLOntology ontology;
     
     Map<URI, ResourceMetaData> resourcesByType = new HashMap<URI, ResourceMetaData>();
@@ -63,18 +68,59 @@ public class MetaDataSpecification {
         Set<OWLClass> theClasses = ontology.getClassesInSignature();
         for (OWLClass theClass:theClasses){
             String id = theClass.toStringID();
+            RequirementLevel requirementLevel = getRequriementLevel(theClass);
             if (id.equals(THING_ID)){
                 //ignore thing;
-            } else if (id.startsWith(ontology.getOntologyID().getDefaultDocumentIRI().getStart())){
-                    System.out.println("ignoring; " + theClass);
-            } else {
+            } else if (requirementLevel == null){
                 URI type = new URIImpl(id);
                 //ystem.out.println(theClass);
                 List<MetaDataBase> childMetaData = getChildren(theClass, RequirementLevel.MUST);
                 ResourceMetaData resourceMetaData = new ResourceMetaData(type, childMetaData);
                 resourcesByType.put(type, resourceMetaData);
+            }
+        }
+        for (OWLClass theClass:theClasses){
+            String id = theClass.toStringID();
+            RequirementLevel requirementLevel = getRequriementLevel(theClass);
+            if (requirementLevel != null){
+                URI type = getSuperType(theClass);
+                System.out.println(theClass + "  " + type);
+                List<MetaDataBase> childMetaData = getChildren(theClass, requirementLevel);
+                ResourceMetaData resourceMetaData = resourcesByType.get(type);
+                resourceMetaData.addChildren(childMetaData);
              }
         }
+    }
+    
+    private RequirementLevel getRequriementLevel(OWLClass theClass) throws MetaDataException{
+        Set<OWLAnnotation> annotations = theClass.getAnnotations(ontology, REQUIREMENT_LEVEL_PROPERTY);
+        if (annotations.isEmpty()){
+            return null;
+        }
+        if (annotations.size() != 1){
+            throw new MetaDataException("Only expected one annotation with property " + REQUIREMENT_LEVEL_PROPERTY + 
+                    "for theClass " + theClass + " but found " + annotations);
+        }
+        return RequirementLevel.parseString(annotations.iterator().next().getValue().toString());
+    }
+    
+    private URI getSuperType(OWLClass theClass) throws MetaDataException {
+        Set<OWLClassExpression> supers = theClass.getSuperClasses(ontology);
+        for (OWLClassExpression theSuper:supers){
+            if (theSuper instanceof OWLClass){
+                OWLClass superClass = (OWLClass)theSuper;
+                String id = superClass.toStringID();
+                if (id.equals(THING_ID)){
+                    throw new MetaDataException ("OWLClass " + theClass + " is a direct child of OWLThing.");
+                }
+                if (getRequriementLevel(superClass) == null){
+                    return new URIImpl(id);
+                } else {
+                    return getSuperType(superClass);
+                }
+            }
+        }
+        throw new MetaDataException("Unexpected end of loop without finding an OWLClass superclass for " + theClass);
     }
 
     private URI toURI(OWLObject object) throws MetaDataException{
@@ -109,10 +155,11 @@ public class MetaDataSpecification {
     private List<MetaDataBase> getChildren(OWLClass theClass, RequirementLevel requirementLevel) throws MetaDataException {
         ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
         Set<OWLClassExpression> exprs = theClass.getSuperClasses(ontology);
-        //ystem.out.println(exprs);
         for (OWLClassExpression expr:exprs){
-            MetaDataBase child = parseExpression(expr, theClass.toStringID(), requirementLevel);
-            children.add(child);
+            if (!(expr instanceof OWLClass)){
+                MetaDataBase child = parseExpression(expr, theClass.toStringID(), requirementLevel);
+                children.add(child);
+            }
         }
         return children;
     }
@@ -178,4 +225,5 @@ public class MetaDataSpecification {
             Reporter.report(resource.Schema());
         }
     }
+
 }

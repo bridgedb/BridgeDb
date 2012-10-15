@@ -9,7 +9,7 @@ import org.bridgedb.metadata.MetaDataException;
 public enum ValidationType {
     LINKSETVOID ("shouldLinkSet.owl", false),
     DATASETVOID ("shouldDataSet.owl", false),
-    LINKS("shouldLinkSet.owl", true),
+    LINKS("LinkSet.owl", true),
     //todo make minal set
     LINKSMINIMAL("minLinkSet.owl", true);
    

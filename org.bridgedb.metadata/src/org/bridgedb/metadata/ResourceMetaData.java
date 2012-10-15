@@ -125,6 +125,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     @Override
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         for (MetaDataBase child:childMetaData){
+            int start = builder.length();
             child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
         }
     }
@@ -185,5 +186,9 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     public Resource getId() {
         return id;
+    }
+
+    void addChildren(List<MetaDataBase> childMetaData) {
+        super.addChildren(childMetaData);
     }
 }

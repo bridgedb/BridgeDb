@@ -10,4 +10,26 @@ package org.bridgedb.metadata;
  */
 public enum RequirementLevel {
     MUST, SHOULD, MAY, UNSPECIFIED;
+    
+    public static RequirementLevel parseString(String string) throws MetaDataException{
+       string = string.trim();
+       string = string.replaceAll("\"", "");
+       for(RequirementLevel type:RequirementLevel.values()){
+           if (type.toString().equalsIgnoreCase(string)){
+               return type;
+           }
+       }
+       throw new MetaDataException ("Unable to parse " + string + " to a ValidationType. "
+               + "Legal values are " + valuesString());
+    }
+    
+    public static String valuesString(){
+        String result = RequirementLevel.values()[0].toString();
+        for (int i = 1; i< RequirementLevel.values().length; i++){
+            result = result + ", " + RequirementLevel.values()[i].toString();
+        }
+        return result;
+    }
+    
+
 }

@@ -148,12 +148,14 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         newLine(builder, tabLevel + 1);
         if (requirementLevel == RequirementLevel.UNSPECIFIED){
             builder.append("Unspecified RDF found in the data. ");
-            newLine(builder);
         } else {
             builder.append("class ");
             builder.append(metaDataType.getCorrectType());        
-            newLine(builder);
         }
+        newLine(builder, tabLevel + 1);
+        builder.append("RequirementLevel ");
+        builder.append(requirementLevel);        
+        newLine(builder);
     }
 
     @Override
@@ -204,8 +206,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     private void appendEmptyReport(StringBuilder builder, int tabLevel, boolean includeWarnings) {
-        tab(builder, tabLevel);
         if (requirementLevel == RequirementLevel.MUST){
+            tab(builder, tabLevel);
             builder.append("ERROR: ");
             appendLabel(builder, ":");
             builder.append(" is missing. ");
@@ -214,7 +216,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             builder.append(predicate);
             newLine(builder);
             addDocumentationLink(builder, tabLevel);
-        } else if (requirementLevel == RequirementLevel.SHOULD || includeWarnings){
+        } else if (requirementLevel == RequirementLevel.SHOULD && includeWarnings){
+            tab(builder, tabLevel);
             builder.append("WARNING: ");
             appendLabel(builder, ":");
             builder.append(" is missing. ");
@@ -224,7 +227,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             newLine(builder);
             addDocumentationLink(builder, tabLevel);
         }
-   }
+    }
     
     private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);

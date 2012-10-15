@@ -40,6 +40,9 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         tab(builder, tabLevel);
         builder.append("Alternatives ");
         builder.append(name);
+        newLine(builder, tabLevel + 1);
+        builder.append("RequirementLevel ");
+        builder.append(requirementLevel);        
         newLine(builder);
         for (MetaDataBase child:childMetaData){
             child.appendSchema(builder, tabLevel + 1);

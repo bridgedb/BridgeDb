@@ -232,7 +232,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
          for (ResourceMetaData resouce:theResources){
              resouce.appendShowAll(builder, 0);
          }
-         appendUnusedStatements(builder);
+         //appendUnusedStatements(builder);
     }
     
     @Override
