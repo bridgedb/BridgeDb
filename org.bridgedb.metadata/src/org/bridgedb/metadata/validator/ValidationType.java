@@ -18,6 +18,7 @@ public enum ValidationType {
     
     private ValidationType(String owlFile, boolean linkset){
         this.owlFile = owlFile;
+        this.linkset = linkset;
     }
     
     public String getOwlFileName(){

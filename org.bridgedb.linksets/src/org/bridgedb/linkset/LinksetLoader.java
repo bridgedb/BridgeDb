@@ -162,8 +162,10 @@ public class LinksetLoader {
         } else {
             try {
                 validationType = ValidationType.parseString(validationString);
-                if (!validationType.isLinkset()){
-                    usage(Validator.VALIDATION + " setting " + validationType + " is not supported for loading linksets");
+                System.out.println(validationType);
+                System.out.println(validationType.isLinkset());
+                if (storeString != null && !validationType.isLinkset()){
+                    usage(Validator.VALIDATION + " setting " + validationType + " is not supported for loading.");
                 }
             } catch (MetaDataException ex) {
                 usage(ex.getMessage());
