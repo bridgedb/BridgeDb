@@ -210,7 +210,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             tab(builder, tabLevel);
             builder.append("ERROR: ");
             appendLabel(builder, ":");
-            builder.append(" is missing. ");
+            builder.append(" is Missing. ");
             newLine(builder, tabLevel + 1);
             builder.append("Please add a statement with the predicate ");
             builder.append(predicate);

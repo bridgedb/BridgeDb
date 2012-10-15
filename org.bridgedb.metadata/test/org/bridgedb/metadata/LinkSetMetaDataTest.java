@@ -9,6 +9,7 @@ import org.junit.Ignore;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -47,6 +48,16 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
         metaData.validate();
     }
 
+    @Test
+    public void testValidateReport() throws MetaDataException{
+        Reporter.report("LinkSet Report");
+        MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertEquals(AppendBase.CLEAR_REPORT, report);
+        report = metaData.validityReport(INCLUDE_WARNINGS);
+        assertThat(AppendBase.CLEAR_REPORT, not(report));
+    }
+    
     @Test
     public void testSummary() throws MetaDataException{
         Reporter.report("LinkSet Summary");

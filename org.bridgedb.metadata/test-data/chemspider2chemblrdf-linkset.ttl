@@ -1,7 +1,7 @@
 @prefix : <http://data.kasabi.com/dataset/chembl-rdf/void.ttl/>.
 
 @prefix dcterms: <http://purl.org/dc/terms/>.
-@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix freq: <http://purl.org/cld/freq/> .
 @prefix pav: <http://purl.org/pav/>.
@@ -18,7 +18,7 @@
 <>
     a void:DatasetDescription;
     dcterms:title "ChEMBL-RDF Compounds to ChemSpider linkset"@en;
-    dcterms:descriptions """A VoID linkset that links compounds in ChEMBL-RDF
+    dcterms:description """A VoID linkset that links compounds in ChEMBL-RDF
         with compounds in ChemSpider."""@en; 
     pav:createdBy <http://egonw.github.com/#me> ;
     pav:createdOn "2012-08-13T15:00:00Z"^^xsd:dateTime ;
