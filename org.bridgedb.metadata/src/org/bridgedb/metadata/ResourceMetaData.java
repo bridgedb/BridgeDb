@@ -171,7 +171,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             if (this.hasRequiredValues()){
                 builder.append(" OK!");
             } else if (this.hasRequiredValues()){
-                builder.append(" has MUST values.");
+                builder.append(" has missing MUST values.");
             } else if (isParent){
                 builder.append(" can only be used as a superset.");
             } else {

@@ -163,12 +163,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
 
     @Override
     public boolean hasRequiredValues() {
-        if (values.isEmpty()){
-            if (requirementLevel == RequirementLevel.MUST){
-                return false;          
-            } else {
-                return true;
-            }
+        if (requirementLevel != RequirementLevel.MUST){
+            return true;
+        } else if (values.isEmpty()){
+            return false;          
         } else {
             return true;
         }

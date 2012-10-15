@@ -58,7 +58,7 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         boolean valueFound = false;
         boolean valueMissing = false;
         for (MetaDataBase child:childMetaData){
-            if (child.hasRequiredValues()){
+            if (child.hasValues()){
                 valueFound = true;
             } else {
                 valueMissing = true;

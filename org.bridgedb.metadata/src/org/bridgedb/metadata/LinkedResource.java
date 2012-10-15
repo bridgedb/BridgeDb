@@ -159,7 +159,9 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
 
     @Override
     public boolean hasRequiredValues() {
-        if (ids.isEmpty()){
+        if (requirementLevel != RequirementLevel.MUST){
+            return true;
+        } else if (ids.isEmpty()){
             return false;
         } else {
             for (Resource id: ids){

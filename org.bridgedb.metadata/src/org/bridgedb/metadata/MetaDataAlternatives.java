@@ -92,7 +92,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     
     @Override
     public boolean hasRequiredValues() {
-        if (noChildernWithValue()){
+        if (requirementLevel == RequirementLevel.MUST && noChildernWithValue()){
             //At least one child must have values so false;
                 return false;
         }
