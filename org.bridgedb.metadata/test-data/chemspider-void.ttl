@@ -35,6 +35,10 @@
 	foaf:page <http://www.chemspider.com/>;
 	dcterms:license <http://www.chemspider.com/Disclaimer.aspx>;
 	void:uriSpace "http://rdf.chemspider.com/"^^xsd:string;
+#Provenance
+	dcterms:publisher <http://www.chemspider.com/>;
+	dcterms:created "2007-03-01T00:00:00"^^xsd:dateTime;
+	dcterms:modified "2012-10-16T00:00:00"^^xsd:dateTime;
 #Subsets
 	void:subset :chemSpiderDataset_chembl_subset,:chemSpiderDataset_drugbank_subset;
 #Vocabularies, topics, resources
@@ -62,25 +66,23 @@
 	dcterms:title "ChemSpider ChEMBL Subset"@en;
 	dcterms:description "The slice of ChemSpider data that corresponds to ChEMBL molecules."@en;
 #Provenance
-	pav:retrievedFrom <https://www.dropbox.com/sh/6zboa8z9i9vrzyl/7NxayhkUH0/ChEMBL20120731.zip>;
+	pav:retrievedFrom <ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_13/chembl_13.sdf.gz>;
 	pav:retrievedOn "2012-08-02T10:23:56Z"^^xsd:dateTime;
-	pav:retrievedBy <http://www.cs.man.ac.uk/~graya/me.ttl> ;
-    pav:createdWith <http://example.com> ;
+	pav:retrievedBy <http://www.chemspider.com> ;
 #Dataset Access
 	void:dataDump <https://www.dropbox.com/sh/6zboa8z9i9vrzyl/7NxayhkUH0/ChEMBL20120731.zip>;
 	.
 
-# Description of the ChemSPider subset relating to DrugBank
+# Description of the ChemSpider subset relating to DrugBank
 :chemSpiderDataset_drugbank_subset
 #General Metadata
 	a void:Dataset;
 	dcterms:title "ChemSpider DrugBank Subset"@en;
 	dcterms:description "Data corresponding to DrugBank."@en;
 #Provenance
-	pav:retrievedFrom <https://www.dropbox.com/sh/6zboa8z9i9vrzyl/qcFZzbLM77/DrugBank20120731.zip>;
+	pav:retrievedFrom <http://www.drugbank.ca/system/downloads/current/structures/all.sdf.zip>;
 	pav:retrievedOn "2012-08-02T10:24:06Z"^^xsd:dateTime;
-	pav:retrievedBy <http://www.cs.man.ac.uk/~graya/me.ttl> ;
-    pav:createdWith <http://example.com> ;
+	pav:retrievedBy <http://www.chemspider.com> ;
 #Dataset Access
 	void:dataDump <https://www.dropbox.com/sh/6zboa8z9i9vrzyl/qcFZzbLM77/DrugBank20120731.zip>;
 	.

@@ -1,4 +1,4 @@
-@prefix : <http://data.kasabi.com/dataset/chembl-rdf/void.ttl/>.
+@prefix : <http://linkedchemistry.info/void.ttl#>.
 
 @prefix dcterms: <http://purl.org/dc/terms/>.
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -19,12 +19,10 @@
         """This is the VoID description for a ChEMBL-RDF dataset."""@en;
     pav:createdBy <http://egonw.github.com/#me> ;
     pav:createdOn "2012-08-12T16:56:07Z"^^xsd:dateTime;
-    pav:lastUpdatedOn "2012-09-14T12:21:12Z"^^xsd:dateTime;
+    #Fix by Christian  lastUpdatedOn is wrong!
+    pav:lastUpdateOn "2012-09-14T12:21:12Z"^^xsd:dateTime;
     pav:previousVersion <http://semantics.bigcat.unimaas.nl/chembl/v13_ops/chembl-rdf-void.ttl>;
-    foaf:primaryTopic :chemblrdf_dataset;
-# ADDED BY CHRISTIAN
-    <http://purl.org/pav/lastUpdateOn> "2012-09-14T12:21:12Z"^^xsd:dateTime;
-.
+    foaf:primaryTopic :chemblrdf_dataset.
 
 :chemblrdf_dataset
 # General metadata
@@ -34,12 +32,15 @@
     foaf:homepage <http://github.com/egonw/chembl.rdf/>;
     foaf:page <http://www.biosharing.org/biodbcore-000015>;
     dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
-    void:uriSpace "http://data.kasabi.com/dataset/chembl-rdf/"^^xsd:string ;
+    void:uriSpace "http://linkedchemistry.info/chembl/"^^xsd:string ;
 # Provenance
 	pav:version "v13_ops";
-    pav:importedFrom :chembl_dataset;
+	pav:previousVersion <http://semantics.bigcat.unimaas.nl/chembl/v13_ops/chembl-rdf-void.ttl#chemblrdf_dataset>;
+#    pav:importedFrom :chembl_dataset;  
+    pav:importedFrom <http://www.hackByChristian.com> ;
     pav:importedBy <http://egonw.github.com/#me> ;
     pav:importedOn "2012-05-15T15:34:40Z"^^xsd:dateTime;
+    pav:createdWith <https://github.com/openphacts/chembl.rdf>;
 # Subsets
     void:subset :chemblrdf_compounds, :chemblrdf_targets ;
 # Vocabularies, topics, resources
@@ -65,37 +66,29 @@
 	voag:frequencyOfChange freq:semiannual;
 # Other metadata
     void:distinctSubjects "18018451"^^xsd:integer ;
-# ADDED BY CHRISTIAN
-    <http://purl.org/pav/createdWith> <http://missingInfo.com>;
-    void:subset :chembl_dataset;
 	.
 
-:chembl_dataset
-# Metadata about the original data source
-    a void:Dataset;
-    dcterms:title "ChEMBL"@en;
-    dcterms:description """ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data)."""@en;
-    foaf:homepage <http://www.ebi.ac.uk/chembl/>;
-    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
-    pav:version "13"^^xsd:integer ;
-    dcterms:publisher <http://www.ebi.ac.uk/chembl/>;
-    dcterms:created "2012-02-29T00:00:00Z"^^xsd:dateTime;
-    dcterms:modified "2012-02-29T00:00:00Z"^^xsd:dateTime;
-# ADDED BY CHRISTIAN
-    <http://rdfs.org/ns/void#uriSpace> "missingInfo";
-    dcterms:subject <http://missingInfo.com>;
-    void:exampleResource <http://missingInfo.com>;
-    void:dataDump <http://missingInfo.com>;
-    .
+#:chembl_dataset
+## Metadata about the original data source
+#    a dcterms:Dataset;
+#    dcterms:title "ChEMBL"@en;
+#    dcterms:description """ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data)."""@en;
+#    foaf:homepage <http://www.ebi.ac.uk/chembl/>;
+#    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+#    pav:version "13"^^xsd:integer ;
+#    dcterms:publisher <http://www.ebi.ac.uk/chembl/>;
+#    dcterms:created "2012-02-29T00:00:00Z"^^xsd:dateTime;
+#    dcterms:modified "2012-02-29T00:00:00Z"^^xsd:dateTime;
+#    .
 
 :chemblrdf_compounds
 # Subset metadata
     a void:Dataset ;
     dcterms:title "ChEMBL Molecules"@en;
     dcterms:description "The subset of ChEMBL data relating to molecules."@en;
-    void:uriSpace "http://data.kasabi.com/dataset/chembl-rdf/molecule/"^^xsd:string ;
+    void:uriSpace "http://linkedchemistry.info/chembl/molecule/"^^xsd:string ;
     dcterms:subject <http://dbpedia.org/resource/Molecule> ;
-    void:exampleResource <http://data.kasabi.com/dataset/chembl-rdf/molecule/M1>;	
+    void:exampleResource <http://linkedchemistry.info/chembl/molecule/M1>;	
     void:dataDump <http://semantics.bigcat.unimaas.nl/chembl/v13_ops/compounds.nt.gz> ;
     .
   
@@ -104,8 +97,8 @@
     a void:Dataset ;
     dcterms:title "ChEMBL Targets"@en;
     dcterms:description "The subset of ChEMBL data relating to targets which are single proteins."@en;
-    void:uriSpace "http://data.kasabi.com/dataset/chembl-rdf/target/"^^xsd:string ;
+    void:uriSpace "http://linkedchemistry.info/chembl/target/"^^xsd:string ;
     dcterms:subject <http://dbpedia.org/resource/Protein> ;
-    void:exampleResource <http://data.kasabi.com/dataset/chembl-rdf/target/t1>;	
+    void:exampleResource <http://linkedchemistry.info/chembl/target/t1>;	
     void:dataDump <http://semantics.bigcat.unimaas.nl/chembl/v13_ops/targets.nt.gz> ;
     .
