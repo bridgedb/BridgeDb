@@ -18,19 +18,19 @@
 :TestDS1 a void:Dataset  ;
 	dcterms:title "Test Dataset 1"^^xsd:string ;
     pav:derivedOn "2012-02-22T10:23:00Z"^^xsd:dateTime ;
-    dcterms:license "Who cares this is a test" ;
-    dcterms:subject "absolutely nothing" ;
+    dcterms:license <http://www.example.com/> ;
+    dcterms:subject <http://www.example.com/> ;
     void:uriSpace <http://www.foo.com/>.
 :TestDS2 a void:Dataset  ;
 	dcterms:title "Test Dataset 2"^^xsd:string ;
     pav:importedOn "2012-02-22T15:23:56Z"^^xsd:dateTime ;
-    dcterms:license "Who cares this is a test" ;
-    dcterms:subject "absolutely nothing" ;
+    dcterms:license <http://www.example.com/> ;
+    dcterms:subject <http://www.example.com/> ;
     void:uriSpace <http://www.example.com/>.
 :Test1_2 a void:Linkset  ;
     void:subjectsTarget :TestDS1 ;
     void:objectsTarget :TestDS2 ;
-    dcterms:license "Who cares this is a test" ;
+    dcterms:license <http://www.example.com/> ;
     void:subset :TestDS1 ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
     dcterms:created "2012-02-22T10:23:56Z"^^xsd:dateTime ;
