@@ -96,8 +96,8 @@ public class RdfFactory {
             File testLockDir = new File(dataDir, "lock");
             if (!testLockDir.canWrite()){
                 try {
-                    String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
-                    String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
+                    String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY).trim();
+                    String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY).trim();
                     throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
                             testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
                 } catch (IDMapperLinksetException ex1) {
@@ -128,7 +128,7 @@ public class RdfFactory {
     public static String getTheBaseURI() {
         String result;
         try {
-            result = getProperties().getProperty(BASE_URI_PROPERTY);
+            result = getProperties().getProperty(BASE_URI_PROPERTY).trim();
         } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
@@ -172,8 +172,8 @@ public class RdfFactory {
             repository = getRepository (storeType, existing);
         } catch (IDMapperLinksetException ex) {
             try {
-                String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
-                String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
+                String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY).trim();
+                String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY).trim();
                 throw new RDFHandlerException("Setup error " + ex + " Please check " + path + " set by " + source, ex);
             } catch (IDMapperLinksetException ex1) {
                 throw new RDFHandlerException("Setup error " + ex + " unable to dettermine source", ex);
@@ -195,7 +195,7 @@ public class RdfFactory {
     private static String getSailNativeStore(){
         String result;
         try {
-            result = getProperties().getProperty(SAIL_NATIVE_STORE_PROPERTY);
+            result = getProperties().getProperty(SAIL_NATIVE_STORE_PROPERTY).trim();
         } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
@@ -206,7 +206,7 @@ public class RdfFactory {
     private static String getLoadSailNativeStore(){
         String result;
         try {
-            result = getProperties().getProperty(LOAD_SAIL_NATIVE_STORE_PROPERTY);
+            result = getProperties().getProperty(LOAD_SAIL_NATIVE_STORE_PROPERTY).trim();
         } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
@@ -217,7 +217,7 @@ public class RdfFactory {
     private static String getTestSailNativeStore(){
         String result;
         try {
-            result = getProperties().getProperty(TEST_SAIL_NATIVE_STORE_PROPERTY);
+            result = getProperties().getProperty(TEST_SAIL_NATIVE_STORE_PROPERTY).trim();
         } catch (IDMapperLinksetException ex) {
             return ex.getMessage();
         }
@@ -451,7 +451,7 @@ public class RdfFactory {
             configs = new FileInputStream(propertyFile);
             properties.load(configs);
             properties.put(CONFIG_FILE_PATH_PROPERTY, propertyFile.getAbsolutePath());
-            String baseURI = properties.getProperty(BASE_URI_PROPERTY);
+            String baseURI = properties.getProperty(BASE_URI_PROPERTY).trim();
             if (!(baseURI.endsWith("/") || baseURI.endsWith("#"))){
                 throw new IDMapperLinksetException("baseURI " + baseURI 
                         + " does not end with expected seperator ('/' or '#') It was found in" 

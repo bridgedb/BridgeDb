@@ -107,7 +107,7 @@ public class SqlFactory {
      */
     public static String configFilePath(){
         try {
-            return getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
+            return getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -119,7 +119,7 @@ public class SqlFactory {
      */
     public static String configSource(){
         try {
-            return getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
+            return getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY).trim();
         } catch (IOException ex) {
            return ex.getMessage();
         }
@@ -132,7 +132,7 @@ public class SqlFactory {
     private static String sqlPort(){
         String result;
         try {
-            result = getProperties().getProperty(SQL_PORT_PROPERTY);
+            result = getProperties().getProperty(SQL_PORT_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -147,7 +147,7 @@ public class SqlFactory {
     private static String sqlPassword(){
         String result;
         try {
-            result = getProperties().getProperty(SQL_PASSWORD_PROPERTY);
+            result = getProperties().getProperty(SQL_PASSWORD_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -162,7 +162,7 @@ public class SqlFactory {
     private static String sqlUser(){
         String result;
         try {
-            result = getProperties().getProperty(SQL_USER_PROPERTY);
+            result = getProperties().getProperty(SQL_USER_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -177,7 +177,7 @@ public class SqlFactory {
     private static String sqlDatabase(){
         String result;
         try {
-            result = getProperties().getProperty(SQL_DATABASE_PROPERTY);
+            result = getProperties().getProperty(SQL_DATABASE_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -192,7 +192,7 @@ public class SqlFactory {
     private static String sqlLoadDatabase(){
         String result;
         try {
-            result = getProperties().getProperty(LOAD_SQL_DATABASE_PROPERTY);
+            result = getProperties().getProperty(LOAD_SQL_DATABASE_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -209,7 +209,7 @@ public class SqlFactory {
     private static String sqlTestDatabase(){
         String result;
         try {
-            result = getProperties().getProperty(TEST_SQL_DATABASE_PROPERTY);
+            result = getProperties().getProperty(TEST_SQL_DATABASE_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -224,7 +224,7 @@ public class SqlFactory {
     private static String testSqlPassword(){
         String result;
         try {
-            result = getProperties().getProperty(TEST_SQL_PASSWORD_PROPERTY);
+            result = getProperties().getProperty(TEST_SQL_PASSWORD_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
@@ -239,7 +239,7 @@ public class SqlFactory {
     private static String testSqlUser(){
         String result;
         try {
-            result = getProperties().getProperty(TEST_SQL_USER_PROPERTY);
+            result = getProperties().getProperty(TEST_SQL_USER_PROPERTY).trim();
         } catch (IOException ex) {
             return ex.getMessage();
         }
