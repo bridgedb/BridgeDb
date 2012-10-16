@@ -115,8 +115,8 @@ public class RDFValidator implements RdfLoader{
 				VoidConstants.DATASET_DESCRIPTION);
         checkObject(linksetResource, DctermsConstants.TITLE);
         checkObject(linksetResource, DctermsConstants.DESCRIPTION);
-        checkObject(linksetResource, DctermsConstants.CREATOR);
-        checkObject(linksetResource, DctermsConstants.CREATED);
+        checkObject(linksetResource, PavConstants.CREATED_BY);
+        checkObject(linksetResource, PavConstants.CREATED_ON);
         checkObject(linksetResource, FoafConstants.PRIMARY_TOPIC);
 	}
     
@@ -177,7 +177,7 @@ public class RDFValidator implements RdfLoader{
         //There must be a version or a Date
         checkHasVersionOrDate(dataSetId);
         //The type of the resource being linked is declared with the dcterm:subject predicate.
-        checkObject(dataSetId, DctermsConstants.SUBJECT);      
+//        checkObject(dataSetId, DctermsConstants.SUBJECT);      
         //The URI namespace for the resources being linked is declared using the void:uriSpace property
         Value uriValue = findTheSingletonObject(dataSetId, VoidConstants.URI_SPACE);
         String uriSpace = null;
@@ -222,7 +222,7 @@ public class RDFValidator implements RdfLoader{
         if (date != null) return;
         date = findPossibleSingletonObject (dataSetId, PavConstants.IMPORTED_ON);
         if (date != null) return;
-        date = findPossibleSingletonObject (dataSetId, PavConstants.MODIFIED_ON);
+        date = findPossibleSingletonObject (dataSetId, DctermsConstants.MODIFIED);
         if (date != null) return;
         date = findPossibleSingletonObject (dataSetId, PavConstants.RETRIEVED_ON);
         if (date != null) return;
@@ -234,7 +234,7 @@ public class RDFValidator implements RdfLoader{
                     PavConstants.CREATED_ON + "\n\t" + 
                     PavConstants.DERIVED_ON + "\n\t" + 
                     PavConstants.IMPORTED_ON + "\n\t" + 
-                    PavConstants.MODIFIED_ON + "\n\t" + 
+                    DctermsConstants.MODIFIED + "\n\t" + 
                     PavConstants.RETRIEVED_ON);
         }
         Resource subjectR = (Resource)dataSetId;

@@ -1,7 +1,7 @@
 @prefix : <#> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix dul: <http://ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix pav: <http://purl.org/pav/> .
@@ -11,8 +11,8 @@
 <> a void:DatasetDescription ;
     dcterms:title "Dataset Description Title"^^xsd:string ;
     dcterms:description """Dataset description description"""^^xsd:string;
-    dcterms:creator <http://www.foo.com/> ;
-    dcterms:created "2012-08-06"^^xsd:date;
+    pav:createdBy <http://www.foo.com/> ;
+    pav:createdOn "2012-08-06"^^xsd:date;
     foaf:primaryTopic :Test1_3 .
 
 :TestDS1 a void:Dataset  ;

@@ -35,5 +35,7 @@ public class DctermsConstants {
     public static final URI SUBJECT = new URIImpl(dctermns + "subject");
 	public static final URI TITLE = new URIImpl(dctermns + "title");
 
+	public static final URI MODIFIED = new URIImpl(dctermns + "modified");
+
     
 }
