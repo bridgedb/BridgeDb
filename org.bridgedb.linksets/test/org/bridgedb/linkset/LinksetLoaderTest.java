@@ -18,6 +18,7 @@
 //
 package org.bridgedb.linkset;
 
+import org.bridgedb.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
@@ -73,6 +74,25 @@ public class LinksetLoaderTest {
         assertEquals ("TestDS2", info.getTargetSysCode());
         assertEquals ("http://www.bridgedb.org/test#testPredicate", info.getPredicate());
         //ystem.out.println(info);
+    }
+    
+    @Test
+    public void testCheckRDF() throws IDMapperException {
+        RdfReader reader = new RdfReader(StoreType.TEST);
+        String result = reader.getRDF(5);
+        assertTrue(result.contains("http://localhost:8080/OPS-IMS/linkset/5/#TestDS3"));
+        assertFalse(result.contains("http://localhost:8080/OPS-IMS/linkset/2/"));
+        assertFalse(result.contains("http://localhost:8080/OPS-IMS/linkset/#Test"));
+        assertFalse(result.contains("http://localhost:8080/OPS-IMS/#Test"));
+    }
+    
+    @Test
+    public void testCheckRDF2() throws IDMapperException {
+        RdfReader reader = new RdfReader(StoreType.TEST);
+        String result = reader.getRDF(6);
+        //Inverse use ids of none inverse
+        assertTrue(result.contains("http://localhost:8080/OPS-IMS/linkset/5/#TestDS3"));
+        assertFalse(result.contains("http://localhost:8080/OPS-IMS/linkset/6/#TestDS3"));
     }
     
     @Test(expected=IDMapperLinksetException.class)

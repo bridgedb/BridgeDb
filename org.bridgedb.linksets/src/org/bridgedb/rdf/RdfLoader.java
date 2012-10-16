@@ -38,4 +38,6 @@ public interface RdfLoader {
 
     public void setSourceFile(String absolutePath);
 
+    public String getBaseUri();
+
 }

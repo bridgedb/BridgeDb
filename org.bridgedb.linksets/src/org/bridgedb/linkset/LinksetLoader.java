@@ -20,6 +20,7 @@ package org.bridgedb.linkset;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.IDMapperException;
@@ -41,6 +42,7 @@ import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
+import org.openrdf.model.Statement;
 
 /**
  * Main class for loading linksets.
@@ -87,7 +89,7 @@ public class LinksetLoader {
             URLListener listener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
             RdfLoader rdfLoader = new RDFWriter(storeType, validator, listener, CALLER_NAME);
             LinksetHandler handler = new LinksetHandler (rdfLoader);
-            handler.parse(file);
+            handler.parse(file, rdfLoader.getBaseUri());
             Reporter.report("Loading of " + file.getAbsolutePath() + " successful");
         }
     }

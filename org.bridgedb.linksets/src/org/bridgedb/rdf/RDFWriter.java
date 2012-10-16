@@ -171,4 +171,9 @@ public class RDFWriter implements RdfLoader{
         accessedFrom = absolutePath;
     }
 
+    @Override
+    public String getBaseUri() {
+        return linksetContext.stringValue() + "/";
+    }
+
 }
