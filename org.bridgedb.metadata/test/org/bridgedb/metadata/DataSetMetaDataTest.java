@@ -88,6 +88,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
  
     @Test
+    @Ignore
     public void testValidityReport() throws MetaDataException{
         Reporter.report("ValidityReport");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);
@@ -121,6 +122,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
+    @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet1(), dataSetRegistry);

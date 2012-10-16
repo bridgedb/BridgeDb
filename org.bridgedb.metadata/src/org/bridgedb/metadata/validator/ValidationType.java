@@ -7,18 +7,20 @@ import org.bridgedb.metadata.MetaDataException;
  * @author Christian
  */
 public enum ValidationType {
-    LINKSETVOID ("LinkSet.owl", false),
-    DATASETVOID ("shouldDataSet.owl", false),
-    LINKS("LinkSet.owl", true),
+    LINKSETVOID ("LinkSet.owl", false, false),
+    DATASETVOID ("shouldDataSet.owl", false, false),
+    LINKS("LinkSet.owl", true, false),
     //todo make minal set
-    LINKSMINIMAL("minLinkSet.owl", true);
+    LINKSMINIMAL("LinkSet.owl", true, true);
    
-    private String owlFile;
-    private boolean linkset;
+    private final String owlFile;
+    private final boolean linkset;
+    private final boolean minimal;
     
-    private ValidationType(String owlFile, boolean linkset){
+    private ValidationType(String owlFile, boolean linkset, boolean isMinimal){
         this.owlFile = owlFile;
         this.linkset = linkset;
+        this.minimal = isMinimal;
     }
     
     public String getOwlFileName(){
@@ -45,5 +47,9 @@ public enum ValidationType {
     
     public boolean isLinkset(){
         return linkset;
+    }
+    
+    public boolean isMinimal(){
+        return this.minimal;
     }
 }

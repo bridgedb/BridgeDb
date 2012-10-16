@@ -59,26 +59,30 @@ public class FileTest extends TestUtils{
         Reporter.report(metaData.validityReport(INCLUDE_WARNINGS));
     }
 
-    public void testChemspider() throws MetaDataException{
-        MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldDataSet.owl");
+    public void testChemspider() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
         checkFile("test-data/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
     @Test
-    public void testChemspiderSmall() throws MetaDataException{
-        MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldDataSet.owl");
+    public void testChemspiderSmall() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
         checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
    } 
 
     @Test
-    public void testChemblRdfVoidTtl() throws MetaDataException{
-        MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldDataSet.owl");
+    public void testChemblRdfVoidTtl() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
         checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
     @Test
-    public void testLINK_FILE() throws MetaDataException{
-        MetaDataSpecification dataSetRegistry = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
+    public void testLINK_FILE() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSETVOID);
         checkFile(LINK_FILE, 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 

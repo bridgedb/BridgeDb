@@ -35,6 +35,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     }
  
     @Test
+    @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("LinkSet AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection(loadLinkSet(), linksetSetRegistry);

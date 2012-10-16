@@ -6,20 +6,20 @@
 @prefix pav: <http://purl.org/pav/> .
 
 :ConceptWiki-Chembl2Targets a void:Linkset ;
-    dcterms:license "unknown" ;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
     void:subjectsTarget :ConceptWiki ;
     void:objectsTarget :Chembl2Targets ;
     void:linkPredicate skos:exactMatch ;
     dcterms:created "2012-02-22"^^xsd:date ;
     dcterms:creator <http://www.conceptwiki.org> .
 :ConceptWiki a void:Dataset ;
-    dcterms:license "unknown" ;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
     dcterms:subject "unknown" ;
-    pav:retrievedOn "2012-02-22"^^xsd:date ;
+    pav:retrievedOn "2000-01-10T00:00:00Z"^^xsd:dateTime;
     void:subset :ConceptWiki-Chembl2Targets ;
     void:uriSpace <http://www.conceptwiki.org/concept/>.
 :Chembl2Targets a void:Dataset ;
-    dcterms:license "unknown" ;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
     dcterms:subject "unknown" ;
     pav:version "unknown" ;
     void:uriSpace <http://chem2bio2rdf.org/chembl/resource/chembl_targets/> ;

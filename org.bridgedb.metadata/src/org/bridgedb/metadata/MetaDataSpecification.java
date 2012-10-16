@@ -37,13 +37,15 @@ public class MetaDataSpecification {
     private static OWLAnnotationProperty REQUIREMENT_LEVEL_PROPERTY = new OWLAnnotationPropertyImpl(
             IRI.create("http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"));
     private OWLOntology ontology;
+    private final boolean minimal;
     
     Map<URI, ResourceMetaData> resourcesByType = new HashMap<URI, ResourceMetaData>();
    // Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
     static String documentationRoot = "";
     private static String THING_ID = "http://www.w3.org/2002/07/owl#Thing";
         
-    public MetaDataSpecification(String location) throws MetaDataException{
+    public MetaDataSpecification(String location, boolean minimal) throws MetaDataException{
+        this.minimal = minimal;
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         IRI pav = IRI.create(location);
         try {
@@ -54,8 +56,10 @@ public class MetaDataSpecification {
         loadSpecification();
     }
     
-    public MetaDataSpecification(InputStream stream) throws MetaDataException{
+    public MetaDataSpecification(InputStream stream, boolean minimal) throws MetaDataException{
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
+        System.out.println("minimal = " + this.minimal);
+        this.minimal = minimal;
         try {
             ontology = m.loadOntologyFromOntologyDocument(stream);
         } catch (OWLOntologyCreationException ex) {
@@ -74,7 +78,7 @@ public class MetaDataSpecification {
             } else if (requirementLevel == null){
                 URI type = new URIImpl(id);
                 //ystem.out.println(theClass);
-                List<MetaDataBase> childMetaData = getChildren(theClass, RequirementLevel.MUST);
+                List<MetaDataBase> childMetaData = getChildren(theClass, type.getLocalName(), RequirementLevel.MUST);
                 ResourceMetaData resourceMetaData = new ResourceMetaData(type, childMetaData);
                 resourcesByType.put(type, resourceMetaData);
             }
@@ -85,7 +89,7 @@ public class MetaDataSpecification {
             if (requirementLevel != null){
                 URI type = getSuperType(theClass);
                 System.out.println(theClass + "  " + type);
-                List<MetaDataBase> childMetaData = getChildren(theClass, requirementLevel);
+                List<MetaDataBase> childMetaData = getChildren(theClass, type.getLocalName(), requirementLevel);
                 ResourceMetaData resourceMetaData = resourcesByType.get(type);
                 resourceMetaData.addChildren(childMetaData);
              }
@@ -101,7 +105,21 @@ public class MetaDataSpecification {
             throw new MetaDataException("Only expected one annotation with property " + REQUIREMENT_LEVEL_PROPERTY + 
                     "for theClass " + theClass + " but found " + annotations);
         }
-        return RequirementLevel.parseString(annotations.iterator().next().getValue().toString());
+        String requirememtString = annotations.iterator().next().getValue().toString();
+        RequirementLevel requirementLevel = RequirementLevel.parseString(requirememtString);
+        switch (requirementLevel){
+            case MINIMAL: {
+                return RequirementLevel.MUST;
+            }
+            case MUST:{
+                if (minimal) {
+                    return RequirementLevel.SHOULD;
+                }
+            }
+            default:{
+                return requirementLevel;
+            }
+        }
     }
     
     private URI getSuperType(OWLClass theClass) throws MetaDataException {
@@ -152,12 +170,12 @@ public class MetaDataSpecification {
         return documentationRoot;
     }
     
-    private List<MetaDataBase> getChildren(OWLClass theClass, RequirementLevel requirementLevel) throws MetaDataException {
+    private List<MetaDataBase> getChildren(OWLClass theClass, String type, RequirementLevel requirementLevel) throws MetaDataException {
         ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
         Set<OWLClassExpression> exprs = theClass.getSuperClasses(ontology);
         for (OWLClassExpression expr:exprs){
             if (!(expr instanceof OWLClass)){
-                MetaDataBase child = parseExpression(expr, theClass.toStringID(), requirementLevel);
+                MetaDataBase child = parseExpression(expr, type, requirementLevel);
                 children.add(child);
             }
         }
@@ -215,15 +233,6 @@ public class MetaDataSpecification {
             return new LinkedResource(predicate, type, requirementLevel, new URIImpl(iri.toString()), this);
         }
         return new PropertyMetaData(predicate, type, requirementLevel, range.toString());
-    }
-
-
-    public static void main( String[] args ) throws MetaDataException 
-    {
-        MetaDataSpecification test = new MetaDataSpecification("file:resources/shouldLinkSet.owl");
-        for (ResourceMetaData resource:test.resourcesByType.values()){
-            Reporter.report(resource.Schema());
-        }
     }
 
 }

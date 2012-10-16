@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.junit.Ignore;
 import org.bridgedb.utils.Reporter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.junit.Test;
@@ -33,6 +34,7 @@ public class DataSet2MetaDataTest extends MetaDataTestBase{
     }
 
     @Test
+    @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection(loadDataSet2(), dataSetRegistry);

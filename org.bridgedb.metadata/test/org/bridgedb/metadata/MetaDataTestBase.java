@@ -170,24 +170,15 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    private Set<Statement> loadMinDataSet1(){
+    Set<Statement> loadDataSet1(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d1IdStatement);
         addStatement(data, d1NameSpaceStatement);
-        return data;
-    }
-    
-    /**
-     * Intentionally not in the constructor so tests can change or remove a statement before loading.
-     * @return 
-     */
-    private Set<Statement> loadSharedDataSet1(){
-        Set<Statement> data = loadMinDataSet1();
         addStatement(data, d1TitleStatement);
         addStatement(data, d1DescriptionStatement);
         addStatement(data, d1HomePageStatement);
         addStatement(data, d1LicenseStatement);
-        //addStatement(data, d1VersionStatement);
+        addStatement(data, d1VersionStatement);
         addStatement(data, d1PublishedStatement);
         addStatement(data, d1ModifiedStatement);
         addStatement(data, d1CreatedStatement);
@@ -195,15 +186,6 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1RetreivedOn);
         addStatement(data, d1RetreivedByStatement);
         addStatement(data, d1CreatedWithStatement);
-        return data;
-    }
-    
-    /**
-     * Intentionally not in the constructor so tests can change or remove a statement before loading.
-     * @return 
-     */
-    Set<Statement> loadDataSet1(){
-        Set<Statement> data = loadSharedDataSet1();
         addStatement(data, d1DataDumpStatement);
         addStatement(data, d1VocabularyStatement1);
         addStatement(data, d1VocabularyStatement2);
@@ -211,16 +193,7 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1ExampleStatement1);
         addStatement(data, d1ExampleStatement2);
         addStatement(data, d1ExampleStatement3);
-        data.add(d1FocStatement);
-        return data;
-    }
-    
-    /**
-     * Intentionally not in the constructor so tests can change or remove a statement before loading.
-     * @return 
-     */
-    private Set<Statement> loadDataSet1ForLinks(){
-        Set<Statement> data = loadSharedDataSet1();
+        addStatement(data, d1FocStatement);
         data.add(d1SourceAccessedByStatement);
         data.add(d1SourceAccessedOnStatement);
         return data;
@@ -230,37 +203,19 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    private Set<Statement> loadMinDataSet2(){
+    Set<Statement> loadDataSet2(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d2IdStatement);
         addStatement(data, d2NameSpaceStatement);
-        return data;
-    }
-    
-    /**
-     * Intentionally not in the constructor so tests can change or remove a statement before loading.
-     * @return 
-     */
-    private Set<Statement> loadSharedDataSet2(){
-        Set<Statement> data = loadMinDataSet2();
         addStatement(data, d2TitleStatement);
         addStatement(data, d2DescriptionStatement);
         addStatement(data, d2HomePageStatement);
         addStatement(data, d2LicenseStatement);
-        //addStatement(data, d2VersionStatement);
+        addStatement(data, d2VersionStatement);
         addStatement(data, d2ImportedOnStatement);
         addStatement(data, d2ImportedByStatement);
         addStatement(data, d2ImportedFromStatement);
         addStatement(data, d2CreatedWithStatement);
-        return data;
-    }
-    
-    /**
-     * Intentionally not in the constructor so tests can change or remove a statement before loading.
-     * @return 
-     */
-    Set<Statement> loadDataSet2(){
-        Set<Statement> data =loadSharedDataSet2();
         addStatement(data, d2DataDumpStatement);
         addStatement(data, d2VocabularyStatement1);
         addStatement(data, d2VocabularyStatement2);
@@ -269,15 +224,6 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d2ExampleStatement2);
         addStatement(data, d2ExampleStatement3);
         addStatement(data, d2FocStatement);
-        return data;
-    }
-    
-    /**
-     * Intentionally not in the constructor so tests can change or remove a statement before loading.
-     * @return 
-     */
-    private Set<Statement> loadDataSet2ForLinks(){
-        Set<Statement> data = loadSharedDataSet2();
         data.add(d2SourceAccessedByStatement);
         data.add(d2SourceAccessedOnStatement);
         return data;
@@ -287,24 +233,13 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadMinLinkSet(){
-        Set<Statement> data = loadMinDataSet1();
-        data.addAll(loadMinDataSet2());
+    Set<Statement> loadLinkSet(){
+        Set<Statement> data = loadDataSet1();
+        data.addAll(loadDataSet2());
         addStatement(data, linkIdStatement); 
         addStatement(data, linkPredicateStatement);
         addStatement(data, subjectStatement);
         addStatement(data, objectStatement);
-        return data;
-    }
-    
-    /**
-     * Intentionally not in the constructor so tests can change or remove a statement before loading.
-     * @return 
-     */
-    Set<Statement> loadLinkSet(){
-        Set<Statement> data = loadMinLinkSet();
-        data.addAll(loadDataSet1ForLinks());
-        data.addAll(loadDataSet2ForLinks());
         addStatement(data, linkTitleStatement);
         addStatement(data, linkDescriptionStatement );
         addStatement(data, linkLicenseStatement);

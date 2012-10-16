@@ -9,7 +9,7 @@ package org.bridgedb.metadata;
  * @author Christian
  */
 public enum RequirementLevel {
-    MUST, SHOULD, MAY, UNSPECIFIED;
+    MINIMAL, MUST, SHOULD, MAY, UNSPECIFIED;
     
     public static RequirementLevel parseString(String string) throws MetaDataException{
        string = string.trim();
