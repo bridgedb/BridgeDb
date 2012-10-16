@@ -167,7 +167,8 @@ public class SQLListener implements MappingListener{
         //Starting with a block will cause a new query to start.
         blockCount = blockSize ;
         insertCount = 0;
-        doubleCount = 0;    
+        doubleCount = 0;   
+        updateLastUpdated();
     }
     
     @Override
