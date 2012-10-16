@@ -63,7 +63,6 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
             label = "(" + type + ") " + id.stringValue();
         }
         
-        
     }
     
     final void addDocumentationLink(StringBuilder builder, int tabLevel) {

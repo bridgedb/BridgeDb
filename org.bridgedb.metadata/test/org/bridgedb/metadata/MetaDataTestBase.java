@@ -136,6 +136,10 @@ public class MetaDataTestBase extends TestUtils{
     Statement objectStatement = new StatementImpl(LINK_ID, VoidConstants.OBJECTSTARGET, D2_ID);
     Statement linkVersionStatement = new StatementImpl(LINK_ID, PavConstants.VERSION, VERSION_VALUE);
 
+    Statement personIdStatement = new StatementImpl(PERSON, RdfConstants.TYPE_URI, new URIImpl("http://www.example.com/Person"));
+    Statement personNameStatement = new StatementImpl(PERSON, new URIImpl("http://www.example.org/hasName"), 
+            new LiteralImpl("Joe Blogs"));
+    
     static MetaDataSpecification dataSetRegistry;
     static MetaDataSpecification linksetSetRegistry;
     static MetaDataSpecification minLinksetSetRegistry;

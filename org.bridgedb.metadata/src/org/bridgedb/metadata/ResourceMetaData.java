@@ -23,15 +23,22 @@ import org.w3c.dom.Element;
  */
 public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
-    private final URI type;
+    private final URI resourceType;
     private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
     private boolean isParent = false;
     private boolean directlyLinkedTo = false;
+    private static String UNSPECIFIED = "unspecified";
+    
+    ResourceMetaData(URI type) {
+        super(type.getLocalName(), UNSPECIFIED, RequirementLevel.SHOULD, new ArrayList<MetaDataBase>());
+        childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
+        this.resourceType = type;
+    }
     
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
         super(type.getLocalName(), type.getLocalName(), RequirementLevel.SHOULD, childMetaData);
         childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
-        this.type = type;
+        this.resourceType = type;
     }
     
     //ResourceMetaData(Element element) throws MetaDataException {
@@ -53,7 +60,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     
     private ResourceMetaData(ResourceMetaData other) {
         super(other);
-        this.type = other.type;
+        this.resourceType = other.resourceType;
     }
 
     /*private ResourceMetaData(String name){
@@ -66,7 +73,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         super.loadValues(id, data, collection);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
-            PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate, type.getLocalName());
+            PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate, type);
             metaData.loadValues(id, data, collection);
             childMetaData.add(metaData);
         }
@@ -96,7 +103,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         builder.append(name);
         newLine(builder, tabLevel + 1);
         builder.append("rdf:type ");
-        builder.append(type);
+        builder.append(resourceType);
         newLine(builder);
         for (MetaDataBase child:childMetaData){
             child.appendSchema(builder, tabLevel + 1);
@@ -104,7 +111,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }
 
     URI getType() {
-        return type;
+        return resourceType;
     }
 
     public ResourceMetaData getSchemaClone() {
@@ -124,9 +131,20 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     @Override
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
-        for (MetaDataBase child:childMetaData){
-            int start = builder.length();
-            child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
+        if (type.equals(UNSPECIFIED)){
+            if (includeWarnings){
+                tab(builder, tabLevel);
+                builder.append("INFO: ");
+                builder.append(id);
+                builder.append(" has a type ");
+                builder.append(resourceType);
+                builder.append(" for which no requirments have been specified.");
+                newLine(builder);
+            }
+        } else {
+            for (MetaDataBase child:childMetaData){
+                child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
+            }
         }
     }
 
@@ -167,19 +185,25 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     public void appendSummary(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
-        appendLabel(builder);
-        if (this.hasCorrectTypes()){
-            if (this.hasRequiredValues()){
-                builder.append(" OK!");
-            } else if (this.hasRequiredValues()){
-                builder.append(" has missing MUST values.");
-            } else if (isParent){
-                builder.append(" can only be used as a superset.");
-            } else {
-                builder.append(" incomplete!");
-            }
+        if (type.equals(UNSPECIFIED)){
+            builder.append(id);
+            builder.append(" has an unspecified type of ");
+            builder.append(resourceType);
         } else {
-            builder.append(" has incorrect typed statements.");
+            appendLabel(builder);
+            if (this.hasCorrectTypes()){
+                if (this.hasRequiredValues()){
+                    builder.append(" OK!");
+                } else if (this.hasRequiredValues()){
+                    builder.append(" has missing MUST values.");
+                } else if (isParent){
+                    builder.append(" can only be used as a superset.");
+                } else {
+                    builder.append(" incomplete!");
+                }
+            } else {
+                builder.append(" has incorrect typed statements.");
+            }
         }
         newLine(builder);        
     }

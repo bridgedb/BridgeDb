@@ -78,7 +78,7 @@ public class FileTest extends TestUtils{
     public void testChemblRdfVoidTtl() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
-        checkFile("test-data/chembl-rdf-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+        checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
     @Test

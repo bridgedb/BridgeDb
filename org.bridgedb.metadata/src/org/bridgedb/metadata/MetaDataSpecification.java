@@ -163,7 +163,8 @@ public class MetaDataSpecification {
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
             Reporter.report("Unable to find specifications for type: " + type);
-            return null;
+            URI uri = (URI)type;
+            return new ResourceMetaData(uri);
         } else {
             return resourceMetaData.getSchemaClone();
         }

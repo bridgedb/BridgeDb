@@ -23,7 +23,6 @@ public class DataSet2MetaDataTest extends MetaDataTestBase{
     @Test
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("HasRequiredValues");
-        System.out.println(dataSetRegistry.getResourceByType(VoidConstants.DATASET).Schema());
         MetaDataCollection metaData = new MetaDataCollection(loadDirectDataSet2(), dataSetRegistry);
         checkRequiredValues(metaData);
     } 

@@ -36,8 +36,7 @@
 # Provenance
 	pav:version "v13_ops";
 	pav:previousVersion <http://semantics.bigcat.unimaas.nl/chembl/v13_ops/chembl-rdf-void.ttl#chemblrdf_dataset>;
-#    pav:importedFrom :chembl_dataset;  
-    pav:importedFrom <http://www.hackByChristian.com> ;
+    pav:importedFrom :chembl_dataset;  
     pav:importedBy <http://egonw.github.com/#me> ;
     pav:importedOn "2012-05-15T15:34:40Z"^^xsd:dateTime;
     pav:createdWith <https://github.com/openphacts/chembl.rdf>;
@@ -68,18 +67,18 @@
     void:distinctSubjects "18018451"^^xsd:integer ;
 	.
 
-#:chembl_dataset
-## Metadata about the original data source
-#    a dcterms:Dataset;
-#    dcterms:title "ChEMBL"@en;
-#    dcterms:description """ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data)."""@en;
-#    foaf:homepage <http://www.ebi.ac.uk/chembl/>;
-#    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
-#    pav:version "13"^^xsd:integer ;
-#    dcterms:publisher <http://www.ebi.ac.uk/chembl/>;
-#    dcterms:created "2012-02-29T00:00:00Z"^^xsd:dateTime;
-#    dcterms:modified "2012-02-29T00:00:00Z"^^xsd:dateTime;
-#    .
+:chembl_dataset
+# Metadata about the original data source
+    a dcterms:Dataset;
+    dcterms:title "ChEMBL"@en;
+    dcterms:description """ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data)."""@en;
+    foaf:homepage <http://www.ebi.ac.uk/chembl/>;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+    pav:version "13"^^xsd:integer ;
+    dcterms:publisher <http://www.ebi.ac.uk/chembl/>;
+    dcterms:created "2012-02-29T00:00:00Z"^^xsd:dateTime;
+    dcterms:modified "2012-02-29T00:00:00Z"^^xsd:dateTime;
+    .
 
 :chemblrdf_compounds
 # Subset metadata

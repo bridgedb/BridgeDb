@@ -159,4 +159,28 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Set<Statement> rewriteData = metaData.getRDF();
         assertEquals(loadMayDataSet1(), rewriteData);
     }
+    
+    @Test
+    public void testSummary() throws MetaDataException{
+        Reporter.report("Dataset Summary");
+        MetaDataCollection metaData = new MetaDataCollection(loadMayDataSet1(), dataSetRegistry);
+        String expected = "(Dataset) http://www.example.com/test/dataset1 OK!\n";
+        String summary = metaData.summary();
+        assertEquals(expected, summary);
+    }
+
+    @Test
+    public void testSummaryExtra() throws MetaDataException{
+        Reporter.report("Dataset Summary Extra");
+        Set<Statement> data = loadMayDataSet1();
+        data.add(personIdStatement);
+        data.add(personNameStatement);
+        MetaDataCollection metaData = new MetaDataCollection(data, dataSetRegistry);
+        String expected = "http://www.example.com/person#Joe has an unspecified type of http://www.example.com/Person\n"
+                + "(Dataset) http://www.example.com/test/dataset1 OK!\n";
+        String summary = metaData.summary();
+        System.out.println(summary);
+        assertEquals(expected, summary);
+    }
+
 }
