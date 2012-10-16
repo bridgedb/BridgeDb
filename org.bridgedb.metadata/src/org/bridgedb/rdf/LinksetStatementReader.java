@@ -19,7 +19,7 @@ import org.openrdf.rio.RDFHandlerException;
  *
  * @author Christian
  */
-public class LinksetStatementReader extends StatementReader{
+public class LinksetStatementReader extends StatementReader implements LinksetStatements{
     
     Set<Statement> linkStatements = new HashSet<Statement>();
     

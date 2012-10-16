@@ -6,6 +6,8 @@ package org.bridgedb.metadata.validator;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.*;
+import org.bridgedb.rdf.LinksetStatementReader;
+import org.bridgedb.rdf.LinksetStatements;
 import org.bridgedb.utils.Reporter;
 
 /**
@@ -22,7 +24,8 @@ public class Validator {
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type);
         MetaData metaData;
         if (type.isLinkset()){
-            metaData = new LinksetVoidInformation(dataFileName, specification);
+            LinksetStatements statements = new LinksetStatementReader(dataFileName);
+            metaData = new LinksetVoidInformation(statements, specification);
         } else {
             metaData = new MetaDataCollection(dataFileName, specification);
         }

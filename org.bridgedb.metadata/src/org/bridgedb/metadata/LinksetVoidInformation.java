@@ -11,6 +11,7 @@ import org.bridgedb.metadata.constants.PavConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.rdf.LinksetStatements;
 import org.bridgedb.rdf.LinksetStatementReader;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
@@ -39,21 +40,11 @@ public class LinksetVoidInformation implements MetaData {
     private boolean INCLUDE_WARNINGS = true;
     private boolean NO_WARNINGS = false;
     
-    public LinksetVoidInformation(String fileName,  ValidationType type) throws IDMapperException{
-        this(new File(fileName), MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
+    public LinksetVoidInformation(LinksetStatements reader,  ValidationType type) throws IDMapperException{
+        this(reader, MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
     }
     
-    public LinksetVoidInformation(File file,  ValidationType type) throws IDMapperException{
-        this(file, MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
-    }
-
-    public LinksetVoidInformation(String fileName, MetaDataSpecification specification) throws MetaDataException{
-        this(new File(fileName), specification);
-    }
-    
-    public LinksetVoidInformation(File file, MetaDataSpecification specification) throws MetaDataException{
-        Reporter.report("Reading data from " + file.getAbsolutePath());
-        LinksetStatementReader reader = new LinksetStatementReader(file);
+    public LinksetVoidInformation(LinksetStatements reader, MetaDataSpecification specification) throws MetaDataException{
         collection = new MetaDataCollection(reader.getVoidStatements(), specification);
         collection.validate();
         ResourceMetaData linkset = findLinkSet();

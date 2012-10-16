@@ -28,6 +28,8 @@ import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.metadata.validator.Validator;
 import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.rdf.LinksetStatementReader;
+import org.bridgedb.rdf.LinksetStatements;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.rdf.RDFWriter;
@@ -74,7 +76,8 @@ public class LinksetLoader {
                 parse(child, storeType, validationType);
             }
         } else { 
-            LinksetVoidInformation validator = new LinksetVoidInformation(file, validationType);
+            LinksetStatements statements = new LinksetStatementReader(file);
+            LinksetVoidInformation validator = new LinksetVoidInformation(statements, validationType);
             Reporter.report("Validation successful");       
             if (storeType == null){
                 return; //Validation done and no loading requested.

@@ -4,6 +4,8 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.rdf.LinksetStatements;
+import org.bridgedb.rdf.LinksetStatementReader;
 import org.openrdf.model.Statement;
 import org.openrdf.model.impl.URIImpl;
 import org.bridgedb.utils.Reporter;
@@ -33,7 +35,8 @@ public class LinksetVoidInformationTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        instance = new LinksetVoidInformation(FileTest.LINK_FILE, ValidationType.LINKSETVOID);
+        LinksetStatements statements = new LinksetStatementReader(FileTest.LINK_FILE);
+        instance = new LinksetVoidInformation(statements, ValidationType.LINKSETVOID);
     }
 
     @AfterClass
