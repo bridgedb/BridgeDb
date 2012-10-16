@@ -66,6 +66,7 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
+    @Ignore
     public void testChemspiderSmall() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
@@ -87,6 +88,7 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
+    @Ignore
     public void testLinksetFirstTtl() throws MetaDataException, IDMapperException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);

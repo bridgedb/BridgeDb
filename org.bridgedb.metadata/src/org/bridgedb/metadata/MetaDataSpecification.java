@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.InputStreamFinder;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
@@ -37,29 +40,17 @@ public class MetaDataSpecification {
     private static OWLAnnotationProperty REQUIREMENT_LEVEL_PROPERTY = new OWLAnnotationPropertyImpl(
             IRI.create("http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"));
     private OWLOntology ontology;
-    private final boolean minimal;
+    private final ValidationType validationType;
     
     Map<URI, ResourceMetaData> resourcesByType = new HashMap<URI, ResourceMetaData>();
    // Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
     static String documentationRoot = "";
     private static String THING_ID = "http://www.w3.org/2002/07/owl#Thing";
         
-    public MetaDataSpecification(String location, boolean minimal) throws MetaDataException{
-        this.minimal = minimal;
+    public MetaDataSpecification(ValidationType type) throws IDMapperException{
+        InputStream stream = InputStreamFinder.findByName(type.getOwlFileName(), this);
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
-        IRI pav = IRI.create(location);
-        try {
-            ontology = m.loadOntologyFromOntologyDocument(pav);
-        } catch (OWLOntologyCreationException ex) {
-            throw new MetaDataException("Unable to read owl file from " + location, ex);
-        }
-        loadSpecification();
-    }
-    
-    public MetaDataSpecification(InputStream stream, boolean minimal) throws MetaDataException{
-        OWLOntologyManager m = OWLManager.createOWLOntologyManager();
-        System.out.println("minimal = " + this.minimal);
-        this.minimal = minimal;
+        this.validationType = type;
         try {
             ontology = m.loadOntologyFromOntologyDocument(stream);
         } catch (OWLOntologyCreationException ex) {
@@ -72,10 +63,10 @@ public class MetaDataSpecification {
         Set<OWLClass> theClasses = ontology.getClassesInSignature();
         for (OWLClass theClass:theClasses){
             String id = theClass.toStringID();
-            RequirementLevel requirementLevel = getRequriementLevel(theClass);
+            String requirementLevelSt = getRequirementLevelString(theClass);
             if (id.equals(THING_ID)){
                 //ignore thing;
-            } else if (requirementLevel == null){
+            } else if (requirementLevelSt == null){
                 URI type = new URIImpl(id);
                 //ystem.out.println(theClass);
                 List<MetaDataBase> childMetaData = getChildren(theClass, type.getLocalName(), RequirementLevel.MUST);
@@ -85,10 +76,10 @@ public class MetaDataSpecification {
         }
         for (OWLClass theClass:theClasses){
             String id = theClass.toStringID();
-            RequirementLevel requirementLevel = getRequriementLevel(theClass);
-            if (requirementLevel != null){
+            String requirementLevelSt = getRequirementLevelString(theClass);
+            if (requirementLevelSt != null){
                 URI type = getSuperType(theClass);
-                System.out.println(theClass + "  " + type);
+                RequirementLevel requirementLevel = getRequriementLevel(requirementLevelSt, type);
                 List<MetaDataBase> childMetaData = getChildren(theClass, type.getLocalName(), requirementLevel);
                 ResourceMetaData resourceMetaData = resourcesByType.get(type);
                 resourceMetaData.addChildren(childMetaData);
@@ -96,7 +87,7 @@ public class MetaDataSpecification {
         }
     }
     
-    private RequirementLevel getRequriementLevel(OWLClass theClass) throws MetaDataException{
+    private String getRequirementLevelString(OWLClass theClass) throws MetaDataException{
         Set<OWLAnnotation> annotations = theClass.getAnnotations(ontology, REQUIREMENT_LEVEL_PROPERTY);
         if (annotations.isEmpty()){
             return null;
@@ -105,14 +96,26 @@ public class MetaDataSpecification {
             throw new MetaDataException("Only expected one annotation with property " + REQUIREMENT_LEVEL_PROPERTY + 
                     "for theClass " + theClass + " but found " + annotations);
         }
-        String requirememtString = annotations.iterator().next().getValue().toString();
-        RequirementLevel requirementLevel = RequirementLevel.parseString(requirememtString);
+        return annotations.iterator().next().getValue().toString();
+    }
+    
+    private RequirementLevel getRequriementLevel(String requirementLevelSt, URI type) throws MetaDataException{
+        RequirementLevel requirementLevel = RequirementLevel.parseString(requirementLevelSt);
         switch (requirementLevel){
             case MINIMAL: {
                 return RequirementLevel.MUST;
             }
             case MUST:{
-                if (minimal) {
+                if (validationType.isMinimal()) {
+                    return RequirementLevel.SHOULD;
+                } else{
+                    return requirementLevel;
+                }
+            }
+            case DIRECTMUST:{
+                if (type.equals(validationType.getDirectType())){
+                    return RequirementLevel.MUST;
+                } else {
                     return RequirementLevel.SHOULD;
                 }
             }
@@ -131,7 +134,7 @@ public class MetaDataSpecification {
                 if (id.equals(THING_ID)){
                     throw new MetaDataException ("OWLClass " + theClass + " is a direct child of OWLThing.");
                 }
-                if (getRequriementLevel(superClass) == null){
+                if (getRequirementLevelString(superClass) == null){
                     return new URIImpl(id);
                 } else {
                     return getSuperType(superClass);

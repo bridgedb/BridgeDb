@@ -7,6 +7,7 @@ package org.bridgedb.metadata;
 import org.junit.Ignore;
 import org.bridgedb.utils.Reporter;
 import javax.xml.datatype.DatatypeConfigurationException;
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -22,14 +23,15 @@ public class DataSet2MetaDataTest extends MetaDataTestBase{
     @Test
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("HasRequiredValues");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2(), dataSetRegistry);
+        System.out.println(dataSetRegistry.getResourceByType(VoidConstants.DATASET).Schema());
+        MetaDataCollection metaData = new MetaDataCollection(loadDirectDataSet2(), dataSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("HasCorrectTypes");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2(), dataSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection(loadMayDataSet2(), dataSetRegistry);
         checkCorrectTypes(metaData);
     }
 
@@ -37,7 +39,7 @@ public class DataSet2MetaDataTest extends MetaDataTestBase{
     @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("AllStatementsUsed");
-        MetaDataCollection metaData = new MetaDataCollection(loadDataSet2(), dataSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection(loadMayDataSet2(), dataSetRegistry);
         checkAllStatementsUsed(metaData);
     }
 

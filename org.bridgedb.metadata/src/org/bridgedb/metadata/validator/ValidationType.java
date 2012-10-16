@@ -1,30 +1,30 @@
 package org.bridgedb.metadata.validator;
 
 import org.bridgedb.metadata.MetaDataException;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  *
  * @author Christian
  */
 public enum ValidationType {
-    LINKSETVOID ("LinkSet.owl", false, false),
-    DATASETVOID ("shouldDataSet.owl", false, false),
-    LINKS("LinkSet.owl", true, false),
+    LINKSETVOID ("LinkSet.owl", "http://rdfs.org/ns/void#Linkset" ,false, false),
+    DATASETVOID ("LinkSet.owl", "http://rdfs.org/ns/void#Dataset", false, false),
+    LINKS("LinkSet.owl", "http://rdfs.org/ns/void#Linkset", true, false),
     //todo make minal set
-    LINKSMINIMAL("LinkSet.owl", true, true);
+    LINKSMINIMAL("LinkSet.owl", "http://rdfs.org/ns/void#Linkset", true, true);
    
     private final String owlFile;
+    private final URI directType;
     private final boolean linkset;
     private final boolean minimal;
     
-    private ValidationType(String owlFile, boolean linkset, boolean isMinimal){
+    private ValidationType(String owlFile, String type, boolean linkset, boolean isMinimal){
         this.owlFile = owlFile;
+        this.directType = new URIImpl(type);
         this.linkset = linkset;
         this.minimal = isMinimal;
-    }
-    
-    public String getOwlFileName(){
-        return owlFile;
     }
     
     public static ValidationType parseString(String string) throws MetaDataException{
@@ -43,6 +43,14 @@ public enum ValidationType {
             result = result + ", " + ValidationType.values()[i].toString();
         }
         return result;
+    }
+    
+    public String getOwlFileName(){
+        return owlFile;
+    }
+    
+    public URI getDirectType(){
+        return directType;
     }
     
     public boolean isLinkset(){

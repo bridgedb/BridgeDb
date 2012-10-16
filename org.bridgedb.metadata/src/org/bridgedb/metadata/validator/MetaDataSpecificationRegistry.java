@@ -21,9 +21,7 @@ public class MetaDataSpecificationRegistry {
     
     public static MetaDataSpecification getMetaDataSpecificationByValidatrionType(ValidationType type) throws IDMapperException{
         if (!specificationByValidationType.containsKey(type)){
-            System.out.println(type);
-            InputStream stream = InputStreamFinder.findByName(type.getOwlFileName(), new MetaDataSpecificationRegistry());
-            MetaDataSpecification specifation = new MetaDataSpecification(stream, type.isMinimal());
+            MetaDataSpecification specifation = new MetaDataSpecification(type);
             specificationByValidationType.put(type, specifation);
         }
         return specificationByValidationType.get(type);

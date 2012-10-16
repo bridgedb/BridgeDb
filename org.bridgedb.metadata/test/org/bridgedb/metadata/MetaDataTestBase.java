@@ -134,6 +134,7 @@ public class MetaDataTestBase extends TestUtils{
     Statement linkNumberStatement = new StatementImpl(LINK_ID, VoidConstants.TRIPLES, new IntegerLiteralImpl(TEN));
     Statement subjectStatement = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D1_ID);
     Statement objectStatement = new StatementImpl(LINK_ID, VoidConstants.OBJECTSTARGET, D2_ID);
+    Statement linkVersionStatement = new StatementImpl(LINK_ID, PavConstants.VERSION, VERSION_VALUE);
 
     static MetaDataSpecification dataSetRegistry;
     static MetaDataSpecification linksetSetRegistry;
@@ -170,23 +171,51 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadDataSet1(){
+    Set<Statement> loadMinDataSet1(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d1IdStatement);
         addStatement(data, d1NameSpaceStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadMustDataSet1(){
+        Set<Statement> data = loadMinDataSet1();
         addStatement(data, d1TitleStatement);
         addStatement(data, d1DescriptionStatement);
         addStatement(data, d1HomePageStatement);
         addStatement(data, d1LicenseStatement);
-        addStatement(data, d1VersionStatement);
+        //Either these there
         addStatement(data, d1PublishedStatement);
         addStatement(data, d1ModifiedStatement);
         addStatement(data, d1CreatedStatement);
+        //or these three are actually enough
         addStatement(data, d1RetreivedFromStatement);
         addStatement(data, d1RetreivedOn);
         addStatement(data, d1RetreivedByStatement);
-        addStatement(data, d1CreatedWithStatement);
+        
+        return data;
+    }
+
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadDirectDataSet1(){
+        Set<Statement> data = loadMustDataSet1();
         addStatement(data, d1DataDumpStatement);
+        return data;
+    }
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadShouldDataSet1(){
+        Set<Statement> data = loadDirectDataSet1();
+        addStatement(data, d1CreatedWithStatement);
         addStatement(data, d1VocabularyStatement1);
         addStatement(data, d1VocabularyStatement2);
         addStatement(data, d1TopicStatement);
@@ -194,8 +223,17 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d1ExampleStatement2);
         addStatement(data, d1ExampleStatement3);
         addStatement(data, d1FocStatement);
-        data.add(d1SourceAccessedByStatement);
-        data.add(d1SourceAccessedOnStatement);
+        return data;
+    }
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadMayDataSet1(){
+        Set<Statement> data = loadShouldDataSet1();
+        addStatement(data, d1VersionStatement);        
+        addStatement(data, d1SourceAccessedByStatement);
+        addStatement(data, d1SourceAccessedOnStatement);
         return data;
     }
 
@@ -203,20 +241,46 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadDataSet2(){
+    Set<Statement> loadMinDataSet2(){
         Set<Statement> data = new HashSet<Statement>();
         addStatement(data, d2IdStatement);
         addStatement(data, d2NameSpaceStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadMustDataSet2(){
+        Set<Statement> data = loadMinDataSet2();
         addStatement(data, d2TitleStatement);
         addStatement(data, d2DescriptionStatement);
         addStatement(data, d2HomePageStatement);
         addStatement(data, d2LicenseStatement);
-        addStatement(data, d2VersionStatement);
         addStatement(data, d2ImportedOnStatement);
         addStatement(data, d2ImportedByStatement);
         addStatement(data, d2ImportedFromStatement);
-        addStatement(data, d2CreatedWithStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadDirectDataSet2(){
+        Set<Statement> data = loadMustDataSet2();
         addStatement(data, d2DataDumpStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadShouldDataSet2(){
+        Set<Statement> data = loadDirectDataSet2();
+        addStatement(data, d2CreatedWithStatement);
         addStatement(data, d2VocabularyStatement1);
         addStatement(data, d2VocabularyStatement2);
         addStatement(data, d2TopicStatement);
@@ -224,8 +288,18 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, d2ExampleStatement2);
         addStatement(data, d2ExampleStatement3);
         addStatement(data, d2FocStatement);
-        data.add(d2SourceAccessedByStatement);
-        data.add(d2SourceAccessedOnStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadMayDataSet2(){
+        Set<Statement> data = loadShouldDataSet2();
+        addStatement(data, d2VersionStatement);
+        addStatement(data, d2SourceAccessedByStatement);
+        addStatement(data, d2SourceAccessedOnStatement);
         return data;
     }
 
@@ -233,22 +307,52 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadLinkSet(){
-        Set<Statement> data = loadDataSet1();
-        data.addAll(loadDataSet2());
+    Set<Statement> loadMinLinkSet(){
+        Set<Statement> data = new HashSet<Statement>();
+        data.addAll(loadMinDataSet1());
+        data.addAll(loadMinDataSet2());
         addStatement(data, linkIdStatement); 
         addStatement(data, linkPredicateStatement);
         addStatement(data, subjectStatement);
         addStatement(data, objectStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadMustLinkSet(){
+        Set<Statement> data = loadMinLinkSet();
+        data.addAll(loadMustDataSet1());
+        data.addAll(loadMustDataSet2());
         addStatement(data, linkTitleStatement);
         addStatement(data, linkDescriptionStatement );
         addStatement(data, linkLicenseStatement);
+        addStatement(data, linkJustificationStatement);
         addStatement(data, linkAuthoredByStatement);
         addStatement(data, linkAuthoredOnStatement);
         addStatement(data, linkCreatedByStatement);
         addStatement(data, linkCreatedOnStatement);
-        addStatement(data, linkJustificationStatement);
+        return data;
+    }
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadShouldLinkSet(){
+        Set<Statement> data = loadMustLinkSet();
         addStatement(data, linkNumberStatement);
+        return data;
+    }
+    
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    Set<Statement> loadMayLinkSet(){
+        Set<Statement> data = loadShouldLinkSet();
+        addStatement(data, linkVersionStatement);
         return data;
     }
 
