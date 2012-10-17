@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -30,14 +31,19 @@ public class LinksetStatementReaderAndImporter implements LinksetStatements{
     private Set<Statement> voidStatements;
     private Set<Statement> linkStatements;
     
+    public LinksetStatementReaderAndImporter(File file, StoreType storeType) throws IDMapperException{
+        LinksetStatementReader reader = new LinksetStatementReader(file);
+        loadInfo(reader, storeType);
+    }
+
     public LinksetStatementReaderAndImporter(String fileName, StoreType storeType) throws IDMapperException{
         LinksetStatementReader reader = new LinksetStatementReader(fileName);
-        voidStatements = reader.getVoidStatements();
-        addExtraInfo(storeType);
-        linkStatements = reader.getLinkStatements();
+        loadInfo(reader, storeType);
     }
     
-    private void addExtraInfo(StoreType storeType) throws IDMapperException {
+    private void loadInfo(LinksetStatementReader reader, StoreType storeType) throws IDMapperException {
+        voidStatements = reader.getVoidStatements();
+        linkStatements = reader.getLinkStatements();
         loadedURIs = new HashSet<Resource>();
         Set<Resource> toLoadURIs = getToLoadResources(voidStatements);
         while (!toLoadURIs.isEmpty()){

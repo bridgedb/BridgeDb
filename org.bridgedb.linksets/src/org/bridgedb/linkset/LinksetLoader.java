@@ -34,6 +34,7 @@ import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.metadata.validator.Validator;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.LinksetStatementReader;
+import org.bridgedb.rdf.LinksetStatementReaderAndImporter;
 import org.bridgedb.rdf.LinksetStatements;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
@@ -78,7 +79,7 @@ public class LinksetLoader {
     
     public LinksetLoader(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
         Reporter.report("Loading " + file);
-        statements = new LinksetStatementReader(file);
+        statements = new LinksetStatementReaderAndImporter(file, storeType);
         validate(validationType);
         accessedFrom = new URIImpl(file.toURI().toString());
     }
