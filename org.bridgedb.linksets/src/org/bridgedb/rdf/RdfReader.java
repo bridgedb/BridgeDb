@@ -19,11 +19,14 @@
 package org.bridgedb.rdf;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.LinkSetStore;
 import org.bridgedb.utils.StoreType;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -55,4 +58,17 @@ public class RdfReader implements LinkSetStore{
         }
     }
     
+    @Override
+    public List<Statement> getStatementsForResource(Resource resource) throws IDMapperException{
+        try {
+            RdfWrapper rdfWrapper = RdfFactory.setupConnection(storeType);
+            List<Statement> result = rdfWrapper.getStatementList(resource, RdfWrapper.ANY_PREDICATE, RdfWrapper.ANY_OBJECT);
+            rdfWrapper.shutdown();
+            return result;
+        } catch (RDFHandlerException ex) {
+            throw new IDMapperException("Unable to read RDF", ex);
+        }
+    
+    }
+
 }

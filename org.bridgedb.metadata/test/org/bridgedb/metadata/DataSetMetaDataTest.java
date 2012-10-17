@@ -179,7 +179,6 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         String expected = "http://www.example.com/person#Joe has an unspecified type of http://www.example.com/Person\n"
                 + "(Dataset) http://www.example.com/test/dataset1 OK!\n";
         String summary = metaData.summary();
-        System.out.println(summary);
         assertEquals(expected, summary);
     }
 

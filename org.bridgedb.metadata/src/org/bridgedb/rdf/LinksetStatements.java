@@ -16,4 +16,6 @@ public interface LinksetStatements{
     public Set<Statement> getLinkStatements();
     
     public Set<Statement> getVoidStatements();
+    
+    public void resetBaseURI(String newBaseURI);
 }

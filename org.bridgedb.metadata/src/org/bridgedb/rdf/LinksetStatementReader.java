@@ -10,9 +10,12 @@ import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.constants.VoidConstants;
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -88,6 +91,36 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
                iterator.remove();
            }
        }      
+    }
+
+    @Override
+    public void resetBaseURI(String newBaseURI) {
+        Set<Statement> newstatements = new HashSet<Statement>();
+        for (Statement statement:statements){
+            String oldName = statement.getSubject().stringValue();
+            if (oldName.startsWith(DEFAULT_BASE_URI)){
+                String newName = oldName.replace(DEFAULT_BASE_URI, newBaseURI);
+                URI newResource = new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));
+                statement = new StatementImpl(newResource, statement.getPredicate(), statement.getObject());
+            }
+            oldName = statement.getPredicate().stringValue();
+            if (oldName.startsWith(DEFAULT_BASE_URI)){
+                String newName = oldName.replace(DEFAULT_BASE_URI, newBaseURI);
+                URI newPredicate = new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));
+                statement = new StatementImpl(statement.getSubject(), newPredicate, statement.getObject());
+            }
+            Value object = statement.getObject();
+            if (object instanceof URI){
+                oldName = object.stringValue();
+                if (oldName.startsWith(DEFAULT_BASE_URI)){
+                    String newName = oldName.replace(DEFAULT_BASE_URI, newBaseURI);
+                    URI newObject = new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));
+                    statement = new StatementImpl(statement.getSubject(), statement.getPredicate(), newObject);
+                }
+            }        
+            newstatements.add(statement);
+        }
+        statements = newstatements;
     }
 
 }

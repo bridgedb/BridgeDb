@@ -97,8 +97,7 @@ public class LinksetLoaderTest {
     
     @Test(expected=IDMapperLinksetException.class)
     public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
-    	LinksetLoader loader = new LinksetLoader();
-    	loader.parse("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
+    	LinksetLoader.parse("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
     }
 
 }

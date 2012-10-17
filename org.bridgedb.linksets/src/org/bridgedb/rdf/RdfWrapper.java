@@ -37,10 +37,10 @@ import org.openrdf.rio.rdfxml.RDFXMLWriter;
  * @author Christian
  */
 public class RdfWrapper {
-    private static final Resource ANY_SUBJECT = null;
-    private static final URI ANY_PREDICATE = null;
-    private static final Value ANY_OBJECT = null;
-    private static final boolean EXCLUDE_INFERRED =false;
+    public static final Resource ANY_SUBJECT = null;
+    public static final URI ANY_PREDICATE = null;
+    public static final Value ANY_OBJECT = null;
+    public static final boolean EXCLUDE_INFERRED =false;
 
     private RepositoryConnection hiddenConnection;
     
@@ -153,7 +153,7 @@ public class RdfWrapper {
         return toString.toString();
     }
     
-    protected void add(Resource subject, URI predicate, Value object, Resource... contexts) 
+    public void add(Resource subject, URI predicate, Value object, Resource... contexts) 
             throws RDFHandlerException{
         RepositoryConnection connection = this.getConnection();
         try {

@@ -19,7 +19,10 @@
 package org.bridgedb.linkset;
 
 import java.util.List;
+import java.util.Set;
 import org.bridgedb.IDMapperException;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
 
 /**
  * Interface for retrieving the RDF MetaData related to LinkSets.
@@ -48,5 +51,6 @@ public interface LinkSetStore {
      * @throws IDMapperException
      */
     public String getRDF (int id) throws IDMapperException;
-
+   
+    public List<Statement> getStatementsForResource(Resource resource) throws IDMapperException;
 }
