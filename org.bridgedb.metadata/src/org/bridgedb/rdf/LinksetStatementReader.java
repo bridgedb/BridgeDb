@@ -95,8 +95,12 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
 
     @Override
     public void resetBaseURI(String newBaseURI) {
+        statements = resetBaseURI(newBaseURI, statements);
+    }
+
+   public static Set<Statement> resetBaseURI(String newBaseURI, Set<Statement> oldStatements) {
         Set<Statement> newstatements = new HashSet<Statement>();
-        for (Statement statement:statements){
+        for (Statement statement:oldStatements){
             String oldName = statement.getSubject().stringValue();
             if (oldName.startsWith(DEFAULT_BASE_URI)){
                 String newName = oldName.replace(DEFAULT_BASE_URI, newBaseURI);
@@ -120,7 +124,7 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
             }        
             newstatements.add(statement);
         }
-        statements = newstatements;
+        return newstatements;
     }
 
 }
