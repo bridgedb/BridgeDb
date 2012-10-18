@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class TestUtils {
+public abstract class TestUtils {
     
     //Flags for easy reading of tests
     static final boolean INCLUDE_WARNINGS = true;
