@@ -60,12 +60,7 @@ public class LinksetLoaderTest {
         LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType, LOAD_DATA);
         LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType, LOAD_DATA);
         LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType, LOAD_DATA);
-        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
-        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
-        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dd.ttl", StoreType.TEST, validationType);
-        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-ct.ttl", StoreType.TEST, validationType);
-        //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dt.ttl", StoreType.TEST, validationType);
-	}
+ 	}
 
     @Test
     public void testMappingInfo() throws IDMapperException {
