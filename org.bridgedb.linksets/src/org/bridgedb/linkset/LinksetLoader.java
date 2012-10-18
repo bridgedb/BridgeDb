@@ -400,8 +400,12 @@ public class LinksetLoader {
         Reporter.report("   This may also be a directory if all files in it can be loaded. ");
         Reporter.report("      Includes subdirectories with the same requirement of all loadable. ");
         Reporter.report("Optional -D format (before the jar) Parameters are:");
+        Reporter.report(LOAD);
+        Reporter.report("   true: loads the file into the rdfstore and if links SQL.");
+        Reporter.report("        Loads into the database and rdf specified by " + STORE + ".");
+        Reporter.report("   default is to append to the existing database and rdf store");
         Reporter.report(STORE);
-        Reporter.report("   Dettermines where (if at all) the data will be stored ");
+        Reporter.report("   Dettermines where (if at all) the data will be stored and read from");
         Reporter.report("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
         Reporter.report("   " + StoreType.LOAD + ": Writes into the secondary database and rdf store");
         Reporter.report("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
@@ -409,6 +413,11 @@ public class LinksetLoader {
         Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
         Reporter.report("   Default is " + StoreType.TEST);
         Reporter.report(Validator.VALIDATION);
+        Reporter.report("   " + ValidationType.DATASETVOID + ": Checks that all MUST and SHOULD values are present");
+        Reporter.report("       Multiple datasets can be declared but linksets and links are not expected");
+        Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
+        Reporter.report("       Multiple Linksets can be declared but links are not expected");
+        Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
         Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
         Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");
         Reporter.report("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
