@@ -239,10 +239,11 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    (expected=BridgeDbSqlException.class)
     public void testGetXrefBad() throws IDMapperException {
         report("GetXrefBad");
-        Xref result = urlMapper.toXref(mapBadURL1);
+        Xref xref = urlMapper.toXref(mapBadURL1);
+        String result = xref.getDataSource().getUrl(goodId1);
+        assertEquals (mapBadURL1, result);
     }
     
     

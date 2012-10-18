@@ -724,7 +724,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 String sysCode = rs.getString("dataSource");
                 return DataSource.getBySystemCode(sysCode);
             }
-            throw new BridgeDbSqlException("No DataSource known for " + uriSpace);
+            DataSource.Builder builder = DataSource.register(uriSpace, uriSpace).urlPattern(uriSpace+"$id");
+            return builder.asDataSource();
        } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to parse results.", ex);
        }
