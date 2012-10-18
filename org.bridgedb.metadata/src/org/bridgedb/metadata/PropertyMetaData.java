@@ -316,8 +316,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             return;
         }
         if (parentLeaf instanceof PropertyMetaData){
-            PropertyMetaData pmd = (PropertyMetaData)parentLeaf;
-            values.addAll(pmd.values);
+            if (values.isEmpty()){
+                PropertyMetaData pmd = (PropertyMetaData)parentLeaf;
+                values.addAll(pmd.values);
+            }
         } else {
             throw new UnsupportedOperationException("Unexpected LeafMetaData type of " + parentLeaf.getClass());
         }

@@ -125,6 +125,10 @@ public class RdfFactory {
         return new URIImpl(getTheBaseURI() + "linkset/" + linksetId);  
     }
   
+    public static URI getVoidURL(int voidId){
+        return new URIImpl(getTheBaseURI() + "linkset/" + voidId);  
+    }
+
     public static String getTheBaseURI() {
         String result;
         try {

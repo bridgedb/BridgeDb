@@ -42,9 +42,12 @@ import static org.hamcrest.Matchers.*;
 /**
  * @author Christian
  */
+@Ignore
 public class LinksetLoaderTest {
        
     private static StoreType VALIDATE_ONLY = null;
+    private static final boolean LOAD_DATA = true;
+   private static final boolean DO_NOT_LOAD_DATA = true;
     
     //Unsure if this is still needed or even desirable!
     @BeforeClass
@@ -54,9 +57,9 @@ public class LinksetLoaderTest {
         
         LinksetLoader.clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType, LOAD_DATA);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType, LOAD_DATA);
+        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType, LOAD_DATA);
         //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
         //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
         //LinksetLoader.parse("../org.bridgedb.linksets/test-data/cw-dd.ttl", StoreType.TEST, validationType);
@@ -97,7 +100,7 @@ public class LinksetLoaderTest {
     
     @Test(expected=IDMapperLinksetException.class)
     public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
-    	LinksetLoader.parse("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
+    	LinksetLoader.parse("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, DO_NOT_LOAD_DATA);
     }
 
 }

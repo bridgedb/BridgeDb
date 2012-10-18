@@ -42,12 +42,6 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
     
     public LinksetStatementReader(File file, String baseURI) throws MetaDataException{
         parse(file, baseURI);
-        if (linkPredicate == null){
-            throw new MetaDataException("Predicate " + VoidConstants.LINK_PREDICATE + " not found so unable to split void from links");
-        }
-        if (linkStatements.isEmpty()){
-            throw new MetaDataException("No links found with linkPredicate " + linkPredicate);
-        }
     }
     
     public Set<Statement> getVoidStatements(){

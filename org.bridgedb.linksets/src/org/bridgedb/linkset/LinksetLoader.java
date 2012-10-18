@@ -27,9 +27,12 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.LinksetVoidInformation;
+import org.bridgedb.metadata.MetaDataCollection;
 import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.metadata.MetaDataSpecification;
 import org.bridgedb.metadata.constants.PavConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.metadata.validator.Validator;
 import org.bridgedb.mysql.MySQLSpecific;
@@ -40,6 +43,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
@@ -64,8 +68,10 @@ import org.openrdf.rio.RDFHandlerException;
 public class LinksetLoader {
     
     private static URI THIS_AS_URI = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.linksets/src/org/bridgedb/linkset/LinksetLoader.java");
+    private static String LAST_USED_VOID_ID = "LastUsedVoidId";
     private static String STORE = "store";
     private static String CLEAR_EXISING_DATA = "clearExistingData";
+    private static String LOAD = "load";
     private int mappingId;
     private boolean symmetric;
     private URI linksetContext;
@@ -75,35 +81,60 @@ public class LinksetLoader {
     private LinksetVoidInformation information;
     private final LinksetStatements statements;
     private final URI accessedFrom;
-    
+    private final ValidationType validationType;
+    private final StoreType storeType;
     
     public LinksetLoader(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
         Reporter.report("Loading " + file);
-        statements = new LinksetStatementReaderAndImporter(file, storeType);
-        validate(validationType);
         accessedFrom = new URIImpl(file.toURI().toString());
-    }
-    
-    private void validate(ValidationType validationType) throws IDMapperException{
-        information = new LinksetVoidInformation(statements, validationType);        
+        this.validationType = validationType;
+        this.storeType = storeType;
+        statements = new LinksetStatementReaderAndImporter(file, storeType);      
+        if (validationType.isLinkset()){
+            for (Statement st:statements.getVoidStatements()){
+                System.out.println(st);
+            }
+            information = new LinksetVoidInformation(statements, validationType);        
+        } else {
+            MetaDataSpecification specification = 
+                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
+            MetaDataCollection metaDataCollection= new MetaDataCollection(statements.getVoidStatements(), specification);
+            metaDataCollection.validate();
+        }
         Reporter.report("Validation successful");          
     }
     
-    public void load(StoreType storeType) throws IDMapperException{
+    //private void inputVoid(){
+    //    statements = new LinksetStatementReaderAndImporter(file, storeType);      
+    //}
+    
+    //private void inputLinkset(){
+    //    statements = new LinksetStatementReaderAndImporter(file, storeType);    
+    //}
+    
+    public synchronized void Load() throws IDMapperException{
+        if (validationType.isLinkset()){
+            linksetLoad();
+        } else {
+            voidLoad();
+        }
+    }
+    
+    public void linksetLoad() throws IDMapperException{
         if (storeType == null){
             return;
         }
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         URLListener urlListener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
-        getContexts(information, urlListener);
+        getLinksetContexts(information, urlListener);
         statements.resetBaseURI(linksetContext+"/");
-        loadVoidHeader(storeType);
+        loadVoidHeader();
         loadSQL(statements, urlListener);
         urlListener.closeInput();    
         Reporter.report("Load finished for " + accessedFrom);
     }
     
-    private void getContexts(LinksetVoidInformation information, URLListener urlListener) throws IDMapperException {
+    private void getLinksetContexts(LinksetVoidInformation information, URLListener urlListener) throws IDMapperException {
         String subjectUriSpace = information.getSubjectUriSpace();
         String targetUriSpace = information.getTargetUriSpace();
         String predicate = information.getPredicate();
@@ -120,8 +151,8 @@ public class LinksetLoader {
             inverseContext = null;
             inverseResource = null;
         }
-     }
-
+    }
+   
     private Resource invertResource(Resource resource){
         if (resource instanceof URI){
             return new URIImpl(resource.toString()+"_Symmetric");
@@ -129,7 +160,7 @@ public class LinksetLoader {
         return resource;
     }
     
-    private void loadVoidHeader(StoreType storeType) 
+    private void loadVoidHeader() 
             throws IDMapperException{
         RdfWrapper rdfWrapper = null;
         try {
@@ -197,6 +228,55 @@ public class LinksetLoader {
         }
     }
         
+    private void voidLoad() throws IDMapperException {
+        RdfWrapper rdfWrapper = null;
+        try {
+            URI voidContext = getVoidContext(rdfWrapper);
+            rdfWrapper = RdfFactory.setupConnection(storeType);
+            for (Statement st:statements.getVoidStatements()){
+                rdfWrapper.add(st.getSubject(), st.getPredicate(), st.getObject(), voidContext);
+            }
+            rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom, voidContext);
+            GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
+            try {
+                XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+                CalendarLiteralImpl now = new CalendarLiteralImpl(xgcal);
+                rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_ON, now, voidContext);
+            } catch (DatatypeConfigurationException ex) {
+                //Should never happen so basically ignore
+                ex.printStackTrace();
+            }
+            rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI, voidContext);
+        } catch (RDFHandlerException ex) {
+            throw new IDMapperException("Error loading RDF " + ex);
+        } finally {
+            try {
+                if (rdfWrapper != null){
+                    rdfWrapper.shutdown();
+                }
+            } catch (RDFHandlerException ex) {
+                throw new IDMapperException("Error loading RDF " + ex);
+            }
+        }
+    }
+
+    private synchronized URI getVoidContext(RdfWrapper rdfWrapper) throws BridgeDbSqlException {
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
+        SQLIdMapper mapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
+        String oldIDString = mapper.getProperty(LAST_USED_VOID_ID);
+        Integer oldId;
+        if (oldIDString == null){
+            oldId = 0;
+        } else {
+            System.out.println(oldIDString);
+            oldId = Integer.parseInt(oldIDString);
+            System.out.println(oldId);
+        }
+        int id = oldId + 1;
+        mapper.putProperty(LAST_USED_VOID_ID, ""+id);
+        return RdfFactory.getVoidURL(id);
+    }
+
    /**
      * Loads the linkset into existing data
      * @param file Could be either a File or a directory
@@ -206,7 +286,7 @@ public class LinksetLoader {
      * @throws IDMapperException
      * @throws FileNotFoundException
      */
-    private static void parse(File file, StoreType storeType, ValidationType validationType) 
+    private static void parse(File file, StoreType storeType, ValidationType validationType, boolean load) 
     		throws IDMapperException {
     	if (!file.exists()) {
     		Reporter.report("File not found: " + file.getAbsolutePath());
@@ -214,11 +294,13 @@ public class LinksetLoader {
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
             for (File child:children){
-                parse(child, storeType, validationType);
+                parse(child, storeType, validationType, load);
             }
         } else { 
             LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
-            loader.load(storeType);
+            if (load){
+                loader.Load();
+            }
         }
     }
 
@@ -241,9 +323,12 @@ public class LinksetLoader {
      * @throws IDMapperException
      * @throws FileNotFoundException
      */
-    public static void parse (String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
+    public static void parse (String fileName, StoreType storeType, ValidationType type, boolean load) throws IDMapperException {
+        if (load && storeType == null){
+            throw new IDMapperException ("Can not load if no storeType set");
+        }
         File file = new File(fileName);
-        parse(file, storeType, type);
+        parse(file, storeType, type, load);
     }
 
     /**
@@ -269,7 +354,7 @@ public class LinksetLoader {
         }
 
         String storeString = System.getProperty(STORE);
-        StoreType storeType = null;
+        StoreType storeType = StoreType.TEST;
         if (storeString != null && !storeString.isEmpty()){
             try {
                 storeType = StoreType.parseString(storeString);
@@ -296,12 +381,13 @@ public class LinksetLoader {
         String clearExistingDataString = System.getProperty(CLEAR_EXISING_DATA, "false");
         boolean clearExistingData = Boolean.valueOf(clearExistingDataString);
         if (clearExistingData){
-            if (storeType == null){
-                throw new IDMapperException("Unable to " + CLEAR_EXISING_DATA + "if no " + STORE + " specified!");
-            }
             clearExistingData(storeType);
         }
-        parse (fileName, storeType, validationType);
+
+        String loadString = System.getProperty(LOAD, "true");
+        boolean load = Boolean.valueOf(loadString);
+        
+        parse (fileName, storeType, validationType, load);
     }
 
     public static void usage(String issue) {
@@ -321,7 +407,7 @@ public class LinksetLoader {
         Reporter.report("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
         Reporter.report("   " + StoreType.TEST + ": Writes into the test database and rdf store");
         Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
-        Reporter.report("   Default is to Validate only.");
+        Reporter.report("   Default is " + StoreType.TEST);
         Reporter.report(Validator.VALIDATION);
         Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
         Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");

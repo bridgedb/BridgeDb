@@ -123,7 +123,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (object instanceof Resource){
                 ResourceMetaData child = resourcesMap.get((Resource)object);
                 if (child == null){
-                    errors.add("No resource found for " + object + " unable to find child");
+                    Reporter.report("No resource found for " + object + " unable to find child");
                 } else {
                     if (parent != null){
                         child.addParent(parent);                           

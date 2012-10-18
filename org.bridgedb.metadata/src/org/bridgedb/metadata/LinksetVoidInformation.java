@@ -176,6 +176,9 @@ public class LinksetVoidInformation implements MetaData {
      * @return 
      */
     private boolean checkIsTransative(ResourceMetaData linkset) {
+        if (linkset == null) {
+            return false;
+        }
         Set<Value> derivedFrom = linkset.getValuesByPredicate(PavConstants.DERIVED_FROM);
         if (derivedFrom == null || derivedFrom.isEmpty()) return false;
         Set<Value> derivedOn = linkset.getValuesByPredicate(PavConstants.DERIVED_ON);

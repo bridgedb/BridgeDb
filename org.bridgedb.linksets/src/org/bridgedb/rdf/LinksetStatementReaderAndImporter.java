@@ -71,11 +71,15 @@ public class LinksetStatementReaderAndImporter implements LinksetStatements{
 
     private Set<Resource> loadExtrenalResources(Set<Resource> toLoadURIs, StoreType storeType) throws IDMapperException {
         Set<Resource> extraLoadURIs = new HashSet<Resource>();
+        if (storeType == null) {
+            return extraLoadURIs;
+        }
         RdfReader reader = new RdfReader(storeType);
         for (Resource resource:toLoadURIs){
-            System.out.println(loadedURIs);
             if (!loadedURIs.contains(resource)){
-                List<Statement> newStatements = reader.getStatementsForResource(resource);        
+                List<Statement> newStatements = reader.getStatementsForResource(resource);  
+                System.out.println(newStatements.size() + "" + resource);
+                newStatements.addAll(reader.getSuperSet(resource));
                 voidStatements.addAll(newStatements);
                 extraLoadURIs.addAll(getToLoadResources(newStatements));
                 loadedURIs.add(resource);
