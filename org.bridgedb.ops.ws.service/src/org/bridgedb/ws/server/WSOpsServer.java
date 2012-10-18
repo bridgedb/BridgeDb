@@ -340,7 +340,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             throw new IDMapperException("Parameter id is missing");
         }
         Integer id = Integer.parseInt(idString);
-        return new RdfReader(StoreType.LIVE).getRDF(id);
+        return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
     }
 
 

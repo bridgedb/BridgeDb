@@ -50,7 +50,9 @@ public interface LinkSetStore {
      * @return Well formatted text that can be returned to a user
      * @throws IDMapperException
      */
-    public String getRDF (int id) throws IDMapperException;
+    public String getLinksetRDF (int id) throws IDMapperException;
    
+    public String getVoidRDF (int id) throws IDMapperException;
+
     public List<Statement> getStatementsForResource(Resource resource) throws IDMapperException;
 }

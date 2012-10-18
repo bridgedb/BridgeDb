@@ -232,16 +232,15 @@ public class RdfWrapper {
     //    return new URIImpl(RdfWrapper.getTheBaseURI() + "linkset/" + linksetId.stringValue());  
     //}
     
-    String getRDF(int linksetId) throws IDMapperLinksetException {
+    String getRDF(Resource graph) throws IDMapperLinksetException {
         StringOutputStream stringOutputStream = new StringOutputStream();            
         RDFXMLWriter writer = new RDFXMLWriter(stringOutputStream);
         writer.startRDF();
-        Resource linkSetGraph = RdfFactory.getLinksetURL(linksetId);
         RepositoryResult<Statement> rr;
         RepositoryConnection connection = this.getConnection();
         try {
             rr = 
-                    connection.getStatements(ANY_SUBJECT, ANY_PREDICATE, ANY_OBJECT, EXCLUDE_INFERRED, linkSetGraph);
+                    connection.getStatements(ANY_SUBJECT, ANY_PREDICATE, ANY_OBJECT, EXCLUDE_INFERRED, graph);
         } catch (Throwable ex) {
             shutdownAfterError();
             throw new IDMapperLinksetException ("Error extracting rdf.", ex);

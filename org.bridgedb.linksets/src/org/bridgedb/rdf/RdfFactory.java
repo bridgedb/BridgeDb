@@ -126,7 +126,7 @@ public class RdfFactory {
     }
   
     public static URI getVoidURL(int voidId){
-        return new URIImpl(getTheBaseURI() + "linkset/" + voidId);  
+        return new URIImpl(getTheBaseURI() + "void/" + voidId);  
     }
 
     public static String getTheBaseURI() {

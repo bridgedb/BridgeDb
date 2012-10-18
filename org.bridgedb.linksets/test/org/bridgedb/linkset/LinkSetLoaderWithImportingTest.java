@@ -62,6 +62,14 @@ public class LinkSetLoaderWithImportingTest {
 	}
 
     @Test
+    public void testVoidInfo() throws IDMapperException {
+        RdfReader reader = new RdfReader(StoreType.TEST);
+        String result = reader.getVoidRDF(1);
+        assertTrue(result.contains("ChemSpider"));
+        assertFalse(result.contains("http://linkedchemistry.info/chembl/molecule/"));
+    }
+    
+    @Test
     public void testMappingInfo() throws IDMapperException {
         Reporter.report("MappingInfo");
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
