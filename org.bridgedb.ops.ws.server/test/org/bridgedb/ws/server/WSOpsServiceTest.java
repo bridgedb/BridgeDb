@@ -18,4 +18,10 @@ public class WSOpsServiceTest {
 		service.mapURL("", "", null);
 	}
 	
+	@Test
+	public void testMapUrlEmptyProfile() throws IDMapperException {
+		WSOpsService service = new WSOpsService();
+		service.mapURL("http://www.foo.com/123", null, null);
+	}
+	
 }

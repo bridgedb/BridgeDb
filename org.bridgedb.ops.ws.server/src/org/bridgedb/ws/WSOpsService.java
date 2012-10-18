@@ -33,10 +33,15 @@ import javax.ws.rs.core.MediaType;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.sql.SQLAccess;
+import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
@@ -54,6 +59,13 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     protected URLMapper urlMapper;
     
     public WSOpsService() {
+    	try {
+			SQLAccess sqlAccess = SqlFactory.createSQLAccess();
+			urlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+		} catch (IDMapperException e) {
+			Reporter.report(e.getLocalizedMessage());
+			throw new RuntimeException(e);
+		}   	
     }
 
     public WSOpsService(URLMapper urlMapper) {
@@ -72,6 +84,9 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");        
         if (profileURL == null || profileURL.isEmpty())  profileURL = //RdfWrapper.getBaseURI() + 
         		"0";
+        if (targetURISpace == null) {
+        	targetURISpace = new ArrayList<String>();
+        }
         String[] targetURISpaces = new String[targetURISpace.size()];
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
