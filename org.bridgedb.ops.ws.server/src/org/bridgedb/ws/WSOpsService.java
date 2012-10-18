@@ -70,7 +70,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
         if (URL == null) throw new IDMapperException("URL parameter missing.");        
         if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");        
-        if (profileURL == null || profileURL.isEmpty())  profileURL = "0";
+        if (profileURL == null || profileURL.isEmpty())  profileURL = //RdfWrapper.getBaseURI() + 
+        		"0";
         String[] targetURISpaces = new String[targetURISpace.size()];
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
