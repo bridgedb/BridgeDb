@@ -649,21 +649,25 @@ public class SQLListener implements MappingListener{
      * @throws BridgeDbSqlException 
      */
     private void updateLastUpdated() throws BridgeDbSqlException {
-        String delete = "DELETE from properties where theKey = 'LastUpdates'";
+        String date = new Date().toString();
+        putProperty("LastUpdates", date);
+    }
+
+    public void putProperty(String key, String value) throws BridgeDbSqlException {
+        String delete = "DELETE from properties where theKey = '" + key + "'";
         Statement statement = this.createStatement();
         try {
             statement.executeUpdate(delete.toString());
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Error Deleting LastUpDated " + delete, ex);
+            throw new BridgeDbSqlException("Error Deleting property " + delete, ex);
         }
-        String date = new Date().toString();
         String update = "INSERT INTO properties    "
                     + "(theKey, property, isPublic )                            " 
-                    + "VALUES ('LastUpdates', '" + date  + "' , 1)  ";
+                    + "VALUES ('" + key + "', '" + value  + "' , 1)  ";
         try {
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Error insertoing LastUpDated " + update, ex);
+            throw new BridgeDbSqlException("Error inserting Property " + update, ex);
         }
     }
 
