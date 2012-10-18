@@ -38,6 +38,7 @@ import org.bridgedb.url.UriSpaceMapper;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.Reporter;
 
 /**
  * Implements the URLMapper and URLListener interfaces using SQL.
@@ -101,7 +102,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             		"createdBy VARCHAR(" + PREDICATE_LENGTH + ") " +
             		")");
             sh.execute("CREATE TABLE profileJustifications ( " +
-            		"profileId VARCHAR(" + ID_LENGTH + ") NOT NULL, " +
+            		"profileId INT NOT NULL, " +
             		"justificationURI VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
 //            		"CONSTRAINT fk_profileId FOREIGN KEY (profileId) REFERENCES profile(profileId) ON DELETE CASCADE " +
             		")");
@@ -131,6 +132,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
+        	Reporter.report("Profile: " + profileURL + "\nQuery to run: " + query.toString());
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
@@ -218,6 +220,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
+        	Reporter.report("Profile: " + profileURL + "\nQuery: " + query.toString());
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
@@ -344,7 +347,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     @Override
     public OverallStatistics getOverallStatistics() throws BridgeDbSqlException {
         int numberOfMappings = getMappingsCount();
-        String linkSetQuery = "SELECT count(distinct(id)) as numberOfMappingSets, "
+        int numberOfProfiles = getNumberOfProfiles();
+        String linkSetQuery = "SELECT count(distinct(mappingSet.id)) as numberOfMappingSets, "
                 + "count(distinct(mappingSet.sourceDataSource)) as numberOfSourceDataSources, "
                 + "count(distinct(mappingSet.predicate)) as numberOfPredicates, "
                 + "count(distinct(mappingSet.targetDataSource)) as numberOfTargetDataSources "
@@ -352,13 +356,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(linkSetQuery);
-            if (rs.next()){
+			if (rs.next()){
                 int numberOfMappingSets = rs.getInt("numberOfMappingSets");
                 int numberOfSourceDataSources = rs.getInt("numberOfSourceDataSources");
                 int numberOfPredicates= rs.getInt("numberOfPredicates");
                 int numberOfTargetDataSources = rs.getInt("numberOfTargetDataSources");
                 return new OverallStatistics(numberOfMappings, numberOfMappingSets, 
-                        numberOfSourceDataSources, numberOfPredicates, numberOfTargetDataSources);
+                		numberOfSourceDataSources, numberOfPredicates, 
+                		numberOfTargetDataSources, numberOfProfiles);
             } else {
                 System.err.println(linkSetQuery);
                 throw new BridgeDbSqlException("no Results for query. " + linkSetQuery);
@@ -369,7 +374,25 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
-    private int getMappingsCount() throws BridgeDbSqlException{
+    private int getNumberOfProfiles() throws BridgeDbSqlException {
+    	String profileCountQuery = "SELECT count(*) as numberOfProfiles " +
+    			"FROM profile";
+    	Statement statement = this.createStatement();
+    	try {
+    		ResultSet rs = statement.executeQuery(profileCountQuery);
+    		if (rs.next()) {
+    			return rs.getInt("numberOfProfiles");
+    		} else {
+    			System.err.println(profileCountQuery);
+                throw new BridgeDbSqlException("No Results for query. " + profileCountQuery);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDbSqlException("Unable to run query. " + profileCountQuery, ex);
+        }      
+	}
+
+	private int getMappingsCount() throws BridgeDbSqlException{
         String linkQuery = "SELECT count(*) as numberOfMappings "
                 + "FROM mapping";
         Statement statement = this.createStatement();

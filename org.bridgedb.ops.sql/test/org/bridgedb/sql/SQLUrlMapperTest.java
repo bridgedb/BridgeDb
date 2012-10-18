@@ -44,13 +44,15 @@ public class SQLUrlMapperTest extends URLListenerTest {
 	public void testRegisterProfile() throws IDMapperException, SQLException {
 		List<String> justificationUris = new ArrayList<String>();
 		justificationUris.add(TEST_JUSTIFICATION1);
-		sqlUrlMapper.registerProfile("test1", "2012-09-28 16:02", "http://www.cs.man.ac.uk/~graya/me.ttl", justificationUris);
+		sqlUrlMapper.registerProfile("test1", "2012-09-28T16:02", "http://www.cs.man.ac.uk/~graya/me.ttl", justificationUris);
 		validateResult("SELECT COUNT(*) FROM profile", 1);
 		validateResult("SELECT COUNT(*) FROM profileJustifications", 1);
+		assertEquals(1, sqlUrlMapper.getOverallStatistics().getNumberOfProfiles());
 		justificationUris.add(TEST_JUSTIFICATION2);
-		sqlUrlMapper.registerProfile("test2", "2012-10-01 16:15", "http://www.cs.man.ac.uk/~brennic", justificationUris);
+		sqlUrlMapper.registerProfile("test2", "2012-10-01T16:15", "http://www.cs.man.ac.uk/~brennic", justificationUris);
 		validateResult("SELECT COUNT(*) FROM profile", 2);
 		validateResult("SELECT COUNT(*) FROM profileJustifications", 3);
+		assertEquals(2, sqlUrlMapper.getOverallStatistics().getNumberOfProfiles());
 	}
 
 	@Test

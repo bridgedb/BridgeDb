@@ -31,14 +31,17 @@ public class OverallStatisticsBean {
     Integer numberOfSourceDataSources;
     Integer numberOfPredicates;
     Integer numberOfTargetDataSources;
+    Integer numberOfProfiles;
     
     public OverallStatisticsBean(Integer numberOfMappings, Integer numberOfMappingSets, 
-            Integer numberOfSourceDataSources, Integer numberOfPredicates, Integer numberOfTargetDataSources){
+            Integer numberOfSourceDataSources, Integer numberOfPredicates, 
+            Integer numberOfTargetDataSources, Integer numberOfProfiles){
         this.numberOfMappings = numberOfMappings;
         this.numberOfMappingSets = numberOfMappingSets;
         this.numberOfSourceDataSources = numberOfSourceDataSources;
         this.numberOfPredicates = numberOfPredicates;
         this.numberOfTargetDataSources = numberOfTargetDataSources;
+        this.numberOfProfiles = numberOfProfiles;
     }
 
     //Webservice constructor
@@ -50,7 +53,8 @@ public class OverallStatisticsBean {
                    + " \n\tnumberOfMappingSets: " + numberOfMappingSets
                    + "\n\tnumberOfSourceDataSources: " + numberOfSourceDataSources
                    + "\n\tnumberOfPredicates: " + numberOfPredicates
-                   + "\n\tnumberOfTargetDataSources: " + numberOfTargetDataSources;
+                   + "\n\tnumberOfTargetDataSources: " + numberOfTargetDataSources
+                   + "\n\tnumberOfProfiles: " + numberOfProfiles;
     }
 
     /**
@@ -122,6 +126,14 @@ public class OverallStatisticsBean {
     public void setNumberOfTargetDataSources(Integer numberOfTargetDataSources) {
         this.numberOfTargetDataSources = numberOfTargetDataSources;
     }
+
+	public Integer getNumberOfProfiles() {
+		return numberOfProfiles;
+	}
+
+	public void setNumberOfProfiles(Integer numberOfProfiles) {
+		this.numberOfProfiles = numberOfProfiles;
+	}
 
     
 }

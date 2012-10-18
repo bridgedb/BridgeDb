@@ -28,14 +28,17 @@ public class OverallStatistics {
     private int numberOfSourceDataSources;
     private int numberOfPredicates;
     private int numberOfTargetDataSources;
+    private int numberOfProfiles;
     
     public OverallStatistics(int numberOfMappings, int numberOfMappingSets, 
-            int numberOfSourceDataSources, int numberOfPredicates, int numberOfTargetDataSources){
+            int numberOfSourceDataSources, int numberOfPredicates, 
+            int numberOfTargetDataSources, int numberOfProfiles) {
         this.numberOfMappings = numberOfMappings;
         this.numberOfMappingSets = numberOfMappingSets;
         this.numberOfSourceDataSources = numberOfSourceDataSources;
         this.numberOfPredicates = numberOfPredicates;
         this.numberOfTargetDataSources = numberOfTargetDataSources;
+        this.numberOfProfiles = numberOfProfiles;
     }
 
     /**
@@ -74,6 +77,14 @@ public class OverallStatistics {
     }
 
     /**
+     * Returns the number of profiles that have been registered
+     * @return the number of profiles
+     */
+    public int getNumberOfProfiles() {
+    	return numberOfProfiles;
+    }
+    
+    /**
      * @param numberOfMappings the numberOfMappings to set
      */
     public void setNumberOfMappings(int numberOfMappings) {
@@ -107,4 +118,12 @@ public class OverallStatistics {
     public void setNumberOfTargetDataSources(int numberOfTargetDataSources) {
         this.numberOfTargetDataSources = numberOfTargetDataSources;
     }
+    
+    /**
+     * @param numberOfProfiles the number of profiles to set
+     */
+    public void setNumberOfProfiles(int numberOfProfiles) {
+    	this.numberOfProfiles = numberOfProfiles;
+    }
+    
 }

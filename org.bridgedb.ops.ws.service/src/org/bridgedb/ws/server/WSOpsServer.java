@@ -92,6 +92,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     		sb.append("<li>Mapping to ");
     		sb.append(formatter.format(statistics.getNumberOfTargetDataSources()));
     		sb.append(" Target Data Sources</li>");
+    		sb.append("<li>Number of profiles: ");
+    		sb.append(statistics.getNumberOfProfiles());
+    		sb.append("</li>");
     		sb.append("<li>Last update: ");
     		sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
     		sb.append("</li>");
@@ -106,10 +109,14 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     	sb.append("<legend>URL Mapper</legend>");
     	sb.append("<p><label for=\"URL\">Input URI</label>");
     	sb.append("<input type=\"text\" id=\"URL\" name=\"URL\" style=\"width:80%\"/></p>");
-    	sb.append("<p><select name=\"profile\">");
+    	sb.append("<p><select name=\"profileURL\">");
     	//TODO: Read profiles from database
-    	sb.append("<option value=\"0\">Default</option>");
-    	sb.append("<option value=\"1\">ChEBI has parts</option>");
+    	sb.append("<option value=\"");
+//    	sb.append(RdfWrapper.getBaseURI());
+    	sb.append("0\">Default</option>");
+    	sb.append("<option value=\"");
+//    	sb.append(RdfWrapper.getBaseURI());
+    	sb.append("1\">ChEBI has parts</option>");
     	sb.append("</select>");
     	sb.append("<p><input type=\"submit\" value=\"Submit\"/></p>");
     	sb.append("<p>Note: If the new page does not open click on the address bar and press enter</p>");

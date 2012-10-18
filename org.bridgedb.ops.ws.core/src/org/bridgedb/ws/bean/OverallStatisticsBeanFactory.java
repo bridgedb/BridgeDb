@@ -28,11 +28,12 @@ public class OverallStatisticsBeanFactory {
     
     public static OverallStatistics asOverallStatistics(OverallStatisticsBean bean){
         return new OverallStatistics (bean.numberOfMappings, bean.numberOfMappingSets, bean.numberOfSourceDataSources, 
-                bean.numberOfPredicates, bean.numberOfTargetDataSources);      
+                bean.numberOfPredicates, bean.numberOfTargetDataSources, bean.numberOfProfiles);      
     }
 
     public static OverallStatisticsBean asBean(OverallStatistics stats){
         return new OverallStatisticsBean (stats.getNumberOfMappings(), stats.getNumberOfMappingSets(), 
-                stats.getNumberOfSourceDataSources(), stats.getNumberOfPredicates(), stats.getNumberOfTargetDataSources());      
+                stats.getNumberOfSourceDataSources(), stats.getNumberOfPredicates(), 
+                stats.getNumberOfTargetDataSources(), stats.getNumberOfProfiles());      
     }
 }
