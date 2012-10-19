@@ -16,6 +16,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
+import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -29,21 +30,17 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
     URI linkPredicate = null;
     
     public LinksetStatementReader(String fileName) throws MetaDataException{
-        this(new File(fileName), DEFAULT_BASE_URI);
+        parse(new File(fileName), DEFAULT_BASE_URI);
     }
     
     public LinksetStatementReader(File file) throws MetaDataException{
-        this(file, DEFAULT_BASE_URI);
+        parse(file, DEFAULT_BASE_URI);
     }
 
-    public LinksetStatementReader(String fileName, String baseURI) throws MetaDataException{
-        this(new File(fileName), baseURI);
+    public LinksetStatementReader(String info, RDFFormat format) throws MetaDataException{
+        parse(info, format, DEFAULT_BASE_URI);
     }
-    
-    public LinksetStatementReader(File file, String baseURI) throws MetaDataException{
-        parse(file, baseURI);
-    }
-    
+
     public Set<Statement> getVoidStatements(){
         return statements;
     }

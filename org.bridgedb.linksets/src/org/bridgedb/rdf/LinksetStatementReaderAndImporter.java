@@ -19,6 +19,7 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -41,6 +42,11 @@ public class LinksetStatementReaderAndImporter implements LinksetStatements{
         loadInfo(reader, storeType);
     }
     
+    public LinksetStatementReaderAndImporter(String info, RDFFormat format, StoreType storeType) throws IDMapperException{
+        LinksetStatementReader reader = new LinksetStatementReader(info, format);
+        loadInfo(reader, storeType);
+    }
+
     private void loadInfo(LinksetStatementReader reader, StoreType storeType) throws IDMapperException {
         voidStatements = reader.getVoidStatements();
         linkStatements = reader.getLinkStatements();

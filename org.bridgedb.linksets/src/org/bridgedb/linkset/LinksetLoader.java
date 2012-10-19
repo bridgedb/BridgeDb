@@ -56,6 +56,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.CalendarLiteralImpl;
 import org.openrdf.model.impl.URIImpl;
+import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -102,6 +103,21 @@ public class LinksetLoader {
         }
     }
     
+    private LinksetLoader(String info, RDFFormat format, URI accessedFrom, ValidationType validationType, StoreType storeType) throws IDMapperException {
+        Reporter.report("Loading " + info);
+        this.accessedFrom = accessedFrom;
+        this.validationType = validationType;
+        this.storeType = storeType;
+        statements = new LinksetStatementReaderAndImporter(info, format, storeType);     
+        if (validationType.isLinkset()){
+            metaData = new LinksetVoidInformation(statements, validationType);        
+        } else {
+            MetaDataSpecification specification = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
+            metaData = new MetaDataCollection(statements.getVoidStatements(), specification);
+        }
+    }
+
     private String validityReport(boolean includeWarnings){
         return metaData.validityReport(includeWarnings);
     }
@@ -110,7 +126,7 @@ public class LinksetLoader {
         metaData.validate();
     }
     
-    private synchronized void Load() throws IDMapperException{
+    private synchronized void load() throws IDMapperException{
         if (validationType.isLinkset()){
             linksetLoad();
         } else {
@@ -282,6 +298,12 @@ public class LinksetLoader {
         return RdfFactory.getVoidURL(id);
     }
 
+    public static String validityReport(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
+            ValidationType validationType, boolean includeWarnings) throws IDMapperException {
+        LinksetLoader loader = new LinksetLoader(info, format, accessedFrom, validationType, storeType);
+        return loader.validityReport(includeWarnings);
+    }
+    
     public static String validityReport(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
     		throws IDMapperException {
     	if (!file.exists()) {
@@ -310,6 +332,13 @@ public class LinksetLoader {
         return validityReport(file, storeType, type, includeWarnings);
     }
     
+    public static void load(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException {
+        LinksetLoader loader = new LinksetLoader(info, format, accessedFrom, validationType, storeType);
+        loader.validate();
+        loader.load();
+    }
+    
     public static void load(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
         if (storeType == null){
@@ -326,7 +355,7 @@ public class LinksetLoader {
         } else { 
             LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
             loader.validate();
-            loader.Load();
+            loader.load();
         }
     }
 
@@ -349,6 +378,12 @@ public class LinksetLoader {
             LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
             loader.validate();
         }
+    }
+
+    public static void validate(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException {
+        LinksetLoader loader = new LinksetLoader(info, format, accessedFrom, validationType, storeType);
+        loader.validate();
     }
 
     public static void validate(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {

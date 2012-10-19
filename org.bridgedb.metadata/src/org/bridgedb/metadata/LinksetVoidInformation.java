@@ -254,7 +254,7 @@ public class LinksetVoidInformation implements MetaData {
     public String validityReport(boolean includeWarnings) {
         if (error.isEmpty()) {
             if (wrongSubject == 0 && wrongTarget == 0){
-                 return collection.validityReport(includeWarnings) + "Found " + correctLinks + " links";
+                 return collection.validityReport(includeWarnings) + "\nFound " + correctLinks + " links";
             } else {
                 String report = collection.validityReport(includeWarnings);   
                 if (wrongSubject > 0){
