@@ -27,6 +27,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.LinksetVoidInformation;
+import org.bridgedb.metadata.MetaData;
 import org.bridgedb.metadata.MetaDataCollection;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.MetaDataSpecification;
@@ -72,44 +73,44 @@ public class LinksetLoader {
     private static String STORE = "store";
     private static String CLEAR_EXISING_DATA = "clearExistingData";
     private static String LOAD = "load";
+    
+    private final MetaData metaData;
+    private final URI accessedFrom;
+    private final LinksetStatements statements;
+    private final ValidationType validationType;
+    private final StoreType storeType;
+    
     private int mappingId;
     private boolean symmetric;
     private URI linksetContext;
     private URI inverseContext;
     private Resource linksetResource;
     private Resource inverseResource;
-    private LinksetVoidInformation information;
-    private final LinksetStatements statements;
-    private final URI accessedFrom;
-    private final ValidationType validationType;
-    private final StoreType storeType;
     
-    public LinksetLoader(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
+    private LinksetLoader(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
         Reporter.report("Loading " + file);
         accessedFrom = new URIImpl(file.toURI().toString());
         this.validationType = validationType;
         this.storeType = storeType;
         statements = new LinksetStatementReaderAndImporter(file, storeType);     
         if (validationType.isLinkset()){
-            information = new LinksetVoidInformation(statements, validationType);        
+            metaData = new LinksetVoidInformation(statements, validationType);        
         } else {
             MetaDataSpecification specification = 
-                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
-            MetaDataCollection metaDataCollection= new MetaDataCollection(statements.getVoidStatements(), specification);
-            metaDataCollection.validate();
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
+            metaData = new MetaDataCollection(statements.getVoidStatements(), specification);
         }
-        Reporter.report("Validation successful");          
     }
     
-    //private void inputVoid(){
-    //    statements = new LinksetStatementReaderAndImporter(file, storeType);      
-    //}
+    private String validityReport(boolean includeWarnings){
+        return metaData.validityReport(includeWarnings);
+    }
     
-    //private void inputLinkset(){
-    //    statements = new LinksetStatementReaderAndImporter(file, storeType);    
-    //}
+    private void validate() throws MetaDataException{
+        metaData.validate();
+    }
     
-    public synchronized void Load() throws IDMapperException{
+    private synchronized void Load() throws IDMapperException{
         if (validationType.isLinkset()){
             linksetLoad();
         } else {
@@ -117,7 +118,7 @@ public class LinksetLoader {
         }
     }
     
-    public void linksetLoad() throws IDMapperException{
+    private void linksetLoad() throws IDMapperException{
         if (storeType == null){
             return;
         }
@@ -132,6 +133,7 @@ public class LinksetLoader {
     }
     
     private void getLinksetContexts(URLListener urlListener) throws IDMapperException {
+        LinksetVoidInformation information = (LinksetVoidInformation)metaData;
         String subjectUriSpace = information.getSubjectUriSpace();
         String targetUriSpace = information.getTargetUriSpace();
         String predicate = information.getPredicate();
@@ -280,16 +282,60 @@ public class LinksetLoader {
         return RdfFactory.getVoidURL(id);
     }
 
-   /**
-     * Loads the linkset into existing data
-     * @param file Could be either a File or a directory
-     * @param arg "load" to add to the load data, "test" to add to the test data
-     *     anything else just validates
-     * @throws BridgeDbSqlException
-     * @throws IDMapperException
-     * @throws FileNotFoundException
-     */
-    private static void parse(File file, StoreType storeType, ValidationType validationType, boolean load) 
+    public static String validityReport(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
+    		throws IDMapperException {
+    	if (!file.exists()) {
+    		Reporter.report("File not found: " + file.getAbsolutePath());
+    		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
+    	} else if (file.isDirectory()){
+            StringBuilder builder = new StringBuilder();
+            File[] children = file.listFiles();
+            for (File child:children){
+                builder.append("Report for ");
+                builder.append(child.getAbsoluteFile());
+                builder.append("\n");
+                builder.append(validityReport(child, storeType, validationType, includeWarnings));
+                builder.append("\n");
+            }
+            return builder.toString();
+        } else { 
+            LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
+            return loader.validityReport(includeWarnings);
+        }
+    }
+
+    public static String validityReport(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
+            throws IDMapperException {
+        File file = new File(fileName);
+        return validityReport(file, storeType, type, includeWarnings);
+    }
+    
+    public static void load(File file, StoreType storeType, ValidationType validationType) 
+    		throws IDMapperException {
+        if (storeType == null){
+            throw new IDMapperException ("Can not load if no storeType set");
+        }
+    	if (!file.exists()) {
+    		Reporter.report("File not found: " + file.getAbsolutePath());
+    		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
+    	} else if (file.isDirectory()){
+            File[] children = file.listFiles();
+            for (File child:children){
+                load(child, storeType, validationType);
+            }
+        } else { 
+            LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
+            loader.validate();
+            loader.Load();
+        }
+    }
+
+    public static void load(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
+        File file = new File(fileName);
+        load(file, storeType, type);
+    }
+    
+    public static void validate(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
     	if (!file.exists()) {
     		Reporter.report("File not found: " + file.getAbsolutePath());
@@ -297,16 +343,19 @@ public class LinksetLoader {
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
             for (File child:children){
-                parse(child, storeType, validationType, load);
+                load(child, storeType, validationType);
             }
         } else { 
             LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
-            if (load){
-                loader.Load();
-            }
+            loader.validate();
         }
     }
 
+    public static void validate(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
+        File file = new File(fileName);
+        validate(file, storeType, type);
+    }
+    
     public static void clearExistingData (StoreType storeType) 
     		throws IDMapperException  {
         RdfFactory.clear(storeType);
@@ -314,24 +363,6 @@ public class LinksetLoader {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
         Reporter.report(storeType + " SQL cleared");                
-    }
-
-    /**
-     * Converts the fileName into a file and then calls parse
-     * Should only be called by main() or tests
-     *
-     * @param fileName name of a file or directory
-     * @param arg "load" to add to the load data, "test" to add to the test data
-     *     anything else just validates
-     * @throws IDMapperException
-     * @throws FileNotFoundException
-     */
-    public static void parse (String fileName, StoreType storeType, ValidationType type, boolean load) throws IDMapperException {
-        if (load && storeType == null){
-            throw new IDMapperException ("Can not load if no storeType set");
-        }
-        File file = new File(fileName);
-        parse(file, storeType, type, load);
     }
 
     /**
@@ -390,7 +421,12 @@ public class LinksetLoader {
         String loadString = System.getProperty(LOAD, "true");
         boolean load = Boolean.valueOf(loadString);
         
-        parse (fileName, storeType, validationType, load);
+        if (load){
+            load(fileName, storeType, validationType);
+            Reporter.report("Load successful");
+        } else {
+            Reporter.report (validityReport(fileName, storeType, validationType, true));
+        }       
     }
 
     public static void usage(String issue) {

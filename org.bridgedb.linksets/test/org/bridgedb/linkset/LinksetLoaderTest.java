@@ -57,9 +57,9 @@ public class LinksetLoaderTest {
         
         LinksetLoader.clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType, LOAD_DATA);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType, LOAD_DATA);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType, LOAD_DATA);
+        LinksetLoader.load("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType);
+        LinksetLoader.load("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType);
+        LinksetLoader.load("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType);
  	}
 
     @Test
@@ -95,7 +95,7 @@ public class LinksetLoaderTest {
     
     @Test(expected=IDMapperLinksetException.class)
     public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
-    	LinksetLoader.parse("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, DO_NOT_LOAD_DATA);
+    	LinksetLoader.validityReport("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, false);
     }
 
 }
