@@ -456,10 +456,13 @@ public class RdfFactory {
             properties.load(configs);
             properties.put(CONFIG_FILE_PATH_PROPERTY, propertyFile.getAbsolutePath());
             String baseURI = properties.getProperty(BASE_URI_PROPERTY).trim();
-            if (!(baseURI.endsWith("/") || baseURI.endsWith("#"))){
+            if (baseURI.contains("#")){
                 throw new IDMapperLinksetException("baseURI " + baseURI 
-                        + " does not end with expected seperator ('/' or '#') It was found in" 
+                        + " contains a ('#') which throws of the webservice. It was found in" 
                         + propertyFile.getAbsolutePath() + " using  " + BASE_URI_PROPERTY);
+            }
+            if (!(baseURI.endsWith("/"))){
+                properties.put(BASE_URI_PROPERTY, baseURI + "/");
             }
         } catch (IOException ex) {
             throw new IDMapperLinksetException ("Exception reading " + propertyFile.getAbsolutePath());
