@@ -91,9 +91,6 @@ public class LinksetLoader {
         this.storeType = storeType;
         statements = new LinksetStatementReaderAndImporter(file, storeType);      
         if (validationType.isLinkset()){
-            for (Statement st:statements.getVoidStatements()){
-                System.out.println(st);
-            }
             information = new LinksetVoidInformation(statements, validationType);        
         } else {
             MetaDataSpecification specification = 
@@ -268,9 +265,7 @@ public class LinksetLoader {
         if (oldIDString == null){
             oldId = 0;
         } else {
-            System.out.println(oldIDString);
             oldId = Integer.parseInt(oldIDString);
-            System.out.println(oldId);
         }
         int id = oldId + 1;
         mapper.putProperty(LAST_USED_VOID_ID, ""+id);

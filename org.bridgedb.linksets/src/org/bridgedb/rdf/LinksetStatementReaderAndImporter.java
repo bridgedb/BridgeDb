@@ -78,7 +78,6 @@ public class LinksetStatementReaderAndImporter implements LinksetStatements{
         for (Resource resource:toLoadURIs){
             if (!loadedURIs.contains(resource)){
                 List<Statement> newStatements = reader.getStatementsForResource(resource);  
-                System.out.println(newStatements.size() + "" + resource);
                 newStatements.addAll(reader.getSuperSet(resource));
                 voidStatements.addAll(newStatements);
                 extraLoadURIs.addAll(getToLoadResources(newStatements));
