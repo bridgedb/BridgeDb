@@ -13,7 +13,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  *
@@ -78,5 +80,21 @@ public class LinksetStatementReaderTest {
             assertTrue(statement.getSubject().stringValue().startsWith(newBaseURI));
             assertFalse(statement.getObject().stringValue().startsWith(StatementReader.DEFAULT_BASE_URI));
         }
+    }
+    
+    @Test
+    public void testResetBaseURIForResource1() throws MetaDataException {
+        Reporter.report("ResetBaseURIForResource1");
+        Resource old = new URIImpl (StatementReader.DEFAULT_BASE_URI + "1234");
+        Resource result = LinksetStatementReader.resetBaseURI("http://example.com/", old);
+        assertEquals ("http://example.com/1234", result.stringValue());     
+    }
+
+    @Test
+    public void testResetBaseURIForResource2() throws MetaDataException {
+        Reporter.report("ResetBaseURIForResource2");
+        Resource old = new URIImpl (StatementReader.DEFAULT_BASE_URI + "#1234");
+        Resource result = LinksetStatementReader.resetBaseURI("http://example.org/", old);
+        assertEquals ("http://example.org/1234", result.stringValue());     
     }
 }

@@ -92,30 +92,41 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
         statements = resetBaseURI(newBaseURI, statements);
     }
 
-   public static Set<Statement> resetBaseURI(String newBaseURI, Set<Statement> oldStatements) {
+    private static URI resetBaseURI(String newBaseURI, URI oldURI){
+        String oldName = oldURI.stringValue();
+        if (oldName.startsWith(DEFAULT_BASE_URI)){
+            if (oldName.startsWith(DEFAULT_BASE_URI + "#")){        
+                return new URIImpl(oldName.replace(DEFAULT_BASE_URI+"#", newBaseURI));
+            } else {
+                return new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));                
+            }
+        }
+        return oldURI;
+    }
+    
+    private static Value resetBaseURI(String newBaseURI, Value oldValue){
+        if (oldValue instanceof URI){
+            return resetBaseURI(newBaseURI, (URI)oldValue);
+        } else {
+            return oldValue;
+        }
+    }
+    
+    public static Resource resetBaseURI(String newBaseURI, Resource oldValue){
+        if (oldValue instanceof URI){
+            return resetBaseURI(newBaseURI, (URI)oldValue);
+        } else {
+            return oldValue;
+        }
+    }
+
+    public static Set<Statement> resetBaseURI(String newBaseURI, Set<Statement> oldStatements) {
         Set<Statement> newstatements = new HashSet<Statement>();
         for (Statement statement:oldStatements){
-            String oldName = statement.getSubject().stringValue();
-            if (oldName.startsWith(DEFAULT_BASE_URI)){
-                String newName = oldName.replace(DEFAULT_BASE_URI, newBaseURI);
-                URI newResource = new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));
-                statement = new StatementImpl(newResource, statement.getPredicate(), statement.getObject());
-            }
-            oldName = statement.getPredicate().stringValue();
-            if (oldName.startsWith(DEFAULT_BASE_URI)){
-                String newName = oldName.replace(DEFAULT_BASE_URI, newBaseURI);
-                URI newPredicate = new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));
-                statement = new StatementImpl(statement.getSubject(), newPredicate, statement.getObject());
-            }
-            Value object = statement.getObject();
-            if (object instanceof URI){
-                oldName = object.stringValue();
-                if (oldName.startsWith(DEFAULT_BASE_URI)){
-                    String newName = oldName.replace(DEFAULT_BASE_URI, newBaseURI);
-                    URI newObject = new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));
-                    statement = new StatementImpl(statement.getSubject(), statement.getPredicate(), newObject);
-                }
-            }        
+            Resource newResource = resetBaseURI(newBaseURI, statement.getSubject());
+            URI newPredicate = resetBaseURI(newBaseURI, statement.getPredicate());
+            Value newObject = resetBaseURI(newBaseURI, statement.getObject());
+            statement = new StatementImpl(newResource, newPredicate, newObject);
             newstatements.add(statement);
         }
         return newstatements;

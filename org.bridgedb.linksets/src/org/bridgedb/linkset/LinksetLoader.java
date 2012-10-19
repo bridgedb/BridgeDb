@@ -89,7 +89,7 @@ public class LinksetLoader {
         accessedFrom = new URIImpl(file.toURI().toString());
         this.validationType = validationType;
         this.storeType = storeType;
-        statements = new LinksetStatementReaderAndImporter(file, storeType);      
+        statements = new LinksetStatementReaderAndImporter(file, storeType);     
         if (validationType.isLinkset()){
             information = new LinksetVoidInformation(statements, validationType);        
         } else {
@@ -123,15 +123,15 @@ public class LinksetLoader {
         }
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         URLListener urlListener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
-        getLinksetContexts(information, urlListener);
-        statements.resetBaseURI(linksetContext+"/");
+        getLinksetContexts(urlListener);
+        resetBaseURI();
         loadVoidHeader();
         loadSQL(statements, urlListener);
         urlListener.closeInput();    
         Reporter.report("Load finished for " + accessedFrom);
     }
     
-    private void getLinksetContexts(LinksetVoidInformation information, URLListener urlListener) throws IDMapperException {
+    private void getLinksetContexts(URLListener urlListener) throws IDMapperException {
         String subjectUriSpace = information.getSubjectUriSpace();
         String targetUriSpace = information.getTargetUriSpace();
         String predicate = information.getPredicate();
@@ -155,6 +155,14 @@ public class LinksetLoader {
             return new URIImpl(resource.toString()+"_Symmetric");
         }
         return resource;
+    }
+    
+    private void resetBaseURI() {
+        statements.resetBaseURI(linksetContext+"/");
+        linksetResource = LinksetStatementReader.resetBaseURI(linksetContext+"/", linksetResource);
+        if (symmetric) {
+            inverseResource = invertResource(linksetResource);
+        }
     }
     
     private void loadVoidHeader() 
@@ -424,5 +432,6 @@ public class LinksetLoader {
         Reporter.report(issue);
         System.exit(1);
     }
+
 
 }

@@ -47,7 +47,6 @@ public class SetupLoaderWithTestData {
                 ValidationType.DATASETVOID, LOAD_DATA);
         LinksetLoader.parse("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.LOAD, 
                 ValidationType.DATASETVOID, LOAD_DATA);
-        System.out.println(new RdfReader(StoreType.LIVE).getVoidRDF(1));
 	}
 
 }
