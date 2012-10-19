@@ -24,6 +24,8 @@ public interface MetaData {
 
     String validityReport(boolean includeWarnings);
     
+    void validate() throws MetaDataException;
+    
     boolean allStatementsUsed();
     
     String unusedStatements();
@@ -40,4 +42,5 @@ public interface MetaData {
     Set<ResourceMetaData> getResoucresByPredicate(URI predicate);
             
     Set<Statement> getRDF();
+    
 }

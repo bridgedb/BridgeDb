@@ -55,7 +55,7 @@ public class LinksetVoidInformation implements MetaData {
         ResourceMetaData target = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.OBJECTSTARGET);
         targetUriSpace = extractSingleStringByPredicate(target, VoidConstants.URI_SPACE);
         validateLinks(reader.getLinkStatements());
-        validate();
+//        validate();
      }
     
     private ResourceMetaData findLinkSet(){
@@ -188,7 +188,8 @@ public class LinksetVoidInformation implements MetaData {
         return true;
     }
    
-    private void validate() throws MetaDataException {
+    @Override
+    public void validate() throws MetaDataException {
         if (!hasRequiredValues() || !hasCorrectTypes()){
             throw new MetaDataException(validityReport(NO_WARNINGS));
         }

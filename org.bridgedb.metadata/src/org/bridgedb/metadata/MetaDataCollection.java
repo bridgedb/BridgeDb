@@ -290,15 +290,6 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
      
-    public void validate() throws MetaDataException {
-        String report = this.validityReport(false);
-        if (report.equals(CLEAR_REPORT)){
-            //OK 
-        } else {
-            throw new MetaDataException(report);
-        }
-    }
-
     ResourceMetaData getResourceByID(Resource id) {
         return resourcesMap.get(id);
     }
