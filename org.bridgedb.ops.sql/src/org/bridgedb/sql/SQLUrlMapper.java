@@ -39,6 +39,8 @@ import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.Reporter;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  * Implements the URLMapper and URLListener interfaces using SQL.
@@ -50,7 +52,6 @@ import org.bridgedb.utils.Reporter;
 public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener {
 
     private static final int URI_SPACE_LENGTH = 100;
-    private String profileQuery = "SELECT justificationURI FROM profileJustifications WHERE profileId = ";
 
     /**
      * Creates a new URLMapper including BridgeDB implementation based on a connection to the SQL Database.
@@ -160,8 +161,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @param target URISpaces
      * @throws BridgeDbSqlException profile does not exist
      */
-    private void finishMappingQuery(StringBuilder query, String sourceURL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
-        //ystem.out.println("mapping: " + sourceURL);
+    private void finishMappingQuery(StringBuilder query, String sourceURL, String profileURL, 
+    		String... targetURISpaces) throws BridgeDbSqlException {
+        //System.out.println("mapping: " + sourceURL);
         String id = getId(sourceURL);
         String uriSpace = getUriSpace(sourceURL);
         query.append("FROM mapping, mappingSet, url as source, url as target ");
@@ -185,7 +187,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             }
             query.append(")");
         }
-         if (!profileURL.equals("0")) addProfileClause(query, profileURL);
+        addProfileClause(query, profileURL);
     }
 
     /**
@@ -197,18 +199,32 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @throws BridgeDbSqlException if the profile does not exist
      */
     private void addProfileClause(StringBuilder query, String profileURL) throws BridgeDbSqlException {
-    	try {
-    		Statement statement = this.createStatement();    		
-			ResultSet rs = statement.executeQuery(profileQuery + "'" + profileURL + "'");
-			if (!rs.next()) throw new BridgeDbSqlException("Unknown profile identifier " + profileURL);
-			query.append(" AND mappingSet.justification IN (");
-			do {
-				query.append("'").append(rs.getString("justificationURI")).append("'");
-				if (!rs.isLast()) query.append(", ");
-			} while (rs.next());
-			query.append(")");
-		} catch (SQLException ex) {
-			throw new BridgeDbSqlException("Error retrieving profile justifications for profileId " + profileURL, ex);
+        String profileJustificationQuery = "SELECT justificationURI FROM profileJustifications WHERE profileId = ";
+        int profileID = extractIDFromURI(profileURL);
+        if (profileID != 0) {
+        	try {
+        		Statement statement = this.createStatement();    		
+        		ResultSet rs = statement.executeQuery(profileJustificationQuery + "'" + profileID + "'");
+        		if (!rs.next()) throw new BridgeDbSqlException("Unknown profile identifier " + profileURL);
+        		query.append(" AND mappingSet.justification IN (");
+        		do {
+        			query.append("'").append(rs.getString("justificationURI")).append("'");
+        			if (!rs.isLast()) query.append(", ");
+        		} while (rs.next());
+        		query.append(")");
+        	} catch (SQLException ex) {
+        		throw new BridgeDbSqlException("Error retrieving profile justifications for profileId " + profileURL, ex);
+        	}
+        }
+	}
+
+	private int extractIDFromURI(String profileURL) throws BridgeDbSqlException {
+		try {
+			URI profileURI = new URIImpl(profileURL);
+			int profileID = Integer.parseInt(profileURI.getLocalName());
+			return profileID;
+		} catch (IllegalArgumentException e) {
+			throw new BridgeDbSqlException("Invalid URI form for a profileURL: " + profileURL);
 		}
 	}
 

@@ -80,6 +80,11 @@
             <version>${hamcrest.version}</version>
 			<scope>test</scope>
         </dependency>    
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.linksets</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
   
 </project>

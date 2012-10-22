@@ -112,10 +112,10 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     	sb.append("<p><select name=\"profileURL\">");
     	//TODO: Read profiles from database
     	sb.append("<option value=\"");
-//    	sb.append(RdfWrapper.getBaseURI());
+    	sb.append(RdfWrapper.getBaseURI());
     	sb.append("0\">Default</option>");
     	sb.append("<option value=\"");
-//    	sb.append(RdfWrapper.getBaseURI());
+    	sb.append(RdfWrapper.getBaseURI());
     	sb.append("1\">ChEBI has parts</option>");
     	sb.append("</select>");
     	sb.append("<p><input type=\"submit\" value=\"Submit\"/></p>");

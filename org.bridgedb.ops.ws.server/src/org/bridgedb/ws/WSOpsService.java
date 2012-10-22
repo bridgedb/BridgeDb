@@ -34,6 +34,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
@@ -82,8 +83,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
         if (URL == null) throw new IDMapperException("URL parameter missing.");        
         if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");        
-        if (profileURL == null || profileURL.isEmpty())  profileURL = //RdfWrapper.getBaseURI() + 
-        		"0";
+        if (profileURL == null || profileURL.isEmpty())  profileURL = RdfWrapper.getBaseURI() + "0";
         if (targetURISpace == null) {
         	targetURISpace = new ArrayList<String>();
         }
@@ -92,7 +92,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             targetURISpaces[i] = targetURISpace.get(i);
         }
         Set<URLMapping> urlMappings = urlMapper.mapURLFull(URL, profileURL, targetURISpaces);
-        ArrayList<URLMappingBean> results = new ArrayList<URLMappingBean>(); 
+        List<URLMappingBean> results = new ArrayList<URLMappingBean>(); 
         for (URLMapping urlMapping:urlMappings){
             results.add(URLMappingBeanFactory.asBean(urlMapping));
         }

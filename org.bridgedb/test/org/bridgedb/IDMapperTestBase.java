@@ -25,6 +25,9 @@ import org.junit.BeforeClass;
  * @author Christian
  */
 public abstract class IDMapperTestBase {
+	
+	//FIXME: The URI_BASE should really be read from the RdfConfig file, but that module is built after this one!
+	protected static final String BASE_URI = "http://localhost:8080/OPS-IMS/";
         
     //DataSource that MUST be supported.
     protected static DataSource DataSource1;

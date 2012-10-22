@@ -19,6 +19,7 @@ import org.junit.Test;
 
 public class SQLUrlMapperTest extends URLListenerTest {
 		
+	private static final String BASE_URI = "http://localhost:8080/OPS-IMS/";
 	private static SQLAccess sqlAccess;
 	private static SQLUrlMapper sqlUrlMapper;
 
@@ -55,6 +56,11 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		assertEquals(2, sqlUrlMapper.getOverallStatistics().getNumberOfProfiles());
 	}
 
+	@Test(expected=BridgeDbSqlException.class)
+	public void testInvalidProfile_notaURI() throws BridgeDbSqlException {
+		sqlUrlMapper.mapURL(map1URL1, "1");
+	}
+	
 	@Test
 	public void testGetMappingNoProfile() throws BridgeDbSqlException {
 		Set<String> expectedURL = new HashSet<String>();
@@ -62,7 +68,7 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		expectedURL.add("http://www.example.com/123");
 		expectedURL.add("http://www.example.org#123");
 		
-		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, "0");
+		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, BASE_URI + "0");
 		assertEquals(3, mapURL.size());
 		assertEquals(expectedURL, mapURL);
 	}
@@ -79,7 +85,7 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		expectedURL.add("http://www.foo.com/123");
 		expectedURL.add("http://www.example.com/123");
 		
-		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, "1");
+		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, BASE_URI + "1");
 		assertEquals(2, mapURL.size());
 		assertEquals(expectedURL, mapURL);
 	}
@@ -91,7 +97,7 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		expectedURL.add("http://www.example.com/456");
 		expectedURL.add("http://www.example.org#456");
 		
-		Set<String> mapURL = sqlUrlMapper.mapURL(map2URL1, "2");
+		Set<String> mapURL = sqlUrlMapper.mapURL(map2URL1, BASE_URI + "2");
 		assertEquals(3, mapURL.size());
 		assertEquals(expectedURL, mapURL);
 	}

@@ -68,6 +68,11 @@
             scope>system</scope>
             <systemPath>${project.basedir}/lib/virtjdbc4.jar</systemPath
         </dependency> -->
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-model</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
 	</dependencies>
     <pluginRepositories>
         <pluginRepository> 
