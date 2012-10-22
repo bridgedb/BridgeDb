@@ -397,7 +397,11 @@ public class RdfWrapper {
             return ex.getMessage();
         }
         if (result != null) return result;
-        return "http://openphacts.cs.man.ac.uk:9090/OPS-IMS";        
+        return "http://openphacts.cs.man.ac.uk:9090/OPS-IMS/";        
+    }
+    
+    public static String getProfileURI(int profileID) {
+    	return getBaseURI() + "profile/" + profileID;
     }
     
     static List<String> getContextNames(RdfStoreType rdfStoreType) throws IDMapperLinksetException {
