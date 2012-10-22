@@ -28,8 +28,10 @@ import java.util.Map;
 import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
@@ -37,6 +39,8 @@ import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
+import org.bridgedb.ws.bean.ProfileBean;
+import org.bridgedb.ws.bean.ProfileBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
@@ -152,4 +156,14 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
         return results;
     }
 
+	@Override
+	public List<ProfileInfo> getProfiles() throws BridgeDbSqlException {
+		List<ProfileBean> beans = opsService.getProfiles();
+		List<ProfileInfo> results = new ArrayList<ProfileInfo>();
+		for (ProfileBean bean:beans) {
+			results.add(ProfileBeanFactory.asProfileInfo(bean));
+		}
+		return results;
+	}
+    
 }

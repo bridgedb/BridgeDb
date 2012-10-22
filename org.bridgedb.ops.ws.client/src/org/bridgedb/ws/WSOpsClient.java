@@ -28,6 +28,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
@@ -157,6 +158,14 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
                 .get(new GenericType<DataSourceUriSpacesBean>() {});
          return result;
     }
-        
 
+	@Override
+	public List<ProfileBean> getProfiles() {
+		List<ProfileBean> result = 
+				webResource.path("profile")
+				.accept(MediaType.APPLICATION_XML_TYPE)
+				.get(new GenericType<List<ProfileBean>>() {});
+		return result;
+	}
+        
 }

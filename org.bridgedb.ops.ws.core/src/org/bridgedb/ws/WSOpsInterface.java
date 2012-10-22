@@ -23,6 +23,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
@@ -52,4 +53,7 @@ public interface WSOpsInterface extends WSCoreInterface{
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException;
 
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
+    
+    public List<ProfileBean> getProfiles();
+    
 }

@@ -42,14 +42,17 @@ import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.RdfReader;
 import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.ws.WSOpsService;
+import org.bridgedb.ws.bean.ProfileBean;
 
 /**
  *
@@ -102,27 +105,36 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     		return sb.toString();
     }
     
-    private final String uriMappingForm() {
+    private final String uriMappingForm() throws BridgeDbSqlException {
     	StringBuilder sb = new StringBuilder();
     	sb.append("<form method=\"get\" action=\"/OPS-IMS/mapURL\">");
     	sb.append("<fieldset>");
     	sb.append("<legend>URL Mapper</legend>");
     	sb.append("<p><label for=\"URL\">Input URI</label>");
     	sb.append("<input type=\"text\" id=\"URL\" name=\"URL\" style=\"width:80%\"/></p>");
-    	sb.append("<p><select name=\"profileURL\">");
-    	//TODO: Read profiles from database
-    	sb.append("<option value=\"");
-    	sb.append(RdfWrapper.getProfileURI(0));
-    	sb.append("\">Default</option>");
-    	sb.append("<option value=\"");
-    	sb.append(RdfWrapper.getProfileURI(1));
-    	sb.append("\">ChEBI has parts</option>");
-    	sb.append("</select>");
+    	sb.append(generateProfileSelector());
     	sb.append("<p><input type=\"submit\" value=\"Submit\"/></p>");
     	sb.append("<p>Note: If the new page does not open click on the address bar and press enter</p>");
     	sb.append("</fieldset></form>");
     	return sb.toString();
     }
+
+	private String generateProfileSelector() throws BridgeDbSqlException {
+		List<ProfileInfo> profiles = urlMapper.getProfiles();
+		StringBuilder sb = new StringBuilder("<p><select name=\"profileURL\">");
+	   	sb.append("<option value=\"");
+    	sb.append(RdfWrapper.getProfileURI(0));
+    	sb.append("\">Default profile</option>");
+		for (ProfileInfo profile : profiles) {
+			sb.append("<option value=\"");
+			sb.append(profile.getUri());
+			sb.append("\">");
+			sb.append(profile.getName());
+			sb.append("</option>");
+		}
+    	sb.append("</select>");
+    	return sb.toString();
+	}
     
     @GET
     @Produces(MediaType.TEXT_HTML)

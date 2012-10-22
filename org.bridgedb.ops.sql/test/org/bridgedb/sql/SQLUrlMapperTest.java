@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLListenerTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,6 +54,12 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		validateResult("SELECT COUNT(*) FROM profile", 2);
 		validateResult("SELECT COUNT(*) FROM profileJustifications", 3);
 		assertEquals(2, sqlUrlMapper.getOverallStatistics().getNumberOfProfiles());
+	}
+	
+	@Test
+	public void testGetProfileInfo() throws BridgeDbSqlException {
+		List<ProfileInfo> profiles = sqlUrlMapper.getProfiles();
+		assertEquals(2, profiles.size());
 	}
 
 	@Test(expected=BridgeDbSqlException.class)

@@ -26,8 +26,10 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 
 /**
  * Base interface for all URL mapping methods.
@@ -172,8 +174,8 @@ public interface URLMapper extends IDMapper{
     /**
      * Obtains some statistics for each MappingSet in the data.
      * <p>
-     * @See MappingSetInfo for details of exactky what is returned
-     * @return Info for each Mapping Set
+     * @See MappingSetInfo for details of exactly what is returned
+     * @return Information for each Mapping Set
      * @throws IDMapperException 
      */
     public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
@@ -187,5 +189,13 @@ public interface URLMapper extends IDMapper{
      * @throws IDMapperException 
      */
     public Set<String> getUriSpaces(String dataSource) throws IDMapperException;
+
+	/**
+	 * Obtains the Set of Profiles currently registered.
+	 * @See {@link ProfileInfo} for details of exactly what is returned
+	 * @return Information for each Profile
+	 * @throws BridgeDbSqlException 
+	 */
+	public List<ProfileInfo> getProfiles() throws BridgeDbSqlException;
 
 }
