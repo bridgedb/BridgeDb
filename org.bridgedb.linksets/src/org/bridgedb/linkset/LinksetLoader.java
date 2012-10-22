@@ -306,6 +306,9 @@ public class LinksetLoader {
 
     public static void clearExistingData (StoreType storeType) 
     		throws IDMapperException  {
+        if (storeType == null){
+            throw new IDMapperException ("unable to clear mapping of unspecified storeType");
+        }
         RdfFactory.clear(storeType);
         Reporter.report(storeType + " RDF cleared");
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
