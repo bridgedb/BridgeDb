@@ -96,8 +96,8 @@ public class RdfFactory {
             File testLockDir = new File(dataDir, "lock");
             if (!testLockDir.canWrite()){
                 try {
-                    String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY).trim();
-                    String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY).trim();
+                    String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
+                    String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
                     throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
                             testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
                 } catch (IDMapperLinksetException ex1) {
@@ -176,8 +176,8 @@ public class RdfFactory {
             repository = getRepository (storeType, existing);
         } catch (IDMapperLinksetException ex) {
             try {
-                String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY).trim();
-                String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY).trim();
+                String path = getProperties().getProperty(CONFIG_FILE_PATH_PROPERTY);
+                String source = getProperties().getProperty(CONFIG_FILE_PATH_SOURCE_PROPERTY);
                 throw new RDFHandlerException("Setup error " + ex + " Please check " + path + " set by " + source, ex);
             } catch (IDMapperLinksetException ex1) {
                 throw new RDFHandlerException("Setup error " + ex + " unable to dettermine source", ex);
@@ -305,6 +305,7 @@ public class RdfFactory {
      * @throws IOException 
      */
     private static void load() throws IDMapperLinksetException{
+        System.out.println("here");
         if (loadByEnviromentVariable()) return;
         if (loadByCatalinaHomeConfigs()) return;
         if (loadDirectly()) return;
