@@ -19,12 +19,6 @@
 package org.bridgedb.linkset.transative;
 
 import java.io.FileNotFoundException;
-import org.bridgedb.linkset.IDMapperLinksetException;
-import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.sql.SQLUrlMapper;
-import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.TestSqlFactory;
 import org.openrdf.OpenRDFException;
 import org.bridgedb.IDMapperException;
@@ -33,9 +27,6 @@ import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -57,7 +48,7 @@ public class TransativeCreatorTest {
     private static boolean DO_NOT_LOAD = false;
     
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         LinksetLoader.clearExistingData( StoreType.TEST);        

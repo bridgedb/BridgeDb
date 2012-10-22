@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfWrapper;

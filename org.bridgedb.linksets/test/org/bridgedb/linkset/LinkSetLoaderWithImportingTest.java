@@ -18,7 +18,6 @@
 //
 package org.bridgedb.linkset;
 
-import org.bridgedb.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
@@ -33,11 +32,9 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
 import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
 
 /**
  * @author Christian
@@ -48,7 +45,7 @@ public class LinkSetLoaderWithImportingTest {
     
     //Unsure if this is still needed or even desirable!
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         

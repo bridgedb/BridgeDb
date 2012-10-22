@@ -24,7 +24,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.linkset.IDMapperLinksetException;
 import org.bridgedb.metadata.LinksetVoidInformation;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.constants.PavConstants;

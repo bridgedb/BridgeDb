@@ -18,6 +18,7 @@
 //
 package org.bridgedb.linkset;
 
+import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class LinksetLoaderTest {
     
     //Unsure if this is still needed or even desirable!
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, BridgeDbSqlException, IDMapperLinksetException, FileNotFoundException, MetaDataException  {
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         

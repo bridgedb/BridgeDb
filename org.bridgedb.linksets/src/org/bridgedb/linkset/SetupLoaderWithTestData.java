@@ -17,11 +17,8 @@
 // limitations under the License.
 //
 package org.bridgedb.linkset;
-import java.io.FileNotFoundException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
-import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 
@@ -32,7 +29,7 @@ public class SetupLoaderWithTestData {
         
    private static final boolean LOAD_DATA = true;
    
-   public static void main(String[] args) throws BridgeDbSqlException, IDMapperException, IDMapperLinksetException, FileNotFoundException, MetaDataException {
+   public static void main(String[] args) throws IDMapperException {
         Reporter.report("sample2to1.ttl");
         //String[] args1 = {, "new"};
         LinksetLoader.clearExistingData(StoreType.LOAD);
