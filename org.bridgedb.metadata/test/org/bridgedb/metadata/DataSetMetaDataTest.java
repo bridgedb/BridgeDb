@@ -12,6 +12,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.openrdf.model.Statement;
+import org.openrdf.model.impl.IntegerLiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
 
@@ -80,13 +81,6 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         assertFalse(metaData.hasCorrectTypes());
     }
  
-    @Test
-    public void testValidityReport() throws MetaDataException{
-        Reporter.report("ValidityReport");
-        MetaDataCollection metaData = new MetaDataCollection(loadMayDataSet1(), dataSetRegistry);
-        assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(INCLUDE_WARNINGS));
-    }
-
     @Test
     public void testMustValidityReport() throws MetaDataException{
         Reporter.report("MustValidityReport");

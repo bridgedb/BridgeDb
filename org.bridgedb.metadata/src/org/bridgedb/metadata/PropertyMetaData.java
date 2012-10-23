@@ -13,6 +13,7 @@ import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.RdfsConstants;
 import org.bridgedb.metadata.constants.XsdConstants;
 import org.bridgedb.metadata.type.*;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -32,6 +33,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     
     public PropertyMetaData(URI predicate, String type, RequirementLevel requirementLevel, String objectClass) throws MetaDataException{
         super(predicate.getLocalName(), type, requirementLevel);
+        System.out.println(predicate + " " + requirementLevel);
         this.predicate = predicate;
         metaDataType = getMetaDataType(objectClass);
     }
@@ -197,7 +199,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         if (requirementLevel == RequirementLevel.UNSPECIFIED){
             appendUnspecifiedReport(builder, includeWarnings, tabLevel);            
         } else if (!hasCorrectTypes()){
-            appendIncorrectTypeReport(builder, tabLevel);
+            appendIncorrectTypeReport(builder, tabLevel, includeWarnings);
         } else if (checkAllpresent && values.isEmpty()){
             appendEmptyReport(builder, tabLevel, includeWarnings);
         } else {
@@ -229,9 +231,14 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }
     }
     
-    private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel) {
+    private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel, boolean includeWarnings) {
+        if (requirementLevel == RequirementLevel.IGNORE && !includeWarnings) { return; }
         tab(builder, tabLevel);
-        builder.append("ERROR: Incorrect type for ");
+        if (requirementLevel == RequirementLevel.IGNORE){
+            builder.append("WARNING: Incorrect type for ");            
+        } else {
+            builder.append("ERROR: Incorrect type for ");
+        }
         appendLabel(builder, ":");
         for (Value value: values){
             if (!metaDataType.correctType(value)){
@@ -242,13 +249,31 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
                 builder.append(" Found ");
                 builder.append(value);
                 builder.append(" Which is a  ");
-                builder.append(value.getClass());
+                addClass(builder,value);
             }
         }
         newLine(builder);
         addDocumentationLink(builder, tabLevel);
     }
     
+    private void addClass(StringBuilder builder, Value value) {
+        if (value instanceof URI){
+            builder.append("URI.");
+        } else if (value instanceof Literal){
+            Literal literal = (Literal)value;
+            URI type = literal.getDatatype();
+            if (type != null){
+                builder.append(type.getLocalName());
+            } else {
+                builder.append("Literal.");
+            }
+        } else if (value instanceof Literal){
+            builder.append("Literal");
+        } else {
+            builder.append(value.getClass());
+        }
+    }
+
     private void appendUnspecifiedReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (includeWarnings){
             tab(builder, tabLevel);
@@ -329,6 +354,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     public Set<Statement> getRDF() {
         return rawRDF;
     }
+
 
 
 }
