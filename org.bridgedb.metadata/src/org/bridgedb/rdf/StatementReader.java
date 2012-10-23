@@ -156,7 +156,8 @@ public class StatementReader extends RDFHandlerBase{
         FileFormat fileFormat = reg.getFileFormatForMIMEType(mimeType);
         if (fileFormat == null || !(fileFormat instanceof RDFFormat)){
             //added bridgeDB/OPS specific extension here if required.           
-            throw new MetaDataException("OpenRDF does not know the RDF Format for " + mimeType);
+            throw new MetaDataException("OpenRDF does not know the RDF Format for " + mimeType
+                    + ". Legal values are " + supportedMineTypes());
         } else {
             return (RDFFormat)fileFormat;
         }

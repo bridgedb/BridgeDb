@@ -52,7 +52,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     @Test
     public void testValidateReport() throws MetaDataException{
         Reporter.report("LinkSet Report");
-        MetaDataCollection metaData = new MetaDataCollection(loadMayLinkSet(), linksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection(loadMustLinkSet(), linksetSetRegistry);
         String report = metaData.validityReport(NO_WARNINGS);
         assertEquals(AppendBase.CLEAR_REPORT, report);
         report = metaData.validityReport(INCLUDE_WARNINGS);

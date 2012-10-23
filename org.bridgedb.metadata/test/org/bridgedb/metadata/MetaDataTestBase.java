@@ -70,7 +70,11 @@ public class MetaDataTestBase extends TestUtils{
     static final URI LINK_PERSON = new URIImpl ("http://www.example.com/test/LinkPerson");
     static final URI JUSTIFICATION = new URIImpl ("http://www.example.com/test/Justification");
     static final URI BIWEEKLY = new URIImpl ("http://purl.org/cld/freq/biennial");
-      
+    static final URI LINK1_SUBJECT = new URIImpl(NAME_SPACE_STRING + "Foo1");
+    static final URI LINK1_OBJECT = new URIImpl(D2_NAME_SPACE_STRING + "1Bar");
+    static final URI LINK2_SUBJECT = new URIImpl(NAME_SPACE_STRING + "Foo2");
+    static final URI LINK2_OBJECT = new URIImpl(D2_NAME_SPACE_STRING + "2Bar");
+    
     Statement d1IdStatement = new StatementImpl(D1_ID, RdfConstants.TYPE_URI, VoidConstants.DATASET); 
     Statement d1TitleStatement = new StatementImpl(D1_ID, DctermsConstants.TITLE, TITLE);
     Statement d1DescriptionStatement = new StatementImpl(D1_ID, DctermsConstants.DESCRIPTION, DESCRIPTION_VALUE);
@@ -139,6 +143,9 @@ public class MetaDataTestBase extends TestUtils{
     Statement personIdStatement = new StatementImpl(PERSON, RdfConstants.TYPE_URI, new URIImpl("http://www.example.com/Person"));
     Statement personNameStatement = new StatementImpl(PERSON, new URIImpl("http://www.example.org/hasName"), 
             new LiteralImpl("Joe Blogs"));
+    
+    Statement link1 = new StatementImpl(LINK1_SUBJECT, SkosConstants.CLOSE_MATCH, LINK1_OBJECT);
+    Statement link2 = new StatementImpl(LINK2_SUBJECT, SkosConstants.CLOSE_MATCH, LINK2_OBJECT);
     
     static MetaDataSpecification dataSetRegistry;
     static MetaDataSpecification linksetSetRegistry;
@@ -233,7 +240,7 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadMayDataSet1(){
+    public Set<Statement> loadMayDataSet1(){
         Set<Statement> data = loadShouldDataSet1();
         addStatement(data, d1VersionStatement);        
         addStatement(data, d1SourceAccessedByStatement);
@@ -346,6 +353,8 @@ public class MetaDataTestBase extends TestUtils{
      */
     Set<Statement> loadShouldLinkSet(){
         Set<Statement> data = loadMustLinkSet();
+        data.addAll(loadShouldDataSet1());
+        data.addAll(loadShouldDataSet2());
         addStatement(data, linkNumberStatement);
         return data;
     }
@@ -354,10 +363,20 @@ public class MetaDataTestBase extends TestUtils{
      * Intentionally not in the constructor so tests can change or remove a statement before loading.
      * @return 
      */
-    Set<Statement> loadMayLinkSet(){
+    public Set<Statement> loadMayLinkSet(){
         Set<Statement> data = loadShouldLinkSet();
         addStatement(data, linkVersionStatement);
         return data;
     }
 
+    /**
+     * Intentionally not in the constructor so tests can change or remove a statement before loading.
+     * @return 
+     */
+    public Set<Statement> loadLinkSetwithLinks(){
+        Set<Statement> data = loadMayLinkSet();
+        addStatement(data, link1);
+        addStatement(data, link2);
+        return data;
+    }
 }

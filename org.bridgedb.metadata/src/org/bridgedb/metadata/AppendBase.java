@@ -10,7 +10,7 @@ package org.bridgedb.metadata;
  */
 public abstract class AppendBase implements MetaData{
     
-    static final String CLEAR_REPORT = "No issues found";
+    public static final String CLEAR_REPORT = "No issues found";
     static final boolean CHECK_ALL_PRESENT = true;
     
     @Override

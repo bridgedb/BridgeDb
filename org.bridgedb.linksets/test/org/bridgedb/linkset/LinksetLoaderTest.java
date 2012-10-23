@@ -58,9 +58,9 @@ public class LinksetLoaderTest {
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
-        linksetLoader.load("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType);
-        linksetLoader.load("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType);
-        linksetLoader.load("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType);
  	}
 
     @Test

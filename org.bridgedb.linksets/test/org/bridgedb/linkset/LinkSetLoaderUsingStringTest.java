@@ -49,11 +49,10 @@ import static org.hamcrest.Matchers.*;
 public class LinkSetLoaderUsingStringTest {
        
     @Test
-    public void testValidate() throws IDMapperException {
-        Reporter.report("Validate");
+    public void testcheckStringValid() throws IDMapperException {
+        Reporter.report("CheckStringValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        new LinksetLoader().validate(LinksetStatementReaderTest.INFO1, format, new URIImpl("http://www.example.com"), 
-                StoreType.TEST, ValidationType.LINKSMINIMAL);
+        new LinksetLoader().checkStringValid(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
     @Test
@@ -69,8 +68,7 @@ public class LinkSetLoaderUsingStringTest {
     public void testLoad() throws IDMapperException {
         Reporter.report("Load");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-       new LinksetLoader().load(LinksetStatementReaderTest.INFO1, format, new URIImpl("http://www.example.com"), 
-                StoreType.TEST, ValidationType.LINKSMINIMAL);
+       new LinksetLoader().loadString(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
 }

@@ -100,9 +100,8 @@ public class LinksetLoaderImplentation{
         }
     }
     
-    protected LinksetLoaderImplentation(String info, RDFFormat format, URI accessedFrom, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Reading " + info);
-        this.accessedFrom = accessedFrom;
+    protected LinksetLoaderImplentation(String info, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
+        Reporter.report("Reading a String length " + info.length());
         this.validationType = validationType;
         this.storeType = storeType;
         statements = new LinksetStatementReaderAndImporter(info, format, storeType);     
@@ -113,6 +112,7 @@ public class LinksetLoaderImplentation{
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
             metaData = new MetaDataCollection(statements.getVoidStatements(), specification);
         }
+        accessedFrom = null;
     }
 
     protected String validityReport(boolean includeWarnings){
@@ -127,14 +127,13 @@ public class LinksetLoaderImplentation{
         if (storeType == null){
             throw new IDMapperException ("Illegal call to load() with StoreType == null");
         }
-        if (accessedFrom == null){
-            throw new IDMapperException ("Illegal call to load() with accessedFrom == null");
-        }
-
         if (validationType.isLinkset()){
             linksetLoad();
         } else {
-            voidLoad();
+            linksetContext = getVoidContext();
+            linksetResource = linksetContext;
+            inverseContext = null;
+            loadVoid();
         }
     }
     
@@ -143,10 +142,14 @@ public class LinksetLoaderImplentation{
         URLListener urlListener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         getLinksetContexts(urlListener);
         resetBaseURI();
-        loadVoidHeader();
+        loadVoid();
         loadSQL(statements, urlListener);
         urlListener.closeInput();    
-        Reporter.report("Load finished for " + accessedFrom);
+        if (accessedFrom == null){
+            Reporter.report("Load finished. ");
+        } else {
+            Reporter.report("Load finished for " + accessedFrom);            
+        }
     }
     
     private void getLinksetContexts(URLListener urlListener) throws IDMapperException {
@@ -184,7 +187,7 @@ public class LinksetLoaderImplentation{
         }
     }
     
-    private void loadVoidHeader() 
+    private void loadVoid() 
             throws IDMapperException{
         RdfWrapper rdfWrapper = null;
         try {
@@ -193,8 +196,8 @@ public class LinksetLoaderImplentation{
                 rdfWrapper.add(st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
                 addInverse(rdfWrapper, st);
             }
-            rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom, linksetContext);
-            if (inverseContext != null){
+            if (accessedFrom != null){
+                rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom, linksetContext);
                 addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom);
             }
             GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
@@ -211,7 +214,7 @@ public class LinksetLoaderImplentation{
             addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI);
             addInverse(rdfWrapper, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
         } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Error loading RDF " + ex);
+            throw new IDMapperException("Error loading RDF ", ex);
         } finally {
             try {
                 if (rdfWrapper != null){
@@ -252,39 +255,7 @@ public class LinksetLoaderImplentation{
         }
     }
         
-    private void voidLoad() throws IDMapperException {
-        RdfWrapper rdfWrapper = null;
-        try {
-            URI voidContext = getVoidContext(rdfWrapper);
-            rdfWrapper = RdfFactory.setupConnection(storeType);
-            for (Statement st:statements.getVoidStatements()){
-                rdfWrapper.add(st.getSubject(), st.getPredicate(), st.getObject(), voidContext);
-            }
-            rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom, voidContext);
-            GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
-            try {
-                XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-                CalendarLiteralImpl now = new CalendarLiteralImpl(xgcal);
-                rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_ON, now, voidContext);
-            } catch (DatatypeConfigurationException ex) {
-                //Should never happen so basically ignore
-                ex.printStackTrace();
-            }
-            rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI, voidContext);
-        } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Error loading RDF " + ex);
-        } finally {
-            try {
-                if (rdfWrapper != null){
-                    rdfWrapper.shutdown();
-                }
-            } catch (RDFHandlerException ex) {
-                throw new IDMapperException("Error loading RDF " + ex);
-            }
-        }
-    }
-
-    private synchronized URI getVoidContext(RdfWrapper rdfWrapper) throws BridgeDbSqlException {
+    private synchronized URI getVoidContext() throws BridgeDbSqlException {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         SQLIdMapper mapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
         String oldIDString = mapper.getProperty(LAST_USED_VOID_ID);

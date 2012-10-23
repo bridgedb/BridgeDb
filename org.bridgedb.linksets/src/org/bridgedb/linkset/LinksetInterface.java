@@ -23,7 +23,7 @@ public interface LinksetInterface {
     
     public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
     
-    public String validateStringAsLinkset(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException;
     
     public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
             throws IDMapperException;
@@ -32,17 +32,17 @@ public interface LinksetInterface {
     
     public String validateFileAsLinksetVoid(String fileName) throws IDMapperException;
     
-    public String validateFileAsLinkset(String fileName) throws IDMapperException; 
+    public String validateFileAsLinks(String fileName) throws IDMapperException; 
 
-    public void load(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException;
+    public void loadString(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+            throws IDMapperException;
     
-    public void load(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;
+    public void loadFile(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;
     
-    public void validate(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException;
+    public void checkStringValid(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+            throws IDMapperException;
     
-    public void validate(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;
+    public void checkFileValid(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;
     
     public void clearExistingData (StoreType storeType) throws IDMapperException;
     
