@@ -228,6 +228,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	private int extractIDFromURI(String profileURL) throws BridgeDbSqlException {
 		try {
 			URI profileURI = new URIImpl(profileURL);
+			if (!profileURI.getNamespace().equals(RdfWrapper.getProfileBaseURI())) {
+				throw new BridgeDbSqlException("Invalid namespace for profile URI: " + profileURL);
+			}
 			int profileID = Integer.parseInt(profileURI.getLocalName());
 			return profileID;
 		} catch (IllegalArgumentException e) {
@@ -490,6 +493,33 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 			throw new BridgeDbSqlException("Unable to retrieve profiles.", e);
 		}
     	return profiles;
+    }
+    
+    @Override
+    public ProfileInfo getProfile(String profileURI) throws BridgeDbSqlException {
+    	int profileID = extractIDFromURI(profileURI);
+    	String query = ("SELECT profileId, name, createdOn, createdBy " +
+    			"FROM profile WHERE profileId = " + profileID);
+    	Statement statement = this.createStatement();
+    	ProfileInfo profile = null;
+		try {
+			ResultSet rs = statement.executeQuery(query);
+			if (!rs.next()) {
+				throw new BridgeDbSqlException("No profile with the URI " + profileURI);
+			}
+			do {
+				int profileId = rs.getInt("profileId");
+				String name = rs.getString("name");
+				String createdOn = rs.getString("createdOn");
+				String createdBy = rs.getString("createdBy");
+				Set<String> justifications = getJustificationsForProfile(profileId);
+				profile = new ProfileInfo(profileURI, name, createdOn, createdBy, justifications);
+			} while (rs.next());
+		} catch (SQLException e) {
+			Reporter.report(e.getLocalizedMessage());
+			throw new BridgeDbSqlException("Unable to retrieve profiles.", e);
+		}
+    	return profile;
     }
 
     // **** URLListener Methods
@@ -893,8 +923,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	    	return "http://openphacts.cs.man.ac.uk:9090/OPS-IMS/";        
 	    }
 
+	    private static String getProfileBaseURI() {
+	    	return getBaseURI() + "profile/";
+	    }
+	    
 	    private static String getProfileURI(int profileID) {
-	    	return getBaseURI() + "profile/" + profileID;
+	    	return getProfileBaseURI() + profileID;
 	    }
 
 	    private static Properties getProperties() throws IOException{

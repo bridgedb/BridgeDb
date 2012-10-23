@@ -165,5 +165,13 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 		}
 		return results;
 	}
+
+	@Override
+	public ProfileInfo getProfile(String profileURI)
+			throws BridgeDbSqlException {
+		ProfileBean profile = opsService.getProfile(profileURI);
+		ProfileInfo result = ProfileBeanFactory.asProfileInfo(profile);
+		return result;
+	}
     
 }

@@ -25,6 +25,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
@@ -165,6 +166,14 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 				webResource.path("profile")
 				.accept(MediaType.APPLICATION_XML_TYPE)
 				.get(new GenericType<List<ProfileBean>>() {});
+		return result;
+	}
+
+	@Override
+	public ProfileBean getProfile(String id) throws BridgeDbSqlException {
+		ProfileBean result = webResource.path("profile/" + id)
+		.accept(MediaType.APPLICATION_XML_TYPE)
+		.get(new GenericType<ProfileBean>() {});
 		return result;
 	}
         

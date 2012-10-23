@@ -20,6 +20,7 @@ package org.bridgedb.ws;
 
 import java.util.List;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
@@ -54,6 +55,8 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
     
-    public List<ProfileBean> getProfiles();
+    public List<ProfileBean> getProfiles() throws BridgeDbSqlException;
+    
+    public ProfileBean getProfile(String id) throws BridgeDbSqlException;
     
 }

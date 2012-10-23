@@ -63,6 +63,33 @@ public class SQLUrlMapperTest extends URLListenerTest {
 	}
 
 	@Test(expected=BridgeDbSqlException.class)
+	public void testGetProfile_notAUri() throws BridgeDbSqlException {
+		sqlUrlMapper.getProfile("Not a URI");
+	}
+	
+	@Test(expected=BridgeDbSqlException.class)
+	public void testGetProfile_invalidURI() throws BridgeDbSqlException {
+		sqlUrlMapper.getProfile("http://www.foo.com/123");
+	}
+	
+	@Test(expected=BridgeDbSqlException.class)
+	public void testGetProfile_invalidProfileNumber() throws BridgeDbSqlException {
+		sqlUrlMapper.getProfile(BASE_PROFILE_URI + "123");
+	}
+		
+	@Test
+	public void testGetProfile_validProfileURI() throws BridgeDbSqlException {
+		ProfileInfo profile = sqlUrlMapper.getProfile(BASE_PROFILE_URI + "1");
+		assertEquals("test1", profile.getName());
+//		assertEquals("2012-09-28T16:02", profile.getCreatedOn());
+		assertEquals("2012-09-28 16:02:00.0", profile.getCreatedOn());
+		assertEquals("http://www.cs.man.ac.uk/~graya/me.ttl", profile.getCreatedBy());
+		Set<String> justifications = profile.getJustification();
+		assertEquals(1, justifications.size());
+		assertEquals(TEST_JUSTIFICATION1, justifications.iterator().next());
+	}
+
+	@Test(expected=BridgeDbSqlException.class)
 	public void testInvalidProfile_notaURI() throws BridgeDbSqlException {
 		sqlUrlMapper.mapURL(map1URL1, "1");
 	}

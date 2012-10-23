@@ -35,11 +35,13 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.Reporter;
@@ -48,6 +50,8 @@ import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
+import org.bridgedb.ws.bean.ProfileBean;
+import org.bridgedb.ws.bean.ProfileBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
@@ -190,7 +194,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/getMappingSetInfos") 
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException {
         List<MappingSetInfo> infos = urlMapper.getMappingSetInfos();
-        ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
+        List<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
             results.add(MappingSetInfoBeanFactory.asBean(info));
         }
@@ -216,5 +220,28 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);
         return bean;
     }
- 
+
+	@Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/profile") 
+	public List<ProfileBean> getProfiles() throws BridgeDbSqlException {
+		List<ProfileInfo> profiles = urlMapper.getProfiles();
+		List<ProfileBean> results = new ArrayList<ProfileBean>();
+		for (ProfileInfo profile:profiles) {
+			results.add(ProfileBeanFactory.asBean(profile));
+		}
+		return results;
+	}
+    
+	@Override
+	@GET
+	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@Path("/profile/{id}")
+	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDbSqlException {
+		ProfileInfo profile = urlMapper.getProfile(RdfWrapper.getProfileURI(Integer.parseInt(id)));
+		ProfileBean result = ProfileBeanFactory.asBean(profile);
+		return result;
+	}
+	
 }

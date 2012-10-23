@@ -198,4 +198,13 @@ public interface URLMapper extends IDMapper{
 	 */
 	public List<ProfileInfo> getProfiles() throws BridgeDbSqlException;
 
+	/**
+	 * Obtains the information about a specific profile.
+	 * @see {@link ProfileInfo} for details of exactly what is returned.
+	 * @param profileURI The URI of the profile to look up
+	 * @return Information about the specified profile
+	 * @throws BridgeDbSqlException
+	 */
+	public ProfileInfo getProfile(String profileURI) throws BridgeDbSqlException;
+
 }
