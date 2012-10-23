@@ -19,44 +19,23 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
-import java.util.GregorianCalendar;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.LinksetVoidInformation;
-import org.bridgedb.metadata.MetaData;
-import org.bridgedb.metadata.MetaDataCollection;
 import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.MetaDataSpecification;
-import org.bridgedb.metadata.constants.PavConstants;
-import org.bridgedb.metadata.constants.VoidConstants;
-import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.metadata.validator.Validator;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.IDMapperLinksetException;
-import org.bridgedb.rdf.LinksetStatementReader;
-import org.bridgedb.rdf.LinksetStatementReaderAndImporter;
-import org.bridgedb.rdf.LinksetStatements;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.rdf.RdfFactory;
-import org.bridgedb.rdf.RdfWrapper;
-import org.bridgedb.sql.SQLIdMapper;
+import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.CalendarLiteralImpl;
-import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandlerException;
 
 /**
  * Main class for loading linksets.
@@ -66,23 +45,45 @@ import org.openrdf.rio.RDFHandlerException;
  * @see usage() for a description of the paramters.
  * @author Christian
  */
-public class LinksetLoader{
+public class LinksetLoader implements LinksetInterface{
         
     private static String LAST_USED_VOID_ID = "LastUsedVoidId";
     private static String STORE = "store";
     private static String CLEAR_EXISING_DATA = "clearExistingData";
     private static String LOAD = "load";
-
+    private static URI ACCESSED_FROM_NOT_REQUIRED = null;
+    private static boolean INCLUDE_WARNINGS = true;
+    
     public LinksetLoader() {
     }
     
-    public String validityReport(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
+    @Override
+    public String validateString(String info, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException {
-        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(info, format, accessedFrom, validationType, storeType);
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(info, format, ACCESSED_FROM_NOT_REQUIRED, 
+                validationType, storeType);
         return loader.validityReport(includeWarnings);
     }
+
+    @Override
+    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        return validateString(info, format, StoreType.LIVE, ValidationType.DATASETVOID, INCLUDE_WARNINGS);
+    }
     
-    public String validityReport(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
+    @Override
+    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        return validateString(info, format, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
+    }
+    
+    @Override
+    public String validateStringAsLinkset(String info, String mimeType) throws IDMapperException {
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        return validateString(info, format, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
+    }
+
+    private String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
     		throws IDMapperException {
     	if (!file.exists()) {
     		Reporter.report("File not found: " + file.getAbsolutePath());
@@ -94,7 +95,7 @@ public class LinksetLoader{
                 builder.append("Report for ");
                 builder.append(child.getAbsoluteFile());
                 builder.append("\n");
-                builder.append(validityReport(child, storeType, validationType, includeWarnings));
+                builder.append(validityFile(child, storeType, validationType, includeWarnings));
                 builder.append("\n");
             }
             return builder.toString();
@@ -104,12 +105,29 @@ public class LinksetLoader{
         }
     }
 
-    public String validityReport(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
+    @Override
+    public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
             throws IDMapperException {
         File file = new File(fileName);
-        return validityReport(file, storeType, type, includeWarnings);
+        return validityFile(file, storeType, type, includeWarnings);
     }
     
+    @Override
+    public String validateFileAsDatasetVoid(String fileName) throws IDMapperException {
+        return validateFile(fileName, StoreType.LIVE, ValidationType.DATASETVOID, INCLUDE_WARNINGS);
+    }
+    
+    @Override
+    public String validateFileAsLinksetVoid(String fileName) throws IDMapperException {
+        return validateFile(fileName, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
+    }
+    
+    @Override
+    public String validateFileAsLinkset(String fileName) throws IDMapperException {
+        return validateFile(fileName, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
+    }
+
+    @Override
     public void load(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
             ValidationType validationType) throws IDMapperException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(info, format, accessedFrom, validationType, storeType);
@@ -117,7 +135,7 @@ public class LinksetLoader{
         loader.load();
     }
     
-    public void load(File file, StoreType storeType, ValidationType validationType) 
+    private void load(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
         if (storeType == null){
             throw new IDMapperException ("Can not load if no storeType set");
@@ -137,12 +155,13 @@ public class LinksetLoader{
         }
     }
 
+    @Override
     public void load(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
         File file = new File(fileName);
         load(file, storeType, type);
     }
     
-    public void validate(File file, StoreType storeType, ValidationType validationType) 
+    private void validate(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
     	if (!file.exists()) {
     		Reporter.report("File not found: " + file.getAbsolutePath());
@@ -158,17 +177,20 @@ public class LinksetLoader{
         }
     }
 
+    @Override
     public void validate(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
             ValidationType validationType) throws IDMapperException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(info, format, accessedFrom, validationType, storeType);
         loader.validate();
     }
 
+    @Override
     public void validate(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
         File file = new File(fileName);
         validate(file, storeType, type);
     }
     
+    @Override
     public void clearExistingData (StoreType storeType) 
     		throws IDMapperException  {
         if (storeType == null){
@@ -243,7 +265,7 @@ public class LinksetLoader{
             linksetLoader.load(fileName, storeType, validationType);
             Reporter.report("Load successful");
         } else {
-            Reporter.report (linksetLoader.validityReport(fileName, storeType, validationType, true));
+            Reporter.report (linksetLoader.validateFile(fileName, storeType, validationType, true));
         }       
     }
 

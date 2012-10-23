@@ -86,7 +86,7 @@ public class LinksetLoaderImplentation{
     private Resource inverseResource;
     
     protected LinksetLoaderImplentation(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Loading " + file);
+        Reporter.report("Reading " + file);
         accessedFrom = new URIImpl(file.toURI().toString());
         this.validationType = validationType;
         this.storeType = storeType;
@@ -101,7 +101,7 @@ public class LinksetLoaderImplentation{
     }
     
     protected LinksetLoaderImplentation(String info, RDFFormat format, URI accessedFrom, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Loading " + info);
+        Reporter.report("Reading " + info);
         this.accessedFrom = accessedFrom;
         this.validationType = validationType;
         this.storeType = storeType;
@@ -124,6 +124,13 @@ public class LinksetLoaderImplentation{
     }
     
     protected synchronized void load() throws IDMapperException{
+        if (storeType == null){
+            throw new IDMapperException ("Illegal call to load() with StoreType == null");
+        }
+        if (accessedFrom == null){
+            throw new IDMapperException ("Illegal call to load() with accessedFrom == null");
+        }
+
         if (validationType.isLinkset()){
             linksetLoad();
         } else {
@@ -132,9 +139,6 @@ public class LinksetLoaderImplentation{
     }
     
     private void linksetLoad() throws IDMapperException{
-        if (storeType == null){
-            return;
-        }
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         URLListener urlListener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         getLinksetContexts(urlListener);

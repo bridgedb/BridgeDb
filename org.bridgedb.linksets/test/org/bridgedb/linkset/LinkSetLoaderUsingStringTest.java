@@ -60,8 +60,8 @@ public class LinkSetLoaderUsingStringTest {
     public void testvalidityReport() throws IDMapperException {
         Reporter.report("validityReport");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
-        String result = new LinksetLoader().validityReport(LinksetStatementReaderTest.INFO1, format, 
-                new URIImpl("http://www.example.com"), StoreType.TEST, ValidationType.LINKSMINIMAL, false);
+        String result = new LinksetLoader().validateString(LinksetStatementReaderTest.INFO1, format, 
+               StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertEquals("No issues found\nFound 3 links", result);
     }
 
