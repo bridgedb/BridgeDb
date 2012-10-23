@@ -78,10 +78,10 @@ public class LinksetLoaderTest {
     public void testCheckRDF() throws IDMapperException {
         RdfReader reader = new RdfReader(StoreType.TEST);
         String result = reader.getLinksetRDF(5);
-        assertTrue(result.contains("http://localhost:8080/OPS-IMS/linkset/5/TestDS3"));
-        assertFalse(result.contains("http://localhost:8080/OPS-IMS/linkset/2/"));
-        assertFalse(result.contains("http://localhost:8080/OPS-IMS/linkset/Test"));
-        assertFalse(result.contains("http://localhost:8080/OPS-IMS/#Test"));
+        assertThat(result, containsString("linkset/5/TestDS3"));
+        assertThat(result, not(containsString("linkset/2/")));
+        assertThat(result, not(containsString("linkset/Test")));
+        assertThat(result, not(containsString("OPS-IMS/#Test")));
     }
     
     @Test
@@ -89,8 +89,8 @@ public class LinksetLoaderTest {
         RdfReader reader = new RdfReader(StoreType.TEST);
         String result = reader.getLinksetRDF(6);
         //Inverse use ids of none inverse
-        assertTrue(result.contains("http://localhost:8080/OPS-IMS/linkset/5/TestDS3"));
-        assertFalse(result.contains("http://localhost:8080/OPS-IMS/linkset/6/TestDS3"));
+        assertThat(result, containsString("linkset/5/TestDS3"));
+        assertThat(result, not(containsString("linkset/6/TestDS3")));
     }
     
     @Test(expected=IDMapperLinksetException.class)
