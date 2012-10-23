@@ -64,7 +64,7 @@ public class RdfReader implements LinkSetStore{
         return getRDF(voidGraph);
     }
 
-    public String getRDF(Resource resource) throws IDMapperException {
+    private String getRDF(Resource resource) throws IDMapperException {
         RdfWrapper rdfWrapper = null;
         try {
             rdfWrapper = RdfFactory.setupConnection(storeType);

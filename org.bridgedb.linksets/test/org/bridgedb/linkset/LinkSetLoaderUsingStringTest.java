@@ -52,7 +52,7 @@ public class LinkSetLoaderUsingStringTest {
     public void testValidate() throws IDMapperException {
         Reporter.report("Validate");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        LinksetLoader.validate(LinksetStatementReaderTest.INFO1, format, new URIImpl("http://www.example.com"), 
+        new LinksetLoader().validate(LinksetStatementReaderTest.INFO1, format, new URIImpl("http://www.example.com"), 
                 StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
@@ -60,7 +60,7 @@ public class LinkSetLoaderUsingStringTest {
     public void testvalidityReport() throws IDMapperException {
         Reporter.report("validityReport");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
-        String result = LinksetLoader.validityReport(LinksetStatementReaderTest.INFO1, format, 
+        String result = new LinksetLoader().validityReport(LinksetStatementReaderTest.INFO1, format, 
                 new URIImpl("http://www.example.com"), StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertEquals("No issues found\nFound 3 links", result);
     }
@@ -69,7 +69,7 @@ public class LinkSetLoaderUsingStringTest {
     public void testLoad() throws IDMapperException {
         Reporter.report("Load");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        LinksetLoader.load(LinksetStatementReaderTest.INFO1, format, new URIImpl("http://www.example.com"), 
+       new LinksetLoader().load(LinksetStatementReaderTest.INFO1, format, new URIImpl("http://www.example.com"), 
                 StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     

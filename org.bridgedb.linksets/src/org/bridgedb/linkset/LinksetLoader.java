@@ -19,7 +19,6 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -67,244 +66,23 @@ import org.openrdf.rio.RDFHandlerException;
  * @see usage() for a description of the paramters.
  * @author Christian
  */
-public class LinksetLoader {
-    
-    private static URI THIS_AS_URI = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.linksets/src/org/bridgedb/linkset/LinksetLoader.java");
+public class LinksetLoader{
+        
     private static String LAST_USED_VOID_ID = "LastUsedVoidId";
     private static String STORE = "store";
     private static String CLEAR_EXISING_DATA = "clearExistingData";
     private static String LOAD = "load";
-    
-    private final MetaData metaData;
-    private final URI accessedFrom;
-    private final LinksetStatements statements;
-    private final ValidationType validationType;
-    private final StoreType storeType;
-    
-    private int mappingId;
-    private boolean symmetric;
-    private URI linksetContext;
-    private URI inverseContext;
-    private Resource linksetResource;
-    private Resource inverseResource;
-    
-    private LinksetLoader(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Loading " + file);
-        accessedFrom = new URIImpl(file.toURI().toString());
-        this.validationType = validationType;
-        this.storeType = storeType;
-        statements = new LinksetStatementReaderAndImporter(file, storeType);     
-        if (validationType.isLinkset()){
-            metaData = new LinksetVoidInformation(statements, validationType);        
-        } else {
-            MetaDataSpecification specification = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
-            metaData = new MetaDataCollection(statements.getVoidStatements(), specification);
-        }
-    }
-    
-    private LinksetLoader(String info, RDFFormat format, URI accessedFrom, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Loading " + info);
-        this.accessedFrom = accessedFrom;
-        this.validationType = validationType;
-        this.storeType = storeType;
-        statements = new LinksetStatementReaderAndImporter(info, format, storeType);     
-        if (validationType.isLinkset()){
-            metaData = new LinksetVoidInformation(statements, validationType);        
-        } else {
-            MetaDataSpecification specification = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
-            metaData = new MetaDataCollection(statements.getVoidStatements(), specification);
-        }
-    }
 
-    private String validityReport(boolean includeWarnings){
-        return metaData.validityReport(includeWarnings);
+    public LinksetLoader() {
     }
     
-    private void validate() throws MetaDataException{
-        metaData.validate();
-    }
-    
-    private synchronized void load() throws IDMapperException{
-        if (validationType.isLinkset()){
-            linksetLoad();
-        } else {
-            voidLoad();
-        }
-    }
-    
-    private void linksetLoad() throws IDMapperException{
-        if (storeType == null){
-            return;
-        }
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
-        URLListener urlListener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
-        getLinksetContexts(urlListener);
-        resetBaseURI();
-        loadVoidHeader();
-        loadSQL(statements, urlListener);
-        urlListener.closeInput();    
-        Reporter.report("Load finished for " + accessedFrom);
-    }
-    
-    private void getLinksetContexts(URLListener urlListener) throws IDMapperException {
-        LinksetVoidInformation information = (LinksetVoidInformation)metaData;
-        String subjectUriSpace = information.getSubjectUriSpace();
-        String targetUriSpace = information.getTargetUriSpace();
-        String predicate = information.getPredicate();
-        //TODO work out way to do this
-        symmetric = true;
-        boolean transative = information.isTransative();
-        mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, targetUriSpace, symmetric, transative);   
-        linksetContext = RdfFactory.getLinksetURL(mappingId);
-        linksetResource = information.getLinksetResource();
-        if (symmetric) {
-            inverseContext = RdfFactory.getLinksetURL(mappingId + 1);             
-            inverseResource = invertResource(linksetResource);
-        } else {
-            inverseContext = null;
-            inverseResource = null;
-        }
-    }
-   
-    private Resource invertResource(Resource resource){
-        if (resource instanceof URI){
-            return new URIImpl(resource.toString()+"_Symmetric");
-        }
-        return resource;
-    }
-    
-    private void resetBaseURI() {
-        statements.resetBaseURI(linksetContext+"/");
-        linksetResource = LinksetStatementReader.resetBaseURI(linksetContext+"/", linksetResource);
-        if (symmetric) {
-            inverseResource = invertResource(linksetResource);
-        }
-    }
-    
-    private void loadVoidHeader() 
-            throws IDMapperException{
-        RdfWrapper rdfWrapper = null;
-        try {
-            rdfWrapper = RdfFactory.setupConnection(storeType);
-            for (Statement st:statements.getVoidStatements()){
-                rdfWrapper.add(st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
-                addInverse(rdfWrapper, st);
-            }
-            rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom, linksetContext);
-            if (inverseContext != null){
-                addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom);
-            }
-            GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
-            try {
-                XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-                CalendarLiteralImpl now = new CalendarLiteralImpl(xgcal);
-                rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_ON, now, linksetContext);
-                addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_ON, now);
-            } catch (DatatypeConfigurationException ex) {
-                //Should never happen so basically ignore
-                ex.printStackTrace();
-            }
-            rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI, linksetContext);
-            addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI);
-            addInverse(rdfWrapper, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
-        } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Error loading RDF " + ex);
-        } finally {
-            try {
-                if (rdfWrapper != null){
-                    rdfWrapper.shutdown();
-                }
-            } catch (RDFHandlerException ex) {
-                throw new IDMapperException("Error loading RDF " + ex);
-            }
-        }
-    }
-
-    private void addInverse(RdfWrapper rdfWrapper, Statement statement) throws RDFHandlerException{
-        addInverse(rdfWrapper, statement.getSubject(), statement.getPredicate(), statement.getObject());
-    }
-    
-    private void addInverse(RdfWrapper rdfWrapper, Resource subject, URI predicate, Value object) 
-            throws RDFHandlerException{
-        if (inverseContext != null){
-            if (subject.equals(linksetResource)){
-                if (predicate.equals(VoidConstants.SUBJECTSTARGET)){
-                    rdfWrapper.add(inverseResource, VoidConstants.OBJECTSTARGET, object, inverseContext); 
-                } else if (predicate.equals(VoidConstants.OBJECTSTARGET)){
-                    rdfWrapper.add(inverseResource, VoidConstants.SUBJECTSTARGET, object, inverseContext); 
-                } else {
-                    rdfWrapper.add(inverseResource, predicate, object, inverseContext);                
-                }
-            } else {
-                rdfWrapper.add(subject, predicate, object, inverseContext);
-            }
-        }
-    }
-
-    private void loadSQL(LinksetStatements statements, URLListener urlListener) throws IDMapperException {
-        for (Statement st:statements.getLinkStatements()){
-            String sourceURL = st.getSubject().stringValue();
-            String targetURL = st.getObject().stringValue();
-            urlListener.insertURLMapping(sourceURL, targetURL, mappingId, symmetric);
-        }
-    }
-        
-    private void voidLoad() throws IDMapperException {
-        RdfWrapper rdfWrapper = null;
-        try {
-            URI voidContext = getVoidContext(rdfWrapper);
-            rdfWrapper = RdfFactory.setupConnection(storeType);
-            for (Statement st:statements.getVoidStatements()){
-                rdfWrapper.add(st.getSubject(), st.getPredicate(), st.getObject(), voidContext);
-            }
-            rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_FROM, accessedFrom, voidContext);
-            GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
-            try {
-                XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-                CalendarLiteralImpl now = new CalendarLiteralImpl(xgcal);
-                rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_ON, now, voidContext);
-            } catch (DatatypeConfigurationException ex) {
-                //Should never happen so basically ignore
-                ex.printStackTrace();
-            }
-            rdfWrapper.add(voidContext, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI, voidContext);
-        } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Error loading RDF " + ex);
-        } finally {
-            try {
-                if (rdfWrapper != null){
-                    rdfWrapper.shutdown();
-                }
-            } catch (RDFHandlerException ex) {
-                throw new IDMapperException("Error loading RDF " + ex);
-            }
-        }
-    }
-
-    private synchronized URI getVoidContext(RdfWrapper rdfWrapper) throws BridgeDbSqlException {
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
-        SQLIdMapper mapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
-        String oldIDString = mapper.getProperty(LAST_USED_VOID_ID);
-        Integer oldId;
-        if (oldIDString == null){
-            oldId = 0;
-        } else {
-            oldId = Integer.parseInt(oldIDString);
-        }
-        int id = oldId + 1;
-        mapper.putProperty(LAST_USED_VOID_ID, ""+id);
-        return RdfFactory.getVoidURL(id);
-    }
-
-    public static String validityReport(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
+    public String validityReport(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException {
-        LinksetLoader loader = new LinksetLoader(info, format, accessedFrom, validationType, storeType);
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(info, format, accessedFrom, validationType, storeType);
         return loader.validityReport(includeWarnings);
     }
     
-    public static String validityReport(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
+    public String validityReport(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
     		throws IDMapperException {
     	if (!file.exists()) {
     		Reporter.report("File not found: " + file.getAbsolutePath());
@@ -321,25 +99,25 @@ public class LinksetLoader {
             }
             return builder.toString();
         } else { 
-            LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
+            LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
             return loader.validityReport(includeWarnings);
         }
     }
 
-    public static String validityReport(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
+    public String validityReport(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
             throws IDMapperException {
         File file = new File(fileName);
         return validityReport(file, storeType, type, includeWarnings);
     }
     
-    public static void load(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
+    public void load(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
             ValidationType validationType) throws IDMapperException {
-        LinksetLoader loader = new LinksetLoader(info, format, accessedFrom, validationType, storeType);
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(info, format, accessedFrom, validationType, storeType);
         loader.validate();
         loader.load();
     }
     
-    public static void load(File file, StoreType storeType, ValidationType validationType) 
+    public void load(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
         if (storeType == null){
             throw new IDMapperException ("Can not load if no storeType set");
@@ -353,18 +131,18 @@ public class LinksetLoader {
                 load(child, storeType, validationType);
             }
         } else { 
-            LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
+            LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
             loader.validate();
             loader.load();
         }
     }
 
-    public static void load(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
+    public void load(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
         File file = new File(fileName);
         load(file, storeType, type);
     }
     
-    public static void validate(File file, StoreType storeType, ValidationType validationType) 
+    public void validate(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
     	if (!file.exists()) {
     		Reporter.report("File not found: " + file.getAbsolutePath());
@@ -375,23 +153,23 @@ public class LinksetLoader {
                 load(child, storeType, validationType);
             }
         } else { 
-            LinksetLoader loader = new LinksetLoader(file, validationType, storeType);
+            LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
             loader.validate();
         }
     }
 
-    public static void validate(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
+    public void validate(String info, RDFFormat format, URI accessedFrom, StoreType storeType, 
             ValidationType validationType) throws IDMapperException {
-        LinksetLoader loader = new LinksetLoader(info, format, accessedFrom, validationType, storeType);
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(info, format, accessedFrom, validationType, storeType);
         loader.validate();
     }
 
-    public static void validate(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
+    public void validate(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
         File file = new File(fileName);
         validate(file, storeType, type);
     }
     
-    public static void clearExistingData (StoreType storeType) 
+    public void clearExistingData (StoreType storeType) 
     		throws IDMapperException  {
         if (storeType == null){
             throw new IDMapperException ("unable to clear mapping of unspecified storeType");
@@ -450,20 +228,22 @@ public class LinksetLoader {
             }
         }
 
+        LinksetLoader linksetLoader = new LinksetLoader();
+        
         String clearExistingDataString = System.getProperty(CLEAR_EXISING_DATA, "false");
         boolean clearExistingData = Boolean.valueOf(clearExistingDataString);
         if (clearExistingData){
-            clearExistingData(storeType);
+            linksetLoader.clearExistingData(storeType);
         }
 
         String loadString = System.getProperty(LOAD, "true");
         boolean load = Boolean.valueOf(loadString);
         
         if (load){
-            load(fileName, storeType, validationType);
+            linksetLoader.load(fileName, storeType, validationType);
             Reporter.report("Load successful");
         } else {
-            Reporter.report (validityReport(fileName, storeType, validationType, true));
+            Reporter.report (linksetLoader.validityReport(fileName, storeType, validationType, true));
         }       
     }
 

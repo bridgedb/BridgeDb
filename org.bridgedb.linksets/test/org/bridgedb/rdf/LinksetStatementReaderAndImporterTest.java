@@ -52,7 +52,7 @@ public class LinksetStatementReaderAndImporterTest {
     @Test
     public void testLoadFromRDF() throws Exception {
         Reporter.report("EndRDF");
-        LinksetLoader.clearExistingData(StoreType.TEST);
+        new LinksetLoader().clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
         LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.TEST);
         Set result = instance.getLinkStatements();

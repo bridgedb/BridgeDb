@@ -50,10 +50,11 @@ public class LinkSetLoaderWithImportingTest {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         
-        LinksetLoader.clearExistingData(StoreType.TEST);
-        LinksetLoader.load("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
-        LinksetLoader.load("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
-        LinksetLoader.load("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
+        LinksetLoader linksetLoader = new LinksetLoader();
+        linksetLoader.clearExistingData(StoreType.TEST);
+        linksetLoader.load("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
+        linksetLoader.load("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
+        linksetLoader.load("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
 	}
 
     @Test

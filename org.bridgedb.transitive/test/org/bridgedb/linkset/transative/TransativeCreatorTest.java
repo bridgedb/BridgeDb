@@ -51,9 +51,11 @@ public class TransativeCreatorTest {
     public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
-        LinksetLoader.clearExistingData( StoreType.TEST);        
-        LinksetLoader.load("../org.bridgedb.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
-        LinksetLoader.load("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        
+        LinksetLoader linksetLoader = new LinksetLoader();
+        linksetLoader.clearExistingData( StoreType.TEST);        
+        linksetLoader.load("../org.bridgedb.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
     
     @Test
@@ -90,7 +92,7 @@ public class TransativeCreatorTest {
         String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
         TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         System.out.println("Ok");
-        LinksetLoader.validate(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
+        new LinksetLoader().validate(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
     }
 
 }
