@@ -48,7 +48,16 @@ public abstract class AppendBase implements MetaData{
          }
     }
 
-    abstract void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel);
+   public void validate() throws MetaDataException {
+        String report = this.validityReport(false);
+        if (report.equals(CLEAR_REPORT)){
+            //OK 
+        } else {
+            throw new MetaDataException(report);
+        }
+    }
+
+   abstract void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel);
 
     @Override
     public String unusedStatements(){

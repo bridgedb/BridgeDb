@@ -36,6 +36,6 @@
     dcterms:created "2012-02-22T10:23:56Z"^^xsd:dateTime ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
 
-foo:T123 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/123> .
-foo:T456 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/456> .
-foo:T789 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/789> .
+foo:123 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/123> .
+foo:456 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/456> .
+foo:789 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/789> .

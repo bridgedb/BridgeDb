@@ -140,7 +140,7 @@ public class LinksetVoidInformationTest {
         Reporter.report("validityReport");
         boolean includeWarnings = false;
         String result = instance.validityReport(includeWarnings);
-        assertEquals("No issues foundFound 2 links", result);
+        assertEquals("No issues found\nFound 2 links", result);
     }
 
      /**

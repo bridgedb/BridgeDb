@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import org.junit.Ignore;
 import java.util.Set;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
@@ -55,7 +56,6 @@ public class LinksetStatementReaderAndImporterTest {
         ValidationType validationType = ValidationType.LINKSMINIMAL;
         LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.TEST);
         Set result = instance.getLinkStatements();
-        System.out.println(result);
         assertEquals(3, result.size());
     }
 }

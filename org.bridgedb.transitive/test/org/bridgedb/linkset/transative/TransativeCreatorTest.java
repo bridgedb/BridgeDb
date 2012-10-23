@@ -52,8 +52,8 @@ public class TransativeCreatorTest {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
         LinksetLoader.clearExistingData( StoreType.TEST);        
-        LinksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL, LOAD);
-        LinksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL, LOAD);
+        LinksetLoader.load("../org.bridgedb.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        LinksetLoader.load("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
     
     @Test
@@ -90,7 +90,7 @@ public class TransativeCreatorTest {
         String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
         TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         System.out.println("Ok");
-        LinksetLoader.parse(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL, DO_NOT_LOAD);
+        LinksetLoader.validate(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
     }
 
 }

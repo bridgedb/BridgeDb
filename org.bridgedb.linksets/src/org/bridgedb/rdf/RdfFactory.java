@@ -102,7 +102,7 @@ public class RdfFactory {
     }
   
     public static URI getVoidURL(int voidId){
-        return new URIImpl(RdfConfig.getTheBaseURI() + "linkset/" + voidId);  
+        return new URIImpl(RdfConfig.getTheBaseURI() + "void/" + voidId);  
     }
 
     private static RepositoryConnection getConnection(Repository repository) throws IDMapperLinksetException{

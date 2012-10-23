@@ -42,10 +42,12 @@ public class UriSpaceMapper {
        dataSource = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id")
                 .idExample("123").asDataSource();
        map.put("http://www.example.com/", dataSource);
+       map.put("http://rdf.example.com/", dataSource);
        dataSource = DataSource.register("TestDS3", "TestDS3")
                .urlPattern("http://www.example.org#$id")
                 .idExample("123").asDataSource();
        map.put("http://www.example.org#", dataSource);
+       map.put("http://rdf.example.org#", dataSource);
        dataSource = DataSource.register("Chemb 2 Compound", "Chemb 2 Compound")
                .urlPattern("http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id")
                 .idExample("698788").asDataSource();

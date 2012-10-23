@@ -33,12 +33,11 @@ public class SetupLoaderWithTestData {
         Reporter.report("sample2to1.ttl");
         //String[] args1 = {, "new"};
         LinksetLoader.clearExistingData(StoreType.LOAD);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.LOAD, 
-                ValidationType.LINKSMINIMAL, LOAD_DATA);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.LOAD, 
-                ValidationType.LINKSMINIMAL, LOAD_DATA);
-        LinksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.LOAD, 
-                ValidationType.LINKSMINIMAL, LOAD_DATA);
+        LinksetLoader.load("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        LinksetLoader.load("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        LinksetLoader.load("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        LinksetLoader.load("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.LOAD, ValidationType.DATASETVOID);
+        LinksetLoader.load("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.LOAD, ValidationType.DATASETVOID);
 	}
 
 }

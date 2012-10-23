@@ -18,6 +18,7 @@
 //
 package org.bridgedb.linkset;
 
+import org.bridgedb.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
@@ -50,14 +51,19 @@ public class LinkSetLoaderWithImportingTest {
         TestSqlFactory.createTestSQLAccess();
         
         LinksetLoader.clearExistingData(StoreType.TEST);
-        LinksetLoader.parse("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.TEST, 
-                ValidationType.DATASETVOID, LOAD_DATA);
-        LinksetLoader.parse("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, 
-                ValidationType.DATASETVOID, LOAD_DATA);
-        LinksetLoader.parse("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, 
-                ValidationType.LINKS, LOAD_DATA);
+        LinksetLoader.load("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
+        LinksetLoader.load("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
+        LinksetLoader.load("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
 	}
 
+    @Test
+    public void testVoidInfo() throws IDMapperException {
+        RdfReader reader = new RdfReader(StoreType.TEST);
+        String result = reader.getVoidRDF(1);
+        assertTrue(result.contains("ChemSpider"));
+        assertFalse(result.contains("http://linkedchemistry.info/chembl/molecule/"));
+    }
+    
     @Test
     public void testMappingInfo() throws IDMapperException {
         Reporter.report("MappingInfo");

@@ -53,11 +53,22 @@ public class RdfReader implements LinkSetStore{
     //}
 
     @Override
-    public String getRDF(int id) throws IDMapperException {
+    public String getLinksetRDF(int linksetId) throws IDMapperException{
+        Resource linkSetGraph = RdfFactory.getLinksetURL(linksetId); 
+        return getRDF(linkSetGraph);
+    }
+
+    @Override
+    public String getVoidRDF(int voidId) throws IDMapperException{
+        Resource voidGraph = RdfFactory.getVoidURL(voidId); 
+        return getRDF(voidGraph);
+    }
+
+    public String getRDF(Resource resource) throws IDMapperException {
         RdfWrapper rdfWrapper = null;
         try {
             rdfWrapper = RdfFactory.setupConnection(storeType);
-            String result = rdfWrapper.getRDF(id);
+            String result = rdfWrapper.getRDF(resource);
             return result;
         } catch (RDFHandlerException ex) {
             throw new IDMapperException("Unable to read RDF", ex);
@@ -65,7 +76,7 @@ public class RdfReader implements LinkSetStore{
             shutDown(rdfWrapper);
         }
     }
-    
+
     @Override
     public List<Statement> getStatementsForResource(Resource resource) throws IDMapperException{
         RdfWrapper rdfWrapper = null;
