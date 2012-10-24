@@ -4,6 +4,10 @@
  */
 package org.bridgedb.metadata;
 
+import org.openrdf.model.impl.StatementImpl;
+import org.bridgedb.metadata.constants.DctermsConstants;
+import org.openrdf.model.Statement;
+import java.util.Set;
 import org.bridgedb.utils.Reporter;
 import org.junit.Ignore;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -31,6 +35,17 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
         Reporter.report("Linkset HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection(loadMinLinkSet(), minLinksetSetRegistry);
         checkCorrectTypes(metaData);
+    }
+ 
+    @Test
+    public void testIgnoreBadTypes() throws MetaDataException{
+        Reporter.report("Linkset HasCorrectTypes");
+        Set<Statement> statements = loadMinLinkSet();
+        d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
+        statements.add(d1ModifiedStatement);
+        MetaDataCollection metaData = new MetaDataCollection(statements, minLinksetSetRegistry);
+        assertFalse(metaData.hasCorrectTypes());
+        metaData.validate();
     }
  
     @Test

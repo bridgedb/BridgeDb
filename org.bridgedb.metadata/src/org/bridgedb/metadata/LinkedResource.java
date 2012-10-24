@@ -215,6 +215,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     builder.append("ERROR: Resource ");
                     builder.append(id);
                     builder.append(" is missing. ");
+                    newLine(builder);
                 } else {
                     rmd.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel + 1);
                 }

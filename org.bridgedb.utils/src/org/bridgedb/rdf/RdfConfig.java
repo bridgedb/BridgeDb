@@ -135,7 +135,6 @@ public class RdfConfig {
      * @throws IOException 
      */
     private static void load() throws IDMapperLinksetException{
-        System.out.println("here");
         if (loadByEnviromentVariable()) return;
         if (loadByCatalinaHomeConfigs()) return;
         if (loadDirectly()) return;

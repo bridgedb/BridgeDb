@@ -105,22 +105,21 @@ public class MetaDataSpecification {
             case MINIMAL: {
                 return RequirementLevel.MUST;
             }
-            case MUST:{
-                if (validationType.isMinimal()) {
-                    return RequirementLevel.SHOULD;
-                } else{
-                    return requirementLevel;
-                }
-            }
             case DIRECTMUST:{
-                if (type.equals(validationType.getDirectType())){
+                if (validationType.isMinimal()) {
+                    return RequirementLevel.IGNORE;
+                } else if (type.equals(validationType.getDirectType())){
                     return RequirementLevel.MUST;
                 } else {
                     return RequirementLevel.SHOULD;
                 }
             }
             default:{
-                return requirementLevel;
+               if (validationType.isMinimal()) {
+                    return RequirementLevel.IGNORE;
+                } else{
+                    return requirementLevel;
+                }
             }
         }
     }

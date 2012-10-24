@@ -267,8 +267,12 @@ public class LinksetLoader implements LinksetInterface{
         boolean load = Boolean.valueOf(loadString);
         
         if (load){
-            linksetLoader.loadFile(fileName, storeType, validationType);
-            Reporter.report("Load successful");
+            try{
+                linksetLoader.loadFile(fileName, storeType, validationType);
+                Reporter.report("Load successful");
+            }catch (Exception e){
+                Reporter.report (linksetLoader.validateFile(fileName, storeType, validationType, true));
+            }
         } else {
             Reporter.report (linksetLoader.validateFile(fileName, storeType, validationType, true));
         }       
