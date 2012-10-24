@@ -460,8 +460,12 @@ public class LinksetLoader {
         boolean load = Boolean.valueOf(loadString);
         
         if (load){
-            load(fileName, storeType, validationType);
-            Reporter.report("Load successful");
+            try{
+                load(fileName, storeType, validationType);
+                Reporter.report("Load successful");
+            }catch (Exception e){
+                Reporter.report (validityReport(fileName, storeType, validationType, true));
+            }
         } else {
             Reporter.report (validityReport(fileName, storeType, validationType, true));
         }       
