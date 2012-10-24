@@ -33,7 +33,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     
     public PropertyMetaData(URI predicate, String type, RequirementLevel requirementLevel, String objectClass) throws MetaDataException{
         super(predicate.getLocalName(), type, requirementLevel);
-        System.out.println(predicate + " " + requirementLevel);
         this.predicate = predicate;
         metaDataType = getMetaDataType(objectClass);
     }

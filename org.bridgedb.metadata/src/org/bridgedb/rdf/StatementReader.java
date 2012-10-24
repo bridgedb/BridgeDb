@@ -180,9 +180,9 @@ public class StatementReader extends RDFHandlerBase{
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
         Set<RDFFormat> keys = reg.getKeys();
         for (RDFFormat key:keys){
-            System.out.println(key);
+            Reporter.report(""+key);
         }
-        System.out.println(supportedMineTypes());
+        Reporter.report(supportedMineTypes());
     }
 
 }
