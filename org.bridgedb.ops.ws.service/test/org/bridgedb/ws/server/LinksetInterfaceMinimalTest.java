@@ -21,11 +21,13 @@ package org.bridgedb.ws.server;
 import java.util.Date;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsMapper;
 import org.bridgedb.ws.WSOpsService;
 import org.junit.BeforeClass;
@@ -43,6 +45,7 @@ public class LinksetInterfaceMinimalTest extends org.bridgedb.linkset.LinksetInt
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        new LinksetLoader().clearExistingData(StoreType.TEST);
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         wsOpsMapper = new WSOpsMapper(new WSOpsService(sqlUrlMapper)); 
     }

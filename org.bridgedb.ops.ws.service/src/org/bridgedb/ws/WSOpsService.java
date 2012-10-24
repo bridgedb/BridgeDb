@@ -61,8 +61,13 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     protected URLMapper urlMapper;
     protected LinksetInterfaceMinimal linksetInterface;
     private String validationTypeString;
-            
+    public final String MIME_TYPE = "mimeType";
+    public final String STORE_TYPE = "storeType";
+    public final String VALIDATION_TYPE = "validationType";
+    public final String INFO = "info"; 
+    
     protected WSOpsService() {
+        this.linksetInterface = new LinksetLoader();
     }
 
     public WSOpsService(URLMapper urlMapper) {
@@ -223,47 +228,125 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     
     //**** LinksetInterfaceMinimal methods
 
+    private RDFFormat getRDFFormatByMimeType(String mimeType) throws MetaDataException{
+        if (mimeType == null){
+            throw new MetaDataException (MIME_TYPE + " parameter may not be null");
+        }
+        if (mimeType.trim().isEmpty()){
+            throw new MetaDataException (MIME_TYPE + " parameter may not be empty");
+        }
+        return  StatementReader.getRDFFormatByMimeType(mimeType);
+    }
+    
+    private StoreType parseStoreType(String storeTypeString) throws IDMapperException{
+        if (storeTypeString == null){
+            throw new MetaDataException (STORE_TYPE + " parameter may not be null");
+        }
+        if (storeTypeString.trim().isEmpty()){
+            throw new MetaDataException (STORE_TYPE + " parameter may not be empty");
+        }
+        return StoreType.parseString(storeTypeString);
+    }
+
+    private ValidationType parseValidationType(String validationTypeString) throws IDMapperException{
+        if (validationTypeString == null){
+            throw new MetaDataException (VALIDATION_TYPE + " parameter may not be null");
+        }
+        if (validationTypeString.trim().isEmpty()){
+            throw new MetaDataException (VALIDATION_TYPE + " parameter may not be empty");
+        }
+        return ValidationType.parseString(validationTypeString);
+    }
+    
+    private void validateInfo(String info) throws MetaDataException{
+        if (info == null){
+            throw new MetaDataException (INFO + " parameter may not be null");
+        }
+        if (info.trim().isEmpty()){
+            throw new MetaDataException (INFO + " parameter may not be empty");
+        }        
+    }
+    
     @Override
-    public String validateString(String info, String mimeType, String storeTypeString, String validationTypeString, 
-        String includeWarningsString) throws IDMapperException {
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        StoreType storeType = StoreType.parseString(storeTypeString);
-        ValidationType validationType = ValidationType.parseString(validationTypeString);
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateString")
+    public String validateString(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType, 
+            @QueryParam(STORE_TYPE)String storeTypeString, 
+            @QueryParam(VALIDATION_TYPE)String validationTypeString, 
+            @QueryParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+        validateInfo(info);
+        RDFFormat format = getRDFFormatByMimeType(mimeType);
+        StoreType storeType = parseStoreType(storeTypeString);
+        ValidationType validationType = parseValidationType(validationTypeString);
         boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
         return linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
     }
 
     @Override
-    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateStringAsVoid")
+    public String validateStringAsVoid(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        validateInfo(info);
+        RDFFormat format = getRDFFormatByMimeType(mimeType);
         return linksetInterface.validateStringAsDatasetVoid(info, mimeType);
     }
 
     @Override
-    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateStringAsLinksetVoid")
+    public String validateStringAsLinksetVoid(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        validateInfo(info);
+        RDFFormat format = getRDFFormatByMimeType(mimeType);
         return linksetInterface.validateStringAsLinksetVoid(info, mimeType);
     }
 
     @Override
-    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException {
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateStringAsLinkSet")
+    public String validateStringAsLinkSet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        validateInfo(info);
+        RDFFormat format = getRDFFormatByMimeType(mimeType);
         return linksetInterface.validateStringAsLinks(info, mimeType);
     }
 
     @Override
-    public String loadString(String info, String mimeType, String storeTypeString, String validationTypeString) 
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/loadString")
+    public String loadString(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType, 
+            @QueryParam(STORE_TYPE)String storeTypeString, 
+            @QueryParam(VALIDATION_TYPE)String validationTypeString) 
             throws IDMapperException {
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        StoreType storeType = StoreType.parseString(storeTypeString);
-        ValidationType validationType = ValidationType.parseString(validationTypeString);
+        validateInfo(info);
+        RDFFormat format = getRDFFormatByMimeType(mimeType);
+        StoreType storeType = parseStoreType(storeTypeString);
+        ValidationType validationType = parseValidationType(validationTypeString);
         linksetInterface.loadString(info, format, storeType, validationType);
         return "Load successful";
     }
 
     @Override
-    public String checkStringValid(String info, String mimeType, String storeTypeString, String validationTypeString) 
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/checkStringValid")
+    public String checkStringValid(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType, 
+            @QueryParam(STORE_TYPE)String storeTypeString, 
+            @QueryParam(VALIDATION_TYPE)String validationTypeString) 
             throws IDMapperException {
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        StoreType storeType = StoreType.parseString(storeTypeString);
-        ValidationType validationType = ValidationType.parseString(validationTypeString);
+        validateInfo(info);
+        RDFFormat format = getRDFFormatByMimeType(mimeType);
+        StoreType storeType = parseStoreType(storeTypeString);
+        ValidationType validationType = parseValidationType(validationTypeString);
         linksetInterface.checkStringValid(info, format, storeType, validationType);
         return "OK";
     }

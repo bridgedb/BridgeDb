@@ -58,14 +58,14 @@ public interface WSOpsInterface extends WSCoreInterface{
     public String validateString(String info, String defaultMIMEType, String storeType, String validationType, 
             String includeWarnings) throws IDMapperException;
 
-    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException;
 
     public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
 
     public String loadString(String info, String mineType, String storeType, String validationType) 
             throws IDMapperException;
 
-    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsLinkSet(String info, String mimeType) throws IDMapperException;
 
     public String checkStringValid(String info, String defaultMIMEType, String storeType, String validationType) 
             throws IDMapperException;

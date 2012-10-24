@@ -37,6 +37,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.RdfReader;
@@ -122,7 +123,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
- @GET
+    @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
     public Response apiPage() throws IDMapperException, UnsupportedEncodingException {
@@ -184,6 +185,26 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateVoid")
+    public Response validateVoid() throws IDMapperException, UnsupportedEncodingException {
+        StringBuilder sb = topAndSide("Query Expander Demo Page");
+        addForm(sb, ValidationType.DATASETVOID);
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateLinkSet")
+    public Response validateLinkSet() throws IDMapperException, UnsupportedEncodingException {
+        StringBuilder sb = topAndSide("Query Expander Demo Page");
+        addForm(sb, ValidationType.DATASETVOID);
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
@@ -392,6 +413,242 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return new RdfReader(StoreType.LIVE).getVoidRDF(id);
     }
 
+    private StringBuilder topAndSide(String header){
+        StringBuilder sb = new StringBuilder(HEADER);
+        sb.append(BODY);
+        sb.append(TOP_LEFT);
+        sb.append(header);
+        sb.append(TOP_RIGHT);
+        sb.append(SIDE_BAR);
+        return sb;
+    }
+    
+    private void addForm(StringBuilder sb, ValidationType validationType){
+        sb.append("<p>Use this page to validate a ");
+        switch (validationType){
+            case DATASETVOID: {
+                sb.append("VOID descripition.");
+                break;
+            }
+            case LINKS: {
+                sb.append("Linkset.");
+                break;
+            } default:{
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
+            }
+        }
+        sb.append(".</p>");
+        
+        sb.append("<p>This is an early prototype and subject to change!</p> ");
+        
+        sb.append("<form method=\"get\" action=\"/OPS-IMS/");
+        switch (validationType){
+            case DATASETVOID: {
+                sb.append("validateStringAsVoid");
+                break;
+            }
+            case LINKS: {
+                sb.append("validateStringAsLinkSet");
+                break;
+            } default:{
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
+            }
+        }
+        sb.append("\">");
+
+        sb.append(FORM_OUTPUT_FORMAT);
+        sb.append(FORM_MINE_TYPE);
+        sb.append(FORM_INFO_START);
+        sb.append(FORM_INFO_END);
+        sb.append(FORM_SUBMIT);        
+    }
+    
+    private final String HEADER_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+            + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+            + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\n"
+            + "<head>\n"
+            + " <title>"
+            + "     Manchester University OpenPhacts Query Expander"
+            + "	</title>\n"
+            + "	<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\"></meta>\n"
+            + "	<script>"
+            + "		function getObj(id) {"
+            + "			return document.getElementById(id)"
+            + "		}"
+            + "		function DHTML_TextHilight(id) {"
+            + "			getObj(id).classNameOld = getObj(id).className;"
+            + "			getObj(id).className = getObj(id).className + \"_hilight\";"
+            + "		}"
+            + "		function DHTML_TextRestore(id) {"
+            + "			if (getObj(id).classNameOld != \"\")"
+            + "				getObj(id).className = getObj(id).classNameOld;"
+            + "		}"
+            + "	</script>\n";
+    private final String TOGGLER ="<script language=\"javascript\">\n"
+            + "function getItem(id)\n"
+            + "{\n"
+            + "    var itm = false;\n"
+            + "    if(document.getElementById)\n"
+            + "        itm = document.getElementById(id);\n"
+            + "    else if(document.all)\n"
+            + "        itm = document.all[id];\n"
+            + "     else if(document.layers)\n"
+            + "        itm = document.layers[id];\n"
+            + "    return itm;\n"
+            + "}\n\n"
+            + "function toggleItem(id)\n"
+            + "{\n"
+            + "    itm = getItem(id);\n"
+            + "    if(!itm)\n"
+            + "        return false;\n"
+            + "    if(itm.style.display == 'none')\n"
+            + "        itm.style.display = '';\n"
+            + "    else\n"
+            + "        itm.style.display = 'none';\n"
+            + "    return false;\n"
+            + "}\n\n"
+            + "function hideDetails()\n"
+            + "{\n"
+            + "     toggleItem('ops')\n"
+            + "     toggleItem('sparql')\n"
+            + "     return true;\n"
+            + "}\n\n"
+            + "</script>\n";
+    private final String HEADER_END = "	<style type=\"text/css\">"
+            + "		.texthotlink, .texthotlink_hilight {"
+            + "			width: 150px;"
+            + "			font-size: 85%;"
+            + "			padding: .25em;"
+            + "			cursor: pointer;"
+            + "			color: black;"
+            + "			font-family: Arial, sans-serif;"
+            + "		}"
+            + "		.texthotlink_hilight {"
+            + "			background-color: #fff6ac;"
+            + "		}"
+            + "		.menugroup {"
+            + "			font-size: 90%;"
+            + "			font-weight: bold;"
+            + "			padding-top: .25em;"
+            + "		}"
+            + "		input { background-color: #EEEEFF; }"
+            + "		body, td {"
+            + "			background-color: white;"
+            + "			font-family: sans-serif;"
+            + "		}"
+            + "	</style>\n"
+            + "</head>\n";            
+    private final String HEADER = HEADER_START + HEADER_END;
+    private final String TOGGLE_HEADER = HEADER_START + TOGGLER + HEADER_END;
+    private final String BODY ="<body style=\"margin: 0px\">";
+    private final String TOP_LEFT ="	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n"
+            + "		<tr valign=\"top\">\n"
+            + "			<td style=\"background-color: white;\">"
+            + "				<a href=\"http://www.openphacts.org/\">"
+            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" "
+            + "                     src=\"http://www.openphacts.org/images/stories/banner.jpg\" "
+            + "                     alt=\"Open PHACTS\" height=\"50\">"
+            + "                 </img>"
+            + "             </a>"
+            + "			</td>\n"
+            + "			<td style=\"font-size: 200%; font-weight: bold; font-family: Arial;\">\n";
+    private final String TOP_RIGHT = "         </td>"
+            + "			<td style=\"background-color: white;\">"
+            + "				<a href=\"http://www.cs.manchester.ac.uk//\">"
+            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" align=\"right\" "
+            + "                     src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" "
+            + "                    alt=\"The University of Manchester\" height=\"50\">"
+            + "                 </img>"
+            + "             </a>"
+            + "			</td>"
+            + "		</tr>"
+            + "	</table>";
+    private final String SIDE_BAR = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
+            + "		<tr valign=\"top\">"
+            + "			<td style=\"border-top: 1px solid #D5D5FF\">"
+            + "				<div class=\"menugroup\">Query Expander</div>"
+            + "				<div id=\"menuQueryExpanderHome_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderHome_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderHome_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander&quot;;\">Home</div>"
+            + "				<div id=\"menuQueryExpanderAPI_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderAPI_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderAPI_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/api&quot;;\">API</div>"
+            + "				<div id=\"menuQueryExpanderExamples_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderExamples_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderExamples_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/examples&quot;;\">Examples</div>"
+            + "				<div id=\"menuQueryExpanderURISpacesPerGraph_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/URISpacesPerGraph&quot;;\">"
+            + "                   URISpaces per Graph</div>"
+            + "				<div id=\"menuQueryExpanderMapURI_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderMapURI_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderMapURI_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/mapURI&quot;;\">"
+            + "                   Check Mapping for an URI</div>"            
+            + "				<div class=\"menugroup\">OPS Identity Mapping Service</div>"
+            + "				<div id=\"menuOpsHome_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsHome_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsHome_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS&quot;;\">Home</div>"
+            + "				<div id=\"menuOpsInfo_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsInfo_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsInfo_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">"
+            + "                   Mappings Summary</div>"
+            + "				<div id=\"menuGraphviz_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuGraphviz_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuGraphviz_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/graphviz&quot;;\">"
+            + "                   Mappings Summary in Graphviz format</div>"
+            + "				<div id=\"menuOpsApi_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsApi_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsApi_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/api&quot;;\">API</div>"
+            + "			</td>"
+            + "			<td width=\"5\" style=\"border-right: 1px solid #D5D5FF\"></td>"
+            + "			<td style=\"border-top: 1px solid #D5D5FF; width:100%\">";
+    private final String FORM_OUTPUT_FORMAT = " <p>Output Format:"
+            + "     <select size=\"1\" name=\"format\">"
+            + "         <option value=\"html\">HTML page</option>"
+            + "         <option value=\"xml\">XML/JASON</option>"
+            + " 	</select>"
+            + " </p>";
+    private final String FORM_MINE_TYPE = " <p>Mime Type:"
+            + "     <select size=\"1\" name=\"mimeType\">"
+            + "         <option value=\"text/plain\">N-Triples (mimeType=text/plain; ext=nt)</option>"
+            + "         <option value=\"application/rdf+xml\">RDF/XML (mimeType=application/rdf+xml; ext=rdf, rdfs, owl, xml</option>"
+            + "         <option value=\"application/x-turtle\">Turtle (mimeType=application/x-turtle; ext=ttl)</option>"
+            + " 	</select>"
+            + " </p>";
+    private final String FORM_INFO_START = "<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";
+    private final String FORM_INFO_END = "</textarea></p>";
+    private final String FORM_SUBMIT = " <p><input type=\"submit\" value=\"Validate!\"></input> "
+            + "    Note: If the new page does not open click on the address and press enter</p>"
+            + "</form>";
+    private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/QueryExpander/mapURI\">"
+            + " <p>Input URI (URI to be looked up in Identity Mapping Service.)"
+            + "     (see <a href=\"/QueryExpander/api#inputURI\">API</a>)</p>"
+            + " <p><input type=\"text\" name=\"inputURI\" style=\"width:100%\"/></p>"
+            + " <p>Graph/Context (Graph value to limit the returned URIs)"
+            + "     (see <a href=\"/QueryExpander/api#graph\">API</a>)</p>"
+            + " <p><input type=\"text\" name=\"graph\" style=\"width:100%\"/></p>"
+            + " <p><input type=\"submit\" value=\"Expand!\"></input> "
+            + "    Note: If the new page does not open click on the address and press enter</p>"
+            + "</form>";
+    private final String MAIN_END = "			</td>"
+            + "		</tr>"
+            + "	</table>"
+            + "	<div style=\"border-top: 1px solid #D5D5FF; padding: .5em; font-size: 80%;\">"
+            + "		This site is run by <a href=\"https://wiki.openphacts.org/index.php/User:Christian\">Christian Brenninkmeijer</a>."
+            + "	</div>";
+    private final String BODY_END = "</body>"
+            + "</html>";
+    private final String END = MAIN_END + BODY_END;
+    
 }
 
 
