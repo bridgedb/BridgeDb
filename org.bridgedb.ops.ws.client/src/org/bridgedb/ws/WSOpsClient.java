@@ -165,5 +165,35 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
          return result;
     }
 
+    @Override
+    public String validateString(String info, String defaultMIMEType, String storeType, String validationType, String includeWarnings) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String loadString(String info, String mineType, String storeType, String validationType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String checkStringValid(String info, String defaultMIMEType, String storeType, String validationType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

@@ -5,7 +5,6 @@
 package org.bridgedb.linkset;
 
 import org.junit.Ignore;
-import org.bridgedb.rdf.RdfReader;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.IDMapperException;
@@ -18,15 +17,8 @@ import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.rdf.StringOutputStream;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
 import static org.junit.Assert.*;

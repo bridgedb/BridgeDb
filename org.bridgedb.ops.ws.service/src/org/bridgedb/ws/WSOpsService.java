@@ -19,6 +19,7 @@
 package org.bridgedb.ws;
 
 import java.util.ArrayList;
+import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
@@ -33,10 +34,15 @@ import javax.ws.rs.core.MediaType;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.linkset.LinksetInterfaceMinimal;
+import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
@@ -47,18 +53,22 @@ import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
+import org.openrdf.rio.RDFFormat;
 
 @Path("/")
 public class WSOpsService extends WSCoreService implements WSOpsInterface {
 
     protected URLMapper urlMapper;
-    
-    public WSOpsService() {
+    protected LinksetInterfaceMinimal linksetInterface;
+    private String validationTypeString;
+            
+    protected WSOpsService() {
     }
 
     public WSOpsService(URLMapper urlMapper) {
         super(urlMapper);
         this.urlMapper = urlMapper;
+        this.linksetInterface = new LinksetLoader();
     }
 
     @GET
@@ -209,6 +219,53 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         DataSource ds = DataSource.getBySystemCode(id);
         DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);
         return bean;
+    }
+    
+    //**** LinksetInterfaceMinimal methods
+
+    @Override
+    public String validateString(String info, String mimeType, String storeTypeString, String validationTypeString, 
+        String includeWarningsString) throws IDMapperException {
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        StoreType storeType = StoreType.parseString(storeTypeString);
+        ValidationType validationType = ValidationType.parseString(validationTypeString);
+        boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
+        return linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
+    }
+
+    @Override
+    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
+        return linksetInterface.validateStringAsDatasetVoid(info, mimeType);
+    }
+
+    @Override
+    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+        return linksetInterface.validateStringAsLinksetVoid(info, mimeType);
+    }
+
+    @Override
+    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException {
+        return linksetInterface.validateStringAsLinks(info, mimeType);
+    }
+
+    @Override
+    public String loadString(String info, String mimeType, String storeTypeString, String validationTypeString) 
+            throws IDMapperException {
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        StoreType storeType = StoreType.parseString(storeTypeString);
+        ValidationType validationType = ValidationType.parseString(validationTypeString);
+        linksetInterface.loadString(info, format, storeType, validationType);
+        return "Load successful";
+    }
+
+    @Override
+    public String checkStringValid(String info, String mimeType, String storeTypeString, String validationTypeString) 
+            throws IDMapperException {
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        StoreType storeType = StoreType.parseString(storeTypeString);
+        ValidationType validationType = ValidationType.parseString(validationTypeString);
+        linksetInterface.checkStringValid(info, format, storeType, validationType);
+        return "OK";
     }
 
  

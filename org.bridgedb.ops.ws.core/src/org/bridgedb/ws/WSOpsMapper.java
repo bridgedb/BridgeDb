@@ -28,10 +28,13 @@ import java.util.Map;
 import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.linkset.LinksetInterfaceMinimal;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
@@ -44,12 +47,13 @@ import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.UriSpaceBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
+import org.openrdf.rio.RDFFormat;
 
 /**
  *
  * @author Christian
  */
-public class WSOpsMapper extends WSCoreMapper implements URLMapper{
+public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInterfaceMinimal{
     
     WSOpsInterface opsService;
     
@@ -166,6 +170,39 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     public Set<String> getTargetUriSpace(int mappingSetId) throws IDMapperException {
         MappingSetInfo info = getMappingSetInfo(mappingSetId);
         return getUriSpaces(info.getTargetSysCode());
+    }
+
+    // *****   LinksetInterfaceMinimal Methods
+    @Override
+    public String validateString(String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
+        return opsService.validateString(info, format.getDefaultMIMEType(), storeType.toString(), 
+                validationType.toString(), Boolean.toString(includeWarnings));
+    }
+
+    @Override
+    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
+        return opsService.validateStringAsDatasetVoid(info, mimeType);
+    }
+
+    @Override
+    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+        return opsService.validateStringAsLinksetVoid(info, mimeType);
+    }
+
+    @Override
+    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException {
+        return opsService.validateStringAsLinks(info, mimeType);
+    }
+
+    @Override
+    public void loadString(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+            throws IDMapperException {
+        opsService.loadString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
+    }
+
+    @Override
+    public void checkStringValid(String info, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
+        opsService.checkStringValid(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
     }
 
 }
