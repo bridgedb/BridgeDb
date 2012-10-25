@@ -15,6 +15,7 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.model.Statement;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -46,7 +47,8 @@ public class FileTest extends TestUtils{
         Set<Statement> statements = StatementReader.extractStatements(input);
         MetaDataCollection metaData = new MetaDataCollection(statements, registry);
         checkCorrectNumberOfIds (metaData, numberOfIds);
-        Reporter.report(metaData.validityReport(INCLUDE_WARNINGS));
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, not(containsString("ERROR")));
     }
 
     private void validateFile(String fileName, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
@@ -56,7 +58,8 @@ public class FileTest extends TestUtils{
         Reporter.report("Read " + fileName);
         MetaDataCollection metaData = new MetaDataCollection(statements, registry);
         Reporter.report("Loaded " + fileName);
-        Reporter.report(metaData.validityReport(INCLUDE_WARNINGS));
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, not(containsString("ERROR")));
     }
 
     @Test

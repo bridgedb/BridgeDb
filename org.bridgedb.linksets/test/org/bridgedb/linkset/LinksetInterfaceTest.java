@@ -69,8 +69,8 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
         Reporter.report("validateFile");
         String fileName = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
         String result = linksetInterface.validateFile(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
-        String expResult = AppendBase.CLEAR_REPORT + "\nFound 3 links";
-        assertEquals(expResult, result);
+        assertThat(result, not(containsString("ERROR")));
+        assertThat(result, containsString("Found 3 links"));
     }
 
     /**
@@ -92,9 +92,8 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     public void testValidateFileAsLinksetVoid() throws Exception {
         Reporter.report("validateFileAsLinksetVoid");
         String fileName = "../org.bridgedb.linksets/test-data/loadLinkSetwithLinks.xml";
-        String expResult = AppendBase.CLEAR_REPORT;
         String result = linksetInterface.validateFileAsLinksetVoid(fileName);
-        assertEquals(expResult, result);
+        assertThat(result, not(containsString("ERROR")));
     }
 
     /**
@@ -104,10 +103,10 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     public void testValidateFileAsLinkset() throws Exception {
         Reporter.report("validateFileAsLinkset");
         String fileName = "../org.bridgedb.linksets/test-data/loadLinkSetwithLinks.xml";
-        String expResult = AppendBase.CLEAR_REPORT + "\nFound 2 links";
         String result = linksetInterface.validateFileAsLinks(fileName);
-        assertEquals(expResult, result);
-    }
+        assertThat(result, not(containsString("ERROR")));
+        assertThat(result, containsString("Found 2 links"));
+   }
 
      /**
      * Test of load method, of class LinksetInterface.

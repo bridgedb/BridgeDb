@@ -9,6 +9,7 @@ import java.util.Set;
 import org.openrdf.model.Resource;
 import javax.xml.datatype.DatatypeConfigurationException;
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -35,7 +36,8 @@ public abstract class TestUtils {
         boolean ok = metaData.hasRequiredValuesOrIsSuperset();
         if (!ok){
             //This test will fail but with extra info
-            assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
+            String report = metaData.validityReport(NO_WARNINGS);
+            assertThat(report, not(containsString("ERROR")));
             Reporter.report("hasRequiredValuesOrIsSuperset failed but validity report clear");
             Reporter.report(metaData.toString());
             assertTrue(ok);
@@ -46,7 +48,8 @@ public abstract class TestUtils {
         boolean ok = metaData.hasCorrectTypes();
         if (!ok){
             //This test will fail but with extra info
-            assertEquals(MetaDataBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
+            String report = metaData.validityReport(NO_WARNINGS);
+            assertThat(report, not(containsString("ERROR")));
             assertTrue(ok);
         }        
     }

@@ -81,9 +81,9 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     private void reportMissingValues(StringBuilder builder, String message, int tabLevel){
         tab(builder, tabLevel);
         builder.append(message);
-        appendLabel(builder, " Alternatives ");
+        builder.append(" Alternatives ");
         builder.append(name);
-        builder.append(" None of the alternatives have a value.");
+        builder.append(": None of the alternatives have a value.");
         newLine(builder);
         addDocumentationLink(builder, tabLevel);
         for (MetaDataBase child:childMetaData){

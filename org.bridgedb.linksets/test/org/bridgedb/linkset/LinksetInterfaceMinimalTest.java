@@ -62,8 +62,8 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         String result = linksetInterfaceMinimal.validateString(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, 
                 ValidationType.LINKSMINIMAL, false);
-        String expResult = AppendBase.CLEAR_REPORT + "\nFound 3 links";
-        assertEquals(expResult, result);
+        assertThat(result, not(containsString("ERROR")));
+        assertThat(result, containsString("Found 3 links"));
     }
 
     /**
@@ -75,7 +75,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         String info = getRDF(loadMayDataSet1());
         String mimeType = "application/xml";
         String result = linksetInterfaceMinimal.validateStringAsDatasetVoid(info, mimeType);
-        assertEquals(AppendBase.CLEAR_REPORT, result);
+        assertThat(result, not(containsString("ERROR")));
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         String mimeType = "application/xml";
         String expResult = AppendBase.CLEAR_REPORT;
         String result = linksetInterfaceMinimal.validateStringAsLinksetVoid(info, mimeType);
-        assertEquals(AppendBase.CLEAR_REPORT, result);
+        assertThat(result, not(containsString("ERROR")));
     }
 
     /**
@@ -100,8 +100,8 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         String info = getRDF(loadLinkSetwithLinks());
         String mimeType = "application/xml";;
         String result = linksetInterfaceMinimal.validateStringAsLinks(info, mimeType);
-        String expResult = AppendBase.CLEAR_REPORT + "\nFound 2 links";
-        assertEquals(expResult, result);
+        assertThat(result, not(containsString("ERROR")));
+        assertThat(result, containsString("Found 2 links"));
     }
 
      /**

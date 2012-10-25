@@ -23,7 +23,7 @@ public interface MetaData {
     boolean hasCorrectTypes();
 
     String validityReport(boolean includeWarnings);
-    
+
     void validate() throws MetaDataException;
     
     boolean allStatementsUsed();

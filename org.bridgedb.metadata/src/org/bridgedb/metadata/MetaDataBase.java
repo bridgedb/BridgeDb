@@ -72,17 +72,6 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
         //newLine(builder);
     }
 
-
-    final void appendLabel(StringBuilder builder){
-        builder.append(label);
-    }
-
-    final void appendLabel(StringBuilder builder, String middle){
-        appendLabel(builder);
-        builder.append(middle);
-        builder.append(name);
-    }
-    
     abstract MetaDataBase getSchemaClone();
     
     abstract boolean hasValues();

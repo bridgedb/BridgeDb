@@ -54,9 +54,10 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
         Reporter.report("LinkSet Report");
         MetaDataCollection metaData = new MetaDataCollection(loadMustLinkSet(), linksetSetRegistry);
         String report = metaData.validityReport(NO_WARNINGS);
-        assertEquals(AppendBase.CLEAR_REPORT, report);
+        assertThat(report, not(containsString("ERROR")));
         report = metaData.validityReport(INCLUDE_WARNINGS);
-        assertThat(AppendBase.CLEAR_REPORT, not(report));
+        assertThat(report, not(containsString("ERROR")));
+        assertThat(report, containsString("WARNING"));
     }
     
     @Test

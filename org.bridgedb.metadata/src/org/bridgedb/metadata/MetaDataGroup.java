@@ -67,8 +67,9 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         if (valueFound && valueMissing){
             tab(builder, tabLevel);
             builder.append("WARNING: ");
-            appendLabel(builder, " Group ");
-            builder.append(" Some but not all items in the group found.");
+            builder.append(" Group ");
+            builder.append(name);
+            builder.append(": Some but not all items in the group found.");
             newLine(builder);
             addDocumentationLink(builder, tabLevel);
             //check all items in the group have a value

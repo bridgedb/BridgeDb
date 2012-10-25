@@ -41,18 +41,12 @@ public abstract class AppendBase implements MetaData{
     public String validityReport(boolean includeWarnings) {
          StringBuilder builder = new StringBuilder();
          appendValidityReport(builder, CHECK_ALL_PRESENT, includeWarnings, 0);
-         if (builder.length() > 0){
-            return builder.toString();
-         } else {
-            return CLEAR_REPORT; 
-         }
+         return builder.toString();
     }
-
-   public void validate() throws MetaDataException {
+    
+    public void validate() throws MetaDataException {
         String report = this.validityReport(false);
-        if (report.equals(CLEAR_REPORT)){
-            //OK 
-        } else {
+        if (report.contains("ERROR")){
             throw new MetaDataException(report);
         }
     }

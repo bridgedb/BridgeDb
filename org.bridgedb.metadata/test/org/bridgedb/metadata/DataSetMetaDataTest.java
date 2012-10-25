@@ -15,6 +15,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.impl.IntegerLiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -85,8 +86,10 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testMustValidityReport() throws MetaDataException{
         Reporter.report("MustValidityReport");
         MetaDataCollection metaData = new MetaDataCollection(loadDirectDataSet1(), dataSetRegistry);
-        assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
-        assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(INCLUDE_WARNINGS));
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, not(containsString("ERROR")));
+        report = metaData.validityReport(INCLUDE_WARNINGS);
+        assertThat(report, not(containsString("ERROR")));
     }
 
     @Test
@@ -94,7 +97,9 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Reporter.report("MissingValidityReport");
         d1TitleStatement = null;
         MetaDataCollection metaData = new MetaDataCollection(loadMayDataSet1(), dataSetRegistry);
-        assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(INCLUDE_WARNINGS));
+        assertFalse(metaData.hasRequiredValues());
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, containsString("ERROR"));
     }
 
     @Test
@@ -102,8 +107,11 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         Reporter.report("MissingValidityReport");
         d1ModifiedStatement = null;
         MetaDataCollection metaData = new MetaDataCollection(loadMayDataSet1(), dataSetRegistry);        
-        assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(INCLUDE_WARNINGS));
-        assertEquals(AppendBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, not(containsString("ERROR")));
+        report = metaData.validityReport(INCLUDE_WARNINGS);
+        assertThat(report, not(containsString("ERROR")));
+        assertThat(report, containsString("WARNING"));
     }
 
     @Test
@@ -112,7 +120,8 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
         d1ModifiedStatement = null;
         d1RetreivedOn = null;
         MetaDataCollection metaData = new MetaDataCollection(loadMayDataSet1(), dataSetRegistry);        
-        assertNotSame(AppendBase.CLEAR_REPORT, metaData.validityReport(NO_WARNINGS));
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, containsString("ERROR"));
     }
     
     @Test

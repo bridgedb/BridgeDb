@@ -200,7 +200,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         if (ids.isEmpty()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
-            appendLabel(builder, ":");
+            builder.append(name);
             builder.append(" is missing. ");
             newLine(builder, tabLevel + 1);
             builder.append("Please add a statment with the predicate ");

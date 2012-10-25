@@ -205,12 +205,12 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             //Ok so nothing to append
         }
     }
-
+    
     private void appendEmptyReport(StringBuilder builder, int tabLevel, boolean includeWarnings) {
         if (requirementLevel == RequirementLevel.MUST){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
-            appendLabel(builder, ":");
+            builder.append(name);
             builder.append(" is Missing. ");
             newLine(builder, tabLevel + 1);
             builder.append("Please add a statement with the predicate ");
@@ -220,7 +220,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         } else if (requirementLevel == RequirementLevel.SHOULD && includeWarnings){
             tab(builder, tabLevel);
             builder.append("WARNING: ");
-            appendLabel(builder, ":");
+            builder.append(name);
             builder.append(" is missing. ");
             newLine(builder, tabLevel + 1);
             builder.append("Please consider adding a statement with the predicate ");
@@ -238,7 +238,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         } else {
             builder.append("ERROR: Incorrect type for ");
         }
-        appendLabel(builder, ":");
+        builder.append(name);
         for (Value value: values){
             if (!metaDataType.correctType(value)){
                 newLine(builder, tabLevel + 1);
@@ -276,10 +276,9 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private void appendUnspecifiedReport(StringBuilder builder, boolean includeWarnings, int tabLevel) {
         if (includeWarnings){
             tab(builder, tabLevel);
-            builder.append("INFO: ");
-            appendLabel(builder);
-            builder.append(" has an extra Predicate ");
+            builder.append("INFO: extra Predicate ");
             builder.append(predicate);
+            builder.append(" found.");
             newLine(builder);
         }
     }

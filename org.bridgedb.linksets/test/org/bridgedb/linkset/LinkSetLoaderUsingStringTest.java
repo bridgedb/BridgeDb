@@ -61,7 +61,8 @@ public class LinkSetLoaderUsingStringTest {
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
         String result = new LinksetLoader().validateString(LinksetStatementReaderTest.INFO1, format, 
                StoreType.TEST, ValidationType.LINKSMINIMAL, false);
-        assertEquals("No issues found\nFound 3 links", result);
+        assertThat(result, not(containsString("ERROR")));
+        assertThat(result, containsString("Found 3 links"));
     }
 
     @Test
