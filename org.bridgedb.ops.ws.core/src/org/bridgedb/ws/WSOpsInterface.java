@@ -27,6 +27,7 @@ import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.ValidationBean;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**
@@ -55,17 +56,17 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
 
-    public String validateString(String info, String defaultMIMEType, String storeType, String validationType, 
+    public ValidationBean validateString(String info, String defaultMIMEType, String storeType, String validationType, 
             String includeWarnings) throws IDMapperException;
 
-    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException;
+    public ValidationBean validateStringAsVoid(String info, String mimeType) throws IDMapperException;
 
-    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
+    public ValidationBean validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
 
     public String loadString(String info, String mineType, String storeType, String validationType) 
             throws IDMapperException;
 
-    public String validateStringAsLinkSet(String info, String mimeType) throws IDMapperException;
+    public ValidationBean validateStringAsLinkSet(String info, String mimeType) throws IDMapperException;
 
     public String checkStringValid(String info, String defaultMIMEType, String storeType, String validationType) 
             throws IDMapperException;

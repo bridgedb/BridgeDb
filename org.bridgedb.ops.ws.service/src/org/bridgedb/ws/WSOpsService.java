@@ -51,6 +51,7 @@ import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.ValidationBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.openrdf.rio.RDFFormat;
@@ -269,9 +270,9 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     
     @Override
     @GET
-    @Produces(MediaType.TEXT_HTML)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateString")
-    public String validateString(@QueryParam(INFO)String info, 
+    public ValidationBean validateString(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType, 
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString, 
@@ -281,40 +282,44 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         StoreType storeType = parseStoreType(storeTypeString);
         ValidationType validationType = parseValidationType(validationTypeString);
         boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
-        return linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
+        String report = linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
+        return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, includeWarnings);
     }
 
     @Override
     @GET
-    @Produces(MediaType.TEXT_HTML)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoid")
-    public String validateStringAsVoid(@QueryParam(INFO)String info, 
+    public ValidationBean validateStringAsVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
         validateInfo(info);
         RDFFormat format = getRDFFormatByMimeType(mimeType);
-        return linksetInterface.validateStringAsDatasetVoid(info, mimeType);
+        String report =  linksetInterface.validateStringAsDatasetVoid(info, mimeType);
+        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.DATASETVOID, true);
     }
 
     @Override
     @GET
-    @Produces(MediaType.TEXT_HTML)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinksetVoid")
-    public String validateStringAsLinksetVoid(@QueryParam(INFO)String info, 
+    public ValidationBean validateStringAsLinksetVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
         validateInfo(info);
         RDFFormat format = getRDFFormatByMimeType(mimeType);
-        return linksetInterface.validateStringAsLinksetVoid(info, mimeType);
+        String report =  linksetInterface.validateStringAsLinksetVoid(info, mimeType);
+        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKSETVOID, true);
     }
 
     @Override
     @GET
-    @Produces(MediaType.TEXT_HTML)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
-    public String validateStringAsLinkSet(@QueryParam(INFO)String info, 
+    public ValidationBean validateStringAsLinkSet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
         validateInfo(info);
         RDFFormat format = getRDFFormatByMimeType(mimeType);
-        return linksetInterface.validateStringAsLinks(info, mimeType);
+        String report =  linksetInterface.validateStringAsLinks(info, mimeType);
+        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKS, true);
     }
 
     @Override

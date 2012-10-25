@@ -45,6 +45,7 @@ import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.UriSpaceBean;
+import org.bridgedb.ws.bean.ValidationBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.openrdf.rio.RDFFormat;
@@ -175,23 +176,27 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     // *****   LinksetInterfaceMinimal Methods
     @Override
     public String validateString(String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
-        return opsService.validateString(info, format.getDefaultMIMEType(), storeType.toString(), 
+        ValidationBean bean = opsService.validateString(info, format.getDefaultMIMEType(), storeType.toString(), 
                 validationType.toString(), Boolean.toString(includeWarnings));
+        return bean.getReport();
     }
 
     @Override
     public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
-        return opsService.validateStringAsVoid(info, mimeType);
+        ValidationBean bean = opsService.validateStringAsVoid(info, mimeType);
+        return bean.getReport();
     }
 
     @Override
     public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
-        return opsService.validateStringAsLinksetVoid(info, mimeType);
+        ValidationBean bean = opsService.validateStringAsLinksetVoid(info, mimeType);
+        return bean.getReport();
     }
 
     @Override
     public String validateStringAsLinks(String info, String mimeType) throws IDMapperException {
-        return opsService.validateStringAsLinkSet(info, mimeType);
+        ValidationBean bean =  opsService.validateStringAsLinkSet(info, mimeType);
+        return bean.getReport();
     }
 
     @Override
