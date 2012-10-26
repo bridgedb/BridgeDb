@@ -441,7 +441,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         
         sb.append("<p>This is an early prototype and subject to change!</p> ");
         
-        sb.append("<form method=\"get\" action=\"/OPS-IMS/");
+        sb.append("<form method=\"post\" action=\"/OPS-IMS/");
         switch (validationType){
             case DATASETVOID: {
                 sb.append("validateStringAsVoid");
@@ -619,9 +619,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             + " </p>";
     private final String FORM_MINE_TYPE = " <p>Mime Type:"
             + "     <select size=\"1\" name=\"mimeType\">"
+            + "         <option value=\"application/x-turtle\">Turtle (mimeType=application/x-turtle; ext=ttl)</option>"
             + "         <option value=\"text/plain\">N-Triples (mimeType=text/plain; ext=nt)</option>"
             + "         <option value=\"application/rdf+xml\">RDF/XML (mimeType=application/rdf+xml; ext=rdf, rdfs, owl, xml</option>"
-            + "         <option value=\"application/x-turtle\">Turtle (mimeType=application/x-turtle; ext=ttl)</option>"
             + " 	</select>"
             + " </p>";
     private final String FORM_INFO_START = "<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";

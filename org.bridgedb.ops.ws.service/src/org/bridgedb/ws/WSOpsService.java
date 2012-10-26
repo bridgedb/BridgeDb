@@ -25,7 +25,9 @@ import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import java.util.List;
 import java.util.Set;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -289,11 +291,11 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     }
 
     @Override
-    @GET
+    @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoid")
-    public ValidationBean validateStringAsVoid(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+    public ValidationBean validateStringAsVoid(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
         String report = NO_RESULT;
         String exception = NO_EXCEPTION;
         try{
@@ -304,6 +306,14 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             exception = e.toString();
         }
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.DATASETVOID, true, exception);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateStringAsVoid")
+    public ValidationBean getValidateStringAsVoid(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        return validateStringAsVoid(info, mimeType);
     }
 
     @Override
@@ -325,11 +335,11 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     }
 
     @Override
-    @GET
+    @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
-    public ValidationBean validateStringAsLinkSet(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+    public ValidationBean validateStringAsLinkSet(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
         String report = NO_RESULT;
         String exception = NO_EXCEPTION;
         try{
@@ -340,6 +350,14 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             exception = e.toString();
         }
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKS, true,exception);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateStringAsLinkSet")
+    public ValidationBean getValidateStringAsLinkSet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        return validateStringAsLinkSet(info, mimeType);
     }
 
     @Override
