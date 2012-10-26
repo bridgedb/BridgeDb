@@ -56,7 +56,7 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
 
-    public ValidationBean validateString(String info, String defaultMIMEType, String storeType, String validationType, 
+    public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
             String includeWarnings) throws IDMapperException;
 
     public ValidationBean validateStringAsVoid(String info, String mimeType) throws IDMapperException;
