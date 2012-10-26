@@ -28,6 +28,7 @@ import org.bridgedb.IDMapperTestBase;
 public class WSOpsClientFactory extends IDMapperTestBase{
     
     public static WSOpsInterface createTestWSClient() throws IDMapperException{
+        setupXref();
         //ystem.out.println("in WSCoreInterface 1");
         WSOpsInterface webService = new WSOpsClient("http://localhost:8080/OPS-IMS");
         //ystem.out.println("in WSCoreInterface 2");
@@ -40,7 +41,9 @@ public class WSOpsClientFactory extends IDMapperTestBase{
             System.err.println ("Please make sure the server is running");
             org.junit.Assume.assumeTrue(false);        
         }
-        //ystem.out.println("in WSCoreInterface 4");
+        System.out.println(DataSource1);
+        System.out.println(DataSource2);
+        System.out.println(DataSource2.getSystemCode());
         if (!webService.isMappingSupported(DataSource1.getSystemCode(), DataSource2.getSystemCode()).isMappingSupported()){
         //ystem.out.println("in WSCoreInterface 5a");
             System.err.println ("***** SKIPPING WSClientTest ******");
