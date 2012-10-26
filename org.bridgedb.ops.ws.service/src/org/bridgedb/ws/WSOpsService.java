@@ -66,6 +66,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String STORE_TYPE = "storeType";
     public final String VALIDATION_TYPE = "validationType";
     public final String INFO = "info"; 
+    public final String NO_EXCEPTION = "No Exception Thrown";
+    public final String NO_RESULT = null;
     
     protected WSOpsService() {
         this.linksetInterface = new LinksetLoader();
@@ -283,7 +285,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         ValidationType validationType = parseValidationType(validationTypeString);
         boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
         String report = linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
-        return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, includeWarnings);
+        return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, includeWarnings, "None");
     }
 
     @Override
@@ -292,10 +294,16 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsVoid")
     public ValidationBean validateStringAsVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
-        validateInfo(info);
-        RDFFormat format = getRDFFormatByMimeType(mimeType);
-        String report =  linksetInterface.validateStringAsDatasetVoid(info, mimeType);
-        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.DATASETVOID, true);
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInfo(info);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            report =  linksetInterface.validateStringAsDatasetVoid(info, mimeType);
+        } catch (Exception e){
+            exception = e.toString();
+        }
+        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.DATASETVOID, true, exception);
     }
 
     @Override
@@ -304,10 +312,16 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsLinksetVoid")
     public ValidationBean validateStringAsLinksetVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
-        validateInfo(info);
-        RDFFormat format = getRDFFormatByMimeType(mimeType);
-        String report =  linksetInterface.validateStringAsLinksetVoid(info, mimeType);
-        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKSETVOID, true);
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInfo(info);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            report =  linksetInterface.validateStringAsLinksetVoid(info, mimeType);
+        } catch (Exception e){
+            exception = e.toString();
+        }
+        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKSETVOID, true, exception);
     }
 
     @Override
@@ -316,10 +330,16 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsLinkSet")
     public ValidationBean validateStringAsLinkSet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
-        validateInfo(info);
-        RDFFormat format = getRDFFormatByMimeType(mimeType);
-        String report =  linksetInterface.validateStringAsLinks(info, mimeType);
-        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKS, true);
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInfo(info);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            report =  linksetInterface.validateStringAsLinks(info, mimeType);
+        } catch (Exception e){
+            exception = e.toString();
+        }
+        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKS, true,exception);
     }
 
     @Override

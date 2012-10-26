@@ -36,27 +36,32 @@ public class ValidationBean {
     private String storeType;
     private String validationType;
     private Boolean includeWarnings;
+    private String exception;
     
     //Webservice constructor
     public ValidationBean(){
     }
 
-    public ValidationBean(String report, String info, String mimeType, String storeType, String validationType, Boolean includeWarnings) {
+    public ValidationBean(String report, String info, String mimeType, String storeType, String validationType, 
+            Boolean includeWarnings, String exception) {
         this.report = report;
         this.info = info;
         this.mimeType = mimeType;
         this.storeType = storeType;
         this.validationType = validationType;
         this.includeWarnings = includeWarnings;
+        this.exception = exception;
     }
     
-    public ValidationBean(String report, String info, String mimeType, StoreType storeType, ValidationType validationType, Boolean includeWarnings) {
+    public ValidationBean(String report, String info, String mimeType, StoreType storeType, 
+            ValidationType validationType, Boolean includeWarnings, String exception) {
         this.report = report;
         this.info = info;
         this.mimeType = mimeType;
         this.storeType = storeType.toString();
         this.validationType = validationType.toString();
         this.includeWarnings = includeWarnings;
+        this.exception = exception;
     }
 
     public String toString(){
@@ -69,10 +74,11 @@ public class ValidationBean {
         builder.append("\nStoreType: ");
         builder.append(getStoreType());
         builder.append("\nValidationType: ");
-        builder.append(getMimeType());
-        
+        builder.append(getMimeType());      
         builder.append("\nIncludeWarnings: ");
         builder.append(getIncludeWarnings());
+        builder.append("\nException: ");
+        builder.append(getException());
         return builder.toString();
      }
 
@@ -158,6 +164,20 @@ public class ValidationBean {
      */
     public void setIncludeWarnings(Boolean includeWarnings) {
         this.includeWarnings = includeWarnings;
+    }
+
+    /**
+     * @return the exception
+     */
+    public String getException() {
+        return exception;
+    }
+
+    /**
+     * @param exception the exception to set
+     */
+    public void setException(String exception) {
+        this.exception = exception;
     }
 
 }
