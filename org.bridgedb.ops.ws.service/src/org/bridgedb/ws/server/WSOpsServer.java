@@ -65,6 +65,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     private NumberFormat formatter;
     
     public WSOpsServer()  throws IDMapperException   {
+        Reporter.report("Super setup");
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
         urlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         idMapper = urlMapper;

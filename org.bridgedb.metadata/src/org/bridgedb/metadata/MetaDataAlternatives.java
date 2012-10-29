@@ -74,7 +74,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
             }
         }
         for (MetaDataBase child:childMetaData){
-            child.appendValidityReport(builder, PRESENCE_OPTIONAL, includeWarnings, tabLevel);
+            child.appendValidityReport(builder, PRESENCE_OPTIONAL, includeWarnings, tabLevel+1);
         }
     }
 

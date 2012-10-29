@@ -131,7 +131,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         } else {
             int before = builder.length();
             for (MetaDataBase child:childMetaData){
-                child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
+                child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel+1);
             }
             if (before == builder.length()){
                 tab(builder, tabLevel+1);
