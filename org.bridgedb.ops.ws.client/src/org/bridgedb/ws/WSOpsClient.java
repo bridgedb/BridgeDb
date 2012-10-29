@@ -18,10 +18,12 @@
 //
 package org.bridgedb.ws;
 
+import com.sun.jersey.api.client.ClientResponse;
 import java.util.List;
 
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
@@ -41,6 +43,9 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 
+    public final String NO_REPORT = null;
+    public final String NO_EXCEPTION = null;
+    
     public WSOpsClient(String serviceAddress) {
         super(serviceAddress);
     }
@@ -172,13 +177,27 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public String checkStringValid(String info, String defaultMIMEType, String storeType, String validationType) throws IDMapperException {
+    public String checkStringValid(String info, String mimeType, String storeType, String validationType) throws IDMapperException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public ValidationBean validateString(String info, String defaultMIMEType, String storeType, String validationType, String includeWarnings) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ValidationBean validateString(String info, String mimeType, String storeType, String validationType, 
+            String includeWarnings) throws IDMapperException {
+        ValidationBean input = new ValidationBean(NO_REPORT, info, mimeType, storeType, validationType, 
+                includeWarnings, NO_EXCEPTION);
+        ValidationBean result = 
+                webResource.path("/validateStringXML")
+                .type(MediaType.APPLICATION_XML)
+                .post(ValidationBean.class, input);
+//        System.out.println(response.getStatus());  
+//        System.out.println(response);  
+//        System.out.println(response.hasEntity());  
+//        System.out.println(response.getClass());  
+//        System.out.println(response.getType());  
+//         = response.getEntity(ValidationBean.class);
+        System.out.println(result);
+        return result;
     }
 
     @Override
@@ -188,6 +207,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 
     @Override
     public ValidationBean validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

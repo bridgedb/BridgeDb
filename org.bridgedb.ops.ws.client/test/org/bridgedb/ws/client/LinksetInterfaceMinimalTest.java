@@ -29,6 +29,7 @@ import org.bridgedb.ws.WSOpsInterface;
 import org.bridgedb.ws.WSOpsMapper;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * This class depends on URLListenerTest having loaded the data.
@@ -49,6 +50,38 @@ public class LinksetInterfaceMinimalTest extends org.bridgedb.linkset.LinksetInt
     public LinksetInterfaceMinimalTest() 
             throws DatatypeConfigurationException, MetaDataException {
         super(wsOpsMapper);
+    }
+    
+    @Test
+    public void testValidateStringAsDatasetVoid() throws Exception {
+    }
+
+    /**
+     * Test of validateStringAsLinksetVoid method, of class LinksetInterface.
+     */
+    @Test
+    public void testValidateStringAsLinksetVoid() throws Exception {
+    }
+
+    /**
+     * Test of validateStringAsLinkset method, of class LinksetInterface.
+     */
+    @Test
+    public void testValidateStringAsLinks() throws Exception {
+    }
+
+     /**
+     * Test of load method, of class LinksetInterface.
+     */
+    @Test
+    public void testLoadStrings() throws Exception {
+    }
+
+   /**
+     * Test of validate method, of class LinksetInterface.
+     */
+    @Test
+    public void testCheckStringValid() throws Exception {
     }
 
 }

@@ -53,6 +53,17 @@ public class ValidationBean {
         this.exception = exception;
     }
     
+    public ValidationBean(String report, String info, String mimeType, String storeType, String validationType, 
+            String includeWarnings, String exception) {
+        this.report = report;
+        this.info = info;
+        this.mimeType = mimeType;
+        this.storeType = storeType;
+        this.validationType = validationType;
+        this.includeWarnings = Boolean.parseBoolean(includeWarnings);
+        this.exception = exception;
+    }
+
     public ValidationBean(String report, String info, String mimeType, StoreType storeType, 
             ValidationType validationType, Boolean includeWarnings, String exception) {
         this.report = report;

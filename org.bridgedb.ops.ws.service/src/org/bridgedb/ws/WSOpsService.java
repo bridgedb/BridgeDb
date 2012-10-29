@@ -25,6 +25,7 @@ import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import java.util.List;
 import java.util.Set;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -33,6 +34,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBElement;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -63,7 +65,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
 
     protected URLMapper urlMapper;
     protected LinksetInterfaceMinimal linksetInterface;
-    private String validationTypeString;
+//    private String validationTypeString;
     public final String MIME_TYPE = "mimeType";
     public final String STORE_TYPE = "storeType";
     public final String VALIDATION_TYPE = "validationType";
@@ -288,6 +290,38 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
         String report = linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
         return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, includeWarnings, "None");
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Consumes(MediaType.APPLICATION_XML)
+    @Path("/validateStringXML")
+    public ValidationBean validateString(JAXBElement<ValidationBean> input) throws IDMapperException {
+        System.out.println("received");
+        String report = NO_RESULT;
+        String info = null;
+        String mimeType = null;
+        String storeType = null;
+        String validationType = null;
+        Boolean includeWarnings = null;
+        String exception = NO_EXCEPTION;       
+        try{
+            ValidationBean bean = input.getValue();
+            info = bean.getInfo();
+            mimeType = bean.getMimeType();
+            storeType = bean.getStoreType();
+            validationType = bean.getValidationType();
+            includeWarnings = bean.getIncludeWarnings();
+        } catch (Exception e){
+            exception = e.toString();
+            return new ValidationBean(report, info, mimeType, storeType, validationType, includeWarnings, exception);
+        }
+        System.out.println("calling");
+        if (includeWarnings){
+            return validateString(info, mimeType, storeType, validationType, "true");
+        } else {
+            return validateString(info, mimeType, storeType, validationType, "false");
+        }     
     }
 
     @Override
