@@ -175,14 +175,14 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
 
     // *****   LinksetInterfaceMinimal Methods
     @Override
-    public String validateString(String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
+    public String validateString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
         ValidationBean bean = opsService.validateString(info, format.getDefaultMIMEType(), storeType.toString(), 
                 validationType.toString(), Boolean.toString(includeWarnings));
         return bean.getReport();
     }
 
     @Override
-    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException {
+    public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException {
         ValidationBean bean = opsService.validateStringAsVoid(info, mimeType);
         return bean.getReport();
     }
@@ -194,19 +194,19 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     //}
 
     @Override
-    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException {
+    public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException {
         ValidationBean bean =  opsService.validateStringAsLinkSet(info, mimeType);
         return bean.getReport();
     }
 
     @Override
-    public void loadString(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException {
         opsService.loadString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
     }
 
     @Override
-    public void checkStringValid(String info, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
+    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
         opsService.checkStringValid(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
     }
 

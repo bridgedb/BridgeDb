@@ -60,8 +60,8 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         Reporter.report("validateString");
         boolean includeWarnings = false;
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        String result = linksetInterfaceMinimal.validateString(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, 
-                ValidationType.LINKSMINIMAL, false);
+        String result = linksetInterfaceMinimal.validateString("LinksetStatementReaderTest.INFO1",
+                LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 3 links"));
     }
@@ -74,7 +74,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         Reporter.report("validateStringAsDatasetVoid");
         String info = getRDF(loadMayDataSet1());
         String mimeType = "application/xml";
-        String result = linksetInterfaceMinimal.validateStringAsVoid(info, mimeType);
+        String result = linksetInterfaceMinimal.validateStringAsVoid("loadMayDataSet1()", info, mimeType);
         assertThat(result, not(containsString("ERROR")));
     }
 
@@ -99,7 +99,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         Reporter.report("validateStringAsLinkset");
         String info = getRDF(loadLinkSetwithLinks());
         String mimeType = "application/xml";;
-        String result = linksetInterfaceMinimal.validateStringAsLinks(info, mimeType);
+        String result = linksetInterfaceMinimal.validateStringAsLinks("loadLinkSetwithLinks()", info, mimeType);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 2 links"));
     }
@@ -113,7 +113,8 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         StoreType storeType = null;
         ValidationType validationType = null;
-        linksetInterfaceMinimal.loadString(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetInterfaceMinimal.loadString("LinksetStatementReaderTest.INFO1", 
+                LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
 
    /**
@@ -123,7 +124,8 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
     public void testCheckStringValid() throws Exception {
         Reporter.report("CheckStringValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        linksetInterfaceMinimal.checkStringValid(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetInterfaceMinimal.checkStringValid("LinksetStatementReaderTest.INFO1", 
+                LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
 
 }

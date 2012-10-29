@@ -17,17 +17,17 @@ import org.openrdf.rio.RDFFormat;
  */
 public interface LinksetInterface extends LinksetInterfaceMinimal{
     @Override
-    public String validateString(String info, RDFFormat format, StoreType storeType, 
+    public String validateString(String source, String info, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException;
     
     @Override
-    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException;
     
     //@Override
     //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
     
     @Override
-    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException;
     
     public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
             throws IDMapperException;
@@ -39,13 +39,13 @@ public interface LinksetInterface extends LinksetInterfaceMinimal{
     public String validateFileAsLinks(String fileName) throws IDMapperException; 
 
     @Override
-    public void loadString(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException;
     
     public void loadFile(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;
     
     @Override
-    public void checkStringValid(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException;
     
     public void checkFileValid(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;

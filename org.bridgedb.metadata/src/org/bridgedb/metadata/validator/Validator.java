@@ -25,7 +25,7 @@ public class Validator {
         MetaData metaData;
         if (type.isLinkset()){
             LinksetStatements statements = new LinksetStatementReader(dataFileName);
-            metaData = new LinksetVoidInformation(statements, specification);
+            metaData = new LinksetVoidInformation(dataFileName, statements, specification);
         } else {
             metaData = new MetaDataCollection(dataFileName, specification);
         }

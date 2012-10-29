@@ -52,14 +52,16 @@ public class LinkSetLoaderUsingStringTest {
     public void testcheckStringValid() throws IDMapperException {
         Reporter.report("CheckStringValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        new LinksetLoader().checkStringValid(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        new LinksetLoader().checkStringValid("LinksetStatementReaderTest.INFO1", 
+                LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
     @Test
     public void testvalidityReport() throws IDMapperException {
         Reporter.report("validityReport");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
-        String result = new LinksetLoader().validateString(LinksetStatementReaderTest.INFO1, format, 
+        String result = new LinksetLoader().validateString("LinksetStatementReaderTest.INFO1", 
+                LinksetStatementReaderTest.INFO1, format, 
                StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 3 links"));
@@ -69,7 +71,8 @@ public class LinkSetLoaderUsingStringTest {
     public void testLoad() throws IDMapperException {
         Reporter.report("Load");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-       new LinksetLoader().loadString(LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
+       new LinksetLoader().loadString("LinksetStatementReaderTest.INFO1", 
+                LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
 }

@@ -36,7 +36,7 @@ public class LinksetVoidInformationTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         LinksetStatements statements = new LinksetStatementReader(FileTest.LINK_FILE);
-        instance = new LinksetVoidInformation(statements, ValidationType.LINKS);
+        instance = new LinksetVoidInformation(FileTest.LINK_FILE, statements, ValidationType.LINKS);
     }
 
     @AfterClass

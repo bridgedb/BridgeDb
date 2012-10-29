@@ -31,7 +31,7 @@ public class FileTest extends TestUtils{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
-        MetaDataCollection metaData = new MetaDataCollection(statements, registry);
+        MetaDataCollection metaData = new MetaDataCollection(fileName, statements, registry);
         checkCorrectNumberOfIds (metaData, numberOfIds);
         checkRequiredValues(metaData);
         checkCorrectTypes(metaData);
@@ -45,7 +45,7 @@ public class FileTest extends TestUtils{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
-        MetaDataCollection metaData = new MetaDataCollection(statements, registry);
+        MetaDataCollection metaData = new MetaDataCollection(fileName, statements, registry);
         checkCorrectNumberOfIds (metaData, numberOfIds);
         String report = metaData.validityReport(NO_WARNINGS);
         assertThat(report, not(containsString("ERROR")));
@@ -56,7 +56,7 @@ public class FileTest extends TestUtils{
         File input = new File(fileName);
         Set<Statement> statements = StatementReader.extractStatements(input);
         Reporter.report("Read " + fileName);
-        MetaDataCollection metaData = new MetaDataCollection(statements, registry);
+        MetaDataCollection metaData = new MetaDataCollection(fileName, statements, registry);
         Reporter.report("Loaded " + fileName);
         String report = metaData.validityReport(NO_WARNINGS);
         assertThat(report, not(containsString("ERROR")));

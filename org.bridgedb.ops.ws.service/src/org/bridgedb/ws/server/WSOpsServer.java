@@ -227,7 +227,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
        try{
             if (info != null && !info.isEmpty()){
                 RDFFormat format = getRDFFormatByMimeType(mimeType);
-                report = linksetInterface.validateString(info, format, StoreType.LIVE, validationType, true);
+                report = linksetInterface.validateString("Webservice Call", info, format, StoreType.LIVE, validationType, true);
             }
         } catch (Exception e){
             report = e.toString();

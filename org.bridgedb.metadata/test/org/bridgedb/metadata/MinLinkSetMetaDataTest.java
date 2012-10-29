@@ -26,14 +26,14 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
     @Test
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("Linkset HasRequiredValues");
-        MetaDataCollection metaData = new MetaDataCollection(loadMinLinkSet(), minLinksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("Linkset HasCorrectTypes");
-        MetaDataCollection metaData = new MetaDataCollection(loadMinLinkSet(), minLinksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         checkCorrectTypes(metaData);
     }
  
@@ -43,7 +43,7 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
         Set<Statement> statements = loadMinLinkSet();
         d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
         statements.add(d1ModifiedStatement);
-        MetaDataCollection metaData = new MetaDataCollection(statements, minLinksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("testIgnoreBadTypes()", statements, minLinksetSetRegistry);
         assertFalse(metaData.hasCorrectTypes());
         metaData.validate();
     }
@@ -52,21 +52,21 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
     @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("LinkSet AllStatementsUsed");
-        MetaDataCollection metaData = new MetaDataCollection(loadMinLinkSet(), minLinksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         checkAllStatementsUsed(metaData);
     }
 
     @Test
     public void testValidateOk() throws MetaDataException{
         Reporter.report("LinkSet Validate OK");
-        MetaDataCollection metaData = new MetaDataCollection(loadMinLinkSet(), minLinksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         metaData.validate();
     }
 
     @Test
     public void testSummary() throws MetaDataException{
         Reporter.report("LinkSet Summary");
-        MetaDataCollection metaData = new MetaDataCollection(loadMinLinkSet(), minLinksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         String expected = "(Linkset) http://www.example.com/test/linkset1 OK!\n"
                 + "(Dataset) http://www.example.com/test/dataset2 OK!\n"
                 + "(Dataset) http://www.example.com/test/dataset1 OK!\n";

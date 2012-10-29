@@ -302,7 +302,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             StoreType storeType = parseStoreType(storeTypeString);
             ValidationType validationType = parseValidationType(validationTypeString);
             boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
-            report = linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
+            report = linksetInterface.validateString("Webservice Call", info, format, storeType, validationType, includeWarnings);
             return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, 
                     includeWarnings, "None");
         } catch (Exception e){
@@ -355,7 +355,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateStringAsVoid(info, mimeType);
+            report =  linksetInterface.validateStringAsVoid("Webservice Call", info, mimeType);
         } catch (Exception e){
             exception = e.toString();
         }
@@ -415,7 +415,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateStringAsLinks(info, mimeType);
+            report =  linksetInterface.validateStringAsLinks("Webservice Call", info, mimeType);
         } catch (Exception e){
             exception = e.toString();
         }
@@ -432,7 +432,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateStringAsLinks(info, mimeType);
+            report =  linksetInterface.validateStringAsLinks("Webservice Call", info, mimeType);
         } catch (Exception e){
             exception = e.toString();
         }
@@ -468,7 +468,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         RDFFormat format = getRDFFormatByMimeType(mimeType);
         StoreType storeType = parseStoreType(storeTypeString);
         ValidationType validationType = parseValidationType(validationTypeString);
-        linksetInterface.loadString(info, format, storeType, validationType);
+        linksetInterface.loadString("Webservice Call", info, format, storeType, validationType);
         return "Load successful";
     }
 
@@ -485,7 +485,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         RDFFormat format = getRDFFormatByMimeType(mimeType);
         StoreType storeType = parseStoreType(storeTypeString);
         ValidationType validationType = parseValidationType(validationTypeString);
-        linksetInterface.checkStringValid(info, format, storeType, validationType);
+        linksetInterface.checkStringValid("Webservice Call", info, format, storeType, validationType);
         return "OK";
     }
 

@@ -23,14 +23,14 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     @Test
     public void testHasRequiredValues() throws MetaDataException{
         Reporter.report("Linkset HasRequiredValues");
-        MetaDataCollection metaData = new MetaDataCollection(loadMustLinkSet(), linksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMustLinkSet()", loadMustLinkSet(), linksetSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("Linkset HasCorrectTypes");
-        MetaDataCollection metaData = new MetaDataCollection(loadMayLinkSet(), linksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         checkCorrectTypes(metaData);
     }
  
@@ -38,21 +38,21 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
         Reporter.report("LinkSet AllStatementsUsed");
-        MetaDataCollection metaData = new MetaDataCollection(loadMayLinkSet(), linksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         checkAllStatementsUsed(metaData);
     }
 
     @Test
     public void testValidateOk() throws MetaDataException{
         Reporter.report("LinkSet Validate OK");
-        MetaDataCollection metaData = new MetaDataCollection(loadMayLinkSet(), linksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         metaData.validate();
     }
 
     @Test
     public void testValidateReport() throws MetaDataException{
         Reporter.report("LinkSet Report");
-        MetaDataCollection metaData = new MetaDataCollection(loadMustLinkSet(), linksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMustLinkSet()", loadMustLinkSet(), linksetSetRegistry);
         String report = metaData.validityReport(NO_WARNINGS);
         assertThat(report, not(containsString("ERROR")));
         report = metaData.validityReport(INCLUDE_WARNINGS);
@@ -63,7 +63,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     @Test
     public void testSummary() throws MetaDataException{
         Reporter.report("LinkSet Summary");
-        MetaDataCollection metaData = new MetaDataCollection(loadMayLinkSet(), linksetSetRegistry);
+        MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         String expected = "(Linkset) http://www.example.com/test/linkset1 OK!\n"
                 + "(Dataset) http://www.example.com/test/dataset2 OK!\n"
                 + "(Dataset) http://www.example.com/test/dataset1 OK!\n";

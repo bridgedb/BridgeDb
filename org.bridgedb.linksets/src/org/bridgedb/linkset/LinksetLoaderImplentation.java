@@ -92,25 +92,25 @@ public class LinksetLoaderImplentation{
         this.storeType = storeType;
         statements = new LinksetStatementReaderAndImporter(file, storeType);     
         if (validationType.isLinkset()){
-            metaData = new LinksetVoidInformation(statements, validationType);        
+            metaData = new LinksetVoidInformation(file.getAbsolutePath(), statements, validationType);        
         } else {
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
-            metaData = new MetaDataCollection(statements.getVoidStatements(), specification);
+            metaData = new MetaDataCollection(file.getAbsolutePath(), statements.getVoidStatements(), specification);
         }
     }
     
-    protected LinksetLoaderImplentation(String info, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
+    protected LinksetLoaderImplentation(String source, String info, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
         Reporter.report("Reading a String length " + info.length());
         this.validationType = validationType;
         this.storeType = storeType;
         statements = new LinksetStatementReaderAndImporter(info, format, storeType);     
         if (validationType.isLinkset()){
-            metaData = new LinksetVoidInformation(statements, validationType);        
+            metaData = new LinksetVoidInformation(source, statements, validationType);        
         } else {
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
-            metaData = new MetaDataCollection(statements.getVoidStatements(), specification);
+            metaData = new MetaDataCollection(source, statements.getVoidStatements(), specification);
         }
         accessedFrom = null;
     }

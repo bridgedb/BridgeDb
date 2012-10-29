@@ -40,17 +40,17 @@ public class LinksetVoidInformation implements MetaData {
     private boolean INCLUDE_WARNINGS = true;
     private boolean NO_WARNINGS = false;
     
-    public LinksetVoidInformation(LinksetStatements reader,  ValidationType type) throws IDMapperException{
-        this(reader, MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
+    public LinksetVoidInformation(String source, LinksetStatements reader,  ValidationType type) throws IDMapperException{
+        this(source, reader, MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
     }
     
-    public LinksetVoidInformation(LinksetStatements reader, MetaDataSpecification specification) throws MetaDataException{
-        collection = new MetaDataCollection(reader.getVoidStatements(), specification);
+    public LinksetVoidInformation(String source, LinksetStatements reader, MetaDataSpecification specification) throws MetaDataException{
+        collection = new MetaDataCollection(source, reader.getVoidStatements(), specification);
         ResourceMetaData linkset = findLinkSet();
         predicate = extractSingleStringByPredicate(linkset, VoidConstants.LINK_PREDICATE);  
         transative =  checkIsTransative(linkset);
-        ResourceMetaData source = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
-        subjectUriSpace = extractSingleStringByPredicate(source, VoidConstants.URI_SPACE);
+        ResourceMetaData resourceMetaData = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
+        subjectUriSpace = extractSingleStringByPredicate(resourceMetaData, VoidConstants.URI_SPACE);
         ResourceMetaData target = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.OBJECTSTARGET);
         targetUriSpace = extractSingleStringByPredicate(target, VoidConstants.URI_SPACE);
         validateLinks(reader.getLinkStatements());
@@ -189,8 +189,11 @@ public class LinksetVoidInformation implements MetaData {
    
     @Override
     public void validate() throws MetaDataException {
-        if (!hasRequiredValues() || !hasCorrectTypes()){
-            throw new MetaDataException(validityReport(NO_WARNINGS));
+        if (!hasRequiredValues() ){
+            throw new MetaDataException("Missing required values. \n" + validityReport(INCLUDE_WARNINGS));
+        }
+        if (!hasCorrectTypes()){
+            throw new MetaDataException("Incorrect Type(s)\n" + validityReport(INCLUDE_WARNINGS));
         }
         if (!error.isEmpty()){
             throw new MetaDataException(error);

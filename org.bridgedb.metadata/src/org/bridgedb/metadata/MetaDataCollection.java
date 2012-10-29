@@ -29,8 +29,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     Set<String> errors = new HashSet<String>();
     Set<Statement> unusedStatements = new HashSet<Statement>();
     MetaDataSpecification metaDataRegistry;
+    private final String source;
     
-    public MetaDataCollection(Set<Statement> incomingStatements, MetaDataSpecification specification) throws MetaDataException {
+    public MetaDataCollection(String source, Set<Statement> incomingStatements, MetaDataSpecification specification) throws MetaDataException {
         Set<Statement> statements = new HashSet(incomingStatements);
         this.metaDataRegistry = specification;
         Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
@@ -48,10 +49,11 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         }
         addSubsets(subsetStatements);
         checkAllRemainingAreLinks(statements);
+        this.source = source;
     }
     
     public MetaDataCollection (String dataFileName, MetaDataSpecification metaDataRegistry) throws MetaDataException{
-        this(StatementReader.extractStatements(dataFileName), metaDataRegistry);
+        this(dataFileName, StatementReader.extractStatements(dataFileName), metaDataRegistry);
     }
         
     private ResourceMetaData getResourceMetaData (Resource id, Set<Statement> statements) throws MetaDataException{
@@ -256,6 +258,15 @@ public class MetaDataCollection extends AppendBase implements MetaData {
          }
     }
 
+    @Override
+    public String validityReport(boolean includeWarnings) {
+         StringBuilder builder = new StringBuilder();
+         builder.append("Report for " + source);
+         newLine(builder);
+         appendValidityReport(builder, CHECK_ALL_PRESENT, includeWarnings, 0);
+         return builder.toString();
+    }
+    
     @Override
     void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
          Collection<ResourceMetaData> theResources = resourcesMap.values();

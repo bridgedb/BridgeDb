@@ -16,19 +16,19 @@ import org.openrdf.rio.RDFFormat;
  * @author Christian
  */
 public interface LinksetInterfaceMinimal {
-    public String validateString(String info, RDFFormat format, StoreType storeType, 
+    public String validateString(String source, String info, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException;
     
-    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException;
     
     //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
     
-    public String validateStringAsLinks(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException;
     
-    public void loadString(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException;
     
-    public void checkStringValid(String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException;
         
 }
