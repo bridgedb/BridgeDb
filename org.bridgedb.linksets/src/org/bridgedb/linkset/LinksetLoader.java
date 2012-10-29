@@ -70,11 +70,11 @@ public class LinksetLoader implements LinksetInterface{
         return validateString(info, format, StoreType.LIVE, ValidationType.DATASETVOID, INCLUDE_WARNINGS);
     }
     
-    @Override
-    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        return validateString(info, format, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
-    }
+    //@Override
+    //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+    //    RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+    //    return validateString(info, format, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
+    //}
     
     @Override
     public String validateStringAsLinks(String info, String mimeType) throws IDMapperException {
@@ -122,10 +122,10 @@ public class LinksetLoader implements LinksetInterface{
         return validateFile(fileName, StoreType.LIVE, ValidationType.DATASETVOID, INCLUDE_WARNINGS);
     }
     
-    @Override
-    public String validateFileAsLinksetVoid(String fileName) throws IDMapperException {
-        return validateFile(fileName, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
-    }
+    //@Override
+    //public String validateFileAsLinksetVoid(String fileName) throws IDMapperException {
+    //    return validateFile(fileName, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
+    //}
     
     @Override
     public String validateFileAsLinks(String fileName) throws IDMapperException {
@@ -303,9 +303,9 @@ public class LinksetLoader implements LinksetInterface{
         Reporter.report(Validator.VALIDATION);
         Reporter.report("   " + ValidationType.DATASETVOID + ": Checks that all MUST and SHOULD values are present");
         Reporter.report("       Multiple datasets can be declared but linksets and links are not expected");
-        Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
-        Reporter.report("       Multiple Linksets can be declared but links are not expected");
-        Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
+        //Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
+        //Reporter.report("       Multiple Linksets can be declared but links are not expected");
+        //Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
         Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
         Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");
         Reporter.report("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");

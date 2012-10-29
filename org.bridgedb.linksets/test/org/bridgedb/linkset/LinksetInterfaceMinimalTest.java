@@ -80,7 +80,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
 
     /**
      * Test of validateStringAsLinksetVoid method, of class LinksetInterface.
-     */
+     * /
     @Test
     public void testValidateStringAsLinksetVoid() throws Exception {
         Reporter.report("validateStringAsLinksetVoid");
@@ -89,7 +89,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         String expResult = AppendBase.CLEAR_REPORT;
         String result = linksetInterfaceMinimal.validateStringAsLinksetVoid(info, mimeType);
         assertThat(result, not(containsString("ERROR")));
-    }
+    }*/
 
     /**
      * Test of validateStringAsLinkset method, of class LinksetInterface.

@@ -68,9 +68,9 @@ public class Validator {
         Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");
         Reporter.report("   " + ValidationType.DATASETVOID + ": Checks that all MUST and SHOULD values are present");
         Reporter.report("       Multiple datasets can be declared but linksets and links are not expected");
-        Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
-        Reporter.report("       Multiple Linksets can be declared but links are not expected");
-        Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
+        //Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
+        //Reporter.report("       Multiple Linksets can be declared but links are not expected");
+        //Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
         Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
         Reporter.report("       Only a single Linkset can be declared. ");
         Reporter.report("       Included Links are also validated.");

@@ -61,7 +61,7 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public ValidationBean validateStringAsVoid(String info, String mimeType) throws IDMapperException;
 
-    public ValidationBean validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
+    //public ValidationBean validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
 
     public String loadString(String info, String mineType, String storeType, String validationType) 
             throws IDMapperException;

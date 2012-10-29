@@ -23,8 +23,8 @@ public interface LinksetInterface extends LinksetInterfaceMinimal{
     @Override
     public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException;
     
-    @Override
-    public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
+    //@Override
+    //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
     
     @Override
     public String validateStringAsLinks(String info, String mimeType) throws IDMapperException;
@@ -34,7 +34,7 @@ public interface LinksetInterface extends LinksetInterfaceMinimal{
     
     public String validateFileAsDatasetVoid(String fileName) throws IDMapperException;
     
-    public String validateFileAsLinksetVoid(String fileName) throws IDMapperException;
+    //public String validateFileAsLinksetVoid(String fileName) throws IDMapperException;
     
     public String validateFileAsLinks(String fileName) throws IDMapperException; 
 

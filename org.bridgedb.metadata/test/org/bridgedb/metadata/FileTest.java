@@ -87,7 +87,7 @@ public class FileTest extends TestUtils{
     @Test
     public void testLINK_FILE() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSETVOID);
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
         checkFile(LINK_FILE, 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 

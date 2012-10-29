@@ -87,14 +87,14 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
 
     /**
      * Test of validateFileAsLinksetVoid method, of class LinksetInterface.
-     */
+     * /
     @Test
     public void testValidateFileAsLinksetVoid() throws Exception {
         Reporter.report("validateFileAsLinksetVoid");
         String fileName = "../org.bridgedb.linksets/test-data/loadLinkSetwithLinks.xml";
         String result = linksetInterface.validateFileAsLinksetVoid(fileName);
         assertThat(result, not(containsString("ERROR")));
-    }
+    }*/
 
     /**
      * Test of validateFileAsLinkset method, of class LinksetInterface.

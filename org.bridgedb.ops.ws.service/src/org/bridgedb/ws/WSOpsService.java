@@ -386,7 +386,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return validateStringAsVoid(info, mimeType);
     }
 
-    @Override
+    /*@Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinksetVoid")
@@ -402,7 +402,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             exception = e.toString();
         }
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKSETVOID, true, exception);
-    }
+    }*/
 
     @Override
     @POST

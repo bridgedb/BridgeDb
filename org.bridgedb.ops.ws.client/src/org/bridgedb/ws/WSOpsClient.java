@@ -181,6 +181,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    //TODO FIX this
     @Override
     public ValidationBean validateString(String info, String mimeType, String storeType, String validationType, 
             String includeWarnings) throws IDMapperException {
@@ -202,12 +203,6 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 
     @Override
     public ValidationBean validateStringAsVoid(String info, String mimeType) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public ValidationBean validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
-        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
