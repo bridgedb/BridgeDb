@@ -74,7 +74,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         Reporter.report("validateStringAsDatasetVoid");
         String info = getRDF(loadMayDataSet1());
         String mimeType = "application/xml";
-        String result = linksetInterfaceMinimal.validateStringAsDatasetVoid(info, mimeType);
+        String result = linksetInterfaceMinimal.validateStringAsVoid(info, mimeType);
         assertThat(result, not(containsString("ERROR")));
     }
 

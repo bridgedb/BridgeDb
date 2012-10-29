@@ -52,8 +52,8 @@ public class LinkSetLoaderWithImportingTest {
         
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
-        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
-        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.DATASETVOID);
+        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.VOID);
+        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.VOID);
         linksetLoader.loadFile("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
 	}
 

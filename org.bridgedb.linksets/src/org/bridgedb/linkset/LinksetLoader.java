@@ -65,9 +65,9 @@ public class LinksetLoader implements LinksetInterface{
     }
 
     @Override
-    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
+    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException {
         RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        return validateString(info, format, StoreType.LIVE, ValidationType.DATASETVOID, INCLUDE_WARNINGS);
+        return validateString(info, format, StoreType.LIVE, ValidationType.VOID, INCLUDE_WARNINGS);
     }
     
     //@Override
@@ -118,8 +118,8 @@ public class LinksetLoader implements LinksetInterface{
     }
     
     @Override
-    public String validateFileAsDatasetVoid(String fileName) throws IDMapperException {
-        return validateFile(fileName, StoreType.LIVE, ValidationType.DATASETVOID, INCLUDE_WARNINGS);
+    public String validateFileAsVoid(String fileName) throws IDMapperException {
+        return validateFile(fileName, StoreType.LIVE, ValidationType.VOID, INCLUDE_WARNINGS);
     }
     
     //@Override
@@ -301,8 +301,8 @@ public class LinksetLoader implements LinksetInterface{
         Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
         Reporter.report("   Default is " + StoreType.TEST);
         Reporter.report(Validator.VALIDATION);
-        Reporter.report("   " + ValidationType.DATASETVOID + ": Checks that all MUST and SHOULD values are present");
-        Reporter.report("       Multiple datasets can be declared but linksets and links are not expected");
+        Reporter.report("   " + ValidationType.VOID + ": Checks that all MUST and SHOULD values are present");
+        Reporter.report("       Multiple datasets and linksets can be declared but links are not expected");
         //Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
         //Reporter.report("       Multiple Linksets can be declared but links are not expected");
         //Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");

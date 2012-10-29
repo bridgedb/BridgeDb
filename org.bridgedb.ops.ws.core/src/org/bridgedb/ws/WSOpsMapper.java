@@ -182,7 +182,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     }
 
     @Override
-    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException {
+    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException {
         ValidationBean bean = opsService.validateStringAsVoid(info, mimeType);
         return bean.getReport();
     }

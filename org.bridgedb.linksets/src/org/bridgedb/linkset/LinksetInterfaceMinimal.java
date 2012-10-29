@@ -19,7 +19,7 @@ public interface LinksetInterfaceMinimal {
     public String validateString(String info, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException;
     
-    public String validateStringAsDatasetVoid(String info, String mimeType) throws IDMapperException;
+    public String validateStringAsVoid(String info, String mimeType) throws IDMapperException;
     
     //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
     

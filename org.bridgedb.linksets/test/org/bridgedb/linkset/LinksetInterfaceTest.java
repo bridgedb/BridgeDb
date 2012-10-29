@@ -80,7 +80,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     public void testValidateFileAsDatasetVoid() throws Exception {
         Reporter.report("validateFileAsDatasetVoid");
         String fileName = "../org.bridgedb.metadata/test-data/chemspider-void.ttl";
-        String result = linksetInterface.validateFileAsDatasetVoid(fileName);
+        String result = linksetInterface.validateFileAsVoid(fileName);
         assertThat(result, not(containsString("ERROR"))); 
         assertThat(result, containsString("INFO")); 
     }

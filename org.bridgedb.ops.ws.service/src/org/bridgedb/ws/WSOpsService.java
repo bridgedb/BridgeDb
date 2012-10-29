@@ -355,11 +355,11 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateStringAsDatasetVoid(info, mimeType);
+            report =  linksetInterface.validateStringAsVoid(info, mimeType);
         } catch (Exception e){
             exception = e.toString();
         }
-        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.DATASETVOID, true, exception);
+        return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.VOID, true, exception);
     }
 
     @POST

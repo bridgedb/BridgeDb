@@ -195,7 +195,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateVoid")
     public Response validateVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-        return validate(info, mimeType, ValidationType.DATASETVOID);
+        return validate(info, mimeType, ValidationType.VOID);
     }
 
     @GET
@@ -203,7 +203,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateVoid")
     public Response getValidateVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-        return validate(info, mimeType, ValidationType.DATASETVOID);
+        return validate(info, mimeType, ValidationType.VOID);
     }
 
     @POST
@@ -459,7 +459,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     private void addForm(StringBuilder sb, ValidationType validationType, String info, String report){
         sb.append("<p>Use this page to validate a ");
         switch (validationType){
-            case DATASETVOID: {
+            case VOID: {
                 sb.append("VOID descripition.");
                 break;
             }
@@ -476,7 +476,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         
         sb.append("<form method=\"post\" action=\"/OPS-IMS/");
         switch (validationType){
-            case DATASETVOID: {
+            case VOID: {
                 sb.append("validateVoid");
                 break;
             }
@@ -510,7 +510,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         }
         sb.append("<h2>");
         switch (validationType){
-            case DATASETVOID: {
+            case VOID: {
                 sb.append("Report as a Void");
                 break;
             }

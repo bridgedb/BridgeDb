@@ -10,7 +10,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public enum ValidationType {
     //LINKSETVOID ("LinkSet.owl", "http://rdfs.org/ns/void#Linkset" ,false, false),
-    DATASETVOID ("LinkSet.owl", "http://rdfs.org/ns/void#Dataset", false, false),
+    VOID ("LinkSet.owl", "http://rdfs.org/ns/void#Dataset", false, false),
     LINKS("LinkSet.owl", "http://rdfs.org/ns/void#Linkset", true, false),
     //todo make minal set
     LINKSMINIMAL("LinkSet.owl", "http://rdfs.org/ns/void#Linkset", true, true);

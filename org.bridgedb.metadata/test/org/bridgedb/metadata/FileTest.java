@@ -65,7 +65,7 @@ public class FileTest extends TestUtils{
     @Test
     public void testChemspider() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
@@ -73,14 +73,14 @@ public class FileTest extends TestUtils{
     @Ignore
     public void testChemspiderSmall() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
    } 
 
     @Test
     public void testChemblRdfVoidTtl() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.DATASETVOID);
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
