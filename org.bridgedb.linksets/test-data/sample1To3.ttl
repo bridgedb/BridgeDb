@@ -16,7 +16,7 @@
 
 :TestDS1 a void:Dataset  ;
 	dcterms:title "Test Dataset 1"^^xsd:string ;
-    pav:version 0 ;
+    pav:version "0" ;
     dcterms:license <http://www.example.com/> ;
     dcterms:subject <http://www.example.com/> ;
     void:uriSpace <http://www.foo.com/>.
