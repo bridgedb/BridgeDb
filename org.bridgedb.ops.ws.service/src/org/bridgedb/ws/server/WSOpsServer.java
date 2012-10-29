@@ -29,10 +29,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.bridgedb.IDMapperException;
@@ -51,6 +54,7 @@ import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsService;
+import org.openrdf.rio.RDFFormat;
 
 /**
  *
@@ -185,22 +189,50 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
-    @GET
+    @POST
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateVoid")
-    public Response validateVoid() throws IDMapperException, UnsupportedEncodingException {
-        StringBuilder sb = topAndSide("Query Expander Demo Page");
-        addForm(sb, ValidationType.DATASETVOID);
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    public Response validateVoid(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.DATASETVOID);
     }
 
     @GET
     @Produces(MediaType.TEXT_HTML)
+    @Path("/validateVoid")
+    public Response getValidateVoid(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.DATASETVOID);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
     @Path("/validateLinkSet")
-    public Response validateLinkSet() throws IDMapperException, UnsupportedEncodingException {
+    public Response validateLinkSet(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.LINKS);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateLinkSet")
+    public Response getValidateLinkSet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.LINKS);
+    }
+
+    private Response validate(String info, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
+       String report = null;
+       try{
+            if (info != null && !info.isEmpty()){
+                RDFFormat format = getRDFFormatByMimeType(mimeType);
+                report = linksetInterface.validateString(info, format, StoreType.LIVE, validationType, true);
+            }
+        } catch (Exception e){
+            report = e.toString();
+        }
         StringBuilder sb = topAndSide("Query Expander Demo Page");
-        addForm(sb, ValidationType.DATASETVOID);
+        addForm(sb, validationType, info, report);
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -423,7 +455,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return sb;
     }
     
-    private void addForm(StringBuilder sb, ValidationType validationType){
+    private void addForm(StringBuilder sb, ValidationType validationType, String info, String report){
         sb.append("<p>Use this page to validate a ");
         switch (validationType){
             case DATASETVOID: {
@@ -444,11 +476,11 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<form method=\"post\" action=\"/OPS-IMS/");
         switch (validationType){
             case DATASETVOID: {
-                sb.append("validateStringAsVoid");
+                sb.append("validateVoid");
                 break;
             }
             case LINKS: {
-                sb.append("validateStringAsLinkSet");
+                sb.append("validateLinkSet");
                 break;
             } default:{
                 sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
@@ -456,11 +488,44 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         }
         sb.append("\">");
 
-        sb.append(FORM_OUTPUT_FORMAT);
+        if (report != null){
+            addReport(sb, validationType, report);
+        }
+        //sb.append(FORM_OUTPUT_FORMAT);
         sb.append(FORM_MINE_TYPE);
         sb.append(FORM_INFO_START);
+        if (info != null && !info.isEmpty()){
+            sb.append(info);
+        }
+            
         sb.append(FORM_INFO_END);
         sb.append(FORM_SUBMIT);        
+    }
+    
+    private void addReport(StringBuilder sb, ValidationType validationType, String report){
+        int lines = 1;
+        for (int i=0; i < report.length(); i++) {
+            if (report.charAt(i) == '\n') lines++;
+        }
+        sb.append("<h2>");
+        switch (validationType){
+            case DATASETVOID: {
+                sb.append("Report as a Void");
+                break;
+            }
+            case LINKS: {
+                sb.append("Report as a LinkSet");
+                break;
+            } default:{
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
+            }
+        }
+        sb.append("</h2>");
+        sb.append("<p><textarea readonly style=\"width:100%;\" rows=");
+        sb.append(lines);
+        sb.append(">");
+        sb.append(report);
+        sb.append("</textarea></p>\n");       
     }
     
     private final String HEADER_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "

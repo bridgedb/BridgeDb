@@ -235,7 +235,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     
     //**** LinksetInterfaceMinimal methods
 
-    private RDFFormat getRDFFormatByMimeType(String mimeType) throws MetaDataException{
+    protected final RDFFormat getRDFFormatByMimeType(String mimeType) throws MetaDataException{
         if (mimeType == null){
             throw new MetaDataException (MIME_TYPE + " parameter may not be null");
         }
@@ -245,7 +245,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return  StatementReader.getRDFFormatByMimeType(mimeType);
     }
     
-    private StoreType parseStoreType(String storeTypeString) throws IDMapperException{
+    protected final StoreType parseStoreType(String storeTypeString) throws IDMapperException{
         if (storeTypeString == null){
             throw new MetaDataException (STORE_TYPE + " parameter may not be null");
         }
@@ -255,7 +255,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return StoreType.parseString(storeTypeString);
     }
 
-    private ValidationType parseValidationType(String validationTypeString) throws IDMapperException{
+    protected final ValidationType parseValidationType(String validationTypeString) throws IDMapperException{
         if (validationTypeString == null){
             throw new MetaDataException (VALIDATION_TYPE + " parameter may not be null");
         }
@@ -265,7 +265,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return ValidationType.parseString(validationTypeString);
     }
     
-    private void validateInfo(String info) throws MetaDataException{
+    protected final void validateInfo(String info) throws MetaDataException{
         if (info == null){
             throw new MetaDataException (INFO + " parameter may not be null");
         }
@@ -274,22 +274,42 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         }        
     }
     
-    @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateString")
-    public ValidationBean validateString(@QueryParam(INFO)String info, 
+    public ValidationBean getValidateString(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType, 
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString, 
             @QueryParam("includeWarnings")String includeWarningsString) throws IDMapperException {
-        validateInfo(info);
-        RDFFormat format = getRDFFormatByMimeType(mimeType);
-        StoreType storeType = parseStoreType(storeTypeString);
-        ValidationType validationType = parseValidationType(validationTypeString);
-        boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
-        String report = linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
-        return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, includeWarnings, "None");
+        return validateString(info, mimeType, storeTypeString, validationTypeString, includeWarningsString);
+    }
+
+    @Override
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateString")
+    public ValidationBean validateString(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType, 
+            @FormParam(STORE_TYPE)String storeTypeString, 
+            @FormParam(VALIDATION_TYPE)String validationTypeString, 
+            @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInfo(info);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            StoreType storeType = parseStoreType(storeTypeString);
+            ValidationType validationType = parseValidationType(validationTypeString);
+            boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
+            report = linksetInterface.validateString(info, format, storeType, validationType, includeWarnings);
+            return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, 
+                    includeWarnings, "None");
+        } catch (Exception e){
+            exception = e.toString();
+            return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, 
+                    includeWarningsString, exception);
+        }
     }
 
     @POST
@@ -342,10 +362,26 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.DATASETVOID, true, exception);
     }
 
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateStringAsVoidXML")
+    public ValidationBean validateStringAsVoidXML(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        return validateStringAsVoid(info, mimeType);
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoid")
     public ValidationBean getValidateStringAsVoid(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        return validateStringAsVoid(info, mimeType);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateStringAsVoidXML")
+    public ValidationBean getValidateStringAsVoidXML(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
         return validateStringAsVoid(info, mimeType);
     }
@@ -386,10 +422,35 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKS, true,exception);
     }
 
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateStringAsLinkSetXML")
+    public ValidationBean validateStringAsLinkSetXML(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInfo(info);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            report =  linksetInterface.validateStringAsLinks(info, mimeType);
+        } catch (Exception e){
+            exception = e.toString();
+        }
+        return validateStringAsLinkSet(info, mimeType);
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
     public ValidationBean getValidateStringAsLinkSet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        return validateStringAsLinkSet(info, mimeType);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateStringAsLinkSetXML")
+    public ValidationBean getValidateStringAsLinkSetXML(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
         return validateStringAsLinkSet(info, mimeType);
     }
