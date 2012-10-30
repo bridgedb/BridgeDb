@@ -18,6 +18,8 @@
 //
 package org.bridgedb.ws;
 
+import com.sun.jersey.multipart.FormDataParam;
+import java.io.InputStream;
 import java.util.ArrayList;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
@@ -70,6 +72,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String STORE_TYPE = "storeType";
     public final String VALIDATION_TYPE = "validationType";
     public final String INFO = "info"; 
+    public final String FILE = "file"; 
     public final String NO_EXCEPTION = "No Exception Thrown";
     public final String NO_RESULT = null;
     
@@ -274,6 +277,12 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         }        
     }
     
+    private void validateInputStream(InputStream inputStream) throws MetaDataException {
+        if (inputStream == null){
+            throw new MetaDataException (FILE + " parameter may not be null");
+        }
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateString")
@@ -308,6 +317,34 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         } catch (Exception e){
             exception = e.toString();
             return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, 
+                    includeWarningsString, exception);
+        }
+    }
+
+    @Override
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/validateString")
+    public ValidationBean validateInputStream(@FormDataParam("file") InputStream uploadedInputStream, 
+            @FormParam(MIME_TYPE)String mimeType, 
+            @FormParam(STORE_TYPE)String storeTypeString, 
+            @FormParam(VALIDATION_TYPE)String validationTypeString, 
+            @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInputStream(uploadedInputStream);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            StoreType storeType = parseStoreType(storeTypeString);
+            ValidationType validationType = parseValidationType(validationTypeString);
+            boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
+            report = linksetInterface.validateInputStream("Webservice Call", uploadedInputStream, format, storeType, validationType, includeWarnings);
+            return new ValidationBean(report, "data read directly from the Stream", mimeType, storeTypeString, validationTypeString, 
+                    includeWarnings, "None");
+        } catch (Exception e){
+            exception = e.toString();
+            return new ValidationBean(report, "data read directly from the Stream", mimeType, storeTypeString, validationTypeString, 
                     includeWarningsString, exception);
         }
     }
@@ -362,12 +399,51 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.VOID, true, exception);
     }
 
+    @Override
+    @POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateInputStreamAsVoid")
+    public ValidationBean validateInputStreamAsVoid(@FormDataParam("file") InputStream uploadedInputStream, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInputStream(uploadedInputStream);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            report =  linksetInterface.validateInputStreamAsVoid("Webservice Call", uploadedInputStream, mimeType);
+        } catch (Exception e){
+            exception = e.toString();
+        }
+        return new ValidationBean(report, "data read directly from the Stream", mimeType, StoreType.LIVE, 
+                ValidationType.LINKS, true,exception);
+    }
+
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoidXML")
     public ValidationBean validateStringAsVoidXML(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
         return validateStringAsVoid(info, mimeType);
+    }
+
+    @Override
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateStringAsLinkSet")
+    public ValidationBean validateInputStreamAsLinkSet(@FormDataParam("file") InputStream uploadedInputStream, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+        String report = NO_RESULT;
+        String exception = NO_EXCEPTION;
+        try{
+            validateInputStream(uploadedInputStream);
+            RDFFormat format = getRDFFormatByMimeType(mimeType);
+            report =  linksetInterface.validateInputStreamAsLinks("Webservice Call", uploadedInputStream, mimeType);
+        } catch (Exception e){
+            exception = e.toString();
+        }
+        return new ValidationBean(report, "data read directly from the Stream", mimeType, StoreType.LIVE, 
+                ValidationType.LINKS, true,exception);
     }
 
     @GET
@@ -488,6 +564,5 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         linksetInterface.checkStringValid("Webservice Call", info, format, storeType, validationType);
         return "OK";
     }
-
  
 }

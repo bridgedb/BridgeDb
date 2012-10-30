@@ -19,6 +19,7 @@
 package org.bridgedb.ws;
 
 import com.sun.jersey.api.client.ClientResponse;
+import java.io.InputStream;
 import java.util.List;
 
 import com.sun.jersey.api.client.GenericType;
@@ -208,6 +209,21 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 
     @Override
     public ValidationBean validateStringAsLinkSet(String info, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ValidationBean validateInputStream(InputStream inputStream, String mimeTypee, String storeType, String validationType, String includeWarnings) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ValidationBean validateInputStreamAsVoid(InputStream inputStream, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ValidationBean validateInputStreamAsLinkSet(InputStream inputStream, String mimeType) throws IDMapperException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

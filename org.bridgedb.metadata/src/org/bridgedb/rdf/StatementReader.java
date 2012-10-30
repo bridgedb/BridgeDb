@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -68,6 +70,29 @@ public class StatementReader extends RDFHandlerBase{
         }        
     }
     
+    void parse(InputStream inputStream, RDFFormat format, String baseURI) throws MetaDataException{
+        if (format == null){
+            throw new MetaDataException ("RDFFormat may not be null");
+        }
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        RDFParser parser = getParser(format);
+        try {
+            parse(reader, parser, baseURI);
+        } catch (IOException ex) {
+            throw new MetaDataException("Error reading input" + ex.getMessage(), ex);
+        } catch (OpenRDFException ex) {
+            throw new MetaDataException("Error parsing input " + ex.getMessage(), ex);
+        } finally {
+            if (reader != null){
+                try {
+                    reader.close();
+                } catch (IOException ex) {
+                    throw new MetaDataException("Error closing input Stream. ", ex);
+                }
+            }
+        }        
+    }
+
     void parse(File file, String baseURI) throws MetaDataException{
         FileReader reader = null;
         RDFParser parser = getParser(file);
@@ -110,7 +135,7 @@ public class StatementReader extends RDFHandlerBase{
     }
     
     public static Set<Statement> extractStatements (String  fileName) throws MetaDataException {
-        File file = new File(fileName);
+        File file = new File(fileName.trim());
         return extractStatements(file);
     }
     

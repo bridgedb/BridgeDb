@@ -5,6 +5,7 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
+import java.io.InputStream;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
@@ -21,8 +22,15 @@ public interface LinksetInterface extends LinksetInterfaceMinimal{
             ValidationType validationType, boolean includeWarnings) throws IDMapperException;
     
     @Override
+    public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType, boolean includeWarnings) throws IDMapperException;
+    
+    @Override
     public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException;
     
+    @Override
+    public String validateInputStreamAsVoid(String source, InputStream inputStream, String mimeType) throws IDMapperException;
+
     //@Override
     //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
     

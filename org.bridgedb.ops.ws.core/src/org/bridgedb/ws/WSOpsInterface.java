@@ -18,6 +18,7 @@
 //
 package org.bridgedb.ws;
 
+import java.io.InputStream;
 import java.util.List;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
@@ -70,5 +71,12 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public String checkStringValid(String info, String defaultMIMEType, String storeType, String validationType) 
             throws IDMapperException;
+
+    public ValidationBean validateInputStream(InputStream inputStream, String mimeTypee, String storeType, 
+            String validationType, String includeWarnings)throws IDMapperException;
+
+    public ValidationBean validateInputStreamAsVoid(InputStream inputStream, String mimeType) throws IDMapperException;
+
+    public ValidationBean validateInputStreamAsLinkSet(InputStream inputStream, String mimeType) throws IDMapperException;
 
 }

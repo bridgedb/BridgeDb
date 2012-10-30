@@ -18,6 +18,7 @@
 //
 package org.bridgedb.ws;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -182,8 +183,22 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     }
 
     @Override
+     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType, boolean includeWarnings) throws IDMapperException{
+        ValidationBean bean = opsService.validateInputStream(inputStream, format.getDefaultMIMEType(), storeType.toString(), 
+                validationType.toString(), Boolean.toString(includeWarnings));
+        return bean.getReport();
+    }
+
+    @Override
     public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException {
         ValidationBean bean = opsService.validateStringAsVoid(info, mimeType);
+        return bean.getReport();
+    }
+
+    @Override
+    public String validateInputStreamAsVoid(String source, InputStream inputStream, String mimeType) throws IDMapperException {
+        ValidationBean bean = opsService.validateInputStreamAsVoid(inputStream, mimeType);
         return bean.getReport();
     }
 
@@ -196,6 +211,12 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     @Override
     public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException {
         ValidationBean bean =  opsService.validateStringAsLinkSet(info, mimeType);
+        return bean.getReport();
+    }
+
+    @Override
+    public String validateInputStreamAsLinks(String source, InputStream inputStream, String mimeType) throws IDMapperException {
+        ValidationBean bean =  opsService.validateInputStreamAsLinkSet(inputStream, mimeType);
         return bean.getReport();
     }
 

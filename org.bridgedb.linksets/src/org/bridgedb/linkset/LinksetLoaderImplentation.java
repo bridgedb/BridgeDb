@@ -20,6 +20,7 @@ package org.bridgedb.linkset;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -105,6 +106,21 @@ public class LinksetLoaderImplentation{
         this.validationType = validationType;
         this.storeType = storeType;
         statements = new LinksetStatementReaderAndImporter(info, format, storeType);     
+        if (validationType.isLinkset()){
+            metaData = new LinksetVoidInformation(source, statements, validationType);        
+        } else {
+            MetaDataSpecification specification = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
+            metaData = new MetaDataCollection(source, statements.getVoidStatements(), specification);
+        }
+        accessedFrom = null;
+    }
+
+    protected LinksetLoaderImplentation(String source, InputStream inputStream, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
+        Reporter.report("Reading from inputStream " + source);
+        this.validationType = validationType;
+        this.storeType = storeType;
+        statements = new LinksetStatementReaderAndImporter(inputStream, format, storeType);     
         if (validationType.isLinkset()){
             metaData = new LinksetVoidInformation(source, statements, validationType);        
         } else {

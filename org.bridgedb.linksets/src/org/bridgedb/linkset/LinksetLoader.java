@@ -19,6 +19,7 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
+import java.io.InputStream;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
@@ -64,12 +65,25 @@ public class LinksetLoader implements LinksetInterface{
         return loader.validityReport(includeWarnings);
     }
 
+    public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType, boolean includeWarnings) throws IDMapperException{
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, inputStream, format, validationType, storeType);
+        return loader.validityReport(includeWarnings);        
+    }
+    
     @Override
     public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException {
         RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
         return validateString(source, info, format, StoreType.LIVE, ValidationType.VOID, INCLUDE_WARNINGS);
     }
     
+    @Override
+    public String validateInputStreamAsVoid(String source, InputStream inputStream, String mimeType) 
+            throws IDMapperException{
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        return validateInputStream(source, inputStream, format, StoreType.LIVE, ValidationType.VOID, INCLUDE_WARNINGS);
+    }
+
     //@Override
     //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
     //    RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
@@ -80,6 +94,12 @@ public class LinksetLoader implements LinksetInterface{
     public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException {
         RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
         return validateString(source, info, format, StoreType.LIVE, ValidationType.LINKS, INCLUDE_WARNINGS);
+    }
+
+    @Override
+    public String validateInputStreamAsLinks(String source, InputStream inputStream, String mimeType) throws IDMapperException {
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        return validateInputStream(source, inputStream, format, StoreType.LIVE, ValidationType.LINKS, INCLUDE_WARNINGS);
     }
 
     private String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
@@ -113,7 +133,7 @@ public class LinksetLoader implements LinksetInterface{
         if (fileName.trim().isEmpty()){
             throw new IDMapperException("File name may not be empty");
         }
-        File file = new File(fileName);
+        File file = new File(fileName.trim());
         return validityFile(file, storeType, type, includeWarnings);
     }
     
@@ -162,7 +182,7 @@ public class LinksetLoader implements LinksetInterface{
 
     @Override
     public void loadFile(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
-        File file = new File(fileName);
+        File file = new File(fileName.trim());
         load(file, storeType, type);
     }
     
@@ -191,7 +211,7 @@ public class LinksetLoader implements LinksetInterface{
 
     @Override
     public void checkFileValid(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
-        File file = new File(fileName);
+        File file = new File(fileName.trim());
         validate(file, storeType, type);
     }
     

@@ -5,6 +5,7 @@
 package org.bridgedb.rdf;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -44,6 +45,11 @@ public class LinksetStatementReaderAndImporter implements LinksetStatements{
     
     public LinksetStatementReaderAndImporter(String info, RDFFormat format, StoreType storeType) throws IDMapperException{
         LinksetStatementReader reader = new LinksetStatementReader(info, format);
+        loadInfo(reader, storeType);
+    }
+
+    public LinksetStatementReaderAndImporter(InputStream inputStream, RDFFormat format, StoreType storeType) throws IDMapperException{
+        LinksetStatementReader reader = new LinksetStatementReader(inputStream, format);
         loadInfo(reader, storeType);
     }
 
