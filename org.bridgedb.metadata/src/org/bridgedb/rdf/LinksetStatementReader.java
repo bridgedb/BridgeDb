@@ -5,6 +5,7 @@
 package org.bridgedb.rdf;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -30,7 +31,7 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
     URI linkPredicate = null;
     
     public LinksetStatementReader(String fileName) throws MetaDataException{
-        parse(new File(fileName), DEFAULT_BASE_URI);
+        parse(new File(fileName.trim()), DEFAULT_BASE_URI);
     }
     
     public LinksetStatementReader(File file) throws MetaDataException{
@@ -39,6 +40,10 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
 
     public LinksetStatementReader(String info, RDFFormat format) throws MetaDataException{
         parse(info, format, DEFAULT_BASE_URI);
+    }
+
+    public LinksetStatementReader(InputStream inputStream, RDFFormat format) throws MetaDataException{
+        parse(inputStream, format, DEFAULT_BASE_URI);
     }
 
     public Set<Statement> getVoidStatements(){
