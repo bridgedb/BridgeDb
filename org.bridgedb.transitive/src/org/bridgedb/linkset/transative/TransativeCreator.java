@@ -325,7 +325,6 @@ public class TransativeCreator {
             while (rs.next()){
                 String sourceId = rs.getString("mapping1.sourceId");
                 String targetId = rs.getString("mapping2.targetId");
-                System.out.println("<" + sourceId + "> <" + newPredicate + "> <" + targetId + "> . "); 
                 buffer.write("<");
                     buffer.write(sourceUriSpace.stringValue());
                     buffer.write(sourceId);
@@ -393,6 +392,10 @@ public class TransativeCreator {
         Reporter.report("WARNING:" + PREDICATE + ", " + LICENSE + " and " + DERIVED_BY + " Must be Uris");
         Reporter.report("   As implemented by openrdf URIImpl");
         Reporter.report("   Any leading < and trailing > characters are removed. So are not required but allowed.");
+        
+        Reporter.report("");
+        Reporter.report(issue);
+        System.exit(1);
     }
 
     private static URI getURI(String property) {
@@ -412,6 +415,7 @@ public class TransativeCreator {
         try{
             return new URIImpl(property);
         } catch (Exception e){
+            e.printStackTrace();
             usage(e.getMessage());
             return null; //never reached
         }
@@ -430,18 +434,20 @@ public class TransativeCreator {
         int leftId = -1;
         int rightId = -1;
         try {
-            leftId = Integer.parseInt(args[0]);
-            rightId = Integer.parseInt(args[1]);
+            leftId = Integer.parseInt(args[0].trim());
+            rightId = Integer.parseInt(args[1].trim());
         } catch (Exception e){
+            e.printStackTrace();
             usage(e.getMessage());
         }
         
         String storeString = System.getProperty(STORE);
         StoreType storeType = StoreType.LIVE;
-        if (storeString != null || !storeString.isEmpty()){
+        if (storeString != null && !storeString.isEmpty()){
             try {
                 storeType = StoreType.parseString(storeString);
             } catch (IDMapperException ex) {
+                ex.printStackTrace();
                 usage(ex.getMessage());
             }
         }
