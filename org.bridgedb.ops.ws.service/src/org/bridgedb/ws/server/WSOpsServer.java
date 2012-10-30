@@ -19,6 +19,12 @@
 package org.bridgedb.ws.server;
 
 
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -29,6 +35,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -714,7 +721,39 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     private final String BODY_END = "</body>"
             + "</html>";
     private final String END = MAIN_END + BODY_END;
-    
+
+    //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
+    @POST
+	@Path("/uploadTest")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(
+        //TODO work out why the FormDataContentDisposition is null
+		@FormDataParam("file") FormDataContentDisposition fileDetail,
+        @FormDataParam("file") InputStream uploadedInputStream) throws IOException {
+ 
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbInnerPure;
+        StringBuilder sbInnerEncoded;
+
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<h1>test</h1>");
+        sb.append("<p>File name:");
+        sb.append(fileDetail);
+        sb.append("</P>");
+        InputStreamReader reader = new InputStreamReader(uploadedInputStream);
+        BufferedReader buffer = new BufferedReader(reader);
+        while (buffer.ready()){
+            sb.append("<br>");
+            sb.append(buffer.readLine());
+        }
+        sb.append(uploadedInputStream.toString());
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+	}
 }
 
 
