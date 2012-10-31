@@ -229,6 +229,24 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return validate(info, mimeType, ValidationType.LINKS);
     }
 
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateMinimum")
+    public Response validateMinimum(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        System.out.println("post");
+        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateMinimum")
+    public Response getValidateMinimum(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        System.out.println("get");
+        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
+    }
+
     private Response validate(String info, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
        String report = null;
        try{
@@ -239,7 +257,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         } catch (Exception e){
             report = e.toString();
         }
-        StringBuilder sb = topAndSide("Query Expander Demo Page");
+        StringBuilder sb = topAndSide("Void validator");
         addForm(sb, validationType, info, report);
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -473,8 +491,13 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             case LINKS: {
                 sb.append("Linkset.");
                 break;
+            }
+            case LINKSMINIMAL: {
+                sb.append("linkset you are too lazy to add a full header to.");
+                sb.append("<br>WARNING: Loading with Minimal void does not excuss you from providing a full header later.");
+                break;
             } default:{
-                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN.");
             }
         }
         sb.append(".</p>");
@@ -490,8 +513,12 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             case LINKS: {
                 sb.append("validateLinkSet");
                 break;
+            }
+            case LINKSMINIMAL: {
+                sb.append("validateMinimum");
+                break;
             } default:{
-                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN!");
             }
         }
         sb.append("\">");
@@ -524,6 +551,10 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             case LINKS: {
                 sb.append("Report as a LinkSet");
                 break;
+            }
+            case LINKSMINIMAL: {
+                sb.append("Report for someone too lazy to generate proper void!");
+                break;
             } default:{
                 sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
             }
@@ -541,7 +572,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\n"
             + "<head>\n"
             + " <title>"
-            + "     Manchester University OpenPhacts Query Expander"
+            + "     Manchester University OpenPhacts Void Validator"
             + "	</title>\n"
             + "	<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\"></meta>\n"
             + "	<script>"
@@ -681,6 +712,14 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             + "                   onmouseout=\"DHTML_TextRestore('menuOpsApi_text'); return true; \" "
             + "                   onmouseover=\"DHTML_TextHilight('menuOpsApi_text'); return true; \" "
             + "                   onclick=\"document.location = &quot;/OPS-IMS/api&quot;;\">API</div>"
+            + "				<div id=\"menuOpsValidateVoid_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateVoid_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateVoid_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateVoid&quot;;\">Validate Void</div>"
+            + "				<div id=\"menuOpsValidateLinkSet_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateLinkSet_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateLinkSet_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateLinkSet&quot;;\">Validate LinkSet</div>"
             + "			</td>"
             + "			<td width=\"5\" style=\"border-right: 1px solid #D5D5FF\"></td>"
             + "			<td style=\"border-top: 1px solid #D5D5FF; width:100%\">";
