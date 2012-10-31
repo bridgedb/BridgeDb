@@ -72,8 +72,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String STORE_TYPE = "storeType";
     public final String VALIDATION_TYPE = "validationType";
     public final String INFO = "info"; 
-    public final String FILE = "file"; 
-    public final String NO_EXCEPTION = "No Exception Thrown";
+    public final String FILE = "file";     
     public final String NO_RESULT = null;
     
     protected WSOpsService() {
@@ -238,11 +237,23 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     
     //**** LinksetInterfaceMinimal methods
 
+    private String trim(String original){
+        String result = original.trim();
+        while (result.startsWith("\"")){
+            result = result.substring(1);
+        }
+        while (result.endsWith("\"")){
+            result = result.substring(0,result.length()-1);
+        }
+        return result.trim();
+    }
+    
     protected final RDFFormat getRDFFormatByMimeType(String mimeType) throws MetaDataException{
         if (mimeType == null){
             throw new MetaDataException (MIME_TYPE + " parameter may not be null");
         }
-        if (mimeType.trim().isEmpty()){
+        mimeType = trim(mimeType);
+        if (mimeType.isEmpty()){
             throw new MetaDataException (MIME_TYPE + " parameter may not be empty");
         }
         return  StatementReader.getRDFFormatByMimeType(mimeType);
@@ -252,7 +263,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         if (storeTypeString == null){
             throw new MetaDataException (STORE_TYPE + " parameter may not be null");
         }
-        if (storeTypeString.trim().isEmpty()){
+        storeTypeString = trim(storeTypeString);
+        if (storeTypeString.isEmpty()){
             throw new MetaDataException (STORE_TYPE + " parameter may not be empty");
         }
         return StoreType.parseString(storeTypeString);
@@ -304,7 +316,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @FormParam(VALIDATION_TYPE)String validationTypeString, 
             @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
         String report = NO_RESULT;
-        String exception = NO_EXCEPTION;
+        String exception = null;
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
@@ -313,7 +325,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
             report = linksetInterface.validateString("Webservice Call", info, format, storeType, validationType, includeWarnings);
             return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, 
-                    includeWarnings, "None");
+                    includeWarnings, exception);
         } catch (Exception e){
             exception = e.toString();
             return new ValidationBean(report, info, mimeType, storeTypeString, validationTypeString, 
@@ -332,7 +344,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @FormParam(VALIDATION_TYPE)String validationTypeString, 
             @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
         String report = NO_RESULT;
-        String exception = NO_EXCEPTION;
+        String exception = null;
         try{
             validateInputStream(uploadedInputStream);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
@@ -341,7 +353,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             boolean includeWarnings = Boolean.parseBoolean(includeWarningsString);
             report = linksetInterface.validateInputStream("Webservice Call", uploadedInputStream, format, storeType, validationType, includeWarnings);
             return new ValidationBean(report, "data read directly from the Stream", mimeType, storeTypeString, validationTypeString, 
-                    includeWarnings, "None");
+                    includeWarnings, exception);
         } catch (Exception e){
             exception = e.toString();
             return new ValidationBean(report, "data read directly from the Stream", mimeType, storeTypeString, validationTypeString, 
@@ -361,7 +373,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         String storeType = null;
         String validationType = null;
         Boolean includeWarnings = null;
-        String exception = NO_EXCEPTION;       
+        String exception = null;       
         try{
             ValidationBean bean = input.getValue();
             info = bean.getInfo();
@@ -388,7 +400,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public ValidationBean validateStringAsVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
         String report = NO_RESULT;
-        String exception = NO_EXCEPTION;
+        String exception = null;
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
@@ -405,9 +417,9 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateInputStreamAsVoid")
     public ValidationBean validateInputStreamAsVoid(@FormDataParam("file") InputStream uploadedInputStream, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormDataParam(MIME_TYPE)String mimeType) throws IDMapperException {
         String report = NO_RESULT;
-        String exception = NO_EXCEPTION;
+        String exception = null;
         try{
             validateInputStream(uploadedInputStream);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
@@ -434,7 +446,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public ValidationBean validateInputStreamAsLinkSet(@FormDataParam("file") InputStream uploadedInputStream, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
         String report = NO_RESULT;
-        String exception = NO_EXCEPTION;
+        String exception = null;
         try{
             validateInputStream(uploadedInputStream);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
@@ -487,7 +499,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public ValidationBean validateStringAsLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
         String report = NO_RESULT;
-        String exception = NO_EXCEPTION;
+        String exception = null;
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
@@ -504,7 +516,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public ValidationBean validateStringAsLinkSetXML(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
         String report = NO_RESULT;
-        String exception = NO_EXCEPTION;
+        String exception = null;
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
