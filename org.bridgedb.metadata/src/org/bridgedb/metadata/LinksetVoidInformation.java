@@ -189,14 +189,17 @@ public class LinksetVoidInformation implements MetaData {
    
     @Override
     public void validate() throws MetaDataException {
-        if (!hasRequiredValues() ){
-            throw new MetaDataException("Missing required values. \n" + validityReport(INCLUDE_WARNINGS));
-        }
-        if (!hasCorrectTypes()){
-            throw new MetaDataException("Incorrect Type(s)\n" + validityReport(INCLUDE_WARNINGS));
-        }
-        if (!error.isEmpty()){
-            throw new MetaDataException(error);
+        String report = collection.validityReport(false);
+        if (report.contains("ERROR") || !error.isEmpty()){
+            if (!hasRequiredValues() ){
+                report = "Missing required values. \n" + report;
+            }
+            if (!hasCorrectTypes()){
+                report = "Incorrect Type(s)\n" + report;
+            }
+            if (!error.isEmpty()){
+                throw new MetaDataException(report + "\n" + error);
+            }
         }
     }
 

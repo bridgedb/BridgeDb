@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.bridgedb.metadata.constants.DctermsConstants;
 import org.openrdf.model.Statement;
@@ -64,6 +65,18 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
+    public void testValidateOkEvenWithWrongExtraType() throws MetaDataException{
+        Reporter.report("LinkSet Validate OKEven With Wrong Extra Type");
+        Set<Statement> statements = loadMinLinkSet();
+        Statement badLinkLicenseStatement = 
+                new StatementImpl(LINK_ID, DctermsConstants.LICENSE, new LiteralImpl("LICENSE"));
+        statements.add(badLinkLicenseStatement);
+        MetaDataCollection metaData = new MetaDataCollection("testValidateOkEvenWithWrongExtraType()", 
+                statements, minLinksetSetRegistry);
+        metaData.validate();
+    }
+
+   @Test
     public void testSummary() throws MetaDataException{
         Reporter.report("LinkSet Summary");
         MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
