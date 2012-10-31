@@ -325,6 +325,18 @@
         <rdfs:subClassOf rdf:resource="&void;DatasetDescription"/>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="&foaf;primaryTopic"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
@@ -337,26 +349,14 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&pav;createdOn"/>
-                <owl:someValuesFrom rdf:resource="&rdfs;Literal"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&pav;createdBy"/>
-                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&terms;description"/>
-                <owl:someValuesFrom rdf:resource="&xsd;string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
                 <owl:onProperty rdf:resource="&terms;title"/>
                 <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                <owl:someValuesFrom rdf:resource="&rdfs;Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <RequirementLevel>Must</RequirementLevel>
@@ -385,25 +385,19 @@
         <rdfs:subClassOf rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DatasetShould"/>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;exampleResource"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="&voag;frequencyOfChange"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&pav;sourceAccessedBy"/>
-                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&pav;previousVersion"/>
-                <owl:someValuesFrom rdf:resource="&xsd;string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&foaf;page"/>
+                <owl:onProperty rdf:resource="&void;vocabulary"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -411,6 +405,12 @@
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&pav;sourceAccessedOn"/>
                 <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;previousVersion"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -427,13 +427,13 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&void;vocabulary"/>
+                <owl:onProperty rdf:resource="&pav;sourceAccessedBy"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&void;exampleResource"/>
+                <owl:onProperty rdf:resource="&foaf;page"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -449,7 +449,8 @@
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&void;uriSpace"/>
-                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <RequirementLevel>Minimal</RequirementLevel>
@@ -461,6 +462,12 @@
 
     <owl:Class rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DatasetMust">
         <rdfs:subClassOf rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DatasetMinimal"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -533,19 +540,13 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&terms;license"/>
+                <owl:onProperty rdf:resource="&foaf;homepage"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&terms;description"/>
-                <owl:someValuesFrom rdf:resource="&xsd;string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&foaf;homepage"/>
+                <owl:onProperty rdf:resource="&terms;license"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -566,13 +567,7 @@
         <rdfs:subClassOf rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DatasetDirectMust"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&void;vocabulary"/>
-                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&voag;frequencyOfChange"/>
+                <owl:onProperty rdf:resource="&void;exampleResource"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -584,7 +579,13 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&void;exampleResource"/>
+                <owl:onProperty rdf:resource="&voag;frequencyOfChange"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;vocabulary"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -626,20 +627,22 @@
         <rdfs:subClassOf rdf:resource="&void;Linkset"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&void;subjectsTarget"/>
-                <owl:someValuesFrom rdf:resource="&void;Dataset"/>
+                <owl:onProperty rdf:resource="&void;linkPredicate"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="&void;objectsTarget"/>
-                <owl:someValuesFrom rdf:resource="&void;Dataset"/>
+                <owl:onClass rdf:resource="&void;Dataset"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&void;linkPredicate"/>
-                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                <owl:onProperty rdf:resource="&void;subjectsTarget"/>
+                <owl:onClass rdf:resource="&void;Dataset"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
             </owl:Restriction>
         </rdfs:subClassOf>
         <RequirementLevel>Minimal</RequirementLevel>
@@ -668,26 +671,8 @@
         <rdfs:subClassOf rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#LinksetMinimal"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&pav;createdOn"/>
-                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&terms;title"/>
+                <owl:onProperty rdf:resource="&terms;description"/>
                 <owl:someValuesFrom rdf:resource="&xsd;string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&pav;createdBy"/>
-                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="&terms;license"/>
-                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -714,13 +699,31 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="&DUL;expresses"/>
                 <owl:someValuesFrom rdf:resource="&owl;Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:onProperty rdf:resource="&terms;license"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;title"/>
                 <owl:someValuesFrom rdf:resource="&xsd;string"/>
             </owl:Restriction>
         </rdfs:subClassOf>

@@ -17,6 +17,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLCardinalityRestriction;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
@@ -186,6 +187,9 @@ public class MetaDataSpecification {
     }
 
     private MetaDataBase parseExpression(OWLClassExpression expr, String type, RequirementLevel requirementLevel) throws MetaDataException {
+        if (expr instanceof OWLCardinalityRestriction){
+            return parseOWLCardinalityRestriction((OWLCardinalityRestriction)expr, type, requirementLevel);
+        } 
         if (expr instanceof OWLQuantifiedRestriction){
             return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr, type, requirementLevel);
         }
@@ -220,6 +224,25 @@ public class MetaDataSpecification {
         throw new MetaDataException("Unexpected expression." + expression);
     }
     
+    private MetaDataBase parseOWLCardinalityRestriction(OWLCardinalityRestriction restriction, String type, 
+            RequirementLevel requirementLevel) throws MetaDataException{
+        URI predicate;
+        OWLPropertyRange range = restriction.getFiller();
+        OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
+        int cardinality = restriction.getCardinality();
+        predicate = toURI(owlPropertyExpression);
+        if (range instanceof OWLClass){
+            OWLClass owlClass = (OWLClass)range;
+            if (owlClass.isOWLThing()){
+                return new PropertyMetaData(predicate, type, cardinality, requirementLevel, range.toString());
+            }
+            IRI iri = owlClass.getIRI();
+            ontology.containsClassInSignature(iri);
+            return new LinkedResource(predicate, type, cardinality, requirementLevel, new URIImpl(iri.toString()), this);
+        }
+        return new PropertyMetaData(predicate, type, cardinality, requirementLevel, range.toString());
+    }
+
     private MetaDataBase parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction, String type, 
             RequirementLevel requirementLevel) throws MetaDataException{
         URI predicate;

@@ -4,6 +4,10 @@
  */
 package org.bridgedb.metadata;
 
+import org.openrdf.model.impl.StatementImpl;
+import org.bridgedb.metadata.constants.VoidConstants;
+import org.openrdf.model.Statement;
+import java.util.Set;
 import org.bridgedb.utils.Reporter;
 import org.junit.Ignore;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -26,6 +30,30 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
         MetaDataCollection metaData = new MetaDataCollection("loadMustLinkSet()", loadMustLinkSet(), linksetSetRegistry);
         checkRequiredValues(metaData);
     } 
+
+    @Test
+    public void testTooManyValues() throws MetaDataException{
+        Reporter.report("TooManyValues");
+        Set<Statement> statements = loadMustLinkSet();
+        Statement extra = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D2_ID);
+        statements.add(extra);
+        MetaDataCollection metaData = new MetaDataCollection("testTooManyValues()", statements, linksetSetRegistry);
+        assertFalse(metaData.hasRequiredValues());
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, containsString("ERROR"));
+    }
+
+    @Test
+    public void testExtraSubjectWithBadId() throws MetaDataException{
+        Reporter.report("ExtraSubjectWithBadId");
+        Set<Statement> statements = loadMustLinkSet();
+        Statement extra = new StatementImpl(D2_ID, VoidConstants.SUBJECTSTARGET, D2_ID);
+        statements.add(extra);
+        MetaDataCollection metaData = new MetaDataCollection("testTooManyValues()", statements, linksetSetRegistry);
+        assertTrue(metaData.hasRequiredValues());
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, not(containsString("ERROR")));
+    }
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{

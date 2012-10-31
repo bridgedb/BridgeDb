@@ -30,13 +30,21 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private final Set<Value> values = new HashSet<Value>();
     private final Set<PropertyMetaData> parents = new HashSet<PropertyMetaData>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
+    private final int cardinality;
     
-    public PropertyMetaData(URI predicate, String type, RequirementLevel requirementLevel, String objectClass) throws MetaDataException{
+    public PropertyMetaData(URI predicate, String type, RequirementLevel requirementLevel, String objectClass) 
+            throws MetaDataException{
+        this(predicate, type, NO_CARDINALITY, requirementLevel, objectClass);
+    }
+    
+    public PropertyMetaData(URI predicate, String type, int cardinality, RequirementLevel requirementLevel, 
+            String objectClass) throws MetaDataException{
         super(predicate.getLocalName(), type, requirementLevel);
         this.predicate = predicate;
         metaDataType = getMetaDataType(objectClass);
+        this.cardinality = cardinality;
     }
-    
+
     public static PropertyMetaData getUnspecifiedProperty(URI predicate, String type){
         PropertyMetaData result = new PropertyMetaData(predicate, type);
         return result;
@@ -51,18 +59,21 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         super(other);
         predicate = other.predicate;
         metaDataType = other.metaDataType;
+        this.cardinality = other.cardinality;
     }
     
     private PropertyMetaData(URI predicate, String type){
         super(predicate.getLocalName(), type, RequirementLevel.UNSPECIFIED);
         this.predicate = predicate;
         metaDataType = null;
+        this.cardinality = this.NO_CARDINALITY;
     }
     
     private PropertyMetaData(String type){
         super("Type", type, RequirementLevel.MUST);
         this.predicate = RdfConstants.TYPE_URI;
         metaDataType = new UriType();
+        this.cardinality = this.NO_CARDINALITY;
     }
 
     @Override
@@ -156,6 +167,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         newLine(builder, tabLevel + 1);
         builder.append("RequirementLevel ");
         builder.append(requirementLevel);        
+        if (this.cardinality != NO_CARDINALITY){
+            newLine(builder, tabLevel + 1);
+            builder.append("Cardinality ");
+            builder.append(cardinality);        
+        }
         newLine(builder);
     }
 
@@ -170,8 +186,10 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             return true;
         } else if (values.isEmpty()){
             return false;          
-        } else {
+        } else if (this.cardinality == NO_CARDINALITY) {
             return true;
+        } else {
+            return values.size() == this.cardinality;
         }
     }
 
@@ -201,6 +219,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             appendIncorrectTypeReport(builder, tabLevel, includeWarnings);
         } else if (checkAllpresent && values.isEmpty()){
             appendEmptyReport(builder, tabLevel, includeWarnings);
+        } else if (this.cardinality != NO_CARDINALITY && this.cardinality != values.size()){
+            appendIncorrectCardinalityReport(builder, tabLevel, includeWarnings);
         } else {
             //Ok so nothing to append
         }
@@ -230,6 +250,32 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }
     }
     
+    private void appendIncorrectCardinalityReport(StringBuilder builder, int tabLevel, boolean includeWarnings) {
+        if (requirementLevel == RequirementLevel.IGNORE && !includeWarnings) { return; }
+        tab(builder, tabLevel);
+        if (requirementLevel == RequirementLevel.IGNORE){
+            builder.append("WARNING: Incorrect cardinaility for ");            
+        } else {
+            builder.append("ERROR: Incorrect cardinaility for ");
+        }
+        builder.append(name);
+        newLine(builder, tabLevel + 1);
+        builder.append("Expected ");
+        builder.append(cardinality);
+        builder.append(" values but Found ");
+        builder.append(values.size());
+        newLine(builder, tabLevel + 1);
+        if (this.cardinality > values.size()) {
+            builder.append("Please add statement(s) with the predicate ");
+        } else {
+            builder.append("Please remove statement(s) with the predicate ");            
+        }
+        builder.append(predicate);
+        newLine(builder);
+        newLine(builder);
+        addDocumentationLink(builder, tabLevel);
+    }
+
     private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel, boolean includeWarnings) {
         if (requirementLevel == RequirementLevel.IGNORE && !includeWarnings) { return; }
         tab(builder, tabLevel);
@@ -352,7 +398,5 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     public Set<Statement> getRDF() {
         return rawRDF;
     }
-
-
 
 }

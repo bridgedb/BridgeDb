@@ -68,6 +68,18 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     } 
 
     @Test
+    public void testTooManyValues() throws MetaDataException{
+        Reporter.report("TooManyValues");
+        Set<Statement> statements = loadDirectDataSet1();
+        Statement extra = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, D2_NAME_SPACE_VALUE);
+        statements.add(extra);
+        MetaDataCollection metaData = new MetaDataCollection("testTooManyValues()", statements, voidRegistry);
+        assertFalse(metaData.hasRequiredValues());
+        String report = metaData.validityReport(NO_WARNINGS);
+        assertThat(report, containsString("ERROR"));
+    }
+    
+    @Test
     public void testHasCorrectTypes() throws MetaDataException{
         Reporter.report("HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);

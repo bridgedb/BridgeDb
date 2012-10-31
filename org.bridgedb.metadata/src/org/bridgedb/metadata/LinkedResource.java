@@ -27,15 +27,22 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private final Set<Statement> rawRDF = new HashSet<Statement>();
     private MetaDataCollection collection;
     private final MetaDataSpecification registry;
+    private final int cardinality;    
     
     LinkedResource(URI predicate, String type, RequirementLevel requirementLevel, URI resourceType, 
+            MetaDataSpecification registry){
+        this(predicate, type, NO_CARDINALITY, requirementLevel, resourceType, registry);
+    }
+    
+    LinkedResource(URI predicate, String type, int cardinality, RequirementLevel requirementLevel, URI resourceType, 
             MetaDataSpecification registry){
         super(predicate.getLocalName(), type, requirementLevel);
         this.predicate = predicate;
         this.resourceType = resourceType;
         this.registry = registry;
+        this.cardinality = cardinality;
     }
-    
+
     //LinkedResource(Element element) throws MetaDataException {
     //    super(element);
     //    String typeSt = element.getAttribute(SchemaConstants.TYPE);
@@ -51,6 +58,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         resourceType = other.resourceType;
         this.collection = other.collection;
         this.registry = other.registry;
+        this.cardinality = other.cardinality;
     }
 
     @Override
@@ -59,7 +67,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         this.collection = collection;
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
-            if (statement.getPredicate().equals(predicate)){
+            if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
                 Value value = statement.getObject();
                 if (value instanceof Resource){
                     iterator.remove();
@@ -86,6 +94,11 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
             builder.append("predicate ");
             builder.append(predicate);        
             newLine(builder);
+            if (this.cardinality != NO_CARDINALITY){
+                newLine(builder, tabLevel + 1);
+                builder.append("Cardinality ");
+                builder.append(cardinality);        
+            }
             resource.appendSchema(builder, tabLevel + 1);
         } catch (MetaDataException ex) {
             appendException(builder, tabLevel, ex);
@@ -145,7 +158,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         } else {
             for (Resource id: ids){
                 ResourceMetaData rmd = collection.getResourceByID(id);
-                if (rmd == null){
+               if (rmd == null){
                     return false;
                 } else {
                     if (!rmd.hasValues()){
@@ -161,7 +174,9 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     public boolean hasRequiredValues() {
         if (requirementLevel != RequirementLevel.MUST){
             return true;
-        } else if (ids.isEmpty()){
+        } else if (this.cardinality != NO_CARDINALITY && this.cardinality != ids.size()) {
+            return false;
+        } else if (ids.isEmpty() && this.cardinality != 0){
             return false;
         } else {
             for (Resource id: ids){
@@ -197,13 +212,32 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
 
     @Override
     void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
-        if (ids.isEmpty()){
+        if (this.cardinality > 0 && ids.isEmpty()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");
             builder.append(name);
             builder.append(" is missing. ");
             newLine(builder, tabLevel + 1);
             builder.append("Please add a statment with the predicate ");
+            builder.append(predicate);
+            newLine(builder);
+        } else if (this.cardinality != NO_CARDINALITY && this.cardinality != ids.size()){
+            tab(builder, tabLevel);
+            builder.append("ERROR: ");
+            builder.append(name);
+            builder.append(" found incorrrect number of times. ");
+            newLine(builder, tabLevel + 1);
+            builder.append("Found ");
+            builder.append(ids.size());
+            builder.append(" times but expected  ");
+            builder.append(this.cardinality);
+            builder.append(" times.");
+            newLine(builder, tabLevel + 1);
+            if (this.cardinality > ids.size()) {
+                builder.append("Please add statment(s) with the predicate ");
+            } else {
+                builder.append("Please remove statment(s) with the predicate ");                
+            } 
             builder.append(predicate);
             newLine(builder);
         } else {

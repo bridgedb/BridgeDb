@@ -28,7 +28,8 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     final String name;
     final String documentation;
     final RequirementLevel requirementLevel;
-    
+    static int NO_CARDINALITY = -1;
+
    // MetaData parent;
     
     //MetaDataBase(Element element){
