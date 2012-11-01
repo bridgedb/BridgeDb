@@ -393,6 +393,10 @@ public class RdfWrapper {
         String result;
         try {
             result = getProperties().getProperty(BASE_URI_PROPERTY);
+            //CB I changed my mind on baseURI ending and this avoids having to change it.
+                if (!(result.endsWith("/"))){
+                    result = result + "/";
+                }
         } catch (IOException ex) {
             return ex.getMessage();
         }
