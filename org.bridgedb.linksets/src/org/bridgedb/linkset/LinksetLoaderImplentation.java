@@ -45,6 +45,8 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.rdf.StatementReaderAndImporter;
+import org.bridgedb.rdf.VoidStatements;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
@@ -75,7 +77,7 @@ public class LinksetLoaderImplentation{
     
     private final MetaData metaData;
     private final URI accessedFrom;
-    private final LinksetStatements statements;
+    private final VoidStatements statements;
     private final ValidationType validationType;
     private final StoreType storeType;
     
@@ -91,10 +93,12 @@ public class LinksetLoaderImplentation{
         accessedFrom = new URIImpl(file.toURI().toString());
         this.validationType = validationType;
         this.storeType = storeType;
-        statements = new LinksetStatementReaderAndImporter(file, storeType);     
         if (validationType.isLinkset()){
-            metaData = new LinksetVoidInformation(file.getAbsolutePath(), statements, validationType);        
+            LinksetStatements linkStatements = new LinksetStatementReaderAndImporter(file, storeType);     
+            statements = linkStatements;     
+            metaData = new LinksetVoidInformation(file.getAbsolutePath(), linkStatements, validationType);        
         } else {
+            statements = new StatementReaderAndImporter(file, storeType);     
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
             metaData = new MetaDataCollection(file.getAbsolutePath(), statements.getVoidStatements(), specification);
@@ -105,10 +109,12 @@ public class LinksetLoaderImplentation{
         Reporter.report("Reading a String length " + info.length());
         this.validationType = validationType;
         this.storeType = storeType;
-        statements = new LinksetStatementReaderAndImporter(info, format, storeType);     
         if (validationType.isLinkset()){
-            metaData = new LinksetVoidInformation(source, statements, validationType);        
+            LinksetStatements linkStatements = new LinksetStatementReaderAndImporter(info, format, storeType);     
+            statements = linkStatements;     
+            metaData = new LinksetVoidInformation(source, linkStatements, validationType);        
         } else {
+            statements = new StatementReaderAndImporter(info, format, storeType);     
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
             metaData = new MetaDataCollection(source, statements.getVoidStatements(), specification);
@@ -120,10 +126,12 @@ public class LinksetLoaderImplentation{
         Reporter.report("Reading from inputStream " + source);
         this.validationType = validationType;
         this.storeType = storeType;
-        statements = new LinksetStatementReaderAndImporter(inputStream, format, storeType);     
         if (validationType.isLinkset()){
-            metaData = new LinksetVoidInformation(source, statements, validationType);        
+            LinksetStatements linkStatements = new LinksetStatementReaderAndImporter(inputStream, format, storeType);     
+            statements = linkStatements;     
+            metaData = new LinksetVoidInformation(source, linkStatements, validationType);        
         } else {
+            statements = new LinksetStatementReaderAndImporter(inputStream, format, storeType);     
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
             metaData = new MetaDataCollection(source, statements.getVoidStatements(), specification);
@@ -159,7 +167,7 @@ public class LinksetLoaderImplentation{
         getLinksetContexts(urlListener);
         resetBaseURI();
         loadVoid();
-        loadSQL(statements, urlListener);
+        loadSQL(urlListener);
         urlListener.closeInput();    
         if (accessedFrom == null){
             Reporter.report("Load finished. ");
@@ -263,8 +271,9 @@ public class LinksetLoaderImplentation{
         }
     }
 
-    private void loadSQL(LinksetStatements statements, URLListener urlListener) throws IDMapperException {
-        for (Statement st:statements.getLinkStatements()){
+    private void loadSQL(URLListener urlListener) throws IDMapperException {
+        LinksetStatements linksetStatements = (LinksetStatements) statements;
+        for (Statement st:linksetStatements.getLinkStatements()){
             String sourceURL = st.getSubject().stringValue();
             String targetURL = st.getObject().stringValue();
             urlListener.insertURLMapping(sourceURL, targetURL, mappingId, symmetric);

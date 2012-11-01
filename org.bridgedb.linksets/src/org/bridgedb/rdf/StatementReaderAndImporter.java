@@ -41,25 +41,25 @@ public class StatementReaderAndImporter implements VoidStatements{
     }
     
     public StatementReaderAndImporter(File file, StoreType storeType) throws IDMapperException{
-        LinksetStatementReader reader = new LinksetStatementReader(file);
+        StatementReader reader = new StatementReader(file);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
     }
 
     public StatementReaderAndImporter(String fileName, StoreType storeType) throws IDMapperException{
-        LinksetStatementReader reader = new LinksetStatementReader(fileName);
+        StatementReader reader = new StatementReader(fileName);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
     }
     
     public StatementReaderAndImporter(String info, RDFFormat format, StoreType storeType) throws IDMapperException{
-        LinksetStatementReader reader = new LinksetStatementReader(info, format);
+        StatementReader reader = new StatementReader(info, format);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
     }
 
     public StatementReaderAndImporter(InputStream inputStream, RDFFormat format, StoreType storeType) throws IDMapperException{
-        LinksetStatementReader reader = new LinksetStatementReader(inputStream, format);
+        StatementReader reader = new StatementReader(inputStream, format);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
     }

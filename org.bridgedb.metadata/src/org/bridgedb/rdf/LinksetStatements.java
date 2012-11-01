@@ -11,11 +11,13 @@ import org.openrdf.model.Statement;
  *
  * @author Christian
  */
-public interface LinksetStatements{
+public interface LinksetStatements extends VoidStatements{
 
     public Set<Statement> getLinkStatements();
     
+    @Override
     public Set<Statement> getVoidStatements();
     
+    @Override
     public void resetBaseURI(String newBaseURI);
 }
