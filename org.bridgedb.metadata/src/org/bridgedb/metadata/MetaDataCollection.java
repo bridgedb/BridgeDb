@@ -53,7 +53,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
     
     public MetaDataCollection (String dataFileName, MetaDataSpecification metaDataRegistry) throws MetaDataException{
-        this(dataFileName, StatementReader.extractStatements(dataFileName), metaDataRegistry);
+        this(dataFileName, new StatementReader(dataFileName).getVoidStatements(), metaDataRegistry);
     }
         
     private ResourceMetaData getResourceMetaData (Resource id, Set<Statement> statements) throws MetaDataException{

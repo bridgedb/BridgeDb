@@ -22,7 +22,12 @@ import java.util.logging.Logger;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
@@ -35,7 +40,7 @@ import org.openrdf.rio.helpers.RDFHandlerBase;
  *
  * @author Christian
  */
-public class StatementReader extends RDFHandlerBase{
+public class StatementReader extends RDFHandlerBase implements VoidStatements {
  
     public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.RDFXML;
     public static String DEFAULT_BASE_URI = "http://no/BaseURI/Set/";
@@ -48,10 +53,23 @@ public class StatementReader extends RDFHandlerBase{
     Set<Statement> statements = new HashSet<Statement>();
     boolean parsed = false;
     
-    StatementReader() {
+    public StatementReader(String fileName) throws MetaDataException{
+        parse(new File(fileName.trim()), DEFAULT_BASE_URI);
     }
-   
-    void parse(String info, RDFFormat format, String baseURI) throws MetaDataException{
+    
+    public StatementReader(File file) throws MetaDataException{
+        parse(file, DEFAULT_BASE_URI);
+    }
+
+    public StatementReader(String info, RDFFormat format) throws MetaDataException{
+        parse(info, format, DEFAULT_BASE_URI);
+    }
+
+    public StatementReader(InputStream inputStream, RDFFormat format) throws MetaDataException{
+        parse(inputStream, format, DEFAULT_BASE_URI);
+    }
+
+    private void parse(String info, RDFFormat format, String baseURI) throws MetaDataException{
         if (format == null){
             throw new MetaDataException ("RDFFormat may not be null");
         }
@@ -70,7 +88,7 @@ public class StatementReader extends RDFHandlerBase{
         }        
     }
     
-    void parse(InputStream inputStream, RDFFormat format, String baseURI) throws MetaDataException{
+    private void parse(InputStream inputStream, RDFFormat format, String baseURI) throws MetaDataException{
         if (format == null){
             throw new MetaDataException ("RDFFormat may not be null");
         }
@@ -93,7 +111,7 @@ public class StatementReader extends RDFHandlerBase{
         }        
     }
 
-    void parse(File file, String baseURI) throws MetaDataException{
+    private void parse(File file, String baseURI) throws MetaDataException{
         FileReader reader = null;
         RDFParser parser = getParser(file);
         try {
@@ -132,21 +150,6 @@ public class StatementReader extends RDFHandlerBase{
                 Reporter.report(ex.getMessage());
             }
         }        
-    }
-    
-    public static Set<Statement> extractStatements (String  fileName) throws MetaDataException {
-        File file = new File(fileName.trim());
-        return extractStatements(file);
-    }
-    
-    public static Set<Statement> extractStatements (File file) throws MetaDataException {
-        return extractStatements(file, DEFAULT_BASE_URI);
-    }
-        
-    public static Set<Statement> extractStatements (File file, String baseURI) throws MetaDataException {
-        StatementReader statementReader = new StatementReader();
-        statementReader.parse(file, baseURI);
-        return statementReader.statements;
     }
     
     private static RDFParser getParser(File file){
@@ -209,6 +212,56 @@ public class StatementReader extends RDFHandlerBase{
             Reporter.report(""+key);
         }
         Reporter.report(supportedMineTypes());
+    }
+
+    @Override
+    public Set<Statement> getVoidStatements(){
+        return statements;
+    }
+    
+    @Override
+    public void resetBaseURI(String newBaseURI) {
+        statements = resetBaseURI(newBaseURI, statements);
+    }
+
+    private static URI resetBaseURI(String newBaseURI, URI oldURI){
+        String oldName = oldURI.stringValue();
+        if (oldName.startsWith(DEFAULT_BASE_URI)){
+            if (oldName.startsWith(DEFAULT_BASE_URI + "#")){        
+                return new URIImpl(oldName.replace(DEFAULT_BASE_URI+"#", newBaseURI));
+            } else {
+                return new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));                
+            }
+        }
+        return oldURI;
+    }
+    
+    private static Value resetBaseURI(String newBaseURI, Value oldValue){
+        if (oldValue instanceof URI){
+            return resetBaseURI(newBaseURI, (URI)oldValue);
+        } else {
+            return oldValue;
+        }
+    }
+    
+    public static Resource resetBaseURI(String newBaseURI, Resource oldValue){
+        if (oldValue instanceof URI){
+            return resetBaseURI(newBaseURI, (URI)oldValue);
+        } else {
+            return oldValue;
+        }
+    }
+
+    public static Set<Statement> resetBaseURI(String newBaseURI, Set<Statement> oldStatements) {
+        Set<Statement> newstatements = new HashSet<Statement>();
+        for (Statement statement:oldStatements){
+            Resource newResource = resetBaseURI(newBaseURI, statement.getSubject());
+            URI newPredicate = resetBaseURI(newBaseURI, statement.getPredicate());
+            Value newObject = resetBaseURI(newBaseURI, statement.getObject());
+            statement = new StatementImpl(newResource, newPredicate, newObject);
+            newstatements.add(statement);
+        }
+        return newstatements;
     }
 
 }

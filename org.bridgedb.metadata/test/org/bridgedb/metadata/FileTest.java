@@ -30,7 +30,8 @@ public class FileTest extends TestUtils{
     private void checkFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
-        Set<Statement> statements = StatementReader.extractStatements(input);
+        StatementReader reader = new StatementReader(input);
+        Set<Statement> statements = reader.getVoidStatements();
         MetaDataCollection metaData = new MetaDataCollection(fileName, statements, registry);
         checkCorrectNumberOfIds (metaData, numberOfIds);
         checkRequiredValues(metaData);
@@ -44,7 +45,8 @@ public class FileTest extends TestUtils{
     private void validateFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
-        Set<Statement> statements = StatementReader.extractStatements(input);
+        StatementReader reader = new StatementReader(input);
+        Set<Statement> statements = reader.getVoidStatements();
         MetaDataCollection metaData = new MetaDataCollection(fileName, statements, registry);
         checkCorrectNumberOfIds (metaData, numberOfIds);
         String report = metaData.validityReport(NO_WARNINGS);
@@ -54,7 +56,8 @@ public class FileTest extends TestUtils{
     private void validateFile(String fileName, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
         Reporter.report("Checking " + fileName);
         File input = new File(fileName);
-        Set<Statement> statements = StatementReader.extractStatements(input);
+        StatementReader reader = new StatementReader(input);
+        Set<Statement> statements = reader.getVoidStatements();
         Reporter.report("Read " + fileName);
         MetaDataCollection metaData = new MetaDataCollection(fileName, statements, registry);
         Reporter.report("Loaded " + fileName);

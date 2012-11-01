@@ -26,30 +26,26 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class LinksetStatementReader extends StatementReader implements LinksetStatements{
     
-    Set<Statement> linkStatements = new HashSet<Statement>();
+    Set<Statement> linkStatements;
     
     URI linkPredicate = null;
     
     public LinksetStatementReader(String fileName) throws MetaDataException{
-        parse(new File(fileName.trim()), DEFAULT_BASE_URI);
+        super(fileName);
     }
     
     public LinksetStatementReader(File file) throws MetaDataException{
-        parse(file, DEFAULT_BASE_URI);
+        super(file);
     }
 
     public LinksetStatementReader(String info, RDFFormat format) throws MetaDataException{
-        parse(info, format, DEFAULT_BASE_URI);
+        super(info, format);
     }
 
     public LinksetStatementReader(InputStream inputStream, RDFFormat format) throws MetaDataException{
-        parse(inputStream, format, DEFAULT_BASE_URI);
+        super(inputStream, format);
     }
 
-    public Set<Statement> getVoidStatements(){
-        return statements;
-    }
-    
     public Set<Statement> getLinkStatements(){
         return linkStatements;
     }
@@ -79,59 +75,17 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
     }
 
     private void moveLinksAlreadyFound() {
-       Iterator<Statement> iterator = statements.iterator();
-       while (iterator.hasNext()){
-           Statement statement = iterator.next();
-           if (statement.getPredicate().equals(linkPredicate)){
-               linkStatements.add(statement);
-               iterator.remove();
-           }
-       }      
-    }
-
-    @Override
-    public void resetBaseURI(String newBaseURI) {
-        statements = resetBaseURI(newBaseURI, statements);
-    }
-
-    private static URI resetBaseURI(String newBaseURI, URI oldURI){
-        String oldName = oldURI.stringValue();
-        if (oldName.startsWith(DEFAULT_BASE_URI)){
-            if (oldName.startsWith(DEFAULT_BASE_URI + "#")){        
-                return new URIImpl(oldName.replace(DEFAULT_BASE_URI+"#", newBaseURI));
-            } else {
-                return new URIImpl(oldName.replace(DEFAULT_BASE_URI, newBaseURI));                
+        if (linkStatements == null){
+            linkStatements = new HashSet<Statement>();
+        }
+        Iterator<Statement> iterator = statements.iterator();
+        while (iterator.hasNext()){
+            Statement statement = iterator.next();
+            if (statement.getPredicate().equals(linkPredicate)){
+                linkStatements.add(statement);
+                iterator.remove();
             }
-        }
-        return oldURI;
-    }
-    
-    private static Value resetBaseURI(String newBaseURI, Value oldValue){
-        if (oldValue instanceof URI){
-            return resetBaseURI(newBaseURI, (URI)oldValue);
-        } else {
-            return oldValue;
-        }
-    }
-    
-    public static Resource resetBaseURI(String newBaseURI, Resource oldValue){
-        if (oldValue instanceof URI){
-            return resetBaseURI(newBaseURI, (URI)oldValue);
-        } else {
-            return oldValue;
-        }
-    }
-
-    public static Set<Statement> resetBaseURI(String newBaseURI, Set<Statement> oldStatements) {
-        Set<Statement> newstatements = new HashSet<Statement>();
-        for (Statement statement:oldStatements){
-            Resource newResource = resetBaseURI(newBaseURI, statement.getSubject());
-            URI newPredicate = resetBaseURI(newBaseURI, statement.getPredicate());
-            Value newObject = resetBaseURI(newBaseURI, statement.getObject());
-            statement = new StatementImpl(newResource, newPredicate, newObject);
-            newstatements.add(statement);
-        }
-        return newstatements;
+        }      
     }
 
 }
