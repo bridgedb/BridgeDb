@@ -4,7 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
-import org.bridgedb.metadata.constants.XsdConstants;
+import org.bridgedb.metadata.constants.XMLSchemaConstants;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -49,11 +49,11 @@ public class StringTypeTest {
         StringType instance = new StringType();
         Value value = new LiteralImpl("10");
         assertTrue(instance.correctType(value));
-        value = new LiteralImpl("10",XsdConstants.INTEGER_URI);
+        value = new LiteralImpl("10",XMLSchemaConstants.INTEGER);
         assertFalse(instance.correctType(value));
         value = new LiteralImpl("ten");
         assertTrue(instance.correctType(value));
-        value = new LiteralImpl("ten",XsdConstants.STRING_URI);
+        value = new LiteralImpl("ten",XMLSchemaConstants.STRING);
         assertTrue(instance.correctType(value));
     }
 
