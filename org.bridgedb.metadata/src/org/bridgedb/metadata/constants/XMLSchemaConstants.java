@@ -52,4 +52,6 @@ public class XMLSchemaConstants {
     public static final URI ANY_URI = new URIImpl(xmlschemans + "anyURI");
     public static final URI QNAME = new URIImpl(xmlschemans + "QName");
     public static final URI NOTATION = new URIImpl(xmlschemans + "NOTATION");
+    public static final URI INTEGER = new URIImpl(xmlschemans + "integer");
+    public static final URI NON_NEGATIVE_INTEGER = new URIImpl(xmlschemans + "nonNegativeInteger");
 }
