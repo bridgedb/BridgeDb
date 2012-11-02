@@ -67,7 +67,9 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
                  linkStatements.add(statement);
              } else {
                 if (statement.getPredicate().equals(VoidConstants.LINK_PREDICATE)){
-                    throw new RDFHandlerException("Two statements found with predicate " + VoidConstants.LINK_PREDICATE);
+                    throw new RDFHandlerException("Two statements found with predicate " + VoidConstants.LINK_PREDICATE +
+                            "\n\tLinksets can have only one declared " + VoidConstants.LINKSET + " type Resource\n" +
+                            "\tAnd that must have the only " +  VoidConstants.LINK_PREDICATE + " statement in the whole file");
                 }
                 statements.add(statement);         
              }
@@ -88,4 +90,16 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
         }      
     }
 
+    public void endRDF() throws RDFHandlerException {
+        super.endRDF();
+        if (linkPredicate == null){
+            throw new RDFHandlerException ("Linkset error! linkPredicate never found.\n"
+                    + "Please make sure there is exactly one statement with the predicate " + VoidConstants.LINK_PREDICATE);
+        }   
+        if (linkStatements == null ||  linkStatements.isEmpty()){
+            throw new RDFHandlerException ("Linkset error! Found the linkPredicate " + linkPredicate + ".\n"
+                    + "But no linkStatements usig this predicate");
+            
+        }
+    }
 }
