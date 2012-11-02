@@ -18,6 +18,7 @@
 //
 package org.bridgedb.ws;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,11 +30,14 @@ import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.linkset.LinksetInterfaceMinimal;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
@@ -46,14 +50,16 @@ import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.UriSpaceBean;
+import org.bridgedb.ws.bean.ValidationBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
+import org.openrdf.rio.RDFFormat;
 
 /**
  *
  * @author Christian
  */
-public class WSOpsMapper extends WSCoreMapper implements URLMapper{
+public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInterfaceMinimal{
     
     WSOpsInterface opsService;
     
@@ -136,6 +142,12 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
+    public MappingSetInfo getMappingSetInfo(int mappingSetId) throws IDMapperException {
+        MappingSetInfoBean bean = opsService.getMappingSetInfo("" + mappingSetId);
+        return MappingSetInfoBeanFactory.asMappingSetInfo(bean);
+    }
+
+    @Override
     public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException {
         List<MappingSetInfoBean> beans = opsService.getMappingSetInfos();
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 
@@ -174,4 +186,74 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 		return result;
 	}
     
+    @Override
+    public Set<String> getSourceUriSpace(int mappingSetId) throws IDMapperException {
+        MappingSetInfo info = getMappingSetInfo(mappingSetId);
+        return getUriSpaces(info.getSourceSysCode());
+    }
+
+    @Override
+    public Set<String> getTargetUriSpace(int mappingSetId) throws IDMapperException {
+        MappingSetInfo info = getMappingSetInfo(mappingSetId);
+        return getUriSpaces(info.getTargetSysCode());
+    }
+
+    // *****   LinksetInterfaceMinimal Methods
+    
+    @Override
+    public String validateString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
+        ValidationBean bean = opsService.validateString(info, format.getDefaultMIMEType(), storeType.toString(), 
+                validationType.toString(), Boolean.toString(includeWarnings));
+        return bean.getOkReport();
+    }
+
+    @Override
+     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType, boolean includeWarnings) throws IDMapperException{
+        ValidationBean bean = opsService.validateInputStream(inputStream, format.getDefaultMIMEType(), storeType.toString(), 
+                validationType.toString(), Boolean.toString(includeWarnings));
+        return bean.getOkReport();
+    }
+
+    @Override
+    public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException {
+        ValidationBean bean = opsService.validateStringAsVoid(info, mimeType);
+        return bean.getOkReport();
+    }
+
+    @Override
+    public String validateInputStreamAsVoid(String source, InputStream inputStream, String mimeType) throws IDMapperException {
+        ValidationBean bean = opsService.validateInputStreamAsVoid(inputStream, mimeType);
+        return bean.getOkReport();
+    }
+
+    //@Override
+    //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
+    //    ValidationBean bean = opsService.validateStringAsLinksetVoid(info, mimeType);
+    //    return bean.getReport();
+    //}
+
+    @Override
+    public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException {
+        ValidationBean bean =  opsService.validateStringAsLinkSet(info, mimeType);
+        return bean.getOkReport();
+    }
+
+    @Override
+    public String validateInputStreamAsLinks(String source, InputStream inputStream, String mimeType) throws IDMapperException {
+        ValidationBean bean =  opsService.validateInputStreamAsLinkSet(inputStream, mimeType);
+        return bean.getOkReport();
+    }
+
+    @Override
+    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+            throws IDMapperException {
+        opsService.loadString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
+    }
+
+    @Override
+    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
+        opsService.checkStringValid(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
+    }
+
 }

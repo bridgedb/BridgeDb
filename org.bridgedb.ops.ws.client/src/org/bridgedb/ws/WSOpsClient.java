@@ -18,10 +18,13 @@
 //
 package org.bridgedb.ws;
 
+import com.sun.jersey.api.client.ClientResponse;
+import java.io.InputStream;
 import java.util.List;
 
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
@@ -34,6 +37,7 @@ import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.ValidationBean;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**
@@ -42,6 +46,9 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 
+    public final String NO_REPORT = null;
+    public final String NO_EXCEPTION = null;
+    
     public WSOpsClient(String serviceAddress) {
         super(serviceAddress);
     }
@@ -139,6 +146,15 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
+    public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException {
+        MappingSetInfoBean result = 
+                webResource.path("getMappingSetInfo/" + mappingSetId)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<MappingSetInfoBean>() {});
+         return result;
+    }
+        
+    @Override
     public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
@@ -158,6 +174,61 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<DataSourceUriSpacesBean>() {});
          return result;
+    }
+
+    @Override
+    public String loadString(String info, String mineType, String storeType, String validationType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String checkStringValid(String info, String mimeType, String storeType, String validationType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    //TODO FIX this
+    @Override
+    public ValidationBean validateString(String info, String mimeType, String storeType, String validationType, 
+            String includeWarnings) throws IDMapperException {
+        ValidationBean input = new ValidationBean(NO_REPORT, info, mimeType, storeType, validationType, 
+                includeWarnings, NO_EXCEPTION);
+        ValidationBean result = 
+                webResource.path("/validateStringXML")
+                .type(MediaType.APPLICATION_XML)
+                .post(ValidationBean.class, input);
+//        System.out.println(response.getStatus());  
+//        System.out.println(response);  
+//        System.out.println(response.hasEntity());  
+//        System.out.println(response.getClass());  
+//        System.out.println(response.getType());  
+//         = response.getEntity(ValidationBean.class);
+        System.out.println(result);
+        return result;
+    }
+
+    @Override
+    public ValidationBean validateStringAsVoid(String info, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ValidationBean validateStringAsLinkSet(String info, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ValidationBean validateInputStream(InputStream inputStream, String mimeTypee, String storeType, String validationType, String includeWarnings) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ValidationBean validateInputStreamAsVoid(InputStream inputStream, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ValidationBean validateInputStreamAsLinkSet(InputStream inputStream, String mimeType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 	@Override

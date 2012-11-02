@@ -169,8 +169,18 @@ public interface URLMapper extends IDMapper{
      * @return high level statistics
      * @throws IDMapperException 
      */
-    public  OverallStatistics getOverallStatistics() throws IDMapperException;
+    public OverallStatistics getOverallStatistics() throws IDMapperException;
 
+    /*
+     * Obtains some statistics for one MappingSet in the data.
+     * <p>
+     * @See MappingSetInfo for details of exactky what is returned
+     * @param mappingSetId Id of mapping set for which info is required
+     * @return Info for the Mapping Set identified by this id
+     * @throws IDMapperException 
+     */
+    public MappingSetInfo getMappingSetInfo(int mappingSetId) throws IDMapperException;
+    
     /**
      * Obtains some statistics for each MappingSet in the data.
      * <p>
@@ -179,7 +189,6 @@ public interface URLMapper extends IDMapper{
      * @throws IDMapperException 
      */
     public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
-    
     //There is currently no method for obtaining a single mapping set info but this can be added if required.
     
     /**
@@ -206,5 +215,25 @@ public interface URLMapper extends IDMapper{
 	 * @throws BridgeDbSqlException
 	 */
 	public ProfileInfo getProfile(String profileURI) throws BridgeDbSqlException;
+
+    /**
+     * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for the Source DataSource.
+     * 
+     * Looks for the mapping set, finds the Source DataSource and returns the UriSpaces for that DataSource.
+     * @param mappingSet The id of the mappingSet to check.
+     * @return UriSpaces (As Strings) of the UriSpace registered for this DataSource.
+     * @throws IDMapperException 
+     */
+    public Set<String> getSourceUriSpace(int mappingSetId) throws IDMapperException;
+
+    /**
+     * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for the target DataSource.
+     * 
+     * Looks for the mapping set, finds the Target DataSource and returns the UriSpaces for that DataSource.
+     * @param mappingSet The id of the mappingSet to check.
+     * @return UriSpaces (As Strings) of the UriSpace registered for this DataSource.
+     * @throws IDMapperException 
+     */
+    public Set<String> getTargetUriSpace(int mappingSetId) throws IDMapperException;
 
 }

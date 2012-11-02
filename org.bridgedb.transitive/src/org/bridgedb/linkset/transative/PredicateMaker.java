@@ -20,7 +20,8 @@ package org.bridgedb.linkset.transative;
 
 import org.bridgedb.linkset.constants.OboConstants;
 import org.bridgedb.linkset.constants.OwlConstants;
-import org.bridgedb.linkset.constants.SkosConstants;
+import org.bridgedb.metadata.constants.SkosConstants;
+import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandlerException;
 
@@ -30,7 +31,11 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class PredicateMaker {
 
-    public static Value combine(Value left, Value right) throws RDFHandlerException{
+    public static URI combine(Value left, Value right) throws RDFHandlerException{
+        return combine((URI)left, (URI)right);
+    }
+    
+    public static URI combine(URI left, URI right) throws RDFHandlerException{
         if (left.equals(right)){
             return left;
         }

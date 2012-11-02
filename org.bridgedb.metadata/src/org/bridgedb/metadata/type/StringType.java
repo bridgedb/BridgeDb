@@ -1,0 +1,41 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.bridgedb.metadata.type;
+
+import org.bridgedb.metadata.AppendBase;
+import org.bridgedb.metadata.constants.XsdConstants;
+import org.openrdf.model.Literal;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+
+/**
+ *
+ * @author Christian
+ */
+public class StringType implements MetaDataType{
+
+    @Override
+    public boolean correctType(Value value) {
+        if (value instanceof Literal){
+            Literal literal = (Literal)value;
+            URI literalType = literal.getDatatype();
+            if (literalType != null){
+                return (XsdConstants.STRING_URI.equals(literalType));
+            }
+        }
+        String stringValue = value.stringValue();
+        if (stringValue == null){
+            return false;
+        }
+        return !stringValue.isEmpty();
+    }
+
+    @Override
+    public String getCorrectType() {
+        return " A String";
+    }
+
+  
+}

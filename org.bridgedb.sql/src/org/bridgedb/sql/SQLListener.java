@@ -66,6 +66,8 @@ public class SQLListener implements MappingListener{
     private StringBuilder insertQuery;
     private final boolean supportsIsValid;
     protected final String autoIncrement;
+    private final static long REPORT_DELAY = 10000;
+    private long lastUpdate = 0;
     
     /**
      * 
@@ -148,6 +150,7 @@ public class SQLListener implements MappingListener{
         } catch (SQLException ex) {
             throw new BridgeDbSqlException ("Error getting new indetity with " + query, ex);
         }
+        lastUpdate = new Date().getTime();
         return autoinc;
     }
 
@@ -168,7 +171,8 @@ public class SQLListener implements MappingListener{
         //Starting with a block will cause a new query to start.
         blockCount = blockSize ;
         insertCount = 0;
-        doubleCount = 0;    
+        doubleCount = 0;   
+        updateLastUpdated();
     }
     
     @Override
@@ -214,12 +218,16 @@ public class SQLListener implements MappingListener{
         if (insertQuery != null) {
            try {
                 Statement statement = createStatement();
-                long start = new Date().getTime();
+                //long start = new Date().getTime();
                 int changed = statement.executeUpdate(insertQuery.toString());
-//                Reporter.report("insertTook " + (new Date().getTime() - start));
+                //Reporter.report("insertTook " + (new Date().getTime() - start));
                 insertCount += changed;
                 doubleCount += blockCount - changed;
-//                Reporter.report("Inserted " + insertCount + " links and ingnored " + doubleCount + " so far");
+                long now = new Date().getTime();
+                if (now - lastUpdate > REPORT_DELAY){
+                    Reporter.report("Inserted " + insertCount + " links and ignored " + doubleCount + " so far");
+                    lastUpdate = now;
+                }
             } catch (SQLException ex) {
                 System.err.println(ex);
                 throw new BridgeDbSqlException ("Error inserting link ", ex, insertQuery.toString());
@@ -684,21 +692,25 @@ public class SQLListener implements MappingListener{
      * @throws BridgeDbSqlException 
      */
     private void updateLastUpdated() throws BridgeDbSqlException {
-        String delete = "DELETE from properties where theKey = 'LastUpdates'";
+        String date = new Date().toString();
+        putProperty("LastUpdates", date);
+    }
+
+    public void putProperty(String key, String value) throws BridgeDbSqlException {
+        String delete = "DELETE from properties where theKey = '" + key + "'";
         Statement statement = this.createStatement();
         try {
             statement.executeUpdate(delete.toString());
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Error Deleting LastUpDated " + delete, ex);
+            throw new BridgeDbSqlException("Error Deleting property " + delete, ex);
         }
-        String date = new Date().toString();
         String update = "INSERT INTO properties    "
                     + "(theKey, property, isPublic )                            " 
-                    + "VALUES ('LastUpdates', '" + date  + "' , 1)  ";
+                    + "VALUES ('" + key + "', '" + value  + "' , 1)  ";
         try {
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Error insertoing LastUpDated " + update, ex);
+            throw new BridgeDbSqlException("Error inserting Property " + update, ex);
         }
     }
 

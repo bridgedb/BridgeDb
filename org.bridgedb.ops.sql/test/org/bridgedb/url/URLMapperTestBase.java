@@ -38,7 +38,9 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     
     protected static String URISpace1;
     protected static String URISpace2;
+    protected static String URISpace2a;
     protected static String URISpace3;
+    protected static String URISpace3a;
     
     protected static String link1to2;
     protected static String link1to3;
@@ -57,6 +59,7 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     //Third Set of URLs which again should map to each other but not the above
     protected static String map3URL1;
     protected static String map3URL2;
+    protected static String map3URL2a;
     protected static String map3URL3;
     //Add an id that does not exist and can not be used in freesearch
     //Or null if all Strings can be used.
@@ -73,7 +76,9 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
       
         URISpace1 = "http://www.foo.com/";
         URISpace2 = "http://www.example.com/";
+        URISpace2a = "http://rdf.example.com/";
         URISpace3 = "http://www.example.org#";
+        URISpace3a = "http://rdf.example.org#";
          
         link1to2 = URISpace1 + "->" + URISpace2;
         link1to3 = URISpace1 + "->" + URISpace3;
@@ -92,6 +97,7 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
         //Third Set of URLs which again should map to each other but not the above
         map3URL1 = map3xref1.getUrl();
         map3URL2 = map3xref2.getUrl();
+        map3URL2a = URISpace2a + goodId3;
         map3URL3 = map3xref3.getUrl();
          //And a few URLs also not used
         mapBadURL1 = "www.notInURLMapper.com#" + goodId1;

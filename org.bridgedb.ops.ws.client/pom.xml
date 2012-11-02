@@ -19,7 +19,6 @@
         <plugins>
         </plugins>
 	</build>
-	
 	<dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
@@ -40,6 +39,11 @@
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
             <version>${jersey.version}</version>
             <type>jar</type>
@@ -54,6 +58,20 @@
 		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ops.sql</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.linksets</artifactId>
+			<version>${project.version}</version>
+            <type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.metadata</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>

@@ -13,18 +13,20 @@
         <mysql.version>5.1.20</mysql.version>
         <sesame.version>2.6.4</sesame.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+        <owlapi-api.version>3.4.1-SNAPSHOT</owlapi-api.version>
     </properties>
 
 
   <modules>
   	<module>org.bridgedb</module>
+  	<module>org.bridgedb.utils</module>
   	<module>org.bridgedb.sql</module>
   	<module>org.bridgedb.ops.sql</module>
+  	<module>org.bridgedb.metadata</module>
   	<module>org.bridgedb.linksets</module>
   	<module>org.bridgedb.ws.core</module>
   	<module>org.bridgedb.ws.server</module>
   	<module>org.bridgedb.ops.ws.core</module>
-  	<module>org.bridgedb.ops.ws.server</module>
   	<module>org.bridgedb.ws.service</module>
  	<module>org.bridgedb.ops.ws.service</module>
   	<module>org.bridgedb.transitive</module>
@@ -34,9 +36,9 @@
 
     <module>org.bridgedb.my.loader</module>
     <!-- The modules below this comment are not actively used by OPS but are part of BridgeDB -->
-   	<!--module>org.bridgedb.bio</module>
+   	<module>org.bridgedb.bio</module>
     <module>org.bridgedb.rdb</module>
-  	<module>org.bridgedb.webservice.bridgerest</module>
+  	<!--module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.webservice.cronos</module>
   	<module>org.bridgedb.webservice.picr</module>
@@ -127,5 +129,18 @@
 			</distributionManagement>
 		</profile>
 	</profiles>
+  	<repositories>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	
 </project>

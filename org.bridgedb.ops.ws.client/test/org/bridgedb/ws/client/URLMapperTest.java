@@ -38,20 +38,10 @@ public class URLMapperTest  extends org.bridgedb.url.URLMapperTest{
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {
         WSOpsInterface webService = WSOpsClientFactory.createTestWSClient();
+        mappingSet2_3 = 3;
         urlMapper = new WSOpsMapper(webService);
     }
     
-    /**
-     * Overwrite as different exception
-     * @throws IDMapperException 
-     */
-    @Test
-    (expected=UniformInterfaceException.class)
-    public void testGetXrefBad() throws IDMapperException {
-        report("GetXrefBad");
-        Xref result = urlMapper.toXref(mapBadURL1);
-    }
-
     @Test
     @Override //TOO slow
     public void testGetOverallStatistics() throws IDMapperException {

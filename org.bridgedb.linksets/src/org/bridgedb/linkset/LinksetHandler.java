@@ -19,7 +19,6 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
-import org.bridgedb.linkset.constants.VoidConstants;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,8 +26,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.IDMapperLinksetException;
+import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.RdfLoader;
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
@@ -77,7 +78,7 @@ public class LinksetHandler extends RDFHandlerBase{
      * @param file
      * @throws IDMapperException
      */
-    void parse (File file) throws IDMapperException  {
+    void parse (File file, String baseURI) throws IDMapperException  {
         if (!file.isFile()){
             throw new IDMapperException (file.getAbsolutePath() + " is not a file");
         }
@@ -90,7 +91,7 @@ public class LinksetHandler extends RDFHandlerBase{
             parser.setParseErrorListener(new LinksetParserErrorListener());
             parser.setVerifyData(true);
             reader = new FileReader(file);
-            parser.parse (reader, RdfWrapper.getBaseURI());
+            parser.parse (reader, baseURI);
         } catch (IOException ex) {
             throw new IDMapperLinksetException("Error reading file " + 
             		file.getAbsolutePath() + " " + ex.getMessage(), ex);

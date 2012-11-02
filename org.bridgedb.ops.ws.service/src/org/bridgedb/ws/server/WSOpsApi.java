@@ -22,7 +22,8 @@ package org.bridgedb.ws.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
-import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.rdf.RdfFactory;
 
 /**
  *
@@ -103,25 +104,25 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("<li><a href=\"#targetURISpace\">targetURISpace</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getBaseURI());
-                sb.append("/mapURL?URL=");
+                sb.append(RdfConfig.getTheBaseURI());
+                sb.append("mapURL?URL=");
                 sb.append(URLEncoder.encode(URL1, "UTF-8"));
                 sb.append("\">");
-                sb.append(RdfWrapper.getBaseURI());
+                sb.append(RdfConfig.getTheBaseURI());
                 sb.append("mapURL?URL=");
                 sb.append(URL1);
                 sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getBaseURI());
-                sb.append("/mapURL?URL=");
+                sb.append(RdfConfig.getTheBaseURI());
+                sb.append("mapURL?URL=");
                 sb.append(URLEncoder.encode(URL2, "UTF-8"));
                 for (String URISpace:URI2Spaces){
                     sb.append("&targetURISpace=");
                     sb.append(URLEncoder.encode(URISpace, "UTF-8"));
                 }
                 sb.append("\">");
-                sb.append(RdfWrapper.getBaseURI());
-                sb.append("/mapURL?URL=");
+                sb.append(RdfConfig.getTheBaseURI());
+                sb.append("mapURL?URL=");
                 sb.append(URL2);
                 for (String URISpace:URI2Spaces){
                     sb.append("&targetURISpace=");
@@ -143,8 +144,8 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("</ul>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                    sb.append(RdfWrapper.getBaseURI());
-                    sb.append("/URLExists?URL=");
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append("URLExists?URL=");
                     sb.append(URLEncoder.encode(URL, "UTF-8"));
                     sb.append("\">");
                     sb.append("URLExists?URL=");
@@ -163,8 +164,8 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("<li><a href=\"#limit\">limit</a> (default available)</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                    sb.append(RdfWrapper.getBaseURI());
-                    sb.append("/URLSearch?text=");
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append("URLSearch?text=");
                     sb.append(URLEncoder.encode(URL, "UTF-8"));
                     sb.append("&limit=5");
                     sb.append("\">");
@@ -189,8 +190,8 @@ public class WSOpsApi extends WSCoreApi {
             sb.append("<li>Brings up a table of all the mappings in the system by URISpace</li>");
             sb.append("<li>No arguements</li>");
             sb.append("<li>Example: <a href=\"");
-                    sb.append(RdfWrapper.getBaseURI());
-                sb.append("/getMappingInfo\">getMappingInfo</a></li>");    
+                    sb.append(RdfConfig.getTheBaseURI());
+                sb.append("getMappingInfo\">getMappingInfo</a></li>");    
             sb.append("</ul>");        
         sb.append("<h3><a name=\"graphviz\">graphviz</h3>");
             sb.append("<ul>");
@@ -205,8 +206,8 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>No arguements</li>");
             sb.append("<li>Example: <a href=\"");
-                    sb.append(RdfWrapper.getBaseURI());
-                sb.append("/graphviz\">graphviz</a></li>");    
+                    sb.append(RdfConfig.getTheBaseURI());
+                sb.append("graphviz\">graphviz</a></li>");    
             sb.append("</ul>");        
     
     }
@@ -220,8 +221,8 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("<li>Place the mapping's ID after the /</li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getBaseURI());
-                    sb.append("/mapping/");
+                sb.append(RdfConfig.getTheBaseURI());
+                    sb.append("mapping/");
                     sb.append(mappingId);
                     sb.append("\">");
                     sb.append("mapping/");
@@ -239,8 +240,8 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("<li>Returns the DataSource and associated UriSpace(s) with a specific id.</li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getBaseURI());
-                    sb.append("/dataSource/");
+                sb.append(RdfConfig.getTheBaseURI());
+                    sb.append("dataSource/");
                     sb.append(URLEncoder.encode(sysCode, "UTF-8"));
                     sb.append("\">");
                     sb.append("dataSource/");
@@ -258,8 +259,8 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("<li>Same as shown on homepage.</li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getBaseURI());
-                    sb.append("/getOverallStatistics");
+                sb.append(RdfConfig.getTheBaseURI());
+                    sb.append("getOverallStatistics");
                     sb.append("\">");
                     sb.append("getOverallStatistics");
                     sb.append("</a></li>");    
@@ -272,7 +273,7 @@ public class WSOpsApi extends WSCoreApi {
             sb.append("<ul>");
             sb.append("<li>Lists all the LinkSets with some basic information </li>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfWrapper.getBaseURI());
+                sb.append(RdfFactory.getBaseURI());
                     sb.append("getLinkSetInfos");
                     sb.append("\">");
                     sb.append("getLinkSetInfos");

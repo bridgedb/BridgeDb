@@ -5,15 +5,13 @@
 
 package org.bridgedb.loader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.linkset.transative.TransativeCreator;
-import org.bridgedb.rdf.RdfStoreType;
-import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.utils.Reporter;
+import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.StoreType;
+import org.openrdf.model.URI;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -22,78 +20,66 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class RunLoader {
 
-    private static LinksetLoader linksetLoader;
+    private static URI GENERATE_PREDICATE = null;
+    private static URI USE_EXISTING_LICENSES = null;
+    private static URI NO_DERIVED_BY = null;
+    private static final boolean LOAD = true;
+    
+    public static void main(String[] args) throws IDMapperException, RDFHandlerException, IOException  {
 
-	private static void loadFile (String fileName) 
-			throws IDMapperException, FileNotFoundException{
-        Reporter.report(fileName);
-        linksetLoader.parse(fileName, "load");
+        LinksetLoader linksetLoader = new LinksetLoader();
+
+        String root = "C:/Dropbox/linksets/";
+        linksetLoader.clearExistingData(StoreType.LOAD);
+        //1-2
+        linksetLoader.loadFile(root + "originals/ConceptWiki-Chembl2Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //3-4
+        linksetLoader.loadFile(root + "originals/ConceptWiki-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //5-6
+        linksetLoader.loadFile(root + "originals/ConceptWiki-DrugbankTargets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //7-8
+        linksetLoader.loadFile(root + "originals/ConceptWiki-GO.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //9-10
+        linksetLoader.loadFile(root + "originals/ConceptWiki-MSH.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //11-12
+        linksetLoader.loadFile(root + "originals/ConceptWiki-NCIM.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //13-14
+        linksetLoader.loadFile(root + "originals/ConceptWiki-Pdb.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //15-16 
+        linksetLoader.loadFile(root + "originals/ConceptWiki-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //17-18 
+        linksetLoader.loadFile(root + "originals/Chembl13Id-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //19-20 
+        linksetLoader.loadFile(root + "originals/Chembl13Molecule-Chembl13Id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //21-22
+        linksetLoader.loadFile(root + "originals/Chembl13Targets-Enzyme.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //23-24 
+        linksetLoader.loadFile(root + "originals/Chembl13Targets-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //25-26 
+        linksetLoader.loadFile(root + "originals/ChemSpider-Chembl2Compounds.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //27-28
+        linksetLoader.loadFile(root + "originals/ChemSpider-DrugBankDrugs.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+    
+        //29-30 
+        TransativeCreator.createTransative(18,20,root + "transitive/ChemSpider-Chembl13Molecule-via-Chembl13Id.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/ChemSpider-Chembl13Molecule-via-Chembl13Id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //31-33
+        TransativeCreator.createTransative(3,29,root + "transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //33-34
+        TransativeCreator.createTransative(15,24,root + "transitive/ConceptWiki-Chembl13Targets-via-Swissprot.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/ConceptWiki-Chembl13Targets-via-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //35-36
+        TransativeCreator.createTransative(3,25,root + "transitive/ConceptWiki-Chembl2Compounds-via-ChemSpider.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/ConceptWiki-Chembl2Compounds-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //37-38
+        TransativeCreator.createTransative(3,27,root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
     }
-
-    private static void transtitive(int leftId, int rightId, String fileName)
-            throws BridgeDbSqlException, IOException, RDFHandlerException, IDMapperException {
-        Reporter.report(fileName);
-        String[] args = new String[4];
-        args[0] = leftId + "";
-        args[1] = rightId + "";
-        args[2] = "load";
-        args[3] = fileName;
-        TransativeCreator.main (args);
-        loadFile (fileName);
-    }
-
-    private static void transtitive2(int leftId, int rightId, String fileName)
-            throws BridgeDbSqlException, IOException, RDFHandlerException, IDMapperException {
-        Reporter.report(fileName);
-        String[] args = new String[6];
-        args[0] = leftId + "";
-        args[1] = rightId + "";
-        args[2] = "load";
-        args[3] = "www";
-        args[4] = "purl";
-        args[5] = fileName;
-        TransativeCreator.main (args);
-        loadFile (fileName);
-    }
-
-    public static void main(String[] args) 
-            throws IDMapperException, IOException, RDFHandlerException  {
-
-    	linksetLoader = new LinksetLoader();
-    	linksetLoader.clearLinksets(RdfStoreType.LOAD);
-    	loadFilesInDirectory(args[0]);
-        loadFile("originals/ConceptWiki-Chembl2Targets.ttl");
-        loadFile ("originals/ConceptWiki-ChemSpider.ttl");
-        loadFile ("originals/ConceptWiki-DrugbankTargets.ttl");
-        loadFile ("originals/ConceptWiki-GO.ttl");
-        loadFile ("originals/ConceptWiki-MSH.ttl");
-        loadFile ("originals/ConceptWiki-NCIM.ttl");
-        loadFile ("originals/ConceptWiki-Pdb.ttl");
-        loadFile ("originals/ConceptWiki-Swissprot.ttl");
-        loadFile ("originals/Chembl13Id-ChemSpider.ttl");
-        loadFile ("originals/Chembl13Molecule-Chembl13Id.ttl");
-        loadFile ("originals/Chembl13Targets-Enzyme.ttl");
-        loadFile ("originals/Chembl13Targets-Swissprot.ttl");
-        loadFile ("originals/ChemSpider-Chembl2Compounds.ttl");
-        loadFile ("originals/ChemSpider-DrugBankDrugs.ttl");
-        transtitive(18,20,"transitive/ChemSpider-Chembl13Molecule-via-Chembl13Id.ttl");
-        transtitive(3,29,"transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl");
-        transtitive2(15,24,"transitive/ConceptWiki-Chembl13Targets-via-Swissprot.ttl");
-        transtitive(3,25,"transitive/ConceptWiki-Chembl2Compounds-via-ChemSpider.ttl");
-        transtitive(3,27,"transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl");
-    }
-
-	private static void loadFilesInDirectory(String directoryString) 
-			throws IOException, IDMapperException {
-		// TODO Auto-generated method stub
-		File directory = new File(directoryString);
-		if (!directory.isDirectory()) {
-			throw new IOException("Need to pass in a directory name");
-		}
-		File[] listFiles = directory.listFiles();
-		for (int i = 0; i < listFiles.length; i++) {
-			loadFile(listFiles[i].getAbsolutePath());
-		}
-	}
 
 }

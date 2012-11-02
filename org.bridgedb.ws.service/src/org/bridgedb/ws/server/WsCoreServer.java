@@ -30,6 +30,7 @@ import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSCoreService;
 
 /**
@@ -39,7 +40,7 @@ import org.bridgedb.ws.WSCoreService;
 public class WsCoreServer extends WSCoreService {
         
     public WsCoreServer() throws BridgeDbSqlException {
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
         idMapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
         Reporter.report("WsCoreServer setup");
     }

@@ -18,6 +18,7 @@ import java.nio.channels.OverlappingFileLockException;
 import java.security.AccessControlException;
 
 import info.aduna.concurrent.locks.Lock;
+import org.bridgedb.rdf.IDMapperLinksetException;
 
 /**
  * Used to create a lock in a directory.

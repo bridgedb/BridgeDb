@@ -24,10 +24,12 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.linkset.IDMapperLinksetException;
-import org.bridgedb.linkset.constants.PavConstants;
-import org.bridgedb.linkset.constants.VoidConstants;
+import org.bridgedb.metadata.LinksetVoidInformation;
+import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.metadata.constants.PavConstants;
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.url.URLListener;
+import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -44,7 +46,7 @@ import org.openrdf.rio.RDFHandlerException;
  */
 public class RDFWriter implements RdfLoader{
 
-    private final RdfStoreType type;
+    private final StoreType storeType;
     private final ArrayList<Statement> statements;
     private final int mappingId;
     private final URI linksetContext;
@@ -57,30 +59,29 @@ public class RDFWriter implements RdfLoader{
     private final URLListener urlListener;
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
-    
-    public RDFWriter(RdfStoreType type, RDFValidator validator, URLListener listener, String mainCaller) throws IDMapperException{
-        this.type = type;
+    public RDFWriter(StoreType storeType, LinksetVoidInformation information, URLListener listener, String mainCaller) throws IDMapperException{
+        this.storeType = storeType;
         urlListener = listener;
         statements = new ArrayList<Statement>();
         this.mainCaller = mainCaller;
         try {
-            String subjectUriSpace = validator.getSubjectUriSpace();
-            String targetUriSpace = validator.getTargetUriSpace();
-            String predicate = validator.getPredicate();
-            String justification = validator.getJustification();
-            symmetric = validator.isSymmetric();
-            boolean transative = validator.isTransative();
-            linksetResource = validator.getLinksetResource();
+            String subjectUriSpace = information.getSubjectUriSpace();
+            String targetUriSpace = information.getTargetUriSpace();
+            String predicate = information.getPredicate();
+            symmetric = information.isSymmetric();
+            String justification = information.getJustification();
+            boolean transative = information.isTransative();
+            linksetResource = information.getLinksetResource();
             inverseResource = invertResource(linksetResource);
             mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, 
             		justification, targetUriSpace, symmetric, transative);            
-            linksetContext = RdfWrapper.getLinksetURL(mappingId);
+            linksetContext = RdfFactory.getLinksetURL(mappingId);
             if (symmetric) {
-                inverseContext = RdfWrapper.getLinksetURL(mappingId + 1);             
+                inverseContext = RdfFactory.getLinksetURL(mappingId + 1);             
             } else {
                 inverseContext = null;
             }
-        } catch (RDFHandlerException ex) {
+        } catch (MetaDataException ex) {
             throw new IDMapperLinksetException("Error setting the context", ex);
         }
      }
@@ -94,15 +95,15 @@ public class RDFWriter implements RdfLoader{
     
     @Override
     public void processFirstNoneHeader(Statement firstMap) throws RDFHandlerException {
-        RepositoryConnection connection = RdfWrapper.setupConnection(type);
+        RdfWrapper rdfWrapper = RdfFactory.setupConnection(storeType);
         for (Statement st:statements){
-            RdfWrapper.add(connection, st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
+            rdfWrapper.add(st.getSubject(), st.getPredicate(), st.getObject(), linksetContext);
             if (st.getPredicate().equals(VoidConstants.SUBJECTSTARGET)){
-                addInverse(connection, st.getSubject(), VoidConstants.OBJECTSTARGET, st.getObject());    
+                addInverse(rdfWrapper, st.getSubject(), VoidConstants.OBJECTSTARGET, st.getObject());    
             } else if (st.getPredicate().equals(VoidConstants.OBJECTSTARGET)){
-                addInverse(connection, st.getSubject(), VoidConstants.SUBJECTSTARGET, st.getObject()); 
+                addInverse(rdfWrapper, st.getSubject(), VoidConstants.SUBJECTSTARGET, st.getObject()); 
             } else {
-                addInverse(connection, st.getSubject(), st.getPredicate(), st.getObject());                
+                addInverse(rdfWrapper, st.getSubject(), st.getPredicate(), st.getObject());                
             }
         }
         Value from;
@@ -116,29 +117,29 @@ public class RDFWriter implements RdfLoader{
         } catch (Exception e){
             from = new LiteralImpl(accessedFrom);
         }
-        RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_FROM, from, linksetContext);
-        addInverse(connection, linksetResource, PavConstants.ACCESSED_FROM, from);
+        rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from, linksetContext);
+        addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_FROM, from);
         GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance();
         try {
             XMLGregorianCalendar xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-            RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_ON, new CalendarLiteralImpl(xgcal), linksetContext);
-            addInverse(connection, linksetResource, PavConstants.ACCESSED_ON, new CalendarLiteralImpl(xgcal));
+            rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal), linksetContext);
+            addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_ON, new CalendarLiteralImpl(xgcal));
         } catch (DatatypeConfigurationException ex) {
             //Should never happen so basically ignore
             ex.printStackTrace();
         }
-        RdfWrapper.add(connection, linksetResource, PavConstants.ACCESSED_BY, new LiteralImpl(mainCaller), linksetContext);
-        addInverse(connection, linksetResource, PavConstants.ACCESSED_BY, new LiteralImpl(mainCaller));
-        addInverse(connection, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
-        RdfWrapper.shutdown(connection);
+        rdfWrapper.add(linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller), linksetContext);
+        addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_BY, new LiteralImpl(mainCaller));
+        addInverse(rdfWrapper, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
+        rdfWrapper.shutdown();
     }
 
-    private void addInverse(RepositoryConnection connection, Resource subject, URI predicate, Value object) 
+    private void addInverse(RdfWrapper rdfWrapper, Resource subject, URI predicate, Value object) 
             throws RDFHandlerException{
         if (subject.equals(linksetResource)){
-            RdfWrapper.add(connection, inverseResource, predicate, object, inverseContext); 
+            rdfWrapper.add(inverseResource, predicate, object, inverseContext); 
         } else {
-            RdfWrapper.add(connection, subject, predicate, object, inverseContext);
+            rdfWrapper.add(subject, predicate, object, inverseContext);
         }
     }
     
@@ -166,6 +167,11 @@ public class RDFWriter implements RdfLoader{
     @Override
     public void setSourceFile(String absolutePath) {
         accessedFrom = absolutePath;
+    }
+
+    @Override
+    public String getBaseUri() {
+        return linksetContext.stringValue() + "/";
     }
 
 }

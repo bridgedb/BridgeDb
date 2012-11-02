@@ -18,6 +18,7 @@
 //
 package org.bridgedb.sql;
 
+import org.bridgedb.utils.StoreType;
 import org.junit.Test;
 
 /**
@@ -32,7 +33,7 @@ public class TestSqlFactory {
 
     public static SQLAccess createTestSQLAccess() {
         try {
-            SQLAccess sqlAccess = SqlFactory.createTestSQLAccess();
+            SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.TEST);
             sqlAccess.getConnection();
             return sqlAccess;
         } catch (BridgeDbSqlException ex) {

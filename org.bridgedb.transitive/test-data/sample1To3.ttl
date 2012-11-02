@@ -16,16 +16,8 @@
     foaf:primaryTopic :Test1_3 .
 
 :TestDS1 a void:Dataset  ;
-	dcterms:title "Test Dataset 1"^^xsd:string ;
-    pav:version 0 ;
-    dcterms:license "Who cares this is a test" ;
-    dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.foo.com/>.
 :TestDS3 a void:Dataset ;
-	dcterms:title "Test Dataset 3"^^xsd:string ;
-    pav:retrievedOn "2012-02-22"^^xsd:date ;
-    dcterms:license "Who cares this is a test" ;
-    dcterms:subject "absolutely nothing" ;
     void:uriSpace <http://www.example.org#>.
 :Test1_3 a void:Linkset  ;
     void:subjectsTarget :TestDS1 ;
@@ -39,7 +31,7 @@
     dul:expresses <http://www.bridgedb.org/test#justification1> ;
     dcterms:created "2012-02-22"^^xsd:date ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
-
+ 
 <http://www.foo.com/123> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#123>  .
 <http://www.foo.com/456> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#456> .
 <http://www.foo.com/789> <http://www.bridgedb.org/test#testPredicate> <http://www.example.org#789> .

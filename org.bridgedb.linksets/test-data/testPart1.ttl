@@ -1,0 +1,20 @@
+@prefix : <> .
+@prefix example: <http://example.com> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix foo: <http://www.foo.com/>.
+
+example:TestDS1 a void:Dataset  ;
+    void:uriSpace <http://www.foo.com/>.
+example:TestDS2 a void:Dataset  ;
+    void:uriSpace <http://www.example.com/>.
+
+:Test1_2 a void:Linkset  ;
+    void:subjectsTarget example:TestDS1 ;
+    void:objectsTarget example:TestDS2 ;
+    dul:expresses <http://www.bridgedb.org/unknown#justification> ;
+    void:linkPredicate <http://www.bridgedb.org/test#testPredicate> .
+
+foo:T123 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/123> .
+foo:T456 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/456> .
+foo:T789 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/789> .

@@ -20,28 +20,28 @@ package org.bridgedb.linkset;
 import java.io.FileNotFoundException;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 
 /**
  * @author Christian
  */
 public class SetupLoaderWithTestData {
 
-	public static void main(String[] args) throws BridgeDbSqlException, IDMapperException, FileNotFoundException {
-		LinksetLoader linksetLoader = new LinksetLoader();
-		linksetLoader.clearLinksets(RdfStoreType.LOAD);
-		
-		Reporter.report("sample2to1.ttl");
-		linksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to2.ttl", "load");
-
-		Reporter.report("sample1to3.ttl");
-		linksetLoader.parse("../org.bridgedb.linksets/test-data/sample1to3.ttl", "load");
-
-		Reporter.report("sample2to3.ttl");
-		linksetLoader.parse("../org.bridgedb.linksets/test-data/sample2to3.ttl", "load");
-
+   private static final boolean LOAD_DATA = true;
+   
+   public static void main(String[] args) throws IDMapperException {
+        Reporter.report("sample2to1.ttl");
+        //String[] args1 = {, "new"};
+        LinksetLoader linksetLoader = new LinksetLoader();
+        linksetLoader.clearExistingData(StoreType.LOAD);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.LOAD, ValidationType.VOID);
+        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.LOAD, ValidationType.VOID);
 	}
 
 }

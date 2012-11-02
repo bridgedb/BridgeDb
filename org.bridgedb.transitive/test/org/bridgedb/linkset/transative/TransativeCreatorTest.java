@@ -18,10 +18,10 @@
 //
 package org.bridgedb.linkset.transative;
 
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.SQLAccess;
+import java.io.FileNotFoundException;
 import org.bridgedb.sql.TestSqlFactory;
 import org.openrdf.OpenRDFException;
 import org.openrdf.rio.RDFHandlerException;
@@ -29,8 +29,14 @@ import org.bridgedb.IDMapperException;
 import java.io.IOException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.openrdf.model.URI;
+import org.openrdf.rio.RDFHandlerException;
 
 /**
  *
@@ -38,44 +44,47 @@ import org.junit.Test;
  */
 public class TransativeCreatorTest {
     
+    private static StoreType VALIDATE_ONLY = null;
+    private static URI GENERATE_PREDICATE = null;
+    private static URI USE_EXISTING_LICENSES = null;
+    private static URI NO_DERIVED_BY = null;
+    private static boolean LOAD = true;
+    private static boolean DO_NOT_LOAD = false;
+    
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException  {
+    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.createTestSQLAccess();
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
-        //Clear the SQL where linkset ids come from
-        new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
         
         LinksetLoader linksetLoader = new LinksetLoader();
-        linksetLoader.clearLinksets(RdfStoreType.TEST);
-        Reporter.report("sample1to2.ttl");
-        linksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to2.ttl", "test");
-        Reporter.report("sample1to3.ttl");
-        linksetLoader.parse("../org.bridgedb.transitive/test-data/sample1to3.ttl", "test");
+        linksetLoader.clearExistingData( StoreType.TEST);        
+        linksetLoader.loadFile("../org.bridgedb.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
 
-    //TODO cleanup this test!
-    /**
-     * Test of main method, of class TransativeCreator.
-     * @throws IOException 
-     * @throws RDFHandlerException 
-     * @throws IDMapperException 
-     */
+
     @Test
-    public void testSuccessfulTransitiveCreation() 
-    		throws RDFHandlerException, IOException, IDMapperException {
-        Reporter.report("testSuccessfulTransiitiveCreation()");
-        String[] args = new String[4];
-        args[0] = "2";
-        args[1] = "3";
-        args[2] = "test";
+    @Ignore
+    public void testNoLink() {
+        Reporter.report("NoLink");
+        String fileName = null;
+        try {
+            TransativeCreator.createTransative(1, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+            assertFalse(true);
+        } catch (Exception e){
+            String error = "Target of mappingSet 1 is TestDS2 Which is not the same as the Source of 3 which is TestDS1";
+            assertEquals(error, e.getMessage());
+        }
+    }
+
+    //TODO cleanup this test!
+    @Test
+    public void testCreateTransative() throws RDFHandlerException, IOException, IDMapperException {
+        Reporter.report("CreateTransative");
         String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
-//        String fileName = "test-data/linkset2To3.ttl";
-        args[3] = fileName;
-        TransativeCreator.main(args);
-        Reporter.report("Transtitive file created: " + fileName);
-        LinksetLoader linksetLoader = new LinksetLoader();
-        linksetLoader.parse(fileName, "validate");
+        TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        System.out.println("Ok");
+        new LinksetLoader().checkFileValid(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
     }
 
 }

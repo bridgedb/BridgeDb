@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.bridgedb.linkset.constants.OboConstants;
 import org.bridgedb.linkset.constants.OwlConstants;
-import org.bridgedb.linkset.constants.SkosConstants;
+import org.bridgedb.metadata.constants.SkosConstants;
 import org.junit.Test;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;

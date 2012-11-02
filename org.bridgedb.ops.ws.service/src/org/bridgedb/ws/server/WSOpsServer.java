@@ -19,6 +19,12 @@
 package org.bridgedb.ws.server;
 
 
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -29,20 +35,25 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.RdfReader;
-import org.bridgedb.rdf.RdfStoreType;
 import org.bridgedb.rdf.RdfWrapper;
 import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
@@ -51,8 +62,10 @@ import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsService;
 import org.bridgedb.ws.bean.ProfileBean;
+import org.openrdf.rio.RDFFormat;
 
 /**
  *
@@ -63,7 +76,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     private NumberFormat formatter;
     
     public WSOpsServer()  throws IDMapperException   {
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess();
+        Reporter.report("Super setup");
+        SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
         urlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         idMapper = urlMapper;
         formatter = NumberFormat.getInstance();
@@ -123,7 +137,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
 		List<ProfileInfo> profiles = urlMapper.getProfiles();
 		StringBuilder sb = new StringBuilder("<p><select name=\"profileURL\">");
 	   	sb.append("<option value=\"");
-    	sb.append(RdfWrapper.getProfileURI(0));
+    	sb.append(RdfFactory.getProfileURI(0));
     	sb.append("\">Default profile</option>");
 		for (ProfileInfo profile : profiles) {
 			sb.append("<option value=\"");
@@ -192,7 +206,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
- @GET
+    @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
     public Response apiPage() throws IDMapperException, UnsupportedEncodingException {
@@ -255,6 +269,72 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateVoid")
+    public Response validateVoid(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.VOID);
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateVoid")
+    public Response getValidateVoid(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.VOID);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateLinkSet")
+    public Response validateLinkSet(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.LINKS);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateLinkSet")
+    public Response getValidateLinkSet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        return validate(info, mimeType, ValidationType.LINKS);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateMinimum")
+    public Response validateMinimum(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        System.out.println("post");
+        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateMinimum")
+    public Response getValidateMinimum(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+        System.out.println("get");
+        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
+    }
+
+    private Response validate(String info, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
+       String report = null;
+       try{
+            if (info != null && !info.isEmpty()){
+                RDFFormat format = getRDFFormatByMimeType(mimeType);
+                report = linksetInterface.validateString("Webservice Call", info, format, StoreType.LIVE, validationType, true);
+            }
+        } catch (Exception e){
+            report = e.toString();
+        }
+        StringBuilder sb = topAndSide("Void validator");
+        addForm(sb, validationType, info, report);
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
@@ -283,15 +363,15 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         for (MappingSetInfo info:mappingSetInfos){
             sb.append("<tr>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfConfig.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getSourceSysCode());
             sb.append("\">");
             sb.append(info.getSourceSysCode());
             sb.append("</a></td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfConfig.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getTargetSysCode());
             sb.append("\">");
             sb.append(info.getTargetSysCode());
@@ -300,8 +380,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             sb.append(formatter.format(info.getNumberOfLinks()));
             sb.append("</td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/mappingSet/");
+            sb.append(RdfConfig.getTheBaseURI());
+            sb.append("mappingSet/");
             sb.append(info.getId());
             sb.append("\">");
             sb.append(info.getId());
@@ -348,15 +428,15 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){
             sb.append("<tr>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfConfig.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getSourceSysCode());
             sb.append("\">");
             sb.append(info.getSourceSysCode());
             sb.append("</a></td>");
             sb.append("<td><a href=\"");
-            sb.append(RdfWrapper.getBaseURI());
-            sb.append("/dataSource/");
+            sb.append(RdfConfig.getTheBaseURI());
+            sb.append("dataSource/");
             sb.append(info.getTargetSysCode());
             sb.append("\">");
             sb.append(info.getTargetSysCode());
@@ -409,13 +489,382 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/mappingSet/{id}")
     public String mappingSet(@PathParam("id") String idString) throws IDMapperException {
         if (idString == null || idString.isEmpty()){
+            throw new IDMapperException("Parameter id is missing!");
+        }
+        Integer id = Integer.parseInt(idString);
+        return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/linkset")
+    public String linkset() throws IDMapperException {
+        throw new IDMapperException("Parameter id is missing");
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/linkset/{id}")
+    public String linksetSet(@PathParam("id") String idString) throws IDMapperException {
+        if (idString == null || idString.isEmpty()){
+            throw new IDMapperException("Parameter id is missing!");
+        }
+        Integer id = Integer.parseInt(idString);
+        return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/linkset/{id}/{resource}")
+    public String linksetSet(@PathParam("id") String idString, @PathParam("resource") String resource) throws IDMapperException {
+        throw new IDMapperException("id= "+ idString + " resource = " + resource);
+        //if (idString == null || idString.isEmpty()){
+       //     throw new IDMapperException("Parameter id is missing!");
+        //}
+        //Integer id = Integer.parseInt(idString);
+        //return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/void")
+    public String voidInfo() throws IDMapperException {
+        throw new IDMapperException("Parameter id is missing");
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/void/{id}")
+    public String voidInfo(@PathParam("id") String idString) throws IDMapperException {
+        if (idString == null || idString.isEmpty()){
             throw new IDMapperException("Parameter id is missing");
         }
         Integer id = Integer.parseInt(idString);
-        return new RdfReader(RdfStoreType.MAIN).getRDF(id);
+        return new RdfReader(StoreType.LIVE).getVoidRDF(id);
     }
 
+    private StringBuilder topAndSide(String header){
+        StringBuilder sb = new StringBuilder(HEADER);
+        sb.append(BODY);
+        sb.append(TOP_LEFT);
+        sb.append(header);
+        sb.append(TOP_RIGHT);
+        sb.append(SIDE_BAR);
+        return sb;
+    }
+    
+    private void addForm(StringBuilder sb, ValidationType validationType, String info, String report){
+        sb.append("<p>Use this page to validate a ");
+        switch (validationType){
+            case VOID: {
+                sb.append("VOID descripition.");
+                break;
+            }
+            case LINKS: {
+                sb.append("Linkset.");
+                break;
+            }
+            case LINKSMINIMAL: {
+                sb.append("linkset you are too lazy to add a full header to.");
+                sb.append("<br>WARNING: Loading with Minimal void does not excuss you from providing a full header later.");
+                break;
+            } default:{
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN.");
+            }
+        }
+        sb.append(".</p>");
+        
+        sb.append("<p>This is an early prototype and subject to change!</p> ");
+        
+        sb.append("<form method=\"post\" action=\"/OPS-IMS/");
+        switch (validationType){
+            case VOID: {
+                sb.append("validateVoid");
+                break;
+            }
+            case LINKS: {
+                sb.append("validateLinkSet");
+                break;
+            }
+            case LINKSMINIMAL: {
+                sb.append("validateMinimum");
+                break;
+            } default:{
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN!");
+            }
+        }
+        sb.append("\">");
 
+        if (report != null){
+            addReport(sb, validationType, report);
+        }
+        //sb.append(FORM_OUTPUT_FORMAT);
+        sb.append(FORM_MINE_TYPE);
+        sb.append(FORM_INFO_START);
+        if (info != null && !info.isEmpty()){
+            sb.append(info);
+        }
+            
+        sb.append(FORM_INFO_END);
+        sb.append(FORM_SUBMIT);        
+    }
+    
+    private void addReport(StringBuilder sb, ValidationType validationType, String report){
+        int lines = 1;
+        for (int i=0; i < report.length(); i++) {
+            if (report.charAt(i) == '\n') lines++;
+        }
+        sb.append("<h2>");
+        switch (validationType){
+            case VOID: {
+                sb.append("Report as a Void");
+                break;
+            }
+            case LINKS: {
+                sb.append("Report as a LinkSet");
+                break;
+            }
+            case LINKSMINIMAL: {
+                sb.append("Report for someone too lazy to generate proper void!");
+                break;
+            } default:{
+                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
+            }
+        }
+        sb.append("</h2>");
+        sb.append("<p><textarea readonly style=\"width:100%;\" rows=");
+        sb.append(lines);
+        sb.append(">");
+        sb.append(report);
+        sb.append("</textarea></p>\n");       
+    }
+    
+    private final String HEADER_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+            + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+            + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\n"
+            + "<head>\n"
+            + " <title>"
+            + "     Manchester University OpenPhacts Void Validator"
+            + "	</title>\n"
+            + "	<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\"></meta>\n"
+            + "	<script>"
+            + "		function getObj(id) {"
+            + "			return document.getElementById(id)"
+            + "		}"
+            + "		function DHTML_TextHilight(id) {"
+            + "			getObj(id).classNameOld = getObj(id).className;"
+            + "			getObj(id).className = getObj(id).className + \"_hilight\";"
+            + "		}"
+            + "		function DHTML_TextRestore(id) {"
+            + "			if (getObj(id).classNameOld != \"\")"
+            + "				getObj(id).className = getObj(id).classNameOld;"
+            + "		}"
+            + "	</script>\n";
+    private final String TOGGLER ="<script language=\"javascript\">\n"
+            + "function getItem(id)\n"
+            + "{\n"
+            + "    var itm = false;\n"
+            + "    if(document.getElementById)\n"
+            + "        itm = document.getElementById(id);\n"
+            + "    else if(document.all)\n"
+            + "        itm = document.all[id];\n"
+            + "     else if(document.layers)\n"
+            + "        itm = document.layers[id];\n"
+            + "    return itm;\n"
+            + "}\n\n"
+            + "function toggleItem(id)\n"
+            + "{\n"
+            + "    itm = getItem(id);\n"
+            + "    if(!itm)\n"
+            + "        return false;\n"
+            + "    if(itm.style.display == 'none')\n"
+            + "        itm.style.display = '';\n"
+            + "    else\n"
+            + "        itm.style.display = 'none';\n"
+            + "    return false;\n"
+            + "}\n\n"
+            + "function hideDetails()\n"
+            + "{\n"
+            + "     toggleItem('ops')\n"
+            + "     toggleItem('sparql')\n"
+            + "     return true;\n"
+            + "}\n\n"
+            + "</script>\n";
+    private final String HEADER_END = "	<style type=\"text/css\">"
+            + "		.texthotlink, .texthotlink_hilight {"
+            + "			width: 150px;"
+            + "			font-size: 85%;"
+            + "			padding: .25em;"
+            + "			cursor: pointer;"
+            + "			color: black;"
+            + "			font-family: Arial, sans-serif;"
+            + "		}"
+            + "		.texthotlink_hilight {"
+            + "			background-color: #fff6ac;"
+            + "		}"
+            + "		.menugroup {"
+            + "			font-size: 90%;"
+            + "			font-weight: bold;"
+            + "			padding-top: .25em;"
+            + "		}"
+            + "		input { background-color: #EEEEFF; }"
+            + "		body, td {"
+            + "			background-color: white;"
+            + "			font-family: sans-serif;"
+            + "		}"
+            + "	</style>\n"
+            + "</head>\n";            
+    private final String HEADER = HEADER_START + HEADER_END;
+    private final String TOGGLE_HEADER = HEADER_START + TOGGLER + HEADER_END;
+    private final String BODY ="<body style=\"margin: 0px\">";
+    private final String TOP_LEFT ="	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n"
+            + "		<tr valign=\"top\">\n"
+            + "			<td style=\"background-color: white;\">"
+            + "				<a href=\"http://www.openphacts.org/\">"
+            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" "
+            + "                     src=\"http://www.openphacts.org/images/stories/banner.jpg\" "
+            + "                     alt=\"Open PHACTS\" height=\"50\">"
+            + "                 </img>"
+            + "             </a>"
+            + "			</td>\n"
+            + "			<td style=\"font-size: 200%; font-weight: bold; font-family: Arial;\">\n";
+    private final String TOP_RIGHT = "         </td>"
+            + "			<td style=\"background-color: white;\">"
+            + "				<a href=\"http://www.cs.manchester.ac.uk//\">"
+            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" align=\"right\" "
+            + "                     src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" "
+            + "                    alt=\"The University of Manchester\" height=\"50\">"
+            + "                 </img>"
+            + "             </a>"
+            + "			</td>"
+            + "		</tr>"
+            + "	</table>";
+    private final String SIDE_BAR = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
+            + "		<tr valign=\"top\">"
+            + "			<td style=\"border-top: 1px solid #D5D5FF\">"
+            + "				<div class=\"menugroup\">Query Expander</div>"
+            + "				<div id=\"menuQueryExpanderHome_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderHome_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderHome_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander&quot;;\">Home</div>"
+            + "				<div id=\"menuQueryExpanderAPI_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderAPI_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderAPI_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/api&quot;;\">API</div>"
+            + "				<div id=\"menuQueryExpanderExamples_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderExamples_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderExamples_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/examples&quot;;\">Examples</div>"
+            + "				<div id=\"menuQueryExpanderURISpacesPerGraph_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/URISpacesPerGraph&quot;;\">"
+            + "                   URISpaces per Graph</div>"
+            + "				<div id=\"menuQueryExpanderMapURI_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderMapURI_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderMapURI_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/QueryExpander/mapURI&quot;;\">"
+            + "                   Check Mapping for an URI</div>"            
+            + "				<div class=\"menugroup\">OPS Identity Mapping Service</div>"
+            + "				<div id=\"menuOpsHome_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsHome_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsHome_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS&quot;;\">Home</div>"
+            + "				<div id=\"menuOpsInfo_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsInfo_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsInfo_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">"
+            + "                   Mappings Summary</div>"
+            + "				<div id=\"menuGraphviz_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuGraphviz_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuGraphviz_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/graphviz&quot;;\">"
+            + "                   Mappings Summary in Graphviz format</div>"
+            + "				<div id=\"menuOpsApi_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsApi_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsApi_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/api&quot;;\">API</div>"
+            + "				<div id=\"menuOpsValidateVoid_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateVoid_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateVoid_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateVoid&quot;;\">Validate Void</div>"
+            + "				<div id=\"menuOpsValidateLinkSet_text\" class=\"texthotlink\" "
+            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateLinkSet_text'); return true; \" "
+            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateLinkSet_text'); return true; \" "
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateLinkSet&quot;;\">Validate LinkSet</div>"
+            + "			</td>"
+            + "			<td width=\"5\" style=\"border-right: 1px solid #D5D5FF\"></td>"
+            + "			<td style=\"border-top: 1px solid #D5D5FF; width:100%\">";
+    private final String FORM_OUTPUT_FORMAT = " <p>Output Format:"
+            + "     <select size=\"1\" name=\"format\">"
+            + "         <option value=\"html\">HTML page</option>"
+            + "         <option value=\"xml\">XML/JASON</option>"
+            + " 	</select>"
+            + " </p>";
+    private final String FORM_MINE_TYPE = " <p>Mime Type:"
+            + "     <select size=\"1\" name=\"mimeType\">"
+            + "         <option value=\"application/x-turtle\">Turtle (mimeType=application/x-turtle; ext=ttl)</option>"
+            + "         <option value=\"text/plain\">N-Triples (mimeType=text/plain; ext=nt)</option>"
+            + "         <option value=\"application/rdf+xml\">RDF/XML (mimeType=application/rdf+xml; ext=rdf, rdfs, owl, xml</option>"
+            + " 	</select>"
+            + " </p>";
+    private final String FORM_INFO_START = "<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";
+    private final String FORM_INFO_END = "</textarea></p>";
+    private final String FORM_SUBMIT = " <p><input type=\"submit\" value=\"Validate!\"></input> "
+            + "    Note: If the new page does not open click on the address and press enter</p>"
+            + "</form>";
+    private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/QueryExpander/mapURI\">"
+            + " <p>Input URI (URI to be looked up in Identity Mapping Service.)"
+            + "     (see <a href=\"/QueryExpander/api#inputURI\">API</a>)</p>"
+            + " <p><input type=\"text\" name=\"inputURI\" style=\"width:100%\"/></p>"
+            + " <p>Graph/Context (Graph value to limit the returned URIs)"
+            + "     (see <a href=\"/QueryExpander/api#graph\">API</a>)</p>"
+            + " <p><input type=\"text\" name=\"graph\" style=\"width:100%\"/></p>"
+            + " <p><input type=\"submit\" value=\"Expand!\"></input> "
+            + "    Note: If the new page does not open click on the address and press enter</p>"
+            + "</form>";
+    private final String MAIN_END = "			</td>"
+            + "		</tr>"
+            + "	</table>"
+            + "	<div style=\"border-top: 1px solid #D5D5FF; padding: .5em; font-size: 80%;\">"
+            + "		This site is run by <a href=\"https://wiki.openphacts.org/index.php/User:Christian\">Christian Brenninkmeijer</a>."
+            + "	</div>";
+    private final String BODY_END = "</body>"
+            + "</html>";
+    private final String END = MAIN_END + BODY_END;
+
+    //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
+    @POST
+	@Path("/uploadTest")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(
+        //TODO work out why the FormDataContentDisposition is null
+		@FormDataParam("file") FormDataContentDisposition fileDetail,
+        @FormDataParam("file") InputStream uploadedInputStream) throws IOException {
+ 
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbInnerPure;
+        StringBuilder sbInnerEncoded;
+
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<h1>test</h1>");
+        sb.append("<p>File name:");
+        sb.append(fileDetail);
+        sb.append("</P>");
+        InputStreamReader reader = new InputStreamReader(uploadedInputStream);
+        BufferedReader buffer = new BufferedReader(reader);
+        while (buffer.ready()){
+            sb.append("<br>");
+            sb.append(buffer.readLine());
+        }
+        sb.append(uploadedInputStream.toString());
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+	}
 }
 
 
