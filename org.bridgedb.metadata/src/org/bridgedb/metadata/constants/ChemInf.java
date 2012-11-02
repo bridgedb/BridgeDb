@@ -1,4 +1,4 @@
-package org.bridgedb.linkset.constants;
+package org.bridgedb.metadata.constants;
 
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;

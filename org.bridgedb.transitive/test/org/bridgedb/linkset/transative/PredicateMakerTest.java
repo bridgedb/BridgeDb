@@ -1,9 +1,9 @@
 package org.bridgedb.linkset.transative;
 
+import org.bridgedb.linkset.constants.OwlConstants;
+import org.bridgedb.metadata.constants.OboConstants;
 import static org.junit.Assert.*;
 
-import org.bridgedb.linkset.constants.OboConstants;
-import org.bridgedb.linkset.constants.OwlConstants;
 import org.bridgedb.metadata.constants.SkosConstants;
 import org.junit.Test;
 import org.openrdf.model.URI;
