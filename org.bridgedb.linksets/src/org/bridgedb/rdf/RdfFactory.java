@@ -101,10 +101,6 @@ public class RdfFactory {
         return new URIImpl(RdfConfig.getTheBaseURI() + "linkset/" + linksetId);  
     }
 
-    public static URI getProfileURI(int linksetId){
-        return new URIImpl(RdfConfig.getTheBaseURI() + "profile//" + linksetId);  
-    }
-  
     public static URI getVoidURL(int voidId){
         return new URIImpl(RdfConfig.getTheBaseURI() + "void/" + voidId);  
     }

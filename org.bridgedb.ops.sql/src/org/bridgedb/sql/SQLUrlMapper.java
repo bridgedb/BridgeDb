@@ -37,6 +37,7 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
@@ -228,8 +229,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	private int extractIDFromURI(String profileURL) throws BridgeDbSqlException {
 		try {
 			URI profileURI = new URIImpl(profileURL);
-			if (!profileURI.getNamespace().equals(RdfWrapper.getProfileBaseURI())) {
-				throw new BridgeDbSqlException("Invalid namespace for profile URI: " + profileURL);
+			if (!profileURI.getNamespace().equals(RdfConfig.getProfileBaseURI())) {
+ 				throw new BridgeDbSqlException("Invalid namespace for profile URI: " + profileURL);
 			}
 			int profileID = Integer.parseInt(profileURI.getLocalName());
 			return profileID;
@@ -515,7 +516,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 				String createdOn = rs.getString("createdOn");
 				String createdBy = rs.getString("createdBy");
 				Set<String> justifications = getJustificationsForProfile(profileId);
-				String profileURL = RdfWrapper.getProfileURI(profileId);
+				String profileURL = RdfConfig.getProfileURI(profileId);
 				profiles.add(new ProfileInfo(profileURL, name, createdOn, createdBy, justifications));
 			}
 		} catch (SQLException e) {
@@ -953,237 +954,5 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 		}
 	}
 
-	/**
-	 * Code copied from RdfWrapper to get the BASE_URI declaration
-	 * 
-	 * Proper solutions is to move this to a Utils method
-	 * 
-	 * @author Alasdair
-	 *
-	 */
-	private static class RdfWrapper {
-	    //FIXME: Use Utils instead!
-	    public static final String CONFIG_FILE_PATH_PROPERTY = "ConfigPath";
-	    public static final String CONFIG_FILE_PATH_SOURCE_PROPERTY = "ConfigPathSource";
-	    public static final String SAIL_NATIVE_STORE_PROPERTY = "SailNativeStore";
-	    public static final String LOAD_SAIL_NATIVE_STORE_PROPERTY = "LoadSailNativeStore";
-	    public static final String TEST_SAIL_NATIVE_STORE_PROPERTY = "TestSailNativeStore";
-	    public static final String BASE_URI_PROPERTY = "BaseURI";
-	    private static final Resource[] ALL_RESOURCES = new Resource[0];
-	    public static final String CONFIG_FILE_NAME = "rdfConfig.txt";
-	    private static final Resource ANY_SUBJECT = null;
-	    private static final URI ANY_PREDICATE = null;
-	    private static final Value ANY_OBJECT = null;
-	    private static final boolean EXCLUDE_INFERRED =false;
-
-	    private static final String NO_CONFIG_FILE = "No config file found";
-	    private static String path;
-	    
-	    private static Properties properties;
-
-	    private static String getBaseURI() {
-	    	String result;
-	    	try {
-	    		result = getProperties().getProperty(BASE_URI_PROPERTY);
-                //CB I changed my mind on baseURI ending and this avoids having to change it.
-                if (!(result.endsWith("/"))){
-                    result = result + "/";
-                }
-
-	    	} catch (IOException ex) {
-	    		return ex.getMessage();
-	    	}
-	    	if (result != null) return result;
-	    	return "http://openphacts.cs.man.ac.uk:9090/OPS-IMS/";        
-	    }
-
-	    private static String getProfileBaseURI() {
-	    	return getBaseURI() + "profile/";
-	    }
-	    
-	    private static String getProfileURI(int profileID) {
-	    	return getProfileBaseURI() + profileID;
-	    }
-
-	    private static Properties getProperties() throws IOException{
-	    	if (properties == null){
-	    		properties = new Properties();
-	    		load();
-	    	}
-	    	return properties;
-	    }
-	    /** 
-	     * Loads the config file looks in various places but always stopping when it is found.
-	     * Any farther config files in other locations are then ignored.
-	     * <p>
-	     * Sets the CONFIG_FILE_PATH_PROPERTY and CONFIG_FILE_PATH_SOURCE_PROPERTY.
-	     * <p>
-	     * Search order is
-	     * <ul>
-	     * <li>@See loadByEnviromentVariable()
-	     * <li>@See loadDirectly()
-	     * <li>@loadFromResources()
-	     * <li>@loadFromSqlConfigs()
-	     * <li>loadFromSqlResources()
-	     * </ul>
-	     * @throws IOException 
-	     */
-	    private static void load() throws IOException{
-	        if (loadByEnviromentVariable()) return;
-	        if (loadByCatalinaHomeConfigs()) return;
-//	        System.out.println("RdfWrapper.load(): here");
-	        if (loadDirectly()) return;
-	        if (loadFromConfigs()) return;
-	        if (loadFromParentConfigs()) return;
-	        properties.put(CONFIG_FILE_PATH_PROPERTY, NO_CONFIG_FILE) ;
-	        properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, NO_CONFIG_FILE);
-	    }
-	    
-	    /**
-	     * Looks for the config file in the directory set up the environment variable "OPS-IMS-CONFIG"
-	     * @return True if the config files was found. False if the environment variable "OPS-IMS-CONFIG" was unset.
-	     * @throws IOException Thrown if the environment variable is not null, 
-	     *    and the config file is not found as indicated, or could not be read.
-	     */
-	    private static boolean loadByEnviromentVariable() throws IOException {
-	        String envPath = System.getenv().get("OPS-IMS-CONFIG");
-	        if (envPath == null || envPath.isEmpty()) return false;
-	        File envDir = new File(envPath);
-	        if (!envDir.exists()){
-	            String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
-	                    " but no directory found there";
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	            throw new FileNotFoundException (error);
-	        }
-	        if (envDir.isDirectory()){
-	            File envFile = new File(envDir, CONFIG_FILE_NAME);
-	            if (!envFile.exists()){
-	                String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
-	                        " but no " + CONFIG_FILE_NAME + " file found there";
-	                properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	                throw new FileNotFoundException (error);
-	            }
-	            FileInputStream configs = new FileInputStream(envFile);
-	            properties.load(configs);
-	            properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "OPS-IMS-CONFIG Enviroment Variable");
-	            return true;
-	        } else {
-	            String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
-	                    " but is not a directory";
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	            throw new FileNotFoundException (error);
-	        }
-	    }
-
-	    /**
-	     * Looks for the config file in the directory set up the environment variable "OPS-IMS-CONFIG"
-	     * @return True if the config files was found. False if the environment variable "OPS-IMS-CONFIG" was unset.
-	     * @throws IOException Thrown if the environment variable is not null, 
-	     *    and the config file is not found as indicated, or could not be read.
-	     */
-	    private static boolean loadByCatalinaHomeConfigs() throws IOException {
-	        String catalinaHomePath = System.getenv().get("CATALINA_HOME");
-	         if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
-	        File catalineHomeDir = new File(catalinaHomePath);
-	        if (!catalineHomeDir.exists()){
-	            String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
-	                    " but no directory found there";
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	            throw new FileNotFoundException (error);
-	        }
-	        if (!catalineHomeDir.isDirectory()){
-	            String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
-	                    " but is not a directory";
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	            throw new FileNotFoundException (error);
-	        }
-	        File envDir = new File (catalineHomeDir + "/conf/OPS-IMS");
-	        if (!envDir.exists()) return false; //No hard requirements that catalineHome has a /conf/OPS-IMS
-	         if (envDir.isDirectory()){
-	            File envFile = new File(envDir, CONFIG_FILE_NAME);
-	            if (!envFile.exists()){
-	                String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
-	                        " but subdirectory /conf/OPS-IMS has no " + CONFIG_FILE_NAME + " file.";
-	                properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	                throw new FileNotFoundException (error);
-	            }
-	            FileInputStream configs = new FileInputStream(envFile);
-	            properties.load(configs);
-	            properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "CATALINA_HOME/conf/OPS-IMS");
-	            return true;
-	        } else {
-	            String error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath  + 
-	                    " but $CATALINA_HOME/conf/OPS-IMS is not a directory";
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	            throw new FileNotFoundException (error);
-	       }
-	    }
-
-	    /**
-	     * Looks for the config file in the run directory.
-	     * @return True if the file was found, False if it was not found.
-	     * @throws IOException If there is an error reading the file.
-	     */
-	    private static boolean loadDirectly() throws IOException {
-	        File envFile = new File(CONFIG_FILE_NAME);
-	        if (!envFile.exists()) return false;
-	        FileInputStream configs = new FileInputStream(envFile);
-	        properties.load(configs);
-	        properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
-	        properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "From main Directory");
-	        return true;
-	    }
-
-	    /**
-	     * Looks for the config file in the conf/OPS-IMS sub directories of the run directory.
-	     * <p>
-	     * For tomcat conf would then be a sister directory of webapps.
-	     * @return True if the file was found, False if it was not found.
-	     * @throws IOException If there is an error reading the file.
-	     */
-	    private static boolean loadFromConfigs() throws IOException {
-	        File confFolder = new File ("conf/OPS-IMS");
-	        if (!confFolder.exists()) return false;
-	        if (!confFolder.isDirectory()){
-	            String error = "Expected " + confFolder.getAbsolutePath() + " to be a directory";
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	            throw new FileNotFoundException (error);
-	        }
-	        File envFile = new File(confFolder, CONFIG_FILE_NAME);
-	        if (!envFile.exists()) return false;
-	        FileInputStream configs = new FileInputStream(envFile);
-	        properties.load(configs);
-	        properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
-	        properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "From conf/OPS-IMS");
-	        return true;
-	    }
-
-	    /**
-	     * Looks for the config file in the conf/OPS-IMS sub directories of the run directory.
-	     * <p>
-	     * For tomcat conf would then be a sister directory of webapps.
-	     * @return True if the file was found, False if it was not found.
-	     * @throws IOException If there is an error reading the file.
-	     */
-	    private static boolean loadFromParentConfigs() throws IOException {
-	        File confFolder = new File ("../conf/OPS-IMS");
-	        if (!confFolder.exists()) return false;
-	        if (!confFolder.isDirectory()){
-	            String error = "Expected " + confFolder.getAbsolutePath() + " to be a directory";
-	            properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, error) ;
-	            throw new FileNotFoundException (error);
-	        }
-	        File envFile = new File(confFolder, CONFIG_FILE_NAME);
-	        if (!envFile.exists()) return false;
-	        FileInputStream configs = new FileInputStream(envFile);
-	        properties.load(configs);
-	        properties.put(CONFIG_FILE_PATH_PROPERTY, envFile.getAbsolutePath());
-	        properties.put(CONFIG_FILE_PATH_SOURCE_PROPERTY, "From ../conf/OPS-IMS");
-	        return true;
-	    }
-
-	}
 
 }

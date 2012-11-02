@@ -60,6 +60,14 @@ public class RdfConfig {
         return "http://openphacts.cs.man.ac.uk:9090/OPS-IMS";        
     }
     
+    public static String getProfileBaseURI(){
+        return getTheBaseURI() + "profile/";  
+    }
+
+    public static String getProfileURI(int linksetId){
+        return getProfileBaseURI() + linksetId;  
+    }
+  
     public static String getProperty(String key) throws IDMapperLinksetException{
         return getProperties().getProperty(key);
     }

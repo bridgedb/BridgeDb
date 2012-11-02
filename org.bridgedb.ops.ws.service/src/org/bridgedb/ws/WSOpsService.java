@@ -101,7 +101,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         if (URL == null) throw new IDMapperException("URL parameter missing.");        
         if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");        
         if (profileURL == null || profileURL.isEmpty()){
-            profileURL = RdfFactory.getProfileURI(0).stringValue();
+            profileURL = RdfConfig.getProfileURI(0);
         }
         if (targetURISpace == null) {
         	targetURISpace = new ArrayList<String>();
@@ -221,7 +221,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Path("/profile/{id}")
 	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDbSqlException {
-		ProfileInfo profile = urlMapper.getProfile(RdfFactory.getProfileURI(Integer.parseInt(id)).stringValue());
+		ProfileInfo profile = urlMapper.getProfile(RdfConfig.getProfileURI(Integer.parseInt(id)));
 		ProfileBean result = ProfileBeanFactory.asBean(profile);
 		return result;
 	}

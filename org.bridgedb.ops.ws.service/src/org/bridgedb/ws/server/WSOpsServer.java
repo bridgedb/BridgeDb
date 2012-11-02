@@ -137,7 +137,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
 		List<ProfileInfo> profiles = urlMapper.getProfiles();
 		StringBuilder sb = new StringBuilder("<p><select name=\"profileURL\">");
 	   	sb.append("<option value=\"");
-    	sb.append(RdfFactory.getProfileURI(0));
+    	sb.append(RdfConfig.getProfileURI(0));
     	sb.append("\">Default profile</option>");
 		for (ProfileInfo profile : profiles) {
 			sb.append("<option value=\"");
