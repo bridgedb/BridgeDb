@@ -31,27 +31,27 @@ import org.openrdf.model.impl.URIImpl;
 public class XMLSchemaConstants {
 
 
-    private static final String xmlschemans = "http://www.w3.org/2001/XMLSchema#";
+    public static final String PREFIX = "http://www.w3.org/2001/XMLSchema#";
     
-    public static final URI STRING = new URIImpl(xmlschemans + "string");
-    public static final URI BOOLEAN = new URIImpl(xmlschemans + "boolean");
-    public static final URI DECIMAL = new URIImpl(xmlschemans + "decimal");
-    public static final URI FLOAT = new URIImpl(xmlschemans + "float");
-    public static final URI DOUBLE = new URIImpl(xmlschemans + "double");
-    public static final URI DURATION = new URIImpl(xmlschemans + "duration");
-    public static final URI DATE_TIME = new URIImpl(xmlschemans + "dateTime");
-    public static final URI TIME = new URIImpl(xmlschemans + "time");
-    public static final URI DATE = new URIImpl(xmlschemans + "date");
-    public static final URI G_YEAR_MONTH = new URIImpl(xmlschemans + "gYearMonth");
-    public static final URI G_YEAR = new URIImpl(xmlschemans + "gYear");
-    public static final URI G_MONTH_DAY = new URIImpl(xmlschemans + "gMonthDay");
-    public static final URI G_DAY = new URIImpl(xmlschemans + "gDay");
-    public static final URI G_MONTH = new URIImpl(xmlschemans + "gMonth");
-    public static final URI HEX_BINARY = new URIImpl(xmlschemans + "hexBinary");
-    public static final URI BASE_64_BINARY = new URIImpl(xmlschemans + "base64Binary");
-    public static final URI ANY_URI = new URIImpl(xmlschemans + "anyURI");
-    public static final URI QNAME = new URIImpl(xmlschemans + "QName");
-    public static final URI NOTATION = new URIImpl(xmlschemans + "NOTATION");
-    public static final URI INTEGER = new URIImpl(xmlschemans + "integer");
-    public static final URI NON_NEGATIVE_INTEGER = new URIImpl(xmlschemans + "nonNegativeInteger");
+    public static final URI STRING = new URIImpl(PREFIX + "string");
+    public static final URI BOOLEAN = new URIImpl(PREFIX + "boolean");
+    public static final URI DECIMAL = new URIImpl(PREFIX + "decimal");
+    public static final URI FLOAT = new URIImpl(PREFIX + "float");
+    public static final URI DOUBLE = new URIImpl(PREFIX + "double");
+    public static final URI DURATION = new URIImpl(PREFIX + "duration");
+    public static final URI DATE_TIME = new URIImpl(PREFIX + "dateTime");
+    public static final URI TIME = new URIImpl(PREFIX + "time");
+    public static final URI DATE = new URIImpl(PREFIX + "date");
+    public static final URI G_YEAR_MONTH = new URIImpl(PREFIX + "gYearMonth");
+    public static final URI G_YEAR = new URIImpl(PREFIX + "gYear");
+    public static final URI G_MONTH_DAY = new URIImpl(PREFIX + "gMonthDay");
+    public static final URI G_DAY = new URIImpl(PREFIX + "gDay");
+    public static final URI G_MONTH = new URIImpl(PREFIX + "gMonth");
+    public static final URI HEX_BINARY = new URIImpl(PREFIX + "hexBinary");
+    public static final URI BASE_64_BINARY = new URIImpl(PREFIX + "base64Binary");
+    public static final URI ANY_URI = new URIImpl(PREFIX + "anyURI");
+    public static final URI QNAME = new URIImpl(PREFIX + "QName");
+    public static final URI NOTATION = new URIImpl(PREFIX + "NOTATION");
+    public static final URI INTEGER = new URIImpl(PREFIX + "integer");
+    public static final URI NON_NEGATIVE_INTEGER = new URIImpl(PREFIX + "nonNegativeInteger");
 }

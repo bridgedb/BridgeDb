@@ -5,7 +5,7 @@
 package org.bridgedb.metadata.type;
 
 import org.bridgedb.metadata.AppendBase;
-import org.bridgedb.metadata.constants.XsdConstants;
+import org.bridgedb.metadata.constants.XMLSchemaConstants;
 import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
@@ -22,7 +22,7 @@ public class StringType implements MetaDataType{
             Literal literal = (Literal)value;
             URI literalType = literal.getDatatype();
             if (literalType != null){
-                return (XsdConstants.STRING_URI.equals(literalType));
+                return (XMLSchemaConstants.STRING.equals(literalType));
             }
         }
         String stringValue = value.stringValue();

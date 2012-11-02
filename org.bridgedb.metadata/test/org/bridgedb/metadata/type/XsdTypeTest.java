@@ -5,7 +5,6 @@
 package org.bridgedb.metadata.type;
 
 import org.bridgedb.metadata.constants.XMLSchemaConstants;
-import org.bridgedb.metadata.constants.XsdConstants;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,7 +46,7 @@ public class XsdTypeTest {
     public void testIntegerTypes() {
         System.out.println("IntegerTypes");
         XsdType instance = new XsdType(XMLSchemaConstants.INTEGER.stringValue());
-        Value value = new LiteralImpl("10",XsdConstants.INTEGER_URI);;
+        Value value = new LiteralImpl("10",XMLSchemaConstants.INTEGER);;
         assertTrue(instance.correctType(value));
         value = new LiteralImpl("10",XMLSchemaConstants.NON_NEGATIVE_INTEGER);
         assertTrue(instance.correctType(value));

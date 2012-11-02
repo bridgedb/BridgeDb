@@ -11,7 +11,7 @@ import java.util.Set;
 import org.bridgedb.linkset.constants.OwlConstants;
 import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.RdfsConstants;
-import org.bridgedb.metadata.constants.XsdConstants;
+import org.bridgedb.metadata.constants.XMLSchemaConstants;
 import org.bridgedb.metadata.type.*;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
@@ -112,12 +112,12 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             return new LiteralType();
         }
         if (objectClass.startsWith("xsd:")){
-            objectClass = XsdConstants.PREFIX + objectClass.substring(4);
+            objectClass = XMLSchemaConstants.PREFIX + objectClass.substring(4);
         }
-        if (objectClass.equalsIgnoreCase(XsdConstants.STRING)){
+        if (objectClass.equalsIgnoreCase(XMLSchemaConstants.STRING.stringValue())){
             return new StringType();
         }
-        if (objectClass.startsWith(XsdConstants.PREFIX)){
+        if (objectClass.startsWith(XMLSchemaConstants.PREFIX)){
             return new XsdType(objectClass);
         }
         throw new MetaDataException ("Unexpected " + SchemaConstants.CLASS + " " + objectClass);
