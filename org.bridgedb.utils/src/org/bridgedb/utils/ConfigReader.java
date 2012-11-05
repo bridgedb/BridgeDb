@@ -44,11 +44,11 @@ public class ConfigReader {
 
     private ConfigReader(String fileName) throws IDMapperException{
         try {
+            if (loadDirectly(fileName)) return;
             if (loadByEnviromentVariable(fileName)) return;
             if (loadByCatalinaHomeConfigs(fileName)) return;
             if (loadFromDirectory(fileName, "../org.bridgedb.utils/resources")) return;
-            if (loadFromDirectory(fileName, "resources")) return;
-            if (loadDirectly(fileName)) return;
+            if (loadFromDirectory(fileName, "conf/OPS-IMS")) return;
             if (getInputStreamFromResource(fileName)) return;
             if (getInputStreamFromJar(fileName)) return;
         } catch (IOException ex) {
