@@ -37,6 +37,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBElement;
+import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -76,16 +77,23 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String FILE = "file";     
     public final String NO_RESULT = null;
     
+    static final Logger logger = Logger.getLogger(WSOpsService.class);
+
+    /**
+     * Defuault constuctor for super classes.
+     * 
+     * Super classes will have the responsibilites of setting up the idMapper.
+     */
     protected WSOpsService() throws IDMapperException {
+        super();
         this.linksetInterface = new LinksetLoader();
-        Reporter.report("WS Server running");
     }
 
     public WSOpsService(URLMapper urlMapper) throws IDMapperException {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
-        Reporter.report("WS Server running");
+        logger.info("WS Service running using supplied urlMapper");
     }
 
     @GET

@@ -14,6 +14,7 @@
         <sesame.version>2.6.4</sesame.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4.1-SNAPSHOT</owlapi-api.version>
+        <log4j.version>1.2.16</log4j.version> <!-- Versio used in MetaData -->
     </properties>
 
 
