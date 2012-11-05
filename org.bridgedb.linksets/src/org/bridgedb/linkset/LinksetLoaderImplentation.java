@@ -282,7 +282,7 @@ public class LinksetLoaderImplentation{
         }
     }
         
-    private synchronized URI getVoidContext() throws BridgeDbSqlException {
+    private synchronized URI getVoidContext() throws IDMapperException {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
         SQLIdMapper mapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
         String oldIDString = mapper.getProperty(LAST_USED_VOID_ID);

@@ -57,28 +57,28 @@ public class SQLUrlMapperTest extends URLListenerTest {
 	}
 	
 	@Test
-	public void testGetProfileInfo() throws BridgeDbSqlException {
+	public void testGetProfileInfo() throws IDMapperException {
 		List<ProfileInfo> profiles = sqlUrlMapper.getProfiles();
 		assertEquals(2, profiles.size());
 	}
 
 	@Test(expected=BridgeDbSqlException.class)
-	public void testGetProfile_notAUri() throws BridgeDbSqlException {
+	public void testGetProfile_notAUri() throws IDMapperException {
 		sqlUrlMapper.getProfile("Not a URI");
 	}
 	
 	@Test(expected=BridgeDbSqlException.class)
-	public void testGetProfile_invalidURI() throws BridgeDbSqlException {
+	public void testGetProfile_invalidURI() throws IDMapperException {
 		sqlUrlMapper.getProfile("http://www.foo.com/123");
 	}
 	
 	@Test(expected=BridgeDbSqlException.class)
-	public void testGetProfile_invalidProfileNumber() throws BridgeDbSqlException {
+	public void testGetProfile_invalidProfileNumber() throws IDMapperException {
 		sqlUrlMapper.getProfile(BASE_PROFILE_URI + "123");
 	}
 		
 	@Test
-	public void testGetProfile_validProfileURI() throws BridgeDbSqlException {
+	public void testGetProfile_validProfileURI() throws IDMapperException {
 		ProfileInfo profile = sqlUrlMapper.getProfile(BASE_PROFILE_URI + "1");
 		assertEquals("test1", profile.getName());
 //		assertEquals("2012-09-28T16:02", profile.getCreatedOn());
@@ -90,12 +90,12 @@ public class SQLUrlMapperTest extends URLListenerTest {
 	}
 
 	@Test(expected=BridgeDbSqlException.class)
-	public void testInvalidProfile_notaURI() throws BridgeDbSqlException {
+	public void testInvalidProfile_notaURI() throws IDMapperException {
 		sqlUrlMapper.mapURL(map1URL1, "1");
 	}
 	
 	@Test
-	public void testGetMappingNoProfile() throws BridgeDbSqlException {
+	public void testGetMappingNoProfile() throws IDMapperException {
 		Set<String> expectedURL = new HashSet<String>();
 		expectedURL.add("http://www.foo.com/123");
 		expectedURL.add("http://www.example.com/123");
@@ -109,13 +109,13 @@ public class SQLUrlMapperTest extends URLListenerTest {
 	}
 
 	@Test(expected=BridgeDbSqlException.class)
-	public void testGetMappingProfileNotValid() throws BridgeDbSqlException {
+	public void testGetMappingProfileNotValid() throws IDMapperException {
 		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, "Anything else");
 		assertEquals(1, mapURL.size());
 	}
 
 	@Test
-	public void testGetMappingsProfile1() throws BridgeDbSqlException {
+	public void testGetMappingsProfile1() throws IDMapperException {
 		Set<String> expectedURL = new HashSet<String>();
 		expectedURL.add("http://www.foo.com/123");
 		expectedURL.add("http://www.example.com/123");
@@ -127,7 +127,7 @@ public class SQLUrlMapperTest extends URLListenerTest {
 	}
 
 	@Test
-	public void testGetMappingsProfile2() throws BridgeDbSqlException {
+	public void testGetMappingsProfile2() throws IDMapperException {
 		Set<String> expectedURL = new HashSet<String>();
 		expectedURL.add("http://www.foo.com/456");
 		expectedURL.add("http://www.example.com/456");

@@ -205,7 +205,7 @@ public interface URLMapper extends IDMapper{
 	 * @return Information for each Profile
 	 * @throws BridgeDbSqlException 
 	 */
-	public List<ProfileInfo> getProfiles() throws BridgeDbSqlException;
+	public List<ProfileInfo> getProfiles() throws IDMapperException;
 
 	/**
 	 * Obtains the information about a specific profile.
@@ -214,7 +214,7 @@ public interface URLMapper extends IDMapper{
 	 * @return Information about the specified profile
 	 * @throws BridgeDbSqlException
 	 */
-	public ProfileInfo getProfile(String profileURI) throws BridgeDbSqlException;
+	public ProfileInfo getProfile(String profileURI) throws IDMapperException;
 
     /**
      * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for the Source DataSource.

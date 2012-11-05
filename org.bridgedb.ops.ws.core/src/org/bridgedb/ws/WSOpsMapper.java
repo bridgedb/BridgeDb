@@ -169,7 +169,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     }
 
 	@Override
-	public List<ProfileInfo> getProfiles() throws BridgeDbSqlException {
+	public List<ProfileInfo> getProfiles() throws IDMapperException {
 		List<ProfileBean> beans = opsService.getProfiles();
 		List<ProfileInfo> results = new ArrayList<ProfileInfo>();
 		for (ProfileBean bean:beans) {
@@ -180,7 +180,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
 
 	@Override
 	public ProfileInfo getProfile(String profileURI)
-			throws BridgeDbSqlException {
+			throws IDMapperException {
 		ProfileBean profile = opsService.getProfile(profileURI);
 		ProfileInfo result = ProfileBeanFactory.asProfileInfo(profile);
 		return result;

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.ValidationType;
-import org.bridgedb.utils.InputStreamFinder;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
@@ -49,7 +49,7 @@ public class MetaDataSpecification {
     private static String THING_ID = "http://www.w3.org/2002/07/owl#Thing";
         
     public MetaDataSpecification(ValidationType type) throws IDMapperException{
-        InputStream stream = InputStreamFinder.findByName(type.getOwlFileName(), this);
+        InputStream stream = ConfigReader.getInputStream(type.getOwlFileName());
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         this.validationType = type;
         try {

@@ -220,7 +220,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
 	@GET
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Path("/profile/{id}")
-	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDbSqlException {
+	public ProfileBean getProfile(@PathParam("id") String id) throws IDMapperException {
 		ProfileInfo profile = urlMapper.getProfile(RdfConfig.getProfileURI(Integer.parseInt(id)));
 		ProfileBean result = ProfileBeanFactory.asBean(profile);
 		return result;
@@ -230,7 +230,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/profile") 
-	public List<ProfileBean> getProfiles() throws BridgeDbSqlException {
+	public List<ProfileBean> getProfiles() throws IDMapperException {
 		List<ProfileInfo> profiles = urlMapper.getProfiles();
 		List<ProfileBean> results = new ArrayList<ProfileBean>();
 		for (ProfileInfo profile:profiles) {

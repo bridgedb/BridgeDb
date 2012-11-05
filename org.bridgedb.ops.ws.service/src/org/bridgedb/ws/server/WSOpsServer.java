@@ -119,7 +119,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     		return sb.toString();
     }
     
-    private final String uriMappingForm() throws BridgeDbSqlException {
+    private final String uriMappingForm() throws IDMapperException {
     	StringBuilder sb = new StringBuilder();
     	sb.append("<form method=\"get\" action=\"/OPS-IMS/mapURL\">");
     	sb.append("<fieldset>");
@@ -133,7 +133,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     	return sb.toString();
     }
 
-	private String generateProfileSelector() throws BridgeDbSqlException {
+	private String generateProfileSelector() throws IDMapperException {
 		List<ProfileInfo> profiles = urlMapper.getProfiles();
 		StringBuilder sb = new StringBuilder("<p><select name=\"profileURL\">");
 	   	sb.append("<option value=\"");

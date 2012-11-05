@@ -126,7 +126,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	}
     
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> URLs, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
+    public Map<String, Set<String>> mapURL(Collection<String> URLs, String profileURL, String... targetURISpaces) 
+            throws IDMapperException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>>();
         for (String ref:URLs){
             Set<String> mapped = this.mapURL(ref, profileURL, targetURISpaces);
@@ -136,7 +137,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Set<String> mapURL(String URL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {
+    public Set<String> mapURL(String URL, String profileURL, String... targetURISpaces) throws IDMapperException {
         StringBuilder query = new StringBuilder("SELECT targetId as id, target.uriSpace as uriSpace ");
         finishMappingQuery(query, URL, profileURL, targetURISpaces); 
         Statement statement = this.createStatement();
@@ -170,7 +171,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @throws BridgeDbSqlException profile does not exist
      */
     private void finishMappingQuery(StringBuilder query, String sourceURL, String profileURL, 
-    		String... targetURISpaces) throws BridgeDbSqlException {
+    		String... targetURISpaces) throws IDMapperException {
         //System.out.println("mapping: " + sourceURL);
         String id = getId(sourceURL);
         String uriSpace = getUriSpace(sourceURL);
@@ -206,7 +207,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @param profileURL URL of the profile to use
      * @throws BridgeDbSqlException if the profile does not exist
      */
-    private void addProfileClause(StringBuilder query, String profileURL) throws BridgeDbSqlException {
+    private void addProfileClause(StringBuilder query, String profileURL) throws IDMapperException {
         String profileJustificationQuery = "SELECT justificationURI FROM profileJustifications WHERE profileId = ";
         int profileID = extractIDFromURI(profileURL);
         if (profileID != 0) {
@@ -226,7 +227,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
 	}
 
-	private int extractIDFromURI(String profileURL) throws BridgeDbSqlException {
+	private int extractIDFromURI(String profileURL) throws IDMapperException {
 		try {
 			URI profileURI = new URIImpl(profileURL);
 			if (!profileURI.getNamespace().equals(RdfConfig.getProfileBaseURI())) {
@@ -240,7 +241,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	}
 
 	@Override
-    public Set<URLMapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws BridgeDbSqlException {    	
+    public Set<URLMapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws IDMapperException {    	
         StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
         query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
         finishMappingQuery(query, URL, profileURL, targetURISpaces); 
@@ -503,7 +504,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
     
     @Override
-    public List<ProfileInfo> getProfiles() throws BridgeDbSqlException {
+    public List<ProfileInfo> getProfiles() throws IDMapperException {
     	String query = ("SELECT profileId, name, createdOn, createdBy " +
     			"FROM profile");
     	Statement statement = this.createStatement();
@@ -527,7 +528,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
     
     @Override
-    public ProfileInfo getProfile(String profileURI) throws BridgeDbSqlException {
+    public ProfileInfo getProfile(String profileURI) throws IDMapperException {
     	int profileID = extractIDFromURI(profileURI);
     	String query = ("SELECT profileId, name, createdOn, createdBy " +
     			"FROM profile WHERE profileId = " + profileID);

@@ -59,9 +59,9 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
     
-    public List<ProfileBean> getProfiles() throws BridgeDbSqlException;
+    public List<ProfileBean> getProfiles() throws IDMapperException;
     
-    public ProfileBean getProfile(String id) throws BridgeDbSqlException;
+    public ProfileBean getProfile(String id) throws IDMapperException;
     
     public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
             String includeWarnings) throws IDMapperException;

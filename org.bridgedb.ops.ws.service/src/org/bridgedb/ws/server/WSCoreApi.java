@@ -22,6 +22,7 @@ package org.bridgedb.ws.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.RdfFactory;
@@ -117,7 +118,7 @@ public class WSCoreApi {
     }
 
     protected void describe_IDMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second,
-            boolean freeSearchSupported) throws UnsupportedEncodingException{
+            boolean freeSearchSupported) throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h2>Implementations of BridgeDB's IDMapper methods</h2>");
 
         describe_mapID(sb, first, firstMaps, second);    
@@ -136,7 +137,7 @@ public class WSCoreApi {
     }
     
     private void describe_mapID(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) 
-            throws UnsupportedEncodingException{
+            throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"mapID\">mapID</h3>");
             sb.append("<ul>");
             sb.append("<li>List the Xrefs that map to these Xrefs</li>");
@@ -188,7 +189,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_xrefExists(StringBuilder sb, Xref first) throws UnsupportedEncodingException{
+    private void describe_xrefExists(StringBuilder sb, Xref first) throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"xrefExists\">xrefExists</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  boolean xrefExists(Xref xref)</li>");
@@ -214,7 +215,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_freeSearch(StringBuilder sb, Xref first) throws UnsupportedEncodingException{
+    private void describe_freeSearch(StringBuilder sb, Xref first) throws UnsupportedEncodingException, IDMapperException{
          sb.append("<h3><a name=\"freeSearch\">freeSearch</h3>");
             sb.append("<ul>");
             sb.append("<li>Searches for Xrefs that have this id.</li>");
@@ -264,7 +265,7 @@ public class WSCoreApi {
         }
     }
   
-    private void describe_getCapabilities(StringBuilder sb) {
+    private void describe_getCapabilities(StringBuilder sb) throws IDMapperException {
          sb.append("<h3><a name=\"getCapabilities\">getCapabilities</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  IDMapperCapabilities getCapabilities()</li>");
@@ -275,8 +276,8 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    protected void describe_IDMapperCapabilities(StringBuilder sb, Xref first, Set<Xref> firstMaps, Set<String> keys, boolean freeSearchSupported)
-            throws UnsupportedEncodingException{
+    protected void describe_IDMapperCapabilities(StringBuilder sb, Xref first, Set<Xref> firstMaps, Set<String> keys, 
+            boolean freeSearchSupported) throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h2>Implementations of BridgeDB's IDMapperCapabilities methods</h2>");
         describe_isFreeSearchSupported(sb, freeSearchSupported);
         describe_getSupportedDataSources(sb);
@@ -285,7 +286,7 @@ public class WSCoreApi {
         describe_getKeys(sb, keys);
     }
     
-    private void describe_isFreeSearchSupported(StringBuilder sb, boolean freeSearchSupported) {
+    private void describe_isFreeSearchSupported(StringBuilder sb, boolean freeSearchSupported) throws IDMapperException {
          sb.append("<h3><a name=\"isFreeSearchSupported\">isFreeSearchSupported</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  boolean isFreeSearchSupported()</li>");
@@ -300,7 +301,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_getSupportedDataSources(StringBuilder sb) {
+    private void describe_getSupportedDataSources(StringBuilder sb) throws IDMapperException {
          sb.append("<h3><a name=\"getSupportedSrcDataSources\">getSupportedSrcDataSources</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  Set&ltDataSource&gt  getSupportedSrcDataSources()</li>");
@@ -320,7 +321,8 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_isMappingSupported(StringBuilder sb, Xref first, Set<Xref> firstMaps) throws UnsupportedEncodingException{
+    private void describe_isMappingSupported(StringBuilder sb, Xref first, Set<Xref> firstMaps) 
+            throws UnsupportedEncodingException, IDMapperException{
          sb.append("<h3><a name=\"isMappingSupported\">isMappingSupported</h3>");
             sb.append("<ul>");
             sb.append("<li>States if two DataSources are mapped at least once.</li>");
@@ -345,7 +347,8 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
 
-    private void describe_getProperty(StringBuilder sb, Set<String> keys) throws UnsupportedEncodingException{
+    private void describe_getProperty(StringBuilder sb, Set<String> keys) 
+            throws UnsupportedEncodingException, IDMapperException{
          sb.append("<h3><a name=\"property\">property/key</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  String getProperty(String key)</li>");
@@ -369,7 +372,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_getKeys(StringBuilder sb, Set<String> keys){
+    private void describe_getKeys(StringBuilder sb, Set<String> keys) throws IDMapperException{
          sb.append("<h3><a name=\"getKeys\">getKeys</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  Set<String> getKeys()</li>");

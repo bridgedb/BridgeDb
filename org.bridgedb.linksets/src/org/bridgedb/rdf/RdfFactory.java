@@ -21,6 +21,8 @@ package org.bridgedb.rdf;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
@@ -55,7 +57,7 @@ public class RdfFactory {
      * @return
      * @throws IDMapperLinksetException 
      */
-    private static Repository getRepository(StoreType storeType, boolean exisiting) throws IDMapperLinksetException {
+    private static Repository getRepository(StoreType storeType, boolean exisiting) throws IDMapperException {
         File dataDir = RdfConfig.getDataDir(storeType);
         if (exisiting) {
             if (!dataDir.exists()){
@@ -72,9 +74,9 @@ public class RdfFactory {
             File testLockDir = new File(dataDir, "lock");
             if (!testLockDir.canWrite()){
                 try {
-                    String path = RdfConfig.getProperty(RdfConfig.CONFIG_FILE_PATH_PROPERTY);
-                    String source = RdfConfig.getProperty(RdfConfig.CONFIG_FILE_PATH_SOURCE_PROPERTY);
-                    throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
+                    String path = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_PROPERTY);
+                    String source = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_SOURCE_PROPERTY);
+                    throw new IDMapperException ("Unable to open repository. Possible cause is unable to write to " +
                             testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
                 } catch (IDMapperLinksetException ex1) {
                     Logger.getLogger(RdfFactory.class.getName()).log(Level.SEVERE, null, ex1);
@@ -92,16 +94,16 @@ public class RdfFactory {
         return repository;
     }
 
-    private static boolean repositoryExists(StoreType storeType) throws IDMapperLinksetException {
+    private static boolean repositoryExists(StoreType storeType) throws IDMapperException {
         File dataDir = RdfConfig.getDataDir(storeType);
         return dataDir.exists();
     }
     
-    public static URI getLinksetURL(int linksetId){
+    public static URI getLinksetURL(int linksetId) throws IDMapperException{
         return new URIImpl(RdfConfig.getTheBaseURI() + "linkset/" + linksetId);  
     }
 
-    public static URI getVoidURL(int voidId){
+    public static URI getVoidURL(int voidId) throws IDMapperException{
         return new URIImpl(RdfConfig.getTheBaseURI() + "void/" + voidId);  
     }
 
@@ -126,12 +128,12 @@ public class RdfFactory {
         Repository repository;
         try {
             repository = getRepository (storeType, existing);
-        } catch (IDMapperLinksetException ex) {
+        } catch (IDMapperException ex) {
             try {
-                String path = RdfConfig.getProperty(RdfConfig.CONFIG_FILE_PATH_PROPERTY);
-                String source = RdfConfig.getProperty(RdfConfig.CONFIG_FILE_PATH_SOURCE_PROPERTY);
+                String path = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_PROPERTY);
+                String source = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_SOURCE_PROPERTY);
                 throw new RDFHandlerException("Setup error " + ex + " Please check " + path + " set by " + source, ex);
-            } catch (IDMapperLinksetException ex1) {
+            } catch (IDMapperException ex1) {
                 throw new RDFHandlerException("Setup error " + ex + " unable to dettermine source", ex);
             }
         }

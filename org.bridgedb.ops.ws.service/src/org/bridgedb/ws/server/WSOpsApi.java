@@ -22,6 +22,7 @@ package org.bridgedb.ws.server;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.RdfFactory;
 
@@ -80,7 +81,8 @@ public class WSOpsApi extends WSCoreApi {
     }
     
     protected final void describe_URLMapper(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces, 
-            String text, int mappingId, String sysCode, boolean freeSearchSupported) throws UnsupportedEncodingException{
+            String text, int mappingId, String sysCode, boolean freeSearchSupported) 
+            throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h2>URL based methods</h2>");
         describe_mapURL(sb, URL1, URL2, URI2Spaces);
         describe_URLExists(sb, URL1);
@@ -91,7 +93,8 @@ public class WSOpsApi extends WSCoreApi {
         describe_dataSource(sb, sysCode);
     }
         
-    private void describe_mapURL(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) throws UnsupportedEncodingException{
+    private void describe_mapURL(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) 
+            throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"mapURL\">mapURL</h3>");
             sb.append("<ul>");
             sb.append("<li>List the URLs that map to this URL</li>");
@@ -132,7 +135,7 @@ public class WSOpsApi extends WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_URLExists(StringBuilder sb, String URL) throws UnsupportedEncodingException{
+    private void describe_URLExists(StringBuilder sb, String URL) throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"URLExists\">URLExists</h3>");
             sb.append("<ul>");
             sb.append("<li>State if the URL is know to the Mapping Service or not</li>");
@@ -154,7 +157,7 @@ public class WSOpsApi extends WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_URLSearch(StringBuilder sb, String URL) throws UnsupportedEncodingException{
+    private void describe_URLSearch(StringBuilder sb, String URL) throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"URLSearch\">URLSearch</h3>");
             sb.append("<ul>");
             sb.append("<li>Searches for URLs that have this ending.</li>");
@@ -183,7 +186,7 @@ public class WSOpsApi extends WSCoreApi {
         sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>");           
     }
 
-    protected final void describe_Info(StringBuilder sb) {
+    protected final void describe_Info(StringBuilder sb) throws IDMapperException {
         sb.append("<h2>URL based methods");
         sb.append("<h3><a name=\"getMappingInfo\">getMappingInfo</h3>");
             sb.append("<ul>");
@@ -212,7 +215,7 @@ public class WSOpsApi extends WSCoreApi {
     
     }
 
-   private void describe_mapping(StringBuilder sb, int mappingId) {
+   private void describe_mapping(StringBuilder sb, int mappingId) throws IDMapperException {
          sb.append("<h3><a name=\"mapping\">mapping/id</h3>");
             sb.append("<ul>");
             sb.append("<li>Obtian a mapping</li>");
@@ -231,7 +234,8 @@ public class WSOpsApi extends WSCoreApi {
             sb.append("</ul>");        
     }
    
-   private void describe_dataSource(StringBuilder sb, String sysCode) throws UnsupportedEncodingException {
+   private void describe_dataSource(StringBuilder sb, String sysCode) 
+           throws UnsupportedEncodingException, IDMapperException {
          sb.append("<h3><a name=\"dataSource\">dataSource/id</h3>");
             sb.append("<ul>");
             sb.append("<li>Obtian a dataSource</li>");
@@ -251,7 +255,7 @@ public class WSOpsApi extends WSCoreApi {
    }
 
    private void describe_getOverallStatistics(StringBuilder sb) 
-            throws UnsupportedEncodingException{
+            throws UnsupportedEncodingException, IDMapperException{
          sb.append("<h3><a name=\"getOverallStatistics\">getOverallStatistics</h3>");
             sb.append("<ul>");
             sb.append("<li>Returns some high level statistics. </li>");
