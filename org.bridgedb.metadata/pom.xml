@@ -80,12 +80,6 @@
             <version>${owlapi-api.version}</version>
         </dependency>
 
-        <!--dependency>
-            <groupId>org.openrdf.sesame</groupId>
-            <artifactId>sesame-rio-N3</artifactId>
-            <version>${sesame.version}</version>
-            <scope>compile</scope>
-        </dependency-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

@@ -48,6 +48,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
@@ -77,12 +78,14 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     
     protected WSOpsService() {
         this.linksetInterface = new LinksetLoader();
+        Reporter.report("WS Server running");
     }
 
     public WSOpsService(URLMapper urlMapper) {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
+        Reporter.report("WS Server running");
     }
 
     @GET

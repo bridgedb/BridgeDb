@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -48,6 +49,7 @@ public class ConfigReader {
             if (loadByEnviromentVariable(fileName)) return;
             if (loadByCatalinaHomeConfigs(fileName)) return;
             if (loadFromDirectory(fileName, "../org.bridgedb.utils/resources")) return;
+            if (loadFromDirectory(fileName, "../conf/OPS-IMS")) return;
             if (loadFromDirectory(fileName, "conf/OPS-IMS")) return;
             if (getInputStreamFromResource(fileName)) return;
             if (getInputStreamFromJar(fileName)) return;
@@ -102,7 +104,9 @@ public class ConfigReader {
      */
     private boolean loadByEnviromentVariable(String fileName) throws IDMapperException, FileNotFoundException{
         String envPath = System.getenv().get("OPS-IMS-CONFIG");
-        if (envPath == null || envPath.isEmpty()) return false;
+        if (envPath == null || envPath.isEmpty()) {
+            return false;
+        }
         File envDir = new File(envPath);
         if (!envDir.exists()){
             error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
@@ -133,7 +137,9 @@ public class ConfigReader {
      */
     private boolean loadByCatalinaHomeConfigs(String fileName) throws IDMapperException, FileNotFoundException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
-        if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
+        if (catalinaHomePath == null || catalinaHomePath.isEmpty()) {
+            return false;
+        }
         File catalineHomeDir = new File(catalinaHomePath);
         if (!catalineHomeDir.exists()){
             error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
@@ -172,6 +178,7 @@ public class ConfigReader {
      */
     private boolean loadFromDirectory(String fileName, String directoryName) throws IDMapperException, FileNotFoundException {
         File directory = new File (directoryName);
+        System.out.println(directory.getAbsolutePath());
         if (!directory.exists()) {
             return false;
         }
