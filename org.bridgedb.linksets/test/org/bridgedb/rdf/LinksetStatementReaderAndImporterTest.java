@@ -30,7 +30,7 @@ public class LinksetStatementReaderAndImporterTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         //Check database is running and settup correctly or kill the test. 
-        TestSqlFactory.createTestSQLAccess();
+        TestSqlFactory.checkSQLAccess();
         
     }
 

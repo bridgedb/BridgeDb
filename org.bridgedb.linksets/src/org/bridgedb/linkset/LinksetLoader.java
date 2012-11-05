@@ -223,8 +223,7 @@ public class LinksetLoader implements LinksetInterface{
         }
         RdfFactory.clear(storeType);
         Reporter.report(storeType + " RDF cleared");
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
-        URLListener listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+        URLListener listener = new SQLUrlMapper(true, storeType);
         Reporter.report(storeType + " SQL cleared");                
     }
 

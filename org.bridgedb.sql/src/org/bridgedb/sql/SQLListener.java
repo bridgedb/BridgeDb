@@ -28,6 +28,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 
 /**
  * This is the root class of the SQL stack.
@@ -69,20 +70,10 @@ public class SQLListener implements MappingListener{
     private final static long REPORT_DELAY = 10000;
     private long lastUpdate = 0;
     
-    /**
-     * 
-     * @param dropTables Flag to dettermine if all tables should be dropped adnd recreated.
-     * @param sqlAccess Access to the specific SQL database being used including if it is the test,load or love.
-     * @param specific Class that hold the parts that are different between different SLQ implementations.
-     * @throws BridgeDbSqlException 
-     */
-    public SQLListener(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws BridgeDbSqlException{
-        if (sqlAccess == null){
-            throw new IllegalArgumentException("sqlAccess can not be null");
-        }
-        this.sqlAccess = sqlAccess;
-        this.supportsIsValid = specific.supportsIsValid();
-        this.autoIncrement = specific.getAutoIncrementCommand();
+    public SQLListener(boolean dropTables, StoreType storeType) throws BridgeDbSqlException{
+        this.sqlAccess = SqlFactory.createTheSQLAccess(storeType);
+        this.supportsIsValid = SqlFactory.supportsIsValid();
+        this.autoIncrement = SqlFactory.getAutoIncrementCommand();
         if (dropTables){
             this.dropSQLTables();
             this.createSQLTables();
@@ -90,7 +81,7 @@ public class SQLListener implements MappingListener{
             checkVersion();
             loadDataSources();
         }
-        if (specific.supportsMultipleInserts()){
+        if (SqlFactory.supportsMultipleInserts()){
             blockSize = MAX_BLOCK_SIZE;
         } else {
             blockSize = 1;
@@ -99,9 +90,8 @@ public class SQLListener implements MappingListener{
         blockCount = blockSize ;
         insertCount = 0;
         doubleCount = 0;    
-
-    }   
-    
+    }
+        
     @Override
     public synchronized int registerMappingSet(DataSource source, String predicate, 
     		String justification, DataSource target, 

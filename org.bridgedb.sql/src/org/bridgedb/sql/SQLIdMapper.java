@@ -31,6 +31,7 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
+import org.bridgedb.utils.StoreType;
 
 /**
  * Builds on the SQLListener to implement the Standard BridgeDB functions of IDMapper and IDMapperCapabilities.
@@ -56,19 +57,10 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
      */
     private final boolean useTop;
     
-    /**
-     * Creates a new BridgeDB implementation based on a connection to the SQL Database.
-     * 
-     * @param dropTables Flag to dettermine if any existing tables should be dropped and new empty tables created.
-     * @param sqlAccess The connection to the actual database. This could be MySQL, Virtuoso ect. 
-     *       It could also be the live database, the loading database or the test database.
-     * @param specific Code to hold the things that are different between different SQL implementaions.
-     * @throws BridgeDbSqlException 
-     */
-    public SQLIdMapper(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws BridgeDbSqlException{
-        super(dropTables, sqlAccess, specific);
-        useLimit = specific.supportsLimit();
-        useTop = specific.supportsTop();
+    public SQLIdMapper(boolean dropTables, StoreType storeType) throws BridgeDbSqlException{
+        super(dropTables, storeType);
+        useLimit = SqlFactory.supportsLimit();
+        useTop = SqlFactory.supportsTop();
      }   
 
     //*** IDMapper Methods 

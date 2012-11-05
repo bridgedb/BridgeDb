@@ -54,7 +54,7 @@ public class TransativeCreatorTest {
     @BeforeClass
     public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
-        TestSqlFactory.createTestSQLAccess();
+        TestSqlFactory.checkSQLAccess();
         
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData( StoreType.TEST);        

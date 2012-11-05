@@ -52,7 +52,9 @@ public class SqlFactory {
     public static final String TEST_SQL_USER_PROPERTY = "TestSqlUser";
     public static final String TEST_SQL_PASSWORD_PROPERTY = "TestSqlPassword";
             
-    private static Properties properties;
+    private static Properties properties; 
+    //TODO get from properties
+    private static boolean useMySQL = true;
     
     /**
      * Create a wrapper around the live SQL Database, 
@@ -60,35 +62,43 @@ public class SqlFactory {
      * @return 
      * @throws BridgeDbSqlException 
      */
-    public static SQLAccess createSQLAccess(StoreType type) throws BridgeDbSqlException {
+    public static SQLAccess createTheSQLAccess(StoreType type) throws BridgeDbSqlException {
         SQLAccess sqlAccess;
-        switch (type){
-            case LIVE:
-                sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlDatabase(), sqlUser(), sqlPassword());
-                break;
-            case LOAD:
-                sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlLoadDatabase(), sqlUser(), sqlPassword());
-                break;
-            case TEST:
-                sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
-                break;
-            default:     
-                throw new UnsupportedOperationException("Unexpected StoreType " + type);
-        }       
+        if (useMySQL){
+            switch (type){
+                case LIVE:
+                    sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlDatabase(), sqlUser(), sqlPassword());
+                    break;
+                case LOAD:
+                    sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlLoadDatabase(), sqlUser(), sqlPassword());
+                    break;
+                case TEST:
+                    sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
+                    break;
+                default:     
+                    throw new UnsupportedOperationException("Unexpected StoreType " + type);
+            } 
+        } else {       
+            switch (type){
+                case LIVE:
+                    sqlAccess = new VirtuosoAccess();;
+                    break;
+                case LOAD:
+                    sqlAccess = new VirtuosoAccess();;
+                    break;
+                case TEST:
+                    sqlAccess = new VirtuosoAccess();;
+                    break;
+                default:     
+                    throw new UnsupportedOperationException("Unexpected StoreType " + type);
+            }
+        }
         sqlAccess.getConnection();
         return sqlAccess;
     }
 
-    /**
-     * Create a wrapper around the Test Virtuosos Database, 
-     *     using the hardcoded database name, user name and password.
-     * @return
-     * @throws BridgeDbSqlException 
-     */
-    public static SQLAccess createTestVirtuosoAccess() throws BridgeDbSqlException {
-        VirtuosoAccess virtuosoAccess = new VirtuosoAccess();
-        virtuosoAccess.getConnection();
-        return virtuosoAccess;
+    public static void setUseMySQL(boolean forceMySQL){
+        useMySQL = forceMySQL;
     }
     
      /**
@@ -223,6 +233,49 @@ public class SqlFactory {
             properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
         }
         return properties;
+    }
+
+    static boolean supportsIsValid() {
+        if (useMySQL){
+            return true;
+        } else {
+            return false;
+        }        
+    }
+
+    static String getAutoIncrementCommand() {
+        if (useMySQL){
+            return "AUTO_INCREMENT";
+        } else {
+            return "IDENTITY";
+        }
+    }
+
+    static boolean supportsMultipleInserts() {
+        if (useMySQL){
+            return true;
+        } else {
+            //TODO work out why this has to be false;
+            return false;
+        }        
+    }
+
+    static boolean supportsLimit() {
+        if (useMySQL){
+            return true;
+        } else {
+            //TODO work out why this has to be false;
+            return false;
+        }        
+    }
+
+    static boolean supportsTop() {
+        if (useMySQL){
+            return false;
+        } else {
+            //TODO work out why this has to be false;
+            return true;
+        }        
     }
           
 }

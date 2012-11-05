@@ -87,8 +87,8 @@ public class TransativeCreator {
       
     private TransativeCreator(int leftId, int rightId, String possibleFileName, StoreType storeType) 
             throws IDMapperException, IOException{
-        sqlAccess = SqlFactory.createSQLAccess(storeType);
-        mapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+        sqlAccess = SqlFactory.createTheSQLAccess(storeType);
+        mapper = new SQLUrlMapper(false, storeType);
         createBufferedWriter(possibleFileName, leftId, rightId);
         leftContext = RdfFactory.getLinksetURL(leftId);
         rightContext = RdfFactory.getLinksetURL(rightId);

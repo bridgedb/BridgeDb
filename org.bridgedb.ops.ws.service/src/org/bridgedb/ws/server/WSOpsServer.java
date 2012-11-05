@@ -80,8 +80,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
 
     public WSOpsServer()  throws IDMapperException   {
         super();
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
-        urlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+        urlMapper = new SQLUrlMapper(false, StoreType.LIVE);
         idMapper = urlMapper;
         formatter = NumberFormat.getInstance();
         if (formatter instanceof DecimalFormat) {

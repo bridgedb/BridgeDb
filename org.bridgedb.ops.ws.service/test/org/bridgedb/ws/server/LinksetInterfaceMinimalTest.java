@@ -44,9 +44,9 @@ public class LinksetInterfaceMinimalTest extends org.bridgedb.linkset.LinksetInt
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        TestSqlFactory.checkSQLAccess();
         new LinksetLoader().clearExistingData(StoreType.TEST);
-        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         wsOpsMapper = new WSOpsMapper(new WSOpsService(sqlUrlMapper)); 
     }
       

@@ -15,6 +15,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLListenerTest;
+import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,8 +26,9 @@ public class SQLUrlMapperTest extends URLListenerTest {
 
 	@BeforeClass
 	public static void beforeClassInitialisation() throws IDMapperException {
-		sqlAccess = TestSqlFactory.createTestSQLAccess();
-		listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+		 TestSqlFactory.checkSQLAccess();
+		sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
+		listener = new SQLUrlMapper(true, StoreType.TEST);
 		loadData();
 		sqlUrlMapper = (SQLUrlMapper) listener;
 	}

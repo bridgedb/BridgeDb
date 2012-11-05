@@ -53,7 +53,7 @@ public class LinksetLoaderTest {
     @BeforeClass
     public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
-        TestSqlFactory.createTestSQLAccess();
+        TestSqlFactory.checkSQLAccess();
         
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
@@ -65,8 +65,8 @@ public class LinksetLoaderTest {
 
     @Test
     public void testMappingInfo() throws IDMapperException {
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
-        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+        TestSqlFactory.checkSQLAccess();
+        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
         assertEquals ("TestDS1", info.getSourceSysCode());
