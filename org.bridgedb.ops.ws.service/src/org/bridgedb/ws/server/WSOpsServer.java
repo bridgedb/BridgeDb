@@ -45,6 +45,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.metadata.validator.ValidationType;
@@ -71,8 +72,10 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     
     private NumberFormat formatter;
     
+    static final Logger logger = Logger.getLogger(WSOpsService.class);
+
     public WSOpsServer()  throws IDMapperException   {
-        Reporter.report("Super setup");
+        super();
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
         urlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
         idMapper = urlMapper;
@@ -82,7 +85,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             dfs.setGroupingSeparator(',');
             ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
         }
-        Reporter.report("WsOpsServer setup");        
+        logger.info("WsOpsServer setup");        
       }
             
     @GET
