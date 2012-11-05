@@ -46,13 +46,14 @@ public class ConfigReader {
         try {
             if (loadByEnviromentVariable(fileName)) return;
             if (loadByCatalinaHomeConfigs(fileName)) return;
+            if (loadFromDirectory(fileName, "../org.bridgedb.utils/resources")) return;
             if (loadFromDirectory(fileName, "resources")) return;
             if (loadDirectly(fileName)) return;
             if (getInputStreamFromResource(fileName)) return;
             if (getInputStreamFromJar(fileName)) return;
         } catch (IOException ex) {
-            error = "Unexpected file not fond exception after file.exists returns true.";
-            throw new IDMapperException("Unexpected file not fond exception after file.exists returns true.", ex);
+            error = "Unexpected IOEXception after doing checks.";
+            throw new IDMapperException(error, ex);
         }
     }
     
