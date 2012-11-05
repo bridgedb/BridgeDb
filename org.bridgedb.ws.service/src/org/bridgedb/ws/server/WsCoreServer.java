@@ -43,8 +43,7 @@ public class WsCoreServer extends WSCoreService {
     static final Logger logger = Logger.getLogger(WsCoreServer.class);
 
     public WsCoreServer() throws IDMapperException {
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
-        idMapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
+        idMapper = new SQLIdMapper(false, StoreType.LIVE);
         logger.info("WsCoreServer setup");
     }
             

@@ -37,6 +37,7 @@ import org.bridgedb.url.UriSpaceMapper;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.StoreType;
 
 /**
  * Implements the URLMapper and URLListener interfaces using SQL.
@@ -58,8 +59,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @param specific Code to hold the things that are different between different SQL implementaions.
      * @throws BridgeDbSqlException
      */
-     public SQLUrlMapper(boolean dropTables, SQLAccess sqlAccess, SQLSpecific specific) throws IDMapperException{
-        super(dropTables, sqlAccess, specific);
+     public SQLUrlMapper(boolean dropTables, StoreType storeType) throws IDMapperException{
+        super(dropTables, storeType);
         if (dropTables){
             try {
                 Map<String,DataSource> mappings = UriSpaceMapper.getUriSpaceMappings();

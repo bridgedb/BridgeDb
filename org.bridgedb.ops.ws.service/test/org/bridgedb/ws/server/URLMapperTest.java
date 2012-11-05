@@ -24,6 +24,7 @@ import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsMapper;
 import org.bridgedb.ws.WSOpsService;
 import org.junit.BeforeClass;
@@ -43,11 +44,11 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        SQLAccess sqlAccess = TestSqlFactory.createTestSQLAccess();
+        TestSqlFactory.checkSQLAccess();
         connectionOk = true;
-        listener = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+        listener = new SQLUrlMapper(true, StoreType.TEST);
         loadData();
-        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         urlMapper = new WSOpsMapper(new WSOpsService(sqlUrlMapper)); 
     }
       

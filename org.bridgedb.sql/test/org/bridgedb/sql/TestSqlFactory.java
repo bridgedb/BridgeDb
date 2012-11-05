@@ -31,11 +31,10 @@ import org.junit.Test;
  */
 public class TestSqlFactory {
 
-    public static SQLAccess createTestSQLAccess() {
+    public static void checkSQLAccess() {
         try {
-            SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.TEST);
+            SQLAccess sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
             sqlAccess.getConnection();
-            return sqlAccess;
         } catch (BridgeDbSqlException ex) {
             System.err.println(ex);
             System.err.println("**** SKIPPPING tests due to Connection error.");
@@ -47,21 +46,17 @@ public class TestSqlFactory {
             System.err.println("1d. Failing that the defaults in SqlFactory.java will be used.");
             System.err.println("2. Full rights for test user on the test database required.");
             org.junit.Assume.assumeTrue(false);        
-            return null;
          }
     } 
 
-    public static SQLAccess createTestVirtuosoAccess() {
-        try {
-            SQLAccess sqlAccess = SqlFactory.createTestVirtuosoAccess();
-            sqlAccess.getConnection();
-            return sqlAccess;
-        } catch (BridgeDbSqlException ex) {
-            System.err.println(ex);
-            System.err.println("**** SKIPPPING Virtuosos tests due to Connection error.");
-            org.junit.Assume.assumeTrue(false);        
-            return null;
-         }
+    public static void checkVirtuosoAccess() {
+        SqlFactory.setUseMySQL(false);
+        checkSQLAccess();
+    }
+
+    public static void checkMySQLAccess() {
+        SqlFactory.setUseMySQL(true);
+        checkSQLAccess();
     }
 
     @Test

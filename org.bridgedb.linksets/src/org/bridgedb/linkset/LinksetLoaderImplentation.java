@@ -162,8 +162,7 @@ public class LinksetLoaderImplentation{
     }
     
     private void linksetLoad() throws IDMapperException{
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
-        URLListener urlListener = new SQLUrlMapper(false, sqlAccess, new MySQLSpecific());
+        URLListener urlListener = new SQLUrlMapper(false, storeType);
         getLinksetContexts(urlListener);
         resetBaseURI();
         loadVoid();
@@ -281,8 +280,7 @@ public class LinksetLoaderImplentation{
     }
         
     private synchronized URI getVoidContext() throws IDMapperException {
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(storeType);
-        SQLIdMapper mapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
+        SQLIdMapper mapper = new SQLIdMapper(false, storeType);
         String oldIDString = mapper.getProperty(LAST_USED_VOID_ID);
         Integer oldId;
         if (oldIDString == null){
