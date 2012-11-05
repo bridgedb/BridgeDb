@@ -31,11 +31,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourceBeanFactory;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
@@ -50,6 +52,8 @@ import org.bridgedb.ws.bean.XrefMapBeanFactory;
 @Path("/")
 public class WSCoreService implements WSCoreInterface {
 
+    static final Logger logger = Logger.getLogger(WSCoreService.class);
+
     protected IDMapper idMapper;
 
     /**
@@ -57,11 +61,14 @@ public class WSCoreService implements WSCoreInterface {
      * 
      * Super classes will have the responsibilites of setting up the idMapper.
      */
-    protected WSCoreService(){
+    protected WSCoreService() throws IDMapperException{
+        ConfigReader.configureLogger();
     }
     
-    public WSCoreService(IDMapper idMapper) {
+    public WSCoreService(IDMapper idMapper) throws IDMapperException {
         this.idMapper = idMapper;
+        ConfigReader.configureLogger();
+        logger.info("WS Service running using supplied urlMapper");
     }
         
     @GET

@@ -37,6 +37,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBElement;
+import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -52,6 +53,7 @@ import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
@@ -81,14 +83,23 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String FILE = "file";     
     public final String NO_RESULT = null;
     
-    protected WSOpsService() {
+    static final Logger logger = Logger.getLogger(WSOpsService.class);
+
+    /**
+     * Defuault constuctor for super classes.
+     * 
+     * Super classes will have the responsibilites of setting up the idMapper.
+     */
+    protected WSOpsService() throws IDMapperException {
+        super();
         this.linksetInterface = new LinksetLoader();
     }
 
-    public WSOpsService(URLMapper urlMapper) {
+    public WSOpsService(URLMapper urlMapper) throws IDMapperException {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
+        logger.info("WS Service running using supplied urlMapper");
     }
 
     @GET

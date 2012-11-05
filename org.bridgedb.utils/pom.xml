@@ -16,5 +16,22 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+         <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jmxri</artifactId>
+                    <groupId>com.sun.jmx</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jmxtools</artifactId>
+                    <groupId>com.sun.jdmk</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>

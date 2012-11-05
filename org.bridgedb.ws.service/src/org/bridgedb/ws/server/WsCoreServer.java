@@ -23,6 +23,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.BridgeDbSqlException;
@@ -39,10 +40,12 @@ import org.bridgedb.ws.WSCoreService;
  */
 public class WsCoreServer extends WSCoreService {
         
-    public WsCoreServer() throws BridgeDbSqlException {
+    static final Logger logger = Logger.getLogger(WsCoreServer.class);
+
+    public WsCoreServer() throws IDMapperException {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
         idMapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
-        Reporter.report("WsCoreServer setup");
+        logger.info("WsCoreServer setup");
     }
             
     @GET

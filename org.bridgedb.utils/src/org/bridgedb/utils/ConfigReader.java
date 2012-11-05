@@ -12,10 +12,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -26,28 +26,48 @@ public class ConfigReader {
     
     public static final String CONFIG_FILE_PATH_PROPERTY = "ConfigPath";
     public static final String CONFIG_FILE_PATH_SOURCE_PROPERTY = "ConfigPathSource";
+    public static final String LOG_PROPERTIES_FILE = "log4j.properties";
+    
     private InputStream inputStream;
     private String findMethod;
     private String foundAt;
     private String error = null;
     private Properties properties;
+    private static boolean loggerSetup = false;
+    
+    static final Logger logger = Logger.getLogger(ConfigReader.class);
     
     public static Properties getProperties(String fileName) throws IDMapperException{
         ConfigReader finder = new ConfigReader(fileName);
+        configureLogger();
         return finder.getProperties();
     }
     
     public static InputStream getInputStream(String fileName) throws IDMapperException{
         ConfigReader finder = new ConfigReader(fileName);
+        configureLogger();
         return finder.getInputStream();
     }
 
+    public static synchronized void configureLogger() throws IDMapperException{
+        if (loggerSetup){
+            return;
+        }
+        ConfigReader finder = new ConfigReader(LOG_PROPERTIES_FILE);
+        Properties props = finder.getProperties();
+        PropertyConfigurator.configure(props);
+        logger.info("Logger configured from " + finder.foundAt + " by " + finder.findMethod);
+        logger.trace("test trace");
+        loggerSetup = true;
+    }
+     
     private ConfigReader(String fileName) throws IDMapperException{
         try {
             if (loadDirectly(fileName)) return;
             if (loadByEnviromentVariable(fileName)) return;
             if (loadByCatalinaHomeConfigs(fileName)) return;
             if (loadFromDirectory(fileName, "../org.bridgedb.utils/resources")) return;
+            if (loadFromDirectory(fileName, "../conf/OPS-IMS")) return;
             if (loadFromDirectory(fileName, "conf/OPS-IMS")) return;
             if (getInputStreamFromResource(fileName)) return;
             if (getInputStreamFromJar(fileName)) return;
@@ -102,7 +122,9 @@ public class ConfigReader {
      */
     private boolean loadByEnviromentVariable(String fileName) throws IDMapperException, FileNotFoundException{
         String envPath = System.getenv().get("OPS-IMS-CONFIG");
-        if (envPath == null || envPath.isEmpty()) return false;
+        if (envPath == null || envPath.isEmpty()) {
+            return false;
+        }
         File envDir = new File(envPath);
         if (!envDir.exists()){
             error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
@@ -133,7 +155,9 @@ public class ConfigReader {
      */
     private boolean loadByCatalinaHomeConfigs(String fileName) throws IDMapperException, FileNotFoundException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
-        if (catalinaHomePath == null || catalinaHomePath.isEmpty()) return false;
+        if (catalinaHomePath == null || catalinaHomePath.isEmpty()) {
+            return false;
+        }
         File catalineHomeDir = new File(catalinaHomePath);
         if (!catalineHomeDir.exists()){
             error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
@@ -172,6 +196,7 @@ public class ConfigReader {
      */
     private boolean loadFromDirectory(String fileName, String directoryName) throws IDMapperException, FileNotFoundException {
         File directory = new File (directoryName);
+        System.out.println(directory.getAbsolutePath());
         if (!directory.exists()) {
             return false;
         }
