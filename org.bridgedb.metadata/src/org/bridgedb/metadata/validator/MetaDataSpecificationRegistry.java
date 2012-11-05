@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.MetaDataSpecification;
-import org.bridgedb.utils.InputStreamFinder;
 
 /**
  *
