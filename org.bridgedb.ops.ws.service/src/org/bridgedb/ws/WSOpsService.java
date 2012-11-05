@@ -76,12 +76,12 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String FILE = "file";     
     public final String NO_RESULT = null;
     
-    protected WSOpsService() {
+    protected WSOpsService() throws IDMapperException {
         this.linksetInterface = new LinksetLoader();
         Reporter.report("WS Server running");
     }
 
-    public WSOpsService(URLMapper urlMapper) {
+    public WSOpsService(URLMapper urlMapper) throws IDMapperException {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();

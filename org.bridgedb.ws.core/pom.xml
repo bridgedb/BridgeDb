@@ -23,7 +23,7 @@
 	<dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb</artifactId>
+			<artifactId>org.bridgedb.utils</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

@@ -12,11 +12,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.Properties;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -27,22 +26,41 @@ public class ConfigReader {
     
     public static final String CONFIG_FILE_PATH_PROPERTY = "ConfigPath";
     public static final String CONFIG_FILE_PATH_SOURCE_PROPERTY = "ConfigPathSource";
+    public static final String LOG_PROPERTIES_FILE = "log4j.properties";
+    
     private InputStream inputStream;
     private String findMethod;
     private String foundAt;
     private String error = null;
     private Properties properties;
+    private static boolean loggerSetup = false;
+    
+    static final Logger logger = Logger.getLogger(ConfigReader.class);
     
     public static Properties getProperties(String fileName) throws IDMapperException{
         ConfigReader finder = new ConfigReader(fileName);
+        configureLogger();
         return finder.getProperties();
     }
     
     public static InputStream getInputStream(String fileName) throws IDMapperException{
         ConfigReader finder = new ConfigReader(fileName);
+        configureLogger();
         return finder.getInputStream();
     }
 
+    public static synchronized void configureLogger() throws IDMapperException{
+        if (loggerSetup){
+            return;
+        }
+        ConfigReader finder = new ConfigReader(LOG_PROPERTIES_FILE);
+        Properties props = finder.getProperties();
+        PropertyConfigurator.configure(props);
+        logger.info("Logger configured from " + finder.foundAt + " by " + finder.findMethod);
+        logger.trace("test trace");
+        loggerSetup = true;
+    }
+     
     private ConfigReader(String fileName) throws IDMapperException{
         try {
             if (loadDirectly(fileName)) return;

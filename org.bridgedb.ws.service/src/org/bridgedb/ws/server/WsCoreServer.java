@@ -39,7 +39,7 @@ import org.bridgedb.ws.WSCoreService;
  */
 public class WsCoreServer extends WSCoreService {
         
-    public WsCoreServer() throws BridgeDbSqlException {
+    public WsCoreServer() throws IDMapperException {
         SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.LIVE);
         idMapper = new SQLIdMapper(false, sqlAccess, new MySQLSpecific());
         Reporter.report("WsCoreServer setup");
