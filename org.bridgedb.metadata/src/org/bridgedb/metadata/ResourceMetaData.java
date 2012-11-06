@@ -119,7 +119,6 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     @Override
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         appendSpecific(builder, tabLevel);
-        newLine(builder);
         if (type.equals(UNSPECIFIED)){
             if (includeWarnings){
                 tab(builder, tabLevel+1);
@@ -144,6 +143,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     void appendSpecific(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append(label);
+        newLine(builder);  
     }
      
     public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel){
@@ -164,7 +164,6 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             }
         } else if (includeWarnings) {
             appendSpecific(builder, tabLevel);
-            newLine(builder);
             if (hasRequiredValues()) {
                 tab(builder, tabLevel+1);
                 builder.append("All Required values found and correctly typed. ");
@@ -201,7 +200,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             builder.append(" has an unspecified type of ");
             builder.append(resourceType);
         } else {
-            appendSpecific(builder, tabLevel);
+            tab(builder, tabLevel);
+            builder.append(label);
             if (this.hasCorrectTypes()){
                 if (this.hasRequiredValues()){
                     builder.append(" OK!");
