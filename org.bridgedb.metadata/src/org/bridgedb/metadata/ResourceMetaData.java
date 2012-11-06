@@ -119,7 +119,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     @Override
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
         appendSpecific(builder, tabLevel);
-        if (type.equals(UNSPECIFIED)){
+         if (type.equals(UNSPECIFIED)){
             if (includeWarnings){
                 tab(builder, tabLevel+1);
                 builder.append("INFO: ");
@@ -137,13 +137,18 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
                 newLine(builder);               
             }
         }
+        newLine(builder);
     }
 
-    @Override
-    void appendSpecific(StringBuilder builder, int tabLevel) {
+    private void appendSpecificNoNewLine(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         builder.append(label);
-        newLine(builder);  
+    }
+    
+    @Override
+    void appendSpecific(StringBuilder builder, int tabLevel) {
+        appendSpecificNoNewLine(builder, tabLevel);
+        newLine(builder);
     }
      
     public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel){
@@ -152,15 +157,18 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
         } else if (!this.hasCorrectTypes()) {
             //Report all to pick up the incorrect type
-            tab(builder, tabLevel);
-            builder.append(label);
-            newLine(builder);
-            tab(builder, tabLevel+1);
-            builder.append(" has a type ");
-            builder.append(resourceType);
-            newLine(builder);
+            appendSpecific(builder, tabLevel);
             for (MetaDataBase child:childMetaData){
-                child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
+                child.appendValidityReport(builder, false, false, tabLevel + 1);
+            }
+            if (hasRequiredValues()) {
+                tab(builder, tabLevel+1);
+                builder.append("All Required values found but above incorrectly typed. ");
+                newLine(builder);
+            } else {
+                tab(builder, tabLevel+1);
+                builder.append("WARNING: Incomplete so can only be used as a superset ");
+                newLine(builder);                
             }
         } else if (includeWarnings) {
             appendSpecific(builder, tabLevel);
@@ -200,8 +208,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             builder.append(" has an unspecified type of ");
             builder.append(resourceType);
         } else {
-            tab(builder, tabLevel);
-            builder.append(label);
+            appendSpecificNoNewLine(builder, tabLevel);
             if (this.hasCorrectTypes()){
                 if (this.hasRequiredValues()){
                     builder.append(" OK!");

@@ -40,7 +40,7 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
  
     @Test
     public void testIgnoreBadTypes() throws MetaDataException{
-        Reporter.report("Linkset HasCorrectTypes");
+        Reporter.report("Linkset IgnoreBadTypes");
         Set<Statement> statements = loadMinLinkSet();
         d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
         statements.add(d1ModifiedStatement);

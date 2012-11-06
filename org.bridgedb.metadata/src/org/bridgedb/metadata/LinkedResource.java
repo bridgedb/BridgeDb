@@ -251,7 +251,27 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     builder.append(" is missing. ");
                     newLine(builder);
                 } else {
-                    rmd.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel + 1);
+                    String linkReport = rmd.validityReport(includeWarnings);
+                    if (linkReport.contains("ERROR")) {
+                        tab(builder, tabLevel);
+                        builder.append("ERROR: ");
+                        builder.append(name);
+                        if (!rmd.hasCorrectTypes()){ 
+                            if (!rmd.hasRequiredValues()) {
+                                builder.append(" has missing values and incorrect types. ");
+                            } else {
+                                builder.append(" has incorrect types. ");
+                            }
+                        } else {
+                            builder.append(" has missing values. ");
+                        }
+                        newLine(builder, tabLevel + 1);
+                        builder.append("Please check id pointed to by predicate ");
+                        builder.append(predicate);
+                        newLine(builder, tabLevel + 1);
+                        rmd.appendSpecific(builder, tabLevel+2);
+                        newLine(builder);
+                    }
                 }
             }
         }
