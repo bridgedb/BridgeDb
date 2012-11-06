@@ -49,7 +49,7 @@ public class ConfigReader {
         return finder.getInputStream();
     }
 
-    public static synchronized void configureLogger() throws IDMapperException{
+    public static synchronized void configureLogger() throws BridgeDBException{
         if (loggerSetup){
             return;
         }
@@ -61,7 +61,7 @@ public class ConfigReader {
         loggerSetup = true;
     }
      
-    private ConfigReader(String fileName) throws IDMapperException{
+    private ConfigReader(String fileName) throws BridgeDBException{
         try {
             if (loadDirectly(fileName)) return;
             if (loadByEnviromentVariable(fileName)) return;
@@ -73,22 +73,22 @@ public class ConfigReader {
             if (getInputStreamFromJar(fileName)) return;
         } catch (IOException ex) {
             error = "Unexpected IOEXception after doing checks.";
-            throw new IDMapperException(error, ex);
+            throw new BridgeDBException(error, ex);
         }
     }
     
-    private InputStream getInputStream() throws IDMapperException{
+    private InputStream getInputStream() throws BridgeDBException{
         if (error != null){
-            throw new IDMapperException(error);
+            throw new BridgeDBException(error);
         }
         if (inputStream == null){
             error = "InputStream already closed. Illegal attempt to use again.";         
-            throw new IDMapperException(error);
+            throw new BridgeDBException(error);
         }
         return inputStream;
     }
     
-    private Properties getProperties() throws IDMapperException{
+    private Properties getProperties() throws BridgeDBException{
         if (properties == null){
             properties = new Properties();
             try {
@@ -99,7 +99,7 @@ public class ConfigReader {
                 inputStream = null;
             } catch (IOException ex) {
                 error = "Unexpected file not fond exception after file.exists returns true.";
-                throw new IDMapperException("Unexpected file not fond exception after file.exists returns true.", ex);
+                throw new BridgeDBException("Unexpected file not fond exception after file.exists returns true.", ex);
             }
         }
         return properties;
@@ -120,7 +120,7 @@ public class ConfigReader {
      * @throws IOException Thrown if the environment variable is not null, 
      *    and the config file is not found as indicated, or could not be read.
      */
-    private boolean loadByEnviromentVariable(String fileName) throws IDMapperException, FileNotFoundException{
+    private boolean loadByEnviromentVariable(String fileName) throws BridgeDBException, FileNotFoundException{
         String envPath = System.getenv().get("OPS-IMS-CONFIG");
         if (envPath == null || envPath.isEmpty()) {
             return false;
@@ -129,7 +129,7 @@ public class ConfigReader {
         if (!envDir.exists()){
             error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
                     " but no directory found there";
-            throw new IDMapperException (error);
+            throw new BridgeDBException (error);
         }
         if (envDir.isDirectory()){
             File file = new File(envDir, fileName);
@@ -143,7 +143,7 @@ public class ConfigReader {
         } else {
             String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
                     " but is not a directory";
-            throw new IDMapperException (error);
+            throw new BridgeDBException (error);
         }
     }
   
@@ -153,7 +153,7 @@ public class ConfigReader {
      * @throws IOException Thrown if the environment variable is not null, 
      *    and the config file is not found as indicated, or could not be read.
      */
-    private boolean loadByCatalinaHomeConfigs(String fileName) throws IDMapperException, FileNotFoundException {
+    private boolean loadByCatalinaHomeConfigs(String fileName) throws BridgeDBException, FileNotFoundException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
         if (catalinaHomePath == null || catalinaHomePath.isEmpty()) {
             return false;
@@ -162,12 +162,12 @@ public class ConfigReader {
         if (!catalineHomeDir.exists()){
             error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
                     " but no directory found there";
-            throw new IDMapperException (error);
+            throw new BridgeDBException(error);
         }
         if (!catalineHomeDir.isDirectory()){
             error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath + 
                     " but is not a directory";
-            throw new IDMapperException(error);
+            throw new BridgeDBException(error);
         }
         File envDir = new File (catalineHomeDir + "/conf/OPS-IMS");
         if (!envDir.exists()) return false; //No hard requirements that catalineHome has a /conf/OPS-IMS
@@ -183,7 +183,7 @@ public class ConfigReader {
         } else {
             error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath  + 
                     " but $CATALINA_HOME/conf/OPS-IMS is not a directory";
-            throw new IDMapperException (error);
+            throw new BridgeDBException (error);
        }
     }
     
@@ -194,7 +194,7 @@ public class ConfigReader {
      * @return True if the file was found, False if it was not found.
      * @throws IOException If there is an error reading the file.
      */
-    private boolean loadFromDirectory(String fileName, String directoryName) throws IDMapperException, FileNotFoundException {
+    private boolean loadFromDirectory(String fileName, String directoryName) throws FileNotFoundException {
         File directory = new File (directoryName);
         System.out.println(directory.getAbsolutePath());
         if (!directory.exists()) {

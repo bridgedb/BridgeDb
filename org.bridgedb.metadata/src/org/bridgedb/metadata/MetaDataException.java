@@ -5,20 +5,15 @@
 package org.bridgedb.metadata;
 
 import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
  * @author Christian
  */
-public class MetaDataException extends IDMapperException {
+public class MetaDataException extends BridgeDBException {
 
-    /**
-     * Creates a new instance of <code>MetaDataException</code> without detail message.
-     */
-    public MetaDataException() {
-    }
-
-    /**
+     /**
      * Constructs an instance of <code>MetaDataException</code> with the specified detail message.
      * @param msg the detail message.
      */

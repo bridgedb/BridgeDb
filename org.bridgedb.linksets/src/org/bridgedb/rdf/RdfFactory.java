@@ -76,7 +76,7 @@ public class RdfFactory {
                 try {
                     String path = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_PROPERTY);
                     String source = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_SOURCE_PROPERTY);
-                    throw new IDMapperException ("Unable to open repository. Possible cause is unable to write to " +
+                    throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
                             testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
                 } catch (IDMapperLinksetException ex1) {
                     Logger.getLogger(RdfFactory.class.getName()).log(Level.SEVERE, null, ex1);

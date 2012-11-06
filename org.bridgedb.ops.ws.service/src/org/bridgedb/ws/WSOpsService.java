@@ -49,6 +49,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
@@ -102,8 +103,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Override
     public List<URLMappingBean> mapURL(@QueryParam("URL") String URL,
             @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
-        if (URL == null) throw new IDMapperException("URL parameter missing.");
-        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
+        if (URL == null) throw new BridgeDBException("URL parameter missing.");
+        if (URL.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");
         String[] targetURISpaces = new String[targetURISpace.size()];
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
@@ -121,8 +122,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/URLExists")
     @Override
     public URLExistsBean URLExists(@QueryParam("URL") String URL) throws IDMapperException {
-        if (URL == null) throw new IDMapperException("URL parameter missing.");
-        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
+        if (URL == null) throw new BridgeDBException("URL parameter missing.");
+        if (URL.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");
         boolean exists = urlMapper.uriExists(URL);
         return new URLExistsBean(URL, exists);
     }
@@ -133,8 +134,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Override
     public URLSearchBean URLSearch(@QueryParam("text") String text,
             @QueryParam("limit") String limitString) throws IDMapperException {
-        if (text == null) throw new IDMapperException("text parameter missing.");
-        if (text.isEmpty()) throw new IDMapperException("text parameter may not be null.");
+        if (text == null) throw new BridgeDBException("text parameter missing.");
+        if (text.isEmpty()) throw new BridgeDBException("text parameter may not be null.");
         if (limitString == null || limitString.isEmpty()){
             Set<String> urls = urlMapper.urlSearch(text, Integer.MAX_VALUE);
             return new URLSearchBean(text, urls);
@@ -150,8 +151,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/toXref")
     @Override
     public XrefBean toXref(@QueryParam("URL") String URL) throws IDMapperException {
-        if (URL == null) throw new IDMapperException("URL parameter missing.");
-        if (URL.isEmpty()) throw new IDMapperException("URL parameter may not be null.");
+        if (URL == null) throw new BridgeDBException("URL parameter missing.");
+        if (URL.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");
         Xref xref = urlMapper.toXref(URL);
         return XrefBeanFactory.asBean(xref);
     }
@@ -160,7 +161,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mapping")
     public URLMappingBean getMapping() throws IDMapperException {
-        throw new IDMapperException("id path parameter missing.");
+        throw new BridgeDBException("id path parameter missing.");
     }
 
     @Override
@@ -168,8 +169,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mapping/{id}")
     public URLMappingBean getMapping(@PathParam("id") String idString) throws IDMapperException {
-        if (idString == null) throw new IDMapperException("id path parameter missing.");
-        if (idString.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
+        if (idString == null) throw new BridgeDBException("id path parameter missing.");
+        if (idString.isEmpty()) throw new BridgeDBException("id path parameter may not be null.");
         int id = Integer.parseInt(idString);
         URLMapping mapping = urlMapper.getMapping(id);
         return URLMappingBeanFactory.asBean(mapping);
@@ -219,8 +220,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getMappingSetInfo/{id}")
     public MappingSetInfoBean getMappingSetInfo(@PathParam("id") String idString) throws IDMapperException {
-        if (idString == null) throw new IDMapperException("id path parameter missing.");
-        if (idString.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
+        if (idString == null) throw new BridgeDBException("id path parameter missing.");
+        if (idString.isEmpty()) throw new BridgeDBException("id path parameter may not be null.");
         int id = Integer.parseInt(idString);
         MappingSetInfo info = urlMapper.getMappingSetInfo(id);
         return MappingSetInfoBeanFactory.asBean(info);
@@ -230,7 +231,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/dataSource")
     public DataSourceUriSpacesBean getDataSource() throws IDMapperException {
-        throw new IDMapperException("id path parameter missing.");
+        throw new BridgeDBException("id path parameter missing.");
     }
 
     @GET
@@ -238,8 +239,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Override
     @Path("/dataSource/{id}")
     public DataSourceUriSpacesBean getDataSource(@PathParam("id") String id) throws IDMapperException {
-        if (id == null) throw new IDMapperException("id path parameter missing.");
-        if (id.isEmpty()) throw new IDMapperException("id path parameter may not be null.");
+        if (id == null) throw new BridgeDBException("id path parameter missing.");
+        if (id.isEmpty()) throw new BridgeDBException("id path parameter may not be null.");
         Set<String> urls = urlMapper.getUriSpaces(id);
         DataSource ds = DataSource.getBySystemCode(id);
         DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);

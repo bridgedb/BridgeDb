@@ -4,6 +4,7 @@
  */
 package org.bridgedb.linkset;
 
+import org.bridgedb.rdf.IDMapperLinksetException;
 import org.junit.Ignore;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -48,7 +49,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
             writer.endRDF();
             return stringOutputStream.toString();
         } catch (Throwable ex) {
-            throw new IDMapperException ("Error extracting rdf.", ex);
+            throw new IDMapperLinksetException ("Error extracting rdf.", ex);
         }
     }
 

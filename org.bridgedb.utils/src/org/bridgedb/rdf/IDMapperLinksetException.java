@@ -19,20 +19,15 @@
 package org.bridgedb.rdf;
 
 import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * Exception thrown while working with Linksets
  * @author Christian
  */
-public class IDMapperLinksetException extends IDMapperException {
+public class IDMapperLinksetException extends BridgeDBException {
 
-    /**
-     * Creates a new instance of <code>IDMapperLinksetException</code> without detail message.
-     */
-    public IDMapperLinksetException() {
-    }
-
-    /**
+     /**
      * Constructs an instance of <code>IDMapperLinksetException</code> with the specified detail message.
      * @param msg the detail message.
      */

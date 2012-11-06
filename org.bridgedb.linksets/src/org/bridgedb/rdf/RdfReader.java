@@ -71,7 +71,7 @@ public class RdfReader implements LinkSetStore{
             String result = rdfWrapper.getRDF(resource);
             return result;
         } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Unable to read RDF", ex);
+            throw new IDMapperLinksetException("Unable to read RDF", ex);
         } finally {
             shutDown(rdfWrapper);
         }
@@ -85,7 +85,7 @@ public class RdfReader implements LinkSetStore{
             List<Statement> result = rdfWrapper.getStatementList(resource, RdfWrapper.ANY_PREDICATE, RdfWrapper.ANY_OBJECT);
             return result;
         } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Unable to read RDF", ex);
+            throw new IDMapperLinksetException("Unable to read RDF", ex);
         } finally {
             shutDown(rdfWrapper);
         }
@@ -100,7 +100,7 @@ public class RdfReader implements LinkSetStore{
             rdfWrapper = RdfFactory.setupConnection(storeType);       
             return getSuperSet(resource, rdfWrapper, allReadyChecked);
         } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Unable to read RDF", ex);
+            throw new IDMapperLinksetException("Unable to read RDF", ex);
         } finally {
             shutDown(rdfWrapper);
         }
@@ -127,7 +127,7 @@ public class RdfReader implements LinkSetStore{
             try {
                 rdfWrapper.shutdown();
             } catch (RDFHandlerException ex) {
-                throw new IDMapperException ("Error shuting down RDFWrapper ", ex);
+                throw new IDMapperLinksetException ("Error shuting down RDFWrapper ", ex);
             }
         }
     }
