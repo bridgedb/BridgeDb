@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.bridgedb.rdf.StatementReader;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -23,39 +24,26 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private boolean isParent = false;
     private boolean directlyLinkedTo = false;
     private static String UNSPECIFIED = "unspecified";
-    
+    private String label; 
+
     ResourceMetaData(URI type) {
         super(type.getLocalName(), UNSPECIFIED, RequirementLevel.SHOULD, new ArrayList<MetaDataBase>());
         childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
         this.resourceType = type;
+        label = "(" + type + ") ";
     }
     
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
         super(type.getLocalName(), type.getLocalName(), RequirementLevel.SHOULD, childMetaData);
         childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
         this.resourceType = type;
+        label = "(" + type + ") ";
     }
-    
-    //ResourceMetaData(Element element) throws MetaDataException {
-    //    super(element);
-    //    childMetaData.add(PropertyMetaData.getTypeProperty());
-    //    String typeSt = element.getAttribute(SchemaConstants.TYPE);
-    //    type = new URIImpl(typeSt);
-    //}
-    
-    /*public static ResourceMetaData getUntypedResource(Resource id){
-        String name;
-        if (id instanceof URI){
-            name = ((URI)id).getLocalName();
-        } else {
-            name = id.stringValue();
-        }
-        return new ResourceMetaData(name);
-    }*/
-    
+        
     private ResourceMetaData(ResourceMetaData other) {
         super(other);
         this.resourceType = other.resourceType;
+        label = "(" + type + ") ";
     }
 
     /*private ResourceMetaData(String name){
@@ -74,6 +62,17 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         }
     }
 
+    void setupValues(Resource id){
+        super.setupValues(id);
+        if (id.stringValue().startsWith(StatementReader.DEFAULT_BASE_URI)){
+            label = id.stringValue().substring(StatementReader.DEFAULT_BASE_URI.length());
+        } else {
+            label = id.stringValue();
+        }    
+        if (!UNSPECIFIED.equals(type)){
+            label = "(" + type + ") " + label;
+        }
+    }
     private Set<URI> getUsedPredicates(Set<Statement> data){
         Set<URI> results = new HashSet<URI>();
         for (Statement statement: data){
@@ -144,10 +143,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     @Override
     void appendSpecific(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
-        builder.append("(");
-        builder.append(type);
-        builder.append(") ");
-        builder.append(id);
+        builder.append(label);
     }
      
     public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel){
@@ -157,7 +153,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         } else if (!this.hasCorrectTypes()) {
             //Report all to pick up the incorrect type
             tab(builder, tabLevel);
-            builder.append(id);
+            builder.append(label);
             newLine(builder);
             tab(builder, tabLevel+1);
             builder.append(" has a type ");
@@ -201,7 +197,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     public void appendSummary(StringBuilder builder, int tabLevel) {
         tab(builder, tabLevel);
         if (type.equals(UNSPECIFIED)){
-            builder.append(id);
+            builder.append(label);
             builder.append(" has an unspecified type of ");
             builder.append(resourceType);
         } else {

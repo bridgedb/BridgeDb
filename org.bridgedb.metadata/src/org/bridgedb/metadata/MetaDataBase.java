@@ -23,7 +23,6 @@ import org.w3c.dom.Element;
 public abstract class MetaDataBase extends AppendBase implements MetaData{
     
     Resource id;
-    private String label; 
     final String type;
     final String name;
     final String documentation;
@@ -41,7 +40,6 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
         this.name = name;
         this.type = type;
         this.requirementLevel = requirementLevel;
-        label = "(" + type + ") ";
         this.documentation = MetaDataSpecification.getDocumentationRoot();
     }
     
@@ -49,7 +47,6 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
         this.name = other.name;
         this.type = other.type;
         this.requirementLevel = other.requirementLevel;
-        label = "(" + type + ") ";
         this.documentation = other.documentation;
     }
     
@@ -57,13 +54,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
     abstract void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection);
 
     void setupValues(Resource id){
-        this.id = id;
-        if (id.stringValue().startsWith(StatementReader.DEFAULT_BASE_URI)){
-            label = "(" + type + ") " + id.stringValue().substring(StatementReader.DEFAULT_BASE_URI.length());
-        } else {
-            label = "(" + type + ") " + id.stringValue();
-        }
-        
+        this.id = id;       
     }
     
     final void addDocumentationLink(StringBuilder builder, int tabLevel) {
