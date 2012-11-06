@@ -149,7 +149,7 @@ public class LinksetLoaderImplentation{
     
     protected synchronized void load() throws IDMapperException{
         if (storeType == null){
-            throw new IDMapperException ("Illegal call to load() with StoreType == null");
+            throw new IDMapperLinksetException ("Illegal call to load() with StoreType == null");
         }
         if (validationType.isLinkset()){
             linksetLoad();
@@ -239,14 +239,14 @@ public class LinksetLoaderImplentation{
             addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI);
             addInverse(rdfWrapper, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
         } catch (RDFHandlerException ex) {
-            throw new IDMapperException("Error loading RDF ", ex);
+            throw new IDMapperLinksetException("Error loading RDF ", ex);
         } finally {
             try {
                 if (rdfWrapper != null){
                     rdfWrapper.shutdown();
                 }
             } catch (RDFHandlerException ex) {
-                throw new IDMapperException("Error loading RDF " + ex);
+                throw new IDMapperLinksetException("Error loading RDF " + ex);
             }
         }
     }

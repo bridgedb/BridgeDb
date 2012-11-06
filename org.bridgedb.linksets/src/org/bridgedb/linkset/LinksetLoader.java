@@ -128,10 +128,10 @@ public class LinksetLoader implements LinksetInterface{
     public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
             throws IDMapperException {
         if (fileName == null){
-            throw new IDMapperException("File name may not be null");
+            throw new IDMapperLinksetException("File name may not be null");
         }
         if (fileName.trim().isEmpty()){
-            throw new IDMapperException("File name may not be empty");
+            throw new IDMapperLinksetException("File name may not be empty");
         }
         File file = new File(fileName.trim());
         return validityFile(file, storeType, type, includeWarnings);
@@ -163,7 +163,7 @@ public class LinksetLoader implements LinksetInterface{
     private void load(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
         if (storeType == null){
-            throw new IDMapperException ("Can not load if no storeType set");
+            throw new IDMapperLinksetException ("Can not load if no storeType set");
         }
     	if (!file.exists()) {
     		Reporter.report("File not found: " + file.getAbsolutePath());
@@ -219,7 +219,7 @@ public class LinksetLoader implements LinksetInterface{
     public void clearExistingData (StoreType storeType) 
     		throws IDMapperException  {
         if (storeType == null){
-            throw new IDMapperException ("unable to clear mapping of unspecified storeType");
+            throw new IDMapperLinksetException ("unable to clear mapping of unspecified storeType");
         }
         RdfFactory.clear(storeType);
         Reporter.report(storeType + " RDF cleared");

@@ -62,6 +62,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapping;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsService;
@@ -483,7 +484,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mappingSet")
     public String mappingSet() throws IDMapperException {
-        throw new IDMapperException("Parameter id is missing");
+        throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
@@ -491,7 +492,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/mappingSet/{id}")
     public String mappingSet(@PathParam("id") String idString) throws IDMapperException {
         if (idString == null || idString.isEmpty()){
-            throw new IDMapperException("Parameter id is missing!");
+            throw new BridgeDBException("Parameter id is missing!");
         }
         Integer id = Integer.parseInt(idString);
         return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
@@ -501,7 +502,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/linkset")
     public String linkset() throws IDMapperException {
-        throw new IDMapperException("Parameter id is missing");
+        throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
@@ -509,7 +510,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/linkset/{id}")
     public String linksetSet(@PathParam("id") String idString) throws IDMapperException {
         if (idString == null || idString.isEmpty()){
-            throw new IDMapperException("Parameter id is missing!");
+            throw new BridgeDBException("Parameter id is missing!");
         }
         Integer id = Integer.parseInt(idString);
         return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
@@ -519,7 +520,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/linkset/{id}/{resource}")
     public String linksetSet(@PathParam("id") String idString, @PathParam("resource") String resource) throws IDMapperException {
-        throw new IDMapperException("id= "+ idString + " resource = " + resource);
+        throw new BridgeDBException("id= "+ idString + " resource = " + resource);
         //if (idString == null || idString.isEmpty()){
        //     throw new IDMapperException("Parameter id is missing!");
         //}
@@ -531,7 +532,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/void")
     public String voidInfo() throws IDMapperException {
-        throw new IDMapperException("Parameter id is missing");
+        throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
@@ -539,7 +540,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/void/{id}")
     public String voidInfo(@PathParam("id") String idString) throws IDMapperException {
         if (idString == null || idString.isEmpty()){
-            throw new IDMapperException("Parameter id is missing");
+            throw new BridgeDBException("Parameter id is missing");
         }
         Integer id = Integer.parseInt(idString);
         return new RdfReader(StoreType.LIVE).getVoidRDF(id);

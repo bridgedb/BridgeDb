@@ -448,10 +448,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             ResultSet rs = statement.executeQuery(query.toString());
             List<MappingSetInfo> results = resultSetToMappingSetInfos(rs);
             if (results.isEmpty()){
-                throw new IDMapperException ("No mappingSet found with id " + mappingSetId);
+                throw new BridgeDbSqlException ("No mappingSet found with id " + mappingSetId);
             }
             if (results.size() > 1){
-                throw new IDMapperException (results.size() + " mappingSets found with id " + mappingSetId);
+                throw new BridgeDbSqlException (results.size() + " mappingSets found with id " + mappingSetId);
             }
             return results.get(0);
         } catch (SQLException ex) {

@@ -19,12 +19,13 @@
 package org.bridgedb.sql;
 
 import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * A BridgeDB Exception thrown by the SQL modules.
  * @author Christian
  */
-public class BridgeDbSqlException extends IDMapperException{
+public class BridgeDbSqlException extends BridgeDBException{
 
     public BridgeDbSqlException(String msg, Exception ex) {
         super(msg, ex);

@@ -46,6 +46,7 @@ import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.url.URLMapper;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
@@ -98,7 +99,7 @@ public class TransativeCreator {
             URI predicate, URI license, URI derivedBy) 
             throws RDFHandlerException, IOException, IDMapperException{
         if (license != null && derivedBy == null){
-            throw new IDMapperException("To change the " + LICENSE + " you must declare who you are using the " + 
+            throw new BridgeDBException("To change the " + LICENSE + " you must declare who you are using the " + 
                     DERIVED_BY + " parameter.");
         }
         TransativeCreator creator = new TransativeCreator(leftId, rightId, possibleFileName, storeType);
@@ -156,11 +157,11 @@ public class TransativeCreator {
         MappingSetInfo leftInfo = mapper.getMappingSetInfo(leftId);
         MappingSetInfo rightInfo = mapper.getMappingSetInfo(rightId);
         if (!leftInfo.getTargetSysCode().equals(rightInfo.getSourceSysCode())){
-            throw new IDMapperException ("Target of mappingSet " + leftId  + " is " + leftInfo.getTargetSysCode() 
+            throw new BridgeDBException ("Target of mappingSet " + leftId  + " is " + leftInfo.getTargetSysCode() 
                 + " Which is not the same as the Source of " + rightId + " which is " + rightInfo.getSourceSysCode());
         }
         if (leftInfo.getSourceSysCode().equals(rightInfo.getTargetSysCode())){
-            throw new IDMapperException ("Source of mappingSet " + leftId  + "(" + leftInfo.getTargetSysCode() +")"
+            throw new BridgeDBException ("Source of mappingSet " + leftId  + "(" + leftInfo.getTargetSysCode() +")"
                 + " is the same as the Target of " + rightId + ". No need for a transative mapping");
         }
     }

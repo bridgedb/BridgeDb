@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 
 /**
@@ -108,7 +109,7 @@ public class ValidationBean {
         if (exception == null || exception.isEmpty()){
             return report;
         }
-        throw new IDMapperException(exception);
+        throw new BridgeDBException(exception);
     }
 
     /**

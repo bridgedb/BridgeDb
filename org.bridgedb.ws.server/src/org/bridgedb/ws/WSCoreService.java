@@ -37,6 +37,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourceBeanFactory;
@@ -94,7 +95,7 @@ public class WSCoreService implements WSCoreInterface {
     public List<XrefBean> freeSearch(
             @QueryParam("text") String text,
             @QueryParam("limit") String limitString) throws IDMapperException {
-        if (text == null) throw new IDMapperException("text parameter missing");
+        if (text == null) throw new BridgeDBException("text parameter missing");
         if (limitString == null || limitString.isEmpty()){
             Set<Xref> mappings = idMapper.freeSearch(text, Integer.MAX_VALUE);
             return setXrefToListXrefBeans(mappings);
@@ -121,11 +122,11 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam("id") List<String> id,
             @QueryParam("code") List<String> scrCode,
             @QueryParam("targetCode") List<String> targetCodes) throws IDMapperException {
-        if (id == null) throw new IDMapperException("id parameter missing");
-        if (id.isEmpty()) throw new IDMapperException("id parameter missing");
-        if (scrCode == null) throw new IDMapperException("code parameter missing");
-        if (scrCode.isEmpty()) throw new IDMapperException("code parameter missing");
-        if (id.size() != scrCode.size()) throw new IDMapperException("Must have same number of id and code parameters");
+        if (id == null) throw new BridgeDBException("id parameter missing");
+        if (id.isEmpty()) throw new BridgeDBException("id parameter missing");
+        if (scrCode == null) throw new BridgeDBException("code parameter missing");
+        if (scrCode.isEmpty()) throw new BridgeDBException("code parameter missing");
+        if (id.size() != scrCode.size()) throw new BridgeDBException("Must have same number of id and code parameters");
         ArrayList<Xref> srcXrefs = new ArrayList<Xref>();
         for (int i = 0; i < id.size() ;i++){
             DataSource dataSource = DataSource.getBySystemCode(scrCode.get(i));
@@ -154,8 +155,8 @@ public class WSCoreService implements WSCoreInterface {
     public XrefExistsBean xrefExists( 
             @QueryParam("id") String id,
             @QueryParam("code") String scrCode) throws IDMapperException {
-        if (id == null) throw new IDMapperException ("\"id\" parameter can not be null");
-        if (scrCode == null) throw new IDMapperException ("\"code\" parameter can not be null");            
+        if (id == null) throw new BridgeDBException ("\"id\" parameter can not be null");
+        if (scrCode == null) throw new BridgeDBException ("\"code\" parameter can not be null");            
         DataSource dataSource = DataSource.getBySystemCode(scrCode);
         Xref source = new Xref(id, dataSource);
         return XrefExistsBeanFactory.asBean(source, idMapper.xrefExists(source));
@@ -190,8 +191,8 @@ public class WSCoreService implements WSCoreInterface {
     public MappingSupportedBean isMappingSupported(
             @QueryParam("sourceCode") String sourceCode, 
             @QueryParam("targetCode") String targetCode) throws IDMapperException {
-        if (sourceCode == null) throw new IDMapperException ("\"sourceCode\" parameter can not be null");
-        if (targetCode == null) throw new IDMapperException ("\"targetCode\" parameter can not be null");
+        if (sourceCode == null) throw new BridgeDBException ("\"sourceCode\" parameter can not be null");
+        if (targetCode == null) throw new BridgeDBException ("\"targetCode\" parameter can not be null");
         DataSource src = DataSource.getBySystemCode(sourceCode);
         DataSource tgt = DataSource.getBySystemCode(targetCode);
         return MappingSupportedBeanFactory.asBean(src, tgt, idMapper.getCapabilities().isMappingSupported(src, tgt));
