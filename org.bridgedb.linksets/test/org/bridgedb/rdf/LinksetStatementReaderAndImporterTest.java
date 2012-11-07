@@ -4,7 +4,7 @@
  */
 package org.bridgedb.rdf;
 
-import org.bridgedb.metadata.TestUtils;
+import org.bridgedb.utils.TestUtils;
 import org.junit.Ignore;
 import java.util.Set;
 import org.bridgedb.metadata.validator.ValidationType;

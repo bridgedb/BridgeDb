@@ -16,27 +16,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws.client;
+package org.bridgedb.utils;
 
-import org.bridgedb.IDMapperException;
-import org.bridgedb.ws.WSOpsClientFactory;
-import org.bridgedb.ws.WSOpsInterface;
-import org.bridgedb.ws.WSOpsMapper;
-import org.junit.BeforeClass;
+import org.apache.log4j.Logger;
 
 /**
+ * Extends the IDMapper Tests with a method to load the test data before running the tests.
  *
  * @author Christian
  */
-public class IDMapperTest  extends org.bridgedb.utils.IDMapperTest{
+public abstract class IDMapperTest extends org.bridgedb.IDMapperTest{
     
-    @BeforeClass
-    public static void setupIDMapper() throws IDMapperException {
-        connectionOk = false;
-        WSOpsInterface webService = WSOpsClientFactory.createTestWSClient();
-        connectionOk = true;
-        idMapper = new WSOpsMapper(webService);
-        capabilities = idMapper.getCapabilities();
+    static final Logger logger = Logger.getLogger(IDMapperTest.class);
+
+    //allows how all tests output to be changed at the same time.
+    public static void report(String message){
+        logger.info(message);
+        System.out.println(message);
     }
+
 
 }

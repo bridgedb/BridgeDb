@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.utils.TestUtils;
 import org.bridgedb.rdf.LinksetStatements;
 import org.bridgedb.rdf.LinksetStatementReader;
 import org.openrdf.model.Statement;

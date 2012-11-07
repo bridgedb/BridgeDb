@@ -20,7 +20,7 @@ package org.bridgedb.url;
 
 import org.junit.BeforeClass;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTestBase;
+import org.bridgedb.utils.IDMapperTestBase;
 
 /**
  * Extends the Test base to include URL variables.

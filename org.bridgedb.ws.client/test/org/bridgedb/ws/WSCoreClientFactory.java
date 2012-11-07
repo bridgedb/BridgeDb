@@ -19,13 +19,12 @@
 package org.bridgedb.ws;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTestBase;
 
 /**
  *
  * @author Christian
  */
-public class WSCoreClientFactory extends IDMapperTestBase{
+public class WSCoreClientFactory extends org.bridgedb.utils.IDMapperTestBase{
     
     public static WSCoreInterface createTestWSClient() throws IDMapperException{
         //ystem.out.println("in WSCoreInterface 1");
