@@ -118,7 +118,7 @@ public abstract class IDMapperTestBase {
     }
     
     //allows how all tests output to be changed at the same time.
-    public static void report(String message){
+    public void report(String message){
         System.out.println(message);
     }
 }

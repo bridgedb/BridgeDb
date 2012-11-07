@@ -18,6 +18,7 @@
 //
 package org.bridgedb.sql;
 
+import org.apache.log4j.Logger;
 import org.bridgedb.utils.StoreType;
 import org.junit.Test;
 
@@ -29,38 +30,52 @@ import org.junit.Test;
  *
  * @author Christian
  */
-public class TestSqlFactory {
+public abstract class TestSqlFactory {
 
+    static final Logger logger = Logger.getLogger(TestSqlFactory.class);
+    
     public static void checkSQLAccess() {
         try {
             SQLAccess sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
             sqlAccess.getConnection();
         } catch (BridgeDbSqlException ex) {
-            System.err.println(ex);
+            logger.error("Unable to connect to SQL", ex);
+            logger.fatal("SKIPPPING tests due to Connection error.");
             System.err.println("**** SKIPPPING tests due to Connection error.");
             System.err.println("To run these test you must have the following:");
-            System.err.println("1. A MYSQL server running as configured " + SqlFactory.CONFIG_FILE_NAME);
-            System.err.println("1a. Location of that file can be set by Enviroment Variable OPS-IMS-CONFIG");
-            System.err.println("1b. Otherwise it will be looked for in the run path then conf/OPS-IMS then resources ");
-            System.err.println("1c.     then the conf/OPS-IMS and resources in the SQL project in that order");
-            System.err.println("1d. Failing that the defaults in SqlFactory.java will be used.");
-            System.err.println("2. Full rights for test user on the test database required.");
+            System.err.println("1. A SQL server running as configured in " + SqlFactory.CONFIG_FILE_NAME);
             org.junit.Assume.assumeTrue(false);        
          }
     } 
 
     public static void checkVirtuosoAccess() {
         SqlFactory.setUseMySQL(false);
-        checkSQLAccess();
+        try {
+            SQLAccess sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
+            sqlAccess.getConnection();
+        } catch (BridgeDbSqlException ex) {
+            logger.error("Unable to connect to Virtuoso", ex);
+            logger.fatal("SKIPPPING tests due to Connection error.");
+            System.err.println("**** SKIPPPING tests due to Connection error.");
+            System.err.println("To run these test you must have the following:");
+            System.err.println("1. A Virtusos server running as configured in " + SqlFactory.CONFIG_FILE_NAME);
+            org.junit.Assume.assumeTrue(false);        
+         }
     }
 
     public static void checkMySQLAccess() {
         SqlFactory.setUseMySQL(true);
-        checkSQLAccess();
+        try {
+            SQLAccess sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
+            sqlAccess.getConnection();
+        } catch (BridgeDbSqlException ex) {
+            logger.error("Unable to connect to Virtuoso", ex);
+            logger.fatal("SKIPPPING tests due to Connection error.");
+            System.err.println("**** SKIPPPING tests due to Connection error.");
+            System.err.println("To run these test you must have the following:");
+            System.err.println("1. A MYSQL server running as configured in " + SqlFactory.CONFIG_FILE_NAME);
+            org.junit.Assume.assumeTrue(false);        
+         }
     }
-
-    @Test
-    public void testNothing(){
-    }
-
+    
 }

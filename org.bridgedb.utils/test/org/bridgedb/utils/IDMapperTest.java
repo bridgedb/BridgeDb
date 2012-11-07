@@ -29,8 +29,8 @@ public abstract class IDMapperTest extends org.bridgedb.IDMapperTest{
     
     static final Logger logger = Logger.getLogger(IDMapperTest.class);
 
-    //allows how all tests output to be changed at the same time.
-    public static void report(String message){
+    @Override
+    public void report(String message){
         logger.info(message);
         System.out.println(message);
     }
