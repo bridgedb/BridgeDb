@@ -29,6 +29,7 @@ import org.bridgedb.IDMapperException;
 import java.io.IOException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.metadata.TestUtils;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
@@ -42,7 +43,7 @@ import org.openrdf.rio.RDFHandlerException;
  *
  * @author Christian
  */
-public class TransativeCreatorTest {
+public class TransativeCreatorTest extends TestUtils {
     
     private static StoreType VALIDATE_ONLY = null;
     private static URI GENERATE_PREDICATE = null;
@@ -62,11 +63,10 @@ public class TransativeCreatorTest {
         linksetLoader.loadFile("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
 
-
     @Test
     @Ignore
     public void testNoLink() {
-        Reporter.report("NoLink");
+        report("NoLink");
         String fileName = null;
         try {
             TransativeCreator.createTransative(1, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
@@ -80,10 +80,9 @@ public class TransativeCreatorTest {
     //TODO cleanup this test!
     @Test
     public void testCreateTransative() throws RDFHandlerException, IOException, IDMapperException {
-        Reporter.report("CreateTransative");
+        report("CreateTransative");
         String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
         TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-        System.out.println("Ok");
         new LinksetLoader().checkFileValid(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
     }
 

@@ -4,6 +4,9 @@
  */
 package org.bridgedb.metadata.validator;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.*;
 import org.bridgedb.rdf.LinksetStatementReader;
@@ -19,6 +22,8 @@ public class Validator {
     public static String VALIDATION = "validation";
     public static String INCLUDE_WARNINGS = "includeWarnings";
     
+    static final Logger logger = Logger.getLogger(Validator.class);
+
     public static String validityReport (String dataFileName, ValidationType type, boolean includeWarnings) throws IDMapperException{
         MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type);
@@ -33,11 +38,12 @@ public class Validator {
     }
     
     static public void main(String[] args) throws IDMapperException {
+        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
         if (args.length != 1){
             usage("Please specify a file/directory and use -D format for all other arguements.");
         }
         String fileName = args[0];
-        Reporter.report("Checking " + fileName);
+        Reporter.println("Checking " + fileName);
     
         String validationString = System.getProperty(VALIDATION);
         ValidationType validationType = null;
@@ -54,35 +60,32 @@ public class Validator {
         String includeWarningsString = System.getProperty(INCLUDE_WARNINGS, "true");
         boolean includeWarnings = Boolean.valueOf(includeWarningsString);
         
-        Reporter.report(validityReport(fileName, validationType, includeWarnings));
+        Reporter.println(validityReport(fileName, validationType, includeWarnings));
     }
 
     private static void usage(String cause) {
-        Reporter.report("This method uses a normal paramter and several named (-D) style parameters");
-        Reporter.report("Required Parameter (following the jar) is:");
-        Reporter.report("File to validate");
-        Reporter.report("   Name (ideally with path) of the file to be validated.");
-        Reporter.report("   Type of file will be dettermined based on the exstension.");
-        Reporter.report("Optional -D format (before the jar) Parameters are:");
-        Reporter.report(Validator.VALIDATION);
-        Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");
-        Reporter.report("   " + ValidationType.VOID + ": Checks that all MUST and SHOULD values are present");
-        Reporter.report("       Multiple datasets and linksets can be declared but links are not expected");
-        //Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
-        //Reporter.report("       Multiple Linksets can be declared but links are not expected");
-        //Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
-        Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
-        Reporter.report("       Only a single Linkset can be declared. ");
-        Reporter.report("       Included Links are also validated.");
-        Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
-        Reporter.report("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
-        Reporter.report("       Please attempt to complete the missing information and run." + ValidationType.LINKS);
-        Reporter.report("   Default is " + ValidationType.LINKS);
-        Reporter.report(INCLUDE_WARNINGS);
-        Reporter.report("   This determines if the validator will include warnings.");
-        Reporter.report("   Any non null value other than \"true\" ignoring case will remove warnings.");
-        Reporter.report("   Default is to include warnings.");
-        Reporter.report(cause);
+        Reporter.println("This method uses a normal paramter and several named (-D) style parameters");
+        Reporter.println("Required Parameter (following the jar) is:");
+        Reporter.println("File to validate");
+        Reporter.println("   Name (ideally with path) of the file to be validated.");
+        Reporter.println("   Type of file will be dettermined based on the exstension.");
+        Reporter.println("Optional -D format (before the jar) Parameters are:");
+        Reporter.println(Validator.VALIDATION);
+        Reporter.println("       See: http://www.openphacts.org/specs/datadesc/");
+        Reporter.println("   " + ValidationType.VOID + ": Checks that all MUST and SHOULD values are present");
+        Reporter.println("       Multiple datasets and linksets can be declared but links are not expected");
+        Reporter.println("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
+        Reporter.println("       Only a single Linkset can be declared. ");
+        Reporter.println("       Included Links are also validated.");
+        Reporter.println("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
+        Reporter.println("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
+        Reporter.println("       Please attempt to complete the missing information and run." + ValidationType.LINKS);
+        Reporter.println("   Default is " + ValidationType.LINKS);
+        Reporter.println(INCLUDE_WARNINGS);
+        Reporter.println("   This determines if the validator will include warnings.");
+        Reporter.println("   Any non null value other than \"true\" ignoring case will remove warnings.");
+        Reporter.println("   Default is to include warnings.");
+        Reporter.println(cause);
         System.exit(1);
     }
 

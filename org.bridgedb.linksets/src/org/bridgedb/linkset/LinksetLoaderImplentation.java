@@ -25,6 +25,7 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.LinksetVoidInformation;
 import org.bridgedb.metadata.MetaData;
@@ -88,8 +89,10 @@ public class LinksetLoaderImplentation{
     private Resource linksetResource;
     private Resource inverseResource;
     
+    static final Logger logger = Logger.getLogger(LinksetLoaderImplentation.class);
+
     protected LinksetLoaderImplentation(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Reading " + file);
+        logger.info("Reading " + file);
         accessedFrom = new URIImpl(file.toURI().toString());
         this.validationType = validationType;
         this.storeType = storeType;
@@ -106,7 +109,7 @@ public class LinksetLoaderImplentation{
     }
     
     protected LinksetLoaderImplentation(String source, String info, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Reading a String length " + info.length());
+        logger.info("Reading a String length " + info.length());
         this.validationType = validationType;
         this.storeType = storeType;
         if (validationType.isLinkset()){
@@ -123,7 +126,7 @@ public class LinksetLoaderImplentation{
     }
 
     protected LinksetLoaderImplentation(String source, InputStream inputStream, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
-        Reporter.report("Reading from inputStream " + source);
+        logger.info("Reading from inputStream " + source);
         this.validationType = validationType;
         this.storeType = storeType;
         if (validationType.isLinkset()){
@@ -169,9 +172,9 @@ public class LinksetLoaderImplentation{
         loadSQL(urlListener);
         urlListener.closeInput();    
         if (accessedFrom == null){
-            Reporter.report("Load finished. ");
+            logger.info("Load finished. ");
         } else {
-            Reporter.report("Load finished for " + accessedFrom);            
+            logger.info("Load finished for " + accessedFrom);            
         }
     }
     

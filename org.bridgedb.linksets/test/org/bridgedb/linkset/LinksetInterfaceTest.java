@@ -66,7 +66,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
      */
     @Test
     public void testValidateFile() throws Exception {
-        Reporter.report("validateFile");
+        report("validateFile");
         String fileName = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
         String result = linksetInterface.validateFile(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertThat(result, not(containsString("ERROR")));
@@ -78,7 +78,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
      */
     @Test
     public void testValidateFileAsDatasetVoid() throws Exception {
-        Reporter.report("validateFileAsDatasetVoid");
+        report("validateFileAsDatasetVoid");
         String fileName = "../org.bridgedb.metadata/test-data/chemspider-void.ttl";
         String result = linksetInterface.validateFileAsVoid(fileName);
         assertThat(result, not(containsString("ERROR"))); 
@@ -101,7 +101,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
      */
     @Test
     public void testValidateFileAsLinkset() throws Exception {
-        Reporter.report("validateFileAsLinkset");
+        report("validateFileAsLinkset");
         String fileName = "../org.bridgedb.linksets/test-data/loadLinkSetwithLinks.xml";
         String result = linksetInterface.validateFileAsLinks(fileName);
         assertThat(result, not(containsString("ERROR")));
@@ -113,7 +113,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
      */
     @Test
     public void testLoadFile() throws Exception {
-        Reporter.report("load File");
+        report("load File");
         String fileName = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
         linksetInterface.loadFile(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
@@ -123,7 +123,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
      */
     @Test
     public void testCheckFileValid() throws Exception {
-        Reporter.report("CheckFileValid");
+        report("CheckFileValid");
         String fileName = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
         linksetInterface.checkFileValid(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
@@ -133,7 +133,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
      */
     @Test
     public void testClearExistingData() throws Exception {
-        Reporter.report("clearExistingData");
+        report("clearExistingData");
         StoreType storeType = null;
         linksetInterface.clearExistingData(StoreType.TEST);
         RdfReader reader = new RdfReader(StoreType.TEST);

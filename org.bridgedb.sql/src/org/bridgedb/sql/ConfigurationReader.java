@@ -388,7 +388,7 @@ public class ConfigurationReader {
 
     /** 
      * Outputs a list of all the properties to the PrintStream. 
-     * @param out A PrintStream such as System.out
+     * @param out A PrintStream such as System out
      */
     public static void list(PrintStream out){
         try {

@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mapping.MappingListener;
@@ -70,6 +71,8 @@ public class SQLListener implements MappingListener{
     private final static long REPORT_DELAY = 10000;
     private long lastUpdate = 0;
     
+    static final Logger logger = Logger.getLogger(SQLListener.class);
+
     public SQLListener(boolean dropTables, StoreType storeType) throws BridgeDbSqlException{
         this.sqlAccess = SqlFactory.createTheSQLAccess(storeType);
         this.supportsIsValid = SqlFactory.supportsIsValid();
@@ -148,7 +151,7 @@ public class SQLListener implements MappingListener{
     public void closeInput() throws BridgeDbSqlException {
         runInsert();
         insertQuery = null;
-        Reporter.report ("Finished processing linkset");
+        logger.info("Finished processing linkset");
         countLinks();
         if (possibleOpenConnection != null){
             try {
@@ -215,7 +218,7 @@ public class SQLListener implements MappingListener{
                 doubleCount += blockCount - changed;
                 long now = new Date().getTime();
                 if (now - lastUpdate > REPORT_DELAY){
-                    Reporter.report("Inserted " + insertCount + " links and ignored " + doubleCount + " so far");
+                    logger.info("Inserted " + insertCount + " links and ignored " + doubleCount + " so far");
                     lastUpdate = now;
                 }
             } catch (SQLException ex) {
@@ -737,14 +740,14 @@ public class SQLListener implements MappingListener{
      * @throws BridgeDbSqlException 
      */
     private void countLinks () throws BridgeDbSqlException{
-        Reporter.report ("Updating link count. Please Wait!");
+        logger.info ("Updating link count. Please Wait!");
         Statement countStatement = this.createStatement();
         Statement updateStatement = this.createStatement();
         String query = ("select count(*) as mycount, mappingSetId from mapping group by mappingSetId");  
         ResultSet rs;
         try {
             rs = countStatement.executeQuery(query);    
-            Reporter.report ("Count query run. Updating link count now");
+            logger.info ("Count query run. Updating link count now");
             while (rs.next()){
                 int count = rs.getInt("mycount");
                 String mappingSetId = rs.getString("mappingSetId");  
@@ -758,7 +761,7 @@ public class SQLListener implements MappingListener{
                      throw new BridgeDbSqlException("Unable to run update. " + update, ex);
                 }
             }
-            Reporter.report ("Updating counts finished!");
+            logger.info ("Updating counts finished!");
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
+import org.bridgedb.metadata.TestUtils;
 import org.bridgedb.metadata.constants.XMLSchemaConstants;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,7 +19,7 @@ import org.openrdf.model.impl.LiteralImpl;
  *
  * @author Christian
  */
-public class XsdTypeTest {
+public class XsdTypeTest extends TestUtils {
     
     public XsdTypeTest() {
     }
@@ -44,7 +45,7 @@ public class XsdTypeTest {
      */
     @Test
     public void testIntegerTypes() {
-        System.out.println("IntegerTypes");
+        report("IntegerTypes");
         XsdType instance = new XsdType(XMLSchemaConstants.INTEGER.stringValue());
         Value value = new LiteralImpl("10",XMLSchemaConstants.INTEGER);;
         assertTrue(instance.correctType(value));
@@ -59,7 +60,7 @@ public class XsdTypeTest {
      */
     @Test
     public void testGetCorrectType() {
-        System.out.println("getCorrectType");
+        report("getCorrectType");
         XsdType instance = new XsdType(XMLSchemaConstants.INTEGER.stringValue());
         String expResult = XMLSchemaConstants.INTEGER.stringValue();
         String result = instance.getCorrectType();

@@ -272,7 +272,6 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }
         builder.append(predicate);
         newLine(builder);
-        newLine(builder);
         addDocumentationLink(builder, tabLevel);
     }
 
@@ -291,10 +290,13 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
                 builder.append("Expected ");
                 builder.append(metaDataType.getCorrectType());
                 newLine(builder, tabLevel + 1);
-                builder.append(" Found ");
+                builder.append("Found ");
                 builder.append(value);
                 builder.append(" Which is a  ");
                 addClass(builder,value);
+                newLine(builder, tabLevel + 1);
+                builder.append("Please check statement with the predicate ");            
+                builder.append(predicate);
             }
         }
         newLine(builder);

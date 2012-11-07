@@ -23,11 +23,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.rdf.IDMapperLinksetException;
+import org.bridgedb.rdf.LinksetParserErrorListener;
 import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.RdfLoader;
 import org.bridgedb.rdf.RdfWrapper;
@@ -60,6 +60,8 @@ public class LinksetHandler extends RDFHandlerBase{
     
     RdfLoader rdfLoader;
     
+    static final Logger logger = Logger.getLogger(LinksetHandler.class);
+
     /**
      * Creates the Handler based on the RdfLoader to receive the data
      * @param rdfLoader
@@ -82,7 +84,7 @@ public class LinksetHandler extends RDFHandlerBase{
         if (!file.isFile()){
             throw new IDMapperLinksetException (file.getAbsolutePath() + " is not a file");
         }
-        Reporter.report("Parsing file:\n\t" + file.getAbsolutePath());
+        logger.info("Parsing file:\n\t" + file.getAbsolutePath());
         rdfLoader.setSourceFile(file.getAbsolutePath());
         FileReader reader = null;
         try {
@@ -104,7 +106,7 @@ public class LinksetHandler extends RDFHandlerBase{
                     reader.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(LinksetHandler.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IDMapperLinksetException("Error closing Reader ", ex);
             }
         }
     }

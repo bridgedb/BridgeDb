@@ -522,7 +522,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 				profiles.add(new ProfileInfo(profileURL, name, createdOn, createdBy, justifications));
 			}
 		} catch (SQLException e) {
-			Reporter.report(e.getLocalizedMessage());
 			throw new BridgeDbSqlException("Unable to retrieve profiles.", e);
 		}
     	return profiles;
@@ -549,7 +548,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 				profile = new ProfileInfo(profileURI, name, createdOn, createdBy, justifications);
 			} while (rs.next());
 		} catch (SQLException e) {
-			Reporter.report(e.getLocalizedMessage());
 			throw new BridgeDbSqlException("Unable to retrieve profiles.", e);
 		}
     	return profile;
@@ -587,7 +585,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 				justifications.add(justification);
 			}
 		} catch (SQLException e) {
-			Reporter.report(e.getLocalizedMessage());
 			throw new BridgeDbSqlException("Unable to retrieve profile justifications.", e);
 		}
     	return justifications;

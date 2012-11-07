@@ -58,7 +58,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
      */
     @Test
     public void testValidateString() throws Exception {
-        Reporter.report("validateString");
+        report("validateString");
         boolean includeWarnings = false;
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         String result = linksetInterfaceMinimal.validateString("LinksetStatementReaderTest.INFO1",
@@ -73,7 +73,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
      */
     @Test
     public void testValidateStringAsDatasetVoid() throws Exception {
-        Reporter.report("validateStringAsDatasetVoid");
+        report("validateStringAsDatasetVoid");
         String info = getRDF(loadMayDataSet1());
         String mimeType = "application/xml";
         String result = linksetInterfaceMinimal.validateStringAsVoid("loadMayDataSet1()", info, mimeType);
@@ -98,7 +98,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
      */
     @Test
     public void testValidateStringAsLinks() throws Exception {
-        Reporter.report("validateStringAsLinkset");
+        report("validateStringAsLinkset");
         String info = getRDF(loadLinkSetwithLinks());
         String mimeType = "application/xml";;
         String result = linksetInterfaceMinimal.validateStringAsLinks("loadLinkSetwithLinks()", info, mimeType);
@@ -111,7 +111,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
      */
     @Test
     public void testLoadStrings() throws Exception {
-        Reporter.report("load from String");
+        report("load from String");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         StoreType storeType = null;
         ValidationType validationType = null;
@@ -124,7 +124,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
      */
     @Test
     public void testCheckStringValid() throws Exception {
-        Reporter.report("CheckStringValid");
+        report("CheckStringValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         linksetInterfaceMinimal.checkStringValid("LinksetStatementReaderTest.INFO1", 
                 LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);

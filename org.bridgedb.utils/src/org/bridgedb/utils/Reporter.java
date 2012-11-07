@@ -29,8 +29,12 @@ package org.bridgedb.utils;
  */
 public class Reporter {
     
-    //Should be logger but using System out for now
-    public static void report(String message){
+    /**
+     * Messages that should always goto the System out stream.
+     * This method just for the ease of searching for System,out lines added for debugging.
+     * @param message 
+     */
+    public static void println(String message){
         System.out.println(message);
     }
 }

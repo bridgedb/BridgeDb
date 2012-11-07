@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
@@ -44,6 +43,8 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
  
     public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.RDFXML;
     public static String DEFAULT_BASE_URI = "http://no/BaseURI/Set/";
+
+    static final Logger logger = Logger.getLogger(StatementReader.class);
 
     public static Set<RDFFormat> getSupportedFormats() {
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
@@ -129,7 +130,7 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
                     reader.close();
                 }
             } catch (IOException ex) {
-                Reporter.report(ex.getMessage());
+                logger.info(ex.getMessage());
             }
         }        
     }
@@ -142,12 +143,8 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
             parser.parse (reader, baseURI);
             parsed = true;
        } finally {
-            try {
-                if (reader != null){
-                    reader.close();
-                }
-            } catch (IOException ex) {
-                Reporter.report(ex.getMessage());
+            if (reader != null){
+                reader.close();
             }
         }        
     }
@@ -158,8 +155,8 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
         FileFormat fileFormat = reg.getFileFormatForFileName(fileName);
         if (fileFormat == null || !(fileFormat instanceof RDFFormat)){
             //added bridgeDB/OPS specific extension here if required.           
-            Reporter.report("OpenRDF does not know the RDF Format for " + fileName);
-            Reporter.report("Using the default format " + DEFAULT_FILE_FORMAT);
+            logger.warn("OpenRDF does not know the RDF Format for " + fileName);
+            logger.warn("Using the default format " + DEFAULT_FILE_FORMAT);
             return reg.get(DEFAULT_FILE_FORMAT).getParser();
         } else {
             RDFFormat format = (RDFFormat)fileFormat;
@@ -209,9 +206,9 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
         Set<RDFFormat> keys = reg.getKeys();
         for (RDFFormat key:keys){
-            Reporter.report(""+key);
+            Reporter.println(""+key);
         }
-        Reporter.report(supportedMineTypes());
+        Reporter.println(supportedMineTypes());
     }
 
     @Override

@@ -6,6 +6,7 @@ package org.bridgedb.metadata.type;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.bridgedb.metadata.TestUtils;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,7 +23,7 @@ import org.w3c.dom.Element;
  *
  * @author Christian
  */
-public class AllowedValueTypeTest {
+public class AllowedValueTypeTest extends TestUtils{
     
     static Element property;
     
@@ -66,7 +67,7 @@ public class AllowedValueTypeTest {
      */
     @Test
     public void testCorrectType() {
-        Reporter.report("correctType");
+        report("correctType");
         AllowedValueType instance = new AllowedValueType(property);
         Value value = new LiteralImpl("first");
         assertTrue(instance.correctType(value));
@@ -79,7 +80,7 @@ public class AllowedValueTypeTest {
      */
     @Test
     public void testGetCorrectType() {
-        Reporter.report("getCorrectType");
+        report("getCorrectType");
         AllowedValueType instance = new AllowedValueType(property);
         String expResult = " One of [first, second, third]";
         String result = instance.getCorrectType();

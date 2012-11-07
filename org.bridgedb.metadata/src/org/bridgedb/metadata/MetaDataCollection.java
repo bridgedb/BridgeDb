@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import org.apache.log4j.Logger;
 import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.rdf.StatementReader;
@@ -31,6 +32,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     MetaDataSpecification metaDataRegistry;
     private final String source;
     
+    static final Logger logger = Logger.getLogger(MetaDataCollection.class);
+
     public MetaDataCollection(String source, Set<Statement> incomingStatements, MetaDataSpecification specification) throws MetaDataException {
         Set<Statement> statements = new HashSet(incomingStatements);
         this.metaDataRegistry = specification;
@@ -40,7 +43,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (!resourcesMap.containsKey(id)){
                ResourceMetaData resourceMetaData =  getResourceMetaData(id, statements);
                if (resourceMetaData == null){
-                   Reporter.report(id + " has no known rdf:type ");
+                   logger.warn(id + " has no known rdf:type ");
                    errors.add(id + " has no known rdf:type ");                   
                } else {
                    resourcesMap.put(id, resourceMetaData);
@@ -125,7 +128,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (object instanceof Resource){
                 ResourceMetaData child = resourcesMap.get((Resource)object);
                 if (child == null){
-                    Reporter.report("No resource found for " + object + " unable to find child");
+                    logger.warn("No resource found for " + object + " unable to find child");
                 } else {
                     if (parent != null){
                         child.addParent(parent);                           

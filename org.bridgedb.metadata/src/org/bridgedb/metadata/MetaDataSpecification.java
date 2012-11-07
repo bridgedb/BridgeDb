@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.utils.ConfigReader;
@@ -48,6 +49,8 @@ public class MetaDataSpecification {
     static String documentationRoot = "";
     private static String THING_ID = "http://www.w3.org/2002/07/owl#Thing";
         
+    static final Logger logger = Logger.getLogger(MetaDataSpecification.class);
+ 
     public MetaDataSpecification(ValidationType type) throws IDMapperException{
         InputStream stream = ConfigReader.getInputStream(type.getOwlFileName());
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
@@ -162,7 +165,7 @@ public class MetaDataSpecification {
     public ResourceMetaData getResourceByType(Value type) throws MetaDataException{
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
-            Reporter.report("Unable to find specifications for type: " + type);
+            logger.warn("Unable to find specifications for type: " + type);
             URI uri = (URI)type;
             return new ResourceMetaData(uri);
         } else {

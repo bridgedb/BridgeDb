@@ -147,7 +147,6 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     @Override
     void appendSchema(StringBuilder builder, int tabLevel) {
         appendSpecific(builder, tabLevel);
-        newLine(builder);
         for (MetaDataBase child:childMetaData){
             child.appendSchema(builder, tabLevel + 1);
         }
@@ -156,7 +155,6 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
    @Override
     void appendShowAll(StringBuilder builder, int tabLevel) {
         appendSpecific(builder, tabLevel);
-        newLine(builder);
         for (MetaDataBase child:childMetaData){
             child.appendShowAll(builder, tabLevel + 1);
         }
