@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.metadata.TestUtils;
 import org.junit.Ignore;
 import java.util.Set;
 import org.bridgedb.metadata.validator.ValidationType;
@@ -22,7 +23,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class LinksetStatementReaderAndImporterTest {
+public class LinksetStatementReaderAndImporterTest extends TestUtils{
     
     public LinksetStatementReaderAndImporterTest() {
     }
@@ -51,7 +52,7 @@ public class LinksetStatementReaderAndImporterTest {
      */
     @Test
     public void testLoadFromRDF() throws Exception {
-        Reporter.report("EndRDF");
+        report("EndRDF");
         new LinksetLoader().clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
         LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.TEST);

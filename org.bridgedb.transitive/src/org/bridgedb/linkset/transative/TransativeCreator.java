@@ -30,6 +30,7 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.constants.DctermsConstants;
 import org.bridgedb.metadata.constants.FoafConstants;
@@ -73,6 +74,7 @@ public class TransativeCreator {
     private Value sourceUriSpace;
     private Value targetUriSpace;
     private BufferedWriter buffer;
+    private File outputFile;
     
     private Resource ANY_SUBJECT = null;
     private static final URI ANY_PREDICATE = null;
@@ -85,6 +87,8 @@ public class TransativeCreator {
     private static String LICENSE = "lisense";
     private static String DERIVED_BY = "derivedBy";
       
+    static final Logger logger = Logger.getLogger(TransativeCreator.class);
+
     private TransativeCreator(int leftId, int rightId, String possibleFileName, StoreType storeType) 
             throws IDMapperException, IOException{
         sqlAccess = SqlFactory.createTheSQLAccess(storeType);
@@ -94,7 +98,7 @@ public class TransativeCreator {
         rightContext = RdfFactory.getLinksetURL(rightId);
     }
             
-    public static void createTransative(int leftId, int rightId, String possibleFileName, StoreType storeType, 
+    public static String createTransative(int leftId, int rightId, String possibleFileName, StoreType storeType, 
             URI predicate, URI license, URI derivedBy) 
             throws RDFHandlerException, IOException, IDMapperException{
         if (license != null && derivedBy == null){
@@ -104,23 +108,26 @@ public class TransativeCreator {
         TransativeCreator creator = new TransativeCreator(leftId, rightId, possibleFileName, storeType);
         predicate = creator.getVoid(leftId, rightId, storeType, predicate, license, derivedBy);
         creator.getSQL(leftId, rightId, storeType, predicate);
+        String message = "Finishing creating transative mapping from " + leftId + " to " + rightId + "\n"
+                + "Result saved at " + creator.getOutputPath();
+        logger.info(message);
+        return message;
     }
  
     private void createBufferedWriter(String possibleFileName, int leftId, int rightId) throws IOException {
-        File file;
         if (possibleFileName == null || possibleFileName.isEmpty()){
-            file = new File("linkset " + leftId + "Transitive" + rightId + ".ttl");
+            outputFile = new File("linkset " + leftId + "Transitive" + rightId + ".ttl");
         } else {
-            file = new File(possibleFileName);
-            if (file.isDirectory()){
-                file = new File(file, "linkset " + leftId + "Transitive" + rightId + ".ttl");
+            outputFile = new File(possibleFileName);
+            if (outputFile.isDirectory()){
+                outputFile = new File(outputFile, "linkset " + leftId + "Transitive" + rightId + ".ttl");
             }
         }        
-        if (file.getParentFile() != null && !file.getParentFile().exists()){
-            throw new IOException("Unable to create file " + file.getName() + " because the requested directory " 
-                    + file.getParent() + " does not yet exist. Please create the directory and try again.");
+        if (outputFile.getParentFile() != null && !outputFile.getParentFile().exists()){
+            throw new IOException("Unable to create file " + outputFile.getName() + " because the requested directory " 
+                    + outputFile.getParent() + " does not yet exist. Please create the directory and try again.");
         }
-        FileWriter writer = new FileWriter(file);
+        FileWriter writer = new FileWriter(outputFile);
         buffer = new BufferedWriter(writer);
         buffer.flush();
     }
@@ -320,9 +327,9 @@ public class TransativeCreator {
            throw new BridgeDbSqlException("Unable to get statement. ", ex);
         }
         try {
-            Reporter.report("Running " + query.toString());
+            logger.info("Running " + query.toString());
             ResultSet rs = statement.executeQuery(query.toString());
-            Reporter.report("processing results");
+            logger.info("processing results");
             while (rs.next()){
                 String sourceId = rs.getString("mapping1.sourceId");
                 String targetId = rs.getString("mapping2.targetId");
@@ -346,56 +353,56 @@ public class TransativeCreator {
     }
     
     public static void usage(String issue) {
-        Reporter.report("Welcome to the OPS Transative Crestor.");
-        Reporter.report("This method uses two normal paramter and several  (optional) named (-D) style parameters");
-        Reporter.report("Required Parameter (following the jar) are:");
-        Reporter.report("Source mapping set Id");
-        Reporter.report("   Sources from this set will become the sources in the new set.");
-        Reporter.report("Target mapping set Id");
-        Reporter.report("   Targets from this set will become the targets in the new set.");
-        Reporter.report("Note: The Target Dataset of the first mappingset must be the same as the Source Dataset of the second.");
-        Reporter.report("   original linksets could have different UriSpaces, so long as they map to the same DataSet.");
+        Reporter.println("Welcome to the OPS Transative Crestor.");
+        Reporter.println("This method uses two normal paramter and several  (optional) named (-D) style parameters");
+        Reporter.println("Required Parameter (following the jar) are:");
+        Reporter.println("Source mapping set Id");
+        Reporter.println("   Sources from this set will become the sources in the new set.");
+        Reporter.println("Target mapping set Id");
+        Reporter.println("   Targets from this set will become the targets in the new set.");
+        Reporter.println("Note: The Target Dataset of the first mappingset must be the same as the Source Dataset of the second.");
+        Reporter.println("   original linksets could have different UriSpaces, so long as they map to the same DataSet.");
         
-        Reporter.report("Optional -D format (before the jar) Parameters are:");
-        Reporter.report(STORE);
-        Reporter.report("   Dettermines where the data will retreived from. ");
-        Reporter.report("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
-        Reporter.report("   " + StoreType.LOAD + ": Writes into the secondary database and rdf store");
-        Reporter.report("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
-        Reporter.report("   " + StoreType.TEST + ": Writes into the test database and rdf store");
-        Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
-        Reporter.report("   Default is to " + StoreType.LIVE);
+        Reporter.println("Optional -D format (before the jar) Parameters are:");
+        Reporter.println(STORE);
+        Reporter.println("   Dettermines where the data will retreived from. ");
+        Reporter.println("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
+        Reporter.println("   " + StoreType.LOAD + ": Writes into the secondary database and rdf store");
+        Reporter.println("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
+        Reporter.println("   " + StoreType.TEST + ": Writes into the test database and rdf store");
+        Reporter.println("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
+        Reporter.println("   Default is to " + StoreType.LIVE);
         
-        Reporter.report(FILE);
-        Reporter.report("   Name (ideally with path) of the file to be created.");
-        Reporter.report("   WARNING Please make sure it has a \".ttl\" exstention or resulting file may not be readable."); 
-        Reporter.report("   Alternatively provide only the directory to save to.");
-        Reporter.report("   Default is the leftId + \"Transitive\" + the rightId + \".ttl\".  ");
-        Reporter.report("      Which will be placed in the suggested directory if provided. ");
+        Reporter.println(FILE);
+        Reporter.println("   Name (ideally with path) of the file to be created.");
+        Reporter.println("   WARNING Please make sure it has a \".ttl\" exstention or resulting file may not be readable."); 
+        Reporter.println("   Alternatively provide only the directory to save to.");
+        Reporter.println("   Default is the leftId + \"Transitive\" + the rightId + \".ttl\".  ");
+        Reporter.println("      Which will be placed in the suggested directory if provided. ");
  
-        Reporter.report(PREDICATE);
-        Reporter.report("   Predicate to used in the new linkset.");
-        Reporter.report("   Defaults any predicate shared by both original linksets");
-        Reporter.report("       If orignals have different links the least specific one is used. If known");
-        Reporter.report("       Otherwise an error is thrown and user will have to provide a " + PREDICATE);
+        Reporter.println(PREDICATE);
+        Reporter.println("   Predicate to used in the new linkset.");
+        Reporter.println("   Defaults any predicate shared by both original linksets");
+        Reporter.println("       If orignals have different links the least specific one is used. If known");
+        Reporter.println("       Otherwise an error is thrown and user will have to provide a " + PREDICATE);
         
-        Reporter.report(LICENSE); 
-        Reporter.report("   License to be used for the new Linkset.");
-        Reporter.report("       Requires the " + DERIVED_BY + " to be used to say who choose this " + LICENSE);
-        Reporter.report("   Users if Responsible for the suitablity of the new " + LICENSE);
-        Reporter.report("   Default is to include all " + LICENSE + " found in the original linksets");
+        Reporter.println(LICENSE); 
+        Reporter.println("   License to be used for the new Linkset.");
+        Reporter.println("       Requires the " + DERIVED_BY + " to be used to say who choose this " + LICENSE);
+        Reporter.println("   Users if Responsible for the suitablity of the new " + LICENSE);
+        Reporter.println("   Default is to include all " + LICENSE + " found in the original linksets");
         
-        Reporter.report(DERIVED_BY);
-        Reporter.report("   Person who triggered the creation of the linkset.");
-        Reporter.report("   Also person who authorized a different " + LICENSE);
-        Reporter.report("   No Default value.");
+        Reporter.println(DERIVED_BY);
+        Reporter.println("   Person who triggered the creation of the linkset.");
+        Reporter.println("   Also person who authorized a different " + LICENSE);
+        Reporter.println("   No Default value.");
         
-        Reporter.report("WARNING:" + PREDICATE + ", " + LICENSE + " and " + DERIVED_BY + " Must be Uris");
-        Reporter.report("   As implemented by openrdf URIImpl");
-        Reporter.report("   Any leading < and trailing > characters are removed. So are not required but allowed.");
+        Reporter.println("WARNING:" + PREDICATE + ", " + LICENSE + " and " + DERIVED_BY + " Must be Uris");
+        Reporter.println("   As implemented by openrdf URIImpl");
+        Reporter.println("   Any leading < and trailing > characters are removed. So are not required but allowed.");
         
-        Reporter.report("");
-        Reporter.report(issue);
+        Reporter.println("");
+        Reporter.println(issue);
         System.exit(1);
     }
 
@@ -458,7 +465,11 @@ public class TransativeCreator {
         URI predicate = getURI(System.getProperty(PREDICATE));
         URI license = getURI(System.getProperty(LICENSE));
         URI derivedBy = getURI(System.getProperty(DERIVED_BY));
-        createTransative(leftId, rightId, fileName, storeType, predicate, license, derivedBy);
+        Reporter.println(createTransative(leftId, rightId, fileName, storeType, predicate, license, derivedBy));
+    }
+
+    private String getOutputPath() {
+        return outputFile.getAbsolutePath();
     }
 
 }

@@ -18,6 +18,7 @@
 //
 package org.bridgedb.linkset;
 
+import org.bridgedb.metadata.TestUtils;
 import org.bridgedb.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,8 +41,8 @@ import static org.junit.Assert.*;
 /**
  * @author Christian
  */
-public class LinkSetLoaderWithImportingTest {
-       
+public class LinkSetLoaderWithImportingTest extends TestUtils{
+        
     private static final boolean LOAD_DATA = true;
     
     //Unsure if this is still needed or even desirable!
@@ -67,7 +68,7 @@ public class LinkSetLoaderWithImportingTest {
     
     @Test
     public void testMappingInfo() throws IDMapperException {
-        Reporter.report("MappingInfo");
+        report("MappingInfo");
         TestSqlFactory.checkSQLAccess();
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         

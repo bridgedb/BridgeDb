@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
+import org.bridgedb.metadata.TestUtils;
 import org.bridgedb.metadata.constants.XMLSchemaConstants;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;
@@ -19,7 +20,7 @@ import org.openrdf.model.impl.LiteralImpl;
  *
  * @author Christian
  */
-public class StringTypeTest {
+public class StringTypeTest extends TestUtils{
     
     public StringTypeTest() {
     }
@@ -45,7 +46,7 @@ public class StringTypeTest {
      */
     @Test
     public void testCorrectType() {
-        Reporter.report("correctType");
+        report("correctType");
         StringType instance = new StringType();
         Value value = new LiteralImpl("10");
         assertTrue(instance.correctType(value));
@@ -62,7 +63,7 @@ public class StringTypeTest {
      */
     @Test
     public void testGetCorrectType() {
-        Reporter.report("getCorrectType");
+        report("getCorrectType");
         StringType instance = new StringType();
         String expResult = " A String";
         String result = instance.getCorrectType();

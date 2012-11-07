@@ -17,8 +17,12 @@
 // limitations under the License.
 //
 package org.bridgedb.linkset;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 
@@ -30,8 +34,8 @@ public class SetupLoaderWithTestData {
    private static final boolean LOAD_DATA = true;
    
    public static void main(String[] args) throws IDMapperException {
-        Reporter.report("sample2to1.ttl");
-        //String[] args1 = {, "new"};
+        ConfigReader.configureLogger();
+        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.LOAD);
         linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);

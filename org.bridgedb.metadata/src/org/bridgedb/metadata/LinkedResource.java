@@ -269,9 +269,8 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                         builder.append("Please check id pointed to by predicate ");
                         builder.append(predicate);
                         newLine(builder, tabLevel + 1);
-                        rmd.appendSpecific(builder, tabLevel+2);
-                        newLine(builder);
-                    }
+                        rmd.appendSpecific(builder, tabLevel+1);
+                     }
                 }
             }
         }

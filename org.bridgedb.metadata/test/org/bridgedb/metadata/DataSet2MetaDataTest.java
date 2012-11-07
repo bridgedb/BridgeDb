@@ -22,14 +22,14 @@ public class DataSet2MetaDataTest extends MetaDataTestBase{
     
     @Test
     public void testHasRequiredValues() throws MetaDataException{
-        Reporter.report("HasRequiredValues");
+        report("HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet2()", loadDirectDataSet2(), voidRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
-        Reporter.report("HasCorrectTypes");
+        report("HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet2()", loadMayDataSet2(), voidRegistry);
         checkCorrectTypes(metaData);
     }
@@ -37,7 +37,7 @@ public class DataSet2MetaDataTest extends MetaDataTestBase{
     @Test
     @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
-        Reporter.report("AllStatementsUsed");
+        report("AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet2()", loadMayDataSet2(), voidRegistry);
         checkAllStatementsUsed(metaData);
     }

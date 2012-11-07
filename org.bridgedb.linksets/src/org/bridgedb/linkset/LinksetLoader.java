@@ -20,6 +20,7 @@ package org.bridgedb.linkset;
 
 import java.io.File;
 import java.io.InputStream;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
@@ -55,6 +56,8 @@ public class LinksetLoader implements LinksetInterface{
     private static URI ACCESSED_FROM_NOT_REQUIRED = null;
     private static boolean INCLUDE_WARNINGS = true;
     
+    static final Logger logger = Logger.getLogger(LinksetLoader.class);
+
     public LinksetLoader() {
     }
     
@@ -105,7 +108,6 @@ public class LinksetLoader implements LinksetInterface{
     private String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
     		throws IDMapperException {
     	if (!file.exists()) {
-    		Reporter.report("File not found: " + file.getAbsolutePath());
     		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
             StringBuilder builder = new StringBuilder();
@@ -166,7 +168,6 @@ public class LinksetLoader implements LinksetInterface{
             throw new IDMapperLinksetException ("Can not load if no storeType set");
         }
     	if (!file.exists()) {
-    		Reporter.report("File not found: " + file.getAbsolutePath());
     		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
@@ -189,7 +190,6 @@ public class LinksetLoader implements LinksetInterface{
     private void validate(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
     	if (!file.exists()) {
-    		Reporter.report("File not found: " + file.getAbsolutePath());
     		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
@@ -222,9 +222,9 @@ public class LinksetLoader implements LinksetInterface{
             throw new IDMapperLinksetException ("unable to clear mapping of unspecified storeType");
         }
         RdfFactory.clear(storeType);
-        Reporter.report(storeType + " RDF cleared");
+        logger.info(storeType + " RDF cleared");
         URLListener listener = new SQLUrlMapper(true, storeType);
-        Reporter.report(storeType + " SQL cleared");                
+        logger.info(storeType + " SQL cleared");                
     }
 
     /**
@@ -288,52 +288,49 @@ public class LinksetLoader implements LinksetInterface{
         if (load){
             try{
                 linksetLoader.loadFile(fileName, storeType, validationType);
-                Reporter.report("Load successful");
+                Reporter.println("Load successful");
             }catch (Exception e){
-                Reporter.report (linksetLoader.validateFile(fileName, storeType, validationType, true));
+                Reporter.println(linksetLoader.validateFile(fileName, storeType, validationType, true));
             }
         } else {
-            Reporter.report (linksetLoader.validateFile(fileName, storeType, validationType, true));
+            Reporter.println(linksetLoader.validateFile(fileName, storeType, validationType, true));
         }       
     }
 
     public static void usage(String issue) {
-        Reporter.report("Welcome to the OPS Linkset Loader.");
-        Reporter.report("This method uses a normal paramter and several (optional) named (-D) style parameters");
-        Reporter.report("Required Parameter (following the jar) is:");
-        Reporter.report("File or Directory to load");
-        Reporter.report("   Name (ideally with path) of the file to be loaded.");
-        Reporter.report("   Type of file will be dettermined based on the exstension.");
-        Reporter.report("   This may also be a directory if all files in it can be loaded. ");
-        Reporter.report("      Includes subdirectories with the same requirement of all loadable. ");
-        Reporter.report("Optional -D format (before the jar) Parameters are:");
-        Reporter.report(LOAD);
-        Reporter.report("   true: loads the file into the rdfstore and if links SQL.");
-        Reporter.report("        Loads into the database and rdf specified by " + STORE + ".");
-        Reporter.report("   default is to append to the existing database and rdf store");
-        Reporter.report(STORE);
-        Reporter.report("   Dettermines where (if at all) the data will be stored and read from");
-        Reporter.report("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
-        Reporter.report("   " + StoreType.LOAD + ": Writes into the secondary database and rdf store");
-        Reporter.report("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
-        Reporter.report("   " + StoreType.TEST + ": Writes into the test database and rdf store");
-        Reporter.report("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
-        Reporter.report("   Default is " + StoreType.TEST);
-        Reporter.report(Validator.VALIDATION);
-        Reporter.report("   " + ValidationType.VOID + ": Checks that all MUST and SHOULD values are present");
-        Reporter.report("       Multiple datasets and linksets can be declared but links are not expected");
-        //Reporter.report("   " + ValidationType.LINKSETVOID + ": Checks that all MUST and SHOULD values are present");
-        //Reporter.report("       Multiple Linksets can be declared but links are not expected");
-        //Reporter.report("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
-        Reporter.report("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
-        Reporter.report("       See: http://www.openphacts.org/specs/datadesc/");
-        Reporter.report("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
-        Reporter.report("   Default is " + ValidationType.LINKS);
-        Reporter.report(CLEAR_EXISING_DATA);
-        Reporter.report("   true: clears the exisiting database and rdfstore.");
-        Reporter.report("        Only the database and rdf specified by " + STORE + " are cleared.");
-        Reporter.report("   default is to append to the existing database and rdf store");
-        Reporter.report(issue);
+        Reporter.println("Welcome to the OPS Linkset Loader.");
+        Reporter.println("This method uses a normal paramter and several (optional) named (-D) style parameters");
+        Reporter.println("Required Parameter (following the jar) is:");
+        Reporter.println("File or Directory to load");
+        Reporter.println("   Name (ideally with path) of the file to be loaded.");
+        Reporter.println("   Type of file will be dettermined based on the exstension.");
+        Reporter.println("   This may also be a directory if all files in it can be loaded. ");
+        Reporter.println("      Includes subdirectories with the same requirement of all loadable. ");
+        Reporter.println("Optional -D format (before the jar) Parameters are:");
+        Reporter.println(LOAD);
+        Reporter.println("   true: loads the file into the rdfstore and if links SQL.");
+        Reporter.println("        Loads into the database and rdf specified by " + STORE + ".");
+        Reporter.println("   default is to append to the existing database and rdf store");
+        Reporter.println(STORE);
+        Reporter.println("   Dettermines where (if at all) the data will be stored and read from");
+        Reporter.println("   " + StoreType.LIVE + ": Writes into the active database and rdf store");
+        Reporter.println("   " + StoreType.LOAD + ": Writes into the secondary database and rdf store");
+        Reporter.println("       Note: " + StoreType.LOAD + " defaults to " + StoreType.LIVE + " if not set in the config files");
+        Reporter.println("   " + StoreType.TEST + ": Writes into the test database and rdf store");
+        Reporter.println("       Note: " + StoreType.TEST + " database and rdf store are erased during junit tests.");
+        Reporter.println("   Default is " + StoreType.TEST);
+        Reporter.println(Validator.VALIDATION);
+        Reporter.println("   " + ValidationType.VOID + ": Checks that all MUST and SHOULD values are present");
+        Reporter.println("       Multiple datasets and linksets can be declared but links are not expected");
+        Reporter.println("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
+        Reporter.println("       See: http://www.openphacts.org/specs/datadesc/");
+        Reporter.println("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
+        Reporter.println("   Default is " + ValidationType.LINKS);
+        Reporter.println(CLEAR_EXISING_DATA);
+        Reporter.println("   true: clears the exisiting database and rdfstore.");
+        Reporter.println("        Only the database and rdf specified by " + STORE + " are cleared.");
+        Reporter.println("   default is to append to the existing database and rdf store");
+        Reporter.println(issue);
         System.exit(1);
     }
 

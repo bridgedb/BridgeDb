@@ -18,6 +18,7 @@
 //
 package org.bridgedb.rdf;
 
+import org.apache.log4j.Logger;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.rio.ParseErrorListener;
 
@@ -27,25 +28,27 @@ import org.openrdf.rio.ParseErrorListener;
  */
 public class LinksetParserErrorListener implements ParseErrorListener{
 
+    static final Logger logger = Logger.getLogger(LinksetParserErrorListener.class);
+    
     @Override
     public void warning(String message, int lineNo, int colNo) {
-        Reporter.report("WARNING *** " + message);
-        Reporter.report("Line number: " + lineNo + " columns number: " + colNo);
+        logger.warn("WARNING *** " + message);
+        logger.warn("Line number: " + lineNo + " columns number: " + colNo);
     }
 
     @Override
     public void error(String message, int lineNo, int colNo) {
-        Reporter.report("***ERROR*** " + message);
-        Reporter.report("Line number: " + lineNo + " columns number: " + colNo);
+        logger.error("***ERROR*** " + message);
+        logger.error("Line number: " + lineNo + " columns number: " + colNo);
     }
 
     @Override
     public void fatalError(String message, int lineNo, int colNo) {
-        Reporter.report("******* FETAL ERROR  *** ");
-        Reporter.report(message);
-        Reporter.report ("Line number: " + lineNo + " columns number: " + colNo);
-        Reporter.report("*************************************************************************");
-        Reporter.report("");
+        logger.fatal("******* FETAL ERROR  *** ");
+        logger.fatal(message);
+        logger.fatal ("Line number: " + lineNo + " columns number: " + colNo);
+        logger.fatal("*************************************************************************");
+        logger.fatal("");
     }
     
 }

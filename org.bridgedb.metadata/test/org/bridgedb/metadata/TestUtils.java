@@ -21,13 +21,18 @@ public abstract class TestUtils {
     static final boolean INCLUDE_WARNINGS = true;
     static final boolean NO_WARNINGS = false;;
      
+    public void report(String message){
+        System.out.println(message);
+        
+    }
+    
     void checkCorrectNumberOfIds(MetaDataCollection metaData, int numberOfIds){
         Set<Resource> ids = metaData.getIds();
         boolean ok = (ids.size() == numberOfIds);
         if (!ok){
             //This test will fail but with extra info
             assertEquals(numberOfIds + " ids Expected ", ids);
-            Reporter.report(metaData.toString());
+            report(metaData.toString());
             assertTrue(ok);
         }        
     }
@@ -38,8 +43,8 @@ public abstract class TestUtils {
             //This test will fail but with extra info
             String report = metaData.validityReport(NO_WARNINGS);
             assertThat(report, not(containsString("ERROR")));
-            Reporter.report("hasRequiredValuesOrIsSuperset failed but validity report clear");
-            Reporter.report(metaData.toString());
+            report("hasRequiredValuesOrIsSuperset failed but validity report clear");
+            report(metaData.toString());
             assertTrue(ok);
         }        
     }
@@ -59,7 +64,7 @@ public abstract class TestUtils {
         if (!ok){
             //This test will fail but with extra info
             assertEquals("", metaData.unusedStatements());
-            Reporter.report(metaData.toString());
+            report(metaData.toString());
             assertTrue(ok);
         }        
     }

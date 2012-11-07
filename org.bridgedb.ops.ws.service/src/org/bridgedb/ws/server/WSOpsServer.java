@@ -237,7 +237,6 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateMinimum")
     public Response validateMinimum(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-        System.out.println("post");
         return validate(info, mimeType, ValidationType.LINKSMINIMAL);
     }
     
@@ -246,7 +245,6 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateMinimum")
     public Response getValidateMinimum(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-        System.out.println("get");
         return validate(info, mimeType, ValidationType.LINKSMINIMAL);
     }
 

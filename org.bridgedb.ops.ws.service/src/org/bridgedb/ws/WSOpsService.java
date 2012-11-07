@@ -378,7 +378,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Consumes(MediaType.APPLICATION_XML)
     @Path("/validateStringXML")
     public ValidationBean validateString(JAXBElement<ValidationBean> input) throws IDMapperException {
-        System.out.println("received");
         String report = NO_RESULT;
         String info = null;
         String mimeType = null;
@@ -397,7 +396,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             exception = e.toString();
             return new ValidationBean(report, info, mimeType, storeType, validationType, includeWarnings, exception);
         }
-        System.out.println("calling");
         if (includeWarnings){
             return validateString(info, mimeType, storeType, validationType, "true");
         } else {

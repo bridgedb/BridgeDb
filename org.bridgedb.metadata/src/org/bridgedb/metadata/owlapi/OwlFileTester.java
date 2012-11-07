@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
+import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.ConfigReader;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -48,6 +53,8 @@ public class OwlFileTester
             .create("file:materializedOntologies/ont1290535967123.owl");
     private static OWLDataFactory df = OWLManager.getOWLDataFactory();
 
+    static final Logger logger = Logger.getLogger(OwlFileTester.class);
+
     public static OWLOntologyManager create() {
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         m.addIRIMapper(new AutoIRIMapper(new File("materializedOntologies"), true));
@@ -63,7 +70,7 @@ public class OwlFileTester
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         // map the ontology IRI to a physical IRI (files for example)
         File output = File.createTempFile("saved_pizza", ".owl");
-        System.out.println(output.getAbsoluteFile());
+        logger.info(output.getAbsoluteFile());
         IRI documentIRI = IRI.create(output);
         // Set up a mapping, which maps the ontology to the document IRI
         SimpleIRIMapper mapper = new SimpleIRIMapper(example_save_iri, documentIRI);
@@ -124,14 +131,14 @@ public class OwlFileTester
         // OWLEntityRemover will remove an entity
         // from a set of ontologies by removing all referencing axioms
         OWLEntityRemover remover = new OWLEntityRemover(m, Collections.singleton(o));
-        System.out.println(o.getIndividualsInSignature());
+        logger.info(o.getIndividualsInSignature());
         // Visit all individuals with the remover
         // Changes needed for removal will be prepared
         for (OWLNamedIndividual ind : o.getIndividualsInSignature()){
             ind.accept(remover);
         }
         m.applyChanges(remover.getChanges());
-        System.out.println(o.getIndividualsInSignature().size());        
+        logger.info(o.getIndividualsInSignature().size());        
     }
     
     private static void slide25() throws OWLOntologyCreationException, OWLOntologyStorageException, IOException{
@@ -139,7 +146,7 @@ public class OwlFileTester
         OWLOntology o = m.loadOntologyFromOntologyDocument(pizza_iri);
         // Named classes referenced by axioms in the ontology.
         for (OWLClass cls : o.getClassesInSignature()){
-            System.out.println(cls);
+            logger.info(cls);
         }
     }
     
@@ -153,8 +160,8 @@ public class OwlFileTester
         OWLOntologyWalkerVisitor<Object> visitor = new OWLOntologyWalkerVisitor<Object>(walker) {
             @Override
             public Object visit(OWLObjectSomeValuesFrom desc) {
-                System.out.println(desc);
-                System.out.println(" " + getCurrentAxiom());
+                logger.info(desc);
+                logger.info(" " + getCurrentAxiom());
                 return null;
             }
         };
@@ -165,47 +172,47 @@ public class OwlFileTester
     private static void print(OWLOntologyManager m, OWLOntology o) throws OWLOntologyStorageException{
        StringDocumentTarget target = new StringDocumentTarget();
        m.saveOntology(o, target);
-       System.out.println(o);
-       System.out.println(target); 
-       System.out.println("*******************************************************");
+       logger.info(o);
+       logger.info(target); 
+       logger.info("*******************************************************");
     }
     
     private static void testOwl(String location) throws OWLOntologyCreationException{
         OWLOntologyManager m = create();
         IRI pav = IRI.create(location);
         OWLOntology o = m.loadOntologyFromOntologyDocument(pav);
-        System.out.println(o);
+        logger.info(o);
         Set<OWLAxiom> all = o.getAxioms();
         //for (OWLAxiom axiom:all){
-        //    System.out.println(axiom);
+        //    logger.info.println(axiom);
         //}
         Set<OWLObjectProperty> properties = o.getObjectPropertiesInSignature();
         for (OWLObjectProperty property:properties){
-            System.out.println(property);
+            logger.info(property);
             Set<OWLAxiom>  axioms = o.getReferencingAxioms(property);
             boolean rangeFound = false;
             for (OWLAxiom axiom:axioms){
                 if (axiom instanceof OWLObjectPropertyDomainAxiom){
                     OWLObjectPropertyDomainAxiom domain = (OWLObjectPropertyDomainAxiom)axiom;
-                    System.out.println("    domain " + domain.getDomain());
+                    logger.info("    domain " + domain.getDomain());
                 }
                 if (axiom instanceof OWLObjectPropertyRangeAxiom){
                     OWLObjectPropertyRangeAxiom range = (OWLObjectPropertyRangeAxiom)axiom;
-                    System.out.println("    range " + range.getRange());
+                    logger.info("    range " + range.getRange());
                     rangeFound = true;
                 }
             }
             if (!rangeFound){
-                System.out.println("    range URI");
+                logger.info("    range URI");
             }
         }
         Set<OWLDataProperty> dataProps = o.getDataPropertiesInSignature();
         for (OWLDataProperty dataProp: dataProps){
-            System.out.println(dataProp);
+            logger.info(dataProp);
             Set<OWLAxiom>  axioms = o.getReferencingAxioms(dataProp);
             boolean rangeFound = false;
             for (OWLAxiom axiom:axioms){
-                System.out.println("    " + axiom);
+                logger.info("    " + axiom);
             }
         }
     }
@@ -227,28 +234,31 @@ public class OwlFileTester
         OWLOntologyManager m = create();
         IRI pav = IRI.create(location);
         OWLOntology o = m.loadOntologyFromOntologyDocument(pav);
-        System.out.println(o);
+        logger.info(o);
         Set<OWLAxiom> all = o.getAxioms();
         for (OWLAxiom axiom:all){
-            System.out.println(axiom);
-            System.out.println("   " + axiom.getClass());
+            logger.info(axiom);
+            logger.info("   " + axiom.getClass());
             
         }
         
         Set<OWLClass> theClasses = o.getClassesInSignature();
         for (OWLClass theClass:theClasses){
-            System.out.println(theClass);
+            logger.info(theClass);
             Set<OWLClassExpression> exprs = theClass.getSuperClasses(o);
             for (OWLClassExpression expr:exprs){
-                System.out.println("  " + expr);
-                System.out.println("     " + expr.getClass());
+                logger.info("  " + expr);
+                logger.info("     " + expr.getClass());
             }
-            System.out.println(getType(o, theClass));
+            logger.info(getType(o, theClass));
         }        
     }
 
-    public static void main( String[] args ) throws OWLOntologyCreationException, OWLOntologyStorageException, IOException
+    public static void main( String[] args ) 
+            throws OWLOntologyCreationException, OWLOntologyStorageException, IOException, BridgeDBException
     {
+        ConfigReader.configureLogger();
+        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
         //@prefix dcterms: <http://purl.org/dc/terms/> .
         //testOwl("http://purl.org/dc/terms/");
         //testOwl("http://bloody-byte.net/rdf/dc_owl2dl/dcterms_od.rdf");

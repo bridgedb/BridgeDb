@@ -26,21 +26,21 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
     
     @Test
     public void testHasRequiredValues() throws MetaDataException{
-        Reporter.report("Linkset HasRequiredValues");
+        report("Linkset HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
     public void testHasCorrectTypes() throws MetaDataException{
-        Reporter.report("Linkset HasCorrectTypes");
+        report("Linkset HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         checkCorrectTypes(metaData);
     }
  
     @Test
     public void testIgnoreBadTypes() throws MetaDataException{
-        Reporter.report("Linkset IgnoreBadTypes");
+        report("Linkset IgnoreBadTypes");
         Set<Statement> statements = loadMinLinkSet();
         d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
         statements.add(d1ModifiedStatement);
@@ -52,21 +52,21 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
     @Test
     @Ignore
     public void testAllStatementsUsed() throws MetaDataException{
-        Reporter.report("LinkSet AllStatementsUsed");
+        report("LinkSet AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         checkAllStatementsUsed(metaData);
     }
 
     @Test
     public void testValidateOk() throws MetaDataException{
-        Reporter.report("LinkSet Validate OK");
+        report("LinkSet Validate OK");
         MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         metaData.validate();
     }
 
     @Test
     public void testValidateOkEvenWithWrongExtraType() throws MetaDataException{
-        Reporter.report("LinkSet Validate OKEven With Wrong Extra Type");
+        report("LinkSet Validate OKEven With Wrong Extra Type");
         Set<Statement> statements = loadMinLinkSet();
         Statement badLinkLicenseStatement = 
                 new StatementImpl(LINK_ID, DctermsConstants.LICENSE, new LiteralImpl("LICENSE"));
@@ -78,7 +78,7 @@ public class MinLinkSetMetaDataTest extends MetaDataTestBase{
 
    @Test
     public void testSummary() throws MetaDataException{
-        Reporter.report("LinkSet Summary");
+        report("LinkSet Summary");
         MetaDataCollection metaData = new MetaDataCollection("loadMinLinkSet()", loadMinLinkSet(), minLinksetSetRegistry);
         String expected = "(Linkset) http://www.example.com/test/linkset1 OK!\n"
                 + "(Dataset) http://www.example.com/test/dataset2 OK!\n"

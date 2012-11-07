@@ -18,6 +18,7 @@
 //
 package org.bridgedb.linkset;
 
+import org.bridgedb.metadata.TestUtils;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
@@ -46,11 +47,11 @@ import static org.hamcrest.Matchers.*;
 /**
  * @author Christian
  */
-public class LinkSetLoaderUsingStringTest {
+public class LinkSetLoaderUsingStringTest extends TestUtils{
        
     @Test
     public void testcheckStringValid() throws IDMapperException {
-        Reporter.report("CheckStringValid");
+        report("CheckStringValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         new LinksetLoader().checkStringValid("LinksetStatementReaderTest.INFO1", 
                 LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
@@ -58,7 +59,7 @@ public class LinkSetLoaderUsingStringTest {
     
     @Test
     public void testvalidityReport() throws IDMapperException {
-        Reporter.report("validityReport");
+        report("validityReport");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
         String result = new LinksetLoader().validateString("LinksetStatementReaderTest.INFO1", 
                 LinksetStatementReaderTest.INFO1, format, 
@@ -69,9 +70,9 @@ public class LinkSetLoaderUsingStringTest {
 
     @Test
     public void testLoad() throws IDMapperException {
-        Reporter.report("Load");
+        report("Load");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-       new LinksetLoader().loadString("LinksetStatementReaderTest.INFO1", 
+        new LinksetLoader().loadString("LinksetStatementReaderTest.INFO1", 
                 LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     

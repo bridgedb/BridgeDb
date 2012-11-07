@@ -28,7 +28,7 @@ public class FileTest extends TestUtils{
     public static String LINK_FILE = "test-data/chemspider2chemblrdf-linkset.ttl";
     
     private void checkFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
-        Reporter.report("Checking " + fileName);
+        report("Checking " + fileName);
         File input = new File(fileName);
         StatementReader reader = new StatementReader(input);
         Set<Statement> statements = reader.getVoidStatements();
@@ -43,7 +43,7 @@ public class FileTest extends TestUtils{
     }
     
     private void validateFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
-        Reporter.report("Checking " + fileName);
+        report("Checking " + fileName);
         File input = new File(fileName);
         StatementReader reader = new StatementReader(input);
         Set<Statement> statements = reader.getVoidStatements();
@@ -54,13 +54,13 @@ public class FileTest extends TestUtils{
     }
 
     private void validateFile(String fileName, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
-        Reporter.report("Checking " + fileName);
+        report("Checking " + fileName);
         File input = new File(fileName);
         StatementReader reader = new StatementReader(input);
         Set<Statement> statements = reader.getVoidStatements();
-        Reporter.report("Read " + fileName);
+        report("Read " + fileName);
         MetaDataCollection metaData = new MetaDataCollection(fileName, statements, registry);
-        Reporter.report("Loaded " + fileName);
+        report("Loaded " + fileName);
         String report = metaData.validityReport(NO_WARNINGS);
         assertThat(report, not(containsString("ERROR")));
     }

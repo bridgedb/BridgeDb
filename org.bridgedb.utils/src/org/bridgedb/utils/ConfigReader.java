@@ -196,7 +196,6 @@ public class ConfigReader {
      */
     private boolean loadFromDirectory(String fileName, String directoryName) throws FileNotFoundException {
         File directory = new File (directoryName);
-        System.out.println(directory.getAbsolutePath());
         if (!directory.exists()) {
             return false;
         }

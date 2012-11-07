@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.*;
  *
  * @author Christian
  */
-public class LinksetVoidInformationTest {
+public class LinksetVoidInformationTest extends TestUtils{
     
     private static LinksetVoidInformation instance;
     
@@ -56,7 +56,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testGetSubjectUriSpace() throws Exception {
-        Reporter.report("getSubjectUriSpace");
+        report("getSubjectUriSpace");
         String result = instance.getSubjectUriSpace();
         assertEquals("http://data.kasabi.com/dataset/chembl-rdf/", result);
     }
@@ -66,7 +66,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testGetTargetUriSpace() throws Exception {
-        Reporter.report("getTargetUriSpace");
+        report("getTargetUriSpace");
         String result = instance.getTargetUriSpace();
         assertEquals("http://rdf.chemspider.com/", result);
     }
@@ -76,7 +76,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testGetPredicate() throws Exception {
-        Reporter.report("getPredicate");
+        report("getPredicate");
         String result = instance.getPredicate();
         assertEquals("http://www.w3.org/2004/02/skos/core#exactMatch", result);
     }
@@ -86,7 +86,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testGetLinksetResource() throws Exception {
-        Reporter.report("getLinksetResource");
+        report("getLinksetResource");
         Resource result = instance.getLinksetResource();
         Resource expected = new URIImpl("http://data.kasabi.com/dataset/chembl-rdf/void.ttl/chembl-rdf-compounds_cs_linkset");
         assertEquals(expected, result);
@@ -97,7 +97,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testIsTransative() {
-        Reporter.report("isTransative");
+        report("isTransative");
         boolean result = instance.isTransative();
         assertFalse(result);
     }
@@ -107,7 +107,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testSchema() {
-        Reporter.report("Schema");
+        report("Schema");
         String result = instance.Schema();
         assertNotNull(result);
     }
@@ -117,7 +117,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testHasRequiredValues() {
-        Reporter.report("hasRequiredValues");
+        report("hasRequiredValues");
         boolean result = instance.hasRequiredValues();
         assertTrue(result);
     }
@@ -127,7 +127,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testHasCorrectTypes() {
-        Reporter.report("hasCorrectTypes");
+        report("hasCorrectTypes");
         boolean result = instance.hasCorrectTypes();
         assertTrue(result);
     }
@@ -137,7 +137,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testValidityReport() {
-        Reporter.report("validityReport");
+        report("validityReport");
         boolean includeWarnings = false;
         String result = instance.validityReport(includeWarnings);
         assertThat(result, not(containsString("ERROR")));
@@ -148,7 +148,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testGetValuesByPredicate() {
-        Reporter.report("getValuesByPredicate");
+        report("getValuesByPredicate");
         Set results = instance.getValuesByPredicate(DctermsConstants.TITLE);
         assertThat (results.size(), greaterThanOrEqualTo(3));
     }
@@ -158,7 +158,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testGetResoucresByPredicate() {
-        Reporter.report("getResoucresByPredicate");
+        report("getResoucresByPredicate");
         Set results = instance.getResoucresByPredicate(VoidConstants.SUBJECTSTARGET);
         assertThat (results.size(), greaterThanOrEqualTo(1));
     }
@@ -168,7 +168,7 @@ public class LinksetVoidInformationTest {
      */
     @Test
     public void testGetRDF() {
-        Reporter.report("getRDF");
+        report("getRDF");
         Set<Statement> results = instance.getRDF();
         boolean found = false;
         for (Statement statement:results){
