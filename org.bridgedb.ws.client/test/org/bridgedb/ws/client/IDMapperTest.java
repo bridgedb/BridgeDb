@@ -30,7 +30,7 @@ import org.junit.Ignore;
  * @author Christian
  */
 @Ignore //repeated in OPS client and depends on the specific BridgeBD.war
-public class IDMapperTest  extends org.bridgedb.IDMapperTest{
+public class IDMapperTest  extends org.bridgedb.utils.IDMapperTest{
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {

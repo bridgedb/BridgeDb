@@ -18,7 +18,7 @@
 //
 package org.bridgedb.linkset;
 
-import org.bridgedb.metadata.TestUtils;
+import org.bridgedb.utils.TestUtils;
 import org.bridgedb.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;

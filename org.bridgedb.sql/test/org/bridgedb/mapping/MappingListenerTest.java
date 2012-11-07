@@ -19,7 +19,7 @@
 package org.bridgedb.mapping;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTest;
+import org.bridgedb.utils.IDMapperTest;
 
 /**
  * Extends the IDMapper Tests with a method to load the test data before running the tests.

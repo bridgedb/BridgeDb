@@ -6,7 +6,7 @@ package org.bridgedb.rdf;
 
 import java.util.Set;
 import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.TestUtils;
+import org.bridgedb.utils.TestUtils;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;
 import org.junit.AfterClass;

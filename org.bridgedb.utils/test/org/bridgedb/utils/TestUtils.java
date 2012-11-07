@@ -2,26 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.metadata;
-
-import org.bridgedb.utils.Reporter;
-import java.util.Set;
-import org.openrdf.model.Resource;
-import javax.xml.datatype.DatatypeConfigurationException;
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+package org.bridgedb.utils;
 
 /**
  *
  * @author Christian
  */
-public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
+public abstract class TestUtils {
     
     //Flags for easy reading of tests
     static final boolean INCLUDE_WARNINGS = true;
     static final boolean NO_WARNINGS = false;;
      
-    void checkCorrectNumberOfIds(MetaDataCollection metaData, int numberOfIds){
+    public void report(String message){
+        System.out.println(message);
+        
+    }
+    
+/*    void checkCorrectNumberOfIds(MetaDataCollection metaData, int numberOfIds){
         Set<Resource> ids = metaData.getIds();
         boolean ok = (ids.size() == numberOfIds);
         if (!ok){
@@ -63,5 +61,5 @@ public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
             assertTrue(ok);
         }        
     }
-    
+  */  
 }

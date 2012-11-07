@@ -26,7 +26,7 @@ public class FileTest extends TestUtils{
     public static boolean FILE_HAS_EXTRA_RDF = false;
     public static boolean FILE_HAS_ONLY_EXPECTED_RDF = true;
     public static String LINK_FILE = "test-data/chemspider2chemblrdf-linkset.ttl";
-    
+
     private void checkFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
         report("Checking " + fileName);
         File input = new File(fileName);

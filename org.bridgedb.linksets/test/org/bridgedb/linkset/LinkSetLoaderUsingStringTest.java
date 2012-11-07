@@ -18,7 +18,7 @@
 //
 package org.bridgedb.linkset;
 
-import org.bridgedb.metadata.TestUtils;
+import org.bridgedb.utils.TestUtils;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;

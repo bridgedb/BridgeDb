@@ -19,13 +19,12 @@
 package org.bridgedb.ws;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.IDMapperTestBase;
 
 /**
  *
  * @author Christian
  */
-public class WSOpsClientFactory extends IDMapperTestBase{
+public class WSOpsClientFactory extends org.bridgedb.utils.IDMapperTestBase{
     
     public static WSOpsInterface createTestWSClient() throws IDMapperException{
         setupXref();
