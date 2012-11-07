@@ -18,6 +18,7 @@
 //
 package org.bridgedb.mysql;
 
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
@@ -34,16 +35,18 @@ import org.junit.BeforeClass;
 //@Ignore 
 public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTest {
     
+    static final Logger logger = Logger.getLogger(MappingListenerTest.class);
+
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException{
         connectionOk = false;
-        TestSqlFactory.checkSQLAccess();
+        TestSqlFactory.checkMySQLAccess();
         listener = new SQLListener(true, StoreType.TEST);
         loadData();
         idMapper = new SQLIdMapper(false, StoreType.TEST);
         connectionOk = true;
         capabilities = idMapper.getCapabilities(); 
-        report("setup");
+        logger.info("MySQL Setup successfull");
     }
             
 }

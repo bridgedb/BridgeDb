@@ -47,18 +47,6 @@ public abstract class URLMapperTest extends URLListenerTest{
     //If set to false will skip testClose(). 
     protected static boolean connectionOk = true;
         
-    static private Date start;
-    
-    @BeforeClass
-    public static void startTime() throws IDMapperException{
-        start = new Date();
-    }
-
-    @AfterClass
-    public static void stopTime() throws IDMapperException{
-        report("Test took " + ((new Date()).getTime() - start.getTime()));
-    }
-    
     @Test
     public void testMapIDManyToManyNoDataSources() throws IDMapperException{
         report("MapIDManyToManyNoDataSources");
