@@ -173,7 +173,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      */
     private void finishMappingQuery(StringBuilder query, String sourceURL, String profileURL, 
     		String... targetURISpaces) throws IDMapperException {
-        //System.out.println("mapping: " + sourceURL);
         String id = getId(sourceURL);
         String uriSpace = getUriSpace(sourceURL);
         query.append("FROM mapping, mappingSet, url as source, url as target ");

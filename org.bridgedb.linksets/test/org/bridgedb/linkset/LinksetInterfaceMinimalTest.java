@@ -64,7 +64,6 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         String result = linksetInterfaceMinimal.validateString("LinksetStatementReaderTest.INFO1",
                 LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertThat(result, not(containsString("ERROR")));
-        System.out.println(result);
         assertThat(result, containsString("Found 3 links"));
     }
 

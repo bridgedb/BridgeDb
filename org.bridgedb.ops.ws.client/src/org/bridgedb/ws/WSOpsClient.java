@@ -196,13 +196,6 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
                 webResource.path("/validateStringXML")
                 .type(MediaType.APPLICATION_XML)
                 .post(ValidationBean.class, input);
-//        System.out.println(response.getStatus());  
-//        System.out.println(response);  
-//        System.out.println(response.hasEntity());  
-//        System.out.println(response.getClass());  
-//        System.out.println(response.getType());  
-//         = response.getEntity(ValidationBean.class);
-        System.out.println(result);
         return result;
     }
 

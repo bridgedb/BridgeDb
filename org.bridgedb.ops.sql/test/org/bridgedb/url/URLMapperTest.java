@@ -81,8 +81,6 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertFalse(resultSet.contains(map1URL2));
         assertFalse(resultSet.contains(map1URL3));
         assertTrue(resultSet.contains(map2URL1));
-        System.out.println(resultSet);
-        System.out.println(map2URL3);
         assertTrue(resultSet.contains(map2URL3));
         resultSet = results.get(map2URL1);
         assertNull(resultSet);
