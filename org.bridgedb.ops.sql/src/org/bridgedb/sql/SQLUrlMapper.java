@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -50,6 +51,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     private static final int URI_SPACE_LENGTH = 100;
 
+    static final Logger logger = Logger.getLogger(SQLListener.class);
+    
     /**
      * Creates a new URLMapper including BridgeDB implementation based on a connection to the SQL Database.
      *
@@ -132,6 +135,22 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 }
             }
         }
+        if (results.size() <= 1){
+            String targets = "";
+            for (String targetURISpace:targetURISpaces){
+                targets+= targetURISpace + ", ";
+            }
+            if (targets.isEmpty()){
+                targets = "all DataSources";
+            }
+            if (results.isEmpty()){
+                logger.warn("Unable to map " + URL + " to any results for " + targets);
+            } else {
+                logger.warn("Only able to map " + URL + " to itself for " + targets);
+            }
+        } else {
+            logger.info("Mapped " + URL + " to " + results.size() + " results");
+        }
         return results;       
     }
 
@@ -193,6 +212,22 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 }
             }
         }
+        if (results.size() <= 1){
+            String targets = "";
+            for (String targetURISpace:targetURISpaces){
+                targets+= targetURISpace + ", ";
+            }
+            if (targets.isEmpty()){
+                targets = "all DataSources";
+            }
+            if (results.isEmpty()){
+                logger.warn("Unable to map " + URL + " to any results for " + targets);
+            } else {
+                logger.warn("Only able to map " + URL + " to itself for " + targets);
+            }
+        } else {
+            logger.info("Mapped " + URL + " to " + results.size() + " results");
+        }
         return results;       
     }
 
@@ -219,7 +254,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         ResultSet rs;
         try {
             rs = statement.executeQuery(query.toString());
-            return rs.next();
+            boolean result = rs.next();
+            if (logger.isDebugEnabled()){
+                logger.debug(URL + " exists = " + result);
+            }
+            return result;
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
@@ -248,6 +287,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         Set<String> results = resultSetToURLsSet(rs);
+        if (logger.isDebugEnabled()){
+            logger.debug("Freesearch for " + text + " gave " + results.size() + " results");
+        }
         return results;       
     }
     
@@ -256,7 +298,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         String id = getId(URL);
         String uriSpace = getUriSpace(URL);
         DataSource dataSource = getDataSource(uriSpace);
-        return new Xref(id, dataSource);
+        Xref result =  new Xref(id, dataSource);
+        if (logger.isDebugEnabled()){
+            logger.debug( URL+ " toXref " + result);
+        }
+        return result;
     }
 
     @Override
@@ -276,7 +322,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
-        return resultSetToURLMapping(rs);
+        URLMapping result = resultSetToURLMapping(rs);
+        if (logger.isDebugEnabled()){
+            logger.debug(" mapping " +id + " is " + result);
+        }
+        return result;    
     }
 
     @Override
