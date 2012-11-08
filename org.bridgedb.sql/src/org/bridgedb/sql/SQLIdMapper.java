@@ -72,7 +72,10 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
 
     @Override
     public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws BridgeDbSqlException {
-        if (badXref(ref)) return new HashSet<Xref>();
+        if (badXref(ref)) {
+            logger.warn("mapId called with a badXref " + ref);
+            return new HashSet<Xref>();
+        }
         StringBuilder query = new StringBuilder();
         query.append("SELECT targetId as id, targetDataSource as sysCode ");
         query.append("FROM mapping, mappingSet ");
@@ -107,6 +110,22 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
                 }
             }
         }
+        if (results.size() <= 1){
+            String targets = "";
+            for (DataSource tgtDataSource:tgtDataSources){
+                targets+= tgtDataSource + ", ";
+            }
+            if (targets.isEmpty()){
+                targets = "all DataSources";
+            }
+            if (results.isEmpty()){
+                logger.warn("Unable to map " + ref + " to any results for " + targets);
+            } else {
+                logger.warn("Only able to map " + ref + " to itself for " + targets);
+            }
+        } else {
+            logger.info("Mapped " + ref + " to " + results.size() + " results");
+        }
         return results;
     }
 
@@ -125,7 +144,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         ResultSet rs;
         try {
             rs = statement.executeQuery(query.toString());
-            return rs.next();
+            boolean result = rs.next();
+            if (logger.isDebugEnabled()){
+                logger.debug(xref + " exists = " + result);
+            }
+            return result;
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
@@ -150,7 +173,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
-        return resultSetToXrefSet(rs);
+        Set<Xref> results = resultSetToXrefSet(rs);
+        if (logger.isDebugEnabled()){
+            logger.debug("Freesearch for " + text + " gave " + results.size() + " results");
+        }
+        return results;
     }
 
     @Override
@@ -172,6 +199,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
                 ex.printStackTrace();
             }
         }
+        logger.info("close() successful");
     }
 
     @Override
@@ -185,12 +213,18 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
                 return false;
             }
         }
+        if (logger.isDebugEnabled()){
+            logger.debug("isConnected() returned  " + isConnected);
+        }
         return isConnected; 
     }
     // ***IDMapperCapabilities
     
     @Override
     public boolean isFreeSearchSupported() {
+        if (logger.isDebugEnabled()){
+            logger.debug("isFreeSearchSupported() returned  true");
+        }
         return true;
     }
 
@@ -206,7 +240,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
-        return resultSetToDataSourceSet(rs);        
+        Set<DataSource> results = resultSetToDataSourceSet(rs);
+        if (logger.isDebugEnabled()){
+            logger.debug("getSupportedSrcDataSources() returned " + results.size() + " results");
+        }
+        return results;        
     }
 
     @Override
@@ -221,7 +259,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
-        return resultSetToDataSourceSet(rs);        
+        Set<DataSource> results = resultSetToDataSourceSet(rs);
+        if (logger.isDebugEnabled()){
+            logger.debug("getSupportedTgtDataSources() returned " + results.size() + " results");
+        }
+        return results;        
     }
 
     @Override
@@ -240,7 +282,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         ResultSet rs;
         try {
             rs = statement.executeQuery(query.toString());
-            return rs.next();
+            boolean result = rs.next();
+            if (logger.isDebugEnabled()){
+                logger.debug("isMappingSupported " + src + " to " + tgt + " is " + result);
+            }
+            return result;
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
@@ -255,8 +301,15 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             Statement statement = this.createStatement();
             ResultSet rs = statement.executeQuery(query);
             if (rs.next()){
-                return rs.getString("property");
+                String result = rs.getString("property");
+                if (logger.isDebugEnabled()){
+                    logger.debug("property " + key + " is " + result);
+                }
+                return result;
             } else {
+                if (logger.isDebugEnabled()){
+                    logger.warn("No property " + key + " found! ");
+                }
                 return null;
             }
         } catch (Exception ex) {
@@ -277,9 +330,12 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             while (rs.next()){
                 results.add(rs.getString("theKey"));
             }
+            if (logger.isDebugEnabled()){
+                logger.warn("getKeys() returned " + results.size() + " keys! ");
+            }
             return results;
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Error getting keys ", ex);
             return null;
         }
     }
