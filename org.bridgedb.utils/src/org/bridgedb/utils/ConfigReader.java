@@ -57,7 +57,6 @@ public class ConfigReader {
         Properties props = finder.getProperties();
         PropertyConfigurator.configure(props);
         logger.info("Logger configured from " + finder.foundAt + " by " + finder.findMethod);
-        logger.trace("test trace");
         loggerSetup = true;
     }
      
@@ -111,6 +110,9 @@ public class ConfigReader {
         inputStream = new FileInputStream(file);
         findMethod = "Loaded from run Directory.";
         foundAt = file.getAbsolutePath();
+        if (loggerSetup){
+            logger.info("Loaded file " + fileName + " directly from " + foundAt);    
+        }
         return true;
     }
 
@@ -139,6 +141,9 @@ public class ConfigReader {
             inputStream = new FileInputStream(file);
             findMethod = "Loaded from Environment Variable.";
             foundAt = file.getAbsolutePath();
+            if (loggerSetup){
+                logger.info("Loaded file " + fileName + " using OPS-IMS-CONFIG from " + foundAt);    
+            }
             return true;
         } else {
             String error = "Environment Variable OPS-IMS-CONFIG points to " + envPath + 
@@ -179,6 +184,9 @@ public class ConfigReader {
             inputStream = new FileInputStream(file);
             findMethod = "Loaded from CATALINA_HOME configs.";
             foundAt = file.getAbsolutePath();
+            if (loggerSetup){
+                logger.info("Loaded file " + fileName + " using CATALINA_HOME from " + foundAt);    
+            }
             return true;
         } else {
             error = "Environment Variable CATALINA_HOME points to " + catalinaHomePath  + 
@@ -210,6 +218,9 @@ public class ConfigReader {
             inputStream = new FileInputStream(file);
             findMethod = "Loaded from directory: " + directoryName;
             foundAt = file.getAbsolutePath();
+            if (loggerSetup){
+                logger.info("Loaded file " + fileName + " from " + foundAt);    
+            }
             return true;
     }
 
@@ -224,6 +235,9 @@ public class ConfigReader {
             inputStream = new FileInputStream(file);
             findMethod = "Loaded from Resource URI";
             foundAt = file.getAbsolutePath();
+            if (loggerSetup){
+                logger.info("Loaded file " + fileName + " from Jar ");    
+            }
             return true;
         }
         return false;
@@ -240,6 +254,9 @@ public class ConfigReader {
                 inputStream = zip;
                 findMethod = "Loaded by unzipping jar";
                 foundAt = "Inside jar file";
+                if (loggerSetup){
+                    logger.info("Loaded file " + name + " by unziiping the Jar ");    
+                }
                 return true;
             }
         }
