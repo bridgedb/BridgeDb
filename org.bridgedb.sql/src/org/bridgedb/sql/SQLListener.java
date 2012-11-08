@@ -80,6 +80,7 @@ public class SQLListener implements MappingListener{
         if (dropTables){
             this.dropSQLTables();
             this.createSQLTables();
+            logger.info("Recreated all tables!");
         } else {
             checkVersion();
             loadDataSources();
@@ -144,6 +145,7 @@ public class SQLListener implements MappingListener{
             throw new BridgeDbSqlException ("Error getting new indetity with " + query, ex);
         }
         lastUpdate = new Date().getTime();
+        logger.info("Registered new Mappingset " + autoinc + " from " + source.getSystemCode() + " to " + target.getSystemCode());
         return autoinc;
     }
 
@@ -166,6 +168,7 @@ public class SQLListener implements MappingListener{
         insertCount = 0;
         doubleCount = 0;   
         updateLastUpdated();
+        logger.debug("Closed input");
     }
     
     @Override
@@ -218,7 +221,7 @@ public class SQLListener implements MappingListener{
                 doubleCount += blockCount - changed;
                 long now = new Date().getTime();
                 if (now - lastUpdate > REPORT_DELAY){
-                    logger.info("Inserted " + insertCount + " links and ignored " + doubleCount + " so far");
+                    logger.debug("Inserted " + insertCount + " links and ignored " + doubleCount + " so far");
                     lastUpdate = now;
                 }
             } catch (SQLException ex) {

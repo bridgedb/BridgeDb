@@ -38,6 +38,12 @@
 		</dependency>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.linksets</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.ops.sql</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>

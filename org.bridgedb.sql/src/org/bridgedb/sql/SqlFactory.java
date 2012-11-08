@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
@@ -56,6 +57,8 @@ public class SqlFactory {
     //TODO get from properties
     private static boolean useMySQL = true;
     
+    static final Logger logger = Logger.getLogger(SqlFactory.class);
+    
     /**
      * Create a wrapper around the live SQL Database, 
      *     using the database name, user name and password found in the config file.
@@ -68,17 +71,21 @@ public class SqlFactory {
             switch (type){
                 case LIVE:
                     sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlDatabase(), sqlUser(), sqlPassword());
+                    logger.info("Connecting to Live MYSQL database " + sqlDatabase());
                     break;
                 case LOAD:
                     sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlLoadDatabase(), sqlUser(), sqlPassword());
+                    logger.info("Connecting to Load MYSQL database " + sqlLoadDatabase());
                     break;
                 case TEST:
                     sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
+                    logger.info("Connecting to test MYSQL database " + sqlTestDatabase());
                     break;
                 default:     
                     throw new UnsupportedOperationException("Unexpected StoreType " + type);
             } 
         } else {       
+            logger.info("Connecting to hardcoded Virtuoso database. Ignoring StoreType");
             switch (type){
                 case LIVE:
                     sqlAccess = new VirtuosoAccess();;

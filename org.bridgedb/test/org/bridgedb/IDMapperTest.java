@@ -106,6 +106,16 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
     }
 
     @Test
+    public void testMapIDOneBadWithTarget() throws IDMapperException{
+        report("MapIDOneToManyNoDataSourcesWithTarget");
+        Set<Xref> results = idMapper.mapID(mapBadxref1, DataSource2);
+        if (results != null && !results.isEmpty()){
+            assertEquals(1, results.size());
+            assertTrue(results.contains(mapBadxref1));
+        }
+    }
+
+    @Test
     public void testMapIDOneToManyWithOneDataSource() throws IDMapperException{
         report("MapIDOneToManyWithOneDataSource");
         Set<Xref> results = idMapper.mapID(map1xref1, DataSource2);
