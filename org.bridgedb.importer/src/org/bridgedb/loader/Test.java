@@ -139,34 +139,14 @@ public class Test {
             directory.mkdir();
         }
         for (DataSource srcDataSource:srcDataSources){
-            String urn = srcDataSource.getURN("");
-            if (urn.length() > 11){
-                String sourceUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+            if (srcDataSource.getURN("").length() > 11){               
                 for (DataSource tgtDataSource:tgtDataSources){
-                    urn = tgtDataSource.getURN("");
-                    if (srcDataSource != tgtDataSource && urn.length() > 11){
-                        String targetUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+                    if (srcDataSource != tgtDataSource && tgtDataSource.getURN("").length() > 11){
                         String fileName = srcDataSource.getSystemCode() + "_" + tgtDataSource.getSystemCode() + ".ttl";
                         File linksetFile = new File(directory, fileName);
                         FileWriter writer = new FileWriter(linksetFile);
                         buffer = new BufferedWriter(writer);
-                        writeln("@prefix : <#> .");
-                        writeln("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .");
-                        writeln("@prefix void: <http://rdfs.org/ns/void#> .");
-                        writeln("@prefix skos: <http://www.w3.org/2004/02/skos/core#> .");
-                        writeln("@prefix idOrg" + srcDataSource.getSystemCode() + ": <" + sourceUriSpace + "> .");
-                        writeln("@prefix idOrg" + tgtDataSource.getSystemCode() + ": <" + targetUriSpace + "> .");
-                        writeln("");
-                        writeln(":DataSource_" + srcDataSource.getSystemCode() + " a void:Dataset  ;");
-                        writeln("    void:uriSpace <" + sourceUriSpace + ">.");
-                        writeln("");
-                        writeln(":DataSource_" + tgtDataSource.getSystemCode() + " a void:Dataset  ;");
-                        writeln("    void:uriSpace <" + targetUriSpace + ">.");
-                        writeln(":Test" + srcDataSource.getSystemCode() + "_" + tgtDataSource.getSystemCode() + " a void:Linkset  ;");
-                        writeln("    void:subjectsTarget :DataSource_" + srcDataSource.getSystemCode() + " ;");
-                        writeln("    void:objectsTarget :DataSource_" + tgtDataSource.getSystemCode() + " ;");
-                        writeln("    void:linkPredicate skos:relatedMatch .");
-                        writeln("");                
+                        writeVoidHeader(srcDataSource, tgtDataSource);
                         writeln(srcDataSource.getSystemCode() + " " + srcDataSource.getURN("$id"));
                         writeln(tgtDataSource.getSystemCode() + " " + tgtDataSource.getURN("$id"));
                         buffer.close();
@@ -175,6 +155,30 @@ public class Test {
                 }
             }
         }
+    }
+    
+    private static void writeVoidHeader (DataSource srcDataSource, DataSource tgtDataSource) throws IOException{
+        String urn = srcDataSource.getURN("");
+        String sourceUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+        urn = tgtDataSource.getURN("");
+        String targetUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+        writeln("@prefix : <#> .");
+        writeln("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .");
+        writeln("@prefix void: <http://rdfs.org/ns/void#> .");
+        writeln("@prefix skos: <http://www.w3.org/2004/02/skos/core#> .");
+        writeln("@prefix idOrg" + srcDataSource.getSystemCode() + ": <" + sourceUriSpace + "> .");
+        writeln("@prefix idOrg" + tgtDataSource.getSystemCode() + ": <" + targetUriSpace + "> .");
+        writeln("");
+        writeln(":DataSource_" + srcDataSource.getSystemCode() + " a void:Dataset  ;");
+        writeln("    void:uriSpace <" + sourceUriSpace + ">.");
+        writeln("");
+        writeln(":DataSource_" + tgtDataSource.getSystemCode() + " a void:Dataset  ;");
+        writeln("    void:uriSpace <" + targetUriSpace + ">.");
+        writeln(":Test" + srcDataSource.getSystemCode() + "_" + tgtDataSource.getSystemCode() + " a void:Linkset  ;");
+        writeln("    void:subjectsTarget :DataSource_" + srcDataSource.getSystemCode() + " ;");
+        writeln("    void:objectsTarget :DataSource_" + tgtDataSource.getSystemCode() + " ;");
+        writeln("    void:linkPredicate skos:relatedMatch .");
+        writeln("");                
     }
     
     private static void writeln(String message) throws IOException{

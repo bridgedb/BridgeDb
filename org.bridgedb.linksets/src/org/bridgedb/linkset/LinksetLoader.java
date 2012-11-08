@@ -105,7 +105,7 @@ public class LinksetLoader implements LinksetInterface{
         return validateInputStream(source, inputStream, format, StoreType.LIVE, ValidationType.LINKS, INCLUDE_WARNINGS);
     }
 
-    private String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
+    public String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
     		throws IDMapperException {
     	if (!file.exists()) {
     		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
