@@ -5,8 +5,10 @@
 
 package org.bridgedb.loader;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,6 +35,7 @@ import org.bridgedb.utils.StoreType;
 public class Test {
 
     static HashSet<DataSource> allSource = new HashSet<DataSource>();
+    static BufferedWriter buffer;
     
     public static String linksetLine(Xref source, Xref target){
         return "<" + source.getUrl() + "> skos:exactMatch <" + target.getUrl() + ">";
@@ -65,8 +68,7 @@ public class Test {
      * @param mapper MUST implement XrefIterator
      */
     public static void printLinksetLines(IDMapper mapper) throws IDMapperException{
-        SQLAccess sqlAccess = SqlFactory.createSQLAccess(StoreType.TEST);
-        SQLUrlMapper sqlMapper = new SQLUrlMapper(true, sqlAccess, new MySQLSpecific());
+        SQLUrlMapper sqlMapper = new SQLUrlMapper(false, StoreType.TEST);
 
         XrefIterator iterator = (XrefIterator)mapper;
         Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
@@ -118,16 +120,72 @@ public class Test {
         Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         for (DataSource dataSource:tgtDataSources) {
             if (dataSource != null && dataSource.getUrl("").trim().isEmpty()){
-                System.out.println(dataSource.getSystemCode() + ": " + dataSource + " " + dataSource.getMainUrl());
+                System.out.println(dataSource.getSystemCode() + ": " + dataSource.getURN("") + " " + dataSource.getMainUrl());
             }
         }
         allSource.addAll(tgtDataSources);
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, IDMapperException {
+    /**
+     * 
+     * @param mapper MUST implement XrefIterator
+     */
+    public static void printLinksets(IDMapper mapper, String name) throws IDMapperException, IOException{
+        XrefIterator iterator = (XrefIterator)mapper;
+        Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+        Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+        File directory = new File("C:/OpenPhacts/linksets/" + name);
+        if (!directory.exists()){
+            directory.mkdir();
+        }
+        for (DataSource srcDataSource:srcDataSources){
+            String urn = srcDataSource.getURN("");
+            if (urn.length() > 11){
+                String sourceUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+                for (DataSource tgtDataSource:tgtDataSources){
+                    urn = tgtDataSource.getURN("");
+                    if (srcDataSource != tgtDataSource && urn.length() > 11){
+                        String targetUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+                        String fileName = srcDataSource.getSystemCode() + "_" + tgtDataSource.getSystemCode() + ".ttl";
+                        File linksetFile = new File(directory, fileName);
+                        FileWriter writer = new FileWriter(linksetFile);
+                        buffer = new BufferedWriter(writer);
+                        writeln("@prefix : <#> .");
+                        writeln("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .");
+                        writeln("@prefix void: <http://rdfs.org/ns/void#> .");
+                        writeln("@prefix skos: <http://www.w3.org/2004/02/skos/core#> .");
+                        writeln("@prefix idOrg" + srcDataSource.getSystemCode() + ": <" + sourceUriSpace + "> .");
+                        writeln("@prefix idOrg" + tgtDataSource.getSystemCode() + ": <" + targetUriSpace + "> .");
+                        writeln("");
+                        writeln(":DataSource_" + srcDataSource.getSystemCode() + " a void:Dataset  ;");
+                        writeln("    void:uriSpace <" + sourceUriSpace + ">.");
+                        writeln("");
+                        writeln(":DataSource_" + tgtDataSource.getSystemCode() + " a void:Dataset  ;");
+                        writeln("    void:uriSpace <" + targetUriSpace + ">.");
+                        writeln(":Test" + srcDataSource.getSystemCode() + "_" + tgtDataSource.getSystemCode() + " a void:Linkset  ;");
+                        writeln("    void:subjectsTarget :DataSource_" + srcDataSource.getSystemCode() + " ;");
+                        writeln("    void:objectsTarget :DataSource_" + tgtDataSource.getSystemCode() + " ;");
+                        writeln("    void:linkPredicate skos:relatedMatch .");
+                        writeln("");                
+                        writeln(srcDataSource.getSystemCode() + " " + srcDataSource.getURN("$id"));
+                        writeln(tgtDataSource.getSystemCode() + " " + tgtDataSource.getURN("$id"));
+                        buffer.close();
+                        System.exit(0);
+                    }
+                }
+            }
+        }
+    }
+    
+    private static void writeln(String message) throws IOException{
+        buffer.write(message);
+        buffer.newLine();
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException, IDMapperException, IOException {
         BioDataSource.init();
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
-        File directory = new File("C:/OpenPhacts/andra");
+        /*File directory = new File("C:/OpenPhacts/andra");
         File[] children = directory.listFiles();
         for (File child:children){
             System.out.println(child.getAbsolutePath());
@@ -143,8 +201,16 @@ public class Test {
                 System.out.println("   Mairan base :" + ds.getURN(""));
             }
         }
-        //IDMapper mapper = BridgeDb.connect("idmapper-pgdb:C:/OpenPhacts/andra/"+"Ag_Derby_20120602.bridge");
-        //printLinksetLines(mapper);
+        System.out.println("SystemCode, Fullname, UriPattern, Main URL, Mairan base");
+        for (DataSource ds:allSource){
+             if (ds != null){
+                System.out.println(ds.getSystemCode() + ", " + ds.getSystemCode() + ", " + ds.getUrl("$id") + ", "
+                        + ds.getMainUrl() + ", " + ds.getURN(""));
+            }
+        }
+        */
+        IDMapper mapper = BridgeDb.connect("idmapper-pgdb:C:/OpenPhacts/andra/"+"Ag_Derby_20120602.bridge");
+        printLinksets(mapper, "Ag_Derby_20120602");
         //Set<DataSource> dataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         //for (DataSource dataSource:dataSources){
         //    System.out.println(dataSource);
