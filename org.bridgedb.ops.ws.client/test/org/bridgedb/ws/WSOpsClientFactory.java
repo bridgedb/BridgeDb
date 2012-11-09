@@ -40,9 +40,6 @@ public class WSOpsClientFactory extends org.bridgedb.utils.IDMapperTestBase{
             System.err.println ("Please make sure the server is running");
             org.junit.Assume.assumeTrue(false);        
         }
-        System.out.println(DataSource1);
-        System.out.println(DataSource2);
-        System.out.println(DataSource2.getSystemCode());
         if (!webService.isMappingSupported(DataSource1.getSystemCode(), DataSource2.getSystemCode()).isMappingSupported()){
         //ystem.out.println("in WSCoreInterface 5a");
             System.err.println ("***** SKIPPING WSClientTest ******");

@@ -165,7 +165,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             }
             query.append(")");
         }
-        System.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -174,7 +173,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         Set<String> results = resultSetToURLsSet(rs, id);
-        System.out.println(results);
         if (results.size() <= 1){
             String targets = "";
             for (String targetURISpace:targetURISpaces){
