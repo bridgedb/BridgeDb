@@ -48,7 +48,7 @@ public class UriSpaceMapper {
                 .idExample("123").asDataSource();
        map.put("http://www.example.org#", dataSource);
        map.put("http://rdf.example.org#", dataSource);
-       dataSource = DataSource.register("Chemb 2 Compound", "Chemb 2 Compound")
+       dataSource = DataSource.register("Chembl 2 Compound", "Chembl 2 Compound")
                .urlPattern("http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id")
                 .idExample("698788").asDataSource();
        map.put("http://chem2bio2rdf.org/chembl/resource/chembl_compounds/", dataSource);
@@ -56,7 +56,7 @@ public class UriSpaceMapper {
                .urlPattern("http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id")
                 .idExample("CHEMBL6329").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/chemblid/", dataSource);
-       dataSource = DataSource.register("Chemb 2 Target", "Chemb 2 Target")
+       dataSource = DataSource.register("Chembl 2 Target", "Chembl 2 Target")
                .urlPattern("http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id")
                 .idExample("698788").asDataSource();
        map.put("http://chem2bio2rdf.org/chembl/resource/chembl_targets/", dataSource);
@@ -64,7 +64,7 @@ public class UriSpaceMapper {
                .urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/$id")
                 .idExample("m1").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/molecule/", dataSource);
-       dataSource = DataSource.register("Chemb 13 Target", "Chembl 13 Target")
+       dataSource = DataSource.register("Chembl 13 Target", "Chembl 13 Target")
                .urlPattern("http://data.kasabi.com/dataset/chembl-rdf/target/$id")
                 .idExample("t1").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/target/", dataSource);
