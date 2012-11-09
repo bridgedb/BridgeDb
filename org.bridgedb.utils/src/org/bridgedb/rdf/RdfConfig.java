@@ -38,6 +38,7 @@ public class RdfConfig {
     public static final String CONFIG_FILE_NAME = "rdfConfig.txt";
 
     private static String path;
+    private static String baseURI = null;
     
     private static Properties properties;
 
@@ -47,7 +48,13 @@ public class RdfConfig {
     }
     
     public static String getTheBaseURI() throws IDMapperException {
-        return getProperties().getProperty(BASE_URI_PROPERTY).trim();
+        if (baseURI == null){
+            baseURI = getProperties().getProperty(BASE_URI_PROPERTY).trim();
+            if (!baseURI.endsWith("/")){
+                baseURI = baseURI + "/";
+            }
+        }
+        return baseURI;
     }
     
     public static File getDataDir(StoreType storeType) throws IDMapperException {
