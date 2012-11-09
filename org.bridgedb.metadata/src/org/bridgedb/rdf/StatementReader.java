@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Resource;
@@ -202,7 +204,8 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
         return mineTypes.toString();
     }
         
-    static public void main(String[] args) {
+    static public void main(String[] args) throws BridgeDBException {
+        ConfigReader.logToConsole();
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
         Set<RDFFormat> keys = reg.getKeys();
         for (RDFFormat key:keys){

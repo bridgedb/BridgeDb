@@ -34,6 +34,7 @@ import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
@@ -236,6 +237,7 @@ public class LinksetLoader implements LinksetInterface{
   //  }
     
     public static void main(String[] args) throws IDMapperException {
+        ConfigReader.logToConsole();
          if (args.length != 1){
             usage("Please specify a file/directory and use -D format for all other arguements.");
         }

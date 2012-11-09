@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.apache.log4j.Logger;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSource.Builder;
@@ -26,6 +27,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 
 /**
@@ -33,6 +35,8 @@ import org.bridgedb.utils.StoreType;
  * @author Christian
  */
 public class Test {
+
+    static final Logger logger = Logger.getLogger(Test.class);
 
     static HashSet<DataSource> allSource = new HashSet<DataSource>();
     static BufferedWriter buffer;
@@ -94,7 +98,7 @@ public class Test {
                         linkCount += targetXrefs.size();
                     }
                 }
-                System.out.println(srcDataSource.getSystemCode() + " -> " + tgtDataSource.getSystemCode() + 
+                logger.info(srcDataSource.getSystemCode() + " -> " + tgtDataSource.getSystemCode() + 
                         " " + sourceCount + " " + linkCount + " " + unmapped);
                 if (linkCount > 0){
                     setCount++;
@@ -102,7 +106,7 @@ public class Test {
                 }
             }
         }
-        System.out.println("set Count = " + setCount + "  Links = " + linkTotal);
+        logger.info("set Count = " + setCount + "  Links = " + linkTotal);
     }
     
     /**
@@ -113,14 +117,14 @@ public class Test {
         Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         for (DataSource dataSource:srcDataSources) {
             if (dataSource != null && dataSource.getUrl("").trim().isEmpty()){
-                System.out.println(dataSource.getSystemCode() + ": " + dataSource + " " + dataSource.getMainUrl());
+                logger.info(dataSource.getSystemCode() + ": " + dataSource + " " + dataSource.getMainUrl());
             }
         }
         allSource.addAll(srcDataSources);
         Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         for (DataSource dataSource:tgtDataSources) {
             if (dataSource != null && dataSource.getUrl("").trim().isEmpty()){
-                System.out.println(dataSource.getSystemCode() + ": " + dataSource.getURN("") + " " + dataSource.getMainUrl());
+                logger.info(dataSource.getSystemCode() + ": " + dataSource.getURN("") + " " + dataSource.getMainUrl());
             }
         }
         allSource.addAll(tgtDataSources);
@@ -187,28 +191,29 @@ public class Test {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, IDMapperException, IOException {
+        ConfigReader.logToConsole();
         BioDataSource.init();
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
         /*File directory = new File("C:/OpenPhacts/andra");
         File[] children = directory.listFiles();
         for (File child:children){
-            System.out.println(child.getAbsolutePath());
+            logger.info(child.getAbsolutePath());
             IDMapper mapper = BridgeDb.connect("idmapper-pgdb:" + child.getAbsolutePath());
             findDataSources(mapper);
         }
         for (DataSource ds:allSource){
              if (ds != null){
-                System.out.println("SystemCode: " + ds.getSystemCode());
-                System.out.println("   Fullname: " + ds.getSystemCode());
-                System.out.println("   UriPattern :" + ds.getUrl("$id"));
-                System.out.println("   Main URL :" + ds.getMainUrl());
-                System.out.println("   Mairan base :" + ds.getURN(""));
+                logger.info("SystemCode: " + ds.getSystemCode());
+                logger.info("   Fullname: " + ds.getSystemCode());
+                logger.info("   UriPattern :" + ds.getUrl("$id"));
+                logger.info("   Main URL :" + ds.getMainUrl());
+                logger.info("   Mairan base :" + ds.getURN(""));
             }
         }
-        System.out.println("SystemCode, Fullname, UriPattern, Main URL, Mairan base");
+        logger.info("SystemCode, Fullname, UriPattern, Main URL, Mairan base");
         for (DataSource ds:allSource){
              if (ds != null){
-                System.out.println(ds.getSystemCode() + ", " + ds.getSystemCode() + ", " + ds.getUrl("$id") + ", "
+                logger.info(ds.getSystemCode() + ", " + ds.getSystemCode() + ", " + ds.getUrl("$id") + ", "
                         + ds.getMainUrl() + ", " + ds.getURN(""));
             }
         }
@@ -217,8 +222,8 @@ public class Test {
         printLinksets(mapper, "Ag_Derby_20120602");
         //Set<DataSource> dataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         //for (DataSource dataSource:dataSources){
-        //    System.out.println(dataSource);
-        //    System.out.println(dataSource.getUrl(""));
+        //    logger.info(dataSource);
+        //    logger.info(dataSource.getUrl(""));
         //}
     }
 

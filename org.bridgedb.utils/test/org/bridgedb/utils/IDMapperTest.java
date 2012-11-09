@@ -19,6 +19,7 @@
 package org.bridgedb.utils;
 
 import org.apache.log4j.Logger;
+import org.junit.BeforeClass;
 
 /**
  * Extends the IDMapper Tests with a method to load the test data before running the tests.
@@ -28,6 +29,11 @@ import org.apache.log4j.Logger;
 public abstract class IDMapperTest extends org.bridgedb.IDMapperTest{
     
     static final Logger logger = Logger.getLogger(IDMapperTest.class);
+
+    @BeforeClass
+    public static void configureLogger() throws BridgeDBException{
+        TestUtils.configureLogger();
+    }
 
     @Override
     public void report(String message){

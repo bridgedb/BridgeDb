@@ -4,62 +4,25 @@
  */
 package org.bridgedb.utils;
 
+import org.apache.log4j.Logger;
+import org.junit.BeforeClass;
+
 /**
  *
  * @author Christian
  */
 public abstract class TestUtils {
     
-    //Flags for easy reading of tests
-    static final boolean INCLUDE_WARNINGS = true;
-    static final boolean NO_WARNINGS = false;;
-     
+    static final Logger logger = Logger.getLogger(BridgeDbTestBase.class);
+
+    @BeforeClass
+    public static void configureLogger() throws BridgeDBException{
+        ConfigReader.configureLogger();
+    }
+    
     public void report(String message){
-        System.out.println(message);
-        
+        System.out.println(message); 
+        logger.info(message);
     }
     
-/*    void checkCorrectNumberOfIds(MetaDataCollection metaData, int numberOfIds){
-        Set<Resource> ids = metaData.getIds();
-        boolean ok = (ids.size() == numberOfIds);
-        if (!ok){
-            //This test will fail but with extra info
-            assertEquals(numberOfIds + " ids Expected ", ids);
-            report(metaData.toString());
-            assertTrue(ok);
-        }        
-    }
-
-    void checkRequiredValues(MetaDataCollection metaData){
-        boolean ok = metaData.hasRequiredValuesOrIsSuperset();
-        if (!ok){
-            //This test will fail but with extra info
-            String report = metaData.validityReport(NO_WARNINGS);
-            assertThat(report, not(containsString("ERROR")));
-            report("hasRequiredValuesOrIsSuperset failed but validity report clear");
-            report(metaData.toString());
-            assertTrue(ok);
-        }        
-    }
-
-    void checkCorrectTypes(MetaData metaData){
-        boolean ok = metaData.hasCorrectTypes();
-        if (!ok){
-            //This test will fail but with extra info
-            String report = metaData.validityReport(NO_WARNINGS);
-            assertThat(report, not(containsString("ERROR")));
-            assertTrue(ok);
-        }        
-    }
-    
-    void checkAllStatementsUsed(MetaDataCollection metaData) {
-        boolean ok = metaData.allStatementsUsed();
-        if (!ok){
-            //This test will fail but with extra info
-            assertEquals("", metaData.unusedStatements());
-            report(metaData.toString());
-            assertTrue(ok);
-        }        
-    }
-  */  
 }

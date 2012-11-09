@@ -152,16 +152,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         Set<String> results = resultSetToURLsSet(rs);
-        if (targetURISpaces.length == 0){
-           results.add(URL); 
-        } else {
-            String uriSpace = getUriSpace(URL);
-            for (String targetURISpace: targetURISpaces){
-                if (uriSpace.equals(targetURISpace)){
-                    results.add(URL);
-                }
-            }
-        }
+        results.addAll(mapAlternativeURL(URL, targetURISpaces));
         if (results.size() <= 1){
             String targets = "";
             for (String targetURISpace:targetURISpaces){
@@ -180,6 +171,54 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
         return results;       
     }
+
+    public Set<String> mapAlternativeURL(String URL, String... targetURISpaces) throws BridgeDbSqlException {
+        String id = getId(URL);
+        String uriSpace = getUriSpace(URL);
+        StringBuilder query = new StringBuilder("SELECT target.uriSpace as uriSpace ");
+        query.append("FROM mappingSet, url as source, url as target ");
+        query.append("WHERE source.dataSource = target.dataSource ");
+        query.append("AND source.uriSpace = '");
+            query.append(uriSpace);
+            query.append("' ");
+        if (targetURISpaces.length > 0){    
+            query.append("AND ( target.uriSpace = '");
+                query.append(targetURISpaces[0]);
+                query.append("' ");
+            for (int i = 1; i < targetURISpaces.length; i++){
+                query.append("OR target.uriSpace = '");
+                    query.append(targetURISpaces[i]);
+                    query.append("'");
+            }
+            query.append(")");
+        }
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+        }    
+        Set<String> results = resultSetToURLsSet(rs, id);
+        if (results.size() <= 1){
+            String targets = "";
+            for (String targetURISpace:targetURISpaces){
+                targets+= targetURISpace + ", ";
+            }
+            if (targets.isEmpty()){
+                targets = "all DataSources";
+            }
+            if (results.isEmpty()){
+                logger.warn("Unable to map " + URL + " to any results for " + targets);
+            } else {
+                logger.warn("Only able to map " + URL + " to itself for " + targets);
+            }
+        } else {
+            logger.info("Mapped " + URL + " to " + results.size() + " results");
+        }
+        return results;       
+    }
+    
 
     /**
      * Adds the FROM and Where clauses to queries to get mappings.
@@ -849,7 +888,35 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
-    /**
+     /**
+     * Generates a set of URl from a ResultSet.
+     *
+     * This implementation just concats the URISpace and Id
+     *
+     * Ideally this would be replaced by a method from Identifiers.org
+     *    based on their knoweldge or ULI/URLs
+     * This may require the method to be exstended with the Target NameSpaces.
+     *
+     * @param rs Result Set holding the information
+     * @param id The id part of the original URI
+     * @return URLs generated
+     * @throws BridgeDbSqlException
+     */
+    private Set<String> resultSetToURLsSet(ResultSet rs, String id) throws BridgeDbSqlException {
+        HashSet<String> results = new HashSet<String>();
+        try {
+            while (rs.next()){
+                String uriSpace = rs.getString("uriSpace");
+                String uri = uriSpace + id;
+                results.add(uri);
+            }
+            return results;
+       } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to parse results.", ex);
+       }
+    }
+    
+   /**
      * Generates the meta info from the result of a query
      * @param rs
      * @return

@@ -10,6 +10,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.linkset.transative.TransativeCreator;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
 import org.openrdf.rio.RDFHandlerException;
@@ -26,6 +27,7 @@ public class RunLoader {
     private static final boolean LOAD = true;
     
     public static void main(String[] args) throws IDMapperException, RDFHandlerException, IOException  {
+        ConfigReader.logToConsole();
 
         LinksetLoader linksetLoader = new LinksetLoader();
 

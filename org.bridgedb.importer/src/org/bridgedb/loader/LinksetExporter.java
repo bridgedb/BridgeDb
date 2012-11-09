@@ -138,6 +138,7 @@ public class LinksetExporter {
     }
     
     public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
+        ConfigReader.logToConsole();
         BioDataSource.init();
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
         ConfigReader.configureLogger();

@@ -48,6 +48,7 @@ import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
@@ -444,7 +445,8 @@ public class TransativeCreator {
     }
 
     public static void main(String[] args) throws RDFHandlerException, IOException, IDMapperException {
-         if (args.length != 2){
+        ConfigReader.logToConsole();
+        if (args.length != 2){
             usage("Please provide the ids of the two mappingsets to combine and any farther -D format arguements.");
         }
         if (args[0] == null || args[0].isEmpty()){

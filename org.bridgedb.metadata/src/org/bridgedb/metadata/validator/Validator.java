@@ -11,6 +11,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.*;
 import org.bridgedb.rdf.LinksetStatementReader;
 import org.bridgedb.rdf.LinksetStatements;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 
 /**
@@ -38,7 +39,7 @@ public class Validator {
     }
     
     static public void main(String[] args) throws IDMapperException {
-        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
+        ConfigReader.logToConsole();
         if (args.length != 1){
             usage("Please specify a file/directory and use -D format for all other arguements.");
         }
