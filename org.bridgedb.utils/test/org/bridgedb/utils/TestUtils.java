@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
  */
 public abstract class TestUtils {
     
-    static final Logger logger = Logger.getLogger(BridgeDbTestBase.class);
+    static final Logger logger = Logger.getLogger(TestUtils.class);
 
     @BeforeClass
     public static void configureLogger() throws BridgeDBException{
