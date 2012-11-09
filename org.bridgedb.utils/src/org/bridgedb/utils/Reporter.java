@@ -18,6 +18,8 @@
 //
 package org.bridgedb.utils;
 
+import org.apache.log4j.Logger;
+
 /**
  * Util functions that allows messages to be output.
  * <p>
@@ -29,12 +31,14 @@ package org.bridgedb.utils;
  */
 public class Reporter {
     
+    static final Logger logger = Logger.getLogger(Reporter.class);
     /**
      * Messages that should always goto the System out stream.
      * This method just for the ease of searching for System,out lines added for debugging.
      * @param message 
      */
     public static void println(String message){
+        logger.info(message);
         System.out.println(message);
     }
 }
