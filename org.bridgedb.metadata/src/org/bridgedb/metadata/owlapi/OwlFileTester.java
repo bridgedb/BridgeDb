@@ -257,8 +257,7 @@ public class OwlFileTester
     public static void main( String[] args ) 
             throws OWLOntologyCreationException, OWLOntologyStorageException, IOException, BridgeDBException
     {
-        ConfigReader.configureLogger();
-        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
+        ConfigReader.logToConsole();
         //@prefix dcterms: <http://purl.org/dc/terms/> .
         //testOwl("http://purl.org/dc/terms/");
         //testOwl("http://bloody-byte.net/rdf/dc_owl2dl/dcterms_od.rdf");

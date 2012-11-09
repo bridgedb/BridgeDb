@@ -26,6 +26,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 
 /**
@@ -187,6 +188,7 @@ public class Test {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, IDMapperException, IOException {
+        ConfigReader.logToConsole();
         BioDataSource.init();
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
         /*File directory = new File("C:/OpenPhacts/andra");

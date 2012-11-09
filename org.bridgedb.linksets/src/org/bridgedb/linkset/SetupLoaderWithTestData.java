@@ -34,8 +34,7 @@ public class SetupLoaderWithTestData {
    private static final boolean LOAD_DATA = true;
    
    public static void main(String[] args) throws IDMapperException {
-        ConfigReader.configureLogger();
-        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
+        ConfigReader.logToConsole();
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.LOAD);
         linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);

@@ -14,8 +14,10 @@ import java.security.CodeSource;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.SimpleLayout;
 import org.bridgedb.IDMapperException;
 
 /**
@@ -60,6 +62,11 @@ public class ConfigReader {
         loggerSetup = true;
     }
      
+    public static void logToConsole() throws BridgeDBException{
+        configureLogger();
+        Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
+    }
+    
     private ConfigReader(String fileName) throws BridgeDBException{
         try {
             if (loadDirectly(fileName)) return;
