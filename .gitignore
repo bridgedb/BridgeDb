@@ -11,6 +11,7 @@ target/
 bin/
 
 # ignore log files #
+logs/
 *.log
 
 #ignore sqlConfig that overrides the one in resources
