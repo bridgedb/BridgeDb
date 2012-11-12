@@ -92,6 +92,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response welcomeMessage() throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("welcomeMessage called!");
+                }
         StringBuilder sb = new StringBuilder();
         StringBuilder sbInnerPure;
         StringBuilder sbInnerEncoded;
@@ -266,11 +269,11 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleInputStreamAsLinkSet")
-    public Response validateTurtleInputStreamAsLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
+    @Path("/validateTurtleLinkSet")
+    public Response validateTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleInputStreamAsLinkSet called!");
+                    logger.debug("validateTurtleLinkSet called!");
                     if (uploadedInputStream == null){
                         logger.debug("NO uploadedInputStream");
                     } else {
@@ -281,10 +284,21 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                         }
                     }
                 }
-        return validate(uploadedInputStream, "text/turtle", ValidationType.LINKS);
+        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKS);
     }
 
     @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleLinkSet")
+    public Response getValidateTurtleLinkSet() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleLinkSet called!");
+                }
+        return validate(null, RDFFormat.TURTLE, ValidationType.LINKS);
+    }
+
+    @POST
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateLinkSet")
     public Response getValidateLinkSet(@QueryParam(INFO)String info, 
@@ -363,18 +377,17 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
-    private Response validate(InputStream input, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
+    private Response validate(InputStream input, RDFFormat format, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
        String report = null;
        try{
-            if (input != null){
-                RDFFormat format = getRDFFormatByMimeType(mimeType);
+            if (input != null && input.available() > 10){
                 report = linksetInterface.validateInputStream("Webservice Call", input, format, StoreType.LIVE, validationType, true);
             }
         } catch (Exception e){
             report = e.toString();
         }
         StringBuilder sb = topAndSide("Void validator");
-        addForm(sb, validationType, null, report);
+        addForm(sb, validationType, format, report);
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -597,7 +610,34 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return sb;
     }
     
-    private void addForm(StringBuilder sb, ValidationType validationType, String info, String report){
+    private void addForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
+        addValidationExplanation(sb, validationType);
+        addFormStart(sb,  validationType);
+        if (report != null){
+            addReport(sb, validationType, report);
+        }
+        //sb.append(FORM_OUTPUT_FORMAT);
+        sb.append(FORM_MINE_TYPE);
+        sb.append(FORM_INFO_START);
+        if (info != null && !info.isEmpty()){
+            sb.append(info);
+        }
+            
+        sb.append(FORM_INFO_END);
+        sb.append(FORM_SUBMIT);        
+    }
+    
+    private void addForm(StringBuilder sb, ValidationType validationType, RDFFormat format, String report) throws BridgeDBException{
+        addValidationExplanation(sb, validationType);
+        addFormStart(sb,  validationType, format);
+        if (report != null){
+            addReport(sb, validationType, report);
+        }
+        sb.append(FORM_FILE);
+        sb.append(FORM_SUBMIT);        
+    }
+
+    private void addValidationExplanation(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
         sb.append("<p>Use this page to validate a ");
         switch (validationType){
             case VOID: {
@@ -613,13 +653,14 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 sb.append("<br>WARNING: Loading with Minimal void does not excuss you from providing a full header later.");
                 break;
             } default:{
-                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN.");
+                throw new BridgeDBException("Unexpected validationType" + validationType);
             }
         }
-        sb.append(".</p>");
-        
+        sb.append(".</p>");       
         sb.append("<p>This is an early prototype and subject to change!</p> ");
-        
+    }
+
+    private void addFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
         sb.append("<form method=\"post\" action=\"/OPS-IMS/");
         switch (validationType){
             case VOID: {
@@ -634,23 +675,47 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 sb.append("validateMinimum");
                 break;
             } default:{
-                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN!");
+                throw new BridgeDBException("Unexpected validationType" + validationType);
             }
         }
-        sb.append("\">");
-
-        if (report != null){
-            addReport(sb, validationType, report);
+        sb.append("\">");        
+    }
+    
+    private void addFormStart(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
+        String formatSt;
+        if (format == RDFFormat.TURTLE){
+            formatSt = "Turtle";
+        } else if (format == RDFFormat.RDFXML){
+            formatSt = "RdfXml";
+        } else if (format == RDFFormat.NTRIPLES){
+            formatSt = "RdfXml";
+        } else {
+            throw new BridgeDBException("Unexpected format" + format);
         }
-        //sb.append(FORM_OUTPUT_FORMAT);
-        sb.append(FORM_MINE_TYPE);
-        sb.append(FORM_INFO_START);
-        if (info != null && !info.isEmpty()){
-            sb.append(info);
+        sb.append("<form method=\"post\" action=\"/OPS-IMS/");
+        switch (validationType){
+            case VOID: {
+                sb.append("validate");
+                sb.append(formatSt);
+                sb.append("Void");
+                break;
+            }
+            case LINKS: {
+                sb.append("validate");
+                sb.append(formatSt);
+                sb.append("LinkSet");
+                break;
+            }
+            case LINKSMINIMAL: {
+                sb.append("validate");
+                sb.append(formatSt);
+                sb.append("Minimum");
+                break;
+            } default:{
+                throw new BridgeDBException("Unexpected validationType" + validationType);
+            }
         }
-            
-        sb.append(FORM_INFO_END);
-        sb.append(FORM_SUBMIT);        
+        sb.append("\" enctype=\"multipart/form-data\">");        
     }
     
     private void addReport(StringBuilder sb, ValidationType validationType, String report){
@@ -854,6 +919,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             + " </p>";
     private final String FORM_INFO_START = "<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";
     private final String FORM_INFO_END = "</textarea></p>";
+    private final String FORM_FILE = "<p>Select a file : <input type=\"file\" name=\"file\" size=\"45\" /></p>";
     private final String FORM_SUBMIT = " <p><input type=\"submit\" value=\"Validate!\"></input> "
             + "    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
