@@ -34,7 +34,7 @@ import org.bridgedb.IDMapperException;
  */
 public class UriSpaceMapper {
     
-    public static Map<String,DataSource> getUriSpaceMappings() throws IDMapperException{
+    public static Map<String,DataSource> getUriSpaceMappings(){
        HashMap <String,DataSource> map = new HashMap <String,DataSource>();
        DataSource dataSource = DataSource.register("TestDS1", "TestDS1"). urlPattern("http://www.foo.com/$id")
                 .idExample("123").asDataSource();
@@ -64,10 +64,12 @@ public class UriSpaceMapper {
                .urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/$id")
                 .idExample("m1").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/molecule/", dataSource);
+       map.put("http://linkedchemistry.info/chembl/molecule/", dataSource);
        dataSource = DataSource.register("Chembl 13 Target", "Chembl 13 Target")
                .urlPattern("http://data.kasabi.com/dataset/chembl-rdf/target/$id")
                 .idExample("t1").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/target/", dataSource);
+       map.put("http://linkedchemistry.info/chembl/target/", dataSource);
        dataSource = DataSource.register("MSH", "Bioontology MESH")
                .urlPattern("http://purl.bioontology.org/ontology/MSH/$id")
                 .idExample("C536282").asDataSource();
