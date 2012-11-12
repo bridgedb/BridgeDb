@@ -205,6 +205,19 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateVoid")
     public Response validateVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateVoid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validate(info, mimeType, ValidationType.VOID);
     }
 
@@ -213,6 +226,19 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateVoid")
     public Response getValidateVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateVoid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validate(info, mimeType, ValidationType.VOID);
     }
 
@@ -221,6 +247,19 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateLinkSet")
     public Response validateLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validate(info, mimeType, ValidationType.LINKS);
     }
     
@@ -229,6 +268,19 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateLinkSet")
     public Response getValidateLinkSet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validate(info, mimeType, ValidationType.LINKS);
     }
 
@@ -237,6 +289,19 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateMinimum")
     public Response validateMinimum(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateMinimum called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validate(info, mimeType, ValidationType.LINKSMINIMAL);
     }
     
@@ -245,6 +310,19 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @Path("/validateMinimum")
     public Response getValidateMinimum(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateMinimum called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validate(info, mimeType, ValidationType.LINKSMINIMAL);
     }
 
@@ -768,9 +846,28 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(
         //TODO work out why the FormDataContentDisposition is null
-		@FormDataParam("file") FormDataContentDisposition fileDetail,
-        @FormDataParam("file") InputStream uploadedInputStream) throws IOException {
+		 @FormDataParam("file") InputStream uploadedInputStream,
+         @FormDataParam("file") FormDataContentDisposition fileDetail
+       ) throws IOException {
  
+                if (logger.isDebugEnabled()){
+                    logger.debug("uploadFile called");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                    if (fileDetail == null){
+                        logger.debug("fileDetail == null");
+                    } else {
+                        logger.debug("fileDetail = " + fileDetail);
+                    }
+                }
+       
         StringBuilder sb = new StringBuilder();
         StringBuilder sbInnerPure;
         StringBuilder sbInnerEncoded;
@@ -787,9 +884,11 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("</P>");
         InputStreamReader reader = new InputStreamReader(uploadedInputStream);
         BufferedReader buffer = new BufferedReader(reader);
-        while (buffer.ready()){
+        int count = 0;
+        while (buffer.ready() && count < 5){
             sb.append("<br>");
             sb.append(buffer.readLine());
+            count++;
         }
         sb.append(uploadedInputStream.toString());
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
