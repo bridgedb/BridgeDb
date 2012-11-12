@@ -306,7 +306,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         }        
     }
     
-    private void validateInputStream(InputStream inputStream) throws MetaDataException {
+    void validateInputStream(InputStream inputStream) throws MetaDataException {
         if (inputStream == null){
             throw new MetaDataException (FILE + " parameter may not be null");
         }

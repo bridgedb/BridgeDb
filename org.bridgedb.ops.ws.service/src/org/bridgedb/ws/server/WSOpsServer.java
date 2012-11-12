@@ -53,6 +53,7 @@ import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.RdfReader;
 import org.bridgedb.rdf.RdfFactory;
+import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
@@ -263,6 +264,26 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return validate(info, mimeType, ValidationType.LINKS);
     }
     
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleInputStreamAsLinkSet")
+    public Response validateTurtleInputStreamAsLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleInputStreamAsLinkSet called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, "text/turtle", ValidationType.LINKS);
+    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateLinkSet")
@@ -338,6 +359,22 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         }
         StringBuilder sb = topAndSide("Void validator");
         addForm(sb, validationType, info, report);
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    private Response validate(InputStream input, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
+       String report = null;
+       try{
+            if (input != null){
+                RDFFormat format = getRDFFormatByMimeType(mimeType);
+                report = linksetInterface.validateInputStream("Webservice Call", input, format, StoreType.LIVE, validationType, true);
+            }
+        } catch (Exception e){
+            report = e.toString();
+        }
+        StringBuilder sb = topAndSide("Void validator");
+        addForm(sb, validationType, null, report);
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -866,6 +903,66 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                     } else {
                         logger.debug("fileDetail = " + fileDetail);
                     }
+                }
+       
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbInnerPure;
+        StringBuilder sbInnerEncoded;
+
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<h1>test</h1>");
+        sb.append("<p>File name:");
+        sb.append(fileDetail);
+        sb.append("</P>");
+        InputStreamReader reader = new InputStreamReader(uploadedInputStream);
+        BufferedReader buffer = new BufferedReader(reader);
+        int count = 0;
+        while (buffer.ready() && count < 5){
+            sb.append("<br>");
+            sb.append(buffer.readLine());
+            count++;
+        }
+        sb.append(uploadedInputStream.toString());
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+	}
+
+    @POST
+	@Path("/uploadTest2")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile2(
+        //TODO work out why the FormDataContentDisposition is null
+		 @FormDataParam("file") InputStream uploadedInputStream,
+         @FormDataParam("file") FormDataContentDisposition fileDetail,
+         @FormParam(MIME_TYPE)String mimeType
+       ) throws IOException {
+ 
+                if (logger.isDebugEnabled()){
+                    logger.debug("uploadFile2 called");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                    if (fileDetail == null){
+                        logger.debug("fileDetail == null");
+                    } else {
+                        logger.debug("fileDetail = " + fileDetail);
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+
                 }
        
         StringBuilder sb = new StringBuilder();
