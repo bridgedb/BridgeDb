@@ -44,7 +44,7 @@ public class WsCoreServer extends WSCoreService {
 
     public WsCoreServer() throws IDMapperException {
         idMapper = new SQLIdMapper(false, StoreType.LIVE);
-        logger.info("WsCoreServer setup");
+        logger.info("BridgeDB Server setup");
     }
             
     @GET

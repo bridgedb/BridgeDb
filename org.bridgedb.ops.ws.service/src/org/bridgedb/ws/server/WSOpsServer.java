@@ -106,10 +106,10 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
         sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
-        sb.append("<p>Welcome to the prototype Identity Mapping Service. </p>");
+        sb.append("\n<p>Welcome to the prototype Identity Mapping Service. </p>");
        
         OverallStatistics statistics = urlMapper.getOverallStatistics();
-        sb.append("<p>Currently the service includes: ");
+        sb.append("\n<p>Currently the service includes: ");
         sb.append("<ul>");
             sb.append("<li>");
                 sb.append(formatter.format(statistics.getNumberOfMappings()));
@@ -128,16 +128,16 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 sb.append(" Target Data Sources</li>");
         sb.append("</ul></p>");
         
-        sb.append("<p>The links where last updated ");
+        sb.append("\n<p>The links where last updated ");
         sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
         sb.append("</p>");
                 
-        sb.append("<p>A List of which mappings we current have can be found at ");
+        sb.append("\n<p>A List of which mappings we current have can be found at ");
         sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
         
-        sb.append("<p>The Main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
+        sb.append("\n<p>The Main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
-        sb.append("<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
+        sb.append("\n<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
         sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -178,9 +178,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
         sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
-        sb.append("<p><a href=\"/OPS-IMS\">Home Page</a></p>");
+        sb.append("\n<p><a href=\"/OPS-IMS\">Home Page</a></p>");
                 
-        sb.append("<p>");
+        sb.append("\n<p>");
         WSOpsApi api = new WSOpsApi();
 
         sb.append("Support services include:");
@@ -247,6 +247,99 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     }
 
     @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleVoid")
+    public Response validateTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleVoid called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.VOID);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleVoid")
+    public Response getValidateTurtleVoid() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleVoid called!");
+                }
+        return validate(null, RDFFormat.TURTLE, ValidationType.VOID);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlVoid")
+    public Response validateRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdfXmlVoid called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.VOID);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlVoid")
+    public Response getValidateRdfXmlVoid() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlVoid called!");
+                }
+        return validate(null, RDFFormat.RDFXML, ValidationType.VOID);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesVoid")
+    public Response validateNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesVoid called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.VOID);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesVoid")
+    public Response getValidateNTriplesVoid() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesVoid called!");
+                }
+        return validate(null, RDFFormat.NTRIPLES, ValidationType.VOID);
+    }
+
+    @POST
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateLinkSet")
     public Response validateLinkSet(@FormParam(INFO)String info, 
@@ -267,6 +360,27 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return validate(info, mimeType, ValidationType.LINKS);
     }
     
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateLinkSet")
+    public Response getValidateLinkSet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validate(info, mimeType, ValidationType.LINKS);
+    }
+
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleLinkSet")
@@ -299,24 +413,65 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     }
 
     @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateLinkSet")
-    public Response getValidateLinkSet(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlLinkSet")
+    public Response validateRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
-                    logger.debug("getValidateLinkSet called!");
-                    if (info == null){
-                        logger.debug("NO Info");
+                    logger.debug("validateRdfXmlLinkSet called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
                     } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
                     }
                 }
-        return validate(info, mimeType, ValidationType.LINKS);
+        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKS);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlLinkSet")
+    public Response getValidateRdfXmlLinkSet() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlLinkSet called!");
+                }
+        return validate(null, RDFFormat.RDFXML, ValidationType.LINKS);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesLinkSet")
+    public Response validateNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesLinkSet called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKS);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesLinkSet")
+    public Response getValidateNTriplesLinkSet() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesLinkSet called!");
+                }
+        return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKS);
     }
 
     @POST
@@ -361,6 +516,124 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return validate(info, mimeType, ValidationType.LINKSMINIMAL);
     }
 
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleMinimum")
+    public Response validateTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleMinimum called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleMinimum")
+    public Response getValidateTurtleMinimum() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleMinimum called!");
+                }
+        return validate(null, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlMinimum")
+    public Response validateRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdfXmlMinimum called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlMinimum")
+    public Response getValidateRdfXmlMinimum() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlMinimum called!");
+                }
+        return validate(null, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesMinimum")
+    public Response validateNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesMinimum called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesMinimum")
+    public Response getValidateNTriplesMinimum() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesMinimum called!");
+                }
+        return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateFile")
+    public Response getValidateFileIndex() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateFileIndex called!");
+                }
+        StringBuilder sb = topAndSide("Void File Validators Index");
+        sb.append("\n<h1>Validate a File as a Void Description</h1>");
+        addFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
+        addFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
+        addFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
+        sb.append("\n<h1>Validate a File as a Linkset</h1>");
+        addFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
+        addFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
+        addFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
+        sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
+        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
+        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
+        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
     private Response validate(String info, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
        String report = null;
        try{
@@ -371,7 +644,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         } catch (Exception e){
             report = e.toString();
         }
-        StringBuilder sb = topAndSide("Void validator");
+        StringBuilder sb = topAndSide(validationType.getName() + " Validator");
         addForm(sb, validationType, info, report);
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -386,8 +659,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         } catch (Exception e){
             report = e.toString();
         }
-        StringBuilder sb = topAndSide("Void validator");
-        addForm(sb, validationType, format, report);
+        StringBuilder sb = topAndSide(validationType.getName() + " Validator");
+        addFileForm(sb, validationType, report);
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -406,9 +679,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
         sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>Open PHACTS Identity Mapping Counter per NameSpaces</h1>");
-        sb.append("<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
+        sb.append("\n<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
         sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
-        sb.append("<p>");
+        sb.append("\n<p>");
         sb.append("<table border=\"1\">");
         sb.append("<tr>");
         sb.append("<th>Source Data Source</th>");
@@ -473,9 +746,9 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
         sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>Open PHACTS Identity Mapping Counter per NameSpaces</h1>");
-        sb.append("<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
+        sb.append("\n<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
         sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
-        sb.append("<p>");
+        sb.append("\n<p>");
         sb.append("<table border=\"1\">");
         sb.append("<tr>");
         sb.append("<th>Source Data Source</th>");
@@ -624,21 +897,24 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         }
             
         sb.append(FORM_INFO_END);
+        sb.append("\n<p>");
         sb.append(FORM_SUBMIT);        
+        sb.append(FORM_NOTE);      
+        sb.append("</p>");
     }
     
-    private void addForm(StringBuilder sb, ValidationType validationType, RDFFormat format, String report) throws BridgeDBException{
+    private void addFileForm(StringBuilder sb, ValidationType validationType, String report) throws BridgeDBException{
         addValidationExplanation(sb, validationType);
-        addFormStart(sb,  validationType, format);
         if (report != null){
             addReport(sb, validationType, report);
         }
-        sb.append(FORM_FILE);
-        sb.append(FORM_SUBMIT);        
+        addFileLine(sb,  validationType, RDFFormat.TURTLE);
+        addFileLine(sb,  validationType, RDFFormat.RDFXML);
+        addFileLine(sb,  validationType, RDFFormat.NTRIPLES);
     }
 
     private void addValidationExplanation(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<p>Use this page to validate a ");
+        sb.append("\n<p>Use this page to validate a ");
         switch (validationType){
             case VOID: {
                 sb.append("VOID descripition.");
@@ -657,7 +933,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             }
         }
         sb.append(".</p>");       
-        sb.append("<p>This is an early prototype and subject to change!</p> ");
+        sb.append("\n<p>This is an early prototype and subject to change!</p> ");
     }
 
     private void addFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
@@ -681,6 +957,17 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("\">");        
     }
     
+    private void addFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
+        addFormStart(sb, validationType, format);
+        sb.append("Select ");
+        sb.append(format.getName());
+        sb.append(" to validate as a ");
+        sb.append(validationType.getName());
+        sb.append("<input type=\"file\" name=\"file\" size=\"45\" />");
+        sb.append(FORM_SUBMIT);   
+        sb.append("<br>");
+    }
+    
     private void addFormStart(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
         String formatSt;
         if (format == RDFFormat.TURTLE){
@@ -688,33 +975,14 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         } else if (format == RDFFormat.RDFXML){
             formatSt = "RdfXml";
         } else if (format == RDFFormat.NTRIPLES){
-            formatSt = "RdfXml";
+            formatSt = "NTriples";
         } else {
             throw new BridgeDBException("Unexpected format" + format);
         }
-        sb.append("<form method=\"post\" action=\"/OPS-IMS/");
-        switch (validationType){
-            case VOID: {
-                sb.append("validate");
-                sb.append(formatSt);
-                sb.append("Void");
-                break;
-            }
-            case LINKS: {
-                sb.append("validate");
-                sb.append(formatSt);
-                sb.append("LinkSet");
-                break;
-            }
-            case LINKSMINIMAL: {
-                sb.append("validate");
-                sb.append(formatSt);
-                sb.append("Minimum");
-                break;
-            } default:{
-                throw new BridgeDBException("Unexpected validationType" + validationType);
-            }
-        }
+        sb.append("\n<form method=\"post\" action=\"/OPS-IMS/");
+        sb.append("validate");
+        sb.append(formatSt);
+        sb.append(validationType.getName());
         sb.append("\" enctype=\"multipart/form-data\">");        
     }
     
@@ -723,25 +991,10 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         for (int i=0; i < report.length(); i++) {
             if (report.charAt(i) == '\n') lines++;
         }
-        sb.append("<h2>");
-        switch (validationType){
-            case VOID: {
-                sb.append("Report as a Void");
-                break;
-            }
-            case LINKS: {
-                sb.append("Report as a LinkSet");
-                break;
-            }
-            case LINKSMINIMAL: {
-                sb.append("Report for someone too lazy to generate proper void!");
-                break;
-            } default:{
-                sb.append("ERROR ON PAGE REPORT TO CHRISTIAN");
-            }
-        }
+        sb.append("<h2>Report as a ");
+        sb.append(validationType.getName());
         sb.append("</h2>");
-        sb.append("<p><textarea readonly style=\"width:100%;\" rows=");
+        sb.append("\n<p><textarea readonly style=\"width:100%;\" rows=");
         sb.append(lines);
         sb.append(">");
         sb.append(report);
@@ -904,33 +1157,32 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             + "			</td>"
             + "			<td width=\"5\" style=\"border-right: 1px solid #D5D5FF\"></td>"
             + "			<td style=\"border-top: 1px solid #D5D5FF; width:100%\">";
-    private final String FORM_OUTPUT_FORMAT = " <p>Output Format:"
+    private final String FORM_OUTPUT_FORMAT = " \n<p>Output Format:"
             + "     <select size=\"1\" name=\"format\">"
             + "         <option value=\"html\">HTML page</option>"
             + "         <option value=\"xml\">XML/JASON</option>"
             + " 	</select>"
             + " </p>";
-    private final String FORM_MINE_TYPE = " <p>Mime Type:"
+    private final String FORM_MINE_TYPE = " \n<p>Mime Type:"
             + "     <select size=\"1\" name=\"mimeType\">"
             + "         <option value=\"application/x-turtle\">Turtle (mimeType=application/x-turtle; ext=ttl)</option>"
             + "         <option value=\"text/plain\">N-Triples (mimeType=text/plain; ext=nt)</option>"
             + "         <option value=\"application/rdf+xml\">RDF/XML (mimeType=application/rdf+xml; ext=rdf, rdfs, owl, xml</option>"
             + " 	</select>"
             + " </p>";
-    private final String FORM_INFO_START = "<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";
+    private final String FORM_INFO_START = "\n<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";
     private final String FORM_INFO_END = "</textarea></p>";
-    private final String FORM_FILE = "<p>Select a file : <input type=\"file\" name=\"file\" size=\"45\" /></p>";
-    private final String FORM_SUBMIT = " <p><input type=\"submit\" value=\"Validate!\"></input> "
-            + "    Note: If the new page does not open click on the address and press enter</p>"
+    private final String FORM_SUBMIT = " <input type=\"submit\" value=\"Validate!\"></input></form>";
+    private final String FORM_NOTE ="    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
     private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/QueryExpander/mapURI\">"
-            + " <p>Input URI (URI to be looked up in Identity Mapping Service.)"
+            + " \n<p>Input URI (URI to be looked up in Identity Mapping Service.)"
             + "     (see <a href=\"/QueryExpander/api#inputURI\">API</a>)</p>"
-            + " <p><input type=\"text\" name=\"inputURI\" style=\"width:100%\"/></p>"
-            + " <p>Graph/Context (Graph value to limit the returned URIs)"
+            + " \n<p><input type=\"text\" name=\"inputURI\" style=\"width:100%\"/></p>"
+            + " \n<p>Graph/Context (Graph value to limit the returned URIs)"
             + "     (see <a href=\"/QueryExpander/api#graph\">API</a>)</p>"
-            + " <p><input type=\"text\" name=\"graph\" style=\"width:100%\"/></p>"
-            + " <p><input type=\"submit\" value=\"Expand!\"></input> "
+            + " \n<p><input type=\"text\" name=\"graph\" style=\"width:100%\"/></p>"
+            + " \n<p><input type=\"submit\" value=\"Expand!\"></input> "
             + "    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
     private final String MAIN_END = "			</td>"
@@ -982,7 +1234,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
         sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>test</h1>");
-        sb.append("<p>File name:");
+        sb.append("\n<p>File name:");
         sb.append(fileDetail);
         sb.append("</P>");
         InputStreamReader reader = new InputStreamReader(uploadedInputStream);
@@ -1042,7 +1294,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
         sb.append("<head><title>OPS IMS</title></head><body>");
         sb.append("<h1>test</h1>");
-        sb.append("<p>File name:");
+        sb.append("\n<p>File name:");
         sb.append(fileDetail);
         sb.append("</P>");
         InputStreamReader reader = new InputStreamReader(uploadedInputStream);

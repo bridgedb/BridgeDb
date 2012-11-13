@@ -10,18 +10,20 @@ import org.openrdf.model.impl.URIImpl;
  */
 public enum ValidationType {
     //LINKSETVOID ("LinkSet.owl", "http://rdfs.org/ns/void#Linkset" ,false, false),
-    VOID ("LinkSet.owl", "http://rdfs.org/ns/void#Dataset", false, false),
-    LINKS("LinkSet.owl", "http://rdfs.org/ns/void#Linkset", true, false),
+    VOID ("LinkSet.owl", "Void", "http://rdfs.org/ns/void#Dataset", false, false),
+    LINKS("LinkSet.owl", "LinkSet", "http://rdfs.org/ns/void#Linkset", true, false),
     //todo make minal set
-    LINKSMINIMAL("LinkSet.owl", "http://rdfs.org/ns/void#Linkset", true, true);
+    LINKSMINIMAL("LinkSet.owl", "Minimum", "http://rdfs.org/ns/void#Linkset", true, true);
    
     private final String owlFile;
+    private final String name;
     private final URI directType;
     private final boolean linkset;
     private final boolean minimal;
     
-    private ValidationType(String owlFile, String type, boolean linkset, boolean isMinimal){
+    private ValidationType(String owlFile, String name, String type, boolean linkset, boolean isMinimal){
         this.owlFile = owlFile;
+        this.name = name;
         this.directType = new URIImpl(type);
         this.linkset = linkset;
         this.minimal = isMinimal;
@@ -47,6 +49,10 @@ public enum ValidationType {
     
     public String getOwlFileName(){
         return owlFile;
+    }
+    
+    public String getName(){
+        return name;
     }
     
     public URI getDirectType(){
