@@ -114,4 +114,24 @@ public class UriSpaceMapper {
        map.put("http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/", dataSource);
        return map;
     }
+    
+    /* Nov 12 2012 Following MYSQL commands will update data loaded earlier.
+INSERT into url (dataSource, uriSpace) values ("Chembl 13 Molecule", "http://linkedchemistry.info/chembl/molecule/");
+INSERT into url (dataSource, uriSpace) values ("Chembl 13 Target", "http://linkedchemistry.info/chembl/target/");
+
+UPDATE datasource SET sysCode="Chembl 2 Compound",fullName="Chembl 2 Compound" WHERE syscode="Chemb 2 Compound";
+UPDATE MappingSet SET sourceDataSource="Chembl 13 Target" WHERE sourceDataSource="Chemb 13 Target";
+UPDATE MappingSet SET targetDataSource="Chembl 13 Target" WHERE targetDataSource="Chemb 13 Target";
+UPDATE url SET dataSource="Chembl 2 Compound" WHERE dataSource="Chemb 2 Compound";
+
+UPDATE datasource SET sysCode="Chembl 2 Target",fullName="Chembl 2 Target" WHERE syscode="Chemb 2 Target";
+UPDATE MappingSet SET sourceDataSource="Chembl 2 Target" WHERE sourceDataSource="Chembl 2 Target";
+UPDATE MappingSet SET targetDataSource="Chembl 2 Target" WHERE targetDataSource="Chembl 2 Target";
+UPDATE url SET dataSource="Chembl 2 Target" WHERE dataSource="Chemb 2 Target";
+                               
+UPDATE datasource SET sysCode="Chembl 13 Target",fullName="Chembl 13 Target" WHERE syscode="Chemb 13 Target";
+UPDATE MappingSet SET sourceDataSource="Chembl 13 Target" WHERE sourceDataSource="Chembl 13 Target";
+UPDATE MappingSet SET targetDataSource="Chembl 13 Target" WHERE targetDataSource="Chembl 13 Target";
+UPDATE url SET dataSource="Chembl 13 Target" WHERE dataSource="Chemb 13 Target";     
+     */
 }
