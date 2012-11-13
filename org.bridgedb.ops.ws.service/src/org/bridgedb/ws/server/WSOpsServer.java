@@ -35,6 +35,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -43,8 +45,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -73,7 +78,7 @@ import org.openrdf.rio.RDFFormat;
 public class WSOpsServer extends WSOpsService implements Comparator<MappingSetInfo>{
     
     private NumberFormat formatter;
-    
+        
     static final Logger logger = Logger.getLogger(WSOpsService.class);
 
     public WSOpsServer()  throws IDMapperException   {
@@ -617,7 +622,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateFileIndex called!");
                 }
-        StringBuilder sb = topAndSide("Void File Validators Index");
+        StringBuilder sb = topAndSide("File Validators Index");
         sb.append("\n<h1>Validate a File as a Void Description</h1>");
         addFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
         addFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
@@ -1196,15 +1201,42 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     private final String END = MAIN_END + BODY_END;
 
     //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
+    @GET
+	@Path("/checkIpAddress")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response checkIpAddress(@Context HttpServletRequest hsr) throws IOException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("checkIpAddress called");
+                }
+                logger.debug("Client IP = " + hsr.getRemoteAddr()); 
+       
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbInnerPure;
+        StringBuilder sbInnerEncoded;
+
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head><title>OPS IMS</title></head><body>");
+        sb.append("<h1>test</h1>");
+        sb.append("\n<p>IP Address:");
+        sb.append(hsr.getRemoteAddr());
+        sb.append("</P>");
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+	}
+
+    //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
     @POST
 	@Path("/uploadTest")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response uploadFile(
         //TODO work out why the FormDataContentDisposition is null
 		 @FormDataParam("file") InputStream uploadedInputStream,
-         @FormDataParam("file") FormDataContentDisposition fileDetail
+         @FormDataParam("file") FormDataContentDisposition fileDetail,
+         @Context HttpServletRequest hsr
        ) throws IOException {
- 
                 if (logger.isDebugEnabled()){
                     logger.debug("uploadFile called");
                     if (uploadedInputStream == null){
@@ -1222,7 +1254,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                         logger.debug("fileDetail = " + fileDetail);
                     }
                 }
-       
+      
         StringBuilder sb = new StringBuilder();
         StringBuilder sbInnerPure;
         StringBuilder sbInnerEncoded;
@@ -1236,7 +1268,10 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("<h1>test</h1>");
         sb.append("\n<p>File name:");
         sb.append(fileDetail);
+        sb.append("\n<p>The IP Address:");
+        sb.append(hsr.getRemoteAddr());
         sb.append("</P>");
+        
         InputStreamReader reader = new InputStreamReader(uploadedInputStream);
         BufferedReader buffer = new BufferedReader(reader);
         int count = 0;
@@ -1245,7 +1280,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             sb.append(buffer.readLine());
             count++;
         }
-        sb.append(uploadedInputStream.toString());
+        sb.append("<br>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
 	}
 
