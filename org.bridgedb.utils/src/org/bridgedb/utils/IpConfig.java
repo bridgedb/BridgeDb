@@ -44,7 +44,11 @@ public class IpConfig {
     public static String checkIPAddress(String ipAddress) throws IDMapperException{
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){
-            logger.warn("Attempt to check IP address " + ipAddress);
+            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            owner = properties.getProperty(ipAddress);
+            if (owner == null){
+                logger.warn("Attempt to check IP address " + ipAddress);
+            }
         }
         return owner;
     }
