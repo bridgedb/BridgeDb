@@ -66,6 +66,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.IpConfig;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsService;
@@ -1204,7 +1205,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
 	@Path("/checkIpAddress")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response checkIpAddress(@Context HttpServletRequest hsr) throws IOException {
+	public Response checkIpAddress(@Context HttpServletRequest hsr) throws IOException, IDMapperException {
                 if (logger.isDebugEnabled()){
                     logger.debug("checkIpAddress called");
                 }
@@ -1224,6 +1225,17 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         sb.append("\n<p>IP Address:");
         sb.append(hsr.getRemoteAddr());
         sb.append("</P>");
+        String owner = IpConfig.checkIPAddress(hsr.getRemoteAddr());
+        if (owner == null){
+            sb.append("<h1>Unknown</h1>");
+            sb.append("Sorry you are not known to this system.");
+            sb.append("<br>You access attempt has been logged.");
+            sb.append("<br>Please register your IP address by contacting an Administrator.");
+        } else {
+            sb.append("<h1>Welcome ");
+            sb.append(owner);
+            sb.append("</h1>");            
+        }
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
 	}
 
