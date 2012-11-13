@@ -205,11 +205,12 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
     }
         
     static public void main(String[] args) throws BridgeDBException {
-        ConfigReader.logToConsole();
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
         Set<RDFFormat> keys = reg.getKeys();
         for (RDFFormat key:keys){
-            Reporter.println(""+key);
+            Reporter.println("key: "+key);
+            Reporter.println("   "+key.getName());
+            Reporter.println("   "+key.getDefaultMIMEType());
         }
         Reporter.println(supportedMineTypes());
     }

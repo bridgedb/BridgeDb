@@ -19,8 +19,10 @@
 package org.bridgedb.ws;
 
 import com.sun.jersey.multipart.FormDataParam;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
 import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.URLExistsBean;
@@ -110,6 +112,13 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public List<URLMappingBean> mapURL(@QueryParam("URL") String URL,
     		@QueryParam("profileURL") String profileURL,
             @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
+        if (logger.isDebugEnabled()){
+            logger.debug("mapURL called! URL = " + URL);
+            logger.debug("   profileURL = " + profileURL);
+            if (targetURISpace!= null || !targetURISpace.isEmpty()){
+                logger.debug("   targetURISpace = " + targetURISpace);
+            }
+        }
         if (URL == null) throw new BridgeDBException("URL parameter missing.");        
         if (URL.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");        
         if (profileURL == null || profileURL.isEmpty()){
@@ -174,7 +183,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mapping")
     public URLMappingBean getMapping() throws IDMapperException {
-        throw new BridgeDBException("id path parameter missing.");
+       throw new BridgeDBException("id path parameter missing.");
     }
 
     @Override
@@ -337,7 +346,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         }        
     }
     
-    private void validateInputStream(InputStream inputStream) throws MetaDataException {
+    void validateInputStream(InputStream inputStream) throws MetaDataException {
         if (inputStream == null){
             throw new MetaDataException (FILE + " parameter may not be null");
         }
@@ -351,7 +360,31 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString, 
             @QueryParam("includeWarnings")String includeWarningsString) throws IDMapperException {
-        return validateString(info, mimeType, storeTypeString, validationTypeString, includeWarningsString);
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateString called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (storeTypeString == null){
+                        logger.debug("NO storeTypeString");
+                    } else {
+                        logger.debug("storeTypeString = " + storeTypeString);
+                    }
+                    if (includeWarningsString == null){
+                        logger.debug("NO svalidationTypeString");
+                    } else {
+                        logger.debug("validationTypeString = " + includeWarningsString);
+                    }
+                    if (includeWarningsString == null){
+                        logger.debug("NO includeWarningsStringg");
+                    } else {
+                        logger.debug("includeWarningsString = " + includeWarningsString);
+                    }
+                }
+        ValidationBean result = validateString(info, mimeType, storeTypeString, validationTypeString, includeWarningsString);
+        return result;
     }
 
     @Override
@@ -363,6 +396,29 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @FormParam(STORE_TYPE)String storeTypeString, 
             @FormParam(VALIDATION_TYPE)String validationTypeString, 
             @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateString called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (storeTypeString == null){
+                        logger.debug("NO storeTypeString");
+                    } else {
+                        logger.debug("storeTypeString = " + storeTypeString);
+                    }
+                    if (includeWarningsString == null){
+                        logger.debug("NO svalidationTypeString");
+                    } else {
+                        logger.debug("validationTypeString = " + includeWarningsString);
+                    }
+                    if (includeWarningsString == null){
+                        logger.debug("NO includeWarningsStringg");
+                    } else {
+                        logger.debug("includeWarningsString = " + includeWarningsString);
+                    }
+                }
         String report = NO_RESULT;
         String exception = null;
         try{
@@ -391,6 +447,33 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @FormParam(STORE_TYPE)String storeTypeString, 
             @FormParam(VALIDATION_TYPE)String validationTypeString, 
             @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateInputStream called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                    if (storeTypeString == null){
+                        logger.debug("NO storeTypeString");
+                    } else {
+                        logger.debug("storeTypeString = " + storeTypeString);
+                    }
+                    if (validationTypeString == null){
+                        logger.debug("NO svalidationTypeString");
+                    } else {
+                        logger.debug("validationTypeString = " + validationTypeString);
+                    }
+                    if (includeWarningsString == null){
+                        logger.debug("NO includeWarningsStringg");
+                    } else {
+                        logger.debug("includeWarningsString = " + includeWarningsString);
+                    }
+                }
         String report = NO_RESULT;
         String exception = null;
         try{
@@ -414,6 +497,14 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Consumes(MediaType.APPLICATION_XML)
     @Path("/validateStringXML")
     public ValidationBean validateString(JAXBElement<ValidationBean> input) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateString(JAXBElement<ValidationBean> input)!");
+                    if (input == null){
+                        logger.debug("NO input");
+                    } else {
+                        logger.debug("input = " + input);
+                    }
+                }
         String report = NO_RESULT;
         String info = null;
         String mimeType = null;
@@ -445,6 +536,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsVoid")
     public ValidationBean validateStringAsVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateStringAsVoid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         String report = NO_RESULT;
         String exception = null;
         try{
@@ -464,6 +568,23 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateInputStreamAsVoid")
     public ValidationBean validateInputStreamAsVoid(@FormDataParam("file") InputStream uploadedInputStream, 
             @FormDataParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateInputStreamAsVoid called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         String report = NO_RESULT;
         String exception = null;
         try{
@@ -482,6 +603,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsVoidXML")
     public ValidationBean validateStringAsVoidXML(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateStringAsVoidXML called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validateStringAsVoid(info, mimeType);
     }
 
@@ -490,7 +624,24 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
     public ValidationBean validateInputStreamAsLinkSet(@FormDataParam("file") InputStream uploadedInputStream, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormDataParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateInputStreamAsLinkSet called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         String report = NO_RESULT;
         String exception = null;
         try{
@@ -509,6 +660,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsVoid")
     public ValidationBean getValidateStringAsVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateStringAsVoid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validateStringAsVoid(info, mimeType);
     }
 
@@ -517,6 +681,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsVoidXML")
     public ValidationBean getValidateStringAsVoidXML(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateStringAsVoidXML called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validateStringAsVoid(info, mimeType);
     }
 
@@ -544,6 +721,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsLinkSet")
     public ValidationBean validateStringAsLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateStringAsLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         String report = NO_RESULT;
         String exception = null;
         try{
@@ -561,6 +751,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsLinkSetXML")
     public ValidationBean validateStringAsLinkSetXML(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateStringAsLinkSetXML called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         String report = NO_RESULT;
         String exception = null;
         try{
@@ -578,6 +781,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsLinkSet")
     public ValidationBean getValidateStringAsLinkSet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateStringAsLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validateStringAsLinkSet(info, mimeType);
     }
 
@@ -586,6 +802,19 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     @Path("/validateStringAsLinkSetXML")
     public ValidationBean getValidateStringAsLinkSetXML(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateStringAsLinkSetXML called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
         return validateStringAsLinkSet(info, mimeType);
     }
 
@@ -598,6 +827,24 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString) 
             throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateString called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (storeTypeString == null){
+                        logger.debug("NO storeTypeString");
+                    } else {
+                        logger.debug("storeTypeString = " + storeTypeString);
+                    }
+                    if (validationTypeString == null){
+                        logger.debug("NO svalidationTypeString");
+                    } else {
+                        logger.debug("validationTypeString = " + validationTypeString);
+                    }
+                }
         validateInfo(info);
         RDFFormat format = getRDFFormatByMimeType(mimeType);
         StoreType storeType = parseStoreType(storeTypeString);
@@ -615,6 +862,24 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString) 
             throws IDMapperException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("checkStringValid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (storeTypeString == null){
+                        logger.debug("NO storeTypeString");
+                    } else {
+                        logger.debug("storeTypeString = " + storeTypeString);
+                    }
+                    if (validationTypeString == null){
+                        logger.debug("NO svalidationTypeString");
+                    } else {
+                        logger.debug("validationTypeString = " + validationTypeString);
+                    }
+                }
         validateInfo(info);
         RDFFormat format = getRDFFormatByMimeType(mimeType);
         StoreType storeType = parseStoreType(storeTypeString);

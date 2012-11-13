@@ -126,4 +126,28 @@ public class OverallStatistics {
     	this.numberOfProfiles = numberOfProfiles;
     }
     
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("numberOfMappings: ");
+        builder.append(numberOfMappings);
+        builder.append("\n");
+        builder.append("numberOfMappingSets: ");
+        builder.append(numberOfMappingSets);
+        builder.append("\n");
+        builder.append("numberOfSourceDataSources: ");
+        builder.append(numberOfSourceDataSources);
+        builder.append("\n");
+        builder.append("numberOfPredicates: ");
+        builder.append(numberOfPredicates);
+        builder.append("\n");
+        builder.append("numberOfTargetDataSources: ");
+        builder.append(numberOfTargetDataSources);
+        builder.append("\n");
+        builder.append("numberOfProfiles: ");
+        builder.append(numberOfProfiles);
+        builder.append("\n");
+        return builder.toString();
+    }
+
 }

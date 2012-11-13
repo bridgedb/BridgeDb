@@ -34,7 +34,7 @@ import org.bridgedb.IDMapperException;
  */
 public class UriSpaceMapper {
     
-    public static Map<String,DataSource> getUriSpaceMappings() throws IDMapperException{
+    public static Map<String,DataSource> getUriSpaceMappings(){
        HashMap <String,DataSource> map = new HashMap <String,DataSource>();
        DataSource dataSource = DataSource.register("TestDS1", "TestDS1"). urlPattern("http://www.foo.com/$id")
                 .idExample("123").asDataSource();
@@ -64,10 +64,12 @@ public class UriSpaceMapper {
                .urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/$id")
                 .idExample("m1").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/molecule/", dataSource);
+       map.put("http://linkedchemistry.info/chembl/molecule/", dataSource);
        dataSource = DataSource.register("Chembl 13 Target", "Chembl 13 Target")
                .urlPattern("http://data.kasabi.com/dataset/chembl-rdf/target/$id")
                 .idExample("t1").asDataSource();
        map.put("http://data.kasabi.com/dataset/chembl-rdf/target/", dataSource);
+       map.put("http://linkedchemistry.info/chembl/target/", dataSource);
        dataSource = DataSource.register("MSH", "Bioontology MESH")
                .urlPattern("http://purl.bioontology.org/ontology/MSH/$id")
                 .idExample("C536282").asDataSource();
@@ -115,4 +117,24 @@ public class UriSpaceMapper {
        map.put("http://purl.obolibrary.org/obo/", dataSource);
        return map;
     }
+    
+    /* Nov 12 2012 Following MYSQL commands will update data loaded earlier.
+INSERT into url (dataSource, uriSpace) values ("Chembl 13 Molecule", "http://linkedchemistry.info/chembl/molecule/");
+INSERT into url (dataSource, uriSpace) values ("Chembl 13 Target", "http://linkedchemistry.info/chembl/target/");
+
+UPDATE datasource SET sysCode="Chembl 2 Compound",fullName="Chembl 2 Compound" WHERE syscode="Chemb 2 Compound";
+UPDATE MappingSet SET sourceDataSource="Chembl 13 Target" WHERE sourceDataSource="Chemb 13 Target";
+UPDATE MappingSet SET targetDataSource="Chembl 13 Target" WHERE targetDataSource="Chemb 13 Target";
+UPDATE url SET dataSource="Chembl 2 Compound" WHERE dataSource="Chemb 2 Compound";
+
+UPDATE datasource SET sysCode="Chembl 2 Target",fullName="Chembl 2 Target" WHERE syscode="Chemb 2 Target";
+UPDATE MappingSet SET sourceDataSource="Chembl 2 Target" WHERE sourceDataSource="Chembl 2 Target";
+UPDATE MappingSet SET targetDataSource="Chembl 2 Target" WHERE targetDataSource="Chembl 2 Target";
+UPDATE url SET dataSource="Chembl 2 Target" WHERE dataSource="Chemb 2 Target";
+                               
+UPDATE datasource SET sysCode="Chembl 13 Target",fullName="Chembl 13 Target" WHERE syscode="Chemb 13 Target";
+UPDATE MappingSet SET sourceDataSource="Chembl 13 Target" WHERE sourceDataSource="Chembl 13 Target";
+UPDATE MappingSet SET targetDataSource="Chembl 13 Target" WHERE targetDataSource="Chembl 13 Target";
+UPDATE url SET dataSource="Chembl 13 Target" WHERE dataSource="Chemb 13 Target";     
+     */
 }
