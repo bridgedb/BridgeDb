@@ -68,7 +68,8 @@ public class LinksetLoader implements LinksetInterface{
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         return loader.validityReport(includeWarnings);
     }
-
+    
+    @Override
     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException{
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, inputStream, format, validationType, storeType);
