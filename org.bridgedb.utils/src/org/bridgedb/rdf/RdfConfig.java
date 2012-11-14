@@ -70,6 +70,11 @@ public class RdfConfig {
         }
     }
 
+    public boolean uniqueLoadRepository() throws IDMapperException{
+        return (!getSailNativeStore().equals(getLoadSailNativeStore()));
+    }
+    
+    
     public static String getProperty(String key) throws IDMapperException{
         return getProperties().getProperty(key);
     }
