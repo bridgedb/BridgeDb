@@ -75,37 +75,6 @@ public class LinksetLoader implements LinksetInterface{
         return loader.validityReport(includeWarnings);        
     }
     
-    @Override
-    public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException {
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        return validateString(source, info, format, StoreType.LIVE, ValidationType.VOID, INCLUDE_WARNINGS);
-    }
-    
-    @Override
-    public String validateInputStreamAsVoid(String source, InputStream inputStream, String mimeType) 
-            throws IDMapperException{
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        return validateInputStream(source, inputStream, format, StoreType.LIVE, ValidationType.VOID, INCLUDE_WARNINGS);
-    }
-
-    //@Override
-    //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
-    //    RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-    //    return validateString(info, format, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
-    //}
-    
-    @Override
-    public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException {
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        return validateString(source, info, format, StoreType.LIVE, ValidationType.LINKS, INCLUDE_WARNINGS);
-    }
-
-    @Override
-    public String validateInputStreamAsLinks(String source, InputStream inputStream, String mimeType) throws IDMapperException {
-        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
-        return validateInputStream(source, inputStream, format, StoreType.LIVE, ValidationType.LINKS, INCLUDE_WARNINGS);
-    }
-
     public String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
     		throws IDMapperException {
     	if (!file.exists()) {
@@ -140,21 +109,6 @@ public class LinksetLoader implements LinksetInterface{
         return validityFile(file, storeType, type, includeWarnings);
     }
     
-    @Override
-    public String validateFileAsVoid(String fileName) throws IDMapperException {
-        return validateFile(fileName, StoreType.LIVE, ValidationType.VOID, INCLUDE_WARNINGS);
-    }
-    
-    //@Override
-    //public String validateFileAsLinksetVoid(String fileName) throws IDMapperException {
-    //    return validateFile(fileName, StoreType.LIVE, ValidationType.LINKSETVOID, INCLUDE_WARNINGS);
-    //}
-    
-    @Override
-    public String validateFileAsLinks(String fileName) throws IDMapperException {
-        return validateFile(fileName, StoreType.LIVE, ValidationType.LINKS, INCLUDE_WARNINGS);
-    }
-
     @Override
     public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException {

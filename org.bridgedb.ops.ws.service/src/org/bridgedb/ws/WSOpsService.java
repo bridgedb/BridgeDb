@@ -490,7 +490,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         }     
     }
 
-    @Override
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoid")
@@ -514,14 +513,14 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateStringAsVoid("Webservice Call", info, mimeType);
+            report =  linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, 
+                    ValidationType.VOID, true);
         } catch (Exception e){
             exception = e.toString();
         }
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.VOID, true, exception);
     }
 
-    @Override
     @POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
@@ -550,7 +549,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInputStream(uploadedInputStream);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateInputStreamAsVoid("Webservice Call", uploadedInputStream, mimeType);
+            report =  linksetInterface.validateInputStream("Webservice Call", uploadedInputStream,  format, 
+                    StoreType.TEST, ValidationType.LINKS, true);
         } catch (Exception e){
             exception = e.toString();
         }
@@ -579,7 +579,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return validateStringAsVoid(info, mimeType);
     }
 
-    @Override
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
@@ -607,7 +606,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInputStream(uploadedInputStream);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateInputStreamAsLinks("Webservice Call", uploadedInputStream, mimeType);
+            report =  linksetInterface.validateInputStream("Webservice Call", uploadedInputStream, format, 
+                    StoreType.TEST, ValidationType.LINKS, true);
         } catch (Exception e){
             exception = e.toString();
         }
@@ -675,7 +675,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKSETVOID, true, exception);
     }*/
 
-    @Override
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
@@ -699,7 +698,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateStringAsLinks("Webservice Call", info, mimeType);
+            report =  linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, 
+                    ValidationType.LINKS,true);
         } catch (Exception e){
             exception = e.toString();
         }
@@ -729,7 +729,8 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         try{
             validateInfo(info);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
-            report =  linksetInterface.validateStringAsLinks("Webservice Call", info, mimeType);
+            report =  linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, 
+                    ValidationType.LINKS,true);
         } catch (Exception e){
             exception = e.toString();
         }

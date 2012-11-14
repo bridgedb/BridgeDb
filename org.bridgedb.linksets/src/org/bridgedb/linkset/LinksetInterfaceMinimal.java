@@ -23,16 +23,6 @@ public interface LinksetInterfaceMinimal {
     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException;
 
-    public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException;
-    
-    public String validateInputStreamAsVoid(String source, InputStream inputStream, String mimeType) throws IDMapperException;
-
-    //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
-    
-    public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException;
-    
-    public String validateInputStreamAsLinks(String source, InputStream inputStream, String mimeType) throws IDMapperException;
-
     public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException;
     

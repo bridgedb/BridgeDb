@@ -75,22 +75,11 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         report("validateStringAsDatasetVoid");
         String info = getRDF(loadMayDataSet1());
         String mimeType = "application/xml";
-        String result = linksetInterfaceMinimal.validateStringAsVoid("loadMayDataSet1()", info, mimeType);
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        String result = linksetInterfaceMinimal.validateString("loadMayDataSet1()", info, format, StoreType.TEST, 
+                ValidationType.VOID, false);
         assertThat(result, not(containsString("ERROR")));
     }
-
-    /**
-     * Test of validateStringAsLinksetVoid method, of class LinksetInterface.
-     * /
-    @Test
-    public void testValidateStringAsLinksetVoid() throws Exception {
-        Reporter.report("validateStringAsLinksetVoid");
-        String info = getRDF(loadMayLinkSet());
-        String mimeType = "application/xml";
-        String expResult = AppendBase.CLEAR_REPORT;
-        String result = linksetInterfaceMinimal.validateStringAsLinksetVoid(info, mimeType);
-        assertThat(result, not(containsString("ERROR")));
-    }*/
 
     /**
      * Test of validateStringAsLinkset method, of class LinksetInterface.
@@ -100,7 +89,9 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         report("validateStringAsLinkset");
         String info = getRDF(loadLinkSetwithLinks());
         String mimeType = "application/xml";;
-        String result = linksetInterfaceMinimal.validateStringAsLinks("loadLinkSetwithLinks()", info, mimeType);
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        String result = linksetInterfaceMinimal.validateString("loadMayDataSet1()", info, format, StoreType.TEST, 
+                ValidationType.LINKS, false);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 2 links"));
     }

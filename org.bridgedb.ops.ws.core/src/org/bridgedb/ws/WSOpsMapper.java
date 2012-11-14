@@ -192,36 +192,6 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     }
 
     @Override
-    public String validateStringAsVoid(String source, String info, String mimeType) throws IDMapperException {
-        ValidationBean bean = opsService.validateStringAsVoid(info, mimeType);
-        return bean.getOkReport();
-    }
-
-    @Override
-    public String validateInputStreamAsVoid(String source, InputStream inputStream, String mimeType) throws IDMapperException {
-        ValidationBean bean = opsService.validateInputStreamAsVoid(inputStream, mimeType);
-        return bean.getOkReport();
-    }
-
-    //@Override
-    //public String validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException {
-    //    ValidationBean bean = opsService.validateStringAsLinksetVoid(info, mimeType);
-    //    return bean.getReport();
-    //}
-
-    @Override
-    public String validateStringAsLinks(String source, String info, String mimeType) throws IDMapperException {
-        ValidationBean bean =  opsService.validateStringAsLinkSet(info, mimeType);
-        return bean.getOkReport();
-    }
-
-    @Override
-    public String validateInputStreamAsLinks(String source, InputStream inputStream, String mimeType) throws IDMapperException {
-        ValidationBean bean =  opsService.validateInputStreamAsLinkSet(inputStream, mimeType);
-        return bean.getOkReport();
-    }
-
-    @Override
     public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException {
         opsService.loadString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
