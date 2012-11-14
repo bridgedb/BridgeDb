@@ -97,14 +97,26 @@ public class StatementReaderAndImporter implements VoidStatements{
 
     private Set<Resource> loadExtrenalResources(Set<Resource> toLoadURIs, StoreType storeType) throws IDMapperException {
         Set<Resource> extraLoadURIs = new HashSet<Resource>();
-        if (storeType == null) {
-            return extraLoadURIs;
-        }
-        RdfReader reader = new RdfReader(storeType);
+        RdfReader liveReader = new RdfReader(StoreType.LIVE);
+        boolean useLoad = storeType != StoreType.LIVE && RdfConfig.uniqueLoadRepository();
+        RdfReader loadReader = new RdfReader(StoreType.LOAD);
+        RdfReader testReader = new RdfReader(StoreType.TEST);
         for (Resource resource:toLoadURIs){
             if (!loadedURIs.contains(resource)){
-                List<Statement> newStatements = reader.getStatementsForResource(resource);  
-                newStatements.addAll(reader.getSuperSet(resource));
+                List<Statement> newStatements = liveReader.getStatementsForResource(resource); 
+                 if (useLoad && (newStatements == null || newStatements.isEmpty())){
+                    newStatements = loadReader.getStatementsForResource(resource);
+                }
+                if (storeType == StoreType.TEST && (newStatements == null || newStatements.isEmpty())){
+                    newStatements = testReader.getStatementsForResource(resource);
+                }
+                newStatements.addAll(liveReader.getSuperSet(resource));
+                if (useLoad) {
+                    newStatements.addAll(loadReader.getSuperSet(resource));
+                    }
+                if (storeType == StoreType.TEST){
+                    newStatements.addAll(testReader.getSuperSet(resource));
+                }
                 voidStatements.addAll(newStatements);
                 extraLoadURIs.addAll(getToLoadResources(newStatements));
                 loadedURIs.add(resource);

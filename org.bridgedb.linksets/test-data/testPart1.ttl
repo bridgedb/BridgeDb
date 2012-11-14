@@ -1,5 +1,5 @@
 @prefix : <> .
-@prefix example: <http://example.com> .
+@prefix example: <http://example.com/> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix foo: <http://www.foo.com/>.
 

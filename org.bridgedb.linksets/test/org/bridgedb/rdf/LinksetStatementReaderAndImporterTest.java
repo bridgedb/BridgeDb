@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.TestUtils;
 import org.junit.Ignore;
 import java.util.Set;
@@ -51,12 +52,46 @@ public class LinksetStatementReaderAndImporterTest extends TestUtils{
      * Test of endRDF method, of class LinksetStatementReaderAndImporter.
      */
     @Test
-    public void testLoadFromRDF() throws Exception {
-        report("EndRDF");
+    public void testLoadFromRDFNoOther() throws Exception {
+        report("LoadFromRDFNoOther");
         new LinksetLoader().clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
         LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.TEST);
         Set result = instance.getLinkStatements();
         assertEquals(3, result.size());
+        result = instance.getVoidStatements();
+        assertEquals(4, result.size());
+    }
+
+    /**
+     * Test of endRDF method, of class LinksetStatementReaderAndImporter.
+     */
+    @Test
+    public void testLoadFromRDFWithOtherTest() throws Exception {
+        report("LoadFromRDFWithOtherTest");
+        LinksetLoader linksetLoader = new LinksetLoader();
+        linksetLoader.clearExistingData(StoreType.TEST);
+        ValidationType validationType = ValidationType.LINKSMINIMAL;
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/testPart1.ttl", StoreType.TEST, validationType);
+        LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.TEST);
+        Set result = instance.getLinkStatements();
+        assertEquals(3, result.size());
+        result = instance.getVoidStatements();
+        assertEquals(8, result.size());
+    }
+
+    /**
+     * Test of endRDF method, of class LinksetStatementReaderAndImporter.
+     */
+    @Test
+    public void testLoadFromRDFWithOtherLive() throws Exception {
+        report("LoadFromRDFWithOtherLive");
+        new LinksetLoader().clearExistingData(StoreType.TEST);
+        ValidationType validationType = ValidationType.LINKSMINIMAL;
+        LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.LIVE);
+        Set result = instance.getLinkStatements();
+        assertEquals(3, result.size());
+        result = instance.getVoidStatements();
+        assertEquals(4, result.size());
     }
 }
