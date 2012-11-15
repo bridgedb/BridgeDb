@@ -19,7 +19,10 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.MetaDataException;
@@ -34,7 +37,9 @@ import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.bridgedb.utils.DirectoriesConfig;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
@@ -115,10 +120,11 @@ public class LinksetLoader implements LinksetInterface{
             throws IDMapperException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         loader.validate();
-        loader.load();
+        File temp = saveString(info, format, validationType);
+        load(temp, storeType, validationType);
     }
     
-    private void load(File file, StoreType storeType, ValidationType validationType) 
+    private static void load(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
         if (storeType == null){
             throw new IDMapperLinksetException ("Can not load if no storeType set");
@@ -183,7 +189,29 @@ public class LinksetLoader implements LinksetInterface{
         logger.info(storeType + " SQL cleared");                
     }
 
-    /**
+    public static File saveString(String info, RDFFormat format, ValidationType validationType) throws IDMapperException {
+        File directory = getDirectory(validationType);      
+        try {
+           File file = File.createTempFile("test", "." + format.getDefaultFileExtension(), directory);
+           FileWriter writer = new FileWriter(file);
+           writer.append(info);
+           writer.close();
+           return file;
+        } catch (IOException ex) {
+            throw new BridgeDBException("Unable to create new file ", ex);
+        }
+    }
+
+    public static File getDirectory(ValidationType validationType) throws IDMapperException{
+        switch (validationType){
+            case VOID: return DirectoriesConfig.getVoidDirectory();
+            case LINKS: return DirectoriesConfig.getLinksetDirectory();
+            case LINKSMINIMAL: return DirectoriesConfig.getLinksetDirectory();
+            default: throw new BridgeDBException("Unexpected ValidationType " + validationType);
+        }
+    }
+    
+     /**
      * Main entry poit for loading linksets.
      *
      * @seem usage() fr explanation of the paramters.
@@ -291,5 +319,6 @@ public class LinksetLoader implements LinksetInterface{
         System.exit(1);
     }
 
+   
 
 }

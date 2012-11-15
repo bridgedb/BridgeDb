@@ -18,6 +18,7 @@
 //
 package org.bridgedb.linkset;
 
+import java.io.File;
 import org.bridgedb.utils.TestUtils;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.openrdf.model.impl.URIImpl;
@@ -76,4 +77,10 @@ public class LinkSetLoaderUsingStringTest extends TestUtils{
                 LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
+    @Test
+    public void testLoadString() throws IDMapperException{
+        report("LoadString");
+        File test = LinksetLoader.saveString("This is a test", RDFFormat.TURTLE, ValidationType.LINKS);
+    }
+
 }
