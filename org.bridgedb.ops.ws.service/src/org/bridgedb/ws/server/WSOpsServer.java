@@ -618,7 +618,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateFile")
-    public Response getValidateFileIndex() 
+    public Response getValidateFileIndex(@Context HttpServletRequest hsr) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateFileIndex called!");
@@ -632,10 +632,12 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
-        sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
-        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
-        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
-        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+        if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
+            sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
+            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
+            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
+            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+        }
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }

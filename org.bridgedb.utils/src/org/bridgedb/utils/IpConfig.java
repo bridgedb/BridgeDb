@@ -41,6 +41,15 @@ public class IpConfig {
 
     private static Properties properties;
 
+    public static boolean isAdminIPAddress(String ipAddress) throws IDMapperException {
+        String owner = getProperties().getProperty(ipAddress);
+        if (owner == null){
+            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            owner = properties.getProperty(ipAddress);
+        }
+        return owner != null;
+    }
+
     public static String checkIPAddress(String ipAddress) throws IDMapperException{
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){

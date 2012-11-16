@@ -52,7 +52,6 @@ public class DirectoriesConfig {
         if (useTest){
             return getTestDirectory();
         }
-        System.out.println("NOT useTest");
         return getDirectory(LINKSET_DIRECTORY_PROPERTY, "Linkset");
     }
     
