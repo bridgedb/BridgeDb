@@ -121,8 +121,8 @@ Ensembl Metazoa		http://metazoa.ensembl.org/	http://metazoa.ensembl.org/id/$id	F
 Ensembl Mosquito	EnAg	http://www.ensembl.org	http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$id	AGAP006864	gene	Anopheles gambiae	1	EnAg	AGAP\d{6}	
 Ensembl Mouse	EnMm	http://www.ensembl.org	http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$id	ENSMUSG00000017167	gene	Mus musculus	1	EnMm	ENSMUSG\d{11}	
 Ensembl Pig	EnSs	http://www.ensembl.org	http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id	ENSSSCG00000004244	gene	Sus scrofa	1	EnSs		
-Ensembl Plants		http://plants.ensembl.org/	http://plants.ensembl.org/id/$id	AT1G73965			1	urn:miriam:ensembl.plant	^\w+$	Ensembl Plants
-Ensembl Protists		http://protists.ensembl.org	http://protists.ensembl.org/id/$id	PFC0120w			1	urn:miriam:ensembl.protist	^\w+$	Ensembl Protists
+Ensembl Plants	EP	http://plants.ensembl.org/	http://plants.ensembl.org/id/$id	AT1G73965	gene		1	urn:miriam:ensembl.plant	^\w+$	Ensembl Plants
+Ensembl Protists		http://protists.ensembl.org	http://protists.ensembl.org/id/$id	PFC0120w	gene		1	urn:miriam:ensembl.protist	^\w+$	Ensembl Protists
 Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id	ENSRNOG00000016648	gene	Rattus norvegicus	1	EnRn	ENSRNOG\d{11}	
 Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id	ENSXETG00000029448	gene	Xenopus tropicalis	1	EnXt	ENSXETG\d{11}	
 Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id	YGR147C	gene	Saccharomyces cerevisiae	1	EnSc	Y[A-Z][RL]\d{3}[WC](?:\-[A-Z])?	

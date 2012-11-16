@@ -136,6 +136,8 @@ public class BioDataSource
 	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_XENOPUS = DataSource.register (
 		"EnXt", "Ensembl Xenopus").asDataSource();
+	public static final DataSource ENSEMBL_PLANTS = DataSource.register (
+		"EP", "Ensembl Plants").asDataSource();
 	public static final DataSource FLYBASE = DataSource.register (
 		"F", "FlyBase").asDataSource();
 	public static final DataSource GENBANK = DataSource.register (
