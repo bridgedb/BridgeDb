@@ -19,9 +19,11 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
@@ -149,6 +151,13 @@ public class LinksetLoader implements LinksetInterface{
         load(file, storeType, type);
     }
     
+    @Override
+    public void loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException{
+        File file = saveInputStream(inputStream, format, validationType);
+        load(file, storeType, validationType);
+    }
+
     private void validate(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
     	if (!file.exists()) {
@@ -177,6 +186,12 @@ public class LinksetLoader implements LinksetInterface{
         validate(file, storeType, type);
     }
     
+    public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException{
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, inputStream, format, validationType, storeType);
+        loader.validate();        
+    }
+    
     @Override
     public void clearExistingData (StoreType storeType) 
     		throws IDMapperException  {
@@ -192,11 +207,32 @@ public class LinksetLoader implements LinksetInterface{
     public static File saveString(String info, RDFFormat format, ValidationType validationType) throws IDMapperException {
         File directory = getDirectory(validationType);      
         try {
-           File file = File.createTempFile("test", "." + format.getDefaultFileExtension(), directory);
+           File file = File.createTempFile(validationType.getName(), "." + format.getDefaultFileExtension(), directory);
            FileWriter writer = new FileWriter(file);
            writer.append(info);
            writer.close();
+           logger.info("Saved String to " + file.getAbsolutePath());
            return file;
+        } catch (IOException ex) {
+            throw new BridgeDBException("Unable to create new file ", ex);
+        }
+    }
+
+    public static File saveInputStream(InputStream inputStream, RDFFormat format, ValidationType validationType) throws IDMapperException {
+        try {
+            File directory = getDirectory(validationType);      
+            File file = File.createTempFile(validationType.getName(), "." + format.getDefaultFileExtension(), directory);
+            OutputStream out = new FileOutputStream(file);
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            while ((read = inputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            inputStream.close();
+            out.flush();
+            out.close();
+            logger.info("Saved InputStream to " + file.getAbsolutePath());
+            return file;
         } catch (IOException ex) {
             throw new BridgeDBException("Unable to create new file ", ex);
         }

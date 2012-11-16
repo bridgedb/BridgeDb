@@ -29,15 +29,23 @@ public interface LinksetInterface extends LinksetInterfaceMinimal{
             throws IDMapperException;
     
     @Override
-    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException;
+    public void loadString(String source, String info, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException;
     
     public void loadFile(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;
     
     @Override
-    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException;
+    public void loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException;
+
+    @Override
+    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException;
     
+    @Override
+    public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException;
+
     public void checkFileValid(String fileName, StoreType storeType, ValidationType type) throws IDMapperException;
     
     public void clearExistingData (StoreType storeType) throws IDMapperException;
