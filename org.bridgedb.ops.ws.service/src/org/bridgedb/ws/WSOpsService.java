@@ -550,7 +550,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             validateInputStream(uploadedInputStream);
             RDFFormat format = getRDFFormatByMimeType(mimeType);
             report =  linksetInterface.validateInputStream("Webservice Call", uploadedInputStream,  format, 
-                    StoreType.TEST, ValidationType.LINKS, true);
+                    StoreType.TEST, ValidationType.VOID, true);
         } catch (Exception e){
             exception = e.toString();
         }

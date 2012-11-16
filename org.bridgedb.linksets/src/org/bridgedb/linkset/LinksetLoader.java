@@ -239,11 +239,10 @@ public class LinksetLoader implements LinksetInterface{
     }
 
     public static File getDirectory(ValidationType validationType) throws IDMapperException{
-        switch (validationType){
-            case VOID: return DirectoriesConfig.getVoidDirectory();
-            case LINKS: return DirectoriesConfig.getLinksetDirectory();
-            case LINKSMINIMAL: return DirectoriesConfig.getLinksetDirectory();
-            default: throw new BridgeDBException("Unexpected ValidationType " + validationType);
+        if (validationType.isLinkset()){
+            return DirectoriesConfig.getLinksetDirectory();
+        } else {
+            return DirectoriesConfig.getVoidDirectory();
         }
     }
     
@@ -346,6 +345,7 @@ public class LinksetLoader implements LinksetInterface{
         Reporter.println("   " + ValidationType.LINKS + ": Checks that all MUST and SHOULD values are present");
         Reporter.println("       See: http://www.openphacts.org/specs/datadesc/");
         Reporter.println("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
+        Reporter.println("   " + ValidationType.ANY_RDF + ": requires only that it is valid rdf.");
         Reporter.println("   Default is " + ValidationType.LINKS);
         Reporter.println(CLEAR_EXISING_DATA);
         Reporter.println("   true: clears the exisiting database and rdfstore.");

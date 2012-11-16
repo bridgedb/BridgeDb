@@ -202,4 +202,14 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
         opsService.checkStringValid(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
     }
 
+    @Override
+    public void loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

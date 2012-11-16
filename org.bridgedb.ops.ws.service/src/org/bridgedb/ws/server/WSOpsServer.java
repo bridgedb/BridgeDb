@@ -637,6 +637,10 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
             addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
             addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
             addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            sb.append("\n<h1>Validate a File as RDF.</h1>");
+            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
+            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
+            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
         }
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -936,6 +940,11 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 sb.append("linkset you are too lazy to add a full header to.");
                 sb.append("<br>WARNING: Loading with Minimal void does not excuss you from providing a full header later.");
                 break;
+            }
+            case ANY_RDF: {
+                sb.append("Any RDF which will act as a parent for void or linkset.");
+                sb.append("<br>WARNING: Loading RDF void does not excuss you from providing a full void later.");
+                break;
             } default:{
                 throw new BridgeDBException("Unexpected validationType" + validationType);
             }
@@ -945,23 +954,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     }
 
     private void addFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/OPS-IMS/");
-        switch (validationType){
-            case VOID: {
-                sb.append("validateVoid");
-                break;
-            }
-            case LINKS: {
-                sb.append("validateLinkSet");
-                break;
-            }
-            case LINKSMINIMAL: {
-                sb.append("validateMinimum");
-                break;
-            } default:{
-                throw new BridgeDBException("Unexpected validationType" + validationType);
-            }
-        }
+        sb.append("<form method=\"post\" action=\"/OPS-IMS/validate");
+        sb.append(validationType.getName());
         sb.append("\">");        
     }
     
