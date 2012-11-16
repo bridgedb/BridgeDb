@@ -615,6 +615,141 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
     }
 
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateRdf")
+    public Response validateRdf(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdf called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validate(info, mimeType, ValidationType.ANY_RDF);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateRdf")
+    public Response getValidateRdf(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdf called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validate(info, mimeType, ValidationType.ANY_RDF);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleRdf")
+    public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleRdf called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleRdf")
+    public Response getValidateTurtleRdf() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleRdf called!");
+                }
+        return validate(null, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlRdf")
+    public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdfXmlRdf called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlRdf")
+    public Response getValidateRdfXmlRdf() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlRdf called!");
+                }
+        return validate(null, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesRdf")
+    public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesRdf called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesRdf")
+    public Response getValidateNTriplesRdf() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesRdf called!");
+                }
+        return validate(null, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateFile")
