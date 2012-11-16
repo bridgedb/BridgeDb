@@ -21,7 +21,9 @@
 
 	<!-- embedded jars are embedded in the resulting bundle -->
 	<path id="embed.jars">
-		<!-- None -->
+		<fileset dir="lib">
+			<include name="synergizer.jar"/>
+		</fileset>
 	</path>
 
 	<!-- test deps are only used for testing -->

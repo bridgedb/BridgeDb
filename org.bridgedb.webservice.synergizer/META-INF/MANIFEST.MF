@@ -3,9 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Synergizer
 Bundle-SymbolicName: org.bridgedb.webservice.synergizer
 Bundle-Version: 1.1.0
-Bundle-ClassPath: synergizer.jar,
- lib/synergizer.jar
-Export-Package: org.bridgedb.webservice.synergizer,
- org.json,
- synergizer
+Export-Package: org.bridgedb.webservice.synergizer
 Require-Bundle: org.bridgedb;bundle-version="1.1.0"

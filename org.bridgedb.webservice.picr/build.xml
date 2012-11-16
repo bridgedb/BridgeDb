@@ -8,6 +8,10 @@
 		<fileset dir="lib">
 			<include name="*.jar"/>
 		</fileset>
+		<fileset dir="../common-bundles">
+			<include name="javax.activation*.jar"/>
+			<include name="commons-collections*.jar"/>
+		</fileset>
 		<fileset dir="../dist">
 			<include name="org.bridgedb.jar"/>
 		</fileset>
@@ -20,7 +24,9 @@
 
 	<!-- embedded jars are embedded in the resulting bundle -->
 	<path id="embed.jars">
-		<!-- None -->
+		<fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
 	</path>
 
 	<!-- test deps are only used for testing -->
