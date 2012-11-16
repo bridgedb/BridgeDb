@@ -18,3 +18,8 @@ TransativeDirectory     ../transatives
 
 #Directory where Export files are placed directory or indirectly
 ExportDirectory         ../export
+
+#Directory where all junit tests will write to 
+#This directory is cleared at the begining of each test run.
+#Warning WS Client test will still cause the server to write to the normal directories.
+TestDirectory           ../test

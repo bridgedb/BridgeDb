@@ -23,7 +23,7 @@ public class BridgeDbTest {
  
     @BeforeClass
     public static void setUplogger() throws Exception {
-        ConfigReader.logToConsole();
+        //ConfigReader.logToConsole();
     /*    SMTPAppender mailer = new SMTPAppender();
         mailer.setSMTPHost("junk");
         mailer.setSMTPPort(25);
