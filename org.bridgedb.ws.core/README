@@ -1,0 +1,8 @@
+org.bridgedb.ws.core
+--------------------
+
+Shared functionality for a BridgeDB webservice, that exposes
+the BridgeDB data via a webservices.
+
+This is unlike the modules that use other webservices as data
+provider to BridgeDB.
