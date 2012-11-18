@@ -55,7 +55,7 @@ Compilation
 -----------
 
 If you've obtained the source code of BridgeDb, you should be
-able to compile with a simple: (Ant build is broken in OPS branches)
+able to compile with a simple:
 
 	ant
 	
