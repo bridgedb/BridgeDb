@@ -48,15 +48,23 @@ public class WSFame extends WSOpsInterfaceService {
         super();
     }
                 
-    protected StringBuilder topAndSide(String header){
+    protected StringBuilder topAndSide(String header, HttpServletRequest httpServletRequest) throws IDMapperException{
         StringBuilder sb = new StringBuilder(HEADER_START);
         sb.append(HEADER_END);
         sb.append(BODY);
         sb.append(TOP_LEFT);
         sb.append(header);
         sb.append(TOP_RIGHT);
-        sb.append(SIDE_BAR);
+        sb.append(SIDE_BAR_START);
+        addSideBarMiddle(sb, httpServletRequest);
+        sb.append(SIDE_BAR_END);
         return sb;
+    }
+    
+    /**
+     * Allows Super classes to add to the side bar
+     */
+    protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws IDMapperException{
     }
     
     private final String HEADER_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
@@ -157,7 +165,7 @@ public class WSFame extends WSOpsInterfaceService {
             + "			</td>"
             + "		</tr>"
             + "	</table>";
-    private final String SIDE_BAR = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
+    private final String SIDE_BAR_START = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
             + "		<tr valign=\"top\">"
             + "			<td style=\"border-top: 1px solid #D5D5FF\">"
             + "				<div class=\"menugroup\">Query Expander</div>"
@@ -201,18 +209,13 @@ public class WSFame extends WSOpsInterfaceService {
             + "				<div id=\"menuOpsApi_text\" class=\"texthotlink\" "
             + "                   onmouseout=\"DHTML_TextRestore('menuOpsApi_text'); return true; \" "
             + "                   onmouseover=\"DHTML_TextHilight('menuOpsApi_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/api&quot;;\">API</div>"
-            + "				<div id=\"menuOpsValidateVoid_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateVoid_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateVoid_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateVoid&quot;;\">Validate Void</div>"
-            + "				<div id=\"menuOpsValidateLinkSet_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateLinkSet_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateLinkSet_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateLinkSet&quot;;\">Validate LinkSet</div>"
-            + "			</td>"
+            + "                   onclick=\"document.location = &quot;/OPS-IMS/api&quot;;\">API</div>";
+    
+    private final String SIDE_BAR_END =
+              "			</td>"
             + "			<td width=\"5\" style=\"border-right: 1px solid #D5D5FF\"></td>"
             + "			<td style=\"border-top: 1px solid #D5D5FF; width:100%\">";
+    
     final String FORM_OUTPUT_FORMAT = " \n<p>Output Format:"
             + "     <select size=\"1\" name=\"format\">"
             + "         <option value=\"html\">HTML page</option>"
