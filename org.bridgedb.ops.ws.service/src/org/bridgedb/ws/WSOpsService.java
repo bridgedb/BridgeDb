@@ -848,5 +848,15 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         linksetInterface.checkStringValid("Webservice Call", info, format, storeType, validationType);
         return "OK";
     }
+
+    @Override
+    public String loadInputStream(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
  
 }

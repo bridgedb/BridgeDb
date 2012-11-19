@@ -105,6 +105,7 @@ public class LinksetLoaderImplentation{
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
             metaData = new MetaDataCollection(file.getAbsolutePath(), statements.getVoidStatements(), specification);
+            
         }
     }
     
@@ -117,7 +118,7 @@ public class LinksetLoaderImplentation{
             statements = linkStatements;     
             metaData = new LinksetVoidInformation(source, linkStatements, validationType);        
         } else {
-            statements = new StatementReaderAndImporter(info, format, storeType);     
+            statements = new StatementReaderAndImporter(info, format, storeType);   
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
             metaData = new MetaDataCollection(source, statements.getVoidStatements(), specification);

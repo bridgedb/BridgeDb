@@ -207,4 +207,14 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public String loadInputStream(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

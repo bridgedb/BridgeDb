@@ -23,10 +23,10 @@ public interface LinksetInterfaceMinimal {
     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws IDMapperException;
 
-    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public String loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException;
     
-    public void loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+    public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws IDMapperException;
 
     public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 

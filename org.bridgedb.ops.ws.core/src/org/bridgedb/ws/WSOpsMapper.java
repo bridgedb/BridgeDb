@@ -192,24 +192,29 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     }
 
     @Override
-    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public String loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException {
-        opsService.loadString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
+        return opsService.loadString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
     }
 
     @Override
-    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
+    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException {
         opsService.checkStringValid(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
     }
 
     @Override
-    public void loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException {
+         return opsService.loadInputStream(source, inputStream, format.getDefaultMIMEType(), storeType.toString(), 
+                 validationType.toString());
     }
 
     @Override
-    public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, ValidationType validationType) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException {
+        opsService.checkInputStreamValid(source, inputStream, format.getDefaultMIMEType(), storeType.toString(), 
+                 validationType.toString());
     }
 
 }

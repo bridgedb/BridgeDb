@@ -68,7 +68,12 @@ public interface WSOpsInterface extends WSCoreInterface{
     public String checkStringValid(String info, String defaultMIMEType, String storeType, String validationType) 
             throws IDMapperException;
 
-    public ValidationBean validateInputStream(InputStream inputStream, String mimeTypee, String storeType, 
+    public ValidationBean validateInputStream(InputStream inputStream, String mimeType, String storeType, 
             String validationType, String includeWarnings)throws IDMapperException;
 
+    public String loadInputStream(String source, InputStream inputStream, String mimeType, String storeType, 
+            String validationType);
+
+    public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, 
+            String validationType);
  }

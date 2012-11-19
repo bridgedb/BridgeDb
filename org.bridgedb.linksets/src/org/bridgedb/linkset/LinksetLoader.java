@@ -118,12 +118,13 @@ public class LinksetLoader implements LinksetInterface{
     }
     
     @Override
-    public void loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+    public String loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         loader.validate();
-        File temp = saveString(info, format, validationType);
-        load(temp, storeType, validationType);
+        File file = saveString(info, format, validationType);
+        load(file, storeType, validationType);
+        return "Loaded file " + file.getAbsolutePath();
     }
     
     private static void load(File file, StoreType storeType, ValidationType validationType) 
@@ -152,10 +153,11 @@ public class LinksetLoader implements LinksetInterface{
     }
     
     @Override
-    public void loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+    public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws IDMapperException{
         File file = saveInputStream(inputStream, format, validationType);
         load(file, storeType, validationType);
+        return "Loaded file " + file.getAbsolutePath();
     }
 
     private void validate(File file, StoreType storeType, ValidationType validationType) 
