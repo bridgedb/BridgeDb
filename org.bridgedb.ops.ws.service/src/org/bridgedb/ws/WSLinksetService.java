@@ -19,7 +19,6 @@
 package org.bridgedb.ws;
 
 
-import org.bridgedb.ws.server.*;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 import java.io.BufferedReader;
@@ -27,54 +26,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
 import org.bridgedb.metadata.validator.ValidationType;
-import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.rdf.RdfConfig;
-import org.bridgedb.rdf.RdfReader;
-import org.bridgedb.rdf.RdfFactory;
-import org.bridgedb.rdf.StatementReader;
-import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.SQLUrlMapper;
-import org.bridgedb.sql.SqlFactory;
-import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IpConfig;
-import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
-import org.bridgedb.ws.WSOpsInterfaceService;
 import org.openrdf.rio.RDFFormat;
 
 /**
- *
+ * WebService forms of the LinksetInterfaceMinimal methods.
+ * 
+ * Currently contains many repeated methods due to the methods not picking up an InputStream and any other parameter at the same time.
+ * 
  * @author Christian
  */
 public class WSLinksetService extends WSUrlService{
@@ -85,417 +60,15 @@ public class WSLinksetService extends WSUrlService{
         super();
         logger.info("WsOpsServer setup");        
     }
+    
+    // validateString methods
             
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateVoid")
-    public Response validateVoid(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateVoid called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.VOID);
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateVoid")
-    public Response validateVoidGet(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateVoid called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.VOID);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleVoid")
-    public Response validateTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleVoid called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.VOID);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleVoid")
-    public Response validateTurtleVoidGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateTurtleVoid called!");
-                }
-        return validate(null, RDFFormat.TURTLE, ValidationType.VOID);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlVoid")
-    public Response validateRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdfXmlVoid called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.VOID);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlVoid")
-    public Response validateRdfXmlVoidGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdfXmlVoid called!");
-                }
-        return validate(null, RDFFormat.RDFXML, ValidationType.VOID);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesVoid")
-    public Response validateNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateNTriplesVoid called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.VOID);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesVoid")
-    public Response validateNTriplesVoidGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateNTriplesVoid called!");
-                }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.VOID);
-    }
-
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateLinkSet")
-    public Response validateLinkSet(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateLinkSet called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKS);
-    }
-    
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateLinkSet")
-    public Response validateLinkSetGet(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateLinkSet called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKS);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleLinkSet")
-    public Response validateTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleLinkSet called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKS);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleLinkSet")
-    public Response validateTurtleLinkSetGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateTurtleLinkSet called!");
-                }
-        return validate(null, RDFFormat.TURTLE, ValidationType.LINKS);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlLinkSet")
-    public Response validateRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdfXmlLinkSet called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKS);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlLinkSet")
-    public Response validateRdfXmlLinkSetGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdfXmlLinkSet called!");
-                }
-        return validate(null, RDFFormat.RDFXML, ValidationType.LINKS);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesLinkSet")
-    public Response validateNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateNTriplesLinkSet called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKS);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesLinkSet")
-    public Response validateNTriplesLinkSetGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateNTriplesLinkSet called!");
-                }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKS);
-    }
-
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateMinimum")
-    public Response validateMinimum(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateMinimum called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
-    }
-    
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateMinimum")
-    public Response validateMinimumGet(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateMinimum called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleMinimum")
-    public Response validateTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleMinimum called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleMinimum")
-    public Response validateTurtleMinimumGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateTurtleMinimum called!");
-                }
-        return validate(null, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlMinimum")
-    public Response validateRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdfXmlMinimum called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlMinimum")
-    public Response validateRdfXmlMinimumGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdfXmlMinimum called!");
-                }
-        return validate(null, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL);
-    }
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesMinimum")
-    public Response validateNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateNTriplesMinimum called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesMinimum")
-    public Response validateNTriplesMinimumGet() 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateNTriplesMinimum called!");
-                }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
-    }
-
     @POST
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateRdf")
     public Response validateRdf(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateRdf called!");
                     if (info == null){
@@ -509,14 +82,15 @@ public class WSLinksetService extends WSUrlService{
                         logger.debug("mimeType = " + mimeType);
                     }
                 }
-        return validate(info, mimeType, ValidationType.ANY_RDF);
+        return validateString(info, mimeType, ValidationType.ANY_RDF, httpServletRequest);
     }
-    
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateRdf")
     public Response validateRdfGet(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdf called!");
                     if (info == null){
@@ -530,13 +104,453 @@ public class WSLinksetService extends WSUrlService{
                         logger.debug("mimeType = " + mimeType);
                     }
                 }
-        return validate(info, mimeType, ValidationType.ANY_RDF);
+        return validateString(info, mimeType, ValidationType.ANY_RDF, httpServletRequest);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateVoid")
+    public Response validateVoid(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateVoid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validateString(info, mimeType, ValidationType.VOID, httpServletRequest);
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateVoid")
+    public Response validateVoidGet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateVoid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validateString(info, mimeType, ValidationType.VOID, httpServletRequest);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateLinkSet")
+    public Response validateLinkSet(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validateString(info, mimeType, ValidationType.LINKS, httpServletRequest);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateLinkSet")
+    public Response validateLinkSetGet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validateString(info, mimeType, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateMinimum")
+    public Response validateMinimum(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateMinimum called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validateString(info, mimeType, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateMinimum")
+    public Response validateMinimumGet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getMinimumSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validateString(info, mimeType, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+
+    private Response validateString(String info, String mimeType, ValidationType validationType, 
+            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+       String report = null;
+       try{
+            if (info != null && !info.isEmpty()){
+                RDFFormat format = getRDFFormatByMimeType(mimeType);
+                report = linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, validationType, true);
+            }
+        } catch (Exception e){
+            report = e.toString();
+        }
+        StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
+        addValidationForm(sb, validationType, info, report);
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    // validateInputStream methods
+    
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleVoid")
+    public Response validateTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleVoid called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.TURTLE, ValidationType.VOID, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleVoid")
+    public Response validateTurtleVoidGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleVoid called!");
+                }
+        return validateInputStream(null, RDFFormat.TURTLE, ValidationType.VOID, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlVoid")
+    public Response validateRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdfXmlVoid called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.RDFXML, ValidationType.VOID, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlVoid")
+    public Response validateRdfXmlVoidGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlVoid called!");
+                }
+        return validateInputStream(null, RDFFormat.RDFXML, ValidationType.VOID, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesVoid")
+    public Response validateNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesVoid called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.VOID, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesVoid")
+    public Response validateNTriplesVoidGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesVoid called!");
+                }
+        return validateInputStream(null, RDFFormat.NTRIPLES, ValidationType.VOID, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleLinkSet")
+    public Response validateTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleLinkSet called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleLinkSet")
+    public Response validateTurtleLinkSetGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleLinkSet called!");
+                }
+        return validateInputStream(null, RDFFormat.TURTLE, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlLinkSet")
+    public Response validateRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdfXmlLinkSet called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlLinkSet")
+    public Response validateRdfXmlLinkSetGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlLinkSet called!");
+                }
+        return validateInputStream(null, RDFFormat.RDFXML, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesLinkSet")
+    public Response validateNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesLinkSet called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesLinkSet")
+    public Response validateNTriplesLinkSetGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesLinkSet called!");
+                }
+        return validateInputStream(null, RDFFormat.NTRIPLES, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleMinimum")
+    public Response validateTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleMinimum called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleMinimum")
+    public Response validateTurtleMinimumGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleMinimum called!");
+                }
+        return validateInputStream(null, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlMinimum")
+    public Response validateRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdfXmlMinimum called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlMinimum")
+    public Response validateRdfXmlMinimumGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlMinimum called!");
+                }
+        return validateInputStream(null, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesMinimum")
+    public Response validateNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesMinimum called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validateInputStream(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesMinimum")
+    public Response validateNTriplesMinimumGet(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesMinimum called!");
+                }
+        return validateInputStream(null, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL, httpServletRequest);
     }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleRdf")
-    public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+    public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateTurtleRdf called!");
@@ -550,24 +564,25 @@ public class WSLinksetService extends WSUrlService{
                         }
                     }
                 }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+        return validateInputStream(uploadedInputStream, RDFFormat.TURTLE, ValidationType.ANY_RDF, httpServletRequest);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleRdf")
-    public Response validateTurtleRdfGet() 
+    public Response validateTurtleRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleRdf called!");
                 }
-        return validate(null, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+        return validateInputStream(null, RDFFormat.TURTLE, ValidationType.ANY_RDF, httpServletRequest);
     }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlRdf")
-    public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+    public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateRdfXmlRdf called!");
@@ -581,24 +596,25 @@ public class WSLinksetService extends WSUrlService{
                         }
                     }
                 }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+        return validateInputStream(uploadedInputStream, RDFFormat.RDFXML, ValidationType.ANY_RDF, httpServletRequest);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlRdf")
-    public Response validateRdfXmlRdfGet() 
+    public Response validateRdfXmlRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlRdf called!");
                 }
-        return validate(null, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+        return validateInputStream(null, RDFFormat.RDFXML, ValidationType.ANY_RDF, httpServletRequest);
     }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesRdf")
-    public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+    public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream,
+            @Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateNTriplesRdf called!");
@@ -612,68 +628,22 @@ public class WSLinksetService extends WSUrlService{
                         }
                     }
                 }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+        return validateInputStream(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.ANY_RDF, httpServletRequest);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesRdf")
-    public Response validateNTriplesRdfGet() 
+    public Response validateNTriplesRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesRdf called!");
                 }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+        return validateInputStream(null, RDFFormat.NTRIPLES, ValidationType.ANY_RDF, httpServletRequest);
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateFile")
-    public Response validateFileIndexGet(@Context HttpServletRequest hsr) 
-            throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateFileIndex called!");
-                }
-        StringBuilder sb = topAndSide("File Validators Index");
-        sb.append("\n<h1>Validate a File as a Void Description.</h1>");
-        addFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
-        addFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
-        addFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
-        sb.append("\n<h1>Validate a File as a Linkset.</h1>");
-        addFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
-        addFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
-        addFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
-        if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
-            sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
-            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
-            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
-            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
-            sb.append("\n<h1>Validate a File as RDF.</h1>");
-            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
-            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
-            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
-        }
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
-    }
-
-    private Response validate(String info, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
-       String report = null;
-       try{
-            if (info != null && !info.isEmpty()){
-                RDFFormat format = getRDFFormatByMimeType(mimeType);
-                report = linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, validationType, true);
-            }
-        } catch (Exception e){
-            report = e.toString();
-        }
-        StringBuilder sb = topAndSide(validationType.getName() + " Validator");
-        addForm(sb, validationType, info, report);
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
-    }
-
-    private Response validate(InputStream input, RDFFormat format, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
+    private Response validateInputStream(InputStream input, RDFFormat format, ValidationType validationType, 
+            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
        String report = null;
        try{
             if (input != null && input.available() > 10){
@@ -682,22 +652,357 @@ public class WSLinksetService extends WSUrlService{
         } catch (Exception e){
             report = e.toString();
         }
-        StringBuilder sb = topAndSide(validationType.getName() + " Validator");
+        StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
         addFileForm(sb, validationType, report);
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
-    private Response loadString(String source, String info, RDFFormat format, ValidationType validationType) 
-            throws IDMapperException{
-        StringBuilder sb = topAndSide("Loading " + validationType.getName());
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();        
+    //loadString mthods
+    
+    //Savetring mthods
+    
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveRdf")
+    public Response saveRdf(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveRdf called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.ANY_RDF, httpServletRequest);
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveRdf")
+    public Response saveRdfGet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveRdfGet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.ANY_RDF, httpServletRequest);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveVoid")
+    public Response saveVoid(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveVoid called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.VOID, httpServletRequest);
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveVoid")
+    public Response saveVoidGet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveVoidGet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.VOID, httpServletRequest);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveLinkSet")
+    public Response saveLinkSet(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveLinkSet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.LINKS, httpServletRequest);
     }
     
-    private void addForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
-        addValidationExplanation(sb, validationType);
-        addFormStart(sb,  validationType);
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveLinkSet")
+    public Response saveLinkSetGet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveLinkSetGet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.LINKS, httpServletRequest);
+    }
+
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveMinimum")
+    public Response saveMinimum(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveMinimum called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/saveMinimum")
+    public Response saveMinimumGet(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType,
+            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveMinimumGet called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return saveString(info, mimeType, ValidationType.LINKSMINIMAL, httpServletRequest);
+    }
+
+    private Response saveString(String info, String mimeType, ValidationType validationType,
+            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+       String report = null;
+       try{
+            if (info != null && !info.isEmpty()){
+                RDFFormat format = getRDFFormatByMimeType(mimeType);
+                report = linksetInterface.saveString("Webservice Call", info, format, StoreType.TEST, validationType);
+            }
+        } catch (Exception e){
+            report = e.toString();
+        }
+        StringBuilder sb = topAndSide("Save but not Load: " + validationType.getName(), httpServletRequest);
+        addSaveForm(sb, validationType, info, report);
+        sb.append("<h1>WARNING Data not Loaded</h1>");
+        sb.append("<h2>Please contact an Admin to Load this data</h2>");
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+     //Index methods for Validate InputStream methods
+    
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validate")
+    public Response validateIndex(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateIndex called!");
+                }
+        StringBuilder sb = topAndSide("Validators Index", httpServletRequest);
+        sb.append("\n<h1>Validate as a Void Description.</h1>");
+        addValidateString(sb, ValidationType.VOID);
+        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
+        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
+        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
+        sb.append("\n<h1>Validate as a Linkset.</h1>");
+        addValidateString(sb, ValidationType.LINKS);
+        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
+        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
+        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
+        //if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
+            sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
+            addValidateString(sb, ValidationType.LINKSMINIMAL);
+            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
+            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
+            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            sb.append("\n<h1>Validate a File as RDF.</h1>");
+            addValidateString(sb, ValidationType.LINKSMINIMAL);
+            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
+            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
+            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
+        //}
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/save")
+    public Response saveIndex(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveIndex called!");
+                }
+        return saveIndex("Savers Index", httpServletRequest);
+    }
+
+    public Response saveIndex(String title, @Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("saveIndex called!");
+                }
+        StringBuilder sb = topAndSide(title, httpServletRequest);
+        sb.append("\n<h1>Save as a Void Description.</h1>");
+        addSaveString(sb, ValidationType.VOID);
+        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
+        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
+        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
+        sb.append("\n<h1>Save as a Linkset.</h1>");
+        addSaveString(sb, ValidationType.LINKS);
+        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
+        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
+        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
+        //if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
+            sb.append("\n<h1>Save a File as the minimum to load a linkset.</h1>");
+            addSaveString(sb, ValidationType.LINKSMINIMAL);
+            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
+            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
+            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            sb.append("\n<h1>v a File as RDF.</h1>");
+            addSaveString(sb, ValidationType.LINKSMINIMAL);
+            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
+            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
+            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
+        //}
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/load")
+    public Response loadIndex(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("loadIndex called!");
+                }
+        StringBuilder sb = topAndSide("Loaders Index", httpServletRequest);
+        sb.append("\n<h1>Load as a Void Description.</h1>");
+        addLoadString(sb, ValidationType.VOID);
+        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
+        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
+        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
+        sb.append("\n<h1>Load as a Linkset.</h1>");
+        addLoadString(sb, ValidationType.LINKS);
+        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
+        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
+        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
+        //if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
+            sb.append("\n<h1>Load a File as the minimum to load a linkset.</h1>");
+            addLoadString(sb, ValidationType.LINKSMINIMAL);
+            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
+            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
+            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            sb.append("\n<h1>Load a File as RDF.</h1>");
+            addLoadString(sb, ValidationType.LINKSMINIMAL);
+            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
+            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
+            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
+        //}
+        sb.append(END);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    //WS Frame methods
+    @Override
+    protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws IDMapperException{
+        sb.append(SIDE_BAR_VALIDATE);
+        sb.append(SIDE_BAR_SAVE);
+        if (httpServletRequest != null && IpConfig.isAdminIPAddress(httpServletRequest.getRemoteAddr())){
+            sb.append(SIDE_BAR_LOAD);
+        }
+    }
+
+    private final String SIDE_BAR_VALIDATE =
+              "<div id=\"menuOpsValidate_text\" class=\"texthotlink\" "
+            + "     onmouseout=\"DHTML_TextRestore('menuOpsValidate_text'); return true; \" "
+            + "     onmouseover=\"DHTML_TextHilight('menuOpsValidate_text'); return true; \" "
+            + "     onclick=\"document.location = &quot;/OPS-IMS/validate&quot;;\">Validate</div>";
+    private final String SIDE_BAR_LOAD =
+              "<div id=\"menuOpsLoad_text\" class=\"texthotlink\" "
+            + "     onmouseout=\"DHTML_TextRestore('menuOpsLoad_text'); return true; \" "
+            + "     onmouseover=\"DHTML_TextHilight('menuOpsLoad_text'); return true; \" "
+            + "     onclick=\"document.location = &quot;/OPS-IMS/load&quot;;\">Load</div>";
+    private final String SIDE_BAR_SAVE =
+              "<div id=\"menuOpsLoad_text\" class=\"texthotlink\" "
+            + "     onmouseout=\"DHTML_TextRestore('menuOpsLoad_text'); return true; \" "
+            + "     onmouseover=\"DHTML_TextHilight('menuOpsLoad_text'); return true; \" "
+            + "     onclick=\"document.location = &quot;/OPS-IMS/save&quot;;\">Save</div>";
+
+    //Support methods 
+    private void addValidationForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
+        sb.append("\n<p>Use this page to validate a ");
+        addValidationTypeExplanation(sb, validationType);
+        addValidationFormStart(sb,  validationType);
         if (report != null){
             addReport(sb, validationType, report);
         }
@@ -710,23 +1015,43 @@ public class WSLinksetService extends WSUrlService{
             
         sb.append(FORM_INFO_END);
         sb.append("\n<p>");
-        sb.append(FORM_SUBMIT);        
+        sb.append(FORM_SUBMIT_TO_VALIDATE);        
         sb.append(FORM_NOTE);      
         sb.append("</p>");
     }
     
-    private void addFileForm(StringBuilder sb, ValidationType validationType, String report) throws BridgeDBException{
-        addValidationExplanation(sb, validationType);
+    private void addSaveForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
+        sb.append("\n<p>Use this page to save a ");
+        addValidationTypeExplanation(sb, validationType);
+        addSaveFormStart(sb,  validationType);
         if (report != null){
             addReport(sb, validationType, report);
         }
-        addFileLine(sb,  validationType, RDFFormat.TURTLE);
-        addFileLine(sb,  validationType, RDFFormat.RDFXML);
-        addFileLine(sb,  validationType, RDFFormat.NTRIPLES);
+        //sb.append(FORM_OUTPUT_FORMAT);
+        sb.append(FORM_MINE_TYPE);
+        sb.append(FORM_INFO_START);
+        if (info != null && !info.isEmpty()){
+            sb.append(info);
+        }
+            
+        sb.append(FORM_INFO_END);
+        sb.append("\n<p>");
+        sb.append(FORM_SUBMIT_TO_SAVE);        
+        sb.append("</p>");
     }
 
-    private void addValidationExplanation(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
+    private void addFileForm(StringBuilder sb, ValidationType validationType, String report) throws BridgeDBException{
         sb.append("\n<p>Use this page to validate a ");
+        addValidationTypeExplanation(sb, validationType);
+        if (report != null){
+            addReport(sb, validationType, report);
+        }
+        addValidateFileLine(sb,  validationType, RDFFormat.TURTLE);
+        addValidateFileLine(sb,  validationType, RDFFormat.RDFXML);
+        addValidateFileLine(sb,  validationType, RDFFormat.NTRIPLES);
+    }
+
+    private void addValidationTypeExplanation(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
         switch (validationType){
             case VOID: {
                 sb.append("VOID descripition.");
@@ -738,39 +1063,72 @@ public class WSLinksetService extends WSUrlService{
             }
             case LINKSMINIMAL: {
                 sb.append("linkset you are too lazy to add a full header to.");
-                sb.append("<br>WARNING: Loading with Minimal void does not excuss you from providing a full header later.");
+                sb.append("<br>WARNING: Using a Minimal void does not excuss you from providing a full header later.");
                 break;
             }
             case ANY_RDF: {
                 sb.append("Any RDF which will act as a parent for void or linkset.");
-                sb.append("<br>WARNING: Loading RDF void does not excuss you from providing a full void later.");
+                sb.append("<br>WARNING: Using just RDF does not excuss you from providing a full void later.");
                 break;
             } default:{
                 throw new BridgeDBException("Unexpected validationType" + validationType);
             }
         }
         sb.append(".</p>");       
-        sb.append("\n<p>This is an early prototype and subject to change!</p> ");
     }
 
-    private void addFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
+    private void addValidationFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
         sb.append("<form method=\"post\" action=\"/OPS-IMS/validate");
         sb.append(validationType.getName());
         sb.append("\">");        
     }
     
-    private void addFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
-        addFormStart(sb, validationType, format);
+    private void addSaveFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
+        sb.append("<form method=\"post\" action=\"/OPS-IMS/save");
+        sb.append(validationType.getName());
+        sb.append("\">");        
+    }
+    
+    private void addLoadFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
+        sb.append("<form method=\"post\" action=\"/OPS-IMS/load");
+        sb.append(validationType.getName());
+        sb.append("\">");        
+    }
+
+    private void addValidateFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
+        addFormStart(sb, validationType, format, "validate");
         sb.append("Select ");
         sb.append(format.getName());
-        sb.append(" to validate as a ");
+        sb.append(" File to validate as a ");
         sb.append(validationType.getName());
         sb.append("<input type=\"file\" name=\"file\" size=\"45\" />");
-        sb.append(FORM_SUBMIT);   
+        sb.append(FORM_SUBMIT_TO_VALIDATE);   
         sb.append("<br>");
     }
     
-    private void addFormStart(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
+    private void addSaveFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
+        addFormStart(sb, validationType, format, "save");
+        sb.append("Select ");
+        sb.append(format.getName());
+        sb.append(" File to Save as a ");
+        sb.append(validationType.getName());
+        sb.append("<input type=\"file\" name=\"file\" size=\"45\" />");
+        sb.append(FORM_SUBMIT_TO_SAVE);   
+        sb.append("<br>");
+    }
+
+    private void addLoadFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
+        addFormStart(sb, validationType, format, "load");
+        sb.append("Select ");
+        sb.append(format.getName());
+        sb.append(" File to Load as a ");
+        sb.append(validationType.getName());
+        sb.append("<input type=\"file\" name=\"file\" size=\"45\" />");
+        sb.append(FORM_SUBMIT_TO_LOAD);   
+        sb.append("<br>");
+    }
+
+    private void addFormStart(StringBuilder sb, ValidationType validationType, RDFFormat format, String action) throws BridgeDBException{
         String formatSt;
         if (format == RDFFormat.TURTLE){
             formatSt = "Turtle";
@@ -782,7 +1140,7 @@ public class WSLinksetService extends WSUrlService{
             throw new BridgeDBException("Unexpected format" + format);
         }
         sb.append("\n<form method=\"post\" action=\"/OPS-IMS/");
-        sb.append("validate");
+        sb.append(action);
         sb.append(formatSt);
         sb.append(validationType.getName());
         sb.append("\" enctype=\"multipart/form-data\">");        
@@ -802,6 +1160,31 @@ public class WSLinksetService extends WSUrlService{
         sb.append(report);
         sb.append("</textarea></p>\n");       
     }
+    
+    private void addValidateString(StringBuilder sb, ValidationType validationType) {
+        sb.append("<a href=\"validate");
+        sb.append(validationType.getName());
+        sb.append("\">Validate String as a ");
+        sb.append(validationType.getName());
+        sb.append("</a>");        
+    }
+    
+    private void addSaveString(StringBuilder sb, ValidationType validationType) {
+        sb.append("<a href=\"save");
+        sb.append(validationType.getName());
+        sb.append("\">Save String as a ");
+        sb.append(validationType.getName());
+        sb.append("</a>");        
+    }
+
+    private void addLoadString(StringBuilder sb, ValidationType validationType) {
+        sb.append("<a href=\"load");
+        sb.append(validationType.getName());
+        sb.append("\">Load String as a ");
+        sb.append(validationType.getName());
+        sb.append("</a>");        
+    }
+
     private final String FORM_MINE_TYPE = " \n<p>Mime Type:"
             + "     <select size=\"1\" name=\"mimeType\">"
             + "         <option value=\"application/x-turtle\">Turtle (mimeType=application/x-turtle; ext=ttl)</option>"
@@ -811,7 +1194,9 @@ public class WSLinksetService extends WSUrlService{
             + " </p>";
     private final String FORM_INFO_START = "\n<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";
     private final String FORM_INFO_END = "</textarea></p>";
-    private final String FORM_SUBMIT = " <input type=\"submit\" value=\"Validate!\"></input></form>";
+    private final String FORM_SUBMIT_TO_VALIDATE = " <input type=\"submit\" value=\"Validate!\"></input></form>";
+    private final String FORM_SUBMIT_TO_LOAD = " <input type=\"submit\" value=\"Load!\"></input></form>";
+    private final String FORM_SUBMIT_TO_SAVE = " <input type=\"submit\" value=\"Save (for Admin to Load later!)\"></input></form>";
     private final String FORM_NOTE ="    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
     private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/QueryExpander/mapURI\">"
@@ -825,7 +1210,7 @@ public class WSLinksetService extends WSUrlService{
             + "    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
 
-    //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
+    //Support function to test the IP Address
     @GET
 	@Path("/checkIpAddress")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -863,6 +1248,8 @@ public class WSLinksetService extends WSUrlService{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
 	}
 
+    // Test methods
+    
     //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
     @POST
 	@Path("/uploadTest")
@@ -979,6 +1366,7 @@ public class WSLinksetService extends WSUrlService{
         sb.append(uploadedInputStream.toString());
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
 	}
+
 }
 
 
