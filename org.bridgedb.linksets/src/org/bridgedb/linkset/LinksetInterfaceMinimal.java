@@ -26,7 +26,13 @@ public interface LinksetInterfaceMinimal {
     public String loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
             throws IDMapperException;
     
+    public String saveString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+            throws IDMapperException;
+    
     public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException;
+
+    public String saveInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws IDMapperException;
 
     public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 

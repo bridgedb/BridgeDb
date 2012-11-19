@@ -127,6 +127,23 @@ public class LinksetLoader implements LinksetInterface{
         return "Loaded file " + file.getAbsolutePath();
     }
     
+    @Override
+    public String saveString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+            throws IDMapperException {
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
+        loader.validate();
+        File file = saveString(info, format, validationType);
+        if (validationType.isLinkset()){
+            logger.warn("Linkset saved to " + file.getAbsolutePath());
+            return "Saved linkset to: " + file.getName();
+        } else {
+            load(file, StoreType.TEST, validationType);            
+            logger.warn("Saved void to: " + file.getName() + " Also loaded into test."); 
+            return "Saved void to: " + file.getName() + " Void is temporarily available to validated other voids."
+                    + " Please ask an admin to make this permenant.";
+        }
+    }
+
     private static void load(File file, StoreType storeType, ValidationType validationType) 
     		throws IDMapperException {
         if (storeType == null){
@@ -154,6 +171,21 @@ public class LinksetLoader implements LinksetInterface{
     
     @Override
     public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException{
+        File file = saveInputStream(inputStream, format, validationType);
+        if (validationType.isLinkset()){
+            logger.warn("Linkset saved to " + file.getAbsolutePath());
+            return "Saved linkset to: " + file.getName();
+        } else {
+            load(file, StoreType.TEST, validationType);            
+            logger.warn("Saved void to: " + file.getName() + " Also loaded into test."); 
+            return "Saved void to: " + file.getName() + " Void is temporarily available to validated other voids."
+                    + " Please ask an admin to make this permenant.";
+        }
+    }
+
+    @Override
+    public String saveInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws IDMapperException{
         File file = saveInputStream(inputStream, format, validationType);
         load(file, storeType, validationType);
