@@ -55,7 +55,7 @@ import org.openrdf.rio.RDFFormat;
  *
  * @author Christian
  */
-public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInterfaceMinimal{
+public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     
     WSOpsInterface opsService;
     
@@ -176,7 +176,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
 
     // *****   LinksetInterfaceMinimal Methods
     
-    @Override
+    /*@Override
     public String validateString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
         ValidationBean bean = opsService.validateString(info, format.getDefaultMIMEType(), storeType.toString(), 
                 validationType.toString(), Boolean.toString(includeWarnings));
@@ -198,6 +198,12 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     }
 
     @Override
+    public String saveString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
+            throws IDMapperException {
+        return opsService.saveString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
+    }
+
+    @Override
     public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws IDMapperException {
         opsService.checkStringValid(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
@@ -211,10 +217,17 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper, LinksetInter
     }
 
     @Override
+    public String saveInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
+            ValidationType validationType) throws IDMapperException {
+         return opsService.saveInputStream(source, inputStream, format.getDefaultMIMEType(), storeType.toString(), 
+                 validationType.toString());
+    }
+
+    @Override
     public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws IDMapperException {
         opsService.checkInputStreamValid(source, inputStream, format.getDefaultMIMEType(), storeType.toString(), 
                  validationType.toString());
     }
-
+     */
 }

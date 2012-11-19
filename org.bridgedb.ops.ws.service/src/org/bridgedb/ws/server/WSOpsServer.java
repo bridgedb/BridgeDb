@@ -234,7 +234,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateVoid")
-    public Response getValidateVoid(@QueryParam(INFO)String info, 
+    public Response validateVoidGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateVoid called!");
@@ -275,7 +275,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleVoid")
-    public Response getValidateTurtleVoid() 
+    public Response validateTurtleVoidGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleVoid called!");
@@ -410,7 +410,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleLinkSet")
-    public Response getValidateTurtleLinkSet() 
+    public Response validateTurtleLinkSetGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleLinkSet called!");
@@ -680,7 +680,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleRdf")
-    public Response getValidateTurtleRdf() 
+    public Response validateTurtleRdfGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleRdf called!");

@@ -172,17 +172,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
          return result;
     }
 
-    @Override
-    public String loadString(String info, String mineType, String storeType, String validationType) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String checkStringValid(String info, String mimeType, String storeType, String validationType) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    //TODO FIX this
+   //TODO FIX this
     @Override
     public ValidationBean validateString(String info, String mimeType, String storeType, String validationType, 
             String includeWarnings) throws IDMapperException {
@@ -200,21 +190,6 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
 //         = response.getEntity(ValidationBean.class);
         System.out.println(result);
         return result;
-    }
-
-    @Override
-    public ValidationBean validateInputStream(InputStream inputStream, String mimeTypee, String storeType, String validationType, String includeWarnings) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String loadInputStream(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
