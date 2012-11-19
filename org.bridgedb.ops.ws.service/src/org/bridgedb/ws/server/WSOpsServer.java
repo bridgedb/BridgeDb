@@ -69,31 +69,22 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IpConfig;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
-import org.bridgedb.ws.WSOpsService;
+import org.bridgedb.ws.WSLinksetService;
+import org.bridgedb.ws.WSOpsInterfaceService;
 import org.openrdf.rio.RDFFormat;
 
 /**
  *
  * @author Christian
  */
-public class WSOpsServer extends WSOpsService implements Comparator<MappingSetInfo>{
+public class WSOpsServer extends WSLinksetService{
     
-    private NumberFormat formatter;
-        
-    static final Logger logger = Logger.getLogger(WSOpsService.class);
+    static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
 
     public WSOpsServer()  throws IDMapperException   {
         super();
-        urlMapper = new SQLUrlMapper(false, StoreType.LIVE);
-        idMapper = urlMapper;
-        formatter = NumberFormat.getInstance();
-        if (formatter instanceof DecimalFormat) {
-            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setGroupingSeparator(',');
-            ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
-        }
         logger.info("WsOpsServer setup");        
-      }
+    }
             
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -210,1281 +201,384 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateVoid")
+    //InWSLinksetService
     public Response validateVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateVoid called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.VOID);
+        return null;
     }
 
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateVoid")
+    //InWSLinksetService
     public Response validateVoidGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateVoid called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.VOID);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleVoid")
+    //InWSLinksetService
     public Response validateTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleVoid called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.VOID);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleVoid")
+    //InWSLinksetService
     public Response validateTurtleVoidGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateTurtleVoid called!");
-                }
-        return validate(null, RDFFormat.TURTLE, ValidationType.VOID);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlVoid")
+    //InWSLinksetService
     public Response validateRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdfXmlVoid called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.VOID);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlVoid")
+    //InWSLinksetService
     public Response validateRdfXmlVoidGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdfXmlVoid called!");
-                }
-        return validate(null, RDFFormat.RDFXML, ValidationType.VOID);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesVoid")
+    //InWSLinksetService
     public Response validateNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateNTriplesVoid called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.VOID);
+        return null;
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesVoid")
+    //InWSLinksetService
     public Response validateNTriplesVoidGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateNTriplesVoid called!");
-                }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.VOID);
+        return null;    
     }
 
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateLinkSet")
+    //InWSLinksetService
     public Response validateLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateLinkSet called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKS);
+        return null;    
     }
     
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateLinkSet")
+    //InWSLinksetService
     public Response validateLinkSetGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateLinkSet called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKS);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleLinkSet")
+    //InWSLinksetService
     public Response validateTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleLinkSet called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKS);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleLinkSet")
+    //InWSLinksetService
     public Response validateTurtleLinkSetGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateTurtleLinkSet called!");
-                }
-        return validate(null, RDFFormat.TURTLE, ValidationType.LINKS);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlLinkSet")
+    //InWSLinksetService
     public Response validateRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdfXmlLinkSet called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKS);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlLinkSet")
+    //InWSLinksetService
     public Response validateRdfXmlLinkSetGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdfXmlLinkSet called!");
-                }
-        return validate(null, RDFFormat.RDFXML, ValidationType.LINKS);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesLinkSet")
+    //InWSLinksetService
     public Response validateNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateNTriplesLinkSet called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKS);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesLinkSet")
+    //InWSLinksetService
     public Response validateNTriplesLinkSetGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateNTriplesLinkSet called!");
-                }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKS);
+        return null;    
     }
 
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateMinimum")
+    //InWSLinksetService
     public Response validateMinimum(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateMinimum called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
+        return null;    
     }
     
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateMinimum")
+    //InWSLinksetService
     public Response validateMinimumGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateMinimum called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.LINKSMINIMAL);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleMinimum")
+    //InWSLinksetService
     public Response validateTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleMinimum called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleMinimum")
+    //InWSLinksetService
     public Response validateTurtleMinimumGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateTurtleMinimum called!");
-                }
-        return validate(null, RDFFormat.TURTLE, ValidationType.LINKSMINIMAL);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlMinimum")
+    //InWSLinksetService
     public Response validateRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdfXmlMinimum called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlMinimum")
+    //InWSLinksetService
     public Response validateRdfXmlMinimumGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdfXmlMinimum called!");
-                }
-        return validate(null, RDFFormat.RDFXML, ValidationType.LINKSMINIMAL);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesMinimum")
+    //InWSLinksetService
     public Response validateNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateNTriplesMinimum called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesMinimum")
+    //InWSLinksetService
     public Response validateNTriplesMinimumGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateNTriplesMinimum called!");
-                }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
+        return null;    
     }
 
-    @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateRdf")
+    //InWSLinksetService
     public Response validateRdf(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdf called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.ANY_RDF);
+        return null;    
     }
     
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/validateRdf")
-    public Response validateRdfGet(@QueryParam(INFO)String info, 
+   //InWSLinksetService
+     public Response validateRdfGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdf called!");
-                    if (info == null){
-                        logger.debug("NO Info");
-                    } else {
-                        logger.debug("info length = " + info.length());
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-                }
-        return validate(info, mimeType, ValidationType.ANY_RDF);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleRdf")
-    public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+   //InWSLinksetService
+     public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateTurtleRdf called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateTurtleRdf")
-    public Response validateTurtleRdfGet() 
+   //InWSLinksetService
+     public Response validateTurtleRdfGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateTurtleRdf called!");
-                }
-        return validate(null, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlRdf")
-    public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+   //InWSLinksetService
+     public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateRdfXmlRdf called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateRdfXmlRdf")
-    public Response validateRdfXmlRdfGet() 
+   //InWSLinksetService
+     public Response validateRdfXmlRdfGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateRdfXmlRdf called!");
-                }
-        return validate(null, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+        return null;    
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesRdf")
-    public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+   //InWSLinksetService
+     public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("validateNTriplesRdf called!");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                }
-        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateNTriplesRdf")
-    public Response validateNTriplesRdfGet() 
+   //InWSLinksetService
+     public Response validateNTriplesRdfGet() 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateNTriplesRdf called!");
-                }
-        return validate(null, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/validateFile")
-    public Response validateFileIndexGet(@Context HttpServletRequest hsr) 
+   //InWSLinksetService
+     public Response validateFileIndexGet(@Context HttpServletRequest hsr) 
             throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("getValidateFileIndex called!");
-                }
-        StringBuilder sb = topAndSide("File Validators Index");
-        sb.append("\n<h1>Validate a File as a Void Description.</h1>");
-        addFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
-        addFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
-        addFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
-        sb.append("\n<h1>Validate a File as a Linkset.</h1>");
-        addFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
-        addFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
-        addFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
-        if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
-            sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
-            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
-            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
-            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
-            sb.append("\n<h1>Validate a File as RDF.</h1>");
-            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
-            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
-            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
-        }
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;    
     }
 
-    private Response validate(String info, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
+   //InWSLinksetService
+     private Response validate(String info, String mimeType, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
        String report = null;
-       try{
-            if (info != null && !info.isEmpty()){
-                RDFFormat format = getRDFFormatByMimeType(mimeType);
-                report = linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, validationType, true);
-            }
-        } catch (Exception e){
-            report = e.toString();
-        }
-        StringBuilder sb = topAndSide(validationType.getName() + " Validator");
-        addForm(sb, validationType, info, report);
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;    
     }
 
+    //InWSLinksetService
     private Response validate(InputStream input, RDFFormat format, ValidationType validationType) throws IDMapperException, UnsupportedEncodingException {
        String report = null;
-       try{
-            if (input != null && input.available() > 10){
-                report = linksetInterface.validateInputStream("Webservice Call", input, format, StoreType.TEST, validationType, true);
-            }
-        } catch (Exception e){
-            report = e.toString();
-        }
-        StringBuilder sb = topAndSide(validationType.getName() + " Validator");
-        addFileForm(sb, validationType, report);
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;    
     }
 
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/getMappingInfo")
+    //InWSLinksetService
+    private Response loadString(String source, String info, RDFFormat format, ValidationType validationType) 
+            throws IDMapperException{
+        return null;    
+    }
+    
+    //in WSUrlService()
     public Response getMappingInfo() throws IDMapperException, UnsupportedEncodingException {
-        StringBuilder sb = new StringBuilder();
-        List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos();
-        Collections.sort(mappingSetInfos, this);
-        sb.append("<?xml version=\"1.0\"?>");
-        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
-                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
-        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
-        sb.append("<head><title>OPS IMS</title></head><body>");
-        sb.append("<h1>Open PHACTS Identity Mapping Counter per NameSpaces</h1>");
-        sb.append("\n<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
-        sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
-        sb.append("\n<p>");
-        sb.append("<table border=\"1\">");
-        sb.append("<tr>");
-        sb.append("<th>Source Data Source</th>");
-        sb.append("<th>Target Data source</th>");
-        sb.append("<th>Sum of Mappings</th>");
-        sb.append("<th>Id</th>");
-        sb.append("<th>Transative</th>");
-        sb.append("</tr>");
-        for (MappingSetInfo info:mappingSetInfos){
-            sb.append("<tr>");
-            sb.append("<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("dataSource/");
-            sb.append(info.getSourceSysCode());
-            sb.append("\">");
-            sb.append(info.getSourceSysCode());
-            sb.append("</a></td>");
-            sb.append("<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("dataSource/");
-            sb.append(info.getTargetSysCode());
-            sb.append("\">");
-            sb.append(info.getTargetSysCode());
-            sb.append("</a></td>");
-            sb.append("<td align=\"right\">");
-            sb.append(formatter.format(info.getNumberOfLinks()));
-            sb.append("</td>");
-            sb.append("<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("mappingSet/");
-            sb.append(info.getId());
-            sb.append("\">");
-            sb.append(info.getId());
-            sb.append("</a></td>");
-            sb.append("<td>");
-            sb.append(info.isTransitive());
-            sb.append("</td>");
-            sb.append("</tr>");
-        }
-        sb.append("</table>"); 
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;    
     }
     
-    @Override
+    //in WSUrlService()
     public int compare(MappingSetInfo o1, MappingSetInfo o2) {
-        int test = o1.getSourceSysCode().compareTo(o2.getSourceSysCode());
-        if (test != 0) return test;
-        return o1.getTargetSysCode().compareTo(o2.getTargetSysCode());
+        return 1/0;    
     }
 
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/getMappingTotal")
+    //in WSUrlService()
     public Response mappingTotal() throws IDMapperException, UnsupportedEncodingException {
-        StringBuilder sb = new StringBuilder();
-        List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos();
-        SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
-        sb.append("<?xml version=\"1.0\"?>");
-        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
-                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
-        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
-        sb.append("<head><title>OPS IMS</title></head><body>");
-        sb.append("<h1>Open PHACTS Identity Mapping Counter per NameSpaces</h1>");
-        sb.append("\n<p>Warning there many not be Distint mappings but just a sum of the mappings from all mapping files.");
-        sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
-        sb.append("\n<p>");
-        sb.append("<table border=\"1\">");
-        sb.append("<tr>");
-        sb.append("<th>Source Data Source</th>");
-        sb.append("<th>Target Data Source</th>");
-        sb.append("<th>Sum of Mappings</th>");
-        sb.append("</tr>");
-        for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){
-            sb.append("<tr>");
-            sb.append("<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("dataSource/");
-            sb.append(info.getSourceSysCode());
-            sb.append("\">");
-            sb.append(info.getSourceSysCode());
-            sb.append("</a></td>");
-            sb.append("<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("dataSource/");
-            sb.append(info.getTargetSysCode());
-            sb.append("\">");
-            sb.append(info.getTargetSysCode());
-            sb.append("</a></td>");
-            sb.append("<td align=\"right\">");
-            sb.append(formatter.format(info.getNumberOfLinks()));
-            sb.append("</td>");
-            sb.append("</tr>");
-        }
-        sb.append("</table>"); 
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;    
     }
     
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    @Path("/graphviz")
+     //in WSUrlService()
     public Response graphvizDot() throws IDMapperException, UnsupportedEncodingException {
-        StringBuilder sb = new StringBuilder();
-        List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos();
-        SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
-        sb.append("digraph G {");
-        for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){
-            if (info.getSourceSysCode().compareTo(info.getTargetSysCode()) < 0 ){
-                sb.append("\"");
-                sb.append(info.getSourceSysCode());
-                sb.append("\" -> \"");
-                sb.append(info.getTargetSysCode());
-                sb.append("\" [dir = both, label=\"");
-                sb.append(formatter.format(info.getNumberOfLinks())); 
-                sb.append("\"");
-                if (info.isTransitive()){
-                    sb.append(", style=dashed");
-                }
-                sb.append("];\n");
-            }
-        }
-        sb.append("}"); 
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/mappingSet")
+     //in WSUrlService()
     public String mappingSet() throws IDMapperException {
-        throw new BridgeDBException("Parameter id is missing");
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/mappingSet/{id}")
+    //in WSUrlService()
     public String mappingSet(@PathParam("id") String idString) throws IDMapperException {
-        if (idString == null || idString.isEmpty()){
-            throw new BridgeDBException("Parameter id is missing!");
-        }
-        Integer id = Integer.parseInt(idString);
-        return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/linkset")
+    //in WSUrlService()
     public String linkset() throws IDMapperException {
-        throw new BridgeDBException("Parameter id is missing");
+        return null;    
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/linkset/{id}")
+    //in WSUrlService()
     public String linksetSet(@PathParam("id") String idString) throws IDMapperException {
-        if (idString == null || idString.isEmpty()){
-            throw new BridgeDBException("Parameter id is missing!");
-        }
-        Integer id = Integer.parseInt(idString);
-        return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
+        return null;    
     }
     
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/linkset/{id}/{resource}")
+     //in WSUrlService()
     public String linksetSet(@PathParam("id") String idString, @PathParam("resource") String resource) throws IDMapperException {
-        throw new BridgeDBException("id= "+ idString + " resource = " + resource);
-        //if (idString == null || idString.isEmpty()){
-       //     throw new IDMapperException("Parameter id is missing!");
-        //}
-        //Integer id = Integer.parseInt(idString);
-        //return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
+        return null;    //
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/void")
+     //in WSUrlService()
     public String voidInfo() throws IDMapperException {
-        throw new BridgeDBException("Parameter id is missing");
+        return null;    //
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/void/{id}")
+    //in WSUrlService()
     public String voidInfo(@PathParam("id") String idString) throws IDMapperException {
-        if (idString == null || idString.isEmpty()){
-            throw new BridgeDBException("Parameter id is missing");
-        }
-        Integer id = Integer.parseInt(idString);
-        return new RdfReader(StoreType.LIVE).getVoidRDF(id);
+        return null;    
     }
 
-    private StringBuilder topAndSide(String header){
-        StringBuilder sb = new StringBuilder(HEADER);
-        sb.append(BODY);
-        sb.append(TOP_LEFT);
-        sb.append(header);
-        sb.append(TOP_RIGHT);
-        sb.append(SIDE_BAR);
-        return sb;
+    //in WSFame
+    public StringBuilder topAndSide(String header){
+        return null;    
     }
     
+    //in WSLinksetService
     private void addForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
-        addValidationExplanation(sb, validationType);
-        addFormStart(sb,  validationType);
-        if (report != null){
-            addReport(sb, validationType, report);
-        }
-        //sb.append(FORM_OUTPUT_FORMAT);
-        sb.append(FORM_MINE_TYPE);
-        sb.append(FORM_INFO_START);
-        if (info != null && !info.isEmpty()){
-            sb.append(info);
-        }
-            
-        sb.append(FORM_INFO_END);
-        sb.append("\n<p>");
-        sb.append(FORM_SUBMIT);        
-        sb.append(FORM_NOTE);      
-        sb.append("</p>");
     }
     
+    //WSLinksetService
     private void addFileForm(StringBuilder sb, ValidationType validationType, String report) throws BridgeDBException{
-        addValidationExplanation(sb, validationType);
-        if (report != null){
-            addReport(sb, validationType, report);
-        }
-        addFileLine(sb,  validationType, RDFFormat.TURTLE);
-        addFileLine(sb,  validationType, RDFFormat.RDFXML);
-        addFileLine(sb,  validationType, RDFFormat.NTRIPLES);
     }
 
+   //in WSLinksetService
     private void addValidationExplanation(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("\n<p>Use this page to validate a ");
-        switch (validationType){
-            case VOID: {
-                sb.append("VOID descripition.");
-                break;
-            }
-            case LINKS: {
-                sb.append("Linkset.");
-                break;
-            }
-            case LINKSMINIMAL: {
-                sb.append("linkset you are too lazy to add a full header to.");
-                sb.append("<br>WARNING: Loading with Minimal void does not excuss you from providing a full header later.");
-                break;
-            }
-            case ANY_RDF: {
-                sb.append("Any RDF which will act as a parent for void or linkset.");
-                sb.append("<br>WARNING: Loading RDF void does not excuss you from providing a full void later.");
-                break;
-            } default:{
-                throw new BridgeDBException("Unexpected validationType" + validationType);
-            }
-        }
-        sb.append(".</p>");       
-        sb.append("\n<p>This is an early prototype and subject to change!</p> ");
     }
 
+   //in WSLinksetService
     private void addFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/OPS-IMS/validate");
-        sb.append(validationType.getName());
-        sb.append("\">");        
     }
     
+   //in WSLinksetService
     private void addFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
-        addFormStart(sb, validationType, format);
-        sb.append("Select ");
-        sb.append(format.getName());
-        sb.append(" to validate as a ");
-        sb.append(validationType.getName());
-        sb.append("<input type=\"file\" name=\"file\" size=\"45\" />");
-        sb.append(FORM_SUBMIT);   
-        sb.append("<br>");
     }
     
+   //in WSLinksetService
     private void addFormStart(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
-        String formatSt;
-        if (format == RDFFormat.TURTLE){
-            formatSt = "Turtle";
-        } else if (format == RDFFormat.RDFXML){
-            formatSt = "RdfXml";
-        } else if (format == RDFFormat.NTRIPLES){
-            formatSt = "NTriples";
-        } else {
-            throw new BridgeDBException("Unexpected format" + format);
-        }
-        sb.append("\n<form method=\"post\" action=\"/OPS-IMS/");
-        sb.append("validate");
-        sb.append(formatSt);
-        sb.append(validationType.getName());
-        sb.append("\" enctype=\"multipart/form-data\">");        
     }
     
+   //in WSLinksetService
     private void addReport(StringBuilder sb, ValidationType validationType, String report){
-        int lines = 1;
-        for (int i=0; i < report.length(); i++) {
-            if (report.charAt(i) == '\n') lines++;
-        }
-        sb.append("<h2>Report as a ");
-        sb.append(validationType.getName());
-        sb.append("</h2>");
-        sb.append("\n<p><textarea readonly style=\"width:100%;\" rows=");
-        sb.append(lines);
-        sb.append(">");
-        sb.append(report);
-        sb.append("</textarea></p>\n");       
     }
     
-    private final String HEADER_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
-            + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
-            + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\n"
-            + "<head>\n"
-            + " <title>"
-            + "     Manchester University OpenPhacts Void Validator"
-            + "	</title>\n"
-            + "	<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\"></meta>\n"
-            + "	<script>"
-            + "		function getObj(id) {"
-            + "			return document.getElementById(id)"
-            + "		}"
-            + "		function DHTML_TextHilight(id) {"
-            + "			getObj(id).classNameOld = getObj(id).className;"
-            + "			getObj(id).className = getObj(id).className + \"_hilight\";"
-            + "		}"
-            + "		function DHTML_TextRestore(id) {"
-            + "			if (getObj(id).classNameOld != \"\")"
-            + "				getObj(id).className = getObj(id).classNameOld;"
-            + "		}"
-            + "	</script>\n";
+    //in WSFame
+    private final String HEADER_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" " 
+            ;
+    //in WSFame
     private final String TOGGLER ="<script language=\"javascript\">\n"
-            + "function getItem(id)\n"
-            + "{\n"
-            + "    var itm = false;\n"
-            + "    if(document.getElementById)\n"
-            + "        itm = document.getElementById(id);\n"
-            + "    else if(document.all)\n"
-            + "        itm = document.all[id];\n"
-            + "     else if(document.layers)\n"
-            + "        itm = document.layers[id];\n"
-            + "    return itm;\n"
-            + "}\n\n"
-            + "function toggleItem(id)\n"
-            + "{\n"
-            + "    itm = getItem(id);\n"
-            + "    if(!itm)\n"
-            + "        return false;\n"
-            + "    if(itm.style.display == 'none')\n"
-            + "        itm.style.display = '';\n"
-            + "    else\n"
-            + "        itm.style.display = 'none';\n"
-            + "    return false;\n"
-            + "}\n\n"
-            + "function hideDetails()\n"
-            + "{\n"
-            + "     toggleItem('ops')\n"
-            + "     toggleItem('sparql')\n"
-            + "     return true;\n"
-            + "}\n\n"
-            + "</script>\n";
+           ;;
+            //in WSFame
     private final String HEADER_END = "	<style type=\"text/css\">"
-            + "		.texthotlink, .texthotlink_hilight {"
-            + "			width: 150px;"
-            + "			font-size: 85%;"
-            + "			padding: .25em;"
-            + "			cursor: pointer;"
-            + "			color: black;"
-            + "			font-family: Arial, sans-serif;"
-            + "		}"
-            + "		.texthotlink_hilight {"
-            + "			background-color: #fff6ac;"
-            + "		}"
-            + "		.menugroup {"
-            + "			font-size: 90%;"
-            + "			font-weight: bold;"
-            + "			padding-top: .25em;"
-            + "		}"
-            + "		input { background-color: #EEEEFF; }"
-            + "		body, td {"
-            + "			background-color: white;"
-            + "			font-family: sans-serif;"
-            + "		}"
-            + "	</style>\n"
             + "</head>\n";            
+    //out
     private final String HEADER = HEADER_START + HEADER_END;
+    //out
     private final String TOGGLE_HEADER = HEADER_START + TOGGLER + HEADER_END;
+    //in WSFame
     private final String BODY ="<body style=\"margin: 0px\">";
+    //in WSFame
     private final String TOP_LEFT ="	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n"
-            + "		<tr valign=\"top\">\n"
-            + "			<td style=\"background-color: white;\">"
-            + "				<a href=\"http://www.openphacts.org/\">"
-            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" "
-            + "                     src=\"http://www.openphacts.org/images/stories/banner.jpg\" "
-            + "                     alt=\"Open PHACTS\" height=\"50\">"
-            + "                 </img>"
-            + "             </a>"
-            + "			</td>\n"
             + "			<td style=\"font-size: 200%; font-weight: bold; font-family: Arial;\">\n";
+    //in WSFame
     private final String TOP_RIGHT = "         </td>"
-            + "			<td style=\"background-color: white;\">"
-            + "				<a href=\"http://www.cs.manchester.ac.uk//\">"
-            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" align=\"right\" "
-            + "                     src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" "
-            + "                    alt=\"The University of Manchester\" height=\"50\">"
-            + "                 </img>"
-            + "             </a>"
-            + "			</td>"
-            + "		</tr>"
             + "	</table>";
+    //in WSFame
     private final String SIDE_BAR = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
-            + "		<tr valign=\"top\">"
-            + "			<td style=\"border-top: 1px solid #D5D5FF\">"
-            + "				<div class=\"menugroup\">Query Expander</div>"
-            + "				<div id=\"menuQueryExpanderHome_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderHome_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderHome_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander&quot;;\">Home</div>"
-            + "				<div id=\"menuQueryExpanderAPI_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderAPI_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderAPI_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/api&quot;;\">API</div>"
-            + "				<div id=\"menuQueryExpanderExamples_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderExamples_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderExamples_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/examples&quot;;\">Examples</div>"
-            + "				<div id=\"menuQueryExpanderURISpacesPerGraph_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/URISpacesPerGraph&quot;;\">"
-            + "                   URISpaces per Graph</div>"
-            + "				<div id=\"menuQueryExpanderMapURI_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderMapURI_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderMapURI_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/mapURI&quot;;\">"
-            + "                   Check Mapping for an URI</div>"            
-            + "				<div class=\"menugroup\">OPS Identity Mapping Service</div>"
-            + "				<div id=\"menuOpsHome_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsHome_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsHome_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS&quot;;\">Home</div>"
-            + "				<div id=\"menuOpsInfo_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsInfo_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsInfo_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">"
-            + "                   Mappings Summary</div>"
-            + "				<div id=\"menuGraphviz_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuGraphviz_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuGraphviz_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/graphviz&quot;;\">"
-            + "                   Mappings Summary in Graphviz format</div>"
-            + "				<div id=\"menuOpsApi_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsApi_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsApi_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/api&quot;;\">API</div>"
-            + "				<div id=\"menuOpsValidateVoid_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateVoid_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateVoid_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateVoid&quot;;\">Validate Void</div>"
-            + "				<div id=\"menuOpsValidateLinkSet_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsValidateLinkSet_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsValidateLinkSet_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/validateLinkSet&quot;;\">Validate LinkSet</div>"
-            + "			</td>"
-            + "			<td width=\"5\" style=\"border-right: 1px solid #D5D5FF\"></td>"
             + "			<td style=\"border-top: 1px solid #D5D5FF; width:100%\">";
+    //in WSFame
     private final String FORM_OUTPUT_FORMAT = " \n<p>Output Format:"
-            + "     <select size=\"1\" name=\"format\">"
-            + "         <option value=\"html\">HTML page</option>"
-            + "         <option value=\"xml\">XML/JASON</option>"
-            + " 	</select>"
             + " </p>";
+   //in WSLinksetService
     private final String FORM_MINE_TYPE = " \n<p>Mime Type:"
-            + "     <select size=\"1\" name=\"mimeType\">"
-            + "         <option value=\"application/x-turtle\">Turtle (mimeType=application/x-turtle; ext=ttl)</option>"
-            + "         <option value=\"text/plain\">N-Triples (mimeType=text/plain; ext=nt)</option>"
-            + "         <option value=\"application/rdf+xml\">RDF/XML (mimeType=application/rdf+xml; ext=rdf, rdfs, owl, xml</option>"
-            + " 	</select>"
             + " </p>";
+   //in WSLinksetService
     private final String FORM_INFO_START = "\n<p><textarea rows=\"15\" name=\"info\" style=\"width:100%; background-color: #EEEEFF;\">";
+   //in WSLinksetService
     private final String FORM_INFO_END = "</textarea></p>";
+   //in WSLinksetService
     private final String FORM_SUBMIT = " <input type=\"submit\" value=\"Validate!\"></input></form>";
+   //in WSLinksetService
     private final String FORM_NOTE ="    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
+   //in WSLinksetService
     private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/QueryExpander/mapURI\">"
-            + " \n<p>Input URI (URI to be looked up in Identity Mapping Service.)"
-            + "     (see <a href=\"/QueryExpander/api#inputURI\">API</a>)</p>"
-            + " \n<p><input type=\"text\" name=\"inputURI\" style=\"width:100%\"/></p>"
-            + " \n<p>Graph/Context (Graph value to limit the returned URIs)"
-            + "     (see <a href=\"/QueryExpander/api#graph\">API</a>)</p>"
-            + " \n<p><input type=\"text\" name=\"graph\" style=\"width:100%\"/></p>"
-            + " \n<p><input type=\"submit\" value=\"Expand!\"></input> "
-            + "    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
+    //in WSFame
     private final String MAIN_END = "			</td>"
-            + "		</tr>"
-            + "	</table>"
-            + "	<div style=\"border-top: 1px solid #D5D5FF; padding: .5em; font-size: 80%;\">"
-            + "		This site is run by <a href=\"https://wiki.openphacts.org/index.php/User:Christian\">Christian Brenninkmeijer</a>."
             + "	</div>";
+    //in WSFame
     private final String BODY_END = "</body>"
             + "</html>";
+    //in WSFame
     private final String END = MAIN_END + BODY_END;
 
-    //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
-    @GET
-	@Path("/checkIpAddress")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
+   //in WSLinksetService
 	public Response checkIpAddress(@Context HttpServletRequest hsr) throws IOException, IDMapperException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("checkIpAddress called");
-                }
-                logger.debug("Client IP = " + hsr.getRemoteAddr()); 
-       
-        StringBuilder sb = new StringBuilder();
-        StringBuilder sbInnerPure;
-        StringBuilder sbInnerEncoded;
-
-        sb.append("<?xml version=\"1.0\"?>");
-        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
-                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
-        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
-        sb.append("<head><title>OPS IMS</title></head><body>");
-        sb.append("<h1>test</h1>");
-        sb.append("\n<p>IP Address:");
-        sb.append(hsr.getRemoteAddr());
-        sb.append("</P>");
-        String owner = IpConfig.checkIPAddress(hsr.getRemoteAddr());
-        if (owner == null){
-            sb.append("<h1>Unknown</h1>");
-            sb.append("Sorry you are not known to this system.");
-            sb.append("<br>You access attempt has been logged.");
-            sb.append("<br>Please register your IP address by contacting an Administrator.");
-        } else {
-            sb.append("<h1>Welcome ");
-            sb.append(owner);
-            sb.append("</h1>");            
-        }
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;
 	}
 
-    //Code from  http://www.mkyong.com/webservices/jax-rs/file-upload-example-in-jersey/
-    @POST
-	@Path("/uploadTest")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
+   //in WSLinksetService
 	public Response uploadFile(
         //TODO work out why the FormDataContentDisposition is null
 		 @FormDataParam("file") InputStream uploadedInputStream,
          @FormDataParam("file") FormDataContentDisposition fileDetail,
          @Context HttpServletRequest hsr
        ) throws IOException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("uploadFile called");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                    if (fileDetail == null){
-                        logger.debug("fileDetail == null");
-                    } else {
-                        logger.debug("fileDetail = " + fileDetail);
-                    }
-                }
-      
-        StringBuilder sb = new StringBuilder();
-        StringBuilder sbInnerPure;
-        StringBuilder sbInnerEncoded;
-
-        sb.append("<?xml version=\"1.0\"?>");
-        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
-                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
-        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
-        sb.append("<head><title>OPS IMS</title></head><body>");
-        sb.append("<h1>test</h1>");
-        sb.append("\n<p>File name:");
-        sb.append(fileDetail);
-        sb.append("\n<p>The IP Address:");
-        sb.append(hsr.getRemoteAddr());
-        sb.append("</P>");
-        
-        InputStreamReader reader = new InputStreamReader(uploadedInputStream);
-        BufferedReader buffer = new BufferedReader(reader);
-        int count = 0;
-        while (buffer.ready() && count < 5){
-            sb.append("<br>");
-            sb.append(buffer.readLine());
-            count++;
-        }
-        sb.append("<br>");
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;
 	}
 
-    @POST
-	@Path("/uploadTest2")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
+   //in WSLinksetService
 	public Response uploadFile2(
         //TODO work out why the FormDataContentDisposition is null
 		 @FormDataParam("file") InputStream uploadedInputStream,
          @FormDataParam("file") FormDataContentDisposition fileDetail,
          @FormParam(MIME_TYPE)String mimeType
        ) throws IOException {
- 
-                if (logger.isDebugEnabled()){
-                    logger.debug("uploadFile2 called");
-                    if (uploadedInputStream == null){
-                        logger.debug("NO uploadedInputStream");
-                    } else {
-                        try {
-                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
-                        } catch (IOException ex) {
-                            logger.error("unable to get inputStream.available:", ex);
-                        }
-                    }
-                    if (fileDetail == null){
-                        logger.debug("fileDetail == null");
-                    } else {
-                        logger.debug("fileDetail = " + fileDetail);
-                    }
-                    if (mimeType == null){
-                        logger.debug("NO mimeType");
-                    } else {
-                        logger.debug("mimeType = " + mimeType);
-                    }
-
-                }
-       
-        StringBuilder sb = new StringBuilder();
-        StringBuilder sbInnerPure;
-        StringBuilder sbInnerEncoded;
-
-        sb.append("<?xml version=\"1.0\"?>");
-        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
-                + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
-        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
-        sb.append("<head><title>OPS IMS</title></head><body>");
-        sb.append("<h1>test</h1>");
-        sb.append("\n<p>File name:");
-        sb.append(fileDetail);
-        sb.append("</P>");
-        InputStreamReader reader = new InputStreamReader(uploadedInputStream);
-        BufferedReader buffer = new BufferedReader(reader);
-        int count = 0;
-        while (buffer.ready() && count < 5){
-            sb.append("<br>");
-            sb.append(buffer.readLine());
-            count++;
-        }
-        sb.append(uploadedInputStream.toString());
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return null;
 	}
 }
 

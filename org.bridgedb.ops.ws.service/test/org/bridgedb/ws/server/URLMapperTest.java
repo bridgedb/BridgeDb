@@ -26,7 +26,7 @@ import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSOpsMapper;
-import org.bridgedb.ws.WSOpsService;
+import org.bridgedb.ws.WSOpsInterfaceService;
 import org.junit.BeforeClass;
 
 /**
@@ -49,7 +49,7 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
         listener = new SQLUrlMapper(true, StoreType.TEST);
         loadData();
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
-        urlMapper = new WSOpsMapper(new WSOpsService(sqlUrlMapper)); 
+        urlMapper = new WSOpsMapper(new WSOpsInterfaceService(sqlUrlMapper)); 
     }
       
 }

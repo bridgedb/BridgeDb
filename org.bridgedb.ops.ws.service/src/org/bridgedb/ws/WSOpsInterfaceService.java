@@ -49,6 +49,7 @@ import org.bridgedb.linkset.LinksetInterfaceMinimal;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
@@ -71,7 +72,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.openrdf.rio.RDFFormat;
 
 @Path("/")
-public class WSOpsService extends WSCoreService implements WSOpsInterface {
+public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterface {
 
     protected URLMapper urlMapper;
     protected LinksetInterfaceMinimal linksetInterface;
@@ -83,19 +84,21 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String FILE = "file";     
     public final String NO_RESULT = null;
     
-    static final Logger logger = Logger.getLogger(WSOpsService.class);
+    static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
 
     /**
      * Defuault constuctor for super classes.
      * 
      * Super classes will have the responsibilites of setting up the idMapper.
      */
-    protected WSOpsService() throws IDMapperException {
+    protected WSOpsInterfaceService() throws IDMapperException {
         super();
         this.linksetInterface = new LinksetLoader();
+        urlMapper = new SQLUrlMapper(false, StoreType.LIVE);
+        idMapper = urlMapper;
     }
 
-    public WSOpsService(URLMapper urlMapper) throws IDMapperException {
+    public WSOpsInterfaceService(URLMapper urlMapper) throws IDMapperException {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
