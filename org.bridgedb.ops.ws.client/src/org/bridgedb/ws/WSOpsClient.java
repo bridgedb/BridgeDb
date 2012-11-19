@@ -200,27 +200,17 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public ValidationBean validateStringAsVoid(String info, String mimeType) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public ValidationBean validateStringAsLinkSet(String info, String mimeType) throws IDMapperException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public ValidationBean validateInputStream(InputStream inputStream, String mimeTypee, String storeType, String validationType, String includeWarnings) throws IDMapperException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public ValidationBean validateInputStreamAsVoid(InputStream inputStream, String mimeType) throws IDMapperException {
+    public String loadInputStream(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public ValidationBean validateInputStreamAsLinkSet(InputStream inputStream, String mimeType) throws IDMapperException {
+    public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

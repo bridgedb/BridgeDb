@@ -79,6 +79,8 @@ public class Validator {
         Reporter.println("       Only a single Linkset can be declared. ");
         Reporter.println("       Included Links are also validated.");
         Reporter.println("       Included Datasets are validated to Linkset \"Minimal Dataset Description\".");
+        Reporter.println("   " + ValidationType.ANY_RDF + ": Checks that the data is valid RDF");
+        Reporter.println("       Only really intended for checking a Parent data file.");
         Reporter.println("   " + ValidationType.LINKSMINIMAL + ": requires only the absolute mininal void to load the data");
         Reporter.println("       Please attempt to complete the missing information and run." + ValidationType.LINKS);
         Reporter.println("   Default is " + ValidationType.LINKS);

@@ -687,27 +687,168 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
         return validate(null, RDFFormat.NTRIPLES, ValidationType.LINKSMINIMAL);
     }
 
+    @POST
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateRdf")
+    public Response validateRdf(@FormParam(INFO)String info, 
+            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdf called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validate(info, mimeType, ValidationType.ANY_RDF);
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/validateRdf")
+    public Response getValidateRdf(@QueryParam(INFO)String info, 
+            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdf called!");
+                    if (info == null){
+                        logger.debug("NO Info");
+                    } else {
+                        logger.debug("info length = " + info.length());
+                    }
+                    if (mimeType == null){
+                        logger.debug("NO mimeType");
+                    } else {
+                        logger.debug("mimeType = " + mimeType);
+                    }
+                }
+        return validate(info, mimeType, ValidationType.ANY_RDF);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleRdf")
+    public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateTurtleRdf called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateTurtleRdf")
+    public Response getValidateTurtleRdf() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateTurtleRdf called!");
+                }
+        return validate(null, RDFFormat.TURTLE, ValidationType.ANY_RDF);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlRdf")
+    public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateRdfXmlRdf called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateRdfXmlRdf")
+    public Response getValidateRdfXmlRdf() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateRdfXmlRdf called!");
+                }
+        return validate(null, RDFFormat.RDFXML, ValidationType.ANY_RDF);
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesRdf")
+    public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream) 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("validateNTriplesRdf called!");
+                    if (uploadedInputStream == null){
+                        logger.debug("NO uploadedInputStream");
+                    } else {
+                        try {
+                            logger.debug("uploadedInputStream.available = " + uploadedInputStream.available());
+                        } catch (IOException ex) {
+                            logger.error("unable to get inputStream.available:", ex);
+                        }
+                    }
+                }
+        return validate(uploadedInputStream, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/validateNTriplesRdf")
+    public Response getValidateNTriplesRdf() 
+            throws IDMapperException, UnsupportedEncodingException {
+                if (logger.isDebugEnabled()){
+                    logger.debug("getValidateNTriplesRdf called!");
+                }
+        return validate(null, RDFFormat.NTRIPLES, ValidationType.ANY_RDF);
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateFile")
-    public Response getValidateFileIndex() 
+    public Response getValidateFileIndex(@Context HttpServletRequest hsr) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateFileIndex called!");
                 }
         StringBuilder sb = topAndSide("File Validators Index");
-        sb.append("\n<h1>Validate a File as a Void Description</h1>");
+        sb.append("\n<h1>Validate a File as a Void Description.</h1>");
         addFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
         addFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
         addFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
-        sb.append("\n<h1>Validate a File as a Linkset</h1>");
+        sb.append("\n<h1>Validate a File as a Linkset.</h1>");
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
-        sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
-        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
-        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
-        addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+        if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
+            sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
+            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
+            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
+            addFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            sb.append("\n<h1>Validate a File as RDF.</h1>");
+            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
+            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
+            addFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
+        }
         sb.append(END);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -717,7 +858,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
        try{
             if (info != null && !info.isEmpty()){
                 RDFFormat format = getRDFFormatByMimeType(mimeType);
-                report = linksetInterface.validateString("Webservice Call", info, format, StoreType.LIVE, validationType, true);
+                report = linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, validationType, true);
             }
         } catch (Exception e){
             report = e.toString();
@@ -732,7 +873,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
        String report = null;
        try{
             if (input != null && input.available() > 10){
-                report = linksetInterface.validateInputStream("Webservice Call", input, format, StoreType.LIVE, validationType, true);
+                report = linksetInterface.validateInputStream("Webservice Call", input, format, StoreType.TEST, validationType, true);
             }
         } catch (Exception e){
             report = e.toString();
@@ -1006,6 +1147,11 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                 sb.append("linkset you are too lazy to add a full header to.");
                 sb.append("<br>WARNING: Loading with Minimal void does not excuss you from providing a full header later.");
                 break;
+            }
+            case ANY_RDF: {
+                sb.append("Any RDF which will act as a parent for void or linkset.");
+                sb.append("<br>WARNING: Loading RDF void does not excuss you from providing a full void later.");
+                break;
             } default:{
                 throw new BridgeDBException("Unexpected validationType" + validationType);
             }
@@ -1015,23 +1161,8 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     }
 
     private void addFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/OPS-IMS/");
-        switch (validationType){
-            case VOID: {
-                sb.append("validateVoid");
-                break;
-            }
-            case LINKS: {
-                sb.append("validateLinkSet");
-                break;
-            }
-            case LINKSMINIMAL: {
-                sb.append("validateMinimum");
-                break;
-            } default:{
-                throw new BridgeDBException("Unexpected validationType" + validationType);
-            }
-        }
+        sb.append("<form method=\"post\" action=\"/OPS-IMS/validate");
+        sb.append(validationType.getName());
         sb.append("\">");        
     }
     

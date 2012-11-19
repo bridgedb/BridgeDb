@@ -5,6 +5,7 @@
 package org.bridgedb.utils;
 
 import org.apache.log4j.Logger;
+import org.bridgedb.IDMapperException;
 import org.junit.BeforeClass;
 
 /**
@@ -16,8 +17,9 @@ public abstract class TestUtils {
     static final Logger logger = Logger.getLogger(TestUtils.class);
 
     @BeforeClass
-    public static void configureLogger() throws BridgeDBException{
+    public static void setup() throws IDMapperException{
         ConfigReader.configureLogger();
+        DirectoriesConfig.useTestDirectory();
     }
     
     public void report(String message){

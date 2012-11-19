@@ -18,53 +18,41 @@
 //
 package org.bridgedb.linkset;
 
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import org.bridgedb.utils.TestUtils;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
-import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
 import org.bridgedb.rdf.StatementReader;
-import org.bridgedb.rdf.RdfReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
-import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.SQLUrlMapper;
-import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.openrdf.OpenRDFException;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 /**
  * @author Christian
  */
-public class LinkSetLoaderUsingStringTest extends TestUtils{
+public class LinkSetLoaderUsingInputStream extends TestUtils{
        
     @Test
-    public void testcheckStringValid() throws IDMapperException {
-        report("CheckStringValid");
+    public void testcheckInputStreamValid() throws IDMapperException {
+        report("CheckInputStreamValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        new LinksetLoader().checkStringValid("LinksetStatementReaderTest.INFO1", 
-                LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        InputStream inputStream = new ByteArrayInputStream(LinksetStatementReaderTest.INFO1.getBytes());
+        new LinksetLoader().checkInputStreamValid("LinksetStatementReaderTest.INFO1", 
+                inputStream, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
     @Test
     public void testvalidityReport() throws IDMapperException {
         report("validityReport");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
-        String result = new LinksetLoader().validateString("LinksetStatementReaderTest.INFO1", 
-                LinksetStatementReaderTest.INFO1, format, 
-               StoreType.TEST, ValidationType.LINKSMINIMAL, false);
+        InputStream inputStream = new ByteArrayInputStream(LinksetStatementReaderTest.INFO1.getBytes());
+        String result = new LinksetLoader().validateInputStream("LinksetStatementReaderTest.INFO1", 
+               inputStream, format, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 3 links"));
     }
@@ -73,14 +61,16 @@ public class LinkSetLoaderUsingStringTest extends TestUtils{
     public void testLoad() throws IDMapperException {
         report("Load");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
-        new LinksetLoader().loadString("LinksetStatementReaderTest.INFO1", 
-                LinksetStatementReaderTest.INFO1, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        InputStream inputStream = new ByteArrayInputStream(LinksetStatementReaderTest.INFO1.getBytes());
+        new LinksetLoader().loadInputStream("LinksetStatementReaderTest.INFO1", 
+                inputStream, format, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
     
     @Test
-    public void testLoadString() throws IDMapperException{
-        report("LoadString");
-        File test = LinksetLoader.saveString("This is a test", RDFFormat.TURTLE, ValidationType.LINKS);
+    public void testLoadInputStream() throws IDMapperException{
+        report("SaveInputStream");
+        InputStream inputStream = new ByteArrayInputStream("This is a test".getBytes());
+        File test = LinksetLoader.saveInputStream(inputStream, RDFFormat.TURTLE, ValidationType.LINKS);
     }
 
 }

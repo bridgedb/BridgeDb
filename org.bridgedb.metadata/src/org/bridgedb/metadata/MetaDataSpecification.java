@@ -104,6 +104,9 @@ public class MetaDataSpecification {
     }
     
     private RequirementLevel getRequriementLevel(String requirementLevelSt, URI type) throws MetaDataException{
+        if (validationType == ValidationType.ANY_RDF) { 
+            return RequirementLevel.IGNORE; 
+        } 
         RequirementLevel requirementLevel = RequirementLevel.parseString(requirementLevelSt);
         switch (requirementLevel){
             case MINIMAL: {

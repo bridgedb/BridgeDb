@@ -147,12 +147,14 @@ public class MetaDataTestBase extends TestUtils{
     Statement link1 = new StatementImpl(LINK1_SUBJECT, SkosConstants.CLOSE_MATCH, LINK1_OBJECT);
     Statement link2 = new StatementImpl(LINK2_SUBJECT, SkosConstants.CLOSE_MATCH, LINK2_OBJECT);
     
+    static MetaDataSpecification rdfRegistry;
     static MetaDataSpecification voidRegistry;
     static MetaDataSpecification linksetSetRegistry;
     static MetaDataSpecification minLinksetSetRegistry;
          
     @BeforeClass
     public static void loadRegistries() throws IDMapperException{
+        rdfRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.ANY_RDF);     
         voidRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);     
         linksetSetRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);        
         minLinksetSetRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);        
