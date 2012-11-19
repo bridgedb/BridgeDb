@@ -306,7 +306,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlVoid")
-    public Response getValidateRdfXmlVoid() 
+    public Response validateRdfXmlVoidGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlVoid called!");
@@ -337,7 +337,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesVoid")
-    public Response getValidateNTriplesVoid() 
+    public Response validateNTriplesVoidGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesVoid called!");
@@ -369,7 +369,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @POST
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateLinkSet")
-    public Response getValidateLinkSet(@QueryParam(INFO)String info, 
+    public Response validateLinkSetGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateLinkSet called!");
@@ -441,7 +441,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlLinkSet")
-    public Response getValidateRdfXmlLinkSet() 
+    public Response validateRdfXmlLinkSetGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlLinkSet called!");
@@ -472,7 +472,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesLinkSet")
-    public Response getValidateNTriplesLinkSet() 
+    public Response validateNTriplesLinkSetGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesLinkSet called!");
@@ -504,7 +504,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateMinimum")
-    public Response getValidateMinimum(@QueryParam(INFO)String info, 
+    public Response validateMinimumGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateMinimum called!");
@@ -545,7 +545,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleMinimum")
-    public Response getValidateTurtleMinimum() 
+    public Response validateTurtleMinimumGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleMinimum called!");
@@ -576,7 +576,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlMinimum")
-    public Response getValidateRdfXmlMinimum() 
+    public Response validateRdfXmlMinimumGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlMinimum called!");
@@ -607,7 +607,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesMinimum")
-    public Response getValidateNTriplesMinimum() 
+    public Response validateNTriplesMinimumGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesMinimum called!");
@@ -639,7 +639,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/validateRdf")
-    public Response getValidateRdf(@QueryParam(INFO)String info, 
+    public Response validateRdfGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdf called!");
@@ -711,7 +711,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlRdf")
-    public Response getValidateRdfXmlRdf() 
+    public Response validateRdfXmlRdfGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlRdf called!");
@@ -742,7 +742,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesRdf")
-    public Response getValidateNTriplesRdf() 
+    public Response validateNTriplesRdfGet() 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesRdf called!");
@@ -753,7 +753,7 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateFile")
-    public Response getValidateFileIndex(@Context HttpServletRequest hsr) 
+    public Response validateFileIndexGet(@Context HttpServletRequest hsr) 
             throws IDMapperException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateFileIndex called!");
