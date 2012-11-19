@@ -29,6 +29,7 @@ import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLMappingBean;
 import java.util.List;
 import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -37,6 +38,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBElement;
 import org.apache.log4j.Logger;
@@ -50,12 +52,14 @@ import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.RdfFactory;
 import org.bridgedb.rdf.StatementReader;
 import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.IpConfig;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
@@ -74,7 +78,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.openrdf.rio.RDFFormat;
 
 @Path("/")
-public class WSOpsService extends WSCoreService implements WSOpsInterface {
+public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterface {
 
     protected URLMapper urlMapper;
     protected LinksetInterfaceMinimal linksetInterface;
@@ -86,19 +90,21 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
     public final String FILE = "file";     
     public final String NO_RESULT = null;
     
-    static final Logger logger = Logger.getLogger(WSOpsService.class);
+    static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
 
     /**
      * Defuault constuctor for super classes.
      * 
      * Super classes will have the responsibilites of setting up the idMapper.
      */
-    protected WSOpsService() throws IDMapperException {
+    protected WSOpsInterfaceService() throws IDMapperException {
         super();
         this.linksetInterface = new LinksetLoader();
+        urlMapper = new SQLUrlMapper(false, StoreType.LIVE);
+        idMapper = urlMapper;
     }
 
-    public WSOpsService(URLMapper urlMapper) throws IDMapperException {
+    public WSOpsInterfaceService(URLMapper urlMapper) throws IDMapperException {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
@@ -437,7 +443,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         }
     }
 
-    @Override
+    /*@Override
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -713,7 +719,7 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
             exception = e.toString();
         }
         return new ValidationBean(report, info, mimeType, StoreType.LIVE, ValidationType.LINKSETVOID, true, exception);
-    }*/
+    }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
@@ -819,11 +825,11 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         return validateStringAsLinkSet(info, mimeType);
     }
 
-    @Override
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/loadString")
-    public String loadString(@QueryParam(INFO)String info, 
+    public String loadString(@Context HttpServletRequest hsr,
+            @QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType, 
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString) 
@@ -850,8 +856,12 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         RDFFormat format = getRDFFormatByMimeType(mimeType);
         StoreType storeType = parseStoreType(storeTypeString);
         ValidationType validationType = parseValidationType(validationTypeString);
-        linksetInterface.loadString("Webservice Call", info, format, storeType, validationType);
-        return "Load successful";
+        String owner = IpConfig.checkIPAddress(hsr.getRemoteAddr());
+        if (owner == null){
+            return linksetInterface.saveString("Webservice Call", info, format, storeType, validationType);
+        } else {
+            return linksetInterface.loadString("Webservice Call", info, format, storeType, validationType);
+        }
     }
 
     @Override
@@ -887,16 +897,6 @@ public class WSOpsService extends WSCoreService implements WSOpsInterface {
         ValidationType validationType = parseValidationType(validationTypeString);
         linksetInterface.checkStringValid("Webservice Call", info, format, storeType, validationType);
         return "OK";
-    }
+    }*/
 
-    @Override
-    public String loadInputStream(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, String validationType) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
- 
 }
