@@ -759,11 +759,11 @@ public class WSOpsServer extends WSOpsService implements Comparator<MappingSetIn
                     logger.debug("getValidateFileIndex called!");
                 }
         StringBuilder sb = topAndSide("File Validators Index");
-        sb.append("\n<h1>Validate a File as a Void Description</h1>");
+        sb.append("\n<h1>Validate a File as a Void Description.</h1>");
         addFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
         addFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
         addFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
-        sb.append("\n<h1>Validate a File as a Linkset</h1>");
+        sb.append("\n<h1>Validate a File as a Linkset.</h1>");
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
         addFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
