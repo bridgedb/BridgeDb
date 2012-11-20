@@ -51,7 +51,17 @@ public class WSOpsServer extends WSLinksetService{
         super();
         logger.info("WsOpsServer setup");        
     }
-            
+       
+    /**
+     * Welcome page for the Serivce.
+     * 
+     * Expected to be overridden by the QueryExpander
+     * 
+     * @param httpServletRequest
+     * @return
+     * @throws IDMapperException
+     * @throws UnsupportedEncodingException 
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response welcomeMessage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
@@ -94,59 +104,20 @@ public class WSOpsServer extends WSLinksetService{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
+    /**
+     * Forwarding page for "/api".
+     * 
+     * This is expected to be overwirriten by the QueryExpander
+     * @param httpServletRequest
+     * @return
+     * @throws IDMapperException
+     * @throws UnsupportedEncodingException 
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
     public Response apiPage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
-        //Long start = new Date().getTime();
-        StringBuilder sb = topAndSide("IMS API",  httpServletRequest);
- 
-        Set<String> urls = urlMapper.getSampleSourceURLs();  
-        Iterator<String> urlsIt = urls.iterator();
-        Xref first = urlMapper.toXref(urlsIt.next());
-        String sysCode = first.getDataSource().getSystemCode();
-        Xref second =  urlMapper.toXref(urlsIt.next());
-        Set<Xref> firstMaps = idMapper.mapID(first);
-        Set<String> keys = idMapper.getCapabilities().getKeys();
-        String URL1 = urlsIt.next();
-        String text = SQLUrlMapper.getId(URL1);
-        String URL2 = urlsIt.next();
-        Set<URLMapping> mappings2 = urlMapper.mapURLFull(URL2);
-        HashSet<String> URI2Spaces = new HashSet<String>();
-        int mappingId = 0;
-        for (URLMapping mapping:mappings2){
-            if (mapping.getId() != null){
-                mappingId = mapping.getId();
-            }
-            String targetURL = mapping.getTargetURLs().iterator().next();
-            URI2Spaces.add(SQLUrlMapper.getUriSpace(targetURL));            
-        }
-        boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
-
-        sb.append("\n<p><a href=\"/OPS-IMS\">Home Page</a></p>");
-                
-        sb.append("\n<p>");
-        WSOpsApi api = new WSOpsApi();
-
-        sb.append("<h2>Support services include:<h2>");
-        sb.append("<dl>");      
-        api.introduce_IDMapper(sb, freeSearchSupported);
-        api.introduce_IDMapperCapabilities(sb, keys, freeSearchSupported);     
-        api.introduce_URLMapper(sb, freeSearchSupported);
-        api.introduce_Info(sb);
-        sb.append("</dl>");
-        sb.append("</p>");
-        
-        api.describeParameter(sb);        
-        
-        api.describe_IDMapper(sb, first, firstMaps, second, freeSearchSupported);
-        api.describe_IDMapperCapabilities(sb, first, firstMaps, keys, freeSearchSupported);
-        api.describe_URLMapper(sb, URL1, URL2, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
-        api.describe_Info(sb);
-        
-        sb.append("</body></html>");
-        //ystem.out.println("Done "+ (new Date().getTime() - start));
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        return imsApiPage(httpServletRequest);
     }
     
 }

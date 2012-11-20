@@ -20,20 +20,28 @@ package org.bridgedb.ws;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.url.URLMapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IpConfig;
 import org.openrdf.rio.RDFFormat;
@@ -49,8 +57,11 @@ public class WSFame extends WSOpsInterfaceService {
         
     static final Logger logger = Logger.getLogger(WSFame.class);
 
+    String serviceName;
+    
     public WSFame()  throws IDMapperException   {
         super();
+        serviceName = "OPS-IMS";
         formatter = NumberFormat.getInstance();
         if (formatter instanceof DecimalFormat) {
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -59,6 +70,71 @@ public class WSFame extends WSOpsInterfaceService {
         }
     }
                 
+    /**
+     * API page for the IMS methods.
+     * 
+     * Warning may not be completely up to date.
+     * 
+     * @param httpServletRequest
+     * @return
+     * @throws IDMapperException
+     * @throws UnsupportedEncodingException 
+     */
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/ims-api")
+    public Response imsApiPage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+        //Long start = new Date().getTime();
+        StringBuilder sb = topAndSide("IMS API",  httpServletRequest);
+ 
+        Set<String> urls = urlMapper.getSampleSourceURLs();  
+        Iterator<String> urlsIt = urls.iterator();
+        Xref first = urlMapper.toXref(urlsIt.next());
+        String sysCode = first.getDataSource().getSystemCode();
+        Xref second =  urlMapper.toXref(urlsIt.next());
+        Set<Xref> firstMaps = idMapper.mapID(first);
+        Set<String> keys = idMapper.getCapabilities().getKeys();
+        String URL1 = urlsIt.next();
+        String text = SQLUrlMapper.getId(URL1);
+        String URL2 = urlsIt.next();
+        Set<URLMapping> mappings2 = urlMapper.mapURLFull(URL2);
+        HashSet<String> URI2Spaces = new HashSet<String>();
+        int mappingId = 0;
+        for (URLMapping mapping:mappings2){
+            if (mapping.getId() != null){
+                mappingId = mapping.getId();
+            }
+            String targetURL = mapping.getTargetURLs().iterator().next();
+            URI2Spaces.add(SQLUrlMapper.getUriSpace(targetURL));            
+        }
+        boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
+
+        sb.append("\n<p><a href=\"/OPS-IMS\">Home Page</a></p>");
+                
+        sb.append("\n<p>");
+        WSOpsApi api = new WSOpsApi();
+
+        sb.append("<h2>Support services include:<h2>");
+        sb.append("<dl>");      
+        api.introduce_IDMapper(sb, freeSearchSupported);
+        api.introduce_IDMapperCapabilities(sb, keys, freeSearchSupported);     
+        api.introduce_URLMapper(sb, freeSearchSupported);
+        api.introduce_Info(sb);
+        sb.append("</dl>");
+        sb.append("</p>");
+        
+        api.describeParameter(sb);        
+        
+        api.describe_IDMapper(sb, first, firstMaps, second, freeSearchSupported);
+        api.describe_IDMapperCapabilities(sb, first, firstMaps, keys, freeSearchSupported);
+        api.describe_URLMapper(sb, URL1, URL2, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
+        api.describe_Info(sb);
+        
+        sb.append("</body></html>");
+        //ystem.out.println("Done "+ (new Date().getTime() - start));
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
     protected StringBuilder topAndSide(String header, HttpServletRequest httpServletRequest) throws IDMapperException{
         StringBuilder sb = new StringBuilder(HEADER_TO_TITLE);
         sb.append(header);
@@ -68,7 +144,7 @@ public class WSFame extends WSOpsInterfaceService {
         sb.append(TOP_LEFT);
         sb.append(header);
         sb.append(TOP_RIGHT);
-        sb.append(SIDE_BAR_START);
+        sb.append(SIDE_BAR_BEGIN);
         addSideBarMiddle(sb, httpServletRequest);
         sb.append(SIDE_BAR_END);
         return sb;
@@ -78,40 +154,58 @@ public class WSFame extends WSOpsInterfaceService {
      * Allows Super classes to add to the side bar
      */
     protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws IDMapperException{
-        OverallStatistics statistics = urlMapper.getOverallStatistics();
-        sb.append("\n<div class=\"menugroup\">Statisitics</div>");
-        sb.append("\n<div id=\"menuMappings_text\" class=\"texthotlink\" ");
-            sb.append("onmouseout=\"DHTML_TextRestore('menuMappings_text'); return true; \" ");
-            sb.append("onmouseover=\"DHTML_TextHilight('menuMappings_text'); return true; \" ");
-            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">");
-            sb.append(formatter.format(statistics.getNumberOfMappings()));
-            sb.append(" Mappings </div>");
-        sb.append("\n<div id=\"menuMappingSets_text\" class=\"texthotlink\" ");
-            sb.append("onmouseout=\"DHTML_TextRestore('menuMappingSets_text'); return true; \" ");
-            sb.append("onmouseover=\"DHTML_TextHilight('menuMappingSets_text'); return true; \" ");
-            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">");
-            sb.append(formatter.format(statistics.getNumberOfMappingSets()));
-            sb.append(" Mapping Sets </div>");
-        sb.append("\n<div id=\"menuSourceDataSources_text\" class=\"texthotlink\" ");
-            sb.append("onmouseout=\"DHTML_TextRestore('menuSourceDataSources_text'); return true; \" ");
-            sb.append("onmouseover=\"DHTML_TextHilight('menuSourceDataSources_text'); return true; \" ");
-            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getSupportedSrcDataSources&quot;;\">");
-            sb.append(formatter.format(statistics.getNumberOfSourceDataSources()));
-            sb.append(" Source Data Sources</div>");
-        sb.append("\n<div id=\"menuPredicates_text\" class=\"texthotlink\" ");
-            sb.append("onmouseout=\"DHTML_TextRestore('menuPredicates_text'); return true; \" ");
-            sb.append("onmouseover=\"DHTML_TextHilight('menuPredicates_text'); return true; \" ");
-            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">");
-            sb.append(formatter.format(statistics.getNumberOfPredicates()));
-            sb.append(" Predicates</div>");
-        sb.append("\n<div id=\"menuTargetDataSources_text\" class=\"texthotlink\" ");
-            sb.append("onmouseout=\"DHTML_TextRestore('menuTargetDataSources_text'); return true; \" ");
-            sb.append("onmouseover=\"DHTML_TextHilight('menuTargetDataSources_text'); return true; \" ");
-            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getSupportedTgtDataSources&quot;;\">");
-            sb.append(formatter.format(statistics.getNumberOfTargetDataSources()));
-            sb.append(" Target Data Sources</div>");
+        addSideBarIMS(sb);
+        addSideBarStatisitics(sb);
     }
     
+    /**
+     * Allows Super classes to add to the side bar
+     */
+    protected void addSideBarIMS(StringBuilder sb) throws IDMapperException{
+        sb.append("<div class=\"menugroup\">OPS Identity Mapping Service</div>");
+        addSideBarItem(sb, "", "Home");
+        addSideBarItem(sb, "getMappingInfo", "Mappings Summary");
+        addSideBarItem(sb, "graphviz", "Mappings Summary in Graphviz format");
+        addSideBarItem(sb, "ims-api", "IMS API");
+    }
+
+    /**
+     * Allows Super classes to add to the side bar
+     */
+    protected void addSideBarStatisitics(StringBuilder sb) throws IDMapperException{
+        OverallStatistics statistics = urlMapper.getOverallStatistics();
+        sb.append("\n<div class=\"menugroup\">Statisitics</div>");
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings");
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets");
+        addSideBarItem(sb, "getSupportedSrcDataSources", formatter.format(statistics.getNumberOfSourceDataSources()) 
+                + " Source Data Sources");
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfPredicates()) + " Predicates");
+        addSideBarItem(sb, "getSupportedTgtDataSources", formatter.format(statistics.getNumberOfTargetDataSources()) 
+                + " Target Data Sources ");
+    }
+    
+    /**
+     * Adds an item to the SideBar for this service
+     */
+    protected void addSideBarItem(StringBuilder sb, String page, String name) throws IDMapperException{
+        sb.append("\n<div id=\"menu");
+        sb.append(page);
+        sb.append("_text\" class=\"texthotlink\" ");
+        sb.append("onmouseout=\"DHTML_TextRestore('menu");
+        sb.append(page);
+        sb.append("_text'); return true; \" ");
+        sb.append("onmouseover=\"DHTML_TextHilight('menu");
+        sb.append(page);
+        sb.append("_text'); return true; \" ");
+        sb.append("onclick=\"document.location = &quot;/");
+        sb.append(serviceName);
+        sb.append("/");
+        sb.append(page);
+        sb.append("&quot;;\">");
+        sb.append(name);
+        sb.append("</div>");
+     }
+
     private final String HEADER_TO_TITLE = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
             + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
             + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\n"
@@ -210,10 +304,10 @@ public class WSFame extends WSOpsInterfaceService {
             + "			</td>"
             + "		</tr>"
             + "	</table>";
-    private final String SIDE_BAR_START = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
+    private final String SIDE_BAR_BEGIN = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
             + "		<tr valign=\"top\">"
-            + "			<td style=\"border-top: 1px solid #D5D5FF\">"
-            + "				<div class=\"menugroup\">Query Expander</div>"
+            + "			<td style=\"border-top: 1px solid #D5D5FF\">";
+    private final String SIDE_BAR_QUERY_EXPANDER = "<div class=\"menugroup\">Query Expander</div>"
             + "				<div id=\"menuQueryExpanderHome_text\" class=\"texthotlink\" "
             + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderHome_text'); return true; \" "
             + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderHome_text'); return true; \" "
@@ -221,7 +315,7 @@ public class WSFame extends WSOpsInterfaceService {
             + "				<div id=\"menuQueryExpanderAPI_text\" class=\"texthotlink\" "
             + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderAPI_text'); return true; \" "
             + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderAPI_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/api&quot;;\">API</div>"
+            + "                   onclick=\"document.location = &quot;/QueryExpander/ims-api&quot;;\">API</div>"
             + "				<div id=\"menuQueryExpanderExamples_text\" class=\"texthotlink\" "
             + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderExamples_text'); return true; \" "
             + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderExamples_text'); return true; \" "
@@ -235,26 +329,7 @@ public class WSFame extends WSOpsInterfaceService {
             + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderMapURI_text'); return true; \" "
             + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderMapURI_text'); return true; \" "
             + "                   onclick=\"document.location = &quot;/QueryExpander/mapURI&quot;;\">"
-            + "                   Check Mapping for an URI</div>"            
-            + "				<div class=\"menugroup\">OPS Identity Mapping Service</div>"
-            + "				<div id=\"menuOpsHome_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsHome_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsHome_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS&quot;;\">Home</div>"
-            + "				<div id=\"menuOpsInfo_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsInfo_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsInfo_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">"
-            + "                   Mappings Summary</div>"
-            + "				<div id=\"menuGraphviz_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuGraphviz_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuGraphviz_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/graphviz&quot;;\">"
-            + "                   Mappings Summary in Graphviz format</div>"
-            + "				<div id=\"menuOpsApi_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuOpsApi_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuOpsApi_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/OPS-IMS/api&quot;;\">API</div>";
+            + "                   Check Mapping for an URI</div>";          
     
     private final String SIDE_BAR_END =
               "			</td>"

@@ -1982,33 +1982,19 @@ public class WSLinksetService extends WSUrlService{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
-    //WS Frame methods
-    @Override
+    /**
+     * Allows Super classes to add to the side bar
+     */
     protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws IDMapperException{
-        sb.append(SIDE_BAR_VALIDATE);
-        sb.append(SIDE_BAR_SAVE);
+        addSideBarIMS(sb);
+        addSideBarItem(sb, "validate", "Validate");
+        addSideBarItem(sb, "save", "Save");
         if (httpServletRequest != null && IpConfig.isAdminIPAddress(httpServletRequest.getRemoteAddr())){
-            sb.append(SIDE_BAR_LOAD);
+            addSideBarItem(sb, "load", "Load");
         }
-        super.addSideBarMiddle(sb, httpServletRequest);
+        addSideBarStatisitics(sb);
     }
-
-    private final String SIDE_BAR_VALIDATE =
-              "<div id=\"menuOpsValidate_text\" class=\"texthotlink\" "
-            + "     onmouseout=\"DHTML_TextRestore('menuOpsValidate_text'); return true; \" "
-            + "     onmouseover=\"DHTML_TextHilight('menuOpsValidate_text'); return true; \" "
-            + "     onclick=\"document.location = &quot;/OPS-IMS/validate&quot;;\">Validate</div>";
-    private final String SIDE_BAR_LOAD =
-              "<div id=\"menuOpsLoad_text\" class=\"texthotlink\" "
-            + "     onmouseout=\"DHTML_TextRestore('menuOpsLoad_text'); return true; \" "
-            + "     onmouseover=\"DHTML_TextHilight('menuOpsLoad_text'); return true; \" "
-            + "     onclick=\"document.location = &quot;/OPS-IMS/load&quot;;\">Load</div>";
-    private final String SIDE_BAR_SAVE =
-              "<div id=\"menuOpsLoad_text\" class=\"texthotlink\" "
-            + "     onmouseout=\"DHTML_TextRestore('menuOpsLoad_text'); return true; \" "
-            + "     onmouseover=\"DHTML_TextHilight('menuOpsLoad_text'); return true; \" "
-            + "     onclick=\"document.location = &quot;/OPS-IMS/save&quot;;\">Save</div>";
-
+    
     //Support methods 
     private void addValidationForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
         sb.append("\n<p>Use this page to validate a ");
