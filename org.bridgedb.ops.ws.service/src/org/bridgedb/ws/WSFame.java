@@ -139,6 +139,7 @@ public class WSFame extends WSOpsInterfaceService {
         StringBuilder sb = new StringBuilder(HEADER_TO_TITLE);
         sb.append(header);
         sb.append(HEADER_AFTER_TITLE);
+        sb.append(TOGGLER);
         sb.append(HEADER_END);
         sb.append(BODY);
         sb.append(TOP_LEFT);
