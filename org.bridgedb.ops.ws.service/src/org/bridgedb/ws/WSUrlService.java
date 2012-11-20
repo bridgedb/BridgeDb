@@ -47,18 +47,10 @@ import org.bridgedb.utils.StoreType;
  */
 public class WSUrlService extends WSFame implements Comparator<MappingSetInfo>{
     
-    protected NumberFormat formatter;
-        
     static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
 
     public WSUrlService()  throws IDMapperException   {
         super();
-        formatter = NumberFormat.getInstance();
-        if (formatter instanceof DecimalFormat) {
-            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setGroupingSeparator(',');
-            ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
-        }
     }
             
     @GET

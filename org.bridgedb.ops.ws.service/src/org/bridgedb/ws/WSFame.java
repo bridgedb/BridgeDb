@@ -20,6 +20,8 @@ package org.bridgedb.ws;
 
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -31,6 +33,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IpConfig;
 import org.openrdf.rio.RDFFormat;
@@ -42,14 +45,24 @@ import org.openrdf.rio.RDFFormat;
  */
 public class WSFame extends WSOpsInterfaceService {
     
+    protected final NumberFormat formatter;
+        
     static final Logger logger = Logger.getLogger(WSFame.class);
 
     public WSFame()  throws IDMapperException   {
         super();
+        formatter = NumberFormat.getInstance();
+        if (formatter instanceof DecimalFormat) {
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+            dfs.setGroupingSeparator(',');
+            ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
+        }
     }
                 
     protected StringBuilder topAndSide(String header, HttpServletRequest httpServletRequest) throws IDMapperException{
-        StringBuilder sb = new StringBuilder(HEADER_START);
+        StringBuilder sb = new StringBuilder(HEADER_TO_TITLE);
+        sb.append(header);
+        sb.append(HEADER_AFTER_TITLE);
         sb.append(HEADER_END);
         sb.append(BODY);
         sb.append(TOP_LEFT);
@@ -65,15 +78,47 @@ public class WSFame extends WSOpsInterfaceService {
      * Allows Super classes to add to the side bar
      */
     protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws IDMapperException{
+        OverallStatistics statistics = urlMapper.getOverallStatistics();
+        sb.append("\n<div class=\"menugroup\">Statisitics</div>");
+        sb.append("\n<div id=\"menuMappings_text\" class=\"texthotlink\" ");
+            sb.append("onmouseout=\"DHTML_TextRestore('menuMappings_text'); return true; \" ");
+            sb.append("onmouseover=\"DHTML_TextHilight('menuMappings_text'); return true; \" ");
+            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">");
+            sb.append(formatter.format(statistics.getNumberOfMappings()));
+            sb.append(" Mappings </div>");
+        sb.append("\n<div id=\"menuMappingSets_text\" class=\"texthotlink\" ");
+            sb.append("onmouseout=\"DHTML_TextRestore('menuMappingSets_text'); return true; \" ");
+            sb.append("onmouseover=\"DHTML_TextHilight('menuMappingSets_text'); return true; \" ");
+            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">");
+            sb.append(formatter.format(statistics.getNumberOfMappingSets()));
+            sb.append(" Mapping Sets </div>");
+        sb.append("\n<div id=\"menuSourceDataSources_text\" class=\"texthotlink\" ");
+            sb.append("onmouseout=\"DHTML_TextRestore('menuSourceDataSources_text'); return true; \" ");
+            sb.append("onmouseover=\"DHTML_TextHilight('menuSourceDataSources_text'); return true; \" ");
+            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getSupportedSrcDataSources&quot;;\">");
+            sb.append(formatter.format(statistics.getNumberOfSourceDataSources()));
+            sb.append(" Source Data Sources</div>");
+        sb.append("\n<div id=\"menuPredicates_text\" class=\"texthotlink\" ");
+            sb.append("onmouseout=\"DHTML_TextRestore('menuPredicates_text'); return true; \" ");
+            sb.append("onmouseover=\"DHTML_TextHilight('menuPredicates_text'); return true; \" ");
+            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getMappingInfo&quot;;\">");
+            sb.append(formatter.format(statistics.getNumberOfPredicates()));
+            sb.append(" Predicates</div>");
+        sb.append("\n<div id=\"menuTargetDataSources_text\" class=\"texthotlink\" ");
+            sb.append("onmouseout=\"DHTML_TextRestore('menuTargetDataSources_text'); return true; \" ");
+            sb.append("onmouseover=\"DHTML_TextHilight('menuTargetDataSources_text'); return true; \" ");
+            sb.append("onclick=\"document.location = &quot;/OPS-IMS/getSupportedTgtDataSources&quot;;\">");
+            sb.append(formatter.format(statistics.getNumberOfTargetDataSources()));
+            sb.append(" Target Data Sources</div>");
     }
     
-    private final String HEADER_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+    private final String HEADER_TO_TITLE = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
             + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
             + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\n"
             + "<head>\n"
             + " <title>"
-            + "     Manchester University OpenPhacts Void Validator"
-            + "	</title>\n"
+            + "     Manchester University OpenPhacts ";
+    private final String HEADER_AFTER_TITLE = "	</title>\n"
             + "	<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\"></meta>\n"
             + "	<script>"
             + "		function getObj(id) {"

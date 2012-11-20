@@ -1990,6 +1990,7 @@ public class WSLinksetService extends WSUrlService{
         if (httpServletRequest != null && IpConfig.isAdminIPAddress(httpServletRequest.getRemoteAddr())){
             sb.append(SIDE_BAR_LOAD);
         }
+        super.addSideBarMiddle(sb, httpServletRequest);
     }
 
     private final String SIDE_BAR_VALIDATE =
