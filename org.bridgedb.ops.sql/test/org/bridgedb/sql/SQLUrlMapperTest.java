@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.URLListenerTest;
 import org.bridgedb.utils.StoreType;
@@ -76,12 +77,12 @@ public class SQLUrlMapperTest extends URLListenerTest {
 	
 	@Test(expected=BridgeDbSqlException.class)
 	public void testGetProfile_invalidProfileNumber() throws IDMapperException {
-		sqlUrlMapper.getProfile(BASE_PROFILE_URI + "123");
+		sqlUrlMapper.getProfile(RdfConfig.getProfileURI(123));
 	}
 		
 	@Test
 	public void testGetProfile_validProfileURI() throws IDMapperException {
-		ProfileInfo profile = sqlUrlMapper.getProfile(BASE_PROFILE_URI + "1");
+		ProfileInfo profile = sqlUrlMapper.getProfile(RdfConfig.getProfileURI(1));
 		assertEquals("test1", profile.getName());
 //		assertEquals("2012-09-28T16:02", profile.getCreatedOn());
 		assertEquals("2012-09-28 16:02:00.0", profile.getCreatedOn());
@@ -105,7 +106,7 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		expectedURL.add("http://www.example.org#123");
 		expectedURL.add("http://rdf.example.org#123");
 		
-		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, BASE_PROFILE_URI + "0");
+		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0));
 		assertEquals(5, mapURL.size());
 		assertEquals(expectedURL, mapURL);
 	}
@@ -123,7 +124,7 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		expectedURL.add("http://www.example.com/123");
 		expectedURL.add("http://rdf.example.com/123");
 		
-		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, BASE_PROFILE_URI + "1");
+		Set<String> mapURL = sqlUrlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(1));
 		assertEquals(3, mapURL.size());
 		assertEquals(expectedURL, mapURL);
 	}
@@ -137,7 +138,7 @@ public class SQLUrlMapperTest extends URLListenerTest {
 		expectedURL.add("http://www.example.org#456");
 		expectedURL.add("http://rdf.example.org#456");
 		
-		Set<String> mapURL = sqlUrlMapper.mapURL(map2URL1, BASE_PROFILE_URI + "2");
+		Set<String> mapURL = sqlUrlMapper.mapURL(map2URL1, RdfConfig.getProfileURI(2));
 		assertEquals(5, mapURL.size());
 		assertEquals(expectedURL, mapURL);
 	}
