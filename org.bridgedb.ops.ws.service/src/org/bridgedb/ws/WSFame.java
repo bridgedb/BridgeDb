@@ -60,12 +60,12 @@ public class WSFame extends WSOpsInterfaceService {
         
     static final Logger logger = Logger.getLogger(WSFame.class);
 
-    String serviceName;
+    private final String serviceName1;
     
     public WSFame()  throws IDMapperException   {
         super();
         URL resource = this.getClass().getClassLoader().getResource(""); 
-        serviceName = getResourceName();
+        serviceName1 = getResourceName();
         formatter = NumberFormat.getInstance();
         if (formatter instanceof DecimalFormat) {
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -87,6 +87,10 @@ public class WSFame extends WSOpsInterfaceService {
             logger.warn("Unable to get resource name from " + path);
         }
         return getDefaultResourceName();
+    }
+    
+    public final String getServiceName(){
+        return serviceName1;
     }
     
     /**
@@ -138,7 +142,9 @@ public class WSFame extends WSOpsInterfaceService {
         }
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
 
-        sb.append("\n<p><a href=\"/OPS-IMS\">Home Page</a></p>");
+        sb.append("\n<p><a href=\"/");
+        sb.append(getServiceName());
+        sb.append("\">Home Page</a></p>");
                 
         sb.append("\n<p>");
         WSOpsApi api = new WSOpsApi();
@@ -228,7 +234,7 @@ public class WSFame extends WSOpsInterfaceService {
         sb.append(page);
         sb.append("_text'); return true; \" ");
         sb.append("onclick=\"document.location = &quot;/");
-        sb.append(serviceName);
+        sb.append(getServiceName());
         sb.append("/");
         sb.append(page);
         sb.append("&quot;;\">");

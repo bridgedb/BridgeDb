@@ -95,11 +95,17 @@ public class WSOpsServer extends WSLinksetService{
         sb.append("</p>");
                 
         sb.append("\n<p>A List of which mappings we current have can be found at ");
-        sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
+        sb.append("<a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/getMappingInfo\">Mapping Info Page</a></p>");
         
-        sb.append("\n<p>The Main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
+        sb.append("\n<p>The Main OPS method is <a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
-        sb.append("\n<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
+        sb.append("\n<p><a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/api\">API Page</a></p>");
         sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
