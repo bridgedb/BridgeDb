@@ -1932,7 +1932,7 @@ public class WSLinksetService extends WSUrlService{
             addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
             addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
             addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
-            sb.append("\n<h1>v a File as RDF.</h1>");
+            sb.append("\n<h1>Save a File as RDF.</h1>");
             addSaveString(sb, ValidationType.LINKSMINIMAL);
             addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
             addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
