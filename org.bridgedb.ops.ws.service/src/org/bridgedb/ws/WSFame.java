@@ -19,14 +19,17 @@
 package org.bridgedb.ws;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -61,7 +64,8 @@ public class WSFame extends WSOpsInterfaceService {
     
     public WSFame()  throws IDMapperException   {
         super();
-        serviceName = "OPS-IMS";
+        URL resource = this.getClass().getClassLoader().getResource(""); 
+        serviceName = getResourceName();
         formatter = NumberFormat.getInstance();
         if (formatter instanceof DecimalFormat) {
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -69,7 +73,32 @@ public class WSFame extends WSOpsInterfaceService {
             ((DecimalFormat) formatter).setDecimalFormatSymbols(dfs);
         }
     }
-                
+        
+    private String getResourceName(){
+        URL resource = this.getClass().getClassLoader().getResource(""); 
+        String path = resource.toString();
+        if (path.contains("/webapps/") && path.contains("/WEB-INF/")){
+            int start = path.lastIndexOf("/webapps/") + 9;
+            String name = path.substring(start, path.lastIndexOf("/WEB-INF/"));
+            logger.info("ResourceName = " + name);
+            return name;
+        }
+        if (!path.endsWith("/test-classes/")){
+            logger.warn("Unable to get resource name from " + path);
+        }
+        return getDefaultResourceName();
+    }
+    
+    /**
+     * Backup in case getResourceName fails.
+     * 
+     * Super classes will need to insert their own war name.
+     * @return war name.
+     */
+    public String getDefaultResourceName(){
+        return "OPS-IMS";
+    }
+    
     /**
      * API page for the IMS methods.
      * 
