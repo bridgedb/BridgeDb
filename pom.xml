@@ -13,7 +13,8 @@
         <mysql.version>5.1.20</mysql.version>
         <sesame.version>2.6.4</sesame.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
-        <owlapi-api.version>3.4.1-SNAPSHOT</owlapi-api.version>
+        <owlapi-api.version>3.4</owlapi-api.version>
+        <slf4j.version>1.6.4</slf4j.version>
         <log4j.version>1.2.16</log4j.version> <!-- Versio used in MetaData -->
     </properties>
 
@@ -90,18 +91,7 @@
                     </execution>
                 </executions>
             </plugin>
-              <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-       </plugins>
+        </plugins>
 	</build>
 	
   	<dependencies>

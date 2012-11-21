@@ -1932,7 +1932,7 @@ public class WSLinksetService extends WSUrlService{
             addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
             addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
             addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
-            sb.append("\n<h1>v a File as RDF.</h1>");
+            sb.append("\n<h1>Save a File as RDF.</h1>");
             addSaveString(sb, ValidationType.LINKSMINIMAL);
             addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
             addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
@@ -2116,19 +2116,25 @@ public class WSLinksetService extends WSUrlService{
     }
 
     private void addValidationFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/OPS-IMS/validate");
+        sb.append("<form method=\"post\" action=\"/");
+        sb.append(getServiceName());
+        sb.append("/validate");
         sb.append(validationType.getName());
         sb.append("\">");        
     }
     
     private void addSaveFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/OPS-IMS/save");
+        sb.append("<form method=\"post\" action=\"/");
+        sb.append(getServiceName());
+        sb.append("/save");
         sb.append(validationType.getName());
         sb.append("\">");        
     }
     
     private void addLoadFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/OPS-IMS/load");
+        sb.append("<form method=\"post\" action=\"/");
+        sb.append(getServiceName());
+        sb.append("/load");
         sb.append(validationType.getName());
         sb.append("\">");        
     }
@@ -2177,7 +2183,9 @@ public class WSLinksetService extends WSUrlService{
         } else {
             throw new BridgeDBException("Unexpected format" + format);
         }
-        sb.append("\n<form method=\"post\" action=\"/OPS-IMS/");
+        sb.append("\n<form method=\"post\" action=\"/");
+        sb.append(getServiceName());
+        sb.append("/");
         sb.append(action);
         sb.append(formatSt);
         sb.append(validationType.getName());

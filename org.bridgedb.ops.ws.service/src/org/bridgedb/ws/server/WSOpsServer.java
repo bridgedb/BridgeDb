@@ -169,16 +169,22 @@ public class WSOpsServer extends WSLinksetService{
         sb.append("<div id=\"content\">");
         sb.append("<p>Welcome to the Identity Mapping Service. </p>");        
                 
-        sb.append("<p>A list of which mappings we currently have can be found at ");
-        sb.append("<a href=\"/OPS-IMS/getMappingInfo\">Mapping Info Page</a></p>");
+        sb.append("\n<p>A List of which mappings we current have can be found at ");
+        sb.append("<a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/getMappingInfo\">Mapping Info Page</a></p>");
         
         sb.append(uriMappingForm());
         
         sb.append("<h2>Usage Information</h2>");
-        sb.append("<p>The main OPS method is <a href=\"/OPS-IMS/api/#mapByURLs\">mapByURLs</a></dt>");
+        sb.append("\n<p>The Main OPS method is <a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/api/#mapByURLs\">mapByURLs</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
-        sb.append("<p><a href=\"/OPS-IMS/api\">API Page</a></p>");
-        sb.append("</div></div></body></html>");
+        sb.append("\n<p><a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/api\">API Page</a></p>");
+        sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
