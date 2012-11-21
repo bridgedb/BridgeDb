@@ -85,7 +85,9 @@ public class WSOpsServer extends WSLinksetService{
     
     private final String uriMappingForm() throws IDMapperException {
     	StringBuilder sb = new StringBuilder();
-    	sb.append("<form method=\"get\" action=\"/OPS-IMS/mapURL\">");
+    	sb.append("<form method=\"get\" action=\"/");
+        sb.append(getServiceName());
+    	sb.append("/mapURL\">");
     	sb.append("<fieldset>");
     	sb.append("<legend>URL Mapper</legend>");
     	sb.append("<p><label for=\"URL\">Input URI</label>");
