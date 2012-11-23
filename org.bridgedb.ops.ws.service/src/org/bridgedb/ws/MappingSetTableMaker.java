@@ -179,14 +179,14 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
 
     private void newTargetMultipleMappings(StringBuilder sb, int i) throws IDMapperException {
-        int j = i + 1;
+        int j = i;
         int last = infos.length -1;
         int mappingCount = 1;
         int numberOfLinks = infos[i].getNumberOfLinks();
         do {
+            j++;
             mappingCount++;
             numberOfLinks+= infos[j].getNumberOfLinks();
-            j++;
         } while ((j < last) && 
                 (infos[j].getSourceSysCode().equals(infos[j+1].getSourceSysCode()))); 
         addTargetSummary(sb, infos[i].getSourceSysCode(), infos[i].getTargetSysCode(), numberOfLinks, mappingCount); 
