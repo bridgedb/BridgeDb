@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -27,6 +28,8 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     
     protected final NumberFormat formatter;
     
+    static final Logger logger = Logger.getLogger(MappingSetTableMaker.class);
+
     public static void addTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos) throws IDMapperException{
         MappingSetTableMaker maker = new MappingSetTableMaker(mappingSetInfos);
         maker.tableMaker(sb);
@@ -69,6 +72,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             + "\t\t<th>Targets</th>\n"
             + "\t\t<th>Sum of Mappings</th>\n"
             + "\t\t<th>Id</th>\n"
+            + "\t\t<th>Predicate</th>\n"
             + "\t\t<th>Transative</th>\n"
             + "\t</tr>\n";
 
@@ -150,23 +154,25 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
 
     private void newSourceMultipleMappings(StringBuilder sb, int i) throws IDMapperException {
-        int j = i + 1;
+        logger.debug("newSourceMultipleMappings " + i);
+        int j = i;
         int last = infos.length -1;
         int targetCount = 1;
         int mappingCount = 1;
         int numberOfLinks = infos[i].getNumberOfLinks();
-        do {
+        do{
+            logger.debug(infos[j].getSourceSysCode() + " ->" + infos[j+1].getSourceSysCode());
+            j++;
+            logger.debug(j);
             mappingCount++;
             numberOfLinks+= infos[j].getNumberOfLinks();
-            if (infos[j].getTargetSysCode().equals(infos[j-1])){
+            if (infos[j].getTargetSysCode().equals(infos[j-1].getTargetSysCode())){
                 //same target
             } else {
                 targetCount++;
             }
-            j++;
         } while ((j < last) && 
-                (infos[j].getSourceSysCode().equals(infos[j+1].getSourceSysCode()))); 
-		
+                (infos[j].getSourceSysCode().equals(infos[j+1].getSourceSysCode())));
         addSourceSummary(sb, infos[i].getSourceSysCode(), targetCount, numberOfLinks, mappingCount); 
         addSourceDetail(sb, infos[i].getSourceSysCode(), targetCount, numberOfLinks, mappingCount); 
         newTarget(sb, i);
@@ -202,6 +208,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         addDataSourceCell(sb, infos[i].getTargetSysCode());
         addNumberOfLinksCell(sb, infos[i].getNumberOfLinks());
         addMappingSetCell(sb, infos[i].getId());
+        addPredicateCell(sb, i);
         addTransative(sb, i);
     }
 
@@ -293,6 +300,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             sb.append(mappingCount);
             sb.append(" Mappings</td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
+        sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t</tr>\n");
     }
 
@@ -325,18 +333,23 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
 
     private void addMappingSetCell(StringBuilder sb, String id) throws IDMapperException {
+        String idUrl = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
         sb.append("\t\t<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("mappingSet/");
-            sb.append(id);
+            sb.append(idUrl);
             sb.append("\">");
-            sb.append(id);
+            sb.append(idUrl);
             sb.append("</a></td>\n");
     }
 
     private void addNumberOfLinksCell(StringBuilder sb, int numberOfLinks) {
         sb.append("\t\t<td align=\"right\">");
             sb.append(formatter.format(numberOfLinks));
+            sb.append("</td>\n");
+   }
+
+    private void addPredicateCell(StringBuilder sb, int i) {
+        sb.append("\t\t<td>");
+            sb.append(infos[i].getPredicate());
             sb.append("</td>\n");
    }
 
