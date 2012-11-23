@@ -229,10 +229,10 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     private void addSourceSummary(StringBuilder sb, String source, int targetCount, int numberOfLinks, int mappingCount) 
             throws IDMapperException {
         sb.append("\t<tr ");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_level1=level1>\n");
         sb.append("\t\t<td><span onclick=\"showLevel2('");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("')\"> &dArr; </span></td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
         addDataSourceCell(sb, source);
@@ -244,7 +244,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             throws IDMapperException {
         addLevel2Tr(sb, source);
         sb.append("\t\t<td><span onclick=\"hideLevel2('");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("')\"> &uArr; </span></td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
         addDataSourceCell(sb, source);
@@ -255,17 +255,17 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     private void addTargetSummary(StringBuilder sb, String source, String target, int numberOfLinks, int mappingCount) 
             throws IDMapperException {
         sb.append("\t<tr ");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_level2=level2; ");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_");
-            sb.append(target);
+            sb.append(cleanup(target));
             sb.append("_level2=level2; style=\"display: none;\">\n");
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t\t<td><span onclick=\"showLevel3('");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_");
-            sb.append(target);
+            sb.append(cleanup(target));
             sb.append("')\"> &dArr; </span></td>\n");
         addDataSourceCell(sb, source);
         addDataSourceCell(sb, target);
@@ -277,9 +277,9 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         addLevel3Tr(sb, source, target);
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t\t<td><span onclick=\"hideLevel3('");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_");
-            sb.append(target);
+            sb.append(cleanup(target));
             sb.append("')\"> &uArr; </span></td>\n");
         addDataSourceCell(sb, source);
         addDataSourceCell(sb, target);
@@ -304,21 +304,26 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("\t</tr>\n");
     }
 
+    private String cleanup(String original){
+        String result = original.replace(" ", "");
+        return result;
+    }
+    
     private void addLevel2Tr(StringBuilder sb, String source) 
             throws IDMapperException {
         sb.append("\t<tr ");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_level2=level2; style=\"display: none;\">\n");
     }
 
     private void addLevel3Tr(StringBuilder sb, String source, String target) 
             throws IDMapperException {
          sb.append("\t<tr ");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_level3=level3; ");
-            sb.append(source);
+            sb.append(cleanup(source));
             sb.append("_");
-            sb.append(target);
+            sb.append(cleanup(target));
             sb.append("_level3=level3; style=\"display: none;\">\n");
    }
 
