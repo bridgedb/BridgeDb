@@ -27,6 +27,7 @@ import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 
@@ -143,9 +144,9 @@ public class Test {
             directory.mkdir();
         }
         for (DataSource srcDataSource:srcDataSources){
-            if (srcDataSource.getURN("").length() > 11){               
+            if (srcDataSource != null && srcDataSource.getURN("").length() > 11){               
                 for (DataSource tgtDataSource:tgtDataSources){
-                    if (srcDataSource != tgtDataSource && tgtDataSource.getURN("").length() > 11){
+                    if (tgtDataSource != null && srcDataSource != tgtDataSource && tgtDataSource.getURN("").length() > 11){
                         String fileName = srcDataSource.getSystemCode() + "_" + tgtDataSource.getSystemCode() + ".ttl";
                         File linksetFile = new File(directory, fileName);
                         FileWriter writer = new FileWriter(linksetFile);
@@ -154,7 +155,6 @@ public class Test {
                         writeln(srcDataSource.getSystemCode() + " " + srcDataSource.getURN("$id"));
                         writeln(tgtDataSource.getSystemCode() + " " + tgtDataSource.getURN("$id"));
                         buffer.close();
-                        System.exit(0);
                     }
                 }
             }
@@ -189,6 +189,28 @@ public class Test {
         buffer.write(message);
         buffer.newLine();
     }
+    
+    
+    public static void printLinksets(File file) 
+    		throws IDMapperException, IOException {
+    	if (!file.exists()) {
+    		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
+    	} else if (file.isDirectory()){
+            StringBuilder builder = new StringBuilder();
+            File[] children = file.listFiles();
+            for (File child:children){
+                printLinksets(child);
+            }
+        } else { 
+            String name = file.getName();
+            name = name.substring(0, name.indexOf('.'));
+            System.out.println("£"+ name);
+            System.out.println(file.getAbsolutePath());
+            IDMapper mapper = BridgeDb.connect("idmapper-pgdb:"+file.getAbsolutePath());
+            printLinksets(mapper, name);
+            System.out.println("done file");
+        }
+    }
 
     public static void main(String[] args) throws ClassNotFoundException, IDMapperException, IOException {
         ConfigReader.logToConsole();
@@ -218,8 +240,10 @@ public class Test {
             }
         }
         */
-        IDMapper mapper = BridgeDb.connect("idmapper-pgdb:C:/OpenPhacts/andra/"+"Ag_Derby_20120602.bridge");
-        printLinksets(mapper, "Ag_Derby_20120602");
+        File file = new File("C:/OpenPhacts/andra/");
+        printLinksets(file);
+//        IDMapper mapper = BridgeDb.connect("idmapper-pgdb:C:/OpenPhacts/andra/"+"Ag_Derby_20120602.bridge");
+//        printLinksets(mapper, "Ag_Derby_20120602");
         //Set<DataSource> dataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         //for (DataSource dataSource:dataSources){
         //    logger.info(dataSource);
