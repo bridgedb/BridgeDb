@@ -80,19 +80,25 @@ public class LinksetExporter {
         File linksetFile = new File(directory, fileName);
         FileWriter writer = new FileWriter(linksetFile);
         buffer = new BufferedWriter(writer);
+        boolean fileValid = false;
         try{
-            writeLinkset(srcDataSource, tgtDataSource);
+            fileValid = writeLinkset(srcDataSource, tgtDataSource);
         } finally {
             buffer.close();        
         }
-        logger.info("Exported to " + linksetFile.getAbsolutePath());
-        LinksetLoader loader = new LinksetLoader();
-        logger.info(loader.validityFile(linksetFile, StoreType.TEST, ValidationType.LINKSMINIMAL, false));
+        if (fileValid){
+            logger.info("Exported to " + linksetFile.getAbsolutePath());
+            LinksetLoader loader = new LinksetLoader();
+            logger.info(loader.validityFile(linksetFile, StoreType.TEST, ValidationType.LINKSMINIMAL, false));
+        } else {
+            logger.info("No link found for " + linksetFile.getAbsolutePath());
+            linksetFile.delete();
+        }
     }
 
-    private void writeLinkset(DataSource srcDataSource, DataSource tgtDataSource) throws IOException, IDMapperException {
+    private boolean writeLinkset(DataSource srcDataSource, DataSource tgtDataSource) throws IOException, IDMapperException {
         writeVoidHeader(srcDataSource, tgtDataSource);
-        writeLinks(srcDataSource, tgtDataSource);
+        return writeLinks(srcDataSource, tgtDataSource);
     }
  
     private void writeln(String message) throws IOException{
@@ -124,16 +130,60 @@ public class LinksetExporter {
         writeln("");                
     }
 
-    private void writeLinks(DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
+    private boolean writeLinks(DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
+        if (srcDataSource == tgtDataSource){
+            return writeSelfLinks(srcDataSource, tgtDataSource);
+        } else {
+            boolean linkFound = false;
+            XrefIterator iterator = (XrefIterator)mapper;
+            Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
+            while (xrefIterator.hasNext()){
+                Xref sourceXref = xrefIterator.next();
+                Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
+                for (Xref targetXref:targetXrefs){
+                    writeln("<" + sourceUriSpace + sourceXref.getId() + "> " + LINK_PREDICATE + 
+                            " <" + targetUriSpace + targetXref.getId() + "> .");
+                    linkFound = true;
+                }
+            }
+            return linkFound;
+        }
+    }
+    
+    private boolean writeSelfLinks(DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
+        boolean linkFound = false;
         XrefIterator iterator = (XrefIterator)mapper;
         Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
         while (xrefIterator.hasNext()){
             Xref sourceXref = xrefIterator.next();
             Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
             for (Xref targetXref:targetXrefs){
-                writeln("<" + sourceUriSpace + sourceXref.getId() + "> " + LINK_PREDICATE + 
-                        " <" + targetUriSpace + targetXref.getId() + "> .");
+                if (!sourceXref.getId().equals(targetXref.getId())){
+                    writeln("<" + sourceUriSpace + sourceXref.getId() + "> " + LINK_PREDICATE + 
+                            " <" + targetUriSpace + targetXref.getId() + "> .");
+                    linkFound = true;
+                }
             }
+        }
+        return linkFound;
+    }
+    
+    public static void exportFile(File file) 
+    		throws IDMapperException, IOException {
+    	if (!file.exists()) {
+    		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
+    	} else if (file.isDirectory()){
+            StringBuilder builder = new StringBuilder();
+            File[] children = file.listFiles();
+            for (File child:children){
+                exportFile(child);
+            }
+        } else { 
+            String name = file.getName();
+            name = name.substring(0, name.indexOf('.'));
+            LinksetExporter exporter = new LinksetExporter(file);
+            File directory = new File("C:/OpenPhacts/linksets/" + name);
+            exporter.exportAll(directory);
         }
     }
     
@@ -141,11 +191,11 @@ public class LinksetExporter {
         ConfigReader.logToConsole();
         BioDataSource.init();
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
-        ConfigReader.configureLogger();
         Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
-        File file = new File("C:/OpenPhacts/andra/Ag_Derby_20120602.bridge");
-        LinksetExporter exporter = new LinksetExporter(file);
-        File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");
-        exporter.exportAll(directory);
+        File file = new File("C:/OpenPhacts/andra/");
+        exportFile(file);
+        //LinksetExporter exporter = new LinksetExporter(file);
+        //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");
+        //exporter.exportAll(directory);
     }
 }
