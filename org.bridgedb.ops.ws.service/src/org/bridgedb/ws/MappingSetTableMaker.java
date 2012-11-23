@@ -72,6 +72,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             + "\t\t<th>Targets</th>\n"
             + "\t\t<th>Sum of Mappings</th>\n"
             + "\t\t<th>Id</th>\n"
+            + "\t\t<th>Predicate</th>\n"
             + "\t\t<th>Transative</th>\n"
             + "\t</tr>\n";
 
@@ -207,6 +208,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         addDataSourceCell(sb, infos[i].getTargetSysCode());
         addNumberOfLinksCell(sb, infos[i].getNumberOfLinks());
         addMappingSetCell(sb, infos[i].getId());
+        addPredicateCell(sb, i);
         addTransative(sb, i);
     }
 
@@ -298,6 +300,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             sb.append(mappingCount);
             sb.append(" Mappings</td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
+        sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t</tr>\n");
     }
 
@@ -330,18 +333,23 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
 
     private void addMappingSetCell(StringBuilder sb, String id) throws IDMapperException {
+        String idUrl = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
         sb.append("\t\t<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("mappingSet/");
-            sb.append(id);
+            sb.append(idUrl);
             sb.append("\">");
-            sb.append(id);
+            sb.append(idUrl);
             sb.append("</a></td>\n");
     }
 
     private void addNumberOfLinksCell(StringBuilder sb, int numberOfLinks) {
         sb.append("\t\t<td align=\"right\">");
             sb.append(formatter.format(numberOfLinks));
+            sb.append("</td>\n");
+   }
+
+    private void addPredicateCell(StringBuilder sb, int i) {
+        sb.append("\t\t<td>");
+            sb.append(infos[i].getPredicate());
             sb.append("</td>\n");
    }
 
