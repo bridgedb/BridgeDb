@@ -27,6 +27,11 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     
     protected final NumberFormat formatter;
     
+    public static void addTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos) throws IDMapperException{
+        MappingSetTableMaker maker = new MappingSetTableMaker(mappingSetInfos);
+        maker.tableMaker(sb);
+    }
+    
     private MappingSetTableMaker(List<MappingSetInfo> mappingSetInfos){
         infos = mappingSetInfos.toArray(infos);
         Arrays.sort(infos, this);
@@ -39,6 +44,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
     
     private void tableMaker(StringBuilder sb) throws IDMapperException{
+        sb.append(SCRIPT);
         sb.append(TABLE_HEADER);
         newSource(sb, 0);
         for (int i = 1; i < infos.length; i++){
@@ -66,6 +72,56 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             + "\t\t<th>Transative</th>\n"
             + "\t</tr>\n";
 
+    String SCRIPT = "<script language=\"javascript\">\n"
+    + "\n"
+    + "function showLevel2(id) {\n"
+    + "	tr=document.getElementsByTagName('tr')\n"
+    + "	for (i=0;i<tr.length;i++){\n"
+    + "	 	if (tr[i].getAttribute(id + '_level2')){\n"
+    + "		    tr[i].style.display = '';\n"
+    + "		} else if (tr[i].getAttribute(id + '_level1')){\n"
+    + "		    tr[i].style.display = 'none';\n"
+    + "	    }\n"
+    + "	}\n"
+    + "}\n"
+    + "\n"
+    + "function hideLevel2(id) {\n"
+    + "	tr=document.getElementsByTagName('tr')\n"
+    + "	for (i=0;i<tr.length;i++){\n"
+    + "	 	if (tr[i].getAttribute(id + '_level3')){\n"
+    + "		    tr[i].style.display = 'none';\n"
+    + "	 	} else if (tr[i].getAttribute(id + '_level2')){\n"
+    + "		    tr[i].style.display = 'none';\n"
+    + "		} else if (tr[i].getAttribute(id + '_level1')){\n"
+    + "		    tr[i].style.display = '';\n"
+    + "	    }\n"
+    + "	}\n"
+    + "}\n"
+    + "\n"
+    + "function showLevel3(id) {\n"
+    + "	tr=document.getElementsByTagName('tr')\n"
+    + "	for (i=0;i<tr.length;i++){\n"
+    + "	 	if (tr[i].getAttribute(id + '_level3')){\n"
+    + "		    tr[i].style.display = '';\n"
+    + "		} else if (tr[i].getAttribute(id + '_level2')){\n"
+    + "		    tr[i].style.display = 'none';\n"
+    + "	    }\n"
+    + "	}\n"
+    + "}\n"
+    + "\n"
+    + "function hideLevel3(id) {\n"
+    + "	tr=document.getElementsByTagName('tr')\n"
+    + "	for (i=0;i<tr.length;i++){\n"
+    + "	 	if (tr[i].getAttribute(id + '_level3')){\n"
+    + "		    tr[i].style.display = 'none';\n"
+    + "		} else if (tr[i].getAttribute(id + '_level2')){\n"
+    + "		    tr[i].style.display = '';\n"
+    + "	    }\n"
+    + "	}\n"
+    + "}\n"
+    + "\n"
+    + "</script>\n";
+    
     @Override
     public int compare(MappingSetInfo o1, MappingSetInfo o2) {
         int test = o1.getSourceSysCode().compareTo(o2.getSourceSysCode());

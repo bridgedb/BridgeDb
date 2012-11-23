@@ -27,10 +27,12 @@ import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
@@ -56,7 +58,19 @@ public class WSUrlService extends WSFame implements Comparator<MappingSetInfo>{
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
-    public Response getMappingInfo() throws IDMapperException, UnsupportedEncodingException {
+    public Response getMappingInfo(@Context HttpServletRequest httpServletRequest) 
+            throws IDMapperException, UnsupportedEncodingException {
+        List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos();
+        StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
+        MappingSetTableMaker.addTable(sb, mappingSetInfos);
+        sb.append("</body></html>");
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/getMappingInfo2")
+    public Response getMappingInfo2() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos();
         Collections.sort(mappingSetInfos, this);
