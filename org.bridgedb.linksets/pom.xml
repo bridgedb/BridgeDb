@@ -42,6 +42,12 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
+ 		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.bio</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
         <dependency>
             <groupId>org.openrdf.sesame</groupId>
             <artifactId>sesame-rio-api</artifactId>
