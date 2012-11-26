@@ -38,7 +38,7 @@ public abstract class AppendBase implements MetaData{
     abstract void appendShowAll(StringBuilder builder, int tabLevel);
     
     @Override
-    public String validityReport(boolean includeWarnings) {
+    public String validityReport(boolean includeWarnings) throws MetaDataException {
          StringBuilder builder = new StringBuilder();
          appendValidityReport(builder, CHECK_ALL_PRESENT, includeWarnings, 0);
          return builder.toString();
@@ -51,7 +51,8 @@ public abstract class AppendBase implements MetaData{
         }
     }
 
-   abstract void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel);
+   abstract void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, 
+           int tabLevel) throws MetaDataException;
 
     @Override
     public String unusedStatements(){

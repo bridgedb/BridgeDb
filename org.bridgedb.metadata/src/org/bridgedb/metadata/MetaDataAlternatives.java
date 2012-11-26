@@ -65,7 +65,7 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
         if (checkAllpresent && noChildernWithValue()){
             if (this.requirementLevel == RequirementLevel.MUST){
                 reportMissingValues(builder, "ERROR: ", tabLevel);

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
+import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.utils.TestUtils;
 import org.bridgedb.metadata.constants.XMLSchemaConstants;
 import org.junit.After;
@@ -44,12 +45,14 @@ public class XsdTypeTest extends TestUtils {
      * Test of correctType method, of class XsdType.
      */
     @Test
-    public void testIntegerTypes() {
+    public void testIntegerTypes() throws MetaDataException {
         report("IntegerTypes");
-        XsdType instance = new XsdType(XMLSchemaConstants.INTEGER.stringValue());
+        XsdType instance = XsdType.getByType(XMLSchemaConstants.INTEGER.stringValue());
         Value value = new LiteralImpl("10",XMLSchemaConstants.INTEGER);;
         assertTrue(instance.correctType(value));
         value = new LiteralImpl("10",XMLSchemaConstants.NON_NEGATIVE_INTEGER);
+        assertTrue(instance.correctType(value));
+        value = new LiteralImpl("10",XMLSchemaConstants.UNISGNED_BYTE);
         assertTrue(instance.correctType(value));
         value = new LiteralImpl("10");
         assertFalse(instance.correctType(value));
@@ -59,9 +62,9 @@ public class XsdTypeTest extends TestUtils {
      * Test of getCorrectType method, of class XsdType.
      */
     @Test
-    public void testGetCorrectType() {
+    public void testGetCorrectType() throws MetaDataException {
         report("getCorrectType");
-        XsdType instance = new XsdType(XMLSchemaConstants.INTEGER.stringValue());
+        XsdType instance = XsdType.getByType(XMLSchemaConstants.INTEGER.stringValue());
         String expResult = XMLSchemaConstants.INTEGER.stringValue();
         String result = instance.getCorrectType();
         assertEquals(expResult, result);

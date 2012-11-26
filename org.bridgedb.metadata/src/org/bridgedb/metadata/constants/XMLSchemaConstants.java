@@ -54,4 +54,5 @@ public class XMLSchemaConstants {
     public static final URI NOTATION = new URIImpl(PREFIX + "NOTATION");
     public static final URI INTEGER = new URIImpl(PREFIX + "integer");
     public static final URI NON_NEGATIVE_INTEGER = new URIImpl(PREFIX + "nonNegativeInteger");
+    public static final URI UNISGNED_BYTE = new URIImpl(PREFIX + "unsignedByte");
 }

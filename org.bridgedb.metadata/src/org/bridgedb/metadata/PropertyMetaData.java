@@ -13,6 +13,7 @@ import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.metadata.constants.RdfsConstants;
 import org.bridgedb.metadata.constants.XMLSchemaConstants;
 import org.bridgedb.metadata.type.*;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -118,7 +119,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             return new StringType();
         }
         if (objectClass.startsWith(XMLSchemaConstants.PREFIX)){
-            return new XsdType(objectClass);
+            return XsdType.getByType(objectClass);
         }
         throw new MetaDataException ("Unexpected " + SchemaConstants.CLASS + " " + objectClass);
     }
@@ -199,7 +200,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
     
     @Override
-    public boolean hasCorrectTypes() {
+    public boolean hasCorrectTypes() throws MetaDataException {
         if (requirementLevel != RequirementLevel.UNSPECIFIED){
             for (Value value: values){
                 if (!metaDataType.correctType(value)){
@@ -212,7 +213,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
+    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, 
+    int tabLevel) throws MetaDataException {
         if (requirementLevel == RequirementLevel.UNSPECIFIED){
             appendUnspecifiedReport(builder, includeWarnings, tabLevel);            
         } else if (!hasCorrectTypes()){
@@ -275,7 +277,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         addDocumentationLink(builder, tabLevel);
     }
 
-    private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel, boolean includeWarnings) {
+    private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel, boolean includeWarnings) throws MetaDataException {
         if (requirementLevel == RequirementLevel.IGNORE && !includeWarnings) { return; }
         tab(builder, tabLevel);
         if (requirementLevel == RequirementLevel.IGNORE){

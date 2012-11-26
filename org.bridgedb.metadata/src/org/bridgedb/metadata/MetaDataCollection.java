@@ -167,7 +167,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return result;
     }
 
-    public String summary() {
+    public String summary() throws MetaDataException {
         StringBuilder builder = new StringBuilder();
         for (ResourceMetaData resource:resourcesMap.values()){
             resource.appendSummary(builder, 0);
@@ -199,7 +199,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
     @Override
-    public boolean hasCorrectTypes() {
+    public boolean hasCorrectTypes() throws MetaDataException {
         for (ResourceMetaData resouce:resourcesMap.values()){
             if (!resouce.hasCorrectTypes()){
                 return false;
@@ -262,7 +262,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
     @Override
-    public String validityReport(boolean includeWarnings) {
+    public String validityReport(boolean includeWarnings) throws MetaDataException {
          StringBuilder builder = new StringBuilder();
          builder.append("Report for " + source);
          newLine(builder);
@@ -271,7 +271,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
     
     @Override
-    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resource:theResources){
              if (!resource.isSuperset()){

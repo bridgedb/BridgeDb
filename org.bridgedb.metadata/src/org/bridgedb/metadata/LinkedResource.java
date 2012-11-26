@@ -211,7 +211,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
         if (this.cardinality > 0 && ids.isEmpty()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");

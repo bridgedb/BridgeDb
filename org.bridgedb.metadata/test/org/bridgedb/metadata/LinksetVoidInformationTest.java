@@ -127,7 +127,7 @@ public class LinksetVoidInformationTest extends TestUtils{
      * Test of hasCorrectTypes method, of class LinksetVoidInformation.
      */
     @Test
-    public void testHasCorrectTypes() {
+    public void testHasCorrectTypes() throws MetaDataException {
         report("hasCorrectTypes");
         boolean result = instance.hasCorrectTypes();
         assertTrue(result);
@@ -137,7 +137,7 @@ public class LinksetVoidInformationTest extends TestUtils{
      * Test of validityReport method, of class LinksetVoidInformation.
      */
     @Test
-    public void testValidityReport() {
+    public void testValidityReport() throws MetaDataException {
         report("validityReport");
         boolean includeWarnings = false;
         String result = instance.validityReport(includeWarnings);
