@@ -18,8 +18,10 @@ import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.metadata.constants.BridgeDBConstants;
 import org.bridgedb.metadata.constants.XMLSchemaConstants;
+import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.bridgedb.utils.StoreType;
 
 /**
  *
@@ -37,10 +39,11 @@ public class DataSourceExporter {
         writer = buffer;
     }
     
-    public static void main(String[] args) throws BridgeDBException, IOException {
+    public static void main(String[] args) throws IOException, IDMapperException {
         ConfigReader.logToConsole();
-        BioDataSource.init();
-        File file = File.createTempFile("test", ".rdf");
+        SQLUrlMapper mapper = new SQLUrlMapper(false, StoreType.LIVE);
+        //BioDataSource.init();
+        File file = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
         logger.info("Exporting DataSources to "+ file.getAbsolutePath());
         FileWriter fileWriter = new FileWriter(file);
         BufferedWriter buffer = new BufferedWriter(fileWriter);
@@ -109,7 +112,7 @@ public class DataSourceExporter {
         if (dataSource.getSystemCode() != null && (!dataSource.getSystemCode().trim().isEmpty())){
             writer.write("         bridgeDB:");
             writer.write(BridgeDBConstants.SYSTEM_CODE);        
-            writer.write("\"");
+            writer.write(" \"");
             writer.write(dataSource.getSystemCode());
             writer.write("\";");
             writer.newLine();
@@ -143,9 +146,9 @@ public class DataSourceExporter {
         writer.newLine();
 
         if (dataSource.getType() != null){
-            writer.write("         bridgeDB:type \"");
+            writer.write("         bridgeDB:");
             writer.write(BridgeDBConstants.TYPE);
-            writer.write("         bridgeDB:type \"");
+            writer.write(" \"");
             writer.write(dataSource.getType());
             writer.write("\";");
             writer.newLine();
@@ -169,6 +172,16 @@ public class DataSourceExporter {
             writer.write(urnPattern.substring(0, urnPattern.length()-1));
             writer.write("\";");
             writer.newLine();
+            String urn = dataSource.getURN("");
+            if (urn.length() >= 11){
+                String identifersOrgBase = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+                writer.write("         bridgeDB:");
+                writer.write(BridgeDBConstants.IDENTIFIERS_ORG_BASE);
+                writer.write(" \"");
+                writer.write(identifersOrgBase);
+                writer.write("\";");
+                writer.newLine();
+            }
         }
 
         if (dataSource.getOrganism() != null){
@@ -183,6 +196,13 @@ public class DataSourceExporter {
             writer.write(";");    
             writer.newLine();
         }
+
+        writer.write("         bridgeDB:");
+        writer.write(BridgeDBConstants.WIKIPATHWAYS_BASE);
+        writer.write(" \"");
+        writer.write(AndraIndetifiersOrg.getNameSpace(dataSource));
+        writer.write("\";");
+        writer.newLine();
         
         writer.write("         bridgeDB:");
         writer.write(BridgeDBConstants.FULL_NAME);

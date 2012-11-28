@@ -4,10 +4,12 @@
  */
 package org.bridgedb.loader;
 
+import org.bridgedb.rdf.AndraIndetifiersOrg;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import org.apache.log4j.ConsoleAppender;
@@ -70,10 +72,10 @@ public class LinksetExporter {
         if (!directory.isDirectory()){
                 throw new BridgeDBException("Expected a directory at " + directory.getAbsolutePath());            
         }
-        if (srcDataSource.getURN("").length() < 11){
+        if (srcDataSource == null){
             return; // no miram to use
         }               
-        if (tgtDataSource.getURN("").length() < 11){
+        if (tgtDataSource == null ){
             return; // no miram to use
         }               
         String fileName = srcDataSource.getSystemCode() + "_" + tgtDataSource.getSystemCode() + ".ttl";
@@ -107,10 +109,8 @@ public class LinksetExporter {
     }
     
     private void writeVoidHeader (DataSource srcDataSource, DataSource tgtDataSource) throws IOException{
-        String urn = srcDataSource.getURN("");
-        sourceUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
-        urn = tgtDataSource.getURN("");
-        targetUriSpace = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+        sourceUriSpace = AndraIndetifiersOrg.getNameSpace(srcDataSource);
+        targetUriSpace = AndraIndetifiersOrg.getNameSpace(tgtDataSource);
         writeln("@prefix : <#> .");
         writeln("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .");
         writeln("@prefix void: <http://rdfs.org/ns/void#> .");
@@ -141,8 +141,8 @@ public class LinksetExporter {
                 Xref sourceXref = xrefIterator.next();
                 Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
                 for (Xref targetXref:targetXrefs){
-                    writeln("<" + sourceUriSpace + sourceXref.getId() + "> " + LINK_PREDICATE + 
-                            " <" + targetUriSpace + targetXref.getId() + "> .");
+                    writeln("<" + sourceUriSpace + scrub(sourceXref.getId()) + "> " + LINK_PREDICATE + 
+                            " <" + targetUriSpace +scrub(targetXref.getId()) + "> .");
                     linkFound = true;
                 }
             }
@@ -150,6 +150,13 @@ public class LinksetExporter {
         }
     }
     
+    private String scrub(String id) {
+        if (id.equals("CD3<EPSILON>")){
+            return "Q7RN2";
+        }
+        return id;
+    }
+
     private boolean writeSelfLinks(DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
         boolean linkFound = false;
         XrefIterator iterator = (XrefIterator)mapper;
@@ -159,8 +166,8 @@ public class LinksetExporter {
             Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
             for (Xref targetXref:targetXrefs){
                 if (!sourceXref.getId().equals(targetXref.getId())){
-                    writeln("<" + sourceUriSpace + sourceXref.getId() + "> " + LINK_PREDICATE + 
-                            " <" + targetUriSpace + targetXref.getId() + "> .");
+                    writeln("<" + sourceUriSpace + scrub(sourceXref.getId()) + "> " + LINK_PREDICATE + 
+                            " <" + targetUriSpace +scrub(targetXref.getId()) + "> .");
                     linkFound = true;
                 }
             }
@@ -198,4 +205,5 @@ public class LinksetExporter {
         //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");
         //exporter.exportAll(directory);
     }
+
 }
