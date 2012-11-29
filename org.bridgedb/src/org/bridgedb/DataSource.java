@@ -299,11 +299,19 @@ public final class DataSource
 		
 		if (byFullName.containsKey(fullName))
 		{
-			current = byFullName.get(fullName);
+            current = byFullName.get(fullName);
+//            if (!current.sysCode.equals(sysCode)){
+//                throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode " + 
+//                        current.sysCode + " which does not match new systemCode " + sysCode);
+//            }
 		}
 		else if (bySysCode.containsKey(sysCode))
 		{
 			current = bySysCode.get(sysCode);
+//            if (!current.fullName.equals(fullName)){
+//                throw new IllegalStateException ("SystemCode " + sysCode + " already used wtih fullName " + 
+//                        current.fullName + " which does not match new fullName " + fullName);
+//            }
 		}
 		else
 		{
