@@ -25,7 +25,7 @@ public class BridgeDBConstants {
     public static final URI ID_EXAMPLE_URI = new URIImpl(PREFIX + ID_EXAMPLE);
     public static final String IDENTIFIERS_ORG_BASE = "identifiers_org_base";
     public static final URI IDENTIFIERS_ORG_BASE_URI = new URIImpl(PREFIX + IDENTIFIERS_ORG_BASE);
-    public static final String WIKIPATHWAYS_BASE = "wikipathways_base";
+    public static final String WIKIPATHWAYS_BASE = "wikipathways_id_base";
     public static final URI WIKIPATHWAYS_BASE_URI = new URIImpl(PREFIX + WIKIPATHWAYS_BASE);
     public static final String PRIMAY = "primary";
     public static final URI PRIMAY_URI = new URIImpl(PREFIX + PRIMAY);

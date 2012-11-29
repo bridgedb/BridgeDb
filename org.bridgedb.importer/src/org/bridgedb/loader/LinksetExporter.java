@@ -109,8 +109,8 @@ public class LinksetExporter {
     }
     
     private void writeVoidHeader (DataSource srcDataSource, DataSource tgtDataSource) throws IOException{
-        sourceUriSpace = AndraIndetifiersOrg.getNameSpace(srcDataSource);
-        targetUriSpace = AndraIndetifiersOrg.getNameSpace(tgtDataSource);
+        sourceUriSpace = AndraIndetifiersOrg.getWikiPathwaysNameSpace(srcDataSource);
+        targetUriSpace = AndraIndetifiersOrg.getWikiPathwaysNameSpace(tgtDataSource);
         writeln("@prefix : <#> .");
         writeln("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .");
         writeln("@prefix void: <http://rdfs.org/ns/void#> .");

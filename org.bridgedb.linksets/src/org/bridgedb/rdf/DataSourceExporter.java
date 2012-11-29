@@ -8,6 +8,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -27,28 +31,38 @@ import org.bridgedb.utils.StoreType;
  *
  * @author Christian
  */
-public class DataSourceExporter {
+public class DataSourceExporter implements Comparator<DataSource>{
+
     
     private HashSet<Organism> organisms;
     private BufferedWriter writer;
-    
+    private HashMap<String,String> mappings;
     static final Logger logger = Logger.getLogger(DataSourceExporter.class);
     
     private DataSourceExporter(BufferedWriter buffer){
         organisms = new HashSet<Organism>();
+        mappings = AndraIndetifiersOrg.getAndraMappings();
         writer = buffer;
     }
     
     public static void main(String[] args) throws IOException, IDMapperException {
         ConfigReader.logToConsole();
         SQLUrlMapper mapper = new SQLUrlMapper(false, StoreType.LIVE);
-        //BioDataSource.init();
+        BioDataSource.init();
+        initAndraDataSources();
         File file = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
         logger.info("Exporting DataSources to "+ file.getAbsolutePath());
         FileWriter fileWriter = new FileWriter(file);
         BufferedWriter buffer = new BufferedWriter(fileWriter);
         DataSourceExporter exporter = new DataSourceExporter(buffer);
         exporter.export();
+    }
+
+    private static void initAndraDataSources() {
+        HashMap<String,String> mappings = AndraIndetifiersOrg.getAndraMappings();
+        for (String fullName:mappings.keySet()){
+            DataSource.getByFullName(fullName);
+        }
     }
 
     public static void export(File file) throws BridgeDBException, IOException{
@@ -60,7 +74,8 @@ public class DataSourceExporter {
     
     private void export() throws BridgeDBException{
         try {
-            Set<DataSource> dataSources = DataSource.getDataSources();
+            ArrayList<DataSource> dataSources = new ArrayList(DataSource.getDataSources());
+            Collections.sort(dataSources, this);
             writer.write("@prefix : <> .");
             writer.newLine();
             writer.write("@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .");
@@ -172,9 +187,8 @@ public class DataSourceExporter {
             writer.write(urnPattern.substring(0, urnPattern.length()-1));
             writer.write("\";");
             writer.newLine();
-            String urn = dataSource.getURN("");
-            if (urn.length() >= 11){
-                String identifersOrgBase = "http://identifiers.org/" + urn.substring(11, urn.length()-1) + "/";
+            if (urnPattern.length() >= 11){
+                String identifersOrgBase = "http://identifiers.org/" + urnPattern.substring(11, urnPattern.length()-1) + "/";
                 writer.write("         bridgeDB:");
                 writer.write(BridgeDBConstants.IDENTIFIERS_ORG_BASE);
                 writer.write(" \"");
@@ -184,6 +198,16 @@ public class DataSourceExporter {
             }
         }
 
+         String wikiNameSpace = mappings.get(dataSource.getFullName());
+        if (wikiNameSpace != null){
+            writer.write("         bridgeDB:");
+            writer.write(BridgeDBConstants.WIKIPATHWAYS_BASE);
+            writer.write(" \"");
+            writer.write(wikiNameSpace);
+            writer.write("\";");
+            writer.newLine();
+        }
+        
         if (dataSource.getOrganism() != null){
             Organism organism = (Organism)dataSource.getOrganism();
             organisms.add(organism);
@@ -197,13 +221,6 @@ public class DataSourceExporter {
             writer.newLine();
         }
 
-        writer.write("         bridgeDB:");
-        writer.write(BridgeDBConstants.WIKIPATHWAYS_BASE);
-        writer.write(" \"");
-        writer.write(AndraIndetifiersOrg.getNameSpace(dataSource));
-        writer.write("\";");
-        writer.newLine();
-        
         writer.write("         bridgeDB:");
         writer.write(BridgeDBConstants.FULL_NAME);
         writer.write(" \"");
@@ -244,5 +261,55 @@ public class DataSourceExporter {
         writer.write("\".");
         writer.newLine();
     }
+
+    private int compare(String s1, String s2){
+        if (s1 == null){
+            if (s2 == null){
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            if (s2 == null){
+                return -1;
+            } else {
+                return s1.compareTo(s2);
+            }            
+        }
+    }
+    
+    @Override
+    public int compare(DataSource ds1, DataSource ds2) {
+        String id1 = mappings.get(ds1.getFullName());
+        if (id1 == null){
+            String urnPattern = ds1.getURN("");
+            if (urnPattern.length() >= 11){
+                id1 = "http://identifiers.org/" + urnPattern.substring(11, urnPattern.length()-1) + "/";
+            }
+        }
+        String id2 = mappings.get(ds2.getFullName());
+        if (id2 == null){
+            String urnPattern = ds2.getURN("");
+            if (urnPattern.length() >= 11){
+                id2 = "http://identifiers.org/" + urnPattern.substring(11, urnPattern.length()-1) + "/";
+            }
+        }
+        if (compare(id1, id2) != 0){
+            return compare(id1, id2);
+        }
+        id1 = ds1.getUrl("$id");
+        id2 = ds2.getUrl("$id");
+        if (compare(id1, id2) != 0){
+            return compare(id1, id2);
+        }
+        id1 = ds1.getSystemCode();
+        id2 = ds2.getSystemCode();
+        if (compare(id1, id2) != 0){
+            return compare(id1, id2);
+        }
+        id1 = ds1.getFullName();
+        id2 = ds2.getFullName();
+        return id1.compareTo(id2);
+     }
 
 }

@@ -35,14 +35,24 @@ public class DataSourceImporter {
     
     public static void main(String[] args) throws IDMapperException {
         ConfigReader.logToConsole();
-        InputStream stream = ConfigReader.getInputStream("DataSources.ttl");
+        InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
         StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
         Set<Statement> allStatements = reader.getVoidStatements();
         Set<Resource> resources = getDataSourceResources(allStatements);
+        HashMap<String, DataSource>  bases = new HashMap<String, DataSource>();
         for (Resource resource:resources){
             System.out.println(resource);
             Set<Statement> resourceStatements = getStatementsByResource(resource, allStatements);
             DataSource dataSource = createDataSource(resourceStatements, allStatements);
+            String urnbase = dataSource.getURN("");
+            if ((urnbase != null) && urnbase.length() > 1 && !urnbase.startsWith("null")){
+                DataSource oldDataSource = bases.get(urnbase);
+                if (oldDataSource != null && !oldDataSource.equals(dataSource)){
+                    throw new BridgeDBException("Base " + urnbase + " used in " + 
+                            dataSource + " and " + oldDataSource);
+                }
+                bases.put(dataSource.getURN(""), dataSource);
+            }
         }
     }
     
@@ -76,6 +86,8 @@ public class DataSourceImporter {
         String type = null;
         String urlPattern = null;
         String urnBase = null;
+        String identifiersOrgBase = null;
+        String wikipathwaysBase = null;
         
         for (Statement statement:dataSourceStatements){
             if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
@@ -99,6 +111,10 @@ public class DataSourceImporter {
                 urlPattern = statement.getObject().stringValue();
             } else if (statement.getPredicate().equals(BridgeDBConstants.URN_BASE_URI)){
                 urnBase = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI)){
+                identifiersOrgBase = statement.getObject().stringValue();
+           } else if (statement.getPredicate().equals(BridgeDBConstants.WIKIPATHWAYS_BASE_URI)){
+                wikipathwaysBase = statement.getObject().stringValue();
             } else {
                 throw new BridgeDBException ("Unexpected Statement " + statement);
             }

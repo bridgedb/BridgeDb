@@ -5,6 +5,8 @@
 package org.bridgedb.rdf;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.BioDataSource;
@@ -29,9 +31,14 @@ public class AndraIndetifiersOrg {
             System.out.println ("  "+ dataSource.getURN(""));
             System.out.println ("  " + andraMappings.get(fullName));
         }
+        ArrayList<String> values = new ArrayList(andraMappings.values());
+        Collections.sort(values);
+        for (String str : values) {
+            System.out.println(str.toString());
+        }
     }
 
-    public static String getNameSpace(DataSource dataSource){
+    public static String getWikiPathwaysNameSpace(DataSource dataSource){
         getAndraMappings();
         String result = andraMappings.get(dataSource.getFullName());
         if (result != null){
@@ -63,7 +70,7 @@ public class AndraIndetifiersOrg {
         return result;
     }
     
-    private static HashMap<String,String> getAndraMappings(){
+    public static HashMap<String,String> getAndraMappings(){
         if (andraMappings == null){
             loadAndraMappings();
         }
