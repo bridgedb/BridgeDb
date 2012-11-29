@@ -20,9 +20,9 @@ public interface MetaData {
 
     boolean hasRequiredValues();
     
-    boolean hasCorrectTypes();
+    boolean hasCorrectTypes() throws MetaDataException;
 
-    String validityReport(boolean includeWarnings);
+    String validityReport(boolean includeWarnings) throws MetaDataException;
 
     void validate() throws MetaDataException;
     

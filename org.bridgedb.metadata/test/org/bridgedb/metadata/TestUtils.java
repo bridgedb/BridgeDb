@@ -32,7 +32,7 @@ public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
         }        
     }
 
-    void checkRequiredValues(MetaDataCollection metaData){
+    void checkRequiredValues(MetaDataCollection metaData) throws MetaDataException{
         boolean ok = metaData.hasRequiredValuesOrIsSuperset();
         if (!ok){
             //This test will fail but with extra info
@@ -44,7 +44,7 @@ public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
         }        
     }
 
-    void checkCorrectTypes(MetaData metaData){
+    void checkCorrectTypes(MetaData metaData) throws MetaDataException{
         boolean ok = metaData.hasCorrectTypes();
         if (!ok){
             //This test will fail but with extra info

@@ -67,7 +67,7 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
         
 
     @Override
-    public boolean hasCorrectTypes() {
+    public boolean hasCorrectTypes() throws MetaDataException {
         for (MetaDataBase child:childMetaData){
             if (!child.hasCorrectTypes()){
                 return false;

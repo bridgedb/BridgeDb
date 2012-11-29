@@ -13,7 +13,7 @@ public class Measure
 	
 	public Measure(String fileName)
 	{
-		dest = new File (System.getProperty("user.home"), fileName);
+		dest = new File (new File (System.getProperty("user.home"), "output"), fileName);
 	}
 	
 	public void add(String key, String value, String unit)

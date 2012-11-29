@@ -117,7 +117,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }
 
     @Override
-    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) {
+    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
         appendSpecific(builder, tabLevel);
          if (type.equals(UNSPECIFIED)){
             if (includeWarnings){
@@ -151,7 +151,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         newLine(builder);
     }
      
-    public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel){
+    public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException{
         if (!isParent){
             //Wrong method called 
             appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
@@ -201,7 +201,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return isParent;
     }
 
-    public void appendSummary(StringBuilder builder, int tabLevel) {
+    public void appendSummary(StringBuilder builder, int tabLevel) throws MetaDataException {
         tab(builder, tabLevel);
         if (type.equals(UNSPECIFIED)){
             builder.append(label);

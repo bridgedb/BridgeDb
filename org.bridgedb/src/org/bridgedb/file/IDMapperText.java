@@ -1,5 +1,5 @@
 // BridgeDb,
-// An abstraction layer for identifer mapping services, both local and online.
+// An abstraction layer for identifier mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -283,5 +283,10 @@ public class IDMapperText extends IDMapperFile
         ((IDMappingReaderFromText)this.getIDMappingReader())
                 .setIDDelimiters(idDelimiters);
         this.idDelimiters = idDelimiters;
+    }
+    
+    public String toString()
+    {
+    	return url.toString();
     }
 }

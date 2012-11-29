@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE Ontology [
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY xml "http://www.w3.org/XML/1998/namespace" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     ontologyIRI="openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl">
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Declaration>
+        <Class IRI="#DataSource"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Organism"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#orgamism"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#fullName"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#idExample"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#latinName"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#mainUrl"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#primary"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#sysCode"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#type"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#urlPattern"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#urnBase"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#orgamism"/>
+            <Class IRI="#Organism"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#fullName"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#idExample"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#mainUrl"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#primary"/>
+            <Datatype abbreviatedIRI="xsd:boolean"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#sysCode"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#type"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#urlPattern"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#urnBase"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Organism"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#latinName"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#orgamism"/>
+        <Class IRI="#Organism"/>
+    </ObjectPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#fullName"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#idExample"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#latinName"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#mainUrl"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#primary"/>
+        <Datatype abbreviatedIRI="xsd:boolean"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#sysCode"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#type"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#urlPattern"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#urnBase"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 3.2.3.1824) http://owlapi.sourceforge.net -->
+

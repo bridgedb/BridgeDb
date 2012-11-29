@@ -1,5 +1,5 @@
 // BridgeDb,
-// An abstraction layer for identifer mapping services, both local and online.
+// An abstraction layer for identifier mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -299,11 +299,19 @@ public final class DataSource
 		
 		if (byFullName.containsKey(fullName))
 		{
-			current = byFullName.get(fullName);
+            current = byFullName.get(fullName);
+//            if (!current.sysCode.equals(sysCode)){
+//                throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode " + 
+//                        current.sysCode + " which does not match new systemCode " + sysCode);
+//            }
 		}
 		else if (bySysCode.containsKey(sysCode))
 		{
 			current = bySysCode.get(sysCode);
+//            if (!current.fullName.equals(fullName)){
+//                throw new IllegalStateException ("SystemCode " + sysCode + " already used wtih fullName " + 
+//                        current.fullName + " which does not match new fullName " + fullName);
+//            }
 		}
 		else
 		{
@@ -471,9 +479,30 @@ public final class DataSource
 		return organism;
 	}
 
+	/**
+	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
+	 * @returns the DataSource for a given urn base, or null if the base is invalid.
+	 * If the given urn base is unknown, a new DataSource will be created with the full name equal to the urn base without "urn.miriam."  
+	 */
 	public static DataSource getByUrnBase(String base)
 	{
-		return byMiriamBase.get(base);
+		if (!base.startsWith ("urn:miriam:"))
+		{
+			return null;
+		}
+		DataSource current = null;
+		
+		if (byMiriamBase.containsKey(base))
+		{
+			current = byMiriamBase.get(base);
+		}
+		else
+		{
+			current = getByFullName(base.substring("urn:miriam:".length()));
+			current.urnBase = base;
+			byMiriamBase.put (base, current);
+		}
+		return current;
 	}
 
 }

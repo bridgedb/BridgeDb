@@ -261,12 +261,12 @@ public class LinksetVoidInformation implements MetaData {
     }
 
     @Override
-    public boolean hasCorrectTypes() {
+    public boolean hasCorrectTypes() throws MetaDataException {
         return collection.hasCorrectTypes();
     }
 
     @Override
-    public String validityReport(boolean includeWarnings) {
+    public String validityReport(boolean includeWarnings) throws MetaDataException {
         if (error.isEmpty()) {
             if (wrongSubject == 0 && wrongTarget == 0){
                  return collection.validityReport(includeWarnings) + "\nFound " + correctLinks + " links";

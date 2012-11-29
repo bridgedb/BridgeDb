@@ -143,7 +143,7 @@ public class LinksetLoaderImplentation{
         accessedFrom = null;
     }
 
-    protected String validityReport(boolean includeWarnings){
+    protected String validityReport(boolean includeWarnings) throws MetaDataException{
         return metaData.validityReport(includeWarnings);
     }
     
