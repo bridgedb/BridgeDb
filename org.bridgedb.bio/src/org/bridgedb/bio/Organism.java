@@ -35,11 +35,13 @@ public enum Organism
 {
 	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito"),
 	ArabidopsisThaliana("Arabidopsis thaliana", "At"),
+	Aspergillusniger("Aspergillus niger", "An", "Black mold"),
 	BacillusSubtilis("Bacillus subtilis", "Bs"),
 	BosTaurus("Bos taurus", "Bt", "Cow"),
 	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm"),
 	CanisFamiliaris("Canis familiaris", "Cf", "Dog"),
 	CionaIntestinalis("Ciona intestinalis", "Ci", "Sea Squirt"),
+	Clostridiumthermocellum("Clostridium thermocellum", "Ct", "Cthe"),
 	DanioRerio("Danio rerio", "Dr", "Zebra fish"),
 	DasypusNovemcinctus("Dasypus novemcinctus", "Dn", "Armadillo"),
 	DrosophilaMelanogaster("Drosophila melanogaster", "Dm", "Fruit fly"),
@@ -50,6 +52,8 @@ public enum Organism
 	EquusCaballus("Equus caballus", "Qc", "Horse"),
 	
 	GallusGallus("Gallus gallus", "Gg", "Chicken"),
+	GlycineMax("Glycine max", "Gm", "Soybean"),
+	GibberellaZeae("Gibberella zeae", "Gz", "Fusarium graminearum"),
 	HomoSapiens("Homo sapiens", "Hs", "Human"),
 	LoxodontaAfricana ("Loxodonta africana", "La", "Elephant"),
 	MacacaMulatta ("Macaca mulatta", "Ml", "Rhesus Monkey"),
@@ -62,6 +66,7 @@ public enum Organism
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish"),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit"),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee"),
+	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato"),
 	SusScrofa("Sus scrofa", "Ss", "Pig"),
 	
 	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	

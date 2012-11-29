@@ -64,9 +64,9 @@ public class BioDataSource
 	public static final DataSource PUBCHEM = DataSource.register (
 		"Cp", "PubChem").asDataSource();
 	public static final DataSource PUBCHEM_SUBSTANCE = DataSource.register (
-		"Cps", "PubChem substance").asDataSource();
+		"Cps", "PubChem-substance").asDataSource();
 	public static final DataSource PUBCHEM_COMPOUND = DataSource.register (
-		"Cpc", "PubChem compound").asDataSource();
+		"Cpc", "PubChem-compound").asDataSource();
 	public static final DataSource CHEMSPIDER = DataSource.register (
 		"Cs", "Chemspider").asDataSource();
 	public static final DataSource SGD = DataSource.register (
@@ -77,47 +77,67 @@ public class BioDataSource
 		"Ec", "Ecoli").asDataSource();
 	public static final DataSource EMBL = DataSource.register (
 		"Em", "EMBL").asDataSource();
-	/** @deprecated use one of the organism-specific system codes instead */ 
 	public static final DataSource ENSEMBL = DataSource.register (
 		"En", "Ensembl").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_MOSQUITO = DataSource.register (
 		"EnAg", "Ensembl Mosquito").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource GRAMENE_ARABIDOPSIS = DataSource.register (
 		"EnAt", "Gramene Arabidopsis").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_BSUBTILIS = DataSource.register (
 		"EnBs", "Ensembl B. subtilis").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_COW = DataSource.register (
 		"EnBt", "Ensembl Cow").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_CELEGANS = DataSource.register (
 		"EnCe", "Ensembl C. elegans").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_DOG = DataSource.register (
 		"EnCf", "Ensembl Dog").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_FRUITFLY = DataSource.register (
 		"EnDm", "Ensembl Fruitfly").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_ZEBRAFISH = DataSource.register (
 		"EnDr", "Ensembl Zebrafish").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_ECOLI = DataSource.register (
 		"EnEc", "Ensembl E. coli").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_CHICKEN = DataSource.register (
 		"EnGg", "Ensembl Chicken").asDataSource(); 
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_HUMAN = DataSource.register (
 		"EnHs", "Ensembl Human").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_MOUSE = DataSource.register (
 		"EnMm", "Ensembl Mouse").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_MTUBERCULOSIS = DataSource.register (
 		"EnMx", "Ensembl M. tuberculosis").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource GRAMENE_RICE = DataSource.register (
 		"EnOj", "Gramene Rice").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_CHIMP = DataSource.register (
 		"EnPt", "Ensembl Chimp").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_HORSE = DataSource.register (
 		"EnQc", "Ensembl Horse").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_RAT = DataSource.register (
 		"EnRn", "Ensembl Rat").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_SCEREVISIAE = DataSource.register (
 		"EnSc", "Ensembl Yeast").asDataSource();
+	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_XENOPUS = DataSource.register (
 		"EnXt", "Ensembl Xenopus").asDataSource();
+	public static final DataSource ENSEMBL_PLANTS = DataSource.register (
+		"EP", "Ensembl Plants").asDataSource();
 	public static final DataSource FLYBASE = DataSource.register (
 		"F", "FlyBase").asDataSource();
 	public static final DataSource GENBANK = DataSource.register (
@@ -178,18 +198,26 @@ public class BioDataSource
 		"Q", "RefSeq").asDataSource();
 	public static final DataSource RGD = DataSource.register (
 		"R", "RGD").asDataSource(); 
+	public static final DataSource REACTOME = DataSource.register (
+		"Re", "Reactome").asDataSource();
+	public static final DataSource KEGG_REACTION = DataSource.register (
+		"Rk", "Kegg Reaction").asDataSource();
 	public static final DataSource RFAM = DataSource.register (
 		"Rf", "Rfam").asDataSource();
+	/** NB the UNIPROT datasource is for Uniprot accession numbers like P12345 */
 	public static final DataSource UNIPROT = DataSource.register (
-		"S", "Uniprot/TrEMBL").asDataSource();
+		"S", "Uniprot/TrEMBL").asDataSource(); 
+	/** THE UNIPROT_ID datasource is for id's like P53_HUMAN */
+	public static final DataSource UNIPROT_ID = DataSource.register (
+		"Sid", "UNIPROT_ID").asDataSource();
 	public static final DataSource SNP = DataSource.register (
 		"Sn", "dbSNP").asDataSource();
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
 		"T", "GeneOntology").asDataSource();
 	public static final DataSource TIGR = DataSource.register (
-			"Ti", "TIGR").asDataSource(); 
+		"Ti", "TIGR").asDataSource(); 
 	public static final DataSource TUBERCULIST = DataSource.register (
-			"Tb", "TUBERCULIST").asDataSource(); 
+		"Tb", "TUBERCULIST").asDataSource(); 
 	public static final DataSource UNIGENE = DataSource.register (
 		"U", "UniGene").asDataSource();
 	public static final DataSource UCSC = DataSource.register (
@@ -292,6 +320,12 @@ public class BioDataSource
 		DataSourcePatterns.registerPattern(
 				BioDataSource.UNIPROT, 
 				Pattern.compile("([A-N,R-][0-9][A-Z][A-Z,0-9][A-Z,0-9][0-9])|([O,P,Q][0-9][A-Z,0-9][A-Z,0-9][A-Z,0-9][0-9])")
+		);
+
+		//Swiss Prot (http://expasy.org/sprot/userman.html#ID_line)
+		DataSourcePatterns.registerPattern(
+				BioDataSource.UNIPROT_ID, 
+				Pattern.compile("[A-Z0-9]+_[A-Z]+")
 		);
 
 		//gene ontology
@@ -459,7 +493,7 @@ public class BioDataSource
 
 		DataSourcePatterns.registerPattern(
 				BioDataSource.CAS,
-				Pattern.compile("\\d+-\\d+-\\d+")
+				Pattern.compile("\\d+-\\d{2}-\\d{1}")
 		);
 		
 		DataSourcePatterns.registerPattern(
@@ -476,6 +510,7 @@ public class BioDataSource
 				BioDataSource.KEGG_COMPOUND,
 				Pattern.compile("C\\d+")
 		);
+		
 		DataSourcePatterns.registerPattern(
 				BioDataSource.KEGG_GENES,
 				Pattern.compile("[a-z]{3}:.+")
@@ -506,6 +541,16 @@ public class BioDataSource
 		ensemblBySpecies.put (Organism.XenopusTropicalis, ENSEMBL_XENOPUS);
 		ensemblBySpecies.put (Organism.DanioRerio, ENSEMBL_ZEBRAFISH);		
 		ensemblBySpecies.put (Organism.MycobacteriumTuberculosis, ENSEMBL_MTUBERCULOSIS);
+		
+		//Reactions
+		DataSourcePatterns.registerPattern(
+				BioDataSource.KEGG_REACTION,
+				Pattern.compile("^R\\d+$")
+		);
+		DataSourcePatterns.registerPattern(
+				BioDataSource.REACTOME,
+				Pattern.compile("^REACT_\\d+(\\.\\d+)?$")
+		);
 	}
 	
 	/**
@@ -565,3 +610,4 @@ public class BioDataSource
 		
 	}
 }
+
