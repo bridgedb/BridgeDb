@@ -153,6 +153,9 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
     
     private static RDFParser getParser(File file){
         String fileName = file.getName();
+        if (fileName.endsWith(".n3")){
+            fileName = "try.ttl";
+        }
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
         FileFormat fileFormat = reg.getFileFormatForFileName(fileName);
         if (fileFormat == null || !(fileFormat instanceof RDFFormat)){
