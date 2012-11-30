@@ -1890,7 +1890,7 @@ public class WSLinksetService extends WSUrlService{
             addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
             addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
             sb.append("\n<h1>Validate a File as RDF.</h1>");
-            addValidateString(sb, ValidationType.LINKSMINIMAL);
+            addValidateString(sb, ValidationType.ANY_RDF);
             addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
             addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
             addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
