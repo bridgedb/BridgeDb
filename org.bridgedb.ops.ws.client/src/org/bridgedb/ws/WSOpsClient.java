@@ -151,8 +151,10 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
         
     @Override
-    public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException {
+    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add("code", sourceSysCode);
+        params.add("targetCode", targetSysCode);
         //Make service call
         List<MappingSetInfoBean> result = 
                 webResource.path("getMappingSetInfos")

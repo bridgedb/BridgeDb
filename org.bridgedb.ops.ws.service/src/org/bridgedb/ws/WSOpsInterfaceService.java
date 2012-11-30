@@ -211,20 +211,36 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
         OverallStatisticsBean bean = OverallStatisticsBeanFactory.asBean(overallStatistics);
         return bean;
     }
-
-
+    
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/getMappingSetInfos") 
-    public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException {
-        List<MappingSetInfo> infos = urlMapper.getMappingSetInfos();
+    public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam("code") String scrCode,
+            @QueryParam("targetCode") String targetCode) throws IDMapperException {
+        List<MappingSetInfo> infos;
+        if (scrCode == null || scrCode.isEmpty()) {
+            if (targetCode == null || targetCode.isEmpty()) {
+                infos = urlMapper.getMappingSetInfos();
+            } else {
+                throw new BridgeDBException ("code parameter missing."
+                        + "Please provide both the code and the targetCode");
+            }
+        } else {
+            if (targetCode == null || targetCode.isEmpty()) {
+                throw new BridgeDBException ("targetCode parameter missing. "
+                        + "Please provide both the code and the targetCode");
+            } else {
+                infos = urlMapper.getMappingSetInfos(scrCode, targetCode);
+            }
+            
+        }
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
             results.add(MappingSetInfoBeanFactory.asBean(info));
         }
         return results;
-    }
+   }
 
     @Override
     @GET

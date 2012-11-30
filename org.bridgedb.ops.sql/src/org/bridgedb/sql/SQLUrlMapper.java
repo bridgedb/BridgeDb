@@ -471,6 +471,20 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
     
     @Override
+    public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException {
+        String query = ("select * from mappingSet WHERE sourceDataSource = \"" + sourceSysCode + 
+                "\" AND targetDataSource = \"" + targetSysCode + "\";");
+        Statement statement = this.createStatement();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            return resultSetToMappingSetInfos(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+        }
+    }
+
+    @Override
     public Set<String> getUriSpaces(String dataSource) throws BridgeDbSqlException {
         String query = ("SELECT uriSpace FROM url "
                 + " WHERE dataSource = '" + dataSource + "'");

@@ -292,6 +292,18 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
+    public void testGetMappingSetInfosByDataSource() throws IDMapperException {
+        report("GetGetMappingSetInfos");
+        List<MappingSetInfo> results = 
+                urlMapper.getMappingSetInfos(DataSource2.getSystemCode(), DataSource1.getSystemCode());
+        assertThat (results.size(), greaterThanOrEqualTo(1));
+        for (MappingSetInfo info:results){
+            assertEquals(DataSource2.getSystemCode(), info.getSourceSysCode());
+            assertEquals(DataSource1.getSystemCode(), info.getTargetSysCode());
+        }
+    }
+
+    @Test
     public void testGetUriSpaces() throws IDMapperException {
         report("GetUriSpaces");
         Set<String> results = urlMapper.getUriSpaces(map2xref3.getDataSource().getSystemCode());
