@@ -190,7 +190,18 @@ public final class BiomartClient {
      * @return result {@link BufferedReader}
      * @throws IOException if failed to read webservice
      */
-    public BufferedReader sendQuery(String xmlQuery) throws IOException {
+    public BufferedReader sendQuery(String xmlQuery) throws IOException 
+    {
+        return new BufferedReader(new InputStreamReader(sendQueryAsStream (xmlQuery)), BUFFER_SIZE);
+    }
+    
+    /**
+     * Send the XML query to Biomart, and get the result as table.
+     * @param xmlQuery query xml
+     * @return result {@link BufferedReader}
+     * @throws IOException if failed to read webservice
+     */
+    public InputStream sendQueryAsStream (String xmlQuery) throws IOException {
 
         //System.out.println("=======Query = " + xmlQuery);
 
@@ -211,7 +222,7 @@ public final class BiomartClient {
         ps = null;
         os = null;
 
-        return new BufferedReader(new InputStreamReader(uc.getInputStream()), BUFFER_SIZE);
+        return uc.getInputStream();
     }
 
     /**
