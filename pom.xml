@@ -37,7 +37,7 @@
  	<module>org.bridgedb.ws.client</module>
    	<module>org.bridgedb.ops.ws.client</module>
 
-    <module>org.bridgedb.my.loader</module>
+    <module>org.bridgedb.tools.loader</module>
     <!-- The modules below this comment are not actively used by OPS but are part of BridgeDB -->
    	<module>org.bridgedb.bio</module>
     <module>org.bridgedb.rdb</module>
