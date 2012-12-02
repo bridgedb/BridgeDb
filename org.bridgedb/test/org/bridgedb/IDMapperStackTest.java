@@ -23,9 +23,11 @@ public class IDMapperStackTest extends TestCase
 		stack = new IDMapperStack();
 		stack.setTransitive(true);
 		
-		for (String fileName : FILENAMES) {                  // Load all IDMappers for test data files
-			URL url = IDMapperStackTest.class.getResource("/org/bridgedb/" + fileName + ".csv");
-
+		for (String fileName : FILENAMES) 
+		{   // Load all IDMappers for test data files
+			String fullName = "/org/bridgedb/" + fileName + ".csv";
+			URL url = IDMapperStackTest.class.getResource(fullName);
+			assertNotNull("Could not find resource in classpath: " + fullName, url);
 			IDMapper m = BridgeDb.connect("idmapper-text:" + url);
 			mappers.put(fileName, m);
 			stack.addIDMapper(m);

@@ -104,6 +104,7 @@
 			<path refid="test.deps"/>
 			<pathelement location="resources"/>
 			<pathelement location="build"/>
+			<pathelement location="test"/>
 		</path>
 		<javac srcdir="test" debug="true" 
 					includes="**"
