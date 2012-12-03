@@ -163,7 +163,8 @@ public class WSFame extends WSOpsInterfaceService {
         api.describe_IDMapper(sb, first, firstMaps, second, freeSearchSupported);
         api.describe_IDMapperCapabilities(sb, first, firstMaps, keys, freeSearchSupported);
         api.describe_URLMapper(sb, URL1, URL2, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
-        api.describe_Info(sb);
+        api.describe_Info(sb, first, firstMaps);
+        api.describe_Graphviz(sb);
         
         sb.append("</body></html>");
         //ystem.out.println("Done "+ (new Date().getTime() - start));

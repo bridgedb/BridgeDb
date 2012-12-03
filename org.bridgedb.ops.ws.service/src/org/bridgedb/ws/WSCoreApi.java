@@ -37,10 +37,14 @@ public class WSCoreApi {
     public WSCoreApi() {      
     }
             
-    private final String ID_CODE = "id_code";
-    private final String FIRST_ID_PARAMETER = "?" + WsConstants.ID + "=";
-    private final String ID_PARAMETER = "&" + WsConstants.ID + "=";
-    private final String DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsConstants.DATASOURCE_SYSTEM_CODE + "=";
+    private static final String ID_CODE = "id_code";
+    private static final String FIRST_ID_PARAMETER = "?" + WsConstants.ID + "=";
+    private static final String ID_PARAMETER = "&" + WsConstants.ID + "=";
+    private static final String DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsConstants.DATASOURCE_SYSTEM_CODE + "=";
+    final static String FIRST_SOURCE_PARAMETER = "?" + WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + "=";
+    final static String TARGET_PARAMETER = "&" + WsConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
+    final static String FIRST_TEXT_PARAMETER = "?" + WsConstants.TEXT + "=";
+    final static String LIMIT5_PARAMETER = "&" + WsConstants.LIMIT + "=5";
 
     protected void describeParameter(StringBuilder sb){
         sb.append("<h2>Parameters </h2>");
@@ -345,18 +349,16 @@ public class WSCoreApi {
                         sb.append("</a> (default available)</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                    String text_part = "?" + WsConstants.TEXT + "=";
-                    String limit5 = "&" + WsConstants.LIMIT + "=5";
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsConstants.FREE_SEARCH);
-                    sb.append(text_part);
+                    sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(URLEncoder.encode(first.getId(), "UTF-8"));
-                    sb.append(limit5);
+                    sb.append(LIMIT5_PARAMETER);
                     sb.append("\">");
                     sb.append(WsConstants.FREE_SEARCH);
-                    sb.append(text_part);
+                    sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(first.getId());
-                    sb.append(limit5);
+                    sb.append(LIMIT5_PARAMETER);
                     sb.append("</a></li>");    
             sb.append("</ul>");
     }
@@ -520,19 +522,17 @@ public class WSCoreApi {
                         sb.append("</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                    String source_part = "?" + WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + "=";
-                    String target_part = "&" + WsConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsConstants.IS_MAPPING_SUPPORTED);
-                    sb.append(source_part);
+                    sb.append(FIRST_SOURCE_PARAMETER);
                     sb.append(first.getDataSource().getSystemCode());
-                    sb.append(target_part);
+                    sb.append(TARGET_PARAMETER);
                     sb.append(firstMaps.iterator().next().getDataSource().getSystemCode());
                     sb.append("\">");
                     sb.append(WsConstants.IS_MAPPING_SUPPORTED);
-                    sb.append(source_part);
+                    sb.append(FIRST_SOURCE_PARAMETER);
                     sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
-                    sb.append(target_part);
+                    sb.append(TARGET_PARAMETER);
                     sb.append(URLEncoder.encode(firstMaps.iterator().next().getDataSource().getSystemCode(), "UTF-8"));
                     sb.append("</a></li>");    
             sb.append("</ul>");

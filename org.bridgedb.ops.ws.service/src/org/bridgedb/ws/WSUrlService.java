@@ -65,7 +65,7 @@ public class WSUrlService extends WSFame{
     
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/graphviz")
+    @Path("/" + WsOpsConstants.GRAPHVIZ)
     public Response graphvizDot() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos();

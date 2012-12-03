@@ -144,7 +144,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     @Override
     public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException {
         MappingSetInfoBean result = 
-                webResource.path(WsOpsConstants.GET_MAPPING_SET_INFO + "/" + mappingSetId)
+                webResource.path(WsOpsConstants.GET_MAPPING_INFO + "/" + mappingSetId)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<MappingSetInfoBean>() {});
          return result;
@@ -157,7 +157,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
         params.add(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE, targetSysCode);
         //Make service call
         List<MappingSetInfoBean> result = 
-                webResource.path(WsOpsConstants.GET_MAPPING_SET_INFOS)
+                webResource.path(WsOpsConstants.GET_MAPPING_INFO)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<MappingSetInfoBean>>() {});

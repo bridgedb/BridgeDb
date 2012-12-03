@@ -212,10 +212,18 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
         return bean;
     }
     
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/" + WsOpsConstants.GET_MAPPING_INFO + WsOpsConstants.XML) 
+    public List<MappingSetInfoBean> getMappingSetInfosXML(@QueryParam(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
+        return getMappingSetInfos(scrCode, targetCode);
+    }
+    
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.GET_MAPPING_SET_INFOS) 
+    @Path("/" + WsOpsConstants.GET_MAPPING_INFO) 
     public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
         List<MappingSetInfo> infos;
@@ -242,12 +250,12 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
             results.add(MappingSetInfoBeanFactory.asBean(info));
         }
         return results;
-   }
+    }
 
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.GET_MAPPING_SET_INFO + "/{id}")
+    @Path("/" + WsOpsConstants.GET_MAPPING_INFO + "/{id}")
     public MappingSetInfoBean getMappingSetInfo(@PathParam("id") String idString) throws IDMapperException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
