@@ -2413,6 +2413,21 @@ public class WSLinksetService extends WSUrlService{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
 	}
 
+    
+    
+    @GET
+	@Path("/test")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response test(@Context HttpServletRequest httpServletRequest) throws IOException, IDMapperException {
+        if (logger.isDebugEnabled()){
+            logger.debug("test called");
+        }
+       
+        StringBuilder sb = topAndSide("Loaders Index", httpServletRequest);
+       
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+	}    
+   
 }
 
 
