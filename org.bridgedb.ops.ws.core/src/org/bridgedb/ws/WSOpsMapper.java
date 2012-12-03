@@ -142,16 +142,6 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException {
-        List<MappingSetInfoBean> beans = opsService.getMappingSetInfos(null, null);
-        ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 
-        for (MappingSetInfoBean bean:beans){
-            results.add(MappingSetInfoBeanFactory.asMappingSetInfo(bean));
-        }
-        return results;  
-    }
-
-    @Override
     public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException {
         List<MappingSetInfoBean> beans = opsService.getMappingSetInfos(sourceSysCode, targetSysCode);
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 

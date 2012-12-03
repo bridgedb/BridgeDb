@@ -176,15 +176,6 @@ public interface URLMapper extends IDMapper{
      */
     public MappingSetInfo getMappingSetInfo(int mappingSetId) throws IDMapperException;
     
-    /**
-     * Obtains some statistics for each MappingSet in the data.
-     * <p>
-     * @See MappingSetInfo for details of exactky what is returned
-     * @return Info for each Mapping Set
-     * @throws IDMapperException 
-     */
-    public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
-    
     /*
      * Obtains some statistics for each MappingSet in the data from the source to the target
      * <p>

@@ -85,11 +85,6 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append(WsOpsConstants.URL_EXISTS);
                 sb.append("</a></dt>");
         sb.append("<dd>State if the URL is know to the Mapping Service or not</dd>");
-        sb.append("<dt><a href=\"#");
-                sb.append(WsOpsConstants.URL_SEARCH);
-                sb.append("\">");
-                sb.append(WsOpsConstants.URL_SEARCH);
-                sb.append("</a></dt>");
         if (freeSearchSupported){
             sb.append("<dt><a href=\"#");
                     sb.append(WsOpsConstants.URL_SEARCH);
@@ -315,6 +310,7 @@ public class WSOpsApi extends WSCoreApi {
                     sb.append(WsOpsConstants.XML);
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
+                    String tgtSysCode = firstMaps.iterator().next().getDataSource().getSystemCode();
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsOpsConstants.GET_MAPPING_INFO);
                     sb.append(FIRST_SOURCE_PARAMETER);

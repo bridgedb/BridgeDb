@@ -26,6 +26,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -52,9 +53,11 @@ public class WSUrlService extends WSFame{
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
-    public Response getMappingInfo(@Context HttpServletRequest httpServletRequest) 
+    public Response getMappingInfo(@QueryParam(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
+            @Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
-        List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos();
+        List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos(scrCode, targetCode);
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
         sb.append("\n<p>Warning summary lines are just a sum of the mappings from all mapping files.");
         sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
@@ -68,7 +71,7 @@ public class WSUrlService extends WSFame{
     @Path("/" + WsOpsConstants.GRAPHVIZ)
     public Response graphvizDot() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
-        List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos();
+        List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos(null, null);
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
         sb.append("digraph G {");
         for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){

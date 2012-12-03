@@ -226,25 +226,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @Path("/" + WsOpsConstants.GET_MAPPING_INFO) 
     public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
-        List<MappingSetInfo> infos;
-        if (scrCode == null || scrCode.isEmpty()) {
-            if (targetCode == null || targetCode.isEmpty()) {
-                infos = urlMapper.getMappingSetInfos();
-            } else {
-                throw new BridgeDBException (WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE+ " parameter missing."
-                        + "Please provide both the " + WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + 
-                        " and the " + WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
-            }
-        } else {
-            if (targetCode == null || targetCode.isEmpty()) {
-                throw new BridgeDBException (WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE + " parameter missing. "
-                        + "Please provide both the " + WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + 
-                        " and the " + WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
-            } else {
-                infos = urlMapper.getMappingSetInfos(scrCode, targetCode);
-            }
-            
-        }
+        List<MappingSetInfo> infos = urlMapper.getMappingSetInfos(scrCode, targetCode);
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
             results.add(MappingSetInfoBeanFactory.asBean(info));
