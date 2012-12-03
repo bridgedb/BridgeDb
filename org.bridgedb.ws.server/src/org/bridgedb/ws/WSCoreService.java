@@ -121,14 +121,14 @@ public class WSCoreService implements WSCoreInterface {
     @Override
     public List<XrefMapBean> mapID(
             @QueryParam(WsConstants.ID) List<String> id,
-            @QueryParam(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) List<String> scrCode,
+            @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) List<String> scrCode,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes) throws IDMapperException {
         if (id == null) throw new BridgeDBException(WsConstants.ID + " parameter missing");
         if (id.isEmpty()) throw new BridgeDBException(WsConstants.ID + " parameter missing");
-        if (scrCode == null) throw new BridgeDBException(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + " parameter missing");
-        if (scrCode.isEmpty()) throw new BridgeDBException(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + " parameter missing");
+        if (scrCode == null) throw new BridgeDBException(WsConstants.DATASOURCE_SYSTEM_CODE + " parameter missing");
+        if (scrCode.isEmpty()) throw new BridgeDBException(WsConstants.DATASOURCE_SYSTEM_CODE + " parameter missing");
         if (id.size() != scrCode.size()) throw new BridgeDBException("Must have same number of " + WsConstants.ID + 
-                " and " + WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + " parameters");
+                " and " + WsConstants.DATASOURCE_SYSTEM_CODE + " parameters");
         ArrayList<Xref> srcXrefs = new ArrayList<Xref>();
         for (int i = 0; i < id.size() ;i++){
             DataSource dataSource = DataSource.getBySystemCode(scrCode.get(i));

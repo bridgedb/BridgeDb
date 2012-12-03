@@ -24,7 +24,7 @@ public class WsConstants {
     static final String GET_SUPPORTED_TARGET_DATA_SOURCES = "getSupportedTgtDataSources";
     static final String IS_FREE_SEARCH_SUPPORTED = "isFreeSearchSupported";
     static final String IS_MAPPING_SUPPORTED = "isMappingSupported";
-    static final String MAP_ID = "/mapID";
+    static final String MAP_ID = "mapID";
     static final String PROPERTY = "property";
-    static final String XREF_EXISTS = "/xrefExists";
+    static final String XREF_EXISTS = "xrefExists";
 }

@@ -56,7 +56,7 @@ public class WSCoreClient implements WSCoreInterface{
             params.add(WsConstants.ID, one);
         }
         for (String one:scrCode){
-            params.add(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE, one);
+            params.add(WsConstants.DATASOURCE_SYSTEM_CODE, one);
         }
         for (String target:targetCodes){
             params.add(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
