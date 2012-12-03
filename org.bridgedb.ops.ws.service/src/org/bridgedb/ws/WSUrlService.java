@@ -59,9 +59,17 @@ public class WSUrlService extends WSFame{
             throws IDMapperException, UnsupportedEncodingException {
         List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos(scrCode, targetCode);
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
-        sb.append("\n<p>Warning summary lines are just a sum of the mappings from all mapping files.");
-        sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
-        MappingSetTableMaker.addTable(sb, mappingSetInfos);
+        if (mappingSetInfos.isEmpty()){
+            sb.append("\n<h1> No mapping found between ");
+            MappingSetTableMaker.addDataSourceLink(sb, scrCode);
+            sb.append(" and ");
+            MappingSetTableMaker.addDataSourceLink(sb, targetCode);
+            sb.append("</h1>");
+        } else {
+            sb.append("\n<p>Warning summary lines are just a sum of the mappings from all mapping files.");
+            sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
+            MappingSetTableMaker.addTable(sb, mappingSetInfos);
+        }
         sb.append("</body></html>");
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
