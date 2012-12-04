@@ -87,8 +87,8 @@ public class PredicateMaker {
         //So Borad, Narrow and mapping relation all go up to mapping Relation
         if (left.equals(SkosConstants.RELATED_MATCH) || left.equals(SkosConstants.BROAD_MATCH) || 
                 left.equals(SkosConstants.NARROW_MATCH)) {
-            if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return SkosConstants.MAPPING_RELATION;
-            if (right.equals(OwlConstants.SAME_AS)) return SkosConstants.MAPPING_RELATION;
+            if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return left;
+            if (right.equals(OwlConstants.SAME_AS)) return left;
             if (right.equals(SkosConstants.EXACT_MATCH)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.CLOSE_MATCH)) return SkosConstants.MAPPING_RELATION;
             if (right.equals(SkosConstants.MAPPING_RELATION)) return SkosConstants.MAPPING_RELATION;

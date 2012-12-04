@@ -24,7 +24,9 @@ import org.openrdf.model.Value;
  */
 public class PredicateMakerTest extends TestUtils{
     
-    private static ArrayList<URI> predicates;
+    private static ArrayList<URI> equivelentPredicates;
+    private static ArrayList<URI> skosPredicates;
+    private static ArrayList<URI> rankedPredicates;
     private static ArrayList<URI> otherPredicates;
     
     public PredicateMakerTest() {
@@ -32,12 +34,15 @@ public class PredicateMakerTest extends TestUtils{
     
     @BeforeClass
     public static void setUpClass() {
-        predicates = new ArrayList<URI>();
-        predicates.add(OwlConstants.SAME_AS);
-        predicates.add(OwlConstants.EQUIVALENT_CLASS);
-        predicates.add(SkosConstants.EXACT_MATCH);
-        predicates.add(SkosConstants.CLOSE_MATCH);
-        predicates.add(SkosConstants.MAPPING_RELATION);
+        equivelentPredicates = new ArrayList<URI>();
+        equivelentPredicates.add(OwlConstants.SAME_AS);
+        equivelentPredicates.add(OwlConstants.EQUIVALENT_CLASS);
+        skosPredicates = new ArrayList<URI>();
+        skosPredicates.add(SkosConstants.EXACT_MATCH);
+        skosPredicates.add(SkosConstants.CLOSE_MATCH);
+        skosPredicates.add(SkosConstants.MAPPING_RELATION);
+        rankedPredicates = new ArrayList<URI>(equivelentPredicates);
+        rankedPredicates.addAll(skosPredicates);
         otherPredicates = new ArrayList<URI>();
         otherPredicates.add(SkosConstants.MAPPING_RELATION);
         otherPredicates.add(SkosConstants.RELATED_MATCH);
@@ -63,13 +68,13 @@ public class PredicateMakerTest extends TestUtils{
     @Test
     public void testCombineOrder() throws Exception {
         report("combine Order");
-        for (int i = 0; i< predicates.size(); i++) {
-            for (int j = 0; j< predicates.size(); j++){
-                URI result = PredicateMaker.combine(predicates.get(i), predicates.get(j));
+        for (int i = 0; i< rankedPredicates.size(); i++) {
+            for (int j = 0; j< rankedPredicates.size(); j++){
+                URI result = PredicateMaker.combine(rankedPredicates.get(i), rankedPredicates.get(j));
                 if (i < j){
-                    assertEquals(predicates.get(j), result);
+                    assertEquals(rankedPredicates.get(j), result);
                 } else {
-                     assertEquals(predicates.get(i), result);
+                     assertEquals(rankedPredicates.get(i), result);
                 }
             }
         }
@@ -79,15 +84,14 @@ public class PredicateMakerTest extends TestUtils{
      * Test of combine method, of class PredicateMaker.
      */
     @Test
-    @Ignore
-    public void testOtherWithOrder() throws Exception {
-        report("combine Order with other");
-        for (int i = 0; i< predicates.size(); i++) {
+    public void testOtherWithEquivellent() throws Exception {
+        report("combine Order with equivelent");
+        for (int i = 0; i< equivelentPredicates.size(); i++) {
             for (int j = 0; j< otherPredicates.size(); j++){
-                URI result = PredicateMaker.combine(predicates.get(i), otherPredicates.get(j));
-                assertEquals(SkosConstants.MAPPING_RELATION, result);
-                result = PredicateMaker.combine(otherPredicates.get(j), predicates.get(i));
-                assertEquals(SkosConstants.MAPPING_RELATION, result);
+                URI result = PredicateMaker.combine(equivelentPredicates.get(i), otherPredicates.get(j));
+                assertEquals(otherPredicates.get(j), result);
+                result = PredicateMaker.combine(otherPredicates.get(j), equivelentPredicates.get(i));
+                assertEquals(otherPredicates.get(j), result);
             }
         }
     }
@@ -96,13 +100,32 @@ public class PredicateMakerTest extends TestUtils{
      * Test of combine method, of class PredicateMaker.
      */
     @Test
-    @Ignore
+    public void testOtherWithSkos() throws Exception {
+        report("combine Order with skos");
+        for (int i = 0; i< skosPredicates.size(); i++) {
+            for (int j = 0; j< otherPredicates.size(); j++){
+                URI result = PredicateMaker.combine(skosPredicates.get(i), otherPredicates.get(j));
+                assertEquals(SkosConstants.MAPPING_RELATION, result);
+                result = PredicateMaker.combine(otherPredicates.get(j), skosPredicates.get(i));
+                assertEquals(SkosConstants.MAPPING_RELATION, result);
+            }
+        }
+    }
+
+    /**
+     * Test of combine method, of class PredicateMaker.
+     */
+    @Test
     public void testOtherWithOther() throws Exception {
         report("combine Other with Other");
         for (int i = 0; i< otherPredicates.size(); i++) {
             for (int j = 0; j< otherPredicates.size(); j++){
                 URI result = PredicateMaker.combine(otherPredicates.get(i), otherPredicates.get(j));
-                assertEquals(SkosConstants.MAPPING_RELATION, result);
+                if (i == j){
+                    assertEquals(otherPredicates.get(i), result);                
+                } else {
+                    assertEquals(SkosConstants.MAPPING_RELATION, result);
+                }
             }
         }
     }
