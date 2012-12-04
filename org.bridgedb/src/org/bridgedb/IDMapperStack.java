@@ -1,5 +1,5 @@
 // BridgeDb,
-// An abstraction layer for identifer mapping services, both local and online.
+// An abstraction layer for identifier mapping services, both local and online.
 // Copyright 2006-2009 BridgeDb developers
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.bridgedb.impl.TransitiveGraph;
+
 /**
  * combines multiple {@link IDMapper}'s in a stack.
  * <p>
@@ -38,10 +40,36 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <p>
  * If the method returns a list, IDMapperStack joins
  * the result from all connected child databases together.
+ * <p>
+ * Transitive maps are deduced from the IDMappers, added to this 
+ * IDMapperStack. Transitive maps are enabled as soon as the transitivity 
+ * is set to be true.
+ * <p>  
+ * In order to calculate the deduced transitive mappings, we build
+ * a graph that represents the possible mappings supported by
+ * the IDMappers in this IDMapperStack. The nodes of this graph are
+ * DataSources, the Edges are IDMappers. Possible mappings are
+ * loop free paths in this graph. We consider a path p to be loop free 
+ * if no data source in p is reached twice by the same IDMapper.
+ * <p>
+ * The mapping graph for transitive maps is retained and re-calculated
+ * whenever an IDMapper is added or removed from this IDMapperStack.
+ * 
  */
 public class IDMapperStack implements IDMapper, AttributeMapper
 {
-	private List<IDMapper> gdbs = new CopyOnWriteArrayList<IDMapper>();
+	// reference shared with TransitiveGraph
+	private final List<IDMapper> gdbs = new CopyOnWriteArrayList<IDMapper>();
+
+	/** Helper class for calculating transitive paths */
+	private TransitiveGraph transitiveGraph = null;
+	
+	private TransitiveGraph getTransitiveGraph() throws IDMapperException
+	{
+		if (transitiveGraph == null)
+			transitiveGraph = new TransitiveGraph(gdbs);
+		return transitiveGraph;
+	}
 
 	/**
 	 * Create a fresh IDMapper from a connectionString and add it to the stack.
@@ -64,6 +92,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
     {
         if (idMapper!=null) {
             gdbs.add(idMapper);
+            transitiveGraph = null; // trigger rebuild.
         }
     }
     
@@ -89,11 +118,14 @@ public class IDMapperStack implements IDMapper, AttributeMapper
     
 	/**
 	 * Remove an idMapper from the stack.
+	 * Automatically rebuilds the mapping graph.
+	 * 
 	 * @param idMapper IDMapper to be removed.
 	 */
     public void removeIDMapper(IDMapper idMapper)
     {
     	gdbs.remove(idMapper);
+    	transitiveGraph = null; // trigger rebuild
     }
 
 	/**
@@ -197,18 +229,25 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 			return result;
 		}
 
-                /** {@inheritDoc} */
-                public boolean isMappingSupported(DataSource src, DataSource tgt)
-                                throws IDMapperException {
-                    for (IDMapper idm : IDMapperStack.this.gdbs)
-                    {
-                        if (idm.getCapabilities().isMappingSupported(src, tgt)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
+		/** {@inheritDoc} */
+		public boolean isMappingSupported(DataSource src, DataSource tgt)
+				throws IDMapperException {
+			
+			if(isTransitive)
+			{
+				return getTransitiveGraph().isTransitiveMappingSupported(src, tgt);
+			}
+			
+			else {
+			for (IDMapper idm : IDMapperStack.this.gdbs) {
+				if (idm.getCapabilities().isMappingSupported(src, tgt)) {
+					return true;
+				}
+			}
+			}
+			return false;
+		}		
+		
 		/**
 		 * @return true if free search is supported by one of the children
 		 */
@@ -274,6 +313,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 			return mapIDnormal(srcXrefs, tgtDataSources);
 		}
 	}
+	
 
 	/**
 	 * helper method to map Id's in non-transitive mode.
@@ -305,6 +345,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
+	
 
 	/**
 	 * helper method to map Id's in transitive mode.
@@ -318,6 +359,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	{
 		// Current implementation just repeatedly calls mapIDTransitive (Xref, Set<Ds>) 
 		// It may be possible to rearrange loops to optimize for fewer database calls.
+		
 		Map <Xref, Set<Xref>> result = new HashMap<Xref, Set<Xref>>();
 		for (Xref ref: srcXrefs)
 		{
@@ -325,7 +367,9 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
+	
 
+	
 	/** {@inheritDoc} */
 	public Set<String> getAttributes(Xref ref, String attrname)
 			throws IDMapperException 
@@ -384,6 +428,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
+	
 	
 	public Map<Xref, Set<String>> freeAttributeSearchEx (String query, String attrType, int limit) throws IDMapperException
 	{
@@ -453,48 +498,31 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 	
 	
 	/**
-	 * helper method to map Id's in transitive mode.
+	 * Helper method to map Id's in transitive mode.
+	 * Relies on pre-calculated mapping graph
+	 * in order to deduce transitively mappings.
+	 * 
 	 * @param ref Xref to map
 	 * @param resultDs target data sources
 	 * @return mapping result
 	 * @throws IDMapperException if one of the children fail
 	 */
-	private Set<Xref> mapIDtransitive(Xref ref, DataSource... resultDs) throws IDMapperException 
-	{
-		// first round
-		Set<Xref> result = new HashSet<Xref>();
-		Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays.asList(resultDs));
-		for (IDMapper i : gdbs)
+	private Set<Xref> mapIDtransitive(Xref ref, DataSource... resultDs)
+			throws IDMapperException {
+		
+		if( resultDs.length == 0 ) 
 		{
-			if (i == null || !i.isConnected()) continue;
-			
-			// map ref in IDMapper i
-			Set<Xref> round1 = i.mapID(ref);
-
-			for (Xref r1 : round1)
-			{
-				if (resultDs.length == 0 || dsFilter.contains(r1.getDataSource()))
-				{
-					result.add (r1);
-				}
-			}
-
-			// then map the result of that in all IDMappers j (j != i)
-			for (IDMapper j : gdbs)
-			{
-				if (j == null || !j.isConnected()) continue;
-				if (i == j) continue;
-				
-				Map<Xref, Set<Xref>> round2 = j.mapID(round1, resultDs); 
-				for (Xref key : round2.keySet())
-				{
-					result.addAll (round2.get (key));
-				}
-			}			
+			return getTransitiveGraph().mapIDtransitiveUntargetted(ref);
 		}
-		return result;
+		else
+		{
+			Set<DataSource> dsFilter = new HashSet<DataSource>(Arrays
+					.asList(resultDs));
+			Set<Xref> result = getTransitiveGraph().mapIDtransitiveTargetted(ref, dsFilter);
+			return result;
+		}
 	}
-	
+
 	/**
 	 * helper method to map Id's in transitive mode.
 	 * @param ref Xref to map
@@ -529,6 +557,7 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		return result;
 	}
 
+	
 	/** {@inheritDoc} */
 	public Map<String, Set<String>> getAttributes(Xref ref)
 			throws IDMapperException 
@@ -557,10 +586,11 @@ public class IDMapperStack implements IDMapper, AttributeMapper
 		}
 		return result;
 	}
-
+	
 	/** get all mappers */
 	public List<IDMapper> getMappers()
 	{
 		return gdbs;
 	}
+
 }
