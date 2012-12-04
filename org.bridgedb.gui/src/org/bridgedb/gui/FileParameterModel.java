@@ -22,7 +22,7 @@ public class FileParameterModel extends SimpleParameterModel implements BridgeDb
 	@Override
 	public String getConnectionString()
 	{
-		return "idmapper-text:file://" + getFile(0).getAbsolutePath();
+		return "idmapper-text:" + getFile(0).toURI();
 	}
 
 	@Override
@@ -52,6 +52,21 @@ public class FileParameterModel extends SimpleParameterModel implements BridgeDb
 	public Category getCategory()
 	{
 		return Category.CUSTOM;
+	}
+
+	private boolean enabled = false;
+	
+	@Override
+	public void loadClass() throws ClassNotFoundException
+	{
+		Class.forName("org.bridgedb.file.IDMapperText");
+		enabled = true;
+	}
+
+	@Override
+	public boolean isEnabled()
+	{
+		return enabled;
 	}
 
 }

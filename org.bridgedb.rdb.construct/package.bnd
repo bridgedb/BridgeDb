@@ -1,5 +1,0 @@
-Bundle-Name: org.bridgedb.rdb.construct
-Bundle-Version: 1.1.0
-Bundle-SymbolicName: org.bridgedb.rdb.construct
-Export-Package: * 
-Require-Bundle: derby;bundle-version="10.4.2000000", org.bridgedb.bio;bundle-version="1.1.0", org.bridgedb.rdb;bundle-version="1.1.0", org.bridgedb;bundle-version="1.1.0"

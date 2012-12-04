@@ -145,4 +145,19 @@ public class BridgeRestParameterModel extends AbstractParameterModel implements 
 		}				
 	}
 
+	private boolean enabled = false;
+	
+	@Override
+	public void loadClass() throws ClassNotFoundException
+	{
+		Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
+		enabled = true;
+	}
+
+	@Override
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+
 }

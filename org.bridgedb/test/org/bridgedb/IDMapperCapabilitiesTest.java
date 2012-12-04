@@ -21,6 +21,7 @@ package org.bridgedb;
 import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  * Test to be run on any class that implements IDMapperCapabilities
@@ -33,6 +34,7 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
+@Ignore
 public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     
     //Must be instantiated by implementation of these tests.

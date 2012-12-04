@@ -100,7 +100,7 @@ AND genmapp_XXXXXX_CS_YYYYYY.gene.Code IN ("En","Mb","L","X","Il","Ag","Q","Om",
 INSERT INTO link
 SELECT DISTINCT *
 FROM genmapp_XXXXXX_CS_YYYYYY.link
-WHERE genmapp_XXXXXX_CS_YYYYYY.link.Code_Right IN ("En,"Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
+WHERE genmapp_XXXXXX_CS_YYYYYY.link.Code_Right IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
 
 ##Add Ensembl IDs to right side of 'link' table
 INSERT INTO link

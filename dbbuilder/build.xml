@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<project name="org.bridgedb.tools.dbbuilder" default="jar" basedir=".">
+
+	<!-- absolute deps are used for building, testing and in the manifest classpath -->
+  <path id="absolute.deps">
+    <pathelement location="../dist/org.bridgedb.jar"/>
+    <pathelement location="../dist/org.bridgedb.bio.jar"/>
+    <pathelement location="../dist/org.bridgedb.rdb.jar"/>
+    <pathelement location="../dist/org.bridgedb.rdb.construct.jar"/>
+  </path>  
+
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
+	</path>
+
+  <import file="../build-common.xml" />
+
+
+</project>

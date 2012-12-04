@@ -36,18 +36,18 @@
  	<module>org.bridgedb.ws.client</module>
    	<module>org.bridgedb.ops.ws.client</module>
 
-    <module>org.bridgedb.my.loader</module>
+    <module>org.bridgedb.tools.loader</module>
     <!-- The modules below this comment are not actively used by OPS but are part of BridgeDB -->
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.ws.service</module>
  	<module>org.bridgedb.ops.ws.server</module>
-  	<!--module>org.bridgedb.webservice.bridgerest</module>
+  	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.webservice.cronos</module>
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
   	<module>examples</module>
-    <module>org.bridgedb.server</module-->
+    <module>org.bridgedb.server</module>
   </modules>
   
   	<build>

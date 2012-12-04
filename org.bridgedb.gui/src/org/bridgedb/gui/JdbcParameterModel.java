@@ -67,4 +67,21 @@ public class JdbcParameterModel extends SimpleParameterModel implements BridgeDb
 		return Category.DATABASE;
 	}
 
+	private boolean enabled = false;
+	
+	@Override
+	public void loadClass() throws ClassNotFoundException
+	{
+		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
+		enabled = true;
+		// optional...
+		Class.forName("com.mysql.jdbc.Driver");		
+	}
+
+	@Override
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+
 }

@@ -1,49 +1,40 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.tools.qc" default="dist" basedir=".">
-
-  <!-- always be java 1.5 compatible -->
-  <property name="ant.build.javac.target" value="1.5"/>
-  <property name="ant.build.javac.source" value="1.5"/>
-	
-  <property name="jar.name" value="../dist/org.bridgedb.tools.qc.jar"/>
   
-  <target name="prepare">
-	<mkdir dir="build"/>
-  </target>
-
-	<path id="class.path">
-		<pathelement location="../dist/org.bridgedb.jar"/>
-		<pathelement location="../dist/org.bridgedb.bio.jar"/>
-		<pathelement location="../dist/org.bridgedb.rdb.jar"/>
+	<!-- absolute deps are used for building, testing and in the manifest classpath -->
+	<path id="absolute.deps">
+		<fileset dir="../dist">
+			<include name="org.bridgedb.jar"/>
+			<include name="org.bridgedb.bio.jar"/>
+			<include name="org.bridgedb.rdb.jar"/>
+			<include name="org.bridgedb.rdb.construct.jar"/>
+		</fileset>
+		<fileset dir="../common-bundles">
+			<include name="com.google.collect_1.0.0.v201105210816.jar"/>
+		</fileset>
 	</path>
 
-  <target name="build" depends="prepare">
-	<javac srcdir="src"
-		   includes="**"
-		   debug="true"
-		   destdir="build">
-		   <classpath refid="class.path"/>
-	</javac>
-  </target>
-  
-  <target name="jar" depends="build">
-	<jar jarfile="${jar.name}">
+	<!-- transient deps are optional, they are used only in the manifest classpath -->
+	<path id="transient.deps">
+		<fileset dir="../dist">
+			<include name="derby.jar"/>
+		</fileset>
+	</path>
+
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
+	</path>
+
+  <!-- override main class in manifest -->
+  <target name="jar" depends="jar-common">
+	<jar jarfile="${jar.name}" update="true">
 	  <manifest>
 		<attribute name="Main-Class" value="org.bridgedb.tools.qc.BridgeQC"/>
-		<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar"/>
 	  </manifest>
-	  <fileset dir="build"/>
 	</jar>
   </target>
 
-  <target name="dist" depends="jar"/>
-
-  <target name="clean">
-	<delete dir="build"/>
-  </target>
-
-  <target name="dist-clean" depends="clean">
-	<delete file="${jar.name}"/>
-  </target>
+	<import file="../build-common.xml" />
 
 </project>

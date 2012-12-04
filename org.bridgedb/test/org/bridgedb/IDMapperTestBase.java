@@ -19,11 +19,13 @@
 package org.bridgedb;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * Base which sets up the static variables used by Tests such as IDMapperTest and IDMapperCapabilitiesTest
  * @author Christian
  */
+@Ignore
 public abstract class IDMapperTestBase {
 	
     //DataSource that MUST be supported.

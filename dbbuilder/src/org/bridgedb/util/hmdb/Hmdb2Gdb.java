@@ -35,9 +35,6 @@ import org.bridgedb.rdb.construct.GdbConstruct;
 import org.bridgedb.rdb.construct.GdbConstructImpl3;
 import org.bridgedb.util.hmdb.ParseHmdb.Compound;
 import org.bridgedb.util.hmdb.ParseHmdb.ParseException;
-import org.pathvisio.core.debug.Logger;
-import org.pathvisio.core.debug.StopWatch;
-import org.pathvisio.core.preferences.PreferenceManager;
 
 /**
  * Program to create a metabolite database based on a
@@ -57,12 +54,10 @@ public class Hmdb2Gdb
 	 */
 	public static void main(String[] args)
 	{
-		Logger.log.setStream (System.out);
 		String dbname = args[0];
 		String file = args[1];
 
 		Hmdb2Gdb h2g = new Hmdb2Gdb();
-		PreferenceManager.init();
 
     	try
     	{
@@ -87,28 +82,22 @@ public class Hmdb2Gdb
     	}
 		catch (IDMapperException e)
 		{
-			Logger.log.error ("IDMapperException ", e);
+			 e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			Logger.log.error ("Exception ", e);
+			e.printStackTrace();
 		}
 	}
 
 	GdbConstruct simpleGdb;
 	String dbName;
 
-	StopWatch timer;
-
 	private void init(String dbname, GdbConstruct simpleGdb) throws IDMapperException, ClassNotFoundException
 	{
-		timer = new StopWatch();
-
 		this.simpleGdb = simpleGdb;
 		this.dbName = dbname;
 
-    	Logger.log.info("Timer started");
-    	timer.start();
 //		simpleGdb.connect (true);
 
 		simpleGdb.createGdbTables();
@@ -126,17 +115,15 @@ public class Hmdb2Gdb
 	{
 		simpleGdb.commit();
 
-    	Logger.log.info("Timer stopped: " + timer.stop());
-
     	//TODO
-//    	Logger.log.info("total ids in gene table: " + simpleGdb.getGeneCount());
-    	Logger.log.info("total errors (duplicates): " + error);
+//    	System.out.println("total ids in gene table: " + simpleGdb.getGeneCount());
+    	System.out.println("total errors (duplicates): " + error);
 
-    	Logger.log.info("END processing text file");
+    	System.out.println("END processing text file");
 
-    	Logger.log.info("Compacting database");
+    	System.out.println("Compacting database");
 
-		Logger.log.info("Closing connections");
+		System.out.println("Closing connections");
 
 
     	simpleGdb.finalize();
@@ -147,7 +134,7 @@ public class Hmdb2Gdb
 
 	private void addCompound (Compound c) throws IDMapperException
 	{
-		Xref ref = new Xref (c.idHmdb, BioDataSource.HMDB);
+		Xref ref = c.idHmdb;
 		error += simpleGdb.addGene(ref);
 		error += simpleGdb.addLink(ref, ref);
 		error += simpleGdb.addAttribute(ref, "Symbol", c.symbol);
@@ -156,7 +143,7 @@ public class Hmdb2Gdb
 		if (c.symbol != null)
 		{
 			// hmdb id is actually also the NUGOWIKI id.
-			Xref right = new Xref (c.idHmdb, BioDataSource.NUGOWIKI);
+			Xref right = c.idHmdb;
 			error += simpleGdb.addGene (right);
 			error += simpleGdb.addLink (ref, right);
 		}
@@ -166,37 +153,32 @@ public class Hmdb2Gdb
 			error += simpleGdb.addAttribute(ref, "InChI", c.inchi);
 		}
 		
-		if (c.idKegg != null) for (String id : c.idKegg)
+		for (Xref right : c.idKegg)
 		{
-			Xref right = new Xref (id, BioDataSource.KEGG_COMPOUND);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idChebi != null) for (String id : c.idChebi)
+		for (Xref right : c.idChebi)
 		{
-			Xref right = new Xref ("CHEBI:" + id, BioDataSource.CHEBI);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idPubchem != null) for (String id : c.idPubchem)
+		for (Xref right : c.idPubchem)
 		{
-			Xref right = new Xref (id, BioDataSource.PUBCHEM);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idCas != null) for (String id : c.idCas)
+		for (Xref right : c.idCas)
 		{
-			Xref right = new Xref (id, BioDataSource.CAS);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
 
-		if (c.idWikipedia != null) for (String id : c.idWikipedia)
+		for (Xref right : c.idWikipedia)
 		{
-			Xref right = new Xref (id, BioDataSource.WIKIPEDIA);
 			error += simpleGdb.addGene(right);
 			error += simpleGdb.addLink(ref, right);
 		}
@@ -215,8 +197,6 @@ public class Hmdb2Gdb
 	private void run(InputStream is) throws IOException, IDMapperException
 	{
 		ParseHmdb parser = new ParseHmdb();
-		StopWatch sw = new StopWatch();
-		sw.start();
 		LineNumberReader br = new LineNumberReader (new InputStreamReader(is));
 		Compound c;
 		try
@@ -226,13 +206,13 @@ public class Hmdb2Gdb
 				progress++;
 				addCompound (c);
 				if(progress % PROGRESS_INTERVAL == 0) {
-					Logger.log.info("Processed " + progress + " record");
+					System.out.println("Processed " + progress + " record");
 					simpleGdb.commit();
 				}
 
-				Logger.log.info (c.symbol + " added");
+				System.out.println (c.symbol + " added");
 			}
-			Logger.log.info ("Total: " + progress);
+			System.out.println ("Total: " + progress);
 		}
 		catch (ParseException pe)
 		{
@@ -240,7 +220,6 @@ public class Hmdb2Gdb
 			System.err.println ("Please check that this is a valid metabocards file");
 			pe.printStackTrace();
 		}
-		Logger.log.info ("Finished in " + sw.stop() + "ms");
 
 	}
 

@@ -21,6 +21,10 @@ import java.io.LineNumberReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bridgedb.DataSource;
+import org.bridgedb.Xref;
+import org.bridgedb.bio.BioDataSource;
+
 /**
  * Parse Metabocards from Hmdb
  */
@@ -30,8 +34,25 @@ public class ParseHmdb
 	 * represents some information from
 	 * a single HMDB metabocard
 	 */
-	static class Compound
+	public static class Compound
 	{
+		private static final Xref[] EMPTY = new Xref[0];
+		
+		private Xref[] makeXrefs (DataSource ds, String value)
+		{
+			if (value == null) return EMPTY;
+			String[] fields = value.split("; ");
+			Xref[] result = new Xref[fields.length];
+			for (int i = 0; i < fields.length; ++i)
+			{
+				if (ds == BioDataSource.CHEBI)
+					result[i] = new Xref("CHEBI:" + fields[i], ds);
+				else
+					result[i] = new Xref(fields[i], ds);
+			}
+			return result;
+		}
+		
 		/** store a key, value field */
 		void storeField (String key, String value)
 		{
@@ -50,23 +71,23 @@ public class ParseHmdb
 			}
 			else if (key.equals("kegg_compound_id"))
 			{
-				idKegg = value == null ? null : value.split("; ");
+				idKegg = makeXrefs (BioDataSource.KEGG_COMPOUND, value);
 			}
 			else if (key.equals("biocyc_id"))
 			{
-				idBioc = value == null ? null : value.split("; ");
+				idBioc = makeXrefs (BioDataSource.BIOCYC, value);
 			}
 			else if (key.equals("pubchem_compound_id"))
 			{
-				idPubchem = value == null ? null : value.split("; ");
+				idPubchem = makeXrefs (BioDataSource.PUBCHEM_COMPOUND, value);
 			}
 			else if (key.equals("chebi_id"))
 			{
-				idChebi = value == null ? null : value.split("; ");
+				idChebi = makeXrefs (BioDataSource.CHEBI, value);
 			}
 			else if (key.equals("cas_number"))
 			{
-				idCas = value == null ? null : value.split("; ");
+				idCas = makeXrefs (BioDataSource.CAS, value);
 			}
 			else if (key.equals("synonyms"))
 			{
@@ -74,7 +95,7 @@ public class ParseHmdb
 			}
 			else if (key.equals("wikipedia_link"))
 			{
-				idWikipedia = value == null ? null : value.split("; ");
+				idWikipedia = makeXrefs (BioDataSource.WIKIPEDIA, value);
 			}
 			else if (key.equals("smiles_canonical"))
 			{
@@ -86,18 +107,18 @@ public class ParseHmdb
 			}
 		}
 
-		String idHmdb = null;
-		String symbol = null;
-		String formula = null;
-		String[] idKegg = null;
-		String[] idPubchem = null;
-		String[] idChebi = null;
-		String[] idCas = null;
-		String[] idBioc = null;
-		String[] idWikipedia = null;
-		String smiles = null;
-		String[] synonyms = null;
-		String inchi = null;
+		public Xref idHmdb = null;
+		public String symbol = null;
+		public String formula = null;
+		public Xref[] idKegg = null;
+		public Xref[] idPubchem = null;
+		public Xref[] idChebi = null;
+		public Xref[] idCas = null;
+		public Xref[] idBioc = null;
+		public Xref[] idWikipedia = null;
+		public String smiles = null;
+		public String[] synonyms = null;
+		public String inchi = null;
 	}
 
 	/**
@@ -106,7 +127,7 @@ public class ParseHmdb
 	 * not a valid metabocards file, or (possibly)
 	 * that the metabocards format has changed.
 	 */
-	static class ParseException extends Exception
+	public static class ParseException extends Exception
 	{
 		ParseException (String message)
 		{
@@ -123,7 +144,7 @@ public class ParseHmdb
 	 * Reads a single metabocard from a text file.
 	 * returns null if there are no more records to read.
 	 */
-	Compound readNext (LineNumberReader reader) throws IOException, ParseException
+	public Compound readNext (LineNumberReader reader) throws IOException, ParseException
 	{
 		Compound result = new Compound();;
 
@@ -148,7 +169,7 @@ public class ParseHmdb
 				if (m1.matches())
 				{
 					newState = 1;
-					result.idHmdb = m1.group(1);
+					result.idHmdb = new Xref (m1.group(1), BioDataSource.HMDB);
 				}
 				else if (line.equals (""))
 				{

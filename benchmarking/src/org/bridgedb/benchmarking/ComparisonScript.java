@@ -142,7 +142,7 @@ public class ComparisonScript
 			consensus = new HashMap<Xref, Set<Xref>>();
 			for (Xref ref : refs)
 			{
-				Multiset<Set<Xref>> frq = new HashMultiset<Set<Xref>>();
+				Multiset<Set<Xref>> frq = HashMultiset.create();
 				
 				for (SingleTest test : tests)
 				{
