@@ -40,10 +40,14 @@ Vitis vinifera	Wine Grape	29760	vvi	Vv
 Populus trichocarpa	Western Balsam Poplar	3694	pth	Pi
 Zea mays	Maize	4577	zm	Zm
 Bacillus subtilis	Bsubtilis	1423	bsu	Bs
-Escherichia coli K12	Ecoli K12	562	eco	Ec
-Mycobacterium tuberculosis H37Rv	Tuberculosis H37Rv			Mx
+Escherichia coli	Ecoli	562	eco	Ec
+Mycobacterium tuberculosis	Tuberculosis			Mx
 Neisseria collection	Neisseria			Nx
 Pyrococcus collection	Pytococcus			Px
 Staphylococcus collection	Staphylococcus			Sx
 Streptococcus collection	Streptococcus			Tx
 Aspergillus niger	Black mold	5061	ani	An
+Clostridium thermocellum	Cthe		cth	Ct
+Gibberella zeae	Fusarium gramaninearum	5518		Gz
+Solanum lycopersicum	Tomato	4081		Sl
+Glycine max	Soybean	3847		Gm	

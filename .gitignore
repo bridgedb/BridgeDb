@@ -5,11 +5,15 @@
 nbactions-local.xml
 nbactions.xml
 catalog*.xml
+*.~java
+nbactions-local.xml
+nbactions.xml
 
 # ignore target files #
 target/
 bin/
 build/
+/dbbuilder/output
 apidoc/
 dist/
 bridgedb-*.zip
@@ -18,6 +22,10 @@ bridgedb-*.gz
 # ignore log files #
 logs/
 *.log
+
+# generated checkstyle warnings
+/org.bridgedb/warnings.txt
+
 
 #ignore sqlConfig that overrides the one in resources
 org.bridgedb.sql/conf/OPS-IMS

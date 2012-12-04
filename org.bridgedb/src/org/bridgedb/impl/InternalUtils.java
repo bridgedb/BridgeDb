@@ -297,6 +297,25 @@ public final class InternalUtils
 		}
 		return result;
 	}
+	
+	/**
+	 * Join the ID part of a collection of Xrefs with a custom separator.
+	 * @param refs Xrefs from which the ids will be concatenated
+	 * @param sep separator string.
+	 * @return concatenation of the ids.
+	 */
+	public static String joinIds (Collection<Xref> refs, String sep)
+	{
+		boolean first = true;
+		StringBuilder builder = new StringBuilder();
+		for (Xref ref : refs)
+		{
+			if (!first) builder.append (sep);
+			builder.append (ref.getId());
+			first = false;
+		}
+		return builder.toString();
+	}
 
 	/** read a configuration file in the bridgedb xml format */
 	public static void readXmlConfig(InputSource is) throws ParserConfigurationException, SAXException, IOException

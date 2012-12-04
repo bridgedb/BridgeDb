@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb" default="dist" basedir=".">
 	
-  <property name="jar.name" value="../dist/org.bridgedb.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
   <property file="version.props"/>
@@ -10,12 +9,17 @@
 		<!-- no dependencies -->
 	</path>
 
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
+	</path>
+
 	<path id="transient.deps">
 		<!-- no dependencies -->
 	</path>
 
 	<path id="test.deps">
-		<pathelement location="build-lib/junit.jar"/>
+		<pathelement location="build-lib/junit4.jar"/>
 		<pathelement location="build-lib/measure.jar"/>
 	</path>
 

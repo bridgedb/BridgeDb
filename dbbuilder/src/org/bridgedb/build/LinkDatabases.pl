@@ -33,6 +33,11 @@ until ($answer =~ /(a|i)/i) {
 	chomp $answer;
 }
 
+my $pwd = `pwd`;
+chomp $pwd;
+my $config = 'gdb.config';
+open CONFIG, ">$config" or die $!;
+
 ## Begin Processing List
 
 foreach my $db (@bridgeFiles) {
@@ -56,6 +61,11 @@ foreach my $db (@bridgeFiles) {
 	for my $key (keys %speciesTable) {
 		if ($prefix[0] =~ $speciesTable{$key}[3]){
 			print "...linking $key\n";
+
+                        #add to config file
+                        my $gs = $speciesTable{$key}[0];
+                        $gs =~ s/_/ /;
+                        print CONFIG "$gs\t$pwd\/$db\n";
 			
 			#first remove any pre-existing directories
 			foreach my $ln (@existingLn) {
@@ -77,6 +87,8 @@ foreach my $db (@bridgeFiles) {
 	}
 	if ($prefix[0] =~ /metabolites/ ){
         	print "...linking metabolites\n";
+
+                print CONFIG "*\t$pwd\/$db\n";
                         
                 #first remove any pre-existing directories
                 foreach my $ln (@existingLn) {
@@ -101,6 +113,8 @@ foreach my $db (@bridgeFiles) {
 		print "\n\n $db NOT LINKED!\n\n";
 	}
 }
+
+close CONFIG;
 print "DONE!\n";
 
 

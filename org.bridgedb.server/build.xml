@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.server" default="dist" basedir=".">
- 	
-	<property name="dist.dir" value="../dist"/>
-	<property name="jar.name" value="${dist.dir}/org.bridgedb.server.jar"/>
 
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
@@ -16,6 +13,11 @@
 		<!-- None -->
 	</path>
 
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
+	</path>
+
 	<!-- test deps are only used for testing -->
 	<path id="test.deps">
 		<pathelement location="../org.bridgedb.rdb/lib/derby.jar"/>
@@ -24,13 +26,11 @@
 
   
 	<target name="jar" depends="build">
-		<mkdir dir="${dist.dir}"/>
-		<jar jarfile="${jar.name}">
+		<jar jarfile="${jar.name}" update="true">
 		  <manifest>
 			<attribute name="Main-Class" value="org.bridgedb.server.Server"/>
 			<attribute name="Class-Path" value="derby.jar org.bridgedb.jar org.bridgedb.bio.jar org.bridgedb.rdb.jar org.restlet.jar commons-cli-1.2.jar"/>
 		  </manifest>
-		  <fileset dir="build"/>
 		</jar>
 	</target>
 

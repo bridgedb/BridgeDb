@@ -16,16 +16,16 @@ DerbyDir=/home/socr/c/users2/apico/Derby/db-derby-10.4.2.0-bin/
 ## Special modification for Yeast database: swapping in SGD identifiers from external file
 if [[ $DatabaseSpecies == Sc ]]; then
 	rm ${ScriptsDir}/SGD_features.tab
-	wget http://downloads.yeastgenome.org/chromosomal_feature/SGD_features.tab
+	wget http://downloads.yeastgenome.org/curation/chromosomal_feature/SGD_features.tab
 	mv SGD_features.tab ${ScriptsDir}/.
 	${mysql} -e "create table ${DatabaseCS}.sgd (a varchar(31), b varchar(31), c varchar(31), d varchar(31), e varchar(31), f varchar(31), g varchar(31))";
 	${mysql} -e "load data local infile '${ScriptsDir}/SGD_features.tab' into table ${DatabaseCS}.sgd fields terminated by '\t' lines terminated by '\n'";
-	#${mysql} -e "create index i_a on ${DatabaseCS}.sgd (a)";
-	${mysql} -e "update ${DatabaseCS}.gene, ${DatabaseCS}.sgd set ${DatabaseCS}.gene.ID = ${DatabaseCS}.sgd.d where ${DatabaseCS}.gene.Symbol = ${DatabaseCS}.sgd.a and ${DatabaseCS}.gene.Code = 'D'";
-	${mysql} -e "update ${DatabaseCS}.attr, ${DatabaseCS}.sgd set ${DatabaseCS}.attr.ID = ${DatabaseCS}.sgd.d where ${DatabaseCS}.attr.Value = ${DatabaseCS}.sgd.a and ${DatabaseCS}.attr.Code = 'D'";
+	${mysql} -e "create index i_d on ${DatabaseCS}.sgd (d)";
+	${mysql} -e "update ${DatabaseCS}.gene, ${DatabaseCS}.sgd set ${DatabaseCS}.gene.ID = ${DatabaseCS}.sgd.a where ${DatabaseCS}.gene.Symbol = ${DatabaseCS}.sgd.d and ${DatabaseCS}.gene.Code = 'D'";
+	${mysql} -e "update ${DatabaseCS}.attr, ${DatabaseCS}.sgd set ${DatabaseCS}.attr.ID = ${DatabaseCS}.sgd.a where ${DatabaseCS}.attr.Value = ${DatabaseCS}.sgd.d and ${DatabaseCS}.attr.Code = 'D'";
 	${mysql} -e "alter table ${DatabaseCS}.link add column (ID_Right2 varchar(31))";
 	${mysql} -e "update ${DatabaseCS}.link set ID_Right2 = ID_Right where Code_Right = 'D'";
-	${mysql} -e "update ${DatabaseCS}.link, ${DatabaseCS}.sgd set ${DatabaseCS}.link.ID_Right = ${DatabaseCS}.sgd.d where ${DatabaseCS}.link.ID_Right2 = ${DatabaseCS}.sgd.a and ${DatabaseCS}.link.Code_Right = 'D'";
+	${mysql} -e "update ${DatabaseCS}.link, ${DatabaseCS}.sgd set ${DatabaseCS}.link.ID_Right = ${DatabaseCS}.sgd.a where ${DatabaseCS}.link.ID_Right2 = ${DatabaseCS}.sgd.d and ${DatabaseCS}.link.Code_Right = 'D'";
 	${mysql} -e "alter table ${DatabaseCS}.link drop column ID_Right2";
 fi
 

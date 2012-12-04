@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.bridgedb.rdb.construct
+Bundle-SymbolicName: org.bridgedb.rdb.construct
+Bundle-Version: 1.1.0
+Export-Package: org.bridgedb.rdb.construct
+Require-Bundle: org.bridgedb;bundle-version="1.1.0",
+ org.bridgedb.bio;bundle-version="1.1.0",
+ org.bridgedb.rdb;bundle-version="1.0.0",
+ derby;bundle-version="10.4.2000000"

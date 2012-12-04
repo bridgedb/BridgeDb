@@ -1,6 +1,8 @@
 package org.bridgedb.tools.qc;
 import java.io.File;
 import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,6 +105,32 @@ public class BridgeQC
 	{
 		Connection con = oldGdb.getConnection();
 		//TODO ... do something to compare cross-link consistency ...
+	}
+	
+	public void checkDatabaseSanity() throws SQLException
+	{
+		Connection con = newGdb.getConnection();
+		Statement st = con.createStatement();
+		/** check for ids that occur in the link table but not in datanode table. We expect zero results */
+		String sql = "select coderight, idright from link left outer join datanode on link.idright = datanode.id and link.coderight = datanode.code where datanode.code IS NULL";
+		ResultSet rs = st.executeQuery(sql);
+		
+		if (rs.next())
+		{
+			System.out.println ("ERROR: 'link' table contains ids that do not occur in 'datanode' table.");
+			System.out.print ("ERROR: A few examples: ");
+			String sep = "";
+			int i = 0;
+			do 
+			{
+				System.out.print (sep + rs.getString(1) + ":" + rs.getString(2));
+				sep = ", ";
+			}
+			while (rs.next() && ++i < 8);
+			System.out.println();
+			System.out.println ("ERROR: These ids will not map properly.");
+		}
+		
 	}
 
 	public void compareFileSizes() throws SQLException
@@ -216,7 +244,7 @@ public class BridgeQC
 		public void checkWrap(String oldVal, String newVal)
 		{
 			if (mustBeSame && !safeEquals (oldVal, newVal))
-				System.out.println ("WARNING: old " + name() + "'" + oldVal + "' doesn\'t match new " + name() + " '" + newVal + "'");
+				System.out.println ("WARNING: old " + name() + " '" + oldVal + "' doesn\'t match new " + name() + " '" + newVal + "'");
 			if (mustBeDefined && (newVal == null || newVal.equals("")))
 				System.out.println ("WARNING: property " + name() + " is undefined");
 			check(oldVal, newVal);
@@ -235,6 +263,7 @@ public class BridgeQC
 	public void run() throws IDMapperException, SQLException
 	{
 		initDatabases();
+		checkDatabaseSanity();
 		compareInfo();
 		compareDataSources();
 

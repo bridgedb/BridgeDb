@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Orthoxml
+Bundle-SymbolicName: org.bridgedb.file.orthoxml
+Bundle-Version: 1.1.0
+Export-Package: org.bridgedb.file.orthoxml
+Require-Bundle: org.bridgedb;bundle-version="1.1.0",
+ org.bridgedb.bio;bundle-version="1.1.0"
+Bundle-ClassPath: lib/orthoxml-0.1b.jar

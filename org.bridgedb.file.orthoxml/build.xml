@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<project name="org.bridgedb.file.orthoxml" default="dist" basedir=".">
+	
+	<!-- absolute deps are used for building, testing and in the manifest classpath -->
+	<path id="absolute.deps">
+		<fileset dir="../dist">
+			<include name="org.bridgedb.jar"/>
+			<include name="org.bridgedb.bio.jar"/>
+		</fileset>
+	</path>
+
+	<!-- transient deps are optional, they are used only in the manifest classpath -->
+	<path id="transient.deps">
+		<!-- NONE -->
+	</path>
+
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<fileset dir="lib" includes="*.jar"/>
+	</path>
+
+	<!-- test deps are only used for testing -->
+	<path id="test.deps">
+		<pathelement location="../org.bridgedb/build-lib/junit4.jar"/>
+	</path>
+
+	<import file="../build-common.xml" />
+
+</project>

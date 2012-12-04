@@ -47,8 +47,8 @@ import com.google.common.collect.Multiset;
  */
 public class PatternChecker 
 {
-	private Multiset<DataSource> allMisses = new HashMultiset<DataSource>();
-	private Multiset<DataSource> allTotals = new HashMultiset<DataSource>();
+	private Multiset<DataSource> allMisses = HashMultiset.create();
+	private Multiset<DataSource> allTotals = HashMultiset.create();
 	
 	public void run (File f) throws SQLException, IDMapperException
 	{
@@ -58,9 +58,9 @@ public class PatternChecker
 		Connection sqlcon = null;
 		sqlcon = con.createConnection(database, 0); 
 		
-		Multimap<DataSource, String> missExamples = new HashMultimap<DataSource, String>();
-		Multiset<DataSource> misses = new HashMultiset<DataSource>();
-		Multiset<DataSource> totals = new HashMultiset<DataSource>();
+		Multimap<DataSource, String> missExamples = HashMultimap.create();
+		Multiset<DataSource> misses = HashMultiset.create();
+		Multiset<DataSource> totals = HashMultiset.create();
 		Map<DataSource, Pattern> patterns = DataSourcePatterns.getPatterns();
 
 //		String url = "jdbc:derby:jar:(" + f + ")database";

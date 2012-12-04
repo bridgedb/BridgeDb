@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <project name="org.bridgedb.rdb.construct" default="dist" basedir=".">
 	
-	<property name="jar.name" value="../dist/org.bridgedb.rdb.construct.jar"/>
-
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
 		<fileset dir="../dist">
@@ -15,6 +13,11 @@
 	<!-- transient deps are optional, they are used only in the manifest classpath -->
 	<path id="transient.deps">
 		<pathelement location="lib/derby.jar"/>
+	</path>
+
+	<!-- embedded jars are embedded in the resulting bundle -->
+	<path id="embed.jars">
+		<!-- None -->
 	</path>
 
 	<!-- test deps are only used for testing -->
