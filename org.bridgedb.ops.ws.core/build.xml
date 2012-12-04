@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<project name="org.bridgedb" default="dist" basedir=".">
+<project name="org.bridgedb.ops.ws.core" default="dist" basedir=".">
 	
-  <property name="jar.name" value="../dist/org.bridgedb.sql.jar"/>
+  <property name="jar.name" value="../dist/org.bridgedb.ops.ws.core.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
   <property file="version.props"/>
@@ -9,8 +9,9 @@
 	<path id="absolute.deps">
              <fileset dir="../dist">
                   <include name="org.bridgedb.jar"/>
-                  <!-- include name="org.bridgedb.ops.jar"/>
-                  <include name="org.bridgedb.plus.jar"/ -->      
+                  <include name="org.bridgedb.sql.jar"/>
+                  <include name="org.bridgedb.ws.core.jar"/>
+		  <include name="org.bridgedb.ops.sql.jar"/>
              </fileset>
 	</path>
 

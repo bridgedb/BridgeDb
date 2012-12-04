@@ -9,9 +9,8 @@
 	<path id="absolute.deps">
              <fileset dir="../dist">
                   <include name="org.bridgedb.jar"/>
-                  <include name="org.bridgedb.plus.jar"/>
-                  <include name="org.bridgedb.ops.jar"/>
                   <include name="org.bridgedb.sql.jar"/>
+                  <include name="org.bridgedb.ops.sql.jar"/>
              </fileset>
              <pathelement location="lib/openrdf-sesame-2.6.5-onejar.jar"/>
 	</path>
@@ -19,6 +18,11 @@
 	<path id="transient.deps">
 		<!-- no dependencies -->
 	</path>
+
+        <!-- embedded jars are embedded in the resulting bundle -->
+        <path id="embed.jars">
+                <!-- None -->
+        </path>
 
 	<path id="test.deps">
 		<pathelement location="build-lib/junit.jar"/>
