@@ -58,7 +58,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     		List<String> targetUriSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsOpsConstants.URL, URL);
-        params.add("profileURL", profileURL);
+        params.add(WsOpsConstants.PROFILE_URL, profileURL);
         for (String target:targetUriSpace){
             params.add(WsOpsConstants.TARGET_URI_SPACE, target);
         }

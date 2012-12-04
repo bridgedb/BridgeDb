@@ -116,8 +116,8 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @Path("/" + WsOpsConstants.MAP_URL)
     @Override
     public List<URLMappingBean> mapURL(@QueryParam(WsOpsConstants.URL) String URL,
-    		@QueryParam(WsOpsConstants.TARGET_URI_SPACE) String profileURL,
-            @QueryParam("targetURISpace") List<String> targetURISpace) throws IDMapperException {
+    		@QueryParam(WsOpsConstants.PROFILE_URL) String profileURL,
+            @QueryParam(WsOpsConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
         if (logger.isDebugEnabled()){
             logger.debug("mapURL called! URL = " + URL);
             logger.debug("   profileURL = " + profileURL);
