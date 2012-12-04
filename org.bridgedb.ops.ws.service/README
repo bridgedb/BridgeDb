@@ -1,0 +1,8 @@
+org.bridgedb.ops.ws.service
+---------------------------
+
+Tomcat service (.war) functionality of the OPS-IMS platform.
+
+IMS is Identity Mapping Service, and is used in the Open PHACTS
+Open Pharmacological Space platform as tool to link multiple
+data resources.

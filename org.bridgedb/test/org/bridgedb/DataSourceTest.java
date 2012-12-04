@@ -80,5 +80,5 @@ public class DataSourceTest {
 		Assert.assertEquals("metabolite", source.getType());
 		Assert.assertTrue(source.isMetabolite());
 	}
-
+    
 }
