@@ -53,17 +53,17 @@ public class WSCoreClient implements WSCoreInterface{
     public List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> targetCodes) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String one:id){
-            params.add("id", one);
+            params.add(WsConstants.ID, one);
         }
         for (String one:scrCode){
-            params.add("code", one);
+            params.add(WsConstants.DATASOURCE_SYSTEM_CODE, one);
         }
         for (String target:targetCodes){
-            params.add("targetCode", target);
+            params.add(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
         }
         //Make service call
         List<XrefMapBean> result = 
-                webResource.path("mapID")
+                webResource.path(WsConstants.MAP_ID)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<XrefMapBean>>() {});
@@ -80,11 +80,11 @@ public class WSCoreClient implements WSCoreInterface{
     @Override
     public List<XrefBean> freeSearch(String text, String limit) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("text", text);
-        params.add("limit", limit);
+        params.add(WsConstants.TEXT, text);
+        params.add(WsConstants.LIMIT, limit);
         //Make service call
         List<XrefBean> result = 
-                webResource.path("freeSearch")
+                webResource.path(WsConstants.FREE_SEARCH)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<XrefBean>>() {});
@@ -96,7 +96,7 @@ public class WSCoreClient implements WSCoreInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         List<PropertyBean> result = 
-                webResource.path("getKeys")
+                webResource.path(WsConstants.GET_KEYS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<PropertyBean>>() {});
@@ -107,7 +107,7 @@ public class WSCoreClient implements WSCoreInterface{
     public PropertyBean getProperty(String key) {
         //Make service call
         PropertyBean result = 
-                webResource.path("property/" + key)
+                webResource.path(WsConstants.PROPERTY + "/" + key)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<PropertyBean>() {});
         return result;
@@ -118,7 +118,7 @@ public class WSCoreClient implements WSCoreInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         List<DataSourceBean> result = 
-                webResource.path("getSupportedSrcDataSources")
+                webResource.path(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<DataSourceBean>>() {});
@@ -130,7 +130,7 @@ public class WSCoreClient implements WSCoreInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         List<DataSourceBean> result = 
-                webResource.path("getSupportedTgtDataSources")
+                webResource.path(WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<DataSourceBean>>() {});
@@ -142,7 +142,7 @@ public class WSCoreClient implements WSCoreInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         FreeSearchSupportedBean result = 
-                webResource.path("isFreeSearchSupported")
+                webResource.path(WsConstants.IS_FREE_SEARCH_SUPPORTED)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<FreeSearchSupportedBean>() {});
@@ -152,11 +152,11 @@ public class WSCoreClient implements WSCoreInterface{
     @Override
     public MappingSupportedBean isMappingSupported(String sourceCode, String targetCode) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("sourceCode", sourceCode);
-        params.add("targetCode", targetCode);
+        params.add(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE, sourceCode);
+        params.add(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE, targetCode);
         //Make service call
         MappingSupportedBean result = 
-                webResource.path("isMappingSupported")
+                webResource.path(WsConstants.IS_MAPPING_SUPPORTED)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<MappingSupportedBean>() {});
@@ -166,11 +166,11 @@ public class WSCoreClient implements WSCoreInterface{
     @Override
     public XrefExistsBean xrefExists(String id, String scrCode) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add("id", id);
-        params.add("code", scrCode);
+        params.add(WsConstants.ID, id);
+        params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
         //Make service call
         XrefExistsBean result = 
-                webResource.path("xrefExists")
+                webResource.path(WsConstants.XREF_EXISTS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<XrefExistsBean>() {});
@@ -182,7 +182,7 @@ public class WSCoreClient implements WSCoreInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         CapabilitiesBean result = 
-                webResource.path("getCapabilities")
+                webResource.path(WsConstants.GET_CAPABILITIES)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<CapabilitiesBean>() {});

@@ -127,6 +127,13 @@ public class WSFame extends WSOpsInterfaceService {
         String sysCode = first.getDataSource().getSystemCode();
         Xref second =  urlMapper.toXref(urlsIt.next());
         Set<Xref> firstMaps = idMapper.mapID(first);
+        Iterator<Xref> setIterator = firstMaps.iterator();
+        while (setIterator.hasNext()) {
+            Xref xref = setIterator.next();
+            if (xref.getDataSource() == first.getDataSource()){
+                setIterator.remove();
+            }
+        }
         Set<String> keys = idMapper.getCapabilities().getKeys();
         String URL1 = urlsIt.next();
         String text = SQLUrlMapper.getId(URL1);
@@ -164,7 +171,8 @@ public class WSFame extends WSOpsInterfaceService {
         api.describe_IDMapper(sb, first, firstMaps, second, freeSearchSupported);
         api.describe_IDMapperCapabilities(sb, first, firstMaps, keys, freeSearchSupported);
         api.describe_URLMapper(sb, URL1, URL2, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
-        api.describe_Info(sb);
+        api.describe_Info(sb, first, firstMaps);
+        api.describe_Graphviz(sb);
         
         sb.append("</body></html>");
         //ystem.out.println("Done "+ (new Date().getTime() - start));

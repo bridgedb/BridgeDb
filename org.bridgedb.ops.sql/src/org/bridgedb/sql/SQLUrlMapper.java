@@ -549,8 +549,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public List<MappingSetInfo> getMappingSetInfos() throws BridgeDbSqlException {
-        String query = ("SELECT * FROM mappingSet ");
+    public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException {
+        StringBuilder query = new StringBuilder("select * from mappingSet");
+        appendSystemCodes(query, sourceSysCode, targetSysCode);
+                
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(query.toString());
@@ -560,7 +562,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }
     }
-    
+
     @Override
     public Set<String> getUriSpaces(String dataSource) throws BridgeDbSqlException {
         String query = ("SELECT uriSpace FROM url "
@@ -1069,5 +1071,24 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 		}
 	}
 
+    private void appendSystemCodes(StringBuilder query, String sourceSysCode, String targetSysCode) {
+        boolean whereAdded = false;
+        if (sourceSysCode != null && !sourceSysCode.isEmpty()){
+            whereAdded = true;
+            query.append(" WHERE sourceDataSource = \"" );
+            query.append(sourceSysCode);
+            query.append("\" ");
+        }
+        if (targetSysCode != null && !targetSysCode.isEmpty()){
+            if (whereAdded){
+                query.append(" AND " );            
+            } else {
+                query.append(" WHERE " );            
+            }
+            query.append("targetDataSource = \"" );
+            query.append(targetSysCode);
+            query.append("\" ");
+        }
+    }
 
 }

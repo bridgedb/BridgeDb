@@ -328,14 +328,20 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
    }
 
    private void addDataSourceCell(StringBuilder sb, String sysCode) throws IDMapperException {
-        sb.append("\t\t<td><a href=\"");
-            sb.append(RdfConfig.getTheBaseURI());
-            sb.append("dataSource/");
-            sb.append(sysCode);
-            sb.append("\">");
-            sb.append(sysCode);
-            sb.append("</a></td>\n");
+        sb.append("\t\t<td>");
+        addDataSourceLink(sb, sysCode);
+        sb.append("</td>\n");
     }
+   
+   public final static void addDataSourceLink(StringBuilder sb, String sysCode) throws IDMapperException{
+        sb.append("<a href=\"");
+        sb.append(RdfConfig.getTheBaseURI());
+        sb.append("dataSource/");
+        sb.append(sysCode);
+        sb.append("\">");
+        sb.append(sysCode);
+        sb.append("</a>");
+   }
 
     private void addMappingSetCell(StringBuilder sb, String id) throws IDMapperException {
         String idUrl = RdfConfig.getTheBaseURI() + "mappingSet/" + id;

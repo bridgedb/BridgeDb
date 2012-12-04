@@ -181,15 +181,16 @@ public interface URLMapper extends IDMapper{
      */
     public MappingSetInfo getMappingSetInfo(int mappingSetId) throws IDMapperException;
     
-    /**
-     * Obtains some statistics for each MappingSet in the data.
+    /*
+     * Obtains some statistics for each MappingSet in the data from the source to the target
      * <p>
      * @See MappingSetInfo for details of exactly what is returned
+     * @param sourceSysCode System Code of the Source DataSource
+     * @param targetSysCode System Code of the Target DataSource
      * @return Information for each Mapping Set
      * @throws IDMapperException 
      */
-    public List<MappingSetInfo> getMappingSetInfos() throws IDMapperException;
-    //There is currently no method for obtaining a single mapping set info but this can be added if required.
+     public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException;
     
     /**
      * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for this DataSource.

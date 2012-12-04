@@ -53,7 +53,7 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public OverallStatisticsBean getOverallStatistics() throws IDMapperException;
 
-    public List<MappingSetInfoBean> getMappingSetInfos() throws IDMapperException;
+    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException;
 
     public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException;
 
@@ -63,8 +63,11 @@ public interface WSOpsInterface extends WSCoreInterface{
     
     public ProfileBean getProfile(String id) throws IDMapperException;
     
-    public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
-            String includeWarnings) throws IDMapperException;
+    //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
+    //        String includeWarnings) throws IDMapperException;
+
+    //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
+    //        String includeWarnings) throws IDMapperException;
 
     //public ValidationBean validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
 

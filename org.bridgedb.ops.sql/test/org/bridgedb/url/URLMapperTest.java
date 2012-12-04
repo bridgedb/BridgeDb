@@ -279,7 +279,7 @@ public abstract class URLMapperTest extends URLListenerTest{
 
     @Test
     public void testGetMappingSetInfo() throws IDMapperException {
-        report("GetGetMappingSetInfo");
+        report("GetMappingSetInfo");
         MappingSetInfo result = urlMapper.getMappingSetInfo(mappingSet2_3);
         assertEquals(DataSource2.getSystemCode(), result.getSourceSysCode());
         assertEquals(DataSource3.getSystemCode(), result.getTargetSysCode());
@@ -287,11 +287,44 @@ public abstract class URLMapperTest extends URLListenerTest{
 
     @Test
     public void testGetMappingSetInfos() throws IDMapperException {
-        report("GetGetMappingSetInfos");
-        List<MappingSetInfo> results = urlMapper.getMappingSetInfos();
+        report("GetMappingSetInfo All");
+        List<MappingSetInfo> results = urlMapper.getMappingSetInfos(null, null);
         assertThat (results.size(), greaterThanOrEqualTo(6));
     }
 
+    @Test
+    public void testGetMappingSetInfosBySourceAndTarget() throws IDMapperException {
+        report("GetMappingSetInfos source and target");
+        List<MappingSetInfo> results = 
+                urlMapper.getMappingSetInfos(DataSource2.getSystemCode(), DataSource1.getSystemCode());
+        assertThat (results.size(), greaterThanOrEqualTo(1));
+        for (MappingSetInfo info:results){
+            assertEquals(DataSource2.getSystemCode(), info.getSourceSysCode());
+            assertEquals(DataSource1.getSystemCode(), info.getTargetSysCode());
+        }
+    }
+
+    @Test
+    public void testGetMappingSetInfosByTarget() throws IDMapperException {
+        report("GetMappingSetInfos target");
+        List<MappingSetInfo> results = 
+                urlMapper.getMappingSetInfos(null, DataSource3.getSystemCode());
+        assertThat (results.size(), greaterThanOrEqualTo(2));
+        for (MappingSetInfo info:results){
+            assertEquals(DataSource3.getSystemCode(), info.getTargetSysCode());
+        }
+    }
+    @Test
+    public void testGetMappingSetInfosBySource() throws IDMapperException {
+        report("GetMappingSetInfos source");
+        List<MappingSetInfo> results = 
+                urlMapper.getMappingSetInfos(DataSource1.getSystemCode(), null);
+        assertThat (results.size(), greaterThanOrEqualTo(2));
+        for (MappingSetInfo info:results){
+            assertEquals(DataSource1.getSystemCode(), info.getSourceSysCode());
+        }
+    }
+    
     @Test
     public void testGetUriSpaces() throws IDMapperException {
         report("GetUriSpaces");

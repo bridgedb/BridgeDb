@@ -37,6 +37,15 @@ public class WSCoreApi {
     public WSCoreApi() {      
     }
             
+    private static final String ID_CODE = "id_code";
+    private static final String FIRST_ID_PARAMETER = "?" + WsConstants.ID + "=";
+    private static final String ID_PARAMETER = "&" + WsConstants.ID + "=";
+    private static final String DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsConstants.DATASOURCE_SYSTEM_CODE + "=";
+    final static String FIRST_SOURCE_PARAMETER = "?" + WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + "=";
+    final static String TARGET_PARAMETER = "&" + WsConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
+    final static String FIRST_TEXT_PARAMETER = "?" + WsConstants.TEXT + "=";
+    final static String LIMIT5_PARAMETER = "&" + WsConstants.LIMIT + "=5";
+
     protected void describeParameter(StringBuilder sb){
         sb.append("<h2>Parameters </h2>");
         sb.append("The following parametes may be applicable to the methods. ");
@@ -45,12 +54,24 @@ public class WSCoreApi {
         
         sb.append("<h3>BridgeDB Parameters</h3>");
         sb.append("<ul>");
-        sb.append("<dt><a name=\"id_code\">id and code</a></dt>");
+        sb.append("<dt><a name=\"id_code\">");
+                sb.append(WsConstants.ID);
+                sb.append(" and ");
+                sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with this/these Xrefs.</li>");
-            sb.append("<li>code is the SystemCode of the Xref's DataSource)</li>");
-            sb.append("<li>id of the Xref</li>");
-            sb.append("<li>Typically There can be multiple \"id\" and \"code\" values</li>");
+            sb.append("<li>");
+                    sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                    sb.append(" is the SystemCode of the Xref's DataSource)</li>");
+            sb.append("<li>");
+                    sb.append(WsConstants.ID);
+                    sb.append(" is the identifier part of the Xref</li>");
+            sb.append("<li>Typically There can be multiple \"");
+                    sb.append(WsConstants.ID);
+                    sb.append("\" and \"");
+                    sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                    sb.append("\" values</li>");
                 sb.append("<ul>");
                 sb.append("<li>There must be at least one of each.</li>");                
                 sb.append("<li>There must be the same number of each.</li>");                
@@ -58,36 +79,73 @@ public class WSCoreApi {
                 sb.append("<li>If multiple Xref's have the same DataSource their code must be repeated.</li>");                
                 sb.append("</ul>");
             sb.append("</ul>");           
-            sb.append("<li>Note: Other methods may obtain a different id by following the method name with a slash // ");           
-                sb.append("and the their id. These do not require a \"code\"</li>");
+            sb.append("<li>Note: Other methods may obtain a different ");           
+                    sb.append(WsConstants.ID);           
+                    sb.append(" by following the method name with a slash // ");
+                    sb.append(WsConstants.ID);
+                    sb.append(". These do not require a \"");
+                    sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                    sb.append("\"</li>");
         sb.append("<dt><a name=\"key\">key</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Selects which property to return.</li>");
             sb.append("<li>Only one key parameter is supported.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"limit\">limit</a></dt>");
-            sb.append("<ul>");
+        sb.append("<dt><a name=\"");
+                sb.append(WsConstants.LIMIT);
+                sb.append("\">");
+                sb.append(WsConstants.LIMIT);
+                sb.append("</a></dt>");
+                sb.append("<ul>");
             sb.append("<li>Limits the number of results.</li>");
             sb.append("<li>Must be a positive Integer in String Format</li>");
-            sb.append("<li>If less than limit results are availabe limit will have no effect.</li>");
-            sb.append("<li>Only one limit parameter is supported.</li>");
-            sb.append("<li>If no limit is set a default limit will be used.</li>");
-            sb.append("<li>If too high a limit is set the default limit will be used.</li>");
+            sb.append("<li>If less than ");
+                    sb.append(WsConstants.LIMIT);
+                    sb.append("results are availabe ");
+                    sb.append(WsConstants.LIMIT);
+                    sb.append(" will have no effect.</li>");
+            sb.append("<li>Only one ");
+                    sb.append(WsConstants.LIMIT);
+                    sb.append(" parameter is supported.</li>");
+            sb.append("<li>If no ");
+                    sb.append(WsConstants.LIMIT);
+                    sb.append(" is set a default ");
+                    sb.append(WsConstants.LIMIT);
+                    sb.append(" will be used.</li>");
+            sb.append("<li>If too high a ");
+                    sb.append(WsConstants.LIMIT);
+                    sb.append(" is set the default ");
+                    sb.append(WsConstants.LIMIT);
+                    sb.append(" will be used.</li>");
             sb.append("<li>To obtain a full data dump please contact the admins.</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"sourceCode\">sourceCode</a></dt>");
+        sb.append("<dt><a name=\"");
+                sb.append(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+                sb.append("\">");
+                sb.append(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+                sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with those Source Xref's DataSource has this sysCode.</li>");
             sb.append("<li>String Format</li>");
-            sb.append("<li>Typically there must be exactly one sourceSysCode when used..</li>");
+            sb.append("<li>Typically there must be exactly one ");
+                    sb.append(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+                    sb.append(" when used..</li>");
             sb.append("</ul>");
-        sb.append("<dt><a name=\"targetCode\">targetCode</a></dt>");
+        sb.append("<dt><a name=\"");
+                sb.append(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                sb.append("\">");
+                sb.append(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with those Target Xref's DataSource has this sysCode.</li>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
             sb.append("</ul>");
-         sb.append("<dt><a name=\"text\">text</a></dt>");
+         sb.append("<dt><a name=\"");
+                    sb.append(WsConstants.TEXT);
+                    sb.append("\">");
+                    sb.append(WsConstants.TEXT);
+                    sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>A bit of text that will be searched for.</li>");
             sb.append("<li>String Format</li>");
@@ -98,18 +156,33 @@ public class WSCoreApi {
     }
 
    protected final void introduce_IDMapper(StringBuilder sb, boolean freeSearchSupported) {
-        sb.append("<dt><a href=\"#mapID\">mapID</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.MAP_ID);
+                sb.append("\">");
+                sb.append(WsConstants.MAP_ID);
+                sb.append("</a></dt>");
         sb.append("<dd>List the Xrefs that map to these Xrefs</dd>");
-        sb.append("<dt><a href=\"#xrefExists\">xrefExists</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.XREF_EXISTS);
+                sb.append("\">");
+                sb.append(WsConstants.XREF_EXISTS);
+                sb.append("</a></dt>");
         sb.append("<dd>State if the Xref is know to the Mapping Service or not</dd>");   
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.FREE_SEARCH);
+                sb.append("\">");
+                sb.append(WsConstants.FREE_SEARCH);
+                sb.append("</a></dt>");
         if (freeSearchSupported){
-            sb.append("<dt><a href=\"#freeSearch\">freeSearch</a></dt>");
             sb.append("<dd>Searches for Xrefs that have this id.</dd>");
         } else {
-            sb.append("<dt>freeSearch</dt>");
             sb.append("<dd>This is currently not supported.</dd>");      
         }
-        sb.append("<dt><a href=\"#getCapabilities\">getCapabilities</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.GET_CAPABILITIES);
+                sb.append("\">");
+                sb.append(WsConstants.GET_CAPABILITIES);
+                sb.append("</a></dt>");
         sb.append("<dd>Gives the Capabilitles as defined by BridgeDB.</dd>");
         sb.append("<dt>Close()</a></dt>");
         sb.append("<dd>Not supported as clients should not be able to close the server.</dd>");
@@ -138,36 +211,55 @@ public class WSCoreApi {
     
     private void describe_mapID(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) 
             throws UnsupportedEncodingException, IDMapperException{
-        sb.append("<h3><a name=\"mapID\">mapID</h3>");
+        sb.append("<h3><a name=\"");
+                    sb.append(WsConstants.MAP_ID);
+                    sb.append("\">");
+                    sb.append(WsConstants.MAP_ID);
+                    sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>List the Xrefs that map to these Xrefs</li>");
             sb.append("<li>Implements:  Map&ltXref, Set&ltXref&gt&gt mapID(Collection&ltXref&gt srcXrefs, DataSource... tgtDataSources)</li>");
             sb.append("<li>Implements:  Set&ltXref&gt mapID(Xref srcXrefs, DataSource... tgtDataSources)</li>");
             sb.append("<li>Required arguements: (Only Source Xref considered)</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#id_code\">id</a></li>");
-                sb.append("<li><a href=\"#id_code\">code</a></li>");
+                sb.append("<li><a href=\"#");
+                        sb.append(ID_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.ID);
+                        sb.append("</a></li>");
+                sb.append("<li><a href=\"#");
+                        sb.append(ID_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                        sb.append("</a></li>");
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#targetCode\">targetCode</a></li> ");
+                sb.append("<li><a href=\"#");
+                        sb.append(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append("</a></li> ");
                 sb.append("</ul>");        
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                    StringBuilder sbInnerPure = new StringBuilder("mapID?id=");
-                    StringBuilder sbInnerEncoded = new StringBuilder("mapID?id=");
+                    StringBuilder front = new StringBuilder(WsConstants.MAP_ID);
+                    StringBuilder sbInnerPure = new StringBuilder(WsConstants.MAP_ID);
+                    StringBuilder sbInnerEncoded = new StringBuilder(WsConstants.MAP_ID);
+                    sbInnerPure.append(FIRST_ID_PARAMETER);
+                    sbInnerEncoded.append(FIRST_ID_PARAMETER);
                     sbInnerPure.append(first.getId());
                     sbInnerEncoded.append(first.getId());
-                    sbInnerPure.append("&code=");
-                    sbInnerEncoded.append("&code=");
+                    sbInnerPure.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sbInnerEncoded.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
                     sbInnerPure.append(first.getDataSource().getSystemCode());
                     sbInnerEncoded.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
-                    sbInnerPure.append("&id=");
-                    sbInnerEncoded.append("&id=");
+                    sbInnerPure.append(ID_PARAMETER);
+                    sbInnerEncoded.append(ID_PARAMETER);
                     sbInnerPure.append(second.getId());
                     sbInnerEncoded.append(URLEncoder.encode(second.getId(), "UTF-8"));
-                    sbInnerPure.append("&code=");
-                    sbInnerEncoded.append("&code=");
+                    sbInnerPure.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sbInnerEncoded.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
                     sbInnerPure.append(second.getDataSource().getSystemCode());
                     sbInnerEncoded.append(URLEncoder.encode(second.getDataSource().getSystemCode(), "UTF-8"));
                     sb.append(sbInnerEncoded.toString());
@@ -177,8 +269,9 @@ public class WSCoreApi {
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
                     for (Xref map:firstMaps){
-                        sbInnerPure.append("&targetCode=");
-                        sbInnerEncoded.append("&targetCode=");
+                        String targetPart = "&" + WsConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
+                        sbInnerPure.append(targetPart);
+                        sbInnerEncoded.append(targetPart);
                         sbInnerPure.append(map.getDataSource().getSystemCode());
                         sbInnerEncoded.append(URLEncoder.encode(map.getDataSource().getSystemCode(), "UTF-8"));
                     }
@@ -190,74 +283,130 @@ public class WSCoreApi {
     }
     
     private void describe_xrefExists(StringBuilder sb, Xref first) throws UnsupportedEncodingException, IDMapperException{
-        sb.append("<h3><a name=\"xrefExists\">xrefExists</h3>");
+        sb.append("<h3><a name=\"");
+                sb.append(WsConstants.XREF_EXISTS);
+                sb.append("\">");
+                sb.append(WsConstants.XREF_EXISTS);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  boolean xrefExists(Xref xref)</li>");
             sb.append("<li>State if the Xref is know to the Mapping Service or not</li>");
             sb.append("<li>Required arguements: (Considers both Source and target Xrefs</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#id_code\">id</a></li>");
-                sb.append("<li><a href=\"#id_code\">code</a></li>");
-                sb.append("<li>Currently on a single id and single code supported.</li>");
+                sb.append("<li><a href=\"#");
+                        sb.append(ID_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.ID);
+                        sb.append("</a></li>");
+                sb.append("<li><a href=\"#");
+                        sb.append(ID_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                        sb.append("</a></li>");
+                sb.append("<li>Currently on a single ");
+                        sb.append(WsConstants.ID);
+                        sb.append(" and single ");
+                        sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                        sb.append(" supported.</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                    sb.append("xrefExists?id=");
+                    sb.append(WsConstants.XREF_EXISTS);
+                    sb.append(FIRST_ID_PARAMETER);
                     sb.append(URLEncoder.encode(first.getId(), "UTF-8"));
-                    sb.append("&code=");
+                    sb.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
                     sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
                     sb.append("\">");
-                    sb.append("xrefExists?id=");
+                    sb.append(WsConstants.XREF_EXISTS);
+                    sb.append(FIRST_ID_PARAMETER);
                     sb.append(first.getId());
-                    sb.append("&code=");
+                    sb.append(FIRST_ID_PARAMETER);
                     sb.append(first.getDataSource().getSystemCode());
                     sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
     private void describe_freeSearch(StringBuilder sb, Xref first) throws UnsupportedEncodingException, IDMapperException{
-         sb.append("<h3><a name=\"freeSearch\">freeSearch</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.FREE_SEARCH);
+                sb.append("\">");
+                sb.append(WsConstants.FREE_SEARCH);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Searches for Xrefs that have this id.</li>");
             sb.append("<li>Implements:  Set@ltXref@gt freeSearch (String text, int limit)</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#text\">text</a></li>");
-                sb.append("<li><a href=\"#limit\">limit</a> (default available)</li>");
+                sb.append("<li><a href=\"#");
+                        sb.append(WsConstants.TEXT);
+                        sb.append("\">");
+                        sb.append(WsConstants.TEXT);
+                        sb.append("</a></li>");
+                sb.append("<li><a href=\"#");
+                        sb.append(WsConstants.LIMIT);
+                        sb.append("\">");
+                        sb.append(WsConstants.LIMIT);
+                        sb.append("</a> (default available)</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfConfig.getTheBaseURI());
-                    sb.append("freeSearch?text=");
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append(WsConstants.FREE_SEARCH);
+                    sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(URLEncoder.encode(first.getId(), "UTF-8"));
-                    sb.append("&limit=5");
+                    sb.append(LIMIT5_PARAMETER);
                     sb.append("\">");
-                    sb.append("freeSearch?text=");
+                    sb.append(WsConstants.FREE_SEARCH);
+                    sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(first.getId());
-                    sb.append("&limit=5");
+                    sb.append(LIMIT5_PARAMETER);
                     sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
   protected final void introduce_IDMapperCapabilities(StringBuilder sb, Set<String> keys, boolean freeSearchSupported) {
-        sb.append("<dt><a href=\"#isFreeSearchSupported\">isFreeSearchSupported</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.IS_FREE_SEARCH_SUPPORTED);
+                sb.append("\">");
+                sb.append(WsConstants.IS_FREE_SEARCH_SUPPORTED);
+                sb.append("</a></dt>");
         if (freeSearchSupported){
             sb.append("<dd>Returns True as freeSearch and URLSearch are supported.</dd>");
         } else {
             sb.append("<dd>Returns False because underlying IDMappper does not support freeSearch or URLSearch.</dd>");                
         }        
-        sb.append("<dt><a href=\"#getSupportedSrcDataSources\">getSupportedSrcDataSources</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES);
+                sb.append("\">");
+                sb.append(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES);
+                sb.append("</a></dt>");
         sb.append("<dd>Returns Supported Source (BridgeDB)DataSource(s).</dd>");
-        sb.append("<dt><a href=\"#getSupportedTgtDataSources\">getSupportedTgtDataSources</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES);
+                sb.append("\">");
+                sb.append(WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES);
+                sb.append("</a></dt>");
         sb.append("<dd>Returns Supported Target (BridgeDB)DataSource(s).</dd>");
-        sb.append("<dt><a href=\"#isMappingSupported\">isMappingSupported</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.IS_MAPPING_SUPPORTED);
+                sb.append("\">");
+                sb.append(WsConstants.IS_MAPPING_SUPPORTED);
+                sb.append("</a></dt>");
         sb.append("<dd>States if two DataSources are mapped at least once.</dd>");
-        sb.append("<dt><a href=\"#property\">property/key</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.PROPERTY);
+                sb.append("\">");
+                sb.append(WsConstants.PROPERTY);
+                sb.append("/key</a></dt>");
         if (keys.isEmpty()){
             sb.append("<dd>There are currently no properties supported.</dd>");
         } else {
             sb.append("<dd>Returns The property value for this key.</dd>");
         }
-        sb.append("<dt><a href=\"#getKeys\">getKeys</a></dt>");
+        sb.append("<dt><a href=\"#");
+                sb.append(WsConstants.GET_KEYS);
+                sb.append("\">");
+                sb.append(WsConstants.GET_KEYS);
+                sb.append("</a></dt>");
         if (keys.isEmpty()){
             sb.append("<dd>There are currently no properties supported.</dd>");
         } else {
@@ -266,13 +415,20 @@ public class WSCoreApi {
     }
   
     private void describe_getCapabilities(StringBuilder sb) throws IDMapperException {
-         sb.append("<h3><a name=\"getCapabilities\">getCapabilities</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.GET_CAPABILITIES);
+                sb.append("\">");
+                sb.append(WsConstants.GET_CAPABILITIES);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  IDMapperCapabilities getCapabilities()</li>");
             sb.append("<li>Gives the Capabilitles as defined by BridgeDB.</li>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfConfig.getTheBaseURI());
-                    sb.append("getCapabilities\">getCapabilities</a></li>");    
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append(WsConstants.GET_CAPABILITIES);
+                    sb.append("\">");
+                    sb.append(WsConstants.GET_CAPABILITIES);
+                    sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
@@ -287,7 +443,11 @@ public class WSCoreApi {
     }
     
     private void describe_isFreeSearchSupported(StringBuilder sb, boolean freeSearchSupported) throws IDMapperException {
-         sb.append("<h3><a name=\"isFreeSearchSupported\">isFreeSearchSupported</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.IS_FREE_SEARCH_SUPPORTED);
+                sb.append("\">");
+                sb.append(WsConstants.IS_FREE_SEARCH_SUPPORTED);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  boolean isFreeSearchSupported()</li>");
             if (freeSearchSupported){
@@ -296,52 +456,83 @@ public class WSCoreApi {
                 sb.append("<li>Returns False because underlying IDMappper does not support freeSearch or URLSearch.</li>");                
             }
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfConfig.getTheBaseURI());
-                    sb.append("isFreeSearchSupported\">isFreeSearchSupported</a></li>");    
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append(WsConstants.IS_FREE_SEARCH_SUPPORTED);
+                    sb.append("\">");
+                    sb.append(WsConstants.IS_FREE_SEARCH_SUPPORTED);
+                    sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
     private void describe_getSupportedDataSources(StringBuilder sb) throws IDMapperException {
-         sb.append("<h3><a name=\"getSupportedSrcDataSources\">getSupportedSrcDataSources</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES);
+                sb.append("\">");
+                sb.append(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  Set&ltDataSource&gt  getSupportedSrcDataSources()</li>");
             sb.append("<li>Returns Supported Source (BridgeDB)DataSource(s).</li>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfConfig.getTheBaseURI());
-                    sb.append("getSupportedSrcDataSources\">getSupportedSrcDataSources</a></li>");    
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES);
+                    sb.append("\">");
+                    sb.append(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES);
+                    sb.append("</a></li>");    
             sb.append("</ul>");
           
-         sb.append("<h3><a name=\"getSupportedTgtDataSources\">getSupportedTgtDataSources</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES);
+                sb.append("\">");
+                sb.append(WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  Set&ltDataSource&gt  getSupportedTgtDataSources()</li>");
             sb.append("<li>Returns Supported Target (BridgeDB)DataSource(s).</li>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfConfig.getTheBaseURI());
-                    sb.append("getSupportedTgtDataSources\">getSupportedTgtDataSources</a></li>");    
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append(WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES);
+                    sb.append("\">");
+                    sb.append(WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES);
+                    sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
     private void describe_isMappingSupported(StringBuilder sb, Xref first, Set<Xref> firstMaps) 
             throws UnsupportedEncodingException, IDMapperException{
-         sb.append("<h3><a name=\"isMappingSupported\">isMappingSupported</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.IS_MAPPING_SUPPORTED);
+                sb.append("\">");
+                sb.append(WsConstants.IS_MAPPING_SUPPORTED);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>States if two DataSources are mapped at least once.</li>");
             sb.append("<li>Implements:  boolean isMappingSupported(DataSource src, DataSource tgt)</li>");
             sb.append("<li>Required arguements: (One of each)</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#sourceCode\">sourceCode</a></li> ");
-                sb.append("<li><a href=\"#targetCode\">targetCode</a></li> ");
+                sb.append("<li><a href=\"#");
+                        sb.append(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+                        sb.append("</a></li> ");
+                sb.append("<li><a href=\"#");
+                        sb.append(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append("</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
-                sb.append(RdfConfig.getTheBaseURI());
-                    sb.append("isMappingSupported?sourceCode=");
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append(WsConstants.IS_MAPPING_SUPPORTED);
+                    sb.append(FIRST_SOURCE_PARAMETER);
                     sb.append(first.getDataSource().getSystemCode());
-                    sb.append("&targetCode=");
+                    sb.append(TARGET_PARAMETER);
                     sb.append(firstMaps.iterator().next().getDataSource().getSystemCode());
                     sb.append("\">");
-                    sb.append("isMappingSupported?sourceCode=");
+                    sb.append(WsConstants.IS_MAPPING_SUPPORTED);
+                    sb.append(FIRST_SOURCE_PARAMETER);
                     sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
-                    sb.append("&targetCode=");
+                    sb.append(TARGET_PARAMETER);
                     sb.append(URLEncoder.encode(firstMaps.iterator().next().getDataSource().getSystemCode(), "UTF-8"));
                     sb.append("</a></li>");    
             sb.append("</ul>");
@@ -349,7 +540,11 @@ public class WSCoreApi {
 
     private void describe_getProperty(StringBuilder sb, Set<String> keys) 
             throws UnsupportedEncodingException, IDMapperException{
-         sb.append("<h3><a name=\"property\">property/key</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.PROPERTY);
+                sb.append("\">");
+                sb.append(WsConstants.PROPERTY);
+                sb.append("/key</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  String getProperty(String key)</li>");
             sb.append("<li>Returns The property value for this key.</li>");
@@ -362,10 +557,12 @@ public class WSCoreApi {
             } else {
                 sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                        sb.append("property/");
+                        sb.append(WsConstants.PROPERTY);
+                        sb.append("/");
                         sb.append(keys.iterator().next());
                         sb.append("\">");
-                        sb.append("property/");
+                        sb.append(WsConstants.PROPERTY);
+                        sb.append("/");
                         sb.append(URLEncoder.encode(keys.iterator().next(), "UTF-8"));
                         sb.append("</a></li>");    
             }
@@ -373,7 +570,11 @@ public class WSCoreApi {
     }
     
     private void describe_getKeys(StringBuilder sb, Set<String> keys) throws IDMapperException{
-         sb.append("<h3><a name=\"getKeys\">getKeys</h3>");
+         sb.append("<h3><a name=\"");
+                sb.append(WsConstants.GET_KEYS);
+                sb.append("\">");
+                sb.append(WsConstants.GET_KEYS);
+                sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Implements:  Set<String> getKeys()</li>");
             sb.append("<li>Returns The keys and their property value.</li>");
@@ -382,9 +583,9 @@ public class WSCoreApi {
             } else {
                 sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                        sb.append("getKeys");
+                        sb.append(WsConstants.GET_KEYS);
                         sb.append("\">");
-                        sb.append("getKeys");
+                        sb.append(WsConstants.GET_KEYS);
                         sb.append("</a></li>");    
             }
             sb.append("</ul>");
