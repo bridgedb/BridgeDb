@@ -111,12 +111,17 @@ public class DataSourceExporter implements Comparator<DataSource>{
         }
     }
 
+    public final static String scrub(String original){
+        String result = original.replace(" ", "_");
+        result = result.replace(".", "");
+        result = result.replace(":", "");
+        result = result.replace("/", "_");
+        return result;
+    }
+    
     private void printDataSource(DataSource dataSource) throws IOException {
-        String name = dataSource.getFullName();
-        name = name.replace(" ", "_");
-        name = name.replace(".", "");
-        name = name.replace(":", "");
-        name = name.replace("/", "_");
+        String name = scrub(dataSource.getFullName());
+        
         writer.write(":DataSource_");
         writer.write(name);
         writer.write(" a bridgeDB:");
