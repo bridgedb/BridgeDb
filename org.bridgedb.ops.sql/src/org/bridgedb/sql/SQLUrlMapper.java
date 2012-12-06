@@ -520,6 +520,22 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
 
+    @Override
+    public int getSqlCompatVersion() throws BridgeDbSqlException {
+        String query = ("select schemaversion from info");
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+            //should always be there unless something has gone majorly wrong.
+            rs.next();
+            return rs.getInt("schemaversion");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+        }       
+    }
+
     // **** URLListener Methods
     
     @Override

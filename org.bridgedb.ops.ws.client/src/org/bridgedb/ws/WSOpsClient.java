@@ -194,4 +194,14 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
         return result;
     }*/
 
+    @Override
+    public String getSqlCompatVersion() throws IDMapperException {
+        //Make service call
+         String result = 
+                webResource.path(WsOpsConstants.SQL_COMPAT_VERSION)
+                .accept(MediaType.TEXT_PLAIN)
+                .get(new GenericType<String>() {});
+         return result;
+    }
+
 }

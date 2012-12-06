@@ -214,4 +214,14 @@ public interface URLMapper extends IDMapper{
      * @throws IDMapperException 
      */
     public Set<String> getTargetUriSpace(int mappingSetId) throws IDMapperException;
+    
+    /**
+     * Returns the SQL_COMPAT_VERSION.
+     * 
+     * This is mainly designed as a test method to check that the underlying SQL engine is up and running.
+     * As SQL_COMPAT_VERSION is stored in a separate table with one row and one column so will be very fast.
+     * 
+     * @return The SQL_COMPAT_VERSION version. But more importantly a positive integer.
+     */
+    public int getSqlCompatVersion() throws IDMapperException;
 }

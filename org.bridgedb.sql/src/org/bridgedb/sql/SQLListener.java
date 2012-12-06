@@ -41,7 +41,7 @@ import org.bridgedb.utils.StoreType;
 public class SQLListener implements MappingListener{
 
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	protected static final int SQL_COMPAT_VERSION = 4;
+	public static final int SQL_COMPAT_VERSION = 4;
   
     //Maximumn size in database
     protected static final int SYSCODE_LENGTH = 100;

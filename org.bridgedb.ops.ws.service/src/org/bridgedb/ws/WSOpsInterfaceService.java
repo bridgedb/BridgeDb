@@ -266,6 +266,14 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
         return bean;
     }
     
+    @GET
+    @Produces({MediaType.TEXT_PLAIN})
+    @Override
+    @Path("/" + WsOpsConstants.SQL_COMPAT_VERSION)
+    public String getSqlCompatVersion() throws IDMapperException {
+        return "" + urlMapper.getSqlCompatVersion();
+    }
+
     //**** LinksetInterfaceMinimal methods
 
     private String trim(String original){
