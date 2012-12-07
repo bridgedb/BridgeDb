@@ -82,6 +82,28 @@ public class RunLoader {
         TransativeCreator.createTransative(3,27,root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", 
                 StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         linksetLoader.loadFile(root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        
+        //39-40  junk to keep numbers the same
+        linksetLoader.loadFile(root + "sample1To2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        
+        //41-42
+        linksetLoader.loadFile(root + "Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        
+        //43-44
+        TransativeCreator.createTransative(24,41,root + "transitive/Swissprot-Chembl13id-via-Chembl13Targets.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/Swissprot-Chembl13id-via-Chembl13Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        
+        //45-46
+        TransativeCreator.createTransative(33,41,root + "transitive/ConceptWiki-Chembl13id-via-Chembl13Targets.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/ConceptWiki-Chembl13id-via-Chembl13Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        
+        //47-48
+        TransativeCreator.createTransative(22,41,root + "transitive/Enzyme-Chembl13id-via-Chembl13Targets.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/Enzyme-Chembl13id-via-Chembl13Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        
     }
 
 }
