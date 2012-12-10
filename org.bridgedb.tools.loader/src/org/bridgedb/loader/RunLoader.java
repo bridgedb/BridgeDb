@@ -85,9 +85,9 @@ public class RunLoader {
         
         //39-40  junk to keep numbers the same
         linksetLoader.loadFile(root + "sample1To2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        
+                                       
         //41-42
-        linksetLoader.loadFile(root + "Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile(root + "originals/Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         
         //43-44
         TransativeCreator.createTransative(24,41,root + "transitive/Swissprot-Chembl13id-via-Chembl13Targets.ttl", 
