@@ -63,6 +63,7 @@ public final class DataSource
 	
 	private String sysCode = null;
 	private String fullName = null;
+    private Set<String> alternativeFullNames = new HashSet<String>();    
 	private String mainUrl = null;
 	private String prefix = "";
 	private String postfix = "";
@@ -79,7 +80,10 @@ public final class DataSource
 	 * {@link getByFullName} or {@link getBySystemCode}. Information about
 	 * DataSources can be added with {@link register}
 	 */
-	private DataSource () {}
+	private DataSource (String sysCode, String fullName) {
+        this.sysCode = sysCode;
+        this.fullName = fullName;
+    }
 	
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
@@ -103,6 +107,18 @@ public final class DataSource
 	}
 	
 	/** 
+	 * returns alternative full names of DataSource e.g. "EC Number" for "Enzyme Nomenclature" 
+	 * 
+ 	 * @return Set of alternative full names (not including the one returned by getFullName() or 
+     * (in the majority of case) an Empty set.
+     * @since 2.0.0
+	 */
+	public Set<String> getAlternativeFullNames()
+	{
+		return this.alternativeFullNames;
+	}
+
+    /** 
 	 * returns GenMAPP SystemCode, e.g. "En". May return null,
 	 * if only the full name is known.
 	 * Also used as identifier in
@@ -277,8 +293,30 @@ public final class DataSource
 		public Builder urnBase (String base)
 		{
 			current.urnBase = base;
+  			byMiriamBase.put (current.urnBase, current);
 			return this;
 		}
+        
+        /**
+         * Allows you to add an Extra FullName to a DataSource
+         * 
+         * Registered the DataSource with this name but keeps the original fullName
+         * 
+         * @param alternativeFullName A DIFFERENT name!
+		 * @return the same Builder object so you can chain setters
+         * @throws IllegalStateException If the alternativeFullName is equals to the current fullName.
+         * @since 2.0.0
+         */
+        public Builder alternativeFullName(String alternativeFullName){
+            //This is a safety test only
+            if (alternativeFullName.equals(current.fullName)){
+               throw new IllegalStateException ("Illegal attempt to assign alterntiveFullName \"" + 
+                       alternativeFullName + "\" which is already the fullName \"");                
+            }
+            current.alternativeFullNames.add(alternativeFullName);
+            byFullName.put(alternativeFullName, current);
+            return this;
+        }
 	}
 	
 	/** 
@@ -295,23 +333,78 @@ public final class DataSource
 //		if (fullName != null && fullName.length() > 20) 
 //		{ 
 //			throw new IllegalArgumentException("full Name '" + fullName + "' must be 20 or less characters"); 
-//		}
-		
-		if (byFullName.containsKey(fullName))
+//		
+        //This blokc is the new version 2.0 way of registeringf
+        DataSource byName = byFullName.get(fullName);
+        DataSource byCode = bySysCode.get(sysCode);
+        
+        if (byName == null){
+            if (byCode == null){
+    			current = new DataSource (sysCode, fullName);
+    			registry.add (current);
+            } else if (byCode.fullName == null){
+                System.err.println("Found DataSource with sysCode \"" + sysCode + " and null fullName. "+ 
+                        " Which is now being set to " + fullName);
+    			current = byCode;
+                current.fullName = fullName;                
+            } else if (byCode.fullName.equals(fullName)){
+                //Strange should never happen.
+                System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
+                        byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
+    			current = byCode;
+                current.fullName = fullName;                
+            } else {
+                byCode.alternativeFullNames.add(byCode.fullName);
+                byCode.alternativeFullNames.remove(fullName);
+                System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
+                        byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
+    			current = byCode;
+                current.fullName = fullName;
+            }
+        } else {
+            if (byCode == null){
+                //This will catch both sysCodes being null;
+                if (byName.sysCode == sysCode){
+                    current = byName;
+                //this one because "abc" != "abc" but "abc".equals("abc")    
+                } else if (byName.sysCode.equals(sysCode)){
+                    current = byName;                
+                } else if (byName.sysCode == null){
+                    current = byName;     
+                    System.err.println("Overwriting null syscode for " + fullName);
+                    current.sysCode = sysCode;
+                } else if (byName.sysCode.isEmpty()){
+                    current = byName;     
+                    System.err.println("Overwriting empty syscode for " + fullName);
+                    current.sysCode = sysCode;
+                } else if (sysCode == null){
+                    current = byName;     
+                    System.err.println("Not overwriting syscode for " + fullName + " with null");
+                } else if (sysCode.isEmpty()){
+                    current = byName;     
+                    System.err.println("Not overwriting syscode for " + fullName + " with empty");
+                } else {
+                    throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode \"" + 
+                            byName.sysCode + "\" which does not match new systemCode \"" + sysCode + "\"");
+                }
+            } else {
+                if (byName == byCode){
+                    current = byCode;
+                } else {
+                    throw new IllegalStateException ("Found two possible DataSources! FullName + \"" + fullName + 
+                            "\" already has code \"" + byName.sysCode + "\". While SysCode \"" + sysCode +
+                            "\" already has a full name "+ byCode.fullName);                
+                }
+            }
+        }
+/*		//This block shows the version 1.0 way of registering 
+        if (byFullName.containsKey(fullName))
 		{
             current = byFullName.get(fullName);
-//            if (!current.sysCode.equals(sysCode)){
-//                throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode " + 
-//                        current.sysCode + " which does not match new systemCode " + sysCode);
-//            }
 		}
 		else if (bySysCode.containsKey(sysCode))
 		{
 			current = bySysCode.get(sysCode);
-//            if (!current.fullName.equals(fullName)){
-//                throw new IllegalStateException ("SystemCode " + sysCode + " already used wtih fullName " + 
-//                        current.fullName + " which does not match new fullName " + fullName);
-//            }
 		}
 		else
 		{
@@ -326,7 +419,7 @@ public final class DataSource
 		
 		current.sysCode = sysCode;
 		current.fullName = fullName;
-
+*/
 		if (isSuitableKey(sysCode))
 			bySysCode.put(sysCode, current);
 		if (isSuitableKey(fullName))
@@ -439,7 +532,7 @@ public final class DataSource
 	 */
 	public String toString()
 	{
-		return fullName;
+		return sysCode + ":" + fullName;
 	}
 	
 	/**

@@ -81,4 +81,29 @@ public class DataSourceTest {
 		Assert.assertTrue(source.isMetabolite());
 	}
     
+    @Test
+    public void testRegisterSecondFullName(){
+        String sysCode = "testRegisterSecondFullName";
+        String fullName1 = "testRegisterSecondFullName_FullName1";
+        DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
+        String fullName2 = "testRegisterSecondFullName_FullName2";
+        DataSource ds2 = DataSource.register(sysCode, fullName2).asDataSource();
+        Assert.assertEquals(ds1, ds2);
+        Assert.assertEquals(fullName2, ds2.getFullName());
+        Assert.assertEquals(fullName1, ds1.getAlternativeFullNames().iterator().next());      
+        Assert.assertEquals(ds1, DataSource.getByFullName(fullName2));
+        Assert.assertEquals(ds1, DataSource.getByFullName(fullName1));        
+    }
+
+    @Test
+    public void testRegisterAleternativeFullName(){
+        String sysCode = "testRegisterSecondFullName";
+        String fullName1 = "testRegisterSecondFullName_FullName1";
+        DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
+        String fullName2 = "testRegisterSecondFullName_FullName2";
+        DataSource ds2 = DataSource.register(sysCode, fullName2).asDataSource();
+        Assert.assertEquals(ds1, ds2);
+        Assert.assertEquals(fullName2, ds2.getFullName());
+        Assert.assertEquals(fullName1, ds1.getAlternativeFullNames().iterator().next());        
+    }
 }
