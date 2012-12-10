@@ -90,14 +90,11 @@ public class UrlPattern {
     }
     
     public void writeAsRDF(BufferedWriter writer) throws IOException{
-        writer.newLine();
-        writer.newLine();
-        writer.write(":DataSource_");
         writer.write(getRdfId());
         writer.write(" a bridgeDB:");
-        writer.write(BridgeDBConstants.DATA_SOURCE);        
-        writer.write("; ");        
-
+        writer.write(BridgeDBConstants.URL_PATTERN);        
+        writer.write(";");        
+        writer.newLine();
     }
     
     public static void main(String[] args) throws BridgeDBException  {

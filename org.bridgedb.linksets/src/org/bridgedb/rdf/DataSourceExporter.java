@@ -116,6 +116,12 @@ public class DataSourceExporter implements Comparator<DataSource>{
         result = result.replace(".", "");
         result = result.replace(":", "");
         result = result.replace("/", "_");
+        while(result.contains("__")){
+            result = result.replace("__", "_");
+        }
+        if (result.endsWith("_")){
+            result = result.substring(0, result.length()-1);
+        }
         return result;
     }
     
