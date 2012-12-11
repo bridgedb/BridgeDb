@@ -37,7 +37,13 @@
         <ObjectProperty IRI="#hasOrgamism"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#hasPrimaryDataSource"/>
+    </Declaration>
+    <Declaration>
         <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasTheUrlPattern"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#hasUrlPattern"/>
@@ -46,7 +52,16 @@
         <ObjectProperty IRI="#isOrganismOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isUrlPatternFor"/>
+        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isTheUrlPatternOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isUrlPatternOf"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#alias"/>
@@ -200,9 +215,16 @@
     <SubClassOf>
         <Class IRI="#UrlPattern"/>
         <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="#isUrlPatternFor"/>
+            <ObjectProperty IRI="#isUrlPatternOf"/>
             <Class IRI="#DataSource"/>
         </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#UrlPattern"/>
+        <ObjectMaxCardinality cardinality="1">
+            <ObjectProperty IRI="#hasPrimaryDataSource"/>
+            <Class IRI="#DataSource"/>
+        </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#UrlPattern"/>
@@ -233,20 +255,60 @@
         </DataMaxCardinality>
     </SubClassOf>
     <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimaryDataSource"/>
+        <ObjectProperty IRI="#isUrlPatternOf"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
         <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
         <ObjectProperty IRI="#hasUrlPattern"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasTheUrlPattern"/>
+        <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasTheUrlPattern"/>
+        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
         <ObjectProperty IRI="#hasUrlPattern"/>
         <ObjectProperty abbreviatedIRI=":topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
+        <ObjectProperty IRI="#hasUrlPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
+        <ObjectProperty IRI="#isUrlPatternOf"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isTheUrlPatternOf"/>
+        <ObjectProperty IRI="#hasPrimaryDataSource"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isTheUrlPatternOf"/>
+        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
     </SubObjectPropertyOf>
     <InverseObjectProperties>
         <ObjectProperty IRI="#hasOrgamism"/>
         <ObjectProperty IRI="#isOrganismOf"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
-        <ObjectProperty IRI="#isUrlPatternFor"/>
+        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
+        <ObjectProperty IRI="#hasPrimaryDataSource"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#hasTheUrlPattern"/>
+        <ObjectProperty IRI="#isTheUrlPatternOf"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
         <ObjectProperty IRI="#hasUrlPattern"/>
+        <ObjectProperty IRI="#isUrlPatternOf"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
+        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
     </InverseObjectProperties>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#hasOrgamism"/>

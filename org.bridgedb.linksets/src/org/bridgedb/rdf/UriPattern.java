@@ -7,7 +7,11 @@ package org.bridgedb.rdf;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import org.bridgedb.DataSource;
 import org.bridgedb.metadata.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 
@@ -15,57 +19,58 @@ import org.bridgedb.utils.BridgeDBException;
  *
  * @author Christian
  */
-public class UrlPattern {
+public class UriPattern {
 
     private final String nameSpace;
     private final String postFix;
-    private static HashMap<String,UrlPattern> byNameSpaceOnly = new HashMap<String,UrlPattern>();
-    private static HashMap<String,HashMap<String,UrlPattern>> byNameSpaceAndPostFix = 
-            new HashMap<String,HashMap<String,UrlPattern>> ();
-            
-    private UrlPattern(String namespace){
+
+    private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
+    private static HashMap<String,HashMap<String,UriPattern>> byNameSpaceAndPostFix = 
+            new HashMap<String,HashMap<String,UriPattern>> ();  
+    
+    private UriPattern(String namespace){
         this.nameSpace = namespace;
         this.postFix = null;
         byNameSpaceOnly.put(namespace, this);
     } 
     
-    private UrlPattern(String namespace, String postfix){
+    private UriPattern(String namespace, String postfix){
         this.nameSpace = namespace;
         if (postfix == null || postfix.isEmpty()){
             this.postFix = null;
             byNameSpaceOnly.put(namespace, this);    
         } else {
             this.postFix = postfix;
-            HashMap<String,UrlPattern> postFixMap = byNameSpaceAndPostFix.get(namespace);
+            HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(namespace);
             if (postFixMap == null){
-                postFixMap = new HashMap<String,UrlPattern>();
+                postFixMap = new HashMap<String,UriPattern>();
             }
             postFixMap.put(postfix, this);
             byNameSpaceAndPostFix.put(namespace, postFixMap);
         }
     }
    
-    public static UrlPattern byNameSpace(String nameSpace){
-        UrlPattern result = byNameSpaceOnly.get(nameSpace);
+    public static UriPattern byNameSpace(String nameSpace){
+        UriPattern result = byNameSpaceOnly.get(nameSpace);
         if (result == null){
-            result = new UrlPattern(nameSpace);
+            result = new UriPattern(nameSpace);
         }
         return result;
     }
     
-    private static UrlPattern byNameSpaceAndPostfix(String nameSpace, String postfix) {
-        HashMap<String,UrlPattern> postFixMap = byNameSpaceAndPostFix.get(nameSpace);
+    private static UriPattern byNameSpaceAndPostfix(String nameSpace, String postfix) {
+        HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(nameSpace);
         if (postFixMap == null){
-            return new UrlPattern(nameSpace, postfix);
+            return new UriPattern(nameSpace, postfix);
         }
-        UrlPattern result = postFixMap.get(postfix);
+        UriPattern result = postFixMap.get(postfix);
         if (result == null){
-            return new UrlPattern(nameSpace, postfix);
+            return new UriPattern(nameSpace, postfix);
         }
         return result;
     }
     
-    public static UrlPattern byUrlPattern(String urlPattern) throws BridgeDBException{
+    public static UriPattern byUrlPattern(String urlPattern) throws BridgeDBException{
         int pos = urlPattern.indexOf("$id");
         if (pos == -1) {
             throw new BridgeDBException("Urlpattern should have $id in it");
@@ -97,13 +102,21 @@ public class UrlPattern {
         writer.newLine();
     }
     
+    public String getUriPattern() {
+        if (postFix == null){
+            return nameSpace + "$id";
+        } else {
+            return nameSpace + "$id" + postFix;
+        }
+    }
+
     public static void main(String[] args) throws BridgeDBException  {
-        UrlPattern test = new UrlPattern("This is a test", "part2");
-        UrlPattern test2 = UrlPattern.byNameSpaceAndPostfix("This is a test","part2");
+        UriPattern test = new UriPattern("This is a test", "part2");
+        UriPattern test2 = UriPattern.byNameSpaceAndPostfix("This is a test","part2");
         System.out.println(test);
         System.out.println(test2);
         System.out.println(test == test2);
-        test2 = UrlPattern.byUrlPattern("This is a test$idpart2");
+        test2 = UriPattern.byUrlPattern("This is a test$idpart2");
         System.out.println(test);
         System.out.println(test2);
         System.out.println(test == test2);

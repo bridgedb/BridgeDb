@@ -43,8 +43,8 @@ public class UrlPatternTest extends TestUtils{
     public void testByNameSpace() {
         report("byNameSpace");
         String nameSpace = "http://UrlPattern.example.com/Test1/";
-        UrlPattern expResult = UrlPattern.byNameSpace(nameSpace);
-        UrlPattern result = UrlPattern.byNameSpace(nameSpace);
+        UriPattern expResult = UriPattern.byNameSpace(nameSpace);
+        UriPattern result = UriPattern.byNameSpace(nameSpace);
         assertEquals(expResult, result);
     }
 
@@ -55,9 +55,9 @@ public class UrlPatternTest extends TestUtils{
     public void testByNameSpaceA() {
         report("byNameSpaceA");
         String nameSpace = "http://UrlPattern.example.com/Test1a/";
-        UrlPattern other = UrlPattern.byNameSpace(nameSpace);
-        UrlPattern expResult = UrlPattern.byNameSpace(nameSpace);
-        UrlPattern result = UrlPattern.byNameSpace(nameSpace);
+        UriPattern other = UriPattern.byNameSpace(nameSpace);
+        UriPattern expResult = UriPattern.byNameSpace(nameSpace);
+        UriPattern result = UriPattern.byNameSpace(nameSpace);
         assertEquals(expResult, result);
     }
 
@@ -68,9 +68,9 @@ public class UrlPatternTest extends TestUtils{
     public void testByNameSpaceB() {
         report("byNameSpaceB");
         String nameSpace = "http://UrlPattern.example.com/Test1b/";
-        UrlPattern expResult = UrlPattern.byNameSpace(nameSpace);
-        UrlPattern other = UrlPattern.byNameSpace("http://UrlPattern.example.com/Test1b/1");
-        UrlPattern result = UrlPattern.byNameSpace(nameSpace);
+        UriPattern expResult = UriPattern.byNameSpace(nameSpace);
+        UriPattern other = UriPattern.byNameSpace("http://UrlPattern.example.com/Test1b/1");
+        UriPattern result = UriPattern.byNameSpace(nameSpace);
         assertEquals(expResult, result);
     }
 
@@ -81,9 +81,9 @@ public class UrlPatternTest extends TestUtils{
     public void testByUrlPattern() throws Exception {
         report("byUrlPattern");
         String nameSpace = "http://UrlPattern.example.com/Test2/";
-        UrlPattern expResult = UrlPattern.byNameSpace(nameSpace);
+        UriPattern expResult = UriPattern.byNameSpace(nameSpace);
         String urlPattern = "http://UrlPattern.example.com/Test2/$id";
-        UrlPattern result = UrlPattern.byUrlPattern(urlPattern);
+        UriPattern result = UriPattern.byUrlPattern(urlPattern);
         assertEquals(expResult, result);
     }
 
@@ -94,8 +94,8 @@ public class UrlPatternTest extends TestUtils{
     public void testByUrlPatternA() throws Exception {
         report("byUrlPattern");
         String urlPattern = "http://UrlPattern.example.com/Test2a/$id/postfix";
-        UrlPattern expResult = UrlPattern.byUrlPattern(urlPattern);
-        UrlPattern result = UrlPattern.byUrlPattern(urlPattern);
+        UriPattern expResult = UriPattern.byUrlPattern(urlPattern);
+        UriPattern result = UriPattern.byUrlPattern(urlPattern);
         assertEquals(expResult, result);
     }
 
@@ -106,10 +106,10 @@ public class UrlPatternTest extends TestUtils{
     public void testByUrlPatternB() throws Exception {
         report("byUrlPattern");
         String urlPattern = "http://UrlPattern.example.com/Test2b/$id/postfix";
-        UrlPattern expResult = UrlPattern.byUrlPattern(urlPattern);
+        UriPattern expResult = UriPattern.byUrlPattern(urlPattern);
         String urlPattern2 = "http://UrlPattern.example.com/Test2b/$id/postfix2";
-        UrlPattern other = UrlPattern.byUrlPattern(urlPattern2);
-        UrlPattern result = UrlPattern.byUrlPattern(urlPattern);
+        UriPattern other = UriPattern.byUrlPattern(urlPattern2);
+        UriPattern result = UriPattern.byUrlPattern(urlPattern);
         assertEquals(expResult, result);
     }
 
@@ -120,7 +120,7 @@ public class UrlPatternTest extends TestUtils{
     public void testGetRdfId() {
         report("getRdfId");
         String nameSpace = "http://UrlPattern.example.com/Test3/";
-        UrlPattern instance = UrlPattern.byNameSpace(nameSpace);
+        UriPattern instance = UriPattern.byNameSpace(nameSpace);
         String expResult = ":UrlPattern_http_UrlPatternexamplecom_Test3";
         String result = instance.getRdfId();
         assertEquals(expResult, result);
@@ -133,7 +133,7 @@ public class UrlPatternTest extends TestUtils{
     public void testGetRdfIdA() throws BridgeDBException {
         report("getRdfIdA");
         String urlPattern = "http://UrlPattern.example.com/Test3a/$id/postfix";
-        UrlPattern instance = UrlPattern.byUrlPattern(urlPattern);
+        UriPattern instance = UriPattern.byUrlPattern(urlPattern);
         String expResult = ":UrlPattern_http_UrlPatternexamplecom_Test3a_postfix";
         String result = instance.getRdfId();
         assertEquals(expResult, result);
@@ -148,7 +148,7 @@ public class UrlPatternTest extends TestUtils{
         StringWriter sw = new StringWriter();
         BufferedWriter writer = new BufferedWriter(sw);
         String nameSpace = "http://UrlPattern.example.com/Test4/";
-        UrlPattern instance = UrlPattern.byNameSpace(nameSpace);
+        UriPattern instance = UriPattern.byNameSpace(nameSpace);
         instance.writeAsRDF(writer);
         writer.flush();
         String result = sw.toString();

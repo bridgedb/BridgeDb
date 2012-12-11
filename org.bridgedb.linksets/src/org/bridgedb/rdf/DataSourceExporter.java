@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
@@ -33,7 +31,6 @@ import org.bridgedb.utils.StoreType;
  */
 public class DataSourceExporter implements Comparator<DataSource>{
 
-    
     private HashSet<Organism> organisms;
     private BufferedWriter writer;
     private HashMap<String,String> mappings;
@@ -50,6 +47,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
         SQLUrlMapper mapper = new SQLUrlMapper(false, StoreType.LIVE);
         BioDataSource.init();
         initAndraDataSources();
+        UriMapping.init();
         File file = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
         logger.info("Exporting DataSources to "+ file.getAbsolutePath());
         FileWriter fileWriter = new FileWriter(file);
