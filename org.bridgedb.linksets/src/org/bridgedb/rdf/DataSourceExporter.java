@@ -46,21 +46,15 @@ public class DataSourceExporter implements Comparator<DataSource>{
         ConfigReader.logToConsole();
         SQLUrlMapper mapper = new SQLUrlMapper(false, StoreType.LIVE);
         BioDataSource.init();
-        initAndraDataSources();
         UriMapping.init();
+        AndraIndetifiersOrg.init();
+        UriMapping.showSharedUriPatterns();
         File file = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
         logger.info("Exporting DataSources to "+ file.getAbsolutePath());
         FileWriter fileWriter = new FileWriter(file);
         BufferedWriter buffer = new BufferedWriter(fileWriter);
         DataSourceExporter exporter = new DataSourceExporter(buffer);
         exporter.export();
-    }
-
-    private static void initAndraDataSources() {
-        HashMap<String,String> mappings = AndraIndetifiersOrg.getAndraMappings();
-        for (String fullName:mappings.keySet()){
-            DataSource.getByFullName(fullName);
-        }
     }
 
     public static void export(File file) throws BridgeDBException, IOException{

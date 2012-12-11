@@ -52,9 +52,16 @@ handle unknown data sources in the same
 way as predefined ones.
 <p>
 Definitions for common DataSources can be found in {@link org.bridgedb.bio.BioDataSource}.
+<p>
+This contains modifications not yet finalized nor approved by the Whole BridgeDB community.
+Until this message is removed use of new features is at the users own risk.
+* 
 */
 public final class DataSource
 {
+    public static final String MIRIAM_URN_ROOT = "urn:miriam:";
+    public static final String IDENTIFIERS_URI_ROOT = "http://identifiers.org/";
+    
 	private static Map<String, DataSource> bySysCode = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byFullName = new HashMap<String, DataSource>();
 	private static Set<DataSource> registry = new HashSet<DataSource>();
@@ -72,6 +79,7 @@ public final class DataSource
 	private boolean isPrimary = true;
 	private String type = "unknown";
 	private String urnBase = "";
+    private String miriamBase = "";
 	
 	/**
 	 * Constructor is private, so that we don't
@@ -167,6 +175,7 @@ public final class DataSource
 	 * in the MIRIAM data types list, a bridgedb URI.
 	 * @param id Id to generate URN from.
 	 * @return the URN. 
+     * @deprecated behaviour when no MIRIAM URI is known is inconsistent. 
 	 */
 	public String getURN(String id)
 	{
@@ -179,6 +188,51 @@ public final class DataSource
 	}
 	
 	/**
+	 * Creates a Mirian identifier if possible. 
+	 * It uses the MIRIAM data type list
+	 * to create a MIRIAM URI like "urn:miriam:uniprot:P12345", 
+	 * or if this DataSource is not included
+	 * in the MIRIAM data types list, returns a null.
+	 * @param id Id to generate URN from.
+	 * @return the Mirian URN or null.
+     * @throws IDMapperException is the id can not be safely URL encoded
+     * @since 2.0.0
+	 */
+    public String getMiriamUrn(String id) throws IDMapperException{
+        if (miriamBase == null){
+            return null;
+        }
+		try
+		{
+    		return MIRIAM_URN_ROOT + miriamBase + ":" + URLEncoder.encode(id, "UTF-8");
+		} catch (UnsupportedEncodingException ex) { 
+            throw new IDMapperException("Unable to Encode id " + id, ex);
+        }
+	}
+
+	/**
+	 * Creates an identifiers.org URI if possible. 
+	 * It uses the MIRIAM data type list
+	 * to create a identifiers.org URI like "http://identifiers.org/uniprot/P12345", 
+	 * or if this DataSource is not included returns null
+	 * @param id Id to generate URN from.
+	 * @return the identifiers.org uri or null.
+     * @throws IDMapperException is the id can not be safely URL encoded
+     * @since 2.0.0
+	 */
+    public String getIdentifiersOrgUri(String id) throws IDMapperException{
+        if (miriamBase == null){
+            return null;
+        }
+		try
+		{
+    		return "http://identifiers.org/" + miriamBase + "/" + URLEncoder.encode(id, "UTF-8");
+		} catch (UnsupportedEncodingException ex) { 
+            throw new IDMapperException("Unable to Encode id " + id, ex);
+        }
+	}
+
+    /**
 	 * Uses builder pattern to set optional attributes for a DataSource. For example, this allows you to use the 
 	 * following code:
 	 * <pre>
@@ -287,15 +341,22 @@ public final class DataSource
 		}
 		
 		/**
+		 * Registers a base for urn generation, for example "urn:miriam:uniprot"
+         * 
+         * Since Version 2.0.0 If the base starts with "urn:miriam:" the part that comes after "urn:miriam:"
+         * will also be used for identifiers.org uris.
 		 * @param base for urn generation, for example "urn:miriam:uniprot"
 		 * @return the same Builder object so you can chain setters
+         * @throws IllegalStateException If a previous (different) urnBase was registered by either this method or 
+         *     indirectly by the identifiersOrg method.
 		 */
 		public Builder urnBase (String base)
 		{
-			current.urnBase = base;
-  			byMiriamBase.put (current.urnBase, current);
-			return this;
+            current.setUrnBase(base);
+ 			return this;
 		}
+        
+        
         
         /**
          * Allows you to add an Extra FullName to a DataSource
@@ -579,7 +640,7 @@ public final class DataSource
 	 */
 	public static DataSource getByUrnBase(String base)
 	{
-		if (!base.startsWith ("urn:miriam:"))
+		if (!base.startsWith (MIRIAM_URN_ROOT))
 		{
 			return null;
 		}
@@ -591,11 +652,42 @@ public final class DataSource
 		}
 		else
 		{
-			current = getByFullName(base.substring("urn:miriam:".length()));
-			current.urnBase = base;
-			byMiriamBase.put (base, current);
+			current = getByFullName(base.substring(MIRIAM_URN_ROOT.length()));
+			current.setUrnBase(base);
 		}
 		return current;
 	}
 
+    private void setUrnBase(String base){
+        if (base != null && !base.isEmpty()){
+            if (urnBase != "" && !urnBase.equals(base)){
+                if (urnBase.startsWith(MIRIAM_URN_ROOT)){
+                    if (base.startsWith(MIRIAM_URN_ROOT)){
+                        throw new IllegalStateException("Illegal attempt to change (Miriam) urnBase for " + this 
+                                + ". Current value \"" + urnBase + "\" is NOT equal to new Value \"" + base + "\"");            
+                    } else {
+                        System.err.println("Ignoring attempt to overwrite Miriam UrnBase \"" + urnBase + "\""
+                                + " with non Miriam base \"" + base + "\" for " + this);
+                        return;
+                    }
+                } else {
+                    if (base.startsWith(MIRIAM_URN_ROOT)){
+                        System.err.println("Overwriting none Miriam UrnBase \"" + urnBase + "\""
+                                + " with Miriam base \"" + base + "\" for " + this);
+                        //ok to continue
+                    } else {
+                        throw new IllegalStateException("Illegal attempt to change (none Miram) urnBase for " + this 
+                                + ". Current value \"" + urnBase + "\" is NOT equal to new Value \"" + base + "\"");            
+                    }
+                }
+            }
+            urnBase = base;
+            if (base.startsWith(MIRIAM_URN_ROOT)){
+                byMiriamBase.put (urnBase, this);   
+                miriamBase = base.substring(MIRIAM_URN_ROOT.length());
+            } else {
+                System.err.println("None miriam urnBase \"" + base + "\" used for " + this);
+            }
+        }
+    }
 }

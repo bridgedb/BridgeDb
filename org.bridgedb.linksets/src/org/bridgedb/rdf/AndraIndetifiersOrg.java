@@ -38,6 +38,16 @@ public class AndraIndetifiersOrg {
         }
     }
 
+    public static void init(){
+        HashMap<String,String> andraMappings = getAndraMappings();
+        for (String fullName:andraMappings.keySet()){
+            DataSource dataSource = DataSource.getByFullName(fullName);
+            String nameSpace = andraMappings.get(fullName);
+            UriPattern pattern = UriPattern.byNameSpace(nameSpace);
+            UriMapping.addMapping(dataSource, pattern, UriMappingRelationship.WIKIPATHWAYS);
+        }      
+    }
+    
     public static String getWikiPathwaysNameSpace(DataSource dataSource){
         getAndraMappings();
         String result = andraMappings.get(dataSource.getFullName());

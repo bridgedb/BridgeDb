@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -43,7 +44,7 @@ public class UriMapping {
         byUriPattern.put(uriPattern, mappings2);
     }
 
-    private static void addMapping(DataSource dataSource, UriPattern uriPattern, UriMappingRelationship uriMappingRelationship) {
+    public static void addMapping(DataSource dataSource, UriPattern uriPattern, UriMappingRelationship uriMappingRelationship) {
         UriMapping mapping = getMapping(dataSource, uriPattern);
         System.out.println(mapping);
         mapping.relationships.add(uriMappingRelationship);
@@ -80,6 +81,7 @@ public class UriMapping {
                 System.out.println(pattern.getUriPattern());
                 for (DataSource dataSource:mappings.keySet()){
                     System.out.println ("   " + dataSource + " " + mappings.get(dataSource).relationships);
+                    System.out.println ("       " + DataSourcePatterns.getPatterns().get(dataSource));
                 }
             }
         }
