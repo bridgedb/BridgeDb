@@ -38,24 +38,29 @@ public class DataSourceImporter {
         InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
         StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
         Set<Statement> allStatements = reader.getVoidStatements();
+        loadDataSources(allStatements);
+        loadUriPatterns(allStatements);
+        linkUriPatterns(allStatements);
+    }
+    
+    public static void loadDataSources(Set<Statement> allStatements) throws IDMapperException {
         Set<Resource> resources = getDataSourceResources(allStatements);
-        HashMap<String, DataSource>  bases = new HashMap<String, DataSource>();
         for (Resource resource:resources){
             System.out.println(resource);
             Set<Statement> resourceStatements = getStatementsByResource(resource, allStatements);
             DataSource dataSource = createDataSource(resourceStatements, allStatements);
-            String urnbase = dataSource.getURN("");
-            if ((urnbase != null) && urnbase.length() > 1 && !urnbase.startsWith("null")){
-                DataSource oldDataSource = bases.get(urnbase);
-                if (oldDataSource != null && !oldDataSource.equals(dataSource)){
-                    throw new BridgeDBException("Base " + urnbase + " used in " + 
-                            dataSource + " and " + oldDataSource);
-                }
-                bases.put(dataSource.getURN(""), dataSource);
-            }
         }
     }
     
+    private static void loadUriPatterns(Set<Statement> allStatements) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private static void linkUriPatterns(Set<Statement> allStatements) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+
     private static Set<Resource> getDataSourceResources(Set<Statement> statements){
         HashSet<Resource> resources = new HashSet<Resource>();
         for (Statement statement:statements){
@@ -158,5 +163,5 @@ public class DataSourceImporter {
         }
         throw new BridgeDBException("No Orgamism found for " + organismId);
     }
-    
+
 }

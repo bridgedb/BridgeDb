@@ -66,6 +66,8 @@ public interface WSOpsInterface extends WSCoreInterface{
     //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
     //        String includeWarnings) throws IDMapperException;
 
+    public String getSqlCompatVersion() throws IDMapperException;
+     
     //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
     //        String includeWarnings) throws IDMapperException;
 
@@ -92,5 +94,5 @@ public interface WSOpsInterface extends WSCoreInterface{
     public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, 
             String validationType);
     */
-     
+
  }

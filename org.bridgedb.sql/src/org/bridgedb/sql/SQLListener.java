@@ -42,7 +42,7 @@ import org.bridgedb.utils.StoreType;
 public class SQLListener implements MappingListener{
 
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	protected static final int SQL_COMPAT_VERSION = 5;
+	public static final int SQL_COMPAT_VERSION = 5;
   
     //Maximumn size in database
     protected static final int SYSCODE_LENGTH = 100;
@@ -723,13 +723,33 @@ public class SQLListener implements MappingListener{
                     + "   from DataSource ";           
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()){
-                DataSource.register(rs.getString("sysCode"), rs.getString("fullName")).
-                        primary(rs.getBoolean("isPrimary")).
-                        mainUrl(rs.getString("mainUrl")).
-                        urlPattern(rs.getString("urlPattern")).
-                        idExample(rs.getString("idExample")).
-                        type(rs.getString("type")).
-                        urnBase(rs.getString("urnBase"));
+                String sysCode = rs.getString("sysCode");
+                if (sysCode.equals("null")){
+                    sysCode = null;
+                }
+                String fullName = rs.getString("fullName");
+                DataSource.Builder builder = DataSource.register(sysCode, fullName);
+                builder.primary(rs.getBoolean("isPrimary"));
+                String mainUrl = rs.getString("mainUrl");
+                if (mainUrl != null && !mainUrl.isEmpty() && mainUrl.equals("null")){
+                    builder.mainUrl(mainUrl);
+                }
+                String urlPattern = rs.getString("urlPattern");
+                if (urlPattern != null && !urlPattern.isEmpty() && urlPattern.equals("null")){
+                    builder.urlPattern(urlPattern);
+                }
+                String idExample = rs.getString("idExample");
+                if (idExample != null && !idExample.isEmpty() && idExample.equals("null")){
+                    builder.idExample(idExample);
+                }
+                String type = rs.getString("type");
+                if (type != null && !type.isEmpty() && type.equals("null")){
+                    builder.type(type);
+                }
+                String urnBase = rs.getString("urnBase");
+                if (urnBase != null && !urnBase.isEmpty() && urnBase.equals("null")){
+                    builder.urnBase(urnBase);
+                }
             }
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to load DataSources");

@@ -5,10 +5,10 @@
 #BaseURI should match the localing the war will be propped to or links will not work.
 BaseURI                 http://localhost:8080/OPS-IMS/
 
-#WARNING leaving the default relative links is not recommeneded especially for Main and Load RDF.
+#WARNING leaving the default relative links is not recommeneded!
 #Relative links will fail if loading and running is not done from the same directory.
-#Remember that the parent directies (in the defaults ../rdf) MUST exist.
-#Remember to grant READ and WRITE ACCESS to all users running any bridgedb programs including tomcat.
+#Remember that these directies (in the defaults ../rdf/linksets and ../rdf/testLinksets) MUST exist, 
+#Remember to grant READ and WRITE ACCESS to all users running any BridgeDB programs including tomcat.
 
 #Main RDF store
 SailNativeStore         ../rdf/linksets
@@ -19,8 +19,9 @@ SailNativeStore         ../rdf/linksets
 LoadSailNativeStore     ../rdf/linksets
 #Defaults to SailNativeStore if not set
 
-#Test RDF store
-#WARNING do not set the test store to be the same as the production store as one of the tests erases the store!
+#Test and temporary RDF store
+#This folder MUST exist as for non admins to save data in and is therefor used in validation.
+#WARNING do not set the test store to be the same as the production store as many of the tests erases the store!
 #the default relative directory will use the RDF directory directly below $BridgeDB
 TestSailNativeStore     ../rdf/testLinksets
 

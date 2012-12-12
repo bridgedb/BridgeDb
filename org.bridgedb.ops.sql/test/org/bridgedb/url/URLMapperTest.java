@@ -31,6 +31,7 @@ import org.junit.AfterClass;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
+import org.bridgedb.sql.SQLListener;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -353,5 +354,12 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertFalse (results.contains(URISpace2a));
         assertTrue (results.contains(URISpace3));
         assertTrue (results.contains(URISpace3a));
+    }
+    
+    @Test
+    public void testGetSqlCompatVersion() throws IDMapperException {
+        report("GetSqlCompatVersion");
+        int result = urlMapper.getSqlCompatVersion();
+        assertEquals(SQLListener.SQL_COMPAT_VERSION, result);
     }
 }

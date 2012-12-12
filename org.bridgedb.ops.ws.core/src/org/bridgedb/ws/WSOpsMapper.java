@@ -198,7 +198,12 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
         return getUriSpaces(info.getTargetSysCode());
     }
 
-    // *****   LinksetInterfaceMinimal Methods
+    @Override
+    public int getSqlCompatVersion() throws IDMapperException {
+        return Integer.parseInt(opsService.getSqlCompatVersion());
+    }
+    
+   // *****   LinksetInterfaceMinimal Methods
     
     /*@Override
     public String validateString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
@@ -254,5 +259,6 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
                  validationType.toString());
     }
      */
+
 
  }

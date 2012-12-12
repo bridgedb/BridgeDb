@@ -81,4 +81,183 @@ public class DataSourceTest {
 		Assert.assertTrue(source.isMetabolite());
 	}
     
+    @Test
+    public void testRegisterSecondFullName(){
+        String sysCode = "testRegisterSecondFullName";
+        String fullName1 = "testRegisterSecondFullName_FullName1";
+        DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
+        String fullName2 = "testRegisterSecondFullName_FullName2";
+        DataSource ds2 = DataSource.register(sysCode, fullName2).asDataSource();
+        Assert.assertEquals(ds1, ds2);
+        Assert.assertEquals(fullName2, ds2.getFullName());
+        Assert.assertEquals(fullName1, ds1.getAlternativeFullNames().iterator().next());      
+        Assert.assertEquals(ds1, DataSource.getByFullName(fullName2));
+        Assert.assertEquals(ds1, DataSource.getByFullName(fullName1));        
+    }
+
+    @Test
+    public void testRegisterAleternativeFullName(){
+        String sysCode = "testRegisterSecondFullName";
+        String fullName1 = "testRegisterSecondFullName_FullName1";
+        DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
+        String fullName2 = "testRegisterSecondFullName_FullName2";
+        DataSource ds2 = DataSource.register(sysCode, fullName2).asDataSource();
+        Assert.assertEquals(ds1, ds2);
+        Assert.assertEquals(fullName2, ds2.getFullName());
+        Assert.assertEquals(fullName1, ds1.getAlternativeFullNames().iterator().next());        
+    }
+    
+    @Test
+    public void testSetUrnBase() throws IDMapperException{
+        String fullName = "TestUrnBase";
+        String nameSpace = "http://identifiers.org/" + fullName;
+        String urnBase = "urn:miriam:" + fullName;
+		DataSource source = DataSource.register(fullName,  fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = urnBase + ":" + id;
+        Assert.assertEquals(result, expected);
+        result = source.getIdentifiersOrgUri(id);
+        expected = nameSpace + "/" + id;
+        Assert.assertEquals(result, expected);        
+    }
+
+    @Test
+    public void testSetUrnShortFirst() throws IDMapperException{
+        String shortBase = "shortBase";
+        String fullName = "TestUrnBase1";
+        String nameSpace = "http://identifiers.org/" + fullName;
+        String urnBase = "urn:miriam:" + fullName;
+		DataSource source1 = DataSource.register(fullName,  fullName)
+                .urnBase(shortBase)
+                .asDataSource();
+		DataSource source2 = DataSource.register(fullName,  fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        Assert.assertEquals(source1, source2);
+        String id = "1234";
+        String result = source1.getURN(id);
+        String expected = urnBase + ":" + id;
+        Assert.assertEquals(result, expected);
+        result = source2.getIdentifiersOrgUri(id);
+        expected = nameSpace + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test
+    public void testSetUrnLongFirst() throws IDMapperException{
+        String shortBase = "shortBase";
+        String fullName = "TestUrnBase2";
+        String nameSpace = "http://identifiers.org/" + fullName;
+        String urnBase = "urn:miriam:" + fullName;
+		DataSource source2 = DataSource.register(fullName,  fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+		DataSource source1 = DataSource.register(fullName,  fullName)
+                .urnBase(shortBase)
+                .asDataSource();
+        Assert.assertEquals(source1, source2);
+        String id = "1234";
+        String result = source1.getURN(id);
+        String expected = urnBase + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source2.getIdentifiersOrgUri(id);
+        expected = nameSpace + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test (expected = IllegalStateException.class)   
+    public void testSetDifferentUrns(){
+        String fullName = "TestUrnBase3";
+        String urnBase1 = "urn:miriam:testUrnBase3a";
+        String urnBase2 = "urn:miriam:testUrnBase3b";
+		DataSource source1 = DataSource.register(fullName,  fullName)
+                .urnBase(urnBase1)
+                .asDataSource();
+		DataSource source2 = DataSource.register(fullName,  fullName)
+                .urnBase(urnBase2)
+                .asDataSource();
+    }
+
+    @Test
+    public void testSetIdentifiersOrgUri() throws IDMapperException{
+        String fullName = "TestIdentifiersOrgUri";
+        String nameSpace = "http://identifiers.org/" + fullName;
+        String urnBase = "urn:miriam:" + fullName;
+		DataSource source = DataSource.register(fullName, fullName)
+                .identifiersOrgUri(nameSpace)
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = urnBase + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        expected = nameSpace + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test
+    public void testSetBoth() throws IDMapperException{
+        String fullName = "TestIdentifiersOrgUri2";
+        String nameSpace = "http://identifiers.org/" + fullName;
+        String urnBase = "urn:miriam:" + fullName;
+		DataSource source1 = DataSource.register(fullName, fullName)
+                .identifiersOrgUri(nameSpace)
+                .asDataSource();
+		DataSource source2 = DataSource.register(fullName, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        Assert.assertEquals(source1, source2);        
+        String id = "1234";
+        String result = source1.getURN(id);
+        String expected = urnBase + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source2.getIdentifiersOrgUri(id);
+        expected = nameSpace + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test (expected = IllegalStateException.class)   
+    public void testSetDifferentUrnBaseToUrn() throws IDMapperException{
+        String fullName = "TestDifferentUrnBaseToUrn";
+        String nameSpace = "http://identifiers.org/" + fullName + "A";
+        String urnBase = "urn:miriam:" + fullName + "B";
+		DataSource source1 = DataSource.register(fullName, fullName)
+                .identifiersOrgUri(nameSpace)
+                .asDataSource();
+		DataSource source2 = DataSource.register(fullName, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+    }
+
+    @Test (expected = IDMapperException.class)   
+    public void testSetDifferentUrnBaseToUrn2() throws IDMapperException{
+        String fullName = "TestDifferentUrnBaseToUrn2";
+        String nameSpace = "http://identifiers.org/" + fullName + "A";
+        String urnBase = "urn:miriam:" + fullName + "B";
+		DataSource source2 = DataSource.register(fullName, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+		DataSource source1 = DataSource.register(fullName, fullName)
+                .identifiersOrgUri(nameSpace)
+                .asDataSource();
+    }
+    
+    @Test
+    public void testSetUrnBaseNonMiram() throws IDMapperException{
+        String fullName = "TestSetUrnBaseNonMiram";
+		DataSource source = DataSource.register(fullName,  fullName)
+                .urnBase(fullName)
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = fullName + ":" + id;
+        Assert.assertEquals(result, expected);
+        result = source.getIdentifiersOrgUri(id);
+        expected = null;
+        Assert.assertEquals(expected, result);        
+    }
+
 }
