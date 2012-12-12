@@ -82,6 +82,39 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
+    public void testMaptoURLsManyToManyNoDataSources() throws IDMapperException{
+        report("MapToURLsManyToManyNoDataSources");
+        HashSet<Xref> sourceXrefs = new HashSet<Xref>();
+        sourceXrefs.add(map1xref1);
+        sourceXrefs.add(map2xref2);
+        sourceXrefs.add(mapBadxref2);
+        assertNotNull(map1URL1);
+        assertNotNull(map2URL2);
+        assertNotNull(mapBadURL1);
+        Map<Xref, Set<String>> results = urlMapper.mapToURLs(sourceXrefs);
+        Set<String> resultSet = results.get(map1xref1);
+        assertNotNull(resultSet);
+        assertTrue(resultSet.contains(map1URL2));
+        assertTrue(resultSet.contains(map1URL3));
+        assertFalse(resultSet.contains(map2URL1));
+        assertFalse(resultSet.contains(map2URL3));
+        resultSet = results.get(map2xref2);
+        assertNotNull(resultSet);
+        assertFalse(resultSet.contains(map1URL2));
+        assertFalse(resultSet.contains(map1URL3));
+        assertTrue(resultSet.contains(map2URL1));
+        assertTrue(resultSet.contains(map2URL3));
+        resultSet = results.get(map2xref1);
+        assertNull(resultSet);
+        resultSet = results.get(map3xref1);
+        assertNull(resultSet);
+        resultSet = results.get(mapBadxref2);
+        //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
+        //Still optional as I am not sure text does.
+        assertTrue(resultSet == null || resultSet.size() <= 1);
+    }
+    
+    @Test
     public void testMapIDOneToManyNoDataSources() throws IDMapperException{
         report("MapIDOneToManyNoDataSources");
         Set<String> results = urlMapper.mapURL(map1URL1);
@@ -92,6 +125,17 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertFalse(results.contains(map2URL2));
     }
     
+    @Test
+    public void testToURLsOneToManyNoDataSources() throws IDMapperException{
+        report("MapXrefOneToManyNoDataSources");
+        Set<String> results = urlMapper.mapToURLs(map1xref1);
+        assertTrue(results.contains(map1URL2));
+        assertTrue(results.contains(map1URL3));
+        assertFalse(results.contains(map2URL1));
+        assertFalse(results.contains(map2URL2));
+        assertFalse(results.contains(map2URL2));
+    }
+
     @Test
     public void testMapFullOneToManyNoDataSources() throws IDMapperException{
         report("MapFullOneToManyNoDataSources");
@@ -113,6 +157,26 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
+    public void testMapXrefFullOneToManyNoDataSources() throws IDMapperException{
+        report("MapXrefFullOneToManyNoDataSources");
+        Set<ToURLMapping> results = urlMapper.mapToURLsFull(map3xref3);
+        for (ToURLMapping URLMapping:results){
+            if (URLMapping.getTargetURLs().contains(map3URL3)){
+                assertNull(URLMapping.getId());
+                assertNull(URLMapping.getMappingSetId());        
+                assertNull(URLMapping.getPredicate() );
+            } else {
+                String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
+                assertThat(URLMapping.getTargetURLs().iterator().next(), isOneOf( expectedMatches ) );
+                assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
+                assertNotNull(URLMapping.getId());
+                assertNotNull(URLMapping.getMappingSetId());
+            }
+            assertEquals(map3xref3, URLMapping.getSource());
+        }
+    }
+
+    @Test
     public void testMapIDOneBad() throws IDMapperException{
         report("MapIDOneBad");
         Set<String> results = urlMapper.mapURL(mapBadURL1);
@@ -126,6 +190,17 @@ public abstract class URLMapperTest extends URLListenerTest{
     public void testMapIDOneToManyWithOneDataSource() throws IDMapperException{
         report("MapIDOneToManyWithOneDataSource");
         Set<String> results = urlMapper.mapURL(map1URL1, URISpace2);
+        assertTrue(results.contains(map1URL2));
+        assertFalse(results.contains(map1URL3));
+        assertFalse(results.contains(map2URL1));
+        assertFalse(results.contains(map2URL2));
+        assertFalse(results.contains(map2URL2));
+    }
+ 
+    @Test
+    public void testMapToURLsOneToManyWithOneDataSource() throws IDMapperException{
+        report("MapIDOneToManyWithOneDataSource");
+        Set<String> results = urlMapper.mapToURLs(map1xref1, URISpace2);
         assertTrue(results.contains(map1URL2));
         assertFalse(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
