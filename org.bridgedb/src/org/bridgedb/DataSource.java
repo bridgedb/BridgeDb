@@ -223,7 +223,7 @@ public final class DataSource
      * @since 2.0.0
 	 */
     public String getIdentifiersOrgUri(String id) throws IDMapperException{
-        if (miriamBase == null){
+        if (miriamBase.isEmpty()){
             return null;
         }
 		try

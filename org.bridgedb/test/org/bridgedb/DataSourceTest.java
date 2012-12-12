@@ -143,7 +143,7 @@ public class DataSourceTest {
         Assert.assertEquals(result, expected);
         result = source2.getIdentifiersOrgUri(id);
         expected = nameSpace + "/" + id;
-        Assert.assertEquals(result, expected);        
+        Assert.assertEquals(expected, result);        
     }
 
     @Test
@@ -162,10 +162,10 @@ public class DataSourceTest {
         String id = "1234";
         String result = source1.getURN(id);
         String expected = urnBase + ":" + id;
-        Assert.assertEquals(result, expected);
+        Assert.assertEquals(expected, result);        
         result = source2.getIdentifiersOrgUri(id);
         expected = nameSpace + "/" + id;
-        Assert.assertEquals(result, expected);        
+        Assert.assertEquals(expected, result);        
     }
 
     @Test (expected = IllegalStateException.class)   
@@ -192,10 +192,10 @@ public class DataSourceTest {
         String id = "1234";
         String result = source.getURN(id);
         String expected = urnBase + ":" + id;
-        Assert.assertEquals(result, expected);
+        Assert.assertEquals(expected, result);        
         result = source.getIdentifiersOrgUri(id);
         expected = nameSpace + "/" + id;
-        Assert.assertEquals(result, expected);        
+        Assert.assertEquals(expected, result);        
     }
 
     @Test
@@ -213,10 +213,10 @@ public class DataSourceTest {
         String id = "1234";
         String result = source1.getURN(id);
         String expected = urnBase + ":" + id;
-        Assert.assertEquals(result, expected);
+        Assert.assertEquals(expected, result);        
         result = source2.getIdentifiersOrgUri(id);
         expected = nameSpace + "/" + id;
-        Assert.assertEquals(result, expected);        
+        Assert.assertEquals(expected, result);        
     }
 
     @Test (expected = IllegalStateException.class)   
@@ -244,4 +244,20 @@ public class DataSourceTest {
                 .identifiersOrgUri(nameSpace)
                 .asDataSource();
     }
+    
+    @Test
+    public void testSetUrnBaseNonMiram() throws IDMapperException{
+        String fullName = "TestSetUrnBaseNonMiram";
+		DataSource source = DataSource.register(fullName,  fullName)
+                .urnBase(fullName)
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = fullName + ":" + id;
+        Assert.assertEquals(result, expected);
+        result = source.getIdentifiersOrgUri(id);
+        expected = null;
+        Assert.assertEquals(expected, result);        
+    }
+
 }
