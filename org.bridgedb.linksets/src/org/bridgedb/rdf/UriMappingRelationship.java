@@ -9,5 +9,5 @@ package org.bridgedb.rdf;
  * @author Christian
  */
 public enum UriMappingRelationship {
-    PRIMARY, IDENTIFERS_ORG, WIKIPATHWAYS;
+    PRIMARY_URI_PATTERN, IDENTIFERS_ORG, WIKIPATHWAYS;
 }

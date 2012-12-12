@@ -68,7 +68,7 @@ public class UriMapping {
             String url = dataSource.getUrl("$id");
             if (url.length() > 3){
                 UriPattern uriPattern = UriPattern.byUrlPattern(url);
-                addMapping (dataSource, uriPattern, UriMappingRelationship.PRIMARY);
+                addMapping (dataSource, uriPattern, UriMappingRelationship.PRIMARY_URI_PATTERN);
             }
         }
         showSharedUriPatterns();
