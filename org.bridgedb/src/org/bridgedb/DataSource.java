@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
 contains information about a certain DataSource, such as
@@ -352,10 +354,40 @@ public final class DataSource
 		 */
 		public Builder urnBase (String base)
 		{
-            current.setUrnBase(base);
- 			return this;
+            if (base!= null && !base.isEmpty()){
+                try {
+                    if (base.startsWith(MIRIAM_URN_ROOT)){
+                        current.setMarianBase(base.substring(MIRIAM_URN_ROOT.length()));
+                    } else {
+                        current.setNonMarianBase(base);
+                    }
+                } catch (IDMapperException ex) {
+                    throw new IllegalStateException("Unable to set base ", ex);
+                }
+            }
+            return this;
 		}
         
+		/**
+		 * Registers an indetifiers.org uri 
+         * 
+         * Since Version 2.0.0 If the base starts with "urn:miriam:" the part that comes after "urn:miriam:"
+         * will also be used for identifiers.org uris.
+		 * @param uri an indetifiers.org uri which must start with "http://identifiers.org/"
+		 * @return the same Builder object so you can chain setters
+         * @throws IDMapperException If a previous (different) uri was registered by either this method or 
+         *     indirectly by the urnBase method.
+		 */
+		public Builder identifiersOrgUri (String uri) throws IDMapperException
+		{
+            if (uri.startsWith(IDENTIFIERS_URI_ROOT)){
+                current.setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length()));
+        		return this;
+            } else {
+                throw new IDMapperException("identifiers.Org uri must start with " + IDENTIFIERS_URI_ROOT 
+                        + " which \"" + uri + "\" does not");
+            }
+		}
         
         
         /**
@@ -636,7 +668,8 @@ public final class DataSource
 	/**
 	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
 	 * @returns the DataSource for a given urn base, or null if the base is invalid.
-	 * If the given urn base is unknown, a new DataSource will be created with the full name equal to the urn base without "urn.miriam."  
+	 * If the given urn base is unknown, a new DataSource will be created 
+     *    with the full name equal to the urn base without "urn.miriam."  
 	 */
 	public static DataSource getByUrnBase(String base)
 	{
@@ -644,50 +677,88 @@ public final class DataSource
 		{
 			return null;
 		}
-		DataSource current = null;
-		
-		if (byMiriamBase.containsKey(base))
+		String marianBase = base.substring(MIRIAM_URN_ROOT.length());
+        return getByMiranBase(marianBase);
+	}
+
+	/**
+	 * @param nameSpace the namespace, which must start with "http://identifiers.org/". It it isn't, null is returned.
+	 * @returns the DataSource for a given urn base, or null if the base is invalid.
+	 * If the given urn base is unknown, a new DataSource will be created 
+     *    with the full name equal to the urn base without "http://identifiers.org/"  
+	 */
+	public static DataSource getByIdentifiersOrgUri(String base)
+	{
+		if (!base.startsWith (IDENTIFIERS_URI_ROOT))
 		{
-			current = byMiriamBase.get(base);
+			return null;
+		}
+		String marianBase = base.substring(IDENTIFIERS_URI_ROOT.length());
+        return getByMiranBase(marianBase);
+	}
+
+	/**
+	 * @param marianBase the bit that comes (after "urn:miriam:" and before the next ":")
+     * or (after "http://identifiers.org/" and beofre the next "/". 
+  	 * @returns the DataSource for a given marianBase, or null if the base is invalid.
+	 * If the given urn base is unknown, a new DataSource will be created with the full name equal to the urn base without "urn.miriam."  
+	 */
+	private static DataSource getByMiranBase(String marianBase)
+	{
+		DataSource current = null;
+        
+		if (byMiriamBase.containsKey(marianBase))
+		{
+			current = byMiriamBase.get(marianBase);
 		}
 		else
 		{
-			current = getByFullName(base.substring(MIRIAM_URN_ROOT.length()));
-			current.setUrnBase(base);
+			current = getByFullName(marianBase);
+            try {
+                current.setMarianBase(marianBase);
+            } catch (IDMapperException ex) {
+                throw new IllegalStateException("Unable to set base", ex);
+            }
 		}
 		return current;
 	}
 
-    private void setUrnBase(String base){
-        if (base != null && !base.isEmpty()){
-            if (urnBase != "" && !urnBase.equals(base)){
-                if (urnBase.startsWith(MIRIAM_URN_ROOT)){
-                    if (base.startsWith(MIRIAM_URN_ROOT)){
-                        throw new IllegalStateException("Illegal attempt to change (Miriam) urnBase for " + this 
-                                + ". Current value \"" + urnBase + "\" is NOT equal to new Value \"" + base + "\"");            
-                    } else {
-                        System.err.println("Ignoring attempt to overwrite Miriam UrnBase \"" + urnBase + "\""
-                                + " with non Miriam base \"" + base + "\" for " + this);
-                        return;
-                    }
-                } else {
-                    if (base.startsWith(MIRIAM_URN_ROOT)){
-                        System.err.println("Overwriting none Miriam UrnBase \"" + urnBase + "\""
-                                + " with Miriam base \"" + base + "\" for " + this);
-                        //ok to continue
-                    } else {
-                        throw new IllegalStateException("Illegal attempt to change (none Miram) urnBase for " + this 
-                                + ". Current value \"" + urnBase + "\" is NOT equal to new Value \"" + base + "\"");            
-                    }
-                }
-            }
-            urnBase = base;
-            if (base.startsWith(MIRIAM_URN_ROOT)){
-                byMiriamBase.put (urnBase, this);   
-                miriamBase = base.substring(MIRIAM_URN_ROOT.length());
-            } else {
-                System.err.println("None miriam urnBase \"" + base + "\" used for " + this);
-            }
+    /**
+	 * @param base the bit that comes (after "urn:miriam:" and before the next ":")
+     * or (after "http://identifiers.org/" and beofre the next "/". 
+     * @throws IDMapperException If a different base is set
+     */
+    private void setMarianBase(String base) throws IDMapperException{
+        if (!miriamBase.isEmpty() && !miriamBase.equals(base)){
+            throw new IDMapperException("Illegal attempt to change miriamBase for " + this 
+                + ". Current value \"" +miriamBase + "\" is NOT equal to new Value \"" + base + "\"");            
+        } 
+        String newUrnBase = MIRIAM_URN_ROOT + base;
+        if (!urnBase.isEmpty() && !newUrnBase.equals(urnBase)){
+            System.err.println("Overwriting none Miriam UrnBase \"" + urnBase + "\""
+                + " with Miriam base \"" + newUrnBase + "\" for " + this);
         }
+        miriamBase = base;
+        urnBase = newUrnBase;
+        byMiriamBase.put (base, this);   
     }
+
+    /**
+	 * @param base A urn base predetermined not to start with "urn:miriam:"
+     * @throws IDMapperException If a different base is set
+     */
+    private void setNonMarianBase(String base) throws IDMapperException{
+        if (urnBase != "" && !urnBase.equals(base)){
+            if (miriamBase.isEmpty()){
+                throw new IDMapperException("Illegal attempt to change (none Miram) urnBase for " + this 
+                        + ". Current value \"" + urnBase + "\" is NOT equal to new Value \"" + base + "\"");            
+            }
+            System.err.println("Ignoring attempt to overwrite Miriam UrnBase \"" + urnBase + "\""
+                    + " with non Miriam base \"" + base + "\" for " + this);
+            return;
+        }
+        urnBase = base;
+        System.err.println("None miriam urnBase \"" + base + "\" used for " + this);
+    }
+
 }
