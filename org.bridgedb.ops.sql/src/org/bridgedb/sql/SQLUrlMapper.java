@@ -34,7 +34,6 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.ToURLMapping;
 import org.bridgedb.url.UriSpaceMapper;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
@@ -317,7 +316,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Set<ToURLMapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws BridgeDbSqlException {
+    public Set<URLMapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
         query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
         finishMappingQuery(query, ref, targetURISpaces); 
@@ -328,7 +327,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
-        Set<ToURLMapping> results = resultSetToURLMappingSet(ref, rs);
+        Set<URLMapping> results = resultSetURLMappingSet(ref, rs);
         logResults(results, ref, targetURISpaces);
         return results;       
     }
@@ -793,15 +792,15 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @return Set of mappings from the source to thie URL in the results.
      * @throws BridgeDbSqlException
      */
-    private Set<ToURLMapping> resultSetToURLMappingSet(Xref ref, ResultSet rs) throws BridgeDbSqlException {
-        HashSet<ToURLMapping> results = new HashSet<ToURLMapping>();
+    private Set<URLMapping> resultSetURLMappingSet(Xref ref, ResultSet rs) throws BridgeDbSqlException {
+        HashSet<URLMapping> results = new HashSet<URLMapping>();
         try {
             while (rs.next()){
                 Integer mappingId = rs.getInt("mappingId"); 
                 String targetURL = rs.getString("uriSpace") + rs.getString("id");
                 Integer mappingSetId = rs.getInt("mappingSetId");
                 String predicate = rs.getString("predicate");
-                ToURLMapping urlMapping = new ToURLMapping (mappingId, ref, predicate, targetURL, mappingSetId);       
+                URLMapping urlMapping = new URLMapping (mappingId, ref, predicate, targetURL, mappingSetId);       
                 results.add(urlMapping);
             }
             return results;

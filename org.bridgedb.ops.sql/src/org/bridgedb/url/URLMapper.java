@@ -140,7 +140,7 @@ public interface URLMapper extends IDMapper{
 	 * @return A Set containing the URL (in ToURLMapping Objects) that have been mapped/ cross referenced.
 	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Set<ToURLMapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws IDMapperException;
+    public Set<URLMapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws IDMapperException;
 
     /**
      * Check whether an URL is known by the given mapping source. 

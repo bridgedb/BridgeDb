@@ -18,6 +18,7 @@
 //
 package org.bridgedb.ws.bean;
 
+import org.bridgedb.Xref;
 import org.bridgedb.url.URLMapping;
 
 /**
@@ -27,12 +28,16 @@ import org.bridgedb.url.URLMapping;
 public class URLMappingBeanFactory {
     
     public static URLMapping asURLMapping(URLMappingBean bean){
-        return new URLMapping (bean.getId(), bean.getSourceURL(), bean.getPredicate(), bean.getTargetURL(), 
-                bean.getMappingSetId());      
+        Xref source = XrefBeanFactory.asXref(bean.getSource());
+        Xref target = XrefBeanFactory.asXref(bean.getTarget());
+        return new URLMapping (bean.getId(), bean.getSourceURL(),source, bean.getPredicate(), 
+                bean.getTargetURL(), target, bean.getMappingSetId());      
     }
 
     public static URLMappingBean asBean(URLMapping urlMapping) {
-        return new URLMappingBean (urlMapping.getId(), urlMapping.getSourceURLs(), urlMapping.getPredicate(), 
-                urlMapping.getTargetURLs(), urlMapping.getMappingSetId());              
+        XrefBean source = XrefBeanFactory.asBean(urlMapping.getSource());
+        XrefBean target = XrefBeanFactory.asBean(urlMapping.getTarget());
+        return new URLMappingBean (urlMapping.getId(), urlMapping.getSourceURLs(), source, urlMapping.getPredicate(), 
+                urlMapping.getTargetURLs(), target, urlMapping.getMappingSetId());              
     }
 }

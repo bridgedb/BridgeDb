@@ -39,6 +39,9 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public List<URLMappingBean> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException;
     
+    public List<URLMappingBean> mapToURLs(String id, String scrCode, List<String> targetUriSpace) 
+            throws IDMapperException;
+
     public URLExistsBean URLExists(String URL) throws IDMapperException;
 
     public URLSearchBean URLSearch(String text, String limitString) throws IDMapperException;

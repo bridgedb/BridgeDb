@@ -159,8 +159,8 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapXrefFullOneToManyNoDataSources() throws IDMapperException{
         report("MapXrefFullOneToManyNoDataSources");
-        Set<ToURLMapping> results = urlMapper.mapToURLsFull(map3xref3);
-        for (ToURLMapping URLMapping:results){
+        Set<URLMapping> results = urlMapper.mapToURLsFull(map3xref3);
+        for (URLMapping URLMapping:results){
             if (URLMapping.getTargetURLs().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
