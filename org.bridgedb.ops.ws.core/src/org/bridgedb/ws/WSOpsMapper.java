@@ -72,7 +72,6 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
     public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, 
     		String profileURL, String... targetURISpaces) throws IDMapperException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>> ();
-        if (sourceURLs.isEmpty()) return results; //No valid srcrefs so return empty set
         for (String sourceURL:sourceURLs){
             Set<String> urls = mapURL(sourceURL, profileURL, targetURISpaces);
             results.put(sourceURL, urls);
@@ -91,6 +90,35 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
         return targetURLS;
     }
 
+    @Override
+    public Set<String> mapToURLs(Xref xref, String... targetURISpaces) throws IDMapperException {
+        List<URLMappingBean> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
+        HashSet<String> targetURLS = new HashSet<String>(); 
+        for (URLMappingBean bean:beans){
+            targetURLS.addAll(bean.getTargetURL());
+        }
+        return targetURLS;
+    }
+
+    @Override
+    public Set<URLMapping> mapToURLsFull(Xref xref, String... targetURISpaces) throws IDMapperException {
+        List<URLMappingBean> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
+        HashSet<URLMapping> targetURLS = new HashSet<URLMapping>(); 
+        for (URLMappingBean bean:beans){
+            targetURLS.add(URLMappingBeanFactory.asURLMapping(bean));
+        }
+        return targetURLS;
+    }
+
+    @Override
+    public Map<Xref, Set<String>> mapToURLs(Collection<Xref> srcXrefs, String... targetURISpaces) throws IDMapperException {
+        HashMap<Xref, Set<String>> results = new HashMap<Xref, Set<String>> ();
+        for (Xref ref:srcXrefs){
+            Set<String> urls = mapToURLs(ref, targetURISpaces);
+            results.put(ref, urls);
+        }
+        return results;
+     }
 
     @Override
     public boolean uriExists(String URL) throws IDMapperException {

@@ -24,6 +24,9 @@ import org.bridgedb.Xref;
 public class XrefBeanFactory {
     
     public static XrefBean asBean(Xref xref){
+        if (xref == null){
+            return null;
+        }
         XrefBean bean = new XrefBean();
         bean.id = xref.getId();
         bean.dataSource = DataSourceBeanFactory.asBean(xref.getDataSource());
@@ -31,6 +34,9 @@ public class XrefBeanFactory {
     }
     
     public static Xref asXref(XrefBean bean) {
+        if (bean == null){
+            return null;
+        }
         DataSource ds = DataSourceBeanFactory.asDataSource(bean.dataSource);
         return new Xref(bean.id, ds);
     }

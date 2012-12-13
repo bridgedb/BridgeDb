@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
@@ -66,30 +67,9 @@ public class DataSourceExporter implements Comparator<DataSource>{
     
     private void export() throws BridgeDBException{
         try {
-            ArrayList<DataSource> dataSources = new ArrayList(DataSource.getDataSources());
-            Collections.sort(dataSources, this);
-            writer.write("@prefix : <> .");
-            writer.newLine();
-            writer.write("@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .");
-            writer.newLine();
-            writer.write("@prefix xsd: <");
-            writer.write(XMLSchemaConstants.PREFIX);
-            writer.write("> .");
-            writer.newLine();
-            writer.newLine();
-            for (DataSource dataSource:dataSources){
-                printDataSource(dataSource);
-            }
-            writer.newLine();
-            writer.write("#WARNING: Organism are hard coded into BridgeDB.");
-            writer.newLine();
-            writer.write("#WARNING: below is for reference and NON BridgeDB use only!");
-            writer.newLine();
-            writer.write("#WARNING: Any changes could cause a BridgeDBException.");
-            writer.newLine();
-            for (Organism organism:organisms){
-                printOrganism(organism);
-            }
+            printDataSources();
+            printOrganisms();
+            printUriPatterns();
         } catch (IOException ex) {
             throw new BridgeDBException("Error exporting DataSources. ", ex);
         } finally {
@@ -100,6 +80,42 @@ public class DataSourceExporter implements Comparator<DataSource>{
                     throw new BridgeDBException("Error closing. ", ex);
                 }
             }
+        }
+    }
+
+    private void printDataSources() throws BridgeDBException, IOException{
+        ArrayList<DataSource> dataSources = new ArrayList(DataSource.getDataSources());
+        Collections.sort(dataSources, this);
+        writer.write("@prefix : <> .");
+        writer.newLine();
+        writer.write("@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .");
+        writer.newLine();
+        writer.write("@prefix xsd: <");
+        writer.write(XMLSchemaConstants.PREFIX);
+        writer.write("> .");
+        writer.newLine();
+        writer.newLine();
+        for (DataSource dataSource:dataSources){
+            printDataSource(dataSource);
+        }
+    }
+
+    private void printOrganisms() throws IOException {
+        writer.write("#WARNING: Organism are hard coded into BridgeDB.");
+        writer.newLine();
+        writer.write("#WARNING: below is for reference and NON BridgeDB use only!");
+        writer.newLine();
+        writer.write("#WARNING: Any changes could cause a BridgeDBException.");
+        writer.newLine();
+        for (Organism organism:organisms){
+            printOrganism(organism);
+        }
+    }
+
+    private void printUriPatterns() throws IOException {
+        Set<UriPattern> uriPatterns = UriPattern.getAllUriPatterns();
+        for (UriPattern  uriPattern:uriPatterns){
+            printUriPattern(uriPattern);
         }
     }
 
@@ -117,11 +133,14 @@ public class DataSourceExporter implements Comparator<DataSource>{
         return result;
     }
     
-    private void printDataSource(DataSource dataSource) throws IOException {
-        String name = scrub(dataSource.getFullName());
-        
+    private void printDataSourceID(DataSource dataSource) throws IOException{
+        String name = scrub(dataSource.getFullName());        
         writer.write(":DataSource_");
         writer.write(name);
+    }
+    
+    private void printDataSource(DataSource dataSource) throws IOException {
+        printDataSourceID(dataSource); 
         writer.write(" a bridgeDB:");
         writer.write(BridgeDBConstants.DATA_SOURCE);        
         writer.write("; ");        
@@ -172,7 +191,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
             writer.newLine();
        }
 
-        String urlPattern = dataSource.getUrl("$id");
+        /*String urlPattern = dataSource.getUrl("$id");
         if (urlPattern.length() > 3){
             writer.write("         bridgeDB:");
             writer.write(BridgeDBConstants.URL_PATTERN);
@@ -201,7 +220,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
             }
         }
 
-         String wikiNameSpace = mappings.get(dataSource.getFullName());
+        String wikiNameSpace = mappings.get(dataSource.getFullName());
         if (wikiNameSpace != null){
             writer.write("         bridgeDB:");
             writer.write(BridgeDBConstants.WIKIPATHWAYS_BASE);
@@ -210,7 +229,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
             writer.write("\";");
             writer.newLine();
         }
-        
+        */
         if (dataSource.getOrganism() != null){
             Organism organism = (Organism)dataSource.getOrganism();
             organisms.add(organism);
@@ -262,6 +281,24 @@ public class DataSourceExporter implements Comparator<DataSource>{
         writer.write(" \"");
         writer.write(organism.latinName());
         writer.write("\".");
+        writer.newLine();
+    }
+
+    private void printUriPattern(UriPattern uriPattern) throws IOException {
+        writer.write(":");
+        writer.write(BridgeDBConstants.URI_PATTERN);
+        writer.write("_");
+        writer.write(uriPattern.getRdfId());
+        writer.write(" a bridgeDB:");
+        writer.write(BridgeDBConstants.URI_PATTERN);
+        writer.write("; ");
+        writer.newLine();
+
+        writer.write("         bridgeDB:");
+        writer.write(BridgeDBConstants.URI_PATTERN);
+        writer.write(" \"");
+        writer.write(uriPattern.getUriPattern());
+        writer.write("\";");
         writer.newLine();
     }
 

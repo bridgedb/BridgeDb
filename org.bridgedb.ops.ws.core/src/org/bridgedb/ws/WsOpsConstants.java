@@ -22,6 +22,7 @@ public class WsOpsConstants extends WsConstants{
     public static final String GRAPHVIZ = "graphviz";
     public static final String MAPPING = "mapping";
     public static final String MAP_URL = "mapURL";
+    public static final String MAP_TO_URLS = "mapToURLs";
     public static final String SQL_COMPAT_VERSION = "SqlCompatVersion";
     public static final String TO_XREF = "toXref";
     public static final String URL_EXISTS = "URLExists";

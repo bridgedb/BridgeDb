@@ -30,8 +30,10 @@ public class URLMappingBean {
     Integer id;
     //Name is single as XML looks better this way
     Set<String> sourceURL;
+    private XrefBean source;
     //Name is single as XML looks better this way
     Set<String> targetURL;
+    private XrefBean target;
     private Integer mappingSetId;
     String predicate;
     
@@ -39,17 +41,42 @@ public class URLMappingBean {
     public URLMappingBean(){
     }
 
-    URLMappingBean(Integer id, Set<String> sourceURLs, String predicate, Set<String> targetURLs, Integer mappingSetId) {
+    URLMappingBean(Integer id, Set<String> sourceURLs, XrefBean source, String predicate, 
+            Set<String> targetURLs, XrefBean target, Integer mappingSetId) {
         this.id = id;
         this.sourceURL = sourceURLs;
+        this.source = source;
         this.predicate = predicate;
         this.targetURL = targetURLs;
+        this.target = target;
         this.mappingSetId = mappingSetId;
     }
     
     public String toString(){
-           return  "URLMapping: id: " + this.getId() + this.getSourceURL() + " " + this.getPredicate() + 
-                   " " + this.getTargetURL() + " id: " + this.getId() + " mappingSet: " + this.getMappingSetId();
+        StringBuilder builder = new StringBuilder ("URLMapping: id: ");
+        builder.append(this.getId());
+        if (this.getSourceURL() != null){
+            builder.append(this.getSourceURL());
+            builder.append(" ");
+        }
+        if (this.getSource() != null){
+            builder.append(this.getSourceURL());
+            builder.append(" ");
+        }
+        builder.append(this.getPredicate());
+        builder.append(" ");
+        if (this.getTargetURL() != null){
+            builder.append(this.getTargetURL());
+            builder.append(" id: ");
+        }
+        if (this.getTarget() != null){
+            builder.append(this.getTarget());
+            builder.append(" id: ");
+        }
+        builder.append(this.getId());
+        builder.append(" mappingSet: ");
+        builder.append(this.getMappingSetId());
+        return builder.toString();
     }
 
     /**
@@ -120,6 +147,34 @@ public class URLMappingBean {
      */
     public void setMappingSetId(Integer mappingSetId) {
         this.mappingSetId = mappingSetId;
+    }
+
+    /**
+     * @return the source
+     */
+    public XrefBean getSource() {
+        return source;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(XrefBean source) {
+        this.source = source;
+    }
+
+    /**
+     * @return the target
+     */
+    public XrefBean getTarget() {
+        return target;
+    }
+
+    /**
+     * @param target the target to set
+     */
+    public void setTarget(XrefBean target) {
+        this.target = target;
     }
     
 }

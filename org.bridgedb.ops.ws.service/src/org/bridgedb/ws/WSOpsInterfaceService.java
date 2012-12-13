@@ -149,6 +149,33 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/" + WsOpsConstants.MAP_TO_URLS)
+    @Override
+    public List<URLMappingBean> mapToURLs(
+            @QueryParam(WsConstants.ID) String id,
+            @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsOpsConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
+         if (logger.isDebugEnabled()){
+            logger.debug("mapToURLs called! id = " + id + " scrCode = " + scrCode + "targetURISpace = " + targetURISpace);
+        }
+        if (id == null) throw new BridgeDBException (WsConstants.ID + " parameter can not be null");
+        if (scrCode == null) throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter can not be null"); 
+        DataSource dataSource = DataSource.getBySystemCode(scrCode);
+        Xref source = new Xref(id, dataSource);
+        String[] targetURISpaces = new String[targetURISpace.size()];
+        for (int i = 0; i < targetURISpace.size(); i++){
+            targetURISpaces[i] = targetURISpace.get(i);
+        }
+        Set<URLMapping> urlMappings = urlMapper.mapToURLsFull(source, targetURISpaces);
+        ArrayList<URLMappingBean> results = new ArrayList<URLMappingBean>(); 
+        for (URLMapping urlMapping:urlMappings){
+            results.add(URLMappingBeanFactory.asBean(urlMapping));
+        }
+        return results;
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsOpsConstants.URL_EXISTS)
     @Override
     public URLExistsBean URLExists(@QueryParam(WsOpsConstants.URL) String URL) throws IDMapperException {

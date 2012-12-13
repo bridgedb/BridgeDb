@@ -41,5 +41,6 @@ public class BridgeDBConstants {
     public static final URI SHORT_NAME_URI = new URIImpl(PREFIX + SHORT_NAME);
     public static final String LATIN_NAME = "latinName";
     public static final URI LATIN_NAME_URI = new URIImpl(PREFIX + LATIN_NAME);
-
+    public static final String URI_PATTERN = "uriPattern";
+    public static final URI URI_PATTERN_URI = new URIImpl(PREFIX + URI_PATTERN);
 }

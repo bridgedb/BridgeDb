@@ -24,6 +24,7 @@ public class UriPattern {
     private final String nameSpace;
     private final String postFix;
 
+    private static HashSet<UriPattern> register = new HashSet<UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
     private static HashMap<String,HashMap<String,UriPattern>> byNameSpaceAndPostFix = 
             new HashMap<String,HashMap<String,UriPattern>> ();  
@@ -32,6 +33,7 @@ public class UriPattern {
         this.nameSpace = namespace;
         this.postFix = null;
         byNameSpaceOnly.put(namespace, this);
+        register.add(this);
     } 
     
     private UriPattern(String namespace, String postfix){
@@ -48,6 +50,7 @@ public class UriPattern {
             postFixMap.put(postfix, this);
             byNameSpaceAndPostFix.put(namespace, postFixMap);
         }
+        register.add(this);
     }
    
     public static UriPattern byNameSpace(String nameSpace){
@@ -70,6 +73,10 @@ public class UriPattern {
         return result;
     }
     
+    public static Set<UriPattern> getAllUriPatterns(){
+       return register;
+    }
+            
     public static UriPattern byUrlPattern(String urlPattern) throws BridgeDBException{
         int pos = urlPattern.indexOf("$id");
         if (pos == -1) {

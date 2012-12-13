@@ -90,6 +90,64 @@ public interface URLMapper extends IDMapper{
 	public Set<String> mapURL (String URL, String profileURL, String... targetURISpaces) throws IDMapperException;
 	
     /**
+	 * Get all mappings/cross-references for the given Xref, restricting the
+	 * result to contain only URLs from the given set of UriSpaces.
+     * <p>
+     * Result will include the sourceURL (even if uriExists(sourceUrl) would return null),
+     *    if and only it has one of the targetURISpaces (or targetURISpaces is empty)
+     *    Result will be empty if no mapping/ cross references could be found. 
+     *    This method should never return null.
+     * <p>
+     * Similar to the mapID method in IDMapper.
+     * 
+	 * @param ref the entity to get cross-references for. 
+     * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
+     *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
+	 * @return A Set containing the URL (as Strings) that have been mapped/ cross referenced.
+	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
+	 */
+	public Set<String> mapToURLs (Xref ref, String... targetURISpaces) throws IDMapperException;
+
+    /**
+	 * Get all mappings/cross-references for the given Xref, restricting the
+	 * result to contain only URLs from the given set of UriSpaces.
+     * <p>
+     * Result will include the sourceURL (even if uriExists(sourceUrl) would return null),
+     *    if and only it has one of the targetURISpaces (or targetURISpaces is empty)
+     *    Result will be empty if no mapping/ cross references could be found. 
+     *    This method should never return null.
+     * <p>
+     * Similar to the mapID method in IDMapper.
+     * 
+     * @param srcXrefs source Xref, containing ID and ID type/data source
+     * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
+     *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
+     * @return A map of each of the xREF to the Set of URLs (as String) that would have been returned by calling
+     *    mapURL(Xref, targetURISpaces) individually.
+	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
+	 */
+	public  Map<Xref, Set<String>>  mapToURLs (Collection<Xref> srcXrefs, String... targetURISpaces) throws IDMapperException;
+
+    /**
+	 * Get all mappings/cross-references for the given Xref, restricting the
+	 * result to contain only URLs from the given set of UriSpaces.
+     * <p>
+     * Result will include the sourceURL (even if uriExists(sourceUrl) would return null),
+     *    if and only it has one of the targetURISpaces (or targetURISpaces is empty)
+     *    Result will be empty if no mapping/ cross references could be found. 
+     *    This method should never return null.
+     * <p>
+     * Similar to the mapID method in IDMapper.
+     * 
+	 * @param ref the entity to get cross-references for. 
+     * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
+     *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
+	 * @return A Set containing the URL (in ToURLMapping Objects) that have been mapped/ cross referenced.
+	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
+     */
+    public Set<URLMapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws IDMapperException;
+
+    /**
      * Check whether an URL is known by the given mapping source. 
      * <p>
      * This is an optionally supported operation.
