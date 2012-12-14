@@ -20,6 +20,7 @@ package org.bridgedb.url;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 
 /**
@@ -34,42 +35,87 @@ import org.bridgedb.Xref;
  */
 public class URLMapping {
  
-    private final Integer id;
-    private final Xref source;
-    private final Xref target;
+    private Integer id;
+    private String sourceId;
+    private final String sourceSysCode;
+    private String targetId;
+    private String targetSysCode;
+    
     private final Set<String> sourceURLs;
     private final Set<String> targetURLs;
     private final Integer mappingSetId;
     private final String predicate;
     
-    public URLMapping (Integer id, Xref source, String predicate, String targetURL, Integer mappingSetId){
+    public URLMapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
+            String targetURL, Integer mappingSetId){
         this.id = id;
-        this.sourceURLs = null;
-        this.source = source;
+        this.sourceURLs = new HashSet<String>();
+        this.sourceId = sourceId;
+        this.sourceSysCode = sourceSysCode;
         this.targetURLs = new HashSet<String>();
         targetURLs.add(targetURL);
-        this.target = null;
+        this.targetId = null;
+        this.targetSysCode = null;
         this.mappingSetId = mappingSetId;
         this.predicate = predicate;
     }
 
+    public URLMapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
+            String targetId, String targetSysCode, Integer mappingSetId){
+        this.id = id;
+        this.sourceURLs = new HashSet<String>();
+        this.sourceId = sourceId;
+        this.sourceSysCode = sourceSysCode;
+        this.targetURLs = new HashSet<String>();
+        this.targetId = targetId;
+        this.targetSysCode = targetSysCode;
+        this.mappingSetId = mappingSetId;
+        this.predicate = predicate;
+    }
+
+    public URLMapping (String sourceId, String sourceSysCode, String targetId, String targetSysCode){
+        this.id = null;
+        this.sourceURLs = new HashSet<String>();
+        this.sourceId = sourceId;
+        this.sourceSysCode = sourceSysCode;
+        this.targetURLs = new HashSet<String>();
+        this.targetId = targetId;
+        this.targetSysCode = targetSysCode;
+        this.mappingSetId = null;
+        this.predicate = null;
+    }
+    
+/*    public URLMapping (Integer id, String predicate, Xref target, Integer mappingSetId){
+        this.id = id;
+        this.sourceURLs = new HashSet<String>();
+        this.source = null;
+        this.targetURLs = new HashSet<String>();
+        this.target = target;
+        this.mappingSetId = mappingSetId;
+        this.predicate = predicate;
+    }
+*/
     public URLMapping (Integer id, String sourceURL, String predicate, Xref target, Integer mappingSetId){
         this.id = id;
         this.sourceURLs = new HashSet<String>();
         sourceURLs.add(sourceURL);
-        this.source = null;
-        this.targetURLs = null;
-        this.target = target;
+        this.sourceId = null;
+        this.sourceSysCode = null;
+        this.targetURLs = new HashSet<String>();
+        this.targetId = target.getId();
+        this.targetSysCode = target.getDataSource().getSystemCode();
         this.mappingSetId = mappingSetId;
         this.predicate = predicate;
     }
 
-    public URLMapping (Integer id, Xref source, String predicate, Xref target, Integer mappingSetId){
+   public URLMapping (Integer id, Xref source, String predicate, Xref target, Integer mappingSetId){
         this.id = id;
-        this.sourceURLs = null;
-        this.source = source;
-        this.targetURLs = null;
-        this.target = target;
+        this.sourceURLs = new HashSet<String>();
+        this.sourceId = source.getId();
+        this.sourceSysCode = source.getDataSource().getSystemCode();
+        this.targetURLs = new HashSet<String>();
+        this.targetId = target.getId();
+        this.targetSysCode = target.getDataSource().getSystemCode();
         this.mappingSetId = mappingSetId;
         this.predicate = predicate;
     }
@@ -78,35 +124,39 @@ public class URLMapping {
         this.id = id;
         this.sourceURLs = new HashSet<String>();
         sourceURLs.add(sourceURL);
-        this.source = null;
+        this.sourceId = null;
+        this.sourceSysCode = null;
         this.targetURLs = new HashSet<String>();
         targetURLs.add(targetURL);
-        this.target = null;
+        this.targetId = null;
+        this.targetSysCode = null;
         this.mappingSetId = mappingSetId;
         this.predicate = predicate;
     }
 
-    public URLMapping (Integer id, Set<String> sourceURLs, String predicate, Set<String> targetURLs, Integer mappingSetId){
+/*    public URLMapping (Integer id, Set<String> sourceURLs, String predicate, Set<String> targetURLs, Integer mappingSetId){
         this.id = id;
         this.sourceURLs = sourceURLs;
-        this.source = null;
+        this.sourceId = null;
+        this.sourceSysCode = null;
         this.mappingSetId = mappingSetId;
         this.targetURLs = targetURLs;
         this.target = null;
         this.predicate = predicate;
     }
-
-    public URLMapping (Integer id, Set<String> sourceURLs, Xref source, String predicate, 
+*/
+/*    public URLMapping (Integer id, Set<String> sourceURLs, String sourceId, String sourceSysCode, String predicate, 
             Set<String> targetURLs, Xref target,Integer mappingSetId){
         this.id = id;
         this.sourceURLs = sourceURLs;
-        this.source = source;
+        this.sourceId = sourceId;
+        this.sourceSysCode = sourceSysCode;
         this.mappingSetId = mappingSetId;
         this.targetURLs = targetURLs;
         this.target = target;
         this.predicate = predicate;
     }
-
+*/
     /**
      * @return the id
      */
@@ -138,24 +188,22 @@ public class URLMapping {
 
     public String toString(){
         StringBuilder output = new StringBuilder("mapping ");
-        output.append(this.id);
-        if (getSource() == null){
-            for (String sourceURL:sourceURLs){
-                output.append("\n\tSourceURL: ");
-                output.append(sourceURL);
-            }
-        } else {
+        output.append(this.getId());
+        for (String sourceURL:sourceURLs){
+            output.append("\n\tSourceURL: ");
+            output.append(sourceURL);
+        }
+        if (getSource() != null){
             output.append("\n\tSource: ");
             output.append(getSource());
         }
         output.append("\n\tPredicate(): ");
         output.append(predicate);
-        if (getTarget() == null){
-            for (String targetURL:targetURLs){
-                output.append("\n\tTargetURL: ");
-                output.append(targetURL);
-            }
-        } else {
+        for (String targetURL:targetURLs){
+            output.append("\n\tTargetURL: ");
+            output.append(targetURL);
+        }
+        if (getTarget() != null){
             output.append("\n\tTarget: ");
             output.append(getTarget()); 
         }
@@ -169,7 +217,7 @@ public class URLMapping {
         if (other == null) return false;
         if (other instanceof URLMapping){
             URLMapping otherMapping = (URLMapping)other;
-            if (otherMapping.id != id) return false;
+            if (otherMapping.getId() != getId()) return false;
             if (!otherMapping.sourceURLs.equals(sourceURLs)) return false;
             if (!otherMapping.targetURLs.equals(targetURLs)) return false;
             if (!otherMapping.getMappingSetId().equals(getMappingSetId())) return false;
@@ -198,14 +246,65 @@ public class URLMapping {
      * @return the source
      */
     public Xref getSource() {
-        return source;
+        DataSource ds = DataSource.getBySystemCode(sourceSysCode);
+        return new Xref(getSourceId(), ds);
     }
 
     /**
      * @return the target
      */
     public Xref getTarget() {
-        return target;
+        DataSource ds = DataSource.getBySystemCode(getTargetSysCode());
+        return new Xref(getTargetId(), ds);
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the sourceId
+     */
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    /**
+     * @param sourceId the sourceId to set
+     */
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    /**
+     * @return the targetId
+     */
+    public String getTargetId() {
+        return targetId;
+    }
+
+    /**
+     * @param targetId the targetId to set
+     */
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
+    }
+
+    /**
+     * @return the targetSysCode
+     */
+    public String getTargetSysCode() {
+        return targetSysCode;
+    }
+
+    /**
+     * @param targetSysCode the targetSysCode to set
+     */
+    public void setTargetSysCode(String targetSysCode) {
+        this.targetSysCode = targetSysCode;
     }
 
  }
