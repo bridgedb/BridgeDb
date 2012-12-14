@@ -321,11 +321,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         String sysCode = getSysCode(uriSpace);
         
 //        Xref source = toXref(URL);
-        DataSource[] targetDataSources = new DataSource[targetURISpaces.length];
+        String[] targetSysCodes = new String[targetURISpaces.length];
         for (int i = 0; i < targetURISpaces.length; i++){
-            targetDataSources[i] = getDataSource(targetURISpaces[i]);
+            targetSysCodes[i] = getSysCode(targetURISpaces[i]);
         }
-        Set<URLMapping> results = mapID2(id, sysCode, targetDataSources);
+        Set<URLMapping> results = mapID2(id, sysCode, targetSysCodes);
         for (URLMapping mapping:results){
             mapping.addSourceURL(URL);
             addTargetURIs(mapping, targetURISpaces);
@@ -1016,7 +1016,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
-    public Set<URLMapping> mapID2(String id, String sysCode, DataSource... tgtDataSources) throws BridgeDbSqlException {
+    public Set<URLMapping> mapID2(String id, String sysCode, String... tgtSysCodes) throws BridgeDbSqlException {
         if (id == null || id.isEmpty()) {
             logger.warn("mapId called with a bad id " + id);
             return new HashSet<URLMapping>();            
@@ -1031,13 +1031,13 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append("FROM mapping, mappingSet ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         appendSourceXref(query, id, sysCode);
-        if (tgtDataSources.length > 0){    
+        if (tgtSysCodes.length > 0){    
             query.append("AND ( targetDataSource = '");
-                query.append(tgtDataSources[0].getSystemCode());
+                query.append(tgtSysCodes[0]);
                 query.append("' ");
-            for (int i = 1; i < tgtDataSources.length; i++){
+            for (int i = 1; i < tgtSysCodes.length; i++){
                 query.append("OR targetDataSource = '");
-                    query.append(tgtDataSources[i].getSystemCode());
+                    query.append(tgtSysCodes[i]);
                     query.append("'");
             }
             query.append(")");
@@ -1051,19 +1051,19 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         Set<URLMapping> results = resultSetToURLMappingSet(id, sysCode, rs);
-        if (tgtDataSources.length == 0){
+        if (tgtSysCodes.length == 0){
            results.add(new URLMapping (id, sysCode, id, sysCode)); 
         } else {
-            for (DataSource tgtDataSource: tgtDataSources){
-                if (sysCode.equals(tgtDataSource.getSystemCode())){
+            for (String tgtSysCode: tgtSysCodes){
+                if (sysCode.equals(tgtSysCode)){
                     results.add(new URLMapping(id, sysCode, id, sysCode));
                 }
             }
         }
         if (results.size() <= 1){
             String targets = "";
-            for (DataSource tgtDataSource:tgtDataSources){
-                targets+= tgtDataSource + ", ";
+            for (String tgtSysCode: tgtSysCodes){
+                targets+= tgtSysCode + ", ";
             }
             if (targets.isEmpty()){
                 targets = "all DataSources";
