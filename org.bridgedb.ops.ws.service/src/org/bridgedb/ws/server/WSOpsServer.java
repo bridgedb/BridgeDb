@@ -37,6 +37,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.url.Mapping;
 import org.bridgedb.ws.WSLinksetService;
 import org.bridgedb.ws.WSOpsInterfaceService;
 

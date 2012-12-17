@@ -21,14 +21,13 @@ package org.bridgedb.ws;
 import java.io.InputStream;
 import java.util.List;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.url.Mapping;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
-import org.bridgedb.ws.bean.URLMappingBean;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.ValidationBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -39,9 +38,11 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSOpsInterface extends WSCoreInterface{
 
-    public List<URLMappingBean> mapURL(String URL, String profileURL, List<String> targetUriSpace) throws IDMapperException;
+    public List<Mapping> mapURL(String URL, String profileURL, List<String> targetUriSpace) throws IDMapperException;
+
+//    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException;
     
-    public List<URLMappingBean> mapToURLs(String id, String scrCode, List<String> targetUriSpace) 
+    public List<Mapping> mapToURLs(String id, String scrCode, String profileURL, List<String> targetUriSpace) 
             throws IDMapperException;
 
     public URLExistsBean URLExists(String URL) throws IDMapperException;
@@ -50,7 +51,7 @@ public interface WSOpsInterface extends WSCoreInterface{
 
     public XrefBean toXref(String URL) throws IDMapperException;
 
-    public URLMappingBean getMapping(String id) throws IDMapperException;
+    public Mapping getMapping(String id) throws IDMapperException;
 
     public List<URLBean> getSampleSourceURLs() throws IDMapperException;
 

@@ -37,14 +37,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CronosWSResponse }
-     * 
-     */
-    public CronosWSResponse createCronosWSResponse() {
-        return new CronosWSResponse();
-    }
-
-    /**
      * Create an instance of {@link IsinRedList }
      * 
      */
@@ -53,19 +45,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CronosWS_Type }
-     * 
-     */
-    public CronosWS_Type createCronosWS_Type() {
-        return new CronosWS_Type();
-    }
-
-    /**
      * Create an instance of {@link IsinRedListResponse }
      * 
      */
     public IsinRedListResponse createIsinRedListResponse() {
         return new IsinRedListResponse();
+    }
+
+    /**
+     * Create an instance of {@link CronosWSResponse }
+     * 
+     */
+    public CronosWSResponse createCronosWSResponse() {
+        return new CronosWSResponse();
+    }
+
+    /**
+     * Create an instance of {@link CronosWS_Type }
+     * 
+     */
+    public CronosWS_Type createCronosWS_Type() {
+        return new CronosWS_Type();
     }
 
     /**

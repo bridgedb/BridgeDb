@@ -45,7 +45,7 @@ import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.URLMapping;
+import org.bridgedb.url.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IpConfig;
 import org.openrdf.rio.RDFFormat;
@@ -138,14 +138,14 @@ public class WSFame extends WSOpsInterfaceService {
         String URL1 = urlsIt.next();
         String text = SQLUrlMapper.getId(URL1);
         String URL2 = urlsIt.next();
-        Set<URLMapping> mappings2 = urlMapper.mapURLFull(URL2, RdfConfig.getProfileBaseURI()+ "0");
+        Set<Mapping> mappings2 = urlMapper.mapURLFull(URL2, RdfConfig.getProfileBaseURI()+ "0");
         HashSet<String> URI2Spaces = new HashSet<String>();
         int mappingId = 0;
-        for (URLMapping mapping:mappings2){
+        for (Mapping mapping:mappings2){
             if (mapping.getId() != null){
                 mappingId = mapping.getId();
             }
-            String targetURL = mapping.getTargetURLs().iterator().next();
+            String targetURL = mapping.getTargetURL().iterator().next();
             URI2Spaces.add(SQLUrlMapper.getUriSpace(targetURL));            
         }
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 

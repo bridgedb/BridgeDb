@@ -349,7 +349,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
      * @param ref
      * @return 
      */
-    private final boolean badXref(Xref ref) {
+    protected final boolean badXref(Xref ref) {
         if (ref == null) return true;
         if (ref.getId() == null || ref.getId().isEmpty()) return true;
         if (ref.getDataSource() == null ) return true;
@@ -361,12 +361,26 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
      * @param query Query to add to.
      * @param ref Xref that forms the base of the condition.
      */
-    private final void appendSourceXref(StringBuilder query, Xref ref){
+    protected final void appendSourceXref(StringBuilder query, Xref ref){
         query.append("AND sourceId = '");
             query.append(ref.getId());
             query.append("' ");
        query.append("AND sourceDataSource = '");
             query.append(ref.getDataSource().getSystemCode());
+            query.append("' ");        
+    }
+    
+    /**
+     * Add a condition to the query that only mappings with a specific source Xref should be used.
+     * @param query Query to add to.
+     * @param ref Xref that forms the base of the condition.
+     */
+    protected final void appendSourceXref(StringBuilder query, String id, String sysCode){
+        query.append("AND sourceId = '");
+            query.append(id);
+            query.append("' ");
+       query.append("AND sourceDataSource = '");
+            query.append(sysCode);
             query.append("' ");        
     }
     
