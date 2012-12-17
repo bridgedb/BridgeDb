@@ -20,6 +20,7 @@ package org.bridgedb.url;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 
@@ -33,6 +34,7 @@ import org.bridgedb.Xref;
  * <li>UriSpace: 
  * @author Christian
  */
+@XmlRootElement(name="URLMapping")
 public class URLMapping {
  
     private Integer id;
@@ -47,20 +49,6 @@ public class URLMapping {
     private final String predicate;
     
     public URLMapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
-            String targetURL, Integer mappingSetId){
-        this.id = id;
-        this.sourceURLs = new HashSet<String>();
-        this.sourceId = sourceId;
-        this.sourceSysCode = sourceSysCode;
-        this.targetURLs = new HashSet<String>();
-        targetURLs.add(targetURL);
-        this.targetId = null;
-        this.targetSysCode = null;
-        this.mappingSetId = mappingSetId;
-        this.predicate = predicate;
-    }
-
-    public URLMapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
             String targetId, String targetSysCode, Integer mappingSetId){
         this.id = id;
         this.sourceURLs = new HashSet<String>();
@@ -73,54 +61,19 @@ public class URLMapping {
         this.predicate = predicate;
     }
 
-    public URLMapping (String sourceId, String sourceSysCode, String targetId, String targetSysCode){
+    public URLMapping (String id, String sysCode){
         this.id = null;
         this.sourceURLs = new HashSet<String>();
-        this.sourceId = sourceId;
-        this.sourceSysCode = sourceSysCode;
+        this.sourceId = id;
+        this.sourceSysCode = sysCode;
         this.targetURLs = new HashSet<String>();
-        this.targetId = targetId;
-        this.targetSysCode = targetSysCode;
+        this.targetId = id;
+        this.targetSysCode = sysCode;
         this.mappingSetId = null;
         this.predicate = null;
     }
     
-/*    public URLMapping (Integer id, String predicate, Xref target, Integer mappingSetId){
-        this.id = id;
-        this.sourceURLs = new HashSet<String>();
-        this.source = null;
-        this.targetURLs = new HashSet<String>();
-        this.target = target;
-        this.mappingSetId = mappingSetId;
-        this.predicate = predicate;
-    }
-*/
-    public URLMapping (Integer id, String sourceURL, String predicate, Xref target, Integer mappingSetId){
-        this.id = id;
-        this.sourceURLs = new HashSet<String>();
-        sourceURLs.add(sourceURL);
-        this.sourceId = null;
-        this.sourceSysCode = null;
-        this.targetURLs = new HashSet<String>();
-        this.targetId = target.getId();
-        this.targetSysCode = target.getDataSource().getSystemCode();
-        this.mappingSetId = mappingSetId;
-        this.predicate = predicate;
-    }
-
-   public URLMapping (Integer id, Xref source, String predicate, Xref target, Integer mappingSetId){
-        this.id = id;
-        this.sourceURLs = new HashSet<String>();
-        this.sourceId = source.getId();
-        this.sourceSysCode = source.getDataSource().getSystemCode();
-        this.targetURLs = new HashSet<String>();
-        this.targetId = target.getId();
-        this.targetSysCode = target.getDataSource().getSystemCode();
-        this.mappingSetId = mappingSetId;
-        this.predicate = predicate;
-    }
-
-    public URLMapping (Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId){
+    public URLMapping (Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId, boolean test){
         this.id = id;
         this.sourceURLs = new HashSet<String>();
         sourceURLs.add(sourceURL);
@@ -134,29 +87,6 @@ public class URLMapping {
         this.predicate = predicate;
     }
 
-/*    public URLMapping (Integer id, Set<String> sourceURLs, String predicate, Set<String> targetURLs, Integer mappingSetId){
-        this.id = id;
-        this.sourceURLs = sourceURLs;
-        this.sourceId = null;
-        this.sourceSysCode = null;
-        this.mappingSetId = mappingSetId;
-        this.targetURLs = targetURLs;
-        this.target = null;
-        this.predicate = predicate;
-    }
-*/
-/*    public URLMapping (Integer id, Set<String> sourceURLs, String sourceId, String sourceSysCode, String predicate, 
-            Set<String> targetURLs, Xref target,Integer mappingSetId){
-        this.id = id;
-        this.sourceURLs = sourceURLs;
-        this.sourceId = sourceId;
-        this.sourceSysCode = sourceSysCode;
-        this.mappingSetId = mappingSetId;
-        this.targetURLs = targetURLs;
-        this.target = target;
-        this.predicate = predicate;
-    }
-*/
     /**
      * @return the id
      */

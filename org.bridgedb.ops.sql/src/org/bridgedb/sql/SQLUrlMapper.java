@@ -142,6 +142,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     
     @Override
     public Set<String> mapToURLs(Xref ref, String... targetURISpaces) throws BridgeDbSqlException {
+        if (badXref(ref)) {
+            logger.warn("mapToURLs called with a badXref " + ref);
+            return new HashSet<String>();
+        }
         StringBuilder query = new StringBuilder("SELECT targetId as id, target.uriSpace as uriSpace ");
         finishMappingQuery(query, ref, targetURISpaces); 
         Statement statement = this.createStatement();
@@ -289,43 +293,15 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Set<URLMapping> mapURLFull(String URL, String... targetURISpaces) throws BridgeDbSqlException {
-        StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
-        query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
-        finishMappingQuery(query, URL, targetURISpaces); 
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
-        }    
-        Set<URLMapping> results = resultSetToURLMappingSet(URL, rs);
-        URLMapping toSelf = new URLMapping(null, URL, null, URL, null);
-        if (targetURISpaces.length == 0){
-           results.add(toSelf); 
-        } else {
-            String uriSpace = getUriSpace(URL);
-            for (String targetURISpace: targetURISpaces){
-                if (uriSpace.equals(targetURISpace)){
-                    results.add(toSelf);
-                }
-            }
-        }
-        logResults(results, URL, targetURISpaces);
-        return results;       
-    }
-
-    public Set<URLMapping> mapURLFull2(String URL, String... targetURISpaces) throws BridgeDbSqlException {
         String id = getId(URL);
         String uriSpace = getUriSpace(URL);
         String sysCode = getSysCode(uriSpace);
         
-//        Xref source = toXref(URL);
         String[] targetSysCodes = new String[targetURISpaces.length];
         for (int i = 0; i < targetURISpaces.length; i++){
             targetSysCodes[i] = getSysCode(targetURISpaces[i]);
         }
-        Set<URLMapping> results = mapID2(id, sysCode, targetSysCodes);
+        Set<URLMapping> results = doMapping(id, sysCode, targetSysCodes);
         for (URLMapping mapping:results){
             mapping.addSourceURL(URL);
             addTargetURIs(mapping, targetURISpaces);
@@ -335,18 +311,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Set<URLMapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws BridgeDbSqlException {
-        StringBuilder query = new StringBuilder("SELECT mapping.id as mappingId, targetId as id, predicate, ");
-        query.append("mappingSet.id as mappingSetId, target.uriSpace as uriSpace ");
-        finishMappingQuery(query, ref, targetURISpaces); 
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
-        }    
-        Set<URLMapping> results = resultSetURLMappingSet(ref, rs);
-        logResults(results, ref, targetURISpaces);
+        String[] targetSysCodes = new String[targetURISpaces.length];
+        for (int i = 0; i < targetURISpaces.length; i++){
+            targetSysCodes[i] = getSysCode(targetURISpaces[i]);
+        }
+        Set<URLMapping> results = doMapping(ref.getId(), ref.getDataSource().getSystemCode(), targetSysCodes);
+        for (URLMapping mapping:results){
+            addTargetURIs(mapping, targetURISpaces);
+        }
         return results;       
     }
 
@@ -777,7 +749,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @param rs Result Set holding the information
      * @return Set of mappings from the source to thie URL in the results.
      * @throws BridgeDbSqlException
-     */
+     * /
     private Set<URLMapping> resultSetToURLMappingSet(String sourceURL, ResultSet rs) throws BridgeDbSqlException {
         HashSet<URLMapping> results = new HashSet<URLMapping>();
         try {
@@ -794,7 +766,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to parse results.", ex);
        }
     }
-
+    */
+     
     private Set<URLMapping> resultSetToURLMappingSet(String id, String sysCode, ResultSet rs) throws BridgeDbSqlException {
         HashSet<URLMapping> results = new HashSet<URLMapping>();
         try {
@@ -826,7 +799,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @param rs Result Set holding the information
      * @return Set of mappings from the source to thie URL in the results.
      * @throws BridgeDbSqlException
-     */
+     * /
     private Set<URLMapping> resultSetURLMappingSet(Xref ref, ResultSet rs) throws BridgeDbSqlException {
         HashSet<URLMapping> results = new HashSet<URLMapping>();
         try {
@@ -862,7 +835,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 String targetURL = rs.getString("target.uriSpace") + rs.getString("targetId");
                 Integer mappingSetId = rs.getInt("mappingSet.id");
                 String predicate = rs.getString("predicate");
-                urlMapping = new URLMapping (mappingId, sourceURL, predicate, targetURL, mappingSetId);       
+                urlMapping = new URLMapping (mappingId, sourceURL, predicate, targetURL, mappingSetId, true);       
             } else {
                 return null;
             }
@@ -1016,15 +989,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
-    public Set<URLMapping> mapID2(String id, String sysCode, String... tgtSysCodes) throws BridgeDbSqlException {
-        if (id == null || id.isEmpty()) {
-            logger.warn("mapId called with a bad id " + id);
-            return new HashSet<URLMapping>();            
-        }
-        if (sysCode == null || sysCode.isEmpty()) {
-            logger.warn("mapId called with a sysCode " + sysCode);
-            return new HashSet<URLMapping>();
-        }
+    private Set<URLMapping> doMapping(String id, String sysCode, String... tgtSysCodes) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT targetId as id, targetDataSource as sysCode, mapping.id as mappingId, predicate, ");
         query.append("mappingSet.id as mappingSetId ");
@@ -1042,7 +1007,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             }
             query.append(")");
         }
-        //ystem.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -1052,34 +1016,18 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }    
         Set<URLMapping> results = resultSetToURLMappingSet(id, sysCode, rs);
         if (tgtSysCodes.length == 0){
-           results.add(new URLMapping (id, sysCode, id, sysCode)); 
+           results.add(new URLMapping (id, sysCode)); 
         } else {
             for (String tgtSysCode: tgtSysCodes){
                 if (sysCode.equals(tgtSysCode)){
-                    results.add(new URLMapping(id, sysCode, id, sysCode));
+                    results.add(new URLMapping(id, sysCode));
                 }
             }
-        }
-        if (results.size() <= 1){
-            String targets = "";
-            for (String tgtSysCode: tgtSysCodes){
-                targets+= tgtSysCode + ", ";
-            }
-            if (targets.isEmpty()){
-                targets = "all DataSources";
-            }
-            if (results.isEmpty()){
-                logger.warn("Unable to map " + id + ":" + sysCode + " to any results for " + targets);
-            } else {
-                logger.warn("Only able to map " + id + ":" + sysCode + " to itself for " + targets);
-            }
-        } else {
-            logger.info("Mapped " + id + ":" + sysCode + " to " + results.size() + " results");
         }
         return results;
     }
 
-    private Set<URLMapping> resultSetToURLMappingSet(Xref source, ResultSet rs) throws BridgeDbSqlException {
+/*    private Set<URLMapping> resultSetToURLMappingSet(Xref source, ResultSet rs) throws BridgeDbSqlException {
         HashSet<URLMapping> results = new HashSet<URLMapping>();
         try {
             while (rs.next()){
@@ -1098,7 +1046,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to parse results.", ex);
        }
     }
-
+*/
     private void addTargetURIs(URLMapping mapping, String[] targetURISpaces) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT uriSpace ");

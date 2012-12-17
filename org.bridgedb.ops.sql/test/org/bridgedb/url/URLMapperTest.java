@@ -108,9 +108,10 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertNull(resultSet);
         resultSet = results.get(map3xref1);
         assertNull(resultSet);
-        resultSet = results.get(mapBadxref2);
+        resultSet = results.get(mapBadxref3);
         //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
         //Still optional as I am not sure text does.
+        System.out.println(resultSet);
         assertTrue(resultSet == null || resultSet.size() <= 1);
     }
     
@@ -146,6 +147,7 @@ public abstract class URLMapperTest extends URLListenerTest{
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
+                System.out.println(URLMapping);
                 String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
                 assertThat(URLMapping.getTargetURLs().iterator().next(), isOneOf( expectedMatches ) );
                 assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );

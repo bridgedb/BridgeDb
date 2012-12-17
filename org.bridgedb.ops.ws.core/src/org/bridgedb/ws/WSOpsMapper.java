@@ -42,8 +42,6 @@ import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
-import org.bridgedb.ws.bean.URLMappingBean;
-import org.bridgedb.ws.bean.URLMappingBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.UriSpaceBean;
 import org.bridgedb.ws.bean.ValidationBean;
@@ -76,32 +74,28 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public Set<String> mapURL(String sourceURL, String... targetURISpaces) throws IDMapperException {
-        List<URLMappingBean> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
+        List<URLMapping> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
         HashSet<String> targetURLS = new HashSet<String>(); 
-        for (URLMappingBean bean:beans){
-            targetURLS.addAll(bean.getTargetURL());
+        for (URLMapping bean:beans){
+            targetURLS.addAll(bean.getTargetURLs());
         }
         return targetURLS;
     }
 
     @Override
     public Set<String> mapToURLs(Xref xref, String... targetURISpaces) throws IDMapperException {
-        List<URLMappingBean> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
+        List<URLMapping> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
         HashSet<String> targetURLS = new HashSet<String>(); 
-        for (URLMappingBean bean:beans){
-            targetURLS.addAll(bean.getTargetURL());
+        for (URLMapping bean:beans){
+            targetURLS.addAll(bean.getTargetURLs());
         }
         return targetURLS;
     }
 
     @Override
     public Set<URLMapping> mapToURLsFull(Xref xref, String... targetURISpaces) throws IDMapperException {
-        List<URLMappingBean> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
-        HashSet<URLMapping> targetURLS = new HashSet<URLMapping>(); 
-        for (URLMappingBean bean:beans){
-            targetURLS.add(URLMappingBeanFactory.asURLMapping(bean));
-        }
-        return targetURLS;
+        List<URLMapping> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
+        return new HashSet<URLMapping>(beans); 
     }
 
     @Override
@@ -127,12 +121,8 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public Set<URLMapping> mapURLFull(String sourceURL, String... targetURISpaces) throws IDMapperException {
-        List<URLMappingBean> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
-        HashSet<URLMapping> results = new HashSet<URLMapping>();
-        for (URLMappingBean bean:beans){
-            results.add(URLMappingBeanFactory.asURLMapping(bean));
-        }
-        return results;
+        List<URLMapping> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
+        return new HashSet<URLMapping>(beans);
     }
 
     @Override
@@ -143,8 +133,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public URLMapping getMapping(int id) throws IDMapperException {
-        URLMappingBean bean = opsService.getMapping("" + id);
-        return URLMappingBeanFactory.asURLMapping(bean);
+        return opsService.getMapping("" + id);
     }
 
     @Override
