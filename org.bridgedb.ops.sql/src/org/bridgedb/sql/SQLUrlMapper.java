@@ -177,92 +177,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
-/*    public Set<String> mapAlternativeURL(String URL, String... targetURISpaces) throws BridgeDbSqlException {
-        String id = getId(URL);
-        String uriSpace = getUriSpace(URL);
-        StringBuilder query = new StringBuilder("SELECT target.uriSpace as uriSpace ");
-        query.append("FROM mappingSet, url as source, url as target ");
-        query.append("WHERE source.dataSource = target.dataSource ");
-        query.append("AND source.uriSpace = '");
-            query.append(uriSpace);
-            query.append("' ");
-        if (targetURISpaces.length > 0){    
-            query.append("AND ( target.uriSpace = '");
-                query.append(targetURISpaces[0]);
-                query.append("' ");
-            for (int i = 1; i < targetURISpaces.length; i++){
-                query.append("OR target.uriSpace = '");
-                    query.append(targetURISpaces[i]);
-                    query.append("'");
-            }
-            query.append(")");
-        }
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
-        }    
-        Set<String> results = resultSetToURLsSet(rs, id);
-        if (results.size() <= 1){
-            String targets = "";
-            for (String targetURISpace:targetURISpaces){
-                targets+= targetURISpace + ", ";
-            }
-            if (targets.isEmpty()){
-                targets = "all DataSources";
-            }
-            if (results.isEmpty()){
-                logger.warn("Unable to map " + URL + " to any results for " + targets);
-            } else {
-                logger.warn("Only able to map " + URL + " to itself for " + targets);
-            }
-        } else {
-            logger.info("Mapped " + URL + " to " + results.size() + " results");
-        }
-        return results;       
-    }
-
-to remove
-    /**
-     * Adds the FROM and Where clauses to queries to get mappings.
-     *
-     * @param query Query with the select clause only
-	 * @param sourceURL the sourceURL to get mappings/cross-references for.
-     * @param profileURL the URL of the profile to use
-     * @param target URISpaces
-     * @throws BridgeDbSqlException profile does not exist
-     */
-    private void finishMappingQuery(StringBuilder query, String sourceURL, String profileURL, 
-    		String... targetURISpaces) throws IDMapperException {
-        //ystem.out.println("mapping: " + sourceURL);
-        String id = getId(sourceURL);
-        String uriSpace = getUriSpace(sourceURL);
-        query.append("FROM mapping, mappingSet, url as source, url as target ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND mappingSet.sourceDataSource = source.dataSource ");
-        query.append("AND mappingSet.targetDataSource = target.dataSource ");
-        query.append("AND sourceId = '");
-            query.append(id);
-            query.append("' ");
-        query.append("AND source.uriSpace = '");
-            query.append(uriSpace);
-            query.append("' ");
-         if (targetURISpaces.length > 0){    
-            query.append("AND ( target.uriSpace = '");
-                query.append(targetURISpaces[0]);
-                query.append("' ");
-            for (int i = 1; i < targetURISpaces.length; i++){
-                query.append("OR target.uriSpace = '");
-                    query.append(targetURISpaces[i]);
-                    query.append("'");
-            }
-            query.append(")");
-        }
-        addProfileClause(query, profileURL);
-    }
-
     /**
      * Adds the WHERE clause conditions for ensuring that the returned mappings
      * are from active linksets.
@@ -303,36 +217,6 @@ to remove
 			throw new BridgeDbSqlException("Invalid URI form for a profileURL: " + profileURL);
 		}
 	}
-
-     /* Adds the FROM and Where clauses to queries to get mappings.
-     *
-     * @param query Query with the select clause only
-	 * @param sourceURL the sourceURL to get mappings/cross-references for.
-     * @param target URISpaces
-     */
-    private void finishMappingQuery(StringBuilder query, Xref ref, String... targetURISpaces) {
-        //ystem.out.println("mapping: " + sourceURL);
-        query.append("FROM mapping, mappingSet, url as source, url as target ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND mappingSet.sourceDataSource = '");
-            query.append(ref.getDataSource().getSystemCode());
-            query.append("' ");
-        query.append("AND mappingSet.targetDataSource = target.dataSource ");
-        query.append("AND sourceId = '");
-            query.append(ref.getId());
-            query.append("' ");
-        if (targetURISpaces.length > 0){    
-            query.append("AND ( target.uriSpace = '");
-                query.append(targetURISpaces[0]);
-                query.append("' ");
-            for (int i = 1; i < targetURISpaces.length; i++){
-                query.append("OR target.uriSpace = '");
-                    query.append(targetURISpaces[i]);
-                    query.append("'");
-            }
-            query.append(")");
-        }
-    }
 
     @Override
     public Set<Mapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws IDMapperException {    	
@@ -860,39 +744,6 @@ to remove
        }
     }
 
-   /**
-     *
-     * Generates a set of mappings from a ResultSet.
-     *
-     * This implementation just concats the URISpace and Id
-     *
-     * Ideally this would be replaced by a method from Identifiers.org
-     *    based on their knoweldge or ULI/URLs
-     * This may require the method to be exstended with the Target NameSpaces.
-     *
-     * @param sourceURL URL to be mapped to
-     * @param rs Result Set holding the information
-     * @return Set of mappings from the source to thie URL in the results.
-     * @throws BridgeDbSqlException
-     * /
-    private Set<URLMapping> resultSetToURLMappingSet(String sourceURL, ResultSet rs) throws BridgeDbSqlException {
-        HashSet<URLMapping> results = new HashSet<URLMapping>();
-        try {
-            while (rs.next()){
-                Integer mappingId = rs.getInt("mappingId"); 
-                String targetURL = rs.getString("uriSpace") + rs.getString("id");
-                Integer mappingSetId = rs.getInt("mappingSetId");
-                String predicate = rs.getString("predicate");
-                URLMapping urlMapping = new URLMapping (mappingId, sourceURL, predicate, targetURL, mappingSetId);       
-                results.add(urlMapping);
-            }
-            return results;
-       } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to parse results.", ex);
-       }
-    }
-    */
-     
     private Set<Mapping> resultSetToURLMappingSet(String id, String sysCode, ResultSet rs) throws BridgeDbSqlException {
         HashSet<Mapping> results = new HashSet<Mapping>();
         try {
@@ -903,37 +754,6 @@ to remove
                 Integer mappingSetId = rs.getInt("mappingSetId");
                 String predicate = rs.getString("predicate");
                 Mapping urlMapping = new Mapping (mappingId, id, sysCode, predicate, targetId, targetSysCode, mappingSetId);       
-                results.add(urlMapping);
-            }
-            return results;
-       } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to parse results.", ex);
-       }
-    }
-   /**
-     *
-     * Generates a set of mappings from a ResultSet.
-     *
-     * This implementation just concats the URISpace and Id
-     *
-     * Ideally this would be replaced by a method from Identifiers.org
-     *    based on their knoweldge or ULI/URLs
-     * This may require the method to be exstended with the Target NameSpaces.
-     *
-     * @param Xref ref to be mapped to
-     * @param rs Result Set holding the information
-     * @return Set of mappings from the source to thie URL in the results.
-     * @throws BridgeDbSqlException
-     * /
-    private Set<URLMapping> resultSetURLMappingSet(Xref ref, ResultSet rs) throws BridgeDbSqlException {
-        HashSet<URLMapping> results = new HashSet<URLMapping>();
-        try {
-            while (rs.next()){
-                Integer mappingId = rs.getInt("mappingId"); 
-                String targetURL = rs.getString("uriSpace") + rs.getString("id");
-                Integer mappingSetId = rs.getInt("mappingSetId");
-                String predicate = rs.getString("predicate");
-                URLMapping urlMapping = new URLMapping (mappingId, ref.getId(), ref.getDataSource().getSystemCode(), predicate, targetURL, mappingSetId);       
                 results.add(urlMapping);
             }
             return results;
@@ -976,34 +796,6 @@ to remove
        }
     }
 
-     /**
-     * Generates a set of URl from a ResultSet.
-     *
-     * This implementation just concats the URISpace and Id
-     *
-     * Ideally this would be replaced by a method from Identifiers.org
-     *    based on their knoweldge or ULI/URLs
-     * This may require the method to be exstended with the Target NameSpaces.
-     *
-     * @param rs Result Set holding the information
-     * @param id The id part of the original URI
-     * @return URLs generated
-     * @throws BridgeDbSqlException
-     * /
-    private Set<String> resultSetToURLsSet(ResultSet rs, String id) throws BridgeDbSqlException {
-        HashSet<String> results = new HashSet<String>();
-        try {
-            while (rs.next()){
-                String uriSpace = rs.getString("uriSpace");
-                String uri = uriSpace + id;
-                results.add(uri);
-            }
-            return results;
-       } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to parse results.", ex);
-       }
-    }
-    
    /**
      * Generates the meta info from the result of a query
      * @param rs
@@ -1216,27 +1008,6 @@ to remove
         return results;
     }
 
-/*    private Set<URLMapping> resultSetToURLMappingSet(Xref source, ResultSet rs) throws BridgeDbSqlException {
-        HashSet<URLMapping> results = new HashSet<URLMapping>();
-        try {
-            while (rs.next()){
-                Integer mappingId = rs.getInt("mappingId"); 
-                String id = rs.getString("id");
-                String sysCode = rs.getString("sysCode");
-                DataSource dataSource = DataSource.getBySystemCode(sysCode);
-                Xref xref = new Xref(id, dataSource);
-                Integer mappingSetId = rs.getInt("mappingSetId");
-                String predicate = rs.getString("predicate");
-                URLMapping urlMapping = new URLMapping (mappingId, source, predicate, xref, mappingSetId);       
-                results.add(urlMapping);
-            }
-            return results;
-       } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to parse results.", ex);
-       }
-    }
-*/
-    
     private Set<String> getTargetURIs(Mapping mapping, String[] targetURISpaces) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT uriSpace ");
