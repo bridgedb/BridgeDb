@@ -18,6 +18,7 @@
 //
 package org.bridgedb.url;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -123,6 +124,10 @@ public class Mapping {
 
     public void addTargetURL(String targetURL){
         getTargetURL().add(targetURL);
+    }
+
+    public void addTargetURLs(Collection<String> extraTargetURLs){
+        getTargetURL().addAll(extraTargetURLs);
     }
 
     public String toString(){
