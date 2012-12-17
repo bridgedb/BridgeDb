@@ -71,6 +71,12 @@ public class Mapping {
         this.predicate = predicate;
     }
 
+    /**
+     * This is the constructor for a mapping to self.
+     * 
+     * @param id
+     * @param sysCode 
+     */
     public Mapping (String id, String sysCode){
         this.id = null;
         this.sourceURL = new HashSet<String>();
@@ -83,20 +89,6 @@ public class Mapping {
         this.predicate = null;
     }
     
-    public Mapping (Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId, boolean test){
-        this.id = id;
-        this.sourceURL = new HashSet<String>();
-        this.sourceURL.add(sourceURL);
-        this.sourceId = null;
-        this.sourceSysCode = null;
-        this.targetURL = new HashSet<String>();
-        this.targetURL.add(targetURL);
-        this.targetId = null;
-        this.targetSysCode = null;
-        this.mappingSetId = mappingSetId;
-        this.predicate = predicate;
-    }
-
     /**
      * @return the id
      */
@@ -113,6 +105,10 @@ public class Mapping {
 
     public void addSourceURL(String sourceURL){
         getSourceURL().add(sourceURL);
+    }
+    
+    public void addSourceURLs(Collection<String> sourceURLs){
+        getSourceURL().addAll(sourceURLs);
     }
     
     /**
