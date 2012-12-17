@@ -124,6 +124,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         for (Mapping mapping: mappings){
             results.addAll(getTargetURIs(mapping, targetURISpaces));
         }
+        logResults(results, URL, targetURISpaces);
         return results;
     }
 
@@ -147,26 +148,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         for (Mapping mapping: mappings){
             results.addAll(getTargetURIs(mapping, targetURISpaces));
         }
+        this.logResults(results, ref.toString(), targetSysCodes);
         return results;
-    }
-
-    private void logResults(Set results, Object ref, String... targetURISpaces) throws BridgeDbSqlException {
-          if (results.size() <= 1){
-            String targets = "";
-            for (String targetURISpace:targetURISpaces){
-                targets+= targetURISpace + ", ";
-            }
-            if (targets.isEmpty()){
-                targets = "all DataSources";
-            }
-            if (results.isEmpty()){
-                logger.warn("Unable to map " + ref + " to any results for " + targets);
-            } else {
-                logger.warn("Only able to map " + ref + " to itself for " + targets);
-            }
-        } else {
-            logger.info("Mapped " + ref + " to " + results.size() + " results");
-        }
     }
 
 /*    public Set<String> mapAlternativeURL(String URL, String... targetURISpaces) throws BridgeDbSqlException {
@@ -293,6 +276,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             mapping.addSourceURL(URL);
             addTargetURIs(mapping, targetURISpaces);
         }
+        this.logResults(results, URL, targetSysCodes);
         return results;       
     }
 
@@ -303,6 +287,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         for (Mapping mapping:results){
             addTargetURIs(mapping, targetURISpaces);
         }
+        this.logResults(results, ref.toString(), targetSysCodes);
         return results;       
     }
 
@@ -1082,4 +1067,19 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
         return sysCodes;
     }
+
+    private void logResults(Set results, String source, String[] targets) throws BridgeDbSqlException {
+        if (results.isEmpty()){
+            String targetSt= "";
+            if (targets.length == 0){
+                targetSt = "all DataSources";
+            } else {
+                for (String targetURISpace:targets){
+                    targetSt+= targetURISpace + ", ";
+                }
+            }
+            logger.warn("Unable to map " + source + " to any results for " + targetSt);
+        } 
+    }
+
 }
