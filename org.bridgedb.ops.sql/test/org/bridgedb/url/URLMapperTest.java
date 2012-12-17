@@ -140,36 +140,36 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapFullOneToManyNoDataSources() throws IDMapperException{
         report("MapFullOneToManyNoDataSources");
-        Set<URLMapping> results = urlMapper.mapURLFull(map3URL3);
-        for (URLMapping URLMapping:results){
-            if (URLMapping.getTargetURLs().contains(map3URL3)){
+        Set<Mapping> results = urlMapper.mapURLFull(map3URL3);
+        for (Mapping URLMapping:results){
+            if (URLMapping.getTargetURL().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
                 System.out.println(URLMapping);
                 String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
-                assertThat(URLMapping.getTargetURLs().iterator().next(), isOneOf( expectedMatches ) );
+                assertThat(URLMapping.getTargetURL().iterator().next(), isOneOf( expectedMatches ) );
                 assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
                 assertNotNull(URLMapping.getId());
                 assertNotNull(URLMapping.getMappingSetId());
             }
-            assertTrue(URLMapping.getSourceURLs().contains(map3URL3));
+            assertTrue(URLMapping.getSourceURL().contains(map3URL3));
         }
     }
 
     @Test
     public void testMapXrefFullOneToManyNoDataSources() throws IDMapperException{
         report("MapXrefFullOneToManyNoDataSources");
-        Set<URLMapping> results = urlMapper.mapToURLsFull(map3xref3);
-        for (URLMapping URLMapping:results){
-            if (URLMapping.getTargetURLs().contains(map3URL3)){
+        Set<Mapping> results = urlMapper.mapToURLsFull(map3xref3);
+        for (Mapping URLMapping:results){
+            if (URLMapping.getTargetURL().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
                 String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
-                assertThat(URLMapping.getTargetURLs().iterator().next(), isOneOf( expectedMatches ) );
+                assertThat(URLMapping.getTargetURL().iterator().next(), isOneOf( expectedMatches ) );
                 assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
                 assertNotNull(URLMapping.getId());
                 assertNotNull(URLMapping.getMappingSetId());
@@ -316,20 +316,20 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testGetMapping() throws IDMapperException {
         report("GetMapping");
-        Set<URLMapping> results = urlMapper.mapURLFull(map3URL3);
+        Set<Mapping> results = urlMapper.mapURLFull(map3URL3);
         Integer mappingId = null;
         Integer setId = null;
-        for (URLMapping URLMapping:results){
-            if (URLMapping.getTargetURLs().contains(map3URL2)){
+        for (Mapping URLMapping:results){
+            if (URLMapping.getTargetURL().contains(map3URL2)){
                 mappingId = URLMapping.getId();
                 setId = URLMapping.getMappingSetId();        
             }
         }
-        URLMapping result = urlMapper.getMapping(mappingId);
+        Mapping result = urlMapper.getMapping(mappingId);
         assertEquals(mappingId, result.getId());
-        assertTrue(result.getSourceURLs().contains(map3URL3));
+        assertTrue(result.getSourceURL().contains(map3URL3));
         assertEquals(TEST_PREDICATE, result.getPredicate());
-        assertTrue(result.getTargetURLs().contains(map3URL2));
+        assertTrue(result.getTargetURL().contains(map3URL2));
         assertEquals(setId, result.getMappingSetId());
     }
     

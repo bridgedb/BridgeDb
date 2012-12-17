@@ -63,7 +63,7 @@ public interface URLMapper extends IDMapper{
 	 * @return A Set containing the URL (in URLMapping Objects) that have been mapped/ cross referenced.
 	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Set<URLMapping> mapURLFull(String URL, String... targetURISpaces) throws IDMapperException;
+    public Set<Mapping> mapURLFull(String URL, String... targetURISpaces) throws IDMapperException;
 
     /**
 	 * Get all mappings/cross-references for the given URL, restricting the
@@ -140,7 +140,7 @@ public interface URLMapper extends IDMapper{
 	 * @return A Set containing the URL (in ToURLMapping Objects) that have been mapped/ cross referenced.
 	 * @throws IDMapperException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Set<URLMapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws IDMapperException;
+    public Set<Mapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws IDMapperException;
 
     /**
      * Check whether an URL is known by the given mapping source. 
@@ -205,7 +205,7 @@ public interface URLMapper extends IDMapper{
      * @return a URLMapping with information about this mapping
      * @throws IDMapperException 
      */
-    public URLMapping getMapping(int id)  throws IDMapperException;
+    public Mapping getMapping(int id)  throws IDMapperException;
     
     /**
      * Gets a Sample of Source URls.

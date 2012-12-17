@@ -28,7 +28,7 @@ import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.url.URLMapping;
+import org.bridgedb.url.Mapping;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
@@ -52,23 +52,23 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public List<URLMapping> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException {
+    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsOpsConstants.URL, URL);
         for (String target:targetUriSpace){
             params.add(WsOpsConstants.TARGET_URI_SPACE, target);
         }
         //Make service call
-        List<URLMapping> result = 
+        List<Mapping> result = 
                 webResource.path(WsOpsConstants.MAP_URL)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<URLMapping>>() {});
+                .get(new GenericType<List<Mapping>>() {});
          return result;
     }
 
     @Override
-    public List<URLMapping> mapToURLs(String id, String scrCode, List<String> targetUriSpace) throws IDMapperException {
+    public List<Mapping> mapToURLs(String id, String scrCode, List<String> targetUriSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.ID, id);
         params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
@@ -76,11 +76,11 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
             params.add(WsOpsConstants.TARGET_URI_SPACE, target);
         }
         //Make service call
-        List<URLMapping> result = 
+        List<Mapping> result = 
                 webResource.path(WsOpsConstants.MAP_TO_URLS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<URLMapping>>() {});
+                .get(new GenericType<List<Mapping>>() {});
          return result;
     }
    
@@ -125,12 +125,12 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     }
 
     @Override
-    public URLMapping getMapping(String id) throws IDMapperException {
+    public Mapping getMapping(String id) throws IDMapperException {
         //Make service call
-        URLMapping result = 
+        Mapping result = 
                 webResource.path(WsOpsConstants.MAPPING + "/" + id)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<URLMapping>() {});
+                .get(new GenericType<Mapping>() {});
          return result;
     }
 

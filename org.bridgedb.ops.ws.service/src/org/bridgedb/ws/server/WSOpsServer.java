@@ -35,7 +35,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.URLMapping;
+import org.bridgedb.url.Mapping;
 import org.bridgedb.ws.WSLinksetService;
 import org.bridgedb.ws.WSOpsInterfaceService;
 

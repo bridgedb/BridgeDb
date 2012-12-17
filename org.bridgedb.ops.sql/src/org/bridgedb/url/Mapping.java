@@ -34,8 +34,8 @@ import org.bridgedb.Xref;
  * <li>UriSpace: 
  * @author Christian
  */
-@XmlRootElement(name="URLMapping")
-public class URLMapping {
+@XmlRootElement(name="Mapping")
+public class Mapping {
  
     private Integer id;
     private String sourceId;
@@ -43,52 +43,53 @@ public class URLMapping {
     private String targetId;
     private String targetSysCode;
     
-    private Set<String> sourceURLs;
-    private Set<String> targetURLs;
+    // Singleton names look better in the xml Bean 
+    private Set<String> sourceURL;
+    private Set<String> targetURL;
     private Integer mappingSetId;
     private String predicate;
     
     /**
      * Default constructor for webService
      */
-    public URLMapping(){
-        this.sourceURLs = new HashSet<String>();
-        this.targetURLs = new HashSet<String>();
+    public Mapping(){
+        this.sourceURL = new HashSet<String>();
+        this.targetURL = new HashSet<String>();
     }
     
-    public URLMapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
+    public Mapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
             String targetId, String targetSysCode, Integer mappingSetId){
         this.id = id;
-        this.sourceURLs = new HashSet<String>();
+        this.sourceURL = new HashSet<String>();
         this.sourceId = sourceId;
         this.sourceSysCode = sourceSysCode;
-        this.targetURLs = new HashSet<String>();
+        this.targetURL = new HashSet<String>();
         this.targetId = targetId;
         this.targetSysCode = targetSysCode;
         this.mappingSetId = mappingSetId;
         this.predicate = predicate;
     }
 
-    public URLMapping (String id, String sysCode){
+    public Mapping (String id, String sysCode){
         this.id = null;
-        this.sourceURLs = new HashSet<String>();
+        this.sourceURL = new HashSet<String>();
         this.sourceId = id;
         this.sourceSysCode = sysCode;
-        this.targetURLs = new HashSet<String>();
+        this.targetURL = new HashSet<String>();
         this.targetId = id;
         this.targetSysCode = sysCode;
         this.mappingSetId = null;
         this.predicate = null;
     }
     
-    public URLMapping (Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId, boolean test){
+    public Mapping (Integer id, String sourceURL, String predicate, String targetURL, Integer mappingSetId, boolean test){
         this.id = id;
-        this.sourceURLs = new HashSet<String>();
-        sourceURLs.add(sourceURL);
+        this.sourceURL = new HashSet<String>();
+        this.sourceURL.add(sourceURL);
         this.sourceId = null;
         this.sourceSysCode = null;
-        this.targetURLs = new HashSet<String>();
-        targetURLs.add(targetURL);
+        this.targetURL = new HashSet<String>();
+        this.targetURL.add(targetURL);
         this.targetId = null;
         this.targetSysCode = null;
         this.mappingSetId = mappingSetId;
@@ -105,29 +106,29 @@ public class URLMapping {
     /**
      * @return the sourceURLs
      */
-    public Set<String> getSourceURLs() {
-        return sourceURLs;
+    public Set<String> getSourceURL() {
+        return sourceURL;
     }
 
     public void addSourceURL(String sourceURL){
-        getSourceURLs().add(sourceURL);
+        getSourceURL().add(sourceURL);
     }
     
     /**
      * @return the target URLs
      */
-    public Set<String> getTargetURLs() {
-        return targetURLs;
+    public Set<String> getTargetURL() {
+        return targetURL;
     }
 
     public void addTargetURL(String targetURL){
-        getTargetURLs().add(targetURL);
+        getTargetURL().add(targetURL);
     }
 
     public String toString(){
         StringBuilder output = new StringBuilder("mapping ");
         output.append(this.getId());
-        for (String sourceURL:getSourceURLs()){
+        for (String sourceURL:getSourceURL()){
             output.append("\n\tSourceURL: ");
             output.append(sourceURL);
         }
@@ -137,7 +138,7 @@ public class URLMapping {
         }
         output.append("\n\tPredicate(): ");
         output.append(getPredicate());
-        for (String targetURL:getTargetURLs()){
+        for (String targetURL:getTargetURL()){
             output.append("\n\tTargetURL: ");
             output.append(targetURL);
         }
@@ -153,11 +154,11 @@ public class URLMapping {
     @Override
     public boolean equals(Object other){
         if (other == null) return false;
-        if (other instanceof URLMapping){
-            URLMapping otherMapping = (URLMapping)other;
+        if (other instanceof Mapping){
+            Mapping otherMapping = (Mapping)other;
             if (otherMapping.getId() != getId()) return false;
-            if (!otherMapping.sourceURLs.equals(sourceURLs)) return false;
-            if (!otherMapping.targetURLs.equals(targetURLs)) return false;
+            if (!otherMapping.sourceURL.equals(sourceURL)) return false;
+            if (!otherMapping.targetURL.equals(targetURL)) return false;
             if (!otherMapping.getMappingSetId().equals(getMappingSetId())) return false;
             //No need to check predicate as by defintion one id has one predicate
             return true;
@@ -262,15 +263,15 @@ public class URLMapping {
     /**
      * @param sourceURLs the sourceURLs to set
      */
-    public void setSourceURLs(Set<String> sourceURLs) {
-        this.sourceURLs = sourceURLs;
+    public void setSourceURL(Set<String> sourceURLs) {
+        this.sourceURL = sourceURLs;
     }
 
     /**
      * @param targetURLs the targetURLs to set
      */
-    public void setTargetURLs(Set<String> targetURLs) {
-        this.targetURLs = targetURLs;
+    public void setTargetURL(Set<String> targetURLs) {
+        this.targetURL = targetURLs;
     }
 
     /**

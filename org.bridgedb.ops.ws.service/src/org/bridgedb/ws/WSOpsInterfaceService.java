@@ -52,7 +52,7 @@ import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;
-import org.bridgedb.url.URLMapping;
+import org.bridgedb.url.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IpConfig;
 import org.bridgedb.utils.Reporter;
@@ -107,7 +107,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsOpsConstants.MAP_URL)
     @Override
-    public List<URLMapping> mapURL(@QueryParam(WsOpsConstants.URL) String URL,
+    public List<Mapping> mapURL(@QueryParam(WsOpsConstants.URL) String URL,
             @QueryParam(WsOpsConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
         if (logger.isDebugEnabled()){
             logger.debug("mapURL called! URL = " + URL + " " + "targetURISpace = " + targetURISpace);
@@ -118,15 +118,15 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
         }
-        Set<URLMapping> urlMappings = urlMapper.mapURLFull(URL, targetURISpaces);
-        return new ArrayList<URLMapping>(urlMappings); 
+        Set<Mapping> urlMappings = urlMapper.mapURLFull(URL, targetURISpaces);
+        return new ArrayList<Mapping>(urlMappings); 
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsOpsConstants.MAP_TO_URLS)
     @Override
-    public List<URLMapping> mapToURLs(
+    public List<Mapping> mapToURLs(
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsOpsConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
@@ -141,8 +141,8 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
         }
-        Set<URLMapping> urlMappings = urlMapper.mapToURLsFull(source, targetURISpaces);
-        return new ArrayList<URLMapping>(urlMappings); 
+        Set<Mapping> urlMappings = urlMapper.mapToURLsFull(source, targetURISpaces);
+        return new ArrayList<Mapping>(urlMappings); 
     }
 
     @GET
@@ -188,7 +188,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsOpsConstants.MAPPING)
-    public URLMapping getMapping() throws IDMapperException {
+    public Mapping getMapping() throws IDMapperException {
        throw new BridgeDBException("Path parameter missing.");
     }
 
@@ -196,7 +196,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsOpsConstants.MAPPING + "/{id}")
-    public URLMapping getMapping(@PathParam(WsOpsConstants.ID) String idString) throws IDMapperException {
+    public Mapping getMapping(@PathParam(WsOpsConstants.ID) String idString) throws IDMapperException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         int id = Integer.parseInt(idString);
