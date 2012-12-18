@@ -41,9 +41,13 @@ public class DataSourceImporter {
         File file = new File ("C:/OpenPhacts/BioDataSource.ttl");
         StatementReaderAndImporter reader = new StatementReaderAndImporter(file, StoreType.TEST);
         Set<Statement> allStatements = reader.getVoidStatements();
+        load(allStatements);
+    }
+
+    public static void load(Set<Statement> allStatements) throws IDMapperException {
         loadDataSources(allStatements);
         loadUriPatterns(allStatements);
-        linkUriPatterns(allStatements);
+        linkUriPatterns(allStatements);    
     }
     
     public static void loadDataSources(Set<Statement> allStatements) throws IDMapperException {
