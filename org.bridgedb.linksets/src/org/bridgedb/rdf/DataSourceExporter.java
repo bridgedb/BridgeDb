@@ -36,6 +36,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
     private BufferedWriter writer;
     private HashMap<String,String> mappings;
     static final Logger logger = Logger.getLogger(DataSourceExporter.class);
+    static final boolean VERSION2 = false;
     
     private DataSourceExporter(BufferedWriter buffer){
         organisms = new HashSet<Organism>();
@@ -69,7 +70,9 @@ public class DataSourceExporter implements Comparator<DataSource>{
         try {
             printDataSources();
             printOrganisms();
-            printUriPatterns();
+            if (VERSION2){
+                printUriPatterns();
+            }
         } catch (IOException ex) {
             throw new BridgeDBException("Error exporting DataSources. ", ex);
         } finally {
@@ -191,36 +194,39 @@ public class DataSourceExporter implements Comparator<DataSource>{
             writer.newLine();
        }
 
-        /*String urlPattern = dataSource.getUrl("$id");
-        if (urlPattern.length() > 3){
-            writer.write("         bridgeDB:");
-            writer.write(BridgeDBConstants.URL_PATTERN);
-            writer.write(" \"");
-            writer.write(urlPattern);
-            writer.write("\";");
-            writer.newLine();
-        }
-
-        String urnPattern = dataSource.getURN("");
-        if (urnPattern.length() > 1){
-            writer.write("         bridgeDB:");
-            writer.write(BridgeDBConstants.URN_BASE);
-            writer.write(" \"");
-            writer.write(urnPattern.substring(0, urnPattern.length()-1));
-            writer.write("\";");
-            writer.newLine();
-            if (urnPattern.length() >= 11){
-                String identifersOrgBase = "http://identifiers.org/" + urnPattern.substring(11, urnPattern.length()-1) + "/";
+        if (!VERSION2){
+            String urlPattern = dataSource.getUrl("$id");
+            if (urlPattern.length() > 3){
                 writer.write("         bridgeDB:");
-                writer.write(BridgeDBConstants.IDENTIFIERS_ORG_BASE);
+                writer.write(BridgeDBConstants.URL_PATTERN);
                 writer.write(" \"");
-                writer.write(identifersOrgBase);
+                writer.write(urlPattern);
                 writer.write("\";");
                 writer.newLine();
             }
         }
 
-        String wikiNameSpace = mappings.get(dataSource.getFullName());
+        if (!VERSION2){
+            String urnPattern = dataSource.getURN("");
+            if (urnPattern.length() > 1){
+                writer.write("         bridgeDB:");
+                writer.write(BridgeDBConstants.URN_BASE);
+                writer.write(" \"");
+                writer.write(urnPattern.substring(0, urnPattern.length()-1));
+                writer.write("\";");
+                writer.newLine();
+                //if (urnPattern.length() >= 11){
+                    //String identifersOrgBase = "http://identifiers.org/" + urnPattern.substring(11, urnPattern.length()-1) + "/";
+                    //writer.write("         bridgeDB:");
+                    //writer.write(BridgeDBConstants.IDENTIFIERS_ORG_BASE);
+                    //writer.write(" \"");
+                    //writer.write(identifersOrgBase);
+                    //writer.write("\";");
+                    //writer.newLine();
+            }
+        }
+
+        /*String wikiNameSpace = mappings.get(dataSource.getFullName());
         if (wikiNameSpace != null){
             writer.write("         bridgeDB:");
             writer.write(BridgeDBConstants.WIKIPATHWAYS_BASE);

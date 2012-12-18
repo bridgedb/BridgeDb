@@ -15,6 +15,8 @@ public class BridgeDBConstants {
 
     public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#";
 
+    public static final String BIO2RDF = "bio2RDF";
+    public static final URI BIO2RDF_URI = new URIImpl(PREFIX + BIO2RDF);
     public static final String DATA_SOURCE = "DataSource";
     public static final URI DATA_SOURCE_URI = new URIImpl(PREFIX + DATA_SOURCE);
     public static final String SYSTEM_CODE = "systemCode";
@@ -43,6 +45,8 @@ public class BridgeDBConstants {
     public static final URI CODE_URI = new URIImpl(PREFIX + CODE);
     public static final String SHORT_NAME = "shortName";
     public static final URI SHORT_NAME_URI = new URIImpl(PREFIX + SHORT_NAME);
+    public static final String SOURCE_RDF = "sourceRDFURI";
+    public static final URI SOURCE_RDF_URI = new URIImpl(PREFIX + SOURCE_RDF);
     public static final String LATIN_NAME = "latinName";
     public static final URI LATIN_NAME_URI = new URIImpl(PREFIX + LATIN_NAME);
     public static final String URI_PATTERN = "uriPattern";

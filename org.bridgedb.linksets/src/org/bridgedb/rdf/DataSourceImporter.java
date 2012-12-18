@@ -4,6 +4,7 @@
 package org.bridgedb.rdf;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,8 +36,10 @@ public class DataSourceImporter {
     
     public static void main(String[] args) throws IDMapperException {
         ConfigReader.logToConsole();
-        InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
-        StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
+        //InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
+        //StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
+        File file = new File ("C:/OpenPhacts/BioDataSource.ttl");
+        StatementReaderAndImporter reader = new StatementReaderAndImporter(file, StoreType.TEST);
         Set<Statement> allStatements = reader.getVoidStatements();
         loadDataSources(allStatements);
         loadUriPatterns(allStatements);
@@ -53,11 +56,11 @@ public class DataSourceImporter {
     }
     
     private static void loadUriPatterns(Set<Statement> allStatements) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    //    throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private static void linkUriPatterns(Set<Statement> allStatements) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    //    throw new UnsupportedOperationException("Not yet implemented");
     }
     
 
@@ -93,6 +96,8 @@ public class DataSourceImporter {
         String urnBase = null;
         String identifiersOrgBase = null;
         String wikipathwaysBase = null;
+        String bio2RDFPattern = null;
+        String sourceRDFURIPattern = null;
         
         for (Statement statement:dataSourceStatements){
             if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
@@ -118,8 +123,12 @@ public class DataSourceImporter {
                 urnBase = statement.getObject().stringValue();
             } else if (statement.getPredicate().equals(BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI)){
                 identifiersOrgBase = statement.getObject().stringValue();
-           } else if (statement.getPredicate().equals(BridgeDBConstants.WIKIPATHWAYS_BASE_URI)){
+            } else if (statement.getPredicate().equals(BridgeDBConstants.WIKIPATHWAYS_BASE_URI)){
                 wikipathwaysBase = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.SOURCE_RDF_URI)){
+                sourceRDFURIPattern = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.BIO2RDF_URI)){
+                bio2RDFPattern = statement.getObject().stringValue();
             } else {
                 throw new BridgeDBException ("Unexpected Statement " + statement);
             }
@@ -146,7 +155,13 @@ public class DataSourceImporter {
         if (urnBase != null) {
             builder.urnBase(urnBase);
         }
-        return builder.asDataSource();
+        DataSource dataSource = builder.asDataSource();
+        registerUriPattern(dataSource, urlPattern, UriMappingRelationship.URN_BASE);
+        registerNameSpace(dataSource, identifiersOrgBase, UriMappingRelationship.IDENTIFERS_ORG);
+        registerNameSpace(dataSource, wikipathwaysBase, UriMappingRelationship.WIKIPATHWAYS);
+        registerUriPattern(dataSource, sourceRDFURIPattern, UriMappingRelationship.SOURCE_RDF);
+        registerUriPattern(dataSource, bio2RDFPattern, UriMappingRelationship.BIO2RDF_URI);
+        return dataSource;
     }
 
     private static Object getOrganism(Value organismId, Set<Statement> allStatements) throws BridgeDBException {
@@ -164,4 +179,21 @@ public class DataSourceImporter {
         throw new BridgeDBException("No Orgamism found for " + organismId);
     }
 
+    private static void registerUriPattern(DataSource dataSource, String urlPattern, UriMappingRelationship uriMappingRelationship) throws BridgeDBException {
+        if (urlPattern == null || urlPattern.isEmpty()) {
+            return;
+        }
+        System.out.println(dataSource.getFullName() + " " + uriMappingRelationship + " = " + urlPattern);
+        UriPattern pattern = UriPattern.byUrlPattern(urlPattern);
+        UriMapping.addMapping(dataSource, pattern, uriMappingRelationship);
+    }
+
+    private static void registerNameSpace(DataSource dataSource, String nameSpace, UriMappingRelationship uriMappingRelationship) throws BridgeDBException {
+        if (nameSpace == null || nameSpace.isEmpty()) {
+            return;
+        }
+        System.out.println(nameSpace);
+        UriPattern pattern = UriPattern.byNameSpace(nameSpace);
+        UriMapping.addMapping(dataSource, pattern, uriMappingRelationship);
+    }
 }
