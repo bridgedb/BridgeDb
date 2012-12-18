@@ -325,11 +325,18 @@ public abstract class URLMapperTest extends URLListenerTest{
             }
         }
         Mapping result = urlMapper.getMapping(mappingId);
+        System.out.println(result);
+        System.out.println(map3URL3);
+        System.out.println(map3URL2);
         assertEquals(mappingId, result.getId());
         assertTrue(result.getSourceURL().contains(map3URL3));
         assertEquals(TEST_PREDICATE, result.getPredicate());
         assertTrue(result.getTargetURL().contains(map3URL2));
         assertEquals(setId, result.getMappingSetId());
+        assertEquals(map3xref3.getId(), result.getSourceId());
+        assertEquals(map3xref3.getDataSource().getSystemCode(), result.getSourceSysCode());
+        assertEquals(map3xref2.getId(), result.getTargetId());
+        assertEquals(map3xref2.getDataSource().getSystemCode(), result.getTargetSysCode());
     }
     
     @Test
