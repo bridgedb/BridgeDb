@@ -4,6 +4,8 @@
  */
 package org.bridgedb.linkset;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.junit.Ignore;
 import java.util.Set;
@@ -68,6 +70,21 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
     }
 
     /**
+     * Test of validateString method, of class LinksetInterface.
+     */
+    @Test
+    public void testValidateInputStream() throws Exception {
+        report("validateInputStream");
+        boolean includeWarnings = false;
+        RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
+        InputStream is = new ByteArrayInputStream(LinksetStatementReaderTest.INFO1.getBytes());
+        String result = linksetInterfaceMinimal.validateInputStream("validateInputStream", is, format, StoreType.TEST, 
+                ValidationType.LINKSMINIMAL, includeWarnings);
+        assertThat(result, not(containsString("ERROR")));
+        assertThat(result, containsString("Found 3 links"));
+    }
+
+    /**
      * Test of validateStringAsDatasetVoid method, of class LinksetInterface.
      */
     @Test
@@ -78,6 +95,22 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
         RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
         String result = linksetInterfaceMinimal.validateString("loadMayDataSet1()", info, format, StoreType.TEST, 
                 ValidationType.VOID, false);
+        assertThat(result, not(containsString("ERROR")));
+    }
+
+    /**
+     * Test of validateStringAsDatasetVoid method, of class LinksetInterface.
+     */
+    @Test
+    public void testValidateInputStreamAsDatasetVoid() throws Exception {
+        report("validateInputStreamAsDatasetVoid");
+        boolean includeWarnings = false;
+        String info = getRDF(loadMayDataSet1());
+        String mimeType = "application/xml";
+        RDFFormat format = StatementReader.getRDFFormatByMimeType(mimeType);
+        InputStream is = new ByteArrayInputStream(info.getBytes());
+        String result = linksetInterfaceMinimal.validateInputStream("validateInputStream", is, format, StoreType.TEST, 
+                ValidationType.VOID, includeWarnings);
         assertThat(result, not(containsString("ERROR")));
     }
 
