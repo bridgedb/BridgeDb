@@ -36,7 +36,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
     private BufferedWriter writer;
     private HashMap<String,String> mappings;
     static final Logger logger = Logger.getLogger(DataSourceExporter.class);
-    static final boolean VERSION2 = false;
+    static final boolean VERSION2 = true;
     
     private DataSourceExporter(BufferedWriter buffer){
         organisms = new HashSet<Organism>();
@@ -113,6 +113,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
         for (Organism organism:organisms){
             printOrganism(organism);
         }
+        writer.newLine();
     }
 
     private void printUriPatterns() throws IOException {
@@ -122,11 +123,8 @@ public class DataSourceExporter implements Comparator<DataSource>{
         }
     }
 
-    public final static String scrub(String original){
-        String result = original.replace(" ", "_");
-        result = result.replace(".", "");
-        result = result.replace(":", "");
-        result = result.replace("/", "_");
+    public static String scrub(String original){
+        String result = original.replaceAll("\\W", "_");
         while(result.contains("__")){
             result = result.replace("__", "_");
         }
@@ -291,9 +289,6 @@ public class DataSourceExporter implements Comparator<DataSource>{
     }
 
     private void printUriPattern(UriPattern uriPattern) throws IOException {
-        writer.write(":");
-        writer.write(BridgeDBConstants.URI_PATTERN);
-        writer.write("_");
         writer.write(uriPattern.getRdfId());
         writer.write(" a bridgeDB:");
         writer.write(BridgeDBConstants.URI_PATTERN);
@@ -304,7 +299,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
         writer.write(BridgeDBConstants.URI_PATTERN);
         writer.write(" \"");
         writer.write(uriPattern.getUriPattern());
-        writer.write("\";");
+        writer.write("\".");
         writer.newLine();
     }
 

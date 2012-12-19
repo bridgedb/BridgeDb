@@ -98,7 +98,7 @@ public class UriPattern {
         } else {
             name = DataSourceExporter.scrub(nameSpace + "_" + postFix);
         }
-        return ":UrlPattern_" + name;
+         return ":" + BridgeDBConstants.URI_PATTERN + "_" + name;
     }
     
     public void writeAsRDF(BufferedWriter writer) throws IOException{
@@ -117,6 +117,11 @@ public class UriPattern {
         }
     }
 
+    @Override
+    public String toString(){
+        return getUriPattern();      
+    }
+    
     public static void main(String[] args) throws BridgeDBException  {
         UriPattern test = new UriPattern("This is a test", "part2");
         UriPattern test2 = UriPattern.byNameSpaceAndPostfix("This is a test","part2");

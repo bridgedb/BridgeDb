@@ -121,7 +121,10 @@ public class UrlPatternTest extends TestUtils{
         report("getRdfId");
         String nameSpace = "http://UrlPattern.example.com/Test3/";
         UriPattern instance = UriPattern.byNameSpace(nameSpace);
-        String expResult = ":UrlPattern_http_UrlPatternexamplecom_Test3";
+        String expResult = ":uriPattern_http_UrlPattern_example_com_Test3";
+        System.out.println(instance);
+        System.out.println(instance.getRdfId());
+        System.out.println(expResult);
         String result = instance.getRdfId();
         assertEquals(expResult, result);
     }
@@ -134,7 +137,7 @@ public class UrlPatternTest extends TestUtils{
         report("getRdfIdA");
         String urlPattern = "http://UrlPattern.example.com/Test3a/$id/postfix";
         UriPattern instance = UriPattern.byUrlPattern(urlPattern);
-        String expResult = ":UrlPattern_http_UrlPatternexamplecom_Test3a_postfix";
+        String expResult = ":uriPattern_http_UrlPattern_example_com_Test3a_postfix";
         String result = instance.getRdfId();
         assertEquals(expResult, result);
     }
@@ -156,7 +159,7 @@ public class UrlPatternTest extends TestUtils{
         //Doing the Expected also using BufferedWriter to avoid different systems having different newLines 
         StringWriter wsExpected = new StringWriter();
         BufferedWriter expectedBuffer = new BufferedWriter(wsExpected);
-        expectedBuffer.write(":UrlPattern_http_UrlPatternexamplecom_Test4 a bridgeDB:urlPattern;");
+        expectedBuffer.write(":uriPattern_http_UrlPattern_example_com_Test4 a bridgeDB:urlPattern;");
         expectedBuffer.newLine();
         expectedBuffer.flush();
         assertEquals(wsExpected.toString(), result);
