@@ -135,7 +135,7 @@ public class LinksetLoaderImplentation{
             statements = linkStatements;     
             metaData = new LinksetVoidInformation(source, linkStatements, validationType);        
         } else {
-            statements = new LinksetStatementReaderAndImporter(inputStream, format, storeType);     
+            statements = new StatementReaderAndImporter(inputStream, format, storeType);     
             MetaDataSpecification specification = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
             metaData = new MetaDataCollection(source, statements.getVoidStatements(), specification);
