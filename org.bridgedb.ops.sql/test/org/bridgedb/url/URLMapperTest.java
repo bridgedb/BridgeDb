@@ -188,6 +188,20 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
+    public void testMapFullOneBad() throws IDMapperException{
+        report("MapFullOneBad");
+        Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1, RdfConfig.getProfileURI(0));
+        assertTrue(results.size() <= 1);
+    }
+
+    @Test
+    public void testMapFullOneBadOneNameSpace() throws IDMapperException{
+        report("MapFullOneBadOneNameSpace");
+        Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1, RdfConfig.getProfileURI(0), URISpace2);
+        assertTrue(results.size() <= 1);
+    }
+
+    @Test
     public void testMapIDOneToManyWithOneDataSource() throws IDMapperException{
         report("MapIDOneToManyWithOneDataSource");
         Set<String> results = urlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0), URISpace2);
@@ -325,9 +339,6 @@ public abstract class URLMapperTest extends URLListenerTest{
             }
         }
         Mapping result = urlMapper.getMapping(mappingId);
-        System.out.println(result);
-        System.out.println(map3URL3);
-        System.out.println(map3URL2);
         assertEquals(mappingId, result.getId());
         assertTrue(result.getSourceURL().contains(map3URL3));
         assertEquals(TEST_PREDICATE, result.getPredicate());

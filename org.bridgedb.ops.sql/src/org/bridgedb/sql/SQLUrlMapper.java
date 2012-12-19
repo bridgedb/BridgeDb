@@ -973,6 +973,18 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     private Set<Mapping> doMapping(String id, String sysCode, String profileURL, String... tgtSysCodes) throws IDMapperException {
+        Set<Mapping> mappings;
+        if (id == null || sysCode == null){
+            mappings = new HashSet<Mapping>();
+        } else {
+            mappings = doMappingQuery(id, sysCode, profileURL, tgtSysCodes);
+        }
+        addMapToSelf(mappings, id, sysCode, tgtSysCodes);
+        return mappings;
+    }
+
+    private Set<Mapping> doMappingQuery(String id, String sysCode, String profileURL, String... tgtSysCodes) 
+            throws IDMapperException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT targetId as id, targetDataSource as sysCode, mapping.id as mappingId, predicate, ");
         query.append("mappingSet.id as mappingSetId ");
@@ -999,16 +1011,21 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException("Unable to run query. " + query, ex);
         }    
         Set<Mapping> results = resultSetToURLMappingSet(id, sysCode, rs);
+        return results;
+    }
+    
+    private void addMapToSelf( Set<Mapping> mappings, String id, String sysCode, String... tgtSysCodes) throws BridgeDbSqlException {
         if (tgtSysCodes.length == 0){
-           results.add(new Mapping (id, sysCode)); 
+           mappings.add(new Mapping (id, sysCode)); 
         } else {
-            for (String tgtSysCode: tgtSysCodes){
-                if (sysCode.equals(tgtSysCode)){
-                    results.add(new Mapping(id, sysCode));
+            if (sysCode != null){
+                for (String tgtSysCode: tgtSysCodes){
+                    if (sysCode.equals(tgtSysCode)){
+                        mappings.add(new Mapping(id, sysCode));
+                    }
                 }
             }
         }
-        return results;
     }
 
     private Set<String> getURIs(String id, String sysCode, String... targetURISpaces) throws BridgeDbSqlException {
