@@ -88,7 +88,29 @@ public class Mapping {
         this.mappingSetId = null;
         this.predicate = null;
     }
-    
+
+    private boolean mapToSelf(){
+        if (sourceSysCode == null){
+            if (targetSysCode != null){
+                return false;
+            }
+        } else {
+            if (!sourceSysCode.equals(targetSysCode)){
+                return false;
+            } 
+        }
+        if (sourceId == null){
+            if (targetId != null){
+                return false;
+            }
+        } else {
+            if (!sourceId.equals(targetId)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * @return the id
      */
@@ -105,10 +127,16 @@ public class Mapping {
 
     public void addSourceURL(String sourceURL){
         getSourceURL().add(sourceURL);
+        if (mapToSelf()){
+            getTargetURL().add(sourceURL);
+        }
     }
     
     public void addSourceURLs(Collection<String> sourceURLs){
         getSourceURL().addAll(sourceURLs);
+        if (mapToSelf()){
+            getTargetURL().addAll(sourceURLs);
+        }
     }
     
     /**
