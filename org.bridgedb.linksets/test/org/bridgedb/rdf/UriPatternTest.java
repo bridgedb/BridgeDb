@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
  *
  * @author Christian
  */
-public class UrlPatternTest extends TestUtils{
+public class UriPatternTest extends TestUtils{
     
-    public UrlPatternTest() {
+    public UriPatternTest() {
     }
     
     @BeforeClass
@@ -122,9 +122,6 @@ public class UrlPatternTest extends TestUtils{
         String nameSpace = "http://UrlPattern.example.com/Test3/";
         UriPattern instance = UriPattern.byNameSpace(nameSpace);
         String expResult = ":uriPattern_http_UrlPattern_example_com_Test3";
-        System.out.println(instance);
-        System.out.println(instance.getRdfId());
-        System.out.println(expResult);
         String result = instance.getRdfId();
         assertEquals(expResult, result);
     }
@@ -159,9 +156,43 @@ public class UrlPatternTest extends TestUtils{
         //Doing the Expected also using BufferedWriter to avoid different systems having different newLines 
         StringWriter wsExpected = new StringWriter();
         BufferedWriter expectedBuffer = new BufferedWriter(wsExpected);
-        expectedBuffer.write(":uriPattern_http_UrlPattern_example_com_Test4 a bridgeDB:urlPattern;");
+        expectedBuffer.write(":uriPattern_http_UrlPattern_example_com_Test4 a bridgeDB:uriPattern;");
+        expectedBuffer.newLine();
+        expectedBuffer.write("         void:uriSpace \"http://UrlPattern.example.com/Test4/\".");
         expectedBuffer.newLine();
         expectedBuffer.flush();
+        
+        assertEquals(wsExpected.toString(), result);
+    }
+
+    /**
+     * Test of writeAsRDF method, of class UrlPattern.
+     */
+    @Test
+    public void testWriteAsRDF2() throws Exception {
+        report("writeAsRDF2");
+        StringWriter sw = new StringWriter();
+        BufferedWriter writer = new BufferedWriter(sw);
+        String nameSpace = "http://UrlPattern.example.com/Test4/";
+        String postfix = ".html";
+        UriPattern instance = UriPattern.byNameSpaceAndPostFix(nameSpace, postfix);
+        instance.writeAsRDF(writer);
+        writer.flush();
+        String result = sw.toString();
+
+        //Doing the Expected also using BufferedWriter to avoid different systems having different newLines 
+        StringWriter wsExpected = new StringWriter();
+        BufferedWriter expectedBuffer = new BufferedWriter(wsExpected);
+        expectedBuffer.write(":uriPattern_http_UrlPattern_example_com_Test4_html a bridgeDB:uriPattern;");
+        expectedBuffer.newLine();
+        expectedBuffer.write("         bridgeDB:postfix \".html\";");
+        expectedBuffer.newLine();
+        expectedBuffer.write("         void:uriSpace \"http://UrlPattern.example.com/Test4/\".");
+        expectedBuffer.newLine();
+        expectedBuffer.flush();
+
+        System.out.println(wsExpected.toString());
+        System.out.println(result);
         assertEquals(wsExpected.toString(), result);
     }
 

@@ -14,6 +14,7 @@ import org.openrdf.model.impl.URIImpl;
 public class BridgeDBConstants {
 
     public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#";
+    public static final String PREFIX_NAME = "bridgeDB:";
 
     public static final String BIO2RDF = "bio2RDF";
     public static final URI BIO2RDF_URI = new URIImpl(PREFIX + BIO2RDF);
@@ -31,6 +32,8 @@ public class BridgeDBConstants {
     public static final URI WIKIPATHWAYS_BASE_URI = new URIImpl(PREFIX + WIKIPATHWAYS_BASE);
     public static final String PRIMAY = "primary";
     public static final URI PRIMAY_URI = new URIImpl(PREFIX + PRIMAY);
+    public static final String POSTFIX = "postfix";
+    public static final URI POSTFIX_URI = new URIImpl(PREFIX + POSTFIX);
     public static final String TYPE = "type";
     public static final URI TYPE_URI = new URIImpl(PREFIX + TYPE);
     public static final String URL_PATTERN = "urlPattern";

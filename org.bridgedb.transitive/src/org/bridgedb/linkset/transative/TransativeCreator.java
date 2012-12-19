@@ -149,8 +149,8 @@ public class TransativeCreator {
         predicate = registerNewLinkset(rdfWrapper, linksetURI, leftId, rightId, predicate, license, derivedBy);
         registerDataSet(rdfWrapper, sourceDataSet, leftContext);
         registerDataSet(rdfWrapper, targetDataSet, rightContext);
-        sourceUriSpace = rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE, leftContext);
-        targetUriSpace = rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE, rightContext);
+        sourceUriSpace = rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE_URI, leftContext);
+        targetUriSpace = rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE_URI, rightContext);
 
         rdfWrapper.shutdown();
         return predicate;

@@ -17,6 +17,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.metadata.constants.BridgeDBConstants;
 import org.bridgedb.metadata.constants.RdfConstants;
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
@@ -34,6 +35,10 @@ public class DataSourceImporter {
     
     static final Logger logger = Logger.getLogger(DataSourceImporter.class);
     
+    static HashMap<Resource,Object> organisms = new HashMap<Resource,Object>();
+    static HashMap<Resource, DataSource> dataSources = new HashMap<Resource, DataSource>();
+    static HashMap<Resource, UriPattern> uriPatterns = new HashMap<Resource, UriPattern>();
+    
     public static void main(String[] args) throws IDMapperException {
         ConfigReader.logToConsole();
         //InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
@@ -50,17 +55,29 @@ public class DataSourceImporter {
         linkUriPatterns(allStatements);    
     }
     
-    public static void loadDataSources(Set<Statement> allStatements) throws IDMapperException {
-        Set<Resource> resources = getDataSourceResources(allStatements);
+    public static void loadOrganism(Set<Statement> allStatements) throws IDMapperException {
+        Set<Resource> resources = getResourcesByType(allStatements, BridgeDBConstants.ORGANISM_URI);
         for (Resource resource:resources){
             System.out.println(resource);
             Set<Statement> resourceStatements = getStatementsByResource(resource, allStatements);
-            DataSource dataSource = createDataSource(resourceStatements, allStatements);
+            Object orgamism = createOrganism(resource, resourceStatements);
         }
     }
     
-    private static void loadUriPatterns(Set<Statement> allStatements) {
-    //    throw new UnsupportedOperationException("Not yet implemented");
+    public static void loadDataSources(Set<Statement> allStatements) throws IDMapperException {
+        Set<Resource> resources = getResourcesByType(allStatements, BridgeDBConstants.DATA_SOURCE_URI);
+        for (Resource resource:resources){
+            Set<Statement> resourceStatements = getStatementsByResource(resource, allStatements);
+            DataSource dataSource = createDataSource(resource, resourceStatements);
+        }
+    }
+    
+    private static void loadUriPatterns(Set<Statement> allStatements) throws BridgeDBException {
+        Set<Resource> resources = getResourcesByType(allStatements, BridgeDBConstants.URI_PATTERN_URI);
+        for (Resource resource:resources){
+            Set<Statement> resourceStatements = getStatementsByResource(resource, allStatements);
+            UriPattern pattern = createUriPattern(resource, resourceStatements);
+        }
     }
 
     private static void linkUriPatterns(Set<Statement> allStatements) {
@@ -68,10 +85,10 @@ public class DataSourceImporter {
     }
     
 
-    private static Set<Resource> getDataSourceResources(Set<Statement> statements){
+    private static Set<Resource> getResourcesByType(Set<Statement> statements, URI type){
         HashSet<Resource> resources = new HashSet<Resource>();
         for (Statement statement:statements){
-            if (statement.getPredicate().equals(RdfConstants.TYPE_URI) && statement.getObject().equals(BridgeDBConstants.DATA_SOURCE_URI)){
+            if (statement.getPredicate().equals(RdfConstants.TYPE_URI) && statement.getObject().equals(type)){
                 resources.add(statement.getSubject());
             }
         }
@@ -88,7 +105,22 @@ public class DataSourceImporter {
         return subset;    
     }
     
-    private static DataSource createDataSource(Set<Statement> dataSourceStatements, Set<Statement> allStatements) throws BridgeDBException{
+    private static Object createOrganism(Resource organismId, Set<Statement> allStatements) throws BridgeDBException {
+        for (Statement statement:allStatements){
+            if (statement.getPredicate().equals(BridgeDBConstants.LATIN_NAME_URI)){
+                String latinName = statement.getObject().stringValue();
+                Organism orgamism =  Organism.fromLatinName(latinName);
+                organisms.put(organismId, orgamism);
+                if (orgamism != null){
+                    return orgamism;
+                }
+                throw new BridgeDBException("No Orgamism with LatinName " + latinName + " for " + organismId);
+            }
+        }
+        throw new BridgeDBException("No Orgamism found for " + organismId);
+    }
+
+    private static DataSource createDataSource(Resource dataSourceId, Set<Statement> dataSourceStatements) throws BridgeDBException{
         String fullName = null;
         String idExample = null;
         String mainUrl = null;
@@ -114,7 +146,7 @@ public class DataSourceImporter {
                 mainUrl = statement.getObject().stringValue();
             } else if (statement.getPredicate().equals(BridgeDBConstants.ORGANISM_URI)){
                 Value organismId = statement.getObject();
-                organism = getOrganism(organismId, allStatements);
+                organism = organisms.get(organismId);
             } else if (statement.getPredicate().equals(BridgeDBConstants.PRIMAY_URI)){
                 primary = statement.getObject().stringValue();
             } else if (statement.getPredicate().equals(BridgeDBConstants.SYSTEM_CODE_URI)){
@@ -160,6 +192,7 @@ public class DataSourceImporter {
             builder.urnBase(urnBase);
         }
         DataSource dataSource = builder.asDataSource();
+        dataSources.put(dataSourceId, dataSource);
         registerUriPattern(dataSource, urlPattern, UriMappingRelationship.URN_BASE);
         registerNameSpace(dataSource, identifiersOrgBase, UriMappingRelationship.IDENTIFERS_ORG);
         registerNameSpace(dataSource, wikipathwaysBase, UriMappingRelationship.WIKIPATHWAYS);
@@ -168,19 +201,19 @@ public class DataSourceImporter {
         return dataSource;
     }
 
-    private static Object getOrganism(Value organismId, Set<Statement> allStatements) throws BridgeDBException {
+    private static UriPattern createUriPattern(Resource patternId, Set<Statement> allStatements) throws BridgeDBException {
+        String nameSpace = null;
+        String postfix = null;
         for (Statement statement:allStatements){
-            if (statement.getSubject().equals(organismId) && 
-                    statement.getPredicate().equals(BridgeDBConstants.LATIN_NAME_URI)){
-                String latinName = statement.getObject().stringValue();
-                Organism result =  Organism.fromLatinName(latinName);
-                if (result != null){
-                    return result;
-                }
-                throw new BridgeDBException("No Orgamism with LatinName " + latinName + " for " + organismId);
+            if (statement.getPredicate().equals(BridgeDBConstants.POSTFIX_URI)){
+                postfix = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
+                nameSpace = statement.getObject().stringValue();
             }
         }
-        throw new BridgeDBException("No Orgamism found for " + organismId);
+        UriPattern pattern = UriPattern.byNameSpaceAndPostFix(nameSpace, postfix);
+        uriPatterns.put(patternId, pattern);
+        return pattern;
     }
 
     private static void registerUriPattern(DataSource dataSource, String urlPattern, UriMappingRelationship uriMappingRelationship) throws BridgeDBException {

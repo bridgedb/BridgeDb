@@ -50,9 +50,9 @@ public class LinksetVoidInformation implements MetaData {
         predicate = extractSingleStringByPredicate(linkset, VoidConstants.LINK_PREDICATE);  
         transative =  checkIsTransative(linkset);
         ResourceMetaData resourceMetaData = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
-        subjectUriSpace = extractSingleStringByPredicate(resourceMetaData, VoidConstants.URI_SPACE);
+        subjectUriSpace = extractSingleStringByPredicate(resourceMetaData, VoidConstants.URI_SPACE_URI);
         ResourceMetaData target = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.OBJECTSTARGET);
-        targetUriSpace = extractSingleStringByPredicate(target, VoidConstants.URI_SPACE);
+        targetUriSpace = extractSingleStringByPredicate(target, VoidConstants.URI_SPACE_URI);
         validateLinks(reader.getLinkStatements());
 //        validate();
      }

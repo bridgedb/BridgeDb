@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.metadata.constants.BridgeDBConstants;
+import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -22,7 +23,7 @@ import org.bridgedb.utils.BridgeDBException;
 public class UriPattern {
 
     private final String nameSpace;
-    private final String postFix;
+    private final String postfix;
 
     private static HashSet<UriPattern> register = new HashSet<UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
@@ -31,7 +32,7 @@ public class UriPattern {
     
     private UriPattern(String namespace){
         this.nameSpace = namespace;
-        this.postFix = null;
+        this.postfix = null;
         byNameSpaceOnly.put(namespace, this);
         register.add(this);
     } 
@@ -39,10 +40,10 @@ public class UriPattern {
     private UriPattern(String namespace, String postfix){
         this.nameSpace = namespace;
         if (postfix == null || postfix.isEmpty()){
-            this.postFix = null;
+            this.postfix = null;
             byNameSpaceOnly.put(namespace, this);    
         } else {
-            this.postFix = postfix;
+            this.postfix = postfix;
             HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(namespace);
             if (postFixMap == null){
                 postFixMap = new HashMap<String,UriPattern>();
@@ -84,36 +85,59 @@ public class UriPattern {
         }
         String nameSpace = urlPattern.substring(0, pos);
         String postfix = urlPattern.substring(pos + 3);
+        return byNameSpaceAndPostFix(nameSpace, postfix);
+    }
+
+    public static UriPattern byNameSpaceAndPostFix(String nameSpace, String postfix) throws BridgeDBException{
         if (postfix.isEmpty()){
             return byNameSpace(nameSpace);
         } else {
             return byNameSpaceAndPostfix(nameSpace, postfix);
         }
     }
-
+    
     public String getRdfId(){
         String name;
-        if (postFix == null){
+        if (postfix == null){
             name = DataSourceExporter.scrub(nameSpace);
         } else {
-            name = DataSourceExporter.scrub(nameSpace + "_" + postFix);
+            name = DataSourceExporter.scrub(nameSpace + "_" + postfix);
         }
          return ":" + BridgeDBConstants.URI_PATTERN + "_" + name;
     }
     
     public void writeAsRDF(BufferedWriter writer) throws IOException{
         writer.write(getRdfId());
-        writer.write(" a bridgeDB:");
-        writer.write(BridgeDBConstants.URL_PATTERN);        
+        writer.write(" a ");
+        writer.write(BridgeDBConstants.PREFIX_NAME);        
+        writer.write(BridgeDBConstants.URI_PATTERN);        
         writer.write(";");        
+        writer.newLine();
+   
+        if (postfix != null){
+            writer.write("         ");
+            writer.write(BridgeDBConstants.PREFIX_NAME);        
+            writer.write(BridgeDBConstants.POSTFIX);
+            writer.write(" \"");
+            writer.write(postfix);
+            writer.write("\";");
+            writer.newLine();
+        }
+
+        writer.write("         ");
+        writer.write(VoidConstants.PREFIX_NAME);
+        writer.write(VoidConstants.URI_SPACE);
+        writer.write(" \"");
+        writer.write(nameSpace);
+        writer.write("\".");
         writer.newLine();
     }
     
     public String getUriPattern() {
-        if (postFix == null){
+        if (postfix == null){
             return nameSpace + "$id";
         } else {
-            return nameSpace + "$id" + postFix;
+            return nameSpace + "$id" + postfix;
         }
     }
 

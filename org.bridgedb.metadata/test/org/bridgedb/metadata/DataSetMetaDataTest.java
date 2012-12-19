@@ -71,7 +71,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     public void testTooManyValues() throws MetaDataException{
         report("TooManyValues");
         Set<Statement> statements = loadDirectDataSet1();
-        Statement extra = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, D2_NAME_SPACE_VALUE);
+        Statement extra = new StatementImpl(D1_ID, VoidConstants.URI_SPACE_URI, D2_NAME_SPACE_VALUE);
         statements.add(extra);
         MetaDataCollection metaData = new MetaDataCollection("testTooManyValues()", statements, voidRegistry);
         assertFalse(metaData.hasRequiredValues());

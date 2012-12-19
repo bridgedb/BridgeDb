@@ -26,7 +26,8 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class VoidConstants {
 
-    private static final String voidns = "http://rdfs.org/ns/void#";
+    public static final String voidns = "http://rdfs.org/ns/void#";
+    public static final String PREFIX_NAME = "void:";
     
     public static final URI DATA_DUMP = new URIImpl(voidns + "dataDump");
     public static final URI DATASET = new URIImpl(voidns + "Dataset");
@@ -40,7 +41,8 @@ public class VoidConstants {
     public static final URI OBJECTSTARGET = new URIImpl(voidns + "objectsTarget");
     public static final URI SUBSET = new URIImpl(voidns + "subset");
     public static final URI SPARQL_ENDPOINT = new URIImpl(voidns + "sparqlEndpoint");
-    public static final URI URI_SPACE = new URIImpl(voidns + "uriSpace");
+    public static final String URI_SPACE = "uriSpace";
+    public static final URI URI_SPACE_URI = new URIImpl(voidns + URI_SPACE);
     public static final URI VOCABULARY = new URIImpl(voidns + "vocabulary");
 
     

@@ -80,7 +80,7 @@ public class MetaDataTestBase extends TestUtils{
     Statement d1DescriptionStatement = new StatementImpl(D1_ID, DctermsConstants.DESCRIPTION, DESCRIPTION_VALUE);
     Statement d1HomePageStatement = new StatementImpl(D1_ID, FoafConstants.HOMEPAGE, HOME_PAGE);
     Statement d1LicenseStatement = new StatementImpl(D1_ID, DctermsConstants.LICENSE, LICENSE);
-    Statement d1NameSpaceStatement = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, NAME_SPACE_VALUE);
+    Statement d1NameSpaceStatement = new StatementImpl(D1_ID, VoidConstants.URI_SPACE_URI, NAME_SPACE_VALUE);
     Statement d1VersionStatement = new StatementImpl(D1_ID, PavConstants.VERSION, VERSION_VALUE);
     Statement d1DataDumpStatement = new StatementImpl(D1_ID, VoidConstants.DATA_DUMP, DATA_DUMP);  
     Statement d1PublishedStatement = new StatementImpl(D1_ID, DctermsConstants.PUBLISHER, DATA_DUMP);  
@@ -106,7 +106,7 @@ public class MetaDataTestBase extends TestUtils{
     Statement d2DescriptionStatement = new StatementImpl(D2_ID, DctermsConstants.DESCRIPTION, D2_DESCRIPTION_VALUE);
     Statement d2HomePageStatement = new StatementImpl(D2_ID, FoafConstants.HOMEPAGE, HOME_PAGE);
     Statement d2LicenseStatement = new StatementImpl(D2_ID, DctermsConstants.LICENSE, LICENSE);
-    Statement d2NameSpaceStatement = new StatementImpl(D2_ID, VoidConstants.URI_SPACE, D2_NAME_SPACE_VALUE);
+    Statement d2NameSpaceStatement = new StatementImpl(D2_ID, VoidConstants.URI_SPACE_URI, D2_NAME_SPACE_VALUE);
     Statement d2VersionStatement = new StatementImpl(D2_ID, PavConstants.VERSION, VERSION_VALUE);
     Statement d2DataDumpStatement = new StatementImpl(D2_ID, VoidConstants.DATA_DUMP, DATA_DUMP);  
     Statement d2ImportedFromStatement = new StatementImpl(D2_ID, PavConstants.IMPORTED_FROM, HOME_PAGE);
