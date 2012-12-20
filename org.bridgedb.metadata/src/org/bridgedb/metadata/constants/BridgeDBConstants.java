@@ -75,9 +75,35 @@ public class BridgeDBConstants {
     private static final String HAS_DATA_SOURCE = "hasDataSource";
     public static final String HAS_DATA_SOURCE_SHORT = PREFIX_NAME1 + HAS_DATA_SOURCE;
     public static final URI HAS_DATA_SOURCE_URI = new URIImpl(PREFIX + HAS_DATA_SOURCE);
+
     private static final String HAS_URI_PATTERN = "hasUriPattern";
     public static final String HAS_URI_PATTERN_SHORT = PREFIX_NAME1 + HAS_URI_PATTERN;
     public static final URI HAS_URI_PATTERN_URI = new URIImpl(PREFIX + HAS_URI_PATTERN);
+    
+    //Relationships
+    private static final String HAS_RELATIONSHIP = "hasRelationship";
+    public static final String HAS_RELATIONSHIP_SHORT = PREFIX_NAME1 + HAS_RELATIONSHIP;
+    public static final URI HAS_RELATIONSHIP_URI = new URIImpl(PREFIX + HAS_RELATIONSHIP);
+    
+    private static final String DATA_SOURCE_URL_PATTERN = "dataSourceUrlPattern";
+    public static final String DATA_SOURCE_URL_PATTERN_SHORT = PREFIX_NAME1 + DATA_SOURCE_URL_PATTERN;
+    public static final URI DATA_SOURCE_URL_PATTERN_URI = new URIImpl(PREFIX + DATA_SOURCE_URL_PATTERN);
+    
+    private static final String IDENTIFERS_ORG_PATTERN = "identifiersOrgPattern";
+    public static final String IDENTIFERS_ORG_PATTERN_SHORT = PREFIX_NAME1 + IDENTIFERS_ORG_PATTERN;
+    public static final URI IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + IDENTIFERS_ORG_PATTERN);
+    
+    private static final String WIKIPATHWAYS_PATTERN = "WikiPathwaysPattern";
+    public static final String WIKIPATHWAYS_PATTERN_SHORT = PREFIX_NAME1 + WIKIPATHWAYS_PATTERN;
+    public static final URI WIKIPATHWAYS_PATTERN_URI = new URIImpl(PREFIX + WIKIPATHWAYS_PATTERN);
+    
+    private static final String SOURCE_RDF_PATTERN = "SourceRdfPattern";
+    public static final String SOURCE_RDF_PATTERN_SHORT = PREFIX_NAME1 + SOURCE_RDF_PATTERN;
+    public static final URI SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + SOURCE_RDF_PATTERN);
+    
+    private static final String BIO2RDF_PATTERN = "Bio2RdfPattern";
+    public static final String BIO2RDF_PATTERN_SHORT = PREFIX_NAME1 + BIO2RDF_PATTERN;
+    public static final URI BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + BIO2RDF_PATTERN);
 
     //URI types (Used in Format received from wikiPathways
     private static final String BIO2RDF = "bio2RDF";

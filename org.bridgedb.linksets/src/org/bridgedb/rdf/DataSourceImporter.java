@@ -193,7 +193,7 @@ public class DataSourceImporter {
         }
         DataSource dataSource = builder.asDataSource();
         dataSources.put(dataSourceId, dataSource);
-        registerUriPattern(dataSource, urlPattern, UriMappingRelationship.URN_BASE);
+        registerUriPattern(dataSource, urlPattern, UriMappingRelationship.DATA_SOURCE_URL_PATTERN);
         registerNameSpace(dataSource, identifiersOrgBase, UriMappingRelationship.IDENTIFERS_ORG);
         registerNameSpace(dataSource, wikipathwaysBase, UriMappingRelationship.WIKIPATHWAYS);
         registerUriPattern(dataSource, sourceRDFURIPattern, UriMappingRelationship.SOURCE_RDF);

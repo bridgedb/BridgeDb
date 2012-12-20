@@ -110,6 +110,15 @@ public class UriMapping {
         writer.write(";");
         writer.newLine();
         
+        for (UriMappingRelationship relationship:relationships){
+            writer.write("         ");
+            writer.write(BridgeDBConstants.HAS_RELATIONSHIP_SHORT);
+            writer.write(" ");
+            writer.write(relationship.getRdfId());
+            writer.write(";");
+            writer.newLine();
+        }
+
         writer.write("         ");
         writer.write(BridgeDBConstants.HAS_DATA_SOURCE_SHORT);
         writer.write(" ");
