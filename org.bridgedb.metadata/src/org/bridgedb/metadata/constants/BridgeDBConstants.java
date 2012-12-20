@@ -14,61 +14,82 @@ import org.openrdf.model.impl.URIImpl;
 public class BridgeDBConstants {
 
     public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#";
-    public static final String PREFIX_NAME = "bridgeDB:";
+    public static final String PREFIX_NAME1 = "bridgeDB:";
 
     //Types
     public static final String DATA_SOURCE = "DataSource";
+    public static final String DATA_SOURCE_SHORT = PREFIX_NAME1 + DATA_SOURCE;
     public static final URI DATA_SOURCE_URI = new URIImpl(PREFIX + DATA_SOURCE);
     public static final String URI_MAPPING = "uriMapping";
+    public static final String URI_MAPPING_SHORT = PREFIX_NAME1 + URI_MAPPING;
     public static final URI URI_MAPPING_URI = new URIImpl(PREFIX + URI_MAPPING);
     public static final String URI_PATTERN = "uriPattern";
+    public static final String URI_PATTERN_SHORT = PREFIX_NAME1 + URI_PATTERN;
     public static final URI URI_PATTERN_URI = new URIImpl(PREFIX + URI_PATTERN);
 
     //DataSource fields
-    public static final String FULL_NAME = "fullName";
+    private static final String FULL_NAME = "fullName";
+    public static final String FULL_NAME_SHORT = PREFIX_NAME1 + FULL_NAME;
     public static final URI FULL_NAME_URI = new URIImpl(PREFIX + FULL_NAME);
-    public static final String ID_EXAMPLE = "idExample";
+    private static final String ID_EXAMPLE = "idExample";
+    public static final String ID_EXAMPLE_SHORT = PREFIX_NAME1 + ID_EXAMPLE;
     public static final URI ID_EXAMPLE_URI = new URIImpl(PREFIX + ID_EXAMPLE);
-    public static final String MAIN_URL = "mainUrl";
+    private static final String MAIN_URL = "mainUrl";
+    public static final String MAIN_URL_SHORT = PREFIX_NAME1 + MAIN_URL;
     public static final URI MAIN_URL_URI = new URIImpl(PREFIX + MAIN_URL);
-    public static final String ORGANISM = "Organism";
+    private static final String ORGANISM = "Organism";
+    public static final String ORGANISM_SHORT = PREFIX_NAME1 + ORGANISM;
     public static final URI ORGANISM_URI = new URIImpl(PREFIX + ORGANISM);
-    public static final String PRIMAY = "primary";
+    private static final String PRIMAY = "primary";
+    public static final String PRIMAY_SHORT = PREFIX_NAME1 + PRIMAY;
     public static final URI PRIMAY_URI = new URIImpl(PREFIX + PRIMAY);
-    public static final String SYSTEM_CODE = "systemCode";
+    private static final String SYSTEM_CODE = "systemCode";
+    public static final String SYSTEM_CODE_SHORT = PREFIX_NAME1 + SYSTEM_CODE;
     public static final URI SYSTEM_CODE_URI = new URIImpl(PREFIX + SYSTEM_CODE);
-    public static final String TYPE = "type";
+    private static final String TYPE = "type";
+    public static final String TYPE_SHORT = PREFIX_NAME1 + TYPE;
     public static final URI TYPE_URI = new URIImpl(PREFIX + TYPE);
-    public static final String URL_PATTERN = "urlPattern";
+    private static final String URL_PATTERN = "urlPattern";
+    public static final String URL_PATTERN_SHORT = PREFIX_NAME1 + URL_PATTERN;
     public static final URI URL_PATTERN_URI = new URIImpl(PREFIX + URL_PATTERN);
-    public static final String URN_BASE = "urnBase";
+    private static final String URN_BASE = "urnBase";
+    public static final String URN_BASE_SHORT = PREFIX_NAME1 + URN_BASE;
     public static final URI URN_BASE_URI = new URIImpl(PREFIX + URN_BASE);
 
     //Organism Fields
-    public static final String CODE = "code";
+    private static final String CODE = "code";
+    public static final String CODE_SHORT = PREFIX_NAME1 + CODE;
     public static final URI CODE_URI = new URIImpl(PREFIX + CODE);
-    public static final String SHORT_NAME = "shortName";
+    private static final String SHORT_NAME = "shortName";
+    public static final String SHORT_NAME_SHORT = PREFIX_NAME1 + SHORT_NAME;
     public static final URI SHORT_NAME_URI = new URIImpl(PREFIX + SHORT_NAME);
-    public static final String LATIN_NAME = "latinName";
+    private static final String LATIN_NAME = "latinName";
+    public static final String LATIN_NAME_SHORT = PREFIX_NAME1 + LATIN_NAME;
     public static final URI LATIN_NAME_URI = new URIImpl(PREFIX + LATIN_NAME);
 
     //UriPatternFields
-    public static final String POSTFIX = "postfix";
+    private static final String POSTFIX = "postfix";
+    public static final String POSTFIX_SHORT = PREFIX_NAME1 + POSTFIX;
     public static final URI POSTFIX_URI = new URIImpl(PREFIX + POSTFIX);
 
-    public static final String HAS_DATA_SOURCE = "hasDataSource";
+    private static final String HAS_DATA_SOURCE = "hasDataSource";
+    public static final String HAS_DATA_SOURCE_SHORT = PREFIX_NAME1 + HAS_DATA_SOURCE;
     public static final URI HAS_DATA_SOURCE_URI = new URIImpl(PREFIX + HAS_DATA_SOURCE);
-    public static final String HAS_URI_PATTERN = "hasUriPattern";
+    private static final String HAS_URI_PATTERN = "hasUriPattern";
+    public static final String HAS_URI_PATTERN_SHORT = PREFIX_NAME1 + HAS_URI_PATTERN;
     public static final URI HAS_URI_PATTERN_URI = new URIImpl(PREFIX + HAS_URI_PATTERN);
 
     //URI types (Used in Format received from wikiPathways
-    public static final String BIO2RDF = "bio2RDF";
+    private static final String BIO2RDF = "bio2RDF";
+    public static final String BIO2RDF_SHORT = PREFIX_NAME1 + BIO2RDF;
     public static final URI BIO2RDF_URI = new URIImpl(PREFIX + BIO2RDF);
-    public static final String IDENTIFIERS_ORG_BASE = "identifiers_org_base";
+    private static final String IDENTIFIERS_ORG_BASE = "identifiers_org_base";
+    public static final String IDENTIFIERS_ORG_BASE_SHORT = PREFIX_NAME1 + IDENTIFIERS_ORG_BASE;
     public static final URI IDENTIFIERS_ORG_BASE_URI = new URIImpl(PREFIX + IDENTIFIERS_ORG_BASE);
-    public static final String WIKIPATHWAYS_BASE = "wikipathways_id_base";
+    private static final String WIKIPATHWAYS_BASE = "wikipathways_id_base";
+    public static final String WIKIPATHWAYS_BASE_SHORT = PREFIX_NAME1 + WIKIPATHWAYS_BASE;
     public static final URI WIKIPATHWAYS_BASE_URI = new URIImpl(PREFIX + WIKIPATHWAYS_BASE);
-    public static final String SOURCE_RDF = "sourceRDFURI";
+    private static final String SOURCE_RDF = "sourceRDFURI";
+    public static final String SOURCE_RDF_SHORT = PREFIX_NAME1 + SOURCE_RDF;
     public static final URI SOURCE_RDF_URI = new URIImpl(PREFIX + SOURCE_RDF);
-    
 }

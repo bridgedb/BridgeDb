@@ -13,6 +13,6 @@ import org.bridgedb.DataSource;
  */
 public interface IdResolver {
 
-    public String getDataSourceRdfLabel(DataSource dataSource);
+    public String getRdfId(DataSource dataSource);
 
 }

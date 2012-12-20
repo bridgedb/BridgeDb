@@ -111,15 +111,13 @@ public class UriPattern {
     public void writeAsRDF(BufferedWriter writer) throws IOException{
         writer.write(getRdfId());
         writer.write(" a ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.URI_PATTERN);        
+        writer.write(BridgeDBConstants.URI_PATTERN_SHORT);        
         writer.write(";");        
         writer.newLine();
    
         if (postfix != null){
             writer.write("         ");
-            writer.write(BridgeDBConstants.PREFIX_NAME);        
-            writer.write(BridgeDBConstants.POSTFIX);
+            writer.write(BridgeDBConstants.POSTFIX_SHORT);
             writer.write(" \"");
             writer.write(postfix);
             writer.write("\";");
@@ -127,8 +125,7 @@ public class UriPattern {
         }
 
         writer.write("         ");
-        writer.write(VoidConstants.PREFIX_NAME);
-        writer.write(VoidConstants.URI_SPACE);
+        writer.write(VoidConstants.URI_SPACE_SHORT);
         writer.write(" \"");
         writer.write(nameSpace);
         writer.write("\".");

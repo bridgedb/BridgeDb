@@ -93,7 +93,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
         writer.write("@prefix : <> .");
         writer.newLine();
         writer.write("@prefix ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
+        writer.write(BridgeDBConstants.PREFIX_NAME1);        
         writer.write(" <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .");
         writer.newLine();
         writer.write("@prefix ");
@@ -156,26 +156,32 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
         return result;
     }
     
-    public final String getDataSourceRdfLabel(DataSource dataSource) {
+    public final String getRdfLabel(DataSource dataSource) {
         return scrub(dataSource.getFullName());        
     }
     
-    public String getDataSourceRdfId(DataSource dataSource) {
-        return ":DataSource_" + getDataSourceRdfLabel(dataSource);
+    public String getRdfId(DataSource dataSource) {
+        return ":" + BridgeDBConstants.DATA_SOURCE + "_" + getRdfLabel(dataSource);
+    }
+
+    public final String getRdfLabel(Organism organism) {
+        return scrub(organism.code());        
+    }
+    
+    public String getRdfId(Organism organism) {
+        return ":" + BridgeDBConstants.DATA_SOURCE + "_" + getRdfLabel(organism);
     }
 
     private void printDataSource(DataSource dataSource) throws IOException {
-        writer.write(getDataSourceRdfId(dataSource)); 
+        writer.write(getRdfId(dataSource)); 
         writer.write(" a ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.DATA_SOURCE);        
+        writer.write(BridgeDBConstants.DATA_SOURCE_SHORT);        
         writer.write("; ");        
         writer.newLine();
          
         if (dataSource.getSystemCode() != null && (!dataSource.getSystemCode().trim().isEmpty())){
             writer.write("         ");
-            writer.write(BridgeDBConstants.PREFIX_NAME);        
-            writer.write(BridgeDBConstants.SYSTEM_CODE);        
+            writer.write(BridgeDBConstants.SYSTEM_CODE_SHORT);        
             writer.write(" \"");
             writer.write(dataSource.getSystemCode());
             writer.write("\";");
@@ -184,8 +190,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
 
         if (dataSource.getMainUrl() != null){
             writer.write("         ");
-            writer.write(BridgeDBConstants.PREFIX_NAME);        
-            writer.write(BridgeDBConstants.MAIN_URL);        
+            writer.write(BridgeDBConstants.MAIN_URL_SHORT);        
             writer.write(" \"");
             writer.write(dataSource.getMainUrl());
             writer.write("\";");
@@ -194,8 +199,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
 
        if (dataSource.getExample() != null && dataSource.getExample().getId() != null){
             writer.write("         ");
-            writer.write(BridgeDBConstants.PREFIX_NAME);        
-            writer.write(BridgeDBConstants.ID_EXAMPLE);
+            writer.write(BridgeDBConstants.ID_EXAMPLE_SHORT);
             writer.write(" \"");
             writer.write(dataSource.getExample().getId());
             writer.write("\";");
@@ -203,8 +207,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
         }
 
         writer.write("         ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.PRIMAY);
+        writer.write(BridgeDBConstants.PRIMAY_SHORT);
         if (dataSource.isPrimary()){
             writer.write(" \"true\"^^xsd:boolean;");
         } else {
@@ -214,8 +217,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
 
         if (dataSource.getType() != null){
             writer.write("         ");
-            writer.write(BridgeDBConstants.PREFIX_NAME);        
-            writer.write(BridgeDBConstants.TYPE);
+            writer.write(BridgeDBConstants.TYPE_SHORT);
             writer.write(" \"");
             writer.write(dataSource.getType());
             writer.write("\";");
@@ -226,8 +228,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
             String urlPattern = dataSource.getUrl("$id");
             if (urlPattern.length() > 3){
                 writer.write("         ");
-                writer.write(BridgeDBConstants.PREFIX_NAME);        
-                writer.write(BridgeDBConstants.URL_PATTERN);
+                writer.write(BridgeDBConstants.URL_PATTERN_SHORT);
                 writer.write(" \"");
                 writer.write(urlPattern);
                 writer.write("\";");
@@ -239,8 +240,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
             String urnPattern = dataSource.getURN("");
             if (urnPattern.length() > 1){
                 writer.write("         ");
-                writer.write(BridgeDBConstants.PREFIX_NAME);        
-                writer.write(BridgeDBConstants.URN_BASE);
+                writer.write(BridgeDBConstants.URN_BASE_SHORT);
                 writer.write(" \"");
                 writer.write(urnPattern.substring(0, urnPattern.length()-1));
                 writer.write("\";");
@@ -270,19 +270,15 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
             Organism organism = (Organism)dataSource.getOrganism();
             organisms.add(organism);
             writer.write("         ");
-            writer.write(BridgeDBConstants.PREFIX_NAME);        
-            writer.write(BridgeDBConstants.ORGANISM);
-            writer.write(" :");
-            writer.write(BridgeDBConstants.ORGANISM);
-            writer.write("_");
-            writer.write(organism.code());
+            writer.write(BridgeDBConstants.ORGANISM_SHORT);
+            writer.write(" ");
+            writer.write(getRdfId(organism));
             writer.write(";");    
             writer.newLine();
         }
 
         writer.write("         ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.FULL_NAME);
+        writer.write(BridgeDBConstants.FULL_NAME_SHORT);
         writer.write(" \"");
         writer.write(dataSource.getFullName());
         writer.write("\".");
@@ -291,35 +287,28 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
     }
 
     private void printOrganism(Organism organism) throws IOException {
-        writer.write(":");
-        writer.write(BridgeDBConstants.ORGANISM);
-        writer.write("_");
-        writer.write(organism.code());
+        writer.write(getRdfId(organism));
         writer.write(" a ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.ORGANISM);
+        writer.write(BridgeDBConstants.ORGANISM_SHORT);
         writer.write("; ");
         writer.newLine();
 
         writer.write("         ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.CODE);
+        writer.write(BridgeDBConstants.CODE_SHORT);
         writer.write(" \"");
         writer.write(organism.code());
         writer.write("\";");
         writer.newLine();
 
         writer.write("         ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.SHORT_NAME);
+        writer.write(BridgeDBConstants.SHORT_NAME_SHORT);
         writer.write(" \"");
         writer.write(organism.shortName());
         writer.write("\";");
         writer.newLine();
         
         writer.write("         ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.LATIN_NAME);
+        writer.write(BridgeDBConstants.LATIN_NAME_SHORT);
         writer.write(" \"");
         writer.write(organism.latinName());
         writer.write("\".");

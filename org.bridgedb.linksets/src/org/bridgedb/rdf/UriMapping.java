@@ -106,26 +106,21 @@ public class UriMapping {
     public void writeAsRDF(BufferedWriter writer, IdResolver idResolver) throws IOException{
         writer.write(getRdfId());
         writer.write(" a ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.URI_MAPPING);
+        writer.write(BridgeDBConstants.URI_MAPPING_SHORT);
         writer.write(";");
         writer.newLine();
         
         writer.write("         ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.HAS_DATA_SOURCE);
+        writer.write(BridgeDBConstants.HAS_DATA_SOURCE_SHORT);
         writer.write(" ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(idResolver.getDataSourceRdfLabel(dataSource));
+        writer.write(idResolver.getRdfId(dataSource));
         writer.write(";");
         writer.newLine();
 
         writer.write("         ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(BridgeDBConstants.HAS_URI_PATTERN);
+        writer.write(BridgeDBConstants.HAS_URI_PATTERN_SHORT);
         writer.write(" ");
-        writer.write(BridgeDBConstants.PREFIX_NAME);        
-        writer.write(uriPattern.getRdfLabel());
+        writer.write(uriPattern.getRdfId());
         writer.write(".");
         writer.newLine();
     }
