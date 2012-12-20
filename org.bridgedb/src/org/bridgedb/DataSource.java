@@ -275,19 +275,39 @@ public final class DataSource
 		 */
 		public Builder urlPattern (String urlPattern)
 		{
-			if (urlPattern == null || "".equals (urlPattern))
-			{
-				current.prefix = "";
-				current.postfix = "";
-			}
-			else
-			{
-				int pos = urlPattern.indexOf("$id");
-				if (pos == -1) throw new IllegalArgumentException("Url maker pattern " + urlPattern + " for " + 
-                        current + "' should have $id in it");
-				current.prefix = urlPattern.substring(0, pos);
-				current.postfix = urlPattern.substring(pos + 3);
-			}
+            if (current.prefix.isEmpty() && current.postfix.isEmpty()){
+    			if (urlPattern == null || "".equals (urlPattern))
+        		{
+            		current.prefix = "";
+                	current.postfix = "";
+                } 
+                else
+                {
+                    int pos = urlPattern.indexOf("$id");
+                    if (pos == -1) throw new IllegalArgumentException("Url maker pattern " + urlPattern + " for " + 
+                            current + "' should have $id in it");
+                    current.prefix = urlPattern.substring(0, pos);
+                    current.postfix = urlPattern.substring(pos + 3);
+                }
+            } else {
+    			if (urlPattern == null || "".equals (urlPattern))
+        		{
+                    System.err.println("Ignoring attempt to replace urlPattern for " + current.fullName + " with null ");
+                } 
+                else
+                {
+                    int pos = urlPattern.indexOf("$id");
+                    if (pos == -1) throw new IllegalArgumentException("Url maker pattern " + urlPattern + " for " + 
+                            current + "' should have $id in it");
+                    if (current.prefix.equals(urlPattern.substring(0, pos)) && 
+                            current.postfix.equals(urlPattern.substring(pos + 3))){
+                        //Ok matches so fine
+                    } else {
+                        throw new IllegalArgumentException ("Illegal attempt to replace urlPattern " 
+                                + current.getUrl("$id") + " for " + current.fullName + " with " + urlPattern);
+                    }
+                }
+            }
 			return this;
 		}
 		
@@ -305,7 +325,7 @@ public final class DataSource
 		/**
 		 * @param idExample an example id from this system
 		 * @return the same Builder object so you can chain setters
-		 */
+		 */ 
 		public Builder idExample (String idExample)
 		{
 			current.idExample = idExample;
