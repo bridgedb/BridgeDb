@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Statement;
@@ -24,6 +25,7 @@ public class Version1To2 {
 
     public static void main(String[] args) throws IDMapperException, IOException {
         ConfigReader.logToConsole();
+        BioDataSource.init();
         //InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
         //StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
         File v1File = new File ("C:/OpenPhacts/BioDataSource.ttl");

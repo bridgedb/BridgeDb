@@ -37,7 +37,7 @@ public class BridgeDBConstants {
     private static final String MAIN_URL = "mainUrl";
     public static final String MAIN_URL_SHORT = PREFIX_NAME1 + MAIN_URL;
     public static final URI MAIN_URL_URI = new URIImpl(PREFIX + MAIN_URL);
-    private static final String ORGANISM = "Organism";
+    public static final String ORGANISM = "Organism";
     public static final String ORGANISM_SHORT = PREFIX_NAME1 + ORGANISM;
     public static final URI ORGANISM_URI = new URIImpl(PREFIX + ORGANISM);
     private static final String PRIMAY = "primary";

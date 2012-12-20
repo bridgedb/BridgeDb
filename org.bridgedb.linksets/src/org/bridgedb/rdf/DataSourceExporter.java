@@ -169,7 +169,7 @@ public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
     }
     
     public String getRdfId(Organism organism) {
-        return ":" + BridgeDBConstants.DATA_SOURCE + "_" + getRdfLabel(organism);
+        return ":" + BridgeDBConstants.ORGANISM + "_" + getRdfLabel(organism);
     }
 
     private void printDataSource(DataSource dataSource) throws IOException {
