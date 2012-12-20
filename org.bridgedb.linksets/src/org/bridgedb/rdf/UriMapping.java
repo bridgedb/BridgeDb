@@ -4,11 +4,14 @@
  */
 package org.bridgedb.rdf;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
+import org.bridgedb.metadata.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -62,13 +65,21 @@ public class UriMapping {
         return result;
     }
 
+    public static Set<UriMapping> getAllUriMappings(){
+        Set<UriMapping> results = new HashSet<UriMapping>();
+        for (HashMap<UriPattern, UriMapping> batch: byDataSource.values()){
+            results.addAll(batch.values());
+        }
+        return results;
+    }
+    
     public static void init() throws BridgeDBException{
         Set<DataSource> dataSources = DataSource.getDataSources();
         for (DataSource dataSource:dataSources){
             String url = dataSource.getUrl("$id");
             if (url.length() > 3){
                 UriPattern uriPattern = UriPattern.byUrlPattern(url);
-                addMapping (dataSource, uriPattern, UriMappingRelationship.PRIMARY_URI_PATTERN);
+                addMapping (dataSource, uriPattern, UriMappingRelationship.DATA_SOURCE_URL_PATTERN);
             }
         }
         showSharedUriPatterns();
@@ -86,4 +97,45 @@ public class UriMapping {
             }
         }
     }
+
+    public String getRdfId(){
+        String name = DataSourceExporter.scrub(dataSource.getFullName() + "_" + uriPattern.getRdfLabel());
+        return ":" + BridgeDBConstants.URI_MAPPING + "_" + name;
+    }
+
+    public void writeAsRDF(BufferedWriter writer, IdResolver idResolver) throws IOException{
+        writer.write(getRdfId());
+        writer.write(" a ");
+        writer.write(BridgeDBConstants.PREFIX_NAME);        
+        writer.write(BridgeDBConstants.URI_MAPPING);
+        writer.write(";");
+        writer.newLine();
+        
+        writer.write("         ");
+        writer.write(BridgeDBConstants.PREFIX_NAME);        
+        writer.write(BridgeDBConstants.HAS_DATA_SOURCE);
+        writer.write(" ");
+        writer.write(BridgeDBConstants.PREFIX_NAME);        
+        writer.write(idResolver.getDataSourceRdfLabel(dataSource));
+        writer.write(";");
+        writer.newLine();
+
+        writer.write("         ");
+        writer.write(BridgeDBConstants.PREFIX_NAME);        
+        writer.write(BridgeDBConstants.HAS_URI_PATTERN);
+        writer.write(" ");
+        writer.write(BridgeDBConstants.PREFIX_NAME);        
+        writer.write(uriPattern.getRdfLabel());
+        writer.write(".");
+        writer.newLine();
+    }
+
+    public DataSource getDataSource(){
+        return dataSource;
+    }
+    
+    public UriPattern getUriPattern(){
+        return uriPattern;
+    }
+    
 }

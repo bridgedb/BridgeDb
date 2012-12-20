@@ -4,11 +4,15 @@
  */
 package org.bridgedb.rdf;
 
+import java.io.IOException;
+import org.bridgedb.DataSource;
+
 /**
  *
  * @author Christian
  */
-public enum UriMappingRelationship {
-    DATA_SOURCE_URL_PATTERN, IDENTIFERS_ORG, WIKIPATHWAYS, URN_BASE, SOURCE_RDF, BIO2RDF_URI;
-    
+public interface IdResolver {
+
+    public String getDataSourceRdfLabel(DataSource dataSource);
+
 }

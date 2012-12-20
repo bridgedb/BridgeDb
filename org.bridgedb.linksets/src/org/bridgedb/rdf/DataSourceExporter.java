@@ -31,7 +31,7 @@ import org.bridgedb.utils.StoreType;
  *
  * @author Christian
  */
-public class DataSourceExporter implements Comparator<DataSource>{
+public class DataSourceExporter implements Comparator<DataSource>, IdResolver{
 
     private HashSet<Organism> organisms;
     private BufferedWriter writer;
@@ -74,6 +74,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
             printOrganisms();
             if (VERSION2){
                 printUriPatterns();
+                printUriMapping();
             }
         } catch (IOException ex) {
             throw new BridgeDBException("Error exporting DataSources. ", ex);
@@ -134,6 +135,14 @@ public class DataSourceExporter implements Comparator<DataSource>{
         for (UriPattern  uriPattern:uriPatterns){
             uriPattern.writeAsRDF(writer);
         }
+        writer.newLine();
+    }
+
+    private void printUriMapping() throws IOException {
+        Set<UriMapping> mappings = UriMapping.getAllUriMappings();
+        for (UriMapping mapping:mappings){
+            mapping.writeAsRDF(writer, this);
+        }
     }
 
     public static String scrub(String original){
@@ -147,14 +156,16 @@ public class DataSourceExporter implements Comparator<DataSource>{
         return result;
     }
     
-    private void printDataSourceID(DataSource dataSource) throws IOException{
-        String name = scrub(dataSource.getFullName());        
-        writer.write(":DataSource_");
-        writer.write(name);
+    public final String getDataSourceRdfLabel(DataSource dataSource) {
+        return scrub(dataSource.getFullName());        
     }
     
+    public String getDataSourceRdfId(DataSource dataSource) {
+        return ":DataSource_" + getDataSourceRdfLabel(dataSource);
+    }
+
     private void printDataSource(DataSource dataSource) throws IOException {
-        printDataSourceID(dataSource); 
+        writer.write(getDataSourceRdfId(dataSource)); 
         writer.write(" a ");
         writer.write(BridgeDBConstants.PREFIX_NAME);        
         writer.write(BridgeDBConstants.DATA_SOURCE);        
@@ -174,7 +185,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
         if (dataSource.getMainUrl() != null){
             writer.write("         ");
             writer.write(BridgeDBConstants.PREFIX_NAME);        
-            writer.write(BridgeDBConstants.URL_PATTERN);        
+            writer.write(BridgeDBConstants.MAIN_URL);        
             writer.write(" \"");
             writer.write(dataSource.getMainUrl());
             writer.write("\";");
@@ -314,7 +325,7 @@ public class DataSourceExporter implements Comparator<DataSource>{
         writer.write("\".");
         writer.newLine();
     }
-
+    
     private int compare(String s1, String s2){
         if (s1 == null){
             if (s2 == null){

@@ -96,16 +96,18 @@ public class UriPattern {
         }
     }
     
-    public String getRdfId(){
-        String name;
+    public final String getRdfLabel(){
         if (postfix == null){
-            name = DataSourceExporter.scrub(nameSpace);
+            return DataSourceExporter.scrub(nameSpace);
         } else {
-            name = DataSourceExporter.scrub(nameSpace + "_" + postfix);
+            return DataSourceExporter.scrub(nameSpace + "_" + postfix);
         }
-         return ":" + BridgeDBConstants.URI_PATTERN + "_" + name;
     }
     
+    public String getRdfId(){
+        return ":" + BridgeDBConstants.URI_PATTERN + "_" + getRdfLabel();
+    }
+
     public void writeAsRDF(BufferedWriter writer) throws IOException{
         writer.write(getRdfId());
         writer.write(" a ");

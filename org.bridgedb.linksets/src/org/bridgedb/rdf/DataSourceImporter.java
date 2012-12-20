@@ -211,7 +211,15 @@ public class DataSourceImporter {
                 nameSpace = statement.getObject().stringValue();
             }
         }
-        UriPattern pattern = UriPattern.byNameSpaceAndPostFix(nameSpace, postfix);
+        if (nameSpace == null){
+            throw new BridgeDBException ("uriPattern " + patternId + " does not have a " + VoidConstants.URI_SPACE_URI);
+        } 
+        UriPattern pattern;
+        if (postfix == null){
+            pattern = UriPattern.byNameSpace(nameSpace);
+        } else {
+            pattern = UriPattern.byNameSpaceAndPostFix(nameSpace, postfix);
+        }
         uriPatterns.put(patternId, pattern);
         return pattern;
     }
