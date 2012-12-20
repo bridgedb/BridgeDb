@@ -103,7 +103,13 @@ public class UriMapping {
         return ":" + BridgeDBConstants.URI_MAPPING + "_" + name;
     }
 
-    public void writeAsRDF(BufferedWriter writer, IdResolver idResolver) throws IOException{
+    public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
+        for (UriMapping mapping:getAllUriMappings()){
+            mapping.writeAsRDF(writer);
+        }
+    }
+    
+    public void writeAsRDF(BufferedWriter writer) throws IOException{
         writer.write(getRdfId());
         writer.write(" a ");
         writer.write(BridgeDBConstants.URI_MAPPING_SHORT);
@@ -122,7 +128,7 @@ public class UriMapping {
         writer.write("         ");
         writer.write(BridgeDBConstants.HAS_DATA_SOURCE_SHORT);
         writer.write(" ");
-        writer.write(idResolver.getRdfId(dataSource));
+        writer.write(DataSourceRdf.getRdfId(dataSource));
         writer.write(";");
         writer.newLine();
 
