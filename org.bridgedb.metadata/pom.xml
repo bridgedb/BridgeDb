@@ -32,7 +32,7 @@
     <dependencies>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.utils</artifactId>
+			<artifactId>org.bridgedb.rdf</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

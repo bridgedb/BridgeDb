@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.metadata.constants.SchemaConstants;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.URI;
 import org.w3c.dom.Element;
 
@@ -17,7 +18,7 @@ import org.w3c.dom.Element;
  */
 public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
 
-    //public MetaDataGroup(Element element) throws MetaDataException {
+    //public MetaDataGroup(Element element) throws BridgeDBException {
     //    super(element);
     //}
     
@@ -47,7 +48,8 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
     }
     
      @Override
-    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) 
+             throws BridgeDBException {
         for (MetaDataBase child:childMetaData){
             child.appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel+1);
         }

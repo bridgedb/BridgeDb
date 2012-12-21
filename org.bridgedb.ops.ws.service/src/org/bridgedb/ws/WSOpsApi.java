@@ -25,7 +25,7 @@ import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
-import org.bridgedb.rdf.RdfFactory;
+import org.bridgedb.linkset.rdf.RdfFactory;
 
 /**
  *

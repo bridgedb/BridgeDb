@@ -5,8 +5,7 @@
 package org.bridgedb.metadata.type;
 
 import java.util.HashMap;
-import org.bridgedb.metadata.MetaDataException;
-import org.bridgedb.metadata.constants.XMLSchemaConstants;
+import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
@@ -81,16 +80,16 @@ public enum XsdType implements MetaDataType{
         getRegister().put(type, this);
     }
     
-    public static XsdType getByType(URI literalType) throws MetaDataException {
+    public static XsdType getByType(URI literalType) throws BridgeDBException {
         return getByType(literalType.stringValue());
     }
     
-    public static XsdType getByType(String type) throws MetaDataException{
+    public static XsdType getByType(String type) throws BridgeDBException{
         XsdType result = getRegister().get(type);
         if (result != null){
             return result;
         }
-        throw new MetaDataException("No XSD type known for " + type);
+        throw new BridgeDBException("No XSD type known for " + type);
     }
     
     private static HashMap<String,XsdType> getRegister(){
@@ -101,7 +100,7 @@ public enum XsdType implements MetaDataType{
     }
 
     @Override
-    public boolean correctType(Value value) throws MetaDataException {
+    public boolean correctType(Value value) throws BridgeDBException {
         if (value instanceof Literal){
             Literal literal = (Literal)value;
             URI literalType = literal.getDatatype();

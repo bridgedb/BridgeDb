@@ -5,12 +5,13 @@
 package org.bridgedb.metadata;
 
 import org.openrdf.model.impl.StatementImpl;
-import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
 import org.openrdf.model.Statement;
 import java.util.Set;
 import org.bridgedb.utils.Reporter;
 import org.junit.Ignore;
 import javax.xml.datatype.DatatypeConfigurationException;
+import org.bridgedb.utils.BridgeDBException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
@@ -21,18 +22,18 @@ import static org.hamcrest.Matchers.*;
  */
 public class LinkSetMetaDataTest extends MetaDataTestBase{
     
-    public LinkSetMetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
+    public LinkSetMetaDataTest() throws DatatypeConfigurationException, BridgeDBException{        
     }
     
     @Test
-    public void testHasRequiredValues() throws MetaDataException{
+    public void testHasRequiredValues() throws BridgeDBException{
         report("Linkset HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection("loadMustLinkSet()", loadMustLinkSet(), linksetSetRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
-    public void testTooManyValues() throws MetaDataException{
+    public void testTooManyValues() throws BridgeDBException{
         report("TooManyValues");
         Set<Statement> statements = loadMustLinkSet();
         Statement extra = new StatementImpl(LINK_ID, VoidConstants.SUBJECTSTARGET, D2_ID);
@@ -44,7 +45,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testExtraSubjectWithBadId() throws MetaDataException{
+    public void testExtraSubjectWithBadId() throws BridgeDBException{
         report("ExtraSubjectWithBadId");
         Set<Statement> statements = loadMustLinkSet();
         Statement extra = new StatementImpl(D2_ID, VoidConstants.SUBJECTSTARGET, D2_ID);
@@ -56,7 +57,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testHasCorrectTypes() throws MetaDataException{
+    public void testHasCorrectTypes() throws BridgeDBException{
         report("Linkset HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         checkCorrectTypes(metaData);
@@ -64,21 +65,21 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
  
     @Test
     @Ignore
-    public void testAllStatementsUsed() throws MetaDataException{
+    public void testAllStatementsUsed() throws BridgeDBException{
         report("LinkSet AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         checkAllStatementsUsed(metaData);
     }
 
     @Test
-    public void testValidateOk() throws MetaDataException{
+    public void testValidateOk() throws BridgeDBException{
         report("LinkSet Validate OK");
         MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         metaData.validate();
     }
 
     @Test
-    public void testValidateReport() throws MetaDataException{
+    public void testValidateReport() throws BridgeDBException{
         report("LinkSet Report");
         MetaDataCollection metaData = new MetaDataCollection("loadMustLinkSet()", loadMustLinkSet(), linksetSetRegistry);
         String report = metaData.validityReport(NO_WARNINGS);
@@ -89,7 +90,7 @@ public class LinkSetMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
-    public void testSummary() throws MetaDataException{
+    public void testSummary() throws BridgeDBException{
         report("LinkSet Summary");
         MetaDataCollection metaData = new MetaDataCollection("loadMayLinkSet()", loadMayLinkSet(), linksetSetRegistry);
         String expected = "(Linkset) http://www.example.com/test/linkset1 OK!\n"

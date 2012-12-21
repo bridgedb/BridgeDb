@@ -5,7 +5,7 @@
 package org.bridgedb.metadata.type;
 
 import org.bridgedb.utils.TestUtils;
-import org.bridgedb.metadata.constants.XMLSchemaConstants;
+import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;
 import org.junit.AfterClass;

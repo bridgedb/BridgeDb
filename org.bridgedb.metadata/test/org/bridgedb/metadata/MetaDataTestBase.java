@@ -4,6 +4,8 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.rdf.constants.RdfConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
 import java.math.BigInteger;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -15,6 +17,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.constants.*;
 import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.openrdf.model.Resource;
@@ -160,7 +163,7 @@ public class MetaDataTestBase extends TestUtils{
         minLinksetSetRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);        
     }
     
-    public MetaDataTestBase() throws DatatypeConfigurationException, MetaDataException {
+    public MetaDataTestBase() throws DatatypeConfigurationException, BridgeDBException {
         GregorianCalendar c = new GregorianCalendar();
         XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         Value now = new CalendarLiteralImpl(date2);

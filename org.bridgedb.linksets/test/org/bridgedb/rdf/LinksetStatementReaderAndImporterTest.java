@@ -4,6 +4,7 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.linkset.rdf.LinksetStatementReaderAndImporter;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.TestUtils;
 import org.junit.Ignore;

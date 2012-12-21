@@ -27,15 +27,13 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.metadata.validator.Validator;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.rdf.RdfFactory;
-import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
@@ -323,7 +321,7 @@ public class LinksetLoader implements LinksetInterface{
                 if (storeString != null && !validationType.isLinkset()){
                     usage(Validator.VALIDATION + " setting " + validationType + " is not supported for loading.");
                 }
-            } catch (MetaDataException ex) {
+            } catch (BridgeDBException ex) {
                 usage(ex.getMessage());
             }
         }

@@ -19,11 +19,10 @@
 package org.bridgedb.linkset;
 
 import org.bridgedb.rdf.IDMapperLinksetException;
-import org.bridgedb.rdf.RdfReader;
+import org.bridgedb.linkset.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.BridgeDbSqlException;
@@ -31,6 +30,7 @@ import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
@@ -95,7 +95,7 @@ public class LinksetLoaderTest {
     }
     
     @Test(expected=IDMapperLinksetException.class)
-    public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, MetaDataException {
+    public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDbSqlException, BridgeDBException {
         new LinksetLoader().validateFile("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, false);
     }
 

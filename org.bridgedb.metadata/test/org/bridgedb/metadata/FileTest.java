@@ -9,7 +9,8 @@ import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.metadata.validator.ValidationType;
-import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
@@ -27,7 +28,8 @@ public class FileTest extends TestUtils{
     public static boolean FILE_HAS_ONLY_EXPECTED_RDF = true;
     public static String LINK_FILE = "test-data/chemspider2chemblrdf-linkset.ttl";
 
-    private void checkFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
+    private void checkFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) 
+            throws BridgeDBException{
         report("Checking " + fileName);
         File input = new File(fileName);
         StatementReader reader = new StatementReader(input);
@@ -42,7 +44,7 @@ public class FileTest extends TestUtils{
         metaData.validate();
     }
     
-    private void validateFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
+    private void validateFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws BridgeDBException{
         report("Checking " + fileName);
         File input = new File(fileName);
         StatementReader reader = new StatementReader(input);
@@ -53,7 +55,7 @@ public class FileTest extends TestUtils{
         assertThat(report, not(containsString("ERROR")));
     }
 
-    private void validateFile(String fileName, boolean checkAllStatements, MetaDataSpecification registry) throws MetaDataException{
+    private void validateFile(String fileName, boolean checkAllStatements, MetaDataSpecification registry) throws BridgeDBException{
         report("Checking " + fileName);
         File input = new File(fileName);
         StatementReader reader = new StatementReader(input);
@@ -96,7 +98,7 @@ public class FileTest extends TestUtils{
 
     @Test
     @Ignore
-    public void testLinksetFirstTtl() throws MetaDataException, IDMapperException{
+    public void testLinksetFirstTtl() throws BridgeDBException, IDMapperException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);
         checkFile("test-data/linksetFirst.ttl", 3, FILE_HAS_EXTRA_RDF, dataSetRegistry);

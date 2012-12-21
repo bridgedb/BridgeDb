@@ -7,7 +7,8 @@ package org.bridgedb.metadata;
 import org.junit.Ignore;
 import org.bridgedb.utils.Reporter;
 import javax.xml.datatype.DatatypeConfigurationException;
-import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.utils.BridgeDBException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,18 +18,18 @@ import static org.junit.Assert.*;
  */
 public class DataSet2MetaDataTest extends MetaDataTestBase{
     
-    public DataSet2MetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
+    public DataSet2MetaDataTest() throws DatatypeConfigurationException, BridgeDBException{        
     }
     
     @Test
-    public void testHasRequiredValues() throws MetaDataException{
+    public void testHasRequiredValues() throws BridgeDBException{
         report("HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet2()", loadDirectDataSet2(), voidRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
-    public void testHasCorrectTypes() throws MetaDataException{
+    public void testHasCorrectTypes() throws BridgeDBException{
         report("HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet2()", loadMayDataSet2(), voidRegistry);
         checkCorrectTypes(metaData);
@@ -36,7 +37,7 @@ public class DataSet2MetaDataTest extends MetaDataTestBase{
 
     @Test
     @Ignore
-    public void testAllStatementsUsed() throws MetaDataException{
+    public void testAllStatementsUsed() throws BridgeDBException{
         report("AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet2()", loadMayDataSet2(), voidRegistry);
         checkAllStatementsUsed(metaData);

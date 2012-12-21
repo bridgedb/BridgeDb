@@ -12,12 +12,12 @@ import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.AppendBase;
-import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.MetaDataTestBase;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
-import org.bridgedb.rdf.StatementReader;
-import org.bridgedb.rdf.StringOutputStream;
+import org.bridgedb.metadata.rdf.StringOutputStream;
+import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
     LinksetInterfaceMinimal linksetInterfaceMinimal;
     
     public LinksetInterfaceMinimalTest(LinksetInterfaceMinimal instance) 
-            throws DatatypeConfigurationException, MetaDataException {
+            throws DatatypeConfigurationException, BridgeDBException {
         this.linksetInterfaceMinimal = instance;
     }
 

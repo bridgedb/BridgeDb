@@ -9,9 +9,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.linkset.constants.OwlConstants;
-import org.bridgedb.metadata.constants.RdfConstants;
+import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.metadata.constants.RdfsConstants;
-import org.bridgedb.metadata.constants.XMLSchemaConstants;
+import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.bridgedb.metadata.type.*;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Literal;
@@ -34,12 +34,12 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     private final int cardinality;
     
     public PropertyMetaData(URI predicate, String type, RequirementLevel requirementLevel, String objectClass) 
-            throws MetaDataException{
+            throws BridgeDBException{
         this(predicate, type, NO_CARDINALITY, requirementLevel, objectClass);
     }
     
     public PropertyMetaData(URI predicate, String type, int cardinality, RequirementLevel requirementLevel, 
-            String objectClass) throws MetaDataException{
+            String objectClass) throws BridgeDBException{
         super(predicate.getLocalName(), type, requirementLevel);
         this.predicate = predicate;
         metaDataType = getMetaDataType(objectClass);
@@ -90,7 +90,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         }  
     }
 
-    private MetaDataType getMetaDataType(String objectClass) throws MetaDataException{
+    private MetaDataType getMetaDataType(String objectClass) throws BridgeDBException{
         //if (SchemaConstants.CLASS_ALLOWED_URIS.equalsIgnoreCase(objectClass)){
         //    return new AllowedUriType(element);
         //}
@@ -121,7 +121,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         if (objectClass.startsWith(XMLSchemaConstants.PREFIX)){
             return XsdType.getByType(objectClass);
         }
-        throw new MetaDataException ("Unexpected " + SchemaConstants.CLASS + " " + objectClass);
+        throw new BridgeDBException ("Unexpected " + SchemaConstants.CLASS + " " + objectClass);
     }
     
     @Override
@@ -200,7 +200,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
     
     @Override
-    public boolean hasCorrectTypes() throws MetaDataException {
+    public boolean hasCorrectTypes() throws BridgeDBException {
         if (requirementLevel != RequirementLevel.UNSPECIFIED){
             for (Value value: values){
                 if (!metaDataType.correctType(value)){
@@ -214,7 +214,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
 
     @Override
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, 
-    int tabLevel) throws MetaDataException {
+    int tabLevel) throws BridgeDBException {
         if (requirementLevel == RequirementLevel.UNSPECIFIED){
             appendUnspecifiedReport(builder, includeWarnings, tabLevel);            
         } else if (!hasCorrectTypes()){
@@ -277,7 +277,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         addDocumentationLink(builder, tabLevel);
     }
 
-    private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel, boolean includeWarnings) throws MetaDataException {
+    private void appendIncorrectTypeReport(StringBuilder builder, int tabLevel, boolean includeWarnings) throws BridgeDBException {
         if (requirementLevel == RequirementLevel.IGNORE && !includeWarnings) { return; }
         tab(builder, tabLevel);
         if (requirementLevel == RequirementLevel.IGNORE){

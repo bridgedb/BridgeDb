@@ -1,0 +1,57 @@
+@prefix : <http://linkedchemistry.info/void.ttl>.
+
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix freq: <http://purl.org/cld/freq/> .
+@prefix pav: <http://purl.org/pav/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix voag: <http://voag.linkedmodel.org/schema/voag#> .
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+@prefix chembl: <http://linkedchemistry.info/chembl/chemblid/> .
+
+# Metadata about this file
+<>
+    a void:DatasetDescription;
+    dcterms:title "ChEMBL-RDF Compounds to ChemSpider linkset"@en;
+    dcterms:description """A VoID linkset that links compounds in ChEMBL-RDF
+        with compounds in ChemSpider."""@en; 
+    pav:createdBy <http://egonw.github.com/#me> ;
+    pav:createdOn "2012-08-13T15:00:00Z"^^xsd:dateTime ;
+    pav:lastUpdateOn "2012-09-14T11:15:32Z"^^xsd:dateTime;
+    foaf:primaryTopic :chembl-rdf-compounds_cs_linkset ;
+    .
+ 
+# Pointer to the subset description in the ChEMBL VoID file
+<http://linkedchemistry.info/void.ttl#chemblrdf_compounds>
+	# Linkset declared as a subset. Inherits properties
+    void:subset :chembl-rdf-compounds_cs_linkset .
+
+:chembl-rdf-compounds_cs_linkset
+# General linkset metadata
+    a void:Linkset ;
+    dcterms:title "ChEMBL-RDF Compounds ChemSpider Linkset"@en;
+    dcterms:description "Linkset relating ChEMBL-RDF compounds to ChemSpider compounds."@en;
+    #Explicit declaration of license for the linkset is preferred
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+# Link information
+    void:subjectsTarget <http://linkedchemistry.info/void.ttl#chemblrdf_compounds> ;
+    void:objectsTarget <http://rdf.chemspider.com/void-example.rdf#chemSpiderDataset_chembl_subset> ;
+    void:linkPredicate skos:exactMatch ;
+    dul:expresses <http://semanticscience.org/resource/CHEMINF_000059> ;
+# Linkset provenance
+    pav:authoredOn "2012-02-22T10:59:38Z"^^xsd:dateTime ;
+    pav:authoredBy <http://www.chemspider.com/> ;
+    pav:createdBy <http://egonw.github.com/#me> ;
+    pav:createdOn "2012-05-15T11:29:01Z"^^xsd:dateTime ;
+# Linkset statistics
+    void:triples "1073967"^^xsd:integer ;
+    .
+
+chembl:CHEMBL1236438 skos:exactMatch <http://rdf.chemspider.com/43> .
+chembl:CHEMBL144103 skos:exactMatch <http://rdf.chemspider.com/60> .
+#...

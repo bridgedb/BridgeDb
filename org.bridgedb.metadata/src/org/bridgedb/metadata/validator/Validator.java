@@ -9,8 +9,9 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.*;
-import org.bridgedb.rdf.LinksetStatementReader;
-import org.bridgedb.rdf.LinksetStatements;
+import org.bridgedb.metadata.rdf.LinksetStatementReader;
+import org.bridgedb.metadata.rdf.LinksetStatements;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 
@@ -53,7 +54,7 @@ public class Validator {
         } else {
             try {
                 validationType = ValidationType.parseString(validationString);
-            } catch (MetaDataException ex) {
+            } catch (BridgeDBException ex) {
                 usage(ex.getMessage());
             }
         }

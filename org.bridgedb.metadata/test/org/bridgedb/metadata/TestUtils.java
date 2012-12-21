@@ -8,6 +8,7 @@ import org.bridgedb.utils.Reporter;
 import java.util.Set;
 import org.openrdf.model.Resource;
 import javax.xml.datatype.DatatypeConfigurationException;
+import org.bridgedb.utils.BridgeDBException;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
@@ -32,7 +33,7 @@ public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
         }        
     }
 
-    void checkRequiredValues(MetaDataCollection metaData) throws MetaDataException{
+    void checkRequiredValues(MetaDataCollection metaData) throws BridgeDBException{
         boolean ok = metaData.hasRequiredValuesOrIsSuperset();
         if (!ok){
             //This test will fail but with extra info
@@ -44,7 +45,7 @@ public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
         }        
     }
 
-    void checkCorrectTypes(MetaData metaData) throws MetaDataException{
+    void checkCorrectTypes(MetaData metaData) throws BridgeDBException{
         boolean ok = metaData.hasCorrectTypes();
         if (!ok){
             //This test will fail but with extra info
