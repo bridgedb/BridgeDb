@@ -6,9 +6,7 @@ package org.bridgedb.rdf;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
@@ -25,12 +23,31 @@ import org.openrdf.model.Value;
  */
 public class DataSourceRdf extends RdfBase  {
     
+    private static HashMap<String, DataSource> register = new HashMap<String, DataSource>();
+
     public static String getRdfLabel(DataSource dataSource) {
         return scrub(dataSource.getFullName());        
     }
     
     public static String getRdfId(DataSource dataSource) {
         return ":" + BridgeDBConstants.DATA_SOURCE + "_" + getRdfLabel(dataSource);
+    }
+
+    static DataSource byRdfResource(Value dataSourceId) throws BridgeDBException {
+        String shortName = convertToShortName(dataSourceId);
+        DataSource result = register.get(shortName);
+        if (result == null){
+            //Load all Datasource in case it came from elseWhere
+            for (DataSource dataSource: DataSource.getDataSources()){
+                register.put(getRdfId(dataSource), dataSource);
+            }
+            //Check again
+            result = register.get(shortName);
+        }
+        if (result == null){
+            throw new BridgeDBException("No DataSource known for Id " + dataSourceId + " / " + shortName);
+        }
+        return result;
     }
 
     public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
@@ -228,6 +245,7 @@ public class DataSourceRdf extends RdfBase  {
         registerNameSpace(dataSource, wikipathwaysBase, UriMappingRelationship.WIKIPATHWAYS);
         registerUriPattern(dataSource, sourceRDFURIPattern, UriMappingRelationship.SOURCE_RDF);
         registerUriPattern(dataSource, bio2RDFPattern, UriMappingRelationship.BIO2RDF_URI);
+        register.put(getRdfId(dataSource), dataSource);
         return dataSource;
     }
 

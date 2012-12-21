@@ -17,26 +17,29 @@ import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  *
  * @author Christian
  */
-public class UriPattern {
+public class UriPattern extends RdfBase {
 
     private final String nameSpace;
     private final String postfix;
 
-    private static HashSet<UriPattern> register = new HashSet<UriPattern>();
+    private static HashMap<String, UriPattern> register = new HashMap<String, UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
     private static HashMap<String,HashMap<String,UriPattern>> byNameSpaceAndPostFix = 
             new HashMap<String,HashMap<String,UriPattern>> ();  
-    
+
     private UriPattern(String namespace){
         this.nameSpace = namespace;
         this.postfix = null;
         byNameSpaceOnly.put(namespace, this);
-        register.add(this);
+        register.put(getRdfId(), this);
     } 
     
     private UriPattern(String namespace, String postfix){
@@ -53,7 +56,7 @@ public class UriPattern {
             postFixMap.put(postfix, this);
             byNameSpaceAndPostFix.put(namespace, postFixMap);
         }
-        register.add(this);
+        register.put(getRdfId(), this);
     }
    
     public static UriPattern byNameSpace(String nameSpace){
@@ -94,6 +97,17 @@ public class UriPattern {
         }
     }
     
+    static UriPattern byRdfResource(Value uriPatternId) throws BridgeDBException {
+        String shortName = convertToShortName(uriPatternId);
+        UriPattern result =  register.get(shortName);
+        if (result == null){
+            System.out.println(register);
+            System.out.println(uriPatternId);
+            throw new BridgeDBException("No UriPattern known for Id " + uriPatternId + " / " + shortName);
+        }
+        return result;
+    }
+
     public final String getRdfLabel(){
         if (postfix == null){
             return DataSourceExporter.scrub(nameSpace);
@@ -107,7 +121,7 @@ public class UriPattern {
     }
 
     public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
-        for (UriPattern uriPattern:register){
+        for (UriPattern uriPattern:register.values()){
             uriPattern.writeAsRDF(writer);
         }
     }

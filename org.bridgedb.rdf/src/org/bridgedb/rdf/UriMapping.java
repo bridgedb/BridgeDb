@@ -13,6 +13,9 @@ import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
+import org.openrdf.model.Value;
 
 /**
  *
@@ -47,10 +50,15 @@ public class UriMapping {
         byUriPattern.put(uriPattern, mappings2);
     }
 
-    public static void addMapping(DataSource dataSource, UriPattern uriPattern, UriMappingRelationship uriMappingRelationship) {
+    public static UriMapping addMapping(DataSource dataSource, UriPattern uriPattern, UriMappingRelationship uriMappingRelationship) {
         UriMapping mapping = getMapping(dataSource, uriPattern);
-        System.out.println(mapping);
-        mapping.relationships.add(uriMappingRelationship);
+        mapping.addRelationship(uriMappingRelationship);
+        return mapping;
+    }
+    
+    //TODO safety checks and add to DataSource UrlPattern, and urnBase
+    private void addRelationship(UriMappingRelationship relationship) {
+        relationships.add(relationship);
     }
     
     private static UriMapping getMapping(DataSource dataSource, UriPattern uriPattern) {
@@ -140,6 +148,42 @@ public class UriMapping {
         writer.newLine();
     }
 
+    static UriMapping readRdf(Resource mappingId, Set<Statement> uriMappingStatements) throws BridgeDBException {
+        System.out.println(mappingId);
+        Value uriPatternId = null;
+        Value dataSourceId = null;
+        HashSet<Value> relationshipIds = new HashSet<Value>();
+        for (Statement statement:uriMappingStatements){
+            if (statement.getPredicate().equals(BridgeDBConstants.HAS_URI_PATTERN_URI)){
+                uriPatternId = statement.getObject();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.HAS_DATA_SOURCE_URI)){
+                dataSourceId = statement.getObject();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.HAS_RELATIONSHIP_URI)){
+                relationshipIds.add(statement.getObject());
+            }
+        }
+        if (uriPatternId == null){
+            throw new BridgeDBException ("UriMapping " + mappingId + " does not have a " + 
+                    BridgeDBConstants.HAS_URI_PATTERN_URI);
+        } 
+        if (dataSourceId == null){
+            throw new BridgeDBException ("UriMapping " + mappingId + " does not have a " + 
+                    BridgeDBConstants.HAS_DATA_SOURCE_URI);
+        } 
+        if (relationshipIds.isEmpty()){
+            throw new BridgeDBException ("UriMapping " + mappingId + " must have at least one " + 
+                    BridgeDBConstants.HAS_RELATIONSHIP_URI);
+        } 
+        UriPattern uriPattern = UriPattern.byRdfResource(uriPatternId);
+        DataSource dataSource = DataSourceRdf.byRdfResource(dataSourceId);
+        UriMapping mapping = getMapping(dataSource, uriPattern);
+        for (Value relationshipId:relationshipIds){
+            UriMappingRelationship relationship = UriMappingRelationship.byRdfResource(relationshipId);
+            mapping.addRelationship(relationship);
+        }
+        return mapping;
+    }
+
     public DataSource getDataSource(){
         return dataSource;
     }
@@ -147,5 +191,5 @@ public class UriMapping {
     public UriPattern getUriPattern(){
         return uriPattern;
     }
-    
+
 }

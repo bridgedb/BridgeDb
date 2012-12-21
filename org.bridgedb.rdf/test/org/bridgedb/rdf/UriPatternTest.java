@@ -191,8 +191,6 @@ public class UriPatternTest extends TestUtils{
         expectedBuffer.newLine();
         expectedBuffer.flush();
 
-        System.out.println(wsExpected.toString());
-        System.out.println(result);
         assertEquals(wsExpected.toString(), result);
     }
 

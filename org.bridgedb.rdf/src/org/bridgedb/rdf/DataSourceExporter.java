@@ -8,12 +8,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
@@ -24,7 +20,6 @@ import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-import org.bridgedb.utils.StoreType;
 
 /**
  *

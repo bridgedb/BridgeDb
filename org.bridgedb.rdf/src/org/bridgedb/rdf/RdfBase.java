@@ -4,6 +4,9 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.rdf.reader.StatementReader;
+import org.openrdf.model.Value;
+
 /**
  *
  * @author Christian
@@ -22,4 +25,11 @@ public abstract class RdfBase {
         return result;
     }
     
+    static String convertToShortName(Value value) {
+        String id = value.stringValue();
+        id = id.replace(StatementReader.DEFAULT_BASE_URI, ":");
+        return id;
+    }
+
+
 }
