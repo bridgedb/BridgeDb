@@ -1,6 +1,6 @@
 package org.bridgedb.metadata.validator;
 
-import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
@@ -29,13 +29,13 @@ public enum ValidationType {
         this.minimal = isMinimal;
     }
     
-    public static ValidationType parseString(String string) throws MetaDataException{
+    public static ValidationType parseString(String string) throws BridgeDBException{
        for(ValidationType type:ValidationType.values()){
            if (type.toString().equalsIgnoreCase(string)){
                return type;
            }
        }
-       throw new MetaDataException ("Unable to parse " + string + " to a ValidationType. "
+       throw new BridgeDBException ("Unable to parse " + string + " to a ValidationType. "
                + "Legal values are " + valuesString());
     }
     

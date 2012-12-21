@@ -4,6 +4,8 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.utils.BridgeDBException;
+
 /**
  *
  * @author Christian
@@ -11,7 +13,7 @@ package org.bridgedb.metadata;
 public enum RequirementLevel {
     MINIMAL, MUST, DIRECTMUST, SHOULD, MAY, IGNORE, UNSPECIFIED;
     
-    public static RequirementLevel parseString(String string) throws MetaDataException{
+    public static RequirementLevel parseString(String string) throws BridgeDBException{
        string = string.trim();
        string = string.replaceAll("\"", "");
        for(RequirementLevel type:RequirementLevel.values()){
@@ -19,7 +21,7 @@ public enum RequirementLevel {
                return type;
            }
        }
-       throw new MetaDataException ("Unable to parse " + string + " to a ValidationType. "
+       throw new BridgeDBException ("Unable to parse " + string + " to a ValidationType. "
                + "Legal values are " + valuesString());
     }
     

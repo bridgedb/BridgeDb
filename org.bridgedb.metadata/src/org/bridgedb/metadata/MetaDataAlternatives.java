@@ -6,6 +6,7 @@ package org.bridgedb.metadata;
 
 import java.util.List;
 import org.bridgedb.metadata.constants.SchemaConstants;
+import org.bridgedb.utils.BridgeDBException;
 import org.w3c.dom.Element;
 
 /**
@@ -14,7 +15,7 @@ import org.w3c.dom.Element;
  */
 public class MetaDataAlternatives extends HasChildrenMetaData implements MetaData{
 
-    //public MetaDataAlternatives(Element element) throws MetaDataException {
+    //public MetaDataAlternatives(Element element) throws BridgeDBException {
     //    super(element);
     //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
     //}
@@ -65,7 +66,8 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) 
+            throws BridgeDBException {
         if (checkAllpresent && noChildernWithValue()){
             if (this.requirementLevel == RequirementLevel.MUST){
                 reportMissingValues(builder, "ERROR: ", tabLevel);

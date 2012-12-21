@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -22,7 +23,7 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     
     final List<MetaDataBase> childMetaData;
 
-    //HasChildrenMetaData(Element element) throws MetaDataException{
+    //HasChildrenMetaData(Element element) throws BridgeDBException{
     //    super(element);
     //    childMetaData = MetaDataRegistry.getChildMetaData(element);
     //}
@@ -67,7 +68,7 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
         
 
     @Override
-    public boolean hasCorrectTypes() throws MetaDataException {
+    public boolean hasCorrectTypes() throws BridgeDBException {
         for (MetaDataBase child:childMetaData){
             if (!child.hasCorrectTypes()){
                 return false;

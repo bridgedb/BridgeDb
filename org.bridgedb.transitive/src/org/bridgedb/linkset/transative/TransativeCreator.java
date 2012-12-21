@@ -36,11 +36,11 @@ import org.bridgedb.metadata.constants.DctermsConstants;
 import org.bridgedb.metadata.constants.DulConstants;
 import org.bridgedb.metadata.constants.FoafConstants;
 import org.bridgedb.metadata.constants.PavConstants;
-import org.bridgedb.metadata.constants.RdfConstants;
-import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.constants.RdfConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.rdf.RdfFactory;
-import org.bridgedb.rdf.RdfWrapper;
+import org.bridgedb.linkset.rdf.RdfFactory;
+import org.bridgedb.linkset.rdf.RdfWrapper;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
@@ -150,8 +150,8 @@ public class TransativeCreator {
         predicate = registerNewLinkset(rdfWrapper, linksetURI, leftId, rightId, predicate, license, derivedBy);
         registerDataSet(rdfWrapper, sourceDataSet, leftContext);
         registerDataSet(rdfWrapper, targetDataSet, rightContext);
-        sourceUriSpace = rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE, leftContext);
-        targetUriSpace = rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE, rightContext);
+        sourceUriSpace = rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE_URI, leftContext);
+        targetUriSpace = rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE_URI, rightContext);
 
         rdfWrapper.shutdown();
         return predicate;

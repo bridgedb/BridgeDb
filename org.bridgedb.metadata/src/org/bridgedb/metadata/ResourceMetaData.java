@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -117,7 +118,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }
 
     @Override
-    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
+    public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) 
+            throws BridgeDBException {
         appendSpecific(builder, tabLevel);
          if (type.equals(UNSPECIFIED)){
             if (includeWarnings){
@@ -151,7 +153,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         newLine(builder);
     }
      
-    public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException{
+    public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws BridgeDBException{
         if (!isParent){
             //Wrong method called 
             appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
@@ -201,7 +203,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return isParent;
     }
 
-    public void appendSummary(StringBuilder builder, int tabLevel) throws MetaDataException {
+    public void appendSummary(StringBuilder builder, int tabLevel) throws BridgeDBException {
         tab(builder, tabLevel);
         if (type.equals(UNSPECIFIED)){
             builder.append(label);

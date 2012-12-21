@@ -5,17 +5,16 @@
 package org.bridgedb.linkset;
 
 import org.junit.Ignore;
-import org.bridgedb.rdf.RdfReader;
+import org.bridgedb.linkset.rdf.RdfReader;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.AppendBase;
-import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.metadata.MetaDataTestBase;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
-import org.bridgedb.rdf.StatementReader;
-import org.bridgedb.rdf.StringOutputStream;
+import org.bridgedb.metadata.rdf.StringOutputStream;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.junit.After;
@@ -40,7 +39,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     
     LinksetInterface linksetInterface;
     
-    public LinksetInterfaceTest(LinksetInterface instance) throws DatatypeConfigurationException, MetaDataException{
+    public LinksetInterfaceTest(LinksetInterface instance) throws DatatypeConfigurationException, BridgeDBException{
         super(instance);
         linksetInterface = new LinksetLoader();
     }

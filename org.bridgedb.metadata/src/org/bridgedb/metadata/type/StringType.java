@@ -5,7 +5,7 @@
 package org.bridgedb.metadata.type;
 
 import org.bridgedb.metadata.AppendBase;
-import org.bridgedb.metadata.constants.XMLSchemaConstants;
+import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;

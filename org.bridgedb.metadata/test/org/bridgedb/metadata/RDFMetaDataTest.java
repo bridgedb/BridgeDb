@@ -4,9 +4,11 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.rdf.constants.VoidConstants;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.metadata.constants.*;
+import org.bridgedb.utils.BridgeDBException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
@@ -21,11 +23,11 @@ import static org.hamcrest.Matchers.*;
  */
 public class RDFMetaDataTest extends MetaDataTestBase{
     
-    public RDFMetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
+    public RDFMetaDataTest() throws DatatypeConfigurationException, BridgeDBException{        
     }
     
     @Test
-    public void testMissingRequiredValue() throws MetaDataException{
+    public void testMissingRequiredValue() throws BridgeDBException{
         report("HasMissingRequiredValues");
         d1LicenseStatement = null;
         MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet1()", loadDirectDataSet1(), rdfRegistry);
@@ -33,7 +35,7 @@ public class RDFMetaDataTest extends MetaDataTestBase{
     } 
 
     @Test
-    public void testAlternativeAllMissingRequiredValue() throws MetaDataException{
+    public void testAlternativeAllMissingRequiredValue() throws BridgeDBException{
         report("HasMissingRequiredValues");
         d1PublishedStatement = null;
         d1RetreivedOn = null;
@@ -42,10 +44,10 @@ public class RDFMetaDataTest extends MetaDataTestBase{
     } 
 
     @Test
-    public void testTooManyValues() throws MetaDataException{
+    public void testTooManyValues() throws BridgeDBException{
         report("TooManyValues");
         Set<Statement> statements = loadDirectDataSet1();
-        Statement extra = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, D2_NAME_SPACE_VALUE);
+        Statement extra = new StatementImpl(D1_ID, VoidConstants.URI_SPACE_URI, D2_NAME_SPACE_VALUE);
         statements.add(extra);
         MetaDataCollection metaData = new MetaDataCollection("testTooManyValues()", statements, rdfRegistry);
         checkRequiredValues(metaData);
@@ -54,7 +56,7 @@ public class RDFMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
-    public void testMissingValidityReport() throws MetaDataException{
+    public void testMissingValidityReport() throws BridgeDBException{
         report("MissingValidityReport");
         d1TitleStatement = null;
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), rdfRegistry);
@@ -64,7 +66,7 @@ public class RDFMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testAlternativeValidityReport() throws MetaDataException{
+    public void testAlternativeValidityReport() throws BridgeDBException{
         report("MissingValidityReport");
         d1ModifiedStatement = null;
         d1RetreivedOn = null;
@@ -74,7 +76,7 @@ public class RDFMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
-    public void testGetRDF() throws MetaDataException{
+    public void testGetRDF() throws BridgeDBException{
         report("getRdf");
         Set<Statement> data = loadMayDataSet1();
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", data, rdfRegistry);

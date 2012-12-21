@@ -19,14 +19,14 @@
 package org.bridgedb.linkset;
 
 import javax.xml.datatype.DatatypeConfigurationException;
-import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * @author Christian
  */
 public class LinksetLoaderInterfaceTest extends LinksetInterfaceTest {
     
-    public LinksetLoaderInterfaceTest() throws DatatypeConfigurationException, MetaDataException{
+    public LinksetLoaderInterfaceTest() throws DatatypeConfigurationException, BridgeDBException{
         super(new LinksetLoader());
     }      
 

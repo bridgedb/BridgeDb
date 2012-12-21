@@ -4,6 +4,8 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.utils.BridgeDBException;
+
 /**
  *
  * @author Christian
@@ -38,21 +40,21 @@ public abstract class AppendBase implements MetaData{
     abstract void appendShowAll(StringBuilder builder, int tabLevel);
     
     @Override
-    public String validityReport(boolean includeWarnings) throws MetaDataException {
+    public String validityReport(boolean includeWarnings) throws BridgeDBException {
          StringBuilder builder = new StringBuilder();
          appendValidityReport(builder, CHECK_ALL_PRESENT, includeWarnings, 0);
          return builder.toString();
     }
     
-    public void validate() throws MetaDataException {
+    public void validate() throws BridgeDBException {
         String report = this.validityReport(false);
         if (report.contains("ERROR")){
-            throw new MetaDataException(report);
+            throw new BridgeDBException(report);
         }
     }
 
    abstract void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, 
-           int tabLevel) throws MetaDataException;
+           int tabLevel) throws BridgeDBException;
 
     @Override
     public String unusedStatements(){

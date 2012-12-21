@@ -4,7 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
-import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Value;
 
 /**
@@ -13,7 +13,7 @@ import org.openrdf.model.Value;
  */
 public interface MetaDataType {
     
-    boolean correctType(Value value) throws MetaDataException;
+    boolean correctType(Value value) throws BridgeDBException;
 
     String getCorrectType();
 }

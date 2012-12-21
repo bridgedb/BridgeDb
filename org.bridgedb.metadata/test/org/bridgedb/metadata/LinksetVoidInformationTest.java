@@ -5,15 +5,16 @@
 package org.bridgedb.metadata;
 
 import org.bridgedb.utils.TestUtils;
-import org.bridgedb.rdf.LinksetStatements;
-import org.bridgedb.rdf.LinksetStatementReader;
+import org.bridgedb.metadata.rdf.LinksetStatements;
+import org.bridgedb.metadata.rdf.LinksetStatementReader;
 import org.openrdf.model.Statement;
 import org.openrdf.model.impl.URIImpl;
 import org.bridgedb.utils.Reporter;
 import java.util.Set;
 import org.bridgedb.metadata.constants.DctermsConstants;
-import org.bridgedb.metadata.constants.VoidConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -127,7 +128,7 @@ public class LinksetVoidInformationTest extends TestUtils{
      * Test of hasCorrectTypes method, of class LinksetVoidInformation.
      */
     @Test
-    public void testHasCorrectTypes() throws MetaDataException {
+    public void testHasCorrectTypes() throws BridgeDBException {
         report("hasCorrectTypes");
         boolean result = instance.hasCorrectTypes();
         assertTrue(result);
@@ -137,7 +138,7 @@ public class LinksetVoidInformationTest extends TestUtils{
      * Test of validityReport method, of class LinksetVoidInformation.
      */
     @Test
-    public void testValidityReport() throws MetaDataException {
+    public void testValidityReport() throws BridgeDBException {
         report("validityReport");
         boolean includeWarnings = false;
         String result = instance.validityReport(includeWarnings);

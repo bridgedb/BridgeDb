@@ -14,11 +14,12 @@ import org.bridgedb.metadata.constants.BridgeDBConstants;
 import org.bridgedb.metadata.constants.DulConstants;
 import org.bridgedb.metadata.constants.PavConstants;
 import org.bridgedb.metadata.constants.SkosConstants;
-import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.metadata.validator.ValidationType;
-import org.bridgedb.rdf.LinksetStatements;
-import org.bridgedb.rdf.LinksetStatementReader;
+import org.bridgedb.metadata.rdf.LinksetStatements;
+import org.bridgedb.metadata.rdf.LinksetStatementReader;
+import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -52,7 +53,8 @@ public class LinksetVoidInformation implements MetaData {
         this(source, reader, MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
     }
     
-    public LinksetVoidInformation(String source, LinksetStatements reader, MetaDataSpecification specification) throws MetaDataException{
+    public LinksetVoidInformation(String source, LinksetStatements reader, MetaDataSpecification specification) 
+            throws BridgeDBException{
         collection = new MetaDataCollection(source, reader.getVoidStatements(), specification);
         ResourceMetaData linkset = findLinkSet();
         predicate = extractSingleStringByPredicate(linkset, VoidConstants.LINK_PREDICATE);  
@@ -60,9 +62,9 @@ public class LinksetVoidInformation implements MetaData {
         isSymmetric = checkIsSymmetric();
         transative =  checkIsTransative(linkset);
         ResourceMetaData resourceMetaData = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
-        subjectUriSpace = extractSingleStringByPredicate(resourceMetaData, VoidConstants.URI_SPACE);
+        subjectUriSpace = extractSingleStringByPredicate(resourceMetaData, VoidConstants.URI_SPACE_URI);
         ResourceMetaData target = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.OBJECTSTARGET);
-        targetUriSpace = extractSingleStringByPredicate(target, VoidConstants.URI_SPACE);
+        targetUriSpace = extractSingleStringByPredicate(target, VoidConstants.URI_SPACE_URI);
         validateLinks(reader.getLinkStatements());
 //        validate();
      }
@@ -140,7 +142,7 @@ public class LinksetVoidInformation implements MetaData {
         return null;
     }
 
-    private String extractSingleStringByPredicate(ResourceMetaData metaDataResource, URI predicate) throws MetaDataException{
+    private String extractSingleStringByPredicate(ResourceMetaData metaDataResource, URI predicate) throws BridgeDBException{
         Value value = extractSingleValueByPredicate(metaDataResource, predicate);
         if (value == null){
             return null;
@@ -198,7 +200,7 @@ public class LinksetVoidInformation implements MetaData {
     }
    
     @Override
-    public void validate() throws MetaDataException {
+    public void validate() throws BridgeDBException {
         String report = collection.validityReport(false);
         if (report.contains("ERROR") || !error.isEmpty()){
             if (!hasRequiredValues() ){
@@ -208,37 +210,37 @@ public class LinksetVoidInformation implements MetaData {
                 report = "Incorrect Type(s)\n" + report;
             }
             if (!error.isEmpty()){
-                throw new MetaDataException(report + "\n" + error);
+                throw new BridgeDBException(report + "\n" + error);
             }
         }
     }
 
     // Methods used to extract specific Linkset info
     
-    public String getSubjectUriSpace() throws MetaDataException {
+    public String getSubjectUriSpace() throws BridgeDBException {
         if (subjectUriSpace == null) {
-            throw new MetaDataException(error);
+            throw new BridgeDBException(error);
         }
         return subjectUriSpace;
     }
 
-    public String getTargetUriSpace() throws MetaDataException {
+    public String getTargetUriSpace() throws BridgeDBException {
         if (targetUriSpace == null) {
-            throw new MetaDataException(error);
+            throw new BridgeDBException(error);
         }
         return targetUriSpace;
     }
 
-    public String getPredicate() throws MetaDataException {
+    public String getPredicate() throws BridgeDBException {
         if (predicate == null) {
-            throw new MetaDataException(error);
+            throw new BridgeDBException(error);
         }
         return predicate;
     }
 
-    public Resource getLinksetResource() throws MetaDataException {
+    public Resource getLinksetResource() throws BridgeDBException {
         if (linksetResource == null) {
-            throw new MetaDataException(error);
+            throw new BridgeDBException(error);
         }
         return linksetResource;
     }
@@ -261,12 +263,12 @@ public class LinksetVoidInformation implements MetaData {
     }
 
     @Override
-    public boolean hasCorrectTypes() throws MetaDataException {
+    public boolean hasCorrectTypes() throws BridgeDBException {
         return collection.hasCorrectTypes();
     }
 
     @Override
-    public String validityReport(boolean includeWarnings) throws MetaDataException {
+    public String validityReport(boolean includeWarnings) throws BridgeDBException {
         if (error.isEmpty()) {
             if (wrongSubject == 0 && wrongTarget == 0){
                  return collection.validityReport(includeWarnings) + "\nFound " + correctLinks + " links";

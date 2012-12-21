@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.metadata.constants.SchemaConstants;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -43,7 +44,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         this.cardinality = cardinality;
     }
 
-    //LinkedResource(Element element) throws MetaDataException {
+    //LinkedResource(Element element) throws BridgeDBException {
     //    super(element);
     //    String typeSt = element.getAttribute(SchemaConstants.TYPE);
     //    resourceType = new URIImpl(typeSt);
@@ -100,12 +101,12 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 builder.append(cardinality);        
             }
             resource.appendSchema(builder, tabLevel + 1);
-        } catch (MetaDataException ex) {
+        } catch (BridgeDBException ex) {
             appendException(builder, tabLevel, ex);
         }
     }
 
-    private void appendException(StringBuilder builder, int tabLevel, MetaDataException ex){
+    private void appendException(StringBuilder builder, int tabLevel, BridgeDBException ex){
             tab(builder, tabLevel);
             builder.append("ERROR!! Linked Resource ");
             builder.append(name);
@@ -211,7 +212,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
-    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws BridgeDBException {
         if (this.cardinality > 0 && ids.isEmpty()){
             tab(builder, tabLevel);
             builder.append("ERROR: ");

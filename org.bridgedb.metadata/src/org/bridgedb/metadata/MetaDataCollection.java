@@ -11,9 +11,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.bridgedb.metadata.constants.RdfConstants;
-import org.bridgedb.metadata.constants.VoidConstants;
-import org.bridgedb.rdf.StatementReader;
+import org.bridgedb.rdf.constants.RdfConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -34,7 +35,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     
     static final Logger logger = Logger.getLogger(MetaDataCollection.class);
 
-    public MetaDataCollection(String source, Set<Statement> incomingStatements, MetaDataSpecification specification) throws MetaDataException {
+    public MetaDataCollection(String source, Set<Statement> incomingStatements, MetaDataSpecification specification) 
+            throws BridgeDBException {
         Set<Statement> statements = new HashSet(incomingStatements);
         this.metaDataRegistry = specification;
         Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
@@ -55,11 +57,11 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         this.source = source;
     }
     
-    public MetaDataCollection (String dataFileName, MetaDataSpecification metaDataRegistry) throws MetaDataException{
+    public MetaDataCollection (String dataFileName, MetaDataSpecification metaDataRegistry) throws BridgeDBException{
         this(dataFileName, new StatementReader(dataFileName).getVoidStatements(), metaDataRegistry);
     }
         
-    private ResourceMetaData getResourceMetaData (Resource id, Set<Statement> statements) throws MetaDataException{
+    private ResourceMetaData getResourceMetaData (Resource id, Set<Statement> statements) throws BridgeDBException{
         Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI, statements);
         ResourceMetaData resourceMetaData = null;
         for (Value type:types){
@@ -167,7 +169,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return result;
     }
 
-    public String summary() throws MetaDataException {
+    public String summary() throws BridgeDBException {
         StringBuilder builder = new StringBuilder();
         for (ResourceMetaData resource:resourcesMap.values()){
             resource.appendSummary(builder, 0);
@@ -199,7 +201,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
     @Override
-    public boolean hasCorrectTypes() throws MetaDataException {
+    public boolean hasCorrectTypes() throws BridgeDBException {
         for (ResourceMetaData resouce:resourcesMap.values()){
             if (!resouce.hasCorrectTypes()){
                 return false;
@@ -262,7 +264,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
 
     @Override
-    public String validityReport(boolean includeWarnings) throws MetaDataException {
+    public String validityReport(boolean includeWarnings) throws BridgeDBException {
          StringBuilder builder = new StringBuilder();
          builder.append("Report for " + source);
          newLine(builder);
@@ -271,7 +273,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     }
     
     @Override
-    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws MetaDataException {
+    void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws BridgeDBException {
          Collection<ResourceMetaData> theResources = resourcesMap.values();
          for (ResourceMetaData resource:theResources){
              if (!resource.isSuperset()){

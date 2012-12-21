@@ -4,9 +4,11 @@
  */
 package org.bridgedb.metadata;
 
+import org.bridgedb.rdf.constants.VoidConstants;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.metadata.constants.*;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -23,12 +25,12 @@ import static org.hamcrest.Matchers.*;
  */
 public class DataSetMetaDataTest extends MetaDataTestBase{
     
-    public DataSetMetaDataTest() throws DatatypeConfigurationException, MetaDataException{        
+    public DataSetMetaDataTest() throws DatatypeConfigurationException, BridgeDBException{        
     }
     
     @Test
     @Ignore
-    public void testShowAll() throws MetaDataException{
+    public void testShowAll() throws BridgeDBException{
         report("ShowAll");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);
         String showAll = metaData.showAll();
@@ -36,14 +38,14 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     } 
     
     @Test
-    public void testHasRequiredValues() throws MetaDataException{
+    public void testHasRequiredValues() throws BridgeDBException{
         report("HasRequiredValues");
         MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet1()", loadDirectDataSet1(), voidRegistry);
         checkRequiredValues(metaData);
     } 
 
     @Test
-    public void testMissingRequiredValue() throws MetaDataException{
+    public void testMissingRequiredValue() throws BridgeDBException{
         report("HasMissingRequiredValues");
         d1LicenseStatement = null;
         MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet1()", loadDirectDataSet1(), voidRegistry);
@@ -51,7 +53,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     } 
 
     @Test
-    public void testAlternative1MissingRequiredValue() throws MetaDataException{
+    public void testAlternative1MissingRequiredValue() throws BridgeDBException{
         report("HasMissingRequiredValues");
         d1PublishedStatement = null;
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);
@@ -59,7 +61,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     } 
 
     @Test
-    public void testAlternativeAllMissingRequiredValue() throws MetaDataException{
+    public void testAlternativeAllMissingRequiredValue() throws BridgeDBException{
         report("HasMissingRequiredValues");
         d1PublishedStatement = null;
         d1RetreivedOn = null;
@@ -68,10 +70,10 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     } 
 
     @Test
-    public void testTooManyValues() throws MetaDataException{
+    public void testTooManyValues() throws BridgeDBException{
         report("TooManyValues");
         Set<Statement> statements = loadDirectDataSet1();
-        Statement extra = new StatementImpl(D1_ID, VoidConstants.URI_SPACE, D2_NAME_SPACE_VALUE);
+        Statement extra = new StatementImpl(D1_ID, VoidConstants.URI_SPACE_URI, D2_NAME_SPACE_VALUE);
         statements.add(extra);
         MetaDataCollection metaData = new MetaDataCollection("testTooManyValues()", statements, voidRegistry);
         assertFalse(metaData.hasRequiredValues());
@@ -80,14 +82,14 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
-    public void testHasCorrectTypes() throws MetaDataException{
+    public void testHasCorrectTypes() throws BridgeDBException{
         report("HasCorrectTypes");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);
         checkCorrectTypes(metaData);
     }
     
     @Test
-    public void testHasCorrectTypesBadDate() throws MetaDataException{
+    public void testHasCorrectTypesBadDate() throws BridgeDBException{
         report("isHasCorrectTypesBadDate");
         d1ModifiedStatement = new StatementImpl(D1_ID, DctermsConstants.MODIFIED, TITLE);  
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);
@@ -95,7 +97,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
  
     @Test
-    public void testMustValidityReport() throws MetaDataException{
+    public void testMustValidityReport() throws BridgeDBException{
         report("MustValidityReport");
         MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet1()", loadDirectDataSet1(), voidRegistry);
         String report = metaData.validityReport(NO_WARNINGS);
@@ -105,7 +107,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testMissingValidityReport() throws MetaDataException{
+    public void testMissingValidityReport() throws BridgeDBException{
         report("MissingValidityReport");
         d1TitleStatement = null;
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);
@@ -115,7 +117,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testGroupValidityReport() throws MetaDataException{
+    public void testGroupValidityReport() throws BridgeDBException{
         report("MissingValidityReport");
         d1ModifiedStatement = null;
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);        
@@ -127,7 +129,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testAlternativeValidityReport() throws MetaDataException{
+    public void testAlternativeValidityReport() throws BridgeDBException{
         report("MissingValidityReport");
         d1ModifiedStatement = null;
         d1RetreivedOn = null;
@@ -138,14 +140,14 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     
     @Test
     @Ignore
-    public void testAllStatementsUsed() throws MetaDataException{
+    public void testAllStatementsUsed() throws BridgeDBException{
         report("AllStatementsUsed");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);
         checkAllStatementsUsed(metaData);
     }
     
     @Test
-    public void testNotAllStatementsUsedDifferentPredicate() throws MetaDataException{
+    public void testNotAllStatementsUsedDifferentPredicate() throws BridgeDBException{
         report("NotAllStatementsUsedDifferentPredicate");
         Set<Statement> data = loadMayDataSet1();
         Statement unusedStatement = 
@@ -157,7 +159,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testNotAllStatementsUsedDifferentResource() throws MetaDataException{
+    public void testNotAllStatementsUsedDifferentResource() throws BridgeDBException{
         report("NotAllStatementsUsedDifferentResource");
         Set<Statement> data = loadMayDataSet1();
         Statement unusedStatement = new StatementImpl(
@@ -169,7 +171,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testGetRDF() throws MetaDataException{
+    public void testGetRDF() throws BridgeDBException{
         report("getRdf");
         Set<Statement> data = loadMayDataSet1();
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", data, voidRegistry);
@@ -178,7 +180,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
     
     @Test
-    public void testSummary() throws MetaDataException{
+    public void testSummary() throws BridgeDBException{
         report("Dataset Summary");
         MetaDataCollection metaData = new MetaDataCollection("loadMayDataSet1()", loadMayDataSet1(), voidRegistry);
         String expected = "(Dataset) http://www.example.com/test/dataset1 OK!\n";
@@ -187,7 +189,7 @@ public class DataSetMetaDataTest extends MetaDataTestBase{
     }
 
     @Test
-    public void testSummaryExtra() throws MetaDataException{
+    public void testSummaryExtra() throws BridgeDBException{
         report("Dataset Summary Extra");
         Set<Statement> data = loadMayDataSet1();
         data.add(personIdStatement);

@@ -5,6 +5,7 @@
 package org.bridgedb.metadata;
 
 import java.util.Set;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -20,11 +21,11 @@ public interface MetaData {
 
     boolean hasRequiredValues();
     
-    boolean hasCorrectTypes() throws MetaDataException;
+    boolean hasCorrectTypes() throws BridgeDBException;
 
-    String validityReport(boolean includeWarnings) throws MetaDataException;
+    String validityReport(boolean includeWarnings) throws BridgeDBException;
 
-    void validate() throws MetaDataException;
+    void validate() throws BridgeDBException;
     
     boolean allStatementsUsed();
     

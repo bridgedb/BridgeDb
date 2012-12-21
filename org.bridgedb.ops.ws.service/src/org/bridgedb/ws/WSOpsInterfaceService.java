@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import org.bridgedb.metadata.MetaDataException;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import java.util.List;
@@ -46,11 +45,10 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.linkset.LinksetInterfaceMinimal;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.metadata.rdf.LinksetStatementReader;
 import org.bridgedb.metadata.validator.ValidationType;
 import org.bridgedb.rdf.RdfConfig;
-import org.bridgedb.rdf.RdfFactory;
-import org.bridgedb.rdf.StatementReader;
-import org.bridgedb.sql.BridgeDbSqlException;
+import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
@@ -346,50 +344,50 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
         return result.trim();
     }
     
-    protected final RDFFormat getRDFFormatByMimeType(String mimeType) throws MetaDataException{
+    protected final RDFFormat getRDFFormatByMimeType(String mimeType) throws BridgeDBException{
         if (mimeType == null){
-            throw new MetaDataException (MIME_TYPE + " parameter may not be null");
+            throw new BridgeDBException (MIME_TYPE + " parameter may not be null");
         }
         mimeType = trim(mimeType);
         if (mimeType.isEmpty()){
-            throw new MetaDataException (MIME_TYPE + " parameter may not be empty");
+            throw new BridgeDBException (MIME_TYPE + " parameter may not be empty");
         }
-        return  StatementReader.getRDFFormatByMimeType(mimeType);
+        return StatementReader.getRDFFormatByMimeType(mimeType);
     }
     
     protected final StoreType parseStoreType(String storeTypeString) throws IDMapperException{
         if (storeTypeString == null){
-            throw new MetaDataException (STORE_TYPE + " parameter may not be null");
+            throw new BridgeDBException (STORE_TYPE + " parameter may not be null");
         }
         storeTypeString = trim(storeTypeString);
         if (storeTypeString.isEmpty()){
-            throw new MetaDataException (STORE_TYPE + " parameter may not be empty");
+            throw new BridgeDBException (STORE_TYPE + " parameter may not be empty");
         }
         return StoreType.parseString(storeTypeString);
     }
 
     protected final ValidationType parseValidationType(String validationTypeString) throws IDMapperException{
         if (validationTypeString == null){
-            throw new MetaDataException (VALIDATION_TYPE + " parameter may not be null");
+            throw new BridgeDBException (VALIDATION_TYPE + " parameter may not be null");
         }
         if (validationTypeString.trim().isEmpty()){
-            throw new MetaDataException (VALIDATION_TYPE + " parameter may not be empty");
+            throw new BridgeDBException (VALIDATION_TYPE + " parameter may not be empty");
         }
         return ValidationType.parseString(validationTypeString);
     }
     
-    protected final void validateInfo(String info) throws MetaDataException{
+    protected final void validateInfo(String info) throws BridgeDBException{
         if (info == null){
-            throw new MetaDataException (INFO + " parameter may not be null");
+            throw new BridgeDBException (INFO + " parameter may not be null");
         }
         if (info.trim().isEmpty()){
-            throw new MetaDataException (INFO + " parameter may not be empty");
+            throw new BridgeDBException (INFO + " parameter may not be empty");
         }        
     }
     
-    void validateInputStream(InputStream inputStream) throws MetaDataException {
+    void validateInputStream(InputStream inputStream) throws BridgeDBException {
         if (inputStream == null){
-            throw new MetaDataException (FILE + " parameter may not be null");
+            throw new BridgeDBException (FILE + " parameter may not be null");
         }
     }
 

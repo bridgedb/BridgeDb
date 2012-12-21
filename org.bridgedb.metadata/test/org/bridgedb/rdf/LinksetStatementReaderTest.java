@@ -4,8 +4,9 @@
  */
 package org.bridgedb.rdf;
 
+import org.bridgedb.metadata.rdf.LinksetStatementReader;
 import java.util.Set;
-import org.bridgedb.metadata.MetaDataException;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.TestUtils;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;
@@ -73,7 +74,7 @@ public class LinksetStatementReaderTest extends TestUtils{
      * Test of getVoidStatements method, of class LinksetStatementReader.
      */
     @Test
-    public void testGetVoidStatements() throws MetaDataException {
+    public void testGetVoidStatements() throws BridgeDBException {
         report("getVoidStatements");
         LinksetStatementReader instance = new LinksetStatementReader(TEST_FILE_NAME);
         Set result = instance.getVoidStatements();
@@ -84,7 +85,7 @@ public class LinksetStatementReaderTest extends TestUtils{
      * Test of getLinkStatements method, of class LinksetStatementReader.
      */
     @Test
-    public void testGetLinkStatements() throws MetaDataException {
+    public void testGetLinkStatements() throws BridgeDBException {
         report("getLinkStatements");
         LinksetStatementReader instance = new LinksetStatementReader(TEST_FILE_NAME);
         Set result = instance.getLinkStatements();
@@ -95,9 +96,9 @@ public class LinksetStatementReaderTest extends TestUtils{
      * Test of getVoidStatements method, of class LinksetStatementReader.
      */
     @Test
-    public void testReadString() throws MetaDataException {
+    public void testReadString() throws BridgeDBException {
         report("getVoidStatements");
-        RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
+        RDFFormat format = LinksetStatementReader.getRDFFormatByMimeType("text/turtle");
         LinksetStatementReader instance = new LinksetStatementReader(INFO1, format);
         Set result = instance.getVoidStatements();
         assertEquals(9, result.size());
@@ -107,7 +108,7 @@ public class LinksetStatementReaderTest extends TestUtils{
      * Test of resetBaseURI method, of class LinksetStatementReader.
      */
     @Test
-    public void testResetBaseURI() throws MetaDataException {
+    public void testResetBaseURI() throws BridgeDBException {
         report("resetBaseURI");
         LinksetStatementReader instance = new LinksetStatementReader(TEST_FILE_NAME);
         String newBaseURI = "http://example.com/";
@@ -115,22 +116,22 @@ public class LinksetStatementReaderTest extends TestUtils{
         Set<Statement> result = instance.getVoidStatements();
         for (Statement statement:result){
             assertTrue(statement.getSubject().stringValue().startsWith(newBaseURI));
-            assertFalse(statement.getObject().stringValue().startsWith(StatementReader.DEFAULT_BASE_URI));
+            assertFalse(statement.getObject().stringValue().startsWith(LinksetStatementReader.DEFAULT_BASE_URI));
         }
     }
     
     @Test
-    public void testResetBaseURIForResource1() throws MetaDataException {
+    public void testResetBaseURIForResource1() throws BridgeDBException {
         report("ResetBaseURIForResource1");
-        Resource old = new URIImpl (StatementReader.DEFAULT_BASE_URI + "1234");
+        Resource old = new URIImpl (LinksetStatementReader.DEFAULT_BASE_URI + "1234");
         Resource result = LinksetStatementReader.resetBaseURI("http://example.com/", old);
         assertEquals ("http://example.com/1234", result.stringValue());     
     }
 
     @Test
-    public void testResetBaseURIForResource2() throws MetaDataException {
+    public void testResetBaseURIForResource2() throws BridgeDBException {
         report("ResetBaseURIForResource2");
-        Resource old = new URIImpl (StatementReader.DEFAULT_BASE_URI + "#1234");
+        Resource old = new URIImpl (LinksetStatementReader.DEFAULT_BASE_URI + "#1234");
         Resource result = LinksetStatementReader.resetBaseURI("http://example.org/", old);
         assertEquals ("http://example.org/1234", result.stringValue());     
     }

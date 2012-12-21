@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.URI;
@@ -58,12 +59,12 @@ public class MetaDataSpecification {
         try {
             ontology = m.loadOntologyFromOntologyDocument(stream);
         } catch (OWLOntologyCreationException ex) {
-            throw new MetaDataException("Unable to read owl from inputStream", ex);
+            throw new BridgeDBException("Unable to read owl from inputStream", ex);
         }
         loadSpecification();
     }
     
-    private void loadSpecification() throws MetaDataException{
+    private void loadSpecification() throws BridgeDBException{
         Set<OWLClass> theClasses = ontology.getClassesInSignature();
         for (OWLClass theClass:theClasses){
             String id = theClass.toStringID();
@@ -91,19 +92,19 @@ public class MetaDataSpecification {
         }
     }
     
-    private String getRequirementLevelString(OWLClass theClass) throws MetaDataException{
+    private String getRequirementLevelString(OWLClass theClass) throws BridgeDBException{
         Set<OWLAnnotation> annotations = theClass.getAnnotations(ontology, REQUIREMENT_LEVEL_PROPERTY);
         if (annotations.isEmpty()){
             return null;
         }
         if (annotations.size() != 1){
-            throw new MetaDataException("Only expected one annotation with property " + REQUIREMENT_LEVEL_PROPERTY + 
+            throw new BridgeDBException("Only expected one annotation with property " + REQUIREMENT_LEVEL_PROPERTY + 
                     "for theClass " + theClass + " but found " + annotations);
         }
         return annotations.iterator().next().getValue().toString();
     }
     
-    private RequirementLevel getRequriementLevel(String requirementLevelSt, URI type) throws MetaDataException{
+    private RequirementLevel getRequriementLevel(String requirementLevelSt, URI type) throws BridgeDBException{
         if (validationType == ValidationType.ANY_RDF) { 
             return RequirementLevel.IGNORE; 
         } 
@@ -131,14 +132,14 @@ public class MetaDataSpecification {
         }
     }
     
-    private URI getSuperType(OWLClass theClass) throws MetaDataException {
+    private URI getSuperType(OWLClass theClass) throws BridgeDBException {
         Set<OWLClassExpression> supers = theClass.getSuperClasses(ontology);
         for (OWLClassExpression theSuper:supers){
             if (theSuper instanceof OWLClass){
                 OWLClass superClass = (OWLClass)theSuper;
                 String id = superClass.toStringID();
                 if (id.equals(THING_ID)){
-                    throw new MetaDataException ("OWLClass " + theClass + " is a direct child of OWLThing.");
+                    throw new BridgeDBException ("OWLClass " + theClass + " is a direct child of OWLThing.");
                 }
                 if (getRequirementLevelString(superClass) == null){
                     return new URIImpl(id);
@@ -147,17 +148,17 @@ public class MetaDataSpecification {
                 }
             }
         }
-        throw new MetaDataException("Unexpected end of loop without finding an OWLClass superclass for " + theClass);
+        throw new BridgeDBException("Unexpected end of loop without finding an OWLClass superclass for " + theClass);
     }
 
-    private URI toURI(OWLObject object) throws MetaDataException{
+    private URI toURI(OWLObject object) throws BridgeDBException{
         OWLEntity entity;
         if (object instanceof OWLEntity){
             entity = (OWLEntity)object;
         } else {
             Set<OWLEntity> signature = object.getSignature();
             if (signature.size() != 1){
-                throw new MetaDataException ("Object " + object + " has unexpected signature " + signature);
+                throw new BridgeDBException ("Object " + object + " has unexpected signature " + signature);
             }
             entity = signature.iterator().next();
         }
@@ -165,7 +166,7 @@ public class MetaDataSpecification {
         return new URIImpl(id);
     }
     
-    public ResourceMetaData getResourceByType(Value type) throws MetaDataException{
+    public ResourceMetaData getResourceByType(Value type) throws BridgeDBException{
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
             logger.warn("Unable to find specifications for type: " + type);
@@ -180,7 +181,7 @@ public class MetaDataSpecification {
         return documentationRoot;
     }
     
-    private List<MetaDataBase> getChildren(OWLClass theClass, String type, RequirementLevel requirementLevel) throws MetaDataException {
+    private List<MetaDataBase> getChildren(OWLClass theClass, String type, RequirementLevel requirementLevel) throws BridgeDBException {
         ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
         Set<OWLClassExpression> exprs = theClass.getSuperClasses(ontology);
         for (OWLClassExpression expr:exprs){
@@ -192,7 +193,7 @@ public class MetaDataSpecification {
         return children;
     }
 
-    private MetaDataBase parseExpression(OWLClassExpression expr, String type, RequirementLevel requirementLevel) throws MetaDataException {
+    private MetaDataBase parseExpression(OWLClassExpression expr, String type, RequirementLevel requirementLevel) throws BridgeDBException {
         if (expr instanceof OWLCardinalityRestriction){
             return parseOWLCardinalityRestriction((OWLCardinalityRestriction)expr, type, requirementLevel);
         } 
@@ -202,11 +203,11 @@ public class MetaDataSpecification {
         if (expr instanceof OWLNaryBooleanClassExpression){
             return parseOWLNaryBooleanClassExpression ((OWLNaryBooleanClassExpression) expr, type, requirementLevel);
         }
-        throw new MetaDataException("Unexpected expression." + expr + " " + expr.getClass());
+        throw new BridgeDBException("Unexpected expression." + expr + " " + expr.getClass());
     }
         
     private MetaDataBase parseOWLNaryBooleanClassExpression(OWLNaryBooleanClassExpression expression, String type, 
-            RequirementLevel requirementLevel) throws MetaDataException{
+            RequirementLevel requirementLevel) throws BridgeDBException{
         ArrayList<MetaDataBase> children = new ArrayList<MetaDataBase>();
         Set<OWLClassExpression> operands = expression.getOperands();
         for (OWLClassExpression expr:operands){
@@ -227,11 +228,11 @@ public class MetaDataSpecification {
             }
             return new MetaDataAlternatives(name, type, requirementLevel, children);
         } 
-        throw new MetaDataException("Unexpected expression." + expression);
+        throw new BridgeDBException("Unexpected expression." + expression);
     }
     
     private MetaDataBase parseOWLCardinalityRestriction(OWLCardinalityRestriction restriction, String type, 
-            RequirementLevel requirementLevel) throws MetaDataException{
+            RequirementLevel requirementLevel) throws BridgeDBException{
         URI predicate;
         OWLPropertyRange range = restriction.getFiller();
         OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
@@ -250,7 +251,7 @@ public class MetaDataSpecification {
     }
 
     private MetaDataBase parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction, String type, 
-            RequirementLevel requirementLevel) throws MetaDataException{
+            RequirementLevel requirementLevel) throws BridgeDBException{
         URI predicate;
         OWLPropertyRange range = restriction.getFiller();
         OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
