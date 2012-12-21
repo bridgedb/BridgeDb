@@ -15,6 +15,8 @@ import org.bridgedb.DataSource;
 import org.bridgedb.metadata.constants.BridgeDBConstants;
 import org.bridgedb.metadata.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
 
 /**
  *
@@ -73,11 +75,7 @@ public class UriPattern {
         }
         return result;
     }
-    
-    public static Set<UriPattern> getAllUriPatterns(){
-       return register;
-    }
-            
+                
     public static UriPattern byUrlPattern(String urlPattern) throws BridgeDBException{
         int pos = urlPattern.indexOf("$id");
         if (pos == -1) {
@@ -108,6 +106,12 @@ public class UriPattern {
         return ":" + BridgeDBConstants.URI_PATTERN + "_" + getRdfLabel();
     }
 
+    public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
+        for (UriPattern uriPattern:register){
+            uriPattern.writeAsRDF(writer);
+        }
+    }
+    
     public void writeAsRDF(BufferedWriter writer) throws IOException{
         writer.write(getRdfId());
         writer.write(" a ");
@@ -132,6 +136,28 @@ public class UriPattern {
         writer.newLine();
     }
     
+    public static UriPattern readRdf(Resource patternId, Set<Statement> uriPatternStatements) throws BridgeDBException {
+        String nameSpace = null;
+        String postfix = null;
+        for (Statement statement:uriPatternStatements){
+            if (statement.getPredicate().equals(BridgeDBConstants.POSTFIX_URI)){
+                postfix = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
+                nameSpace = statement.getObject().stringValue();
+            }
+        }
+        if (nameSpace == null){
+            throw new BridgeDBException ("uriPattern " + patternId + " does not have a " + VoidConstants.URI_SPACE_URI);
+        } 
+        UriPattern pattern;
+        if (postfix == null){
+            pattern = UriPattern.byNameSpace(nameSpace);
+        } else {
+            pattern = UriPattern.byNameSpaceAndPostFix(nameSpace, postfix);
+        }
+        return pattern;
+    }
+
     public String getUriPattern() {
         if (postfix == null){
             return nameSpace + "$id";

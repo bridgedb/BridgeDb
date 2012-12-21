@@ -6,15 +6,38 @@ package org.bridgedb.rdf;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Set;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.metadata.constants.BridgeDBConstants;
+import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
+import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  *
  * @author Christian
  */
 public class OrganismRdf extends RdfBase{
+
+    private static OrganismRdf singleton = null;
+    
+    static HashMap<Value,Object> organisms = new HashMap<Value,Object>();
+    
+    private OrganismRdf(){
+        for (Organism organism:Organism.values()){
+            organisms.put(new URIImpl(getRdfId(organism)), organism);
+        }
+    }
+    
+    public static OrganismRdf factory(){
+        if (singleton == null){
+            singleton = new OrganismRdf();
+        }
+        return singleton;
+    }
     
     public static final String getRdfLabel(Organism organism) {
         return scrub(organism.code());   
@@ -66,4 +89,24 @@ public class OrganismRdf extends RdfBase{
         writer.newLine();
     }
     
+    public static Object readRdf(Resource organismId, Set<Statement> allStatements) throws BridgeDBException {
+        for (Statement statement:allStatements){
+            if (statement.getPredicate().equals(BridgeDBConstants.LATIN_NAME_URI)){
+                String latinName = statement.getObject().stringValue();
+                Organism orgamism =  Organism.fromLatinName(latinName);
+                if (orgamism != null){
+                    return orgamism;
+                }
+                throw new BridgeDBException("No Orgamism with LatinName " + latinName + " for " + organismId);
+            }
+        }
+        throw new BridgeDBException("No Orgamism found for " + organismId);
+    }
+
+    static Object byRdfResource(Value organismId) {
+        OrganismRdf organismRdf = factory();
+        Object result = organismRdf.organisms.get(organismId);
+        return result;
+    }
+
 }

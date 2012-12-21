@@ -72,8 +72,8 @@ public class DataSourceExporter extends RdfBase {
             DataSourceRdf.writeAllAsRDF(writer);
             OrganismRdf.writeAllAsRDF(writer);
             if (VERSION2){
-                printUriPatterns();
-                printUriMapping();
+                UriPattern.writeAllAsRDF(writer);
+                UriMapping.writeAllAsRDF(writer);
             }
         } catch (IOException ex) {
             throw new BridgeDBException("Error exporting DataSources. ", ex);
@@ -108,22 +108,6 @@ public class DataSourceExporter extends RdfBase {
         writer.newLine();
     }
 
-    private void printUriPatterns() throws IOException {
-        Set<UriPattern> uriPatterns = UriPattern.getAllUriPatterns();
-        for (UriPattern  uriPattern:uriPatterns){
-            uriPattern.writeAsRDF(writer);
-        }
-        writer.newLine();
-    }
-
-    private void printUriMapping() throws IOException {
-        Set<UriMapping> mappings = UriMapping.getAllUriMappings();
-        for (UriMapping mapping:mappings){
-            mapping.writeAsRDF(writer);
-        }
-    }
-
- 
     private int compare(String s1, String s2){
         if (s1 == null){
             if (s2 == null){

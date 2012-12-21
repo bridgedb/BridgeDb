@@ -9,10 +9,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.metadata.constants.BridgeDBConstants;
+import org.bridgedb.metadata.constants.RdfConstants;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
+import org.openrdf.model.Value;
 
 /**
  *
@@ -143,9 +148,103 @@ public class DataSourceRdf extends RdfBase  {
         writer.write(" \"");
         writer.write(dataSource.getFullName());
         writer.write("\".");
-        writer.newLine();
-                
+        writer.newLine();                
     }
 
- 
+    public static DataSource readRdf(Resource dataSourceId, Set<Statement> dataSourceStatements) throws BridgeDBException{
+        String fullName = null;
+        String idExample = null;
+        String mainUrl = null;
+        Object organism = null;
+        String primary = null;
+        String systemCode = null;
+        String type = null;
+        String urlPattern = null;
+        String urnBase = null;
+        String identifiersOrgBase = null;
+        String wikipathwaysBase = null;
+        String bio2RDFPattern = null;
+        String sourceRDFURIPattern = null;
+        
+        for (Statement statement:dataSourceStatements){
+            if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
+                //Ignore the type statement
+            } else if (statement.getPredicate().equals(BridgeDBConstants.FULL_NAME_URI)){
+                fullName = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.ID_EXAMPLE_URI)){
+                idExample = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.MAIN_URL_URI)){
+                mainUrl = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.ORGANISM_URI)){
+                Value organismId = statement.getObject();
+                Object Organism = OrganismRdf.byRdfResource(organismId);
+            } else if (statement.getPredicate().equals(BridgeDBConstants.PRIMAY_URI)){
+                primary = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.SYSTEM_CODE_URI)){
+                systemCode = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.TYPE_URI)){
+                type = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.URL_PATTERN_URI)){
+                urlPattern = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.URN_BASE_URI)){
+                urnBase = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI)){
+                identifiersOrgBase = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.WIKIPATHWAYS_BASE_URI)){
+                wikipathwaysBase = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.SOURCE_RDF_URI)){
+                sourceRDFURIPattern = statement.getObject().stringValue();
+            } else if (statement.getPredicate().equals(BridgeDBConstants.BIO2RDF_URI)){
+                bio2RDFPattern = statement.getObject().stringValue();
+            } else {
+                throw new BridgeDBException ("Unexpected Statement " + statement);
+            }
+        }
+        DataSource.Builder builder = DataSource.register(systemCode, fullName);
+        if (mainUrl != null) {
+            builder.mainUrl(mainUrl);
+        }
+        if (urlPattern != null) {
+            builder.urlPattern(urlPattern);
+        }
+        if (idExample != null) {
+            builder.idExample(idExample);
+        }
+        if (type != null) {
+            builder.type(type);
+        }
+        if (organism != null) {
+            builder.organism(organism);
+        }					      
+        if (primary != null) {
+            builder.primary (Boolean.parseBoolean(primary));
+        }					      
+        if (urnBase != null) {
+            builder.urnBase(urnBase);
+        }
+        DataSource dataSource = builder.asDataSource();
+        registerUriPattern(dataSource, urlPattern, UriMappingRelationship.DATA_SOURCE_URL_PATTERN);
+        registerNameSpace(dataSource, identifiersOrgBase, UriMappingRelationship.IDENTIFERS_ORG);
+        registerNameSpace(dataSource, wikipathwaysBase, UriMappingRelationship.WIKIPATHWAYS);
+        registerUriPattern(dataSource, sourceRDFURIPattern, UriMappingRelationship.SOURCE_RDF);
+        registerUriPattern(dataSource, bio2RDFPattern, UriMappingRelationship.BIO2RDF_URI);
+        return dataSource;
+    }
+
+     private static void registerUriPattern(DataSource dataSource, String urlPattern, UriMappingRelationship uriMappingRelationship) throws BridgeDBException {
+        if (urlPattern == null || urlPattern.isEmpty()) {
+            return;
+        }
+        UriPattern pattern = UriPattern.byUrlPattern(urlPattern);
+        UriMapping.addMapping(dataSource, pattern, uriMappingRelationship);
+    }
+
+    private static void registerNameSpace(DataSource dataSource, String nameSpace, UriMappingRelationship uriMappingRelationship) throws BridgeDBException {
+        if (nameSpace == null || nameSpace.isEmpty()) {
+            return;
+        }
+        UriPattern pattern = UriPattern.byNameSpace(nameSpace);
+        UriMapping.addMapping(dataSource, pattern, uriMappingRelationship);
+    }
+
 }
