@@ -29,12 +29,10 @@ public class DataSourceExporter extends RdfBase {
 
     private HashSet<Organism> organisms;
     private BufferedWriter writer;
-    private HashMap<String,String> mappings;
     static final Logger logger = Logger.getLogger(DataSourceExporter.class);
     
     private DataSourceExporter(BufferedWriter buffer){
         organisms = new HashSet<Organism>();
-        mappings = AndraIndetifiersOrg.getAndraMappings();
         writer = buffer;
     }
     
@@ -42,7 +40,6 @@ public class DataSourceExporter extends RdfBase {
         ConfigReader.logToConsole();
         BioDataSource.init();
         UriMapping.init();
-        AndraIndetifiersOrg.init();
         UriMapping.showSharedUriPatterns();
         File file = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
         logger.info("Exporting DataSources to "+ file.getAbsolutePath());
@@ -118,25 +115,8 @@ public class DataSourceExporter extends RdfBase {
     }
     
     public int compare(DataSource ds1, DataSource ds2) {
-        String id1 = mappings.get(ds1.getFullName());
-        if (id1 == null){
-            String urnPattern = ds1.getURN("");
-            if (urnPattern.length() >= 11){
-                id1 = "http://identifiers.org/" + urnPattern.substring(11, urnPattern.length()-1) + "/";
-            }
-        }
-        String id2 = mappings.get(ds2.getFullName());
-        if (id2 == null){
-            String urnPattern = ds2.getURN("");
-            if (urnPattern.length() >= 11){
-                id2 = "http://identifiers.org/" + urnPattern.substring(11, urnPattern.length()-1) + "/";
-            }
-        }
-        if (compare(id1, id2) != 0){
-            return compare(id1, id2);
-        }
-        id1 = ds1.getUrl("$id");
-        id2 = ds2.getUrl("$id");
+        String id1 = ds1.getUrl("$id");
+        String id2 = ds2.getUrl("$id");
         if (compare(id1, id2) != 0){
             return compare(id1, id2);
         }

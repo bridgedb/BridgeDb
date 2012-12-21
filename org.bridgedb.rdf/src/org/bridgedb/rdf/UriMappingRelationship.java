@@ -22,12 +22,10 @@ public enum UriMappingRelationship {
 
     static UriMappingRelationship byRdfResource(Value relationshipId) throws BridgeDBException {
         for (UriMappingRelationship relationship: values()){
-            System.out.println(relationship.uri);
             if (relationship.uri.equals(relationshipId)){
                 return relationship;
             }
         }
-        System.out.println("£" + relationshipId);
         throw new BridgeDBException("No UriMappingRelationship knoown with id " + relationshipId);
     }
     
