@@ -451,7 +451,7 @@ public final class DataSource
         //This blokc is the new version 2.0 way of registeringf
         DataSource byName = byFullName.get(fullName);
         DataSource byCode = bySysCode.get(sysCode);
-        
+       
         if (byName == null){
             if (byCode == null){
     			current = new DataSource (sysCode, fullName);
@@ -646,7 +646,11 @@ public final class DataSource
 	 */
 	public String toString()
 	{
-		return sysCode + ":" + fullName;
+        if (alternativeFullNames.isEmpty()){
+            return sysCode + ":" + fullName;
+        } else {
+            return sysCode + ":" + fullName + " " + alternativeFullNames;      
+        }    
 	}
 	
 	/**
