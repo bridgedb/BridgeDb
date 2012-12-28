@@ -27,46 +27,69 @@ public class UriMapping {
     private final DataSource dataSource;
     private final UriPattern uriPattern;
     private final Set<UriMappingRelationship> relationships;
-    
-    private static HashMap<DataSource,HashMap<UriPattern, UriMapping>> byDataSource = 
-            new HashMap<DataSource,HashMap<UriPattern, UriMapping>>();
-    private static HashMap<UriPattern,HashMap<DataSource, UriMapping>> byUriPattern = 
-            new HashMap<UriPattern,HashMap<DataSource, UriMapping>>();
+            
+    private static HashMap<DataSource, HashSet<UriMapping>> byDataSource = 
+            new HashMap<DataSource, HashSet<UriMapping>>();
+    private static HashMap<UriPattern, HashSet<UriMapping>> byUriPattern = 
+            new HashMap<UriPattern, HashSet<UriMapping>>();
     
     private UriMapping(DataSource dataSource, UriPattern uriPattern) {
         this.dataSource = dataSource;
         this.uriPattern = uriPattern;
         this.relationships = new HashSet<UriMappingRelationship>();
-        HashMap<UriPattern, UriMapping> mappings1 = byDataSource.get(dataSource);
-        if (mappings1 == null){
-            mappings1 = new HashMap<UriPattern, UriMapping>();
+        HashSet<UriMapping> mappings = byDataSource.get(dataSource);
+        if (mappings == null){
+            mappings = new HashSet<UriMapping>();
         }
-        mappings1.put(uriPattern, this);
-        byDataSource.put(dataSource, mappings1);
-        HashMap<DataSource, UriMapping> mappings2 = byUriPattern.get(uriPattern);
-        if (mappings2 == null){
-            mappings2 = new HashMap<DataSource, UriMapping>();
+        mappings.add(this);
+        byDataSource.put(dataSource, mappings);
+        mappings = byUriPattern.get(uriPattern);
+        if (mappings == null){
+            mappings = new HashSet<UriMapping>();
         }
-        mappings2.put(dataSource, this);
-        byUriPattern.put(uriPattern, mappings2);
+        mappings.add(this);
+        byUriPattern.put(uriPattern, mappings);
     }
 
-    public static UriMapping addMapping(DataSource dataSource, UriPattern uriPattern, UriMappingRelationship uriMappingRelationship) {
+    public static UriMapping addMapping(DataSource dataSource, UriPattern uriPattern, 
+            UriMappingRelationship uriMappingRelationship) throws BridgeDBException {
         UriMapping mapping = getMapping(dataSource, uriPattern);
         mapping.addRelationship(uriMappingRelationship);
         return mapping;
     }
     
-    //TODO safety checks and add to DataSource UrlPattern, and urnBase
-    private void addRelationship(UriMappingRelationship relationship) {
+    private void addRelationship(UriMappingRelationship relationship) throws BridgeDBException {
+        if (!relationship.multiplesUriPatternsAllowed()){
+            HashSet<UriMapping> mappings = byDataSource.get(dataSource);
+            for (UriMapping mapping:mappings){
+                for (UriMappingRelationship exisitingRelationship:mapping.relationships){
+                    if (exisitingRelationship == relationship){
+                        if (mapping.uriPattern == this.uriPattern){
+                            return; //already a known relationship so stop checking
+                        } else {
+                            System.out.println(mapping);
+                            System.out.println(this);
+                            throw new BridgeDBException("Relationship " + relationship + " already exists for "
+                                    + dataSource + " as " + mapping.uriPattern 
+                                    + " which is not the same as " + this.uriPattern);
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(dataSource + " -> " + uriPattern + " " + relationship);
         relationships.add(relationship);
     }
     
     private static UriMapping getMapping(DataSource dataSource, UriPattern uriPattern) {
-        HashMap<UriPattern, UriMapping> mappings = byDataSource.get(dataSource);
+        HashSet<UriMapping> mappings = byDataSource.get(dataSource);
         UriMapping result = null;
         if (mappings != null){
-            result = mappings.get(uriPattern);
+            for (UriMapping mapping:mappings){
+                if (mapping.uriPattern.equals(uriPattern)){
+                    result = mapping;
+                }
+            }
         }
         if (result == null){
             result = new UriMapping(dataSource, uriPattern);
@@ -76,8 +99,8 @@ public class UriMapping {
 
     public static Set<UriMapping> getAllUriMappings(){
         Set<UriMapping> results = new HashSet<UriMapping>();
-        for (HashMap<UriPattern, UriMapping> batch: byDataSource.values()){
-            results.addAll(batch.values());
+        for (HashSet<UriMapping> batch: byDataSource.values()){
+            results.addAll(batch);
         }
         return results;
     }
@@ -85,6 +108,7 @@ public class UriMapping {
     public static void init() throws BridgeDBException{
         Set<DataSource> dataSources = DataSource.getDataSources();
         for (DataSource dataSource:dataSources){
+            System.out.println(dataSource);
             String url = dataSource.getUrl("$id");
             if (url.length() > 3){
                 UriPattern uriPattern = UriPattern.byUrlPattern(url);
@@ -96,12 +120,11 @@ public class UriMapping {
 
     public static void showSharedUriPatterns(){
         for (UriPattern pattern: byUriPattern.keySet()){
-            HashMap<DataSource, UriMapping> mappings = byUriPattern.get(pattern);
-            if (mappings != null && mappings.size() > 1){
+            HashSet<UriMapping> mappings = byUriPattern.get(pattern);
+            if (mappings.size() > 1){
                 System.out.println(pattern.getUriPattern());
-                for (DataSource dataSource:mappings.keySet()){
-                    System.out.println ("   " + dataSource + " " + mappings.get(dataSource).relationships);
-                    System.out.println ("       " + DataSourcePatterns.getPatterns().get(dataSource));
+                for (UriMapping mapping:mappings){
+                    System.out.println (mapping);
                 }
             }
         }
@@ -206,7 +229,16 @@ public class UriMapping {
                 System.out.println(identifiersOrgUri);
                 UriPattern pattern = UriPattern.byUrlPattern(identifiersOrgUri);
                 UriMapping.addMapping(dataSource, pattern, UriMappingRelationship.IDENTIFERS_ORG);
-            }   
+            }
         }
+    }
+    
+    private void findWikiPathwaysMapping(){
+        
+//        sourceRDFURI -> bio2RDF -> urlPattern
+    }
+    
+    public String toString(){
+        return dataSource + " -> " + uriPattern + " as " + relationships;
     }
 }
