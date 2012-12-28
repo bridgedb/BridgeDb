@@ -110,7 +110,7 @@ public class DataSourceTest {
     @Test
     public void testSetUrnBase() throws IDMapperException{
         String fullName = "TestUrnBase";
-        String nameSpace = "http://identifiers.org/" + fullName;
+        String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source = DataSource.register(fullName,  fullName)
                 .urnBase(urnBase)
@@ -120,7 +120,7 @@ public class DataSourceTest {
         String expected = urnBase + ":" + id;
         Assert.assertEquals(result, expected);
         result = source.getIdentifiersOrgUri(id);
-        expected = nameSpace + "/" + id;
+        expected = rootURL + "/" + id;
         Assert.assertEquals(result, expected);        
     }
 
@@ -128,7 +128,7 @@ public class DataSourceTest {
     public void testSetUrnShortFirst() throws IDMapperException{
         String shortBase = "shortBase";
         String fullName = "TestUrnBase1";
-        String nameSpace = "http://identifiers.org/" + fullName;
+        String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source1 = DataSource.register(fullName,  fullName)
                 .urnBase(shortBase)
@@ -142,7 +142,7 @@ public class DataSourceTest {
         String expected = urnBase + ":" + id;
         Assert.assertEquals(result, expected);
         result = source2.getIdentifiersOrgUri(id);
-        expected = nameSpace + "/" + id;
+        expected = rootURL + "/" + id;
         Assert.assertEquals(expected, result);        
     }
 
@@ -150,7 +150,7 @@ public class DataSourceTest {
     public void testSetUrnLongFirst() throws IDMapperException{
         String shortBase = "shortBase";
         String fullName = "TestUrnBase2";
-        String nameSpace = "http://identifiers.org/" + fullName;
+        String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source2 = DataSource.register(fullName,  fullName)
                 .urnBase(urnBase)
@@ -164,7 +164,7 @@ public class DataSourceTest {
         String expected = urnBase + ":" + id;
         Assert.assertEquals(expected, result);        
         result = source2.getIdentifiersOrgUri(id);
-        expected = nameSpace + "/" + id;
+        expected = rootURL + "/" + id;
         Assert.assertEquals(expected, result);        
     }
 
@@ -184,27 +184,44 @@ public class DataSourceTest {
     @Test
     public void testSetIdentifiersOrgUri() throws IDMapperException{
         String fullName = "TestIdentifiersOrgUri";
-        String nameSpace = "http://identifiers.org/" + fullName;
+        String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(nameSpace)
+                .identifiersOrgUri(rootURL)
                 .asDataSource();
         String id = "1234";
         String result = source.getURN(id);
         String expected = urnBase + ":" + id;
         Assert.assertEquals(expected, result);        
         result = source.getIdentifiersOrgUri(id);
-        expected = nameSpace + "/" + id;
+        expected = rootURL + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test
+    public void testSetIdentifiersOrgUri2() throws IDMapperException{
+        String fullName = "TestIdentifiersOrgUri2";
+        String rootURL = "http://identifiers.org/" + fullName;
+        String urnBase = "urn:miriam:" + fullName;
+		DataSource source = DataSource.register(fullName, fullName)
+                .identifiersOrgUri(rootURL + "/")
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = urnBase + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        expected = rootURL + "/" + id;
         Assert.assertEquals(expected, result);        
     }
 
     @Test
     public void testSetBoth() throws IDMapperException{
         String fullName = "TestIdentifiersOrgUri2";
-        String nameSpace = "http://identifiers.org/" + fullName;
+        String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source1 = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(nameSpace)
+                .identifiersOrgUri(rootURL)
                 .asDataSource();
 		DataSource source2 = DataSource.register(fullName, fullName)
                 .urnBase(urnBase)
@@ -215,17 +232,17 @@ public class DataSourceTest {
         String expected = urnBase + ":" + id;
         Assert.assertEquals(expected, result);        
         result = source2.getIdentifiersOrgUri(id);
-        expected = nameSpace + "/" + id;
+        expected = rootURL + "/" + id;
         Assert.assertEquals(expected, result);        
     }
 
     @Test (expected = IllegalStateException.class)   
     public void testSetDifferentUrnBaseToUrn() throws IDMapperException{
         String fullName = "TestDifferentUrnBaseToUrn";
-        String nameSpace = "http://identifiers.org/" + fullName + "A";
+        String rootURL = "http://identifiers.org/" + fullName + "A";
         String urnBase = "urn:miriam:" + fullName + "B";
 		DataSource source1 = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(nameSpace)
+                .identifiersOrgUri(rootURL)
                 .asDataSource();
 		DataSource source2 = DataSource.register(fullName, fullName)
                 .urnBase(urnBase)
@@ -235,13 +252,13 @@ public class DataSourceTest {
     @Test (expected = IDMapperException.class)   
     public void testSetDifferentUrnBaseToUrn2() throws IDMapperException{
         String fullName = "TestDifferentUrnBaseToUrn2";
-        String nameSpace = "http://identifiers.org/" + fullName + "A";
+        String rootURL = "http://identifiers.org/" + fullName + "A";
         String urnBase = "urn:miriam:" + fullName + "B";
 		DataSource source2 = DataSource.register(fullName, fullName)
                 .urnBase(urnBase)
                 .asDataSource();
 		DataSource source1 = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(nameSpace)
+                .identifiersOrgUri(rootURL)
                 .asDataSource();
     }
     
