@@ -82,7 +82,7 @@ public class DataSourceExporter extends RdfBase {
         writer.write("@prefix : <> .");
         writer.newLine();
         writer.write("@prefix ");
-        writer.write(BridgeDBConstants.PREFIX_NAME1);        
+        writer.write(BridgeDBConstants.PREFIX_NAME);        
         writer.write(" <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .");
         writer.newLine();
         writer.write("@prefix ");
