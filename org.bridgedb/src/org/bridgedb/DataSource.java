@@ -222,16 +222,11 @@ public final class DataSource
      * @throws IDMapperException is the id can not be safely URL encoded
      * @since 2.0.0
 	 */
-    public String getIdentifiersOrgUri(String id) throws IDMapperException{
+    public String getIdentifiersOrgUri(String id) {
         if (miriamBase.isEmpty()){
             return null;
         }
-		try
-		{
-    		return "http://identifiers.org/" + miriamBase + "/" + URLEncoder.encode(id, "UTF-8");
-		} catch (UnsupportedEncodingException ex) { 
-            throw new IDMapperException("Unable to Encode id " + id, ex);
-        }
+        return "http://identifiers.org/" + miriamBase + "/" + id;
 	}
 
     /**

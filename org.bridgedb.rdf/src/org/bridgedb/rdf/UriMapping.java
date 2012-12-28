@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
@@ -111,7 +112,8 @@ public class UriMapping {
         return ":" + BridgeDBConstants.URI_MAPPING + "_" + name;
     }
 
-    public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
+    public static void writeAllAsRDF(BufferedWriter writer) throws IOException, BridgeDBException {
+        loadMappingsFromDataSources();
         for (UriMapping mapping:getAllUriMappings()){
             mapping.writeAsRDF(writer);
         }
@@ -192,4 +194,19 @@ public class UriMapping {
         return uriPattern;
     }
 
+    private static void loadMappingsFromDataSources() throws BridgeDBException {
+        for (DataSource dataSource:DataSource.getDataSources()){
+            String urlPattern = dataSource.getUrl("$id");
+            if (urlPattern.length() > 3){
+                UriPattern pattern = UriPattern.byUrlPattern(urlPattern);
+                UriMapping.addMapping(dataSource, pattern, UriMappingRelationship.DATA_SOURCE_URL_PATTERN);
+            }
+            String identifiersOrgUri = dataSource.getIdentifiersOrgUri("$id");
+            if (identifiersOrgUri != null){
+                System.out.println(identifiersOrgUri);
+                UriPattern pattern = UriPattern.byUrlPattern(identifiersOrgUri);
+                UriMapping.addMapping(dataSource, pattern, UriMappingRelationship.IDENTIFERS_ORG);
+            }   
+        }
+    }
 }
