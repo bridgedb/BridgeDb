@@ -28,6 +28,10 @@ public class BridgeDBConstants {
     public static final URI URI_PATTERN_URI = new URIImpl(PREFIX + URI_PATTERN);
 
     //DataSource fields
+    private static final String ALTERNATIVE_FULL_NAME = "alternativeFullName";
+    public static final String ALTERNATIVE_FULL_NAME_SHORT = PREFIX_NAME + ALTERNATIVE_FULL_NAME;
+    public static final URI ALTERNATIVE_FULL_NAME_URI = new URIImpl(PREFIX + ALTERNATIVE_FULL_NAME);
+
     private static final String FULL_NAME = "fullName";
     public static final String FULL_NAME_SHORT = PREFIX_NAME + FULL_NAME;
     public static final URI FULL_NAME_URI = new URIImpl(PREFIX + FULL_NAME);
@@ -97,7 +101,7 @@ public class BridgeDBConstants {
     public static final String WIKIPATHWAYS_PATTERN_SHORT = PREFIX_NAME + WIKIPATHWAYS_PATTERN;
     public static final URI WIKIPATHWAYS_PATTERN_URI = new URIImpl(PREFIX + WIKIPATHWAYS_PATTERN);
     
-    private static final String SOURCE_RDF_PATTERN = "SourceRdfPattern";
+    private static final String SOURCE_RDF_PATTERN = "sourceRdfPattern";
     public static final String SOURCE_RDF_PATTERN_SHORT = PREFIX_NAME + SOURCE_RDF_PATTERN;
     public static final URI SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + SOURCE_RDF_PATTERN);
     

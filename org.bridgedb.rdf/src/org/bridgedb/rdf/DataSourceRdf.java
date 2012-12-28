@@ -7,6 +7,7 @@ package org.bridgedb.rdf;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
@@ -182,10 +183,13 @@ public class DataSourceRdf extends RdfBase  {
         String wikipathwaysBase = null;
         String bio2RDFPattern = null;
         String sourceRDFURIPattern = null;
+        HashSet<String> alternativeFullNames = new HashSet<String>();
         
         for (Statement statement:dataSourceStatements){
             if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
                 //Ignore the type statement
+            } else if (statement.getPredicate().equals(BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI)){
+                alternativeFullNames.add(statement.getObject().stringValue());
             } else if (statement.getPredicate().equals(BridgeDBConstants.FULL_NAME_URI)){
                 fullName = statement.getObject().stringValue();
             } else if (statement.getPredicate().equals(BridgeDBConstants.ID_EXAMPLE_URI)){
@@ -218,6 +222,9 @@ public class DataSourceRdf extends RdfBase  {
             }
         }
         DataSource.Builder builder = DataSource.register(systemCode, fullName);
+        for (String alternativeFullName:alternativeFullNames){
+            builder.alternativeFullName(alternativeFullName);
+        }
         if (mainUrl != null) {
             builder.mainUrl(mainUrl);
         }
