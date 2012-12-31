@@ -67,8 +67,6 @@ public class UriMapping {
                         if (mapping.uriPattern == this.uriPattern){
                             return; //already a known relationship so stop checking
                         } else {
-                            System.out.println(mapping);
-                            System.out.println(this);
                             throw new BridgeDBException("Relationship " + relationship + " already exists for "
                                     + dataSource + " as " + mapping.uriPattern 
                                     + " which is not the same as " + this.uriPattern);
@@ -77,7 +75,6 @@ public class UriMapping {
                 }
             }
         }
-        System.out.println(dataSource + " -> " + uriPattern + " " + relationship);
         relationships.add(relationship);
     }
     
@@ -108,7 +105,6 @@ public class UriMapping {
     public static void init() throws BridgeDBException{
         Set<DataSource> dataSources = DataSource.getDataSources();
         for (DataSource dataSource:dataSources){
-            System.out.println(dataSource);
             String url = dataSource.getUrl("$id");
             if (url.length() > 3){
                 UriPattern uriPattern = UriPattern.byUrlPattern(url);
@@ -174,7 +170,6 @@ public class UriMapping {
     }
 
     static UriMapping readRdf(Resource mappingId, Set<Statement> uriMappingStatements) throws BridgeDBException {
-        System.out.println(mappingId);
         Value uriPatternId = null;
         Value dataSourceId = null;
         HashSet<Value> relationshipIds = new HashSet<Value>();
@@ -226,7 +221,6 @@ public class UriMapping {
             }
             String identifiersOrgUri = dataSource.getIdentifiersOrgUri("$id");
             if (identifiersOrgUri != null){
-                System.out.println(identifiersOrgUri);
                 UriPattern pattern = UriPattern.byUrlPattern(identifiersOrgUri);
                 UriMapping.addMapping(dataSource, pattern, UriMappingRelationship.IDENTIFERS_ORG);
             }

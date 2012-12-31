@@ -101,8 +101,6 @@ public class UriPattern extends RdfBase {
         String shortName = convertToShortName(uriPatternId);
         UriPattern result =  register.get(shortName);
         if (result == null){
-            System.out.println(register);
-            System.out.println(uriPatternId);
             throw new BridgeDBException("No UriPattern known for Id " + uriPatternId + " / " + shortName);
         }
         return result;
