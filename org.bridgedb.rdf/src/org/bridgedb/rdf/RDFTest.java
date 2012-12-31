@@ -52,10 +52,18 @@ public class RDFTest {
         //}
         DataSourceRdf.readAllDataSources(con);
         UriPattern.readAllUriPatterns(con);
-        writeRDF(con);
         con.close();
+        save();
     }
 
+    private static void save() throws RepositoryException, IOException, RDFHandlerException{
+        Repository myRepository = new SailRepository(new MemoryStore());
+        myRepository.initialize();
+        RepositoryConnection con = myRepository.getConnection();
+        DataSourceRdf.addAll(con);
+        writeRDF(con);        
+    }
+    
     private static void writeRDF(RepositoryConnection repositoryConnection) throws IOException, RDFHandlerException, RepositoryException{
         File file = new File ("c:/temp/writertest.ttl");
         Writer writer = new FileWriter (file);
@@ -66,9 +74,8 @@ public class RDFTest {
     
     private static void writeRDF(RepositoryConnection repositoryConnection, RDFWriter rdfWriter) 
             throws IOException, RDFHandlerException, RepositoryException{ 
-        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME, BridgeDBConstants.PREFIX);
+        rdfWriter.handleNamespace(BridgeDBConstants.PREFIX_NAME1, BridgeDBConstants.PREFIX);
         rdfWriter.handleNamespace("", DEFAULT_BASE_URI);
-        rdfWriter.handleNamespace("junk", "JUNK");
         rdfWriter.startRDF();
         RepositoryResult<Statement> statements = 
                 repositoryConnection.getStatements(null, null, null, true);

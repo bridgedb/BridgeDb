@@ -14,10 +14,14 @@ import org.bridgedb.bio.Organism;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.BooleanLiteralImpl;
+import org.openrdf.model.impl.LiteralImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
@@ -35,9 +39,13 @@ public class DataSourceRdf extends RdfBase  {
     }
     
     public static String getRdfId(DataSource dataSource) {
-        return ":" + BridgeDBConstants.DATA_SOURCE + "_" + getRdfLabel(dataSource);
+        return ":" + BridgeDBConstants.DATA_SOURCE_LABEL + "_" + getRdfLabel(dataSource);
     }
 
+    public static URI getResourceId(DataSource dataSource) {
+        return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_" + getRdfLabel(dataSource));
+    }
+    
     static DataSource byRdfResource(Value dataSourceId) throws BridgeDBException {
         String shortName = convertToShortName(dataSourceId);
         DataSource result = register.get(shortName);
@@ -53,6 +61,62 @@ public class DataSourceRdf extends RdfBase  {
             throw new BridgeDBException("No DataSource known for Id " + dataSourceId + " / " + shortName);
         }
         return result;
+    }
+
+    public static void addAll(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
+        for (DataSource dataSource:DataSource.getDataSources()){
+            add(repositoryConnection, dataSource); 
+        }
+    }
+
+    public static void add(RepositoryConnection repositoryConnection, DataSource dataSource) throws IOException, RepositoryException {
+        URI id = getResourceId(dataSource);
+        repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.DATA_SOURCE_URI);         
+        repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, new LiteralImpl(dataSource.getFullName()));
+
+        if (dataSource.getSystemCode() != null && (!dataSource.getSystemCode().trim().isEmpty())){
+            repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(dataSource.getSystemCode()));
+        }
+
+        //Alternative names
+        
+        if (dataSource.getMainUrl() != null){
+            repositoryConnection.add(id, BridgeDBConstants.MAIN_URL_URI, new LiteralImpl(dataSource.getMainUrl()));
+        }
+
+        if (dataSource.getExample() != null && dataSource.getExample().getId() != null){
+            repositoryConnection.add(id, BridgeDBConstants.ID_EXAMPLE_URI, new LiteralImpl(dataSource.getExample().getId()));
+        }
+
+        if (dataSource.isPrimary()){
+            repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.TRUE);
+        } else {
+            repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.FALSE);
+        }
+ 
+        if (dataSource.getType() != null){
+            repositoryConnection.add(id, BridgeDBConstants.TYPE_URI, new LiteralImpl(dataSource.getType()));
+        }
+
+        if (!VERSION2){
+            String urlPattern = dataSource.getUrl("$id");
+            if (urlPattern.length() > 3){
+                repositoryConnection.add(id, BridgeDBConstants.URL_PATTERN_URI, new LiteralImpl(urlPattern));
+            }
+        }
+
+        if (!VERSION2){
+            String urnPattern = dataSource.getURN("");
+            if (urnPattern.length() > 1){
+                repositoryConnection.add(id, BridgeDBConstants.URN_BASE_URI, 
+                        new LiteralImpl(urnPattern.substring(0, urnPattern.length()-1)));
+            }
+        }
+
+        if (dataSource.getOrganism() != null){
+            Organism organism = (Organism)dataSource.getOrganism();
+            repositoryConnection.add(id, BridgeDBConstants.ORGANISM_URI, OrganismRdf.getResourceId(organism));
+        }
     }
 
     public static void writeAllAsRDF(BufferedWriter writer) throws IOException {

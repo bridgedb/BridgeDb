@@ -14,12 +14,14 @@ import org.openrdf.model.impl.URIImpl;
 public class BridgeDBConstants {
 
     public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#";
+    public static final String PREFIX_NAME1 = "bridgeDB";
     public static final String PREFIX_NAME = "bridgeDB:";
 
     //Types
-    public static final String DATA_SOURCE = "DataSource";
-    public static final String DATA_SOURCE_SHORT = PREFIX_NAME + DATA_SOURCE;
-    public static final URI DATA_SOURCE_URI = new URIImpl(PREFIX + DATA_SOURCE);
+    public static final String DATA_SOURCE_LABEL = "DataSource";
+    public static final String DATA_SOURCE_SHORT = PREFIX_NAME + DATA_SOURCE_LABEL;
+    public static final String DATA_SOURCE1 = PREFIX + DATA_SOURCE_LABEL;
+    public static final URI DATA_SOURCE_URI = new URIImpl(PREFIX + DATA_SOURCE_LABEL);
     public static final String URI_MAPPING = "uriMapping";
     public static final String URI_MAPPING_SHORT = PREFIX_NAME + URI_MAPPING;
     public static final URI URI_MAPPING_URI = new URIImpl(PREFIX + URI_MAPPING);
@@ -41,9 +43,10 @@ public class BridgeDBConstants {
     private static final String MAIN_URL = "mainUrl";
     public static final String MAIN_URL_SHORT = PREFIX_NAME + MAIN_URL;
     public static final URI MAIN_URL_URI = new URIImpl(PREFIX + MAIN_URL);
-    public static final String ORGANISM = "Organism";
-    public static final String ORGANISM_SHORT = PREFIX_NAME + ORGANISM;
-    public static final URI ORGANISM_URI = new URIImpl(PREFIX + ORGANISM);
+    public static final String ORGANISM_LABEL = "Organism";
+    public static final String ORGANISM_SHORT = PREFIX_NAME + ORGANISM_LABEL;
+    public static final String ORGANISM1 = PREFIX + ORGANISM_LABEL;
+    public static final URI ORGANISM_URI = new URIImpl(ORGANISM1);
     private static final String PRIMAY = "primary";
     public static final String PRIMAY_SHORT = PREFIX_NAME + PRIMAY;
     public static final URI PRIMAY_URI = new URIImpl(PREFIX + PRIMAY);

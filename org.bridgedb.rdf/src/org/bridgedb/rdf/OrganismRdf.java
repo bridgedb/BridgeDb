@@ -13,6 +13,7 @@ import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
 
@@ -44,9 +45,13 @@ public class OrganismRdf extends RdfBase{
     }
     
     public static final String getRdfId(Organism organism) {
-        return ":" + BridgeDBConstants.ORGANISM + "_" + getRdfLabel(organism);
+        return ":" + BridgeDBConstants.ORGANISM_LABEL + "_" + getRdfLabel(organism);
     }
 
+    public static final URI getResourceId(Organism organism){
+        return new URIImpl(BridgeDBConstants.ORGANISM1);
+    }
+    
     public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
         writer.write("#WARNING: Organism are hard coded into BridgeDB.");
         writer.newLine();
