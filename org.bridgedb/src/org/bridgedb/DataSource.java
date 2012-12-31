@@ -773,6 +773,10 @@ public final class DataSource
      * @throws IDMapperException If a different base is set
      */
     private void setNonMarianBase(String base) throws IDMapperException{
+        if (base.equalsIgnoreCase("null")){
+            System.err.println("Ignoring attempt to set miriam urnBase to null for " + this);
+            return;
+        }
         if (urnBase != "" && !urnBase.equals(base)){
             if (miriamBase.isEmpty()){
                 throw new IDMapperException("Illegal attempt to change (none Miram) urnBase for " + this 
