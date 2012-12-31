@@ -6,20 +6,20 @@ package org.bridgedb.rdf;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
+import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
-import org.openrdf.model.impl.URIImpl;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.RepositoryResult;
 
 /**
  *
@@ -29,7 +29,8 @@ public class UriPattern extends RdfBase {
 
     private final String nameSpace;
     private final String postfix;
-
+    private DataSource dataSource;
+    
     private static HashMap<String, UriPattern> register = new HashMap<String, UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
     private static HashMap<String,HashMap<String,UriPattern>> byNameSpaceAndPostFix = 
@@ -106,6 +107,14 @@ public class UriPattern extends RdfBase {
         return result;
     }
 
+    public void setDataSource(DataSource dataSource){
+        this.dataSource = dataSource;
+    }
+    
+    public DataSource getDataSource(){
+        return dataSource;
+    }
+    
     public final String getRdfLabel(){
         if (postfix == null){
             return DataSourceExporter.scrub(nameSpace);
@@ -148,6 +157,45 @@ public class UriPattern extends RdfBase {
         writer.newLine();
     }
     
+    public static void readAllUriPatterns(RepositoryConnection repositoryConnection) throws BridgeDBException, RepositoryException{
+        RepositoryResult<Statement> statements = 
+                repositoryConnection.getStatements(null, RdfConstants.TYPE_URI, BridgeDBConstants.URL_PATTERN_URI, true);
+        while (statements.hasNext()) {
+            Statement statement = statements.next();
+            UriPattern pattern = readUriPattern(repositoryConnection, statement.getSubject());
+        }
+    }
+
+    public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource id) 
+            throws BridgeDBException, RepositoryException{
+        String uriSpace = getSingletonString(repositoryConnection, id, VoidConstants.URI_SPACE_URI);
+        String postfix = getPossibleSingletonString(repositoryConnection, id, BridgeDBConstants.POSTFIX_URI);
+        UriPattern pattern;
+        if (postfix == null){
+            pattern = UriPattern.byNameSpace(uriSpace);
+        } else {
+            pattern = UriPattern.byNameSpaceAndPostFix(uriSpace, postfix);
+        }
+        RepositoryResult<Statement> statements = 
+                repositoryConnection.getStatements(id, null, null, true);
+        while (statements.hasNext()) {
+            Statement statement = statements.next();
+            pattern.processStatement(statement);
+        }
+        return pattern;
+    }
+
+    //Currently just checks for unexpected statements
+    private void processStatement(Statement statement) throws BridgeDBException{
+        if (statement.getPredicate().equals(BridgeDBConstants.POSTFIX_URI)){
+            //Do nothing as already have the postfix
+        } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
+            //Do nothing as laready have the uri space
+        } else  {
+             throw new BridgeDBException ("Unexpected Statement " + statement);
+       }
+    }
+
     public static UriPattern readRdf(Resource patternId, Set<Statement> uriPatternStatements) throws BridgeDBException {
         String nameSpace = null;
         String postfix = null;

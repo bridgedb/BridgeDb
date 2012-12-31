@@ -329,7 +329,7 @@ public class DataSourceRdf extends RdfBase  {
         return dataSource;
     }
 
-     private static void registerUriPattern(DataSource dataSource, String urlPattern, UriMappingRelationship uriMappingRelationship) throws BridgeDBException {
+    private static void registerUriPattern(DataSource dataSource, String urlPattern, UriMappingRelationship uriMappingRelationship) throws BridgeDBException {
         if (urlPattern == null || urlPattern.isEmpty()) {
             return;
         }
@@ -343,31 +343,6 @@ public class DataSourceRdf extends RdfBase  {
         }
         UriPattern pattern = UriPattern.byNameSpace(nameSpace);
         UriMapping.addMapping(dataSource, pattern, uriMappingRelationship);
-    }
-
-    private static String getSingletonString(RepositoryConnection repositoryConnection, Resource id, URI predicate) 
-            throws BridgeDBException, RepositoryException {
-        String result = getPossibleSingletonString(repositoryConnection, id, predicate);
-        if (result == null){
-            throw new BridgeDBException("No statement found with resource " + id + " and predicate " + predicate);
-        }
-        return result;
-    }
-
-    private static String getPossibleSingletonString(RepositoryConnection repositoryConnection, Resource id, 
-            URI predicate) throws RepositoryException, BridgeDBException {
-        RepositoryResult<Statement> statements = 
-                repositoryConnection.getStatements(id, predicate, null, true);
-        if (statements.hasNext()) {
-            Statement statement = statements.next();
-            String result = statement.getObject().stringValue();
-            if (statements.hasNext()) {
-                throw new BridgeDBException("Found more than one statement with resource " + id 
-                        + " and predicate " + predicate);
-            }      
-            return result;
-        }
-        return null;
     }
 
 }
