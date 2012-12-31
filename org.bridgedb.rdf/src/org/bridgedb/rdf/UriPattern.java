@@ -33,7 +33,7 @@ public class UriPattern extends RdfBase {
     private final String postfix;
     private DataSource dataSource;
     
-    private static HashMap<String, UriPattern> register = new HashMap<String, UriPattern>();
+    private static HashMap<Resource, UriPattern> register = new HashMap<Resource, UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
     private static HashMap<String,HashMap<String,UriPattern>> byNameSpaceAndPostFix = 
             new HashMap<String,HashMap<String,UriPattern>> ();  
@@ -42,7 +42,7 @@ public class UriPattern extends RdfBase {
         this.nameSpace = namespace;
         this.postfix = null;
         byNameSpaceOnly.put(namespace, this);
-        register.put(getRdfId(), this);
+        register.put(getResourceId(), this);
     } 
     
     private UriPattern(String namespace, String postfix){
@@ -59,7 +59,7 @@ public class UriPattern extends RdfBase {
             postFixMap.put(postfix, this);
             byNameSpaceAndPostFix.put(namespace, postFixMap);
         }
-        register.put(getRdfId(), this);
+        register.put(getResourceId(), this);
     }
    
     public static UriPattern byNameSpace(String nameSpace){
@@ -100,15 +100,6 @@ public class UriPattern extends RdfBase {
         }
     }
     
-    static UriPattern byRdfResource(Value uriPatternId) throws BridgeDBException {
-        String shortName = convertToShortName(uriPatternId);
-        UriPattern result =  register.get(shortName);
-        if (result == null){
-            throw new BridgeDBException("No UriPattern known for Id " + uriPatternId + " / " + shortName);
-        }
-        return result;
-    }
-
     public void setDataSource(DataSource dataSource){
         this.dataSource = dataSource;
     }
@@ -117,22 +108,18 @@ public class UriPattern extends RdfBase {
         return dataSource;
     }
     
-    public final String getRdfLabel(){
+    public final URI getResourceId(){
+        return new URIImpl(getUriPattern());
+    }
+    
+    public String getUriPattern() {
         if (postfix == null){
-            return DataSourceExporter.scrub(nameSpace);
+            return nameSpace + "$id";
         } else {
-            return DataSourceExporter.scrub(nameSpace + "_" + postfix);
+            return nameSpace + "$id" + postfix;
         }
     }
-    
-    public String getRdfId(){
-        return ":" + BridgeDBConstants.URI_PATTERN_LABEL + "_" + getRdfLabel();
-    }
 
-    public final URI getResourceId(){
-        return new URIImpl(BridgeDBConstants.ORGANISM1 + "_" + getRdfLabel());
-    }
-    
     public static void addAll(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
         for (UriPattern uriPattern:register.values()){
             uriPattern.add(repositoryConnection);
@@ -148,36 +135,6 @@ public class UriPattern extends RdfBase {
         }
     }        
     
-    public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
-        for (UriPattern uriPattern:register.values()){
-            uriPattern.writeAsRDF(writer);
-        }
-    }
-    
-    public void writeAsRDF(BufferedWriter writer) throws IOException{
-        writer.write(getRdfId());
-        writer.write(" a ");
-        writer.write(BridgeDBConstants.URI_PATTERN_SHORT);        
-        writer.write(";");        
-        writer.newLine();
-   
-        if (postfix != null){
-            writer.write("         ");
-            writer.write(BridgeDBConstants.POSTFIX_SHORT);
-            writer.write(" \"");
-            writer.write(postfix);
-            writer.write("\";");
-            writer.newLine();
-        }
-
-        writer.write("         ");
-        writer.write(VoidConstants.URI_SPACE_SHORT);
-        writer.write(" \"");
-        writer.write(nameSpace);
-        writer.write("\".");
-        writer.newLine();
-    }
-    
     public static void readAllUriPatterns(RepositoryConnection repositoryConnection) throws BridgeDBException, RepositoryException{
         RepositoryResult<Statement> statements = 
                 repositoryConnection.getStatements(null, RdfConstants.TYPE_URI, BridgeDBConstants.URL_PATTERN_URI, true);
@@ -189,9 +146,12 @@ public class UriPattern extends RdfBase {
 
     public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource id) 
             throws BridgeDBException, RepositoryException{
+        UriPattern pattern = register.get(id);        
+        if (pattern != null){
+            return pattern;
+        }
         String uriSpace = getSingletonString(repositoryConnection, id, VoidConstants.URI_SPACE_URI);
         String postfix = getPossibleSingletonString(repositoryConnection, id, BridgeDBConstants.POSTFIX_URI);
-        UriPattern pattern;
         if (postfix == null){
             pattern = UriPattern.byNameSpace(uriSpace);
         } else {
@@ -203,6 +163,8 @@ public class UriPattern extends RdfBase {
             Statement statement = statements.next();
             pattern.processStatement(statement);
         }
+        //Constructor registers with standard recource this register with used resource
+        register.put((URI)id, pattern);
         return pattern;
     }
 
@@ -217,51 +179,9 @@ public class UriPattern extends RdfBase {
        }
     }
 
-    public static UriPattern readRdf(Resource patternId, Set<Statement> uriPatternStatements) throws BridgeDBException {
-        String nameSpace = null;
-        String postfix = null;
-        for (Statement statement:uriPatternStatements){
-            if (statement.getPredicate().equals(BridgeDBConstants.POSTFIX_URI)){
-                postfix = statement.getObject().stringValue();
-            } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
-                nameSpace = statement.getObject().stringValue();
-            }
-        }
-        if (nameSpace == null){
-            throw new BridgeDBException ("uriPattern " + patternId + " does not have a " + VoidConstants.URI_SPACE_URI);
-        } 
-        UriPattern pattern;
-        if (postfix == null){
-            pattern = UriPattern.byNameSpace(nameSpace);
-        } else {
-            pattern = UriPattern.byNameSpaceAndPostFix(nameSpace, postfix);
-        }
-        return pattern;
-    }
-
-    public String getUriPattern() {
-        if (postfix == null){
-            return nameSpace + "$id";
-        } else {
-            return nameSpace + "$id" + postfix;
-        }
-    }
-
     @Override
     public String toString(){
         return getUriPattern();      
     }
     
-    public static void main(String[] args) throws BridgeDBException  {
-        UriPattern test = new UriPattern("This is a test", "part2");
-        UriPattern test2 = UriPattern.byNameSpaceAndPostfix("This is a test","part2");
-        System.out.println(test);
-        System.out.println(test2);
-        System.out.println(test == test2);
-        test2 = UriPattern.byUrlPattern("This is a test$idpart2");
-        System.out.println(test);
-        System.out.println(test2);
-        System.out.println(test == test2);
-    }
-
 }

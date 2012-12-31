@@ -1,0 +1,213 @@
+@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .
+@prefix : <http://no/BaseURI/Set/> .
+
+
+bridgeDB:Organism_Ag a bridgeDB:Organism ;
+	bridgeDB:code "Ag" ;
+	bridgeDB:shortName "Mosquito" ;
+	bridgeDB:latinName "Anopheles gambiae" .
+
+bridgeDB:Organism_At a bridgeDB:Organism ;
+	bridgeDB:code "At" ;
+	bridgeDB:shortName "Arabidopsis thaliana" ;
+	bridgeDB:latinName "Arabidopsis thaliana" .
+
+bridgeDB:Organism_An a bridgeDB:Organism ;
+	bridgeDB:code "An" ;
+	bridgeDB:shortName "Black mold" ;
+	bridgeDB:latinName "Aspergillus niger" .
+
+bridgeDB:Organism_Bs a bridgeDB:Organism ;
+	bridgeDB:code "Bs" ;
+	bridgeDB:shortName "Bacillus subtilis" ;
+	bridgeDB:latinName "Bacillus subtilis" .
+
+bridgeDB:Organism_Bt a bridgeDB:Organism ;
+	bridgeDB:code "Bt" ;
+	bridgeDB:shortName "Cow" ;
+	bridgeDB:latinName "Bos taurus" .
+
+bridgeDB:Organism_Ce a bridgeDB:Organism ;
+	bridgeDB:code "Ce" ;
+	bridgeDB:shortName "Worm" ;
+	bridgeDB:latinName "Caenorhabditis elegans" .
+
+bridgeDB:Organism_Cf a bridgeDB:Organism ;
+	bridgeDB:code "Cf" ;
+	bridgeDB:shortName "Dog" ;
+	bridgeDB:latinName "Canis familiaris" .
+
+bridgeDB:Organism_Ci a bridgeDB:Organism ;
+	bridgeDB:code "Ci" ;
+	bridgeDB:shortName "Sea Squirt" ;
+	bridgeDB:latinName "Ciona intestinalis" .
+
+bridgeDB:Organism_Ct a bridgeDB:Organism ;
+	bridgeDB:code "Ct" ;
+	bridgeDB:shortName "Cthe" ;
+	bridgeDB:latinName "Clostridium thermocellum" .
+
+bridgeDB:Organism_Dr a bridgeDB:Organism ;
+	bridgeDB:code "Dr" ;
+	bridgeDB:shortName "Zebra fish" ;
+	bridgeDB:latinName "Danio rerio" .
+
+bridgeDB:Organism_Dn a bridgeDB:Organism ;
+	bridgeDB:code "Dn" ;
+	bridgeDB:shortName "Armadillo" ;
+	bridgeDB:latinName "Dasypus novemcinctus" .
+
+bridgeDB:Organism_Dm a bridgeDB:Organism ;
+	bridgeDB:code "Dm" ;
+	bridgeDB:shortName "Fruit fly" ;
+	bridgeDB:latinName "Drosophila melanogaster" .
+
+bridgeDB:Organism_Ec a bridgeDB:Organism ;
+	bridgeDB:code "Ec" ;
+	bridgeDB:shortName "Escherichia coli" ;
+	bridgeDB:latinName "Escherichia coli" .
+
+bridgeDB:Organism_Et a bridgeDB:Organism ;
+	bridgeDB:code "Et" ;
+	bridgeDB:shortName "Hedgehog" ;
+	bridgeDB:latinName "Echinops telfairi" .
+
+bridgeDB:Organism_Qc a bridgeDB:Organism ;
+	bridgeDB:code "Qc" ;
+	bridgeDB:shortName "Horse" ;
+	bridgeDB:latinName "Equus caballus" .
+
+bridgeDB:Organism_Gg a bridgeDB:Organism ;
+	bridgeDB:code "Gg" ;
+	bridgeDB:shortName "Chicken" ;
+	bridgeDB:latinName "Gallus gallus" .
+
+bridgeDB:Organism_Gm a bridgeDB:Organism ;
+	bridgeDB:code "Gm" ;
+	bridgeDB:shortName "Soybean" ;
+	bridgeDB:latinName "Glycine max" .
+
+bridgeDB:Organism_Gz a bridgeDB:Organism ;
+	bridgeDB:code "Gz" ;
+	bridgeDB:shortName "Fusarium graminearum" ;
+	bridgeDB:latinName "Gibberella zeae" .
+
+bridgeDB:Organism_Hs a bridgeDB:Organism ;
+	bridgeDB:code "Hs" ;
+	bridgeDB:shortName "Human" ;
+	bridgeDB:latinName "Homo sapiens" .
+
+bridgeDB:Organism_La a bridgeDB:Organism ;
+	bridgeDB:code "La" ;
+	bridgeDB:shortName "Elephant" ;
+	bridgeDB:latinName "Loxodonta africana" .
+
+bridgeDB:Organism_Ml a bridgeDB:Organism ;
+	bridgeDB:code "Ml" ;
+	bridgeDB:shortName "Rhesus Monkey" ;
+	bridgeDB:latinName "Macaca mulatta" .
+
+bridgeDB:Organism_Mm a bridgeDB:Organism ;
+	bridgeDB:code "Mm" ;
+	bridgeDB:shortName "Mouse" ;
+	bridgeDB:latinName "Mus musculus" .
+
+bridgeDB:Organism_Md a bridgeDB:Organism ;
+	bridgeDB:code "Md" ;
+	bridgeDB:shortName "Opossum" ;
+	bridgeDB:latinName "Monodelphis domestica" .
+
+bridgeDB:Organism_Mx a bridgeDB:Organism ;
+	bridgeDB:code "Mx" ;
+	bridgeDB:shortName "Tuberculosis" ;
+	bridgeDB:latinName "Mycobacterium tuberculosis" .
+
+bridgeDB:Organism_Oa a bridgeDB:Organism ;
+	bridgeDB:code "Oa" ;
+	bridgeDB:shortName "Platypus" ;
+	bridgeDB:latinName "Ornithorhynchus anatinus" .
+
+bridgeDB:Organism_Os a bridgeDB:Organism ;
+	bridgeDB:code "Os" ;
+	bridgeDB:shortName "Rice" ;
+	bridgeDB:latinName "Oryza sativa" .
+
+bridgeDB:Organism_Oj a bridgeDB:Organism ;
+	bridgeDB:code "Oj" ;
+	bridgeDB:shortName "Rice" ;
+	bridgeDB:latinName "Oryza japonica" .
+
+bridgeDB:Organism_Ol a bridgeDB:Organism ;
+	bridgeDB:code "Ol" ;
+	bridgeDB:shortName "Medaka Fish" ;
+	bridgeDB:latinName "Oryzias latipes" .
+
+bridgeDB:Organism_Oc a bridgeDB:Organism ;
+	bridgeDB:code "Oc" ;
+	bridgeDB:shortName "Rabbit" ;
+	bridgeDB:latinName "Oryctolagus cuniculus" .
+
+bridgeDB:Organism_Pt a bridgeDB:Organism ;
+	bridgeDB:code "Pt" ;
+	bridgeDB:shortName "Chimpanzee" ;
+	bridgeDB:latinName "Pan troglodytes" .
+
+bridgeDB:Organism_Sl a bridgeDB:Organism ;
+	bridgeDB:code "Sl" ;
+	bridgeDB:shortName "Tomato" ;
+	bridgeDB:latinName "Solanum lycopersicum" .
+
+bridgeDB:Organism_Ss a bridgeDB:Organism ;
+	bridgeDB:code "Ss" ;
+	bridgeDB:shortName "Pig" ;
+	bridgeDB:latinName "Sus scrofa" .
+
+bridgeDB:Organism_Pi a bridgeDB:Organism ;
+	bridgeDB:code "Pi" ;
+	bridgeDB:shortName "Western Balsam Poplar" ;
+	bridgeDB:latinName "Populus trichocarpa" .
+
+bridgeDB:Organism_Rn a bridgeDB:Organism ;
+	bridgeDB:code "Rn" ;
+	bridgeDB:shortName "Rat" ;
+	bridgeDB:latinName "Rattus norvegicus" .
+
+bridgeDB:Organism_Sc a bridgeDB:Organism ;
+	bridgeDB:code "Sc" ;
+	bridgeDB:shortName "Yeast" ;
+	bridgeDB:latinName "Saccharomyces cerevisiae" .
+
+bridgeDB:Organism_Sa a bridgeDB:Organism ;
+	bridgeDB:code "Sa" ;
+	bridgeDB:shortName "Shrew" ;
+	bridgeDB:latinName "Sorex araneus" .
+
+bridgeDB:Organism_Sb a bridgeDB:Organism ;
+	bridgeDB:code "Sb" ;
+	bridgeDB:shortName "Sorghum" ;
+	bridgeDB:latinName "Sorghum bicolor" .
+
+bridgeDB:Organism_Tn a bridgeDB:Organism ;
+	bridgeDB:code "Tn" ;
+	bridgeDB:shortName "Pufferfish" ;
+	bridgeDB:latinName "Tetraodon nigroviridis" .
+
+bridgeDB:Organism_Ta a bridgeDB:Organism ;
+	bridgeDB:code "Ta" ;
+	bridgeDB:shortName "Wheat" ;
+	bridgeDB:latinName "Triticum aestivum" .
+
+bridgeDB:Organism_Xt a bridgeDB:Organism ;
+	bridgeDB:code "Xt" ;
+	bridgeDB:shortName "Frog" ;
+	bridgeDB:latinName "Xenopus tropicalis" .
+
+bridgeDB:Organism_Vv a bridgeDB:Organism ;
+	bridgeDB:code "Vv" ;
+	bridgeDB:shortName "Wine Grape" ;
+	bridgeDB:latinName "Vitis vinifera" .
+
+bridgeDB:Organism_Zm a bridgeDB:Organism ;
+	bridgeDB:code "Zm" ;
+	bridgeDB:shortName "Maize" ;
+	bridgeDB:latinName "Zea mays" .

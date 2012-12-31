@@ -68,7 +68,7 @@ public class DataSourceUrisTest extends TestUtils{
      */
     @Test (expected = Exception.class)  
     public void testSetUriParentToNull() throws Exception {
-        report("setUriParent");
+        report("setUriParentToNull");
         DataSource original = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentToSelf");
         DataSourceUris instance = DataSourceUris.byDataSource(original);;
         instance.setUriParent(null);
@@ -79,7 +79,7 @@ public class DataSourceUrisTest extends TestUtils{
      */
     @Test (expected = BridgeDBException.class)
     public void testSetUriParentToSelf() throws Exception {
-        report("setUriParent");
+        report("setUriParentToSelf");
         DataSource original = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentToSelf");
         DataSourceUris instance = DataSourceUris.byDataSource(original);;
         instance.setUriParent(original);
@@ -90,7 +90,7 @@ public class DataSourceUrisTest extends TestUtils{
      */
     @Test (expected = BridgeDBException.class)
     public void testSetUriParentChange() throws BridgeDBException {
-        report("setUriParentCircular");
+        report("setUriParentChange");
         DataSource dataSource1 = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentChange1");
         DataSource dataSource2 = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentChange2");
         DataSource dataSource3 = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentChange3");
@@ -118,7 +118,7 @@ public class DataSourceUrisTest extends TestUtils{
      */
     @Test (expected = BridgeDBException.class)
     public void testSetUriParentGrandParent() throws BridgeDBException {
-        report("setUriParentCircular");
+        report("setUriParentGrandParent");
         DataSource dataSource1 = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentGrandParent1");
         DataSource dataSource2 = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentGrandParent2");
         DataSource dataSource3 = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentGrandParent3");

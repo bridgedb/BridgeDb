@@ -4,7 +4,6 @@
  */
 package org.bridgedb.rdf;
 
-import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -20,6 +19,7 @@ import org.openrdf.repository.RepositoryResult;
  */
 public abstract class RdfBase {
     static final boolean VERSION2 = true;
+    public static String DEFAULT_BASE_URI = "http://no/BaseURI/Set/";
 
     static String scrub(String original){
         String result = original.replaceAll("\\W", "_");
@@ -34,7 +34,7 @@ public abstract class RdfBase {
     
     static String convertToShortName(Value value) {
         String id = value.stringValue();
-        id = id.replace(StatementReader.DEFAULT_BASE_URI, ":");
+        id = id.replace(DEFAULT_BASE_URI, ":");
         return id;
     }
 
