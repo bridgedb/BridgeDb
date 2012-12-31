@@ -17,6 +17,8 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.LiteralImpl;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
@@ -124,9 +126,28 @@ public class UriPattern extends RdfBase {
     }
     
     public String getRdfId(){
-        return ":" + BridgeDBConstants.URI_PATTERN + "_" + getRdfLabel();
+        return ":" + BridgeDBConstants.URI_PATTERN_LABEL + "_" + getRdfLabel();
     }
 
+    public final URI getResourceId(){
+        return new URIImpl(BridgeDBConstants.ORGANISM1 + "_" + getRdfLabel());
+    }
+    
+    public static void addAll(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
+        for (UriPattern uriPattern:register.values()){
+            uriPattern.add(repositoryConnection);
+        }        
+    }
+    
+    public void add(RepositoryConnection repositoryConnection) throws RepositoryException{
+        URI id = getResourceId();
+        repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI);
+        repositoryConnection.add(id, VoidConstants.URI_SPACE_URI,  new LiteralImpl(nameSpace));
+        if (postfix != null){
+            repositoryConnection.add(id, BridgeDBConstants.POSTFIX_URI,  new LiteralImpl(postfix));
+        }
+    }        
+    
     public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
         for (UriPattern uriPattern:register.values()){
             uriPattern.writeAsRDF(writer);

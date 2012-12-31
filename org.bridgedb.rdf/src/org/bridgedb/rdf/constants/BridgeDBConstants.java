@@ -25,9 +25,10 @@ public class BridgeDBConstants {
     public static final String URI_MAPPING = "uriMapping";
     public static final String URI_MAPPING_SHORT = PREFIX_NAME + URI_MAPPING;
     public static final URI URI_MAPPING_URI = new URIImpl(PREFIX + URI_MAPPING);
-    public static final String URI_PATTERN = "uriPattern";
-    public static final String URI_PATTERN_SHORT = PREFIX_NAME + URI_PATTERN;
-    public static final URI URI_PATTERN_URI = new URIImpl(PREFIX + URI_PATTERN);
+    public static final String URI_PATTERN_LABEL = "uriPattern";
+    public static final String URI_PATTERN_SHORT = PREFIX_NAME + URI_PATTERN_LABEL;
+    public static final String URI_PATTERN1 = PREFIX + URI_PATTERN_LABEL;
+    public static final URI URI_PATTERN_URI = new URIImpl(URI_PATTERN1);
 
     //DataSource fields
     private static final String ALTERNATIVE_FULL_NAME = "alternativeFullName";
