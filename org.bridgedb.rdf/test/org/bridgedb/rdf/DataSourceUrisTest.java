@@ -116,7 +116,7 @@ public class DataSourceUrisTest extends TestUtils{
     /**
      * Test of setUriParent method, of class DataSourcePlus.
      */
-    @Test
+    @Test (expected = BridgeDBException.class)
     public void testSetUriParentGrandParent() throws BridgeDBException {
         report("setUriParentCircular");
         DataSource dataSource1 = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentGrandParent1");
