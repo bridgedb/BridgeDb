@@ -50,7 +50,7 @@ public class RDFTest {
         //    Statement statement = statements.next();
         //    System.out.println(statement);
         //}
-        DataSourceRdf.readAllDataSources(con);
+        DataSourceUris.readAllDataSources(con);
         UriPattern.readAllUriPatterns(con);
         con.close();
         save();
@@ -60,7 +60,7 @@ public class RDFTest {
         Repository myRepository = new SailRepository(new MemoryStore());
         myRepository.initialize();
         RepositoryConnection con = myRepository.getConnection();
-        DataSourceRdf.addAll(con);
+        DataSourceUris.addAll(con);
         writeRDF(con);        
     }
     
