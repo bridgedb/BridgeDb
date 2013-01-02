@@ -96,7 +96,7 @@ public class DataSourceTest {
     }
 
     @Test
-    public void testRegisterAleternativeFullName(){
+    public void testRegisterAlternativeFullName(){
         String sysCode = "testRegisterSecondFullName";
         String fullName1 = "testRegisterSecondFullName_FullName1";
         DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
@@ -107,6 +107,70 @@ public class DataSourceTest {
         Assert.assertEquals(fullName1, ds1.getAlternativeFullNames().iterator().next());        
     }
     
+    @Test (expected = IllegalStateException.class)
+    public void testRegisterAlternativeFullWhichIsAlreadyFullname(){
+        String fullName1 = "testRegisterAlternativeFullWhichIsAlreadyFullname";
+        DataSource ds = DataSource.register(null, fullName1)
+                .alternativeFullName(fullName1)
+                .asDataSource();
+    }
+    
+    @Test (expected = IllegalStateException.class)
+    public void testRegisterAlternativeFullNameToTwoDataSources(){
+        String fullName1 = "testRegisterAlternativeFullNameToTwoDataSources1";
+        String altName = "testRegisterAlternativeFullNameToTwoDataSourcesalt";        
+        DataSource ds1 = DataSource.register(null, fullName1)
+                .alternativeFullName(altName)
+                .asDataSource();
+        String fullName2 = "testRegisterAlternativeFullNameToTwoDataSources2";
+        DataSource ds2 = DataSource.register(null, fullName2)
+                .alternativeFullName(altName)
+                .asDataSource();
+    }
+    
+    @Test (expected = IllegalStateException.class)
+    public void testRegisterAsFullNameAndThenAlternativeName(){
+        String fullName1 = "testRegisterAsFullNameAndThenAlternativeName1";
+        DataSource ds1 = DataSource.register(null, fullName1)
+                .asDataSource();
+        String fullName2 = "testRegisterAsFullNameAndThenAlternativeName2";
+        DataSource ds2 = DataSource.register(null, fullName2)
+                .alternativeFullName(fullName1)
+                .asDataSource();
+    }
+
+    @Test 
+    public void testRegisterAsAlternativeAndThenFullName(){
+        String fullName1 = "testRegisterAsAlternativeAndThenFullName1";
+        String altName = "testRegisterAsAlternativeAndThenFullNameAlt";        
+        DataSource ds1 = DataSource.register(null, fullName1)
+                .alternativeFullName(altName)
+                .asDataSource();
+        DataSource ds2 = DataSource.register(null, altName)
+                .asDataSource();
+        Assert.assertEquals(ds1, ds2);
+        //ToDo dettermine which should be the full name of this DataSource.
+        //Better would be to throw an error on registering the new one but reverse combatability issue!
+        Assert.assertEquals(altName, ds1.getAlternativeFullNames().iterator().next());        
+    }
+
+    @Test (expected = IllegalStateException.class)
+    public void testRegisterAsAlternativeAndThenFullNameDiffSysCocdes(){
+        String sysCode1 = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesSysCode1";
+        String fullName1 = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesFullName1";
+        String altName = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesFullNameAlt";        
+        String sysCode2 = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesSysCode2";
+        DataSource ds1 = DataSource.register(sysCode1, fullName1)
+                .alternativeFullName(altName)
+                .asDataSource();
+        DataSource ds2 = DataSource.register(sysCode2, altName)
+                .asDataSource();
+        Assert.assertEquals(ds1, ds2);
+        Assert.assertEquals(fullName1, ds1.getFullName());        
+        Assert.assertEquals(altName, ds2.getFullName());
+        Assert.assertEquals(altName, ds1.getAlternativeFullNames().iterator().next());        
+    }
+
     @Test
     public void testSetUrnBase() throws IDMapperException{
         String fullName = "TestUrnBase";

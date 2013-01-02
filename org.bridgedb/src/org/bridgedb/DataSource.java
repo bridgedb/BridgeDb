@@ -24,8 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
 contains information about a certain DataSource, such as
@@ -416,19 +414,27 @@ public final class DataSource
          * 
          * Registered the DataSource with this name but keeps the original fullName
          * 
-         * @param alternativeFullName A DIFFERENT name!
+         * @param alternativeFullName A DIFFERENT name! 
 		 * @return the same Builder object so you can chain setters
          * @throws IllegalStateException If the alternativeFullName is equals to the current fullName.
+         *      Also throw if this alternativeName is assigned to a different DataSource
          * @since 2.0.0
          */
         public Builder alternativeFullName(String alternativeFullName){
             //This is a safety test only
             if (alternativeFullName.equals(current.fullName)){
                throw new IllegalStateException ("Illegal attempt to assign alterntiveFullName \"" + 
-                       alternativeFullName + "\" which is already the fullName \"");                
+                       alternativeFullName + "\" which is already the fullName ");                
             }
-            current.alternativeFullNames.add(alternativeFullName);
-            byFullName.put(alternativeFullName, current);
+            if (!current.alternativeFullNames.contains(alternativeFullName)){
+                if (byFullName.containsKey(alternativeFullName)){
+                    throw new IllegalStateException ("Illegal attempt to assign alterntiveFullName \"" 
+                            + alternativeFullName + "\" to " + current
+                            + " as it is already assigned to " + byFullName.get(alternativeFullName));                
+                }
+                current.alternativeFullNames.add(alternativeFullName);
+                byFullName.put(alternativeFullName, current);
+            }
             return this;
         }
 	}
