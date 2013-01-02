@@ -4,6 +4,8 @@
  */
 package org.bridgedb.rdf;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -49,19 +51,40 @@ public abstract class RdfBase {
 
     static String getPossibleSingletonString(RepositoryConnection repositoryConnection, Resource id, 
             URI predicate) throws RepositoryException, BridgeDBException {
+        Value result = getPossibleSingleton(repositoryConnection, id, predicate);
+        if (result == null) {
+            return null;
+        } else {     
+            return result.stringValue();
+        }
+    }
+
+    static Value getPossibleSingleton(RepositoryConnection repositoryConnection, Resource id, 
+            URI predicate) throws RepositoryException, BridgeDBException {
         RepositoryResult<Statement> statements = 
                 repositoryConnection.getStatements(id, predicate, null, true);
         if (statements.hasNext()) {
             Statement statement = statements.next();
-            String result = statement.getObject().stringValue();
             if (statements.hasNext()) {
                 throw new BridgeDBException("Found more than one statement with resource " + id 
-                        + " and predicate " + predicate);
-            }      
-            return result;
+                        + " and predicate " + predicate + "\nFound: " + statement + "\n\t" + statements.next());
+            } else {
+                return statement.getObject();
+            }     
         }
         return null;
     }
 
+    static Set<String> getAllStrings(RepositoryConnection repositoryConnection, Resource id, URI predicate) 
+            throws RepositoryException {
+        HashSet<String> results = new HashSet<String>();
+        RepositoryResult<Statement> statements = 
+                repositoryConnection.getStatements(id, predicate, null, true);
+        while(statements.hasNext()) {
+            Statement statement = statements.next();
+            results.add(statement.getObject().stringValue());
+        }
+        return results;
+    }
 
 }

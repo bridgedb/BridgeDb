@@ -382,33 +382,6 @@ public final class DataSource
             return this;
 		}
         
-		/**
-		 * Registers an indetifiers.org uri 
-         * 
-         * Since Version 2.0.0 If the base starts with "urn:miriam:" the part that comes after "urn:miriam:"
-         * will also be used for identifiers.org uris.
-		 * @param uri an indetifiers.org uri which must start with "http://identifiers.org/".
-         *    Input supports both uris that ends with "/" and ones that do not,
-         *    But output will always be the "offical" one with the slash.
-		 * @return the same Builder object so you can chain setters
-         * @throws IDMapperException If a previous (different) uri was registered by either this method or 
-         *     indirectly by the urnBase method.
-		 */
-		public Builder identifiersOrgUri (String uri) throws IDMapperException
-		{
-            if (uri.startsWith(IDENTIFIERS_URI_ROOT)){
-                if (uri.endsWith("/")){
-                    current.setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length(), uri.length()-1));
-                } else {
-                    current.setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length()));                    
-                }
-                return this;
-            } else {
-                throw new IDMapperException("identifiers.Org uri must start with " + IDENTIFIERS_URI_ROOT 
-                        + " which \"" + uri + "\" does not");
-            }
-		}
-                
         /**
          * Allows you to add an Extra FullName to a DataSource
          * 
@@ -754,6 +727,33 @@ public final class DataSource
 		return current;
 	}
 
+    /**
+     * Registers an indetifiers.org uri 
+     * 
+     * Since Version 2.0.0 If the base starts with "urn:miriam:" the part that comes after "urn:miriam:"
+     * will also be used for identifiers.org uris.
+     * @param uri an indetifiers.org uri which must start with "http://identifiers.org/".
+     *    Input supports both uris that ends with "/" and ones that do not,
+     *    But output will always be the "offical" one with the slash.
+	 * @return the same Builder object so you can chain setters
+     * @throws IDMapperException If a previous (different) uri was registered by either this method or 
+     *     indirectly by the urnBase method.
+     * @since Version 2.0.0
+	*/
+    public void setIdentifiersOrgUri (String uri) throws IDMapperException
+    {
+        if (uri.startsWith(IDENTIFIERS_URI_ROOT)){
+            if (uri.endsWith("/")){
+                setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length(), uri.length()-1));
+            } else {
+               setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length()));                    
+            }
+        } else {
+            throw new IDMapperException("identifiers.Org uri must start with " + IDENTIFIERS_URI_ROOT 
+                    + " which \"" + uri + "\" does not");
+        }
+    }
+                
     /**
 	 * @param base the bit that comes (after "urn:miriam:" and before the next ":")
      * or (after "http://identifiers.org/" and beofre the next "/". 

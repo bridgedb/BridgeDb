@@ -53,7 +53,7 @@ public class BridgeDBRdfHandler {
             repository.initialize();
             repositoryConnection = repository.getConnection();
             repositoryConnection.add(file, DEFAULT_BASE_URI, getFormat(file));
-            DataSourceUris.readAllDataSources(repositoryConnection);
+            DataSourceUris.readAllDataSourceUris(repositoryConnection);
             UriPattern.readAllUriPatterns(repositoryConnection);      
         } catch (Exception ex) {
             throw new BridgeDBException ("Error parsing RDf file ", ex);

@@ -251,8 +251,8 @@ public class DataSourceTest {
         String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(rootURL)
                 .asDataSource();
+        source.setIdentifiersOrgUri(rootURL);
         String id = "1234";
         String result = source.getURN(id);
         String expected = urnBase + ":" + id;
@@ -268,8 +268,8 @@ public class DataSourceTest {
         String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(rootURL + "/")
                 .asDataSource();
+        source.setIdentifiersOrgUri(rootURL + "/");
         String id = "1234";
         String result = source.getURN(id);
         String expected = urnBase + ":" + id;
@@ -285,8 +285,8 @@ public class DataSourceTest {
         String rootURL = "http://identifiers.org/" + fullName;
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source1 = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(rootURL)
                 .asDataSource();
+        source1.setIdentifiersOrgUri(rootURL);
 		DataSource source2 = DataSource.register(fullName, fullName)
                 .urnBase(urnBase)
                 .asDataSource();
@@ -306,8 +306,8 @@ public class DataSourceTest {
         String rootURL = "http://identifiers.org/" + fullName + "A";
         String urnBase = "urn:miriam:" + fullName + "B";
 		DataSource source1 = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(rootURL)
                 .asDataSource();
+        source1.setIdentifiersOrgUri(rootURL);
 		DataSource source2 = DataSource.register(fullName, fullName)
                 .urnBase(urnBase)
                 .asDataSource();
@@ -322,8 +322,8 @@ public class DataSourceTest {
                 .urnBase(urnBase)
                 .asDataSource();
 		DataSource source1 = DataSource.register(fullName, fullName)
-                .identifiersOrgUri(rootURL)
                 .asDataSource();
+        source1.setIdentifiersOrgUri(rootURL);
     }
     
     @Test

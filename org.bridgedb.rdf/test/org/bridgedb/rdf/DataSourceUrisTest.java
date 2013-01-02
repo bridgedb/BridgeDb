@@ -13,6 +13,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openrdf.model.Resource;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
+import org.openrdf.repository.RepositoryConnection;
 
 /**
  *
@@ -37,6 +41,18 @@ public class DataSourceUrisTest extends TestUtils{
     
     @After
     public void tearDown() {
+    }
+
+   /**
+     * Test of getResourceId method, of class DataSourceUris.
+     */
+    @Test
+    public void testGetResourceId() {
+        report("getResourceId");
+        DataSource dataSource = DataSource.getByFullName("DataSourceUrisTest_testGetResourceId");
+        URI expResult = new URIImpl("http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#DataSource_DataSourceUrisTest_testGetResourceId");
+        URI result = DataSourceUris.getResourceId(dataSource);
+        assertEquals(expResult, result);
     }
 
     /**

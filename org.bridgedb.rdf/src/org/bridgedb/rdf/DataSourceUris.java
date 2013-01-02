@@ -5,8 +5,12 @@
 package org.bridgedb.rdf;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import org.bridgedb.DataSource;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.Organism;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
@@ -27,14 +31,27 @@ import org.openrdf.repository.RepositoryResult;
  * @author Christian
  */
 public class DataSourceUris extends RdfBase {
-    
+
     private final DataSource inner;
     private DataSource uriParent = null;
-    private UriPattern dataSourceUrlPattern;
     
     private static final HashMap<DataSource, DataSourceUris> byDataSource = new HashMap<DataSource, DataSourceUris>();
     private static final HashMap<Resource, DataSourceUris> register = new HashMap<Resource, DataSourceUris>();
-    
+    private static HashSet<URI> expectedPredicates = new HashSet<URI>(Arrays.asList(new URI[] {
+        BridgeDBConstants.FULL_NAME_URI,
+        RdfConstants.TYPE_URI,
+        BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI,
+        BridgeDBConstants.FULL_NAME_URI,
+        BridgeDBConstants.ID_EXAMPLE_URI,
+        BridgeDBConstants.MAIN_URL_URI,
+        BridgeDBConstants.ORGANISM_URI,
+        BridgeDBConstants.PRIMAY_URI,
+        BridgeDBConstants.SYSTEM_CODE_URI,
+        BridgeDBConstants.TYPE_URI,
+        BridgeDBConstants.URL_PATTERN_URI,
+        BridgeDBConstants.URN_BASE_URI,
+    }));
+      
     public static URI getResourceId(DataSource dataSource) {
         return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_" + scrub(dataSource.getFullName()));
     }
@@ -54,7 +71,9 @@ public class DataSourceUris extends RdfBase {
             repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(dataSource.getSystemCode()));
         }
 
-        //Alternative names
+        for (String alternativeFullName:dataSource.getAlternativeFullNames()){
+            repositoryConnection.add(id, BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI, new LiteralImpl(alternativeFullName));            
+        }
         
         if (dataSource.getMainUrl() != null){
             repositoryConnection.add(id, BridgeDBConstants.MAIN_URL_URI, new LiteralImpl(dataSource.getMainUrl()));
@@ -95,80 +114,107 @@ public class DataSourceUris extends RdfBase {
         }
     }
 
-    public static void readAllDataSources(RepositoryConnection repositoryConnection) throws BridgeDBException, RepositoryException{
+    public static void readAllDataSourceUris(RepositoryConnection repositoryConnection) throws BridgeDBException, RepositoryException{
         RepositoryResult<Statement> statements = 
                 repositoryConnection.getStatements(null, RdfConstants.TYPE_URI, BridgeDBConstants.DATA_SOURCE_URI, true);
                 //repositoryConnection.getStatements(null, null, null, true);
         while (statements.hasNext()) {
             Statement statement = statements.next();
-            DataSource ds = readDataSources(repositoryConnection, statement.getSubject());
+            DataSourceUris dataSourceUris = readDataSourceUris(repositoryConnection, statement.getSubject());
         }
     }
 
+    public static DataSourceUris readDataSourceUris(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+            throws BridgeDBException, RepositoryException {
+        checkStatements(repositoryConnection, dataSourceId);
+        DataSourceUris dataSourceUris = register.get(dataSourceId);
+        if (dataSourceUris != null){
+            return dataSourceUris;
+        }
+        DataSource dataSource = readDataSources(repositoryConnection, dataSourceId);
+        dataSourceUris = DataSourceUris.byDataSource(dataSource);
+        register.put(dataSourceId, dataSourceUris);
+        return dataSourceUris;
+     }    
+        
     public static DataSource readDataSources(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException{
-        DataSourceUris dsu = register.get(dataSourceId);
-        if (dsu != null){
-            return dsu.inner;
-        }
+        return readDataSourcesStatements(repositoryConnection, dataSourceId);
+    }
+    
+    public static DataSource readDataSourcesStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+            throws BridgeDBException, RepositoryException{
         String fullName = getSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.FULL_NAME_URI);
         String systemCode = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.SYSTEM_CODE_URI);
         DataSource.Builder builder = DataSource.register(systemCode, fullName);
-        dsu = DataSourceUris.byDataSource(builder.asDataSource());
-        register.put(dataSourceId, dsu);
+
+        Set<String> alternativeNames = getAllStrings(repositoryConnection, dataSourceId, BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI);
+        for (String alternativeName:alternativeNames){
+            builder.alternativeFullName(alternativeName);            
+        }
+ 
+        String idExample = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.ID_EXAMPLE_URI);
+        if (idExample != null){
+            builder.idExample(idExample);
+        }
         
+        String mainUrl = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.MAIN_URL_URI);
+        if (mainUrl != null){
+            builder.mainUrl(mainUrl);
+        }
+  
+        Value organismId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.ORGANISM_URI);
+        if (organismId != null){
+            Object organism = OrganismRdf.byRdfResource(organismId);
+            builder.organism(organism);
+        }
+            
+        String primary = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.PRIMAY_URI);
+        if (primary != null){
+            builder.type(primary);
+        }
+
+        String type = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.TYPE_URI);
+        if (type != null){
+            builder.type(type);
+        }
+
+        String urlPattern = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.URL_PATTERN_URI);
+        if (urlPattern != null){
+            builder.urlPattern(urlPattern);
+        }
+        
+        String urnBase = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.URN_BASE_URI);
+        if (urnBase != null){
+            builder.urnBase(urnBase);
+        }
+        
+        return builder.asDataSource();
+    }
+    
+    private void readUriPatterns(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+            throws BridgeDBException, RepositoryException{
+        String identifiers_org_base = 
+                getSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI);
+        setIdentifiersOrgBase(identifiers_org_base);
+    }
+    
+    private final static void checkStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+            throws BridgeDBException, RepositoryException{
         RepositoryResult<Statement> statements = 
                 repositoryConnection.getStatements(dataSourceId, null, null, true);
         while (statements.hasNext()) {
             Statement statement = statements.next();
             try{
-                dsu.processStatement(statement, builder);
+                if (!expectedPredicates.contains(statement.getPredicate())){
+                    System.err.println("unexpected predicate in statement " + statement);
+                }
             } catch (Exception e){
                 throw new BridgeDBException ("Error processing statement " + statement, e);
             }
         }
-        return builder.asDataSource();
     }
     
-    private void processStatement(Statement statement, DataSource.Builder builder) throws BridgeDBException{
-        if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
-            //Ignore the type statement
-        } else if (statement.getPredicate().equals(BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI)){
-            builder.alternativeFullName(statement.getObject().stringValue());
-        } else if (statement.getPredicate().equals(BridgeDBConstants.FULL_NAME_URI)){
-            //Already used the fullName statement;
-        } else if (statement.getPredicate().equals(BridgeDBConstants.ID_EXAMPLE_URI)){
-            builder.idExample(statement.getObject().stringValue());
-        } else if (statement.getPredicate().equals(BridgeDBConstants.MAIN_URL_URI)){
-            builder.mainUrl(statement.getObject().stringValue());
-        } else if (statement.getPredicate().equals(BridgeDBConstants.ORGANISM_URI)){
-            Value organismId = statement.getObject();
-            Object organism = OrganismRdf.byRdfResource(organismId);
-            builder.organism(organism);
-        } else if (statement.getPredicate().equals(BridgeDBConstants.PRIMAY_URI)){
-            builder.primary (Boolean.parseBoolean(statement.getObject().stringValue()));
-        } else if (statement.getPredicate().equals(BridgeDBConstants.SYSTEM_CODE_URI)){
-            //Already used the systemCode statement;
-        } else if (statement.getPredicate().equals(BridgeDBConstants.TYPE_URI)){
-            builder.type(statement.getObject().stringValue());
-        } else if (statement.getPredicate().equals(BridgeDBConstants.URL_PATTERN_URI)){
-            String urlPattern = statement.getObject().stringValue();
-            builder.urlPattern(urlPattern);
-            dataSourceUrlPattern = getUriPatternFromPattern(builder.asDataSource(), urlPattern);
-        } else if (statement.getPredicate().equals(BridgeDBConstants.URN_BASE_URI)){
-            builder.urnBase(statement.getObject().stringValue());
- //       } else if (statement.getPredicate().equals(BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI)){
- //           registerNameSpace(builder.asDataSource(), statement.getObject().stringValue(), UriMappingRelationship.IDENTIFERS_ORG);
- //       } else if (statement.getPredicate().equals(BridgeDBConstants.WIKIPATHWAYS_BASE_URI)){
- //           registerNameSpace(builder.asDataSource(), statement.getObject().stringValue(), UriMappingRelationship.WIKIPATHWAYS);
- //       } else if (statement.getPredicate().equals(BridgeDBConstants.SOURCE_RDF_URI)){
- //           registerUriPattern(builder.asDataSource(), statement.getObject().stringValue(), UriMappingRelationship.SOURCE_RDF);
- //       } else if (statement.getPredicate().equals(BridgeDBConstants.BIO2RDF_URI)){
- //           registerUriPattern(builder.asDataSource(), statement.getObject().stringValue(), UriMappingRelationship.BIO2RDF_URI);
-        } else {
-            throw new BridgeDBException ("Unexpected Statement " + statement);
-        }
-    }
     
     private DataSourceUris(DataSource wraps){
         inner = wraps;
@@ -209,17 +255,15 @@ public class DataSourceUris extends RdfBase {
         }
         uriParent = parent;
     }
+
+    public void setIdentifiersOrgBase(String identifiersOrgBase) throws BridgeDBException {
+        if (identifiersOrgBase != null){
+            try {
+                inner.setIdentifiersOrgUri(identifiersOrgBase);
+            } catch (IDMapperException ex) {
+                throw new BridgeDBException("Unable to set Identifiers Org Base to " + identifiersOrgBase, ex);
+            }
+        }
+    }
     
-    private UriPattern getUriPatternFromPattern(DataSource dataSource, String urlPattern) throws BridgeDBException {
-        UriPattern pattern = UriPattern.byUrlPattern(urlPattern);
-        pattern.setDataSource(dataSource);
-        return pattern;
-    }
-
-    private UriPattern getUriPatternFromUriSpace(DataSource dataSource, String uriSpace) throws BridgeDBException {
-       UriPattern pattern = UriPattern.byNameSpace(uriSpace);
-        pattern.setDataSource(dataSource);
-        return pattern;
-    }
-
 }
