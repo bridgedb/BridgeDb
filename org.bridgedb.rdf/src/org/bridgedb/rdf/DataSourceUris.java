@@ -69,6 +69,7 @@ public class DataSourceUris extends RdfBase {
         for (DataSource dataSource:DataSource.getDataSources()){
             DataSourceUris dsu = byDataSource(dataSource);
             dsu.writeDataSource(repositoryConnection); 
+            dsu.writeUriParent(repositoryConnection);
             dsu.writeUriPatterns(repositoryConnection); 
         }
     }
@@ -126,6 +127,14 @@ public class DataSourceUris extends RdfBase {
         }
     }
 
+    private void writeUriParent(RepositoryConnection repositoryConnection) throws RepositoryException {
+        if (uriParent != null){ 
+            URI id = getResourceId(inner);
+            URI parentId = getResourceId(uriParent);
+            repositoryConnection.add(id, BridgeDBConstants.HAS_URI_PARENT, parentId);
+        }
+    }
+
     private void writeUriPatterns(RepositoryConnection repositoryConnection) throws RepositoryException {
         URI id = getResourceId(inner);
         if (bio2RdfPattern != null){
@@ -154,19 +163,15 @@ public class DataSourceUris extends RdfBase {
         if (dataSourceUris != null){
             return dataSourceUris;
         }
-        DataSource dataSource = readDataSources(repositoryConnection, dataSourceId);
+        DataSource dataSource = readDataSource(repositoryConnection, dataSourceId);
         dataSourceUris = DataSourceUris.byDataSource(dataSource);
+        dataSourceUris.readUriParent(repositoryConnection, dataSourceId);
         dataSourceUris.readUriPatternsStatements(repositoryConnection, dataSourceId);
         register.put(dataSourceId, dataSourceUris);
         return dataSourceUris;
      }    
         
-    public static DataSource readDataSources(RepositoryConnection repositoryConnection, Resource dataSourceId) 
-            throws BridgeDBException, RepositoryException{
-        return readDataSourcesStatements(repositoryConnection, dataSourceId);
-    }
-    
-    public static DataSource readDataSourcesStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+    public static DataSource readDataSource(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException{
         String fullName = getSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.FULL_NAME_URI);
         String systemCode = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.SYSTEM_CODE_URI);
@@ -216,6 +221,21 @@ public class DataSourceUris extends RdfBase {
         return builder.asDataSource();
     }
     
+    private void readUriParent(RepositoryConnection repositoryConnection, Resource dataSourceId) throws RepositoryException, BridgeDBException {
+        Value parentId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_URI_PARENT);
+        if (parentId != null){
+            DataSourceUris dataSourceUris = register.get(parentId.stringValue());
+            DataSource parent;
+            if (dataSourceUris != null){
+                parent = dataSourceUris.inner;
+            } else {
+                //Read only the DataSource part for now to avoid a loop with bad chained parent
+                parent = readDataSource(repositoryConnection, (Resource)parentId);
+            }
+            setUriParent(parent);
+        }
+    }
+
     private void readUriPatternsStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException{
         String identifiersOrgPattern = 
@@ -334,4 +354,5 @@ public class DataSourceUris extends RdfBase {
         uriPattern.setDataSource(inner);
         return uriPattern;
     }
+
 }

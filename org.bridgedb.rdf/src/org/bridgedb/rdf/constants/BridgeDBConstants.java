@@ -62,19 +62,6 @@ public class BridgeDBConstants {
     private static final String POSTFIX = "postfix";
     public static final URI POSTFIX_URI = new URIImpl(PREFIX + POSTFIX);
 
-    private static final String HAS_DATA_SOURCE = "hasDataSource";
-    public static final URI HAS_DATA_SOURCE_URI = new URIImpl(PREFIX + HAS_DATA_SOURCE);
-
-    private static final String HAS_URI_PATTERN = "hasUriPattern";
-    public static final URI HAS_URI_PATTERN_URI = new URIImpl(PREFIX + HAS_URI_PATTERN);
-    
-    //Relationships
-    private static final String HAS_RELATIONSHIP = "hasRelationship";
-    public static final URI HAS_RELATIONSHIP_URI = new URIImpl(PREFIX + HAS_RELATIONSHIP);
-    
-    private static final String DATA_SOURCE_URL_PATTERN = "dataSourceUrlPattern";
-    public static final URI DATA_SOURCE_URL_PATTERN_URI = new URIImpl(PREFIX + DATA_SOURCE_URL_PATTERN);
-    
     private static final String IDENTIFERS_ORG_PATTERN = "identifiersOrgPattern";
     public static final URI IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + IDENTIFERS_ORG_PATTERN);
     
@@ -86,6 +73,8 @@ public class BridgeDBConstants {
     
     private static final String BIO2RDF_PATTERN = "bio2RdfPattern";
     public static final URI BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + BIO2RDF_PATTERN);
+
+    public static final URI HAS_URI_PARENT = new URIImpl(PREFIX + "hasUriPattern");
 
     //URI types (Used in Format received from wikiPathways
     private static final String IDENTIFIERS_ORG_BASE = "identifiers_org_base";
