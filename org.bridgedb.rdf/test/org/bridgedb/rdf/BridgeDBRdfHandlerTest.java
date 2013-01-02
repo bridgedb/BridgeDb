@@ -6,6 +6,7 @@ package org.bridgedb.rdf;
 
 import java.io.File;
 import java.util.Date;
+import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.utils.TestUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -48,6 +49,7 @@ public class BridgeDBRdfHandlerTest extends TestUtils{
     @Test
     public void testWriteRdfToFile() throws Exception {
         report("writeRdfToFile");
+        BioDataSource.init();
         BridgeDBRdfHandler.writeRdfToFile(file);
     }
 

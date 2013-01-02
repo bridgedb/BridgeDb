@@ -93,11 +93,9 @@ public class DataSourceUris extends RdfBase {
             repositoryConnection.add(id, BridgeDBConstants.TYPE_URI, new LiteralImpl(dataSource.getType()));
         }
 
-        if (!VERSION2){
-            String urlPattern = dataSource.getUrl("$id");
-            if (urlPattern.length() > 3){
-                repositoryConnection.add(id, BridgeDBConstants.URL_PATTERN_URI, new LiteralImpl(urlPattern));
-            }
+        String urlPattern = dataSource.getUrl("$id");
+        if (urlPattern.length() > 3){
+            repositoryConnection.add(id, BridgeDBConstants.URL_PATTERN_URI, new LiteralImpl(urlPattern));
         }
 
         if (!VERSION2){
@@ -214,7 +212,6 @@ public class DataSourceUris extends RdfBase {
             }
         }
     }
-    
     
     private DataSourceUris(DataSource wraps){
         inner = wraps;
