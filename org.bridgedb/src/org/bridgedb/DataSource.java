@@ -432,55 +432,53 @@ public final class DataSource
         DataSource byCode = bySysCode.get(sysCode);
        
         if (byName == null){
-            if (byCode == null){
+            if (byCode == null){ //found neither
     			current = new DataSource (sysCode, fullName);
     			registry.add (current);
-            } else if (byCode.fullName == null){
-                System.err.println("Found DataSource with sysCode \"" + sysCode + " and null fullName. "+ 
-                        " Which is now being set to " + fullName);
-    			current = byCode;
-                current.fullName = fullName;                
-            } else if (byCode.fullName.equals(fullName)){
-                //Strange should never happen.
-                System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
-                        byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
-    			current = byCode;
-                current.fullName = fullName;                
-            } else {
-                byCode.alternativeFullNames.add(byCode.fullName);
-                byCode.alternativeFullNames.remove(fullName);
-                System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
-                        byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
-    			current = byCode;
-                current.fullName = fullName;
+            } else { //Only found by code
+                if (byCode.fullName == null){
+                    System.err.println("Found DataSource with sysCode \"" + sysCode + " and null fullName. "+ 
+                            " Which is now being set to " + fullName);
+                    current = byCode;
+                    current.fullName = fullName;                
+                } else if (byCode.fullName.equals(fullName)){
+                    //Strange should never happen.
+                    System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
+                            byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
+                    current = byCode;
+                    current.fullName = fullName;                
+                } else {
+                    byCode.alternativeFullNames.add(byCode.fullName);
+                    byCode.alternativeFullNames.remove(fullName);
+                    System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
+                            byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
+                    current = byCode;
+                    current.fullName = fullName;
+                }
             }
         } else {
-            if (byCode == null){
-                //This will catch both sysCodes being null;
-                if (byName.sysCode == sysCode){
-                    current = byName;
-                //this one because "abc" != "abc" but "abc".equals("abc")    
-                } else if (byName.sysCode.equals(sysCode)){
-                    current = byName;                
-                } else if (byName.sysCode == null){
-                    current = byName;     
-                    System.err.println("Overwriting null syscode for " + fullName);
-                    current.sysCode = sysCode;
-                } else if (byName.sysCode.isEmpty()){
-                    current = byName;     
-                    System.err.println("Overwriting empty syscode for " + fullName);
-                    current.sysCode = sysCode;
-                } else if (sysCode == null){
-                    current = byName;     
-                    System.err.println("Not overwriting syscode for " + fullName + " with null");
-                } else if (sysCode.isEmpty()){
-                    current = byName;     
-                    System.err.println("Not overwriting syscode for " + fullName + " with empty");
+            if (byCode == null){ //Only found byName
+                current = byName;
+                if (byName.sysCode == null || byName.sysCode.isEmpty()){
+                    if (sysCode == null || sysCode.isEmpty()){
+                        //ok still null/empty so do nothing
+                    } else {
+                        System.err.println("Overwriting null/empty syscode for " + fullName + " with " + sysCode);
+                    }
                 } else {
-                    throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode \"" + 
+                    if (byName.sysCode.equals(sysCode)){
+                        //Strange should never happen
+                        System.err.println("Found " + current + " by name but not by syscode.");
+                    } else if (sysCode == null){
+                        System.err.println("Not overwriting syscode for " + fullName + " with null");
+                    } else if (sysCode.isEmpty()){
+                        System.err.println("Not overwriting syscode for " + fullName + " with empty");
+                    } else {
+                        throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode \"" + 
                             byName.sysCode + "\" which does not match new systemCode \"" + sysCode + "\"");
+                    }
                 }
-            } else {
+            } else { //Found both byCode and by name
                 if (byName == byCode){
                     current = byCode;
                 } else {
