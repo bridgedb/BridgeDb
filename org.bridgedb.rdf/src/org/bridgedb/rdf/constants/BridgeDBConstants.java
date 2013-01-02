@@ -109,7 +109,7 @@ public class BridgeDBConstants {
     public static final String SOURCE_RDF_PATTERN_SHORT = PREFIX_NAME + SOURCE_RDF_PATTERN;
     public static final URI SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + SOURCE_RDF_PATTERN);
     
-    private static final String BIO2RDF_PATTERN = "Bio2RdfPattern";
+    private static final String BIO2RDF_PATTERN = "bio2RdfPattern";
     public static final String BIO2RDF_PATTERN_SHORT = PREFIX_NAME + BIO2RDF_PATTERN;
     public static final URI BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + BIO2RDF_PATTERN);
 

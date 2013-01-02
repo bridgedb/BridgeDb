@@ -29,6 +29,7 @@ public class BridgeDBRdfHandlerTest extends TestUtils{
     
     @BeforeClass
     public static void setUpClass() {
+        BioDataSource.init();
     }
     
     @AfterClass
@@ -49,7 +50,6 @@ public class BridgeDBRdfHandlerTest extends TestUtils{
     @Test
     public void testWriteRdfToFile() throws Exception {
         report("writeRdfToFile");
-        BioDataSource.init();
         BridgeDBRdfHandler.writeRdfToFile(file);
     }
 

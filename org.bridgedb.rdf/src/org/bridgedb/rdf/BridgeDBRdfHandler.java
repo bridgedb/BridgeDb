@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Statement;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
@@ -46,6 +47,7 @@ public class BridgeDBRdfHandler {
     }
 
     public static void parseRdfFile(File file) throws BridgeDBException{
+        Reporter.println("Parsing " + file.getAbsolutePath());
         Repository repository = null;
         RepositoryConnection repositoryConnection = null;
         try {
@@ -63,13 +65,14 @@ public class BridgeDBRdfHandler {
     }
     
     public static void writeRdfToFile(File file) throws BridgeDBException{
+        Reporter.println("Writing DataSource RDF to " + file.getAbsolutePath());
         Repository repository = null;
         RepositoryConnection repositoryConnection = null;
         try {
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             repositoryConnection = repository.getConnection();
-            DataSourceUris.addAll(repositoryConnection);
+            DataSourceUris.writeAll(repositoryConnection);
             OrganismRdf.addAll(repositoryConnection);
             UriPattern.addAll(repositoryConnection);
             writeRDF(repositoryConnection, file);        

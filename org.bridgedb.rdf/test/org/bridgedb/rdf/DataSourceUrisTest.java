@@ -59,7 +59,7 @@ public class DataSourceUrisTest extends TestUtils{
      * Test of byDataSource method, of class DataSourcePlus.
      */
     @Test
-    public void testByDataSource() {
+    public void testByDataSource() throws BridgeDBException {
         report("byDataSource");
         DataSource dataSource = DataSource.getByFullName("DataSourceUrisTest_testByDataSource");
         DataSourceUris expResult = DataSourceUris.byDataSource(dataSource);

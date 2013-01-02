@@ -20,7 +20,6 @@ import org.openrdf.repository.RepositoryResult;
  * @author Christian
  */
 public abstract class RdfBase {
-    static final boolean VERSION2 = true;
     public static String DEFAULT_BASE_URI = "http://no/BaseURI/Set/";
 
     static String scrub(String original){

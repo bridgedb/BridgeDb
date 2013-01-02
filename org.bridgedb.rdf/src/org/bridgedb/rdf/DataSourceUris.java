@@ -34,6 +34,8 @@ public class DataSourceUris extends RdfBase {
 
     private final DataSource inner;
     private DataSource uriParent = null;
+    private UriPattern sourceRdfPattern;
+    private UriPattern bio2RdfPattern;
     
     private static final HashMap<DataSource, DataSourceUris> byDataSource = new HashMap<DataSource, DataSourceUris>();
     private static final HashMap<Resource, DataSourceUris> register = new HashMap<Resource, DataSourceUris>();
@@ -41,74 +43,97 @@ public class DataSourceUris extends RdfBase {
         BridgeDBConstants.FULL_NAME_URI,
         RdfConstants.TYPE_URI,
         BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI,
+        BridgeDBConstants.BIO2RDF_PATTERN_URI,
         BridgeDBConstants.FULL_NAME_URI,
         BridgeDBConstants.ID_EXAMPLE_URI,
+        BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI,
+        BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI,
         BridgeDBConstants.MAIN_URL_URI,
         BridgeDBConstants.ORGANISM_URI,
         BridgeDBConstants.PRIMAY_URI,
+        BridgeDBConstants.SOURCE_RDF_PATTERN_URI,
         BridgeDBConstants.SYSTEM_CODE_URI,
         BridgeDBConstants.TYPE_URI,
         BridgeDBConstants.URL_PATTERN_URI,
         BridgeDBConstants.URN_BASE_URI,
+        BridgeDBConstants.WIKIPATHWAYS_BASE_URI, //Being ignored as wrong in only file used.
+        BridgeDBConstants.WIKIPATHWAYS_PATTERN_URI,
     }));
       
     public static URI getResourceId(DataSource dataSource) {
         return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_" + scrub(dataSource.getFullName()));
     }
     
-    public static void addAll(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
+    public static void writeAll(RepositoryConnection repositoryConnection) 
+            throws IOException, RepositoryException, BridgeDBException {
         for (DataSource dataSource:DataSource.getDataSources()){
-            add(repositoryConnection, dataSource); 
+            DataSourceUris dsu = byDataSource(dataSource);
+            dsu.writeDataSource(repositoryConnection); 
+            dsu.writeUriPatterns(repositoryConnection); 
         }
     }
 
-    public static void add(RepositoryConnection repositoryConnection, DataSource dataSource) throws IOException, RepositoryException {
-        URI id = getResourceId(dataSource);
+    public void writeDataSource(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
+        URI id = getResourceId(inner);
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.DATA_SOURCE_URI);         
-        repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, new LiteralImpl(dataSource.getFullName()));
+        repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, new LiteralImpl(inner.getFullName()));
 
-        if (dataSource.getSystemCode() != null && (!dataSource.getSystemCode().trim().isEmpty())){
-            repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(dataSource.getSystemCode()));
+        if (inner.getSystemCode() != null && (!inner.getSystemCode().trim().isEmpty())){
+            repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(inner.getSystemCode()));
         }
 
-        for (String alternativeFullName:dataSource.getAlternativeFullNames()){
+        for (String alternativeFullName:inner.getAlternativeFullNames()){
             repositoryConnection.add(id, BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI, new LiteralImpl(alternativeFullName));            
         }
         
-        if (dataSource.getMainUrl() != null){
-            repositoryConnection.add(id, BridgeDBConstants.MAIN_URL_URI, new LiteralImpl(dataSource.getMainUrl()));
+        if (inner.getMainUrl() != null){
+            repositoryConnection.add(id, BridgeDBConstants.MAIN_URL_URI, new LiteralImpl(inner.getMainUrl()));
         }
 
-        if (dataSource.getExample() != null && dataSource.getExample().getId() != null){
-            repositoryConnection.add(id, BridgeDBConstants.ID_EXAMPLE_URI, new LiteralImpl(dataSource.getExample().getId()));
+        if (inner.getExample() != null && inner.getExample().getId() != null){
+            repositoryConnection.add(id, BridgeDBConstants.ID_EXAMPLE_URI, new LiteralImpl(inner.getExample().getId()));
         }
 
-        if (dataSource.isPrimary()){
+        if (inner.isPrimary()){
             repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.TRUE);
         } else {
             repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.FALSE);
         }
  
-        if (dataSource.getType() != null){
-            repositoryConnection.add(id, BridgeDBConstants.TYPE_URI, new LiteralImpl(dataSource.getType()));
+        if (inner.getType() != null){
+            repositoryConnection.add(id, BridgeDBConstants.TYPE_URI, new LiteralImpl(inner.getType()));
         }
 
-        String urlPattern = dataSource.getUrl("$id");
+        String urlPattern = inner.getUrl("$id");
         if (urlPattern.length() > 3){
             repositoryConnection.add(id, BridgeDBConstants.URL_PATTERN_URI, new LiteralImpl(urlPattern));
         }
 
-        if (!VERSION2){
-            String urnPattern = dataSource.getURN("");
+        String identifersOrgPattern = inner.getIdentifiersOrgUri("$id");
+        if (identifersOrgPattern == null){
+            String urnPattern = inner.getURN("");
             if (urnPattern.length() > 1){
-                repositoryConnection.add(id, BridgeDBConstants.URN_BASE_URI, 
-                        new LiteralImpl(urnPattern.substring(0, urnPattern.length()-1)));
+                Value urnBase = new LiteralImpl(urnPattern.substring(0, urnPattern.length()-1));
+                repositoryConnection.add(id, BridgeDBConstants.URN_BASE_URI, urnBase);
             }
+        } else {
+            repositoryConnection.add(id, BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI, new LiteralImpl(identifersOrgPattern));            
         }
 
-        if (dataSource.getOrganism() != null){
-            Organism organism = (Organism)dataSource.getOrganism();
+        if (inner.getOrganism() != null){
+            Organism organism = (Organism)inner.getOrganism();
             repositoryConnection.add(id, BridgeDBConstants.ORGANISM_URI, OrganismRdf.getResourceId(organism));
+        }
+    }
+
+    private void writeUriPatterns(RepositoryConnection repositoryConnection) throws RepositoryException {
+        URI id = getResourceId(inner);
+        if (bio2RdfPattern != null){
+            repositoryConnection.add(id, BridgeDBConstants.BIO2RDF_PATTERN_URI, bio2RdfPattern.getResourceId());        
+        }
+        if (sourceRdfPattern != null){
+            repositoryConnection.add(id, BridgeDBConstants.SOURCE_RDF_PATTERN_URI, sourceRdfPattern.getResourceId());                        
+            System.out.println("£" + sourceRdfPattern);
         }
     }
 
@@ -131,6 +156,7 @@ public class DataSourceUris extends RdfBase {
         }
         DataSource dataSource = readDataSources(repositoryConnection, dataSourceId);
         dataSourceUris = DataSourceUris.byDataSource(dataSource);
+        dataSourceUris.readUriPatternsStatements(repositoryConnection, dataSourceId);
         register.put(dataSourceId, dataSourceUris);
         return dataSourceUris;
      }    
@@ -190,11 +216,20 @@ public class DataSourceUris extends RdfBase {
         return builder.asDataSource();
     }
     
-    private void readUriPatterns(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+    private void readUriPatternsStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException{
-        String identifiers_org_base = 
-                getSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI);
-        setIdentifiersOrgBase(identifiers_org_base);
+        String identifiersOrgPattern = 
+                getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI);
+        setIdentifiersOrgPattern(identifiersOrgPattern);
+        String identifiersOrgBase = 
+                getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI);
+        setIdentifiersOrgBase(identifiersOrgBase);
+        String bio2Pattern = 
+                getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.BIO2RDF_PATTERN_URI);
+        bio2RdfPattern = addPattern(bio2Pattern);
+        String sourcePattern = 
+                getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.SOURCE_RDF_PATTERN_URI);
+        sourceRdfPattern = addPattern(sourcePattern);        
     }
     
     private final static void checkStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
@@ -213,12 +248,13 @@ public class DataSourceUris extends RdfBase {
         }
     }
     
-    private DataSourceUris(DataSource wraps){
+    private DataSourceUris(DataSource wraps) throws BridgeDBException{
         inner = wraps;
         byDataSource.put(inner, this);
+        loadDataSourceUriPatterns();
     }
     
-    public static DataSourceUris byDataSource(DataSource dataSource){
+    public static DataSourceUris byDataSource(DataSource dataSource) throws BridgeDBException{
         DataSourceUris result = byDataSource.get(dataSource);
         if (result == null){
             result = new DataSourceUris(dataSource);
@@ -256,11 +292,46 @@ public class DataSourceUris extends RdfBase {
     public void setIdentifiersOrgBase(String identifiersOrgBase) throws BridgeDBException {
         if (identifiersOrgBase != null){
             try {
-                inner.setIdentifiersOrgUri(identifiersOrgBase);
+                inner.setIdentifiersOrgUriBase(identifiersOrgBase);
             } catch (IDMapperException ex) {
                 throw new BridgeDBException("Unable to set Identifiers Org Base to " + identifiersOrgBase, ex);
             }
+            System.err.println("depricated " + BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI + " used");
+            UriPattern pattern = UriPattern.byUrlPattern(inner.getIdentifiersOrgUri("$id"));
+            pattern.setDataSource(inner);
         }
     }
     
+    public void setIdentifiersOrgPattern(String identifiersOrgPattern) throws BridgeDBException {
+        if (identifiersOrgPattern != null){
+            if (identifiersOrgPattern.endsWith("$id")){
+                try {
+                    String identifiersOrgBase = identifiersOrgPattern.substring(0, identifiersOrgPattern.length()-3);
+                    inner.setIdentifiersOrgUriBase(identifiersOrgBase);
+                } catch (IDMapperException ex) {
+                    throw new BridgeDBException("Unable to set Identifiers Org pattern to " + identifiersOrgPattern, ex);
+                }
+                UriPattern pattern = UriPattern.byUrlPattern(identifiersOrgPattern);
+                pattern.setDataSource(inner);          
+            } else {
+                throw new BridgeDBException("Identifersorg Pattern must end with $id");
+            }
+        }
+    }
+
+    private void loadDataSourceUriPatterns() throws BridgeDBException {
+        String pattern = inner.getUrl("$id");
+        addPattern(pattern);
+        pattern = inner.getIdentifiersOrgUri("$id");
+        addPattern(pattern);        
+   }
+
+    private UriPattern addPattern(String pattern) throws BridgeDBException {
+        if (pattern == null || pattern.isEmpty() || pattern.equals("$id") || pattern.equals("null")){
+            return null;
+        }
+        UriPattern uriPattern =  UriPattern.byUrlPattern(pattern);
+        uriPattern.setDataSource(inner);
+        return uriPattern;
+    }
 }

@@ -112,7 +112,7 @@ public class UriPattern extends RdfBase {
         return new URIImpl(getUriPattern());
     }
     
-    public String getUriPattern() {
+    private String getUriPattern() {
         if (postfix == null){
             return nameSpace + "$id";
         } else {
