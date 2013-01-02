@@ -738,7 +738,7 @@ public final class DataSource
      *     indirectly by the urnBase method.
      * @since Version 2.0.0
 	*/
-    public void setIdentifiersOrgUri (String uri) throws IDMapperException
+    public void setIdentifiersOrgUriBase (String uri) throws IDMapperException
     {
         if (uri.startsWith(IDENTIFIERS_URI_ROOT)){
             if (uri.endsWith("/")){
@@ -777,11 +777,17 @@ public final class DataSource
      * @throws IDMapperException If a different base is set
      */
     private void setNonMarianBase(String base) throws IDMapperException{
+        if (urnBase.equals(base)){
+            return; //no change
+        }
         if (base.equalsIgnoreCase("null")){
             System.err.println("Ignoring attempt to set miriam urnBase to null for " + this);
             return;
         }
-        if (urnBase != "" && !urnBase.equals(base)){
+        if (urnBase.isEmpty()){
+            System.err.println("None miriam urnBase \"" + base + "\" used for " + this + " previous was " + urnBase);
+            urnBase = base;
+        } else {
             if (miriamBase.isEmpty()){
                 throw new IDMapperException("Illegal attempt to change (none Miram) urnBase for " + this 
                         + ". Current value \"" + urnBase + "\" is NOT equal to new Value \"" + base + "\"");            
@@ -790,8 +796,6 @@ public final class DataSource
                     + " with non Miriam base \"" + base + "\" for " + this);
             return;
         }
-        urnBase = base;
-        System.err.println("None miriam urnBase \"" + base + "\" used for " + this);
     }
 
 }

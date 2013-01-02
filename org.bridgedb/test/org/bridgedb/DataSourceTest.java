@@ -252,7 +252,7 @@ public class DataSourceTest {
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source = DataSource.register(fullName, fullName)
                 .asDataSource();
-        source.setIdentifiersOrgUri(rootURL);
+        source.setIdentifiersOrgUriBase(rootURL);
         String id = "1234";
         String result = source.getURN(id);
         String expected = urnBase + ":" + id;
@@ -269,7 +269,7 @@ public class DataSourceTest {
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source = DataSource.register(fullName, fullName)
                 .asDataSource();
-        source.setIdentifiersOrgUri(rootURL + "/");
+        source.setIdentifiersOrgUriBase(rootURL + "/");
         String id = "1234";
         String result = source.getURN(id);
         String expected = urnBase + ":" + id;
@@ -286,7 +286,7 @@ public class DataSourceTest {
         String urnBase = "urn:miriam:" + fullName;
 		DataSource source1 = DataSource.register(fullName, fullName)
                 .asDataSource();
-        source1.setIdentifiersOrgUri(rootURL);
+        source1.setIdentifiersOrgUriBase(rootURL);
 		DataSource source2 = DataSource.register(fullName, fullName)
                 .urnBase(urnBase)
                 .asDataSource();
@@ -307,7 +307,7 @@ public class DataSourceTest {
         String urnBase = "urn:miriam:" + fullName + "B";
 		DataSource source1 = DataSource.register(fullName, fullName)
                 .asDataSource();
-        source1.setIdentifiersOrgUri(rootURL);
+        source1.setIdentifiersOrgUriBase(rootURL);
 		DataSource source2 = DataSource.register(fullName, fullName)
                 .urnBase(urnBase)
                 .asDataSource();
@@ -323,7 +323,7 @@ public class DataSourceTest {
                 .asDataSource();
 		DataSource source1 = DataSource.register(fullName, fullName)
                 .asDataSource();
-        source1.setIdentifiersOrgUri(rootURL);
+        source1.setIdentifiersOrgUriBase(rootURL);
     }
     
     @Test
