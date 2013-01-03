@@ -37,6 +37,7 @@ public class DataSourceUris extends RdfBase {
     private boolean isParent = false;
     private UriPattern sourceRdfPattern;
     private UriPattern bio2RdfPattern;
+    private UriPattern wikiPathwaysPattern;
     
     private static final HashMap<DataSource, DataSourceUris> byDataSource = new HashMap<DataSource, DataSourceUris>();
     private static final HashMap<Resource, DataSourceUris> register = new HashMap<Resource, DataSourceUris>();
@@ -76,7 +77,7 @@ public class DataSourceUris extends RdfBase {
         }
     }
 
-    public void writeDataSource(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
+    public void writeDataSource(RepositoryConnection repositoryConnection) throws IOException, RepositoryException, BridgeDBException {
         URI id = getResourceId(inner);
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.DATA_SOURCE_URI);         
         repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, new LiteralImpl(inner.getFullName()));
@@ -107,9 +108,9 @@ public class DataSourceUris extends RdfBase {
             repositoryConnection.add(id, BridgeDBConstants.TYPE_URI, new LiteralImpl(inner.getType()));
         }
 
-        String urlPattern = inner.getUrl("$id");
-        if (urlPattern.length() > 3){
-            repositoryConnection.add(id, BridgeDBConstants.URL_PATTERN_URI, new LiteralImpl(urlPattern));
+        UriPattern urlPattern = getDataSourceUrl();
+        if (urlPattern != null){
+            repositoryConnection.add(id, BridgeDBConstants.URL_PATTERN_URI, urlPattern.getResourceId());
         }
 
         String identifersOrgPattern = inner.getIdentifiersOrgUri("$id");
@@ -137,14 +138,17 @@ public class DataSourceUris extends RdfBase {
         }
     }
 
-    private void writeUriPatterns(RepositoryConnection repositoryConnection) throws RepositoryException {
+    private void writeUriPatterns(RepositoryConnection repositoryConnection) throws RepositoryException, BridgeDBException {
         URI id = getResourceId(inner);
         if (bio2RdfPattern != null){
             repositoryConnection.add(id, BridgeDBConstants.BIO2RDF_PATTERN_URI, bio2RdfPattern.getResourceId());        
         }
         if (sourceRdfPattern != null){
             repositoryConnection.add(id, BridgeDBConstants.SOURCE_RDF_PATTERN_URI, sourceRdfPattern.getResourceId());                        
-            System.out.println("£" + sourceRdfPattern);
+        }
+        UriPattern wikiPathwaysPattern = getWikiPathwaysPattern();
+        if (wikiPathwaysPattern != null){
+            repositoryConnection.add(id, BridgeDBConstants.WIKIPATHWAYS_PATTERN_URI, wikiPathwaysPattern.getResourceId());                        
         }
     }
 
@@ -341,7 +345,7 @@ public class DataSourceUris extends RdfBase {
                 throw new BridgeDBException("Unable to set Identifiers Org Base to " + identifiersOrgBase, ex);
             }
             //System.err.println("depricated " + BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI + " used");
-            UriPattern pattern = UriPattern.byUrlPattern(inner.getIdentifiersOrgUri("$id"));
+            UriPattern pattern = UriPattern.byPattern(inner.getIdentifiersOrgUri("$id"));
             pattern.setDataSource(this);
         }
     }
@@ -355,7 +359,7 @@ public class DataSourceUris extends RdfBase {
                 } catch (IDMapperException ex) {
                     throw new BridgeDBException("Unable to set Identifiers Org pattern to " + identifiersOrgPattern, ex);
                 }
-                UriPattern pattern = UriPattern.byUrlPattern(identifiersOrgPattern);
+                UriPattern pattern = UriPattern.byPattern(identifiersOrgPattern);
                 pattern.setDataSource(this);          
             } else {
                 throw new BridgeDBException("Identifersorg Pattern must end with $id");
@@ -374,7 +378,7 @@ public class DataSourceUris extends RdfBase {
         if (pattern == null || pattern.isEmpty() || pattern.equals("$id") || pattern.equals("null")){
             return null;
         }
-        UriPattern uriPattern =  UriPattern.byUrlPattern(pattern);
+        UriPattern uriPattern =  UriPattern.byPattern(pattern);
         //System.out.println(pattern);
         uriPattern.setDataSource(this);
         return uriPattern;
@@ -386,6 +390,28 @@ public class DataSourceUris extends RdfBase {
 
     DataSource getDataSource() {
         return inner;
+    }
+
+    private UriPattern getWikiPathwaysPattern() throws BridgeDBException {
+        //sourceRDFURI -> bio2RDF -> urlPattern
+        if (wikiPathwaysPattern != null){
+            return wikiPathwaysPattern;
+        }
+        if (sourceRdfPattern != null){
+            return sourceRdfPattern;
+        }
+        if (bio2RdfPattern != null){
+            return bio2RdfPattern;
+        }
+        return getDataSourceUrl();
+    }
+
+    private UriPattern getDataSourceUrl() throws BridgeDBException {
+        String urlPattern = inner.getUrl("$id");
+        if (urlPattern.length() > 3){
+            return UriPattern.byPattern(urlPattern);
+        }
+        return null;
     }
 
 }

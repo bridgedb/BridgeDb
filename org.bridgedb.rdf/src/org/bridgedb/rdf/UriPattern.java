@@ -83,7 +83,7 @@ public class UriPattern extends RdfBase {
         return result;
     }
                 
-    public static UriPattern byUrlPattern(String urlPattern) throws BridgeDBException{
+    public static UriPattern byPattern(String urlPattern) throws BridgeDBException{
         int pos = urlPattern.indexOf("$id");
         if (pos == -1) {
             throw new BridgeDBException("Urlpattern should have $id in it");
