@@ -31,7 +31,8 @@ public class UriPattern extends RdfBase {
 
     private final String nameSpace;
     private final String postfix;
-    private DataSource dataSource;
+    private DataSourceUris dataSourceUris;
+    private boolean multipleDataSources = false;
     
     private static HashMap<Resource, UriPattern> register = new HashMap<Resource, UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
@@ -100,12 +101,51 @@ public class UriPattern extends RdfBase {
         }
     }
     
-    public void setDataSource(DataSource dataSource){
-        this.dataSource = dataSource;
+    public void setDataSource(DataSourceUris dsu) throws BridgeDBException{
+        if (dsu.isParent()){
+            setParentDataSource(dsu);
+        } else {
+            setNonParentDataSource(dsu);
+        }
+    }
+    
+    private void setNonParentDataSource(DataSourceUris dsu) {
+        if (multipleDataSources) {
+            if (dataSourceUris == null){
+                System.err.println("UriPattern " + this + " assigned to " + dsu.getDataSource()
+                    + " and others but no Uri parent set");
+            } else {
+                System.out.println("UriPattern " + this + " assigned to " + dsu.getDataSource()
+                    + " and Uri parent " + this.dataSourceUris.getDataSource());
+            }
+            //already a multiple so ignore non parent
+        } else if (dataSourceUris == null){
+            dataSourceUris = dsu;
+        } else if (dataSourceUris.equals(dsu)){
+            //already set so do nothing
+        } else {
+            System.err.println("UriPattern " + this + " assigned to " + this.dataSourceUris.getDataSource()
+                    + " and " + dsu.getDataSource());
+            dataSourceUris = null;
+            multipleDataSources = true;
+        }
+    }
+    
+    private void setParentDataSource(DataSourceUris dsu) throws BridgeDBException{
+        multipleDataSources = true;
+        if (dataSourceUris ==  null) {       
+            dataSourceUris = dsu;
+        } else if (dataSourceUris.equals(dsu)){
+            //already set so do nothing
+        } else {
+            throw new BridgeDBException("UriPattern " + this + " already assigned to parent " 
+                    + this.dataSourceUris.getDataSource()
+                    + " so can not assign to parent " + dsu.getDataSource());
+        }
     }
     
     public DataSource getDataSource(){
-        return dataSource;
+        return dataSourceUris.getDataSource();
     }
     
     public final URI getResourceId(){

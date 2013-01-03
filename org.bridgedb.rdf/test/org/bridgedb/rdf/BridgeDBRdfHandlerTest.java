@@ -6,6 +6,7 @@ package org.bridgedb.rdf;
 
 import java.io.File;
 import java.util.Date;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.utils.TestUtils;
 import org.junit.After;
@@ -28,8 +29,9 @@ public class BridgeDBRdfHandlerTest extends TestUtils{
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws IDMapperException {
         BioDataSource.init();
+        UriParentSetter.setParents();
     }
     
     @AfterClass

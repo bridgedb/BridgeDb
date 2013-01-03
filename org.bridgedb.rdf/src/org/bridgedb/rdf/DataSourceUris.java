@@ -34,6 +34,7 @@ public class DataSourceUris extends RdfBase {
 
     private final DataSource inner;
     private DataSource uriParent = null;
+    private boolean isParent = false;
     private UriPattern sourceRdfPattern;
     private UriPattern bio2RdfPattern;
     
@@ -45,6 +46,7 @@ public class DataSourceUris extends RdfBase {
         BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI,
         BridgeDBConstants.BIO2RDF_PATTERN_URI,
         BridgeDBConstants.FULL_NAME_URI,
+        BridgeDBConstants.HAS_URI_PARENT,
         BridgeDBConstants.ID_EXAMPLE_URI,
         BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI,
         BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI,
@@ -274,6 +276,13 @@ public class DataSourceUris extends RdfBase {
         loadDataSourceUriPatterns();
     }
     
+    private DataSourceUris(DataSource wraps, DataSource parent) throws BridgeDBException{
+        inner = wraps;
+        byDataSource.put(inner, this);
+        setUriParent(parent);
+        loadDataSourceUriPatterns();
+    }
+    
     public static DataSourceUris byDataSource(DataSource dataSource) throws BridgeDBException{
         DataSourceUris result = byDataSource.get(dataSource);
         if (result == null){
@@ -282,7 +291,16 @@ public class DataSourceUris extends RdfBase {
         return result;
     }
     
-    public void setUriParent(DataSource parent) throws BridgeDBException{
+    public static void setUriParent(DataSource parent, DataSource child) throws BridgeDBException{
+        DataSourceUris childThis = byDataSource.get(child);
+        if (childThis == null){
+            childThis = new DataSourceUris(child, parent);
+        } else {
+            childThis.setUriParent(parent);
+        }
+    }
+    
+    public final void setUriParent(DataSource parent) throws BridgeDBException{
         if (parent.equals(uriParent)){
             return;  //already set. Also checks that replacedBy is not null
         }
@@ -298,31 +316,37 @@ public class DataSourceUris extends RdfBase {
             throw new BridgeDBException("Illegal attempt to set UriParent of  " + inner + " with "  + parent
                     + ". As parent has a UriParent of " + parentPlus.uriParent + " set.");             
         }
-        for (DataSourceUris plus: byDataSource.values()){
-            if (plus.uriParent != null){
-                if (plus.uriParent.equals(inner)){
-                    throw new BridgeDBException("Illegal attempt to set UriParent of  " + inner + " with "  + parent
-                        + ". As " + inner + " is itself a UriParent of " + plus.inner);             
+        if (isParent()){
+            for (DataSourceUris plus: byDataSource.values()){
+                if (plus.uriParent != null){
+                    if (plus.uriParent.equals(inner)){
+                        throw new BridgeDBException("Illegal attempt to set UriParent of  " + inner + " with "  + parent
+                            + ". As " + inner + " is itself a UriParent of " + plus.inner);             
+                    }
                 }
             }
+            throw new BridgeDBException("Illegal attempt to set UriParent of  " + inner + " with "  + parent
+                    + ". As " + inner + " is itself a UriParent.");                         
         }
+        System.out.println("Setting uriParent of " + inner + " to " + parent);
         uriParent = parent;
+        parentPlus.isParent = true;
     }
 
-    public void setIdentifiersOrgBase(String identifiersOrgBase) throws BridgeDBException {
+    public final void setIdentifiersOrgBase(String identifiersOrgBase) throws BridgeDBException {
         if (identifiersOrgBase != null){
             try {
                 inner.setIdentifiersOrgUriBase(identifiersOrgBase);
             } catch (IDMapperException ex) {
                 throw new BridgeDBException("Unable to set Identifiers Org Base to " + identifiersOrgBase, ex);
             }
-            System.err.println("depricated " + BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI + " used");
+            //System.err.println("depricated " + BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI + " used");
             UriPattern pattern = UriPattern.byUrlPattern(inner.getIdentifiersOrgUri("$id"));
-            pattern.setDataSource(inner);
+            pattern.setDataSource(this);
         }
     }
     
-    public void setIdentifiersOrgPattern(String identifiersOrgPattern) throws BridgeDBException {
+    public final void setIdentifiersOrgPattern(String identifiersOrgPattern) throws BridgeDBException {
         if (identifiersOrgPattern != null){
             if (identifiersOrgPattern.endsWith("$id")){
                 try {
@@ -332,7 +356,7 @@ public class DataSourceUris extends RdfBase {
                     throw new BridgeDBException("Unable to set Identifiers Org pattern to " + identifiersOrgPattern, ex);
                 }
                 UriPattern pattern = UriPattern.byUrlPattern(identifiersOrgPattern);
-                pattern.setDataSource(inner);          
+                pattern.setDataSource(this);          
             } else {
                 throw new BridgeDBException("Identifersorg Pattern must end with $id");
             }
@@ -351,8 +375,17 @@ public class DataSourceUris extends RdfBase {
             return null;
         }
         UriPattern uriPattern =  UriPattern.byUrlPattern(pattern);
-        uriPattern.setDataSource(inner);
+        //System.out.println(pattern);
+        uriPattern.setDataSource(this);
         return uriPattern;
+    }
+
+    boolean isParent() {
+        return isParent;
+    }
+
+    DataSource getDataSource() {
+        return inner;
     }
 
 }
