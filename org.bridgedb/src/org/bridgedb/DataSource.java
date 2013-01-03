@@ -566,6 +566,20 @@ public final class DataSource
 		return byFullName.get(fullName);
 	}
 	
+	/** 
+	 * returns pre-existing DataSource object by full name
+	 * @param fullName full name to query for
+	 * @return DataSource
+	 */
+	public static DataSource getExistingByFullName(String fullName) throws IDMapperException
+	{
+		DataSource result = byFullName.get(fullName);
+        if (result == null){
+            throw new IDMapperException("No DataSource know for " + fullName);
+        }
+        return result;
+	}
+	
 	public static DataSource getByAlias(String alias)
 	{
 		return byAlias.get(alias);
