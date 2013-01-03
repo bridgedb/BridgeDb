@@ -253,14 +253,19 @@ public class LinksetExporter {
 
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
         Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
+ 
         File file = new File("C:/OpenPhacts/andra/");
         //exportFile(file);
-        
+
         Set<DataSource> used = extractDataSources(file);
         for (DataSource ds:used){
             System.out.println(ds);
             canExport(ds);
         }
+
+        File dsfile = new File("resources/BridgeDBDataSource.ttl");
+        BridgeDBRdfHandler.writeRdfToFile(dsfile, used);
+        
         //LinksetExporter exporter = new LinksetExporter(file);
         //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");
         //exporter.exportAll(directory);

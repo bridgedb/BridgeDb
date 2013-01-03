@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collection;
 import org.apache.log4j.Logger;
+import org.bridgedb.DataSource;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -73,6 +75,25 @@ public class BridgeDBRdfHandler {
             repository.initialize();
             repositoryConnection = repository.getConnection();
             DataSourceUris.writeAll(repositoryConnection);
+            OrganismRdf.addAll(repositoryConnection);
+            UriPattern.addAll(repositoryConnection);
+            writeRDF(repositoryConnection, file);        
+        } catch (Exception ex) {
+            throw new BridgeDBException ("Error writing Rdf to file ", ex);
+        } finally {
+            shutDown(repository, repositoryConnection);
+        }
+    }
+    
+    public static void writeRdfToFile(File file, Collection<DataSource> dataSources) throws BridgeDBException{
+        Reporter.println("Writing DataSource RDF to " + file.getAbsolutePath());
+        Repository repository = null;
+        RepositoryConnection repositoryConnection = null;
+        try {
+            repository = new SailRepository(new MemoryStore());
+            repository.initialize();
+            repositoryConnection = repository.getConnection();
+            DataSourceUris.writeAll(repositoryConnection, dataSources);
             OrganismRdf.addAll(repositoryConnection);
             UriPattern.addAll(repositoryConnection);
             writeRDF(repositoryConnection, file);        

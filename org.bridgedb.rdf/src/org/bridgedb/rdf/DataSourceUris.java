@@ -6,6 +6,7 @@ package org.bridgedb.rdf;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,23 +65,37 @@ public class DataSourceUris extends RdfBase {
     }));
       
     public static URI getResourceId(DataSource dataSource) {
-        return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_" + scrub(dataSource.getFullName()));
+        if (dataSource.getFullName() == null){
+            return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_bysysCode_" + scrub(dataSource.getSystemCode()));
+        } else {
+            return new URIImpl(BridgeDBConstants.DATA_SOURCE1 + "_" + scrub(dataSource.getFullName()));
+        }
     }
     
     public static void writeAll(RepositoryConnection repositoryConnection) 
             throws IOException, RepositoryException, BridgeDBException {
-        for (DataSource dataSource:DataSource.getDataSources()){
-            DataSourceUris dsu = byDataSource(dataSource);
-            dsu.writeDataSource(repositoryConnection); 
-            dsu.writeUriParent(repositoryConnection);
-            dsu.writeUriPatterns(repositoryConnection); 
+        writeAll(repositoryConnection, DataSource.getDataSources());
+    }
+    
+    public static void writeAll(RepositoryConnection repositoryConnection, Collection<DataSource> dataSources) 
+            throws IOException, RepositoryException, BridgeDBException {
+        for (DataSource dataSource:dataSources){
+            if (dataSource !=null){
+                DataSourceUris dsu = byDataSource(dataSource);
+                dsu.writeDataSource(repositoryConnection); 
+                dsu.writeUriParent(repositoryConnection);
+                dsu.writeUriPatterns(repositoryConnection); 
+            }
         }
     }
 
     public void writeDataSource(RepositoryConnection repositoryConnection) throws IOException, RepositoryException, BridgeDBException {
         URI id = getResourceId(inner);
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.DATA_SOURCE_URI);         
-        repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, new LiteralImpl(inner.getFullName()));
+        
+        if (inner.getFullName() != null){
+            repositoryConnection.add(id, BridgeDBConstants.FULL_NAME_URI, new LiteralImpl(inner.getFullName()));
+        }
 
         if (inner.getSystemCode() != null && (!inner.getSystemCode().trim().isEmpty())){
             repositoryConnection.add(id, BridgeDBConstants.SYSTEM_CODE_URI, new LiteralImpl(inner.getSystemCode()));
