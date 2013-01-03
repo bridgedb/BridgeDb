@@ -24,8 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
 contains information about a certain DataSource, such as
@@ -222,16 +220,11 @@ public final class DataSource
      * @throws IDMapperException is the id can not be safely URL encoded
      * @since 2.0.0
 	 */
-    public String getIdentifiersOrgUri(String id) throws IDMapperException{
+    public String getIdentifiersOrgUri(String id) {
         if (miriamBase.isEmpty()){
             return null;
         }
-		try
-		{
-    		return "http://identifiers.org/" + miriamBase + "/" + URLEncoder.encode(id, "UTF-8");
-		} catch (UnsupportedEncodingException ex) { 
-            throw new IDMapperException("Unable to Encode id " + id, ex);
-        }
+        return "http://identifiers.org/" + miriamBase + "/" + id;
 	}
 
     /**
@@ -389,46 +382,32 @@ public final class DataSource
             return this;
 		}
         
-		/**
-		 * Registers an indetifiers.org uri 
-         * 
-         * Since Version 2.0.0 If the base starts with "urn:miriam:" the part that comes after "urn:miriam:"
-         * will also be used for identifiers.org uris.
-		 * @param uri an indetifiers.org uri which must start with "http://identifiers.org/"
-		 * @return the same Builder object so you can chain setters
-         * @throws IDMapperException If a previous (different) uri was registered by either this method or 
-         *     indirectly by the urnBase method.
-		 */
-		public Builder identifiersOrgUri (String uri) throws IDMapperException
-		{
-            if (uri.startsWith(IDENTIFIERS_URI_ROOT)){
-                current.setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length()));
-        		return this;
-            } else {
-                throw new IDMapperException("identifiers.Org uri must start with " + IDENTIFIERS_URI_ROOT 
-                        + " which \"" + uri + "\" does not");
-            }
-		}
-        
-        
         /**
          * Allows you to add an Extra FullName to a DataSource
          * 
          * Registered the DataSource with this name but keeps the original fullName
          * 
-         * @param alternativeFullName A DIFFERENT name!
+         * @param alternativeFullName A DIFFERENT name! 
 		 * @return the same Builder object so you can chain setters
          * @throws IllegalStateException If the alternativeFullName is equals to the current fullName.
+         *      Also throw if this alternativeName is assigned to a different DataSource
          * @since 2.0.0
          */
         public Builder alternativeFullName(String alternativeFullName){
             //This is a safety test only
             if (alternativeFullName.equals(current.fullName)){
                throw new IllegalStateException ("Illegal attempt to assign alterntiveFullName \"" + 
-                       alternativeFullName + "\" which is already the fullName \"");                
+                       alternativeFullName + "\" which is already the fullName ");                
             }
-            current.alternativeFullNames.add(alternativeFullName);
-            byFullName.put(alternativeFullName, current);
+            if (!current.alternativeFullNames.contains(alternativeFullName)){
+                if (byFullName.containsKey(alternativeFullName)){
+                    throw new IllegalStateException ("Illegal attempt to assign alterntiveFullName \"" 
+                            + alternativeFullName + "\" to " + current
+                            + " as it is already assigned to " + byFullName.get(alternativeFullName));                
+                }
+                current.alternativeFullNames.add(alternativeFullName);
+                byFullName.put(alternativeFullName, current);
+            }
             return this;
         }
 	}
@@ -451,57 +430,55 @@ public final class DataSource
         //This blokc is the new version 2.0 way of registeringf
         DataSource byName = byFullName.get(fullName);
         DataSource byCode = bySysCode.get(sysCode);
-        
+       
         if (byName == null){
-            if (byCode == null){
+            if (byCode == null){ //found neither
     			current = new DataSource (sysCode, fullName);
     			registry.add (current);
-            } else if (byCode.fullName == null){
-                System.err.println("Found DataSource with sysCode \"" + sysCode + " and null fullName. "+ 
-                        " Which is now being set to " + fullName);
-    			current = byCode;
-                current.fullName = fullName;                
-            } else if (byCode.fullName.equals(fullName)){
-                //Strange should never happen.
-                System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
-                        byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
-    			current = byCode;
-                current.fullName = fullName;                
-            } else {
-                byCode.alternativeFullNames.add(byCode.fullName);
-                byCode.alternativeFullNames.remove(fullName);
-                System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
-                        byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
-    			current = byCode;
-                current.fullName = fullName;
+            } else { //Only found by code
+                if (byCode.fullName == null){
+                    System.err.println("Found DataSource with sysCode \"" + sysCode + " and null fullName. "+ 
+                            " Which is now being set to " + fullName);
+                    current = byCode;
+                    current.fullName = fullName;                
+                } else if (byCode.fullName.equals(fullName)){
+                    //Strange should never happen.
+                    System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
+                            byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
+                    current = byCode;
+                    current.fullName = fullName;                
+                } else {
+                    byCode.alternativeFullNames.add(byCode.fullName);
+                    byCode.alternativeFullNames.remove(fullName);
+                    System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
+                            byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
+                    current = byCode;
+                    current.fullName = fullName;
+                }
             }
         } else {
-            if (byCode == null){
-                //This will catch both sysCodes being null;
-                if (byName.sysCode == sysCode){
-                    current = byName;
-                //this one because "abc" != "abc" but "abc".equals("abc")    
-                } else if (byName.sysCode.equals(sysCode)){
-                    current = byName;                
-                } else if (byName.sysCode == null){
-                    current = byName;     
-                    System.err.println("Overwriting null syscode for " + fullName);
-                    current.sysCode = sysCode;
-                } else if (byName.sysCode.isEmpty()){
-                    current = byName;     
-                    System.err.println("Overwriting empty syscode for " + fullName);
-                    current.sysCode = sysCode;
-                } else if (sysCode == null){
-                    current = byName;     
-                    System.err.println("Not overwriting syscode for " + fullName + " with null");
-                } else if (sysCode.isEmpty()){
-                    current = byName;     
-                    System.err.println("Not overwriting syscode for " + fullName + " with empty");
+            if (byCode == null){ //Only found byName
+                current = byName;
+                if (byName.sysCode == null || byName.sysCode.isEmpty()){
+                    if (sysCode == null || sysCode.isEmpty()){
+                        //ok still null/empty so do nothing
+                    } else {
+                        System.err.println("Overwriting null/empty syscode for " + fullName + " with " + sysCode);
+                    }
                 } else {
-                    throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode \"" + 
+                    if (byName.sysCode.equals(sysCode)){
+                        //Strange should never happen
+                        System.err.println("Found " + current + " by name but not by syscode.");
+                    } else if (sysCode == null){
+                        System.err.println("Not overwriting syscode for " + fullName + " with null");
+                    } else if (sysCode.isEmpty()){
+                        System.err.println("Not overwriting syscode for " + fullName + " with empty");
+                    } else {
+                        throw new IllegalStateException ("fullName " + fullName + " already used wtih systemCode \"" + 
                             byName.sysCode + "\" which does not match new systemCode \"" + sysCode + "\"");
+                    }
                 }
-            } else {
+            } else { //Found both byCode and by name
                 if (byName == byCode){
                     current = byCode;
                 } else {
@@ -589,6 +566,20 @@ public final class DataSource
 		return byFullName.get(fullName);
 	}
 	
+	/** 
+	 * returns pre-existing DataSource object by full name
+	 * @param fullName full name to query for
+	 * @return DataSource
+	 */
+	public static DataSource getExistingByFullName(String fullName) throws IDMapperException
+	{
+		DataSource result = byFullName.get(fullName);
+        if (result == null){
+            throw new IDMapperException("No DataSource know for " + fullName);
+        }
+        return result;
+	}
+	
 	public static DataSource getByAlias(String alias)
 	{
 		return byAlias.get(alias);
@@ -646,7 +637,11 @@ public final class DataSource
 	 */
 	public String toString()
 	{
-		return sysCode + ":" + fullName;
+        if (alternativeFullNames.isEmpty()){
+            return sysCode + ":" + fullName;
+        } else {
+            return sysCode + ":" + fullName + " " + alternativeFullNames;      
+        }    
 	}
 	
 	/**
@@ -745,6 +740,33 @@ public final class DataSource
 	}
 
     /**
+     * Registers an indetifiers.org uri 
+     * 
+     * Since Version 2.0.0 If the base starts with "urn:miriam:" the part that comes after "urn:miriam:"
+     * will also be used for identifiers.org uris.
+     * @param uri an indetifiers.org uri which must start with "http://identifiers.org/".
+     *    Input supports both uris that ends with "/" and ones that do not,
+     *    But output will always be the "offical" one with the slash.
+	 * @return the same Builder object so you can chain setters
+     * @throws IDMapperException If a previous (different) uri was registered by either this method or 
+     *     indirectly by the urnBase method.
+     * @since Version 2.0.0
+	*/
+    public void setIdentifiersOrgUriBase (String uri) throws IDMapperException
+    {
+        if (uri.startsWith(IDENTIFIERS_URI_ROOT)){
+            if (uri.endsWith("/")){
+                setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length(), uri.length()-1));
+            } else {
+               setMarianBase(uri.substring(IDENTIFIERS_URI_ROOT.length()));                    
+            }
+        } else {
+            throw new IDMapperException("identifiers.Org uri must start with " + IDENTIFIERS_URI_ROOT 
+                    + " which \"" + uri + "\" does not");
+        }
+    }
+                
+    /**
 	 * @param base the bit that comes (after "urn:miriam:" and before the next ":")
      * or (after "http://identifiers.org/" and beofre the next "/". 
      * @throws IDMapperException If a different base is set
@@ -769,7 +791,17 @@ public final class DataSource
      * @throws IDMapperException If a different base is set
      */
     private void setNonMarianBase(String base) throws IDMapperException{
-        if (urnBase != "" && !urnBase.equals(base)){
+        if (urnBase.equals(base)){
+            return; //no change
+        }
+        if (base.equalsIgnoreCase("null")){
+            System.err.println("Ignoring attempt to set miriam urnBase to null for " + this);
+            return;
+        }
+        if (urnBase.isEmpty()){
+            System.err.println("None miriam urnBase \"" + base + "\" used for " + this + " previous was " + urnBase);
+            urnBase = base;
+        } else {
             if (miriamBase.isEmpty()){
                 throw new IDMapperException("Illegal attempt to change (none Miram) urnBase for " + this 
                         + ". Current value \"" + urnBase + "\" is NOT equal to new Value \"" + base + "\"");            
@@ -778,8 +810,6 @@ public final class DataSource
                     + " with non Miriam base \"" + base + "\" for " + this);
             return;
         }
-        urnBase = base;
-        System.err.println("None miriam urnBase \"" + base + "\" used for " + this);
     }
 
 }

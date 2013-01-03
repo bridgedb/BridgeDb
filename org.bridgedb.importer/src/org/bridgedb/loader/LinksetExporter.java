@@ -4,12 +4,12 @@
  */
 package org.bridgedb.loader;
 
-import org.bridgedb.rdf.AndraIndetifiersOrg;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.apache.log4j.ConsoleAppender;
@@ -24,6 +24,9 @@ import org.bridgedb.XrefIterator;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.rdf.BridgeDBRdfHandler;
+import org.bridgedb.rdf.DataSourceUris;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
@@ -55,12 +58,34 @@ public class LinksetExporter {
         Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         for (DataSource srcDataSource:srcDataSources){
-            for (DataSource tgtDataSource:tgtDataSources){
-                exportLinkset (directory, srcDataSource, tgtDataSource);
+            if (canExport(srcDataSource)){
+                for (DataSource tgtDataSource:tgtDataSources){
+                    if (canExport(tgtDataSource)){
+                        exportLinkset (directory, srcDataSource, tgtDataSource);
+                    }
+                }
             }
         }
     }
 
+    private static boolean canExport(DataSource dataSource) throws BridgeDBException{
+        if (dataSource == null){
+            System.err.println("Ignoring null DataSource");
+            return false;
+        }
+        DataSourceUris dsu = DataSourceUris.byDataSource(dataSource);
+        UriPattern wp = dsu.getWikiPathwaysPattern();
+        if (wp == null){
+            System.err.println("Skipping DataSource " + dataSource + " as it has no WikiPathways pattern");
+            return false;
+        }
+        if (wp.hasPostfix()){
+            System.err.println("Skipping DataSource " + dataSource + " as WikiPathways pattern " + wp.getUriPattern() + " has a postfix");
+            return false;
+        }
+        return true;
+    }
+    
     public synchronized void exportLinkset(File directory, DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
         if (!directory.exists()){
             if (directory.getParentFile().exists()){
@@ -108,9 +133,18 @@ public class LinksetExporter {
         buffer.newLine();
     }
     
-    private void writeVoidHeader (DataSource srcDataSource, DataSource tgtDataSource) throws IOException{
-        sourceUriSpace = AndraIndetifiersOrg.getWikiPathwaysNameSpace(srcDataSource);
-        targetUriSpace = AndraIndetifiersOrg.getWikiPathwaysNameSpace(tgtDataSource);
+    private String getWikiPathwaysPattern(DataSource dataSource) throws BridgeDBException{
+        DataSourceUris dsu = DataSourceUris.byDataSource(dataSource);
+        UriPattern pattern = dsu.getWikiPathwaysPattern();
+        if (pattern == null){
+            throw new BridgeDBException ("No WikiPathways pattern found for " + dataSource);
+        }
+        return pattern.getUriSpace();
+    }
+    
+    private void writeVoidHeader (DataSource srcDataSource, DataSource tgtDataSource) throws IOException, BridgeDBException{
+        sourceUriSpace = getWikiPathwaysPattern(srcDataSource);
+        targetUriSpace = getWikiPathwaysPattern(tgtDataSource);
         writeln("@prefix : <#> .");
         writeln("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .");
         writeln("@prefix void: <http://rdfs.org/ns/void#> .");
@@ -194,13 +228,44 @@ public class LinksetExporter {
         }
     }
     
+    public static Set<DataSource> extractDataSources(File file) throws IDMapperException {
+        HashSet results = new HashSet<DataSource>();
+    	if (!file.exists()) {
+    		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
+    	} else if (file.isDirectory()){
+            File[] children = file.listFiles();
+            for (File child:children){
+                results.addAll(extractDataSources(child));
+            }
+        } else { 
+            IDMapper idMpper = BridgeDb.connect("idmapper-pgdb:" + file.getAbsolutePath());
+            results.addAll(idMpper .getCapabilities().getSupportedSrcDataSources());
+            results.addAll(idMpper .getCapabilities().getSupportedTgtDataSources());
+        }
+        return results;
+    }
+
     public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
         ConfigReader.logToConsole();
         BioDataSource.init();
+        File DSfile = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
+        BridgeDBRdfHandler.parseRdfFile(DSfile);
+
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
         Logger.getRootLogger().addAppender(new ConsoleAppender(new SimpleLayout(), ConsoleAppender.SYSTEM_OUT));
+ 
         File file = new File("C:/OpenPhacts/andra/");
-        exportFile(file);
+        //exportFile(file);
+
+        Set<DataSource> used = extractDataSources(file);
+        for (DataSource ds:used){
+            System.out.println(ds);
+            canExport(ds);
+        }
+
+        File dsfile = new File("resources/BridgeDBDataSource.ttl");
+        BridgeDBRdfHandler.writeRdfToFile(dsfile, used);
+        
         //LinksetExporter exporter = new LinksetExporter(file);
         //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");
         //exporter.exportAll(directory);

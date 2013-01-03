@@ -1,0 +1,3143 @@
+@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .
+@prefix : <http://no/BaseURI/Set/> .
+
+
+bridgeDB:DataSource_ZFIN a bridgeDB:DataSource ;
+	bridgeDB:fullName "ZFIN" ;
+	bridgeDB:systemCode "Z" ;
+	bridgeDB:mainUrl "http://zfin.org" ;
+	bridgeDB:idExample "ZDB-GENE-041118-11" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://zfin.org/action/marker/view/$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/zfin/$id" ;
+	bridgeDB:Organism bridgeDB:Organism_Dr ;
+	bridgeDB:WikiPathwaysPattern <http://zfin.org/action/marker/view/$id> .
+
+bridgeDB:DataSource_bysysCode_EnOc a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnOc" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_UCSC_Genome_Browser a bridgeDB:DataSource ;
+	bridgeDB:fullName "UCSC Genome Browser" ;
+	bridgeDB:systemCode "Uc" ;
+	bridgeDB:mainUrl "http://genome.ucsc.edu/" ;
+	bridgeDB:idExample "uc001tyh.1" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id> ;
+	bridgeDB:urnBase "Uc" ;
+	bridgeDB:WikiPathwaysPattern <http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id> .
+
+bridgeDB:DataSource_bysysCode_EnLa a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnLa" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_PubChem a bridgeDB:DataSource ;
+	bridgeDB:fullName "PubChem" ;
+	bridgeDB:systemCode "Cp" ;
+	bridgeDB:mainUrl "http://pubchem.ncbi.nlm.nih.gov/" ;
+	bridgeDB:idExample "100101" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" .
+
+bridgeDB:DataSource_bysysCode_EnDn a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnDn" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
+	bridgeDB:fullName "Ensembl" ;
+	bridgeDB:systemCode "En" ;
+	bridgeDB:mainUrl "http://www.ensembl.org/" ;
+	bridgeDB:idExample "ENSG00000139618" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.ensembl.org/id/$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/ensembl/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
+
+bridgeDB:DataSource_CAS a bridgeDB:DataSource ;
+	bridgeDB:fullName "CAS" ;
+	bridgeDB:systemCode "Ca" ;
+	bridgeDB:mainUrl "http://commonchemistry.org" ;
+	bridgeDB:idExample "50-00-0" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:urlPattern <http://commonchemistry.org/ChemicalDetail.aspx?ref=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/cas/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://commonchemistry.org/ChemicalDetail.aspx?ref=$id> .
+
+bridgeDB:DataSource_ChEBI a bridgeDB:DataSource ;
+	bridgeDB:fullName "ChEBI" ;
+	bridgeDB:systemCode "Ce" ;
+	bridgeDB:mainUrl "http://www.ebi.ac.uk/chebi/" ;
+	bridgeDB:idExample "CHEBI:36927" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:urlPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/obo.chebi/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/chebi:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/chebi:$id> .
+
+bridgeDB:DataSource_MGI a bridgeDB:DataSource ;
+	bridgeDB:fullName "MGI" ;
+	bridgeDB:systemCode "M" ;
+	bridgeDB:mainUrl "http://www.informatics.jax.org/" ;
+	bridgeDB:idExample "MGI:2442292" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.informatics.jax.org/marker/$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/mgd/$id" ;
+	bridgeDB:Organism bridgeDB:Organism_Mm ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/mgi:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/mgi:$id> .
+
+bridgeDB:DataSource_bysysCode_Ws a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Ws" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_HMDB a bridgeDB:DataSource ;
+	bridgeDB:fullName "HMDB" ;
+	bridgeDB:systemCode "Ch" ;
+	bridgeDB:mainUrl "http://www.hmdb.ca/" ;
+	bridgeDB:idExample "HMDB00001" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:urlPattern <http://www.hmdb.ca/metabolites/$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/hmdb/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://www.hmdb.ca/metabolites/$id> .
+
+bridgeDB:DataSource_SGD a bridgeDB:DataSource ;
+	bridgeDB:fullName "SGD" ;
+	bridgeDB:systemCode "D" ;
+	bridgeDB:mainUrl "http://www.yeastgenome.org/" ;
+	bridgeDB:idExample "S000028457" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/sgd/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> .
+
+bridgeDB:DataSource_WikiGenes a bridgeDB:DataSource ;
+	bridgeDB:fullName "WikiGenes" ;
+	bridgeDB:systemCode "Wg" ;
+	bridgeDB:mainUrl "http://www.wikigenes.org/" ;
+	bridgeDB:idExample "7157" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.wikigenes.org/e/gene/e/$id.html> ;
+	bridgeDB:urnBase "Wg" ;
+	bridgeDB:WikiPathwaysPattern <http://www.wikigenes.org/e/gene/e/$id.html> .
+
+bridgeDB:DataSource_GeneOntology a bridgeDB:DataSource ;
+	bridgeDB:fullName "GeneOntology" ;
+	bridgeDB:systemCode "T" ;
+	bridgeDB:mainUrl "http://www.ebi.ac.uk/QuickGO/" ;
+	bridgeDB:idExample "GO:0006915" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "probe" ;
+	bridgeDB:urlPattern <http://www.ebi.ac.uk/QuickGO/GTerm?id=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/obo.go/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://www.ebi.ac.uk/QuickGO/GTerm?id=$id> .
+
+bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
+	bridgeDB:fullName "PDB" ;
+	bridgeDB:systemCode "Pd" ;
+	bridgeDB:mainUrl "http://www.pdb.org/" ;
+	bridgeDB:idExample "2gc4" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "protein" ;
+	bridgeDB:urlPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/pdb/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> .
+
+bridgeDB:DataSource_Wheat_gene_refs a bridgeDB:DataSource ;
+	bridgeDB:fullName "Wheat gene refs" ;
+	bridgeDB:systemCode "Wr" ;
+	bridgeDB:mainUrl "http://wheat.pw.usda.gov/" ;
+	bridgeDB:idExample "WGS-95-1333" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "probe" ;
+	bridgeDB:urlPattern <http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id> ;
+	bridgeDB:urnBase "Wr" ;
+	bridgeDB:Organism bridgeDB:Organism_Ta ;
+	bridgeDB:WikiPathwaysPattern <http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id> .
+
+bridgeDB:DataSource_bysysCode_EnSb a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnSb" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnMd a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnMd" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_RGD a bridgeDB:DataSource ;
+	bridgeDB:fullName "RGD" ;
+	bridgeDB:systemCode "R" ;
+	bridgeDB:mainUrl "http://rgd.mcw.edu/" ;
+	bridgeDB:idExample "2018" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/rgd/$id" ;
+	bridgeDB:Organism bridgeDB:Organism_Rn ;
+	bridgeDB:WikiPathwaysPattern <http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=$id> .
+
+bridgeDB:DataSource_Gramene_Literature a bridgeDB:DataSource ;
+	bridgeDB:fullName "Gramene Literature" ;
+	bridgeDB:systemCode "Gl" ;
+	bridgeDB:mainUrl "http://www.gramene.org/" ;
+	bridgeDB:idExample "6200" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "probe" ;
+	bridgeDB:urlPattern <http://www.gramene.org/db/literature/pub_search?ref_id=$id> ;
+	bridgeDB:urnBase "Gl" ;
+	bridgeDB:WikiPathwaysPattern <http://www.gramene.org/db/literature/pub_search?ref_id=$id> .
+
+bridgeDB:DataSource_Affy a bridgeDB:DataSource ;
+	bridgeDB:fullName "Affy" ;
+	bridgeDB:systemCode "X" ;
+	bridgeDB:mainUrl "http://www.affymetrix.com/" ;
+	bridgeDB:idExample "1851_s_at" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "probe" ;
+	bridgeDB:urlPattern <http://www.ensembl.org/common/Lucene/Results?species=all;feature=OligoProbe;q=$id> ;
+	bridgeDB:urnBase "X" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/affymetrix:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/affymetrix:$id> .
+
+bridgeDB:DataSource_Agilent a bridgeDB:DataSource ;
+	bridgeDB:fullName "Agilent" ;
+	bridgeDB:systemCode "Ag" ;
+	bridgeDB:idExample "A_24_P98555" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "probe" ;
+	bridgeDB:urnBase "Ag" .
+
+bridgeDB:DataSource_Oryzabase a bridgeDB:DataSource ;
+	bridgeDB:fullName "Oryzabase" ;
+	bridgeDB:systemCode "Ob" ;
+	bridgeDB:mainUrl "http://www.shigen.nig.ac.jp/rice/oryzabase" ;
+	bridgeDB:idExample "468" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id> ;
+	bridgeDB:urnBase "Ob" ;
+	bridgeDB:Organism bridgeDB:Organism_Os ;
+	bridgeDB:WikiPathwaysPattern <http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id> .
+
+bridgeDB:DataSource_Rice_Ensembl_Gene a bridgeDB:DataSource ;
+	bridgeDB:fullName "Rice Ensembl Gene" ;
+	bridgeDB:systemCode "Os" ;
+	bridgeDB:mainUrl "http://www.gramene.org/Oryza_sativa" ;
+	bridgeDB:idExample "LOC_Os04g54800" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.gramene.org/Oryza_sativa/geneview?gene=$id> ;
+	bridgeDB:urnBase "Os" ;
+	bridgeDB:Organism bridgeDB:Organism_Os ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
+
+bridgeDB:DataSource_bysysCode_Gc a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Gc" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_Rfam a bridgeDB:DataSource ;
+	bridgeDB:fullName "Rfam" ;
+	bridgeDB:systemCode "Rf" ;
+	bridgeDB:idExample "RF00066" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id> ;
+	bridgeDB:urnBase "Rf" ;
+	bridgeDB:WikiPathwaysPattern <http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id> .
+
+bridgeDB:DataSource_Enzyme_Nomenclature a bridgeDB:DataSource ;
+	bridgeDB:fullName "Enzyme Nomenclature" ;
+	bridgeDB:systemCode "E" ;
+	bridgeDB:alternativeFullName "EC Number" ;
+	bridgeDB:mainUrl "http://www.ebi.ac.uk/intenz/" ;
+	bridgeDB:idExample "1.1.1.1" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/ec-code/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/ec:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/ec:$id> .
+
+bridgeDB:DataSource_BioCyc a bridgeDB:DataSource ;
+	bridgeDB:fullName "BioCyc" ;
+	bridgeDB:systemCode "Bc" ;
+	bridgeDB:mainUrl "http://biocyc.org" ;
+	bridgeDB:idExample "ECOLI:CYT-D-UBIOX-CPLX" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:urlPattern <http://biocyc.org/getid?id=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/biocyc/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/biocyc:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/biocyc:$id> .
+
+bridgeDB:DataSource_NuGO_wiki a bridgeDB:DataSource ;
+	bridgeDB:fullName "NuGO wiki" ;
+	bridgeDB:systemCode "Nw" ;
+	bridgeDB:idExample "HMDB00001" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:urlPattern <http://wiki.nugo.org/index.php/$id> ;
+	bridgeDB:urnBase "Nw" ;
+	bridgeDB:WikiPathwaysPattern <http://wiki.nugo.org/index.php/$id> .
+
+bridgeDB:DataSource_WormBase a bridgeDB:DataSource ;
+	bridgeDB:fullName "WormBase" ;
+	bridgeDB:systemCode "W" ;
+	bridgeDB:mainUrl "http://www.wormbase.org/" ;
+	bridgeDB:idExample "WBGene00000001" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.wormbase.org/db/gene/gene?name=$id;class=Gene> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/wormbase/$id" ;
+	bridgeDB:Organism bridgeDB:Organism_Ce ;
+	bridgeDB:WikiPathwaysPattern <http://www.wormbase.org/db/gene/gene?name=$id;class=Gene> .
+
+bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
+	bridgeDB:fullName "UniGene" ;
+	bridgeDB:systemCode "U" ;
+	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/unigene" ;
+	bridgeDB:idExample "4900" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:urlPattern <http://www.ncbi.nlm.nih.gov/unigene?term=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/unigene/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/unigene?term=$id> .
+
+bridgeDB:DataSource_Illumina a bridgeDB:DataSource ;
+	bridgeDB:fullName "Illumina" ;
+	bridgeDB:systemCode "Il" ;
+	bridgeDB:idExample "ILMN_5668" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "probe" ;
+	bridgeDB:urnBase "Il" .
+
+bridgeDB:DataSource_bysysCode_EnTn a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnTn" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_PlantGDB a bridgeDB:DataSource ;
+	bridgeDB:fullName "PlantGDB" ;
+	bridgeDB:systemCode "Pl" ;
+	bridgeDB:mainUrl "http://www.plantgdb.org/" ;
+	bridgeDB:idExample "PUT-157a-Vitis_vinifera-37378" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urnBase "Q" .
+
+bridgeDB:DataSource_Wheat_gene_names a bridgeDB:DataSource ;
+	bridgeDB:fullName "Wheat gene names" ;
+	bridgeDB:systemCode "Wn" ;
+	bridgeDB:mainUrl "http://wheat.pw.usda.gov/" ;
+	bridgeDB:idExample "5S-Rrna-D1_(Triticum)" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://wheat.pw.usda.gov/report?class=gene;name=$id> ;
+	bridgeDB:urnBase "Wn" ;
+	bridgeDB:Organism bridgeDB:Organism_Ta ;
+	bridgeDB:WikiPathwaysPattern <http://wheat.pw.usda.gov/report?class=gene;name=$id> .
+
+bridgeDB:DataSource_Ecoli a bridgeDB:DataSource ;
+	bridgeDB:fullName "Ecoli" ;
+	bridgeDB:systemCode "Ec" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urnBase "Ec" ;
+	bridgeDB:Organism bridgeDB:Organism_Ec .
+
+bridgeDB:DataSource_IPI a bridgeDB:DataSource ;
+	bridgeDB:fullName "IPI" ;
+	bridgeDB:systemCode "Ip" ;
+	bridgeDB:mainUrl "http://www.ebi.ac.uk/IPI" ;
+	bridgeDB:idExample "IPI00000001" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "probe" ;
+	bridgeDB:urlPattern <http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/ipi/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/ipi:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/ipi:$id> .
+
+bridgeDB:DataSource_HGNC a bridgeDB:DataSource ;
+	bridgeDB:fullName "HGNC" ;
+	bridgeDB:systemCode "H" ;
+	bridgeDB:mainUrl "http://www.genenames.org" ;
+	bridgeDB:idExample "DAPK1" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.genenames.org/data/hgnc_data.php?match=$id> ;
+	bridgeDB:urnBase "H" ;
+	bridgeDB:Organism bridgeDB:Organism_Hs ;
+	bridgeDB:WikiPathwaysPattern <http://www.genenames.org/data/hgnc_data.php?match=$id> .
+
+bridgeDB:DataSource_IRGSP_Gene a bridgeDB:DataSource ;
+	bridgeDB:fullName "IRGSP Gene" ;
+	bridgeDB:systemCode "Ir" ;
+	bridgeDB:mainUrl "http://rgp.dna.affrc.go.jp/IRGSP/" ;
+	bridgeDB:idExample "Os12g0561000" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urnBase "Ir" .
+
+bridgeDB:DataSource_bysysCode_EnOl a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnOl" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_Entrez_Gene a bridgeDB:DataSource ;
+	bridgeDB:fullName "Entrez Gene" ;
+	bridgeDB:systemCode "L" ;
+	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/gene" ;
+	bridgeDB:idExample "100010" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.ncbi.nlm.nih.gov/gene/$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/ncbigene/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/geneid:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/geneid:$id> .
+
+bridgeDB:DataSource_MaizeGDB a bridgeDB:DataSource ;
+	bridgeDB:fullName "MaizeGDB" ;
+	bridgeDB:systemCode "Mg" ;
+	bridgeDB:idExample "acc1" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id> ;
+	bridgeDB:urnBase "Mg" ;
+	bridgeDB:Organism bridgeDB:Organism_Zm ;
+	bridgeDB:WikiPathwaysPattern <http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id> .
+
+bridgeDB:DataSource_Wikipedia a bridgeDB:DataSource ;
+	bridgeDB:fullName "Wikipedia" ;
+	bridgeDB:systemCode "Wi" ;
+	bridgeDB:mainUrl "http://www.wikipedia.org" ;
+	bridgeDB:idExample "Acetate" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:urlPattern <http://en.wikipedia.org/wiki/$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/wikipedia.en/$id" ;
+	bridgeDB:sourceRdfPattern <http://dbpedia.org/resource/$id> ;
+	bridgeDB:WikiPathwaysPattern <http://dbpedia.org/resource/$id> .
+
+bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
+	bridgeDB:fullName "Uniprot/TrEMBL" ;
+	bridgeDB:systemCode "S" ;
+	bridgeDB:mainUrl "http://www.ebi.uniprot.org/" ;
+	bridgeDB:idExample "P62158" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "protein" ;
+	bridgeDB:urlPattern <http://www.ebi.uniprot.org/entry/$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/uniprot/$id" ;
+	bridgeDB:sourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:WikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
+
+bridgeDB:DataSource_bysysCode_EnSa a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnSa" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_Gm a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Gm" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_RefSeq a bridgeDB:DataSource ;
+	bridgeDB:fullName "RefSeq" ;
+	bridgeDB:systemCode "Q" ;
+	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/projects/RefSeq/" ;
+	bridgeDB:idExample "NP_012345" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/refseq/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id> .
+
+bridgeDB:DataSource_FlyBase a bridgeDB:DataSource ;
+	bridgeDB:fullName "FlyBase" ;
+	bridgeDB:systemCode "F" ;
+	bridgeDB:mainUrl "http://flybase.org/" ;
+	bridgeDB:idExample "FBgn0011293" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://flybase.org/reports/$id.html> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/flybase/$id" ;
+	bridgeDB:Organism bridgeDB:Organism_Dm ;
+	bridgeDB:WikiPathwaysPattern <http://flybase.org/reports/$id.html> .
+
+bridgeDB:DataSource_TubercuList a bridgeDB:DataSource ;
+	bridgeDB:fullName "TubercuList" ;
+	bridgeDB:systemCode "Tb" ;
+	bridgeDB:alternativeFullName "TUBERCULIST" ;
+	bridgeDB:mainUrl "http://tuberculist.epfl.ch" ;
+	bridgeDB:idExample "Rv0064" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id> ;
+	bridgeDB:urnBase "Tb" ;
+	bridgeDB:Organism bridgeDB:Organism_Mx ;
+	bridgeDB:WikiPathwaysPattern <http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id> .
+
+bridgeDB:DataSource_bysysCode_EnEt a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnEt" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_Kegg_Compound a bridgeDB:DataSource ;
+	bridgeDB:fullName "Kegg Compound" ;
+	bridgeDB:systemCode "Ck" ;
+	bridgeDB:mainUrl "http://www.genome.jp/kegg/ligand.html" ;
+	bridgeDB:idExample "C12345" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:urlPattern <http://www.genome.jp/dbget-bin/www_bget?cpd:$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/kegg.compound/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/ec:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/ec:$id> .
+
+bridgeDB:DataSource_KEGG_Genes a bridgeDB:DataSource ;
+	bridgeDB:fullName "KEGG Genes" ;
+	bridgeDB:systemCode "Kg" ;
+	bridgeDB:mainUrl "http://www.genome.jp/kegg/genes.html" ;
+	bridgeDB:idExample "syn:ssr3451" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://www.genome.jp/dbget-bin/www_bget?$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/kegg.genes/$id" ;
+	bridgeDB:bio2RdfPattern <http://bio2rdf.org/kegg:$id> ;
+	bridgeDB:WikiPathwaysPattern <http://bio2rdf.org/kegg:$id> .
+
+bridgeDB:DataSource_miRBase_Sequence a bridgeDB:DataSource ;
+	bridgeDB:fullName "miRBase Sequence" ;
+	bridgeDB:systemCode "Mb" ;
+	bridgeDB:alternativeFullName "miRBase" ;
+	bridgeDB:mainUrl "http://microrna.sanger.ac.uk/" ;
+	bridgeDB:idExample "MI0000001" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "gene" ;
+	bridgeDB:urlPattern <http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> ;
+	bridgeDB:identifiersOrgPattern "http://identifiers.org/mirbase/$id" ;
+	bridgeDB:WikiPathwaysPattern <http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> .
+
+bridgeDB:Organism_Ag a bridgeDB:Organism ;
+	bridgeDB:code "Ag" ;
+	bridgeDB:shortName "Mosquito" ;
+	bridgeDB:latinName "Anopheles gambiae" .
+
+bridgeDB:Organism_At a bridgeDB:Organism ;
+	bridgeDB:code "At" ;
+	bridgeDB:shortName "Arabidopsis thaliana" ;
+	bridgeDB:latinName "Arabidopsis thaliana" .
+
+bridgeDB:Organism_An a bridgeDB:Organism ;
+	bridgeDB:code "An" ;
+	bridgeDB:shortName "Black mold" ;
+	bridgeDB:latinName "Aspergillus niger" .
+
+bridgeDB:Organism_Bs a bridgeDB:Organism ;
+	bridgeDB:code "Bs" ;
+	bridgeDB:shortName "Bacillus subtilis" ;
+	bridgeDB:latinName "Bacillus subtilis" .
+
+bridgeDB:Organism_Bt a bridgeDB:Organism ;
+	bridgeDB:code "Bt" ;
+	bridgeDB:shortName "Cow" ;
+	bridgeDB:latinName "Bos taurus" .
+
+bridgeDB:Organism_Ce a bridgeDB:Organism ;
+	bridgeDB:code "Ce" ;
+	bridgeDB:shortName "Worm" ;
+	bridgeDB:latinName "Caenorhabditis elegans" .
+
+bridgeDB:Organism_Cf a bridgeDB:Organism ;
+	bridgeDB:code "Cf" ;
+	bridgeDB:shortName "Dog" ;
+	bridgeDB:latinName "Canis familiaris" .
+
+bridgeDB:Organism_Ci a bridgeDB:Organism ;
+	bridgeDB:code "Ci" ;
+	bridgeDB:shortName "Sea Squirt" ;
+	bridgeDB:latinName "Ciona intestinalis" .
+
+bridgeDB:Organism_Ct a bridgeDB:Organism ;
+	bridgeDB:code "Ct" ;
+	bridgeDB:shortName "Cthe" ;
+	bridgeDB:latinName "Clostridium thermocellum" .
+
+bridgeDB:Organism_Dr a bridgeDB:Organism ;
+	bridgeDB:code "Dr" ;
+	bridgeDB:shortName "Zebra fish" ;
+	bridgeDB:latinName "Danio rerio" .
+
+bridgeDB:Organism_Dn a bridgeDB:Organism ;
+	bridgeDB:code "Dn" ;
+	bridgeDB:shortName "Armadillo" ;
+	bridgeDB:latinName "Dasypus novemcinctus" .
+
+bridgeDB:Organism_Dm a bridgeDB:Organism ;
+	bridgeDB:code "Dm" ;
+	bridgeDB:shortName "Fruit fly" ;
+	bridgeDB:latinName "Drosophila melanogaster" .
+
+bridgeDB:Organism_Ec a bridgeDB:Organism ;
+	bridgeDB:code "Ec" ;
+	bridgeDB:shortName "Escherichia coli" ;
+	bridgeDB:latinName "Escherichia coli" .
+
+bridgeDB:Organism_Et a bridgeDB:Organism ;
+	bridgeDB:code "Et" ;
+	bridgeDB:shortName "Hedgehog" ;
+	bridgeDB:latinName "Echinops telfairi" .
+
+bridgeDB:Organism_Qc a bridgeDB:Organism ;
+	bridgeDB:code "Qc" ;
+	bridgeDB:shortName "Horse" ;
+	bridgeDB:latinName "Equus caballus" .
+
+bridgeDB:Organism_Gg a bridgeDB:Organism ;
+	bridgeDB:code "Gg" ;
+	bridgeDB:shortName "Chicken" ;
+	bridgeDB:latinName "Gallus gallus" .
+
+bridgeDB:Organism_Gm a bridgeDB:Organism ;
+	bridgeDB:code "Gm" ;
+	bridgeDB:shortName "Soybean" ;
+	bridgeDB:latinName "Glycine max" .
+
+bridgeDB:Organism_Gz a bridgeDB:Organism ;
+	bridgeDB:code "Gz" ;
+	bridgeDB:shortName "Fusarium graminearum" ;
+	bridgeDB:latinName "Gibberella zeae" .
+
+bridgeDB:Organism_Hs a bridgeDB:Organism ;
+	bridgeDB:code "Hs" ;
+	bridgeDB:shortName "Human" ;
+	bridgeDB:latinName "Homo sapiens" .
+
+bridgeDB:Organism_La a bridgeDB:Organism ;
+	bridgeDB:code "La" ;
+	bridgeDB:shortName "Elephant" ;
+	bridgeDB:latinName "Loxodonta africana" .
+
+bridgeDB:Organism_Ml a bridgeDB:Organism ;
+	bridgeDB:code "Ml" ;
+	bridgeDB:shortName "Rhesus Monkey" ;
+	bridgeDB:latinName "Macaca mulatta" .
+
+bridgeDB:Organism_Mm a bridgeDB:Organism ;
+	bridgeDB:code "Mm" ;
+	bridgeDB:shortName "Mouse" ;
+	bridgeDB:latinName "Mus musculus" .
+
+bridgeDB:Organism_Md a bridgeDB:Organism ;
+	bridgeDB:code "Md" ;
+	bridgeDB:shortName "Opossum" ;
+	bridgeDB:latinName "Monodelphis domestica" .
+
+bridgeDB:Organism_Mx a bridgeDB:Organism ;
+	bridgeDB:code "Mx" ;
+	bridgeDB:shortName "Tuberculosis" ;
+	bridgeDB:latinName "Mycobacterium tuberculosis" .
+
+bridgeDB:Organism_Oa a bridgeDB:Organism ;
+	bridgeDB:code "Oa" ;
+	bridgeDB:shortName "Platypus" ;
+	bridgeDB:latinName "Ornithorhynchus anatinus" .
+
+bridgeDB:Organism_Os a bridgeDB:Organism ;
+	bridgeDB:code "Os" ;
+	bridgeDB:shortName "Rice" ;
+	bridgeDB:latinName "Oryza sativa" .
+
+bridgeDB:Organism_Oj a bridgeDB:Organism ;
+	bridgeDB:code "Oj" ;
+	bridgeDB:shortName "Rice" ;
+	bridgeDB:latinName "Oryza japonica" .
+
+bridgeDB:Organism_Ol a bridgeDB:Organism ;
+	bridgeDB:code "Ol" ;
+	bridgeDB:shortName "Medaka Fish" ;
+	bridgeDB:latinName "Oryzias latipes" .
+
+bridgeDB:Organism_Oc a bridgeDB:Organism ;
+	bridgeDB:code "Oc" ;
+	bridgeDB:shortName "Rabbit" ;
+	bridgeDB:latinName "Oryctolagus cuniculus" .
+
+bridgeDB:Organism_Pt a bridgeDB:Organism ;
+	bridgeDB:code "Pt" ;
+	bridgeDB:shortName "Chimpanzee" ;
+	bridgeDB:latinName "Pan troglodytes" .
+
+bridgeDB:Organism_Sl a bridgeDB:Organism ;
+	bridgeDB:code "Sl" ;
+	bridgeDB:shortName "Tomato" ;
+	bridgeDB:latinName "Solanum lycopersicum" .
+
+bridgeDB:Organism_Ss a bridgeDB:Organism ;
+	bridgeDB:code "Ss" ;
+	bridgeDB:shortName "Pig" ;
+	bridgeDB:latinName "Sus scrofa" .
+
+bridgeDB:Organism_Pi a bridgeDB:Organism ;
+	bridgeDB:code "Pi" ;
+	bridgeDB:shortName "Western Balsam Poplar" ;
+	bridgeDB:latinName "Populus trichocarpa" .
+
+bridgeDB:Organism_Rn a bridgeDB:Organism ;
+	bridgeDB:code "Rn" ;
+	bridgeDB:shortName "Rat" ;
+	bridgeDB:latinName "Rattus norvegicus" .
+
+bridgeDB:Organism_Sc a bridgeDB:Organism ;
+	bridgeDB:code "Sc" ;
+	bridgeDB:shortName "Yeast" ;
+	bridgeDB:latinName "Saccharomyces cerevisiae" .
+
+bridgeDB:Organism_Sa a bridgeDB:Organism ;
+	bridgeDB:code "Sa" ;
+	bridgeDB:shortName "Shrew" ;
+	bridgeDB:latinName "Sorex araneus" .
+
+bridgeDB:Organism_Sb a bridgeDB:Organism ;
+	bridgeDB:code "Sb" ;
+	bridgeDB:shortName "Sorghum" ;
+	bridgeDB:latinName "Sorghum bicolor" .
+
+bridgeDB:Organism_Tn a bridgeDB:Organism ;
+	bridgeDB:code "Tn" ;
+	bridgeDB:shortName "Pufferfish" ;
+	bridgeDB:latinName "Tetraodon nigroviridis" .
+
+bridgeDB:Organism_Ta a bridgeDB:Organism ;
+	bridgeDB:code "Ta" ;
+	bridgeDB:shortName "Wheat" ;
+	bridgeDB:latinName "Triticum aestivum" .
+
+bridgeDB:Organism_Xt a bridgeDB:Organism ;
+	bridgeDB:code "Xt" ;
+	bridgeDB:shortName "Frog" ;
+	bridgeDB:latinName "Xenopus tropicalis" .
+
+bridgeDB:Organism_Vv a bridgeDB:Organism ;
+	bridgeDB:code "Vv" ;
+	bridgeDB:shortName "Wine Grape" ;
+	bridgeDB:latinName "Vitis vinifera" .
+
+bridgeDB:Organism_Zm a bridgeDB:Organism ;
+	bridgeDB:code "Zm" ;
+	bridgeDB:shortName "Maize" ;
+	bridgeDB:latinName "Zea mays" .
+
+<http://identifiers.org/sciencesignaling.pic/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sciencesignaling.pic/" .
+
+<http://identifiers.org/tgd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tgd/" .
+
+<http://www.genedb.org/gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genedb.org/gene/" .
+
+<http://identifiers.org/hinv.locus/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hinv.locus/" .
+
+<http://www.ncbi.nlm.nih.gov/nucest/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/nucest/" .
+
+<http://identifiers.org/obo.mi/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.mi/" .
+
+<http://identifiers.org/conoserver/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/conoserver/" .
+
+<http://identifiers.org/snomedct/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/snomedct/" .
+
+<http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=" .
+
+<http://identifiers.org/ecogene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ecogene/" .
+
+<http://identifiers.org/zfin.expression/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/zfin.expression/" .
+
+<http://identifiers.org/beetlebase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/beetlebase/" .
+
+<http://identifiers.org/tair.gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tair.gene/" .
+
+<http://identifiers.org/xenbase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/xenbase/" .
+
+<http://purl.org/obo/owl/GO#$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.org/obo/owl/GO#" .
+
+<http://identifiers.org/glycomedb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/glycomedb/" .
+
+<http://paleodb.org/cgi-bin/bridge.pl?a=basicTaxonInfo&taxon_no=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://paleodb.org/cgi-bin/bridge.pl?a=basicTaxonInfo&taxon_no=" .
+
+<http://identifiers.org/wormpep/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/wormpep/" .
+
+<http://identifiers.org/dbsnp/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dbsnp/" .
+
+<http://identifiers.org/bindingDB/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bindingDB/" .
+
+<http://identifiers.org/irefweb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/irefweb/" .
+
+<http://dx.doi.org/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://dx.doi.org/" .
+
+<http://identifiers.org/greengenes/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/greengenes/" .
+
+<http://www.genome.jp/dbget-bin/www_bget?pathway+$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/dbget-bin/www_bget?pathway+" .
+
+<http://bykdb.ibcp.fr/data/html/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bykdb.ibcp.fr/data/html/" ;
+	bridgeDB:postfix ".html" .
+
+<http://www.noncode.org/NONCODERv3/ncrna.php?ncid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.noncode.org/NONCODERv3/ncrna.php?ncid=" .
+
+<http://bio2rdf.org/chebi:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/chebi:" .
+
+<http://bitterdb.agri.huji.ac.il/bitterdb/compound.php?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bitterdb.agri.huji.ac.il/bitterdb/compound.php?id=" .
+
+<http://identifiers.org/ligandexpo/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ligandexpo/" .
+
+<http://identifiers.org/doqcs.model/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/doqcs.model/" .
+
+<http://www.pseudomonas.com/getAnnotation.do?locusID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pseudomonas.com/getAnnotation.do?locusID=" .
+
+<http://identifiers.org/toxoplasma/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/toxoplasma/" .
+
+<http://identifiers.org/panther/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/panther/" .
+
+<http://identifiers.org/giardiadb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/giardiadb/" .
+
+<http://identifiers.org/dip/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dip/" .
+
+<http://identifiers.org/mo/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mo/" .
+
+<http://identifiers.org/atc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/atc/" .
+
+<http://identifiers.org/uniparc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/uniparc/" .
+
+<http://stke.sciencemag.org/cgi/cm/stkecm;$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://stke.sciencemag.org/cgi/cm/stkecm;" .
+
+<http://www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.jcvi.org/cgi-bin/tigrfams/HmmReportPage.cgi?acc=" .
+
+<http://identifiers.org/maizegdb.locus/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/maizegdb.locus/" .
+
+<http://www.umbbd.ethz.ch/servlets/rule.jsp?rule=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.umbbd.ethz.ch/servlets/rule.jsp?rule=" .
+
+<http://identifiers.org/mmmp:biomaps/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mmmp:biomaps/" .
+
+<http://identifiers.org/ensembl.protist/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ensembl.protist/" .
+
+<http://identifiers.org/obo.clo/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.clo/" .
+
+<http://identifiers.org/elm/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/elm/" .
+
+<http://identifiers.org/gramene.qtl/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/gramene.qtl/" .
+
+<http://www.conoserver.org/?page=card&table=protein&id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.conoserver.org/?page=card&table=protein&id=" .
+
+<http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn=$id&display_opts=Prints&category=None&queryform=false&regexpr=off> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn=" ;
+	bridgeDB:postfix "&display_opts=Prints&category=None&queryform=false&regexpr=off" .
+
+<http://identifiers.org/interpro/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/interpro/" .
+
+<http://identifiers.org/pmp/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pmp/" .
+
+<http://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=" .
+
+<http://identifiers.org/refseq/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/refseq/" .
+
+<http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://mint.bio.uniroma2.it/mint/search/inFrameInteraction.do?interactionAc=" .
+
+<http://www.whocc.no/atc_ddd_index/?code=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.whocc.no/atc_ddd_index/?code=" .
+
+<http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pdb.org/pdb/explore/explore.do?pdbId=" .
+
+<http://www.ebi.ac.uk/cgi-bin/dbfetch?db=uniparc&id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/cgi-bin/dbfetch?db=uniparc&id=" .
+
+<http://identifiers.org/atcvet/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/atcvet/" .
+
+<http://microsporidiadb.org/micro/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://microsporidiadb.org/micro/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://identifiers.org/unite/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/unite/" .
+
+<http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" .
+
+<http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" .
+
+<http://identifiers.org/pubchem.compound/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pubchem.compound/" .
+
+<http://www.proglycprot.org/detail.aspx?ProId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.proglycprot.org/detail.aspx?ProId=" .
+
+<http://prosite.expasy.org/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://prosite.expasy.org/" .
+
+<http://beetlebase.org/cgi-bin/gbrowse/BeetleBase3.gff3/?name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://beetlebase.org/cgi-bin/gbrowse/BeetleBase3.gff3/?name=" .
+
+<http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid=" .
+
+<http://identifiers.org/neurolex/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/neurolex/" .
+
+<http://identifiers.org/sabiork.kineticrecord/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sabiork.kineticrecord/" .
+
+<http://identifiers.org/macie/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/macie/" .
+
+<http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=" .
+
+<http://identifiers.org/phosphosite.residue/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/phosphosite.residue/" .
+
+<http://identifiers.org/genpept/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/genpept/" .
+
+<http://identifiers.org/nextdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/nextdb/" .
+
+<http://identifiers.org/mirex/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mirex/" .
+
+<http://ctdbase.org/detail.go?type=disease&db=MESH&acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ctdbase.org/detail.go?type=disease&db=MESH&acc=" .
+
+<http://wheat.pw.usda.gov/report?class=gene;name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://wheat.pw.usda.gov/report?class=gene;name=" .
+
+<http://www.ncbi.nlm.nih.gov/gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/gene/" .
+
+<http://www.phosphosite.org/siteAction.do?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.phosphosite.org/siteAction.do?id=" .
+
+<http://identifiers.org/ttd.target/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ttd.target/" .
+
+<http://identifiers.org/ec-code/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ec-code/" .
+
+<http://identifiers.org/merops.family/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/merops.family/" .
+
+<http://identifiers.org/oma.protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/oma.protein/" .
+
+<http://www.genenames.org/data/hgnc_data.php?match=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genenames.org/data/hgnc_data.php?match=" .
+
+<http://bioinfo.iitk.ac.in/MIPModDB/result.php?code=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bioinfo.iitk.ac.in/MIPModDB/result.php?code=" .
+
+<http://compluyeast2dpage.dacya.ucm.es/cgi-bin/2d/2d.cgi?ac=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://compluyeast2dpage.dacya.ucm.es/cgi-bin/2d/2d.cgi?ac=" .
+
+<http://arabidopsis.info/StockInfo?NASC_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://arabidopsis.info/StockInfo?NASC_id=" .
+
+<http://identifiers.org/biocyc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biocyc/" .
+
+<http://webprod3.hc-sc.gc.ca/dpd-bdpp/info.do?lang=eng&code=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://webprod3.hc-sc.gc.ca/dpd-bdpp/info.do?lang=eng&code=" .
+
+<http://www.pombase.org/spombe/result/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pombase.org/spombe/result/" .
+
+<http://s59.cas.albany.edu/RNAmods/cgi-bin/rnashow.cgi?$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://s59.cas.albany.edu/RNAmods/cgi-bin/rnashow.cgi?" .
+
+<http://identifiers.org/vectorbase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/vectorbase/" .
+
+<http://www.ebi.ac.uk/QuickGO/GTerm?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/QuickGO/GTerm?id=" .
+
+<http://www.wikigenes.org/e/gene/e/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.wikigenes.org/e/gene/e/" ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/jws/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/jws/" .
+
+<http://identifiers.org/wormbase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/wormbase/" .
+
+<http://www.subtiwiki.uni-goettingen.de/wiki/index.php/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.subtiwiki.uni-goettingen.de/wiki/index.php/" .
+
+<http://metlin.scripps.edu/metabo_info.php?molid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://metlin.scripps.edu/metabo_info.php?molid=" .
+
+<http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=" .
+
+<http://identifiers.org/insdc.sra/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/insdc.sra/" .
+
+<http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=" .
+
+<http://identifiers.org/smart/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/smart/" .
+
+<http://www.genome.jp/dbget-bin/www_bget?gl:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/dbget-bin/www_bget?gl:" .
+
+<http://identifiers.org/arxiv/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/arxiv/" .
+
+<http://www.ebi.ac.uk/arrayexpress/arrays/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/arrayexpress/arrays/" .
+
+<http://agd.vital-it.ch/Ashbya_gossypii/geneview?gene=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://agd.vital-it.ch/Ashbya_gossypii/geneview?gene=" .
+
+<http://phylomedb.org/?seqid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://phylomedb.org/?seqid=" .
+
+<http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=" .
+
+<http://bio2rdf.org/mesh:$id"> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/mesh:" ;
+	bridgeDB:postfix "\"" .
+
+<http://www.allergome.org/script/dettaglio.php?id_molecule=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.allergome.org/script/dettaglio.php?id_molecule=" .
+
+<http://identifiers.org/cas/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cas/" .
+
+<http://identifiers.org/lipidmaps/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/lipidmaps/" .
+
+<http://www.ebi.ac.uk/pride/experimentLink.do?experimentAccessionNumber=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/pride/experimentLink.do?experimentAccessionNumber=" .
+
+<http://identifiers.org/disprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/disprot/" .
+
+<http://www.genome.jp/kegg-bin/show_organism?org=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/kegg-bin/show_organism?org=" .
+
+<http://flystocks.bio.indiana.edu/Reports/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://flystocks.bio.indiana.edu/Reports/" ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/miriam.resource/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/miriam.resource/" .
+
+<http://identifiers.org/paleodb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/paleodb/" .
+
+<http://www.ebi.ac.uk/miriam/main/resources/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/miriam/main/resources/" .
+
+<http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=" .
+
+<http://dbpedia.org/resource/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://dbpedia.org/resource/" .
+
+<http://identifiers.org/nbrc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/nbrc/" .
+
+<http://www.ebi.ac.uk/biosamples/biosamples.html?query=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/biosamples/biosamples.html?query=" .
+
+<http://identifiers.org/pid.pathway/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pid.pathway/" .
+
+<http://identifiers.org/ensembl/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ensembl/" .
+
+<http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genenames.org/data/hgnc_data.php?hgnc_id=" .
+
+<http://identifiers.org/dbest/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dbest/" .
+
+<http://identifiers.org/obo.go/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.go/" .
+
+<http://identifiers.org/ensembl.fungi/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ensembl.fungi/" .
+
+<http://identifiers.org/pharmgkb.disease/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pharmgkb.disease/" .
+
+<http://identifiers.org/taxonomy/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/taxonomy/" .
+
+<http://www.iuphar-db.org/DATABASE/FamilyMenuForward?familyId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.iuphar-db.org/DATABASE/FamilyMenuForward?familyId=" .
+
+<http://identifiers.org/noncode/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/noncode/" .
+
+<http://identifiers.org/chemspider/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/chemspider/" .
+
+<http://identifiers.org/grin.taxonomy/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/grin.taxonomy/" .
+
+<http://www.protonet.cs.huji.ac.il/requested/cluster_card.php?cluster=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.protonet.cs.huji.ac.il/requested/cluster_card.php?cluster=" .
+
+<http://identifiers.org/obo.pw/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.pw/" .
+
+<http://www.gramene.org/db/literature/pub_search?ref_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/db/literature/pub_search?ref_id=" .
+
+<http://www.ebi.ac.uk/cgi-bin/imgt/hla/get_allele.cgi?$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/cgi-bin/imgt/hla/get_allele.cgi?" .
+
+<http://identifiers.org/nextprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/nextprot/" .
+
+<http://pbil.univ-lyon1.fr/cgi-bin/view-tree.pl?query=$id&db=HOVERGEN> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pbil.univ-lyon1.fr/cgi-bin/view-tree.pl?query=" ;
+	bridgeDB:postfix "&db=HOVERGEN" .
+
+<http://purl.uniprot.org/enzyme/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/enzyme/" .
+
+<http://identifiers.org/resid/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/resid/" .
+
+<http://bio2rdf.org/mgi:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/mgi:" .
+
+<http://ctdbase.org/detail.go?type=chem&acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ctdbase.org/detail.go?type=chem&acc=" .
+
+<http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=" .
+
+<http://rdf.wikipathways.org/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rdf.wikipathways.org/" .
+
+<http://mips.gsf.de/genre/proj/yeast/singleGeneReport.html?entry=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://mips.gsf.de/genre/proj/yeast/singleGeneReport.html?entry=" .
+
+<http://identifiers.org/sitex/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sitex/" .
+
+<http://identifiers.org/obo.do/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.do/" .
+
+<http://identifiers.org/kegg.reaction/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.reaction/" .
+
+<http://identifiers.org/subtiwiki/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/subtiwiki/" .
+
+<http://www.vectorbase.org/Genome/BRCGene/?gene=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.vectorbase.org/Genome/BRCGene/?gene=" .
+
+<http://identifiers.org/gramene.taxonomy/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/gramene.taxonomy/" .
+
+<http://identifiers.org/clinicaltrials/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/clinicaltrials/" .
+
+<http://identifiers.org/arrayexpress.platform/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/arrayexpress.platform/" .
+
+<http://www.fludb.org/brc/fluSegmentDetails.do?ncbiGenomicAccession=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.fludb.org/brc/fluSegmentDetails.do?ncbiGenomicAccession=" .
+
+<http://www.ncbi.nlm.nih.gov/sites/entrez?Db=proteinclusters&Cmd=DetailsSearch&Term=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/sites/entrez?Db=proteinclusters&Cmd=DetailsSearch&Term=" .
+
+<http://peroxibase.toulouse.inra.fr/listing.php?action=view&id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://peroxibase.toulouse.inra.fr/listing.php?action=view&id=" .
+
+<http://arabidopsis.org/servlets/TairObject?accession=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://arabidopsis.org/servlets/TairObject?accession=" .
+
+<http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=" .
+
+<http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&p1=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayEntry&p1=" .
+
+<http://identifiers.org/csa/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/csa/" .
+
+<http://identifiers.org/homd.seq/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/homd.seq/" .
+
+<http://identifiers.org/nuclearbd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/nuclearbd/" .
+
+<http://identifiers.org/orthodb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/orthodb/" .
+
+<http://identifiers.org/huge/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/huge/" .
+
+<http://www.cabri.org/CABRI/srs-bin/wgetz?-e+-page+EntryPage+[$id]> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.cabri.org/CABRI/srs-bin/wgetz?-e+-page+EntryPage+[" ;
+	bridgeDB:postfix "]" .
+
+<http://www.t3db.org/toxins/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.t3db.org/toxins/" .
+
+<http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Danio_rerio/Gene/Summary?g=" .
+
+<http://identifiers.org/rouge/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/rouge/" .
+
+<http://identifiers.org/zfin.phenotype/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/zfin.phenotype/" .
+
+<http://piroplasmadb.org/piro/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://piroplasmadb.org/piro/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://identifiers.org/edam/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/edam/" .
+
+<http://identifiers.org/pfam/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pfam/" .
+
+<http://identifiers.org/isbn/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/isbn/" .
+
+<http://prodom.prabi.fr/prodom/current/cgi-bin/request.pl?question=DBEN&query=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://prodom.prabi.fr/prodom/current/cgi-bin/request.pl?question=DBEN&query=" .
+
+<http://identifiers.org/mipmod/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mipmod/" .
+
+<http://www.example.org#$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.example.org#" .
+
+<http://identifiers.org/insdc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/insdc/" .
+
+<http://identifiers.org/pride/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pride/" .
+
+<http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/Oryza_sativa/Gene/Summary?db=core;g=" .
+
+<http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Bos_taurus/Gene/Summary?g=" .
+
+<http://identifiers.org/cgd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cgd/" .
+
+<http://identifiers.org/phylomedb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/phylomedb/" .
+
+<http://identifiers.org/obo.po/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.po/" .
+
+<https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=" .
+
+<http://identifiers.org/obo.pr/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.pr/" .
+
+<http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=" .
+
+<http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=" .
+
+<http://www.kazusa.or.jp/rouge/gfpage/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.kazusa.or.jp/rouge/gfpage/" .
+
+<http://identifiers.org/dictybase.gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dictybase.gene/" .
+
+<http://bitterdb.agri.huji.ac.il/bitterdb/Receptor.php?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bitterdb.agri.huji.ac.il/bitterdb/Receptor.php?id=" .
+
+<http://matrixdb.ibcp.fr/cgi-bin/model/report/default?name=$id&class=Association> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://matrixdb.ibcp.fr/cgi-bin/model/report/default?name=" ;
+	bridgeDB:postfix "&class=Association" .
+
+<http://identifiers.org/biomodels.kisao/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biomodels.kisao/" .
+
+<http://identifiers.org/imex/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/imex/" .
+
+<http://data.kasabi.com/dataset/chembl-rdf/target/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/target/" .
+
+<http://identifiers.org/kegg.genes/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.genes/" .
+
+<http://bio2rdf.org/mesh;$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/mesh;" .
+
+<http://identifiers.org/ubio.namebank/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ubio.namebank/" .
+
+<http://www.genome.jp/dbget-bin/www_bget?cpd:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/dbget-bin/www_bget?cpd:" .
+
+<http://apps.who.int/classifications/icd10/browse/2010/en#/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://apps.who.int/classifications/icd10/browse/2010/en#/" .
+
+<http://identifiers.org/bdgp.est/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bdgp.est/" .
+
+<http://polbase.neb.com/polymerases/$id#sequences> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://polbase.neb.com/polymerases/" ;
+	bridgeDB:postfix "#sequences" .
+
+<http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Equus_caballus/Gene/Summary?g=" .
+
+<http://www.foo.com/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.foo.com/" .
+
+<http://www.conceptwiki.org/concept/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.conceptwiki.org/concept/" .
+
+<http://riodb01.ibase.aist.go.jp/sdbs/cgi-bin/cre_frame_disp.cgi?sdbsno=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://riodb01.ibase.aist.go.jp/sdbs/cgi-bin/cre_frame_disp.cgi?sdbsno=" .
+
+<http://identifiers.org/kegg.drug/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.drug/" .
+
+<http://www.pharmgkb.org/gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pharmgkb.org/gene/" .
+
+<http://identifiers.org/tcdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tcdb/" .
+
+<http://bio2rdf.org/genbank:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/genbank:" .
+
+<http://identifiers.org/genedb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/genedb/" .
+
+<http://mi.caspur.it/PMDB/user/search.php?idsearch=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://mi.caspur.it/PMDB/user/search.php?idsearch=" .
+
+<http://bioportal.bioontology.org/ontologies/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bioportal.bioontology.org/ontologies/" .
+
+<http://plasmodb.org/plasmo/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://plasmodb.org/plasmo/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://plugins.biogps.org/cgi-bin/wp.cgi?id=" .
+
+<http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=$id;class=DNA> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=" ;
+	bridgeDB:postfix ";class=DNA" .
+
+<http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=" .
+
+<http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.sanger.ac.uk/cgi-bin/Rfam/getacc?" .
+
+<http://identifiers.org/bitterdb.rec/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bitterdb.rec/" .
+
+<http://stitch.embl.de/interactions/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://stitch.embl.de/interactions/" .
+
+<http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/intact/pages/details/details.xhtml?interactionAc=" .
+
+<http://www.glycome-db.org/database/showStructure.action?glycomeId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.glycome-db.org/database/showStructure.action?glycomeId=" .
+
+<http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.brenda-enzymes.org/php/result_flat.php4?ecno=" .
+
+<http://www.protonet.cs.huji.ac.il/requested/protein_card.php?protein_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.protonet.cs.huji.ac.il/requested/protein_card.php?protein_id=" .
+
+<http://flybase.org/reports/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://flybase.org/reports/" ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/gramene.gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/gramene.gene/" .
+
+<http://www.homd.org/modules.php?op=modload&name=HOMD&file=index&oraltaxonid=$id&view=dynamic> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.homd.org/modules.php?op=modload&name=HOMD&file=index&oraltaxonid=" ;
+	bridgeDB:postfix "&view=dynamic" .
+
+<http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=c&compID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=c&compID=" .
+
+<http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=" .
+
+<http://www.ensembl.org/Multi/GeneTree/Image?db=core;gt=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Multi/GeneTree/Image?db=core;gt=" .
+
+<http://clipserve.clip.ubc.ca/topfind/proteins/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://clipserve.clip.ubc.ca/topfind/proteins/" .
+
+<http://pgn.cornell.edu/unigene/unigene_assembly_contigs.pl?unigene_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pgn.cornell.edu/unigene/unigene_assembly_contigs.pl?unigene_id=" .
+
+<http://immunet.cn/mimodb/browse.php?table=mimoset&ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://immunet.cn/mimodb/browse.php?table=mimoset&ID=" .
+
+<http://identifiers.org/aceview.worm/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/aceview.worm/" .
+
+<http://www.kazusa.or.jp/tech-cgi/view_direct.cgi?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.kazusa.or.jp/tech-cgi/view_direct.cgi?id=" .
+
+<http://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rgd.mcw.edu/rgdweb/ontology/annot.html?acc_id=" .
+
+<http://bio2rdf.org/ensembl:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/ensembl:" .
+
+<http://identifiers.org/imgt.hla/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/imgt.hla/" .
+
+<http://senselab.med.yale.edu/NeuronDB/NeuronProp.aspx?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://senselab.med.yale.edu/NeuronDB/NeuronProp.aspx?id=" .
+
+<http://www.genome.jp/dbget-bin/www_bget?rn:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/dbget-bin/www_bget?rn:" .
+
+<http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=" .
+
+<http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=" .
+
+<http://identifiers.org/mirnest/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mirnest/" .
+
+<http://cegg.unige.ch/orthodb/results?searchtext=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cegg.unige.ch/orthodb/results?searchtext=" .
+
+<http://lipidbank.jp/cgi-bin/detail.cgi?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://lipidbank.jp/cgi-bin/detail.cgi?id=" .
+
+<http://identifiers.org/soybase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/soybase/" .
+
+<http://identifiers.org/pharmgkb.gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pharmgkb.gene/" .
+
+<http://thebiogrid.org/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://thebiogrid.org/" .
+
+<http://cmr.jcvi.org/cgi-bin/CMR/shared/GenePage.cgi?locus=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cmr.jcvi.org/cgi-bin/CMR/shared/GenePage.cgi?locus=" .
+
+<http://mycobrowser.epfl.ch/marinosearch.php?gene+name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://mycobrowser.epfl.ch/marinosearch.php?gene+name=" .
+
+<http://identifiers.org/biomodels.sbo/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biomodels.sbo/" .
+
+<http://www.ncbi.nlm.nih.gov/protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/protein/" .
+
+<http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=" .
+
+<http://identifiers.org/merops/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/merops/" .
+
+<http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=GeneDetail&gene_oid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=GeneDetail&gene_oid=" .
+
+<http://www.nextprot.org/db/entry/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.nextprot.org/db/entry/" .
+
+<http://jjj.biochem.sun.ac.za/cgi-bin/processModelSelection.py?keytype=modelname&keyword=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://jjj.biochem.sun.ac.za/cgi-bin/processModelSelection.py?keytype=modelname&keyword=" .
+
+<http://mycobrowser.epfl.ch/leprosysearch.php?gene+name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://mycobrowser.epfl.ch/leprosysearch.php?gene+name=" .
+
+<http://jaxmice.jax.org/strain/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://jaxmice.jax.org/strain/" ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/mycobank/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mycobank/" .
+
+<http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=" .
+
+<http://cryptodb.org/cryptodb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cryptodb.org/cryptodb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://identifiers.org/genefarm/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/genefarm/" .
+
+<http://identifiers.org/unigene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/unigene/" .
+
+<http://identifiers.org/ncbiprotein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ncbiprotein/" .
+
+<http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/" .
+
+<http://identifiers.org/topfind/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/topfind/" .
+
+<http://identifiers.org/obo.fma/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.fma/" .
+
+<http://bio2rdf.org/ipi:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/ipi:" .
+
+<http://identifiers.org/chembl.target/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/chembl.target/" .
+
+<http://www.boldsystems.org/views/taxbrowser.php?taxid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.boldsystems.org/views/taxbrowser.php?taxid=" .
+
+<http://identifiers.org/sgd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sgd/" .
+
+<http://www.nbrc.nite.go.jp/NBRC2/NBRCCatalogueDetailServlet?ID=NBRC&CAT=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.nbrc.nite.go.jp/NBRC2/NBRCCatalogueDetailServlet?ID=NBRC&CAT=" .
+
+<http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/chemblid/" .
+
+<http://identifiers.org/obo.pato/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.pato/" .
+
+<http://www.ebi.ac.uk/arrayexpress/experiments/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/arrayexpress/experiments/" .
+
+<http://identifiers.org/ensembl.bacteria/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ensembl.bacteria/" .
+
+<http://identifiers.org/goa/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/goa/" .
+
+<http://cdb.ics.uci.edu/cgibin/ChemicalDetailWeb.psp?chemical_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cdb.ics.uci.edu/cgibin/ChemicalDetailWeb.psp?chemical_id=" .
+
+<http://bio2rdf.org/bind:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/bind:" .
+
+<http://identifiers.org/phosphosite.protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/phosphosite.protein/" .
+
+<https://www.ebi.ac.uk/chembldb/index.php/target/inspect/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "https://www.ebi.ac.uk/chembldb/index.php/target/inspect/" .
+
+<http://isbndb.com/search-all.html?kw=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://isbndb.com/search-all.html?kw=" .
+
+<http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=$id&ver=1> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=" ;
+	bridgeDB:postfix "&ver=1" .
+
+<http://identifiers.org/tigrfam/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tigrfam/" .
+
+<http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=" .
+
+<http://hamap.expasy.org/unirule/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://hamap.expasy.org/unirule/" .
+
+<http://identifiers.org/mmrrc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mmrrc/" .
+
+<http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://chem.sis.nlm.nih.gov/chemidplus/direct.jsp?regno=" .
+
+<http://www.ebi.ac.uk/biomodels-main/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/biomodels-main/" .
+
+<http://pir.georgetown.edu/cgi-bin/pro/entry_pro?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pir.georgetown.edu/cgi-bin/pro/entry_pro?id=" .
+
+<http://fungi.ensembl.org/id/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://fungi.ensembl.org/id/" .
+
+<http://identifiers.org/pmap.cutdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pmap.cutdb/" .
+
+<http://www.example.com/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.example.com/" .
+
+<http://identifiers.org/echobase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/echobase/" .
+
+<http://identifiers.org/piroplasma/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/piroplasma/" .
+
+<http://dictybase.org/gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://dictybase.org/gene/" .
+
+<http://identifiers.org/kegg.compound/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.compound/" .
+
+<http://identifiers.org/antweb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/antweb/" .
+
+<http://identifiers.org/myco.smeg/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/myco.smeg/" .
+
+<http://identifiers.org/allergome/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/allergome/" .
+
+<http://www.gramene.org/db/genes/search_gene?acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/db/genes/search_gene?acc=" .
+
+<http://identifiers.org/isfinder/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/isfinder/" .
+
+<http://identifiers.org/jcm/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/jcm/" .
+
+<http://bio2rdf.org/ec:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/ec:" .
+
+<http://identifiers.org/swiss-model/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/swiss-model/" .
+
+<http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=" .
+
+<http://www.hmdb.ca/metabolites/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.hmdb.ca/metabolites/" .
+
+<http://identifiers.org/cgsc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cgsc/" .
+
+<http://zfin.org/action/genotype/show_all_phenotype?zdbID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://zfin.org/action/genotype/show_all_phenotype?zdbID=" .
+
+<http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://genome.ucsc.edu/cgi-bin/hgTracks?position=" .
+
+<http://identifiers.org/plasmodb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/plasmodb/" .
+
+<http://www.gpcr.org/7tm/proteins/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gpcr.org/7tm/proteins/" .
+
+<http://identifiers.org/pombase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pombase/" .
+
+<http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=$id&amp;class=Allele> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=" ;
+	bridgeDB:postfix "&amp;class=Allele" .
+
+<http://identifiers.org/pseudomonas/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pseudomonas/" .
+
+<http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=r&reacID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=r&reacID=" .
+
+<http://identifiers.org/bykdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bykdb/" .
+
+<http://merops.sanger.ac.uk/cgi-bin/famsum?family=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://merops.sanger.ac.uk/cgi-bin/famsum?family=" .
+
+<http://co.mbine.org/specifications/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://co.mbine.org/specifications/" .
+
+<http://trichdb.org/trichdb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://trichdb.org/trichdb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://identifiers.org/miriam.collection/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/miriam.collection/" .
+
+<http://identifiers.org/biomodels.db/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biomodels.db/" .
+
+<http://bio2rdf.org/biomodels:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/biomodels:" .
+
+<http://identifiers.org/pdb-ccd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pdb-ccd/" .
+
+<http://identifiers.org/sgd.pathways/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sgd.pathways/" .
+
+<http://identifiers.org/protonet.proteincard/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/protonet.proteincard/" .
+
+<http://comgen.pl/mirex/?page=results/record&name=$id&web_temp=1683440&exref=pp2a&limit=yes> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://comgen.pl/mirex/?page=results/record&name=" ;
+	bridgeDB:postfix "&web_temp=1683440&exref=pp2a&limit=yes" .
+
+<http://commonchemistry.org/ChemicalDetail.aspx?ref=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://commonchemistry.org/ChemicalDetail.aspx?ref=" .
+
+<http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=ep&enzymeID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=ep&enzymeID=" .
+
+<http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayGroup&p1=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://omabrowser.org/cgi-bin/gateway.pl?f=DisplayGroup&p1=" .
+
+<http://identifiers.org/flybase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/flybase/" .
+
+<http://identifiers.org/rhea/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/rhea/" .
+
+<http://www.plantontology.org/amigo/go.cgi?view=details&amp;query=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.plantontology.org/amigo/go.cgi?view=details&amp;query=" .
+
+<http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://tuberculist.epfl.ch/quicksearch.php?gene+name=" .
+
+<http://identifiers.org/bioproject/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bioproject/" .
+
+<http://identifiers.org/kegg.glycan/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.glycan/" .
+
+<http://yetfasco.ccbr.utoronto.ca/showPFM.php?mot=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://yetfasco.ccbr.utoronto.ca/showPFM.php?mot=" .
+
+<http://www.phenol-explorer.eu/contents/total?food_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.phenol-explorer.eu/contents/total?food_id=" .
+
+<http://identifiers.org/peptideatlas/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/peptideatlas/" .
+
+<http://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=" .
+
+<http://www.ncbi.nlm.nih.gov/biosystems/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/biosystems/" .
+
+<http://identifiers.org/peroxibase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/peroxibase/" .
+
+<http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=" .
+
+<http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=" .
+
+<http://www.ubio.org/browser/details.php?namebankID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ubio.org/browser/details.php?namebankID=" .
+
+<http://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/db/qtl/qtl_display?qtl_accession_id=" .
+
+<http://crdd.osdd.net/servers/virsirnadb/record.php?details=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://crdd.osdd.net/servers/virsirnadb/record.php?details=" .
+
+<http://trace.ddbj.nig.ac.jp/BPSearch/bioproject?acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://trace.ddbj.nig.ac.jp/BPSearch/bioproject?acc=" .
+
+<http://www.vbase2.org/vgene.php?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.vbase2.org/vgene.php?id=" .
+
+<http://www.gramene.org/db/ontology/search?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/db/ontology/search?id=" .
+
+<http://identifiers.org/mgd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mgd/" .
+
+<http://identifiers.org/cabri/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cabri/" .
+
+<http://identifiers.org/icd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/icd/" .
+
+<http://identifiers.org/orphanet/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/orphanet/" .
+
+<http://identifiers.org/wikipedia.en/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/wikipedia.en/" .
+
+<http://identifiers.org/obo.eco/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.eco/" .
+
+<http://toxodb.org/toxo/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://toxodb.org/toxo/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://www.ebi.ac.uk/sbo/main/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/sbo/main/" .
+
+<http://genome.crg.es/datasets/abs2005/entries/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://genome.crg.es/datasets/abs2005/entries/" ;
+	bridgeDB:postfix ".html" .
+
+<http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=" .
+
+<http://identifiers.org/pdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pdb/" .
+
+<http://identifiers.org/string/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/string/" .
+
+<http://identifiers.org/cogs/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cogs/" .
+
+<http://identifiers.org/zfin/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/zfin/" .
+
+<http://bio2rdf.org/homologen:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/homologen:" .
+
+<http://identifiers.org/doi/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/doi/" .
+
+<http://identifiers.org/prosite/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/prosite/" .
+
+<http://www.ebi.ac.uk/intact/imex/main.xhtml?query=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/intact/imex/main.xhtml?query=" .
+
+<http://identifiers.org/clustr/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/clustr/" .
+
+<http://gmd.mpimp-golm.mpg.de/Metabolites/$id.aspx> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://gmd.mpimp-golm.mpg.de/Metabolites/" ;
+	bridgeDB:postfix ".aspx" .
+
+<http://omia.angis.org.au/$id/> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://omia.angis.org.au/" ;
+	bridgeDB:postfix "/" .
+
+<http://identifiers.org/agd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/agd/" .
+
+<http://clinicaltrials.gov/ct2/show/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://clinicaltrials.gov/ct2/show/" .
+
+<http://nematode.lab.nig.ac.jp/db2/ShowCloneInfo.php?clone=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://nematode.lab.nig.ac.jp/db2/ShowCloneInfo.php?clone=" .
+
+<http://h-invitational.jp/hinv/spsoup/locus_view?hix_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://h-invitational.jp/hinv/spsoup/locus_view?hix_id=" .
+
+<http://ligand-depot.rutgers.edu/pyapps/ldHandler.py?formid=cc-index-search&target=$id&operation=ccid> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ligand-depot.rutgers.edu/pyapps/ldHandler.py?formid=cc-index-search&target=" ;
+	bridgeDB:postfix "&operation=ccid" .
+
+<http://identifiers.org/asap/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/asap/" .
+
+<http://www.ensembl.org/common/Lucene/Results?species=all;feature=OligoProbe;q=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/common/Lucene/Results?species=all;feature=OligoProbe;q=" .
+
+<http://identifiers.org/iuphar.family/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/iuphar.family/" .
+
+<http://identifiers.org/kegg.pathway/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.pathway/" .
+
+<http://identifiers.org/cygd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cygd/" .
+
+<http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/COG/grace/wiew.cgi?" .
+
+<http://www.dpvweb.net/dpv/showdpv.php?dpvno=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.dpvweb.net/dpv/showdpv.php?dpvno=" .
+
+<http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=TaxonDetail&taxon_oid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://img.jgi.doe.gov/cgi-bin/w/main.cgi?section=TaxonDetail&taxon_oid=" .
+
+<http://identifiers.org/umbbd.rule/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/umbbd.rule/" .
+
+<http://identifiers.org/niaest/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/niaest/" .
+
+<http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=" .
+
+<http://kanaya.naist.jp/knapsack_jsp/information.jsp?word=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://kanaya.naist.jp/knapsack_jsp/information.jsp?word=" .
+
+<http://www.ebi.ac.uk/QuickGO/GProtein?ac=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/QuickGO/GProtein?ac=" .
+
+<http://identifiers.org/massbank/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/massbank/" .
+
+<http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/" .
+
+<http://nikkajiweb.jst.go.jp/nikkaji_web/pages/top_e.jsp?CONTENT=syosai&SN=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://nikkajiweb.jst.go.jp/nikkaji_web/pages/top_e.jsp?CONTENT=syosai&SN=" .
+
+<http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=" .
+
+<http://www.genome.jp/dbget-bin/www_bget?$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/dbget-bin/www_bget?" .
+
+<http://identifiers.org/bioportal/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bioportal/" .
+
+<http://www.chemspider.com/Chemical-Structure.$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.chemspider.com/Chemical-Structure." ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/sciencesignaling.path/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sciencesignaling.path/" .
+
+<http://greengenes.lbl.gov/cgi-bin/show_one_record_v2.pl?prokMSA_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://greengenes.lbl.gov/cgi-bin/show_one_record_v2.pl?prokMSA_id=" .
+
+<http://identifiers.org/jaxmice/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/jaxmice/" .
+
+<http://identifiers.org/arachnoserver/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/arachnoserver/" .
+
+<http://identifiers.org/supfam/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/supfam/" .
+
+<http://identifiers.org/hamap/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hamap/" .
+
+<http://bio2rdf.org/drugbank:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/drugbank:" .
+
+<http://identifiers.org/mpid/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mpid/" .
+
+<http://identifiers.org/ncim/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ncim/" .
+
+<http://identifiers.org/uniprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/uniprot/" .
+
+<http://www.pazar.info/cgi-bin/tf_search.cgi?geneID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pazar.info/cgi-bin/tf_search.cgi?geneID=" .
+
+<http://identifiers.org/apd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/apd/" .
+
+<http://identifiers.org/dpv/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dpv/" .
+
+<http://identifiers.org/ctd.disease/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ctd.disease/" .
+
+<http://identifiers.org/ttd.drug/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ttd.drug/" .
+
+<http://www.maizegdb.org/cgi-bin/displaylocusrecord.cgi?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.maizegdb.org/cgi-bin/displaylocusrecord.cgi?id=" .
+
+<http://identifiers.org/lgic/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/lgic/" .
+
+<http://soybeanbreederstoolbox.org/search/search_results.php?category=SNP&search_term=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://soybeanbreederstoolbox.org/search/search_results.php?category=SNP&search_term=" .
+
+<http://identifiers.org/dragondb.dna/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dragondb.dna/" .
+
+<http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=" .
+
+<http://urgi.versailles.inra.fr/Genefarm/Gene/display_gene.htpl?GENE_ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://urgi.versailles.inra.fr/Genefarm/Gene/display_gene.htpl?GENE_ID=" .
+
+<http://identifiers.org/dictybase.est/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dictybase.est/" .
+
+<http://identifiers.org/img.gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/img.gene/" .
+
+<http://www.pharmgkb.org/drug/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pharmgkb.org/drug/" .
+
+<http://rdf.chemspider.com/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rdf.chemspider.com/" .
+
+<http://identifiers.org/ird.segment/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ird.segment/" .
+
+<http://www.obofoundry.org/ro/#$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.obofoundry.org/ro/#" .
+
+<ftp://ftp.embl-heidelberg.de/pub/databases/protein_extras/hssp/$id.hssp> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "ftp://ftp.embl-heidelberg.de/pub/databases/protein_extras/hssp/" ;
+	bridgeDB:postfix ".hssp" .
+
+<http://identifiers.org/hinv.protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hinv.protein/" .
+
+<http://identifiers.org/flystock/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/flystock/" .
+
+<http://identifiers.org/sprint/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sprint/" .
+
+<http://www.ebi.ac.uk/ontology-lookup/?termId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/ontology-lookup/?termId=" .
+
+<http://unite.ut.ee/bl_forw.php?nimi=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://unite.ut.ee/bl_forw.php?nimi=" .
+
+<http://identifiers.org/ipi/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ipi/" .
+
+<http://www.cathdb.info/cathnode/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.cathdb.info/cathnode/" .
+
+<http://arxiv.org/abs/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://arxiv.org/abs/" .
+
+<http://identifiers.org/metlin/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/metlin/" .
+
+<http://identifiers.org/rebase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/rebase/" .
+
+<http://identifiers.org/biosample/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biosample/" .
+
+<http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://smart.embl-heidelberg.de/smart/do_annotation.pl?DOMAIN=" .
+
+<http://identifiers.org/yetfasco/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/yetfasco/" .
+
+<http://www.ebi.ac.uk/rhea/reaction.xhtml?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/rhea/reaction.xhtml?id=" .
+
+<http://identifiers.org/lipidbank/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/lipidbank/" .
+
+<http://identifiers.org/pazar/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pazar/" .
+
+<http://www.tcdb.org/search/result.php?tc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.tcdb.org/search/result.php?tc=" .
+
+<http://www.ncbi.nlm.nih.gov/pubmed/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/pubmed/" .
+
+<http://www.jcvi.org/mpidb/experiment.php?interaction_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.jcvi.org/mpidb/experiment.php?interaction_id=" .
+
+<http://treebase.org/treebase-web/search/study/summary.html?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://treebase.org/treebase-web/search/study/summary.html?id=" .
+
+<http://substrate.burnham.org/protein/annotation/$id/html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://substrate.burnham.org/protein/annotation/" ;
+	bridgeDB:postfix "/html" .
+
+<http://worfdb.dfci.harvard.edu/index.php?search_type=name&page=showresultrc&race_query=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://worfdb.dfci.harvard.edu/index.php?search_type=name&page=showresultrc&race_query=" .
+
+<http://www.ncbi.nlm.nih.gov/pmc/articles/$id/?tool=pubmed> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/pmc/articles/" ;
+	bridgeDB:postfix "/?tool=pubmed" .
+
+<http://identifiers.org/kegg.metagenome/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.metagenome/" .
+
+<http://mycobrowser.epfl.ch/smegmasearch.php?gene+name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://mycobrowser.epfl.ch/smegmasearch.php?gene+name=" .
+
+<http://bio2rdf.org/biocyc:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/biocyc:" .
+
+<http://identifiers.org/sgn/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sgn/" .
+
+<http://identifiers.org/ncbigene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ncbigene/" .
+
+<http://identifiers.org/umbbd.pathway/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/umbbd.pathway/" .
+
+<http://identifiers.org/hssp/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hssp/" .
+
+<http://identifiers.org/hpa/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hpa/" .
+
+<http://identifiers.org/compulyeast/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/compulyeast/" .
+
+<http://identifiers.org/iuphar.receptor/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/iuphar.receptor/" .
+
+<http://www.antweb.org/specimen.do?name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.antweb.org/specimen.do?name=" .
+
+<http://identifiers.org/eggnog/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/eggnog/" .
+
+<http://identifiers.org/bitterdb.cpd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bitterdb.cpd/" .
+
+<http://identifiers.org/geo/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/geo/" .
+
+<http://identifiers.org/genecards/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/genecards/" .
+
+<http://napp.u-psud.fr/Niveau2.php?specie=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://napp.u-psud.fr/Niveau2.php?specie=" .
+
+<http://identifiers.org/mesh/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mesh/" .
+
+<http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=" .
+
+<http://www.wormbase.org/db/gene/gene?name=$id;class=Gene> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.wormbase.org/db/gene/gene?name=" ;
+	bridgeDB:postfix ";class=Gene" .
+
+<http://www.maizesequence.org/Zea_mays/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.maizesequence.org/Zea_mays/Gene/Summary?g=" .
+
+<http://identifiers.org/hovergen/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hovergen/" .
+
+<http://identifiers.org/brenda/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/brenda/" .
+
+<http://identifiers.org/2d-page.protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/2d-page.protein/" .
+
+<https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/" .
+
+<http://www-is.biotoul.fr/index.html?is_special_name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www-is.biotoul.fr/index.html?is_special_name=" .
+
+<http://purl.bioontology.org/ontology/MSH/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.bioontology.org/ontology/MSH/" .
+
+<http://identifiers.org/dragondb.locus/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dragondb.locus/" .
+
+<http://www.bioguo.org/AnimalTFDB/family.php?fam=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.bioguo.org/AnimalTFDB/family.php?fam=" .
+
+<http://identifiers.org/t3db/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/t3db/" .
+
+<http://metazoa.ensembl.org/id/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://metazoa.ensembl.org/id/" .
+
+<http://2dbase.techfak.uni-bielefeld.de/cgi-bin/2d/2d.cgi?ac=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://2dbase.techfak.uni-bielefeld.de/cgi-bin/2d/2d.cgi?ac=" .
+
+<http://identifiers.org/cath.domain/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cath.domain/" .
+
+<http://identifiers.org/hogenom/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hogenom/" .
+
+<http://dictybase.org/db/cgi-bin/feature_page.pl?primary_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://dictybase.org/db/cgi-bin/feature_page.pl?primary_id=" .
+
+<http://identifiers.org/sciencesignaling.pdc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sciencesignaling.pdc/" .
+
+<http://identifiers.org/homologene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/homologene/" .
+
+<http://purl.bioontology.org/ontology/NCIM/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.bioontology.org/ontology/NCIM/" .
+
+<http://identifiers.org/intact/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/intact/" .
+
+<http://pbil.univ-lyon1.fr/cgi-bin/view-tree.pl?db=HOGENOM5&query=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pbil.univ-lyon1.fr/cgi-bin/view-tree.pl?db=HOGENOM5&query=" .
+
+<http://flypush.imgen.bcm.tmc.edu/pscreen/details.php?line=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://flypush.imgen.bcm.tmc.edu/pscreen/details.php?line=" .
+
+<http://identifiers.org/phenolexplorer/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/phenolexplorer/" .
+
+<http://aclame.ulb.ac.be/perl/Aclame/Genomes/mge_view.cgi?view=info&id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://aclame.ulb.ac.be/perl/Aclame/Genomes/mge_view.cgi?view=info&id=" .
+
+<http://identifiers.org/bind/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bind/" .
+
+<http://www.3dmet.dna.affrc.go.jp/cgi/show_data.php?acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.3dmet.dna.affrc.go.jp/cgi/show_data.php?acc=" .
+
+<http://oai.cwi.nl/oai?verb=GetRecord&metadataPrefix=nl_didl&identifier=oai:cwi.nl:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://oai.cwi.nl/oai?verb=GetRecord&metadataPrefix=nl_didl&identifier=oai:cwi.nl:" .
+
+<http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/CSA/CSA_Site_Wrapper.pl?pdb=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/CSA/CSA_Site_Wrapper.pl?pdb=" .
+
+<http://identifiers.org/pharmgkb.pathways/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pharmgkb.pathways/" .
+
+<http://www.ncbi.nlm.nih.gov/homologene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/homologene/" .
+
+<http://www.jcm.riken.go.jp/cgi-bin/jcm/jcm_number?JCM=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.jcm.riken.go.jp/cgi-bin/jcm/jcm_number?JCM=" .
+
+<http://bio2rdf.org/kegg:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/kegg:" .
+
+<http://biocyc.org/getid?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://biocyc.org/getid?id=" .
+
+<http://identifiers.org/miriam/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/miriam/" .
+
+<http://bio2rdf.org/interpro:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/interpro:" .
+
+<http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=" .
+
+<http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=worm&c=Gene&l=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=worm&c=Gene&l=" .
+
+<http://identifiers.org/pgn/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pgn/" .
+
+<http://www.jcvi.org/charprotdb/index.cgi/view/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.jcvi.org/charprotdb/index.cgi/view/" .
+
+<http://identifiers.org/gabi/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/gabi/" .
+
+<http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=" .
+
+<http://identifiers.org/drugbank/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/drugbank/" .
+
+<http://identifiers.org/dbg2introns/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dbg2introns/" .
+
+<http://identifiers.org/omim/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/omim/" .
+
+<http://identifiers.org/hcvdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hcvdb/" .
+
+<http://identifiers.org/ensembl.plant/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ensembl.plant/" .
+
+<http://www-bionet.sscc.ru/sitex/index.php?siteid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www-bionet.sscc.ru/sitex/index.php?siteid=" .
+
+<http://amoebadb.org/amoeba/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://amoebadb.org/amoeba/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://www.ebi.ac.uk/clustr-srv/CCluster?interpro=yes&cluster_varid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/clustr-srv/CCluster?interpro=yes&cluster_varid=" .
+
+<http://identifiers.org/prodom/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/prodom/" .
+
+<http://identifiers.org/spike.map/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/spike.map/" .
+
+<http://www.bind.ca/Action?identifier=bindid&idsearch=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.bind.ca/Action?identifier=bindid&idsearch=" .
+
+<http://identifiers.org/mint/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mint/" .
+
+<http://identifiers.org/combine.specifications/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/combine.specifications/" .
+
+<http://arabidopsis.org/servlets/TairObject?type=locus&name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://arabidopsis.org/servlets/TairObject?type=locus&name=" .
+
+<http://lemur.amu.edu.pl/share/php/mirnest/search.php?search_term=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://lemur.amu.edu.pl/share/php/mirnest/search.php?search_term=" .
+
+<http://identifiers.org/nasc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/nasc/" .
+
+<http://identifiers.org/proglyc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/proglyc/" .
+
+<http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+1fmSL1g8Xvs+-e+[IMGTLIGM:'$id']> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+1fmSL1g8Xvs+-e+[IMGTLIGM:'" ;
+	bridgeDB:postfix "']" .
+
+<http://identifiers.org/biosystems/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biosystems/" .
+
+<http://identifiers.org/protonet.cluster/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/protonet.cluster/" .
+
+<http://wodaklab.org/iRefWeb/interaction/show/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://wodaklab.org/iRefWeb/interaction/show/" .
+
+<http://www.ebi.ac.uk/compneur-srv/LGICdb/HTML/$id.php> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/compneur-srv/LGICdb/HTML/" ;
+	bridgeDB:postfix ".php" .
+
+<http://zfin.org/action/marker/view/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://zfin.org/action/marker/view/" .
+
+<http://identifiers.org/tair.locus/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tair.locus/" .
+
+<http://identifiers.org/obo.bto/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.bto/" .
+
+<http://bioportal.bioontology.org/ontologies/1141?p=terms&conceptid=OPB:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bioportal.bioontology.org/ontologies/1141?p=terms&conceptid=OPB:" .
+
+<http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=" .
+
+<http://stormo.wustl.edu/ScerTF/details/$id/> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://stormo.wustl.edu/ScerTF/details/" ;
+	bridgeDB:postfix "/" .
+
+<http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=" .
+
+<http://www.disprot.org/protein.php?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.disprot.org/protein.php?id=" .
+
+<http://identifiers.org/smpdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/smpdb/" .
+
+<http://identifiers.org/umbbd.reaction/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/umbbd.reaction/" .
+
+<http://identifiers.org/cath.superfamily/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cath.superfamily/" .
+
+<http://doqcs.ncbs.res.in/template.php?&y=accessiondetails&an=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://doqcs.ncbs.res.in/template.php?&y=accessiondetails&an=" .
+
+<http://www.pharmgkb.org/pathway/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pharmgkb.org/pathway/" .
+
+<http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=$id;class=Peptide> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=" ;
+	bridgeDB:postfix ";class=Peptide" .
+
+<http://identifiers.org/genetree/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/genetree/" .
+
+<http://identifiers.org/tissuelist/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tissuelist/" .
+
+<http://www.genome.jp/dbget-bin/www_bget?dr:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/dbget-bin/www_bget?dr:" .
+
+<http://purl.bioontology.org/ontology/MO/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.bioontology.org/ontology/MO/" .
+
+<http://identifiers.org/imgt.ligm/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/imgt.ligm/" .
+
+<http://terminology.vetmed.vt.edu/SCT/ISA.cfm?SCT_ConceptID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://terminology.vetmed.vt.edu/SCT/ISA.cfm?SCT_ConceptID=" .
+
+<http://identifiers.org/biocatalogue.service/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biocatalogue.service/" .
+
+<http://identifiers.org/biogrid/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biogrid/" .
+
+<http://solgenomics.net/phenome/locus_display.pl?locus_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://solgenomics.net/phenome/locus_display.pl?locus_id=" .
+
+<http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=" .
+
+<http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=" .
+
+<http://identifiers.org/tarbase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tarbase/" .
+
+<http://www.ars-grin.gov/cgi-bin/npgs/html/taxon.pl?$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ars-grin.gov/cgi-bin/npgs/html/taxon.pl?" .
+
+<http://identifiers.org/omia/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/omia/" .
+
+<http://sabiork.h-its.org/index2.jsp?EC=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://sabiork.h-its.org/index2.jsp?EC=" .
+
+<http://identifiers.org/mimodb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mimodb/" .
+
+<http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=" .
+
+<http://bio2rdf.org/geneid:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/geneid:" .
+
+<http://identifiers.org/gpcrdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/gpcrdb/" .
+
+<http://www.pantherdb.org/panther/family.do?clsAccession=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pantherdb.org/panther/family.do?clsAccession=" .
+
+<http://identifiers.org/oma.grp/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/oma.grp/" .
+
+<http://identifiers.org/sdbs/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sdbs/" .
+
+<http://www.neurolex.org/wiki/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.neurolex.org/wiki/" .
+
+<http://identifiers.org/cazy/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cazy/" .
+
+<http://www.genome.jp/dbget-bin/www_bget?ko+$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genome.jp/dbget-bin/www_bget?ko+" .
+
+<http://tritrypdb.org/tritrypdb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://tritrypdb.org/tritrypdb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://identifiers.org/opb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/opb/" .
+
+<http://identifiers.org/myco.tuber/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/myco.tuber/" .
+
+<http://bio2rdf.org/goa:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/goa:" .
+
+<http://bioportal.bioontology.org/ontologies/1407?p=terms&conceptid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bioportal.bioontology.org/ontologies/1407?p=terms&conceptid=" .
+
+<http://www.arachnoserver.org/toxincard.html?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.arachnoserver.org/toxincard.html?id=" .
+
+<http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=" ;
+	bridgeDB:postfix "&format=default" .
+
+<http://identifiers.org/tritrypdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tritrypdb/" .
+
+<http://sabiork.h-its.org/index2.jsp?reac=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://sabiork.h-its.org/index2.jsp?reac=" .
+
+<http://www.pathwaycommons.org/pc/record2.do?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pathwaycommons.org/pc/record2.do?id=" .
+
+<http://identifiers.org/hinv.transcript/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hinv.transcript/" .
+
+<http://www.mmmp.org/MMMP/public/biomap/viewBiomap.mmmp?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.mmmp.org/MMMP/public/biomap/viewBiomap.mmmp?id=" .
+
+<http://identifiers.org/cmr.gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cmr.gene/" .
+
+<http://identifiers.org/dbprobe/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dbprobe/" .
+
+<http://identifiers.org/umbbd.enzyme/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/umbbd.enzyme/" .
+
+<http://identifiers.org/obo.ro/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.ro/" .
+
+<http://gabi.rzpd.de/database/cgi-bin/GreenCards.pl.cgi?BioObjectId=$id&Mode=ShowBioObject> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://gabi.rzpd.de/database/cgi-bin/GreenCards.pl.cgi?BioObjectId=" ;
+	bridgeDB:postfix "&Mode=ShowBioObject" .
+
+<http://identifiers.org/chemidplus/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/chemidplus/" .
+
+<http://webapps2.ucalgary.ca/~groupii/cgi-bin/intron.cgi?name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://webapps2.ucalgary.ca/~groupii/cgi-bin/intron.cgi?name=" .
+
+<http://www.xenbase.org/gene/showgene.do?method=displayGeneSummary&geneId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.xenbase.org/gene/showgene.do?method=displayGeneSummary&geneId=" .
+
+<http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pid.nci.nih.gov/search/pathway_landing.shtml?what=graphic&jpg=on&pathway_id=" .
+
+<http://identifiers.org/pmap.substratedb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pmap.substratedb/" .
+
+<http://www.ncbi.nlm.nih.gov/projects/genome/probe/reports/probereport.cgi?uid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/projects/genome/probe/reports/probereport.cgi?uid=" .
+
+<http://www.ncbi.nlm.nih.gov/unigene?term=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/unigene?term=" .
+
+<http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'$id']> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+6JSUg1NA6u4+-e+[RESID:'" ;
+	bridgeDB:postfix "']" .
+
+<http://identifiers.org/aclame/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/aclame/" .
+
+<http://giardiadb.org/giardiadb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://giardiadb.org/giardiadb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=" .
+
+<http://www.ensembl.org/id/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/id/" .
+
+<http://cbg.garvan.unsw.edu.au/pina/interactome.oneP.do?ac=$id&showExtend=null> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cbg.garvan.unsw.edu.au/pina/interactome.oneP.do?ac=" ;
+	bridgeDB:postfix "&showExtend=null" .
+
+<http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://swissmodel.expasy.org/repository/smr.php?sptr_ac=" .
+
+<http://www.wormbase.org/db/seq/protein?name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.wormbase.org/db/seq/protein?name=" .
+
+<http://www.biocatalogue.org/services/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.biocatalogue.org/services/" .
+
+<http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.reactome.org/cgi-bin/eventbrowser_st_id?FROM_REACTOME=1&ST_ID=" .
+
+<http://identifiers.org/atcc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/atcc/" .
+
+<http://identifiers.org/chemdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/chemdb/" .
+
+<http://identifiers.org/matrixdb.association/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/matrixdb.association/" .
+
+<http://ctdbase.org/basicQuery.go?bqCat=gene&bq=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ctdbase.org/basicQuery.go?bqCat=gene&bq=" .
+
+<http://identifiers.org/microsporidia/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/microsporidia/" .
+
+<http://identifiers.org/img.taxon/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/img.taxon/" .
+
+<http://identifiers.org/unists/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/unists/" .
+
+<http://eggnog.embl.de/version_3.0/cgi/search.py?search_term_0=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://eggnog.embl.de/version_3.0/cgi/search.py?search_term_0=" .
+
+<http://bio2rdf.org/omim:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/omim:" .
+
+<http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=" .
+
+<http://www.genecards.org/cgi-bin/carddisp.pl?gene=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.genecards.org/cgi-bin/carddisp.pl?gene=" .
+
+<http://identifiers.org/cdpd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cdpd/" .
+
+<http://www.york.ac.uk/res/thomas/Gene.cfm?recordID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.york.ac.uk/res/thomas/Gene.cfm?recordID=" .
+
+<http://ashby.csail.mit.edu/cgi-bin/obiterm?ref=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ashby.csail.mit.edu/cgi-bin/obiterm?ref=" .
+
+<http://identifiers.org/trichdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/trichdb/" .
+
+<http://identifiers.org/pubchem.bioassay/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pubchem.bioassay/" .
+
+<http://identifiers.org/gmd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/gmd/" .
+
+<http://identifiers.org/cryptodb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cryptodb/" .
+
+<http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://chem2bio2rdf.org/chembl/resource/chembl_targets/" .
+
+<http://purl.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/uniprot/" .
+
+<http://identifiers.org/jcsd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/jcsd/" .
+
+<http://www.cathdb.info/domain/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.cathdb.info/domain/" .
+
+<http://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=" .
+
+<http://identifiers.org/kegg.orthology/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.orthology/" .
+
+<http://identifiers.org/signaling-gateway/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/signaling-gateway/" .
+
+<http://identifiers.org/pubchem.substance/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pubchem.substance/" .
+
+<http://diana.cslab.ece.ntua.gr/DianaToolsNew/index.php?r=tarbase/index&mirnas=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://diana.cslab.ece.ntua.gr/DianaToolsNew/index.php?r=tarbase/index&mirnas=" .
+
+<http://cutdb.burnham.org/relation/show/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cutdb.burnham.org/relation/show/" .
+
+<http://asap.ahabs.wisc.edu/asap/feature_info.php?LocationID=WIS&FeatureID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://asap.ahabs.wisc.edu/asap/feature_info.php?LocationID=WIS&FeatureID=" .
+
+<http://identifiers.org/tair.protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/tair.protein/" .
+
+<http://identifiers.org/vbase2/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/vbase2/" .
+
+<http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Gene/Summary?g=" .
+
+<http://www.candidagenome.org/cgi-bin/locus.pl?dbid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.candidagenome.org/cgi-bin/locus.pl?dbid=" .
+
+<http://identifiers.org/cellimage/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cellimage/" .
+
+<http://zfin.org/action/genotype/show_all_expression?genoID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://zfin.org/action/genotype/show_all_expression?genoID=" .
+
+<http://identifiers.org/obo.obi/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.obi/" .
+
+<http://genatlas.medecine.univ-paris5.fr/fiche.php?symbol=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://genatlas.medecine.univ-paris5.fr/fiche.php?symbol=" .
+
+<http://www.ebi.uniprot.org/entry/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.uniprot.org/entry/" .
+
+<http://www.informatics.jax.org/marker/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.informatics.jax.org/marker/" .
+
+<http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=$id&amp;class=Locus> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=" ;
+	bridgeDB:postfix "&amp;class=Locus" .
+
+<http://identifiers.org/pathwaycommons/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pathwaycommons/" .
+
+<http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=" .
+
+<http://www.mycobank.org/MycoTaxo.aspx?Link=T&Rec=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.mycobank.org/MycoTaxo.aspx?Link=T&Rec=" .
+
+<http://sabiork.h-its.org/kineticLawEntry.jsp?kinlawid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://sabiork.h-its.org/kineticLawEntry.jsp?kinlawid=" .
+
+<http://lgsun.grc.nia.nih.gov/cgi-bin/pro3?sname1=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://lgsun.grc.nia.nih.gov/cgi-bin/pro3?sname1=" .
+
+<http://www.sequenceontology.org/miso/current_release/term/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.sequenceontology.org/miso/current_release/term/" .
+
+<http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=" .
+
+<http://identifiers.org/polbase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/polbase/" .
+
+<http://identifiers.org/neuromorpho/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/neuromorpho/" .
+
+<http://identifiers.org/pmc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pmc/" .
+
+<http://identifiers.org/pina/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pina/" .
+
+<http://identifiers.org/mirbase.mature/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mirbase.mature/" .
+
+<http://cgsc.biology.yale.edu/Strain.php?ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cgsc.biology.yale.edu/Strain.php?ID=" .
+
+<http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://chem2bio2rdf.org/chembl/resource/chembl_compounds/" .
+
+<http://identifiers.org/myco.marinum/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/myco.marinum/" .
+
+<http://identifiers.org/obo.chebi/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.chebi/" .
+
+<http://wiki.nugo.org/index.php/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://wiki.nugo.org/index.php/" .
+
+<http://www.homd.org/modules.php?op=modload&name=GenomeList&file=index&link=detailinfo&seqid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.homd.org/modules.php?op=modload&name=GenomeList&file=index&link=detailinfo&seqid=" .
+
+<http://string.embl.de/interactions/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://string.embl.de/interactions/" .
+
+<http://identifiers.org/bionumbers/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bionumbers/" .
+
+<http://identifiers.org/virsirna/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/virsirna/" .
+
+<http://ciliate.org/index.php/feature/details/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ciliate.org/index.php/feature/details/" .
+
+<http://identifiers.org/3dmet/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/3dmet/" .
+
+<http://identifiers.org/cco/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cco/" .
+
+<http://identifiers.org/ricegap/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ricegap/" .
+
+<http://merops.sanger.ac.uk/cgi-bin/merops.cgi?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://merops.sanger.ac.uk/cgi-bin/merops.cgi?id=" .
+
+<http://identifiers.org/mirbase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mirbase/" .
+
+<http://identifiers.org/dragondb.protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dragondb.protein/" .
+
+<http://cellimagelibrary.org/images/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://cellimagelibrary.org/images/" .
+
+<http://identifiers.org/rgd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/rgd/" .
+
+<http://www.proteinmodelportal.org/?pid=modelDetail&pmpuid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.proteinmodelportal.org/?pid=modelDetail&pmpuid=" .
+
+<http://identifiers.org/charprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/charprot/" .
+
+<http://neuromorpho.org/neuroMorpho/neuron_info.jsp?neuron_name=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://neuromorpho.org/neuroMorpho/neuron_info.jsp?neuron_name=" .
+
+<http://protists.ensembl.org/id/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://protists.ensembl.org/id/" .
+
+<http://www.wikipathways.org/index.php/Pathway:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.wikipathways.org/index.php/Pathway:" .
+
+<http://identifiers.org/treebase/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/treebase/" .
+
+<http://euhcvdb.ibcp.fr/euHCVdb/do/displayHCVEntry?primaryAC=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://euhcvdb.ibcp.fr/euHCVdb/do/displayHCVEntry?primaryAC=" .
+
+<http://www.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.uniprot.org/uniprot/" .
+
+<http://bioportal.bioontology.org/ontologies/1410?p=terms&conceptid=kisao:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bioportal.bioontology.org/ontologies/1410?p=terms&conceptid=kisao:" .
+
+<http://msbi.ipb-halle.de/MassBank/jsp/Dispatcher.jsp?type=disp&id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://msbi.ipb-halle.de/MassBank/jsp/Dispatcher.jsp?type=disp&id=" .
+
+<http://www.phosphosite.org/proteinAction.do?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.phosphosite.org/proteinAction.do?id=" .
+
+<http://www.gramene.org/Oryza_sativa/geneview?gene=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/Oryza_sativa/geneview?gene=" .
+
+<http://www.cazy.org/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.cazy.org/" ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/neurondb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/neurondb/" .
+
+<http://omim.org/entry/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://omim.org/entry/" .
+
+<http://identifiers.org/pmdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pmdb/" .
+
+<http://identifiers.org/ncit/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ncit/" .
+
+<http://identifiers.org/ensembl.metazoa/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ensembl.metazoa/" .
+
+<http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+[EMBL:$id]+-view+EmblEntry> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+[EMBL:" ;
+	bridgeDB:postfix "]+-view+EmblEntry" .
+
+<http://identifiers.org/pubmed/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pubmed/" .
+
+<http://identifiers.org/dragondb.allele/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/dragondb.allele/" .
+
+<http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=" .
+
+<http://identifiers.org/kegg.genome/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/kegg.genome/" .
+
+<http://senselab.med.yale.edu/ModelDB/ShowModel.asp?model=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://senselab.med.yale.edu/ModelDB/ShowModel.asp?model=" .
+
+<http://identifiers.org/mmdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/mmdb/" .
+
+<http://identifiers.org/arrayexpress/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/arrayexpress/" .
+
+<http://identifiers.org/wikipathways/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/wikipathways/" .
+
+<http://www.whocc.no/atcvet/atcvet_index/?code=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.whocc.no/atcvet/atcvet_index/?code=" .
+
+<http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.mirbase.org/cgi-bin/mature.pl?mature_acc=" .
+
+<http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=" .
+
+<http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=" .
+
+<http://identifiers.org/pharmgkb.drug/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pharmgkb.drug/" .
+
+<http://identifiers.org/obo.psi-mod/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.psi-mod/" .
+
+<http://identifiers.org/BDGP.insertion/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/BDGP.insertion/" .
+
+<http://www.ncbi.nlm.nih.gov/protein/$id?report=genpept> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/protein/" ;
+	bridgeDB:postfix "?report=genpept" .
+
+<http://en.wikipedia.org/wiki/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://en.wikipedia.org/wiki/" .
+
+<http://identifiers.org/gramene.protein/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/gramene.protein/" .
+
+<http://identifiers.org/modeldb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/modeldb/" .
+
+<http://www.receptors.org/nucleardb/proteins/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.receptors.org/nucleardb/proteins/" .
+
+<http://www.proteinatlas.org/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.proteinatlas.org/" .
+
+<http://identifiers.org/worfdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/worfdb/" .
+
+<http://identifiers.org/biomodels.teddy/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biomodels.teddy/" .
+
+<http://identifiers.org/unipathway/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/unipathway/" .
+
+<http://identifiers.org/atfdb.family/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/atfdb.family/" .
+
+<http://h-invitational.jp/hinv/protein/protein_view.cgi?hip_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://h-invitational.jp/hinv/protein/protein_view.cgi?hip_id=" .
+
+<http://identifiers.org/genatlas/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/genatlas/" .
+
+<http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Mus_musculus/Gene/Summary?g=" .
+
+<http://www.pharmgkb.org/disease/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pharmgkb.org/disease/" .
+
+<http://plants.ensembl.org/id/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://plants.ensembl.org/id/" .
+
+<http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=p&pathway_abbr=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://umbbd.msi.umn.edu/servlets/pageservlet?ptype=p&pathway_abbr=" .
+
+<http://catalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg=0745-4570$id&PID=le0kCQllk84KcxI3gMhUTowLMnn9H> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://catalog.loc.gov/cgi-bin/Pwebrecon.cgi?Search_Arg=0745-4570" ;
+	bridgeDB:postfix "&PID=le0kCQllk84KcxI3gMhUTowLMnn9H" .
+
+<http://identifiers.org/scretf/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/scretf/" .
+
+<http://elm.eu.org/elms/elmPages/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://elm.eu.org/elms/elmPages/" ;
+	bridgeDB:postfix ".html" .
+
+<http://www.signaling-gateway.org/molecule/query?afcsid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.signaling-gateway.org/molecule/query?afcsid=" .
+
+<http://www.uniprot.org/tissues/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.uniprot.org/tissues/" .
+
+<http://identifiers.org/sabiork.ec/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sabiork.ec/" .
+
+<http://identifiers.org/reactome/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/reactome/" .
+
+<http://identifiers.org/myco.lepra/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/myco.lepra/" .
+
+<http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid=" .
+
+<http://identifiers.org/amoebadb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/amoebadb/" .
+
+<http://identifiers.org/umbbd.compound/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/umbbd.compound/" .
+
+<http://pir.georgetown.edu/cgi-bin/ipcSF?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pir.georgetown.edu/cgi-bin/ipcSF?id=" .
+
+<http://www.drugbank.ca/drugs/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.drugbank.ca/drugs/" .
+
+<http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g=" .
+
+<http://identifiers.org/sabiork.reaction/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/sabiork.reaction/" .
+
+<http://www.ncbi.nlm.nih.gov/sra/$id?&report=full> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ncbi.nlm.nih.gov/sra/" ;
+	bridgeDB:postfix "?&report=full" .
+
+<http://rebase.neb.com/rebase/enz/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rebase.neb.com/rebase/enz/" ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/cdd/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/cdd/" .
+
+<http://bioportal.bioontology.org/ontologies/1009/?p=terms&conceptid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bioportal.bioontology.org/ontologies/1009/?p=terms&conceptid=" .
+
+<http://bacteria.ensembl.org/id/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bacteria.ensembl.org/id/" .
+
+<http://identifiers.org/rnamods/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/rnamods/" .
+
+<http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.bindingdb.org/bind/chemsearch/marvin/MolStructure.jsp?monomerid=" .
+
+<http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=" .
+
+<http://identifiers.org/chembank/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/chembank/" .
+
+<http://identifiers.org/hgnc/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hgnc/" .
+
+<http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/" .
+
+<http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=" .
+
+<http://www.atcc.org/SearchCatalogs/Linkin?id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.atcc.org/SearchCatalogs/Linkin?id=" .
+
+<http://identifiers.org/bold.taxonomy/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/bold.taxonomy/" .
+
+<http://rice.plantbiology.msu.edu/cgi-bin/ORF_infopage.cgi?&orf=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rice.plantbiology.msu.edu/cgi-bin/ORF_infopage.cgi?&orf=" .
+
+<http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=" .
+
+<http://identifiers.org/stitch/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/stitch/" .
+
+<http://identifiers.org/doqcs.pathway/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/doqcs.pathway/" .
+
+<http://www.gramene.org/db/protein/protein_search?protein_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.gramene.org/db/protein/protein_search?protein_id=" .
+
+<http://identifiers.org/protclustdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/protclustdb/" .
+
+<http://identifiers.org/hmdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/hmdb/" .
+
+<http://identifiers.org/narcis/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/narcis/" .
+
+<http://identifiers.org/chembl.compound/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/chembl.compound/" .
+
+<http://data.kasabi.com/dataset/chembl-rdf/molecule/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/molecule/" .
+
+<http://identifiers.org/abs/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/abs/" .
+
+<http://bio2rdf.org/hgnc:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/hgnc:" .
+
+<http://identifiers.org/obo.unit/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/obo.unit/" .
+
+<http://identifiers.org/issn/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/issn/" .
+
+<http://identifiers.org/napp/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/napp/" .
+
+<http://aps.unmc.edu/AP/database/query_output.php?ID=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://aps.unmc.edu/AP/database/query_output.php?ID=" .
+
+<http://identifiers.org/pirsf/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/pirsf/" .
+
+<http://www.iuphar-db.org/DATABASE/ObjectDisplayForward?objectId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.iuphar-db.org/DATABASE/ObjectDisplayForward?objectId=" .
+
+<http://pfam.sanger.ac.uk/family/$id/> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pfam.sanger.ac.uk/family/" ;
+	bridgeDB:postfix "/" .
+
+<http://ecogene.org/geneInfo.php?eg_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://ecogene.org/geneInfo.php?eg_id=" .
+
+<http://doqcs.ncbs.res.in/template.php?&y=pathwaydetails&pn=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://doqcs.ncbs.res.in/template.php?&y=pathwaydetails&pn=" .
+
+<http://www.cs.tau.ac.il/~spike/maps/$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.cs.tau.ac.il/~spike/maps/" ;
+	bridgeDB:postfix ".html" .
+
+<http://identifiers.org/ctd.chemical/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ctd.chemical/" .
+
+<http://pathman.smpdb.ca/pathways/$id/pathway> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://pathman.smpdb.ca/pathways/" ;
+	bridgeDB:postfix "/pathway" .
+
+<http://www.mmrrc.org/catalog/getSDS.php?mmrrc_id=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.mmrrc.org/catalog/getSDS.php?mmrrc_id=" .
+
+<http://opm.phar.umich.edu/protein.php?pdbid=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://opm.phar.umich.edu/protein.php?pdbid=" .
+
+<http://bio2rdf.org/affymetrix:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/affymetrix:" .
+
+<http://identifiers.org/opm/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/opm/" .
+
+<http://identifiers.org/homd.taxon/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/homd.taxon/" .
+
+<http://identifiers.org/knapsack/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/knapsack/" .
+
+<http://identifiers.org/ctd.gene/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/ctd.gene/" .
+
+<http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.rcsb.org/pdb/explore/explore.do?structureId=" .
+
+<http://www.ebi.ac.uk/miriam/main/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/miriam/main/" .

@@ -4,18 +4,12 @@
  */
 package org.bridgedb.rdf;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.BioDataSource;
-import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.utils.ConfigReader;
-import org.bridgedb.utils.StoreType;
-import org.openrdf.model.Statement;
 
 /**
  *
@@ -30,16 +24,13 @@ public class Version1To2 {
         //InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
         //StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
         File v1File = new File ("C:/OpenPhacts/BioDataSource.ttl");
-        StatementReader reader1 = new StatementReader(v1File);
-        Set<Statement> allStatements1 = reader1.getVoidStatements();
-        DataSourceImporter.load(allStatements1);
+        BridgeDBRdfHandler.parseRdfFile(v1File);
         
         File v2File = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
-        DataSourceExporter.export(v2File);
+        BridgeDBRdfHandler.writeRdfToFile(v2File);
 
-        StatementReader reader2 = new StatementReader(v2File);
-        Set<Statement> allStatements2 = reader2.getVoidStatements();
-        DataSourceImporter.load(allStatements2);
+        BridgeDBRdfHandler.parseRdfFile(v2File);
+        
     }
 
 }

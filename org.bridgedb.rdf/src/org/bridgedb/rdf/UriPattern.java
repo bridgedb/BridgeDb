@@ -6,37 +6,44 @@ package org.bridgedb.rdf;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
+import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.Value;
+import org.openrdf.model.impl.LiteralImpl;
+import org.openrdf.model.impl.URIImpl;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.RepositoryResult;
 
 /**
  *
  * @author Christian
  */
-public class UriPattern {
+public class UriPattern extends RdfBase {
 
     private final String nameSpace;
     private final String postfix;
-
-    private static HashSet<UriPattern> register = new HashSet<UriPattern>();
+    private DataSourceUris dataSourceUris;
+    private boolean multipleDataSources = false;
+    
+    private static HashMap<Resource, UriPattern> register = new HashMap<Resource, UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
     private static HashMap<String,HashMap<String,UriPattern>> byNameSpaceAndPostFix = 
             new HashMap<String,HashMap<String,UriPattern>> ();  
-    
+
     private UriPattern(String namespace){
         this.nameSpace = namespace;
         this.postfix = null;
         byNameSpaceOnly.put(namespace, this);
-        register.add(this);
+        register.put(getResourceId(), this);
     } 
     
     private UriPattern(String namespace, String postfix){
@@ -53,7 +60,7 @@ public class UriPattern {
             postFixMap.put(postfix, this);
             byNameSpaceAndPostFix.put(namespace, postFixMap);
         }
-        register.add(this);
+        register.put(getResourceId(), this);
     }
    
     public static UriPattern byNameSpace(String nameSpace){
@@ -76,7 +83,7 @@ public class UriPattern {
         return result;
     }
                 
-    public static UriPattern byUrlPattern(String urlPattern) throws BridgeDBException{
+    public static UriPattern byPattern(String urlPattern) throws BridgeDBException{
         int pos = urlPattern.indexOf("$id");
         if (pos == -1) {
             throw new BridgeDBException("Urlpattern should have $id in it");
@@ -94,70 +101,57 @@ public class UriPattern {
         }
     }
     
-    public final String getRdfLabel(){
-        if (postfix == null){
-            return DataSourceExporter.scrub(nameSpace);
+    public void setDataSource(DataSourceUris dsu) throws BridgeDBException{
+        if (dsu.isParent()){
+            setParentDataSource(dsu);
         } else {
-            return DataSourceExporter.scrub(nameSpace + "_" + postfix);
+            setNonParentDataSource(dsu);
         }
     }
     
-    public String getRdfId(){
-        return ":" + BridgeDBConstants.URI_PATTERN + "_" + getRdfLabel();
-    }
-
-    public static void writeAllAsRDF(BufferedWriter writer) throws IOException {
-        for (UriPattern uriPattern:register){
-            uriPattern.writeAsRDF(writer);
-        }
-    }
-    
-    public void writeAsRDF(BufferedWriter writer) throws IOException{
-        writer.write(getRdfId());
-        writer.write(" a ");
-        writer.write(BridgeDBConstants.URI_PATTERN_SHORT);        
-        writer.write(";");        
-        writer.newLine();
-   
-        if (postfix != null){
-            writer.write("         ");
-            writer.write(BridgeDBConstants.POSTFIX_SHORT);
-            writer.write(" \"");
-            writer.write(postfix);
-            writer.write("\";");
-            writer.newLine();
-        }
-
-        writer.write("         ");
-        writer.write(VoidConstants.URI_SPACE_SHORT);
-        writer.write(" \"");
-        writer.write(nameSpace);
-        writer.write("\".");
-        writer.newLine();
-    }
-    
-    public static UriPattern readRdf(Resource patternId, Set<Statement> uriPatternStatements) throws BridgeDBException {
-        String nameSpace = null;
-        String postfix = null;
-        for (Statement statement:uriPatternStatements){
-            if (statement.getPredicate().equals(BridgeDBConstants.POSTFIX_URI)){
-                postfix = statement.getObject().stringValue();
-            } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
-                nameSpace = statement.getObject().stringValue();
+    private void setNonParentDataSource(DataSourceUris dsu) {
+        if (multipleDataSources) {
+            if (dataSourceUris == null){
+                System.err.println("UriPattern " + this + " assigned to " + dsu.getDataSource()
+                    + " and others but no Uri parent set");
+            } else {
+                System.out.println("UriPattern " + this + " assigned to " + dsu.getDataSource()
+                    + " and Uri parent " + this.dataSourceUris.getDataSource());
             }
-        }
-        if (nameSpace == null){
-            throw new BridgeDBException ("uriPattern " + patternId + " does not have a " + VoidConstants.URI_SPACE_URI);
-        } 
-        UriPattern pattern;
-        if (postfix == null){
-            pattern = UriPattern.byNameSpace(nameSpace);
+            //already a multiple so ignore non parent
+        } else if (dataSourceUris == null){
+            dataSourceUris = dsu;
+        } else if (dataSourceUris.equals(dsu)){
+            //already set so do nothing
         } else {
-            pattern = UriPattern.byNameSpaceAndPostFix(nameSpace, postfix);
+            System.err.println("UriPattern " + this + " assigned to " + this.dataSourceUris.getDataSource()
+                    + " and " + dsu.getDataSource());
+            dataSourceUris = null;
+            multipleDataSources = true;
         }
-        return pattern;
     }
-
+    
+    private void setParentDataSource(DataSourceUris dsu) throws BridgeDBException{
+        multipleDataSources = true;
+        if (dataSourceUris ==  null) {       
+            dataSourceUris = dsu;
+        } else if (dataSourceUris.equals(dsu)){
+            //already set so do nothing
+        } else {
+            throw new BridgeDBException("UriPattern " + this + " already assigned to parent " 
+                    + this.dataSourceUris.getDataSource()
+                    + " so can not assign to parent " + dsu.getDataSource());
+        }
+    }
+    
+    public DataSource getDataSource(){
+        return dataSourceUris.getDataSource();
+    }
+    
+    public final URI getResourceId(){
+        return new URIImpl(getUriPattern());
+    }
+    
     public String getUriPattern() {
         if (postfix == null){
             return nameSpace + "$id";
@@ -166,21 +160,79 @@ public class UriPattern {
         }
     }
 
+    public static void addAll(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
+        for (UriPattern uriPattern:register.values()){
+            uriPattern.add(repositoryConnection);
+        }        
+    }
+    
+    public void add(RepositoryConnection repositoryConnection) throws RepositoryException{
+        URI id = getResourceId();
+        repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI);
+        repositoryConnection.add(id, VoidConstants.URI_SPACE_URI,  new LiteralImpl(nameSpace));
+        if (postfix != null){
+            repositoryConnection.add(id, BridgeDBConstants.POSTFIX_URI,  new LiteralImpl(postfix));
+        }
+    }        
+    
+    public static void readAllUriPatterns(RepositoryConnection repositoryConnection) throws BridgeDBException, RepositoryException{
+        RepositoryResult<Statement> statements = 
+                repositoryConnection.getStatements(null, RdfConstants.TYPE_URI, BridgeDBConstants.URL_PATTERN_URI, true);
+        while (statements.hasNext()) {
+            Statement statement = statements.next();
+            UriPattern pattern = readUriPattern(repositoryConnection, statement.getSubject());
+        }
+    }
+
+    public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource id) 
+            throws BridgeDBException, RepositoryException{
+        UriPattern pattern = register.get(id);        
+        if (pattern != null){
+            return pattern;
+        }
+        String uriSpace = getSingletonString(repositoryConnection, id, VoidConstants.URI_SPACE_URI);
+        String postfix = getPossibleSingletonString(repositoryConnection, id, BridgeDBConstants.POSTFIX_URI);
+        if (postfix == null){
+            pattern = UriPattern.byNameSpace(uriSpace);
+        } else {
+            pattern = UriPattern.byNameSpaceAndPostFix(uriSpace, postfix);
+        }
+        RepositoryResult<Statement> statements = 
+                repositoryConnection.getStatements(id, null, null, true);
+        while (statements.hasNext()) {
+            Statement statement = statements.next();
+            pattern.processStatement(statement);
+        }
+        //Constructor registers with standard recource this register with used resource
+        register.put((URI)id, pattern);
+        return pattern;
+    }
+
+    //Currently just checks for unexpected statements
+    private void processStatement(Statement statement) throws BridgeDBException{
+        if (statement.getPredicate().equals(BridgeDBConstants.POSTFIX_URI)){
+            //Do nothing as already have the postfix
+        } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
+            //Do nothing as laready have the uri space
+        } else  {
+             throw new BridgeDBException ("Unexpected Statement " + statement);
+       }
+    }
+
     @Override
     public String toString(){
         return getUriPattern();      
     }
-    
-    public static void main(String[] args) throws BridgeDBException  {
-        UriPattern test = new UriPattern("This is a test", "part2");
-        UriPattern test2 = UriPattern.byNameSpaceAndPostfix("This is a test","part2");
-        System.out.println(test);
-        System.out.println(test2);
-        System.out.println(test == test2);
-        test2 = UriPattern.byUrlPattern("This is a test$idpart2");
-        System.out.println(test);
-        System.out.println(test2);
-        System.out.println(test == test2);
-    }
 
+    public boolean hasPostfix(){
+        return postfix != null;
+    }
+    
+    public String getUriSpace() throws BridgeDBException {
+        if (postfix != null){
+            throw new BridgeDBException("UriPattern " + this + " has a postfix");
+        }
+        return nameSpace;
+    }
+  
 }
