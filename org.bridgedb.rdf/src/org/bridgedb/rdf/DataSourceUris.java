@@ -288,6 +288,9 @@ public class DataSourceUris extends RdfBase {
     }
     
     public static DataSourceUris byDataSource(DataSource dataSource) throws BridgeDBException{
+        if (dataSource == null){
+            return null;
+        }
         DataSourceUris result = byDataSource.get(dataSource);
         if (result == null){
             result = new DataSourceUris(dataSource);
@@ -392,7 +395,7 @@ public class DataSourceUris extends RdfBase {
         return inner;
     }
 
-    private UriPattern getWikiPathwaysPattern() throws BridgeDBException {
+    public UriPattern getWikiPathwaysPattern() throws BridgeDBException {
         //sourceRDFURI -> bio2RDF -> urlPattern
         if (wikiPathwaysPattern != null){
             return wikiPathwaysPattern;

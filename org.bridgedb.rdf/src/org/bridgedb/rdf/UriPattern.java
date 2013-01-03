@@ -152,7 +152,7 @@ public class UriPattern extends RdfBase {
         return new URIImpl(getUriPattern());
     }
     
-    private String getUriPattern() {
+    public String getUriPattern() {
         if (postfix == null){
             return nameSpace + "$id";
         } else {
@@ -223,5 +223,16 @@ public class UriPattern extends RdfBase {
     public String toString(){
         return getUriPattern();      
     }
+
+    public boolean hasPostfix(){
+        return postfix != null;
+    }
     
+    public String getUriSpace() throws BridgeDBException {
+        if (postfix != null){
+            throw new BridgeDBException("UriPattern " + this + " has a postfix");
+        }
+        return nameSpace;
+    }
+  
 }
