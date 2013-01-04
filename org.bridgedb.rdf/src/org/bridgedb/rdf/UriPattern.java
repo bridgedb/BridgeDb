@@ -101,11 +101,23 @@ public class UriPattern extends RdfBase {
         }
     }
     
-    public void setDataSource(DataSourceUris dsu) throws BridgeDBException{
+    public void setDataSource(DataSourceUris dsu, boolean shared) throws BridgeDBException{
         if (dsu.isParent()){
-            setParentDataSource(dsu);
+            if (shared){
+                throw new BridgeDBException("DataSources declared as a " + BridgeDBConstants.HAS_URI_PARENT 
+                        + " may not have a " + BridgeDBConstants.SHARED + "UriPattern");
+            } else {
+                setParentDataSource(dsu);
+            }
         } else {
-            setNonParentDataSource(dsu);
+            if (shared){
+                multipleDataSources = true;
+                if (dataSourceUris != null && !dataSourceUris.isParent()){
+                    dataSourceUris = null;
+                }
+            } else {
+                setNonParentDataSource(dsu);
+            }
         }
     }
     
@@ -123,6 +135,10 @@ public class UriPattern extends RdfBase {
             dataSourceUris = dsu;
         } else if (dataSourceUris.equals(dsu)){
             //already set so do nothing
+        } else if (dataSourceUris.isParent()) {
+            System.err.println("UriPattern " + this + " assigned to (parent)" + this.dataSourceUris.getDataSource()
+                    + " so uable to assign to " + dsu.getDataSource());
+            multipleDataSources = true;
         } else {
             System.err.println("UriPattern " + this + " assigned to " + this.dataSourceUris.getDataSource()
                     + " and " + dsu.getDataSource());
@@ -145,6 +161,9 @@ public class UriPattern extends RdfBase {
     }
     
     public DataSource getDataSource(){
+        if (dataSourceUris == null){
+            return null;
+        }
         return dataSourceUris.getDataSource();
     }
     

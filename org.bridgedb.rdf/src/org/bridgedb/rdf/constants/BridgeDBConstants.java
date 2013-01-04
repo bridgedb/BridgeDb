@@ -15,6 +15,8 @@ public class BridgeDBConstants {
 
     public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#";
     public static final String PREFIX_NAME1 = "bridgeDB";
+    public static final String SHARED = "Shared";
+    public static final String PRIMARY = "Primary";
 
     //Types
     public static final String DATA_SOURCE_LABEL = "DataSource";
@@ -62,9 +64,10 @@ public class BridgeDBConstants {
     private static final String POSTFIX = "postfix";
     public static final URI POSTFIX_URI = new URIImpl(PREFIX + POSTFIX);
 
-    private static final String IDENTIFERS_ORG_PATTERN = "identifiersOrgPattern";
-    public static final URI IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + IDENTIFERS_ORG_PATTERN);
-    
+    private static final String IDENTIFERS_ORG_PATTERN = "IdentifiersOrgPattern";
+    public static final URI HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + IDENTIFERS_ORG_PATTERN);
+    public static final URI HAS_SHARED_IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + "has" + SHARED + IDENTIFERS_ORG_PATTERN);
+
     private static final String WIKIPATHWAYS_PATTERN = "WikiPathwaysPattern";
     public static final URI WIKIPATHWAYS_PATTERN_URI = new URIImpl(PREFIX + WIKIPATHWAYS_PATTERN);
     
@@ -74,11 +77,7 @@ public class BridgeDBConstants {
     private static final String BIO2RDF_PATTERN = "bio2RdfPattern";
     public static final URI BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + BIO2RDF_PATTERN);
 
-    public static final URI HAS_URI_PARENT = new URIImpl(PREFIX + "hasUriPattern");
+    public static final String HAS_URI_PARENT = "hasUriParent";
+    public static final URI HAS_URI_PARENT_URI = new URIImpl(PREFIX + "hasUriPattern");
 
-    //URI types (Used in Format received from wikiPathways
-    private static final String IDENTIFIERS_ORG_BASE = "identifiers_org_base";
-    public static final URI IDENTIFIERS_ORG_BASE_URI = new URIImpl(PREFIX + IDENTIFIERS_ORG_BASE);
-    private static final String WIKIPATHWAYS_BASE = "wikipathways_id_base";
-    public static final URI WIKIPATHWAYS_BASE_URI = new URIImpl(PREFIX + WIKIPATHWAYS_BASE); //used only to ignore in one file used
 }

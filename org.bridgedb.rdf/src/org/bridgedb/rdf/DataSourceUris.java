@@ -27,6 +27,7 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 
+
 /**
  *
  * @author Christian
@@ -48,10 +49,10 @@ public class DataSourceUris extends RdfBase {
         BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI,
         BridgeDBConstants.BIO2RDF_PATTERN_URI,
         BridgeDBConstants.FULL_NAME_URI,
-        BridgeDBConstants.HAS_URI_PARENT,
+        BridgeDBConstants.HAS_URI_PARENT_URI,
         BridgeDBConstants.ID_EXAMPLE_URI,
-        BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI,
-        BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI,
+        BridgeDBConstants.HAS_SHARED_IDENTIFERS_ORG_PATTERN_URI,
+        BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI,
         BridgeDBConstants.MAIN_URL_URI,
         BridgeDBConstants.ORGANISM_URI,
         BridgeDBConstants.PRIMAY_URI,
@@ -60,9 +61,10 @@ public class DataSourceUris extends RdfBase {
         BridgeDBConstants.TYPE_URI,
         BridgeDBConstants.URL_PATTERN_URI,
         BridgeDBConstants.URN_BASE_URI,
-        BridgeDBConstants.WIKIPATHWAYS_BASE_URI, //Being ignored as wrong in only file used.
         BridgeDBConstants.WIKIPATHWAYS_PATTERN_URI,
     }));
+    private static final boolean NOT_SHARED = false;
+    private static final boolean SHARED = true;
       
     public static URI getResourceId(DataSource dataSource) {
         if (dataSource.getFullName() == null){
@@ -79,13 +81,17 @@ public class DataSourceUris extends RdfBase {
     
     public static void writeAll(RepositoryConnection repositoryConnection, Collection<DataSource> dataSources) 
             throws IOException, RepositoryException, BridgeDBException {
+        HashSet<DataSourceUris> dsus = new HashSet<DataSourceUris>(); 
         for (DataSource dataSource:dataSources){
             if (dataSource !=null){
                 DataSourceUris dsu = byDataSource(dataSource);
-                dsu.writeDataSource(repositoryConnection); 
-                dsu.writeUriParent(repositoryConnection);
-                dsu.writeUriPatterns(repositoryConnection); 
+                dsus.add(dsu);
             }
+        }
+        for (DataSourceUris dsu:dsus){
+            dsu.writeDataSource(repositoryConnection); 
+            dsu.writeUriParent(repositoryConnection);
+            dsu.writeUriPatterns(repositoryConnection); 
         }
     }
 
@@ -112,7 +118,7 @@ public class DataSourceUris extends RdfBase {
         if (inner.getExample() != null && inner.getExample().getId() != null){
             repositoryConnection.add(id, BridgeDBConstants.ID_EXAMPLE_URI, new LiteralImpl(inner.getExample().getId()));
         }
-
+ 
         if (inner.isPrimary()){
             repositoryConnection.add(id, BridgeDBConstants.PRIMAY_URI, BooleanLiteralImpl.TRUE);
         } else {
@@ -136,20 +142,28 @@ public class DataSourceUris extends RdfBase {
                 repositoryConnection.add(id, BridgeDBConstants.URN_BASE_URI, urnBase);
             }
         } else {
-            repositoryConnection.add(id, BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI, new LiteralImpl(identifersOrgPattern));            
+            UriPattern identifersOrgUriPattern = UriPattern.byPattern(identifersOrgPattern);
+            if (inner.equals(identifersOrgUriPattern.getDataSource())){
+                repositoryConnection.add(id, BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI, 
+                        identifersOrgUriPattern.getResourceId());            
+            } else {
+                repositoryConnection.add(id, BridgeDBConstants.HAS_SHARED_IDENTIFERS_ORG_PATTERN_URI, 
+                        identifersOrgUriPattern.getResourceId());                            
+            }
         }
 
         if (inner.getOrganism() != null){
             Organism organism = (Organism)inner.getOrganism();
             repositoryConnection.add(id, BridgeDBConstants.ORGANISM_URI, OrganismRdf.getResourceId(organism));
         }
+
     }
 
     private void writeUriParent(RepositoryConnection repositoryConnection) throws RepositoryException {
         if (uriParent != null){ 
             URI id = getResourceId(inner);
             URI parentId = getResourceId(uriParent);
-            repositoryConnection.add(id, BridgeDBConstants.HAS_URI_PARENT, parentId);
+            repositoryConnection.add(id, BridgeDBConstants.HAS_URI_PARENT_URI, parentId);
         }
     }
 
@@ -243,7 +257,7 @@ public class DataSourceUris extends RdfBase {
     }
     
     private void readUriParent(RepositoryConnection repositoryConnection, Resource dataSourceId) throws RepositoryException, BridgeDBException {
-        Value parentId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_URI_PARENT);
+        Value parentId = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_URI_PARENT_URI);
         if (parentId != null){
             DataSourceUris dataSourceUris = register.get(parentId.stringValue());
             DataSource parent;
@@ -259,18 +273,24 @@ public class DataSourceUris extends RdfBase {
 
     private void readUriPatternsStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException{
-        String identifiersOrgPattern = 
-                getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.IDENTIFERS_ORG_PATTERN_URI);
-        setIdentifiersOrgPattern(identifiersOrgPattern);
-        String identifiersOrgBase = 
-                getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI);
-        setIdentifiersOrgBase(identifiersOrgBase);
+        String primaryIdentifiersOrgPattern = getPossibleSingletonString(repositoryConnection, dataSourceId, 
+                BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI);
+        setIdentifiersOrgPattern(primaryIdentifiersOrgPattern, NOT_SHARED);
+        String sharedIdentifiersOrgPattern = getPossibleSingletonString(repositoryConnection, dataSourceId, 
+                BridgeDBConstants.HAS_SHARED_IDENTIFERS_ORG_PATTERN_URI);
+        if (primaryIdentifiersOrgPattern != null && sharedIdentifiersOrgPattern != null){
+            throw new BridgeDBException ("Illegal use of both " 
+                    + BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI
+                    + " and " + BridgeDBConstants.HAS_SHARED_IDENTIFERS_ORG_PATTERN_URI);
+        }
+        setIdentifiersOrgPattern(sharedIdentifiersOrgPattern, SHARED);
+        
         String bio2Pattern = 
                 getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.BIO2RDF_PATTERN_URI);
-        bio2RdfPattern = addPattern(bio2Pattern);
+        bio2RdfPattern = addPattern(bio2Pattern, NOT_SHARED);
         String sourcePattern = 
                 getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.SOURCE_RDF_PATTERN_URI);
-        sourceRdfPattern = addPattern(sourcePattern);        
+        sourceRdfPattern = addPattern(sourcePattern, NOT_SHARED);        
     }
     
     private final static void checkStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
@@ -350,25 +370,11 @@ public class DataSourceUris extends RdfBase {
             throw new BridgeDBException("Illegal attempt to set UriParent of  " + inner + " with "  + parent
                     + ". As " + inner + " is itself a UriParent.");                         
         }
-        System.out.println("Setting uriParent of " + inner + " to " + parent);
         uriParent = parent;
         parentPlus.isParent = true;
     }
 
-    public final void setIdentifiersOrgBase(String identifiersOrgBase) throws BridgeDBException {
-        if (identifiersOrgBase != null){
-            try {
-                inner.setIdentifiersOrgUriBase(identifiersOrgBase);
-            } catch (IDMapperException ex) {
-                throw new BridgeDBException("Unable to set Identifiers Org Base to " + identifiersOrgBase, ex);
-            }
-            //System.err.println("depricated " + BridgeDBConstants.IDENTIFIERS_ORG_BASE_URI + " used");
-            UriPattern pattern = UriPattern.byPattern(inner.getIdentifiersOrgUri("$id"));
-            pattern.setDataSource(this);
-        }
-    }
-    
-    public final void setIdentifiersOrgPattern(String identifiersOrgPattern) throws BridgeDBException {
+    public final void setIdentifiersOrgPattern(String identifiersOrgPattern, boolean shared) throws BridgeDBException {
         if (identifiersOrgPattern != null){
             if (identifiersOrgPattern.endsWith("$id")){
                 try {
@@ -378,7 +384,7 @@ public class DataSourceUris extends RdfBase {
                     throw new BridgeDBException("Unable to set Identifiers Org pattern to " + identifiersOrgPattern, ex);
                 }
                 UriPattern pattern = UriPattern.byPattern(identifiersOrgPattern);
-                pattern.setDataSource(this);          
+                pattern.setDataSource(this, shared);          
             } else {
                 throw new BridgeDBException("Identifersorg Pattern must end with $id");
             }
@@ -387,18 +393,17 @@ public class DataSourceUris extends RdfBase {
 
     private void loadDataSourceUriPatterns() throws BridgeDBException {
         String pattern = inner.getUrl("$id");
-        addPattern(pattern);
+        addPattern(pattern, NOT_SHARED);
         pattern = inner.getIdentifiersOrgUri("$id");
-        addPattern(pattern);        
+        addPattern(pattern, NOT_SHARED);        
    }
 
-    private UriPattern addPattern(String pattern) throws BridgeDBException {
+    private UriPattern addPattern(String pattern, boolean shared) throws BridgeDBException {
         if (pattern == null || pattern.isEmpty() || pattern.equals("$id") || pattern.equals("null")){
             return null;
         }
         UriPattern uriPattern =  UriPattern.byPattern(pattern);
-        //System.out.println(pattern);
-        uriPattern.setDataSource(this);
+        uriPattern.setDataSource(this, shared);
         return uriPattern;
     }
 
