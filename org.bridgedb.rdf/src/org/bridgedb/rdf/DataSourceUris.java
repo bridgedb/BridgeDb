@@ -310,10 +310,8 @@ public class DataSourceUris extends RdfBase {
             }
         }
          
-        System.out.println(dataSourceId);
         bio2RdfPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this,
                 BridgeDBConstants.HAS_PRIMARY_BIO2RDF_PATTERN_URI, BridgeDBConstants.HAS_SHARED_BIO2RDF_PATTERN_URI);
-        System.out.println("  " + bio2RdfPattern);
         sourceRdfPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
                 BridgeDBConstants.HAS_PRIMARY_SOURCE_RDF_PATTERN_URI, BridgeDBConstants.HAS_SHARED_SOURCE_RDF_PATTERN_URI); 
         wikiPathwaysPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 

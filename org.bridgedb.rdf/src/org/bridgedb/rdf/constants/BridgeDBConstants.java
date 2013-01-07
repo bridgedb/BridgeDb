@@ -84,4 +84,5 @@ public class BridgeDBConstants {
     public static final String HAS_URI_PARENT = "hasUriParent";
     public static final URI HAS_URI_PARENT_URI = new URIImpl(PREFIX + "hasUriPattern");
 
+    public static final URI HAS_DATA_SOURCE = new URIImpl(PREFIX + "hasDataSource");
 }

@@ -247,7 +247,7 @@ public class LinksetExporter {
 
     public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
         ConfigReader.logToConsole();
-        BioDataSource.init();
+        //BioDataSource.init();
         File DSfile = new File("../../BioDataSource.ttl");
         BridgeDBRdfHandler.parseRdfFile(DSfile);
 

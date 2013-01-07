@@ -192,6 +192,9 @@ public class UriPattern extends RdfBase {
         if (postfix != null){
             repositoryConnection.add(id, BridgeDBConstants.POSTFIX_URI,  new LiteralImpl(postfix));
         }
+        if (dataSourceUris != null){
+            repositoryConnection.add(id, BridgeDBConstants.HAS_DATA_SOURCE,  dataSourceUris.getResourceId());            
+        }
     }        
     
     public static void readAllUriPatterns(RepositoryConnection repositoryConnection) throws BridgeDBException, RepositoryException{
@@ -260,6 +263,8 @@ public class UriPattern extends RdfBase {
         } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
             //Do nothing as already have the uri space
         } else if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
+            //Do nothing as already used to get resources
+        } else if (statement.getPredicate().equals(BridgeDBConstants.HAS_DATA_SOURCE)){
             //Do nothing as already used to get resources
         } else  {
              System.err.println ("Unexpected Statement " + statement);
