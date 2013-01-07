@@ -47,8 +47,8 @@ public class BridgeDBConstants {
     public static final URI SYSTEM_CODE_URI = new URIImpl(PREFIX + SYSTEM_CODE);
     private static final String TYPE = "type";
     public static final URI TYPE_URI = new URIImpl(PREFIX + TYPE);
-    private static final String URL_PATTERN = "urlPattern";
-    public static final URI URL_PATTERN_URI = new URIImpl(PREFIX + URL_PATTERN);
+    public static final URI HAS_PRIMARY_URL_PATTERN_URI = new URIImpl(PREFIX + "urlPattern");
+    public static final URI HAS_SHARED_URL_PATTERN_URI = new URIImpl(PREFIX + "has" + SHARED + "UrlPattern");
     private static final String URN_BASE = "urnBase";
     public static final URI URN_BASE_URI = new URIImpl(PREFIX + URN_BASE);
 
@@ -60,22 +60,26 @@ public class BridgeDBConstants {
     private static final String LATIN_NAME = "latinName";
     public static final URI LATIN_NAME_URI = new URIImpl(PREFIX + LATIN_NAME);
 
-    //UriPatternFields
+    //UriPatternFields    
     private static final String POSTFIX = "postfix";
     public static final URI POSTFIX_URI = new URIImpl(PREFIX + POSTFIX);
 
     private static final String IDENTIFERS_ORG_PATTERN = "IdentifiersOrgPattern";
+    public static final URI IDENTIFERS_ORG_BASE = new URIImpl(PREFIX + "identifiers_org_base");
     public static final URI HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + IDENTIFERS_ORG_PATTERN);
     public static final URI HAS_SHARED_IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + "has" + SHARED + IDENTIFERS_ORG_PATTERN);
 
     private static final String WIKIPATHWAYS_PATTERN = "WikiPathwaysPattern";
-    public static final URI WIKIPATHWAYS_PATTERN_URI = new URIImpl(PREFIX + WIKIPATHWAYS_PATTERN);
+    public static final URI HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + WIKIPATHWAYS_PATTERN);
+    public static final URI HAS_SHARED_WIKIPATHWAYS_PATTERN_URI = new URIImpl(PREFIX + "has" + SHARED + WIKIPATHWAYS_PATTERN);
     
-    private static final String SOURCE_RDF_PATTERN = "sourceRdfPattern";
-    public static final URI SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + SOURCE_RDF_PATTERN);
+    private static final String SOURCE_RDF_PATTERN = "SourceRdfPattern";
+    public static final URI HAS_PRIMARY_SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + SOURCE_RDF_PATTERN);
+    public static final URI HAS_SHARED_SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + SHARED + SOURCE_RDF_PATTERN);
     
-    private static final String BIO2RDF_PATTERN = "bio2RdfPattern";
-    public static final URI BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + BIO2RDF_PATTERN);
+    private static final String BIO2RDF_PATTERN = "Bio2RdfPattern";
+    public static final URI HAS_PRIMARY_BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + BIO2RDF_PATTERN);
+    public static final URI HAS_SHARED_BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + SHARED + BIO2RDF_PATTERN);
 
     public static final String HAS_URI_PARENT = "hasUriParent";
     public static final URI HAS_URI_PARENT_URI = new URIImpl(PREFIX + "hasUriPattern");

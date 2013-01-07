@@ -196,25 +196,51 @@ public class UriPattern extends RdfBase {
     
     public static void readAllUriPatterns(RepositoryConnection repositoryConnection) throws BridgeDBException, RepositoryException{
         RepositoryResult<Statement> statements = 
-                repositoryConnection.getStatements(null, RdfConstants.TYPE_URI, BridgeDBConstants.URL_PATTERN_URI, true);
+                repositoryConnection.getStatements(null, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI, true);
         while (statements.hasNext()) {
             Statement statement = statements.next();
             UriPattern pattern = readUriPattern(repositoryConnection, statement.getSubject());
         }
     }
 
-    public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource id) 
+    public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource dataSourceId, DataSourceUris parent, 
+            URI primary, URI shared) throws RepositoryException, BridgeDBException{
+        Resource primaryId = getPossibleSingletonResource(repositoryConnection, dataSourceId, primary);
+        Resource sharedId = getPossibleSingletonResource(repositoryConnection, dataSourceId, shared);
+        if (primaryId == null){
+            if (sharedId == null){
+                //nothing found
+                return null;
+            } else {
+                UriPattern result = readUriPattern(repositoryConnection, sharedId);
+                result.setDataSource(parent, true);
+                return result;
+            } 
+        } else { 
+            if (sharedId == null){
+                UriPattern result = readUriPattern(repositoryConnection, primaryId);
+                result.setDataSource(parent, false);
+                return result;
+            } else {
+                throw new BridgeDBException(parent.getResourceId() + " can not have both a " 
+                        + primary + " and a " + shared + " predicate.");
+            }
+        }        
+    }
+    
+   public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource id) 
             throws BridgeDBException, RepositoryException{
-        UriPattern pattern = register.get(id);        
-        if (pattern != null){
-            return pattern;
-        }
-        String uriSpace = getSingletonString(repositoryConnection, id, VoidConstants.URI_SPACE_URI);
-        String postfix = getPossibleSingletonString(repositoryConnection, id, BridgeDBConstants.POSTFIX_URI);
-        if (postfix == null){
-            pattern = UriPattern.byNameSpace(uriSpace);
+        UriPattern pattern;      
+        String uriSpace = getPossibleSingletonString(repositoryConnection, id, VoidConstants.URI_SPACE_URI);
+        if (uriSpace == null){
+            pattern = byPattern(id.stringValue());
         } else {
-            pattern = UriPattern.byNameSpaceAndPostFix(uriSpace, postfix);
+            String postfix = getPossibleSingletonString(repositoryConnection, id, BridgeDBConstants.POSTFIX_URI);
+            if (postfix == null){
+                pattern = UriPattern.byNameSpace(uriSpace);
+            } else {
+                pattern = UriPattern.byNameSpaceAndPostFix(uriSpace, postfix);
+            }
         }
         RepositoryResult<Statement> statements = 
                 repositoryConnection.getStatements(id, null, null, true);
@@ -232,9 +258,11 @@ public class UriPattern extends RdfBase {
         if (statement.getPredicate().equals(BridgeDBConstants.POSTFIX_URI)){
             //Do nothing as already have the postfix
         } else if (statement.getPredicate().equals(VoidConstants.URI_SPACE_URI)){
-            //Do nothing as laready have the uri space
+            //Do nothing as already have the uri space
+        } else if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
+            //Do nothing as already used to get resources
         } else  {
-             throw new BridgeDBException ("Unexpected Statement " + statement);
+             System.err.println ("Unexpected Statement " + statement);
        }
     }
 

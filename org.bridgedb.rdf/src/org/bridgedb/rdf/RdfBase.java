@@ -11,6 +11,7 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
@@ -56,6 +57,21 @@ public abstract class RdfBase {
         } else {     
             return result.stringValue();
         }
+    }
+
+    static Resource getPossibleSingletonResource(RepositoryConnection repositoryConnection, Resource id, 
+            URI predicate) throws RepositoryException, BridgeDBException {
+        Value result = getPossibleSingleton(repositoryConnection, id, predicate);
+        if (result == null) {
+            return null;
+        } else if (result instanceof Resource){
+            return (Resource)result;
+        }
+        return new URIImpl(result.stringValue());
+        //} else {     
+        //    throw new BridgeDBException (" Resource " + id + " predicate " + predicate + " returned " + result 
+        //            + " which is not a " + result.getClass());
+        //}
     }
 
     static Value getPossibleSingleton(RepositoryConnection repositoryConnection, Resource id, 
