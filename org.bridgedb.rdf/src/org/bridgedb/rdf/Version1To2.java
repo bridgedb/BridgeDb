@@ -27,7 +27,7 @@ public class Version1To2 {
         BridgeDBRdfHandler.parseRdfFile(v1File);
         
         File v2File = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(v2File);
+        BridgeDBRdfHandler.writeRdfToFile(v2File, true);
 
         BridgeDBRdfHandler.parseRdfFile(v2File);
         

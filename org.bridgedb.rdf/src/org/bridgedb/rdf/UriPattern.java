@@ -139,6 +139,17 @@ public class UriPattern extends RdfBase {
         return dataSourceUris.getDataSource();
     }
     
+    public DataSourceUris getMainDataSourceUris() {
+        if (dataSourceUris != null){
+            return dataSourceUris;
+        }
+        if (isUriPatternOf.size() == 1){
+            return isUriPatternOf.iterator().next();
+        }
+        return null;
+    }
+  
+
     public final URI getResourceId(){
         return new URIImpl(getUriPattern());
     }
@@ -151,24 +162,37 @@ public class UriPattern extends RdfBase {
         }
     }
 
-    public static void addAll(RepositoryConnection repositoryConnection) throws IOException, RepositoryException {
+    public static void addAll(RepositoryConnection repositoryConnection, boolean addPrimaries) throws IOException, RepositoryException {
         for (UriPattern uriPattern:register.values()){
-            uriPattern.add(repositoryConnection);
+            uriPattern.add(repositoryConnection, addPrimaries);
         }        
     }
     
-    public void add(RepositoryConnection repositoryConnection) throws RepositoryException{
+    public void add(RepositoryConnection repositoryConnection, boolean addPrimaries) throws RepositoryException{
         URI id = getResourceId();
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI);
         repositoryConnection.add(id, VoidConstants.URI_SPACE_URI,  new LiteralImpl(nameSpace));
         if (postfix != null){
             repositoryConnection.add(id, BridgeDBConstants.POSTFIX_URI,  new LiteralImpl(postfix));
         }
-        if (dataSourceUris != null){
-            repositoryConnection.add(id, BridgeDBConstants.HAS_DATA_SOURCE,  dataSourceUris.getResourceId());            
-        }
-        for (DataSourceUris dsu:isUriPatternOf){
-             repositoryConnection.add(id, BridgeDBConstants.IS_URI_PATTERN_OF,  dsu.getResourceId()); 
+        if (addPrimaries){
+            DataSourceUris primary = getMainDataSourceUris();
+            if (primary != null){
+                repositoryConnection.add(id, BridgeDBConstants.HAS_DATA_SOURCE,  this.getMainDataSourceUris().getResourceId());            
+            }        
+            for (DataSourceUris dsu:isUriPatternOf){
+                if (!dsu.equals(primary)){
+                    repositoryConnection.add(id, BridgeDBConstants.IS_URI_PATTERN_OF,  dsu.getResourceId()); 
+                }
+            }
+            
+        } else {
+            if (dataSourceUris != null){
+                repositoryConnection.add(id, BridgeDBConstants.HAS_DATA_SOURCE,  dataSourceUris.getResourceId());            
+            }
+            for (DataSourceUris dsu:isUriPatternOf){
+                 repositoryConnection.add(id, BridgeDBConstants.IS_URI_PATTERN_OF,  dsu.getResourceId()); 
+            }
         }
     }        
     
@@ -269,5 +293,5 @@ public class UriPattern extends RdfBase {
         }
         return nameSpace;
     }
-  
-}
+
+ }

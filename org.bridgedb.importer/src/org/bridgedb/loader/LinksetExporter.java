@@ -266,7 +266,7 @@ public class LinksetExporter {
         }
 
         File dsfile = new File("resources/BridgeDBDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(dsfile);
+        BridgeDBRdfHandler.writeRdfToFile(dsfile, true);
         
         //LinksetExporter exporter = new LinksetExporter(file);
         //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");

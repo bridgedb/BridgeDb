@@ -23,7 +23,8 @@ import org.junit.Ignore;
  */
 public class BridgeDBRdfHandlerTest extends TestUtils{
     
-    private static File file = new File("test-data/CreatedByTest.ttl");
+    private static File file1 = new File("test-data/CreatedByTest.ttl");
+    private static File file2 = new File("test-data/CreatedByTestWithPrimaries.ttl");
 
     public BridgeDBRdfHandlerTest() {
     }
@@ -51,7 +52,16 @@ public class BridgeDBRdfHandlerTest extends TestUtils{
     @Test
     public void testWriteRdfToFile() throws Exception {
         report("writeRdfToFile");
-        BridgeDBRdfHandler.writeRdfToFile(file);
+        BridgeDBRdfHandler.writeRdfToFile(file1, false);
+    }
+
+    /**
+     * Test of writeRdfToFile method, of class BridgeDBRdfHandler.
+     */
+    @Test
+    public void testWriteRdfToFileAddPrimaries() throws Exception {
+        report("writeRdfToFile");
+        BridgeDBRdfHandler.writeRdfToFile(file2, true);
     }
 
     /**
@@ -60,7 +70,15 @@ public class BridgeDBRdfHandlerTest extends TestUtils{
     @Test
     public void testParseRdfFile() throws Exception {
         report("parseRdfFile ");
-        BridgeDBRdfHandler.parseRdfFile(file);
+        BridgeDBRdfHandler.parseRdfFile(file1);
     }
 
+   /**
+     * Test of parseRdfFile method, of class BridgeDBRdfHandler.
+     */
+    @Test
+    public void testParseRdfFileWithPrimaries() throws Exception {
+        report("parseRdfFile ");
+        BridgeDBRdfHandler.parseRdfFile(file2);
+    }
 }
