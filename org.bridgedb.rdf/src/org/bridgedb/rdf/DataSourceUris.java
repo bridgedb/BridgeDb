@@ -38,6 +38,7 @@ public class DataSourceUris extends RdfBase {
     private UriPattern sourceRdfPattern;
     private UriPattern bio2RdfPattern;
     private UriPattern wikiPathwaysPattern;
+    private DataSourceUris uriParent = null;
     
     private static final HashMap<DataSource, DataSourceUris> byDataSource = new HashMap<DataSource, DataSourceUris>();
     private static final HashMap<Resource, DataSourceUris> register = new HashMap<Resource, DataSourceUris>();
@@ -81,7 +82,6 @@ public class DataSourceUris extends RdfBase {
     Resource getResourceId() {
         return getResourceId(inner);
     }
-
 
     public static void writeAll(RepositoryConnection repositoryConnection, boolean addPrimaries) 
             throws IOException, RepositoryException, BridgeDBException {
@@ -375,5 +375,37 @@ public class DataSourceUris extends RdfBase {
         }
         return null;
     }
+
+    void setUriParent(DataSource parent) throws BridgeDBException {
+        if (parent == null){
+            throw new BridgeDBException ("Parent may not be null");
+        }
+        if (parent.equals(inner)){
+            throw new BridgeDBException ("Illegal attempt to set parent to self");
+        }
+        if (uriParent == null){
+            DataSourceUris parentDSU = byDataSource(parent);
+            DataSourceUris grandParent = parentDSU.uriParent;
+            while (grandParent != null){
+                if (grandParent.equals(this)){
+                    throw new BridgeDBException("Illeagl attemp to create a circular reference");
+                }
+                grandParent = grandParent.uriParent;
+            }
+            uriParent = parentDSU;
+        } else {
+            throw new BridgeDBException ("Parent on " + this + " already set to " + uriParent 
+                + " so can not set to " + parent);
+        }
+    }
+
+    public DataSourceUris getUriParent() {
+        DataSourceUris parentDSU = uriParent;
+        while (parentDSU.uriParent != null){
+            parentDSU = parentDSU.uriParent;
+        }
+        return parentDSU;
+    }
+
 
 }
