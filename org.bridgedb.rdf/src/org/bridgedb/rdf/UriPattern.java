@@ -308,8 +308,27 @@ public class UriPattern extends RdfBase {
         if (isUriPatternOf.size() <= 1){
             return;  //Singleton can be used and empty is fine too
         }
-        String uriPattern = getUriPattern();
-        DataSource dataSource = DataSource.register(uriPattern, uriPattern).urlPattern(uriPattern).asDataSource();
-        dataSourceUris = DataSourceUris.byDataSource(dataSource);
+        DataSourceUris parent = null;
+        for (DataSourceUris dsu:isUriPatternOf){
+            if (dsu.getUriParent() != null){
+                if (parent == null){
+                    parent = dsu.getUriParent();
+                } else {
+                    System.out.println(this + " has two primary DataSources " + parent + " and " + dsu 
+                            + " please delcare one formally");
+                }
+            }
+        }
+        if (parent != null){
+            dataSourceUris = parent;
+            System.out.println("£" + parent);
+        } else {
+            String uriPattern = getUriPattern();        
+            DataSource dataSource = DataSource.register(uriPattern, uriPattern).urlPattern(uriPattern).asDataSource();
+            dataSourceUris = DataSourceUris.byDataSource(dataSource);
+        }
+        for (DataSourceUris dsu:isUriPatternOf){
+            dsu.setUriParent(dataSourceUris); 
+        }
     }
  }

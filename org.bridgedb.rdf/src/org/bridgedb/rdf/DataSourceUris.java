@@ -100,6 +100,7 @@ public class DataSourceUris extends RdfBase {
         for (DataSourceUris dsu:dsus){
             dsu.writeDataSource(repositoryConnection, addPrimaries); 
             dsu.writeUriPatterns(repositoryConnection, addPrimaries); 
+            dsu.writeUriParent(repositoryConnection, addPrimaries);
         }
     }
 
@@ -179,6 +180,18 @@ public class DataSourceUris extends RdfBase {
             } else {
                 repositoryConnection.add(getResourceId(), shared, pattern.getResourceId());                
             }
+        }
+    }
+    
+    private void writeUriParent(RepositoryConnection repositoryConnection, boolean addPrimaries) throws RepositoryException {
+        DataSourceUris parent;
+        if (addPrimaries){
+            parent = getUriParent();
+        } else {
+            parent = uriParent;
+        }  
+        if (parent != null){
+            repositoryConnection.add(getResourceId(),BridgeDBConstants.HAS_URI_PARENT_URI, parent.getResourceId());
         }
     }
     
@@ -380,11 +393,32 @@ public class DataSourceUris extends RdfBase {
         if (parent == null){
             throw new BridgeDBException ("Parent may not be null");
         }
-        if (parent.equals(inner)){
-            throw new BridgeDBException ("Illegal attempt to set parent to self");
+        DataSourceUris parentDSU = byDataSource(parent);
+        setUriParent(parentDSU);
+    }
+
+    public DataSourceUris getUriParent() {
+        DataSourceUris parentDSU = uriParent;
+        if (parentDSU == null){
+            return null;
+        }
+        while (parentDSU.uriParent != null){
+            parentDSU = parentDSU.uriParent;
+        }
+        return parentDSU;
+    }
+
+    void setUriParent(DataSourceUris parentDSU) throws BridgeDBException {
+        if (parentDSU == null){
+            throw new BridgeDBException ("Parent may not be null");
+        }
+        if (parentDSU.equals(this)){
+            return; //Ignore attempt to set parent to self;
+        }       
+        if (parentDSU.equals(uriParent)){
+            return; //already set
         }
         if (uriParent == null){
-            DataSourceUris parentDSU = byDataSource(parent);
             DataSourceUris grandParent = parentDSU.uriParent;
             while (grandParent != null){
                 if (grandParent.equals(this)){
@@ -392,20 +426,16 @@ public class DataSourceUris extends RdfBase {
                 }
                 grandParent = grandParent.uriParent;
             }
+            System.out.println("Setting parent of " + this + " to " + parentDSU);
             uriParent = parentDSU;
         } else {
             throw new BridgeDBException ("Parent on " + this + " already set to " + uriParent 
-                + " so can not set to " + parent);
+                + " so can not set to " + uriParent);
         }
     }
-
-    public DataSourceUris getUriParent() {
-        DataSourceUris parentDSU = uriParent;
-        while (parentDSU.uriParent != null){
-            parentDSU = parentDSU.uriParent;
-        }
-        return parentDSU;
+    
+    @Override
+    public String toString(){
+        return inner.toString();
     }
-
-
 }

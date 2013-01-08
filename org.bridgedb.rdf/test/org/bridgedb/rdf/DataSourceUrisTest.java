@@ -88,19 +88,22 @@ public class DataSourceUrisTest extends TestUtils{
     public void testSetUriParentToNull() throws Exception {
         report("setUriParentToNull");
         DataSource original = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentToSelf");
-        DataSourceUris instance = DataSourceUris.byDataSource(original);;
-        instance.setUriParent(null);
+        DataSourceUris instance = DataSourceUris.byDataSource(original);
+        DataSource ds = null;
+        instance.setUriParent(ds);
     }
 
     /**
      * Test of setUriParent method, of class DataSourcePlus.
      */
-    @Test (expected = BridgeDBException.class)
+    @Test 
     public void testSetUriParentToSelf() throws Exception {
         report("setUriParentToSelf");
         DataSource original = DataSource.getByFullName("DataSourceUrisTest_testSetUriParentToSelf");
         DataSourceUris instance = DataSourceUris.byDataSource(original);;
         instance.setUriParent(original);
+        DataSourceUris parent = instance.getUriParent();
+        assertNull(parent);
     }
 
     /**

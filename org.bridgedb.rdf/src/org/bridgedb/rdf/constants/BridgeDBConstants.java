@@ -80,8 +80,7 @@ public class BridgeDBConstants {
     public static final URI HAS_PRIMARY_BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + BIO2RDF_PATTERN);
     public static final URI HAS_BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + BIO2RDF_PATTERN);
 
-    public static final String HAS_URI_PARENT = "hasUriParent";
-    public static final URI HAS_URI_PARENT_URI = new URIImpl(PREFIX + "hasUriPattern");
+    public static final URI HAS_URI_PARENT_URI = new URIImpl(PREFIX + "hasUriParent");
 
     public static final URI HAS_DATA_SOURCE = new URIImpl(PREFIX + "hasDataSource");
     public static final URI IS_URI_PATTERN_OF = new URIImpl(PREFIX + "isUriPatternOf");
