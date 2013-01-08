@@ -247,10 +247,10 @@ public class LinksetExporter {
 
     public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
         ConfigReader.logToConsole();
-        //BioDataSource.init();
+        BioDataSource.init();
         File DSfile = new File("../../BioDataSource.ttl");
         BridgeDBRdfHandler.parseRdfFile(DSfile);
-
+               
         System.out.println("Parsing finished");
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
  
@@ -259,14 +259,14 @@ public class LinksetExporter {
 
         Set<DataSource> used = extractDataSources(file);
         
-        System.out.println("finished extracting files");
+        System.out.println("finished extracting files " + used.size());
         
         for (DataSource ds:used){
             canExport(ds);
         }
 
         File dsfile = new File("resources/BridgeDBDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(dsfile, used);
+        BridgeDBRdfHandler.writeRdfToFile(dsfile);
         
         //LinksetExporter exporter = new LinksetExporter(file);
         //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");

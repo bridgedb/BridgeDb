@@ -31,7 +31,6 @@ public class BridgeDBRdfHandlerTest extends TestUtils{
     @BeforeClass
     public static void setUpClass() throws IDMapperException {
         BioDataSource.init();
-        UriParentSetter.setParents();
     }
     
     @AfterClass

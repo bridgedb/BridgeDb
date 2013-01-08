@@ -61,19 +61,19 @@ public abstract class RdfBase {
 
     static Resource getPossibleSingletonResource(RepositoryConnection repositoryConnection, Resource id, 
             URI predicate) throws RepositoryException, BridgeDBException {
-        Value result = getPossibleSingleton(repositoryConnection, id, predicate);
-        if (result == null) {
-            return null;
-        } else if (result instanceof Resource){
-            return (Resource)result;
-        }
-        return new URIImpl(result.stringValue());
-        //} else {     
-        //    throw new BridgeDBException (" Resource " + id + " predicate " + predicate + " returned " + result 
-        //            + " which is not a " + result.getClass());
-        //}
+        Value value = getPossibleSingleton(repositoryConnection, id, predicate);
+        return toResource(value);
     }
 
+    private static Resource toResource(Value value){
+        if (value == null) {
+            return null;
+        } else if (value instanceof Resource){
+            return (Resource)value;
+        }
+        return new URIImpl(value.stringValue());        
+    }
+    
     static Value getPossibleSingleton(RepositoryConnection repositoryConnection, Resource id, 
             URI predicate) throws RepositoryException, BridgeDBException {
         RepositoryResult<Statement> statements = 
@@ -102,4 +102,18 @@ public abstract class RdfBase {
         return results;
     }
 
+    static Set<Resource> getAllResources(RepositoryConnection repositoryConnection, Resource id, URI predicate) 
+            throws RepositoryException {
+        HashSet<Resource> results = new HashSet<Resource>();
+        RepositoryResult<Statement> statements = 
+                repositoryConnection.getStatements(id, predicate, null, true);
+        while(statements.hasNext()) {
+            Statement statement = statements.next();
+            Value value = statement.getObject();
+            if (value != null){
+                results.add(toResource(value));
+            }
+        }
+        return results;
+    }
 }
