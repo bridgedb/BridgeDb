@@ -15,4 +15,5 @@ Similar to RDB package but.
 3. MappingSets have a predicate assigned.
 4. MappingSets have a field to save if they are "transitive". 
    (badly named flag to identify linksets/mappingsets) created by using transitivity of two other mappingsets)
-
+5. FUTURE WORK: Mapping sets to have extra information so they are sometimes used sometimes not.
+    a. Example exact mappings vs near mappings
