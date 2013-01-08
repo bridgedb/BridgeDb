@@ -162,7 +162,8 @@ public class UriPattern extends RdfBase {
         }
     }
 
-    public static void addAll(RepositoryConnection repositoryConnection, boolean addPrimaries) throws IOException, RepositoryException {
+    public static void addAll(RepositoryConnection repositoryConnection, boolean addPrimaries) 
+            throws IOException, RepositoryException, BridgeDBException {
         for (UriPattern uriPattern:register.values()){
             uriPattern.add(repositoryConnection, addPrimaries);
         }        
@@ -294,4 +295,21 @@ public class UriPattern extends RdfBase {
         return nameSpace;
     }
 
+    public static void checkAllDataSourceUris() throws BridgeDBException{
+        for (UriPattern uriPattern:register.values()){
+            uriPattern.checkDataSourceUris();
+        }        
+    }
+    
+    private void checkDataSourceUris() throws BridgeDBException{
+        if (dataSourceUris != null){
+            return;  //DataSource has been Set
+        }
+        if (isUriPatternOf.size() <= 1){
+            return;  //Singleton can be used and empty is fine too
+        }
+        String uriPattern = getUriPattern();
+        DataSource dataSource = DataSource.register(uriPattern, uriPattern).urlPattern(uriPattern).asDataSource();
+        dataSourceUris = DataSourceUris.byDataSource(dataSource);
+    }
  }

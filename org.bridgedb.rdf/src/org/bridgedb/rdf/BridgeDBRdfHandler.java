@@ -74,6 +74,9 @@ public class BridgeDBRdfHandler {
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             repositoryConnection = repository.getConnection();
+            if (addPrimaries) {
+                UriPattern.checkAllDataSourceUris();
+            }
             DataSourceUris.writeAll(repositoryConnection, addPrimaries);
             OrganismRdf.addAll(repositoryConnection);
             UriPattern.addAll(repositoryConnection, addPrimaries);
