@@ -73,10 +73,12 @@ public class ConfigReader {
             if (loadByEnviromentVariable(fileName)) return;
             if (loadByCatalinaHomeConfigs(fileName)) return;
             if (loadFromDirectory(fileName, "../org.bridgedb.utils/resources")) return;
+            if (loadFromDirectory(fileName, "../../BridgeDb/org.bridgedb.utils/resources")) return;
             if (loadFromDirectory(fileName, "../conf/OPS-IMS")) return;
             if (loadFromDirectory(fileName, "conf/OPS-IMS")) return;
             if (getInputStreamFromResource(fileName)) return;
             if (getInputStreamFromJar(fileName)) return;
+            throw new BridgeDBException("Unable to find " + fileName);
         } catch (IOException ex) {
             error = "Unexpected IOEXception after doing checks.";
             throw new BridgeDBException(error, ex);
@@ -96,7 +98,7 @@ public class ConfigReader {
     
     private Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = new Properties();
+            properties = new Properties();           
             try {
                 properties.load(getInputStream());
                 properties.put(CONFIG_FILE_PATH_PROPERTY, foundAt);
