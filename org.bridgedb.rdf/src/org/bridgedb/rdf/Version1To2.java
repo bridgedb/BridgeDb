@@ -21,15 +21,16 @@ public class Version1To2 {
     public static void main(String[] args) throws IDMapperException, IOException {
         ConfigReader.logToConsole();
         BioDataSource.init();
-        //InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
-        //StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
-        File v1File = new File ("../org.bridgedb.rdf/resources/BioDataSource.ttl");
-        BridgeDBRdfHandler.parseRdfFile(v1File);
+        File bioFile = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
+        BridgeDBRdfHandler.parseRdfFile(bioFile);
         
-        File v2File = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(v2File, false);
+        File v1File = new File ("../org.bridgedb.rdf/resources/AndraBioDataSource.ttl");
+//        BridgeDBRdfHandler.parseRdfFile(v1File);
+        
+        
+        BridgeDBRdfHandler.writeRdfToFile(bioFile, false);
+        BridgeDBRdfHandler.parseRdfFile(bioFile);
 
-        BridgeDBRdfHandler.parseRdfFile(v2File);
         
     }
 
