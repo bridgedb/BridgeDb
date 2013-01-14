@@ -1739,7 +1739,7 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "unknown";
          bridgeDB:wikipathways_id_base "http://identifiers.org/kegg.compound/";
-         bridgeDB:bio2RDF "http://bio2rdf.org/ec:";
+         bridgeDB:bio2RDF "http://bio2rdf.org/cpd:"
          bridgeDB:fullName "COMPOUND".
 :DataSource_Kegg_Compound a bridgeDB:DataSource; 
          bridgeDB:systemCode "Ck";
@@ -1751,7 +1751,7 @@
          bridgeDB:urnBase "urn:miriam:kegg.compound";
          bridgeDB:identifiers_org_base "http://identifiers.org/kegg.compound/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/kegg.compound/";
-         bridgeDB:bio2RDF "http://bio2rdf.org/ec:$id";
+         bridgeDB:bio2RDF "http://bio2rdf.org/cpd:$id";
          bridgeDB:fullName "Kegg Compound".
 :DataSource_KEGG_Drug a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.genome.jp/kegg/drug/";
@@ -1760,6 +1760,7 @@
          bridgeDB:type "metabolite";
          bridgeDB:urlPattern "http://www.genome.jp/dbget-bin/www_bget?dr:$id";
          bridgeDB:urnBase "urn:miriam:kegg.drug";
+         bridgeDB:bio2RDF "http://bio2rdf.org/dr:$id";
          bridgeDB:identifiers_org_base "http://identifiers.org/kegg.drug/";
          bridgeDB:fullName "KEGG Drug".
 :DataSource_KEGG_Genes a bridgeDB:DataSource; 
@@ -1792,7 +1793,7 @@
          bridgeDB:urlPattern "http://www.genome.jp/dbget-bin/www_bget?gl:$id";
          bridgeDB:urnBase "urn:miriam:kegg.glycan";
          bridgeDB:identifiers_org_base "http://identifiers.org/kegg.glycan/";
-         bridgeDB:bio2RDF "http://bio2rdf.org/kegg:$id";
+         bridgeDB:bio2RDF "http://bio2rdf.org/gl:$id";
          bridgeDB:fullName "KEGG Glycan".
 :DataSource_KEGG_Metagenome a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.genome.jp/kegg/catalog/org_list3.html";
@@ -1823,7 +1824,7 @@
          bridgeDB:urnBase "urn:miriam:kegg.pathway";
          bridgeDB:identifiers_org_base "http://identifiers.org/kegg.pathway/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/kegg.pathway/";
-         bridgeDB:bio2RDF "http://bio2rdf.org/kegg:$id";
+         bridgeDB:bio2RDF "http://bio2rdf.org/path:$id";
          bridgeDB:fullName "KEGG Pathway".
 :DataSource_KEGG_Reaction a bridgeDB:DataSource; 
          bridgeDB:systemCode "Rk";
@@ -1834,7 +1835,7 @@
          bridgeDB:urlPattern "http://www.genome.jp/dbget-bin/www_bget?rn:$id";
          bridgeDB:urnBase "urn:miriam:kegg.reaction";
          bridgeDB:identifiers_org_base "http://identifiers.org/kegg.reaction/";
-         bridgeDB:bio2RDF "http://bio2rdf.org/kegg:$id";
+         bridgeDB:bio2RDF "http://bio2rdf.org/rn:$id";
          bridgeDB:fullName "KEGG Reaction".
 :DataSource_KnapSack a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://kanaya.aist-nara.ac.jp/KNApSAcK/";
