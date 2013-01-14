@@ -688,7 +688,6 @@
          bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp";
          bridgeDB:idExample "121909098";
          bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
          bridgeDB:urlPattern "http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id";
          bridgeDB:urnBase "urn:miriam:dbsnp";
          bridgeDB:identifiers_org_base "http://identifiers.org/dbsnp/";

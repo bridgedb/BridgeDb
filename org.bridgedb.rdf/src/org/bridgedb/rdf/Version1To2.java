@@ -24,8 +24,8 @@ public class Version1To2 {
         File bioFile = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
         BridgeDBRdfHandler.parseRdfFile(bioFile);
         
-        File v1File = new File ("../org.bridgedb.rdf/resources/AndraBioDataSource.ttl");
-//        BridgeDBRdfHandler.parseRdfFile(v1File);
+        File v1File = new File ("../org.bridgedb.rdf/resources/AndraDataSource.ttl");
+        BridgeDBRdfHandler.parseRdfFile(v1File);
         
         
         BridgeDBRdfHandler.writeRdfToFile(bioFile, false);
