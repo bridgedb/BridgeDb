@@ -3480,11 +3480,6 @@ bridgeDB:DataSource_PubChem_substance a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pubchem.substance/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=$id> .
 
-bridgeDB:DataSource_Pubmed a bridgeDB:DataSource ;
-	bridgeDB:fullName "Pubmed" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" .
-
 bridgeDB:DataSource_PubMed a bridgeDB:DataSource ;
 	bridgeDB:fullName "PubMed" ;
 	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/PubMed/" ;
@@ -3494,6 +3489,11 @@ bridgeDB:DataSource_PubMed a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/pubmed/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pubmed/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/pubmed/$id> .
+
+bridgeDB:DataSource_Pubmed a bridgeDB:DataSource ;
+	bridgeDB:fullName "Pubmed" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
 
 bridgeDB:DataSource_PubMed_Central a bridgeDB:DataSource ;
 	bridgeDB:fullName "PubMed Central" ;
