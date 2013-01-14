@@ -1739,7 +1739,7 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "unknown";
          bridgeDB:wikipathways_id_base "http://identifiers.org/kegg.compound/";
-         bridgeDB:bio2RDF "http://bio2rdf.org/cpd:"
+         bridgeDB:bio2RDF "http://bio2rdf.org/cpd:";
          bridgeDB:fullName "COMPOUND".
 :DataSource_Kegg_Compound a bridgeDB:DataSource; 
          bridgeDB:systemCode "Ck";
@@ -2473,8 +2473,7 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "ontology";
          bridgeDB:urlPattern "http://www.ebi.ac.uk/sbo/main/$id";
-         bridgeDB:urnBase "urn:miriam:obo.sbo";
-         bridgeDB:identifiers_org_base "http://identifiers.org/obo.sbo/";
+         bridgeDB:urnBase "urn:miriam:biomodels.sbo";
          bridgeDB:fullName "Systems Biology Ontology".
 :DataSource_sequence_ontology a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.sequenceontology.org/";
@@ -2482,8 +2481,8 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "ontology";
          bridgeDB:urlPattern "http://www.sequenceontology.org/miso/current_release/term/$id";
-         bridgeDB:urnBase "urn:miriam:obo.so";
-         bridgeDB:identifiers_org_base "http://identifiers.org/obo.so/";
+         bridgeDB:urnBase "urn:miriam:biomodels.sbo";
+         bridgeDB:identifiers_org_base "http://identifiers.org/biomodels.sbo/";
          bridgeDB:fullName "sequence ontology".
 :DataSource_Unit_Ontology a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.obofoundry.org/cgi-bin/detail.cgi?id=unit";
@@ -2930,22 +2929,8 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "metabolite";
          bridgeDB:wikipathways_id_base "http://identifiers.org/pubchem.compound/";
+         bridgeDB:alternativeFullName "Pubchem";
          bridgeDB:fullName "PubChem".
-:DataSource_Pubchem a bridgeDB:DataSource; 
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:wikipathways_id_base "http://identifiers.org/pubchem.compound/";
-         bridgeDB:fullName "Pubchem".
-:DataSource_Pubchem_compound a bridgeDB:DataSource; 
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:wikipathways_id_base "http://identifiers.org/pubchem.compound/";
-         bridgeDB:fullName "Pubchem compound".
-:DataSource_Pubchem-compound a bridgeDB:DataSource; 
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:wikipathways_id_base "http://identifiers.org/pubchem.compound/";
-         bridgeDB:fullName "Pubchem-compound".
 :DataSource_PubChem-compound a bridgeDB:DataSource; 
          bridgeDB:systemCode "Cpc";
          bridgeDB:mainUrl "http://pubchem.ncbi.nlm.nih.gov/";
@@ -2956,6 +2941,8 @@
          bridgeDB:urnBase "urn:miriam:pubchem.compound";
          bridgeDB:identifiers_org_base "http://identifiers.org/pubchem.compound/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/pubchem.compound/";
+         bridgeDB:alternativeFullName "Pubchem compound";
+         bridgeDB:alternativeFullName "Pubchem-compound";
          bridgeDB:fullName "PubChem-compound".
 :DataSource_PubChem-substance a bridgeDB:DataSource; 
          bridgeDB:systemCode "Cps";

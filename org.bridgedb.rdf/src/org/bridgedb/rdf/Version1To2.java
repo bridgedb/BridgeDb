@@ -23,11 +23,11 @@ public class Version1To2 {
         BioDataSource.init();
         //InputStream stream = ConfigReader.getInputStream("BioDataSource.ttl");
         //StatementReaderAndImporter reader = new StatementReaderAndImporter(stream, RDFFormat.TURTLE, StoreType.TEST);
-        File v1File = new File ("C:/OpenPhacts/BioDataSource.ttl");
+        File v1File = new File ("../org.bridgedb.rdf/resources/BioDataSource.ttl");
         BridgeDBRdfHandler.parseRdfFile(v1File);
         
         File v2File = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(v2File, true);
+        BridgeDBRdfHandler.writeRdfToFile(v2File, false);
 
         BridgeDBRdfHandler.parseRdfFile(v2File);
         
