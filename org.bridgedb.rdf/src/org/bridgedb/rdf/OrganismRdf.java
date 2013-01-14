@@ -90,9 +90,12 @@ public class OrganismRdf extends RdfBase{
         throw new BridgeDBException("No Orgamism found for " + organismId);
     }
 
-    static Object byRdfResource(Value organismId) {
+    static Object byRdfResource(Value organismId) throws BridgeDBException {
         OrganismRdf organismRdf = factory();
         Object result = organismRdf.organisms.get(organismId);
+        if (result == null){
+            throw new BridgeDBException("No Orgamism known for " +  organismId);
+        }
         return result;
     }
 
