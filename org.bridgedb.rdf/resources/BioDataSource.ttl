@@ -1739,7 +1739,7 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "unknown";
          bridgeDB:wikipathways_id_base "http://identifiers.org/kegg.compound/";
-         bridgeDB:bio2RDF "http://bio2rdf.org/cpd:";
+         bridgeDB:bio2RDF "http://bio2rdf.org/cpd:$id";
          bridgeDB:fullName "COMPOUND".
 :DataSource_Kegg_Compound a bridgeDB:DataSource; 
          bridgeDB:systemCode "Ck";
