@@ -95,7 +95,7 @@ public class UriPattern extends RdfBase {
     public static UriPattern byPattern(String urlPattern) throws BridgeDBException{
         int pos = urlPattern.indexOf("$id");
         if (pos == -1) {
-            throw new BridgeDBException("Urlpattern should have $id in it");
+            throw new BridgeDBException("Urlpattern " + urlPattern + " does not have $id in it.");
         }
         String nameSpace = urlPattern.substring(0, pos);
         String postfix = urlPattern.substring(pos + 3);
@@ -208,26 +208,50 @@ public class UriPattern extends RdfBase {
 
     public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource dataSourceId, DataSourceUris parent, 
             URI primary, URI shared) throws RepositoryException, BridgeDBException{
+        return readUriPattern(repositoryConnection, dataSourceId, parent, primary, shared, null, null);
+    }
+    
+    public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource dataSourceId, DataSourceUris parent, 
+            URI primary, URI shared, URI old) throws RepositoryException, BridgeDBException{
+        String oldString = getPossibleSingletonString(repositoryConnection, dataSourceId, old);
+        return readUriPattern(repositoryConnection, dataSourceId, parent, primary, shared, old, oldString);
+    }
+    
+    private static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource dataSourceId, DataSourceUris parent, 
+            URI primary, URI shared, URI old, String oldString) throws RepositoryException, BridgeDBException{
         Resource primaryId = getPossibleSingletonResource(repositoryConnection, dataSourceId, primary);
         Resource sharedId = getPossibleSingletonResource(repositoryConnection, dataSourceId, shared);
         if (primaryId == null){
             if (sharedId == null){
-                //nothing found
-                return null;
+                if (oldString == null){
+                    //nothing found
+                    return null;
+                } else {
+                    UriPattern result = UriPattern.byPattern(oldString);
+                    result.setDataSource(parent);
+                    return result;
+                }
             } else {
+                if (oldString != null){
+                    throw new BridgeDBException(parent.getResourceId() + " can not have both a " 
+                        + old + " and a " + shared + " predicate.");
+                }
                 UriPattern result = readUriPattern(repositoryConnection, sharedId);
                 result.setDataSource(parent);
                 return result;
             } 
         } else { 
-            if (sharedId == null){
-                UriPattern result = readUriPattern(repositoryConnection, primaryId);
-                result.setPrimaryDataSource(parent);
-                return result;
-            } else {
+            if (oldString != null){
+                throw new BridgeDBException(parent.getResourceId() + " can not have both a " 
+                    + old + " and a " + primary + " predicate.");
+            }
+            if (sharedId != null){
                 throw new BridgeDBException(parent.getResourceId() + " can not have both a " 
                         + primary + " and a " + shared + " predicate.");
             }
+            UriPattern result = readUriPattern(repositoryConnection, primaryId);
+            result.setPrimaryDataSource(parent);
+            return result;
         }        
     }
     

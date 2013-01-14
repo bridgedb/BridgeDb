@@ -48,6 +48,7 @@ public class DataSourceUris extends RdfBase {
         BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI,
         BridgeDBConstants.HAS_PRIMARY_BIO2RDF_PATTERN_URI,
         BridgeDBConstants.HAS_BIO2RDF_PATTERN_URI,
+        BridgeDBConstants.BIO2RDF_PATTERN_URI, //old version
         BridgeDBConstants.FULL_NAME_URI,
         BridgeDBConstants.HAS_URI_PARENT_URI,
         BridgeDBConstants.ID_EXAMPLE_URI,
@@ -63,6 +64,7 @@ public class DataSourceUris extends RdfBase {
         BridgeDBConstants.TYPE_URI,
         BridgeDBConstants.HAS_URL_PATTERN_URI,
         BridgeDBConstants.HAS_PRIMARY_URL_PATTERN_URI,
+        BridgeDBConstants.URL_PATTERN_URI, //Old version
         BridgeDBConstants.URN_BASE_URI,
         BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI,
         BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI,
@@ -270,10 +272,11 @@ public class DataSourceUris extends RdfBase {
             DataSource.Builder builder) throws BridgeDBException, RepositoryException{
         DataSourceUris dsu = byDataSource(builder.asDataSource());
         UriPattern uriPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, dsu, 
-                BridgeDBConstants.HAS_PRIMARY_URL_PATTERN_URI, BridgeDBConstants.HAS_URL_PATTERN_URI);
+                BridgeDBConstants.HAS_PRIMARY_URL_PATTERN_URI, BridgeDBConstants.HAS_URL_PATTERN_URI, 
+                BridgeDBConstants.URL_PATTERN_URI);
         if (uriPattern != null){
             builder.urlPattern(uriPattern.getUriPattern());
-        }
+        }       
     }
     
     private void readUriPatternsStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
@@ -298,7 +301,8 @@ public class DataSourceUris extends RdfBase {
         }
          
         bio2RdfPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this,
-                BridgeDBConstants.HAS_PRIMARY_BIO2RDF_PATTERN_URI, BridgeDBConstants.HAS_BIO2RDF_PATTERN_URI);
+                BridgeDBConstants.HAS_PRIMARY_BIO2RDF_PATTERN_URI, BridgeDBConstants.HAS_BIO2RDF_PATTERN_URI, 
+                BridgeDBConstants.BIO2RDF_PATTERN_URI);
         sourceRdfPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
                 BridgeDBConstants.HAS_PRIMARY_SOURCE_RDF_PATTERN_URI, BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI); 
         wikiPathwaysPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 

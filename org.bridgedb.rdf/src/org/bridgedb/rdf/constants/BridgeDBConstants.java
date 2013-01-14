@@ -48,6 +48,8 @@ public class BridgeDBConstants {
     public static final URI TYPE_URI = new URIImpl(PREFIX + TYPE);
     public static final URI HAS_URL_PATTERN_URI = new URIImpl(PREFIX + "hasUrlPattern");
     public static final URI HAS_PRIMARY_URL_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + "UrlPattern");
+    //old verions
+    public static final URI URL_PATTERN_URI = new URIImpl(PREFIX + "urlPattern");
     private static final String URN_BASE = "urnBase";
     public static final URI URN_BASE_URI = new URIImpl(PREFIX + URN_BASE);
 
@@ -79,6 +81,7 @@ public class BridgeDBConstants {
     private static final String BIO2RDF_PATTERN = "Bio2RdfPattern";
     public static final URI HAS_PRIMARY_BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + BIO2RDF_PATTERN);
     public static final URI HAS_BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + BIO2RDF_PATTERN);
+    public static final URI BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "bio2RDF");
 
     public static final URI HAS_URI_PARENT_URI = new URIImpl(PREFIX + "hasUriParent");
 
