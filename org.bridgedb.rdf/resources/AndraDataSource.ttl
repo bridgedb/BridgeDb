@@ -1585,16 +1585,6 @@
          bridgeDB:urnBase "urn:miriam:imgt.ligm";
          bridgeDB:identifiers_org_base "http://identifiers.org/imgt.ligm/";
          bridgeDB:fullName "IMGT LIGM".
-:DataSource_InChI a bridgeDB:DataSource; 
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:wikipathways_id_base "http://identifiers.org/inchi/";
-         bridgeDB:fullName "InChI".
-:DataSource_InChIKey a bridgeDB:DataSource; 
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:wikipathways_id_base "http://identifiers.org/inchi/";
-         bridgeDB:fullName "InChIKey".
 :DataSource_Sequence_Read_Archive a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/sra";
          bridgeDB:idExample "SRX000007";
@@ -3863,46 +3853,6 @@
          bridgeDB:Organism bridgeDB:Organism_Ec;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl E. coli".
-:DataSource_Chembl_2_Compound a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Chembl 2 Compound";
-         bridgeDB:idExample "698788";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "Chembl 2 Compound".
-:DataSource_Chembl_2_Target a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Chembl 2 Target";
-         bridgeDB:idExample "698788";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "Chembl 2 Target".
-:DataSource_Chembl_13_Internal_ids a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Chembl 13 Internal";
-         bridgeDB:idExample "CHEMBL6329";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "Chembl 13 Internal ids".
-:DataSource_Chembl_13_Molecule a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Chembl 13 Molecule";
-         bridgeDB:idExample "m1";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://data.kasabi.com/dataset/chembl-rdf/molecule/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "Chembl 13 Molecule".
-:DataSource_Chembl_13_Target a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Chembl 13 Target";
-         bridgeDB:idExample "t1";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://data.kasabi.com/dataset/chembl-rdf/target/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "Chembl 13 Target".
 :DataSource_UCSC_Genome_Browser a bridgeDB:DataSource; 
          bridgeDB:systemCode "Uc";
          bridgeDB:mainUrl "http://genome.ucsc.edu/";
@@ -3952,14 +3902,6 @@
          bridgeDB:urlPattern "http://purl.uniprot.org/enzyme/$id";
          bridgeDB:urnBase "null";
          bridgeDB:fullName "Uniprot Enzyme".
-:DataSource_ChemSpider a bridgeDB:DataSource; 
-         bridgeDB:systemCode "ChemSpider";
-         bridgeDB:idExample "43";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://rdf.chemspider.com/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "ChemSpider".
 :DataSource_Wheat_gene_refs a bridgeDB:DataSource; 
          bridgeDB:systemCode "Wr";
          bridgeDB:mainUrl "http://wheat.pw.usda.gov/";
@@ -3998,14 +3940,6 @@
          bridgeDB:urlPattern "http://wiki.nugo.org/index.php/$id";
          bridgeDB:urnBase "Nw";
          bridgeDB:fullName "NuGO wiki".
-:DataSource_ConceptWiki a bridgeDB:DataSource; 
-         bridgeDB:systemCode "ConceptWiki";
-         bridgeDB:idExample "33a28bb2-35ed-4d94-adfd-3c96053cbaaf";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www.conceptwiki.org/concept/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "ConceptWiki".
 :DataSource_Ensembl_Mosquito a bridgeDB:DataSource; 
          bridgeDB:systemCode "EnAg";
          bridgeDB:mainUrl "http://www.ensembl.org";
@@ -4028,30 +3962,6 @@
          bridgeDB:Organism bridgeDB:Organism_Xt;
  	 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Xenopus".
-:DataSource_TestDS2 a bridgeDB:DataSource; 
-         bridgeDB:systemCode "TestDS2";
-         bridgeDB:idExample "123";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www.example.com/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "TestDS2".
-:DataSource_TestDS3 a bridgeDB:DataSource; 
-         bridgeDB:systemCode "TestDS3";
-         bridgeDB:idExample "123";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www.example.org#$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "TestDS3".
-:DataSource_TestDS1 a bridgeDB:DataSource; 
-         bridgeDB:systemCode "TestDS1";
-         bridgeDB:idExample "123";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www.foo.com/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "TestDS1".
 :DataSource_Gramene_Literature a bridgeDB:DataSource; 
          bridgeDB:systemCode "Gl";
          bridgeDB:mainUrl "http://www.gramene.org/";
@@ -4078,14 +3988,6 @@
          bridgeDB:urlPattern "http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=ALLFIELDS&DATA=$id";
          bridgeDB:urnBase "Cc";
          bridgeDB:fullName "CCDS".
-:DataSource_pdb a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Pdb";
-         bridgeDB:idExample "1ZW8";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www.pdb.org/pdb/explore/explore.do?pdbId=$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "pdb".
 :DataSource_Rfam a bridgeDB:DataSource; 
          bridgeDB:systemCode "Rf";
          bridgeDB:idExample "RF00066";
@@ -4104,15 +4006,6 @@
          bridgeDB:urnBase "Ob";
          bridgeDB:Organism bridgeDB:Organism_Os;
          bridgeDB:fullName "Oryzabase".
-:DataSource_Swissprot_part_of_uniprot a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Swissprot";
-         bridgeDB:idExample "O43451";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www.uniprot.org/uniprot/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:sourceRDFURI "http://purl.uniprot.org/uniprot/$id";
-         bridgeDB:fullName "Swissprot part of uniprot".
 :DataSource_WikiGenes a bridgeDB:DataSource; 
          bridgeDB:systemCode "Wg";
          bridgeDB:mainUrl "http://www.wikigenes.org/";
@@ -4122,22 +4015,6 @@
          bridgeDB:urlPattern "http://www.wikigenes.org/e/gene/e/$id.html";
          bridgeDB:urnBase "Wg";
          bridgeDB:fullName "WikiGenes".
-:DataSource_DrugBank_Drugs a bridgeDB:DataSource; 
-         bridgeDB:systemCode "DrugBank drugs";
-         bridgeDB:idExample "DB02901";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "DrugBank Drugs".
-:DataSource_Drug_Bank_Target a bridgeDB:DataSource; 
-         bridgeDB:systemCode "Drug Bank Target";
-         bridgeDB:idExample "6511";
-         bridgeDB:primary "true"^^xsd:boolean;
-         bridgeDB:type "unknown";
-         bridgeDB:urlPattern "http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id";
-         bridgeDB:urnBase "null";
-         bridgeDB:fullName "Drug Bank Target".
 
 #WARNING: Organism are hard coded into BridgeDB.
 #WARNING: below is for reference and NON BridgeDB use only!
