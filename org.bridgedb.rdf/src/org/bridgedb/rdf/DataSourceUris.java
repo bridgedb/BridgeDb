@@ -226,7 +226,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         
     public static DataSource readDataSource(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException{
-        String fullName = getSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.FULL_NAME_URI);
+        String fullName = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.FULL_NAME_URI);
         String systemCode = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.SYSTEM_CODE_URI);
         DataSource.Builder builder = DataSource.register(systemCode, fullName);
 

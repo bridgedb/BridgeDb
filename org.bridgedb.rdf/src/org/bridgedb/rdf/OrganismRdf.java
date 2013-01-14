@@ -31,12 +31,12 @@ import org.openrdf.rio.RDFWriter;
 public class OrganismRdf extends RdfBase{
 
     private static OrganismRdf singleton = null;
-    
-    static HashMap<Value,Object> organisms = new HashMap<Value,Object>();
+    private HashMap<Value,Object> organisms;;
     
     private OrganismRdf(){
+        organisms = new HashMap<Value,Object>();
         for (Organism organism:Organism.values()){
-            organisms.put(new URIImpl(getRdfId(organism)), organism);
+            organisms.put(getResourceId(organism), organism);
         }
     }
     
@@ -51,10 +51,6 @@ public class OrganismRdf extends RdfBase{
         return scrub(organism.code());   
     }
     
-    public static final String getRdfId(Organism organism) {
-        return ":" + BridgeDBConstants.ORGANISM_LABEL + "_" + getRdfLabel(organism);
-    }
-
     public static final URI getResourceId(Organism organism){
         return new URIImpl(BridgeDBConstants.ORGANISM1 + "_" + getRdfLabel(organism));
     }
