@@ -2,6 +2,66 @@
 @prefix : <http://no/BaseURI/Set/> .
 
 
+bridgeDB:DataSource_bysysCode_EnDn a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnDn" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnEt a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnEt" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnLa a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnLa" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnMd a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnMd" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnOc a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnOc" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnOl a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnOl" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnSa a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnSa" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnSb a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnSb" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnTn a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnTn" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_Gc a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Gc" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_Gm a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Gm" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_Ws a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Ws" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
 bridgeDB:DataSource_2D_PAGE_protein a bridgeDB:DataSource ;
 	bridgeDB:fullName "2D-PAGE protein" ;
 	bridgeDB:mainUrl "http://2dbase.techfak.uni-bielefeld.de/" ;
