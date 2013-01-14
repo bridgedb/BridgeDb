@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.Organism;
@@ -93,7 +94,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
     
     public static void writeAll(RepositoryConnection repositoryConnection, Collection<DataSource> dataSources, 
             boolean addPrimaries) throws IOException, RepositoryException, BridgeDBException {
-        HashSet<DataSourceUris> dsus = new HashSet<DataSourceUris>(); 
+        TreeSet<DataSourceUris> dsus = new TreeSet<DataSourceUris>(); 
         for (DataSource dataSource:dataSources){
             if (dataSource !=null){
                 DataSourceUris dsu = byDataSource(dataSource);
@@ -473,7 +474,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
            if (value2 == null || value2.trim().isEmpty()){
                return 1;
            } else {
-               return value1.compareTo(value2);
+               return value1.toLowerCase().compareTo(value2.toLowerCase());
            }
         }
     }

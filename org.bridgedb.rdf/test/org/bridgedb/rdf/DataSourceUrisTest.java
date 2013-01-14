@@ -157,7 +157,7 @@ public class DataSourceUrisTest extends TestUtils{
                 DataSource.register("DataSourceUrisTest_testCompare1", "DataSourceUrisTest_testCompare1").asDataSource();
         DataSource dataSource2 = 
                 DataSource.register("DataSourceUrisTest_testCompare2", "DataSourceUrisTest_testCompare2").asDataSource();
-        DataSource dataSource3 = DataSource.getByFullName("DataSourceUrisTest_testCompare3");
+        DataSource dataSource3 = DataSource.getByFullName("dataSourceUrisTest_testCompare3");
         DataSource dataSource4 = DataSource.getBySystemCode("DataSourceUrisTest_testCompare4");
         DataSource dataSource5 = DataSource.getBySystemCode("DataSourceUrisTest_testCompare5");
         DataSourceUris dataSourceUris1 = DataSourceUris.byDataSource(dataSource1);
