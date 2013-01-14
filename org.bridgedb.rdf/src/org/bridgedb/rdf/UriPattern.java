@@ -35,7 +35,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     private final String nameSpace;
     private final String postfix;
     private DataSourceUris dataSourceUris;
-    private HashSet<DataSourceUris> isUriPatternOf = new HashSet<DataSourceUris>();
+    private TreeSet<DataSourceUris> isUriPatternOf = new TreeSet<DataSourceUris>();
     
     private static HashMap<Resource, UriPattern> register = new HashMap<Resource, UriPattern>();
     private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();

@@ -4916,7 +4916,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://identifiers.org/biomodels.sbo/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biomodels.sbo/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Systems_Biology_Ontology , bridgeDB:DataSource_sequence_ontology .
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_sequence_ontology , bridgeDB:DataSource_Systems_Biology_Ontology .
 
 <http://identifiers.org/biomodels.teddy/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/biomodels.teddy/" ;
@@ -6568,7 +6568,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://stke.sciencemag.org/cgi/cm/stkecm;$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://stke.sciencemag.org/cgi/cm/stkecm;" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Science_Signaling_Pathway_Dependent_Component , bridgeDB:DataSource_Science_Signaling_Pathway_Independent_Component , bridgeDB:DataSource_Science_Signaling_Pathway .
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Science_Signaling_Pathway , bridgeDB:DataSource_Science_Signaling_Pathway_Dependent_Component , bridgeDB:DataSource_Science_Signaling_Pathway_Independent_Component .
 
 <http://stormo.wustl.edu/ScerTF/details/$id/> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://stormo.wustl.edu/ScerTF/details/" ;
@@ -6870,7 +6870,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.ebi.ac.uk/ontology-lookup/?termId=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/ontology-lookup/?termId=" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Evidence_Code , bridgeDB:DataSource_EDAM_Ontology , bridgeDB:DataSource_PATO , bridgeDB:DataSource_Cell_Cycle_Ontology , bridgeDB:DataSource_Cell_Ontology , bridgeDB:DataSource_Brenda_Tissue_Ontology , bridgeDB:DataSource_Unit_Ontology , bridgeDB:DataSource_FMA , bridgeDB:DataSource_Molecular_Interactions_Ontology , bridgeDB:DataSource_Protein_Modification_Ontology .
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Brenda_Tissue_Ontology , bridgeDB:DataSource_Cell_Cycle_Ontology , bridgeDB:DataSource_Cell_Ontology , bridgeDB:DataSource_EDAM_Ontology , bridgeDB:DataSource_Evidence_Code , bridgeDB:DataSource_FMA , bridgeDB:DataSource_Molecular_Interactions_Ontology , bridgeDB:DataSource_PATO , bridgeDB:DataSource_Protein_Modification_Ontology , bridgeDB:DataSource_Unit_Ontology .
 
 <http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/" ;
