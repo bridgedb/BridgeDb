@@ -964,7 +964,7 @@
          bridgeDB:urlPattern "http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnBs";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Bt;
+         bridgeDB:Organism bridgeDB:Organism_Bt;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl B. subtilis".
 :DataSource_Ensembl_M_tuberculosis a bridgeDB:DataSource; 
@@ -976,7 +976,7 @@
          bridgeDB:urlPattern "http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnMx";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Mx;
+         bridgeDB:Organism bridgeDB:Organism_Mx;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl M. tuberculosis".
 :DataSource_Ensembl_Cow a bridgeDB:DataSource; 
@@ -988,7 +988,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnBt";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Bt;
+         bridgeDB:Organism bridgeDB:Organism_Bt;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Cow".
 :DataSource_Ensembl_C_elegans a bridgeDB:DataSource; 
@@ -1000,7 +1000,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnCe";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Ce;
+         bridgeDB:Organism bridgeDB:Organism_Ce;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl C. elegans".
 :DataSource_Ensembl_Dog a bridgeDB:DataSource; 
@@ -1012,7 +1012,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnCf";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Cf;
+         bridgeDB:Organism bridgeDB:Organism_Cf;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Dog".
 :DataSource_Ensembl_Zebrafish a bridgeDB:DataSource; 
@@ -1024,7 +1024,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnDr";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Dr;
+         bridgeDB:Organism bridgeDB:Organism_Dr;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Zebrafish".
 :DataSource_Ensembl_Fruitfly a bridgeDB:DataSource; 
@@ -1037,7 +1037,7 @@
          bridgeDB:urnBase "EnDm";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
-         bridgeDB:Organism :Organism_Dm;
+         bridgeDB:Organism bridgeDB:Organism_Dm;
          
          bridgeDB:fullName "Ensembl Fruitfly".
 :DataSource_Ensembl_Horse a bridgeDB:DataSource; 
@@ -1049,7 +1049,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnQc";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Qc;
+         bridgeDB:Organism bridgeDB:Organism_Qc;
    		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Horse".
 :DataSource_Ensembl_Chicken a bridgeDB:DataSource; 
@@ -1061,7 +1061,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnGg";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Gg;
+         bridgeDB:Organism bridgeDB:Organism_Gg;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Chicken".
 :DataSource_Ensembl_Human a bridgeDB:DataSource; 
@@ -1073,7 +1073,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnHs";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Hs;
+         bridgeDB:Organism bridgeDB:Organism_Hs;
     	 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Human".
 :DataSource_Ensembl_Mouse a bridgeDB:DataSource; 
@@ -1085,7 +1085,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnMm";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Mm;
+         bridgeDB:Organism bridgeDB:Organism_Mm;
          bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Mouse".
 :DataSource_Ensembl_Chimp a bridgeDB:DataSource; 
@@ -1097,7 +1097,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnPt";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Pt;
+         bridgeDB:Organism bridgeDB:Organism_Pt;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Chimp".
 :DataSource_Ensembl_Rat a bridgeDB:DataSource; 
@@ -1109,7 +1109,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnRn";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Rn;
+         bridgeDB:Organism bridgeDB:Organism_Rn;
  		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Rat".
 :DataSource_Ensembl_Yeast a bridgeDB:DataSource; 
@@ -1121,7 +1121,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnSc";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Sc;
+         bridgeDB:Organism bridgeDB:Organism_Sc;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Yeast".
 :DataSource_Ensembl_Pig a bridgeDB:DataSource; 
@@ -1133,7 +1133,7 @@
          bridgeDB:urlPattern "http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnSs";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Ss;
+         bridgeDB:Organism bridgeDB:Organism_Ss;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Pig".
 :DataSource_Ensembl a bridgeDB:DataSource; 
@@ -1157,7 +1157,7 @@
          bridgeDB:urlPattern "http://www.gramene.org/Oryza_sativa/geneview?gene=$id";
          bridgeDB:urnBase "Os";
          bridgeDB:wikipathways_id_base "http://identifiers.org/ensembl/";
-         bridgeDB:Organism :Organism_Os;
+         bridgeDB:Organism bridgeDB:Organism_Os;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Rice Ensembl Gene".
 :DataSource_FlyBase a bridgeDB:DataSource; 
@@ -1170,7 +1170,7 @@
          bridgeDB:urnBase "urn:miriam:flybase";
          bridgeDB:identifiers_org_base "http://identifiers.org/flybase/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/flybase/";
-         bridgeDB:Organism :Organism_Dm;
+         bridgeDB:Organism bridgeDB:Organism_Dm;
          bridgeDB:fullName "FlyBase".
 :DataSource_Flystock a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://flystocks.bio.indiana.edu/bloomhome.htm";
@@ -1401,7 +1401,7 @@
          bridgeDB:urlPattern "http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id";
          bridgeDB:urnBase "urn:miriam:hgnc";
          bridgeDB:identifiers_org_base "http://identifiers.org/hgnc/";
-         bridgeDB:Organism :Organism_Hs;
+         bridgeDB:Organism bridgeDB:Organism_Hs;
          bridgeDB:bio2RDF "http://bio2rdf.org/hgnc:$id";
          bridgeDB:fullName "HGNC Accession number".
 :DataSource_HGNC a bridgeDB:DataSource; 
@@ -1413,7 +1413,7 @@
          bridgeDB:urlPattern "http://www.genenames.org/data/hgnc_data.php?match=$id";
          bridgeDB:urnBase "H";
          bridgeDB:wikipathways_id_base "http://identifiers.org/hgnc/";
-         bridgeDB:Organism :Organism_Hs;
+         bridgeDB:Organism bridgeDB:Organism_Hs;
          bridgeDB:fullName "HGNC".
 :DataSource_H-InvDb_Locus a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://h-invitational.jp/hinv/ahg-db/index.jsp";
@@ -1966,7 +1966,7 @@
          bridgeDB:urnBase "urn:miriam:mgd";
          bridgeDB:identifiers_org_base "http://identifiers.org/mgd/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/mgd/";
-         bridgeDB:Organism :Organism_Mm;
+         bridgeDB:Organism bridgeDB:Organism_Mm;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/mgi:$id";
          bridgeDB:fullName "MGI".
 :DataSource_MicrosporidiaDB a bridgeDB:DataSource; 
@@ -2170,7 +2170,7 @@
          bridgeDB:urlPattern "http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id";
          bridgeDB:urnBase "Tb";
          bridgeDB:wikipathways_id_base "http://identifiers.org/myco.tuber/";
-         bridgeDB:Organism :Organism_Mx;
+         bridgeDB:Organism bridgeDB:Organism_Mx;
          bridgeDB:fullName "TubercuList".
 :DataSource_MycoBank a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.mycobank.org/";
@@ -3020,7 +3020,7 @@
          bridgeDB:urnBase "urn:miriam:rgd";
          bridgeDB:identifiers_org_base "http://identifiers.org/rgd/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/rgd/";
-         bridgeDB:Organism :Organism_Rn;
+         bridgeDB:Organism bridgeDB:Organism_Rn;
          bridgeDB:fullName "RGD".
 :DataSource_Rhea a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.ebi.ac.uk/rhea/";
@@ -3138,7 +3138,7 @@
          bridgeDB:urlPattern "http://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=$id";
          bridgeDB:urnBase "urn:miriam:sgd.pathways";
          bridgeDB:identifiers_org_base "http://identifiers.org/sgd.pathways/";
-         bridgeDB:Organism :Organism_Sc;
+         bridgeDB:Organism bridgeDB:Organism_Sc;
          bridgeDB:fullName "Saccharomyces genome database pathways".
 :DataSource_SGD a bridgeDB:DataSource; 
          bridgeDB:systemCode "D";
@@ -3609,7 +3609,7 @@
          bridgeDB:urnBase "urn:miriam:wormbase";
          bridgeDB:identifiers_org_base "http://identifiers.org/wormbase/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/wormbase/";
-         bridgeDB:Organism :Organism_Ce;
+         bridgeDB:Organism bridgeDB:Organism_Ce;
          bridgeDB:fullName "WormBase".
 :DataSource_Wormpep a bridgeDB:DataSource; 
          bridgeDB:mainUrl "http://www.wormbase.org/db/seq/protein";
@@ -3666,7 +3666,7 @@
          bridgeDB:urnBase "urn:miriam:zfin";
          bridgeDB:identifiers_org_base "http://identifiers.org/zfin/";
          bridgeDB:wikipathways_id_base "http://identifiers.org/zfin/";
-         bridgeDB:Organism :Organism_Dr;
+         bridgeDB:Organism bridgeDB:Organism_Dr;
          bridgeDB:fullName "ZFIN".
 :DataSource_Kegg_ortholog a bridgeDB:DataSource; 
          bridgeDB:primary "true"^^xsd:boolean;
@@ -3753,7 +3753,7 @@
          bridgeDB:urlPattern "http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnAt";
          bridgeDB:wikipathways_id_base "miriam:gramene.gene/";
-         bridgeDB:Organism :Organism_At;
+         bridgeDB:Organism bridgeDB:Organism_At;
          bridgeDB:fullName "Gramene Arabidopsis".
 :DataSource_Gramene_Rice a bridgeDB:DataSource; 
          bridgeDB:systemCode "EnOj";
@@ -3783,7 +3783,7 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "gene";
          bridgeDB:urnBase "Ec";
-         bridgeDB:Organism :Organism_Ec;
+         bridgeDB:Organism bridgeDB:Organism_Ec;
          bridgeDB:fullName "Ecoli".
 :DataSource_CodeLink a bridgeDB:DataSource; 
          bridgeDB:systemCode "Ge";
@@ -3805,7 +3805,7 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "gene";
          bridgeDB:urnBase "Hs";
-         bridgeDB:Organism :Organism_Hs;
+         bridgeDB:Organism bridgeDB:Organism_Hs;
          bridgeDB:fullName "HsGene".
 :DataSource_Illumina a bridgeDB:DataSource; 
          bridgeDB:systemCode "Il";
@@ -3828,7 +3828,7 @@
          bridgeDB:primary "true"^^xsd:boolean;
          bridgeDB:type "gene";
          bridgeDB:urnBase "N";
-         bridgeDB:Organism :Organism_At;
+         bridgeDB:Organism bridgeDB:Organism_At;
          bridgeDB:fullName "NASC Gene".
 :DataSource_PlantGDB a bridgeDB:DataSource; 
          bridgeDB:systemCode "Pl";
@@ -3860,7 +3860,7 @@
          bridgeDB:type "gene";
          bridgeDB:urlPattern "http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnEc";
-         bridgeDB:Organism :Organism_Ec;
+         bridgeDB:Organism bridgeDB:Organism_Ec;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl E. coli".
 :DataSource_Chembl_2_Compound a bridgeDB:DataSource; 
@@ -3968,7 +3968,7 @@
          bridgeDB:type "probe";
          bridgeDB:urlPattern "http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id";
          bridgeDB:urnBase "Wr";
-         bridgeDB:Organism :Organism_Ta;
+         bridgeDB:Organism bridgeDB:Organism_Ta;
          bridgeDB:fullName "Wheat gene refs".
 :DataSource_Wheat_gene_names a bridgeDB:DataSource; 
          bridgeDB:systemCode "Wn";
@@ -3978,7 +3978,7 @@
          bridgeDB:type "gene";
          bridgeDB:urlPattern "http://wheat.pw.usda.gov/report?class=gene;name=$id";
          bridgeDB:urnBase "Wn";
-         bridgeDB:Organism :Organism_Ta;
+         bridgeDB:Organism bridgeDB:Organism_Ta;
          bridgeDB:fullName "Wheat gene names".
 :DataSource_Wheat_gene_catalog a bridgeDB:DataSource; 
          bridgeDB:systemCode "Wc";
@@ -3988,7 +3988,7 @@
          bridgeDB:type "gene";
          bridgeDB:urlPattern "http://wheat.pw.usda.gov/sql?sql=select+distinct+genewgcreference.number+as+WGC,+reference.name+as+Reference,+reference.title+as+Title,+journal.name+as+Journal,+reference.volume+as+Volume,+reference.pages+as+Page+from+reference+inner+join+genewgcreference+on+genewgcreference.referenceid=reference.id+inner+join+journal+on+reference.journalid=journal.id+where+genewgcreference.number=$id";
          bridgeDB:urnBase "Wc";
-         bridgeDB:Organism :Organism_Ta;
+         bridgeDB:Organism bridgeDB:Organism_Ta;
          bridgeDB:fullName "Wheat gene catalog".
 :DataSource_NuGO_wiki a bridgeDB:DataSource; 
          bridgeDB:systemCode "Nw";
@@ -4014,7 +4014,7 @@
          bridgeDB:type "gene";
          bridgeDB:urlPattern "http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$id";
          bridgeDB:urnBase "EnAg";
-         bridgeDB:Organism :Organism_Ag;
+         bridgeDB:Organism bridgeDB:Organism_Ag;
 		 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Mosquito".
 :DataSource_Ensembl_Xenopus a bridgeDB:DataSource; 
@@ -4025,7 +4025,7 @@
          bridgeDB:type "gene";
          bridgeDB:urlPattern "http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id";
          bridgeDB:urnBase "EnXt";
-         bridgeDB:Organism :Organism_Xt;
+         bridgeDB:Organism bridgeDB:Organism_Xt;
  	 bridgeDB:bio2RDF "http://bio2rdf.org/ensembl:$id";
          bridgeDB:fullName "Ensembl Xenopus".
 :DataSource_TestDS2 a bridgeDB:DataSource; 
@@ -4068,7 +4068,7 @@
          bridgeDB:type "gene";
          bridgeDB:urlPattern "http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id";
          bridgeDB:urnBase "Mg";
-         bridgeDB:Organism :Organism_Zm;
+         bridgeDB:Organism bridgeDB:Organism_Zm;
          bridgeDB:fullName "MaizeGDB".
 :DataSource_CCDS a bridgeDB:DataSource; 
          bridgeDB:systemCode "Cc";
@@ -4102,7 +4102,7 @@
          bridgeDB:type "gene";
          bridgeDB:urlPattern "http://www.shigen.nig.ac.jp/rice/oryzabase/gateway/gatewayAction.do?target=symbol&id=$id";
          bridgeDB:urnBase "Ob";
-         bridgeDB:Organism :Organism_Os;
+         bridgeDB:Organism bridgeDB:Organism_Os;
          bridgeDB:fullName "Oryzabase".
 :DataSource_Swissprot_part_of_uniprot a bridgeDB:DataSource; 
          bridgeDB:systemCode "Swissprot";
