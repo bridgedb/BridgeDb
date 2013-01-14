@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
@@ -29,7 +30,7 @@ import org.openrdf.repository.RepositoryResult;
  *
  * @author Christian
  */
-public class UriPattern extends RdfBase {
+public class UriPattern extends RdfBase implements Comparable<UriPattern>{
 
     private final String nameSpace;
     private final String postfix;
@@ -164,7 +165,8 @@ public class UriPattern extends RdfBase {
 
     public static void addAll(RepositoryConnection repositoryConnection, boolean addPrimaries) 
             throws IOException, RepositoryException, BridgeDBException {
-        for (UriPattern uriPattern:register.values()){
+        TreeSet<UriPattern> all = new TreeSet(register.values());
+        for (UriPattern uriPattern:all){
             uriPattern.add(repositoryConnection, addPrimaries);
         }        
     }
@@ -355,4 +357,14 @@ public class UriPattern extends RdfBase {
             dsu.setUriParent(dataSourceUris); 
         }
     }
+
+    @Override
+    public int compareTo(UriPattern other) {
+        String thisString = this.getResourceId().stringValue().toLowerCase();
+        thisString = thisString.replaceFirst("https://","http://");
+        String otherString = other.getResourceId().stringValue().toLowerCase();
+        otherString = otherString.replaceFirst("https://","http://");
+        return thisString.compareTo(otherString);
+     }
+    
  }
