@@ -62,6 +62,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         BridgeDBConstants.PRIMAY_URI,
         BridgeDBConstants.HAS_PRIMARY_SOURCE_RDF_PATTERN_URI,
         BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI,
+        BridgeDBConstants.SOURCE_RDF_PATTERN_URI, //Old version
         BridgeDBConstants.SYSTEM_CODE_URI,
         BridgeDBConstants.TYPE_URI,
         BridgeDBConstants.HAS_URL_PATTERN_URI,
@@ -306,7 +307,8 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
                 BridgeDBConstants.HAS_PRIMARY_BIO2RDF_PATTERN_URI, BridgeDBConstants.HAS_BIO2RDF_PATTERN_URI, 
                 BridgeDBConstants.BIO2RDF_PATTERN_URI);
         sourceRdfPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
-                BridgeDBConstants.HAS_PRIMARY_SOURCE_RDF_PATTERN_URI, BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI); 
+                BridgeDBConstants.HAS_PRIMARY_SOURCE_RDF_PATTERN_URI, BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI, 
+                BridgeDBConstants.SOURCE_RDF_PATTERN_URI); 
         wikiPathwaysPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
                 BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI, BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI);  
     }

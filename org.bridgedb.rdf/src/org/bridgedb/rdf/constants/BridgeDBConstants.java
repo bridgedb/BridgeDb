@@ -77,6 +77,7 @@ public class BridgeDBConstants {
     private static final String SOURCE_RDF_PATTERN = "SourceRdfPattern";
     public static final URI HAS_PRIMARY_SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + SOURCE_RDF_PATTERN);
     public static final URI HAS_SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + SOURCE_RDF_PATTERN);
+    public static final URI SOURCE_RDF_PATTERN_URI = new URIImpl(PREFIX + "sourceRDFURI");
     
     private static final String BIO2RDF_PATTERN = "Bio2RdfPattern";
     public static final URI HAS_PRIMARY_BIO2RDF_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + BIO2RDF_PATTERN);
