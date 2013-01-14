@@ -7,16 +7,15 @@ package org.bridgedb.rdf;
 import org.bridgedb.DataSource;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.TestUtils;
+import static org.hamcrest.number.OrderingComparison.*;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
-import org.openrdf.repository.RepositoryConnection;
 
 /**
  *
@@ -149,5 +148,44 @@ public class DataSourceUrisTest extends TestUtils{
         instanceParent.setUriParent(dataSourceGrandParent);
         DataSourceUris result = instanceChild.getUriParent();
         assertEquals(dataSourceGrandParent, result.getDataSource());
+    }
+    
+    @Test
+    public void testCompare() throws BridgeDBException{
+        report("compare");
+        DataSource dataSource1 = 
+                DataSource.register("DataSourceUrisTest_testCompare1", "DataSourceUrisTest_testCompare1").asDataSource();
+        DataSource dataSource2 = 
+                DataSource.register("DataSourceUrisTest_testCompare2", "DataSourceUrisTest_testCompare2").asDataSource();
+        DataSource dataSource3 = DataSource.getByFullName("DataSourceUrisTest_testCompare3");
+        DataSource dataSource4 = DataSource.getBySystemCode("DataSourceUrisTest_testCompare4");
+        DataSource dataSource5 = DataSource.getBySystemCode("DataSourceUrisTest_testCompare5");
+        DataSourceUris dataSourceUris1 = DataSourceUris.byDataSource(dataSource1);
+        DataSourceUris dataSourceUris1a = DataSourceUris.byDataSource(dataSource1);
+        DataSourceUris dataSourceUris2 = DataSourceUris.byDataSource(dataSource2);
+        DataSourceUris dataSourceUris3 = DataSourceUris.byDataSource(dataSource3);
+        DataSourceUris dataSourceUris4 = DataSourceUris.byDataSource(dataSource4);
+        DataSourceUris dataSourceUris5 = DataSourceUris.byDataSource(dataSource5);
+        assertEquals(0, dataSourceUris1.compareTo(dataSourceUris1a));
+        assertThat(dataSourceUris1.compareTo(dataSourceUris2), lessThan(0));
+        assertThat(dataSourceUris2.compareTo(dataSourceUris1), greaterThan(0));
+        assertThat(dataSourceUris1.compareTo(dataSourceUris3), lessThan(0));
+        assertThat(dataSourceUris3.compareTo(dataSourceUris1), greaterThan(0));
+        assertThat(dataSourceUris4.compareTo(dataSourceUris1), lessThan(0));
+        assertThat(dataSourceUris1.compareTo(dataSourceUris4), greaterThan(0));
+        assertThat(dataSourceUris5.compareTo(dataSourceUris1), lessThan(0));
+        assertThat(dataSourceUris1.compareTo(dataSourceUris5), greaterThan(0));
+        assertThat(dataSourceUris2.compareTo(dataSourceUris3), lessThan(0));
+        assertThat(dataSourceUris3.compareTo(dataSourceUris2), greaterThan(0));
+        assertThat(dataSourceUris4.compareTo(dataSourceUris2), lessThan(0));
+        assertThat(dataSourceUris2.compareTo(dataSourceUris4), greaterThan(0));
+        assertThat(dataSourceUris5.compareTo(dataSourceUris2), lessThan(0));
+        assertThat(dataSourceUris2.compareTo(dataSourceUris5), greaterThan(0));
+        assertThat(dataSourceUris4.compareTo(dataSourceUris3), lessThan(0));
+        assertThat(dataSourceUris3.compareTo(dataSourceUris4), greaterThan(0));
+        assertThat(dataSourceUris5.compareTo(dataSourceUris3), lessThan(0));
+        assertThat(dataSourceUris3.compareTo(dataSourceUris5), greaterThan(0));
+        assertThat(dataSourceUris4.compareTo(dataSourceUris5), lessThan(0));
+        assertThat(dataSourceUris5.compareTo(dataSourceUris4), greaterThan(0));
     }
 }

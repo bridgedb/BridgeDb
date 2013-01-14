@@ -7,6 +7,7 @@ package org.bridgedb.rdf;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +33,7 @@ import org.openrdf.repository.RepositoryResult;
  *
  * @author Christian
  */
-public class DataSourceUris extends RdfBase {
+public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris>, Comparator<DataSource>{
 
     private final DataSource inner;
     private UriPattern sourceRdfPattern;
@@ -441,5 +442,39 @@ public class DataSourceUris extends RdfBase {
     @Override
     public String toString(){
         return inner.toString();
+    }
+
+    @Override
+    public int compareTo(DataSourceUris other) {
+        return compare(inner, other.inner);
+    }
+
+    @Override
+    public int compare(DataSource dataSource1, DataSource dataSource2) {
+        int result = softCompare(dataSource1.getFullName(), dataSource2.getFullName());
+        if (result != 0){
+            return result;
+        }
+        result = softCompare(dataSource1.getSystemCode(), dataSource2.getSystemCode());
+        if (result != 0){
+            return result;
+        }
+        return dataSource1.hashCode() - dataSource2.hashCode();
+    }
+
+    private int softCompare(String value1, String value2) {
+        if (value1 == null || value1.trim().isEmpty()){
+           if (value2 == null || value2.trim().isEmpty()){
+               return 0;
+           } else {
+               return -1;
+           }
+        } else {
+           if (value2 == null || value2.trim().isEmpty()){
+               return 1;
+           } else {
+               return value1.compareTo(value2);
+           }
+        }
     }
 }
