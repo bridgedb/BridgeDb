@@ -11,7 +11,7 @@
                   <include name="org.bridgedb.jar"/>
                   <include name="org.bridgedb.sql.jar"/>
                   <include name="org.bridgedb.ws.core.jar"/>
-		  <include name="org.bridgedb.ops.sql.jar"/>
+		  <include name="org.bridgedb.uri.sql.jar"/>
              </fileset>
 	</path>
 

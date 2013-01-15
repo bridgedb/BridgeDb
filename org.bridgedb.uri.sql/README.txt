@@ -1,4 +1,4 @@
-org.bridgedb.ops.sql
+org.bridgedb.uri.sql
 --------------------
 
 To be renamed org.bridgedb.uri.sql

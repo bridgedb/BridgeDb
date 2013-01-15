@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<project name="org.bridgedb.ops.sql" default="dist" basedir=".">
+<project name="org.bridgedb.uri.sql" default="dist" basedir=".">
 	
-  <property name="jar.name" value="../dist/org.bridgedb.ops.sql.jar"/>
+  <property name="jar.name" value="../dist/org.bridgedb.uri.sql.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
   <property file="version.props"/>
