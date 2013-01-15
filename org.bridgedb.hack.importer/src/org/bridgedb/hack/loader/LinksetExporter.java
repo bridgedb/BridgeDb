@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.loader;
+package org.bridgedb.hack.loader;
 
 import java.io.BufferedWriter;
 import java.io.File;
