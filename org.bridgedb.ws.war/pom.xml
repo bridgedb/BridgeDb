@@ -5,9 +5,9 @@
         http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bridgedb</groupId>
-    <artifactId>org.bridgedb.ws.service</artifactId>
+    <artifactId>org.bridgedb.ws.war</artifactId>
     <packaging>war</packaging>
-    <name>BridgeDb Websever Service</name>
+    <name>BridgeDb Websever War</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
