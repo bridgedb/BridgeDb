@@ -10,7 +10,7 @@
              <fileset dir="../dist">
                   <include name="org.bridgedb.jar"/>
                   <include name="org.bridgedb.sql.jar"/>
-                  <include name="org.bridgedb.ops.sql.jar"/>
+                  <include name="org.bridgedb.uri.sql.jar"/>
              </fileset>
              <pathelement location="lib/openrdf-sesame-2.6.5-onejar.jar"/>
 	</path>
