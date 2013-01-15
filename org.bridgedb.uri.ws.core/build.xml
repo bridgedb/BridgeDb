@@ -1,23 +1,17 @@
 <?xml version="1.0"?>
-<project name="org.bridgedb.ops.ws.service" default="dist" basedir=".">
+<project name="org.bridgedb.uri.ws.core" default="dist" basedir=".">
 	
-  <property name="jar.name" value="../dist/org.bridgedb.ops.ws.service.jar"/>
+  <property name="jar.name" value="../dist/org.bridgedb.uri.ws.core.jar"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
   
   <property file="version.props"/>
 
 	<path id="absolute.deps">
-             <fileset dir="lib">
-                  <include name="*.jar"/>
-              </fileset>
              <fileset dir="../dist">
                   <include name="org.bridgedb.jar"/>
                   <include name="org.bridgedb.sql.jar"/>
                   <include name="org.bridgedb.ws.core.jar"/>
-                  <include name="org.bridgedb.ws.server.jar"/>
 		  <include name="org.bridgedb.uri.sql.jar"/>
-                  <include name="org.bridgedb.linksets.jar"/>
-                  <include name="org.bridgedb.ops.ws.server.jar"/>
              </fileset>
 	</path>
 

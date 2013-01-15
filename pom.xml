@@ -30,18 +30,18 @@
   	<module>org.bridgedb.linksets</module>
   	<module>org.bridgedb.ws.core</module>
   	<module>org.bridgedb.ws.server</module>
-  	<module>org.bridgedb.ops.ws.core</module>
- 	<module>org.bridgedb.ops.ws.service</module>
+  	<module>org.bridgedb.uri.ws.core</module>
+ 	<module>org.bridgedb.uri.ws.service</module>
   	<module>org.bridgedb.tools.transitive</module>
     <!-- The client modules are currently only used as examples and testing -->
  	<module>org.bridgedb.ws.client</module>
-   	<module>org.bridgedb.ops.ws.client</module>
+   	<module>org.bridgedb.uri.ws.client</module>
 
     <module>org.bridgedb.tools.loader</module>
     <!-- The modules below this comment are not actively used by OPS but are part of BridgeDB -->
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.ws.service</module>
- 	<module>org.bridgedb.ops.ws.server</module>
+ 	<module>org.bridgedb.uri.ws.server</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
   	<module>org.bridgedb.webservice.cronos</module>
