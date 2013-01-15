@@ -52,9 +52,9 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
-        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.VOID);
-        linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.VOID);
-        linksetLoader.loadFile("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
+        linksetLoader.loadFile("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.VOID);
+        linksetLoader.loadFile("../org.bridgedb.tools.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.VOID);
+        linksetLoader.loadFile("../org.bridgedb.tools.metadata/test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
 	}
 
     @Test
@@ -72,7 +72,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
-        assertEquals ("Chembl 13 Molecule", info.getSourceSysCode());
+        assertEquals ("http://data.kasabi.com/dataset/chembl-rdf/", info.getSourceSysCode());
         assertEquals ("ChemSpider", info.getTargetSysCode());
         assertEquals ("http://www.w3.org/2004/02/skos/core#exactMatch", info.getPredicate());
         //ystem.out.println(info);

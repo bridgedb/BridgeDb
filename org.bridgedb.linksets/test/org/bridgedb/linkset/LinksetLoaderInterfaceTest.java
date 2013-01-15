@@ -20,6 +20,7 @@ package org.bridgedb.linkset;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.utils.BridgeDBException;
+import org.junit.Ignore;
 
 /**
  * @author Christian

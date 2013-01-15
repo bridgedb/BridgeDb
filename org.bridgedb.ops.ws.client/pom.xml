@@ -78,7 +78,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.metadata</artifactId>
+			<artifactId>org.bridgedb.tools.metadata</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>
