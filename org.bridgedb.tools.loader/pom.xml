@@ -32,7 +32,7 @@
     <dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.transitive</artifactId>
+			<artifactId>org.bridgedb.tools.transitive</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -59,7 +59,7 @@
 		</dependency>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.transitive</artifactId>
+			<artifactId>org.bridgedb.tools.transitive</artifactId>
 			<version>${project.version}</version>
             <type>test-jar</type>
 			<scope>test</scope>

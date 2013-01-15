@@ -55,8 +55,8 @@ public class TransativeCreatorTest extends TestUtils {
         
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData( StoreType.TEST);        
-        linksetLoader.loadFile("../org.bridgedb.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
-        linksetLoader.loadFile("../org.bridgedb.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.tools.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.tools.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
     
     @Test
@@ -90,7 +90,7 @@ public class TransativeCreatorTest extends TestUtils {
     @Test
     public void testCreateTransative() throws RDFHandlerException, IOException, IDMapperException {
         report("CreateTransative");
-        String fileName = "../org.bridgedb.transitive/test-data/linkset2To3.ttl";
+        String fileName = "../org.bridgedb.tools.transitive/test-data/linkset2To3.ttl";
         TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         new LinksetLoader().checkFileValid(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
     }

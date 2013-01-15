@@ -88,7 +88,7 @@ Run $BridgeDb\org.bridgedb.linksets\target\org.bridgedb.linksets-2.0.0-SNAPSHOT.
    (Run without parameters for usage information)
 
 (OPTIONAL) To create a transative linkset:
-Run $BridgeDB\BridgeDb\org.bridgedb.transitive\target\org.bridgedb.transitive-2.0.0-SNAPSHOT.one-jar.jar
+Run $BridgeDB\BridgeDb\org.bridgedb.tools.transitive\target\org.bridgedb.tools.transitive-2.0.0-SNAPSHOT.one-jar.jar
 
 Library dependencies 
 --------------------
