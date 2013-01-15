@@ -32,7 +32,7 @@
   	<module>org.bridgedb.ws.server</module>
   	<module>org.bridgedb.ops.ws.core</module>
  	<module>org.bridgedb.ops.ws.service</module>
-  	<module>org.bridgedb.transitive</module>
+  	<module>org.bridgedb.tools.transitive</module>
     <!-- The client modules are currently only used as examples and testing -->
  	<module>org.bridgedb.ws.client</module>
    	<module>org.bridgedb.ops.ws.client</module>
