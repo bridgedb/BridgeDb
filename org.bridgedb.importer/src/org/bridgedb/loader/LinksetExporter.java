@@ -23,7 +23,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.linkset.LinksetLoader;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.DataSourceUris;
 import org.bridgedb.rdf.UriPattern;

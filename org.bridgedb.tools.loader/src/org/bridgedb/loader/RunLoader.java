@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.linkset.transative.TransativeCreator;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;

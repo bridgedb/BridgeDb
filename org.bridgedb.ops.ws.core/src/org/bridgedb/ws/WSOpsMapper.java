@@ -30,7 +30,7 @@ import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.linkset.LinksetInterfaceMinimal;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.URLMapper;

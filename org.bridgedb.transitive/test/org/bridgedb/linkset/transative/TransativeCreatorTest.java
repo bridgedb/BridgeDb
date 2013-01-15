@@ -26,7 +26,7 @@ import java.io.IOException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.utils.TestUtils;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

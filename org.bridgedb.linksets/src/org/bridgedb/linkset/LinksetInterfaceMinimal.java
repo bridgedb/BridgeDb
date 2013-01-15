@@ -7,7 +7,7 @@ package org.bridgedb.linkset;
 import java.io.File;
 import java.io.InputStream;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
 import org.openrdf.rio.RDFFormat;

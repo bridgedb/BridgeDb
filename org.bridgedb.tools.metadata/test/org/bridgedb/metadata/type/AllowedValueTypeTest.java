@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
+import org.bridgedb.tools.metadata.type.AllowedValueType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.bridgedb.utils.TestUtils;

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
+import org.bridgedb.tools.metadata.type.XsdType;
 import org.bridgedb.utils.TestUtils;
 import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.bridgedb.utils.BridgeDBException;

@@ -27,7 +27,7 @@ import org.bridgedb.linkset.rdf.RdfReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.sql.BridgeDbSqlException;

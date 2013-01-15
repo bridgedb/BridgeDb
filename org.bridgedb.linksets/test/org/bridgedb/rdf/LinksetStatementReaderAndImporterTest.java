@@ -9,7 +9,7 @@ import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.TestUtils;
 import org.junit.Ignore;
 import java.util.Set;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.sql.TestSqlFactory;

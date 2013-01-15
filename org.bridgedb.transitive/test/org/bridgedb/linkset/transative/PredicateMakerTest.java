@@ -5,8 +5,8 @@
 package org.bridgedb.linkset.transative;
 
 import java.util.ArrayList;
-import org.bridgedb.linkset.constants.OwlConstants;
-import org.bridgedb.metadata.constants.SkosConstants;
+import org.bridgedb.tools.metadata.constants.OwlConstants;
+import org.bridgedb.tools.metadata.constants.SkosConstants;
 import org.bridgedb.utils.TestUtils;
 import org.junit.After;
 import org.junit.AfterClass;

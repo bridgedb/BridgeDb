@@ -18,7 +18,6 @@
 //
 package org.bridgedb.linkset.rdf;
 
-import org.bridgedb.metadata.rdf.StringOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;

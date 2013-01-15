@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 
