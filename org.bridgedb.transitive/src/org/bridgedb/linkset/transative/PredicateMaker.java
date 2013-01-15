@@ -18,9 +18,9 @@
 //
 package org.bridgedb.linkset.transative;
 
-import org.bridgedb.linkset.constants.OwlConstants;
 import org.bridgedb.metadata.constants.OboConstants;
-import org.bridgedb.metadata.constants.SkosConstants;
+import org.bridgedb.tools.metadata.constants.OwlConstants;
+import org.bridgedb.tools.metadata.constants.SkosConstants;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandlerException;

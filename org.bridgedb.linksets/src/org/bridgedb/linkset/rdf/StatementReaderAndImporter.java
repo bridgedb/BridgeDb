@@ -4,7 +4,7 @@
  */
 package org.bridgedb.linkset.rdf;
 
-import org.bridgedb.metadata.rdf.VoidStatements;
+import org.bridgedb.tools.metadata.rdf.VoidStatements;
 import org.bridgedb.rdf.constants.VoidConstants;
 import java.io.File;
 import java.io.InputStream;

@@ -4,6 +4,7 @@
  */
 package org.bridgedb.metadata.type;
 
+import org.bridgedb.tools.metadata.type.IntegerType;
 import org.bridgedb.utils.TestUtils;
 import org.bridgedb.utils.Reporter;
 import org.junit.After;

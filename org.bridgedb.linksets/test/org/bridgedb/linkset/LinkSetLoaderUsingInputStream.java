@@ -25,7 +25,7 @@ import org.bridgedb.utils.TestUtils;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.openrdf.rio.RDFFormat;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.utils.StoreType;
 import org.junit.Test;

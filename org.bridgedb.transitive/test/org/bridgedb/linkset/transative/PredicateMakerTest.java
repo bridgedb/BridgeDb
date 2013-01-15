@@ -1,11 +1,10 @@
 package org.bridgedb.linkset.transative;
 
 import java.util.ArrayList;
-import org.bridgedb.linkset.constants.OwlConstants;
 import org.bridgedb.metadata.constants.OboConstants;
+import org.bridgedb.tools.metadata.constants.OwlConstants;
+import org.bridgedb.tools.metadata.constants.SkosConstants;
 import static org.junit.Assert.*;
-
-import org.bridgedb.metadata.constants.SkosConstants;
 import org.bridgedb.utils.TestUtils;
 import org.junit.BeforeClass;
 import org.junit.Ignore;

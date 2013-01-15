@@ -4,7 +4,7 @@
  */
 package org.bridgedb.rdf;
 
-import org.bridgedb.metadata.rdf.LinksetStatementReader;
+import org.bridgedb.tools.metadata.rdf.LinksetStatementReader;
 import java.util.Set;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.TestUtils;
