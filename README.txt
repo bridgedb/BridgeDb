@@ -74,7 +74,7 @@ OPS Webservice Setup.
 
 Make sure config files, SQL database and rdf parent directory are setup (and accessible) as above.
 
-Deploy $BridgeDb/org.bridgedb.ops.ws.service/target/OPS-IMS.war to something like tomcat/webapps
+Deploy $BridgeDb/org.bridgedb.uri.ws.service/target/OPS-IMS.war to something like tomcat/webapps
 To setup databases and add test data run org.bridgedb.linkset.SetupLoaderWithTestData
 (Optional) Depoly $BridgeDb/org.bridgedb.ws.service/target/BridgeDb.war
    Both wars share the same SQL data.

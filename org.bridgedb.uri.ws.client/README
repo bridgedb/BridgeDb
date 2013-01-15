@@ -1,4 +1,4 @@
-org.bridgedb.ops.ws.client
+org.bridgedb.uri.ws.client
 --------------------------
 
 Client functionality of the OPS-IMS platform.

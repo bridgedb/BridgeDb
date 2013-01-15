@@ -5,9 +5,9 @@
         http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bridgedb</groupId>
-    <artifactId>org.bridgedb.ops.ws.server</artifactId>
+    <artifactId>org.bridgedb.uri.ws.server</artifactId>
     <packaging>war</packaging>
-    <name>BridgeDb OPS Websever Server</name>
+    <name>BridgeDb URI Websever Server</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
@@ -33,7 +33,7 @@
 	<dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ops.ws.service</artifactId>
+			<artifactId>org.bridgedb.uri.ws.service</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

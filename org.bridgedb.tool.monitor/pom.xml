@@ -22,7 +22,7 @@
 	<dependencies>
   		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.ops.ws.client</artifactId>
+			<artifactId>org.bridgedb.uri.ws.client</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

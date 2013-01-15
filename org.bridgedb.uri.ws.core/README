@@ -1,4 +1,4 @@
-org.bridgedb.ops.ws.core
+org.bridgedb.uri.ws.core
 ------------------------
 
 Core functionality of the OPS-IMS platform.

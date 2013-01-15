@@ -1,4 +1,0 @@
-Bundle-Name: org.bridgedb.ops.ws.server
-Bundle-Version: 1.1.0
-Bundle-SymbolicName: org.bridgedb.ops.ws.server
-Export-Package: * 
