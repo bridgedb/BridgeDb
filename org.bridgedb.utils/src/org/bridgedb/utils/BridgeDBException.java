@@ -35,4 +35,15 @@ public class BridgeDBException extends IDMapperException {
 		super (msg, t);
         logger.error(msg, t);
 	}
+
+    /** 
+	 * See Exception(String, Throwable). 
+	 * @param msg a message
+	 * @param t cause
+	 */
+	public BridgeDBException (IDMapperException t)
+	{
+		super (t);
+        logger.error(t);
+	}
 }

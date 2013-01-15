@@ -2,6 +2,66 @@
 @prefix : <http://no/BaseURI/Set/> .
 
 
+bridgeDB:DataSource_bysysCode_EnDn a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnDn" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnEt a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnEt" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnLa a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnLa" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnMd a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnMd" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnOc a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnOc" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnOl a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnOl" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnSa a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnSa" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnSb a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnSb" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_EnTn a bridgeDB:DataSource ;
+	bridgeDB:systemCode "EnTn" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_Gc a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Gc" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_Gm a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Gm" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
+bridgeDB:DataSource_bysysCode_Ws a bridgeDB:DataSource ;
+	bridgeDB:systemCode "Ws" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
 bridgeDB:DataSource_2D_PAGE_protein a bridgeDB:DataSource ;
 	bridgeDB:fullName "2D-PAGE protein" ;
 	bridgeDB:mainUrl "http://2dbase.techfak.uni-bielefeld.de/" ;
@@ -61,7 +121,8 @@ bridgeDB:DataSource_Affy a bridgeDB:DataSource ;
 	bridgeDB:type "probe" ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/common/Lucene/Results?species=all;feature=OligoProbe;q=$id> ;
 	bridgeDB:urnBase "X" ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/common/Lucene/Results?species=all;feature=OligoProbe;q=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/affymetrix:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/affymetrix:$id> .
 
 bridgeDB:DataSource_AGD a bridgeDB:DataSource ;
 	bridgeDB:fullName "AGD" ;
@@ -248,7 +309,8 @@ bridgeDB:DataSource_BIND a bridgeDB:DataSource ;
 	bridgeDB:type "pathway" ;
 	bridgeDB:hasUrlPattern <http://www.bind.ca/Action?identifier=bindid&idsearch=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/bind/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.bind.ca/Action?identifier=bindid&idsearch=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/bind:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/bind:$id> .
 
 bridgeDB:DataSource_BindingDB a bridgeDB:DataSource ;
 	bridgeDB:fullName "BindingDB" ;
@@ -279,7 +341,8 @@ bridgeDB:DataSource_BioCyc a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://biocyc.org/getid?id=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/biocyc/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://biocyc.org/getid?id=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/biocyc:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/biocyc:$id> .
 
 bridgeDB:DataSource_BioGrid a bridgeDB:DataSource ;
 	bridgeDB:fullName "BioGrid" ;
@@ -300,7 +363,8 @@ bridgeDB:DataSource_BioModels_Database a bridgeDB:DataSource ;
 	bridgeDB:type "pathway" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/biomodels-main/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/biomodels.db/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.ac.uk/biomodels-main/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/biomodels:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/biomodels:$id> .
 
 bridgeDB:DataSource_BioNumbers a bridgeDB:DataSource ;
 	bridgeDB:fullName "BioNumbers" ;
@@ -311,6 +375,24 @@ bridgeDB:DataSource_BioNumbers a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=$id&ver=1> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/bionumbers/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=$id&ver=1> .
+
+bridgeDB:DataSource_Bioontology_MESH a bridgeDB:DataSource ;
+	bridgeDB:fullName "Bioontology MESH" ;
+	bridgeDB:systemCode "MSH" ;
+	bridgeDB:idExample "C536282" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/MSH/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.bioontology.org/ontology/MSH/$id> .
+
+bridgeDB:DataSource_Bioontology_UMLS_NCIM a bridgeDB:DataSource ;
+	bridgeDB:fullName "Bioontology UMLS NCIM" ;
+	bridgeDB:systemCode "NCIM" ;
+	bridgeDB:idExample "C3203102" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/NCIM/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.bioontology.org/ontology/NCIM/$id> .
 
 bridgeDB:DataSource_BioPortal a bridgeDB:DataSource ;
 	bridgeDB:fullName "BioPortal" ;
@@ -390,7 +472,8 @@ bridgeDB:DataSource_BRENDA a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/brenda/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.brenda-enzymes.org/php/result_flat.php4?ecno=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ec:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ec:$id> .
 
 bridgeDB:DataSource_Brenda_Tissue_Ontology a bridgeDB:DataSource ;
 	bridgeDB:fullName "Brenda Tissue Ontology" ;
@@ -552,7 +635,8 @@ bridgeDB:DataSource_ChEBI a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/obo.chebi/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/chebi:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/chebi:$id> .
 
 bridgeDB:DataSource_ChemBank a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChemBank" ;
@@ -623,7 +707,8 @@ bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://www.chemspider.com/Chemical-Structure.$id.html> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.chemspider.com/Chemical-Structure.$id.html> .
+	bridgeDB:hasSourceRdfPattern <http://rdf.chemspider.com/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://rdf.chemspider.com/$id> .
 
 bridgeDB:DataSource_Cint a bridgeDB:DataSource ;
 	bridgeDB:fullName "Cint" ;
@@ -690,6 +775,13 @@ bridgeDB:DataSource_COMBINE_specifications a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/combine.specifications/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://co.mbine.org/specifications/$id> .
 
+bridgeDB:DataSource_COMPOUND a bridgeDB:DataSource ;
+	bridgeDB:fullName "COMPOUND" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/cpd:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/cpd:$id> .
+
 bridgeDB:DataSource_Compulyeast a bridgeDB:DataSource ;
 	bridgeDB:fullName "Compulyeast" ;
 	bridgeDB:mainUrl "http://compluyeast2dpage.dacya.ucm.es/" ;
@@ -748,7 +840,8 @@ bridgeDB:DataSource_CTD_Chemical a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://ctdbase.org/detail.go?type=chem&acc=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ctd.chemical/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://ctdbase.org/detail.go?type=chem&acc=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/mesh:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/mesh:$id> .
 
 bridgeDB:DataSource_CTD_Disease a bridgeDB:DataSource ;
 	bridgeDB:fullName "CTD Disease" ;
@@ -856,7 +949,7 @@ bridgeDB:DataSource_dbSNP a bridgeDB:DataSource ;
 	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp" ;
 	bridgeDB:idExample "121909098" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "gene" ;
+	bridgeDB:type "true" ;
 	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/dbsnp/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id> .
@@ -959,7 +1052,8 @@ bridgeDB:DataSource_DrugBank a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://www.drugbank.ca/drugs/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.drugbank.ca/drugs/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/drugbank:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/drugbank:$id> .
 
 bridgeDB:DataSource_EchoBASE a bridgeDB:DataSource ;
 	bridgeDB:fullName "EchoBASE" ;
@@ -1030,6 +1124,13 @@ bridgeDB:DataSource_EMBL a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/insdc/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+EntryPage+-e+[EMBL:$id]+-view+EmblEntry> .
 
+bridgeDB:DataSource_ENSEMBL a bridgeDB:DataSource ;
+	bridgeDB:fullName "ENSEMBL" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
+
 bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl" ;
 	bridgeDB:systemCode "En" ;
@@ -1039,7 +1140,8 @@ bridgeDB:DataSource_Ensembl a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/id/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_B_subtilis a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl B. subtilis" ;
@@ -1051,7 +1153,8 @@ bridgeDB:DataSource_Ensembl_B_subtilis a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnBs" ;
 	bridgeDB:Organism bridgeDB:Organism_Bt ;
-	bridgeDB:hasWikiPathwaysPattern <http://bacteria.ensembl.org/Bacillus/B_subtilis/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Bacteria a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Bacteria" ;
@@ -1061,7 +1164,8 @@ bridgeDB:DataSource_Ensembl_Bacteria a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://bacteria.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl.bacteria/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://bacteria.ensembl.org/id/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_C_elegans a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl C. elegans" ;
@@ -1073,7 +1177,15 @@ bridgeDB:DataSource_Ensembl_C_elegans a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnCe" ;
 	bridgeDB:Organism bridgeDB:Organism_Ce ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Caenorhabditis_elegans/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
+
+bridgeDB:DataSource_Ensembl_Celegans a bridgeDB:DataSource ;
+	bridgeDB:fullName "Ensembl Celegans" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Chicken a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Chicken" ;
@@ -1085,7 +1197,8 @@ bridgeDB:DataSource_Ensembl_Chicken a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnGg" ;
 	bridgeDB:Organism bridgeDB:Organism_Gg ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Gallus_gallus/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Chimp a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Chimp" ;
@@ -1097,7 +1210,8 @@ bridgeDB:DataSource_Ensembl_Chimp a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnPt" ;
 	bridgeDB:Organism bridgeDB:Organism_Pt ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Pan_troglodytes/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Cow a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Cow" ;
@@ -1109,7 +1223,8 @@ bridgeDB:DataSource_Ensembl_Cow a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnBt" ;
 	bridgeDB:Organism bridgeDB:Organism_Bt ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Bos_taurus/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Dog a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Dog" ;
@@ -1121,7 +1236,8 @@ bridgeDB:DataSource_Ensembl_Dog a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnCf" ;
 	bridgeDB:Organism bridgeDB:Organism_Cf ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Canis_familiaris/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_E_coli a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl E. coli" ;
@@ -1133,7 +1249,8 @@ bridgeDB:DataSource_Ensembl_E_coli a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnEc" ;
 	bridgeDB:Organism bridgeDB:Organism_Ec ;
-	bridgeDB:hasWikiPathwaysPattern <http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Fruitfly a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Fruitfly" ;
@@ -1145,7 +1262,8 @@ bridgeDB:DataSource_Ensembl_Fruitfly a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnDm" ;
 	bridgeDB:Organism bridgeDB:Organism_Dm ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Drosophila_melanogaster/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Fungi a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Fungi" ;
@@ -1155,7 +1273,8 @@ bridgeDB:DataSource_Ensembl_Fungi a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://fungi.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl.fungi/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://fungi.ensembl.org/id/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Horse a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Horse" ;
@@ -1167,7 +1286,8 @@ bridgeDB:DataSource_Ensembl_Horse a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnQc" ;
 	bridgeDB:Organism bridgeDB:Organism_Qc ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Equus_caballus/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Human a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Human" ;
@@ -1179,7 +1299,8 @@ bridgeDB:DataSource_Ensembl_Human a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnHs" ;
 	bridgeDB:Organism bridgeDB:Organism_Hs ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_M_tuberculosis a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl M. tuberculosis" ;
@@ -1191,7 +1312,8 @@ bridgeDB:DataSource_Ensembl_M_tuberculosis a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnMx" ;
 	bridgeDB:Organism bridgeDB:Organism_Mx ;
-	bridgeDB:hasWikiPathwaysPattern <http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Metazoa a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Metazoa" ;
@@ -1201,7 +1323,8 @@ bridgeDB:DataSource_Ensembl_Metazoa a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://metazoa.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl.metazoa/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://metazoa.ensembl.org/id/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Mosquito a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Mosquito" ;
@@ -1213,7 +1336,15 @@ bridgeDB:DataSource_Ensembl_Mosquito a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$id> ;
 	bridgeDB:urnBase "EnAg" ;
 	bridgeDB:Organism bridgeDB:Organism_Ag ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
+
+bridgeDB:DataSource_Ensembl_Mosquito_Ag a bridgeDB:DataSource ;
+	bridgeDB:fullName "Ensembl Mosquito_Ag" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Mouse a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Mouse" ;
@@ -1225,7 +1356,8 @@ bridgeDB:DataSource_Ensembl_Mouse a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnMm" ;
 	bridgeDB:Organism bridgeDB:Organism_Mm ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Pig a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Pig" ;
@@ -1237,7 +1369,8 @@ bridgeDB:DataSource_Ensembl_Pig a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnSs" ;
 	bridgeDB:Organism bridgeDB:Organism_Ss ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Plants a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Plants" ;
@@ -1248,7 +1381,8 @@ bridgeDB:DataSource_Ensembl_Plants a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://plants.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl.plant/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://plants.ensembl.org/id/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Protists a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Protists" ;
@@ -1258,7 +1392,8 @@ bridgeDB:DataSource_Ensembl_Protists a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://protists.ensembl.org/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ensembl.protist/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://protists.ensembl.org/id/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Rat a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Rat" ;
@@ -1270,7 +1405,8 @@ bridgeDB:DataSource_Ensembl_Rat a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnRn" ;
 	bridgeDB:Organism bridgeDB:Organism_Rn ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Xenopus a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Xenopus" ;
@@ -1282,7 +1418,8 @@ bridgeDB:DataSource_Ensembl_Xenopus a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnXt" ;
 	bridgeDB:Organism bridgeDB:Organism_Xt ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Yeast a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Yeast" ;
@@ -1294,7 +1431,8 @@ bridgeDB:DataSource_Ensembl_Yeast a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnSc" ;
 	bridgeDB:Organism bridgeDB:Organism_Sc ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Ensembl_Zebrafish a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ensembl Zebrafish" ;
@@ -1306,7 +1444,8 @@ bridgeDB:DataSource_Ensembl_Zebrafish a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id> ;
 	bridgeDB:urnBase "EnDr" ;
 	bridgeDB:Organism bridgeDB:Organism_Dr ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Entrez_Gene a bridgeDB:DataSource ;
 	bridgeDB:fullName "Entrez Gene" ;
@@ -1317,7 +1456,15 @@ bridgeDB:DataSource_Entrez_Gene a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/gene/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ncbigene/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/gene/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/geneid:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/geneid:$id> .
+
+bridgeDB:DataSource_enzyme a bridgeDB:DataSource ;
+	bridgeDB:fullName "enzyme" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ec:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ec:$id> .
 
 bridgeDB:DataSource_Enzyme_Nomenclature a bridgeDB:DataSource ;
 	bridgeDB:fullName "Enzyme Nomenclature" ;
@@ -1329,7 +1476,8 @@ bridgeDB:DataSource_Enzyme_Nomenclature a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ec-code/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ec:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ec:$id> .
 
 bridgeDB:DataSource_Evidence_Code a bridgeDB:DataSource ;
 	bridgeDB:fullName "Evidence Code" ;
@@ -1398,7 +1546,9 @@ bridgeDB:DataSource_GenBank a bridgeDB:DataSource ;
 	bridgeDB:systemCode "G" ;
 	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "probe" ;
-	bridgeDB:urnBase "G" .
+	bridgeDB:urnBase "G" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/genbank:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/genbank:$id> .
 
 bridgeDB:DataSource_Gene_Wiki a bridgeDB:DataSource ;
 	bridgeDB:fullName "Gene Wiki" ;
@@ -1492,6 +1642,13 @@ bridgeDB:DataSource_GiardiaDB a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/giardiadb/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://giardiadb.org/giardiadb/showRecord.do?name=GeneRecordClasses.GeneRecordClass&source_id=$id> .
 
+bridgeDB:DataSource_GLYCAN a bridgeDB:DataSource ;
+	bridgeDB:fullName "GLYCAN" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/kegg:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/kegg:$id> .
+
 bridgeDB:DataSource_GlycomeDB a bridgeDB:DataSource ;
 	bridgeDB:fullName "GlycomeDB" ;
 	bridgeDB:mainUrl "http://www.glycome-db.org/showMenu.action?major=database" ;
@@ -1510,7 +1667,8 @@ bridgeDB:DataSource_GOA a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/QuickGO/GProtein?ac=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/goa/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.ac.uk/QuickGO/GProtein?ac=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/goa:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/goa:$id> .
 
 bridgeDB:DataSource_Golm_Metabolome_Database a bridgeDB:DataSource ;
 	bridgeDB:fullName "Golm Metabolome Database" ;
@@ -1729,7 +1887,8 @@ bridgeDB:DataSource_HGNC_Accession_number a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/hgnc/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Hs ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genenames.org/data/hgnc_data.php?hgnc_id=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/hgnc:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/hgnc:$id> .
 
 bridgeDB:DataSource_HMDB a bridgeDB:DataSource ;
 	bridgeDB:fullName "HMDB" ;
@@ -1741,6 +1900,11 @@ bridgeDB:DataSource_HMDB a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.hmdb.ca/metabolites/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/hmdb/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.hmdb.ca/metabolites/$id> .
+
+bridgeDB:DataSource_hmdbid a bridgeDB:DataSource ;
+	bridgeDB:fullName "hmdbid" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
 
 bridgeDB:DataSource_HOGENOM a bridgeDB:DataSource ;
 	bridgeDB:fullName "HOGENOM" ;
@@ -1780,7 +1944,8 @@ bridgeDB:DataSource_HomoloGene a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/homologene/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/homologene/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/homologene/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/homologen:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/homologen:$id> .
 
 bridgeDB:DataSource_HOVERGEN a bridgeDB:DataSource ;
 	bridgeDB:fullName "HOVERGEN" ;
@@ -1829,6 +1994,13 @@ bridgeDB:DataSource_HUGE a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.kazusa.or.jp/tech-cgi/view_direct.cgi?id=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/huge/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.kazusa.or.jp/tech-cgi/view_direct.cgi?id=$id> .
+
+bridgeDB:DataSource_HUGO a bridgeDB:DataSource ;
+	bridgeDB:fullName "HUGO" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/hgnc:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/hgnc:$id> .
 
 bridgeDB:DataSource_Human_Disease_Ontology a bridgeDB:DataSource ;
 	bridgeDB:fullName "Human Disease Ontology" ;
@@ -1927,7 +2099,8 @@ bridgeDB:DataSource_InterPro a bridgeDB:DataSource ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/interpro/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/interpro:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/interpro:$id> .
 
 bridgeDB:DataSource_IPI a bridgeDB:DataSource ;
 	bridgeDB:fullName "IPI" ;
@@ -1938,7 +2111,8 @@ bridgeDB:DataSource_IPI a bridgeDB:DataSource ;
 	bridgeDB:type "probe" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ipi/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ipi:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ipi:$id> .
 
 bridgeDB:DataSource_IRD_Segment_Sequence a bridgeDB:DataSource ;
 	bridgeDB:fullName "IRD Segment Sequence" ;
@@ -2068,7 +2242,8 @@ bridgeDB:DataSource_Kegg_Compound a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/dbget-bin/www_bget?cpd:$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.compound/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/dbget-bin/www_bget?cpd:$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/cpd:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/cpd:$id> .
 
 bridgeDB:DataSource_KEGG_Drug a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Drug" ;
@@ -2078,7 +2253,15 @@ bridgeDB:DataSource_KEGG_Drug a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/dbget-bin/www_bget?dr:$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.drug/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/dbget-bin/www_bget?dr:$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/dr:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/dr:$id> .
+
+bridgeDB:DataSource_Kegg_enzyme a bridgeDB:DataSource ;
+	bridgeDB:fullName "Kegg enzyme" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ec:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ec:$id> .
 
 bridgeDB:DataSource_KEGG_Genes a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Genes" ;
@@ -2089,7 +2272,8 @@ bridgeDB:DataSource_KEGG_Genes a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/dbget-bin/www_bget?$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.genes/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/dbget-bin/www_bget?$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/kegg:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/kegg:$id> .
 
 bridgeDB:DataSource_KEGG_Genome a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Genome" ;
@@ -2099,7 +2283,8 @@ bridgeDB:DataSource_KEGG_Genome a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/kegg-bin/show_organism?org=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.genome/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/kegg-bin/show_organism?org=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/kegg:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/kegg:$id> .
 
 bridgeDB:DataSource_KEGG_Glycan a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Glycan" ;
@@ -2109,7 +2294,8 @@ bridgeDB:DataSource_KEGG_Glycan a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/dbget-bin/www_bget?gl:$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.glycan/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/dbget-bin/www_bget?gl:$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/gl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/gl:$id> .
 
 bridgeDB:DataSource_KEGG_Metagenome a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Metagenome" ;
@@ -2119,7 +2305,15 @@ bridgeDB:DataSource_KEGG_Metagenome a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/kegg-bin/show_organism?org=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.metagenome/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/kegg-bin/show_organism?org=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/kegg:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/kegg:$id> .
+
+bridgeDB:DataSource_Kegg_ortholog a bridgeDB:DataSource ;
+	bridgeDB:fullName "Kegg ortholog" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/kegg:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/kegg:$id> .
 
 bridgeDB:DataSource_KEGG_Orthology a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Orthology" ;
@@ -2129,7 +2323,8 @@ bridgeDB:DataSource_KEGG_Orthology a bridgeDB:DataSource ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/dbget-bin/www_bget?ko+$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.orthology/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/dbget-bin/www_bget?ko+$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/kegg:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/kegg:$id> .
 
 bridgeDB:DataSource_KEGG_Pathway a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Pathway" ;
@@ -2139,7 +2334,8 @@ bridgeDB:DataSource_KEGG_Pathway a bridgeDB:DataSource ;
 	bridgeDB:type "pathway" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/dbget-bin/www_bget?pathway+$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.pathway/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/dbget-bin/www_bget?pathway+$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/path:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/path:$id> .
 
 bridgeDB:DataSource_KEGG_Reaction a bridgeDB:DataSource ;
 	bridgeDB:fullName "KEGG Reaction" ;
@@ -2151,7 +2347,8 @@ bridgeDB:DataSource_KEGG_Reaction a bridgeDB:DataSource ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasUrlPattern <http://www.genome.jp/dbget-bin/www_bget?rn:$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/kegg.reaction/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.genome.jp/dbget-bin/www_bget?rn:$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/rn:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/rn:$id> .
 
 bridgeDB:DataSource_KiSAO a bridgeDB:DataSource ;
 	bridgeDB:fullName "KiSAO" ;
@@ -2302,7 +2499,8 @@ bridgeDB:DataSource_MeSH a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mesh/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/mesh;$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/mesh;$id> .
 
 bridgeDB:DataSource_METLIN a bridgeDB:DataSource ;
 	bridgeDB:fullName "METLIN" ;
@@ -2334,7 +2532,8 @@ bridgeDB:DataSource_MGI a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.informatics.jax.org/marker/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mgd/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Mm ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.informatics.jax.org/marker/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/mgi:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/mgi:$id> .
 
 bridgeDB:DataSource_Microbial_Protein_Interaction_Database a bridgeDB:DataSource ;
 	bridgeDB:fullName "Microbial Protein Interaction Database" ;
@@ -2404,7 +2603,7 @@ bridgeDB:DataSource_miRBase_Sequence a bridgeDB:DataSource ;
 	bridgeDB:mainUrl "http://microrna.sanger.ac.uk/" ;
 	bridgeDB:idExample "MI0000001" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "gene" ;
+	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mirbase/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> .
@@ -2728,6 +2927,15 @@ bridgeDB:DataSource_NuGO_wiki a bridgeDB:DataSource ;
 	bridgeDB:urnBase "Nw" ;
 	bridgeDB:hasWikiPathwaysPattern <http://wiki.nugo.org/index.php/$id> .
 
+bridgeDB:DataSource_OBO_GO a bridgeDB:DataSource ;
+	bridgeDB:fullName "OBO GO" ;
+	bridgeDB:systemCode "GO" ;
+	bridgeDB:idExample "GO_0046767" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://purl.org/obo/owl/GO#$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.org/obo/owl/GO#$id> .
+
 bridgeDB:DataSource_OMA_Group a bridgeDB:DataSource ;
 	bridgeDB:fullName "OMA Group" ;
 	bridgeDB:mainUrl "http://omabrowser.org/cgi-bin/gateway.pl" ;
@@ -2767,7 +2975,8 @@ bridgeDB:DataSource_OMIM a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://omim.org/entry/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/omim/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://omim.org/entry/$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/omim:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/omim:$id> .
 
 bridgeDB:DataSource_Ontology_for_Biomedical_Investigations a bridgeDB:DataSource ;
 	bridgeDB:fullName "Ontology for Biomedical Investigations" ;
@@ -3232,6 +3441,7 @@ bridgeDB:DataSource_Pseudomonas_Genome_Database a bridgeDB:DataSource ;
 bridgeDB:DataSource_PubChem a bridgeDB:DataSource ;
 	bridgeDB:fullName "PubChem" ;
 	bridgeDB:systemCode "Cp" ;
+	bridgeDB:alternativeFullName "Pubchem" ;
 	bridgeDB:mainUrl "http://pubchem.ncbi.nlm.nih.gov/" ;
 	bridgeDB:idExample "100101" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
@@ -3250,6 +3460,7 @@ bridgeDB:DataSource_PubChem_bioassay a bridgeDB:DataSource ;
 bridgeDB:DataSource_PubChem_compound a bridgeDB:DataSource ;
 	bridgeDB:fullName "PubChem-compound" ;
 	bridgeDB:systemCode "Cpc" ;
+	bridgeDB:alternativeFullName "Pubchem compound" , "Pubchem-compound" ;
 	bridgeDB:mainUrl "http://pubchem.ncbi.nlm.nih.gov/" ;
 	bridgeDB:idExample "100101" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
@@ -3278,6 +3489,11 @@ bridgeDB:DataSource_PubMed a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/pubmed/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pubmed/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/pubmed/$id> .
+
+bridgeDB:DataSource_Pubmed a bridgeDB:DataSource ;
+	bridgeDB:fullName "Pubmed" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
 
 bridgeDB:DataSource_PubMed_Central a bridgeDB:DataSource ;
 	bridgeDB:fullName "PubMed Central" ;
@@ -3383,7 +3599,8 @@ bridgeDB:DataSource_Rice_Ensembl_Gene a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.gramene.org/Oryza_sativa/geneview?gene=$id> ;
 	bridgeDB:urnBase "Os" ;
 	bridgeDB:Organism bridgeDB:Organism_Os ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.gramene.org/Oryza_sativa/geneview?gene=$id> .
+	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/ensembl:$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/ensembl:$id> .
 
 bridgeDB:DataSource_Rice_Genome_Annotation_Project a bridgeDB:DataSource ;
 	bridgeDB:fullName "Rice Genome Annotation Project" ;
@@ -3687,12 +3904,17 @@ bridgeDB:DataSource_SWISS_MODEL a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/swiss-model/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id> .
 
+bridgeDB:DataSource_SwissProt a bridgeDB:DataSource ;
+	bridgeDB:fullName "SwissProt" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" .
+
 bridgeDB:DataSource_Systems_Biology_Ontology a bridgeDB:DataSource ;
 	bridgeDB:fullName "Systems Biology Ontology" ;
 	bridgeDB:mainUrl "http://www.ebi.ac.uk/sbo/" ;
 	bridgeDB:idExample "SBO:0000262" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
+	bridgeDB:type "ontology" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/sbo/main/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/biomodels.sbo/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.ac.uk/sbo/main/$id> .
@@ -4002,6 +4224,21 @@ bridgeDB:DataSource_Unipathway a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/unipathway/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id> .
 
+bridgeDB:DataSource_UniProt a bridgeDB:DataSource ;
+	bridgeDB:fullName "UniProt" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
+
+bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
+	bridgeDB:fullName "Uniprot Enzyme" ;
+	bridgeDB:systemCode "Enzyme" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://purl.uniprot.org/enzyme/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/enzyme/$id> .
+
 bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
 	bridgeDB:fullName "Uniprot/TrEMBL" ;
 	bridgeDB:systemCode "S" ;
@@ -4011,13 +4248,16 @@ bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.uniprot.org/entry/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.ebi.uniprot.org/entry/$id> .
+	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_UNIPROT_ID a bridgeDB:DataSource ;
 	bridgeDB:fullName "UNIPROT_ID" ;
 	bridgeDB:systemCode "Sid" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" .
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_UniSTS a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniSTS" ;
@@ -4136,7 +4376,8 @@ bridgeDB:DataSource_WikiPathways a bridgeDB:DataSource ;
 	bridgeDB:type "pathway" ;
 	bridgeDB:hasUrlPattern <http://www.wikipathways.org/index.php/Pathway:$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wikipathways/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.wikipathways.org/index.php/Pathway:$id> .
+	bridgeDB:hasSourceRdfPattern <http://rdf.wikipathways.org/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://rdf.wikipathways.org/$id> .
 
 bridgeDB:DataSource_Wikipedia a bridgeDB:DataSource ;
 	bridgeDB:fullName "Wikipedia" ;
@@ -4146,8 +4387,9 @@ bridgeDB:DataSource_Wikipedia a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://en.wikipedia.org/wiki/$id> ;
-	bridgeDB:urnBase "Wi" ;
-	bridgeDB:hasWikiPathwaysPattern <http://en.wikipedia.org/wiki/$id> .
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wikipedia.en/$id> ;
+	bridgeDB:hasSourceRdfPattern <http://dbpedia.org/resource/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://dbpedia.org/resource/$id> .
 
 bridgeDB:DataSource_Worfdb a bridgeDB:DataSource ;
 	bridgeDB:fullName "Worfdb" ;
@@ -4544,6 +4786,106 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	<http://rdfs.org/ns/void#uriSpace> "http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_TTD_Drug .
 
+<http://bio2rdf.org/affymetrix:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/affymetrix:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Affy .
+
+<http://bio2rdf.org/bind:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/bind:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_BIND .
+
+<http://bio2rdf.org/biocyc:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/biocyc:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_BioCyc .
+
+<http://bio2rdf.org/biomodels:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/biomodels:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_BioModels_Database .
+
+<http://bio2rdf.org/chebi:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/chebi:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_ChEBI .
+
+<http://bio2rdf.org/cpd:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/cpd:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_COMPOUND , bridgeDB:DataSource_Kegg_Compound .
+
+<http://bio2rdf.org/dr:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/dr:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_KEGG_Drug .
+
+<http://bio2rdf.org/drugbank:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/drugbank:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_DrugBank .
+
+<http://bio2rdf.org/ec:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/ec:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_BRENDA , bridgeDB:DataSource_enzyme , bridgeDB:DataSource_Enzyme_Nomenclature , bridgeDB:DataSource_Kegg_enzyme .
+
+<http://bio2rdf.org/ensembl:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/ensembl:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_ENSEMBL , bridgeDB:DataSource_Ensembl , bridgeDB:DataSource_Ensembl_B_subtilis , bridgeDB:DataSource_Ensembl_Bacteria , bridgeDB:DataSource_Ensembl_C_elegans , bridgeDB:DataSource_Ensembl_Celegans , bridgeDB:DataSource_Ensembl_Chicken , bridgeDB:DataSource_Ensembl_Chimp , bridgeDB:DataSource_Ensembl_Cow , bridgeDB:DataSource_Ensembl_Dog , bridgeDB:DataSource_Ensembl_E_coli , bridgeDB:DataSource_Ensembl_Fruitfly , bridgeDB:DataSource_Ensembl_Fungi , bridgeDB:DataSource_Ensembl_Horse , bridgeDB:DataSource_Ensembl_Human , bridgeDB:DataSource_Ensembl_M_tuberculosis , bridgeDB:DataSource_Ensembl_Metazoa , bridgeDB:DataSource_Ensembl_Mosquito , bridgeDB:DataSource_Ensembl_Mosquito_Ag , bridgeDB:DataSource_Ensembl_Mouse , bridgeDB:DataSource_Ensembl_Pig , bridgeDB:DataSource_Ensembl_Plants , bridgeDB:DataSource_Ensembl_Protists , bridgeDB:DataSource_Ensembl_Rat , bridgeDB:DataSource_Ensembl_Xenopus , bridgeDB:DataSource_Ensembl_Yeast , bridgeDB:DataSource_Ensembl_Zebrafish , bridgeDB:DataSource_Rice_Ensembl_Gene .
+
+<http://bio2rdf.org/genbank:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/genbank:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_GenBank .
+
+<http://bio2rdf.org/geneid:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/geneid:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Entrez_Gene .
+
+<http://bio2rdf.org/gl:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/gl:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_KEGG_Glycan .
+
+<http://bio2rdf.org/goa:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/goa:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_GOA .
+
+<http://bio2rdf.org/hgnc:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/hgnc:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_HGNC_Accession_number , bridgeDB:DataSource_HUGO .
+
+<http://bio2rdf.org/homologen:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/homologen:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_HomoloGene .
+
+<http://bio2rdf.org/interpro:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/interpro:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_InterPro .
+
+<http://bio2rdf.org/ipi:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/ipi:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_IPI .
+
+<http://bio2rdf.org/kegg:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/kegg:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_GLYCAN , bridgeDB:DataSource_KEGG_Genes , bridgeDB:DataSource_KEGG_Genome , bridgeDB:DataSource_KEGG_Metagenome , bridgeDB:DataSource_Kegg_ortholog , bridgeDB:DataSource_KEGG_Orthology .
+
+<http://bio2rdf.org/mesh:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/mesh:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_CTD_Chemical .
+
+<http://bio2rdf.org/mesh;$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/mesh;" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_MeSH .
+
+<http://bio2rdf.org/mgi:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/mgi:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_MGI .
+
+<http://bio2rdf.org/omim:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/omim:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_OMIM .
+
+<http://bio2rdf.org/path:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/path:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_KEGG_Pathway .
+
+<http://bio2rdf.org/rn:$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://bio2rdf.org/rn:" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_KEGG_Reaction .
+
 <http://biocyc.org/getid?id=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://biocyc.org/getid?id=" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_BioCyc .
@@ -4683,6 +5025,10 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_PeptideAtlas .
+
+<http://dbpedia.org/resource/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://dbpedia.org/resource/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Wikipedia .
 
 <http://diana.cslab.ece.ntua.gr/DianaToolsNew/index.php?r=tarbase/index&mirnas=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://diana.cslab.ece.ntua.gr/DianaToolsNew/index.php?r=tarbase/index&mirnas=" ;
@@ -6206,6 +6552,10 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/wikipathways/" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_WikiPathways .
 
+<http://identifiers.org/wikipedia.en/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/wikipedia.en/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Wikipedia .
+
 <http://identifiers.org/worfdb/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/worfdb/" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Worfdb .
@@ -6489,6 +6839,34 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://purl.bioontology.org/ontology/MO/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://purl.bioontology.org/ontology/MO/" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_MGED_Ontology .
+
+<http://purl.bioontology.org/ontology/MSH/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.bioontology.org/ontology/MSH/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Bioontology_MESH .
+
+<http://purl.bioontology.org/ontology/NCIM/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.bioontology.org/ontology/NCIM/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Bioontology_UMLS_NCIM .
+
+<http://purl.org/obo/owl/GO#$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.org/obo/owl/GO#" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_OBO_GO .
+
+<http://purl.uniprot.org/enzyme/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/enzyme/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Uniprot_Enzyme .
+
+<http://purl.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/uniprot/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_UniProt , bridgeDB:DataSource_Uniprot_TrEMBL , bridgeDB:DataSource_UNIPROT_ID .
+
+<http://rdf.chemspider.com/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rdf.chemspider.com/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chemspider .
+
+<http://rdf.wikipathways.org/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://rdf.wikipathways.org/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_WikiPathways .
 
 <http://rebase.neb.com/rebase/enz/$id.html> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://rebase.neb.com/rebase/enz/" ;

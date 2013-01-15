@@ -11,6 +11,7 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
@@ -58,6 +59,21 @@ public abstract class RdfBase {
         }
     }
 
+    static Resource getPossibleSingletonResource(RepositoryConnection repositoryConnection, Resource id, 
+            URI predicate) throws RepositoryException, BridgeDBException {
+        Value value = getPossibleSingleton(repositoryConnection, id, predicate);
+        return toResource(value);
+    }
+
+    private static Resource toResource(Value value){
+        if (value == null) {
+            return null;
+        } else if (value instanceof Resource){
+            return (Resource)value;
+        }
+        return new URIImpl(value.stringValue());        
+    }
+    
     static Value getPossibleSingleton(RepositoryConnection repositoryConnection, Resource id, 
             URI predicate) throws RepositoryException, BridgeDBException {
         RepositoryResult<Statement> statements = 
@@ -86,4 +102,18 @@ public abstract class RdfBase {
         return results;
     }
 
+    static Set<Resource> getAllResources(RepositoryConnection repositoryConnection, Resource id, URI predicate) 
+            throws RepositoryException {
+        HashSet<Resource> results = new HashSet<Resource>();
+        RepositoryResult<Statement> statements = 
+                repositoryConnection.getStatements(id, predicate, null, true);
+        while(statements.hasNext()) {
+            Statement statement = statements.next();
+            Value value = statement.getObject();
+            if (value != null){
+                results.add(toResource(value));
+            }
+        }
+        return results;
+    }
 }

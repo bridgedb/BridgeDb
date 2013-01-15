@@ -73,9 +73,9 @@ public class ConfigReader {
             if (loadByEnviromentVariable(fileName)) return;
             if (loadByCatalinaHomeConfigs(fileName)) return;
             if (loadFromDirectory(fileName, "../org.bridgedb.utils/resources")) return;
-            if (loadFromDirectory(fileName, "../../BridgeDb/org.bridgedb.utils/resources")) return;
             if (loadFromDirectory(fileName, "../conf/OPS-IMS")) return;
             if (loadFromDirectory(fileName, "conf/OPS-IMS")) return;
+            if (loadFromDirectory(fileName, "../../BridgeDb/org.bridgedb.utils/resources")) return;
             if (getInputStreamFromResource(fileName)) return;
             if (getInputStreamFromJar(fileName)) return;
             throw new BridgeDBException("Unable to find " + fileName);
@@ -134,6 +134,7 @@ public class ConfigReader {
     private boolean loadByEnviromentVariable(String fileName) throws BridgeDBException, FileNotFoundException{
         String envPath = System.getenv().get("OPS-IMS-CONFIG");
         if (envPath == null || envPath.isEmpty()) {
+            logger.warn("No environment variable OPS-IMS-CONFIG found");
             return false;
         }
         File envDir = new File(envPath);
@@ -170,6 +171,7 @@ public class ConfigReader {
     private boolean loadByCatalinaHomeConfigs(String fileName) throws BridgeDBException, FileNotFoundException {
         String catalinaHomePath = System.getenv().get("CATALINA_HOME");
         if (catalinaHomePath == null || catalinaHomePath.isEmpty()) {
+            logger.warn("No enviroment variable CATALINA_HOME found");
             return false;
         }
         File catalineHomeDir = new File(catalinaHomePath);
@@ -214,6 +216,7 @@ public class ConfigReader {
     private boolean loadFromDirectory(String fileName, String directoryName) throws FileNotFoundException {
         File directory = new File (directoryName);
         if (!directory.exists()) {
+            logger.warn("No file directory found at: " + directoryName);
             return false;
         }
         if (!directory.isDirectory()){

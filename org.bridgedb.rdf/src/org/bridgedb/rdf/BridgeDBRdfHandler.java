@@ -45,7 +45,7 @@ public class BridgeDBRdfHandler {
         File file1 = new File ("C:/OpenPhacts/BioDataSource.ttl");
         parseRdfFile(file1);
         File file2 = new File ("c:/temp/writertest.ttl");
-        writeRdfToFile(file2);
+        writeRdfToFile(file2, true);
     }
 
     public static void parseRdfFile(File file) throws BridgeDBException{
@@ -66,7 +66,7 @@ public class BridgeDBRdfHandler {
         }
     }
     
-    public static void writeRdfToFile(File file) throws BridgeDBException{
+    public static void writeRdfToFile(File file, boolean addPrimaries) throws BridgeDBException{
         Reporter.println("Writing DataSource RDF to " + file.getAbsolutePath());
         Repository repository = null;
         RepositoryConnection repositoryConnection = null;
@@ -74,9 +74,12 @@ public class BridgeDBRdfHandler {
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             repositoryConnection = repository.getConnection();
-            DataSourceUris.writeAll(repositoryConnection);
+            if (addPrimaries) {
+                UriPattern.checkAllDataSourceUris();
+            }
+            DataSourceUris.writeAll(repositoryConnection, addPrimaries);
             OrganismRdf.addAll(repositoryConnection);
-            UriPattern.addAll(repositoryConnection);
+            UriPattern.addAll(repositoryConnection, addPrimaries);
             writeRDF(repositoryConnection, file);        
         } catch (Exception ex) {
             throw new BridgeDBException ("Error writing Rdf to file ", ex);
@@ -85,7 +88,7 @@ public class BridgeDBRdfHandler {
         }
     }
     
-    public static void writeRdfToFile(File file, Collection<DataSource> dataSources) throws BridgeDBException{
+    public static void writeRdfToFile(File file, Collection<DataSource> dataSources, boolean addPrimaries) throws BridgeDBException{
         Reporter.println("Writing DataSource RDF to " + file.getAbsolutePath());
         Repository repository = null;
         RepositoryConnection repositoryConnection = null;
@@ -93,9 +96,9 @@ public class BridgeDBRdfHandler {
             repository = new SailRepository(new MemoryStore());
             repository.initialize();
             repositoryConnection = repository.getConnection();
-            DataSourceUris.writeAll(repositoryConnection, dataSources);
+            DataSourceUris.writeAll(repositoryConnection, dataSources, addPrimaries);
             OrganismRdf.addAll(repositoryConnection);
-            UriPattern.addAll(repositoryConnection);
+            UriPattern.addAll(repositoryConnection, addPrimaries);
             writeRDF(repositoryConnection, file);        
         } catch (Exception ex) {
             throw new BridgeDBException ("Error writing Rdf to file ", ex);
