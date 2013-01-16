@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,23 +19,19 @@
 //
 package org.bridgedb.url;
 
-import org.bridgedb.rdf.RdfConfig;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
+import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.sql.SQLListener;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.Xref;
-import java.util.Date;
-import org.junit.BeforeClass;
-import org.bridgedb.IDMapperException;
-import org.junit.AfterClass;
-import java.util.Map;
-import java.util.HashSet;
-import java.util.Set;
-import org.bridgedb.sql.SQLListener;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests the URLMapper interface (and by loading the URLListener interface)

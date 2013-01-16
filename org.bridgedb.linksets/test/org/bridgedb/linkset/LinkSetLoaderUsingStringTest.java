@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,30 +20,16 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
-import org.bridgedb.utils.TestUtils;
-import org.bridgedb.rdf.LinksetStatementReaderTest;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.rio.RDFFormat;
-import org.bridgedb.linkset.rdf.RdfReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.tools.metadata.validator.ValidationType;
-import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.bridgedb.rdf.reader.StatementReader;
-import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.SQLUrlMapper;
-import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.statistics.MappingSetInfo;
-import org.bridgedb.utils.Reporter;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.StoreType;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.openrdf.OpenRDFException;
-import static org.junit.Assert.*;
+import org.bridgedb.utils.TestUtils;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.openrdf.rio.RDFFormat;
 
 /**
  * @author Christian

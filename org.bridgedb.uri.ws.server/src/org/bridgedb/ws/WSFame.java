@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +20,6 @@
 package org.bridgedb.ws;
 
 
-import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -29,9 +28,7 @@ import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -45,9 +42,6 @@ import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.Mapping;
-import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.IpConfig;
-import org.openrdf.rio.RDFFormat;
 
 /**
  * This class provides the Reposnse Frame including Top and Sidebar 

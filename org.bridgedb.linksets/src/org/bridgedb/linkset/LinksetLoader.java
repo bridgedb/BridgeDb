@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,18 +25,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.tools.metadata.validator.ValidationType;
-import org.bridgedb.tools.metadata.validator.Validator;
-import org.bridgedb.mysql.MySQLSpecific;
+import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.sql.SQLUrlMapper;
-import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.tools.metadata.validator.Validator;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
