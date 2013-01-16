@@ -1,5 +1,0 @@
-Bundle-Name: org.bridgedb.plus
-Bundle-Version: 1.1.0
-Bundle-SymbolicName: org.bridgedb.plus
-Export-Package: * 
-Require-Bundle: org.bridgedb;bundle-version="1.1.0", org.bridgedb.rdb;bundle-version="1.1.0", org.bridgedb.webservice.bridgerest;bundle-version="1.1.0"
