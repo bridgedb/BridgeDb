@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,9 +21,6 @@ package org.bridgedb.ws.server;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -32,10 +30,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.Xref;
-import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.Mapping;
 import org.bridgedb.ws.WSLinksetService;
 import org.bridgedb.ws.WSOpsInterfaceService;
 

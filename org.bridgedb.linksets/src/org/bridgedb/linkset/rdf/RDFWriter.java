@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,16 +19,16 @@
 //
 package org.bridgedb.linkset.rdf;
 
-import org.bridgedb.rdf.constants.VoidConstants;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.rdf.IDMapperLinksetException;
+import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.LinksetVoidInformation;
 import org.bridgedb.tools.metadata.constants.PavConstants;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -38,7 +39,6 @@ import org.openrdf.model.Value;
 import org.openrdf.model.impl.CalendarLiteralImpl;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.URIImpl;
-import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFHandlerException;
 
 /**

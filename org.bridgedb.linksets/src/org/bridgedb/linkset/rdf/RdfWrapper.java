@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,8 +21,6 @@ package org.bridgedb.linkset.rdf;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;

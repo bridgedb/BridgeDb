@@ -1,8 +1,9 @@
 // BridgeDb,
 // An abstraction layer for identifier mapping services, both local and online.
 //
-// Copyright      2012  Christian Y. A. Brenninkmeijer
-// Copyright      2012  OpenPhacts
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +20,6 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -27,32 +27,26 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.linkset.rdf.LinksetStatementReaderAndImporter;
+import org.bridgedb.linkset.rdf.RdfFactory;
+import org.bridgedb.linkset.rdf.RdfWrapper;
+import org.bridgedb.linkset.rdf.StatementReaderAndImporter;
+import org.bridgedb.rdf.IDMapperLinksetException;
+import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.sql.SQLIdMapper;
+import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.tools.metadata.LinksetVoidInformation;
 import org.bridgedb.tools.metadata.MetaData;
 import org.bridgedb.tools.metadata.MetaDataCollection;
 import org.bridgedb.tools.metadata.MetaDataSpecification;
 import org.bridgedb.tools.metadata.constants.PavConstants;
-import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.tools.metadata.rdf.LinksetStatementReader;
+import org.bridgedb.tools.metadata.rdf.LinksetStatements;
+import org.bridgedb.tools.metadata.rdf.VoidStatements;
 import org.bridgedb.tools.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.tools.metadata.validator.ValidationType;
-import org.bridgedb.tools.metadata.validator.Validator;
-import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.rdf.IDMapperLinksetException;
-import org.bridgedb.tools.metadata.rdf.LinksetStatementReader;
-import org.bridgedb.linkset.rdf.LinksetStatementReaderAndImporter;
-import org.bridgedb.tools.metadata.rdf.LinksetStatements;
-import org.bridgedb.sql.BridgeDbSqlException;
-import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.linkset.rdf.RdfFactory;
-import org.bridgedb.linkset.rdf.RdfWrapper;
-import org.bridgedb.linkset.rdf.StatementReaderAndImporter;
-import org.bridgedb.tools.metadata.rdf.VoidStatements;
-import org.bridgedb.sql.SQLIdMapper;
-import org.bridgedb.sql.SQLUrlMapper;
-import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;

@@ -1,31 +1,43 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+// BridgeDb,
+// An abstraction layer for identifier mapping services, both local and online.
+//
+// Copyright 2006-2009  BridgeDb developers
+// Copyright 2012-2013  Christian Y. A. Brenninkmeijer
+// Copyright 2012-2013  OpenPhacts
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 package org.bridgedb.linkset;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import org.bridgedb.rdf.IDMapperLinksetException;
-import org.junit.Ignore;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.tools.metadata.AppendBase;
-import org.bridgedb.tools.metadata.MetaDataTestBase;
-import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
-import org.bridgedb.tools.metadata.rdf.StringOutputStream;
 import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.tools.metadata.MetaDataTestBase;
+import org.bridgedb.tools.metadata.rdf.StringOutputStream;
+import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.rdfxml.RDFXMLWriter;
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
 
 /**
  *
