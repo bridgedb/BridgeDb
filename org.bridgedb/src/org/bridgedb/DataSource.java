@@ -85,8 +85,15 @@ public final class DataSource
 	private String postfix = "";
 	private Object organism = null;
 	private String idExample = null;
-	private boolean isPrimary = true;
-	private String type = "unknown";
+    /**
+     * @since Version 1 However in Version 2 changed to the Object Boolean to capture a third state. Not yet Set!
+     */
+	private Boolean isPrimary = null;
+    /**
+     * @since Version 2. Only change is creation of a CONSTANT as in Version 1 type was defaulted to "unknown". 
+     */
+    public static String DEFAULT_TYPE = "unknown";
+	private String type = DEFAULT_TYPE;
     /**
      * Used for both the getUrn and getIdentifiersOrgUri (where applicable)
      */
@@ -355,7 +362,7 @@ public final class DataSource
 	public static final class Builder
 	{
 		private final DataSource current;
-		
+  		
 		/**
 		 * Create a Builder for a DataSource. Note that an existing DataSource is
 		 * modified rather than creating a new one.
@@ -401,9 +408,18 @@ public final class DataSource
 		/**
 		 * @param mainUrl url of homepage
 		 * @return the same Builder object so you can chain setters
+         * @since Version 1 but since Version2 could throw an Exception
+         * @throws IllegalArgumentException If and only if overwriteLevel == STRICT 
+         *    AND a previous different non null mainUrl had been set.
 		 */
 		public Builder mainUrl (String mainUrl)
 		{
+            if (current.mainUrl != null) {
+                if (DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && !current.mainUrl.equals(mainUrl)){
+                    throw new IllegalArgumentException("Illegal attemt to overwrite a mainUrl for " + current + 
+                " was " + current.mainUrl + " so can not set " + mainUrl);
+                }
+            }
 			current.mainUrl = mainUrl;
 			return this;
 		}
@@ -412,9 +428,18 @@ public final class DataSource
 		/**
 		 * @param idExample an example id from this system
 		 * @return the same Builder object so you can chain setters
+         * @since Version 1 but since Version2 could throw an Exception
+         * @throws IllegalArgumentException If and only if overwriteLevel == STRICT 
+         *    AND a previous different non null idExample had been set.
 		 */
 		public Builder idExample (String idExample)
 		{
+            if (current.idExample != null && !current.idExample.isEmpty()){
+                if (DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && !current.idExample.equals(idExample)){
+                    throw new IllegalArgumentException("Illegal attemt to overwrite a idExample for " + current + 
+                " was " + current.idExample + " so can not set " + idExample);
+                }
+            }
 			current.idExample = idExample;
 			return this;
 		}
@@ -423,9 +448,17 @@ public final class DataSource
 		 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
 		 * 	but their use in pathways is discouraged
 		 * @return the same Builder object so you can chain setters
+         * @since Version 1 but since Version2 could throw an Exception
+         * @throws IllegalArgumentException If and only if overwriteLevel == STRICT 
+         *    AND a previous different isPrimary was set.
 		 */
 		public Builder primary (boolean isPrimary)
 		{
+            if (current.isPrimary != null && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
+                    current.isPrimary != isPrimary){
+                throw new IllegalArgumentException("Illegal attemt to change primary for " + current + 
+                        " was " + current.isPrimary + " so can not set " + isPrimary);
+            }
 			current.isPrimary = isPrimary;
 			return this;
 		}
@@ -433,19 +466,36 @@ public final class DataSource
 		/**
 		 * @param type the type of datasource, for example "protein", "gene", "metabolite" 
 		 * @return the same Builder object so you can chain setters
+         * @since Version 1 but since Version2 could throw an Exception
+         * @throws IllegalArgumentException If and only if overwriteLevel == STRICT 
+         *    AND a previous different type was set to something other than "unknown".
 		 */
 		public Builder type (String type)
 		{
-			current.type = type;
+            System.out.println(current + " " + type);
+            if (!current.type.equals(DEFAULT_TYPE) && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
+                    !current.type.equals(type)){
+                throw new IllegalArgumentException("Illegal attemt to change type for " + current + 
+                        " was " + current.type + " so can not set " + type);
+            }
+ 			current.type = type;
 			return this;
 		}
 		
 		/**
 		 * @param organism organism for which this system code is suitable, or null for any / not applicable
 		 * @return the same Builder object so you can chain setters
+         * @since Version 1 but since Version2 could throw an Exception
+         * @throws IllegalArgumentException If and only if overwriteLevel == STRICT 
+         *    AND a previous different organism was set.
 		 */
 		public Builder organism (Object organism)
 		{
+            if (current.organism != null && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
+                    !current.organism.equals(organism)){
+                throw new IllegalArgumentException("Illegal attemt to change Orgamism for " + current + 
+                        " was " + current.organism + " so can not set " + organism);
+            }
 			current.organism = organism;
 			return this;
 		}
@@ -868,10 +918,15 @@ public final class DataSource
 	 * A DataSource is primary if it is not of type probe, 
 	 * so that means e.g. Affymetrix or Agilent probes are not primary. All
 	 * gene, protein and metabolite identifiers are primary.
+     * @since Version 1 However since Version 2 if no primary was set during building a default value of true is still returned.
+     *     (in version 1 primary is automatically set to true.)
 	 */
 	public boolean isPrimary()
 	{
-		return isPrimary;
+        if (isPrimary == null){
+            return true;
+        }
+		return isPrimary.booleanValue();
 	}
 	
 	/**

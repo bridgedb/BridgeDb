@@ -44,16 +44,53 @@ public class DataSourceTest {
 	}
 
 	@Test
-	public void testBuildingMainUrl() {
+	public void testBuildingMainUrlVersion1() {
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.VERSION1);
 		DataSource source = DataSource.register("X", "Affymetrix")
+		    .mainUrl("http://www.affymetrix.com/A")
+		    .asDataSource();
+		Assert.assertEquals("http://www.affymetrix.com/A", source.getMainUrl());
+		source = DataSource.register("X", "Affymetrix")
 		    .mainUrl("http://www.affymetrix.com")
 		    .asDataSource();
 		Assert.assertEquals("http://www.affymetrix.com", source.getMainUrl());
 	}
 
-	@Test
-	public void testBuildingType() {
+    @Test (expected =  IllegalArgumentException.class)
+	public void testBuildingMainUrlStrict() {
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
 		DataSource source = DataSource.register("X", "Affymetrix")
+		    .mainUrl("http://www.affymetrix.com/A")
+		    .asDataSource();
+		source = DataSource.register("X", "Affymetrix")
+		    .mainUrl("http://www.affymetrix.com")
+		    .asDataSource();
+	}
+    
+	@Test
+	public void testBuildingTypeVersion1() {
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.VERSION1);
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .type("metabolite")
+		    .asDataSource();
+		Assert.assertEquals("metabolite", source.getType());
+		Assert.assertTrue(source.isMetabolite());
+		source = DataSource.register("X", "Affymetrix")
+		    .type("probe")
+		    .asDataSource();
+		Assert.assertEquals("probe", source.getType());
+		Assert.assertFalse(source.isMetabolite());
+	}
+
+    @Test (expected =  IllegalArgumentException.class)
+	public void testBuildingTypeStrict() {
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .type("metabolite")
+		    .asDataSource();
+		Assert.assertEquals("metabolite", source.getType());
+		Assert.assertTrue(source.isMetabolite());
+		source = DataSource.register("X", "Affymetrix")
 		    .type("probe")
 		    .asDataSource();
 		Assert.assertEquals("probe", source.getType());
@@ -61,7 +98,22 @@ public class DataSourceTest {
 	}
 
 	@Test
-	public void testBuildingPrimary() {
+	public void testBuildingPrimaryVersion1() {
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.VERSION1);
+        String fullName = "DataSourceTest_testBuildingPrimaryVersion1";
+		DataSource source = DataSource.register(null, fullName)
+		    .primary(false)
+		    .asDataSource();
+		Assert.assertFalse(source.isPrimary());
+		source = DataSource.register(null, fullName)
+			.primary(true)
+			.asDataSource();
+		Assert.assertTrue(source.isPrimary());
+	}
+
+    @Test (expected =  IllegalArgumentException.class)
+	public void testBuildingPrimaryStrict() {
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
 		DataSource source = DataSource.register("X", "Affymetrix")
 		    .primary(false)
 		    .asDataSource();
@@ -69,7 +121,6 @@ public class DataSourceTest {
 		source = DataSource.register("X", "Affymetrix")
 			.primary(true)
 			.asDataSource();
-		Assert.assertTrue(source.isPrimary());
 	}
 
 	@Test
@@ -81,94 +132,5 @@ public class DataSourceTest {
 		Assert.assertTrue(source.isMetabolite());
 	}
     
-/*    @Test
-    public void testRegisterSecondFullName(){
-        String sysCode = "testRegisterSecondFullName";
-        String fullName1 = "testRegisterSecondFullName_FullName1";
-        DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
-        String fullName2 = "testRegisterSecondFullName_FullName2";
-        DataSource ds2 = DataSource.register(sysCode, fullName2).asDataSource();
-        Assert.assertEquals(ds1, ds2);
-        Assert.assertEquals(fullName2, ds2.getFullName());
-        Assert.assertEquals(fullName1, ds1.getAlternativeFullNames().iterator().next());      
-        Assert.assertEquals(ds1, DataSource.getByFullName(fullName2));
-        Assert.assertEquals(ds1, DataSource.getByFullName(fullName1));        
-    }
 
-    @Test
-    public void testRegisterAlternativeFullName(){
-        String sysCode = "testRegisterSecondFullName";
-        String fullName1 = "testRegisterSecondFullName_FullName1";
-        DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
-        String fullName2 = "testRegisterSecondFullName_FullName2";
-        DataSource ds2 = DataSource.register(sysCode, fullName2).asDataSource();
-        Assert.assertEquals(ds1, ds2);
-        Assert.assertEquals(fullName2, ds2.getFullName());
-        Assert.assertEquals(fullName1, ds1.getAlternativeFullNames().iterator().next());        
-    }
-    
-    @Test (expected = IllegalStateException.class)
-    public void testRegisterAlternativeFullWhichIsAlreadyFullname(){
-        String fullName1 = "testRegisterAlternativeFullWhichIsAlreadyFullname";
-        DataSource ds = DataSource.register(null, fullName1)
-                .alternativeFullName(fullName1)
-                .asDataSource();
-    }
-    
-    @Test (expected = IllegalStateException.class)
-    public void testRegisterAlternativeFullNameToTwoDataSources(){
-        String fullName1 = "testRegisterAlternativeFullNameToTwoDataSources1";
-        String altName = "testRegisterAlternativeFullNameToTwoDataSourcesalt";        
-        DataSource ds1 = DataSource.register(null, fullName1)
-                .alternativeFullName(altName)
-                .asDataSource();
-        String fullName2 = "testRegisterAlternativeFullNameToTwoDataSources2";
-        DataSource ds2 = DataSource.register(null, fullName2)
-                .alternativeFullName(altName)
-                .asDataSource();
-    }
-    
-    @Test (expected = IllegalStateException.class)
-    public void testRegisterAsFullNameAndThenAlternativeName(){
-        String fullName1 = "testRegisterAsFullNameAndThenAlternativeName1";
-        DataSource ds1 = DataSource.register(null, fullName1)
-                .asDataSource();
-        String fullName2 = "testRegisterAsFullNameAndThenAlternativeName2";
-        DataSource ds2 = DataSource.register(null, fullName2)
-                .alternativeFullName(fullName1)
-                .asDataSource();
-    }
-
-    @Test 
-    public void testRegisterAsAlternativeAndThenFullName(){
-        String fullName1 = "testRegisterAsAlternativeAndThenFullName1";
-        String altName = "testRegisterAsAlternativeAndThenFullNameAlt";        
-        DataSource ds1 = DataSource.register(null, fullName1)
-                .alternativeFullName(altName)
-                .asDataSource();
-        DataSource ds2 = DataSource.register(null, altName)
-                .asDataSource();
-        Assert.assertEquals(ds1, ds2);
-        //ToDo dettermine which should be the full name of this DataSource.
-        //Better would be to throw an error on registering the new one but reverse combatability issue!
-        Assert.assertEquals(altName, ds1.getAlternativeFullNames().iterator().next());        
-    }
-
-    @Test (expected = IllegalStateException.class)
-    public void testRegisterAsAlternativeAndThenFullNameDiffSysCocdes(){
-        String sysCode1 = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesSysCode1";
-        String fullName1 = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesFullName1";
-        String altName = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesFullNameAlt";        
-        String sysCode2 = "testRegisterAsAlternativeAndThenFullNameDiffSysCocdesSysCode2";
-        DataSource ds1 = DataSource.register(sysCode1, fullName1)
-                .alternativeFullName(altName)
-                .asDataSource();
-        DataSource ds2 = DataSource.register(sysCode2, altName)
-                .asDataSource();
-        Assert.assertEquals(ds1, ds2);
-        Assert.assertEquals(fullName1, ds1.getFullName());        
-        Assert.assertEquals(altName, ds2.getFullName());
-        Assert.assertEquals(altName, ds1.getAlternativeFullNames().iterator().next());        
-    }
-*/
 }
