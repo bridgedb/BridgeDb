@@ -559,7 +559,8 @@ public final class DataSource
                 return lookupDataSourceVersion1(sysCode, fullName);
             }
             case CONTROLLED: {
-                return lookupDataSourceControlled(sysCode, fullName);
+                DataSource result = lookupDataSourceControlled(sysCode, fullName);
+                return result;
             }
             case STRICT: {
                 return lookupDataSourceStrict(sysCode, fullName);
@@ -635,7 +636,7 @@ public final class DataSource
                 System.err.println("sysCode \"" + sysCode + " already used wtih fullName \"" + 
                     byCode.fullName + "\" which does not match new fullName \"" + fullName + "\"");
             }
-            byCode.fullName =fullName;    
+            byCode.fullName = fullName;    
             return byCode;
         }
         if (sysCode == null || sysCode.isEmpty()){
@@ -737,12 +738,12 @@ public final class DataSource
         if ((sysCode == null || sysCode.isEmpty()) && (byName.sysCode == null || byName.sysCode.isEmpty())){
             return returnOrCreateNew(byName, sysCode, fullName);
         }
-        if ((fullName == null || fullName.isEmpty()) && (byCode.sysCode == null || byCode.sysCode.isEmpty())){
+        if ((fullName == null || fullName.isEmpty()) && (byCode.fullName == null || byCode.fullName.isEmpty())){
             return returnOrCreateNew(byCode, sysCode, fullName);
         }
         throw new IllegalArgumentException("Multiple possible DataSources found. " 
                 + "SysCode " + sysCode + " already maps to " + byCode 
-                + "while fullName " + fullName + " maps to " + byName);
+                + " while fullName " + fullName + " maps to " + byName);
     }
 
     public void registerAlias(String alias)

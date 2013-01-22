@@ -470,4 +470,50 @@ public class DataSourceRegisterTest {
         DataSource ds2 = DataSource.register(sysCode2, fullName).asDataSource();
     }
 
+    @Test 
+    public void testFullNameNullVersion1() throws IDMapperException{
+        System.out.println("FullNameNullVersion1");
+        String sysCode = "DataSourceRegistryTest_FullNameNullVersion1";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.VERSION1);
+        DataSource ds1 = DataSource.register(sysCode, null).asDataSource();
+        DataSource ds2 = DataSource.register(sysCode, null).asDataSource();
+        //Is this behaviour desirable????
+        Assert.assertEquals(ds1, ds2);
+        //Is this behaviour desirable????
+        Assert.assertEquals(null, ds1.getFullName());
+        Assert.assertEquals(sysCode, ds1.getSystemCode());
+        Assert.assertEquals(null, ds2.getFullName());
+        Assert.assertEquals(sysCode, ds2.getSystemCode());
+    }
+
+    @Test 
+    public void testFullNameNullControlled() throws IDMapperException{
+        System.out.println("FullNameNullControlled");
+        String sysCode = "DataSourceRegistryTest_FullNameNullControlled";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
+        DataSource ds1 = DataSource.register(sysCode, null).asDataSource();
+        DataSource ds2 = DataSource.register(sysCode, null).asDataSource();
+        Assert.assertEquals(ds1, ds2);
+        System.out.println(ds1);
+        Assert.assertEquals(null, ds1.getFullName());
+        Assert.assertEquals(sysCode, ds1.getSystemCode());
+        Assert.assertEquals(null, ds2.getFullName());
+        Assert.assertEquals(sysCode, ds2.getSystemCode());
+    }
+    
+    @Test 
+    public void testFullNameNullStrict() throws IDMapperException{
+        System.out.println("FullNameNullStrict");
+        String sysCode = "DataSourceRegistryTest_FullNameNullStrict";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        DataSource ds1 = DataSource.register(sysCode, null).asDataSource();
+        DataSource ds2 = DataSource.register(sysCode, null).asDataSource();
+        //Is this behaviour desirable????
+        Assert.assertEquals(ds1, ds2);
+        //Is this behaviour desirable????
+        Assert.assertEquals(null, ds1.getFullName());
+        Assert.assertEquals(sysCode, ds1.getSystemCode());
+        Assert.assertEquals(null, ds2.getFullName());
+        Assert.assertEquals(sysCode, ds2.getSystemCode());
+    }
 }
