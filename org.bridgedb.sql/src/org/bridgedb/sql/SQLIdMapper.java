@@ -160,7 +160,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
         appendTopConditions(query, 0, limit); 
-        query.append(" targetId as id, targetDataSource as sysCode ");
+        query.append(" sourceId as id, sourceDataSource as sysCode ");
         query.append("FROM mapping, mappingSet ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND sourceId = '");
