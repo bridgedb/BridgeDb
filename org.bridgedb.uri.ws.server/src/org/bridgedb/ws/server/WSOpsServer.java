@@ -33,6 +33,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.ws.WSLinksetService;
 import org.bridgedb.ws.WSOpsInterfaceService;
+import org.bridgedb.ws.WsOpsConstants;
 
 /**
  *
@@ -60,9 +61,9 @@ public class WSOpsServer extends WSLinksetService{
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response welcomeMessage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
-                if (logger.isDebugEnabled()){
-                    logger.debug("welcomeMessage called!");
-                }
+        if (logger.isDebugEnabled()){
+            logger.debug("welcomeMessage called!");
+        }
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
        
         OverallStatistics statistics = urlMapper.getOverallStatistics();
@@ -94,9 +95,12 @@ public class WSOpsServer extends WSLinksetService{
         sb.append(getServiceName());
         sb.append("/getMappingInfo\">Mapping Info Page</a></p>");
         
-        sb.append("\n<p>The Main OPS method is <a href=\"/");
+        sb.append("\n<p>The Main OPS method (when not using the QueryExpander on the same machine) is <a href=\"/");
         sb.append(getServiceName());
-        sb.append("/api/#mapByURLs\">mapByURLs</a></dt>");
+        sb.append("/api/#");
+        sb.append(WsOpsConstants.MAP_URL);
+        sb.append("\">");
+        sb.append(WsOpsConstants.MAP_URL);
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("\n<p><a href=\"/");
         sb.append(getServiceName());
