@@ -38,9 +38,10 @@
    	<module>org.bridgedb.uri.ws.client</module>
 
     <module>org.bridgedb.hack.loader</module>
+    <module>org.bridgedb.rdb</module>
     <module>org.bridgedb.tools.importer</module>
     
-    <!-- The modules below this comment are not actively used by OPS but are part of BridgeDB -->
+    <!-- The modules below this comment are not actively used by OPS but are part of BridgeDB >
     <module>org.bridgedb.rdb</module>
     <module>org.bridgedb.rdb.construct</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
@@ -49,7 +50,7 @@
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
   	<module>examples</module>
-    <module>org.bridgedb.server</module>
+    <module>org.bridgedb.server</module-->
     <!-- war creation moved low down to make sure jars have registered -->
   	<module>org.bridgedb.ws.war</module>
     <module>org.bridgedb.uri.ws.war</module>
