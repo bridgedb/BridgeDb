@@ -35,7 +35,7 @@ public class URLMapperTest  extends org.bridgedb.url.URLMapperTest{
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {
         WSOpsInterface webService = WSOpsClientFactory.createTestWSClient();
-        mappingSet2_3 = 3;
+        mappingSet2_3 = 29;
         urlMapper = new WSOpsMapper(webService);
     }
     

@@ -40,6 +40,7 @@ import org.junit.Test;
 public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     
     LinksetInterface linksetInterface;
+    private static String cwCsFileName = "../org.bridgedb.linksets/test-data/cw-cs.ttl";
     
     public LinksetInterfaceTest(LinksetInterface instance) throws DatatypeConfigurationException, BridgeDBException{
         super(instance);
@@ -68,8 +69,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     @Test
     public void testValidateFile() throws Exception {
         report("validateFile");
-        String fileName = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
-        String result = linksetInterface.validateFile(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
+        String result = linksetInterface.validateFile(cwCsFileName, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 3 links"));
     }
@@ -115,8 +115,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     @Test
     public void testLoadFile() throws Exception {
         report("load File");
-        String fileName = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
-        linksetInterface.loadFile(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetInterface.loadFile(cwCsFileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
 
     /**
@@ -125,8 +124,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     @Test
     public void testCheckFileValid() throws Exception {
         report("CheckFileValid");
-        String fileName = "../org.bridgedb.linksets/test-data/sample1to2.ttl";
-        linksetInterface.checkFileValid(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetInterface.checkFileValid(cwCsFileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
 
     /**

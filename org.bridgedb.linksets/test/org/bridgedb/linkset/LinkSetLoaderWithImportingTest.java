@@ -70,10 +70,9 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         
         MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
         assertEquals ("http://data.kasabi.com/dataset/chembl-rdf/", info.getSourceSysCode());
-        assertEquals ("ChemSpider", info.getTargetSysCode());
+        assertEquals ("Cs", info.getTargetSysCode());
         assertEquals ("http://www.w3.org/2004/02/skos/core#exactMatch", info.getPredicate());
         //ystem.out.println(info);
     }
     
-
 }

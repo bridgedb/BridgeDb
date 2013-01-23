@@ -74,11 +74,11 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     @BeforeClass
     public static void setupURLs() throws IDMapperException{
       
-        URISpace1 = "http://www.foo.com/";
-        URISpace2 = "http://www.example.com/";
-        URISpace2a = "http://rdf.example.com/";
-        URISpace3 = "http://www.example.org#";
-        URISpace3a = "http://rdf.example.org#";
+        URISpace1 = "http://www.conceptwiki.org/concept/";
+        URISpace2 = "http://www.chemspider.com/";
+        URISpace2a = "http://rdf.chemspider.com/";
+        URISpace3 = "http://data.kasabi.com/dataset/chembl-rdf/molecule/";
+        URISpace3a = "http://linkedchemistry.info/chembl/molecule/";
          
         link1to2 = URISpace1 + "->" + URISpace2;
         link1to3 = URISpace1 + "->" + URISpace3;
@@ -88,19 +88,19 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
         link3to2 = URISpace3 + "->" + URISpace3;
 
         map1URL1 = map1xref1.getUrl();
-        map1URL2 = map1xref2.getUrl();
+        map1URL2 = URISpace2 + ds2Id1;
         map1URL3 = map1xref3.getUrl();
         //Second set of URLs that are expected to map together.
         map2URL1 = map2xref1.getUrl();
-        map2URL2 = map2xref2.getUrl();
+        map2URL2 = URISpace2 + ds2Id2;
         map2URL3 = map2xref3.getUrl();
         //Third Set of URLs which again should map to each other but not the above
         map3URL1 = map3xref1.getUrl();
-        map3URL2 = map3xref2.getUrl();
-        map3URL2a = URISpace2a + goodId3;
+        map3URL2 = URISpace2 + ds2Id3;
+        map3URL2a = URISpace2a + ds2Id3;
         map3URL3 = map3xref3.getUrl();
          //And a few URLs also not used
-        mapBadURL1 = "www.notInURLMapper.com#" + goodId1;
+        mapBadURL1 = "www.notInURLMapper.com#" + ds1Id1;
         mapBadURL2 = URISpace2 + badID;
         mapBadURL3 = "www.notInURLMapper.com#789";
     }

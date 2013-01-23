@@ -55,9 +55,9 @@ public class LinksetLoaderTest {
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.TEST, validationType);
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.TEST, validationType);
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.TEST, validationType);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cs-cm.ttl", StoreType.TEST, validationType);
  	}
 
     @Test
@@ -66,9 +66,9 @@ public class LinksetLoaderTest {
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
-        assertEquals ("TestDS1", info.getSourceSysCode());
-        assertEquals ("TestDS2", info.getTargetSysCode());
-        assertEquals ("http://www.bridgedb.org/test#testPredicate", info.getPredicate());
+        assertEquals ("ConceptWiki", info.getSourceSysCode());
+        assertEquals ("Cs", info.getTargetSysCode());
+        assertEquals ("http://www.w3.org/2004/02/skos/core#exactMatch", info.getPredicate());
         //ystem.out.println(info);
     }
     
@@ -76,7 +76,7 @@ public class LinksetLoaderTest {
     public void testCheckRDF() throws IDMapperException {
         RdfReader reader = new RdfReader(StoreType.TEST);
         String result = reader.getLinksetRDF(5);
-        assertThat(result, containsString("linkset/5/TestDS3"));
+        assertThat(result, containsString("linkset/5/conceptwiki_chemblMolecule"));
         assertThat(result, not(containsString("linkset/2/")));
         assertThat(result, not(containsString("linkset/Test")));
         assertThat(result, not(containsString("OPS-IMS/#Test")));
@@ -87,8 +87,8 @@ public class LinksetLoaderTest {
         RdfReader reader = new RdfReader(StoreType.TEST);
         String result = reader.getLinksetRDF(6);
         //Inverse use ids of none inverse
-        assertThat(result, containsString("linkset/5/TestDS3"));
-        assertThat(result, not(containsString("linkset/6/TestDS3")));
+        assertThat(result, containsString("linkset/5/conceptwiki_chemblMolecule"));
+        assertThat(result, not(containsString("linkset/6/conceptwiki_chemblMolecule")));
     }
     
     @Test(expected=IDMapperLinksetException.class)

@@ -30,7 +30,7 @@ import org.bridgedb.IDMapperException;
 public abstract class URLListenerTest extends URLMapperTestBase{
         
     protected static URLListener listener;
-    protected static final String TEST_PREDICATE = "http://www.bridgedb.org/test#testPredicate";
+    protected static final String TEST_PREDICATE = "http://www.w3.org/2004/02/skos/core#exactMatch";
     private static final boolean SYMETRIC = true;
     private static final boolean ORIGINAL = false;
     private static final boolean TRANSATIVE = true;

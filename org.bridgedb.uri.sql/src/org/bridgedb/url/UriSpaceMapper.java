@@ -36,19 +36,7 @@ public class UriSpaceMapper {
     
     public static Map<String,DataSource> getUriSpaceMappings(){
        HashMap <String,DataSource> map = new HashMap <String,DataSource>();
-       DataSource dataSource = DataSource.register("TestDS1", "TestDS1"). urlPattern("http://www.foo.com/$id")
-                .idExample("123").asDataSource();
-       map.put("http://www.foo.com/", dataSource);
-       dataSource = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id")
-                .idExample("123").asDataSource();
-       map.put("http://www.example.com/", dataSource);
-       map.put("http://rdf.example.com/", dataSource);
-       dataSource = DataSource.register("TestDS3", "TestDS3")
-               .urlPattern("http://www.example.org#$id")
-                .idExample("123").asDataSource();
-       map.put("http://www.example.org#", dataSource);
-       map.put("http://rdf.example.org#", dataSource);
-       dataSource = DataSource.register("Chembl 2 Compound", "Chembl 2 Compound")
+       DataSource dataSource = DataSource.register("Chembl 2 Compound", "Chembl 2 Compound")
                .urlPattern("http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id")
                 .idExample("698788").asDataSource();
        map.put("http://chem2bio2rdf.org/chembl/resource/chembl_compounds/", dataSource);
@@ -91,9 +79,9 @@ public class UriSpaceMapper {
                 .idExample("O43451").asDataSource();
        map.put("http://purl.uniprot.org/uniprot/", dataSource);
        map.put("http://www.uniprot.org/uniprot/", dataSource);
-       dataSource = DataSource.register("ChemSpider", "ChemSpider")
-               .urlPattern("http://rdf.chemspider.com/$id")
-                .idExample("43").asDataSource();
+       dataSource = DataSource.register("Cs", "Chemspider").
+               urlPattern("http://www.chemspider.com/Chemical-Structure.$id.html")
+               .idExample("43").asDataSource();
        map.put("http://rdf.chemspider.com/", dataSource);
        map.put("http://www.chemspider.com/", dataSource);
        dataSource = DataSource.register("ConceptWiki", "ConceptWiki")

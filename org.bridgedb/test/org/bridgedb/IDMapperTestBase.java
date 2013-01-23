@@ -35,10 +35,11 @@ public abstract class IDMapperTestBase {
     //This DataSource MUST not be supported
     protected static DataSource DataSourceBad;
       
-    //The id for map1xref1
-    protected static String goodId1;
-    protected static String goodId2;
-    protected static String goodId3;
+    protected static String ds1Id1;
+    protected static String ds2Id1;
+    protected static String ds3Id1;
+    protected static String ds2Id2;
+    protected static String ds2Id3;
     //Set of Xrefs that are expected to map together.
     protected static Xref map1xref1;
     protected static Xref map1xref2;
@@ -77,34 +78,35 @@ public abstract class IDMapperTestBase {
      */
     public static void setupXref() throws IDMapperException{
         //If the actual source to be tested does not contain these please overwrite with ones that do exist.
-        goodId1 = "123";
-        DataSource1 = DataSource.register("TestDS1", "TestDS1"). urlPattern("http://www.foo.com/$id")
-                .idExample(goodId1).asDataSource();
-        DataSource2 = DataSource.register("TestDS2", "TestDS2").urlPattern("http://www.example.com/$id")
-                .idExample(goodId1).asDataSource();
-        DataSource3 = DataSource.register("TestDS3", "TestDS3").urlPattern("http://www.example.org#$id")
-                .idExample(goodId1).asDataSource();
+        DataSource1 = DataSource.register("ConceptWiki", "ConceptWiki"). urlPattern("http://www.conceptwiki.org/concept/$id")
+                .idExample("38932552-111f-4a4e-a46a-4ed1d7bdf9d5").asDataSource();
+        DataSource2 = DataSource.register("Cs", "Chemspider").urlPattern("http://www.chemspider.com/Chemical-Structure.$id.html")
+                .idExample("187440").asDataSource();
+        DataSource3 = DataSource.register("Chembl 13 Molecule", "Chembl 13 Molecule").urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/$id")
+                .idExample("m276734").asDataSource();
         //This DataSource MUST not be supported
         DataSourceBad = DataSource.register("TestDSBad", "TestDSBad")
                 .urlPattern("www.NotInTheURlMapper.com#$id").asDataSource();
 
         //Set of Xrefs that are expected to map together.
         //Note: Ids intentionally equals for testing of DataCollection
-        goodId1 = "123";
-        map1xref1 = new Xref(goodId1, DataSource1);
-        map1xref2 = new Xref(goodId1, DataSource2);
-        map1xref3 = new Xref(goodId1, DataSource3);
+        ds1Id1 = "38932552-111f-4a4e-a46a-4ed1d7bdf9d5";
+        map1xref1 = new Xref(ds1Id1, DataSource1);
+        ds2Id1 = "187440";
+        map1xref2 = new Xref(ds2Id1, DataSource2);
+        ds3Id1 = "m276734";
+        map1xref3 = new Xref(ds3Id1, DataSource3);
         //Second set of Xrefs that are expected to map together.
         //But these are not expected NOT to map to the first set
-        goodId2 = "456";
-        map2xref1 = new Xref(goodId2, DataSource1);
-        map2xref2 = new Xref(goodId2, DataSource2);
-        map2xref3 = new Xref(goodId2, DataSource3);
+        map2xref1 = new Xref("bd42675d-9966-48f5-b42e-f6a0c5ec6794", DataSource1);
+        ds2Id2 = "18";
+        map2xref2 = new Xref(ds2Id2, DataSource2);
+        map2xref3 = new Xref("m370186", DataSource3);
         //Third Set of Xref which again should map to eachothe but not the above
-        goodId3 = "789";
-        map3xref1 = new Xref(goodId3, DataSource1);
-        map3xref2 = new Xref(goodId3, DataSource2);
-        map3xref3 = new Xref(goodId3, DataSource3);
+        map3xref1 = new Xref("9d4a6a08-6757-4ff2-98c1-e3c8b3e095cc", DataSource1);
+        ds2Id3 = "50";
+        map3xref2 = new Xref(ds2Id3 , DataSource2);
+        map3xref3 = new Xref("m520018", DataSource3);
         //Add an id that does not exist and can not be used in freesearch
         //Or null if all Strings can be used.
         badID = "ThisIdIsNotinTheSystem";

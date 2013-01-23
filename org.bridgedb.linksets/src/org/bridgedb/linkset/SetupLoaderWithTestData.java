@@ -34,9 +34,9 @@ public class SetupLoaderWithTestData {
         ConfigReader.logToConsole();
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.LOAD);
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample2to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/sample1to3.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cs-cm.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cs-cm.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chemspider-void.ttl", StoreType.LOAD, ValidationType.VOID);
         linksetLoader.loadFile("../org.bridgedb.metadata/test-data/chembl-rdf-void.ttl", StoreType.LOAD, ValidationType.VOID);
 	}
