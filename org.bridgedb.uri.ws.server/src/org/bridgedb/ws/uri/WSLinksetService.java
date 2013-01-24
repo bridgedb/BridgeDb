@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri;
 
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -53,9 +53,9 @@ import org.openrdf.rio.RDFFormat;
  * 
  * @author Christian
  */
-public class WSLinksetService extends WSUrlService{
+public class WSLinksetService extends WSVoidService{
     
-    static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
+    static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
     public WSLinksetService()  throws IDMapperException   {
         super();

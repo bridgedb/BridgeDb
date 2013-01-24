@@ -21,8 +21,8 @@ package org.bridgedb.ws.client;
 
 import org.bridgedb.IDMapperException;
 import org.bridgedb.ws.WSOpsClientFactory;
-import org.bridgedb.ws.WSOpsInterface;
-import org.bridgedb.ws.WSOpsMapper;
+import org.bridgedb.ws.WSUriInterface;
+import org.bridgedb.ws.WSUriMapper;
 import org.junit.BeforeClass;
 
 /**
@@ -33,8 +33,8 @@ public class IDMapperCapabilitiesTest  extends org.bridgedb.utils.IDMapperCapabi
     
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {
-        WSOpsInterface webService = WSOpsClientFactory.createTestWSClient();
-        capabilities = new WSOpsMapper(webService).getCapabilities();
+        WSUriInterface webService = WSOpsClientFactory.createTestWSClient();
+        capabilities = new WSUriMapper(webService).getCapabilities();
     }
 
 }

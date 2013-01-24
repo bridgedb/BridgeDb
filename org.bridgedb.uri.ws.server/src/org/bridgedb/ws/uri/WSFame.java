@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
@@ -48,7 +48,7 @@ import org.bridgedb.url.Mapping;
  * 
  * @author Christian
  */
-public class WSFame extends WSOpsInterfaceService {
+public class WSFame extends WSUriInterfaceService {
     
     protected final NumberFormat formatter;
         
@@ -148,7 +148,7 @@ public class WSFame extends WSOpsInterfaceService {
         sb.append("\">Home Page</a></p>");
                 
         sb.append("\n<p>");
-        WSOpsApi api = new WSOpsApi();
+        WSUriApi api = new WSUriApi();
 
         sb.append("<h2>Support services include:<h2>");
         sb.append("<dl>");      

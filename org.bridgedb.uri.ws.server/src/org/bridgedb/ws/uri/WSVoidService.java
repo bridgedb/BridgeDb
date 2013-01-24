@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
@@ -37,25 +37,25 @@ import org.bridgedb.linkset.rdf.RdfReader;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
-import org.bridgedb.ws.server.SourceTargetCounter;
+import org.bridgedb.ws.WsUriConstants;
 
 /**
  * This class adds the html versions of the SQLUrlMapper methods
  * @author Christian
  */
-public class WSUrlService extends WSFame{
+public class WSVoidService extends WSFame{
     
-    static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
+    static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
-    public WSUrlService()  throws IDMapperException   {
+    public WSVoidService()  throws IDMapperException   {
         super();
     }
             
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/getMappingInfo")
-    public Response getMappingInfo(@QueryParam(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
+    public Response getMappingInfo(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
             @Context HttpServletRequest httpServletRequest) 
             throws IDMapperException, UnsupportedEncodingException {
         List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos(scrCode, targetCode);
@@ -77,7 +77,7 @@ public class WSUrlService extends WSFame{
     
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/" + WsOpsConstants.GRAPHVIZ)
+    @Path("/" + WsUriConstants.GRAPHVIZ)
     public Response graphvizDot() throws IDMapperException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos(null, null);
