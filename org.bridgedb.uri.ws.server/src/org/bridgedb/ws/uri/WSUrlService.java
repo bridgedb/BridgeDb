@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
@@ -37,7 +37,7 @@ import org.bridgedb.linkset.rdf.RdfReader;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
-import org.bridgedb.ws.server.SourceTargetCounter;
+import org.bridgedb.ws.WsOpsConstants;
 
 /**
  * This class adds the html versions of the SQLUrlMapper methods

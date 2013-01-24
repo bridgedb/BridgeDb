@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
@@ -26,6 +26,7 @@ import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.ws.WsOpsConstants;
 
 /**
  *

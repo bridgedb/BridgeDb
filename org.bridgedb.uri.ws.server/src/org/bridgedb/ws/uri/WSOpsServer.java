@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws.server;
+package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
@@ -31,8 +31,8 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.ws.WSLinksetService;
-import org.bridgedb.ws.WSOpsInterfaceService;
+import org.bridgedb.ws.uri.WSLinksetService;
+import org.bridgedb.ws.uri.WSOpsInterfaceService;
 import org.bridgedb.ws.WsOpsConstants;
 
 /**

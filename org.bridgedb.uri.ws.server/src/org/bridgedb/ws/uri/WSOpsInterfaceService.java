@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,6 +44,10 @@ import org.bridgedb.url.Mapping;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
+import org.bridgedb.ws.WSCoreService;
+import org.bridgedb.ws.WSOpsInterface;
+import org.bridgedb.ws.WsConstants;
+import org.bridgedb.ws.WsOpsConstants;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
 import org.bridgedb.ws.bean.MappingSetInfoBean;

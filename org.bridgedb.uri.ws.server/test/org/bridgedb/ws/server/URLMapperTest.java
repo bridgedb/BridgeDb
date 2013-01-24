@@ -24,7 +24,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.StoreType;
-import org.bridgedb.ws.WSOpsInterfaceService;
+import org.bridgedb.ws.uri.WSOpsInterfaceService;
 import org.bridgedb.ws.WSOpsMapper;
 import org.junit.BeforeClass;
 
