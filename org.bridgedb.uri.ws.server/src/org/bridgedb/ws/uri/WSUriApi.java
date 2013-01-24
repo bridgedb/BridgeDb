@@ -26,18 +26,18 @@ import java.util.Set;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
-import org.bridgedb.ws.WsOpsConstants;
+import org.bridgedb.ws.WsUriConstants;
 
 /**
  *
  * @author Christian
  */
-public class WSOpsApi extends WSCoreApi {
+public class WSUriApi extends WSCoreApi {
      
-    private final String FIRST_URL_PARAMETER = "?" + WsOpsConstants.URL + "=";
-    private final String TARGET_URI_SPACE_PARAMETER = "&" + WsOpsConstants.TARGET_URI_SPACE + "=";
+    private final String FIRST_URL_PARAMETER = "?" + WsUriConstants.URL + "=";
+    private final String TARGET_URI_SPACE_PARAMETER = "&" + WsUriConstants.TARGET_URI_SPACE + "=";
     
-    public WSOpsApi() {      
+    public WSUriApi() {      
     }
             
     protected void describeParameter(StringBuilder sb){
@@ -46,22 +46,22 @@ public class WSOpsApi extends WSCoreApi {
         sb.append("<h3>Ops Exstension Parameters</h3>");
         sb.append("<ul>");
         sb.append("<dt><a name=\"");
-                sb.append(WsOpsConstants.URL);
+                sb.append(WsUriConstants.URL);
                 sb.append("\">");
-                sb.append(WsOpsConstants.URL);
+                sb.append(WsUriConstants.URL);
                 sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with this URL.</li>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
             sb.append("<li>Only one ");
-                    sb.append(WsOpsConstants.URL);
+                    sb.append(WsUriConstants.URL);
                     sb.append(" parameters is supported.</li>");
             sb.append("</ul>");
          sb.append("<dt><a name=\"");
-                sb.append(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                 sb.append("\">");
-                sb.append(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                 sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>Limits the results to ones with URLs in this/these URISpace(s) as a target.</li>");
@@ -75,45 +75,45 @@ public class WSOpsApi extends WSCoreApi {
 
     protected final void introduce_URLMapper(StringBuilder sb, boolean freeSearchSupported) {
         sb.append("<dt><a href=\"#");
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append("\">");
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append("</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("<dt><a href=\"#");
-                sb.append(WsOpsConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URL_EXISTS);
                 sb.append("\">");
-                sb.append(WsOpsConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URL_EXISTS);
                 sb.append("</a></dt>");
         sb.append("<dd>State if the URL is know to the Mapping Service or not</dd>");
         if (freeSearchSupported){
             sb.append("<dt><a href=\"#");
-                    sb.append(WsOpsConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URL_SEARCH);
                     sb.append("\">");
-                    sb.append(WsOpsConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URL_SEARCH);
                     sb.append("</a></dt>");
             sb.append("<dd>Searches for URLs that have this ending.</dd>");    
         } else {
             sb.append("<dt>");
-                    sb.append(WsOpsConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URL_SEARCH);
                     sb.append("</a></dt>");
 
             sb.append("<dd>This is currently not supported.</dd>");            
         }
         ///toXref
         sb.append("<dt><a href=\"#");
-                sb.append(WsOpsConstants.MAPPING);
+                sb.append(WsUriConstants.MAPPING);
                 sb.append("\">");
-                sb.append(WsOpsConstants.MAPPING);
+                sb.append(WsUriConstants.MAPPING);
                 sb.append("</a></dt>");
         sb.append("<dd>Returns the mapping for with the specific id</dd>");
         ///getSampleSourceURLs
         //getMappingStatistics
         //getMappingSetInfos
         sb.append("<dt><a href=\"#");
-                sb.append(WsOpsConstants.DATA_SOURCE);
+                sb.append(WsUriConstants.DATA_SOURCE);
                 sb.append("\">");
-                sb.append(WsOpsConstants.DATA_SOURCE);
+                sb.append(WsUriConstants.DATA_SOURCE);
                 sb.append("</a></dt>");
         sb.append("<dd>Returns the DataSource and associated UriSpace(s) with a specific id</dd>");
     }
@@ -134,42 +134,42 @@ public class WSOpsApi extends WSCoreApi {
     private void describe_mapURL(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) 
             throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append("\">");
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>List the URLs that map to this URL</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsOpsConstants.URL);
+                        sb.append(WsUriConstants.URL);
                         sb.append("\">");
-                        sb.append(WsOpsConstants.URL_EXISTS);
+                        sb.append(WsUriConstants.URL_EXISTS);
                         sb.append("</a></li>");
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                         sb.append("\">");
-                        sb.append(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                         sb.append("</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URLEncoder.encode(URL1, "UTF-8"));
                 sb.append("\">");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URL1);
                 sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URLEncoder.encode(URL2, "UTF-8"));
                 for (String URISpace:URI2Spaces){
@@ -178,7 +178,7 @@ public class WSOpsApi extends WSCoreApi {
                 }
                 sb.append("\">");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsOpsConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP_URL);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URL2);
                 for (String URISpace:URI2Spaces){
@@ -191,18 +191,18 @@ public class WSOpsApi extends WSCoreApi {
     
     private void describe_URLExists(StringBuilder sb, String URL) throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URL_EXISTS);
                 sb.append("\">");
-                sb.append(WsOpsConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URL_EXISTS);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>State if the URL is know to the Mapping Service or not</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsOpsConstants.URL);
+                        sb.append(WsUriConstants.URL);
                         sb.append("\">");
-                        sb.append(WsOpsConstants.URL);
+                        sb.append(WsUriConstants.URL);
                         sb.append("</a></li>");
                 sb.append("<ul>");
                 sb.append("<li>Currently limited to single URI</li>");
@@ -210,11 +210,11 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.URL_EXISTS);
+                    sb.append(WsUriConstants.URL_EXISTS);
                     sb.append(FIRST_URL_PARAMETER);
                     sb.append(URLEncoder.encode(URL, "UTF-8"));
                     sb.append("\">");
-                    sb.append(WsOpsConstants.URL_EXISTS);
+                    sb.append(WsUriConstants.URL_EXISTS);
                     sb.append(FIRST_URL_PARAMETER);
                     sb.append(URL);
                     sb.append("</a></li>");    
@@ -223,37 +223,37 @@ public class WSOpsApi extends WSCoreApi {
     
     private void describe_URLSearch(StringBuilder sb, String URL) throws UnsupportedEncodingException, IDMapperException{
         sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.URL_SEARCH);
+                sb.append(WsUriConstants.URL_SEARCH);
                 sb.append("\">");
-                sb.append(WsOpsConstants.URL_SEARCH);
+                sb.append(WsUriConstants.URL_SEARCH);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Searches for URLs that have this ending.</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsOpsConstants.TEXT);
+                        sb.append(WsUriConstants.TEXT);
                         sb.append("\">");
-                        sb.append(WsOpsConstants.TEXT);
+                        sb.append(WsUriConstants.TEXT);
                         sb.append("</a></li>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsOpsConstants.LIMIT);
+                        sb.append(WsUriConstants.LIMIT);
                         sb.append("\">");
-                        sb.append(WsOpsConstants.LIMIT);
+                        sb.append(WsUriConstants.LIMIT);
                         sb.append("</a> (default available)</li>");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URL_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(URLEncoder.encode(URL, "UTF-8"));
-                    sb.append(WsOpsConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URL_SEARCH);
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("\">");
-                    sb.append(WsOpsConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URL_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(URL);
-                    sb.append(WsOpsConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URL_SEARCH);
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("</a></li>");    
             sb.append("</ul>");        
@@ -261,15 +261,15 @@ public class WSOpsApi extends WSCoreApi {
        
     protected final void introduce_Info(StringBuilder sb) {
         sb.append("<dt><a href=\"#");
-                sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                sb.append(WsUriConstants.GET_MAPPING_INFO);
                 sb.append("\">");
-                sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                sb.append(WsUriConstants.GET_MAPPING_INFO);
                 sb.append("</a></dt>");
         sb.append("<dd>Brings up a table of all the mappings in the system by URISpace</dd>");
         sb.append("<dt><a href=\"#");
-                sb.append(WsOpsConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("\">");
-                sb.append(WsOpsConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("</a></dt>");
         sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>");           
     }
@@ -277,49 +277,49 @@ public class WSOpsApi extends WSCoreApi {
     protected final void describe_Info(StringBuilder sb, Xref first, Set<Xref> firstMaps) throws IDMapperException, UnsupportedEncodingException {
         sb.append("<h2>URL based methods");
         sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                sb.append(WsUriConstants.GET_MAPPING_INFO);
                 sb.append("\">");
-                sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                sb.append(WsUriConstants.GET_MAPPING_INFO);
                 sb.append("</h3>");
                 sb.append("<ul>");
             sb.append("<li>Brings up a table/List of mappings in the system by URISpaces</li>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
                         sb.append("\">");
-                        sb.append(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
                         sb.append("</a></li>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                         sb.append("\">");
-                        sb.append(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                         sb.append("</a> (default available)</li>");
                 sb.append("</ul>");           
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                    sb.append(WsUriConstants.GET_MAPPING_INFO);
                     sb.append("\">");
-                    sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                    sb.append(WsUriConstants.GET_MAPPING_INFO);
                     sb.append("</a></li>");    
             sb.append("<li>XML Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.GET_MAPPING_INFO);
-                    sb.append(WsOpsConstants.XML);
+                    sb.append(WsUriConstants.GET_MAPPING_INFO);
+                    sb.append(WsUriConstants.XML);
                     sb.append("\">");
-                    sb.append(WsOpsConstants.GET_MAPPING_INFO);
-                    sb.append(WsOpsConstants.XML);
+                    sb.append(WsUriConstants.GET_MAPPING_INFO);
+                    sb.append(WsUriConstants.XML);
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                     String tgtSysCode = firstMaps.iterator().next().getDataSource().getSystemCode();
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                    sb.append(WsUriConstants.GET_MAPPING_INFO);
                     sb.append(FIRST_SOURCE_PARAMETER);
                     sb.append(first.getDataSource().getSystemCode());
                     sb.append(TARGET_PARAMETER);
                     sb.append(firstMaps.iterator().next().getDataSource().getSystemCode());
                     sb.append("\">");
-                    sb.append(WsOpsConstants.GET_MAPPING_INFO);
+                    sb.append(WsUriConstants.GET_MAPPING_INFO);
                     sb.append(FIRST_SOURCE_PARAMETER);
                     sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
                     sb.append(TARGET_PARAMETER);
@@ -330,9 +330,9 @@ public class WSOpsApi extends WSCoreApi {
             
     protected final void describe_Graphviz(StringBuilder sb) throws IDMapperException, UnsupportedEncodingException {
         sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("\">");
-                sb.append(WsOpsConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Brings up the getMappingInfo as graphviz input.</li>");
@@ -347,18 +347,18 @@ public class WSOpsApi extends WSCoreApi {
             sb.append("<li>No arguements</li>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsOpsConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("\">");
-                sb.append(WsOpsConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("</a></li>");    
             sb.append("</ul>");        
     }
 
    private void describe_mapping(StringBuilder sb, int mappingId) throws IDMapperException {
          sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.MAPPING);
+                sb.append(WsUriConstants.MAPPING);
                 sb.append("\">");
-                sb.append(WsOpsConstants.MAPPING);
+                sb.append(WsUriConstants.MAPPING);
                 sb.append("/id</h3>");
             sb.append("<ul>");
             sb.append("<li>Obtian a mapping</li>");
@@ -368,11 +368,11 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.MAPPING);
+                    sb.append(WsUriConstants.MAPPING);
                     sb.append("/");
                     sb.append(mappingId);
                     sb.append("\">");
-                    sb.append(WsOpsConstants.MAPPING);
+                    sb.append(WsUriConstants.MAPPING);
                     sb.append("/");
                     sb.append(mappingId);
                     sb.append("</a></li>");    
@@ -382,9 +382,9 @@ public class WSOpsApi extends WSCoreApi {
    private void describe_dataSource(StringBuilder sb, String sysCode) 
            throws UnsupportedEncodingException, IDMapperException {
          sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.DATA_SOURCE);
+                sb.append(WsUriConstants.DATA_SOURCE);
                 sb.append("\">");
-                sb.append(WsOpsConstants.DATA_SOURCE);
+                sb.append(WsUriConstants.DATA_SOURCE);
                 sb.append("/id</h3>");
             sb.append("<ul>");
             sb.append("<li>Obtian a dataSource</li>");
@@ -394,11 +394,11 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.DATA_SOURCE);
+                    sb.append(WsUriConstants.DATA_SOURCE);
                     sb.append("/");
                     sb.append(URLEncoder.encode(sysCode, "UTF-8"));
                     sb.append("\">");
-                    sb.append(WsOpsConstants.DATA_SOURCE);
+                    sb.append(WsUriConstants.DATA_SOURCE);
                     sb.append("/");
                     sb.append(sysCode);
                     sb.append("</a></li>");    
@@ -408,9 +408,9 @@ public class WSOpsApi extends WSCoreApi {
    private void describe_getOverallStatistics(StringBuilder sb) 
             throws UnsupportedEncodingException, IDMapperException{
          sb.append("<h3><a name=\"");
-                sb.append(WsOpsConstants.GET_OVERALL_STATISTICS);
+                sb.append(WsUriConstants.GET_OVERALL_STATISTICS);
                 sb.append("\">");
-                sb.append(WsOpsConstants.GET_OVERALL_STATISTICS);
+                sb.append(WsUriConstants.GET_OVERALL_STATISTICS);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Returns some high level statistics. </li>");
@@ -419,9 +419,9 @@ public class WSOpsApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsOpsConstants.GET_OVERALL_STATISTICS);
+                    sb.append(WsUriConstants.GET_OVERALL_STATISTICS);
                     sb.append("\">");
-                    sb.append(WsOpsConstants.GET_OVERALL_STATISTICS);
+                    sb.append(WsUriConstants.GET_OVERALL_STATISTICS);
                     sb.append("</a></li>");    
             sb.append("</ul>");        
    }

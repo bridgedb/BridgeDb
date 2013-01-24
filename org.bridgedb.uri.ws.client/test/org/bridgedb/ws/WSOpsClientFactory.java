@@ -27,10 +27,10 @@ import org.bridgedb.IDMapperException;
  */
 public class WSOpsClientFactory extends org.bridgedb.utils.IDMapperTestBase{
     
-    public static WSOpsInterface createTestWSClient() throws IDMapperException{
+    public static WSUriInterface createTestWSClient() throws IDMapperException{
         setupXref();
         //ystem.out.println("in WSCoreInterface 1");
-        WSOpsInterface webService = new WSOpsClient("http://localhost:8080/OPS-IMS");
+        WSUriInterface webService = new WSOpsClient("http://localhost:8080/OPS-IMS");
         //ystem.out.println("in WSCoreInterface 2");
         try { 
             webService.isFreeSearchSupported();

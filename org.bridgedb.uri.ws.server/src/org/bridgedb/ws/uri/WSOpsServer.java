@@ -32,8 +32,8 @@ import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.ws.uri.WSLinksetService;
-import org.bridgedb.ws.uri.WSOpsInterfaceService;
-import org.bridgedb.ws.WsOpsConstants;
+import org.bridgedb.ws.uri.WSUriInterfaceService;
+import org.bridgedb.ws.WsUriConstants;
 
 /**
  *
@@ -41,7 +41,7 @@ import org.bridgedb.ws.WsOpsConstants;
  */
 public class WSOpsServer extends WSLinksetService{
     
-    static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
+    static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
     public WSOpsServer()  throws IDMapperException   {
         super();
@@ -98,9 +98,9 @@ public class WSOpsServer extends WSLinksetService{
         sb.append("\n<p>The Main OPS method (when not using the QueryExpander on the same machine) is <a href=\"/");
         sb.append(getServiceName());
         sb.append("/api/#");
-        sb.append(WsOpsConstants.MAP_URL);
+        sb.append(WsUriConstants.MAP_URL);
         sb.append("\">");
-        sb.append(WsOpsConstants.MAP_URL);
+        sb.append(WsUriConstants.MAP_URL);
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("\n<p><a href=\"/");
         sb.append(getServiceName());
