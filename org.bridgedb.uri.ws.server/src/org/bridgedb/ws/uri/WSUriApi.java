@@ -145,15 +145,15 @@ public class WSUriApi extends WSCoreApi {
                 sb.append("<li><a href=\"#");
                         sb.append(WsUriConstants.URL);
                         sb.append("\">");
-                        sb.append(WsUriConstants.URL_EXISTS);
+                        sb.append(WsUriConstants.URL);
                         sb.append("</a></li>");
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.TARGET_URI_SPACE);
                         sb.append("\">");
-                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append(WsUriConstants.TARGET_URI_SPACE);
                         sb.append("</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
