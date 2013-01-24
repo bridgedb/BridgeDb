@@ -131,14 +131,11 @@ public class WSOpsClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<URLBean> getSampleSourceURLs() throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        //Make service call
-        List<URLBean> result = 
-                webResource.path(WsUriConstants.GET_SAMPLE_SOURCE_URLS)
-                .queryParams(params)
+    public List<Mapping> getSampleMappings() throws IDMapperException {
+        List<Mapping> result = 
+                webResource.path(WsUriConstants.GET_SAMPLE_MAPPINGS)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<URLBean>>() {});
+                .get(new GenericType<List<Mapping>>() {});
          return result;
     }
 

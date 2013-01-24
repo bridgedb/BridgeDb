@@ -49,7 +49,7 @@ public interface WSUriInterface extends WSCoreInterface{
 
     public Mapping getMapping(String id) throws IDMapperException;
 
-    public List<URLBean> getSampleSourceURLs() throws IDMapperException;
+    public List<Mapping> getSampleMappings() throws IDMapperException;
 
     public OverallStatisticsBean getOverallStatistics() throws IDMapperException;
 
@@ -61,31 +61,4 @@ public interface WSUriInterface extends WSCoreInterface{
 
     public String getSqlCompatVersion() throws IDMapperException;
      
-    //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
-    //        String includeWarnings) throws IDMapperException;
-
-    //public ValidationBean validateStringAsLinksetVoid(String info, String mimeType) throws IDMapperException;
-
-    /*public String loadString(String info, String mineType, String storeType, String validationType) 
-            throws IDMapperException;
-
-    public String saveString(String info, String mineType, String storeType, String validationType) 
-            throws IDMapperException;
-
-    public String checkStringValid(String info, String defaultMIMEType, String storeType, String validationType) 
-            throws IDMapperException;
-
-    public ValidationBean validateInputStream(InputStream inputStream, String mimeType, String storeType, 
-            String validationType, String includeWarnings)throws IDMapperException;
-
-    public String loadInputStream(String source, InputStream inputStream, String mimeType, String storeType, 
-            String validationType);
-
-    public String saveInputStream(String source, InputStream inputStream, String mimeType, String storeType, 
-            String validationType);
-
-    public void checkInputStreamValid(String source, InputStream inputStream, String mimeType, String storeType, 
-            String validationType);
-    */
-
  }
