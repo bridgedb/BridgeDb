@@ -48,13 +48,13 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
  *
  * @author Christian
  */
-public class WSOpsMapper extends WSCoreMapper implements URLMapper{
+public class WSUriMapper extends WSCoreMapper implements URLMapper{
     
-    WSOpsInterface opsService;
+    WSUriInterface uriService;
     
-    public WSOpsMapper(WSOpsInterface opsService){
-        super(opsService);
-        this.opsService = opsService;
+    public WSUriMapper(WSUriInterface uriService){
+        super(uriService);
+        this.uriService = uriService;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public Set<String> mapURL(String sourceURL, String... targetURISpaces) throws IDMapperException {
-        List<Mapping> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
+        List<Mapping> beans = uriService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
         HashSet<String> targetURLS = new HashSet<String>(); 
         for (Mapping bean:beans){
             targetURLS.addAll(bean.getTargetURL());
@@ -79,7 +79,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public Set<String> mapToURLs(Xref xref, String... targetURISpaces) throws IDMapperException {
-        List<Mapping> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
+        List<Mapping> beans = uriService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
         HashSet<String> targetURLS = new HashSet<String>(); 
         for (Mapping bean:beans){
             targetURLS.addAll(bean.getTargetURL());
@@ -89,7 +89,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public Set<Mapping> mapToURLsFull(Xref xref, String... targetURISpaces) throws IDMapperException {
-        List<Mapping> beans = opsService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
+        List<Mapping> beans = uriService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), Arrays.asList(targetURISpaces));
         return new HashSet<Mapping>(beans); 
     }
 
@@ -105,35 +105,35 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public boolean uriExists(String URL) throws IDMapperException {
-        return opsService.URLExists(URL).exists();
+        return uriService.URLExists(URL).exists();
     }
 
     @Override
     public Set<String> urlSearch(String text, int limit) throws IDMapperException {
-        URLSearchBean  bean = opsService.URLSearch(text, "" + limit);
+        URLSearchBean  bean = uriService.URLSearch(text, "" + limit);
         return bean.getURLSet();
     }
 
     @Override
     public Set<Mapping> mapURLFull(String sourceURL, String... targetURISpaces) throws IDMapperException {
-        List<Mapping> beans = opsService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
+        List<Mapping> beans = uriService.mapURL(sourceURL, Arrays.asList(targetURISpaces));
         return new HashSet<Mapping>(beans);
     }
 
     @Override
     public Xref toXref(String URL) throws IDMapperException {
-        XrefBean bean = opsService.toXref(URL);
+        XrefBean bean = uriService.toXref(URL);
         return XrefBeanFactory.asXref(bean);
     }
 
     @Override
     public Mapping getMapping(int id) throws IDMapperException {
-        return opsService.getMapping("" + id);
+        return uriService.getMapping("" + id);
     }
 
     @Override
     public Set<String> getSampleSourceURLs() throws IDMapperException {
-        List<URLBean> beans = opsService.getSampleSourceURLs();
+        List<URLBean> beans = uriService.getSampleSourceURLs();
         HashSet<String> results = new HashSet<String>();
         for (URLBean bean:beans){
             results.add(bean.getURL());
@@ -143,19 +143,19 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {
-        OverallStatisticsBean bean = opsService.getOverallStatistics();
+        OverallStatisticsBean bean = uriService.getOverallStatistics();
         return OverallStatisticsBeanFactory.asOverallStatistics(bean);
     }
 
     @Override
     public MappingSetInfo getMappingSetInfo(int mappingSetId) throws IDMapperException {
-        MappingSetInfoBean bean = opsService.getMappingSetInfo("" + mappingSetId);
+        MappingSetInfoBean bean = uriService.getMappingSetInfo("" + mappingSetId);
         return MappingSetInfoBeanFactory.asMappingSetInfo(bean);
     }
 
     @Override
     public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException {
-        List<MappingSetInfoBean> beans = opsService.getMappingSetInfos(sourceSysCode, targetSysCode);
+        List<MappingSetInfoBean> beans = uriService.getMappingSetInfos(sourceSysCode, targetSysCode);
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 
         for (MappingSetInfoBean bean:beans){
             results.add(MappingSetInfoBeanFactory.asMappingSetInfo(bean));
@@ -165,7 +165,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
    
     @Override
     public Set<String> getUriSpaces(String dataSource) throws IDMapperException {
-        DataSourceUriSpacesBean bigBean = opsService.getDataSource(dataSource);
+        DataSourceUriSpacesBean bigBean = uriService.getDataSource(dataSource);
         List<UriSpaceBean> beans = bigBean.getUriSpace(); 
         HashSet<String> results = new HashSet<String>();
         for (UriSpaceBean bean:beans){
@@ -188,65 +188,7 @@ public class WSOpsMapper extends WSCoreMapper implements URLMapper{
 
     @Override
     public int getSqlCompatVersion() throws IDMapperException {
-        return Integer.parseInt(opsService.getSqlCompatVersion());
+        return Integer.parseInt(uriService.getSqlCompatVersion());
     }
     
-   // *****   LinksetInterfaceMinimal Methods
-    
-    /*@Override
-    public String validateString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType, boolean includeWarnings) throws IDMapperException {
-        ValidationBean bean = opsService.validateString(info, format.getDefaultMIMEType(), storeType.toString(), 
-                validationType.toString(), Boolean.toString(includeWarnings));
-        return bean.getOkReport();
-    }
-
-    @Override
-     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType, boolean includeWarnings) throws IDMapperException{
-        ValidationBean bean = opsService.validateInputStream(inputStream, format.getDefaultMIMEType(), storeType.toString(), 
-                validationType.toString(), Boolean.toString(includeWarnings));
-        return bean.getOkReport();
-    }
-
-    @Override
-    public String loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException {
-        return opsService.loadString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
-    }
-
-    @Override
-    public String saveString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException {
-        return opsService.saveString(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
-    }
-
-    @Override
-    public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException {
-        opsService.checkStringValid(info, format.getDefaultMIMEType(), storeType.toString(), validationType.toString());
-    }
-
-    @Override
-    public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException {
-         return opsService.loadInputStream(source, inputStream, format.getDefaultMIMEType(), storeType.toString(), 
-                 validationType.toString());
-    }
-
-    @Override
-    public String saveInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException {
-         return opsService.saveInputStream(source, inputStream, format.getDefaultMIMEType(), storeType.toString(), 
-                 validationType.toString());
-    }
-
-    @Override
-    public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException {
-        opsService.checkInputStreamValid(source, inputStream, format.getDefaultMIMEType(), storeType.toString(), 
-                 validationType.toString());
-    }
-     */
-
-
  }

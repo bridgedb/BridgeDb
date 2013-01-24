@@ -38,7 +38,7 @@ import org.bridgedb.ws.bean.XrefBean;
  *
  * @author Christian
  */
-public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
+public class WSOpsClient extends WSCoreClient implements WSUriInterface{
 
     public final String NO_REPORT = null;
     public final String NO_EXCEPTION = null;
@@ -50,13 +50,13 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     @Override
     public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsOpsConstants.URL, URL);
+        params.add(WsUriConstants.URL, URL);
         for (String target:targetUriSpace){
-            params.add(WsOpsConstants.TARGET_URI_SPACE, target);
+            params.add(WsUriConstants.TARGET_URI_SPACE, target);
         }
         //Make service call
         List<Mapping> result = 
-                webResource.path(WsOpsConstants.MAP_URL)
+                webResource.path(WsUriConstants.MAP_URL)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<Mapping>>() {});
@@ -69,11 +69,11 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
         params.add(WsConstants.ID, id);
         params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
         for (String target:targetUriSpace){
-            params.add(WsOpsConstants.TARGET_URI_SPACE, target);
+            params.add(WsUriConstants.TARGET_URI_SPACE, target);
         }
         //Make service call
         List<Mapping> result = 
-                webResource.path(WsOpsConstants.MAP_TO_URLS)
+                webResource.path(WsUriConstants.MAP_TO_URLS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<Mapping>>() {});
@@ -83,10 +83,10 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     @Override
     public URLExistsBean URLExists(String URL) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsOpsConstants.URL, URL);
+        params.add(WsUriConstants.URL, URL);
         //Make service call
         URLExistsBean result = 
-                webResource.path(WsOpsConstants.URL_EXISTS)
+                webResource.path(WsUriConstants.URL_EXISTS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<URLExistsBean>() {});
@@ -96,11 +96,11 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     @Override
     public URLSearchBean URLSearch(String text, String limitString) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsOpsConstants.TEXT, text);
-        params.add(WsOpsConstants.LIMIT, limitString);
+        params.add(WsUriConstants.TEXT, text);
+        params.add(WsUriConstants.LIMIT, limitString);
         //Make service call
         URLSearchBean result = 
-                webResource.path(WsOpsConstants.URL_SEARCH)
+                webResource.path(WsUriConstants.URL_SEARCH)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<URLSearchBean>() {});
@@ -110,10 +110,10 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     @Override
     public XrefBean toXref(String URL) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsOpsConstants.URL, URL);
+        params.add(WsUriConstants.URL, URL);
         //Make service call
         XrefBean result = 
-                webResource.path(WsOpsConstants.TO_XREF)
+                webResource.path(WsUriConstants.TO_XREF)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<XrefBean>() {});
@@ -124,7 +124,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     public Mapping getMapping(String id) throws IDMapperException {
         //Make service call
         Mapping result = 
-                webResource.path(WsOpsConstants.MAPPING + "/" + id)
+                webResource.path(WsUriConstants.MAPPING + "/" + id)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<Mapping>() {});
          return result;
@@ -135,7 +135,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         List<URLBean> result = 
-                webResource.path(WsOpsConstants.GET_SAMPLE_SOURCE_URLS)
+                webResource.path(WsUriConstants.GET_SAMPLE_SOURCE_URLS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<URLBean>>() {});
@@ -147,7 +147,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         OverallStatisticsBean result = 
-                webResource.path(WsOpsConstants.GET_OVERALL_STATISTICS)
+                webResource.path(WsUriConstants.GET_OVERALL_STATISTICS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<OverallStatisticsBean>() {});
@@ -157,7 +157,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     @Override
     public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException {
         MappingSetInfoBean result = 
-                webResource.path(WsOpsConstants.GET_MAPPING_INFO + "/" + mappingSetId)
+                webResource.path(WsUriConstants.GET_MAPPING_INFO + "/" + mappingSetId)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<MappingSetInfoBean>() {});
          return result;
@@ -166,11 +166,11 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     @Override
     public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE, sourceSysCode);
-        params.add(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE, targetSysCode);
+        params.add(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE, sourceSysCode);
+        params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, targetSysCode);
         //Make service call
         List<MappingSetInfoBean> result = 
-                webResource.path(WsOpsConstants.GET_MAPPING_INFO)
+                webResource.path(WsUriConstants.GET_MAPPING_INFO)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<MappingSetInfoBean>>() {});
@@ -181,7 +181,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException{
         //Make service call
         DataSourceUriSpacesBean result = 
-                webResource.path(WsOpsConstants.DATA_SOURCE + "/" + dataSource)
+                webResource.path(WsUriConstants.DATA_SOURCE + "/" + dataSource)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<DataSourceUriSpacesBean>() {});
          return result;
@@ -211,7 +211,7 @@ public class WSOpsClient extends WSCoreClient implements WSOpsInterface{
     public String getSqlCompatVersion() throws IDMapperException {
         //Make service call
          String result = 
-                webResource.path(WsOpsConstants.SQL_COMPAT_VERSION)
+                webResource.path(WsUriConstants.SQL_COMPAT_VERSION)
                 .accept(MediaType.TEXT_PLAIN)
                 .get(new GenericType<String>() {});
          return result;

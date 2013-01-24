@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,6 +44,10 @@ import org.bridgedb.url.Mapping;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
+import org.bridgedb.ws.WSCoreService;
+import org.bridgedb.ws.WSUriInterface;
+import org.bridgedb.ws.WsConstants;
+import org.bridgedb.ws.WsUriConstants;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
@@ -58,7 +62,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.openrdf.rio.RDFFormat;
 
 @Path("/")
-public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterface {
+public class WSUriInterfaceService extends WSCoreService implements WSUriInterface {
 
     protected URLMapper urlMapper;
     protected LinksetInterfaceMinimal linksetInterface;
@@ -70,21 +74,21 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     public final String FILE = "file";     
     public final String NO_RESULT = null;
     
-    static final Logger logger = Logger.getLogger(WSOpsInterfaceService.class);
+    static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
     /**
      * Defuault constuctor for super classes.
      * 
      * Super classes will have the responsibilites of setting up the idMapper.
      */
-    protected WSOpsInterfaceService() throws IDMapperException {
+    protected WSUriInterfaceService() throws IDMapperException {
         super();
         this.linksetInterface = new LinksetLoader();
         urlMapper = new SQLUrlMapper(false, StoreType.LIVE);
         idMapper = urlMapper;
     }
 
-    public WSOpsInterfaceService(URLMapper urlMapper) throws IDMapperException {
+    public WSUriInterfaceService(URLMapper urlMapper) throws IDMapperException {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
@@ -93,15 +97,15 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.MAP_URL)
+    @Path("/" + WsUriConstants.MAP_URL)
     @Override
-    public List<Mapping> mapURL(@QueryParam(WsOpsConstants.URL) String URL,
-            @QueryParam(WsOpsConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
+    public List<Mapping> mapURL(@QueryParam(WsUriConstants.URL) String URL,
+            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
         if (logger.isDebugEnabled()){
             logger.debug("mapURL called! URL = " + URL + " " + "targetURISpace = " + targetURISpace);
         }
-        if (URL == null) throw new BridgeDBException(WsOpsConstants.URL + " parameter missing.");
-        if (URL.isEmpty()) throw new BridgeDBException(WsOpsConstants.URL + " parameter may not be null.");
+        if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
+        if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
         String[] targetURISpaces = new String[targetURISpace.size()];
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
@@ -112,12 +116,12 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.MAP_TO_URLS)
+    @Path("/" + WsUriConstants.MAP_TO_URLS)
     @Override
     public List<Mapping> mapToURLs(
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsOpsConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
+            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
          if (logger.isDebugEnabled()){
             logger.debug("mapToURLs called! id = " + id + " scrCode = " + scrCode + "targetURISpace = " + targetURISpace);
         }
@@ -135,23 +139,23 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.URL_EXISTS)
+    @Path("/" + WsUriConstants.URL_EXISTS)
     @Override
-    public URLExistsBean URLExists(@QueryParam(WsOpsConstants.URL) String URL) throws IDMapperException {
-        if (URL == null) throw new BridgeDBException(WsOpsConstants.URL + " parameter missing.");
-        if (URL.isEmpty()) throw new BridgeDBException(WsOpsConstants.URL + " parameter may not be null.");
+    public URLExistsBean URLExists(@QueryParam(WsUriConstants.URL) String URL) throws IDMapperException {
+        if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
+        if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
         boolean exists = urlMapper.uriExists(URL);
         return new URLExistsBean(URL, exists);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.URL_SEARCH)
+    @Path("/" + WsUriConstants.URL_SEARCH)
     @Override
-    public URLSearchBean URLSearch(@QueryParam(WsOpsConstants.TEXT) String text,
-            @QueryParam(WsOpsConstants.LIMIT) String limitString) throws IDMapperException {
-        if (text == null) throw new BridgeDBException(WsOpsConstants.TEXT + " parameter missing.");
-        if (text.isEmpty()) throw new BridgeDBException(WsOpsConstants.TEXT + " parameter may not be null.");
+    public URLSearchBean URLSearch(@QueryParam(WsUriConstants.TEXT) String text,
+            @QueryParam(WsUriConstants.LIMIT) String limitString) throws IDMapperException {
+        if (text == null) throw new BridgeDBException(WsUriConstants.TEXT + " parameter missing.");
+        if (text.isEmpty()) throw new BridgeDBException(WsUriConstants.TEXT + " parameter may not be null.");
         if (limitString == null || limitString.isEmpty()){
             Set<String> urls = urlMapper.urlSearch(text, Integer.MAX_VALUE);
             return new URLSearchBean(text, urls);
@@ -164,18 +168,18 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.TO_XREF)
+    @Path("/" + WsUriConstants.TO_XREF)
     @Override
-    public XrefBean toXref(@QueryParam(WsOpsConstants.URL) String URL) throws IDMapperException {
-        if (URL == null) throw new BridgeDBException(WsOpsConstants.URL + " parameter missing.");
-        if (URL.isEmpty()) throw new BridgeDBException(WsOpsConstants.URL + " parameter may not be null.");
+    public XrefBean toXref(@QueryParam(WsUriConstants.URL) String URL) throws IDMapperException {
+        if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
+        if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
         Xref xref = urlMapper.toXref(URL);
         return XrefBeanFactory.asBean(xref);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.MAPPING)
+    @Path("/" + WsUriConstants.MAPPING)
     public Mapping getMapping() throws IDMapperException {
        throw new BridgeDBException("Path parameter missing.");
     }
@@ -183,8 +187,8 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.MAPPING + "/{id}")
-    public Mapping getMapping(@PathParam(WsOpsConstants.ID) String idString) throws IDMapperException {
+    @Path("/" + WsUriConstants.MAPPING + "/{id}")
+    public Mapping getMapping(@PathParam(WsUriConstants.ID) String idString) throws IDMapperException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         int id = Integer.parseInt(idString);
@@ -194,7 +198,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.GET_SAMPLE_SOURCE_URLS) 
+    @Path("/" + WsUriConstants.GET_SAMPLE_SOURCE_URLS) 
     public List<URLBean> getSampleSourceURLs() throws IDMapperException {
         Set<String> URLs = urlMapper.getSampleSourceURLs();
         List<URLBean> beans = new ArrayList<URLBean>();
@@ -209,7 +213,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.GET_OVERALL_STATISTICS) 
+    @Path("/" + WsUriConstants.GET_OVERALL_STATISTICS) 
     public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
         OverallStatistics overallStatistics = urlMapper.getOverallStatistics();
         OverallStatisticsBean bean = OverallStatisticsBeanFactory.asBean(overallStatistics);
@@ -218,18 +222,18 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.GET_MAPPING_INFO + WsOpsConstants.XML) 
-    public List<MappingSetInfoBean> getMappingSetInfosXML(@QueryParam(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
+    @Path("/" + WsUriConstants.GET_MAPPING_INFO + WsUriConstants.XML) 
+    public List<MappingSetInfoBean> getMappingSetInfosXML(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
         return getMappingSetInfos(scrCode, targetCode);
     }
     
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.GET_MAPPING_INFO) 
-    public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsOpsConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsOpsConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
+    @Path("/" + WsUriConstants.GET_MAPPING_INFO) 
+    public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
         List<MappingSetInfo> infos = urlMapper.getMappingSetInfos(scrCode, targetCode);
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
@@ -241,7 +245,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.GET_MAPPING_INFO + "/{id}")
+    @Path("/" + WsUriConstants.GET_MAPPING_INFO + "/{id}")
     public MappingSetInfoBean getMappingSetInfo(@PathParam("id") String idString) throws IDMapperException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
@@ -252,7 +256,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsOpsConstants.DATA_SOURCE)
+    @Path("/" + WsUriConstants.DATA_SOURCE)
     public DataSourceUriSpacesBean getDataSource() throws IDMapperException {
         throw new BridgeDBException("id path parameter missing.");
     }
@@ -260,7 +264,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Override
-    @Path("/" + WsOpsConstants.DATA_SOURCE + "/{id}")
+    @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
     public DataSourceUriSpacesBean getDataSource(@PathParam("id") String id) throws IDMapperException {
         if (id == null) throw new BridgeDBException("Path parameter missing.");
         if (id.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
@@ -273,7 +277,7 @@ public class WSOpsInterfaceService extends WSCoreService implements WSOpsInterfa
     @GET
     @Produces({MediaType.TEXT_PLAIN})
     @Override
-    @Path("/" + WsOpsConstants.SQL_COMPAT_VERSION)
+    @Path("/" + WsUriConstants.SQL_COMPAT_VERSION)
     public String getSqlCompatVersion() throws IDMapperException {
         return "" + urlMapper.getSqlCompatVersion();
     }

@@ -23,7 +23,7 @@ package org.bridgedb.ws;
  *
  * @author Christian
  */
-public class WsOpsConstants extends WsConstants{
+public class WsUriConstants extends WsConstants{
     
     public static final String TARGET_URI_SPACE = "targetURISpace";
     public static final String URL = "URL";
