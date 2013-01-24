@@ -268,7 +268,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
             
         String primary = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.PRIMAY_URI);
         if (primary != null){
-            builder.type(primary);
+            builder.primary(Boolean.parseBoolean(primary));
         }
 
         String type = getPossibleSingletonString(repositoryConnection, dataSourceId, BridgeDBConstants.TYPE_URI);

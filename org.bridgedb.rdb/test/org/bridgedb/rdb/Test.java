@@ -50,8 +50,16 @@ public class Test {
 		start = System.currentTimeMillis();
 		Class.forName ("org.bridgedb.rdb.IDMapperRdb");
 		Class.forName ("org.apache.derby.jdbc.ClientDriver");
-		
-		IDMapper mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens?host=www.wikipathways.org");
+        
+		IDMapper mapper = null;
+        try {
+            mapper = BridgeDb.connect ("idmapper-derbyclient:Homo sapiens?host=www.wikipathways.org");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.println("**** SKIPPPING tests due to Connection error.");
+            org.junit.Assume.assumeTrue(false);        
+        }
+ 
 		end = System.currentTimeMillis();
 		delta = end - start;
 		measure.add ("timing::idmapper-derbyclient connect to two databases", "" + delta, "msec");

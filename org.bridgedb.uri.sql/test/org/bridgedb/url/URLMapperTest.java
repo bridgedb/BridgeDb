@@ -29,6 +29,8 @@ import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.tools.metadata.constants.OwlConstants;
+import org.bridgedb.tools.metadata.constants.SkosConstants;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -138,40 +140,52 @@ public abstract class URLMapperTest extends URLListenerTest{
     public void testMapFullOneToManyNoDataSources() throws IDMapperException{
         report("MapFullOneToManyNoDataSources");
         Set<Mapping> results = urlMapper.mapURLFull(map3URL3, RdfConfig.getProfileURI(0));
+        Set<String> mappedTo = new HashSet<String>();
         for (Mapping URLMapping:results){
             if (URLMapping.getTargetURL().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
-                String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
-                assertThat(URLMapping.getTargetURL().iterator().next(), isOneOf( expectedMatches ) );
-                assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
+                mappedTo.addAll(URLMapping.getTargetURL());
+                String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
+                    OwlConstants.EQUIVALENT_CLASS.stringValue()};
+                assertThat(URLMapping.getPredicate(), isIn(predicates));
                 assertNotNull(URLMapping.getId());
                 assertNotNull(URLMapping.getMappingSetId());
             }
             assertTrue(URLMapping.getSourceURL().contains(map3URL3));
         }
+        String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
+        assertThat(mappedTo, hasItems(expectedMatches));
+        assertThat(mappedTo, not(hasItems(map1URL1)));
+        assertThat(mappedTo, not(hasItems(map2URL2)));
     }
 
     @Test
     public void testMapXrefFullOneToManyNoDataSources() throws IDMapperException{
         report("MapXrefFullOneToManyNoDataSources");
         Set<Mapping> results = urlMapper.mapToURLsFull(map3xref3, RdfConfig.getProfileURI(0));
+        Set<String> mappedTo = new HashSet<String>();
         for (Mapping URLMapping:results){
             if (URLMapping.getTargetURL().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
-                String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
-                assertThat(URLMapping.getTargetURL().iterator().next(), isOneOf( expectedMatches ) );
-                assertEquals(TEST_PREDICATE, URLMapping.getPredicate() );
+                mappedTo.addAll(URLMapping.getTargetURL());
+                String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
+                    OwlConstants.EQUIVALENT_CLASS.stringValue()};
+                assertThat(URLMapping.getPredicate(), isIn(predicates));
                 assertNotNull(URLMapping.getId());
                 assertNotNull(URLMapping.getMappingSetId());
             }
             assertEquals(map3xref3, URLMapping.getSource());
         }
+        String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
+        assertThat(mappedTo, hasItems(expectedMatches));
+        assertThat(mappedTo, not(hasItems(map1URL1)));
+        assertThat(mappedTo, not(hasItems(map2URL2)));
     }
 
     @Test
@@ -289,21 +303,23 @@ public abstract class URLMapperTest extends URLListenerTest{
     public void testFreeSearchGood() throws IDMapperException{
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGood");
-        Set<String> results = urlMapper.urlSearch(goodId1, 10);
+        Set<String> results = urlMapper.urlSearch(ds2Id3, 10);
         //Skip these if there are 10 or more possible ones. No Gurantee whiuch come back
+        System.out.println(ds2Id3);
+        System.out.println(results);
         if (results.size() < 10){
-            assertTrue (results.contains(map1URL1));
-            assertTrue (results.contains(map1URL1));
-            assertTrue (results.contains(map1URL3));
+            assertTrue (results.contains(map3URL2));
+            assertTrue (results.contains(map3URL2a));
         }
-        assertFalse (results.contains(map2URL1));
+        assertFalse (results.contains(map3URL1));
+        assertFalse (results.contains(map1URL2));
     }
     
     @Test
     public void testFreeSearchGoodJust2() throws IDMapperException{
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGoodJust2");
-        Set<String> results = urlMapper.urlSearch(goodId1, 2);
+        Set<String> results = urlMapper.urlSearch(ds2Id2, 2);
         assertEquals (2, results.size());
      }
 
@@ -318,7 +334,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     public void testGetXrefBad() throws IDMapperException {
         report("GetXrefBad");
         Xref xref = urlMapper.toXref(mapBadURL1);
-        String result = xref.getDataSource().getUrl(goodId1);
+        String result = xref.getDataSource().getUrl(ds1Id1);
         assertEquals (mapBadURL1, result);
     }
     

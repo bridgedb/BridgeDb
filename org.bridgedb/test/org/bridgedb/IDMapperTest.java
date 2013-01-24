@@ -64,6 +64,10 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
         Map<Xref, Set<Xref>> results = idMapper.mapID(srcXrefs);
         Set<Xref> resultSet = results.get(map1xref1);
         assertNotNull(resultSet);
+        System.out.println(map1xref1);        
+        System.out.println(resultSet);
+        System.out.println(map1xref2);
+        System.out.println(DataSource.getDataSources());
         assertTrue(resultSet.contains(map1xref2));
         assertTrue(resultSet.contains(map1xref3));
         assertFalse(resultSet.contains(map2xref1));
@@ -177,23 +181,23 @@ public abstract class IDMapperTest extends IDMapperCapabilitiesTest{
     
     @Test
     public void testFreeSearchGood() throws IDMapperException{
+        report("FreeSearchGood");
         org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGood");
-        Set<Xref> results = idMapper.freeSearch(goodId1, 10);
+        Set<Xref> results = idMapper.freeSearch(ds1Id1, 10);
         //there many be many othe results in which case skip testing for specific ones.
-        if (results.size() > 10){
+         if (results.size() < 10){
             assertTrue (results.contains(map1xref1));
-            assertTrue (results.contains(map1xref2));
-            assertTrue (results.contains(map1xref3));
         }
         assertFalse (results.contains(map2xref1));
     }
 
     @Test
+    @Ignore // There is no longer an id in the test data used more than once.
     public void testFreeSearchGoodJust2() throws IDMapperException{
         org.junit.Assume.assumeTrue(idMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGoodJust2");
-        Set<Xref> results = idMapper.freeSearch(goodId1, 2);
+        Set<Xref> results = idMapper.freeSearch("An id used more than twice here", 2);
         assertEquals (2, results.size());
     }
     

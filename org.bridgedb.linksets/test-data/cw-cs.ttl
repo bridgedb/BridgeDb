@@ -18,6 +18,9 @@
 
 :conceptwiki_chemspider a void:Linkset ;
     dcterms:license "unknown" ;
+    foaf:primaryTopic :conceptwiki_chemspider .
+
+:conceptwiki_chemspider a void:Linkset ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemspider ;
     void:subset :conceptwiki ;
@@ -35,8 +38,8 @@
 	dcterms:title "ChemSpider"^^xsd:string ;
     dcterms:license "http://www.chemspider.com/Disclaimer.aspx" ;
     dcterms:subject "unknown" ;
-     pav:version "unknown" ;
-   void:uriSpace <http://rdf.chemspider.com/> .
+    pav:version "unknown" ;
+    void:uriSpace <http://rdf.chemspider.com/> .
    
 <http://www.conceptwiki.org/concept/38932552-111f-4a4e-a46a-4ed1d7bdf9d5> skos:exactMatch <http://rdf.chemspider.com/187440> .
 <http://www.conceptwiki.org/concept/bd42675d-9966-48f5-b42e-f6a0c5ec6794> skos:exactMatch <http://rdf.chemspider.com/18> .

@@ -286,10 +286,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append("SELECT DISTINCT ");
         //TODO get DISTINCT working on Virtuosos
         appendTopConditions(query, 0, limit); 
-        query.append(" targetId as id, target.uriSpace as uriSpace ");
-        query.append("FROM mapping, mappingSet, url as target ");
+        query.append(" sourceId as id, uriSpace ");
+        query.append("FROM mapping, mappingSet, url ");
         query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND mappingSet.targetDataSource = target.dataSource ");
+        query.append("AND mappingSet.SourceDataSource = url.dataSource ");
         query.append("AND sourceId = '");
             query.append(text);
             query.append("' ");

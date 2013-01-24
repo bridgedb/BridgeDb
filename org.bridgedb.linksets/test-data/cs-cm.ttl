@@ -1,0 +1,34 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "ChemSpider to ChEMBL Molecule Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting ConceptWiki concepts 
+    	with ChEMBL-RDF Molecules."""^^xsd:string;
+    foaf:primaryTopic :conceptwiki_chemblMolecule .
+
+:chemspider_chemblMolecule a void:Linkset ;
+    void:subjectsTarget :chemspider ;
+    void:objectsTarget :chemblMolecule ;
+    void:subset :conceptwiki ;
+    void:linkPredicate skos:exactMatch ;
+    dul:expresses rdfs:isDefinedBy ;
+    dcterms:creator <http://www.conceptwiki.org> .
+:chemspider a void:Dataset ;
+	dcterms:title "ChemSpider"^^xsd:string ;
+    dcterms:license <http://www.chemspider.com/Disclaimer.aspx> ;
+   void:uriSpace <http://rdf.chemspider.com/> .
+:chemblMolecule a void:Dataset ;
+	dcterms:title "ChEMBL Molecule"^^xsd:string ;
+    void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/molecule/> .
+   
+<http://rdf.chemspider.com/187440> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m276734> .
+<http://rdf.chemspider.com/18> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m370186> .
+<http://rdf.chemspider.com/50> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m520018> . 

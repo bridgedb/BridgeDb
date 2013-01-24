@@ -29,6 +29,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.BridgeDb;
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourceOverwriteLevel;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -41,6 +42,7 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 
 /**
@@ -241,6 +243,7 @@ public class LinksetExporter {
     }
     
     public static Set<DataSource> extractDataSources(File file) throws IDMapperException {
+        Reporter.println("extractDataSources from " + file.getAbsolutePath());
         HashSet results = new HashSet<DataSource>();
     	if (!file.exists()) {
     		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
@@ -257,11 +260,23 @@ public class LinksetExporter {
         return results;
     }
 
+    public static void writeBioDataSource() throws BridgeDBException{
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
+        BioDataSource.init();
+        File dsfile = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
+        BridgeDBRdfHandler.writeRdfToFile(dsfile, false);
+        
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        BridgeDBRdfHandler.parseRdfFile(dsfile);        
+    }
+    
     public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
         ConfigReader.logToConsole();
-        BioDataSource.init();
-        //File DSfile = new File("../../BioDataSource.ttl");
-        //BridgeDBRdfHandler.parseRdfFile(DSfile);             
+        writeBioDataSource();
+        
+        File dsfile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        BridgeDBRdfHandler.parseRdfFile(dsfile);             
         System.out.println("Parsing finished");
         
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
@@ -274,12 +289,16 @@ public class LinksetExporter {
             canExport(ds);
         }
 
-        File dsfile = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
         BridgeDBRdfHandler.writeRdfToFile(dsfile, false);
+        
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        BridgeDBRdfHandler.parseRdfFile(dsfile);
         
         //LinksetExporter exporter = new LinksetExporter(file);
         //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");
         //exporter.exportAll(directory);
+         
+        
     }
 
 }
