@@ -17,10 +17,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws.client;
+package org.bridgedb.ws.uri.client;
 
 import org.bridgedb.IDMapperException;
-import org.bridgedb.ws.WSOpsClientFactory;
 import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WSUriMapper;
 import org.junit.BeforeClass;
@@ -34,7 +33,7 @@ public class IDMapperTest  extends org.bridgedb.utils.IDMapperTest{
     @BeforeClass
     public static void setupIDMapper() throws IDMapperException {
         connectionOk = false;
-        WSUriInterface webService = WSOpsClientFactory.createTestWSClient();
+        WSUriInterface webService = WsUriClientFactory.createTestWSClient();
         connectionOk = true;
         idMapper = new WSUriMapper(webService);
         capabilities = idMapper.getCapabilities();

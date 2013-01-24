@@ -140,15 +140,10 @@ public class WSUriMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public Set<String> getSampleSourceURLs() throws IDMapperException {
-        List<URLBean> beans = uriService.getSampleSourceURLs();
-        HashSet<String> results = new HashSet<String>();
-        for (URLBean bean:beans){
-            results.add(bean.getURL());
-        }
-        return results;
+    public List<Mapping> getSampleMapping() throws IDMapperException {
+        return uriService.getSampleMappings();
     }
-
+    
     @Override
     public OverallStatistics getOverallStatistics() throws IDMapperException {
         OverallStatisticsBean bean = uriService.getOverallStatistics();
@@ -216,5 +211,5 @@ public class WSUriMapper extends WSCoreMapper implements URLMapper{
     public int getSqlCompatVersion() throws IDMapperException {
         return Integer.parseInt(uriService.getSqlCompatVersion());
     }
-    
- }
+
+  }

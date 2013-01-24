@@ -215,14 +215,14 @@ public interface URLMapper extends IDMapper{
      * @throws IDMapperException 
      */
     public Mapping getMapping(int id)  throws IDMapperException;
-    
+        
     /**
-     * Gets a Sample of Source URls.
+     * Gets a Sample of mappings.
      * 
      * Main use is for writing the api description page
      * @return 5 URLs that would return true for the method urlExists(URL)
      */
-    public Set<String> getSampleSourceURLs() throws IDMapperException;
+    public List<Mapping> getSampleMapping() throws IDMapperException;
     
     /**
      * Obtains some general high level statistics about the data held.

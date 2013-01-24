@@ -216,16 +216,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/" + WsUriConstants.GET_SAMPLE_SOURCE_URLS) 
-    public List<URLBean> getSampleSourceURLs() throws IDMapperException {
-        Set<String> URLs = urlMapper.getSampleSourceURLs();
-        List<URLBean> beans = new ArrayList<URLBean>();
-        for (String URL:URLs){
-            URLBean bean = new URLBean();
-            bean.setURL(URL);
-            beans.add(bean);
-        }
-        return beans;
+    @Path("/" + WsUriConstants.GET_SAMPLE_MAPPINGS) 
+    public List<Mapping> getSampleMappings() throws IDMapperException {
+        return urlMapper.getSampleMapping();
     }
 
     @Override

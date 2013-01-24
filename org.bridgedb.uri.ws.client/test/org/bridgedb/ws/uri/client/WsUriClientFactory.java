@@ -17,20 +17,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri.client;
 
+import org.bridgedb.ws.uri.client.WSUriClient;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.ws.WSUriInterface;
 
 /**
  *
  * @author Christian
  */
-public class WSOpsClientFactory extends org.bridgedb.utils.IDMapperTestBase{
+public class WsUriClientFactory extends org.bridgedb.utils.IDMapperTestBase{
     
     public static WSUriInterface createTestWSClient() throws IDMapperException{
         setupXref();
         //ystem.out.println("in WSCoreInterface 1");
-        WSUriInterface webService = new WSOpsClient("http://localhost:8080/OPS-IMS");
+        WSUriInterface webService = new WSUriClient("http://localhost:8080/OPS-IMS");
         //ystem.out.println("in WSCoreInterface 2");
         try { 
             webService.isFreeSearchSupported();

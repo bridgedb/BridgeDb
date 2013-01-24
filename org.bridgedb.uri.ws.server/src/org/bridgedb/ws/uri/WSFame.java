@@ -27,6 +27,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -36,6 +37,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
@@ -114,33 +116,33 @@ public class WSFame extends WSUriInterfaceService {
         //Long start = new Date().getTime();
         StringBuilder sb = topAndSide("IMS API",  httpServletRequest);
  
-        Set<String> urls = urlMapper.getSampleSourceURLs();  
-        Iterator<String> urlsIt = urls.iterator();
-        Xref first = urlMapper.toXref(urlsIt.next());
-        String sysCode = first.getDataSource().getSystemCode();
-        Xref second =  urlMapper.toXref(urlsIt.next());
-        Set<Xref> firstMaps = idMapper.mapID(first);
+        List<Mapping> mappings = urlMapper.getSampleMapping(); 
+        Mapping mapping1 = mappings.get(0);
+        DataSource dataSource1 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
+        Xref firstSourceXref = new Xref (mapping1.getSourceId(), dataSource1);
+        String sysCode = firstSourceXref.getDataSource().getSystemCode();
+        Mapping mapping2 = mappings.get(1);
+        DataSource dataSource2 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
+        Xref secondSourceXref =  new Xref (mapping2.getSourceId(), dataSource2);
+        Set<Xref> firstMaps = idMapper.mapID(firstSourceXref);
         Iterator<Xref> setIterator = firstMaps.iterator();
         while (setIterator.hasNext()) {
             Xref xref = setIterator.next();
-            if (xref.getDataSource() == first.getDataSource()){
+            if (xref.getDataSource() == firstSourceXref.getDataSource()){
                 setIterator.remove();
             }
         }
         Set<String> keys = idMapper.getCapabilities().getKeys();
-        String URL1 = urlsIt.next();
-        String text = SQLUrlMapper.getId(URL1);
-        String URL2 = urlsIt.next();
-        Set<Mapping> mappings2 = urlMapper.mapURLFull(URL2, RdfConfig.getProfileBaseURI()+ "0");
+        Mapping mapping3 = mappings.get(2);
+        String SourceUrl3 = mapping3.getSourceURL().iterator().next();
+        String text = SQLUrlMapper.getId(SourceUrl3);
+        Mapping mapping4 = mappings.get(3);
+        String sourceUrl4 = mapping4.getSourceURL().iterator().next();
+        Mapping mapping5 = mappings.get(4);
+        int mappingId = mapping5.getId();
         HashSet<String> URI2Spaces = new HashSet<String>();
-        int mappingId = 0;
-        for (Mapping mapping:mappings2){
-            if (mapping.getId() != null){
-                mappingId = mapping.getId();
-            }
-            String targetURL = mapping.getTargetURL().iterator().next();
-            URI2Spaces.add(SQLUrlMapper.getUriSpace(targetURL));            
-        }
+        String targetURL = mapping5.getTargetURL().iterator().next();
+        URI2Spaces.add(SQLUrlMapper.getUriSpace(targetURL));            
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
 
         sb.append("\n<p><a href=\"/");
@@ -161,10 +163,10 @@ public class WSFame extends WSUriInterfaceService {
         
         api.describeParameter(sb);        
         
-        api.describe_IDMapper(sb, first, firstMaps, second, freeSearchSupported);
-        api.describe_IDMapperCapabilities(sb, first, firstMaps, keys, freeSearchSupported);
-        api.describe_URLMapper(sb, URL1, URL2, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
-        api.describe_Info(sb, first, firstMaps);
+        api.describe_IDMapper(sb, firstSourceXref, firstMaps, secondSourceXref, freeSearchSupported);
+        api.describe_IDMapperCapabilities(sb, firstSourceXref, firstMaps, keys, freeSearchSupported);
+        api.describe_URLMapper(sb, SourceUrl3, sourceUrl4, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
+        api.describe_Info(sb, firstSourceXref, firstMaps);
         api.describe_Graphviz(sb);
         
         sb.append("</body></html>");

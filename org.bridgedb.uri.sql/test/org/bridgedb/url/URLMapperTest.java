@@ -364,12 +364,15 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testGetSampleSourceURL() throws IDMapperException {
+    public void testGetSampleMappings() throws IDMapperException {
         report("GetSampleSourceURL");
-        Set<String> results = urlMapper.getSampleSourceURLs();
+        List<Mapping> results = urlMapper.getSampleMapping();
         assertEquals(5, results.size());
-        for (String url:results){
-            assertTrue(urlMapper.uriExists(url));
+        for (Mapping mapping:results){
+            Set<String> sources = mapping.getSourceURL();
+            assertThat(sources.size(), greaterThan(0));
+            Set<String> targets = mapping.getTargetURL();
+            assertThat(targets.size(), greaterThan(0));
         }
     }
 

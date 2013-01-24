@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.ws;
+package org.bridgedb.ws.uri.client;
 
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
@@ -27,6 +27,10 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.url.Mapping;
+import org.bridgedb.ws.WSCoreClient;
+import org.bridgedb.ws.WSUriInterface;
+import org.bridgedb.ws.WsConstants;
+import org.bridgedb.ws.WsUriConstants;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
@@ -40,12 +44,12 @@ import org.bridgedb.ws.bean.XrefBean;
  *
  * @author Christian
  */
-public class WSOpsClient extends WSCoreClient implements WSUriInterface{
+public class WSUriClient extends WSCoreClient implements WSUriInterface{
 
     public final String NO_REPORT = null;
     public final String NO_EXCEPTION = null;
     
-    public WSOpsClient(String serviceAddress) {
+    public WSUriClient(String serviceAddress) {
         super(serviceAddress);
     }
 
@@ -136,14 +140,11 @@ public class WSOpsClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<URLBean> getSampleSourceURLs() throws IDMapperException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        //Make service call
-        List<URLBean> result = 
-                webResource.path(WsUriConstants.GET_SAMPLE_SOURCE_URLS)
-                .queryParams(params)
+    public List<Mapping> getSampleMappings() throws IDMapperException {
+        List<Mapping> result = 
+                webResource.path(WsUriConstants.GET_SAMPLE_MAPPINGS)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<URLBean>>() {});
+                .get(new GenericType<List<Mapping>>() {});
          return result;
     }
 
