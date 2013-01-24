@@ -17,6 +17,6 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
     
-    <bean id="imsImpl" class="org.bridgedb.ws.server.WSOpsServer" />
+    <bean id="imsImpl" class="org.bridgedb.ws.uri.WSOpsServer" />
 
 </beans>
