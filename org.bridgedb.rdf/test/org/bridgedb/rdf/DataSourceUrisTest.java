@@ -19,10 +19,12 @@
 //
 package org.bridgedb.rdf;
 
+import java.io.File;
+import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.TestUtils;
-import static org.hamcrest.number.OrderingComparison.*;
+import static org.hamcrest.Matchers.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -37,6 +39,8 @@ import org.openrdf.model.impl.URIImpl;
  * @author Christian
  */
 public class DataSourceUrisTest extends TestUtils{
+    
+    private static File file1 = new File("test-data/DataSourceMin.ttl");
     
     public DataSourceUrisTest() {
     }
@@ -202,5 +206,17 @@ public class DataSourceUrisTest extends TestUtils{
         assertThat(dataSourceUris3.compareTo(dataSourceUris5), greaterThan(0));
         assertThat(dataSourceUris4.compareTo(dataSourceUris5), lessThan(0));
         assertThat(dataSourceUris5.compareTo(dataSourceUris4), greaterThan(0));
+    }
+    
+    @Test
+    public void testGetUriPatterns() throws BridgeDBException{
+        BridgeDBRdfHandler.parseRdfFile(file1);
+        DataSource dataSource =  DataSource.getBySystemCode("Cs");
+        DataSourceUris dataSourceUris = DataSourceUris.byDataSource(dataSource);
+        Set<UriPattern> result = dataSourceUris.getUriPatterns();
+        UriPattern pattern = UriPattern.byPattern("http://www.chemspider.com/Chemical-Structure.$id.html");
+        assertThat (result, hasItem(pattern));
+        pattern = UriPattern.byPattern("http://identifiers.org/chemspider/$id");
+        assertThat (result, hasItem(pattern));
     }
 }

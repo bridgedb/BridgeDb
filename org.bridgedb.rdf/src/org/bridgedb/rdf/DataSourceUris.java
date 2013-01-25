@@ -390,6 +390,21 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         return inner;
     }
 
+    public Set<UriPattern> getUriPatterns() throws BridgeDBException{
+        HashSet<UriPattern> results = new HashSet<UriPattern>();
+        results.add(getDataSourceUrl());
+        results.add(wikiPathwaysPattern);
+        results.add(sourceRdfPattern);
+        results.add(bio2RdfPattern);
+        String identifersOrgPattern = inner.getIdentifiersOrgUri("$id");
+        if (identifersOrgPattern != null){
+            UriPattern identifersOrgUriPattern = UriPattern.byPattern(identifersOrgPattern);
+            results.add(identifersOrgUriPattern);
+        }
+        results.remove(null);
+        return results;
+    }
+    
     public UriPattern getWikiPathwaysPattern() throws BridgeDBException {
         //sourceRDFURI -> bio2RDF -> urlPattern
         if (wikiPathwaysPattern != null){
