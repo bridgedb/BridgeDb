@@ -22,16 +22,31 @@
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <Declaration>
-        <Class IRI="http://purl.org/NET/mediatype#MediaType"/>
+        <Class IRI="http://purl.org/dc/terms/IMT"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Bio2RdfPattern"/>
     </Declaration>
     <Declaration>
         <Class IRI="#DataSource"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#IdentifiersOrgPattern"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#Organism"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#SourceRdfPattern"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#UriPattern"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#UrlPattern"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#WikiPathwaysPattern"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="http://purl.org/dc/elements/1.1/format"/>
@@ -85,6 +100,12 @@
         <ObjectProperty IRI="#isUriPatternOf"/>
     </Declaration>
     <Declaration>
+        <DataProperty abbreviatedIRI="rdf:value"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty abbreviatedIRI="rdfs:label"/>
+    </Declaration>
+    <Declaration>
         <DataProperty IRI="#alias"/>
     </Declaration>
     <Declaration>
@@ -97,13 +118,7 @@
         <DataProperty IRI="#idExample"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#justification"/>
-    </Declaration>
-    <Declaration>
         <DataProperty IRI="#latinName"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#mediaType"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#name"/>
@@ -123,25 +138,46 @@
     <Declaration>
         <DataProperty IRI="#type"/>
     </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://purl.org/NET/mediatypes/text/html"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="http://purl.org/dc/terms/IMT"/>
+        <DataSomeValuesFrom>
+            <DataProperty abbreviatedIRI="rdfs:label"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://purl.org/dc/terms/IMT"/>
+        <DataExactCardinality cardinality="1">
+            <DataProperty abbreviatedIRI="rdf:value"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Bio2RdfPattern"/>
+        <Class IRI="#UriPattern"/>
+    </SubClassOf>
     <SubClassOf>
         <Class IRI="#DataSource"/>
         <ObjectSomeValuesFrom>
             <ObjectProperty IRI="#hasUriPattern"/>
-            <Class IRI="#DataSource"/>
+            <Class IRI="#UriPattern"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#DataSource"/>
         <ObjectMaxCardinality cardinality="1">
             <ObjectProperty IRI="#hasBio2RdfPattern"/>
-            <Class IRI="#UrlPattern"/>
+            <Class IRI="#UriPattern"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#DataSource"/>
         <ObjectMaxCardinality cardinality="1">
             <ObjectProperty IRI="#hasIdentifiersOrgPattern"/>
-            <Class IRI="#UrlPattern"/>
+            <Class IRI="#IdentifiersOrgPattern"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
@@ -155,7 +191,7 @@
         <Class IRI="#DataSource"/>
         <ObjectMaxCardinality cardinality="1">
             <ObjectProperty IRI="#hasSourceRdfPattern"/>
-            <Class IRI="#UrlPattern"/>
+            <Class IRI="#SourceRdfPattern"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
@@ -169,7 +205,7 @@
         <Class IRI="#DataSource"/>
         <ObjectMaxCardinality cardinality="1">
             <ObjectProperty IRI="#hasWikiPathwaysPattern"/>
-            <Class IRI="#UrlPattern"/>
+            <Class IRI="#WikiPathwaysPattern"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
@@ -208,6 +244,10 @@
         </DataMaxCardinality>
     </SubClassOf>
     <SubClassOf>
+        <Class IRI="#IdentifiersOrgPattern"/>
+        <Class IRI="#UriPattern"/>
+    </SubClassOf>
+    <SubClassOf>
         <Class IRI="#Organism"/>
         <DataExactCardinality cardinality="1">
             <DataProperty IRI="#latinName"/>
@@ -215,53 +255,44 @@
         </DataExactCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
-        <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="http://purl.org/dc/elements/1.1/format"/>
-            <Class IRI="http://purl.org/NET/mediatype#MediaType"/>
-        </ObjectSomeValuesFrom>
+        <Class IRI="#SourceRdfPattern"/>
+        <Class IRI="#UriPattern"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <ObjectSomeValuesFrom>
             <ObjectProperty IRI="#isUriPatternOf"/>
             <Class IRI="#DataSource"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <ObjectMaxCardinality cardinality="1">
             <ObjectProperty IRI="#hasDataSource"/>
             <Class IRI="#DataSource"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
-        <DataSomeValuesFrom>
-            <DataProperty IRI="#justification"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataSomeValuesFrom>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#UrlPattern"/>
-        <DataSomeValuesFrom>
-            <DataProperty IRI="#mediaType"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataSomeValuesFrom>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <DataExactCardinality cardinality="1">
             <DataProperty IRI="#nameSpace"/>
             <Datatype abbreviatedIRI="xsd:string"/>
         </DataExactCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <DataMaxCardinality cardinality="1">
             <DataProperty IRI="#postfix"/>
             <Datatype abbreviatedIRI="xsd:string"/>
         </DataMaxCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#WikiPathwaysPattern"/>
+        <Class IRI="#UriPattern"/>
     </SubClassOf>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#hasBio2RdfPattern"/>
@@ -340,8 +371,8 @@
         <ObjectProperty IRI="#isOrganismOf"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
-        <ObjectProperty IRI="#hasUriPattern"/>
         <ObjectProperty IRI="#isUriPatternOf"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
         <ObjectProperty IRI="#hasUrlPattern"/>
@@ -360,16 +391,12 @@
         <Class IRI="#Organism"/>
     </ObjectPropertyDomain>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://purl.org/dc/elements/1.1/format"/>
-        <Class IRI="http://purl.org/NET/mediatype#MediaType"/>
-    </ObjectPropertyRange>
-    <ObjectPropertyRange>
         <ObjectProperty IRI="#hasOrgamism"/>
         <Class IRI="#Organism"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#hasUriPattern"/>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#isOrganismOf"/>
@@ -388,10 +415,6 @@
         <Class IRI="#DataSource"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
-        <DataProperty IRI="#justification"/>
-        <Class IRI="#UrlPattern"/>
-    </DataPropertyDomain>
-    <DataPropertyDomain>
         <DataProperty IRI="#latinName"/>
         <Class IRI="#Organism"/>
     </DataPropertyDomain>
@@ -401,11 +424,11 @@
     </DataPropertyDomain>
     <DataPropertyDomain>
         <DataProperty IRI="#nameSpace"/>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
         <DataProperty IRI="#postfix"/>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
         <DataProperty IRI="#systemCode"/>
@@ -429,10 +452,6 @@
     </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#latinName"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#mediaType"/>
         <Datatype abbreviatedIRI="xsd:string"/>
     </DataPropertyRange>
     <DataPropertyRange>
@@ -456,13 +475,13 @@
         <Datatype abbreviatedIRI="xsd:string"/>
     </DataPropertyRange>
     <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>http://purl.org/NET/mediatype#MediaType</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">http://mediatypes.appspot.com/</Literal>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>http://purl.org/dc/terms/IMT</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">The set of media types specified by the Internet Assigned Numbers Authority.</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI=":versionInfo"/>
-        <IRI>#UrlPattern</IRI>
+        <IRI>#UriPattern</IRI>
         <Literal datatypeIRI="&rdf;PlainLiteral">In BridgeBD Version 1 UriPattern was stored in DataSource simply as a prefix and Postfix.</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -519,21 +538,6 @@
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
         <IRI>#idExample</IRI>
         <Literal datatypeIRI="&rdf;PlainLiteral">Maps to DataSource idExample</Literal>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-        <IRI>#justification</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">This is still underdevelopment but is intended to be the input for mapping lenses/ profiles.</Literal>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-        <IRI>#mediaType</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">Still under development</Literal>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>#mediaType</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">http://en.wikipedia.org/wiki/Internet_media_type</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
