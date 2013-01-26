@@ -221,20 +221,26 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
                 //repositoryConnection.getStatements(null, null, null, true);
         while (statements.hasNext()) {
             Statement statement = statements.next();
-            DataSourceUris dataSourceUris = readDataSourceUris(repositoryConnection, statement.getSubject());
+            DataSourceUris dataSourceUris = readDataSourceUris1(repositoryConnection, statement.getSubject());
         }
     }
 
-    public static DataSourceUris readDataSourceUris(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+    public static DataSourceUris readDataSourceUris1(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException {
         checkStatements(repositoryConnection, dataSourceId);
+        DataSource dataSource = readDataSource(repositoryConnection, dataSourceId);
         DataSourceUris dataSourceUris = register.get(dataSourceId);
         if (dataSourceUris != null){
-            return dataSourceUris;
+            if (dataSourceUris.inner.equals(dataSource)){
+                //Ok fine
+            } else {
+                throw new BridgeDBException("Resource " + dataSourceId + " allready mapped to " + dataSourceUris.inner +
+                        " while new RDF maps it to " + dataSource);
+            } 
+        } else {
+            dataSourceUris = DataSourceUris.byDataSource(dataSource);
+            register.put(dataSourceId, dataSourceUris);
         }
-        DataSource dataSource = readDataSource(repositoryConnection, dataSourceId);
-        dataSourceUris = DataSourceUris.byDataSource(dataSource);
-        register.put(dataSourceId, dataSourceUris);
         dataSourceUris.readUriPatternsStatements(repositoryConnection, dataSourceId);
         return dataSourceUris;
      }    
