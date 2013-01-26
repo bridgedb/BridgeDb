@@ -41,6 +41,8 @@ import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.UriSpaceMapper;
 import org.bridgedb.utils.StoreType;
 
+// SELECT id FROM test WHERE 'defdghij' like concat(prefix,'%', postfix);
+
 /**
  * Implements the URLMapper and URLListener interfaces using SQL.
  *
