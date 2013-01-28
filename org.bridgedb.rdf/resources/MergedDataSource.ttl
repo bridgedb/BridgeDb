@@ -664,7 +664,8 @@ bridgeDB:DataSource_Chembl_13_Target a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/target/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/target/$id> .
+	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/target/$id> ;
+	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/target/$id> .
 
 bridgeDB:DataSource_Chembl_2_Compound a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl 2 Compound" ;
@@ -711,7 +712,8 @@ bridgeDB:DataSource_Chembl_13_Molecule a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/$id> .
+	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/$id> ;
+	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/molecule/$id> .
 
 bridgeDB:DataSource_ChemDB a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChemDB" ;
@@ -753,7 +755,8 @@ bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.chemspider.com/Chemical-Structure.$id.html> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id> ;
 	bridgeDB:hasSourceRdfPattern <http://rdf.chemspider.com/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://rdf.chemspider.com/$id> .
+	bridgeDB:hasWikiPathwaysPattern <http://rdf.chemspider.com/$id> ;
+	bridgeDB:hasUriPattern <http://www.chemspider.com/$id> .
 
 bridgeDB:DataSource_Cint a bridgeDB:DataSource ;
 	bridgeDB:fullName "Cint" ;
@@ -3188,7 +3191,8 @@ bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasUrlPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pdb/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> .
+	bridgeDB:hasWikiPathwaysPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
+	bridgeDB:hasUriPattern <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> .
 
 bridgeDB:DataSource_PeptideAtlas a bridgeDB:DataSource ;
 	bridgeDB:fullName "PeptideAtlas" ;
@@ -4301,7 +4305,8 @@ bridgeDB:DataSource_UniProt a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
+	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasUriPattern <http://www.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
 	bridgeDB:fullName "Uniprot Enzyme" ;
@@ -6722,6 +6727,12 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:postfix "&operation=ccid" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Ligand_Expo .
 
+<http://linkedchemistry.info/chembl/molecule/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://linkedchemistry.info/chembl/molecule/" .
+
+<http://linkedchemistry.info/chembl/target/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://linkedchemistry.info/chembl/target/" .
+
 <http://lipidbank.jp/cgi-bin/detail.cgi?id=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://lipidbank.jp/cgi-bin/detail.cgi?id=" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_LipidBank .
@@ -7237,6 +7248,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.cazy.org/" ;
 	bridgeDB:postfix ".html" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_CAZy .
+
+<http://www.chemspider.com/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.chemspider.com/" .
 
 <http://www.chemspider.com/Chemical-Structure.$id.html> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.chemspider.com/Chemical-Structure." ;
@@ -7758,6 +7772,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.pazar.info/cgi-bin/tf_search.cgi?geneID=" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Pazar_Transcription_Factor .
 
+<http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.pdb.org/pdb/explore/explore.do?pdbId=" .
+
 <http://www.pharmgkb.org/disease/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.pharmgkb.org/disease/" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_PharmGKB_Disease .
@@ -7869,6 +7886,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://www.uniprot.org/tissues/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.uniprot.org/tissues/" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Tissue_List .
+
+<http://www.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.uniprot.org/uniprot/" .
 
 <http://www.vbase2.org/vgene.php?id=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.vbase2.org/vgene.php?id=" ;

@@ -56,6 +56,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
     private UriPattern bio2RdfPattern;
     private UriPattern wikiPathwaysPattern;
     private DataSourceUris uriParent = null;
+    private final Set<UriPattern> otherUriPatterns = new HashSet<UriPattern>();
     
     private static final HashMap<DataSource, DataSourceUris> byDataSource = new HashMap<DataSource, DataSourceUris>();
     private static final HashMap<Resource, DataSourceUris> register = new HashMap<Resource, DataSourceUris>();
@@ -80,6 +81,9 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         BridgeDBConstants.SOURCE_RDF_PATTERN_URI, //Old version
         BridgeDBConstants.SYSTEM_CODE_URI,
         BridgeDBConstants.TYPE_URI,
+        BridgeDBConstants.HAS_URI_PATTERN_URI,
+        BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI,
+        //No need for old version
         BridgeDBConstants.HAS_URL_PATTERN_URI,
         BridgeDBConstants.HAS_PRIMARY_URL_PATTERN_URI,
         BridgeDBConstants.URL_PATTERN_URI, //Old version
@@ -178,7 +182,6 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
             Organism organism = (Organism)inner.getOrganism();
             repositoryConnection.add(id, BridgeDBConstants.ORGANISM_URI, OrganismRdf.getResourceId(organism));
         }
-
     }
 
     private void writeUriPatterns(RepositoryConnection repositoryConnection, boolean addPrimaries) throws RepositoryException, BridgeDBException {
@@ -188,6 +191,10 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
                 BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI, sourceRdfPattern, addPrimaries);
         writeUriPattern(repositoryConnection, BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI, 
                 BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI, getWikiPathwaysPattern(), addPrimaries);
+        for (UriPattern pattern:this.otherUriPatterns){
+            writeUriPattern(repositoryConnection, BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI,  
+                BridgeDBConstants.HAS_URI_PATTERN_URI, pattern, addPrimaries);
+        }
     }
 
     private void writeUriPattern(RepositoryConnection repositoryConnection, URI primary, URI shared, 
@@ -221,11 +228,11 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
                 //repositoryConnection.getStatements(null, null, null, true);
         while (statements.hasNext()) {
             Statement statement = statements.next();
-            DataSourceUris dataSourceUris = readDataSourceUris1(repositoryConnection, statement.getSubject());
+            DataSourceUris dataSourceUris = readDataSourceUris(repositoryConnection, statement.getSubject());
         }
     }
 
-    public static DataSourceUris readDataSourceUris1(RepositoryConnection repositoryConnection, Resource dataSourceId) 
+    public static DataSourceUris readDataSourceUris(RepositoryConnection repositoryConnection, Resource dataSourceId) 
             throws BridgeDBException, RepositoryException {
         checkStatements(repositoryConnection, dataSourceId);
         DataSource dataSource = readDataSource(repositoryConnection, dataSourceId);
@@ -332,6 +339,21 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
                 BridgeDBConstants.SOURCE_RDF_PATTERN_URI); 
         wikiPathwaysPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
                 BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI, BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI);  
+        
+        this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, 
+                BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI));
+        this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, 
+                BridgeDBConstants.HAS_URI_PATTERN_URI));
+        
+        //make sure there are no specific uris in other.
+        otherUriPatterns.remove(bio2RdfPattern);
+        otherUriPatterns.remove(sourceRdfPattern);
+        otherUriPatterns.remove(wikiPathwaysPattern);
+        String identifersOrgPattern = inner.getIdentifiersOrgUri("$id");
+        if (identifersOrgPattern != null){
+            UriPattern identifersOrgUriPattern = UriPattern.byPattern(identifersOrgPattern);
+            otherUriPatterns.remove(identifersOrgUriPattern);    
+        }
     }
     
     private final static void checkStatements(RepositoryConnection repositoryConnection, Resource dataSourceId) 
@@ -407,6 +429,8 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
             UriPattern identifersOrgUriPattern = UriPattern.byPattern(identifersOrgPattern);
             results.add(identifersOrgUriPattern);
         }
+        results.addAll(otherUriPatterns);
+        //Avoids having to check all of the above for null;
         results.remove(null);
         return results;
     }

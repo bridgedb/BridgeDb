@@ -4281,7 +4281,7 @@ bridgeDB:DataSource_UniProt a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
-    bridgeDB:hauUriPattern <http://www.uniprot.org/uniprot/$id> .
+    bridgeDB:hasUriPattern <http://www.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
 	bridgeDB:fullName "Uniprot Enzyme" ;

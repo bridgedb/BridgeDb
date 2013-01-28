@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
@@ -269,7 +270,17 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         }        
     }
     
-   public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource uriPatternId) 
+    public static Set<UriPattern> readUriPatterns(RepositoryConnection repositoryConnection, Resource dataSourceId, 
+            URI predicate) throws RepositoryException, BridgeDBException{
+        Set<Resource> resources = getAllResources(repositoryConnection,  dataSourceId, predicate);
+        HashSet<UriPattern> results = new HashSet<UriPattern>();
+        for (Resource resource:resources){
+            results.add(readUriPattern(repositoryConnection, resource));
+        }
+        return results;
+    }
+    
+    public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource uriPatternId) 
             throws BridgeDBException, RepositoryException{
         checkStatements(repositoryConnection, uriPatternId);
         UriPattern pattern;      
