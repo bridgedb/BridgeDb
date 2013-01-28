@@ -32,13 +32,10 @@ import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.utils.ConfigReader;
 
 /**
- * This will create rdf files passed purely on the current state of BioDataSource package.
- * 
- * Note: This can not be run as a unit test as BioDataSource loads some data which is different in the DataSource.ttl
- * For example the runPattern for the wikiPathways DataSource which is non Miriam in BioDataSource
+ *
  * @author Christian
  */
-public class BioDataSourceCreateRdf {
+public class MergedSourceCreateRdf {
     
     private IDMapper mapper;
     private String name;
@@ -55,13 +52,17 @@ public class BioDataSourceCreateRdf {
         //Load DataSources from BioDataSource and save that
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
         BioDataSource.init();
-        File biofile = new File("../org.bridgedb.rdf/resources/BioDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(biofile, false);
+        
+        File utilsFile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
+        BridgeDBRdfHandler.parseRdfFile(utilsFile);
+        
+        File mergedFile = new File("../org.bridgedb.utils/resources/MergedDataSource.ttl");
+        BridgeDBRdfHandler.writeRdfToFile(mergedFile, false);
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
-        BridgeDBRdfHandler.parseRdfFile(biofile);        
+        BridgeDBRdfHandler.parseRdfFile(mergedFile);        
                 
         //Write a file marking the primary URIs as currently set
-        File primaryfile = new File("../org.bridgedb.rdf/resources/BioDataSourceWithPrimary.ttl");
+        File primaryfile = new File("../org.bridgedb.rdf/resources/MergedDataSourceWithPrimary.ttl");
         BridgeDBRdfHandler.writeRdfToFile(primaryfile, true);
         
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
