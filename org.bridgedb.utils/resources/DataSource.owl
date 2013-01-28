@@ -22,73 +22,106 @@
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <Declaration>
+        <Class IRI="http://purl.org/dc/terms/IMT"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Bio2RdfPattern"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#DataSource"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#IdentifiersOrgPattern"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Organism"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#SourceRdfPattern"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#UriPattern"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#UrlPattern"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#depricatedBy"/>
+        <Class IRI="#WikiPathwaysPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="http://purl.org/dc/elements/1.1/format"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasBio2RdfPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasDataSource"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasIdentifiersOrgPattern"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#hasOrgamism"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#hasPrimaryDataSource"/>
+        <ObjectProperty IRI="#hasPrimaryBio2RdfPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasPrimaryIdentifiersOrgPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasPrimarySourceRdfPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#hasTheUrlPattern"/>
+        <ObjectProperty IRI="#hasPrimaryWikiPathwaysPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasSourceRdfPattern"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasUriPattern"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#hasUrlPattern"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#hasWikiPathwaysPattern"/>
+    </Declaration>
+    <Declaration>
         <ObjectProperty IRI="#isOrganismOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
+        <ObjectProperty IRI="#isUriPatternOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
+        <DataProperty abbreviatedIRI="rdf:value"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isTheUrlPatternOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isUrlPatternOf"/>
+        <DataProperty abbreviatedIRI="rdfs:label"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#alias"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#code"/>
+        <DataProperty IRI="#fullName"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#fullName"/>
+        <DataProperty IRI="#hasUrnBase"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#idExample"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#justification"/>
-    </Declaration>
-    <Declaration>
         <DataProperty IRI="#latinName"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#mainUrl"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#mediaType"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#miriamNameSpace"/>
+        <DataProperty IRI="#name"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#nameSpace"/>
@@ -100,26 +133,52 @@
         <DataProperty IRI="#primary"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#primarySysCode"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#primiaryFullName"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#shortName"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#sysCode"/>
+        <DataProperty IRI="#systemCode"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#type"/>
     </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="http://purl.org/NET/mediatypes/text/html"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="http://purl.org/dc/terms/IMT"/>
+        <DataSomeValuesFrom>
+            <DataProperty abbreviatedIRI="rdfs:label"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="http://purl.org/dc/terms/IMT"/>
+        <DataExactCardinality cardinality="1">
+            <DataProperty abbreviatedIRI="rdf:value"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Bio2RdfPattern"/>
+        <Class IRI="#UriPattern"/>
+    </SubClassOf>
     <SubClassOf>
         <Class IRI="#DataSource"/>
         <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="#hasUrlPattern"/>
-            <Class IRI="#DataSource"/>
+            <ObjectProperty IRI="#hasUriPattern"/>
+            <Class IRI="#UriPattern"/>
         </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <ObjectMaxCardinality cardinality="1">
+            <ObjectProperty IRI="#hasBio2RdfPattern"/>
+            <Class IRI="#UriPattern"/>
+        </ObjectMaxCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <ObjectMaxCardinality cardinality="1">
+            <ObjectProperty IRI="#hasIdentifiersOrgPattern"/>
+            <Class IRI="#IdentifiersOrgPattern"/>
+        </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#DataSource"/>
@@ -131,8 +190,22 @@
     <SubClassOf>
         <Class IRI="#DataSource"/>
         <ObjectMaxCardinality cardinality="1">
-            <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
+            <ObjectProperty IRI="#hasSourceRdfPattern"/>
+            <Class IRI="#SourceRdfPattern"/>
+        </ObjectMaxCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <ObjectMaxCardinality cardinality="1">
+            <ObjectProperty IRI="#hasUrlPattern"/>
             <Class IRI="#UrlPattern"/>
+        </ObjectMaxCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DataSource"/>
+        <ObjectMaxCardinality cardinality="1">
+            <ObjectProperty IRI="#hasWikiPathwaysPattern"/>
+            <Class IRI="#WikiPathwaysPattern"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
@@ -145,7 +218,7 @@
     <SubClassOf>
         <Class IRI="#DataSource"/>
         <DataSomeValuesFrom>
-            <DataProperty IRI="#sysCode"/>
+            <DataProperty IRI="#systemCode"/>
             <Datatype abbreviatedIRI="xsd:string"/>
         </DataSomeValuesFrom>
     </SubClassOf>
@@ -158,29 +231,8 @@
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#DataSource"/>
-        <DataExactCardinality cardinality="1">
-            <DataProperty IRI="#primiaryFullName"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataExactCardinality>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#DataSource"/>
         <DataMaxCardinality cardinality="1">
             <DataProperty IRI="#idExample"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataMaxCardinality>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#DataSource"/>
-        <DataMaxCardinality cardinality="1">
-            <DataProperty IRI="#mainUrl"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataMaxCardinality>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#DataSource"/>
-        <DataMaxCardinality cardinality="1">
-            <DataProperty IRI="#primarySysCode"/>
             <Datatype abbreviatedIRI="xsd:string"/>
         </DataMaxCardinality>
     </SubClassOf>
@@ -192,11 +244,8 @@
         </DataMaxCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Organism"/>
-        <DataExactCardinality cardinality="1">
-            <DataProperty IRI="#code"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataExactCardinality>
+        <Class IRI="#IdentifiersOrgPattern"/>
+        <Class IRI="#UriPattern"/>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#Organism"/>
@@ -206,132 +255,191 @@
         </DataExactCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Organism"/>
-        <DataExactCardinality cardinality="1">
-            <DataProperty IRI="#shortName"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataExactCardinality>
+        <Class IRI="#SourceRdfPattern"/>
+        <Class IRI="#UriPattern"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <ObjectSomeValuesFrom>
-            <ObjectProperty IRI="#isUrlPatternOf"/>
+            <ObjectProperty IRI="#isUriPatternOf"/>
             <Class IRI="#DataSource"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <ObjectMaxCardinality cardinality="1">
-            <ObjectProperty IRI="#hasPrimaryDataSource"/>
+            <ObjectProperty IRI="#hasDataSource"/>
             <Class IRI="#DataSource"/>
         </ObjectMaxCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
-        <DataSomeValuesFrom>
-            <DataProperty IRI="#justification"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataSomeValuesFrom>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#UrlPattern"/>
-        <DataSomeValuesFrom>
-            <DataProperty IRI="#mediaType"/>
-            <Datatype abbreviatedIRI="xsd:string"/>
-        </DataSomeValuesFrom>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <DataExactCardinality cardinality="1">
             <DataProperty IRI="#nameSpace"/>
             <Datatype abbreviatedIRI="xsd:string"/>
         </DataExactCardinality>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
         <DataMaxCardinality cardinality="1">
             <DataProperty IRI="#postfix"/>
             <Datatype abbreviatedIRI="xsd:string"/>
         </DataMaxCardinality>
     </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#UrlPattern"/>
+        <Class IRI="#UriPattern"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#WikiPathwaysPattern"/>
+        <Class IRI="#UriPattern"/>
+    </SubClassOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="#hasPrimaryDataSource"/>
-        <ObjectProperty IRI="#isUrlPatternOf"/>
+        <ObjectProperty IRI="#hasBio2RdfPattern"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasDataSource"/>
+        <ObjectProperty IRI="#isUriPatternOf"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasIdentifiersOrgPattern"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimaryBio2RdfPattern"/>
+        <ObjectProperty IRI="#hasBio2RdfPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimaryBio2RdfPattern"/>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimaryIdentifiersOrgPattern"/>
+        <ObjectProperty IRI="#hasIdentifiersOrgPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimaryIdentifiersOrgPattern"/>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimarySourceRdfPattern"/>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimarySourceRdfPattern"/>
+        <ObjectProperty IRI="#hasSourceRdfPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
         <ObjectProperty IRI="#hasUrlPattern"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="#hasTheUrlPattern"/>
-        <ObjectProperty IRI="#hasPrimaryUrlPattern"/>
+        <ObjectProperty IRI="#hasPrimaryWikiPathwaysPattern"/>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="#hasTheUrlPattern"/>
-        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
+        <ObjectProperty IRI="#hasPrimaryWikiPathwaysPattern"/>
+        <ObjectProperty IRI="#hasWikiPathwaysPattern"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hasSourceRdfPattern"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#hasUrlPattern"/>
-        <ObjectProperty abbreviatedIRI=":topObjectProperty"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
-        <ObjectProperty IRI="#hasUrlPattern"/>
+        <ObjectProperty IRI="#hasWikiPathwaysPattern"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
     </SubObjectPropertyOf>
-    <SubObjectPropertyOf>
-        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
-        <ObjectProperty IRI="#isUrlPatternOf"/>
-    </SubObjectPropertyOf>
-    <SubObjectPropertyOf>
-        <ObjectProperty IRI="#isTheUrlPatternOf"/>
-        <ObjectProperty IRI="#hasPrimaryDataSource"/>
-    </SubObjectPropertyOf>
-    <SubObjectPropertyOf>
-        <ObjectProperty IRI="#isTheUrlPatternOf"/>
-        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
-    </SubObjectPropertyOf>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#hasPrimaryUriPattern"/>
+        <ObjectProperty IRI="#hasDataSource"/>
+    </InverseObjectProperties>
     <InverseObjectProperties>
         <ObjectProperty IRI="#hasOrgamism"/>
         <ObjectProperty IRI="#isOrganismOf"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
-        <ObjectProperty IRI="#isPrimaryDataSourceOf"/>
-        <ObjectProperty IRI="#hasPrimaryDataSource"/>
-    </InverseObjectProperties>
-    <InverseObjectProperties>
-        <ObjectProperty IRI="#hasTheUrlPattern"/>
-        <ObjectProperty IRI="#isTheUrlPatternOf"/>
+        <ObjectProperty IRI="#isUriPatternOf"/>
+        <ObjectProperty IRI="#hasUriPattern"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
         <ObjectProperty IRI="#hasUrlPattern"/>
-        <ObjectProperty IRI="#isUrlPatternOf"/>
-    </InverseObjectProperties>
-    <InverseObjectProperties>
-        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
-        <ObjectProperty IRI="#isPrimaryUriPatternOf"/>
+        <ObjectProperty IRI="#isUriPatternOf"/>
     </InverseObjectProperties>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#hasOrgamism"/>
         <Class IRI="#DataSource"/>
     </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#hasUriPattern"/>
+        <Class IRI="#DataSource"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isOrganismOf"/>
+        <Class IRI="#Organism"/>
+    </ObjectPropertyDomain>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#hasOrgamism"/>
         <Class IRI="#Organism"/>
     </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#hasUriPattern"/>
+        <Class IRI="#UriPattern"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isOrganismOf"/>
+        <Class IRI="#DataSource"/>
+    </ObjectPropertyRange>
     <SubDataPropertyOf>
-        <DataProperty IRI="#primarySysCode"/>
-        <DataProperty IRI="#sysCode"/>
-    </SubDataPropertyOf>
-    <SubDataPropertyOf>
-        <DataProperty IRI="#primiaryFullName"/>
         <DataProperty IRI="#fullName"/>
+        <DataProperty IRI="#name"/>
     </SubDataPropertyOf>
+    <DataPropertyDomain>
+        <DataProperty IRI="#alias"/>
+        <Class IRI="#DataSource"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#idExample"/>
+        <Class IRI="#DataSource"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#latinName"/>
+        <Class IRI="#Organism"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#name"/>
+        <Class IRI="#DataSource"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#nameSpace"/>
+        <Class IRI="#UriPattern"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#postfix"/>
+        <Class IRI="#UriPattern"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#systemCode"/>
+        <Class IRI="#DataSource"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#type"/>
+        <Class IRI="#DataSource"/>
+    </DataPropertyDomain>
     <DataPropertyRange>
         <DataProperty IRI="#alias"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#code"/>
         <Datatype abbreviatedIRI="xsd:string"/>
     </DataPropertyRange>
     <DataPropertyRange>
@@ -344,18 +452,6 @@
     </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#latinName"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#mainUrl"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#mediaType"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#miriamNameSpace"/>
         <Datatype abbreviatedIRI="xsd:string"/>
     </DataPropertyRange>
     <DataPropertyRange>
@@ -371,19 +467,7 @@
         <Datatype abbreviatedIRI="xsd:boolean"/>
     </DataPropertyRange>
     <DataPropertyRange>
-        <DataProperty IRI="#primarySysCode"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#primiaryFullName"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#shortName"/>
-        <Datatype abbreviatedIRI="xsd:string"/>
-    </DataPropertyRange>
-    <DataPropertyRange>
-        <DataProperty IRI="#sysCode"/>
+        <DataProperty IRI="#systemCode"/>
         <Datatype abbreviatedIRI="xsd:string"/>
     </DataPropertyRange>
     <DataPropertyRange>
@@ -392,28 +476,78 @@
     </DataPropertyRange>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-        <IRI>#hasPrimaryUrlPattern</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">If none supplied the Idenfiers.org UrlPattern should be used if available</Literal>
+        <IRI>http://purl.org/dc/terms/IMT</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">The set of media types specified by the Internet Assigned Numbers Authority.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI=":versionInfo"/>
+        <IRI>#UriPattern</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">In BridgeBD Version 1 UriPattern was stored in DataSource simply as a prefix and Postfix.</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-        <IRI>#justification</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">This is still underdevelopment but is intended to be the input for mapping lenses/ profiles.</Literal>
+        <IRI>#alias</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Currently not used but would map to DataSource registerAlias and getByAlias Methods. Would require a getAlias() method!</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>#mediaType</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">http://en.wikipedia.org/wiki/Internet_media_type</Literal>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-        <IRI>#miriamNameSpace</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">Adding &quot;http://identifiers.org/&quot; give the Identifiers.org nameSpace</Literal>
+        <AnnotationProperty abbreviatedIRI=":versionInfo"/>
+        <IRI>#hasBio2RdfPattern</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Since BrdgeDB Version2</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-        <IRI>#miriamNameSpace</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">Adding &quot;urn:miriam:&quot; give the urnBase</Literal>
+        <IRI>#hasIdentifiersOrgPattern</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">The value used here will also be used to compute the UrnBase by converting it to a MiriamUrn Base.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI=":backwardCompatibleWith"/>
+        <IRI>#hasIdentifiersOrgPattern</IRI>
+        <IRI>#hasUrnBase</IRI>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#hasPrimaryUriPattern</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">This is the inverse of hasDataSource, and UriPattern has a resitriction that it has exatcly one DataSource. Therefor at most one DataSource my declare hasPrimaryUriPattern (or any sub properties) for each UriPattern</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI=":versionInfo"/>
+        <IRI>#hasUriPattern</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Since BridgeDB Version 2, With the exception of hasUrlPattern which was already in BridgeDB Version 1</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#hasUrlPattern</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">String value is input to DataSource.Builder.urlPattern</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI=":versionInfo"/>
+        <IRI>#hasUrlPattern</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Since BridngeDb Version 1</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#hasUrnBase</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Maps to DataSource.urnBase</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI=":deprecated"/>
+        <IRI>#hasUrnBase</IRI>
+        <IRI>#hasIdentifiersOrgPattern</IRI>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#idExample</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Maps to DataSource idExample</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#name</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Currently not used directly biut only to group  sub Data Properties.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI=":versionInfo"/>
+        <IRI>#nameSpace</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Since Version 1</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
@@ -423,7 +557,17 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
         <IRI>#primary</IRI>
-        <Literal datatypeIRI="&rdf;PlainLiteral">The assumption will be that this is true if missing</Literal>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Maps to DataSource isprimary field</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#systemCode</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Maps to DataSource.sysCode </Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#type</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">Mapd to DataSource type field</Literal>
     </AnnotationAssertion>
 </Ontology>
 

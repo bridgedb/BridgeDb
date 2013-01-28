@@ -63,6 +63,8 @@ public class BridgeDBConstants {
     public static final URI TYPE_URI = new URIImpl(PREFIX + TYPE);
     public static final URI HAS_URL_PATTERN_URI = new URIImpl(PREFIX + "hasUrlPattern");
     public static final URI HAS_PRIMARY_URL_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + "UrlPattern");
+    public static final URI HAS_URI_PATTERN_URI = new URIImpl(PREFIX + "hasUriPattern");
+    public static final URI HAS_PRIMARY_URI_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + "UriPattern");
     //old verions
     public static final URI URL_PATTERN_URI = new URIImpl(PREFIX + "urlPattern");
     private static final String URN_BASE = "urnBase";

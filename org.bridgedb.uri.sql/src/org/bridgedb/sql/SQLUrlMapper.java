@@ -51,6 +51,8 @@ import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
+// SELECT id FROM test WHERE 'defdghij' like concat(prefix,'%', postfix);
+
 /**
  * Implements the URLMapper and URLListener interfaces using SQL.
  *

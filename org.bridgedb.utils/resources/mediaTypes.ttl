@@ -1,0 +1,19 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://purl.org/NET/mediatypes/text/html> a dcterms:IMT;
+        rdf:value "text/html";
+        rdfs:label "HTML document".
+
+<http://purl.org/NET/mediatypes/application/xml> a dcterms:IMT;
+        rdf:value "application/xml";
+        rdfs:label "XML from an Application".
+
+<http://mediatypes.appspot.com/application/json> a dcterms:IMT;
+        rdf:value "application/json";
+        rdfs:label "Json from an Application".
+
+<http://mediatypes.appspot.com/text/xml> a dcterms:IMT;
+        rdf:value "text/xml";
+        rdfs:label "XML document".

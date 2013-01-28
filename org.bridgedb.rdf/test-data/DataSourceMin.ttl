@@ -1,0 +1,23 @@
+@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .
+@prefix : <http://no/BaseURI/Set/> .
+
+bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
+	bridgeDB:fullName "Chemspider" ;
+	bridgeDB:systemCode "Cs" ;
+	bridgeDB:mainUrl "http://www.chemspider.com/" ;
+	bridgeDB:idExample "56586" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:hasUrlPattern <http://www.chemspider.com/Chemical-Structure.$id.html> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://www.chemspider.com/Chemical-Structure.$id.html> .
+
+<http://identifiers.org/chemspider/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://identifiers.org/chemspider/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chemspider .
+
+<http://www.chemspider.com/Chemical-Structure.$id.html> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://www.chemspider.com/Chemical-Structure." ;
+	bridgeDB:postfix ".html" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chemspider .
+

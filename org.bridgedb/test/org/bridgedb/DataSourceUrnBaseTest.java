@@ -518,12 +518,49 @@ public class DataSourceUrnBaseTest{
                 .asDataSource();
     }
 
-    //As setIdentifiersOrgUriBase is only since Version 2 it is always STRICT
-    @Test (expected = IDMapperException.class)   
-    public void testSetDifferentUrnBaseToUrn2() throws IDMapperException{
-        String fullName = "DataSourceUrnBase_TestDifferentUrnBaseToUrn2";
+    @Test    
+    public void testSetDifferentUrnBaseToUrn2Version1() throws IDMapperException{
+        String fullName = "DataSourceUrnBase_TestDifferentUrnBaseToUrn2Version1";
         String rootURL = "http://identifiers.org/" + fullName + "A";
         String urnBase = "urn:miriam:" + fullName + "B";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.VERSION1);
+		DataSource source = DataSource.register(null, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = "urn:miriam:" + fullName + "B" + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        expected = "http://identifiers.org/" + fullName + "B" + "/" + id;
+        Assert.assertEquals(expected, result);        
+        source.setIdentifiersOrgUriBase(rootURL);
+        result = source.getURN(id);
+        expected = "urn:miriam:" + fullName + "A" + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        expected = "http://identifiers.org/" + fullName + "A" + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test (expected = IDMapperException.class)   
+    public void testSetDifferentUrnBaseToUrn2Controlled() throws IDMapperException{
+        String fullName = "DataSourceUrnBase_TestDifferentUrnBaseToUrn2Controlled";
+        String rootURL = "http://identifiers.org/" + fullName + "A";
+        String urnBase = "urn:miriam:" + fullName + "B";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
+		DataSource source = DataSource.register(null, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        source.setIdentifiersOrgUriBase(rootURL);
+    }
+
+    @Test (expected = IDMapperException.class)   
+    public void testSetDifferentUrnBaseToUrn2Strict() throws IDMapperException{
+        String fullName = "DataSourceUrnBase_TestDifferentUrnBaseToUrn2Strict";
+        String rootURL = "http://identifiers.org/" + fullName + "A";
+        String urnBase = "urn:miriam:" + fullName + "B";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
 		DataSource source = DataSource.register(null, fullName)
                 .urnBase(urnBase)
                 .asDataSource();
@@ -592,4 +629,65 @@ public class DataSourceUrnBaseTest{
         expected = null;
         Assert.assertEquals(expected, result);        
     }
+
+    @Test    
+    public void testIdentifiersOverWriteNonMiriamVersion1() throws IDMapperException{
+        String fullName = "DataSourceUrnBase_testIdentifiersOverWriteNonMiriamVersion1";
+        String rootURL = "http://identifiers.org/" + fullName + "A";
+        String urnBase = fullName + "B";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.VERSION1);
+		DataSource source = DataSource.register(null, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = fullName + "B" + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        Assert.assertEquals(null, result);        
+        source.setIdentifiersOrgUriBase(rootURL);
+        result = source.getURN(id);
+        expected = "urn:miriam:" + fullName + "A" + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        expected = "http://identifiers.org/" + fullName + "A" + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test    
+    public void testIdentifiersOverWriteNonMiriamControlled() throws IDMapperException{
+        String fullName = "DataSourceUrnBase_testIdentifiersOverWriteNonMiriamController";
+        String rootURL = "http://identifiers.org/" + fullName + "A";
+        String urnBase = fullName + "B";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
+		DataSource source = DataSource.register(null, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        String id = "1234";
+        String result = source.getURN(id);
+        String expected = fullName + "B" + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        Assert.assertEquals(null, result);        
+        source.setIdentifiersOrgUriBase(rootURL);
+        result = source.getURN(id);
+        expected = "urn:miriam:" + fullName + "A" + ":" + id;
+        Assert.assertEquals(expected, result);        
+        result = source.getIdentifiersOrgUri(id);
+        expected = "http://identifiers.org/" + fullName + "A" + "/" + id;
+        Assert.assertEquals(expected, result);        
+    }
+
+    @Test (expected = IDMapperException.class)   
+    public void testIdentifiersOverWriteNonMiriamStrict() throws IDMapperException{
+        String fullName = "DataSourceUrnBase_testIdentifiersOverWriteNonMiriamStrict";
+        String rootURL = "http://identifiers.org/" + fullName + "A";
+        String urnBase = fullName + "B";
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+		DataSource source = DataSource.register(null, fullName)
+                .urnBase(urnBase)
+                .asDataSource();
+        source.setIdentifiersOrgUriBase(rootURL);
+    }
+
 }
