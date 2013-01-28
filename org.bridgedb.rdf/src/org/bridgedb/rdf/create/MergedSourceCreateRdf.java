@@ -56,13 +56,13 @@ public class MergedSourceCreateRdf {
         File utilsFile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
         BridgeDBRdfHandler.parseRdfFile(utilsFile);
         
-        File mergedFile = new File("../org.bridgedb.utils/resources/MergedDataSource.ttl");
+        File mergedFile = new File("../org.bridgedb.rdf/resources/DataSource.ttl");
         BridgeDBRdfHandler.writeRdfToFile(mergedFile, false);
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(mergedFile);        
                 
         //Write a file marking the primary URIs as currently set
-        File primaryfile = new File("../org.bridgedb.rdf/resources/MergedDataSourceWithPrimary.ttl");
+        File primaryfile = new File("../org.bridgedb.rdf/resources/DataSourceWithPrimary.ttl");
         BridgeDBRdfHandler.writeRdfToFile(primaryfile, true);
         
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
