@@ -35,7 +35,7 @@ import org.bridgedb.utils.ConfigReader;
  *
  * @author Christian
  */
-public class MergedSourceCreateRdf {
+public class BioAndTttlCreateRdf {
     
     private IDMapper mapper;
     private String name;
@@ -49,26 +49,25 @@ public class MergedSourceCreateRdf {
     public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
         ConfigReader.logToConsole();
 
-        //File utilsFile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
-        //BridgeDBRdfHandler.parseRdfFile(utilsFile);
+        //Load DataSources from BioDataSource and save that
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
+        BioDataSource.init();
         
-        System.out.println(DataSource.getDataSources());
-        File addFile = new File("../org.bridgedb.rdf/resources/ChristianDataSource.ttl");
-        BridgeDBRdfHandler.parseRdfFile(addFile);
+        File utilsFile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
+        BridgeDBRdfHandler.parseRdfFile(utilsFile);
         
-        System.out.println(DataSource.getDataSources());
-        File mergedFile = new File("../org.bridgedb.rdf/resources/MergedDataSource.ttl");
+        File mergedFile = new File("../org.bridgedb.rdf/resources/DataSource.ttl");
         BridgeDBRdfHandler.writeRdfToFile(mergedFile, false);
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(mergedFile);        
                 
         //Write a file marking the primary URIs as currently set
-        File primaryfile = new File("../org.bridgedb.rdf/resources/MergedDataSourceWithPrimary.ttl");
+        File primaryfile = new File("../org.bridgedb.rdf/resources/DataSourceWithPrimary.ttl");
         BridgeDBRdfHandler.writeRdfToFile(primaryfile, true);
         
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(primaryfile);
-       
+        
      }
 
 }
