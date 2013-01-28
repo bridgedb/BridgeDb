@@ -512,7 +512,13 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
            if (value2 == null || value2.trim().isEmpty()){
                return 1;
            } else {
-               return value1.toLowerCase().compareTo(value2.toLowerCase());
+               //Try Ignore case first
+               int result = value1.toLowerCase().compareTo(value2.toLowerCase());
+               if (result != 0){
+                   return result;
+               }
+               //If that is tied try with case to keep Pubmed and PubMed order consistant.
+               return value1.compareTo(value2);
            }
         }
     }
