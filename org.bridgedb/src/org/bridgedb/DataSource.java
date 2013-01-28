@@ -255,10 +255,10 @@ public final class DataSource
         if (identifiersOrgBase.startsWith(IDENTIFIERS_URI_ROOT)){
             try {
                 if (identifiersOrgBase.endsWith("/")) {
-                    setUrnBaseStrict(MIRIAM_URN_ROOT + identifiersOrgBase.substring(IDENTIFIERS_URI_ROOT.length(),
+                    setUrnBase(MIRIAM_URN_ROOT + identifiersOrgBase.substring(IDENTIFIERS_URI_ROOT.length(),
                             identifiersOrgBase.length()-1));
                 } else {
-                    setUrnBaseStrict(MIRIAM_URN_ROOT + identifiersOrgBase.substring(IDENTIFIERS_URI_ROOT.length()));                    
+                    setUrnBase(MIRIAM_URN_ROOT + identifiersOrgBase.substring(IDENTIFIERS_URI_ROOT.length()));                    
                 }
            } catch (Exception e){
                throw new IDMapperException("Unable to set dentifiersOrgUriBase to " + identifiersOrgBase, e);
@@ -269,6 +269,33 @@ public final class DataSource
        }
     }
 	
+   /**
+    * Sets the urnBase, using the overWrite level
+    * 
+    * In contrast to Builder.setUrnBase in Version 1 this method does register the DataSource with this urn Base.
+    * 
+    * @param base for urn generation, for example "urn:miriam:uniprot"
+    * @throw IllegalArgumentException Depends on OverwriteLevel
+    * @see DataSourceOverwriteLevel
+    */
+    private void setUrnBase(String base) {
+        switch (overwriteLevel){
+            case VERSION1 : {
+                setUrnBaseVersion1(base);
+                break;
+            }
+            case CONTROLLED: {
+                setUrnBaseControlled(base);
+                break;
+            }   
+            case STRICT: {
+                setUrnBaseStrict(base);
+                break;
+            }
+            default: throw new IllegalStateException ("Unexpected overwriteLevel " + overwriteLevel);
+        }       
+    }
+    
    /**
     * Sets the urnBase keeping the same data as in version 1
     * 
@@ -472,8 +499,7 @@ public final class DataSource
 		 */
 		public Builder type (String type)
 		{
-            System.out.println(current + " " + type);
-            if (!current.type.equals(DEFAULT_TYPE) && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
+           if (!current.type.equals(DEFAULT_TYPE) && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
                     !current.type.equals(type)){
                 throw new IllegalArgumentException("Illegal attemt to change type for " + current + 
                         " was " + current.type + " so can not set " + type);
@@ -506,22 +532,9 @@ public final class DataSource
 		 */
 		public Builder urnBase (String base)
 		{
-            switch (overwriteLevel){
-                case VERSION1 : {
-                    current.setUrnBaseVersion1(base);
-        			return this;
-               }
-                case CONTROLLED: {
-                    current.setUrnBaseControlled(base);
-        			return this;
-                }   
-                case STRICT: {
-                    current.setUrnBaseStrict(base);
-        			return this;
-                }
-                default: throw new IllegalStateException ("Unexpected overwriteLevel " + overwriteLevel);
-            }       
- 		}
+            current.setUrnBase(base);
+            return this;
+        }
 
         /**
          * Adds an alternative name to this DataSource, and registers it by fullName
