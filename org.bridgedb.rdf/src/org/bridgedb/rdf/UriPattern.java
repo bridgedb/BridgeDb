@@ -117,7 +117,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     }
 
     public static UriPattern byNameSpaceAndPostFix(String nameSpace, String postfix) throws BridgeDBException{
-        if (postfix.isEmpty()){
+        if (postfix.isEmpty() || postfix.equals("NULL")){
             return byNameSpace(nameSpace);
         } else {
             return byNameSpaceAndPostfix(nameSpace, postfix);
