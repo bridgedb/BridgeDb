@@ -41,7 +41,7 @@ import org.bridgedb.utils.StoreType;
 public class SQLListener implements MappingListener{
 
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	public static final int SQL_COMPAT_VERSION = 4;
+	public static final int SQL_COMPAT_VERSION = 21;
   
     //Maximumn size in database
     protected static final int SYSCODE_LENGTH = 100;
@@ -58,6 +58,34 @@ public class SQLListener implements MappingListener{
     private static final int SQL_TIMEOUT = 2;
     private static final int MAX_BLOCK_SIZE = 1000;
     
+    static final String FULL_NAME_COLUMN_NAME = "fullName";
+    static final String ID_COLUMN_NAME = "id";
+    static final String ID_EXAMPLE_COLUMN_NAME = "idExample";
+    static final String IS_PRIMARY_COLUMN_NAME = "isPrimary";
+    static final String IS_PUBLIC_COLUMN_NAME = "isPublic";
+    static final String IS_TRANSITIVE_COLUMN_NAME = "isTransitive";  
+    static final String KEY_COLUMN_NAME = "theKey";
+    static final String MAIN_URL_COLUMN_NAME = "mainUrl";
+    static final String MAPPING_COUNT_COLUMN_NAME = "mappingCount";
+    static final String MAPPING_SET_ID_COLUMN_NAME = "mappingSetId";
+    static final String PREDICATE_COLUMN_NAME = "predicate";
+    static final String PROPERTY_COLUMN_NAME = "property";
+    static final String SCHEMA_VERSION_COLUMN_NAME = "schemaversion";
+    static final String SOURCE_DATASOURCE_COLUMN_NAME = "sourceDataSource";
+    static final String SOURCE_ID_COLUMN_NAME = "sourceId";
+    static final String SYSCODE_COLUMN_NAME = "sysCode";
+    static final String TARGET_ID_COLUMN_NAME = "targetId";
+    static final String TARGET_DATASOURCE_COLUMN_NAME = "targetDataSource";
+    static final String TYPE_COLUMN_NAME = "type";
+    static final String URL_PATTERN_COLUMN_NAME = "urlPattern";
+    static final String URN_BASE_COLUMN_NAME = "urnBase";
+
+    static final String DATASOURCE_TABLE_NAME = "DataSource";
+    static final String INFO_TABLE_NAME = "info";
+    static final String MAPPING_TABLE_NAME = "mapping";
+    static final String MAPPING_SET_TABLE_NAME = "mappingSet";
+    static final String PROPERTIES_TABLE_NAME = "properties";
+
     protected SQLAccess sqlAccess;
     protected Connection possibleOpenConnection;
     private final int blockSize;
@@ -113,13 +141,16 @@ public class SQLListener implements MappingListener{
      */
     private int registerMappingSet(DataSource source, DataSource target, String predicate, boolean isTransitive) 
             throws BridgeDbSqlException {
-        String query = "INSERT INTO mappingSet "
-                    + "(sourceDataSource, predicate, targetDataSource, isTransitive) " 
-                    + "VALUES (" 
-                    + "'" + source.getSystemCode() + "', " 
-                    + "'" + predicate + "', " 
-                    + "'" + target.getSystemCode() + "',"
-                    + "'" + booleanIntoQuery(isTransitive) + "')";
+        String query = "INSERT INTO " + MAPPING_SET_TABLE_NAME
+                + " (" + SOURCE_DATASOURCE_COLUMN_NAME + ", " 
+                    + PREDICATE_COLUMN_NAME + ", " 
+                    + TARGET_DATASOURCE_COLUMN_NAME + ", " 
+                    + IS_TRANSITIVE_COLUMN_NAME + ") " 
+                + " VALUES (" 
+                + "'" + source.getSystemCode() + "', " 
+                + "'" + predicate + "', " 
+                + "'" + target.getSystemCode() + "',"
+                + "'" + booleanIntoQuery(isTransitive) + "')";
         Statement statement = createStatement();
         try {
             statement.executeUpdate(query);
@@ -183,7 +214,15 @@ public class SQLListener implements MappingListener{
     private void insertLink(String sourceId, String targetId, int mappingSetId) throws BridgeDbSqlException{
         if (blockCount >= blockSize){
             runInsert();
-            insertQuery = new StringBuilder("INSERT INTO mapping (sourceId, targetId, mappingSetId) VALUES ");
+            insertQuery = new StringBuilder("INSERT INTO ");
+            insertQuery.append(MAPPING_TABLE_NAME);
+            insertQuery.append(" (");
+            insertQuery.append(SOURCE_ID_COLUMN_NAME);
+            insertQuery.append(", ");
+            insertQuery.append(TARGET_ID_COLUMN_NAME);
+            insertQuery.append(", ");
+            insertQuery.append(MAPPING_SET_ID_COLUMN_NAME);
+            insertQuery.append(") VALUES ");
         } else {
             try {
                 insertQuery.append(", ");        
@@ -260,7 +299,7 @@ public class SQLListener implements MappingListener{
             System.err.println("Unable to drop table " + name + " assuming it does not exist");
         }
     }
-
+ 
     /**
 	  * Excecutes several SQL statements to create the tables and indexes in the database.
       * <p>
@@ -295,45 +334,45 @@ public class SQLListener implements MappingListener{
 		{
 			Statement sh = createStatement();
  			sh.execute("CREATE TABLE                            "
-					+ "info                                     " 
-					+ "(    schemaversion INTEGER PRIMARY KEY	"
+					+ INFO_TABLE_NAME 
+					+ " (    " + SCHEMA_VERSION_COLUMN_NAME + " INTEGER PRIMARY KEY	"
                     + ")");
   			sh.execute( //Add compatibility version of GDB
-					"INSERT INTO info VALUES ( " + SQL_COMPAT_VERSION + ")");
+					"INSERT INTO " + INFO_TABLE_NAME + " VALUES ( " + SQL_COMPAT_VERSION + ")");
             //TODO add organism as required
-            sh.execute("CREATE TABLE DataSource "
-                    + "  (  sysCode VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
-                    + "     isPrimary SMALLINT,                                  "
-                    + "     fullName VARCHAR(" + FULLNAME_LENGTH + "),      "
-                    + "     mainUrl VARCHAR(" + MAINURL_LENGTH + "),        "
-                    + "     urlPattern VARCHAR(" + URLPATTERN_LENGTH + "),  "
-                    + "     idExample VARCHAR(" + ID_LENGTH + "),           "
-                    + "     type VARCHAR(" + TYPE_LENGTH + "),              "
-                    + "     urnBase VARCHAR(" + URNBASE_LENGTH + ")         "
+            sh.execute("CREATE TABLE " + DATASOURCE_TABLE_NAME 
+                    + "  (  " + SYSCODE_COLUMN_NAME     + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
+                    + "     " + IS_PRIMARY_COLUMN_NAME  + " SMALLINT,                                  "
+                    + "     " + FULL_NAME_COLUMN_NAME   + " VARCHAR(" + FULLNAME_LENGTH + "),      "
+                    + "     " + MAIN_URL_COLUMN_NAME    + " VARCHAR(" + MAINURL_LENGTH + "),        "
+                    + "     " + URL_PATTERN_COLUMN_NAME + " VARCHAR(" + URLPATTERN_LENGTH + "),  "
+                    + "     " + ID_EXAMPLE_COLUMN_NAME  + " VARCHAR(" + ID_LENGTH + "),           "
+                    + "     " + TYPE_COLUMN_NAME        + " VARCHAR(" + TYPE_LENGTH + "),              "
+                    + "     " + URN_BASE_COLUMN_NAME    + " VARCHAR(" + URNBASE_LENGTH + ")         "
                     + "  ) ");
-            String query = "CREATE TABLE mapping " 
-                    + "( id INT " + autoIncrement + " PRIMARY KEY, " 
-                    + "  sourceId VARCHAR(" + ID_LENGTH + ") NOT NULL, "
-        			+ "  targetId VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
-                    + "  mappingSetId INT(" + LINK_SET_ID_LENGTH + ") "
+            String query = "CREATE TABLE " + MAPPING_TABLE_NAME 
+                    + "( " + ID_COLUMN_NAME             + " INT " + autoIncrement + " PRIMARY KEY, " 
+                    + "  " + SOURCE_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, "
+        			+ "  " + TARGET_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
+                    + "  " + MAPPING_SET_ID_COLUMN_NAME + " INT(" + LINK_SET_ID_LENGTH + ") "
                     + " ) ";
 			sh.execute(query);
-            sh.execute("CREATE INDEX sourceFind ON mapping (sourceid) ");
-            sh.execute("CREATE INDEX sourceMappingSetFind ON mapping (mappingSetId, sourceId) ");
-         	query =	"CREATE TABLE mappingSet " 
-                    + "( id INT " + autoIncrement + " PRIMARY KEY, " 
-                    + "     sourceDataSource VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
-                    + "     predicate   VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
-                    + "     targetDataSource VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
-                    + "     isTransitive    SMALLINT, "
-                    + "     mappingCount INT "
+            sh.execute("CREATE INDEX sourceFind ON " + MAPPING_TABLE_NAME + " (" + SOURCE_ID_COLUMN_NAME + ") ");
+            sh.execute("CREATE INDEX sourceMappingSetFind ON " + MAPPING_TABLE_NAME + " (" + MAPPING_SET_ID_COLUMN_NAME + ", " + SOURCE_ID_COLUMN_NAME + ") ");
+         	query =	"CREATE TABLE " + MAPPING_SET_TABLE_NAME 
+                    + " (" + ID_COLUMN_NAME                   + " INT " + autoIncrement + " PRIMARY KEY, " 
+                    + "     " + SOURCE_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
+                    + "     " + PREDICATE_COLUMN_NAME         + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
+                    + "     " + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
+                    + "     " + IS_TRANSITIVE_COLUMN_NAME     + " SMALLINT, "
+                    + "     " + MAPPING_COUNT_COLUMN_NAME     + " INT "
 					+ " ) "; 
             sh.execute(query);
             sh.execute ("CREATE TABLE  "
-                    + "    properties "
-                    + "(   theKey      VARCHAR(" + KEY_LENGTH + ") NOT NULL, "
-                    + "    property    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
-                    + "    isPublic    SMALLINT "
+                    + "    " + PROPERTIES_TABLE_NAME
+                    + "(   " + KEY_COLUMN_NAME +   "      VARCHAR(" + KEY_LENGTH + ") NOT NULL, "
+                    + "    " + PROPERTY_COLUMN_NAME + "    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
+                    + "    " + IS_PUBLIC_COLUMN_NAME + "    SMALLINT "
 					+ " ) "); 
             sh.close();
 		} catch (SQLException e)
@@ -417,10 +456,10 @@ public class SQLListener implements MappingListener{
         if (sysCode.isEmpty()) {
             throw new BridgeDbSqlException ("Currently unable to handle Datasources with empty systemCode");
         }
-        String query = "SELECT sysCode"
-                + "   from DataSource "
+        String query = "SELECT " + SYSCODE_COLUMN_NAME
+                + "   from " + DATASOURCE_TABLE_NAME
                 + "   where "
-                + "      sysCode = '" + source.getSystemCode() + "'"; 
+                + "      " + SYSCODE_COLUMN_NAME + " = '" + source.getSystemCode() + "'"; 
         boolean found;
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -443,7 +482,12 @@ public class SQLListener implements MappingListener{
      * @throws BridgeDbSqlException 
      */
     private void writeDataSource(DataSource source) throws BridgeDbSqlException{
-        StringBuilder insert = new StringBuilder ("INSERT INTO DataSource ( sysCode , isPrimary ");
+        StringBuilder insert = new StringBuilder ("INSERT INTO ");
+        insert.append(DATASOURCE_TABLE_NAME);
+        insert.append(" ( ");
+        insert.append(SYSCODE_COLUMN_NAME);
+        insert.append(", ");
+        insert.append(IS_PRIMARY_COLUMN_NAME);
         StringBuilder values = new StringBuilder ("Values ( ");
         if (source.getSystemCode().length() > SYSCODE_LENGTH ){
             throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
@@ -463,7 +507,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
                         " so unable to save " + value);
             }
-            insert.append (", fullName ");
+            insert.append (", ");
+            insert.append (FULL_NAME_COLUMN_NAME);
+            insert.append (" ");
             values.append (", '");
             values.append (value);
             values.append ("' ");
@@ -474,7 +520,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
                         " so unable to save " + value);
             }
-            insert.append (", mainUrl ");
+            insert.append (", ");
+            insert.append (MAIN_URL_COLUMN_NAME);
+            insert.append (" ");
             values.append (", '");
             values.append (value);
             values.append ("' ");
@@ -485,7 +533,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
                         " so unable to save " + value);
             }
-            insert.append (", urlPattern ");
+            insert.append (", ");
+            insert.append (URL_PATTERN_COLUMN_NAME);
+            insert.append (" ");
             values.append (", '");
             values.append (value);
             values.append ("' ");
@@ -496,7 +546,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for exampleId is " + ID_LENGTH + 
                         " so unable to save " + value);
             }
-            insert.append (", idExample ");
+            insert.append (", ");
+            insert.append (ID_EXAMPLE_COLUMN_NAME);
+            insert.append (" ");
             values.append (", '");
             values.append (value);
             values.append ("' ");
@@ -507,7 +559,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for type is " + TYPE_LENGTH + 
                         " so unable to save " + value);
             }
-            insert.append (", type ");
+            insert.append (", ");
+            insert.append (TYPE_COLUMN_NAME);
+            insert.append (" ");
             values.append (", '");
             values.append (value);
             values.append ("' ");
@@ -520,7 +574,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
                         " so unable to save " + value);
             }
-            insert.append (", urnBase ");
+            insert.append (", ");
+            insert.append (URN_BASE_COLUMN_NAME);
+            insert.append (" ");
             values.append (", '");
             values.append (value);
             values.append ("' ");
@@ -555,8 +611,11 @@ public class SQLListener implements MappingListener{
      * @throws BridgeDbSqlException 
      */
     private void updateDataSource(DataSource source) throws BridgeDbSqlException{
-        StringBuilder update = new StringBuilder("UPDATE DataSource ");
-        update.append ("SET isPrimary = ");
+        StringBuilder update = new StringBuilder("UPDATE ");
+        update.append (DATASOURCE_TABLE_NAME);
+        update.append (" SET ");
+        update.append (IS_PRIMARY_COLUMN_NAME);
+        update.append (" = ");
         update.append (booleanIntoQuery(source.isPrimary()));
         update.append (" ");       
         String value = source.getFullName();
@@ -565,7 +624,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", fullName = '");
+            update.append (", ");
+            update.append (FULL_NAME_COLUMN_NAME);
+            update.append (" = '");
             update.append (value);
             update.append ("' ");
         }       
@@ -575,7 +636,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", mainUrl = '");
+            update.append (", ");
+            update.append (MAIN_URL_COLUMN_NAME);
+            update.append (" = '");
             update.append (value);
             update.append ("' ");
         }
@@ -585,7 +648,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", urlPattern = '");
+            update.append (", ");
+            update.append (URL_PATTERN_COLUMN_NAME);
+            update.append (" = '");
             update.append (value);
             update.append ("' ");
         }
@@ -595,7 +660,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for exampleId is " + ID_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", idExample = '");
+            update.append (", ");
+        update.append (ID_EXAMPLE_COLUMN_NAME);
+        update.append (" = '");
             update.append (value);
             update.append ("' ");
         }
@@ -605,7 +672,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for type is " + TYPE_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", type = '");
+            update.append (", ");
+        update.append (TYPE_COLUMN_NAME);
+        update.append (" = '");
             update.append (value);
             update.append ("' ");
         }
@@ -617,7 +686,9 @@ public class SQLListener implements MappingListener{
                 throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
                         " so unable to save " + value);
             }
-            update.append (", urnBase = '");
+            update.append (", ");
+        update.append (URN_BASE_COLUMN_NAME);
+        update.append (" = '");
             update.append (value);
             update.append ("' ");
         }
@@ -625,7 +696,9 @@ public class SQLListener implements MappingListener{
             throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
                     " so unable to save " + source.getSystemCode());
         }
-        update.append ("WHERE sysCode  = '");
+        update.append ("WHERE ");
+        update.append (SYSCODE_COLUMN_NAME);
+        update.append ("  = '");
         update.append (source.getSystemCode());
         update.append ("' ");
         if (source.getOrganism() != null){
@@ -650,16 +723,16 @@ public class SQLListener implements MappingListener{
     }
 
     public void putProperty(String key, String value) throws BridgeDbSqlException {
-        String delete = "DELETE from properties where theKey = '" + key + "'";
+        String delete = "DELETE from " + PROPERTIES_TABLE_NAME + " where " + KEY_COLUMN_NAME + " = '" + key + "'";
         Statement statement = this.createStatement();
         try {
             statement.executeUpdate(delete.toString());
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Error Deleting property " + delete, ex);
         }
-        String update = "INSERT INTO properties    "
-                    + "(theKey, property, isPublic )                            " 
-                    + "VALUES ('" + key + "', '" + value  + "' , 1)  ";
+        String update = "INSERT INTO " + PROPERTIES_TABLE_NAME
+                    + " (" + KEY_COLUMN_NAME + ", " + PROPERTY_COLUMN_NAME + ", " + IS_PUBLIC_COLUMN_NAME + " )" 
+                    + " VALUES ('" + key + "', '" + value  + "' , 1)  ";
         try {
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
@@ -676,34 +749,36 @@ public class SQLListener implements MappingListener{
     private void loadDataSources() throws BridgeDbSqlException{
         try {
             Statement statement = this.createStatement();
-            String query = "SELECT sysCode, isPrimary, fullName, mainUrl, urlPattern, idExample, type, urnBase"
-                    + "   from DataSource ";           
+            String query = "SELECT " + SYSCODE_COLUMN_NAME + ", " + IS_PRIMARY_COLUMN_NAME + ", " 
+                    + FULL_NAME_COLUMN_NAME + ", " + MAIN_URL_COLUMN_NAME + ", " + URL_PATTERN_COLUMN_NAME + ", " 
+                    + ID_EXAMPLE_COLUMN_NAME + ", " + TYPE_COLUMN_NAME + ", " + URN_BASE_COLUMN_NAME
+                    + "   from " + DATASOURCE_TABLE_NAME;           
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()){
-                String sysCode = rs.getString("sysCode");
+                String sysCode = rs.getString(SYSCODE_COLUMN_NAME);
                 if (sysCode.equals("null")){
                     sysCode = null;
                 }
-                String fullName = rs.getString("fullName");
+                String fullName = rs.getString(FULL_NAME_COLUMN_NAME);
                 DataSource.Builder builder = DataSource.register(sysCode, fullName);
-                builder.primary(rs.getBoolean("isPrimary"));
-                String mainUrl = rs.getString("mainUrl");
+                builder.primary(rs.getBoolean(IS_PRIMARY_COLUMN_NAME));
+                String mainUrl = rs.getString(MAIN_URL_COLUMN_NAME);
                 if (mainUrl != null && !mainUrl.isEmpty() && mainUrl.equals("null")){
                     builder.mainUrl(mainUrl);
                 }
-                String urlPattern = rs.getString("urlPattern");
+                String urlPattern = rs.getString(URL_PATTERN_COLUMN_NAME);
                 if (urlPattern != null && !urlPattern.isEmpty() && urlPattern.equals("null")){
                     builder.urlPattern(urlPattern);
                 }
-                String idExample = rs.getString("idExample");
+                String idExample = rs.getString(ID_EXAMPLE_COLUMN_NAME);
                 if (idExample != null && !idExample.isEmpty() && idExample.equals("null")){
                     builder.idExample(idExample);
                 }
-                String type = rs.getString("type");
+                String type = rs.getString(TYPE_COLUMN_NAME);
                 if (type != null && !type.isEmpty() && type.equals("null")){
                     builder.type(type);
                 }
-                String urnBase = rs.getString("urnBase");
+                String urnBase = rs.getString(URN_BASE_COLUMN_NAME);
                 if (urnBase != null && !urnBase.isEmpty() && urnBase.equals("null")){
                     builder.urnBase(urnBase);
                 }
@@ -723,15 +798,19 @@ public class SQLListener implements MappingListener{
         logger.info ("Updating link count. Please Wait!");
         Statement countStatement = this.createStatement();
         Statement updateStatement = this.createStatement();
-        String query = ("select count(*) as mycount, mappingSetId from mapping group by mappingSetId");  
+        String query = ("select count(*) as mycount, " + MAPPING_SET_ID_COLUMN_NAME 
+                + " from " + MAPPING_TABLE_NAME 
+                + " group by " + MAPPING_SET_ID_COLUMN_NAME);  
         ResultSet rs;
         try {
             rs = countStatement.executeQuery(query);    
             logger.info ("Count query run. Updating link count now");
             while (rs.next()){
                 int count = rs.getInt("mycount");
-                String mappingSetId = rs.getString("mappingSetId");  
-                String update = "update mappingSet set mappingCount = " + count + " where id = '" + mappingSetId + "'";
+                String mappingSetId = rs.getString(MAPPING_SET_ID_COLUMN_NAME);  
+                String update = "update " + MAPPING_SET_TABLE_NAME 
+                        + " set " + MAPPING_COUNT_COLUMN_NAME + " = " + count 
+                        + " where " + ID_COLUMN_NAME + " = '" + mappingSetId + "'";
                 try {
                     int updateCount = updateStatement.executeUpdate(update);
                     if (updateCount != 1){
