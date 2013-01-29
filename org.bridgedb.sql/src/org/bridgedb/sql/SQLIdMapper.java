@@ -78,18 +78,37 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             return new HashSet<Xref>();
         }
         StringBuilder query = new StringBuilder();
-        query.append("SELECT targetId as id, targetDataSource as sysCode ");
-        query.append("FROM mapping, mappingSet ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
+        query.append("SELECT ");
+            query.append(TARGET_ID_COLUMN_NAME);
+                query.append(" as ");
+                query.append(ID_COLUMN_NAME);
+                query.append(", ");
+            query.append(TARGET_DATASOURCE_COLUMN_NAME);
+                query.append(" as ");
+                query.append(SYSCODE_COLUMN_NAME);
+        query.append(" FROM ");
+            query.append(MAPPING_TABLE_NAME);
+                query.append(", ");
+            query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+            query.append(MAPPING_SET_ID_COLUMN_NAME);
+                query.append(" = ");
+                query.append(MAPPING_SET_TABLE_NAME);
+                query.append(".");
+                query.append(ID_COLUMN_NAME);
         appendSourceXref(query, ref);
         if (tgtDataSources.length > 0){    
-            query.append("AND ( targetDataSource = '");
-                query.append(tgtDataSources[0].getSystemCode());
-                query.append("' ");
+            query.append(" AND ( ");
+            query.append(TARGET_DATASOURCE_COLUMN_NAME);
+            query.append(" = '");
+            query.append(tgtDataSources[0].getSystemCode());
+            query.append("' ");
             for (int i = 1; i < tgtDataSources.length; i++){
-                query.append("OR targetDataSource = '");
-                    query.append(tgtDataSources[i].getSystemCode());
-                    query.append("'");
+                query.append(" OR ");
+                query.append(TARGET_DATASOURCE_COLUMN_NAME);
+                query.append(" = '");
+                query.append(tgtDataSources[i].getSystemCode());
+                query.append("'");
             }
             query.append(")");
         }
@@ -136,9 +155,15 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
         appendTopConditions(query, 0, 1); 
-        query.append("targetId ");
-        query.append("FROM mapping, mappingSet ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
+        query.append(TARGET_ID_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(MAPPING_TABLE_NAME);
+        query.append(", ");
+        query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(MAPPING_SET_ID_COLUMN_NAME);
+        query.append(" = ");
+        query.append(MAPPING_SET_DOT_ID_COLUMN_NAME);
         appendSourceXref(query, xref);
         appendLimitConditions(query,0, 1);
         Statement statement = this.createStatement();
@@ -160,10 +185,24 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
         appendTopConditions(query, 0, limit); 
-        query.append(" sourceId as id, sourceDataSource as sysCode ");
-        query.append("FROM mapping, mappingSet ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND sourceId = '");
+        query.append(SOURCE_ID_COLUMN_NAME);
+        query.append(" as ");
+        query.append(ID_COLUMN_NAME);
+        query.append(", ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+        query.append(" as ");
+        query.append(SYSCODE_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(MAPPING_TABLE_NAME);
+        query.append(", ");
+        query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(MAPPING_SET_ID_COLUMN_NAME);
+        query.append(" = ");
+        query.append(MAPPING_SET_DOT_ID_COLUMN_NAME);
+        query.append(" AND ");
+        query.append(SOURCE_ID_COLUMN_NAME);
+        query.append(" = '");
             query.append(text);
             query.append("' ");
         appendLimitConditions(query,0, limit);
@@ -232,8 +271,12 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     @Override
     public Set<DataSource> getSupportedSrcDataSources() throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT sourceDataSource as sysCode ");
-        query.append("FROM mappingSet ");
+        query.append("SELECT ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+        query.append(" as ");
+        query.append(SYSCODE_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(MAPPING_SET_TABLE_NAME);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -251,8 +294,12 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     @Override
     public Set<DataSource> getSupportedTgtDataSources() throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT targetDataSource as sysCode ");
-        query.append("FROM mappingSet ");
+        query.append("SELECT ");
+        query.append(TARGET_DATASOURCE_COLUMN_NAME);
+        query.append(" as ");
+        query.append(SYSCODE_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(MAPPING_SET_TABLE_NAME);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -270,12 +317,18 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT predicate ");
-        query.append("FROM mappingSet ");
-        query.append("WHERE sourceDataSource = '");
+        query.append("SELECT ");
+        query.append(PREDICATE_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+        query.append(" = '");
             query.append(src.getSystemCode());
             query.append("' ");        
-        query.append("AND targetDataSource = '");
+        query.append(" AND ");
+        query.append(TARGET_DATASOURCE_COLUMN_NAME);
+        query.append(" = '");
             query.append(tgt.getSystemCode());
             query.append("' ");        
         
@@ -295,9 +348,9 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
 
     @Override
     public String getProperty(String key) {
-        String query = "SELECT DISTINCT property "
-                + "FROM properties "
-                + "WHERE theKey = '" + key + "'";
+        String query = "SELECT DISTINCT " + PROPERTY_COLUMN_NAME 
+                + " FROM " + PROPERTIES_TABLE_NAME 
+                + " WHERE " + KEY_COLUMN_NAME + " = '" + key + "'";
         try {
             Statement statement = this.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -322,14 +375,14 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
     @Override
     public Set<String> getKeys() {
         HashSet<String> results = new HashSet<String>();
-        String query = "SELECT theKey "
-                + "FROM properties "
-                + "WHERE isPublic = 1"; //one works where isPublic is a boolean
+        String query = "SELECT " + KEY_COLUMN_NAME
+                + " FROM " + PROPERTIES_TABLE_NAME
+                + " WHERE " + IS_PUBLIC_COLUMN_NAME + " = 1"; //one works where isPublic is a boolean
         try {
             Statement statement = this.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()){
-                results.add(rs.getString("theKey"));
+                results.add(rs.getString(KEY_COLUMN_NAME));
             }
             if (logger.isDebugEnabled()){
                 logger.warn("getKeys() returned " + results.size() + " keys! ");
@@ -363,10 +416,14 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
      * @param ref Xref that forms the base of the condition.
      */
     protected final void appendSourceXref(StringBuilder query, Xref ref){
-        query.append("AND sourceId = '");
+        query.append(" AND ");
+            query.append(SOURCE_ID_COLUMN_NAME);
+            query.append(" = '");
             query.append(ref.getId());
             query.append("' ");
-       query.append("AND sourceDataSource = '");
+        query.append(" AND ");
+            query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+            query.append(" = '");
             query.append(ref.getDataSource().getSystemCode());
             query.append("' ");        
     }
@@ -377,10 +434,14 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
      * @param ref Xref that forms the base of the condition.
      */
     protected final void appendSourceXref(StringBuilder query, String id, String sysCode){
-        query.append("AND sourceId = '");
+        query.append(" AND ");
+            query.append(SOURCE_ID_COLUMN_NAME);
+            query.append(" = '");
             query.append(id);
             query.append("' ");
-       query.append("AND sourceDataSource = '");
+       query.append(" AND ");
+            query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+            query.append(" = '");
             query.append(sysCode);
             query.append("' ");        
     }
@@ -393,8 +454,8 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         HashSet<Xref> results = new HashSet<Xref>();
         try {
             while (rs.next()){
-                String id = rs.getString("id");
-                String sysCode = rs.getString("sysCode");
+                String id = rs.getString(ID_COLUMN_NAME);
+                String sysCode = rs.getString(SYSCODE_COLUMN_NAME);
                 DataSource dataSource = DataSource.getBySystemCode(sysCode);
                 Xref xref = new Xref(id, dataSource);
                 results.add(xref);
@@ -418,7 +479,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         HashSet<DataSource> results = new HashSet<DataSource>();
         try {
             while (rs.next()){
-                String sysCode = rs.getString("sysCode");
+                String sysCode = rs.getString(SYSCODE_COLUMN_NAME);
                 DataSource dataSource = DataSource.getBySystemCode(sysCode);
                 results.add(dataSource);
             }
@@ -467,7 +528,5 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append("TOP " + position + ", " + limit + " ");                
         }
     }
-
-
 
 }

@@ -58,6 +58,12 @@ public class SQLListener implements MappingListener{
     private static final int SQL_TIMEOUT = 2;
     private static final int MAX_BLOCK_SIZE = 1000;
     
+    static final String DATASOURCE_TABLE_NAME = "DataSource";
+    static final String INFO_TABLE_NAME = "info";
+    static final String MAPPING_TABLE_NAME = "mapping";
+    static final String MAPPING_SET_TABLE_NAME = "mappingSet";
+    static final String PROPERTIES_TABLE_NAME = "properties";
+
     static final String FULL_NAME_COLUMN_NAME = "fullName";
     static final String ID_COLUMN_NAME = "id";
     static final String ID_EXAMPLE_COLUMN_NAME = "idExample";
@@ -68,6 +74,7 @@ public class SQLListener implements MappingListener{
     static final String MAIN_URL_COLUMN_NAME = "mainUrl";
     static final String MAPPING_COUNT_COLUMN_NAME = "mappingCount";
     static final String MAPPING_SET_ID_COLUMN_NAME = "mappingSetId";
+    static final String MAPPING_SET_DOT_ID_COLUMN_NAME = MAPPING_SET_TABLE_NAME + "." + ID_COLUMN_NAME;
     static final String PREDICATE_COLUMN_NAME = "predicate";
     static final String PROPERTY_COLUMN_NAME = "property";
     static final String SCHEMA_VERSION_COLUMN_NAME = "schemaversion";
@@ -79,12 +86,6 @@ public class SQLListener implements MappingListener{
     static final String TYPE_COLUMN_NAME = "type";
     static final String URL_PATTERN_COLUMN_NAME = "urlPattern";
     static final String URN_BASE_COLUMN_NAME = "urnBase";
-
-    static final String DATASOURCE_TABLE_NAME = "DataSource";
-    static final String INFO_TABLE_NAME = "info";
-    static final String MAPPING_TABLE_NAME = "mapping";
-    static final String MAPPING_SET_TABLE_NAME = "mappingSet";
-    static final String PROPERTIES_TABLE_NAME = "properties";
 
     protected SQLAccess sqlAccess;
     protected Connection possibleOpenConnection;
