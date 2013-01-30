@@ -20,7 +20,6 @@
 package org.bridgedb.utils;
 
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.junit.BeforeClass;
 
 /**
@@ -33,7 +32,7 @@ public abstract class IDMapperTestBase extends org.bridgedb.IDMapperTestBase{
     static final Logger logger = Logger.getLogger(IDMapperTestBase.class);
 
     @BeforeClass
-    public static void setup() throws IDMapperException{
+    public static void setup() throws BridgeDBException{
         TestUtils.setup();
     }
     

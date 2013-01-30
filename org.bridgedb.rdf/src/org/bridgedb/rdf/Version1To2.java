@@ -22,8 +22,8 @@ package org.bridgedb.rdf;
 import java.io.File;
 import java.io.IOException;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 /**
@@ -33,7 +33,7 @@ import org.bridgedb.utils.ConfigReader;
 public class Version1To2 {
     static final Logger logger = Logger.getLogger(Version1To2.class);
 
-    public static void main(String[] args) throws IDMapperException, IOException {
+    public static void main(String[] args) throws BridgeDBException, IOException {
         ConfigReader.logToConsole();
         BioDataSource.init();
         File bioFile = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");

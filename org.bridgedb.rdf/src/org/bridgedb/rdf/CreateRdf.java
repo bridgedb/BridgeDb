@@ -26,8 +26,8 @@ import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourceOverwriteLevel;
 import org.bridgedb.IDMapper;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 
 /**
@@ -45,7 +45,7 @@ public class CreateRdf {
     
     static final Logger logger = Logger.getLogger(CreateRdf.class);
 
-    public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
+    public static void main(String[] args) throws BridgeDBException, IOException, ClassNotFoundException{
         ConfigReader.logToConsole();
 
         //Load DataSources from BioDataSource and save that

@@ -21,7 +21,6 @@ package org.bridgedb.utils;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 
 /**
  *
@@ -35,7 +34,7 @@ public class IpConfig {
 
     private static Properties properties;
 
-    public static boolean isAdminIPAddress(String ipAddress) throws IDMapperException {
+    public static boolean isAdminIPAddress(String ipAddress) throws BridgeDBException {
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){
             properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
@@ -44,7 +43,7 @@ public class IpConfig {
         return owner != null;
     }
 
-    public static String checkIPAddress(String ipAddress) throws IDMapperException{
+    public static String checkIPAddress(String ipAddress) throws BridgeDBException{
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){
             properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
@@ -56,14 +55,14 @@ public class IpConfig {
         return owner;
     }
     
-    private static Properties getProperties() throws IDMapperException{
+    private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
             properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
         }
         return properties;
     }
     
-    public static void main(String[] args) throws IDMapperException  {
+    public static void main(String[] args) throws BridgeDBException  {
         Set<Object> keys = getProperties().keySet();
         System.out.println(keys);
     }
