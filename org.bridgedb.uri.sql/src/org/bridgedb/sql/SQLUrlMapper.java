@@ -39,6 +39,7 @@ import org.bridgedb.url.Mapping;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.UriSpaceMapper;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 
 // SELECT id FROM test WHERE 'defdghij' like concat(prefix,'%', postfix);
@@ -265,15 +266,48 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
     
     @Override
-    public Xref toXref(String URL) throws BridgeDbSqlException {
-        String id = getId(URL);
-        String uriSpace = getUriSpace(URL);
-        DataSource dataSource = getDataSource(uriSpace);
-        Xref result =  new Xref(id, dataSource);
-        if (logger.isDebugEnabled()){
-            logger.debug( URL+ " toXref " + result);
-        }
-        return result;
+    public Xref toXref(String uri) throws BridgeDBException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(", ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(", ");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URL_TABLE_NAME);
+        query.append(" WHERE '");
+        query.append(uri);
+        query.append("' LIKE CONCAT(");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(",'%',");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append(")");
+        
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        try {
+            if (rs.next()){
+                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String id = uri.substring(prefix.length(), uri.length()-postfix.length());
+                Xref result =  new Xref(id, dataSource);
+                if (logger.isDebugEnabled()){
+                    logger.debug(uri + " toXref " + result);
+                }
+                return result;
+            }
+            throw new BridgeDBException("No uri pattern regsitered that matches " + uri);
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to get uriSpace. " + query, ex);
+        }    
     }
 
     @Override
@@ -717,50 +751,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
-    private Xref uriToXref(String uri) throws BridgeDbSqlException {
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
-        query.append(DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(", ");
-        query.append(POSTFIX_COLUMN_NAME);
-        query.append(" FROM ");
-        query.append(URL_TABLE_NAME);
-        query.append("WHERE '");
-        query.append(uri);
-        query.append("' LIKE CONCAT(");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(",'%',");
-        query.append(POSTFIX_COLUMN_NAME);
-        query.append(")");
-        
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
-        }    
-        try {
-            if (rs.next()){
-                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                DataSource dataSource = DataSource.getBySystemCode(sysCode);
-                String prefix = rs.getString(PREFIX_COLUMN_NAME);
-                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                String id;
-                if (postfix.equals("NULL")){
-                    id = uri.substring(prefix.length());
-                } else {
-                    id = uri.substring(prefix.length(), uri.length()-postfix.length());
-                }
-                return new Xref(id, dataSource);
-            }
-            return null;
-        } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to get uriSpace. " + query, ex);
-        }    
-    }
 
     /**
      * Finds the SysCode of the DataSource which includes this URISpace

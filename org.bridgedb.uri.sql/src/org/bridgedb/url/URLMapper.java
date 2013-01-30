@@ -187,14 +187,23 @@ public interface URLMapper extends IDMapper{
     public boolean isConnected();
     
     /**
-     * Service to convert a URL to its BridgeDB Xref version.
+     * Service to convert a uri to its BridgeDB Xref version if it is a known uri pattern
      * <p>
-     * Behaviour of this method in cases where the UriSpace of the URL has not yet been registered is still to be dettermined.
+     * The uri will be compared to all known uri patterns and if known the primary DataSource will be returned.
+     * <p>
+     * Where the same uri pattern has been registered with several DataSources 
+     * and no primary DataSource has been declared  
+     * a Datasource based on the registered uri pattern will be/ have been created.
+     * <p>
+     * Where the uri does not match any registered pattern and exception is thrown.
+     * This behaviour was selected as there is no known algorithm that will 
+     * always correctly split a uri into prefix, id and postfix
+     * 
      * @param URL A URL as a String
      * @return The Xref implementation of this URL. 
-     * @throws IDMapperException 
+     * @throws IDMapperException If the uri does not match a registered pattern
      */
-    public Xref toXref(String URL) throws IDMapperException;
+    public Xref toXref(String uri) throws IDMapperException;
     
     /**
      * Obtains the URLMapping information of the mapping of this id.

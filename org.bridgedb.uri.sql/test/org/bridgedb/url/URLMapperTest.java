@@ -30,6 +30,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.tools.metadata.constants.OwlConstants;
 import org.bridgedb.tools.metadata.constants.SkosConstants;
+import org.bridgedb.utils.BridgeDBException;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -329,14 +330,11 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertEquals(map2xref2, result);
     }
 
-    @Test
+    @Test (expected = BridgeDBException.class)
     public void testGetXrefBad() throws IDMapperException {
         report("GetXrefBad");
         Xref xref = urlMapper.toXref(mapBadURL1);
-        String result = xref.getDataSource().getUrl(ds1Id1);
-        assertEquals (mapBadURL1, result);
     }
-    
     
     @Test
     public void testGetMapping() throws IDMapperException {
