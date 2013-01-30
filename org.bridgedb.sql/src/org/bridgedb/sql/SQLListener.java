@@ -26,7 +26,6 @@ import java.sql.Statement;
 import java.util.Date;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.mapping.MappingListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -272,7 +271,7 @@ public class SQLListener implements MappingListener{
     
      /**
 	 * Excecutes several SQL statements to drop the tables 
-	 * @throws IDMapperException 
+	 * @throws BridgeDBException 
 	 */
 	protected void dropSQLTables() throws BridgeDBException
 	{
@@ -327,7 +326,7 @@ public class SQLListener implements MappingListener{
       * <p>
       * Table "properties" underpins bridgeDB properties methods.
       * "isPublic" field dettermines if the key will be returned by the getKeys() method.
-	  * @throws IDMapperException 
+	  * @throws BridgeDBException 
 	  */
 	protected void createSQLTables() throws BridgeDBException
 	{

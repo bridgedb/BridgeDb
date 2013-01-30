@@ -20,10 +20,10 @@
 package org.bridgedb.mysql;
 
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
 
@@ -38,7 +38,7 @@ public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTes
     static final Logger logger = Logger.getLogger(MappingListenerTest.class);
 
     @BeforeClass
-    public static void setupIDMapper() throws IDMapperException{
+    public static void setupIDMapper() throws BridgeDBException{
         connectionOk = false;
         TestSqlFactory.checkMySQLAccess();
         listener = new SQLListener(true, StoreType.TEST);
