@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Properties;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -61,7 +62,7 @@ public class RepositoryFactory {
     
     private static Properties properties;
 
-    public synchronized static void clear(StoreType storeType) throws RdfException{
+    public synchronized static void clear(StoreType storeType) throws BridgeDBException{
         WrappedRepository repository = getRepository(storeType, false);
         repository.clearAndClose();
      }
@@ -73,7 +74,7 @@ public class RepositoryFactory {
      * @return
      * @throws IDMapperLinksetException 
      */
-    public static WrappedRepository getRepository(StoreType storeType) throws RdfException {
+    public static WrappedRepository getRepository(StoreType storeType) throws BridgeDBException {
         return getRepository(storeType, MUST_ALREADY_EXIST);
     }
     
@@ -84,21 +85,21 @@ public class RepositoryFactory {
      * @return
      * @throws IDMapperLinksetException 
      */
-    public static WrappedRepository getRepository(StoreType storeType, boolean exisiting) throws RdfException {
+    public static WrappedRepository getRepository(StoreType storeType, boolean exisiting) throws BridgeDBException {
         File dataDir = getDataDir(storeType);
         if (exisiting) {
             if (!dataDir.exists()){
-                throw new RdfException ("Please check RDF settings File " + dataDir + " does not exist");
+                throw new BridgeDBException ("Please check RDF settings File " + dataDir + " does not exist");
             }
             if (!dataDir.isDirectory()){
-               throw new RdfException ("Please check RDF settings File " + dataDir + " is not a directory");
+               throw new BridgeDBException ("Please check RDF settings File " + dataDir + " is not a directory");
             }
         }
         Repository repository = new SailRepository(new NativeStore(dataDir));
         return new WrappedRepository(repository);
     }
 
-    private static File getDataDir(StoreType storeType) throws RdfException {
+    private static File getDataDir(StoreType storeType) throws BridgeDBException {
         switch (storeType){
             case LIVE: 
                 return new File(getSailNativeStore());
@@ -107,7 +108,7 @@ public class RepositoryFactory {
             case TEST:
                 return new File(getTestSailNativeStore());
              default:
-                throw new RdfException ("Unepected RdfStoreType " + storeType);
+                throw new BridgeDBException ("Unepected RdfStoreType " + storeType);
         }
     }
 
@@ -180,7 +181,7 @@ public class RepositoryFactory {
         return new URIImpl(RepositoryFactory.getBaseURI() + "/linkset/" + linksetId);  
     }
   
-    static String getRDF(StoreType storeType, int linksetId) throws RdfException {
+    static String getRDF(StoreType storeType, int linksetId) throws BridgeDBException {
         WrappedRepository repository = getRepository(storeType, true);
         StringOutputStream stringOutputStream = new StringOutputStream();            
         RDFXMLWriter writer = new RDFXMLWriter(stringOutputStream);
@@ -191,7 +192,7 @@ public class RepositoryFactory {
             try {
                 writer.handleStatement(statement);
             } catch (RDFHandlerException ex) {
-                throw new RdfException ("Unable to write statement " + statement, ex);
+                throw new BridgeDBException ("Unable to write statement " + statement, ex);
             }
         }
         return stringOutputStream.toString();

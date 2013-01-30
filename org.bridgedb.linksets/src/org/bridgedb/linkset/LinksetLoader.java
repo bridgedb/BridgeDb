@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfFactory;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.tools.metadata.validator.Validator;
@@ -79,7 +78,7 @@ public class LinksetLoader implements LinksetInterface{
     public String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
     		throws BridgeDBException {
     	if (!file.exists()) {
-    		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
+    		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
             StringBuilder builder = new StringBuilder();
             File[] children = file.listFiles();
@@ -101,10 +100,10 @@ public class LinksetLoader implements LinksetInterface{
     public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
             throws BridgeDBException {
         if (fileName == null){
-            throw new IDMapperLinksetException("File name may not be null");
+            throw new BridgeDBException("File name may not be null");
         }
         if (fileName.trim().isEmpty()){
-            throw new IDMapperLinksetException("File name may not be empty");
+            throw new BridgeDBException("File name may not be empty");
         }
         File file = new File(fileName.trim());
         return validityFile(file, storeType, type, includeWarnings);
@@ -140,10 +139,10 @@ public class LinksetLoader implements LinksetInterface{
     private static void load(File file, StoreType storeType, ValidationType validationType) 
     		throws BridgeDBException {
         if (storeType == null){
-            throw new IDMapperLinksetException ("Can not load if no storeType set");
+            throw new BridgeDBException ("Can not load if no storeType set");
         }
     	if (!file.exists()) {
-    		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
+    		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
             for (File child:children){
@@ -188,7 +187,7 @@ public class LinksetLoader implements LinksetInterface{
     private void validate(File file, StoreType storeType, ValidationType validationType) 
     		throws BridgeDBException {
     	if (!file.exists()) {
-    		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
+    		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
             for (File child:children){
@@ -223,7 +222,7 @@ public class LinksetLoader implements LinksetInterface{
     public void clearExistingData (StoreType storeType) 
     		throws BridgeDBException  {
         if (storeType == null){
-            throw new IDMapperLinksetException ("unable to clear mapping of unspecified storeType");
+            throw new BridgeDBException ("unable to clear mapping of unspecified storeType");
         }
         RdfFactory.clear(storeType);
         logger.info(storeType + " RDF cleared");

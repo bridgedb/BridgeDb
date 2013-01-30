@@ -21,7 +21,7 @@ package org.bridgedb.linkset.rdf;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.bridgedb.rdf.IDMapperLinksetException;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -55,14 +55,14 @@ public class RdfWrapper {
         return hiddenConnection;
     }
 
-    public synchronized void clear() throws IDMapperLinksetException{
+    public synchronized void clear() throws BridgeDBException{
         try {
             RepositoryConnection connection = this.getConnection();
             connection.clear();
             shutdown();
         } catch (Throwable ex) {
             shutdownAfterError();
-            throw new IDMapperLinksetException ("Error clearing the Reposotory. ", ex);
+            throw new BridgeDBException ("Error clearing the Reposotory. ", ex);
         }
     }
 
@@ -232,7 +232,7 @@ public class RdfWrapper {
     //    return new URIImpl(RdfWrapper.getTheBaseURI() + "linkset/" + linksetId.stringValue());  
     //}
     
-    String getRDF(Resource graph) throws IDMapperLinksetException {
+    String getRDF(Resource graph) throws BridgeDBException {
         StringOutputStream stringOutputStream = new StringOutputStream();            
         RDFXMLWriter writer = new RDFXMLWriter(stringOutputStream);
         writer.startRDF();
@@ -243,7 +243,7 @@ public class RdfWrapper {
                     connection.getStatements(ANY_SUBJECT, ANY_PREDICATE, ANY_OBJECT, EXCLUDE_INFERRED, graph);
         } catch (Throwable ex) {
             shutdownAfterError();
-            throw new IDMapperLinksetException ("Error extracting rdf.", ex);
+            throw new BridgeDBException ("Error extracting rdf.", ex);
         }
         try {
             while (rr.hasNext()){
@@ -255,7 +255,7 @@ public class RdfWrapper {
             return stringOutputStream.toString();
         } catch (Throwable ex) {
             shutdownAfterError();
-            throw new IDMapperLinksetException ("Error extracting rdf.", ex);
+            throw new BridgeDBException ("Error extracting rdf.", ex);
         }
     }
  

@@ -30,7 +30,6 @@ import org.bridgedb.linkset.rdf.LinksetStatementReaderAndImporter;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.linkset.rdf.RdfWrapper;
 import org.bridgedb.linkset.rdf.StatementReaderAndImporter;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLUrlMapper;
@@ -148,7 +147,7 @@ public class LinksetLoaderImplentation{
     
     protected synchronized void load() throws BridgeDBException{
         if (storeType == null){
-            throw new IDMapperLinksetException ("Illegal call to load() with StoreType == null");
+            throw new BridgeDBException ("Illegal call to load() with StoreType == null");
         }
         if (validationType.isLinkset()){
             linksetLoad();
@@ -236,14 +235,14 @@ public class LinksetLoaderImplentation{
             addInverse(rdfWrapper, linksetResource, PavConstants.SOURCE_ACCESSED_BY, THIS_AS_URI);
             addInverse(rdfWrapper, inverseResource, PavConstants.DERIVED_FROM, linksetResource);
         } catch (RDFHandlerException ex) {
-            throw new IDMapperLinksetException("Error loading RDF ", ex);
+            throw new BridgeDBException("Error loading RDF ", ex);
         } finally {
             try {
                 if (rdfWrapper != null){
                     rdfWrapper.shutdown();
                 }
             } catch (RDFHandlerException ex) {
-                throw new IDMapperLinksetException("Error loading RDF " + ex);
+                throw new BridgeDBException("Error loading RDF " + ex);
             }
         }
     }

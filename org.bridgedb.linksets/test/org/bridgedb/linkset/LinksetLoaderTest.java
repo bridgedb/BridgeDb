@@ -22,7 +22,6 @@ package org.bridgedb.linkset;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.linkset.rdf.RdfReader;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -89,7 +88,7 @@ public class LinksetLoaderTest {
         assertThat(result, not(containsString("linkset/6/conceptwiki_chemblMolecule")));
     }
     
-    @Test(expected=IDMapperLinksetException.class)
+    @Test(expected=BridgeDBException.class)
     public void testFileNotFound() throws BridgeDBException, FileNotFoundException, BridgeDBException {
         new LinksetLoader().validateFile("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, false);
     }

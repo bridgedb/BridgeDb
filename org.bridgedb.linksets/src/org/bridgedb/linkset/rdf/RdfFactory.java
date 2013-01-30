@@ -22,7 +22,6 @@ package org.bridgedb.linkset.rdf;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -43,12 +42,12 @@ import org.openrdf.sail.nativerdf.NativeStore;
 public class RdfFactory {
     private static final Resource[] ALL_RESOURCES = new Resource[0];
 
-    public synchronized static void clear(StoreType storeType) throws IDMapperLinksetException{
+    public synchronized static void clear(StoreType storeType) throws BridgeDBException{
         RdfWrapper rdfWrapper;
         try {
             rdfWrapper = setupConnection(storeType, false);
         } catch (RDFHandlerException ex) {
-            throw new IDMapperLinksetException("Unable to clear repository ", ex);
+            throw new BridgeDBException("Unable to clear repository ", ex);
         }
         rdfWrapper.clear();
    }
@@ -58,16 +57,16 @@ public class RdfFactory {
      * 
      * @param rdfStoreType
      * @return
-     * @throws IDMapperLinksetException 
+     * @throws BridgeDBException 
      */
     private static Repository getRepository(StoreType storeType, boolean exisiting) throws BridgeDBException {
         File dataDir = RdfConfig.getDataDir(storeType);
         if (exisiting) {
             if (!dataDir.exists()){
-                throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " does not exist");
+                throw new BridgeDBException ("Please check RDF settings File " + dataDir + " does not exist");
             }
             if (!dataDir.isDirectory()){
-               throw new IDMapperLinksetException ("Please check RDF settings File " + dataDir + " is not a directory");
+               throw new BridgeDBException ("Please check RDF settings File " + dataDir + " is not a directory");
             }
         }
         Repository repository = new SailRepository(new NativeStore(dataDir));
@@ -79,9 +78,9 @@ public class RdfFactory {
                 try {
                     String path = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_PROPERTY);
                     String source = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_SOURCE_PROPERTY);
-                    throw new IDMapperLinksetException ("Unable to open repository. Possible cause is unable to write to " +
+                    throw new BridgeDBException ("Unable to open repository. Possible cause is unable to write to " +
                             testLockDir.getAbsolutePath() + " Please check " + path + " set by " + source);
-                } catch (IDMapperLinksetException ex1) {
+                } catch (BridgeDBException ex1) {
                     Logger.getLogger(RdfFactory.class.getName()).log(Level.SEVERE, null, ex1);
                 }
             }
@@ -90,9 +89,9 @@ public class RdfFactory {
                 repository = new SailRepository(new NativeStore(dataDir));
                 repository.initialize();
             } catch (Throwable ex1) {
-                throw new IDMapperLinksetException ("Error initializing and now shutting down repository ", ex1);
+                throw new BridgeDBException ("Error initializing and now shutting down repository ", ex1);
             }
-            //throw new IDMapperLinksetException ("Error initializing repository ", ex);
+            //throw new BridgeDBException ("Error initializing repository ", ex);
         }
         return repository;
     }
@@ -110,16 +109,16 @@ public class RdfFactory {
         return new URIImpl(RdfConfig.getTheBaseURI() + "void/" + voidId);  
     }
 
-    private static RepositoryConnection getConnection(Repository repository) throws IDMapperLinksetException{
+    private static RepositoryConnection getConnection(Repository repository) throws BridgeDBException{
         try {
             return repository.getConnection();
         } catch (Throwable ex) {
             try {
                 repository.shutDown();
             } catch (Throwable ex1) {
-                throw new IDMapperLinksetException ("Unable to get a connection and error shuting down. ", ex1);
+                throw new BridgeDBException ("Unable to get a connection and error shuting down. ", ex1);
             }
-            throw new IDMapperLinksetException ("Unable to get a connection. ", ex);
+            throw new BridgeDBException ("Unable to get a connection. ", ex);
         }      
     }
     

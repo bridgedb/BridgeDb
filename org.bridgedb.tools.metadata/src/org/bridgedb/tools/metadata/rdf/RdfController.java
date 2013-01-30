@@ -19,6 +19,7 @@
 //
 package org.bridgedb.tools.metadata.rdf;
 
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
@@ -34,13 +35,13 @@ public class RdfController {
     private static final URI NEXT_CONTEXT = new URIImpl(RepositoryFactory.getBaseURI() + "#nextContext");
     private static final boolean CAN_BE_NEW = false;
     
-    public static String getNextContext(StoreType storeType) throws RdfException{
+    public static String getNextContext(StoreType storeType) throws BridgeDBException{
         WrappedRepository repository = RepositoryFactory.getRepository(storeType, CAN_BE_NEW);
         int nextContext = repository.getAndIncrementValue(CONTROLLER_RESOURCE, NEXT_CONTEXT, CONTROLLER_RESOURCE);
         return RepositoryFactory.getBaseURI() + "void/" + nextContext;
     }
 
-    public static String getValidateBase() throws RdfException{
+    public static String getValidateBase() throws BridgeDBException{
         return RepositoryFactory.getBaseURI() + "void/validate/";
     }
 }
