@@ -22,7 +22,6 @@ package org.bridgedb.sql;
 import java.io.IOException;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLAccess;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -110,13 +109,9 @@ public class SqlFactory {
      * Identifies the port number the SQL services can be found at.
      * @return Port number is specified otherwise default of 3306
      */
-    private static String sqlPort(){
+    private static String sqlPort() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(SQL_PORT_PROPERTY).trim();
-        } catch (IDMapperException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(SQL_PORT_PROPERTY).trim();
         if (result != null) return result;
         return "jdbc:mysql://localhost:3306";
     }
@@ -125,13 +120,9 @@ public class SqlFactory {
      * Identifies the password to use for the live and load databases
      * @return Password specified or the default of "ims"
      */
-    private static String sqlPassword(){
+    private static String sqlPassword() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(SQL_PASSWORD_PROPERTY).trim();
-        } catch (IDMapperException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(SQL_PASSWORD_PROPERTY).trim();
         if (result != null) return result;
         return "ims";
     }
@@ -140,13 +131,9 @@ public class SqlFactory {
      * Identifies the user name to use for the live and load databases
      * @return User name specified or the default of "ims"
      */
-    private static String sqlUser(){
+    private static String sqlUser() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(SQL_USER_PROPERTY).trim();
-        } catch (IDMapperException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(SQL_USER_PROPERTY).trim();
         if (result != null) return result;
         return "ims";
     }
@@ -155,13 +142,9 @@ public class SqlFactory {
      * Identifies the database name to use for the live database
      * @return Database name specified or the default of "ims"
      */
-    private static String sqlDatabase(){
+    private static String sqlDatabase() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(SQL_DATABASE_PROPERTY).trim();
-        } catch (IDMapperException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(SQL_DATABASE_PROPERTY).trim();
         if (result != null) return result;
         return "ims";
     }
@@ -170,13 +153,9 @@ public class SqlFactory {
      * Identifies the database name to use for the load database
      * @return Database name specified. Otherwise defaults to the live database.
      */
-    private static String sqlLoadDatabase(){
+    private static String sqlLoadDatabase() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(LOAD_SQL_DATABASE_PROPERTY).trim();
-        } catch (IDMapperException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(LOAD_SQL_DATABASE_PROPERTY).trim();
         if (result != null) return result;
         return sqlDatabase();
     }
@@ -191,7 +170,7 @@ public class SqlFactory {
         String result;
         try {
             result = getProperties().getProperty(TEST_SQL_DATABASE_PROPERTY).trim();
-        } catch (IDMapperException ex) {
+        } catch (BridgeDBException ex) {
             return ex.getMessage();
         }
         if (result != null) return result;
@@ -206,7 +185,7 @@ public class SqlFactory {
         String result;
         try {
             result = getProperties().getProperty(TEST_SQL_PASSWORD_PROPERTY).trim();
-        } catch (IDMapperException ex) {
+        } catch (BridgeDBException ex) {
             return ex.getMessage();
         }
         if (result != null) return result;
@@ -221,7 +200,7 @@ public class SqlFactory {
         String result;
         try {
             result = getProperties().getProperty(TEST_SQL_USER_PROPERTY).trim();
-        } catch (IDMapperException ex) {
+        } catch (BridgeDBException ex) {
             return ex.getMessage();
         }
         if (result != null) return result;
@@ -233,7 +212,7 @@ public class SqlFactory {
      * @return
      * @throws IOException 
      */
-    private static Properties getProperties() throws IDMapperException{
+    private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
             properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
         }
