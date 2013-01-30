@@ -72,13 +72,13 @@ public class Test {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private static void registerUriSpaces(SQLUrlMapper sqlMapper, Set<DataSource> dataSources) throws BridgeDbSqlException{
+    private static void registerUriSpaces(SQLUrlMapper sqlMapper, Set<DataSource> dataSources) throws BridgeDBException{
         for (DataSource source: dataSources){
-            String uriSpace = source.getUrl("").trim();
-            if (uriSpace.isEmpty()){
+            String uriSpace = source.getUrl("$id").trim();
+            if (uriSpace.equals("$id")){
                 uriSpace = "www.example.com/" + source.getSystemCode() + "/";
             }
-            sqlMapper.registerUriSpace(source, uriSpace);        
+            sqlMapper.registerUriPattern(source, uriSpace);        
         }
     }
     

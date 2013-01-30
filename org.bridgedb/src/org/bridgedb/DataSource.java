@@ -412,7 +412,7 @@ public final class DataSource
 		/**
 		 * 
 		 * @param urlPattern is a template for generating valid URL's for identifiers. 
-		 * 	The pattern should contain the substring "$ID", which will be replaced by the actual identifier.
+		 * 	The pattern should contain the substring "$id", which will be replaced by the actual identifier.
 		 * @return the same Builder object so you can chain setters
 		 */
 		public Builder urlPattern (String urlPattern)
