@@ -19,6 +19,7 @@
 package org.bridgedb.sql;
 
 import java.sql.Connection;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * A wrapper around the individual SQL DataBase Drivers.
@@ -34,8 +35,8 @@ public interface SQLAccess {
     /**
      * Allows SQL code to obtain a new Connection without having access to the Database name, user name and password.
      * @return An open Connection
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    public Connection getConnection()  throws BridgeDbSqlException;
+    public Connection getConnection()  throws BridgeDBException;
     
 }

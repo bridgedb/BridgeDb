@@ -24,6 +24,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLAccess;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.virtuoso.VirtuosoAccess;
@@ -60,9 +61,9 @@ public class SqlFactory {
      * Create a wrapper around the live SQL Database, 
      *     using the database name, user name and password found in the config file.
      * @return 
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    public static SQLAccess createTheSQLAccess(StoreType type) throws BridgeDbSqlException {
+    public static SQLAccess createTheSQLAccess(StoreType type) throws BridgeDBException {
         SQLAccess sqlAccess;
         if (useMySQL){
             switch (type){

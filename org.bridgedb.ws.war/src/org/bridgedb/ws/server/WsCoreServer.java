@@ -26,7 +26,6 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SqlFactory;

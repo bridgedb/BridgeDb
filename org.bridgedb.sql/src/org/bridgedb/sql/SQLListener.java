@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.mapping.MappingListener;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 
 /**
@@ -101,7 +102,7 @@ public class SQLListener implements MappingListener{
     
     static final Logger logger = Logger.getLogger(SQLListener.class);
 
-    public SQLListener(boolean dropTables, StoreType storeType) throws BridgeDbSqlException{
+    public SQLListener(boolean dropTables, StoreType storeType) throws BridgeDBException{
         this.sqlAccess = SqlFactory.createTheSQLAccess(storeType);
         this.supportsIsValid = SqlFactory.supportsIsValid();
         this.autoIncrement = SqlFactory.getAutoIncrementCommand();
@@ -126,7 +127,7 @@ public class SQLListener implements MappingListener{
         
     @Override
     public synchronized int registerMappingSet(DataSource source, String predicate, DataSource target, 
-            boolean symetric, boolean isTransitive) throws BridgeDbSqlException {
+            boolean symetric, boolean isTransitive) throws BridgeDBException {
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
         int forwardId = registerMappingSet(source, target, predicate, isTransitive);
@@ -141,7 +142,7 @@ public class SQLListener implements MappingListener{
      * 
      */
     private int registerMappingSet(DataSource source, DataSource target, String predicate, boolean isTransitive) 
-            throws BridgeDbSqlException {
+            throws BridgeDBException {
         String query = "INSERT INTO " + MAPPING_SET_TABLE_NAME
                 + " (" + SOURCE_DATASOURCE_COLUMN_NAME + ", " 
                     + PREDICATE_COLUMN_NAME + ", " 
@@ -156,7 +157,7 @@ public class SQLListener implements MappingListener{
         try {
             statement.executeUpdate(query);
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException ("Error inserting link with " + query, ex);
+            throw new BridgeDBException ("Error inserting link with " + query, ex);
         }
         statement = createStatement();
         int autoinc = 0;
@@ -167,10 +168,10 @@ public class SQLListener implements MappingListener{
             {
                 autoinc = rs.getInt(1);
             } else {
-                throw new BridgeDbSqlException ("No result getting new indetity with " + query);
+                throw new BridgeDBException ("No result getting new indetity with " + query);
             }
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException ("Error getting new indetity with " + query, ex);
+            throw new BridgeDBException ("Error getting new indetity with " + query, ex);
         }
         lastUpdate = new Date().getTime();
         logger.info("Registered new Mappingset " + autoinc + " from " + source.getSystemCode() + " to " + target.getSystemCode());
@@ -178,7 +179,7 @@ public class SQLListener implements MappingListener{
     }
 
     @Override
-    public void closeInput() throws BridgeDbSqlException {
+    public void closeInput() throws BridgeDBException {
         runInsert();
         insertQuery = null;
         logger.info("Finished processing linkset");
@@ -188,7 +189,7 @@ public class SQLListener implements MappingListener{
                 //possibleOpenConnection.commit();
                 possibleOpenConnection.close();
             } catch (SQLException ex) {
-               throw new BridgeDbSqlException ("Error closing connection ", ex);
+               throw new BridgeDBException ("Error closing connection ", ex);
             }
         }
         //Starting with a block will cause a new query to start.
@@ -200,7 +201,7 @@ public class SQLListener implements MappingListener{
     }
     
     @Override
-    public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws BridgeDbSqlException {
+    public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws BridgeDBException {
         insertLink(sourceId, targetId, mappingSet);
         if (symetric){
             insertLink(targetId, sourceId, mappingSet + 1);
@@ -212,7 +213,7 @@ public class SQLListener implements MappingListener{
      * <p>
      * May store link updates in a StringBuilder to make one large call rather than many small calls.
      */
-    private void insertLink(String sourceId, String targetId, int mappingSetId) throws BridgeDbSqlException{
+    private void insertLink(String sourceId, String targetId, int mappingSetId) throws BridgeDBException{
         if (blockCount >= blockSize){
             runInsert();
             insertQuery = new StringBuilder("INSERT INTO ");
@@ -228,7 +229,7 @@ public class SQLListener implements MappingListener{
             try {
                 insertQuery.append(", ");        
             } catch (NullPointerException ex){
-                throw new BridgeDbSqlException("Please run openInput() before insertLink");
+                throw new BridgeDBException("Please run openInput() before insertLink");
             }
         }
         blockCount++;
@@ -244,9 +245,9 @@ public class SQLListener implements MappingListener{
 
     /**
      * Runs the insert using the StringBuilder built up by one or more Insert calls.
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    private void runInsert() throws BridgeDbSqlException{
+    private void runInsert() throws BridgeDBException{
         if (insertQuery != null) {
            try {
                 Statement statement = createStatement();
@@ -262,7 +263,7 @@ public class SQLListener implements MappingListener{
                 }
             } catch (SQLException ex) {
                 System.err.println(ex);
-                throw new BridgeDbSqlException ("Error inserting link ", ex, insertQuery.toString());
+                throw new BridgeDBException ("Error inserting link ", ex, insertQuery.toString());
             }
         }   
         insertQuery = null;
@@ -273,7 +274,7 @@ public class SQLListener implements MappingListener{
 	 * Excecutes several SQL statements to drop the tables 
 	 * @throws IDMapperException 
 	 */
-	protected void dropSQLTables() throws BridgeDbSqlException
+	protected void dropSQLTables() throws BridgeDBException
 	{
  		dropTable("info");
  		dropTable("mapping");
@@ -287,9 +288,9 @@ public class SQLListener implements MappingListener{
      * <p>
      * Virtuosos appears not to have the if exists syntax so errors are assumed to be table not found.
      * @param name
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    protected void dropTable(String name) throws BridgeDbSqlException{
+    protected void dropTable(String name) throws BridgeDBException{
         //"IF NOT EXISTS" is unsupported 
        Statement sh = createStatement();
         try 
@@ -328,7 +329,7 @@ public class SQLListener implements MappingListener{
       * "isPublic" field dettermines if the key will be returned by the getKeys() method.
 	  * @throws IDMapperException 
 	  */
-	protected void createSQLTables() throws BridgeDbSqlException
+	protected void createSQLTables() throws BridgeDBException
 	{
         //"IF NOT EXISTS " is not supported
 		try 
@@ -380,16 +381,16 @@ public class SQLListener implements MappingListener{
 		{
             System.err.println(e);
             e.printStackTrace();
-			throw new BridgeDbSqlException ("Error creating the tables ", e);
+			throw new BridgeDBException ("Error creating the tables ", e);
 		}
 	}
      
     /**
      * Checks that the schema is for this version.
      * 
-     * @throws BridgeDbSqlException If the schema version is not the expected one.
+     * @throws BridgeDBException If the schema version is not the expected one.
      */
-	private void checkVersion() throws BridgeDbSqlException
+	private void checkVersion() throws BridgeDBException
 	{
         Statement stmt = createStatement();
         ResultSet r = null;
@@ -398,7 +399,7 @@ public class SQLListener implements MappingListener{
             r = stmt.executeQuery("SELECT schemaversion FROM info");
             if(r.next()) version = r.getInt(1);
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Error checking the version. ", ex);
+            throw new BridgeDBException("Error checking the version. ", ex);
         }
 		finally
 		{
@@ -409,12 +410,12 @@ public class SQLListener implements MappingListener{
  		switch (version)
 		{
     		case 2:
-        		throw new BridgeDbSqlException("Please use the SimpleGdbFactory in the org.bridgedb.rdb package");
+        		throw new BridgeDBException("Please use the SimpleGdbFactory in the org.bridgedb.rdb package");
             case 3:
-                throw new BridgeDbSqlException("Please use the SimpleGdbFactory in the org.bridgedb.rdb package");
+                throw new BridgeDBException("Please use the SimpleGdbFactory in the org.bridgedb.rdb package");
             //NB add future schema versions here
             default:
-                throw new BridgeDbSqlException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
+                throw new BridgeDBException ("Unrecognized schema version '" + version + "', please make sure you have the latest " +
 					"version of this software and databases");
 		}		
 	}
@@ -422,9 +423,9 @@ public class SQLListener implements MappingListener{
     /**
      * 
      * @return
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    protected Statement createStatement() throws BridgeDbSqlException{
+    protected Statement createStatement() throws BridgeDBException{
         try {
             if (possibleOpenConnection == null){
                 possibleOpenConnection = sqlAccess.getConnection();
@@ -436,7 +437,7 @@ public class SQLListener implements MappingListener{
             }  
             return possibleOpenConnection.createStatement();
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException ("Error creating a new statement ", ex);
+            throw new BridgeDBException ("Error creating a new statement ", ex);
         }
     }
     
@@ -446,16 +447,16 @@ public class SQLListener implements MappingListener{
      * <p>
      * This is required to allow the DataSource registry to be rebuilt if the service is restarted.
      * @param source A DataSource to check
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    void checkDataSourceInDatabase(DataSource source) throws BridgeDbSqlException{
+    void checkDataSourceInDatabase(DataSource source) throws BridgeDBException{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();
         if (sysCode == null) {
-            throw new BridgeDbSqlException ("Currently unable to handle Datasources with null systemCode");
+            throw new BridgeDBException ("Currently unable to handle Datasources with null systemCode");
         }
         if (sysCode.isEmpty()) {
-            throw new BridgeDbSqlException ("Currently unable to handle Datasources with empty systemCode");
+            throw new BridgeDBException ("Currently unable to handle Datasources with empty systemCode");
         }
         String query = "SELECT " + SYSCODE_COLUMN_NAME
                 + "   from " + DATASOURCE_TABLE_NAME
@@ -466,7 +467,7 @@ public class SQLListener implements MappingListener{
             ResultSet rs = statement.executeQuery(query);
             found = rs.next();
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to check provenace " +  query, ex);
+            throw new BridgeDBException("Unable to check provenace " +  query, ex);
         }
         if (found){
             updateDataSource(source);
@@ -480,9 +481,9 @@ public class SQLListener implements MappingListener{
      * <p>
      * By the time this methods is called the assumption is that the DataSource did not yet exist in the database.
      * @param source DataSource to save.
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    private void writeDataSource(DataSource source) throws BridgeDbSqlException{
+    private void writeDataSource(DataSource source) throws BridgeDBException{
         StringBuilder insert = new StringBuilder ("INSERT INTO ");
         insert.append(DATASOURCE_TABLE_NAME);
         insert.append(" ( ");
@@ -491,7 +492,7 @@ public class SQLListener implements MappingListener{
         insert.append(IS_PRIMARY_COLUMN_NAME);
         StringBuilder values = new StringBuilder ("Values ( ");
         if (source.getSystemCode().length() > SYSCODE_LENGTH ){
-            throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
+            throw new BridgeDBException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
                     " so unable to save " + source.getSystemCode());
         }
         values.append("'");
@@ -505,7 +506,7 @@ public class SQLListener implements MappingListener{
         String value = source.getFullName(); 
         if (value != null && !value.isEmpty()){
             if (value.length() > FULLNAME_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
                         " so unable to save " + value);
             }
             insert.append (", ");
@@ -518,7 +519,7 @@ public class SQLListener implements MappingListener{
         value = source.getMainUrl();
         if (value != null && !value.isEmpty()){
             if (value.length() > MAINURL_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
                         " so unable to save " + value);
             }
             insert.append (", ");
@@ -531,7 +532,7 @@ public class SQLListener implements MappingListener{
         value = source.getUrl("$id");
         if (value != null && !value.isEmpty()){
             if (value.length() > URLPATTERN_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
                         " so unable to save " + value);
             }
             insert.append (", ");
@@ -544,7 +545,7 @@ public class SQLListener implements MappingListener{
         value = source.getExample().getId();
         if (value != null && !value.isEmpty()){
             if (value.length() > ID_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for exampleId is " + ID_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for exampleId is " + ID_LENGTH + 
                         " so unable to save " + value);
             }
             insert.append (", ");
@@ -557,7 +558,7 @@ public class SQLListener implements MappingListener{
         value = source.getType();
         if (value != null && !value.isEmpty()){
             if (value.length() > TYPE_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for type is " + TYPE_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for type is " + TYPE_LENGTH + 
                         " so unable to save " + value);
             }
             insert.append (", ");
@@ -572,7 +573,7 @@ public class SQLListener implements MappingListener{
         value = value.substring(0, value.length()-1);
         if (value != null && !value.isEmpty()){
             if (value.length() > URNBASE_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
                         " so unable to save " + value);
             }
             insert.append (", ");
@@ -583,14 +584,14 @@ public class SQLListener implements MappingListener{
             values.append ("' ");
         }
         if (source.getOrganism() != null){
-            throw new BridgeDbSqlException("Sorry DataSource oraginism filed is upsupported");
+            throw new BridgeDBException("Sorry DataSource oraginism filed is upsupported");
         }
         Statement statement = this.createStatement();
         String update = insert.toString() + ") " + values.toString() + " )";
         try {
             statement.executeUpdate(update);
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to writeDataSource " + update, ex);
+            throw new BridgeDBException("Unable to writeDataSource " + update, ex);
         }
     }
 
@@ -609,9 +610,9 @@ public class SQLListener implements MappingListener{
      * Updates the DataBase record assoicated with a DataSource that has previous been dettermined to already exist.
      * 
      * @param source DataSource whose info will be updated/ confirmed.
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    private void updateDataSource(DataSource source) throws BridgeDbSqlException{
+    private void updateDataSource(DataSource source) throws BridgeDBException{
         StringBuilder update = new StringBuilder("UPDATE ");
         update.append (DATASOURCE_TABLE_NAME);
         update.append (" SET ");
@@ -622,7 +623,7 @@ public class SQLListener implements MappingListener{
         String value = source.getFullName();
         if (value != null && !value.isEmpty()){
             if (value.length() > FULLNAME_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for fullName is " + FULLNAME_LENGTH + 
                         " so unable to save " + value);
             }
             update.append (", ");
@@ -634,7 +635,7 @@ public class SQLListener implements MappingListener{
         value = source.getMainUrl();
         if (value != null && !value.isEmpty()){
             if (value.length() > MAINURL_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for mainUrl is " + MAINURL_LENGTH + 
                         " so unable to save " + value);
             }
             update.append (", ");
@@ -646,7 +647,7 @@ public class SQLListener implements MappingListener{
         value = source.getUrl("$id");
         if (value != null && !value.isEmpty()){
             if (value.length() > URLPATTERN_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
                         " so unable to save " + value);
             }
             update.append (", ");
@@ -658,7 +659,7 @@ public class SQLListener implements MappingListener{
         value = source.getExample().getId();
         if (value != null && !value.isEmpty()){
             if (value.length() > ID_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for exampleId is " + ID_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for exampleId is " + ID_LENGTH + 
                         " so unable to save " + value);
             }
             update.append (", ");
@@ -670,7 +671,7 @@ public class SQLListener implements MappingListener{
         value = source.getType();
         if (value != null && !value.isEmpty()){
             if (value.length() > TYPE_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for type is " + TYPE_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for type is " + TYPE_LENGTH + 
                         " so unable to save " + value);
             }
             update.append (", ");
@@ -684,7 +685,7 @@ public class SQLListener implements MappingListener{
         value = value.substring(0, value.length()-1);
         if (value != null && !value.isEmpty()){
             if (value.length() > URNBASE_LENGTH){
-                throw new BridgeDbSqlException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
+                throw new BridgeDBException("Maximum length supported for urnBase is " + URNBASE_LENGTH + 
                         " so unable to save " + value);
             }
             update.append (", ");
@@ -694,7 +695,7 @@ public class SQLListener implements MappingListener{
             update.append ("' ");
         }
         if (source.getSystemCode().length() > SYSCODE_LENGTH ){
-            throw new BridgeDbSqlException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
+            throw new BridgeDBException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
                     " so unable to save " + source.getSystemCode());
         }
         update.append ("WHERE ");
@@ -703,33 +704,33 @@ public class SQLListener implements MappingListener{
         update.append (source.getSystemCode());
         update.append ("' ");
         if (source.getOrganism() != null){
-            throw new BridgeDbSqlException("Sorry DataSource oraginism filed is upsupported");
+            throw new BridgeDBException("Sorry DataSource oraginism filed is upsupported");
         }
         Statement statement = this.createStatement();
         try {
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to updateDataSource " + update, ex);
+            throw new BridgeDBException("Unable to updateDataSource " + update, ex);
         }
     }
 
     /**
      * Updates the property LastUpdayes with the current date and time.
      * 
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    private void updateLastUpdated() throws BridgeDbSqlException {
+    private void updateLastUpdated() throws BridgeDBException {
         String date = new Date().toString();
         putProperty("LastUpdates", date);
     }
 
-    public void putProperty(String key, String value) throws BridgeDbSqlException {
+    public void putProperty(String key, String value) throws BridgeDBException {
         String delete = "DELETE from " + PROPERTIES_TABLE_NAME + " where " + KEY_COLUMN_NAME + " = '" + key + "'";
         Statement statement = this.createStatement();
         try {
             statement.executeUpdate(delete.toString());
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Error Deleting property " + delete, ex);
+            throw new BridgeDBException("Error Deleting property " + delete, ex);
         }
         String update = "INSERT INTO " + PROPERTIES_TABLE_NAME
                     + " (" + KEY_COLUMN_NAME + ", " + PROPERTY_COLUMN_NAME + ", " + IS_PUBLIC_COLUMN_NAME + " )" 
@@ -737,7 +738,7 @@ public class SQLListener implements MappingListener{
         try {
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Error inserting Property " + update, ex);
+            throw new BridgeDBException("Error inserting Property " + update, ex);
         }
     }
 
@@ -745,9 +746,9 @@ public class SQLListener implements MappingListener{
      * Loads all the DataSources stored in the database into the DataSource registry.
      * <p>
      * This together with checkDataSourceInDatabase ensures that the DataSource registry is constant between runs.
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    private void loadDataSources() throws BridgeDbSqlException{
+    private void loadDataSources() throws BridgeDBException{
         try {
             Statement statement = this.createStatement();
             String query = "SELECT " + SYSCODE_COLUMN_NAME + ", " + IS_PRIMARY_COLUMN_NAME + ", " 
@@ -785,7 +786,7 @@ public class SQLListener implements MappingListener{
                 }
             }
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to load DataSources");
+            throw new BridgeDBException("Unable to load DataSources");
         }
     }
     
@@ -793,9 +794,9 @@ public class SQLListener implements MappingListener{
      * Updates the count variable for each Mapping Sets.
      * <p>
      * This allows the counts of the mappings in each Mapping Set to be quickly returned.
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    private void countLinks () throws BridgeDbSqlException{
+    private void countLinks () throws BridgeDBException{
         logger.info ("Updating link count. Please Wait!");
         Statement countStatement = this.createStatement();
         Statement updateStatement = this.createStatement();
@@ -815,16 +816,16 @@ public class SQLListener implements MappingListener{
                 try {
                     int updateCount = updateStatement.executeUpdate(update);
                     if (updateCount != 1){
-                        throw new BridgeDbSqlException("Updated rows <> ! when running " + update);
+                        throw new BridgeDBException("Updated rows <> ! when running " + update);
                     }
                 } catch (SQLException ex) {
-                     throw new BridgeDbSqlException("Unable to run update. " + update, ex);
+                     throw new BridgeDBException("Unable to run update. " + update, ex);
                 }
             }
             logger.info ("Updating counts finished!");
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+            throw new BridgeDBException("Unable to run query. " + query, ex);
         }
     }
     
