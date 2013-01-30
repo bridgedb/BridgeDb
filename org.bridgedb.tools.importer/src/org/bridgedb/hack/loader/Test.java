@@ -85,14 +85,18 @@ public class Test {
      * 
      * @param mapper MUST implement XrefIterator
      */
-    public static void printLinksetLines(IDMapper mapper) throws IDMapperException{
+    public static void printLinksetLines(IDMapper mapper) throws BridgeDBException{
         SQLUrlMapper sqlMapper = new SQLUrlMapper(false, StoreType.TEST);
 
         XrefIterator iterator = (XrefIterator)mapper;
-        Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
-//        registerUriSpaces(sqlMapper, srcDataSources);
-        Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
-//        registerUriSpaces(sqlMapper, srcDataSources);
+        Set<DataSource> srcDataSources;
+        Set<DataSource> tgtDataSources;
+        try {
+            srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+            tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
+        }
         int setCount = 0;
         int linkTotal = 0;
         
@@ -101,16 +105,20 @@ public class Test {
                 int sourceCount = 0;
                 int linkCount = 0;
                 int unmapped = 0;
-                Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
-                while (xrefIterator.hasNext()){
-                    Xref sourceXref = xrefIterator.next();
-                    Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
-                    if (targetXrefs.isEmpty()){
-                        unmapped++;
-                    } else {
-                        sourceCount ++;
-                        linkCount += targetXrefs.size();
+                try { 
+                    Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
+                    while (xrefIterator.hasNext()){
+                        Xref sourceXref = xrefIterator.next();
+                        Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
+                        if (targetXrefs.isEmpty()){
+                            unmapped++;
+                        } else {
+                            sourceCount ++;
+                            linkCount += targetXrefs.size();
+                        }
                     }
+                } catch (IDMapperException e){
+                    throw BridgeDBException.convertToBridgeDB(e);
                 }
                 logger.info(srcDataSource.getSystemCode() + " -> " + tgtDataSource.getSystemCode() + 
                         " " + sourceCount + " " + linkCount + " " + unmapped);
@@ -127,15 +135,21 @@ public class Test {
      * 
      * @param mapper MUST implement XrefIterator
      */
-    public static void findDataSources(IDMapper mapper) throws IDMapperException{
-        Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+    public static void findDataSources(IDMapper mapper) throws BridgeDBException{
+        Set<DataSource> srcDataSources;
+        Set<DataSource> tgtDataSources;
+        try {
+            srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+            tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
+        }
         for (DataSource dataSource:srcDataSources) {
             if (dataSource != null && dataSource.getUrl("").trim().isEmpty()){
                 logger.info(dataSource.getSystemCode() + ": " + dataSource + " " + dataSource.getMainUrl());
             }
         }
         allSource.addAll(srcDataSources);
-        Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
         for (DataSource dataSource:tgtDataSources) {
             if (dataSource != null && dataSource.getUrl("").trim().isEmpty()){
                 logger.info(dataSource.getSystemCode() + ": " + dataSource.getURN("") + " " + dataSource.getMainUrl());
@@ -148,10 +162,16 @@ public class Test {
      * 
      * @param mapper MUST implement XrefIterator
      */
-    public static void printLinksets(IDMapper mapper, String name) throws IDMapperException, IOException{
+    public static void printLinksets(IDMapper mapper, String name) throws BridgeDBException, IOException{
         XrefIterator iterator = (XrefIterator)mapper;
-        Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
-        Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+        Set<DataSource> srcDataSources;
+        Set<DataSource> tgtDataSources;
+        try {
+            srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+            tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
+        }
         File directory = new File("C:/OpenPhacts/linksets/" + name);
         if (!directory.exists()){
             directory.mkdir();
@@ -205,7 +225,7 @@ public class Test {
     
     
     public static void printLinksets(File file) 
-    		throws IDMapperException, IOException {
+    		throws BridgeDBException, IOException {
     	if (!file.exists()) {
     		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
@@ -219,13 +239,18 @@ public class Test {
             name = name.substring(0, name.indexOf('.'));
             System.out.println("£"+ name);
             System.out.println(file.getAbsolutePath());
-            IDMapper mapper = BridgeDb.connect("idmapper-pgdb:"+file.getAbsolutePath());
+            IDMapper mapper;
+            try{
+                mapper = BridgeDb.connect("idmapper-pgdb:"+file.getAbsolutePath());
+            } catch (IDMapperException e){
+                throw BridgeDBException.convertToBridgeDB(e);
+            }
             printLinksets(mapper, name);
             System.out.println("done file");
         }
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, IDMapperException, IOException {
+    public static void main(String[] args) throws ClassNotFoundException, BridgeDBException, IOException {
         ConfigReader.logToConsole();
         BioDataSource.init();
         Class.forName("org.bridgedb.rdb.IDMapperRdb");

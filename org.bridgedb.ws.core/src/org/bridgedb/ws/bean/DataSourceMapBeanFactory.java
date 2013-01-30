@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 @XmlRootElement(name="DataSourceMapping")
 public class DataSourceMapBeanFactory {
@@ -47,11 +47,11 @@ public class DataSourceMapBeanFactory {
         return bean;
     }
 
-    public static DataSource getKey(DataSourceMapBean bean) throws IDMapperException {
+    public static DataSource getKey(DataSourceMapBean bean) throws BridgeDBException {
         return DataSourceBeanFactory.asDataSource(bean.source);
     }
 
-    public static Set<DataSource> getMappedSet(DataSourceMapBean bean) throws IDMapperException {
+    public static Set<DataSource> getMappedSet(DataSourceMapBean bean) throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean trg:bean.target){
             results.add(DataSourceBeanFactory.asDataSource(trg));

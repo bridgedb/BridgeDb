@@ -33,6 +33,7 @@ import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -58,7 +59,7 @@ public class DataSourceMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
+    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws BridgeDBException {
         Set<Xref> results = new HashSet<Xref>();
         Set<DataSource> possibleMappings = mappings.get(ref.getDataSource());
         Iterator<DataSource> possibleIterator = possibleMappings.iterator();
@@ -78,13 +79,13 @@ public class DataSourceMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public boolean xrefExists(Xref xref) throws IDMapperException {
+    public boolean xrefExists(Xref xref) throws BridgeDBException {
         //check that xref.getDataSource() is in the mappig keys or one of the sets
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
+    public Set<Xref> freeSearch(String text, int limit) throws BridgeDBException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -94,7 +95,7 @@ public class DataSourceMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public void close() throws IDMapperException {
+    public void close() throws BridgeDBException {
         closed = true;
     }
 
@@ -109,12 +110,12 @@ public class DataSourceMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedSrcDataSources() throws BridgeDBException {
         return mappings.keySet();
     }
 
     @Override
-    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedTgtDataSources() throws BridgeDBException {
         if (targetDataSources == null){
             targetDataSources = new HashSet<DataSource>();
             Collection<Set<DataSource>> values = mappings.values();
@@ -126,7 +127,7 @@ public class DataSourceMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws BridgeDBException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

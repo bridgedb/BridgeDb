@@ -20,8 +20,8 @@
 package org.bridgedb.linkset;
 
 import java.io.InputStream;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.rio.RDFFormat;
 
@@ -31,26 +31,26 @@ import org.openrdf.rio.RDFFormat;
  */
 public interface LinksetInterfaceMinimal {
     public String validateString(String source, String info, RDFFormat format, StoreType storeType, 
-            ValidationType validationType, boolean includeWarnings) throws IDMapperException;
+            ValidationType validationType, boolean includeWarnings) throws BridgeDBException;
     
     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType, boolean includeWarnings) throws IDMapperException;
+            ValidationType validationType, boolean includeWarnings) throws BridgeDBException;
 
     public String loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException;
+            throws BridgeDBException;
     
     public String saveString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException;
+            throws BridgeDBException;
     
     public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException;
+            ValidationType validationType) throws BridgeDBException;
 
     public String saveInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException;
+            ValidationType validationType) throws BridgeDBException;
 
     public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException;
+            throws BridgeDBException;
         
     public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException;
+            ValidationType validationType) throws BridgeDBException;
 }

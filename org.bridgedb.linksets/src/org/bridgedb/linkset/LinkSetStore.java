@@ -20,7 +20,7 @@
 package org.bridgedb.linkset;
 
 import java.util.List;
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 
@@ -40,19 +40,19 @@ public interface LinkSetStore {
      *
      * Currently not used.
      * @return list of linksets
-     * @throws IDMapperException
+     * @throws BridgeDBException
      */
-    //public List<String> getLinksetNames() throws IDMapperException;
+    //public List<String> getLinksetNames() throws BridgeDBException;
 
     /**
      * Converts all the rdf for this linkset into well formatted text
      * @param id Id of the linkset for which metadata is required
      * @return Well formatted text that can be returned to a user
-     * @throws IDMapperException
+     * @throws BridgeDBException
      */
-    public String getLinksetRDF (int id) throws IDMapperException;
+    public String getLinksetRDF (int id) throws BridgeDBException;
    
-    public String getVoidRDF (int id) throws IDMapperException;
+    public String getVoidRDF (int id) throws BridgeDBException;
 
-    public List<Statement> getStatementsForResource(Resource resource) throws IDMapperException;
+    public List<Statement> getStatementsForResource(Resource resource) throws BridgeDBException;
 }

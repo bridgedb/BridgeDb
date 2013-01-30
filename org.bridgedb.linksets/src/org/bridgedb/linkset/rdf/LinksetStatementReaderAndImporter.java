@@ -22,9 +22,9 @@ package org.bridgedb.linkset.rdf;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.tools.metadata.rdf.LinksetStatementReader;
 import org.bridgedb.tools.metadata.rdf.LinksetStatements;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFFormat;
@@ -37,28 +37,29 @@ public class LinksetStatementReaderAndImporter extends StatementReaderAndImporte
     
     private Set<Statement> linkStatements;
     
-    public LinksetStatementReaderAndImporter(File file, StoreType storeType) throws IDMapperException{
+    public LinksetStatementReaderAndImporter(File file, StoreType storeType) throws BridgeDBException{
         LinksetStatementReader reader = new LinksetStatementReader(file);
         voidStatements = reader.getVoidStatements();
         linkStatements = reader.getLinkStatements();
         loadInfo(storeType);
     }
 
-    public LinksetStatementReaderAndImporter(String fileName, StoreType storeType) throws IDMapperException{
+    public LinksetStatementReaderAndImporter(String fileName, StoreType storeType) throws BridgeDBException{
         LinksetStatementReader reader = new LinksetStatementReader(fileName);
         voidStatements = reader.getVoidStatements();
         linkStatements = reader.getLinkStatements();
         loadInfo(storeType);
     }
     
-    public LinksetStatementReaderAndImporter(String info, RDFFormat format, StoreType storeType) throws IDMapperException{
+    public LinksetStatementReaderAndImporter(String info, RDFFormat format, StoreType storeType) throws BridgeDBException{
         LinksetStatementReader reader = new LinksetStatementReader(info, format);
         voidStatements = reader.getVoidStatements();
         linkStatements = reader.getLinkStatements();
         loadInfo(storeType);
     }
 
-    public LinksetStatementReaderAndImporter(InputStream inputStream, RDFFormat format, StoreType storeType) throws IDMapperException{
+    public LinksetStatementReaderAndImporter(InputStream inputStream, RDFFormat format, StoreType storeType)
+            throws BridgeDBException{
         LinksetStatementReader reader = new LinksetStatementReader(inputStream, format);
         voidStatements = reader.getVoidStatements();
         linkStatements = reader.getLinkStatements();

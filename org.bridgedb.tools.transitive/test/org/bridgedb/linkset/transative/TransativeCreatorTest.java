@@ -21,10 +21,10 @@ package org.bridgedb.linkset.transative;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.junit.Assert.*;
@@ -49,7 +49,7 @@ public class TransativeCreatorTest extends TestUtils {
     private static boolean DO_NOT_LOAD = false;
     
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
+    public static void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.checkSQLAccess();
         
@@ -58,6 +58,20 @@ public class TransativeCreatorTest extends TestUtils {
         linksetLoader.loadFile("../org.bridgedb.tools.transitive/test-data/sample1to2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.loadFile("../org.bridgedb.tools.transitive/test-data/sample1to3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
+    
+    @Test
+    @Ignore
+    public void testNoLinkToSelf() throws RDFHandlerException, IOException, BridgeDBException {
+        report("NoLinkToSelf");
+        String fileName = null;
+        try {
+            TransativeCreator.createTransative(1, 2, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+            assertFalse(true);
+        } catch (Exception e){
+            String error = "Source of mappingSet 1(TestDS2) is the same as the Target of 2. No need for a transative mapping";
+            assertEquals(error, e.getMessage());
+        }
+    }
 
     @Test
     @Ignore
@@ -75,7 +89,7 @@ public class TransativeCreatorTest extends TestUtils {
 
     //TODO cleanup this test!
     @Test
-    public void testCreateTransative() throws RDFHandlerException, IOException, IDMapperException {
+    public void testCreateTransative() throws RDFHandlerException, IOException, BridgeDBException {
         report("CreateTransative");
         String fileName = "../org.bridgedb.tools.transitive/test-data/linkset2To3.ttl";
         TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);

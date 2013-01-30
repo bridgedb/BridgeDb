@@ -20,7 +20,7 @@
 package org.bridgedb.ws;
 
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -30,7 +30,7 @@ public class WSCoreClientFactory extends org.bridgedb.utils.IDMapperTestBase{
     
     static final Logger logger = Logger.getLogger( WSCoreClientFactory.class);
 
-    public static WSCoreInterface createTestWSClient() throws IDMapperException{
+    public static WSCoreInterface createTestWSClient() throws BridgeDBException{
         //ystem.out.println("in WSCoreInterface 1");
         WSCoreInterface webService = new WSCoreClient("http://localhost:8080/BridgeDb");
         //ystem.out.println("in WSCoreInterface 2");

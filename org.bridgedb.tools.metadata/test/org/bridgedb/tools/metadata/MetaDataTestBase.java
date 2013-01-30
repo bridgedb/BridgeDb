@@ -26,7 +26,6 @@ import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.constants.DctermsConstants;
@@ -175,7 +174,7 @@ public class MetaDataTestBase extends TestUtils{
     static MetaDataSpecification minLinksetSetRegistry;
          
     @BeforeClass
-    public static void loadRegistries() throws IDMapperException{
+    public static void loadRegistries() throws BridgeDBException{
         rdfRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.ANY_RDF);     
         voidRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);     
         linksetSetRegistry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);        

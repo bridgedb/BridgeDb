@@ -21,12 +21,12 @@ package org.bridgedb.linkset;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.RdfReader;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.junit.Assert.*;
@@ -43,7 +43,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
     
     //Unsure if this is still needed or even desirable!
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
+    public static void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.checkSQLAccess();
         
@@ -56,7 +56,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
 	}
 
     @Test
-    public void testVoidInfo() throws IDMapperException {
+    public void testVoidInfo() throws BridgeDBException {
         RdfReader reader = new RdfReader(StoreType.TEST);
         String result = reader.getVoidRDF(1);
         assertTrue(result.contains("ChemSpider"));
@@ -64,7 +64,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
     }
     
     @Test
-    public void testMappingInfo() throws IDMapperException {
+    public void testMappingInfo() throws BridgeDBException {
         report("MappingInfo");
         TestSqlFactory.checkSQLAccess();
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);

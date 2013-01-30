@@ -20,7 +20,6 @@
 package org.bridgedb.tools.metadata;
 
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.constants.DulConstants;
@@ -59,7 +58,7 @@ public class LinksetVoidInformation implements MetaData {
     private boolean INCLUDE_WARNINGS = true;
     private boolean NO_WARNINGS = false;
     
-    public LinksetVoidInformation(String source, LinksetStatements reader,  ValidationType type) throws IDMapperException{
+    public LinksetVoidInformation(String source, LinksetStatements reader,  ValidationType type) throws BridgeDBException{
         this(source, reader, MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(type));
     }
     

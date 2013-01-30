@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -52,7 +51,7 @@ public class MetaDataSpecification {
         
     static final Logger logger = Logger.getLogger(MetaDataSpecification.class);
  
-    public MetaDataSpecification(ValidationType type) throws IDMapperException{
+    public MetaDataSpecification(ValidationType type) throws BridgeDBException{
         InputStream stream = ConfigReader.getInputStream(type.getOwlFileName());
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
         this.validationType = type;

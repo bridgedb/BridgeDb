@@ -21,7 +21,6 @@ package org.bridgedb.linkset;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.RdfReader;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.sql.SQLUrlMapper;
@@ -47,7 +46,7 @@ public class LinksetLoaderTest {
     
     //Unsure if this is still needed or even desirable!
     @BeforeClass
-    public static void testLoader() throws IDMapperException, IOException, OpenRDFException, FileNotFoundException {
+    public static void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.checkSQLAccess();
         
@@ -60,7 +59,7 @@ public class LinksetLoaderTest {
  	}
 
     @Test
-    public void testMappingInfo() throws IDMapperException {
+    public void testMappingInfo() throws BridgeDBException {
         TestSqlFactory.checkSQLAccess();
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         
@@ -72,7 +71,7 @@ public class LinksetLoaderTest {
     }
     
     @Test
-    public void testCheckRDF() throws IDMapperException {
+    public void testCheckRDF() throws BridgeDBException {
         RdfReader reader = new RdfReader(StoreType.TEST);
         String result = reader.getLinksetRDF(5);
         assertThat(result, containsString("linkset/5/conceptwiki_chemblMolecule"));
@@ -82,7 +81,7 @@ public class LinksetLoaderTest {
     }
     
     @Test
-    public void testCheckRDF2() throws IDMapperException {
+    public void testCheckRDF2() throws BridgeDBException {
         RdfReader reader = new RdfReader(StoreType.TEST);
         String result = reader.getLinksetRDF(6);
         //Inverse use ids of none inverse
@@ -91,7 +90,7 @@ public class LinksetLoaderTest {
     }
     
     @Test(expected=IDMapperLinksetException.class)
-    public void testFileNotFound() throws IDMapperException, FileNotFoundException, BridgeDBException {
+    public void testFileNotFound() throws BridgeDBException, FileNotFoundException, BridgeDBException {
         new LinksetLoader().validateFile("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, false);
     }
 

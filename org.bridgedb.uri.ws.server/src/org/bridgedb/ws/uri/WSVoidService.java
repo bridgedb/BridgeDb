@@ -32,7 +32,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.RdfReader;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.BridgeDBException;
@@ -141,10 +140,10 @@ public class WSVoidService extends WSFame{
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/linkset/{id}/{resource}")
-    public String linksetSet(@PathParam("id") String idString, @PathParam("resource") String resource) throws IDMapperException {
+    public String linksetSet(@PathParam("id") String idString, @PathParam("resource") String resource) throws BridgeDBException {
         throw new BridgeDBException("id= "+ idString + " resource = " + resource);
         //if (idString == null || idString.isEmpty()){
-       //     throw new IDMapperException("Parameter id is missing!");
+       //     throw new BridgeDBException("Parameter id is missing!");
         //}
         //Integer id = Integer.parseInt(idString);
         //return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
@@ -153,14 +152,14 @@ public class WSVoidService extends WSFame{
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/void")
-    public String voidInfo() throws IDMapperException {
+    public String voidInfo() throws BridgeDBException {
         throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/void/{id}")
-    public String voidInfo(@PathParam("id") String idString) throws IDMapperException {
+    public String voidInfo(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null || idString.isEmpty()){
             throw new BridgeDBException("Parameter id is missing");
         }

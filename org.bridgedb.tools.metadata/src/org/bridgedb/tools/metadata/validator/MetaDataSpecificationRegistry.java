@@ -20,8 +20,8 @@
 package org.bridgedb.tools.metadata.validator;
 
 import java.util.HashMap;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.tools.metadata.MetaDataSpecification;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -32,7 +32,7 @@ public class MetaDataSpecificationRegistry {
     private static HashMap<ValidationType,MetaDataSpecification>  specificationByValidationType = 
             new HashMap<ValidationType,MetaDataSpecification>();
     
-    public static MetaDataSpecification getMetaDataSpecificationByValidatrionType(ValidationType type) throws IDMapperException{
+    public static MetaDataSpecification getMetaDataSpecificationByValidatrionType(ValidationType type) throws BridgeDBException{
         if (!specificationByValidationType.containsKey(type)){
             MetaDataSpecification specifation = new MetaDataSpecification(type);
             specificationByValidationType.put(type, specifation);

@@ -19,8 +19,8 @@
 //
 package org.bridgedb.linkset;
 
-import org.bridgedb.IDMapperException;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 
@@ -31,7 +31,7 @@ public class SetupLoaderWithTestData {
 
    private static final boolean LOAD_DATA = true;
    
-   public static void main(String[] args) throws IDMapperException {
+   public static void main(String[] args) throws BridgeDBException {
         ConfigReader.logToConsole();
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.LOAD);

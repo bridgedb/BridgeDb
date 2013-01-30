@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.sql.SQLUrlMapper;
@@ -65,20 +64,20 @@ public class LinksetLoader implements LinksetInterface{
     
     @Override
     public String validateString(String source, String info, RDFFormat format, StoreType storeType, 
-            ValidationType validationType, boolean includeWarnings) throws IDMapperException {
+            ValidationType validationType, boolean includeWarnings) throws BridgeDBException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         return loader.validityReport(includeWarnings);
     }
     
     @Override
     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType, boolean includeWarnings) throws IDMapperException{
+            ValidationType validationType, boolean includeWarnings) throws BridgeDBException{
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, inputStream, format, validationType, storeType);
         return loader.validityReport(includeWarnings);        
     }
     
     public String validityFile(File file, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
-    		throws IDMapperException {
+    		throws BridgeDBException {
     	if (!file.exists()) {
     		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
@@ -100,7 +99,7 @@ public class LinksetLoader implements LinksetInterface{
 
     @Override
     public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
-            throws IDMapperException {
+            throws BridgeDBException {
         if (fileName == null){
             throw new IDMapperLinksetException("File name may not be null");
         }
@@ -113,7 +112,7 @@ public class LinksetLoader implements LinksetInterface{
     
     @Override
     public String loadString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException {
+            throws BridgeDBException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         loader.validate();
         File file = saveString(info, format, validationType);
@@ -123,7 +122,7 @@ public class LinksetLoader implements LinksetInterface{
     
     @Override
     public String saveString(String source, String info, RDFFormat format, StoreType storeType, ValidationType validationType) 
-            throws IDMapperException {
+            throws BridgeDBException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         loader.validate();
         File file = saveString(info, format, validationType);
@@ -139,7 +138,7 @@ public class LinksetLoader implements LinksetInterface{
     }
 
     private static void load(File file, StoreType storeType, ValidationType validationType) 
-    		throws IDMapperException {
+    		throws BridgeDBException {
         if (storeType == null){
             throw new IDMapperLinksetException ("Can not load if no storeType set");
         }
@@ -158,14 +157,14 @@ public class LinksetLoader implements LinksetInterface{
     }
 
     @Override
-    public void loadFile(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
+    public void loadFile(String fileName, StoreType storeType, ValidationType type) throws BridgeDBException {
         File file = new File(fileName.trim());
         load(file, storeType, type);
     }
     
     @Override
     public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException{
+            ValidationType validationType) throws BridgeDBException{
         File file = saveInputStream(inputStream, format, validationType);
         if (validationType.isLinkset()){
             logger.warn("Linkset saved to " + file.getAbsolutePath());
@@ -180,14 +179,14 @@ public class LinksetLoader implements LinksetInterface{
 
     @Override
     public String saveInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException{
+            ValidationType validationType) throws BridgeDBException{
         File file = saveInputStream(inputStream, format, validationType);
         load(file, storeType, validationType);
         return "Loaded file " + file.getAbsolutePath();
     }
 
     private void validate(File file, StoreType storeType, ValidationType validationType) 
-    		throws IDMapperException {
+    		throws BridgeDBException {
     	if (!file.exists()) {
     		throw new IDMapperLinksetException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
@@ -203,26 +202,26 @@ public class LinksetLoader implements LinksetInterface{
 
     @Override
     public void checkStringValid(String source, String info, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException {
+            ValidationType validationType) throws BridgeDBException {
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         loader.validate();
     }
 
     @Override
-    public void checkFileValid(String fileName, StoreType storeType, ValidationType type) throws IDMapperException {
+    public void checkFileValid(String fileName, StoreType storeType, ValidationType type) throws BridgeDBException {
         File file = new File(fileName.trim());
         validate(file, storeType, type);
     }
     
     public void checkInputStreamValid(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
-            ValidationType validationType) throws IDMapperException{
+            ValidationType validationType) throws BridgeDBException{
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, inputStream, format, validationType, storeType);
         loader.validate();        
     }
     
     @Override
     public void clearExistingData (StoreType storeType) 
-    		throws IDMapperException  {
+    		throws BridgeDBException  {
         if (storeType == null){
             throw new IDMapperLinksetException ("unable to clear mapping of unspecified storeType");
         }
@@ -232,7 +231,7 @@ public class LinksetLoader implements LinksetInterface{
         logger.info(storeType + " SQL cleared");                
     }
 
-    public static File saveString(String info, RDFFormat format, ValidationType validationType) throws IDMapperException {
+    public static File saveString(String info, RDFFormat format, ValidationType validationType) throws BridgeDBException {
         File directory = getDirectory(validationType);      
         try {
            File file = File.createTempFile(validationType.getName(), "." + format.getDefaultFileExtension(), directory);
@@ -246,7 +245,7 @@ public class LinksetLoader implements LinksetInterface{
         }
     }
 
-    public static File saveInputStream(InputStream inputStream, RDFFormat format, ValidationType validationType) throws IDMapperException {
+    public static File saveInputStream(InputStream inputStream, RDFFormat format, ValidationType validationType) throws BridgeDBException {
         try {
             File directory = getDirectory(validationType);      
             File file = File.createTempFile(validationType.getName(), "." + format.getDefaultFileExtension(), directory);
@@ -266,7 +265,7 @@ public class LinksetLoader implements LinksetInterface{
         }
     }
 
-    public static File getDirectory(ValidationType validationType) throws IDMapperException{
+    public static File getDirectory(ValidationType validationType) throws BridgeDBException{
         if (validationType.isLinkset()){
             return DirectoriesConfig.getLinksetDirectory();
         } else {
@@ -286,7 +285,7 @@ public class LinksetLoader implements LinksetInterface{
      * @param args
      * @throws BridgeDbSqlException
      */
-    public static void main(String[] args) throws IDMapperException {
+    public static void main(String[] args) throws BridgeDBException {
         ConfigReader.logToConsole();
          if (args.length != 1){
             usage("Please specify a file/directory and use -D format for all other arguements.");
@@ -302,7 +301,7 @@ public class LinksetLoader implements LinksetInterface{
         if (storeString != null && !storeString.isEmpty()){
             try {
                 storeType = StoreType.parseString(storeString);
-            } catch (IDMapperException ex) {
+            } catch (BridgeDBException ex) {
                 usage(ex.getMessage());
             }
         }

@@ -25,11 +25,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.tools.metadata.rdf.VoidStatements;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -54,25 +54,25 @@ public class StatementReaderAndImporter implements VoidStatements{
     protected StatementReaderAndImporter(){
     }
     
-    public StatementReaderAndImporter(File file, StoreType storeType) throws IDMapperException{
+    public StatementReaderAndImporter(File file, StoreType storeType) throws BridgeDBException{
         StatementReader reader = new StatementReader(file);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
     }
 
-    public StatementReaderAndImporter(String fileName, StoreType storeType) throws IDMapperException{
+    public StatementReaderAndImporter(String fileName, StoreType storeType) throws BridgeDBException{
         StatementReader reader = new StatementReader(fileName);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
     }
     
-    public StatementReaderAndImporter(String info, RDFFormat format, StoreType storeType) throws IDMapperException{
+    public StatementReaderAndImporter(String info, RDFFormat format, StoreType storeType) throws BridgeDBException{
         StatementReader reader = new StatementReader(info, format);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
     }
 
-    public StatementReaderAndImporter(InputStream inputStream, RDFFormat format, StoreType storeType) throws IDMapperException{
+    public StatementReaderAndImporter(InputStream inputStream, RDFFormat format, StoreType storeType) throws BridgeDBException{
         StatementReader reader = new StatementReader(inputStream, format);
         voidStatements = reader.getVoidStatements();
         loadInfo(storeType);
@@ -81,9 +81,9 @@ public class StatementReaderAndImporter implements VoidStatements{
     /**
      * MUST be called by ALL constructors incl superClasses AFTER they have set voidStatements 
      * @param storeType
-     * @throws IDMapperException 
+     * @throws BridgeDBException 
      */
-    protected void loadInfo(StoreType storeType) throws IDMapperException {
+    protected void loadInfo(StoreType storeType) throws BridgeDBException {
         loadedURIs = new HashSet<Resource>();
         Set<Resource> toLoadURIs = getToLoadResources(voidStatements);
         while (!toLoadURIs.isEmpty()){
@@ -109,7 +109,7 @@ public class StatementReaderAndImporter implements VoidStatements{
         return toLoadURIs;
     }
 
-    private Set<Resource> loadExtrenalResources(Set<Resource> toLoadURIs, StoreType storeType) throws IDMapperException {
+    private Set<Resource> loadExtrenalResources(Set<Resource> toLoadURIs, StoreType storeType) throws BridgeDBException {
         Set<Resource> extraLoadURIs = new HashSet<Resource>();
         RdfReader liveReader = new RdfReader(StoreType.LIVE);
         boolean useLoad = storeType != StoreType.LIVE && RdfConfig.uniqueLoadRepository();

@@ -41,8 +41,7 @@ public class IDMapperTest extends org.bridgedb.utils.IDMapperTest{
         IDMapper inner = new IDMapperText(INTERFACE_TEST_FILE.toURL());
         WSCoreInterface  webService = new WSCoreService(inner);
         idMapper = new WSCoreMapper(webService);
-        capabilities = idMapper.getCapabilities();
-        
+        capabilities = idMapper.getCapabilities();        
     }
 
 }

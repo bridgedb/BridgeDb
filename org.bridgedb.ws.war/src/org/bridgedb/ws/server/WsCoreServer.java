@@ -24,11 +24,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSCoreService;
@@ -41,14 +41,14 @@ public class WsCoreServer extends WSCoreService {
         
     static final Logger logger = Logger.getLogger(WsCoreServer.class);
 
-    public WsCoreServer() throws IDMapperException {
+    public WsCoreServer() throws BridgeDBException {
         idMapper = new SQLIdMapper(false, StoreType.LIVE);
         logger.info("BridgeDB Server setup");
     }
             
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response welcomeMessage() throws IDMapperException, UnsupportedEncodingException {
+    public Response welcomeMessage() throws BridgeDBException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         StringBuilder sbInnerPure;
         StringBuilder sbInnerEncoded;

@@ -21,7 +21,6 @@ package org.bridgedb.tools.metadata;
 
 import java.io.File;
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.tools.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.tools.metadata.validator.ValidationType;
@@ -82,7 +81,7 @@ public class FileTest extends TestUtils{
     }
 
     @Test
-    public void testChemspider() throws IDMapperException{
+    public void testChemspider() throws BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
@@ -90,21 +89,21 @@ public class FileTest extends TestUtils{
 
     @Test
     @Ignore
-    public void testChemspiderSmall() throws IDMapperException{
+    public void testChemspiderSmall() throws BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
    } 
 
     @Test
-    public void testChemblRdfVoidTtl() throws IDMapperException{
+    public void testChemblRdfVoidTtl() throws BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
     @Test
-    public void testLINK_FILE() throws IDMapperException{
+    public void testLINK_FILE() throws BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
         checkFile(LINK_FILE, 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
@@ -112,7 +111,7 @@ public class FileTest extends TestUtils{
 
     @Test
     @Ignore
-    public void testLinksetFirstTtl() throws BridgeDBException, IDMapperException{
+    public void testLinksetFirstTtl() throws BridgeDBException, BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);
         checkFile("test-data/linksetFirst.ttl", 3, FILE_HAS_EXTRA_RDF, dataSetRegistry);
