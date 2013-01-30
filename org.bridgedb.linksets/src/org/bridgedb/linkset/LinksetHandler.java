@@ -25,11 +25,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.RdfLoader;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.rdf.reader.LinksetParserErrorListener;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -78,9 +78,9 @@ public class LinksetHandler extends RDFHandlerBase{
      * Uses the BaseURI found in the configs read by the RdfWrapper
      *
      * @param file
-     * @throws IDMapperException
+     * @throws BridgeDBException
      */
-    void parse (File file, String baseURI) throws IDMapperException  {
+    void parse (File file, String baseURI) throws BridgeDBException  {
         if (!file.isFile()){
             throw new IDMapperLinksetException (file.getAbsolutePath() + " is not a file");
         }
@@ -164,7 +164,7 @@ public class LinksetHandler extends RDFHandlerBase{
         super.endRDF();
         try {
             rdfLoader.closeInput();
-        } catch (IDMapperException ex) {
+        } catch (BridgeDBException ex) {
             throw new RDFHandlerException("Error endingRDF ", ex);
         }
         if (this.processingHeader){

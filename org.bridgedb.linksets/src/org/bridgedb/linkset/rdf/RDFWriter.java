@@ -24,7 +24,6 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.LinksetVoidInformation;
@@ -62,7 +61,7 @@ public class RDFWriter implements RdfLoader{
     private static final Resource ANY_RESOURCE = null;
 
     public RDFWriter(StoreType storeType, LinksetVoidInformation information, URLListener listener, String mainCaller) 
-            throws IDMapperException{
+            throws BridgeDBException{
         this.storeType = storeType;
         urlListener = listener;
         statements = new ArrayList<Statement>();
@@ -152,7 +151,7 @@ public class RDFWriter implements RdfLoader{
     }
 
     @Override
-    public void closeInput() throws IDMapperException {
+    public void closeInput() throws BridgeDBException {
         urlListener.closeInput();
     }
 
@@ -162,7 +161,7 @@ public class RDFWriter implements RdfLoader{
         String targetURL = st.getObject().stringValue();
         try {
             urlListener.insertURLMapping(sourceURL, targetURL, mappingId, symmetric);
-        } catch (IDMapperException ex) {
+        } catch (BridgeDBException ex) {
             throw new RDFHandlerException ("Error inserting mapping. ", ex);
         }
     }

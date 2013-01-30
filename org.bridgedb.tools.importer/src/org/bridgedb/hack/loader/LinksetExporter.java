@@ -60,17 +60,27 @@ public class LinksetExporter {
     
     static final Logger logger = Logger.getLogger(LinksetExporter.class);
 
-    public LinksetExporter(File file) throws IDMapperException{
-        mapper = BridgeDb.connect("idmapper-pgdb:" + file.getAbsolutePath());
+    public LinksetExporter(File file) throws BridgeDBException{
+        try {
+            mapper = BridgeDb.connect("idmapper-pgdb:" + file.getAbsolutePath());
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
+        }
         name = file.getName();
         if (name.contains(".")){
             name = name.substring(0, name.lastIndexOf("."));
         }
     }
     
-    public void exportAll(File directory) throws IDMapperException, IOException{
-        Set<DataSource> srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
-        Set<DataSource> tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+    public void exportAll(File directory) throws BridgeDBException, IOException{
+        Set<DataSource> srcDataSources;
+        Set<DataSource> tgtDataSources;
+        try {
+            srcDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+            tgtDataSources = mapper.getCapabilities().getSupportedSrcDataSources();
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
+        }
         for (DataSource srcDataSource:srcDataSources){
             if (canExport(srcDataSource)){
                 for (DataSource tgtDataSource:tgtDataSources){
@@ -100,7 +110,7 @@ public class LinksetExporter {
         return true;
     }
     
-    public synchronized void exportLinkset(File directory, DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
+    public synchronized void exportLinkset(File directory, DataSource srcDataSource, DataSource tgtDataSource) throws BridgeDBException, IOException {
         if (!directory.exists()){
             if (directory.getParentFile().exists()){
                 directory.mkdir();
@@ -137,7 +147,7 @@ public class LinksetExporter {
         }
     }
 
-    private boolean writeLinkset(DataSource srcDataSource, DataSource tgtDataSource) throws IOException, IDMapperException {
+    private boolean writeLinkset(DataSource srcDataSource, DataSource tgtDataSource) throws IOException, BridgeDBException {
         writeVoidHeader(srcDataSource, tgtDataSource);
         return writeLinks(srcDataSource, tgtDataSource);
     }
@@ -178,23 +188,27 @@ public class LinksetExporter {
         writeln("");                
     }
 
-    private boolean writeLinks(DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
+    private boolean writeLinks(DataSource srcDataSource, DataSource tgtDataSource) throws BridgeDBException, IOException {
         if (srcDataSource == tgtDataSource){
             return writeSelfLinks(srcDataSource, tgtDataSource);
         } else {
-            boolean linkFound = false;
-            XrefIterator iterator = (XrefIterator)mapper;
-            Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
-            while (xrefIterator.hasNext()){
-                Xref sourceXref = xrefIterator.next();
-                Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
-                for (Xref targetXref:targetXrefs){
-                    writeln("<" + sourceUriSpace + scrub(sourceXref.getId()) + "> " + LINK_PREDICATE + 
-                            " <" + targetUriSpace +scrub(targetXref.getId()) + "> .");
-                    linkFound = true;
+            try {
+                boolean linkFound = false;
+                XrefIterator iterator = (XrefIterator)mapper;
+                Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
+                while (xrefIterator.hasNext()){
+                    Xref sourceXref = xrefIterator.next();
+                    Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
+                    for (Xref targetXref:targetXrefs){
+                        writeln("<" + sourceUriSpace + scrub(sourceXref.getId()) + "> " + LINK_PREDICATE + 
+                                " <" + targetUriSpace +scrub(targetXref.getId()) + "> .");
+                        linkFound = true;
+                    }
                 }
+                return linkFound;
+            } catch (IDMapperException e){
+                throw BridgeDBException.convertToBridgeDB(e);
             }
-            return linkFound;
         }
     }
     
@@ -205,26 +219,31 @@ public class LinksetExporter {
         return id;
     }
 
-    private boolean writeSelfLinks(DataSource srcDataSource, DataSource tgtDataSource) throws IDMapperException, IOException {
+    private boolean writeSelfLinks(DataSource srcDataSource, DataSource tgtDataSource) throws BridgeDBException, IOException {
         boolean linkFound = false;
         XrefIterator iterator = (XrefIterator)mapper;
-        Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
-        while (xrefIterator.hasNext()){
-            Xref sourceXref = xrefIterator.next();
-            Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
-            for (Xref targetXref:targetXrefs){
-                if (!sourceXref.getId().equals(targetXref.getId())){
-                    writeln("<" + sourceUriSpace + scrub(sourceXref.getId()) + "> " + LINK_PREDICATE + 
-                            " <" + targetUriSpace +scrub(targetXref.getId()) + "> .");
-                    linkFound = true;
+        try {
+            Iterator<Xref> xrefIterator = iterator.getIterator(srcDataSource).iterator();
+            while (xrefIterator.hasNext()){
+                Xref sourceXref = xrefIterator.next();
+                Set<Xref> targetXrefs = mapper.mapID(sourceXref, tgtDataSource);
+                for (Xref targetXref:targetXrefs){
+                    if (!sourceXref.getId().equals(targetXref.getId())){
+                        writeln("<" + sourceUriSpace + scrub(sourceXref.getId()) + "> " + LINK_PREDICATE + 
+                                " <" + targetUriSpace +scrub(targetXref.getId()) + "> .");
+                        linkFound = true;
+                    }
                 }
             }
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
         }
+
         return linkFound;
     }
     
     public static void exportFile(File file) 
-    		throws IDMapperException, IOException {
+    		throws BridgeDBException, IOException {
     	if (!file.exists()) {
     		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
@@ -242,7 +261,7 @@ public class LinksetExporter {
         }
     }
     
-    public static Set<DataSource> extractDataSources(File file) throws IDMapperException {
+    public static Set<DataSource> extractDataSources(File file) throws BridgeDBException {
         Reporter.println("extractDataSources from " + file.getAbsolutePath());
         HashSet results = new HashSet<DataSource>();
     	if (!file.exists()) {
@@ -253,9 +272,13 @@ public class LinksetExporter {
                 results.addAll(extractDataSources(child));
             }
         } else { 
-            IDMapper idMpper = BridgeDb.connect("idmapper-pgdb:" + file.getAbsolutePath());
-            results.addAll(idMpper .getCapabilities().getSupportedSrcDataSources());
-            results.addAll(idMpper .getCapabilities().getSupportedTgtDataSources());
+            try {
+                IDMapper idMpper = BridgeDb.connect("idmapper-pgdb:" + file.getAbsolutePath());
+                results.addAll(idMpper .getCapabilities().getSupportedSrcDataSources());
+                results.addAll(idMpper .getCapabilities().getSupportedTgtDataSources());
+            } catch (IDMapperException e){
+                throw BridgeDBException.convertToBridgeDB(e);
+            }
         }
         return results;
     }
@@ -270,7 +293,7 @@ public class LinksetExporter {
         BridgeDBRdfHandler.parseRdfFile(dsfile);        
     }
     
-    public static void main(String[] args) throws IDMapperException, IOException, ClassNotFoundException{
+    public static void main(String[] args) throws BridgeDBException, IOException, ClassNotFoundException{
         ConfigReader.logToConsole();
         writeBioDataSource();
         

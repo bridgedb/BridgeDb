@@ -22,10 +22,10 @@ package org.bridgedb.linkset;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.hamcrest.Matchers.*;
@@ -39,7 +39,7 @@ import org.openrdf.rio.RDFFormat;
 public class LinkSetLoaderUsingInputStream extends TestUtils{
        
     @Test
-    public void testcheckInputStreamValid() throws IDMapperException {
+    public void testcheckInputStreamValid() throws BridgeDBException {
         report("CheckInputStreamValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         InputStream inputStream = new ByteArrayInputStream(LinksetStatementReaderTest.INFO1.getBytes());
@@ -48,7 +48,7 @@ public class LinkSetLoaderUsingInputStream extends TestUtils{
     }
     
     @Test
-    public void testvalidityReport() throws IDMapperException {
+    public void testvalidityReport() throws BridgeDBException {
         report("validityReport");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
         InputStream inputStream = new ByteArrayInputStream(LinksetStatementReaderTest.INFO1.getBytes());
@@ -59,7 +59,7 @@ public class LinkSetLoaderUsingInputStream extends TestUtils{
     }
 
     @Test
-    public void testLoad() throws IDMapperException {
+    public void testLoad() throws BridgeDBException {
         report("Load");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         InputStream inputStream = new ByteArrayInputStream(LinksetStatementReaderTest.INFO1.getBytes());
@@ -68,7 +68,7 @@ public class LinkSetLoaderUsingInputStream extends TestUtils{
     }
     
     @Test
-    public void testLoadInputStream() throws IDMapperException{
+    public void testLoadInputStream() throws BridgeDBException{
         report("SaveInputStream");
         InputStream inputStream = new ByteArrayInputStream("This is a test".getBytes());
         File test = LinksetLoader.saveInputStream(inputStream, RDFFormat.TURTLE, ValidationType.LINKS);

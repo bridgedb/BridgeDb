@@ -19,7 +19,7 @@
 //
 package org.bridgedb.ws.uri.client;
 
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WSUriMapper;
 import org.junit.BeforeClass;
@@ -31,7 +31,7 @@ import org.junit.BeforeClass;
 public class IDMapperTest  extends org.bridgedb.utils.IDMapperTest{
     
     @BeforeClass
-    public static void setupIDMapper() throws IDMapperException {
+    public static void setupIDMapper() throws BridgeDBException {
         connectionOk = false;
         WSUriInterface webService = WsUriClientFactory.createTestWSClient();
         connectionOk = true;

@@ -26,7 +26,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.LinksetStatementReaderAndImporter;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.linkset.rdf.RdfWrapper;
@@ -85,7 +84,7 @@ public class LinksetLoaderImplentation{
     
     static final Logger logger = Logger.getLogger(LinksetLoaderImplentation.class);
 
-    protected LinksetLoaderImplentation(File file, ValidationType validationType, StoreType storeType) throws IDMapperException {
+    protected LinksetLoaderImplentation(File file, ValidationType validationType, StoreType storeType) throws BridgeDBException {
         logger.info("Reading " + file);
         accessedFrom = new URIImpl(file.toURI().toString());
         this.validationType = validationType;
@@ -103,7 +102,8 @@ public class LinksetLoaderImplentation{
         }
     }
     
-    protected LinksetLoaderImplentation(String source, String info, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
+    protected LinksetLoaderImplentation(String source, String info, RDFFormat format, ValidationType validationType, 
+            StoreType storeType) throws BridgeDBException {
         logger.info("Reading a String length " + info.length());
         this.validationType = validationType;
         this.storeType = storeType;
@@ -120,7 +120,8 @@ public class LinksetLoaderImplentation{
         accessedFrom = null;
     }
 
-    protected LinksetLoaderImplentation(String source, InputStream inputStream, RDFFormat format, ValidationType validationType, StoreType storeType) throws IDMapperException {
+    protected LinksetLoaderImplentation(String source, InputStream inputStream, RDFFormat format, 
+            ValidationType validationType, StoreType storeType) throws BridgeDBException {
         logger.info("Reading from inputStream " + source);
         this.validationType = validationType;
         this.storeType = storeType;
@@ -145,7 +146,7 @@ public class LinksetLoaderImplentation{
         metaData.validate();
     }
     
-    protected synchronized void load() throws IDMapperException{
+    protected synchronized void load() throws BridgeDBException{
         if (storeType == null){
             throw new IDMapperLinksetException ("Illegal call to load() with StoreType == null");
         }
@@ -159,7 +160,7 @@ public class LinksetLoaderImplentation{
         }
     }
     
-    private void linksetLoad() throws IDMapperException{
+    private void linksetLoad() throws BridgeDBException{
         URLListener urlListener = new SQLUrlMapper(false, storeType);
         getLinksetContexts(urlListener);
         resetBaseURI();
@@ -173,7 +174,7 @@ public class LinksetLoaderImplentation{
         }
     }
     
-    private void getLinksetContexts(URLListener urlListener) throws IDMapperException {
+    private void getLinksetContexts(URLListener urlListener) throws BridgeDBException {
         LinksetVoidInformation information = (LinksetVoidInformation)metaData;
         String subjectUriSpace = information.getSubjectUriSpace();
         String targetUriSpace = information.getTargetUriSpace();
@@ -209,7 +210,7 @@ public class LinksetLoaderImplentation{
     }
     
     private void loadVoid() 
-            throws IDMapperException{
+            throws BridgeDBException{
         RdfWrapper rdfWrapper = null;
         try {
             rdfWrapper = RdfFactory.setupConnection(storeType);
@@ -268,7 +269,7 @@ public class LinksetLoaderImplentation{
         }
     }
 
-    private void loadSQL(URLListener urlListener) throws IDMapperException {
+    private void loadSQL(URLListener urlListener) throws BridgeDBException {
         LinksetStatements linksetStatements = (LinksetStatements) statements;
         for (Statement st:linksetStatements.getLinkStatements()){
             String sourceURL = st.getSubject().stringValue();
@@ -277,7 +278,7 @@ public class LinksetLoaderImplentation{
         }
     }
         
-    private synchronized URI getVoidContext() throws IDMapperException {
+    private synchronized URI getVoidContext() throws BridgeDBException {
         SQLIdMapper mapper = new SQLIdMapper(false, storeType);
         String oldIDString = mapper.getProperty(LAST_USED_VOID_ID);
         Integer oldId;

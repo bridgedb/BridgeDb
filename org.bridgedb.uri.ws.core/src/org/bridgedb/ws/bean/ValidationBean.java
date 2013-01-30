@@ -20,7 +20,6 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -104,7 +103,7 @@ public class ValidationBean {
     /**
      * @return the report
      */
-    public String getOkReport() throws IDMapperException {
+    public String getOkReport() throws BridgeDBException {
         if (exception == null || exception.isEmpty()){
             return report;
         }

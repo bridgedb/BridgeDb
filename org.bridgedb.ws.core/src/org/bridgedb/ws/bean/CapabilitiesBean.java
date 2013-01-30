@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -88,7 +89,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     }
 
     @Override
-    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedSrcDataSources() throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:sourceDataSource){
             results.add(DataSourceBeanFactory.asDataSource(bean));
@@ -97,7 +98,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     }
 
     @Override
-    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedTgtDataSources() throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:targetDataSource){
             results.add(DataSourceBeanFactory.asDataSource(bean));
@@ -106,7 +107,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     }
 
     @Override
-    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws BridgeDBException {
         for (DataSourceMapBean bean:supportedMapping){
             if (DataSourceMapBeanFactory.getKey(bean) == src ){
                 Set<DataSource> targets = DataSourceMapBeanFactory.getMappedSet(bean);

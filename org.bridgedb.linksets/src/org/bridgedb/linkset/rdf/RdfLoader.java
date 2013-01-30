@@ -19,7 +19,7 @@
 //
 package org.bridgedb.linkset.rdf;
 
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
 
@@ -35,7 +35,7 @@ public interface RdfLoader {
 
     public void insertURLMapping(Statement st) throws RDFHandlerException;
 
-    public void closeInput()throws IDMapperException;
+    public void closeInput()throws BridgeDBException;
 
     public void setSourceFile(String absolutePath);
 

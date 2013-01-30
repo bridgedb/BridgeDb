@@ -20,10 +20,10 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.hamcrest.Matchers.*;
@@ -37,7 +37,7 @@ import org.openrdf.rio.RDFFormat;
 public class LinkSetLoaderUsingStringTest extends TestUtils{
        
     @Test
-    public void testcheckStringValid() throws IDMapperException {
+    public void testcheckStringValid() throws BridgeDBException {
         report("CheckStringValid");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         new LinksetLoader().checkStringValid("LinksetStatementReaderTest.INFO1", 
@@ -45,7 +45,7 @@ public class LinkSetLoaderUsingStringTest extends TestUtils{
     }
     
     @Test
-    public void testvalidityReport() throws IDMapperException {
+    public void testvalidityReport() throws BridgeDBException {
         report("validityReport");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle"); 
         String result = new LinksetLoader().validateString("LinksetStatementReaderTest.INFO1", 
@@ -56,7 +56,7 @@ public class LinkSetLoaderUsingStringTest extends TestUtils{
     }
 
     @Test
-    public void testLoad() throws IDMapperException {
+    public void testLoad() throws BridgeDBException {
         report("Load");
         RDFFormat format = StatementReader.getRDFFormatByMimeType("text/turtle");
         new LinksetLoader().loadString("LinksetStatementReaderTest.INFO1", 
@@ -64,7 +64,7 @@ public class LinkSetLoaderUsingStringTest extends TestUtils{
     }
     
     @Test
-    public void testLoadString() throws IDMapperException{
+    public void testLoadString() throws BridgeDBException{
         report("LoadString");
         File test = LinksetLoader.saveString("This is a test", RDFFormat.TURTLE, ValidationType.LINKS);
     }

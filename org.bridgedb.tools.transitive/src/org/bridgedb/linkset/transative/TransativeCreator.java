@@ -32,7 +32,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.linkset.rdf.RdfWrapper;
 import org.bridgedb.rdf.constants.RdfConstants;
@@ -90,7 +89,7 @@ public class TransativeCreator {
     static final Logger logger = Logger.getLogger(TransativeCreator.class);
 
     private TransativeCreator(int leftId, int rightId, String possibleFileName, StoreType storeType) 
-            throws IDMapperException, IOException{
+            throws BridgeDBException, IOException{
         sqlAccess = SqlFactory.createTheSQLAccess(storeType);
         mapper = new SQLUrlMapper(false, storeType);
         createBufferedWriter(possibleFileName, leftId, rightId);
@@ -100,7 +99,7 @@ public class TransativeCreator {
             
     public static String createTransative(int leftId, int rightId, String possibleFileName, StoreType storeType, 
             URI predicate, URI license, URI derivedBy) 
-            throws RDFHandlerException, IOException, IDMapperException{
+            throws RDFHandlerException, IOException, BridgeDBException{
         if (license != null && derivedBy == null){
             throw new BridgeDBException("To change the " + LICENSE + " you must declare who you are using the " + 
                     DERIVED_BY + " parameter.");
@@ -133,7 +132,7 @@ public class TransativeCreator {
     }
 
     private synchronized URI getVoid(int leftId, int rightId, StoreType storeType, URI predicate, URI license, URI derivedBy) 
-            throws RDFHandlerException, IOException, IDMapperException{
+            throws RDFHandlerException, IOException, BridgeDBException{
         checkMappable(leftId, rightId);
         RdfWrapper rdfWrapper = RdfFactory.setupConnection(storeType);
         leftLinkSet = getLinkSet(rdfWrapper, leftContext);
@@ -159,7 +158,7 @@ public class TransativeCreator {
         return rdfWrapper.getTheSingeltonSubject (RdfConstants.TYPE_URI, VoidConstants.LINKSET, context);
     }
     
-    private void checkMappable(int leftId, int rightId) throws IDMapperException{
+    private void checkMappable(int leftId, int rightId) throws BridgeDBException{
         MappingSetInfo leftInfo = mapper.getMappingSetInfo(leftId);
         MappingSetInfo rightInfo = mapper.getMappingSetInfo(rightId);
         if (!leftInfo.getTargetSysCode().equals(rightInfo.getSourceSysCode())){
@@ -429,7 +428,7 @@ public class TransativeCreator {
         }
     }
 
-    public static void main(String[] args) throws RDFHandlerException, IOException, IDMapperException {
+    public static void main(String[] args) throws RDFHandlerException, IOException, BridgeDBException {
         ConfigReader.logToConsole();
         if (args.length != 2){
             usage("Please provide the ids of the two mappingsets to combine and any farther -D format arguements.");
@@ -455,7 +454,7 @@ public class TransativeCreator {
         if (storeString != null && !storeString.isEmpty()){
             try {
                 storeType = StoreType.parseString(storeString);
-            } catch (IDMapperException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 usage(ex.getMessage());
             }

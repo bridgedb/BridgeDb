@@ -19,7 +19,7 @@
 //
 package org.bridgedb.ws.client;
 
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreClientFactory;
 import org.bridgedb.ws.WSCoreInterface;
 import org.bridgedb.ws.WSCoreMapper;
@@ -34,7 +34,7 @@ import org.junit.Ignore;
 public class IDMapperCapabilitiesTest  extends org.bridgedb.utils.IDMapperCapabilitiesTest{
     
     @BeforeClass
-    public static void setupIDMapper() throws IDMapperException {
+    public static void setupIDMapper() throws BridgeDBException {
         WSCoreInterface webService = WSCoreClientFactory.createTestWSClient();
         capabilities = new WSCoreMapper(webService).getCapabilities();
     }
