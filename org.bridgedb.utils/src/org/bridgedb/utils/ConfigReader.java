@@ -54,7 +54,7 @@ public class ConfigReader {
     
     static final Logger logger = Logger.getLogger(ConfigReader.class);
     
-    public static Properties getProperties(String fileName) throws IDMapperException{
+    public static Properties getProperties(String fileName) throws BridgeDBException{
         ConfigReader finder = new ConfigReader(fileName);
         configureLogger();
         return finder.getProperties();

@@ -37,7 +37,6 @@ import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.linkset.rdf.RdfWrapper;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
-import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
@@ -322,7 +321,7 @@ public class TransativeCreator {
         }
     }
        
-    private void getSQL(int leftId, int rightId, StoreType storeType, URI newPredicate) throws BridgeDbSqlException, IOException {
+    private void getSQL(int leftId, int rightId, StoreType storeType, URI newPredicate) throws BridgeDBException, IOException {
         buffer.newLine();
         StringBuilder query = new StringBuilder(
                 "SELECT mapping1.sourceId, mapping2.targetId ");
@@ -339,7 +338,7 @@ public class TransativeCreator {
         try {
             statement = connection.createStatement();
         } catch (SQLException ex) {
-           throw new BridgeDbSqlException("Unable to get statement. ", ex);
+           throw new BridgeDBException("Unable to get statement. ", ex);
         }
         try {
             logger.info("Running " + query.toString());
@@ -361,7 +360,7 @@ public class TransativeCreator {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+            throw new BridgeDBException("Unable to run query. " + query, ex);
         }
         buffer.flush();
         buffer.close();

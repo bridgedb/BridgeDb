@@ -20,6 +20,7 @@
 package org.bridgedb.sql;
 
 import org.apache.log4j.Logger;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 
 /**
@@ -38,7 +39,7 @@ public abstract class TestSqlFactory {
         try {
             SQLAccess sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
             sqlAccess.getConnection();
-        } catch (BridgeDbSqlException ex) {
+        } catch (BridgeDBException ex) {
             logger.error("Unable to connect to SQL", ex);
             logger.fatal("SKIPPPING tests due to Connection error.");
             System.err.println("**** SKIPPPING tests due to Connection error.");
@@ -53,7 +54,7 @@ public abstract class TestSqlFactory {
         try {
             SQLAccess sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
             sqlAccess.getConnection();
-        } catch (BridgeDbSqlException ex) {
+        } catch (BridgeDBException ex) {
             logger.error("Unable to connect to Virtuoso", ex);
             logger.fatal("SKIPPPING tests due to Connection error.");
             System.err.println("**** SKIPPPING tests due to Connection error.");
@@ -68,7 +69,7 @@ public abstract class TestSqlFactory {
         try {
             SQLAccess sqlAccess = SqlFactory.createTheSQLAccess(StoreType.TEST);
             sqlAccess.getConnection();
-        } catch (BridgeDbSqlException ex) {
+        } catch (BridgeDBException ex) {
             logger.error("Unable to connect to Virtuoso", ex);
             logger.fatal("SKIPPPING tests due to Connection error.");
             System.err.println("**** SKIPPPING tests due to Connection error.");

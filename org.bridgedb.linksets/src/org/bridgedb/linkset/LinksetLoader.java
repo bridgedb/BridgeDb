@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.rdf.IDMapperLinksetException;
-import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.tools.metadata.validator.Validator;

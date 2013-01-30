@@ -37,7 +37,6 @@ import org.bridgedb.Xref;
 import org.bridgedb.XrefIterator;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.mysql.MySQLSpecific;
-import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;

@@ -22,6 +22,7 @@ package org.bridgedb.rdf;
 import java.io.File;
 import java.util.Properties;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 
@@ -46,7 +47,7 @@ public class RdfConfig {
         return dataDir.exists();
     }
     
-    public static String getTheBaseURI() throws IDMapperException {
+    public static String getTheBaseURI() throws BridgeDBException {
         if (baseURI == null){
             baseURI = getProperties().getProperty(BASE_URI_PROPERTY).trim();
             if (!baseURI.endsWith("/")){
@@ -56,11 +57,11 @@ public class RdfConfig {
         return baseURI;
     }
     
-    public static String getProfileBaseURI() throws IDMapperException{
+    public static String getProfileBaseURI() throws BridgeDBException{
         return getTheBaseURI() + "profile/";  
     }
 
-    public static String getProfileURI(int linksetId) throws IDMapperException{
+    public static String getProfileURI(int linksetId) throws BridgeDBException{
         return getProfileBaseURI() + linksetId;  
     }
   
@@ -118,7 +119,7 @@ public class RdfConfig {
         return "../rdf/testLinksets";
     }
  
-    private static Properties getProperties() throws IDMapperException{
+    private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
             properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
         }

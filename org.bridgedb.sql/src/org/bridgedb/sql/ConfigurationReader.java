@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Properties;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.virtuoso.VirtuosoAccess;
 
 /**
@@ -67,9 +68,9 @@ public class ConfigurationReader {
      * Create a wrapper around the Test Virtuosos Database, 
      *     using the hardcoded database name, user name and password.
      * @return
-     * @throws BridgeDbSqlException 
+     * @throws BridgeDBException 
      */
-    public static SQLAccess createTestVirtuosoAccess() throws BridgeDbSqlException {
+    public static SQLAccess createTestVirtuosoAccess() throws BridgeDBException {
         VirtuosoAccess virtuosoAccess = new VirtuosoAccess();
         virtuosoAccess.getConnection();
         return virtuosoAccess;

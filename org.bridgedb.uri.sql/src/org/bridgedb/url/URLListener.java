@@ -20,7 +20,6 @@
 package org.bridgedb.url;
 
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -41,7 +40,7 @@ public interface URLListener {
      * @param source A BridgeDB DataSource to associate with.
      * @param uriPattern is a template for generating valid URI's for identifiers. 
 	 * The pattern should contain the substring "$id", which will be replaced by the actual identifier.
-     * @throws IDMapperException 
+     * @throws BridgeDBException 
      */
     public void registerUriPattern(DataSource source, String uriPattern) throws BridgeDBException;
 
@@ -63,12 +62,12 @@ public interface URLListener {
      *     Creates two mapping sets this one and the inverse with one number higher.
      * @param transative Flag to indicate if the mapping was created using transativity
      * @return Id of the forward mappingSet.
-     * @throws IDMapperException Thrown if either UriSpace has not previously been registered using registerUriSpace
+     * @throws BridgeDBException Thrown if either UriSpace has not previously been registered using registerUriSpace
      */
     //XXX-AG: Asssuming justification can be null if the predicate can be null!
    public int registerMappingSet(String sourceUriSpace, String predicate, 
 		   String justification, String targetUriSpace, 
-        boolean symetric, boolean transative) throws IDMapperException;
+        boolean symetric, boolean transative) throws  BridgeDBException;
 
     /**
      * Inserts a mapping into the system.
@@ -89,10 +88,10 @@ public interface URLListener {
      * @param targetId ID of the target xref
      * @param mappingSet The ID of the mapping set to be inserted into.
      * @param symetric If true the inverse mapping will be inserted into the mapping set one number higher.
-     * @throws IDMapperException 
+     * @throws BridgeDBException 
      */
    public void insertURLMapping(String sourceURL, String targetURL, int mappingSet, boolean symetric) 
-            throws IDMapperException;
+            throws BridgeDBException;
     
     /**
      * Closes the input, flushing any links into storage.
@@ -101,8 +100,8 @@ public interface URLListener {
      * <p>
      * This method and MappingListener method are intended to be duplicates of each other.
      * A single actual method can implement closeInput() for both interfaces. 
-     * @throws IDMapperException 
+     * @throws BridgeDBException 
      */
-   public void closeInput()throws IDMapperException;
+   public void closeInput()throws BridgeDBException;
 
 }

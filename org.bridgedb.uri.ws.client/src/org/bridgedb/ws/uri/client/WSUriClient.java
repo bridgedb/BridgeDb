@@ -25,8 +25,8 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.sql.BridgeDbSqlException;
 import org.bridgedb.url.Mapping;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreClient;
 import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WsConstants;
@@ -216,7 +216,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
 	}
 
 	@Override
-	public ProfileBean getProfile(String id) throws BridgeDbSqlException {
+	public ProfileBean getProfile(String id) throws BridgeDBException {
 		ProfileBean result = webResource.path("profile/" + id)
 		.accept(MediaType.APPLICATION_XML_TYPE)
 		.get(new GenericType<ProfileBean>() {});
