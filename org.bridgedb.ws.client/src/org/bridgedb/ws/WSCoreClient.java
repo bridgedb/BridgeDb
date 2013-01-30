@@ -28,7 +28,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
@@ -49,7 +49,7 @@ public class WSCoreClient implements WSCoreInterface{
     protected final WebResource webResource;
 
     @Override
-    public List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> targetCodes) throws IDMapperException {
+    public List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> targetCodes) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         for (String one:id){
             params.add(WsConstants.ID, one);
@@ -77,7 +77,7 @@ public class WSCoreClient implements WSCoreInterface{
     }
         
     @Override
-    public List<XrefBean> freeSearch(String text, String limit) throws IDMapperException {
+    public List<XrefBean> freeSearch(String text, String limit) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.TEXT, text);
         params.add(WsConstants.LIMIT, limit);
@@ -113,7 +113,7 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public List<DataSourceBean> getSupportedSrcDataSources() throws IDMapperException {
+    public List<DataSourceBean> getSupportedSrcDataSources() throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         List<DataSourceBean> result = 
@@ -125,7 +125,7 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public List<DataSourceBean> getSupportedTgtDataSources() throws IDMapperException {
+    public List<DataSourceBean> getSupportedTgtDataSources() throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         List<DataSourceBean> result = 
@@ -149,7 +149,7 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public MappingSupportedBean isMappingSupported(String sourceCode, String targetCode) throws IDMapperException {
+    public MappingSupportedBean isMappingSupported(String sourceCode, String targetCode) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE, sourceCode);
         params.add(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE, targetCode);
@@ -163,7 +163,7 @@ public class WSCoreClient implements WSCoreInterface{
     }
 
     @Override
-    public XrefExistsBean xrefExists(String id, String scrCode) throws IDMapperException {
+    public XrefExistsBean xrefExists(String id, String scrCode) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.ID, id);
         params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);

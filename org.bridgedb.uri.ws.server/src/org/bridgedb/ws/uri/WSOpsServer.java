@@ -29,8 +29,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.uri.WSLinksetService;
 import org.bridgedb.ws.uri.WSUriInterfaceService;
 import org.bridgedb.ws.WsUriConstants;
@@ -43,7 +43,7 @@ public class WSOpsServer extends WSLinksetService{
     
     static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
-    public WSOpsServer()  throws IDMapperException   {
+    public WSOpsServer()  throws BridgeDBException   {
         super();
         logger.info("WsOpsServer setup");        
     }
@@ -55,12 +55,12 @@ public class WSOpsServer extends WSLinksetService{
      * 
      * @param httpServletRequest
      * @return
-     * @throws IDMapperException
+     * @throws BridgeDBException
      * @throws UnsupportedEncodingException 
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response welcomeMessage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+    public Response welcomeMessage(@Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
         if (logger.isDebugEnabled()){
             logger.debug("welcomeMessage called!");
         }
@@ -115,13 +115,13 @@ public class WSOpsServer extends WSLinksetService{
      * This is expected to be overwirriten by the QueryExpander
      * @param httpServletRequest
      * @return
-     * @throws IDMapperException
+     * @throws BridgeDBException
      * @throws UnsupportedEncodingException 
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
-    public Response apiPage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+    public Response apiPage(@Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
         return imsApiPage(httpServletRequest);
     }
     

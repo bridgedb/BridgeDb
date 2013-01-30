@@ -20,7 +20,7 @@
 package org.bridgedb.ws;
 
 import java.util.List;
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
@@ -36,38 +36,38 @@ import org.bridgedb.ws.bean.XrefMapBean;
  */
 public interface WSCoreInterface {
 
-    List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> targetCodes) throws IDMapperException;
+    List<XrefMapBean> mapID(List<String> id, List<String> scrCode, List<String> targetCodes) throws BridgeDBException;
 
-    XrefExistsBean xrefExists(String id, String scrCode) throws IDMapperException;
+    XrefExistsBean xrefExists(String id, String scrCode) throws BridgeDBException;
 
-    List<XrefBean> freeSearch(String text, String limit) throws IDMapperException;
+    List<XrefBean> freeSearch(String text, String limit) throws BridgeDBException;
 
     CapabilitiesBean getCapabilities();
 
     FreeSearchSupportedBean isFreeSearchSupported();
 
-    List<DataSourceBean> getSupportedSrcDataSources() throws IDMapperException;
+    List<DataSourceBean> getSupportedSrcDataSources() throws BridgeDBException;
 
-    List<DataSourceBean> getSupportedTgtDataSources() throws IDMapperException;
+    List<DataSourceBean> getSupportedTgtDataSources() throws BridgeDBException;
 
-    MappingSupportedBean isMappingSupported( String sourceCode, String targetCode) throws IDMapperException;
+    MappingSupportedBean isMappingSupported( String sourceCode, String targetCode) throws BridgeDBException;
 
     PropertyBean getProperty(String key);
 
     List<PropertyBean> getKeys();
    
-    /*DataSourceBean getDataSoucre(String code) throws IDMapperException;
+    /*DataSourceBean getDataSoucre(String code) throws BridgeDBException;
 
 
 
     CapabilitiesBean getCapabilities();
 
     public List<URLMappingBean> mapByURLs(List<String> sourceURL, List<String> linkSetId, List<String> targetNameSpace) 
-            throws IDMapperException;
+            throws BridgeDBException;
 
-    public URLExistsBean urlExists(String URL) throws IDMapperException;
+    public URLExistsBean urlExists(String URL) throws BridgeDBException;
 
-    public URLSearchBean URLSearch(String text, Integer limit) throws IDMapperException;
+    public URLSearchBean URLSearch(String text, Integer limit) throws BridgeDBException;
 */
 
 }

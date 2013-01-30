@@ -20,10 +20,10 @@
 package org.bridgedb.mysql;
 
 import java.util.Date;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
 
@@ -42,7 +42,7 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
     private static final long CREATION1 = new Date().getTime();
 
     @BeforeClass
-    public static void setupIDMapper() throws IDMapperException{
+    public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();

@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.linkset.LinkSetStore;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -48,23 +48,23 @@ public class RdfReader implements LinkSetStore{
     }
     
     //@Override
-    //public List<String> getLinksetNames() throws IDMapperException {
+    //public List<String> getLinksetNames() throws BridgeDBException {
     //    return RdfWrapper.getContextNames(storeType);
     //}
 
     @Override
-    public String getLinksetRDF(int linksetId) throws IDMapperException{
+    public String getLinksetRDF(int linksetId) throws BridgeDBException{
         Resource linkSetGraph = RdfFactory.getLinksetURL(linksetId); 
         return getRDF(linkSetGraph);
     }
 
     @Override
-    public String getVoidRDF(int voidId) throws IDMapperException{
+    public String getVoidRDF(int voidId) throws BridgeDBException{
         Resource voidGraph = RdfFactory.getVoidURL(voidId); 
         return getRDF(voidGraph);
     }
 
-    private String getRDF(Resource resource) throws IDMapperException {
+    private String getRDF(Resource resource) throws BridgeDBException {
         RdfWrapper rdfWrapper = null;
         try {
             rdfWrapper = RdfFactory.setupConnection(storeType);
@@ -78,7 +78,7 @@ public class RdfReader implements LinkSetStore{
     }
 
     @Override
-    public List<Statement> getStatementsForResource(Resource resource) throws IDMapperException{
+    public List<Statement> getStatementsForResource(Resource resource) throws BridgeDBException{
         RdfWrapper rdfWrapper = null;
         try {
             rdfWrapper = RdfFactory.setupConnection(storeType);
@@ -91,7 +91,7 @@ public class RdfReader implements LinkSetStore{
         }
     }
     
-    public Set<Statement> getSuperSet(Resource resource) throws IDMapperException{
+    public Set<Statement> getSuperSet(Resource resource) throws BridgeDBException{
         //TODO this will cause endless recursion is two Ids are subsets of each other
         List<Statement> results = new ArrayList<Statement>();
         Set<Resource> allReadyChecked = new HashSet<Resource>();
@@ -122,7 +122,7 @@ public class RdfReader implements LinkSetStore{
         return results;
     }
 
-    private void shutDown(RdfWrapper rdfWrapper) throws IDMapperException{
+    private void shutDown(RdfWrapper rdfWrapper) throws BridgeDBException{
         if (rdfWrapper != null){
             try {
                 rdfWrapper.shutdown();

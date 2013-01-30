@@ -22,9 +22,9 @@ package org.bridgedb.linkset.rdf;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
@@ -60,7 +60,7 @@ public class RdfFactory {
      * @return
      * @throws IDMapperLinksetException 
      */
-    private static Repository getRepository(StoreType storeType, boolean exisiting) throws IDMapperException {
+    private static Repository getRepository(StoreType storeType, boolean exisiting) throws BridgeDBException {
         File dataDir = RdfConfig.getDataDir(storeType);
         if (exisiting) {
             if (!dataDir.exists()){
@@ -97,16 +97,16 @@ public class RdfFactory {
         return repository;
     }
 
-    private static boolean repositoryExists(StoreType storeType) throws IDMapperException {
+    private static boolean repositoryExists(StoreType storeType) throws BridgeDBException {
         File dataDir = RdfConfig.getDataDir(storeType);
         return dataDir.exists();
     }
     
-    public static URI getLinksetURL(int linksetId) throws IDMapperException{
+    public static URI getLinksetURL(int linksetId) throws BridgeDBException{
         return new URIImpl(RdfConfig.getTheBaseURI() + "linkset/" + linksetId);  
     }
   
-    public static URI getVoidURL(int voidId) throws IDMapperException{
+    public static URI getVoidURL(int voidId) throws BridgeDBException{
         return new URIImpl(RdfConfig.getTheBaseURI() + "void/" + voidId);  
     }
 
@@ -131,12 +131,12 @@ public class RdfFactory {
         Repository repository;
         try {
             repository = getRepository (storeType, existing);
-        } catch (IDMapperException ex) {
+        } catch (BridgeDBException ex) {
             try {
                 String path = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_PROPERTY);
                 String source = RdfConfig.getProperty(ConfigReader.CONFIG_FILE_PATH_SOURCE_PROPERTY);
                 throw new RDFHandlerException("Setup error " + ex + " Please check " + path + " set by " + source, ex);
-            } catch (IDMapperException ex1) {
+            } catch (BridgeDBException ex1) {
                 throw new RDFHandlerException("Setup error " + ex + " unable to dettermine source", ex);
             }
         }

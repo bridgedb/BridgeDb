@@ -31,7 +31,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.linkset.LinksetInterfaceMinimal;
 import org.bridgedb.linkset.LinksetLoader;
@@ -81,14 +80,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
      * 
      * Super classes will have the responsibilites of setting up the idMapper.
      */
-    protected WSUriInterfaceService() throws IDMapperException {
+    protected WSUriInterfaceService() throws BridgeDBException {
         super();
         this.linksetInterface = new LinksetLoader();
         urlMapper = new SQLUrlMapper(false, StoreType.LIVE);
         idMapper = urlMapper;
     }
 
-    public WSUriInterfaceService(URLMapper urlMapper) throws IDMapperException {
+    public WSUriInterfaceService(URLMapper urlMapper) throws BridgeDBException {
         super(urlMapper);
         this.urlMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
@@ -100,7 +99,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.MAP_URL)
     @Override
     public List<Mapping> mapURL(@QueryParam(WsUriConstants.URL) String URL,
-            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
+            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
         if (logger.isDebugEnabled()){
             logger.debug("mapURL called! URL = " + URL + " " + "targetURISpace = " + targetURISpace);
         }
@@ -121,7 +120,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public List<Mapping> mapToURLs(
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
+            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
          if (logger.isDebugEnabled()){
             logger.debug("mapToURLs called! id = " + id + " scrCode = " + scrCode + "targetURISpace = " + targetURISpace);
         }
@@ -141,7 +140,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.URL_EXISTS)
     @Override
-    public URLExistsBean URLExists(@QueryParam(WsUriConstants.URL) String URL) throws IDMapperException {
+    public URLExistsBean URLExists(@QueryParam(WsUriConstants.URL) String URL) throws BridgeDBException {
         if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
         if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
         boolean exists = urlMapper.uriExists(URL);
@@ -153,7 +152,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.URL_SEARCH)
     @Override
     public URLSearchBean URLSearch(@QueryParam(WsUriConstants.TEXT) String text,
-            @QueryParam(WsUriConstants.LIMIT) String limitString) throws IDMapperException {
+            @QueryParam(WsUriConstants.LIMIT) String limitString) throws BridgeDBException {
         if (text == null) throw new BridgeDBException(WsUriConstants.TEXT + " parameter missing.");
         if (text.isEmpty()) throw new BridgeDBException(WsUriConstants.TEXT + " parameter may not be null.");
         if (limitString == null || limitString.isEmpty()){
@@ -170,7 +169,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.TO_XREF)
     @Override
-    public XrefBean toXref(@QueryParam(WsUriConstants.URL) String URL) throws IDMapperException {
+    public XrefBean toXref(@QueryParam(WsUriConstants.URL) String URL) throws BridgeDBException {
         if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
         if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
         Xref xref = urlMapper.toXref(URL);
@@ -180,7 +179,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.MAPPING)
-    public Mapping getMapping() throws IDMapperException {
+    public Mapping getMapping() throws BridgeDBException {
        throw new BridgeDBException("Path parameter missing.");
     }
 
@@ -188,7 +187,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.MAPPING + "/{id}")
-    public Mapping getMapping(@PathParam(WsUriConstants.ID) String idString) throws IDMapperException {
+    public Mapping getMapping(@PathParam(WsUriConstants.ID) String idString) throws BridgeDBException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         int id = Integer.parseInt(idString);
@@ -199,7 +198,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.GET_SAMPLE_MAPPINGS) 
-    public List<Mapping> getSampleMappings() throws IDMapperException {
+    public List<Mapping> getSampleMappings() throws BridgeDBException {
         return urlMapper.getSampleMapping();
     }
 
@@ -207,7 +206,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.GET_OVERALL_STATISTICS) 
-    public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
+    public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {
         OverallStatistics overallStatistics = urlMapper.getOverallStatistics();
         OverallStatisticsBean bean = OverallStatisticsBeanFactory.asBean(overallStatistics);
         return bean;
@@ -217,7 +216,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO + WsUriConstants.XML) 
     public List<MappingSetInfoBean> getMappingSetInfosXML(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws BridgeDBException {
         return getMappingSetInfos(scrCode, targetCode);
     }
     
@@ -226,7 +225,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO) 
     public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws IDMapperException {
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws BridgeDBException {
         List<MappingSetInfo> infos = urlMapper.getMappingSetInfos(scrCode, targetCode);
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
@@ -239,7 +238,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO + "/{id}")
-    public MappingSetInfoBean getMappingSetInfo(@PathParam("id") String idString) throws IDMapperException {
+    public MappingSetInfoBean getMappingSetInfo(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         int id = Integer.parseInt(idString);
@@ -250,7 +249,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/" + WsUriConstants.DATA_SOURCE)
-    public DataSourceUriSpacesBean getDataSource() throws IDMapperException {
+    public DataSourceUriSpacesBean getDataSource() throws BridgeDBException {
         throw new BridgeDBException("id path parameter missing.");
     }
 
@@ -258,7 +257,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Override
     @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
-    public DataSourceUriSpacesBean getDataSource(@PathParam("id") String id) throws IDMapperException {
+    public DataSourceUriSpacesBean getDataSource(@PathParam("id") String id) throws BridgeDBException {
         if (id == null) throw new BridgeDBException("Path parameter missing.");
         if (id.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         Set<String> urls = urlMapper.getUriSpaces(id);
@@ -271,7 +270,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.TEXT_PLAIN})
     @Override
     @Path("/" + WsUriConstants.SQL_COMPAT_VERSION)
-    public String getSqlCompatVersion() throws IDMapperException {
+    public String getSqlCompatVersion() throws BridgeDBException {
         return "" + urlMapper.getSqlCompatVersion();
     }
 
@@ -299,7 +298,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return StatementReader.getRDFFormatByMimeType(mimeType);
     }
     
-    protected final StoreType parseStoreType(String storeTypeString) throws IDMapperException{
+    protected final StoreType parseStoreType(String storeTypeString) throws BridgeDBException{
         if (storeTypeString == null){
             throw new BridgeDBException (STORE_TYPE + " parameter may not be null");
         }
@@ -310,7 +309,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return StoreType.parseString(storeTypeString);
     }
 
-    protected final ValidationType parseValidationType(String validationTypeString) throws IDMapperException{
+    protected final ValidationType parseValidationType(String validationTypeString) throws BridgeDBException{
         if (validationTypeString == null){
             throw new BridgeDBException (VALIDATION_TYPE + " parameter may not be null");
         }
@@ -342,7 +341,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(MIME_TYPE)String mimeType, 
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString, 
-            @QueryParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+            @QueryParam("includeWarnings")String includeWarningsString) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateString called!");
                     if (info == null){
@@ -378,7 +377,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @FormParam(MIME_TYPE)String mimeType, 
             @FormParam(STORE_TYPE)String storeTypeString, 
             @FormParam(VALIDATION_TYPE)String validationTypeString, 
-            @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+            @FormParam("includeWarnings")String includeWarningsString) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateString called!");
                     if (info == null){
@@ -429,7 +428,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @FormParam(MIME_TYPE)String mimeType, 
             @FormParam(STORE_TYPE)String storeTypeString, 
             @FormParam(VALIDATION_TYPE)String validationTypeString, 
-            @FormParam("includeWarnings")String includeWarningsString) throws IDMapperException {
+            @FormParam("includeWarnings")String includeWarningsString) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateInputStream called!");
                     if (uploadedInputStream == null){
@@ -479,7 +478,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Consumes(MediaType.APPLICATION_XML)
     @Path("/validateStringXML")
-    public ValidationBean validateString(JAXBElement<ValidationBean> input) throws IDMapperException {
+    public ValidationBean validateString(JAXBElement<ValidationBean> input) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateString(JAXBElement<ValidationBean> input)!");
                     if (input == null){
@@ -517,7 +516,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoid")
     public ValidationBean validateStringAsVoid(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateStringAsVoid called!");
                     if (info == null){
@@ -549,7 +548,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateInputStreamAsVoid")
     public ValidationBean validateInputStreamAsVoid(@FormDataParam("file") InputStream uploadedInputStream, 
-            @FormDataParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormDataParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateInputStreamAsVoid called!");
                     if (uploadedInputStream == null){
@@ -585,7 +584,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoidXML")
     public ValidationBean validateStringAsVoidXML(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateStringAsVoidXML called!");
                     if (info == null){
@@ -606,7 +605,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
     public ValidationBean validateInputStreamAsLinkSet(@FormDataParam("file") InputStream uploadedInputStream, 
-            @FormDataParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormDataParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateInputStreamAsLinkSet called!");
                     if (uploadedInputStream == null){
@@ -642,7 +641,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoid")
     public ValidationBean getValidateStringAsVoid(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateStringAsVoid called!");
                     if (info == null){
@@ -663,7 +662,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsVoidXML")
     public ValidationBean getValidateStringAsVoidXML(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateStringAsVoidXML called!");
                     if (info == null){
@@ -685,7 +684,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinksetVoid")
     public ValidationBean validateStringAsLinksetVoid(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
         String report = NO_RESULT;
         String exception = NO_EXCEPTION;
         try{
@@ -702,7 +701,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
     public ValidationBean validateStringAsLinkSet(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateStringAsLinkSet called!");
                     if (info == null){
@@ -733,7 +732,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSetXML")
     public ValidationBean validateStringAsLinkSetXML(@FormParam(INFO)String info, 
-            @FormParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateStringAsLinkSetXML called!");
                     if (info == null){
@@ -764,7 +763,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSet")
     public ValidationBean getValidateStringAsLinkSet(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateStringAsLinkSet called!");
                     if (info == null){
@@ -785,7 +784,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateStringAsLinkSetXML")
     public ValidationBean getValidateStringAsLinkSetXML(@QueryParam(INFO)String info, 
-            @QueryParam(MIME_TYPE)String mimeType) throws IDMapperException {
+            @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateStringAsLinkSetXML called!");
                     if (info == null){
@@ -810,7 +809,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(MIME_TYPE)String mimeType, 
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString) 
-            throws IDMapperException {
+            throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateString called!");
                     if (info == null){
@@ -849,7 +848,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(MIME_TYPE)String mimeType, 
             @QueryParam(STORE_TYPE)String storeTypeString, 
             @QueryParam(VALIDATION_TYPE)String validationTypeString) 
-            throws IDMapperException {
+            throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("checkStringValid called!");
                     if (info == null){

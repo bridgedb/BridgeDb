@@ -43,6 +43,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.Mapping;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * This class provides the Reposnse Frame including Top and Sidebar 
@@ -57,7 +58,7 @@ public class WSFame extends WSUriInterfaceService {
 
     private final String serviceName1;
     
-    public WSFame()  throws IDMapperException   {
+    public WSFame()  throws BridgeDBException   {
         super();
         URL resource = this.getClass().getClassLoader().getResource(""); 
         serviceName1 = getResourceName();
@@ -105,13 +106,13 @@ public class WSFame extends WSUriInterfaceService {
      * 
      * @param httpServletRequest
      * @return
-     * @throws IDMapperException
+     * @throws BridgeDBException
      * @throws UnsupportedEncodingException 
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/ims-api")
-    public Response imsApiPage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+    public Response imsApiPage(@Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
         //Long start = new Date().getTime();
         StringBuilder sb = topAndSide("IMS API",  httpServletRequest);
  
@@ -123,7 +124,13 @@ public class WSFame extends WSUriInterfaceService {
         Mapping mapping2 = mappings.get(1);
         DataSource dataSource2 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
         Xref secondSourceXref =  new Xref (mapping2.getSourceId(), dataSource2);
-        Set<Xref> firstMaps = idMapper.mapID(firstSourceXref);
+        Set<Xref> firstMaps;
+        try{ 
+            firstMaps = idMapper.mapID(firstSourceXref);
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
+        }
+
         Iterator<Xref> setIterator = firstMaps.iterator();
         while (setIterator.hasNext()) {
             Xref xref = setIterator.next();
@@ -173,7 +180,7 @@ public class WSFame extends WSUriInterfaceService {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
-    protected StringBuilder topAndSide(String header, HttpServletRequest httpServletRequest) throws IDMapperException{
+    protected StringBuilder topAndSide(String header, HttpServletRequest httpServletRequest) throws BridgeDBException{
         StringBuilder sb = new StringBuilder(HEADER_TO_TITLE);
         sb.append(header);
         sb.append(HEADER_AFTER_TITLE);
@@ -192,7 +199,7 @@ public class WSFame extends WSUriInterfaceService {
     /**
      * Allows Super classes to add to the side bar
      */
-    protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws IDMapperException{
+    protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
         addSideBarIMS(sb);
         addSideBarStatisitics(sb);
     }
@@ -200,7 +207,7 @@ public class WSFame extends WSUriInterfaceService {
     /**
      * Allows Super classes to add to the side bar
      */
-    protected void addSideBarIMS(StringBuilder sb) throws IDMapperException{
+    protected void addSideBarIMS(StringBuilder sb) throws BridgeDBException{
         sb.append("<div class=\"menugroup\">OPS Identity Mapping Service</div>");
         addSideBarItem(sb, "", "Home");
         addSideBarItem(sb, "getMappingInfo", "Mappings Summary");
@@ -211,7 +218,7 @@ public class WSFame extends WSUriInterfaceService {
     /**
      * Allows Super classes to add to the side bar
      */
-    protected void addSideBarStatisitics(StringBuilder sb) throws IDMapperException{
+    protected void addSideBarStatisitics(StringBuilder sb) throws BridgeDBException{
         OverallStatistics statistics = urlMapper.getOverallStatistics();
         sb.append("\n<div class=\"menugroup\">Statisitics</div>");
         addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings");
@@ -226,7 +233,7 @@ public class WSFame extends WSUriInterfaceService {
     /**
      * Adds an item to the SideBar for this service
      */
-    protected void addSideBarItem(StringBuilder sb, String page, String name) throws IDMapperException{
+    protected void addSideBarItem(StringBuilder sb, String page, String name) throws BridgeDBException{
         sb.append("\n<div id=\"menu");
         sb.append(page);
         sb.append("_text\" class=\"texthotlink\" ");

@@ -24,8 +24,8 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.url.Mapping;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreClient;
 import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WsConstants;
@@ -52,7 +52,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException {
+    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URL, URL);
         for (String target:targetUriSpace){
@@ -68,7 +68,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<Mapping> mapToURLs(String id, String scrCode, List<String> targetUriSpace) throws IDMapperException {
+    public List<Mapping> mapToURLs(String id, String scrCode, List<String> targetUriSpace) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.ID, id);
         params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
@@ -85,7 +85,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
    
     @Override
-    public URLExistsBean URLExists(String URL) throws IDMapperException {
+    public URLExistsBean URLExists(String URL) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URL, URL);
         //Make service call
@@ -98,7 +98,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public URLSearchBean URLSearch(String text, String limitString) throws IDMapperException {
+    public URLSearchBean URLSearch(String text, String limitString) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.TEXT, text);
         params.add(WsUriConstants.LIMIT, limitString);
@@ -112,7 +112,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public XrefBean toXref(String URL) throws IDMapperException {
+    public XrefBean toXref(String URL) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URL, URL);
         //Make service call
@@ -125,7 +125,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public Mapping getMapping(String id) throws IDMapperException {
+    public Mapping getMapping(String id) throws BridgeDBException {
         //Make service call
         Mapping result = 
                 webResource.path(WsUriConstants.MAPPING + "/" + id)
@@ -135,7 +135,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<Mapping> getSampleMappings() throws IDMapperException {
+    public List<Mapping> getSampleMappings() throws BridgeDBException {
         List<Mapping> result = 
                 webResource.path(WsUriConstants.GET_SAMPLE_MAPPINGS)
                 .accept(MediaType.APPLICATION_XML_TYPE)
@@ -144,7 +144,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public OverallStatisticsBean getOverallStatistics() throws IDMapperException {
+    public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         //Make service call
         OverallStatisticsBean result = 
@@ -156,7 +156,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException {
+    public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws BridgeDBException {
         MappingSetInfoBean result = 
                 webResource.path(WsUriConstants.GET_MAPPING_INFO + "/" + mappingSetId)
                 .accept(MediaType.APPLICATION_XML_TYPE)
@@ -165,7 +165,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
         
     @Override
-    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException {
+    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE, sourceSysCode);
         params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, targetSysCode);
@@ -179,7 +179,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException{
+    public DataSourceUriSpacesBean getDataSource(String dataSource) throws BridgeDBException{
         //Make service call
         DataSourceUriSpacesBean result = 
                 webResource.path(WsUriConstants.DATA_SOURCE + "/" + dataSource)
@@ -191,7 +191,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
    /*TODO FIX this
     @Override
     public ValidationBean validateString(String info, String mimeType, String storeType, String validationType, 
-            String includeWarnings) throws IDMapperException {
+            String includeWarnings) throws BridgeDBException {
         ValidationBean input = new ValidationBean(NO_REPORT, info, mimeType, storeType, validationType, 
                 includeWarnings, NO_EXCEPTION);
         ValidationBean result = 
@@ -209,7 +209,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }*/
 
     @Override
-    public String getSqlCompatVersion() throws IDMapperException {
+    public String getSqlCompatVersion() throws BridgeDBException {
         //Make service call
          String result = 
                 webResource.path(WsUriConstants.SQL_COMPAT_VERSION)

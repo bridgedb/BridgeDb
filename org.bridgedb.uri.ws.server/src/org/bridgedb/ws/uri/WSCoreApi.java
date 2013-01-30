@@ -23,9 +23,9 @@ package org.bridgedb.ws.uri;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsConstants;
 
 /**
@@ -191,7 +191,7 @@ public class WSCoreApi {
     }
 
     protected void describe_IDMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second,
-            boolean freeSearchSupported) throws UnsupportedEncodingException, IDMapperException{
+            boolean freeSearchSupported) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h2>Implementations of BridgeDB's IDMapper methods</h2>");
 
         describe_mapID(sb, first, firstMaps, second);    
@@ -210,7 +210,7 @@ public class WSCoreApi {
     }
     
     private void describe_mapID(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) 
-            throws UnsupportedEncodingException, IDMapperException{
+            throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                     sb.append(WsConstants.MAP_ID);
                     sb.append("\">");
@@ -282,7 +282,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_xrefExists(StringBuilder sb, Xref first) throws UnsupportedEncodingException, IDMapperException{
+    private void describe_xrefExists(StringBuilder sb, Xref first) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsConstants.XREF_EXISTS);
                 sb.append("\">");
@@ -326,7 +326,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_freeSearch(StringBuilder sb, Xref first) throws UnsupportedEncodingException, IDMapperException{
+    private void describe_freeSearch(StringBuilder sb, Xref first) throws UnsupportedEncodingException, BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.FREE_SEARCH);
                 sb.append("\">");
@@ -414,7 +414,7 @@ public class WSCoreApi {
         }
     }
   
-    private void describe_getCapabilities(StringBuilder sb) throws IDMapperException {
+    private void describe_getCapabilities(StringBuilder sb) throws BridgeDBException {
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.GET_CAPABILITIES);
                 sb.append("\">");
@@ -433,7 +433,7 @@ public class WSCoreApi {
     }
     
     protected void describe_IDMapperCapabilities(StringBuilder sb, Xref first, Set<Xref> firstMaps, Set<String> keys, 
-            boolean freeSearchSupported) throws UnsupportedEncodingException, IDMapperException{
+            boolean freeSearchSupported) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h2>Implementations of BridgeDB's IDMapperCapabilities methods</h2>");
         describe_isFreeSearchSupported(sb, freeSearchSupported);
         describe_getSupportedDataSources(sb);
@@ -442,7 +442,7 @@ public class WSCoreApi {
         describe_getKeys(sb, keys);
     }
     
-    private void describe_isFreeSearchSupported(StringBuilder sb, boolean freeSearchSupported) throws IDMapperException {
+    private void describe_isFreeSearchSupported(StringBuilder sb, boolean freeSearchSupported) throws BridgeDBException {
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.IS_FREE_SEARCH_SUPPORTED);
                 sb.append("\">");
@@ -464,7 +464,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_getSupportedDataSources(StringBuilder sb) throws IDMapperException {
+    private void describe_getSupportedDataSources(StringBuilder sb) throws BridgeDBException {
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES);
                 sb.append("\">");
@@ -499,7 +499,7 @@ public class WSCoreApi {
     }
     
     private void describe_isMappingSupported(StringBuilder sb, Xref first, Set<Xref> firstMaps) 
-            throws UnsupportedEncodingException, IDMapperException{
+            throws UnsupportedEncodingException, BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.IS_MAPPING_SUPPORTED);
                 sb.append("\">");
@@ -539,7 +539,7 @@ public class WSCoreApi {
     }
 
     private void describe_getProperty(StringBuilder sb, Set<String> keys) 
-            throws UnsupportedEncodingException, IDMapperException{
+            throws UnsupportedEncodingException, BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.PROPERTY);
                 sb.append("\">");
@@ -569,7 +569,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_getKeys(StringBuilder sb, Set<String> keys) throws IDMapperException{
+    private void describe_getKeys(StringBuilder sb, Set<String> keys) throws BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.GET_KEYS);
                 sb.append("\">");

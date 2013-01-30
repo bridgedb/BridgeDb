@@ -19,7 +19,7 @@
 //
 package org.bridgedb.url;
 
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * Base class of all Test using URLs
@@ -40,9 +40,9 @@ public abstract class URLListenerTest extends URLMapperTestBase{
      * Method for loading the Test data
      * Should eb called in a @beforeClass method after setting listener
      * 
-     * @throws IDMapperException
+     * @throws BridgeDBException
      */
-    public static void loadData() throws IDMapperException{
+    public static void loadData() throws BridgeDBException{
         listener.registerUriPattern(DataSource1, URISpace1 + "$id");
         listener.registerUriPattern(DataSource2, URISpace2 + "$id");
         listener.registerUriPattern(DataSource2, URISpace2a + "$id");

@@ -18,8 +18,8 @@
 //
 package org.bridgedb.url;
 
+import org.bridgedb.utils.BridgeDBException;
 import org.junit.BeforeClass;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.utils.IDMapperTestBase;
 
 /**
@@ -72,7 +72,7 @@ public abstract class URLMapperTestBase extends IDMapperTestBase {
     protected static final String TEST_PREDICATE = "http://www.bridgedb.org/test#testPredicate";
     
     @BeforeClass
-    public static void setupURLs() throws IDMapperException{
+    public static void setupURLs() throws BridgeDBException{
       
         URISpace1 = "http://www.conceptwiki.org/concept/";
         URISpace2 = "http://www.chemspider.com/";

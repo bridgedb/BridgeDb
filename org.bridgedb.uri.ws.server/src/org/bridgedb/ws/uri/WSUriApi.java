@@ -23,9 +23,9 @@ package org.bridgedb.ws.uri;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsUriConstants;
 
 /**
@@ -120,7 +120,7 @@ public class WSUriApi extends WSCoreApi {
     
     protected final void describe_URLMapper(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces, 
             String text, int mappingId, String sysCode, boolean freeSearchSupported) 
-            throws UnsupportedEncodingException, IDMapperException{
+            throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h2>URL based methods</h2>");
         describe_mapURL(sb, URL1, URL2, URI2Spaces);
         describe_URLExists(sb, URL1);
@@ -132,7 +132,7 @@ public class WSUriApi extends WSCoreApi {
     }
         
     private void describe_mapURL(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) 
-            throws UnsupportedEncodingException, IDMapperException{
+            throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.MAP_URL);
                 sb.append("\">");
@@ -189,7 +189,7 @@ public class WSUriApi extends WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_URLExists(StringBuilder sb, String URL) throws UnsupportedEncodingException, IDMapperException{
+    private void describe_URLExists(StringBuilder sb, String URL) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.URL_EXISTS);
                 sb.append("\">");
@@ -221,7 +221,7 @@ public class WSUriApi extends WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_URLSearch(StringBuilder sb, String URL) throws UnsupportedEncodingException, IDMapperException{
+    private void describe_URLSearch(StringBuilder sb, String URL) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.URL_SEARCH);
                 sb.append("\">");
@@ -274,7 +274,7 @@ public class WSUriApi extends WSCoreApi {
         sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>");           
     }
 
-    protected final void describe_Info(StringBuilder sb, Xref first, Set<Xref> firstMaps) throws IDMapperException, UnsupportedEncodingException {
+    protected final void describe_Info(StringBuilder sb, Xref first, Set<Xref> firstMaps) throws BridgeDBException, UnsupportedEncodingException {
         sb.append("<h2>URL based methods");
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.GET_MAPPING_INFO);
@@ -328,7 +328,7 @@ public class WSUriApi extends WSCoreApi {
             sb.append("</ul>");
     }  
             
-    protected final void describe_Graphviz(StringBuilder sb) throws IDMapperException, UnsupportedEncodingException {
+    protected final void describe_Graphviz(StringBuilder sb) throws BridgeDBException, UnsupportedEncodingException {
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("\">");
@@ -354,7 +354,7 @@ public class WSUriApi extends WSCoreApi {
             sb.append("</ul>");        
     }
 
-   private void describe_mapping(StringBuilder sb, int mappingId) throws IDMapperException {
+   private void describe_mapping(StringBuilder sb, int mappingId) throws BridgeDBException {
          sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.MAPPING);
                 sb.append("\">");
@@ -380,7 +380,7 @@ public class WSUriApi extends WSCoreApi {
     }
    
    private void describe_dataSource(StringBuilder sb, String sysCode) 
-           throws UnsupportedEncodingException, IDMapperException {
+           throws UnsupportedEncodingException, BridgeDBException {
          sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.DATA_SOURCE);
                 sb.append("\">");
@@ -406,7 +406,7 @@ public class WSUriApi extends WSCoreApi {
    }
 
    private void describe_getOverallStatistics(StringBuilder sb) 
-            throws UnsupportedEncodingException, IDMapperException{
+            throws UnsupportedEncodingException, BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.GET_OVERALL_STATISTICS);
                 sb.append("\">");
