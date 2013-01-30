@@ -52,7 +52,17 @@ import org.bridgedb.utils.StoreType;
  */
 public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener {
 
-    private static final int URI_SPACE_LENGTH = 100;
+    private static final int PREFIX_LENGTH = 100;
+    private static final int POSTFIX_LENGTH = 50;
+    private static final int MIMETYPE_LENGTH = 50;
+    
+    private static final String URL_TABLE_NAME = "url";
+    private static final String MIMETYPE_TABLE_NAME = "mimeType";
+   
+    private static final String DATASOURCE_COLUMN_NAME = "dataSource";
+    private static final String PREFIX_COLUMN_NAME = "prefix";
+    private static final String POSTFIX_COLUMN_NAME = "postfix";
+    private static final String MIMETYPE_COLUMN_NAME = "mimetype";
 
     static final Logger logger = Logger.getLogger(SQLListener.class);
     
@@ -74,7 +84,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                     this.registerUriSpace(mappings.get(uriSpace), uriSpace);
                 }
             } catch (IDMapperException ex) {
-                throw new BridgeDbSqlException("Error setting up urispace mappings");
+                throw new BridgeDbSqlException("Error setting up urispace mappings ", ex);
             }
         }
     }   
@@ -83,7 +93,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	protected void dropSQLTables() throws BridgeDbSqlException
 	{
         super.dropSQLTables();
- 		dropTable("url");
+ 		dropTable(URL_TABLE_NAME);
+ 		dropTable(MIMETYPE_TABLE_NAME);
     }
  
     @Override
@@ -93,9 +104,15 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 		try 
 		{
 			Statement sh = createStatement();
-            sh.execute("CREATE TABLE url"
-                    + "  (  dataSource VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
-                    + "     uriSpace VARCHAR(" + URI_SPACE_LENGTH + ")  "
+            sh.execute("CREATE TABLE " + URL_TABLE_NAME
+                    + "  (  " + DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
+                    + "     " + PREFIX_COLUMN_NAME + " VARCHAR(" + PREFIX_LENGTH + ") NOT NULL, "
+                    + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL "
+                    + "  ) ");
+            sh.execute("CREATE TABLE " + MIMETYPE_TABLE_NAME
+                    + "  (  " + PREFIX_COLUMN_NAME + " VARCHAR(" + PREFIX_LENGTH + ") NOT NULL, "
+                    + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL, "
+                    + "     mimeType VARCHAR(" + MIMETYPE_LENGTH + ") NOT NULL "
                     + "  ) ");
             sh.close();
 		} catch (SQLException e)
@@ -197,7 +214,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append("AND sourceId = '");
             query.append(id);
             query.append("' ");
-        query.append("AND source.uriSpace = '");
+        query.append("AND source.");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(" = '");
             query.append(uriSpace);
             query.append("' ");
         appendLimitConditions(query,0, 1);
@@ -222,8 +241,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append("SELECT DISTINCT ");
         //TODO get DISTINCT working on Virtuosos
         appendTopConditions(query, 0, limit); 
-        query.append(" sourceId as id, uriSpace ");
-        query.append("FROM mapping, mappingSet, url ");
+        query.append(" sourceId as id, ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(" FROM mapping, mappingSet, url ");
         query.append("WHERE mappingSetId = mappingSet.id ");
         query.append("AND mappingSet.SourceDataSource = url.dataSource ");
         query.append("AND sourceId = '");
@@ -388,7 +408,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Set<String> getUriSpaces(String dataSource) throws BridgeDbSqlException {
-        String query = ("SELECT uriSpace FROM url "
+        String query = ("SELECT " + PREFIX_COLUMN_NAME + " FROM url "
                 + " WHERE dataSource = '" + dataSource + "'");
         Statement statement = this.createStatement();
         ResultSet rs;
@@ -403,7 +423,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     
     @Override
     public Set<String> getSourceUriSpace(int mappingSetId) throws IDMapperException {
-        String query = ("SELECT uriSpace FROM url, mappingSet  "
+        String query = ("SELECT " + PREFIX_COLUMN_NAME + " FROM url, mappingSet  "
                 + " WHERE dataSource = sourceDataSource"
                 + " AND mappingSet.id = " + mappingSetId);
         Statement statement = this.createStatement();
@@ -419,7 +439,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Set<String> getTargetUriSpace(int mappingSetId) throws IDMapperException {
-        String query = ("SELECT uriSpace FROM url, mappingSet  "
+        String query = ("SELECT " + PREFIX_COLUMN_NAME + " FROM url, mappingSet  "
                 + " WHERE dataSource = targetDataSource"
                 + " AND mappingSet.id = " + mappingSetId);
         Statement statement = this.createStatement();
@@ -461,9 +481,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDbSqlException ("UriSpace " + uriSpace + " already mapped to " + sysCode 
                     + " Which does not match " + source.getSystemCode());
         }
-        String query = "INSERT INTO url (dataSource, uriSpace) VALUES "
+        String query = "INSERT INTO url (dataSource, " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME + ") VALUES "
                 + " ('" + source.getSystemCode() + "', "
-                + "  '" + uriSpace + "'"
+                + "  '" + uriSpace + "',"
+                + "  ''"
                 + ")";  
         Statement statement = createStatement();
         try {
@@ -566,7 +587,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         try {
             while (rs.next()){
                 String id = rs.getString("id");
-                String uriSpace = rs.getString("uriSpace");
+                String uriSpace = rs.getString(PREFIX_COLUMN_NAME);
                 String uri = uriSpace + id;
                 results.add(uri);
             }
@@ -589,7 +610,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         try {
             HashSet<String> uriSpaces = new HashSet<String>();
             while (rs.next()){
-                uriSpaces.add(rs.getString("uriSpace"));
+                uriSpaces.add(rs.getString(PREFIX_COLUMN_NAME));
             }
             return uriSpaces;
        } catch (SQLException ex) {
@@ -664,9 +685,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 return null;
             }
             while (rs.next()){
-                String sourceURL = rs.getString("source.uriSpace") + rs.getString("sourceId");
+                String sourceURL = rs.getString("source." + PREFIX_COLUMN_NAME) + rs.getString("sourceId");
                 urlMapping.addSourceURL(sourceURL);
-                String targetURL = rs.getString("target.uriSpace") + rs.getString("targetId"); 
+                String targetURL = rs.getString("target." + PREFIX_COLUMN_NAME) + rs.getString("targetId"); 
                 urlMapping.addTargetURL(targetURL);
             }
             return urlMapping;
@@ -696,6 +717,51 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
+    private Xref uriToXref(String uri) throws BridgeDbSqlException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(", ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(", ");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URL_TABLE_NAME);
+        query.append("WHERE '");
+        query.append(uri);
+        query.append("' LIKE CONCAT(");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(",'%',");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append(")");
+        
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+        }    
+        try {
+            if (rs.next()){
+                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String id;
+                if (postfix.equals("NULL")){
+                    id = uri.substring(prefix.length());
+                } else {
+                    id = uri.substring(prefix.length(), uri.length()-postfix.length());
+                }
+                return new Xref(id, dataSource);
+            }
+            return null;
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to get uriSpace. " + query, ex);
+        }    
+    }
+
     /**
      * Finds the SysCode of the DataSource which includes this URISpace
      *
@@ -709,7 +775,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         StringBuilder query = new StringBuilder();
         query.append("SELECT dataSource ");
         query.append("FROM url ");
-        query.append("WHERE uriSpace = '");
+        query.append("WHERE ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(" = '");
         query.append(uriSpace);
         query.append("' ");
         Statement statement = this.createStatement();
@@ -742,7 +810,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         StringBuilder query = new StringBuilder();
         query.append("SELECT dataSource ");
         query.append("FROM url ");
-        query.append("WHERE uriSpace = '");
+        query.append("WHERE ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(" = '");
             query.append(uriSpace);
             query.append("' ");
         Statement statement = this.createStatement();
@@ -841,19 +911,23 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     private Set<String> getURIs(String id, String sysCode, String... targetURISpaces) throws BridgeDbSqlException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT uriSpace ");
-        query.append("FROM url ");
+        query.append("SELECT " + PREFIX_COLUMN_NAME);
+        query.append(" FROM url ");
         query.append("WHERE dataSource = '");
-            query.append(sysCode);
-            query.append("' ");
+        query.append(sysCode);
+        query.append("' ");
         if (targetURISpaces.length > 0){    
-            query.append("AND (uriSpace = '");
-                query.append(targetURISpaces[0]);
-                query.append("' ");
+            query.append("AND (");
+            query.append(PREFIX_COLUMN_NAME);
+            query.append(" = '");
+            query.append(targetURISpaces[0]);
+            query.append("' ");
             for (int i = 1; i < targetURISpaces.length; i++){
-                query.append("OR uriSpace = '");
-                    query.append(targetURISpaces[i]);
-                    query.append("'");
+                query.append("OR ");
+                query.append(PREFIX_COLUMN_NAME);
+                query.append(" = '");
+                query.append(targetURISpaces[i]);
+                query.append("'");
             }
             query.append(")");
         }
@@ -867,7 +941,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         HashSet<String> results = new HashSet<String>();
         try {
             while (rs.next()){
-                String uriSpace = rs.getString("uriSpace");
+                String uriSpace = rs.getString(PREFIX_COLUMN_NAME);
                 String uri = uriSpace + id;
                 results.add(uri);
             }
