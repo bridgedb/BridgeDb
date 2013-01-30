@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 
 import buildsystem.Measure;
+import org.junit.Ignore;
 
 /**
  * Test access to the derby client running on the webservice.
@@ -44,6 +45,7 @@ public class Test {
 	}
 
 	@org.junit.Test
+    @Ignore
 	public void testDerbyClient() throws IDMapperException, ClassNotFoundException
 	{
 		long start, end, delta;
