@@ -21,6 +21,7 @@ package org.bridgedb.url;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  * Import Interface that supports the adding of URLs.
@@ -38,10 +39,11 @@ public interface URLListener {
      * This adds the UriSpace as an alternative without removing any previous ones or changing the default/ primary UriSpace.
      * 
      * @param source A BridgeDB DataSource to associate with.
-     * @param uriSpace A UriSpace to add to
+     * @param uriPattern is a template for generating valid URI's for identifiers. 
+	 * The pattern should contain the substring "$id", which will be replaced by the actual identifier.
      * @throws IDMapperException 
      */
-    public void registerUriSpace(DataSource source, String uriSpace) throws IDMapperException;
+    public void registerUriPattern(DataSource source, String uriPattern) throws BridgeDBException;
 
     //Note: To change the primary UriSpace you need to change the DataSource. 
     

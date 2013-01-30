@@ -46,7 +46,8 @@ import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.Mapping;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
-import org.bridgedb.url.UriSpaceMapper;
+import org.bridgedb.url.UriPatternMapper;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
@@ -91,9 +92,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         super(dropTables, storeType);
         if (dropTables){
             try {
-                Map<String,DataSource> mappings = UriSpaceMapper.getUriSpaceMappings();
-                for (String uriSpace:mappings.keySet()){
-                    this.registerUriSpace(mappings.get(uriSpace), uriSpace);
+                Map<String,DataSource> mappings = UriPatternMapper.getUriPatternMappings();
+                for (String uriPattern:mappings.keySet()){
+                    this.registerUriPattern(mappings.get(uriPattern), uriPattern);
                 }
             } catch (IDMapperException ex) {
                 throw new BridgeDbSqlException("Error setting up urispace mappings ", ex);
@@ -333,15 +334,48 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
     
     @Override
-    public Xref toXref(String URL) throws BridgeDbSqlException {
-        String id = getId(URL);
-        String uriSpace = getUriSpace(URL);
-        DataSource dataSource = getDataSource(uriSpace);
-        Xref result =  new Xref(id, dataSource);
-        if (logger.isDebugEnabled()){
-            logger.debug( URL+ " toXref " + result);
-        }
-        return result;
+    public Xref toXref(String uri) throws BridgeDBException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(", ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(", ");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URL_TABLE_NAME);
+        query.append(" WHERE '");
+        query.append(uri);
+        query.append("' LIKE CONCAT(");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(",'%',");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append(")");
+        
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        try {
+            if (rs.next()){
+                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String id = uri.substring(prefix.length(), uri.length()-postfix.length());
+                Xref result =  new Xref(id, dataSource);
+                if (logger.isDebugEnabled()){
+                    logger.debug(uri + " toXref " + result);
+                }
+                return result;
+            }
+            throw new BridgeDBException("No uri pattern regsitered that matches " + uri);
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to get uriSpace. " + query, ex);
+        }    
     }
 
     @Override
@@ -627,25 +661,34 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     	return justifications;
 	}
 
-	@Override
-    public void registerUriSpace(DataSource source, String uriSpace) throws BridgeDbSqlException {
+    @Override
+    public void registerUriPattern(DataSource source, String uriPattern) throws BridgeDBException {
         checkDataSourceInDatabase(source);
-        String sysCode = getSysCode(uriSpace);
+        int pos = uriPattern.indexOf("$id");
+        if (pos == -1) {
+            throw new BridgeDBException ("uriPattern " + uriPattern + " does not contain \"$id\"");
+        }
+        String prefix = uriPattern.substring(0, pos);
+		String postfix = uriPattern.substring(pos + 3);
+
+        String sysCode = getSysCode(prefix, postfix);
         if (sysCode != null){
             if (source.getSystemCode().equals(sysCode)) return; //Already known so fine.
-            throw new BridgeDbSqlException ("UriSpace " + uriSpace + " already mapped to " + sysCode 
+            throw new BridgeDBException ("UriPattern " + uriPattern + " already mapped to " + sysCode 
                     + " Which does not match " + source.getSystemCode());
         }
-        String query = "INSERT INTO url (dataSource, " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME + ") VALUES "
+        String query = "INSERT INTO " + URL_TABLE_NAME + " (" 
+                + DATASOURCE_COLUMN_NAME + ", " 
+                + PREFIX_COLUMN_NAME + ", " 
+                + POSTFIX_COLUMN_NAME + ") VALUES "
                 + " ('" + source.getSystemCode() + "', "
-                + "  '" + uriSpace + "',"
-                + "  ''"
-                + ")";  
+                + "  '" + prefix + "',"
+                + "  '" + postfix + "')";
         Statement statement = createStatement();
         try {
             int changed = statement.executeUpdate(query);
         } catch (SQLException ex) {
-            throw new BridgeDbSqlException ("Error inserting UriSpace ", ex, query);
+            throw new BridgeDBException ("Error inserting UriPattern ", ex, query);
         }
     }
 
@@ -871,50 +914,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
-    private Xref uriToXref(String uri) throws BridgeDbSqlException {
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
-        query.append(DATASOURCE_COLUMN_NAME);
-        query.append(", ");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(", ");
-        query.append(POSTFIX_COLUMN_NAME);
-        query.append(" FROM ");
-        query.append(URL_TABLE_NAME);
-        query.append("WHERE '");
-        query.append(uri);
-        query.append("' LIKE CONCAT(");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(",'%',");
-        query.append(POSTFIX_COLUMN_NAME);
-        query.append(")");
-        
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
-        }    
-        try {
-            if (rs.next()){
-                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                DataSource dataSource = DataSource.getBySystemCode(sysCode);
-                String prefix = rs.getString(PREFIX_COLUMN_NAME);
-                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                String id;
-                if (postfix.equals("NULL")){
-                    id = uri.substring(prefix.length());
-                } else {
-                    id = uri.substring(prefix.length(), uri.length()-postfix.length());
-                }
-                return new Xref(id, dataSource);
-            }
-            return null;
-        } catch (SQLException ex) {
-            throw new BridgeDbSqlException("Unable to get uriSpace. " + query, ex);
-        }    
-    }
 
     /**
      * Finds the SysCode of the DataSource which includes this URISpace
@@ -948,6 +947,52 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             return null;
         } catch (SQLException ex) {
             throw new BridgeDbSqlException("Unable to get uriSpace. " + query, ex);
+        }    
+    }
+
+    /**
+     * Finds the SysCode of the DataSource which includes this prefix and postfix
+     *
+     * Should be replaced by a more complex method from identifiers.org
+     *
+     * @param prefix to find DataSource for
+     * @param postfix to find DataSource for
+     * @return sysCode of an existig DataSource or null
+     * @throws BridgeDbSqlException
+     */
+    private String getSysCode(String prefix, String postfix) throws BridgeDbSqlException {
+        if (postfix == null){
+            postfix = "";
+        }
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URL_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(" = '");
+        query.append(prefix);
+        query.append("' ");
+        query.append(" AND ");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append(" = '");
+        query.append(postfix);
+        query.append("' ");
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to run query. " + query, ex);
+        }    
+        try {
+            if (rs.next()){
+                return rs.getString(DATASOURCE_COLUMN_NAME);
+            }
+            return null;
+        } catch (SQLException ex) {
+            throw new BridgeDbSqlException("Unable to get SysCode. " + query, ex);
         }    
     }
 

@@ -45,11 +45,11 @@ public abstract class URLListenerTest extends URLMapperTestBase{
      * @throws IDMapperException
      */
     public static void loadData() throws IDMapperException{
-        listener.registerUriSpace(DataSource1, URISpace1);
-        listener.registerUriSpace(DataSource2, URISpace2);
-        listener.registerUriSpace(DataSource2, URISpace2a);
-        listener.registerUriSpace(DataSource3, URISpace3);
-        listener.registerUriSpace(DataSource3, URISpace3a);
+        listener.registerUriPattern(DataSource1, URISpace1 + "$id");
+        listener.registerUriPattern(DataSource2, URISpace2 + "$id");
+        listener.registerUriPattern(DataSource2, URISpace2a + "$id");
+        listener.registerUriPattern(DataSource3, URISpace3 + "$id");
+        listener.registerUriPattern(DataSource3, URISpace3a + "$id");
 
         int mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, 
         		TEST_JUSTIFICATION1, URISpace2, SYMETRIC, ORIGINAL);
