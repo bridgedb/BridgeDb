@@ -86,6 +86,18 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         register.put(getResourceId(), this);
     }
    
+    public String getPrefix(){
+        return nameSpace;
+    }
+    
+    public String getPostfix(){
+        return postfix;
+    }
+    
+    public boolean hasPostfix(){
+        return postfix != null;
+    }
+    
     public static UriPattern byNameSpace(String nameSpace){
         UriPattern result = byNameSpaceOnly.get(nameSpace);
         if (result == null){
@@ -333,10 +345,6 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         return getUriPattern();      
     }
 
-    public boolean hasPostfix(){
-        return postfix != null;
-    }
-    
     public String getUriSpace() throws BridgeDBException {
         if (postfix != null){
             throw new BridgeDBException("UriPattern " + this + " has a postfix");
