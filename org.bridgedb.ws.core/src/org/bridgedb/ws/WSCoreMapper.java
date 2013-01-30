@@ -29,8 +29,8 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.DataSourceBeanFactory;
@@ -53,7 +53,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     
     //**** IDMApper functions *****
     @Override
-    public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws IDMapperException {
+    public Map<Xref, Set<Xref>> mapID(Collection<Xref> srcXrefs, DataSource... tgtDataSources) throws BridgeDBException {
         ArrayList<String> ids = new ArrayList<String>();
         ArrayList<String> codes = new ArrayList<String>();
         ArrayList<String> targetCodes = new ArrayList<String>();
@@ -82,7 +82,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws IDMapperException {
+    public Set<Xref> mapID(Xref ref, DataSource... tgtDataSources) throws BridgeDBException {
         if (ref.getId() == null || ref.getDataSource() == null) return new HashSet<Xref>();
         ArrayList<String> ids = new ArrayList<String>();
         ArrayList<String> codes = new ArrayList<String>();
@@ -101,7 +101,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public boolean xrefExists(Xref xref) throws IDMapperException {
+    public boolean xrefExists(Xref xref) throws BridgeDBException {
         if (xref.getId() == null) return false;
         if (xref.getDataSource() == null) return false;
         String id = xref.getId();
@@ -110,7 +110,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public Set<Xref> freeSearch(String text, int limit) throws IDMapperException {
+    public Set<Xref> freeSearch(String text, int limit) throws BridgeDBException {
         List<XrefBean>  beans = webService.freeSearch(text, "" + limit);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefBean bean:beans){
@@ -130,7 +130,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     
     @Override
     /** {@inheritDoc} */
-    public void close() throws IDMapperException { 
+    public void close() throws BridgeDBException { 
         isConnected = false; 
     }
  
@@ -154,7 +154,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public Set<DataSource> getSupportedSrcDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedSrcDataSources() throws BridgeDBException {
         List<DataSourceBean> beans = webService.getSupportedSrcDataSources();
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean bean:beans){
@@ -164,7 +164,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public Set<DataSource> getSupportedTgtDataSources() throws IDMapperException {
+    public Set<DataSource> getSupportedTgtDataSources() throws BridgeDBException {
         List<DataSourceBean> beans = webService.getSupportedTgtDataSources();
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean bean:beans){
@@ -174,7 +174,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
     }
 
     @Override
-    public boolean isMappingSupported(DataSource src, DataSource tgt) throws IDMapperException {
+    public boolean isMappingSupported(DataSource src, DataSource tgt) throws BridgeDBException {
         return webService.isMappingSupported(src.getSystemCode(), tgt.getSystemCode()).isMappingSupported();
     }
 

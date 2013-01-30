@@ -27,9 +27,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.MappingSetInfo;
+import org.bridgedb.utils.BridgeDBException;
 
 /**
  *
@@ -44,7 +44,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     
     static final Logger logger = Logger.getLogger(MappingSetTableMaker.class);
 
-    public static void addTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos) throws IDMapperException{
+    public static void addTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos) throws BridgeDBException{
         MappingSetTableMaker maker = new MappingSetTableMaker(mappingSetInfos);
         maker.tableMaker(sb);
     }
@@ -60,7 +60,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         }
     }
     
-    private void tableMaker(StringBuilder sb) throws IDMapperException{
+    private void tableMaker(StringBuilder sb) throws BridgeDBException{
         sb.append(SCRIPT);
         sb.append(TABLE_HEADER);
         newSource(sb, 0);
@@ -147,7 +147,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         return o1.getTargetSysCode().compareTo(o2.getTargetSysCode());
     }
     
-    private void newTarget(StringBuilder sb, int i) throws IDMapperException {
+    private void newTarget(StringBuilder sb, int i) throws BridgeDBException {
         if (i == infos.length - 1){
             addSingleTarget(sb ,i);
         } else if (infos[i].getTargetSysCode().equals(infos[i+1].getTargetSysCode())){
@@ -157,7 +157,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         }
     }
 
-    private void newSource(StringBuilder sb, int i) throws IDMapperException {
+    private void newSource(StringBuilder sb, int i) throws BridgeDBException {
         if (i == infos.length - 1){
             addSingleSource(sb ,i);
         } else if (infos[i].getSourceSysCode().equals(infos[i+1].getSourceSysCode())){
@@ -167,7 +167,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         }
     }
 
-    private void newSourceMultipleMappings(StringBuilder sb, int i) throws IDMapperException {
+    private void newSourceMultipleMappings(StringBuilder sb, int i) throws BridgeDBException {
         logger.debug("newSourceMultipleMappings " + i);
         int j = i;
         int last = infos.length -1;
@@ -192,7 +192,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         newTarget(sb, i);
     }
 
-    private void newTargetMultipleMappings(StringBuilder sb, int i) throws IDMapperException {
+    private void newTargetMultipleMappings(StringBuilder sb, int i) throws BridgeDBException {
         int j = i;
         int last = infos.length -1;
         int mappingCount = 1;
@@ -209,7 +209,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
 
     private void addSingleSource(StringBuilder sb, int i) 
-            throws IDMapperException {
+            throws BridgeDBException {
         sb.append("\t<tr>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
@@ -217,7 +217,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
 
     private void addInfo(StringBuilder sb, int i) 
-            throws IDMapperException {
+            throws BridgeDBException {
         addDataSourceCell(sb, infos[i].getSourceSysCode());
         addDataSourceCell(sb, infos[i].getTargetSysCode());
         addNumberOfLinksCell(sb, infos[i].getNumberOfLinks());
@@ -226,14 +226,14 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         addTransative(sb, i);
     }
 
-    private void addSingleTarget(StringBuilder sb, int i) throws IDMapperException {
+    private void addSingleTarget(StringBuilder sb, int i) throws BridgeDBException {
         addLevel2Tr(sb, infos[i].getSourceSysCode());
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
         addInfo(sb, i);
     }
     
-    private void AddMappingSet(StringBuilder sb, int i) throws IDMapperException {
+    private void AddMappingSet(StringBuilder sb, int i) throws BridgeDBException {
         addLevel3Tr(sb, infos[i].getSourceSysCode(), infos[i].getTargetSysCode());
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
@@ -241,7 +241,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }		
 		
     private void addSourceSummary(StringBuilder sb, String source, int targetCount, int numberOfLinks, int mappingCount) 
-            throws IDMapperException {
+            throws BridgeDBException {
         sb.append("\t<tr ");
             sb.append(cleanup(source));
             sb.append("_level1=level1>\n");
@@ -255,7 +255,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
      }
     
     private void addSourceDetail(StringBuilder sb, String source, int targetCount, int numberOfLinks, int mappingCount) 
-            throws IDMapperException {
+            throws BridgeDBException {
         addLevel2Tr(sb, source);
         sb.append("\t\t<td><span onclick=\"hideLevel2('");
             sb.append(cleanup(source));
@@ -267,7 +267,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
      }
     
     private void addTargetSummary(StringBuilder sb, String source, String target, int numberOfLinks, int mappingCount) 
-            throws IDMapperException {
+            throws BridgeDBException {
         sb.append("\t<tr ");
             sb.append(cleanup(source));
             sb.append("_level2=level2; ");
@@ -287,7 +287,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
      }
     
     private void addTargetDetail(StringBuilder sb, String source, String target, int numberOfLinks, int mappingCount) 
-            throws IDMapperException {
+            throws BridgeDBException {
         addLevel3Tr(sb, source, target);
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t\t<td><span onclick=\"hideLevel3('");
@@ -301,14 +301,14 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
     
     private void addTargetCount(StringBuilder sb, int targetCount) 
-            throws IDMapperException {
+            throws BridgeDBException {
         sb.append("\t\t<td align=\"right\">");
             sb.append(targetCount);
             sb.append(" Targets</td>\n");
     }
     
     private void addMappingSummary(StringBuilder sb, int numberOfLinks, int mappingCount) 
-            throws IDMapperException {
+            throws BridgeDBException {
         addNumberOfLinksCell(sb, numberOfLinks);
         sb.append("\t\t<td align=\"right\">");
             sb.append(mappingCount);
@@ -324,14 +324,14 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     }
     
     private void addLevel2Tr(StringBuilder sb, String source) 
-            throws IDMapperException {
+            throws BridgeDBException {
         sb.append("\t<tr ");
             sb.append(cleanup(source));
             sb.append("_level2=level2; style=\"display: none;\">\n");
     }
 
     private void addLevel3Tr(StringBuilder sb, String source, String target) 
-            throws IDMapperException {
+            throws BridgeDBException {
          sb.append("\t<tr ");
             sb.append(cleanup(source));
             sb.append("_level3=level3; ");
@@ -341,13 +341,13 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             sb.append("_level3=level3; style=\"display: none;\">\n");
    }
 
-   private void addDataSourceCell(StringBuilder sb, String sysCode) throws IDMapperException {
+   private void addDataSourceCell(StringBuilder sb, String sysCode) throws BridgeDBException {
         sb.append("\t\t<td>");
         addDataSourceLink(sb, sysCode);
         sb.append("</td>\n");
     }
    
-   public final static void addDataSourceLink(StringBuilder sb, String sysCode) throws IDMapperException{
+   public final static void addDataSourceLink(StringBuilder sb, String sysCode) throws BridgeDBException{
         sb.append("<a href=\"");
         sb.append(RdfConfig.getTheBaseURI());
         sb.append("dataSource/");
@@ -357,7 +357,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("</a>");
    }
 
-    private void addMappingSetCell(StringBuilder sb, String id) throws IDMapperException {
+    private void addMappingSetCell(StringBuilder sb, String id) throws BridgeDBException {
         String idUrl = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
         sb.append("\t\t<td><a href=\"");
             sb.append(idUrl);
@@ -389,7 +389,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("\t</tr>\n");
     }
 
-    public static void main(String[] args) throws IDMapperException {
+    public static void main(String[] args) throws BridgeDBException {
         List<MappingSetInfo> data = new ArrayList<MappingSetInfo>();
         data.add(new MappingSetInfo("1", "S1", "p1", "T1", 25000, false));
         data.add(new MappingSetInfo("2", "S1", "p1", "T1", 50000, false));

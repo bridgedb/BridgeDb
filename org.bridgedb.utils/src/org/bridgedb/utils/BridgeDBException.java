@@ -61,15 +61,22 @@ public class BridgeDBException extends IDMapperException {
 		super (msg + "with Query " + query, t);
         logger.error(msg + "with Query " + query, t);
 	}
-
+    
     /** 
-	 * See Exception(String, Throwable). 
-	 * @param msg a message
+	 * See Exception(Throwable). 
 	 * @param t cause
 	 */
 	public BridgeDBException (IDMapperException t)
 	{
 		super (t);
         logger.error(t);
+	}
+    
+  	public static BridgeDBException convertToBridgeDB(IDMapperException t)
+	{
+        if (t instanceof BridgeDBException){
+            return (BridgeDBException)t;
+        }
+        return new BridgeDBException(t);
 	}
 }

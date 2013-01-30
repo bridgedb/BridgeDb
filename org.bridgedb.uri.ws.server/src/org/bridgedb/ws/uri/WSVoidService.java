@@ -47,7 +47,7 @@ public class WSVoidService extends WSFame{
     
     static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
-    public WSVoidService()  throws IDMapperException   {
+    public WSVoidService()  throws BridgeDBException   {
         super();
     }
             
@@ -57,7 +57,7 @@ public class WSVoidService extends WSFame{
     public Response getMappingInfo(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
         List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos(scrCode, targetCode);
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
         if (mappingSetInfos.isEmpty()){
@@ -78,7 +78,7 @@ public class WSVoidService extends WSFame{
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + WsUriConstants.GRAPHVIZ)
-    public Response graphvizDot() throws IDMapperException, UnsupportedEncodingException {
+    public Response graphvizDot() throws BridgeDBException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos(null, null);
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
@@ -105,14 +105,14 @@ public class WSVoidService extends WSFame{
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mappingSet")
-    public String mappingSet() throws IDMapperException {
+    public String mappingSet() throws BridgeDBException {
         throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/mappingSet/{id}")
-    public String mappingSet(@PathParam("id") String idString) throws IDMapperException {
+    public String mappingSet(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null || idString.isEmpty()){
             throw new BridgeDBException("Parameter id is missing!");
         }
@@ -123,14 +123,14 @@ public class WSVoidService extends WSFame{
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/linkset")
-    public String linkset() throws IDMapperException {
+    public String linkset() throws BridgeDBException {
         throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/linkset/{id}")
-    public String linksetSet(@PathParam("id") String idString) throws IDMapperException {
+    public String linksetSet(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null || idString.isEmpty()){
             throw new BridgeDBException("Parameter id is missing!");
         }

@@ -19,8 +19,9 @@
 //
 package org.bridgedb.ws.uri.client;
 
-import org.bridgedb.ws.uri.client.WSUriClient;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.ws.uri.client.WSUriClient;
 import org.bridgedb.ws.WSUriInterface;
 
 /**
@@ -29,8 +30,12 @@ import org.bridgedb.ws.WSUriInterface;
  */
 public class WsUriClientFactory extends org.bridgedb.utils.IDMapperTestBase{
     
-    public static WSUriInterface createTestWSClient() throws IDMapperException{
-        setupXref();
+    public static WSUriInterface createTestWSClient() throws BridgeDBException{
+        try {
+            setupXref();
+        } catch (IDMapperException e){
+            throw BridgeDBException.convertToBridgeDB(e);
+        }
         //ystem.out.println("in WSCoreInterface 1");
         WSUriInterface webService = new WSUriClient("http://localhost:8080/OPS-IMS");
         //ystem.out.println("in WSCoreInterface 2");

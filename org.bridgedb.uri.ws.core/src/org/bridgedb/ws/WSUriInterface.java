@@ -20,8 +20,8 @@
 package org.bridgedb.ws;
 
 import java.util.List;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.url.Mapping;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
@@ -37,38 +37,38 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSUriInterface extends WSCoreInterface{
 
-    public List<Mapping> mapURL(String URL, String profileURL, List<String> targetUriSpace) throws IDMapperException;
+    public List<Mapping> mapURL(String URL, String profileURL, List<String> targetUriSpace) throws BridgeDBException;
 
-//    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws IDMapperException;
+//    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws BridgeDBException;
     
     public List<Mapping> mapToURLs(String id, String scrCode, String profileURL, List<String> targetUriSpace) 
-            throws IDMapperException;
+            throws BridgeDBException;
 
-    public URLExistsBean URLExists(String URL) throws IDMapperException;
+    public URLExistsBean URLExists(String URL) throws BridgeDBException;
 
-    public URLSearchBean URLSearch(String text, String limitString) throws IDMapperException;
+    public URLSearchBean URLSearch(String text, String limitString) throws BridgeDBException;
 
-    public XrefBean toXref(String URL) throws IDMapperException;
+    public XrefBean toXref(String URL) throws BridgeDBException;
 
-    public Mapping getMapping(String id) throws IDMapperException;
+    public Mapping getMapping(String id) throws BridgeDBException;
 
-    public List<Mapping> getSampleMappings() throws IDMapperException;
+    public List<Mapping> getSampleMappings() throws BridgeDBException;
 
-    public OverallStatisticsBean getOverallStatistics() throws IDMapperException;
+    public OverallStatisticsBean getOverallStatistics() throws BridgeDBException;
 
-    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws IDMapperException;
+    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException;
 
-    public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws IDMapperException;
+    public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws BridgeDBException;
 
-    public DataSourceUriSpacesBean getDataSource(String dataSource) throws IDMapperException;
+    public DataSourceUriSpacesBean getDataSource(String dataSource) throws BridgeDBException;
     
-    public List<ProfileBean> getProfiles() throws IDMapperException;
+    public List<ProfileBean> getProfiles() throws BridgeDBException;
     
-    public ProfileBean getProfile(String id) throws IDMapperException;
+    public ProfileBean getProfile(String id) throws BridgeDBException;
     
     //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
-    //        String includeWarnings) throws IDMapperException;
+    //        String includeWarnings) throws BridgeDBException;
 
-    public String getSqlCompatVersion() throws IDMapperException;
+    public String getSqlCompatVersion() throws BridgeDBException;
      
  }

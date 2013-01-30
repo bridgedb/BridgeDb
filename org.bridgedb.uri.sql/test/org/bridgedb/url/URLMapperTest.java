@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLListener;
@@ -50,7 +49,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     protected static boolean connectionOk = true;
         
     @Test
-    public void testMapIDManyToManyNoDataSources() throws IDMapperException{
+    public void testMapIDManyToManyNoDataSources() throws BridgeDBException{
         report("MapIDManyToManyNoDataSources");
         HashSet<String> sourceURLs = new HashSet<String>();
         sourceURLs.add(map1URL1);
@@ -83,7 +82,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testMaptoURLsManyToManyNoDataSources() throws IDMapperException{
+    public void testMaptoURLsManyToManyNoDataSources() throws BridgeDBException{
         report("MapToURLsManyToManyNoDataSources");
         HashSet<Xref> sourceXrefs = new HashSet<Xref>();
         sourceXrefs.add(map1xref1);
@@ -116,7 +115,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testMapIDOneToManyNoDataSources() throws IDMapperException{
+    public void testMapIDOneToManyNoDataSources() throws BridgeDBException{
         report("MapIDOneToManyNoDataSources");
         Set<String> results = urlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0));
         assertTrue(results.contains(map1URL2));
@@ -127,7 +126,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testToURLsOneToManyNoDataSources() throws IDMapperException{
+    public void testToURLsOneToManyNoDataSources() throws BridgeDBException{
         report("MapXrefOneToManyNoDataSources");
         Set<String> results = urlMapper.mapToURLs(map1xref1, RdfConfig.getProfileURI(0));
         assertTrue(results.contains(map1URL2));
@@ -138,7 +137,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testMapFullOneToManyNoDataSources() throws IDMapperException{
+    public void testMapFullOneToManyNoDataSources() throws BridgeDBException{
         report("MapFullOneToManyNoDataSources");
         Set<Mapping> results = urlMapper.mapURLFull(map3URL3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
@@ -164,7 +163,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testMapXrefFullOneToManyNoDataSources() throws IDMapperException{
+    public void testMapXrefFullOneToManyNoDataSources() throws BridgeDBException{
         report("MapXrefFullOneToManyNoDataSources");
         Set<Mapping> results = urlMapper.mapToURLsFull(map3xref3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
@@ -190,7 +189,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testMapIDOneBad() throws IDMapperException{
+    public void testMapIDOneBad() throws BridgeDBException{
         report("MapIDOneBad");
         Set<String> results = urlMapper.mapURL(mapBadURL1, RdfConfig.getProfileURI(0));
         //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
@@ -200,21 +199,21 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testMapFullOneBad() throws IDMapperException{
+    public void testMapFullOneBad() throws BridgeDBException{
         report("MapFullOneBad");
         Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1, RdfConfig.getProfileURI(0));
         assertTrue(results.size() <= 1);
     }
 
     @Test
-    public void testMapFullOneBadOneNameSpace() throws IDMapperException{
+    public void testMapFullOneBadOneNameSpace() throws BridgeDBException{
         report("MapFullOneBadOneNameSpace");
         Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.size() <= 1);
     }
 
     @Test
-    public void testMapIDOneToManyWithOneDataSource() throws IDMapperException{
+    public void testMapIDOneToManyWithOneDataSource() throws BridgeDBException{
         report("MapIDOneToManyWithOneDataSource");
         Set<String> results = urlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.contains(map1URL2));
@@ -225,7 +224,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
  
     @Test
-    public void testMapToURLsOneToManyWithOneDataSource() throws IDMapperException{
+    public void testMapToURLsOneToManyWithOneDataSource() throws BridgeDBException{
         report("MapIDOneToManyWithOneDataSource");
         Set<String> results = urlMapper.mapToURLs(map1xref1, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.contains(map1URL2));
@@ -236,7 +235,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
  
     @Test
-    public void testMapToSelfWithOneDataSource() throws IDMapperException{
+    public void testMapToSelfWithOneDataSource() throws BridgeDBException{
         report("MapToSelfWithOneDataSource");
         Set<String> results = urlMapper.mapURL(map1URL2, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.contains(map1URL2));
@@ -247,7 +246,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testMapIDOneToManyWithTwoDataSources() throws IDMapperException{
+    public void testMapIDOneToManyWithTwoDataSources() throws BridgeDBException{
         report("MapIDOneToManyWithTwoDataSources");
         Set<String> results = urlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0), URISpace2, URISpace3);
         assertTrue(results.contains(map1URL2));
@@ -258,7 +257,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
  
     @Test
-    public void testMapIDOneToManyNoDataSources2() throws IDMapperException{
+    public void testMapIDOneToManyNoDataSources2() throws BridgeDBException{
         report("MapIDOneToManyNoDataSources");
         Set<String> results = urlMapper.mapURL(map2URL1, RdfConfig.getProfileURI(0));
         assertTrue(results.contains(map2URL2));
@@ -268,7 +267,7 @@ public abstract class URLMapperTest extends URLListenerTest{
      }
 
     @Test
-    public void testMapNoneExistingDataSource() throws IDMapperException{
+    public void testMapNoneExistingDataSource() throws BridgeDBException{
         report("MapNoneExistingDataSource");
         Set<String> results = urlMapper.mapURL(map1URL2, RdfConfig.getProfileURI(0), "http://wwww.THIS.should.NOT.Be.InThe.Data.zzz");
         assertEquals(0,results.size());
@@ -292,7 +291,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
         
     @Test
-    public void testFreeSearchBad() throws IDMapperException{
+    public void testFreeSearchBad() throws BridgeDBException{
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         org.junit.Assume.assumeTrue(badID != null);
         report("FreeSearchBad");
@@ -301,7 +300,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testFreeSearchGood() throws IDMapperException{
+    public void testFreeSearchGood() throws BridgeDBException{
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGood");
         Set<String> results = urlMapper.urlSearch(ds2Id3, 10);
@@ -317,7 +316,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testFreeSearchGoodJust2() throws IDMapperException{
+    public void testFreeSearchGoodJust2() throws BridgeDBException{
         org.junit.Assume.assumeTrue(urlMapper.getCapabilities().isFreeSearchSupported());       
         report("FreeSearchGoodJust2");
         Set<String> results = urlMapper.urlSearch(ds2Id2, 2);
@@ -325,20 +324,20 @@ public abstract class URLMapperTest extends URLListenerTest{
      }
 
     @Test
-    public void testGetXrefGood() throws IDMapperException {
+    public void testGetXrefGood() throws BridgeDBException {
         report("GetXrefGood");
         Xref result = urlMapper.toXref(map2URL2);
         assertEquals(map2xref2, result);
     }
 
     @Test (expected = BridgeDBException.class)
-    public void testGetXrefBad() throws IDMapperException {
+    public void testGetXrefBad() throws BridgeDBException {
         report("GetXrefBad");
         Xref xref = urlMapper.toXref(mapBadURL1);
     }
     
     @Test
-    public void testGetMapping() throws IDMapperException {
+    public void testGetMapping() throws BridgeDBException {
         report("GetMapping");
         Set<Mapping> results = urlMapper.mapURLFull(map3URL3, RdfConfig.getProfileURI(0));
         Integer mappingId = null;
@@ -362,7 +361,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testGetSampleMappings() throws IDMapperException {
+    public void testGetSampleMappings() throws BridgeDBException {
         report("GetSampleSourceURL");
         List<Mapping> results = urlMapper.getSampleMapping();
         assertEquals(5, results.size());
@@ -375,7 +374,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testGetOverallStatistics() throws IDMapperException {
+    public void testGetOverallStatistics() throws BridgeDBException {
         report("GetOverallStatistics()");
         OverallStatistics results = urlMapper.getOverallStatistics();
         assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
@@ -386,7 +385,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testGetMappingSetInfo() throws IDMapperException {
+    public void testGetMappingSetInfo() throws BridgeDBException {
         report("GetMappingSetInfo");
         MappingSetInfo result = urlMapper.getMappingSetInfo(mappingSet2_3);
         assertEquals(DataSource2.getSystemCode(), result.getSourceSysCode());
@@ -394,14 +393,14 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testGetMappingSetInfos() throws IDMapperException {
+    public void testGetMappingSetInfos() throws BridgeDBException {
         report("GetMappingSetInfo All");
         List<MappingSetInfo> results = urlMapper.getMappingSetInfos(null, null);
         assertThat (results.size(), greaterThanOrEqualTo(6));
     }
 
     @Test
-    public void testGetMappingSetInfosBySourceAndTarget() throws IDMapperException {
+    public void testGetMappingSetInfosBySourceAndTarget() throws BridgeDBException {
         report("GetMappingSetInfos source and target");
         List<MappingSetInfo> results = 
                 urlMapper.getMappingSetInfos(DataSource2.getSystemCode(), DataSource1.getSystemCode());
@@ -413,7 +412,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testGetMappingSetInfosByTarget() throws IDMapperException {
+    public void testGetMappingSetInfosByTarget() throws BridgeDBException {
         report("GetMappingSetInfos target");
         List<MappingSetInfo> results = 
                 urlMapper.getMappingSetInfos(null, DataSource3.getSystemCode());
@@ -423,7 +422,7 @@ public abstract class URLMapperTest extends URLListenerTest{
         }
     }
     @Test
-    public void testGetMappingSetInfosBySource() throws IDMapperException {
+    public void testGetMappingSetInfosBySource() throws BridgeDBException {
         report("GetMappingSetInfos source");
         List<MappingSetInfo> results = 
                 urlMapper.getMappingSetInfos(DataSource1.getSystemCode(), null);
@@ -434,14 +433,14 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testGetUriSpaces() throws IDMapperException {
+    public void testGetUriSpaces() throws BridgeDBException {
         report("GetUriSpaces");
         Set<String> results = urlMapper.getUriSpaces(map2xref3.getDataSource().getSystemCode());
         assertTrue (results.contains(URISpace3));
     }
     
     @Test
-    public void testGetSourceUriSpace() throws IDMapperException {
+    public void testGetSourceUriSpace() throws BridgeDBException {
         report("GetSourceUriSpace");
         Set<String> results = urlMapper.getSourceUriSpace(mappingSet2_3);
         assertFalse (results.contains(URISpace1));
@@ -452,7 +451,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
 
     @Test
-    public void testGetTargetUriSpace() throws IDMapperException {
+    public void testGetTargetUriSpace() throws BridgeDBException {
         report("GetTargetUriSpace");
         MappingSetInfo result = urlMapper.getMappingSetInfo(mappingSet2_3);
         Set<String> results = urlMapper.getTargetUriSpace(mappingSet2_3);
@@ -464,7 +463,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     }
     
     @Test
-    public void testGetSqlCompatVersion() throws IDMapperException {
+    public void testGetSqlCompatVersion() throws BridgeDBException {
         report("GetSqlCompatVersion");
         int result = urlMapper.getSqlCompatVersion();
         assertEquals(SQLListener.SQL_COMPAT_VERSION, result);

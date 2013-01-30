@@ -39,7 +39,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IpConfig;
@@ -57,7 +56,7 @@ public class WSLinksetService extends WSVoidService{
     
     static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
-    public WSLinksetService()  throws IDMapperException   {
+    public WSLinksetService()  throws BridgeDBException   {
         super();
         logger.info("WsOpsServer setup");        
     }
@@ -69,7 +68,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateRdf")
     public Response validateRdf(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateRdf called!");
                     if (info == null){
@@ -91,7 +90,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateRdf")
     public Response validateRdfGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdf called!");
                     if (info == null){
@@ -113,7 +112,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateVoid")
     public Response validateVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateVoid called!");
                     if (info == null){
@@ -135,7 +134,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateVoid")
     public Response validateVoidGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateVoid called!");
                     if (info == null){
@@ -157,7 +156,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateLinkSet")
     public Response validateLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateLinkSet called!");
                     if (info == null){
@@ -179,7 +178,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateLinkSet")
     public Response validateLinkSetGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateLinkSet called!");
                     if (info == null){
@@ -201,7 +200,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateMinimum")
     public Response validateMinimum(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateMinimum called!");
                     if (info == null){
@@ -223,7 +222,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateMinimum")
     public Response validateMinimumGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getMinimumSet called!");
                     if (info == null){
@@ -241,7 +240,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     private Response validateString(String info, String mimeType, ValidationType validationType, 
-            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
        String report = null;
        try{
             if (info != null && !info.isEmpty()){
@@ -264,7 +263,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateTurtleVoid")
     public Response validateTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateTurtleVoid called!");
                     if (uploadedInputStream == null){
@@ -284,7 +283,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleVoid")
     public Response validateTurtleVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleVoid called!");
                 }
@@ -296,7 +295,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateRdfXmlVoid")
     public Response validateRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateRdfXmlVoid called!");
                     if (uploadedInputStream == null){
@@ -316,7 +315,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlVoid")
     public Response validateRdfXmlVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlVoid called!");
                 }
@@ -328,7 +327,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateNTriplesVoid")
     public Response validateNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateNTriplesVoid called!");
                     if (uploadedInputStream == null){
@@ -348,7 +347,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesVoid")
     public Response validateNTriplesVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesVoid called!");
                 }
@@ -360,7 +359,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateTurtleLinkSet")
     public Response validateTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateTurtleLinkSet called!");
                     if (uploadedInputStream == null){
@@ -380,7 +379,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleLinkSet")
     public Response validateTurtleLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleLinkSet called!");
                 }
@@ -392,7 +391,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateRdfXmlLinkSet")
     public Response validateRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateRdfXmlLinkSet called!");
                     if (uploadedInputStream == null){
@@ -412,7 +411,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlLinkSet")
     public Response validateRdfXmlLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlLinkSet called!");
                 }
@@ -424,7 +423,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateNTriplesLinkSet")
     public Response validateNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateNTriplesLinkSet called!");
                     if (uploadedInputStream == null){
@@ -444,7 +443,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesLinkSet")
     public Response validateNTriplesLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesLinkSet called!");
                 }
@@ -456,7 +455,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateTurtleMinimum")
     public Response validateTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateTurtleMinimum called!");
                     if (uploadedInputStream == null){
@@ -476,7 +475,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleMinimum")
     public Response validateTurtleMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleMinimum called!");
                 }
@@ -488,7 +487,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateRdfXmlMinimum")
     public Response validateRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateRdfXmlMinimum called!");
                     if (uploadedInputStream == null){
@@ -508,7 +507,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlMinimum")
     public Response validateRdfXmlMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlMinimum called!");
                 }
@@ -520,7 +519,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateNTriplesMinimum")
     public Response validateNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateNTriplesMinimum called!");
                     if (uploadedInputStream == null){
@@ -540,7 +539,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesMinimum")
     public Response validateNTriplesMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesMinimum called!");
                 }
@@ -552,7 +551,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateTurtleRdf")
     public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateTurtleRdf called!");
                     if (uploadedInputStream == null){
@@ -572,7 +571,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateTurtleRdf")
     public Response validateTurtleRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateTurtleRdf called!");
                 }
@@ -584,7 +583,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateRdfXmlRdf")
     public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateRdfXmlRdf called!");
                     if (uploadedInputStream == null){
@@ -604,7 +603,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateRdfXmlRdf")
     public Response validateRdfXmlRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateRdfXmlRdf called!");
                 }
@@ -616,7 +615,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/validateNTriplesRdf")
     public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateNTriplesRdf called!");
                     if (uploadedInputStream == null){
@@ -636,7 +635,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validateNTriplesRdf")
     public Response validateNTriplesRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("getValidateNTriplesRdf called!");
                 }
@@ -644,7 +643,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     private Response validateInputStream(InputStream input, RDFFormat format, ValidationType validationType, 
-            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
        String report = null;
        try{
             if (input != null && input.available() > 10){
@@ -666,7 +665,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadRdf")
     public Response loadRdf(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdf called!");
                     if (info == null){
@@ -688,7 +687,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadRdf")
     public Response loadRdfGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfGet called!");
                     if (info == null){
@@ -710,7 +709,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadVoid")
     public Response loadVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadVoid called!");
                     if (info == null){
@@ -732,7 +731,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadVoid")
     public Response loadVoidGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadVoidGet called!");
                     if (info == null){
@@ -754,7 +753,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadLinkSet")
     public Response loadLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadLinkSet called!");
                     if (info == null){
@@ -776,7 +775,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadLinkSet")
     public Response loadLinkSetGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadLinkSetGet called!");
                     if (info == null){
@@ -798,7 +797,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadMinimum")
     public Response loadMinimum(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadMinimum called!");
                     if (info == null){
@@ -820,7 +819,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadMinimum")
     public Response loadMinimumGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadMinimumGet called!");
                     if (info == null){
@@ -838,7 +837,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     private Response loadString(String info, String mimeType, ValidationType validationType,
-            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
         if (IpConfig.isAdminIPAddress(httpServletRequest.getRemoteAddr())){
             String report = null;
             try{
@@ -865,7 +864,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadTurtleVoid")
     public Response loadTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleVoid called!");
                     if (uploadedInputStream == null){
@@ -885,7 +884,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadTurtleVoid")
     public Response loadTurtleVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleVoidGet called!");
                 }
@@ -897,7 +896,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadRdfXmlVoid")
     public Response loadRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlVoid called!");
                     if (uploadedInputStream == null){
@@ -917,7 +916,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadRdfXmlVoid")
     public Response loadRdfXmlVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlvoidGet called!");
                 }
@@ -929,7 +928,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadNTriplesVoid")
     public Response loadNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadNTriplesVoid called!");
                     if (uploadedInputStream == null){
@@ -949,7 +948,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadNTriplesVoid")
     public Response loadNTriplesVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadNTriplesVoidGet called!");
                 }
@@ -961,7 +960,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadTurtleLinkSet")
     public Response loadTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleLinkSet called!");
                     if (uploadedInputStream == null){
@@ -981,7 +980,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadTurtleLinkSet")
     public Response loadTurtleLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleLinkSetGet called!");
                 }
@@ -993,7 +992,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadRdfXmlLinkSet")
     public Response loadRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlLinkSet called!");
                     if (uploadedInputStream == null){
@@ -1013,7 +1012,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadRdfXmlLinkSet")
     public Response loadRdfXmlLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlLinkSetGet called!");
                 }
@@ -1025,7 +1024,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadNTriplesLinkSet")
     public Response loadNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadNTriplesLinkSet called!");
                     if (uploadedInputStream == null){
@@ -1045,7 +1044,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadNTriplesLinkSet")
     public Response loadNTriplesLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadeNTriplesLinkSetGet called!");
                 }
@@ -1057,7 +1056,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadTurtleMinimum")
     public Response loadTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleMinimum called!");
                     if (uploadedInputStream == null){
@@ -1077,7 +1076,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadTurtleMinimum")
     public Response loadTurtleMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleMinimumGet called!");
                 }
@@ -1089,7 +1088,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadRdfXmlMinimum")
     public Response loadRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlMinimum called!");
                     if (uploadedInputStream == null){
@@ -1109,7 +1108,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadRdfXmlMinimum")
     public Response loadRdfXmlMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlMinimumGet called!");
                 }
@@ -1121,7 +1120,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadNTriplesMinimum")
     public Response loadNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadNTriplesMinimum called!");
                     if (uploadedInputStream == null){
@@ -1141,7 +1140,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadNTriplesMinimum")
     public Response loadNTriplesMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadNTriplesMinimumGet called!");
                 }
@@ -1153,7 +1152,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadTurtleRdf")
     public Response loadTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleRdf called!");
                     if (uploadedInputStream == null){
@@ -1173,7 +1172,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadTurtleRdf")
     public Response loadTurtleRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadTurtleRdfGet called!");
                 }
@@ -1185,7 +1184,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadRdfXmlRdf")
     public Response loadRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlRdf called!");
                     if (uploadedInputStream == null){
@@ -1205,7 +1204,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadRdfXmlRdf")
     public Response loadRdfXmlRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadRdfXmlRdfGet called!");
                 }
@@ -1217,7 +1216,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/loadNTriplesRdf")
     public Response loadNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadNTriplesRdf called!");
                     if (uploadedInputStream == null){
@@ -1237,7 +1236,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/loadNTriplesRdf")
     public Response loadNTriplesRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadNTriplesRdfGet called!");
                 }
@@ -1245,7 +1244,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     private Response loadInputStream(InputStream input, RDFFormat format, ValidationType validationType, 
-            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
         if (IpConfig.isAdminIPAddress(httpServletRequest.getRemoteAddr())){
             String report = null;
             try{
@@ -1271,7 +1270,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveRdf")
     public Response saveRdf(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdf called!");
                     if (info == null){
@@ -1293,7 +1292,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveRdf")
     public Response saveRdfGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfGet called!");
                     if (info == null){
@@ -1315,7 +1314,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveVoid")
     public Response saveVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveVoid called!");
                     if (info == null){
@@ -1337,7 +1336,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveVoid")
     public Response saveVoidGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveVoidGet called!");
                     if (info == null){
@@ -1359,7 +1358,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveLinkSet")
     public Response saveLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveLinkSet called!");
                     if (info == null){
@@ -1381,7 +1380,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveLinkSet")
     public Response saveLinkSetGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveLinkSetGet called!");
                     if (info == null){
@@ -1403,7 +1402,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveMinimum")
     public Response saveMinimum(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveMinimum called!");
                     if (info == null){
@@ -1425,7 +1424,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveMinimum")
     public Response saveMinimumGet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType,
-            @Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveMinimumGet called!");
                     if (info == null){
@@ -1443,7 +1442,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     private Response saveString(String info, String mimeType, ValidationType validationType,
-            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
        String report = null;
        try{
             if (info != null && !info.isEmpty()){
@@ -1468,7 +1467,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveTurtleVoid")
     public Response saveTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveTurtleVoid called!");
                     if (uploadedInputStream == null){
@@ -1488,7 +1487,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveTurtleVoid")
     public Response saveTurtleVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveTurtleVoidGet called!");
                 }
@@ -1500,7 +1499,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveRdfXmlVoid")
     public Response saveRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlVoid called!");
                     if (uploadedInputStream == null){
@@ -1520,7 +1519,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveRdfXmlVoid")
     public Response saveRdfXmlVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlvoidGet called!");
                 }
@@ -1532,7 +1531,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveNTriplesVoid")
     public Response saveNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveNTriplesVoid called!");
                     if (uploadedInputStream == null){
@@ -1552,7 +1551,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveNTriplesVoid")
     public Response saveNTriplesVoidGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveNTriplesVoidGet called!");
                 }
@@ -1564,7 +1563,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveTurtleLinkSet")
     public Response saveTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveTurtleLinkSet called!");
                     if (uploadedInputStream == null){
@@ -1584,7 +1583,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveTurtleLinkSet")
     public Response saveTurtleLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveTurtleLinkSetGet called!");
                 }
@@ -1596,7 +1595,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveRdfXmlLinkSet")
     public Response saveRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlLinkSet called!");
                     if (uploadedInputStream == null){
@@ -1616,7 +1615,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveRdfXmlLinkSet")
     public Response saveRdfXmlLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlLinkSetGet called!");
                 }
@@ -1628,7 +1627,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveNTriplesLinkSet")
     public Response saveNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveNTriplesLinkSet called!");
                     if (uploadedInputStream == null){
@@ -1648,7 +1647,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveNTriplesLinkSet")
     public Response saveNTriplesLinkSetGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveeNTriplesLinkSetGet called!");
                 }
@@ -1660,7 +1659,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveTurtleMinimum")
     public Response saveTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateTurtleMinimum called!");
                     if (uploadedInputStream == null){
@@ -1680,7 +1679,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveTurtleMinimum")
     public Response saveTurtleMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveTurtleMinimumGet called!");
                 }
@@ -1692,7 +1691,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveRdfXmlMinimum")
     public Response saveRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlMinimum called!");
                     if (uploadedInputStream == null){
@@ -1712,7 +1711,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveRdfXmlMinimum")
     public Response saveRdfXmlMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlMinimumGet called!");
                 }
@@ -1724,7 +1723,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveNTriplesMinimum")
     public Response saveNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveNTriplesMinimum called!");
                     if (uploadedInputStream == null){
@@ -1744,7 +1743,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveNTriplesMinimum")
     public Response saveNTriplesMinimumGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveNTriplesMinimumGet called!");
                 }
@@ -1756,7 +1755,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveTurtleRdf")
     public Response saveTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveTurtleRdf called!");
                     if (uploadedInputStream == null){
@@ -1776,7 +1775,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveTurtleRdf")
     public Response saveTurtleRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveTurtleRdfGet called!");
                 }
@@ -1788,7 +1787,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveRdfXmlRdf")
     public Response saveRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlRdf called!");
                     if (uploadedInputStream == null){
@@ -1808,7 +1807,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveRdfXmlRdf")
     public Response saveRdfXmlRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveRdfXmlRdfGet called!");
                 }
@@ -1820,7 +1819,7 @@ public class WSLinksetService extends WSVoidService{
     @Path("/saveNTriplesRdf")
     public Response saveNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveNTriplesRdf called!");
                     if (uploadedInputStream == null){
@@ -1840,7 +1839,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/saveNTriplesRdf")
     public Response saveNTriplesRdfGet(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveNTriplesRdfGet called!");
                 }
@@ -1848,7 +1847,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     private Response saveInputStream(InputStream input, RDFFormat format, ValidationType validationType, 
-            HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+            HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
        String report = null;
        try{
             if (input != null && input.available() > 10){
@@ -1869,7 +1868,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/validate")
     public Response validateIndex(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("validateIndex called!");
                 }
@@ -1904,7 +1903,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/save")
     public Response saveIndex(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveIndex called!");
                 }
@@ -1912,7 +1911,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     public Response saveIndex(String title, @Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException {
+            throws BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("saveIndex called!");
                 }
@@ -1943,7 +1942,7 @@ public class WSLinksetService extends WSVoidService{
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
-    private Response redirectToSave(HttpServletRequest httpServletRequest) throws IDMapperException {
+    private Response redirectToSave(HttpServletRequest httpServletRequest) throws BridgeDBException {
         logger.warn("Load attempt blocked from IP address " + httpServletRequest.getRemoteAddr());
         return saveIndex("Please Save and then ask an admin to Load", httpServletRequest);
     }
@@ -1952,7 +1951,7 @@ public class WSLinksetService extends WSVoidService{
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/load")
     public Response loadIndex(@Context HttpServletRequest httpServletRequest) 
-            throws IDMapperException, UnsupportedEncodingException {
+            throws BridgeDBException, UnsupportedEncodingException {
                 if (logger.isDebugEnabled()){
                     logger.debug("loadIndex called!");
                 }
@@ -1986,7 +1985,7 @@ public class WSLinksetService extends WSVoidService{
     /**
      * Allows Super classes to add to the side bar
      */
-    protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws IDMapperException{
+    protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
         addSideBarIMS(sb);
         addSideBarItem(sb, "validate", "Validate");
         addSideBarItem(sb, "save", "Save");
@@ -2261,7 +2260,7 @@ public class WSLinksetService extends WSVoidService{
     @GET
 	@Path("/checkIpAddress")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response checkIpAddress(@Context HttpServletRequest hsr) throws IOException, IDMapperException {
+	public Response checkIpAddress(@Context HttpServletRequest hsr) throws IOException, BridgeDBException {
                 if (logger.isDebugEnabled()){
                     logger.debug("checkIpAddress called");
                 }
@@ -2419,7 +2418,7 @@ public class WSLinksetService extends WSVoidService{
     @GET
 	@Path("/test")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response test(@Context HttpServletRequest httpServletRequest) throws IOException, IDMapperException {
+	public Response test(@Context HttpServletRequest httpServletRequest) throws IOException, BridgeDBException {
         if (logger.isDebugEnabled()){
             logger.debug("test called");
         }

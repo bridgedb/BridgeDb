@@ -30,10 +30,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsUriConstants;
 
 /**
@@ -44,12 +44,12 @@ public class WSOpsServer extends WSLinksetService{
     
     static final Logger logger = Logger.getLogger(WSUriInterfaceService.class);
 
-    public WSOpsServer()  throws IDMapperException   {
+    public WSOpsServer()  throws BridgeDBException   {
         super();
         logger.info("WsOpsServer setup");        
     }
     
-    private final String statsBlock() throws IDMapperException {
+    private final String statsBlock() throws BridgeDBException {
     		OverallStatistics statistics = urlMapper.getOverallStatistics();
     		StringBuilder sb = new StringBuilder();
     		sb.append("<div id=\"navBar\"><h2>Service statistics</h2>");
@@ -79,7 +79,7 @@ public class WSOpsServer extends WSLinksetService{
     		return sb.toString();
     }
     
-    private final String uriMappingForm() throws IDMapperException {
+    private final String uriMappingForm() throws BridgeDBException {
     	StringBuilder sb = new StringBuilder();
     	sb.append("<form method=\"get\" action=\"/");
         sb.append(getServiceName());
@@ -95,7 +95,7 @@ public class WSOpsServer extends WSLinksetService{
     	return sb.toString();
     }
 
-	private String generateProfileSelector() throws IDMapperException {
+	private String generateProfileSelector() throws BridgeDBException {
 		List<ProfileInfo> profiles = urlMapper.getProfiles();
 		StringBuilder sb = new StringBuilder("<p><select name=\"profileURL\">");
 	   	sb.append("<option value=\"");
@@ -119,12 +119,12 @@ public class WSOpsServer extends WSLinksetService{
      * 
      * @param httpServletRequest
      * @return
-     * @throws IDMapperException
+     * @throws BridgeDBException
      * @throws UnsupportedEncodingException 
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response welcomeMessage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+    public Response welcomeMessage(@Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
         if (logger.isDebugEnabled()){
             logger.debug("welcomeMessage called!");
         }
@@ -194,13 +194,13 @@ public class WSOpsServer extends WSLinksetService{
      * This is expected to be overwirriten by the QueryExpander
      * @param httpServletRequest
      * @return
-     * @throws IDMapperException
+     * @throws BridgeDBException
      * @throws UnsupportedEncodingException 
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/api")
-    public Response apiPage(@Context HttpServletRequest httpServletRequest) throws IDMapperException, UnsupportedEncodingException {
+    public Response apiPage(@Context HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
         return imsApiPage(httpServletRequest);
     }
     

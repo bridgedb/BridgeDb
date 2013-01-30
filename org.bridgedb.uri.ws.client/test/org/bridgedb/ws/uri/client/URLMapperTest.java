@@ -19,7 +19,7 @@
 //
 package org.bridgedb.ws.uri.client;
 
-import org.bridgedb.IDMapperException;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WSUriMapper;
 import org.junit.BeforeClass;
@@ -32,7 +32,7 @@ import org.junit.Test;
 public class URLMapperTest  extends org.bridgedb.url.URLMapperTest{
     
     @BeforeClass
-    public static void setupIDMapper() throws IDMapperException {
+    public static void setupIDMapper() throws BridgeDBException {
         WSUriInterface webService = WsUriClientFactory.createTestWSClient();
         mappingSet2_3 = 29;
         urlMapper = new WSUriMapper(webService);
@@ -40,7 +40,7 @@ public class URLMapperTest  extends org.bridgedb.url.URLMapperTest{
     
     @Test
     @Override //TOO slow
-    public void testGetOverallStatistics() throws IDMapperException {
+    public void testGetOverallStatistics() throws BridgeDBException {
     }
 
 }
