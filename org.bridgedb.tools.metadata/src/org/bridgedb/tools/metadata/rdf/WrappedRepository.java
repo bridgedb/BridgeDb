@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -48,12 +49,12 @@ public class WrappedRepository {
     private static final Value ANY_OBJECT = null;
     private static final boolean EXCLUDE_INFERRED =false;
    
-    public WrappedRepository(Repository repository) throws RdfException{
+    public WrappedRepository(Repository repository) throws BridgeDBException{
         this.repository = repository;
     }
     
     public List<Statement> getStatementList(Resource subjectResource, URI predicate, Value object, Resource... contexts) 
-            throws RdfException {
+            throws BridgeDBException {
         RepositoryConnection connection = getConnection();
         try {
             RepositoryResult<Statement> rr = 
@@ -67,7 +68,7 @@ public class WrappedRepository {
         }
     }
 
-    private RepositoryConnection getConnection() throws RdfException{
+    private RepositoryConnection getConnection() throws BridgeDBException{
         try {
             repository.initialize();
         } catch (RepositoryException ex) {
@@ -81,18 +82,18 @@ public class WrappedRepository {
         return connection;
     }
 
-    public void clearAndClose() throws RdfException {
+    public void clearAndClose() throws BridgeDBException {
         RepositoryConnection connection = getConnection();
         try {
             connection.clear();
         } catch (RepositoryException ex) {
-            throw new RdfException("Error clearing repository ", ex);
+            throw new BridgeDBException("Error clearing repository ", ex);
         } finally {
             close();
         }
     }
     
-    public Value getPossibleSingeltonObject(Resource subject, URI predicate, Resource... contexts) throws RdfException {
+    public Value getPossibleSingeltonObject(Resource subject, URI predicate, Resource... contexts) throws BridgeDBException {
         List<Statement> statements = getStatementList(subject, predicate, ANY_OBJECT, contexts);
         if (statements.size() == 1) {
             Statement statement = statements.get(0);
@@ -100,19 +101,19 @@ public class WrappedRepository {
         } else if (statements.size() == 0) {
                return null;
         }
-        throw new RdfException ("Found more than one Object with Subject " + subject + 
+        throw new BridgeDBException ("Found more than one Object with Subject " + subject + 
                 " and Predicate " + predicate + " in context(s) " + toString(contexts));
     }
 
-    public Value getTheSingeltonObject(Resource subject, URI predicate, Resource... contexts) throws RdfException {
+    public Value getTheSingeltonObject(Resource subject, URI predicate, Resource... contexts) throws BridgeDBException {
         Value possible = getPossibleSingeltonObject(subject, predicate, contexts);
         if (possible != null) return possible;
-        throw new RdfException ("Found no Object with Subject " + subject + " and Predicate " + predicate + 
+        throw new BridgeDBException ("Found no Object with Subject " + subject + " and Predicate " + predicate + 
                 " in context(s) " + toString(contexts));
     }
     
     public int getAndIncrementValue(Resource subject, URI predicate, Resource context) 
-            throws RdfException {
+            throws BridgeDBException {
         RepositoryConnection connection = getConnection();
         int newValue = 1;
         try {
@@ -126,7 +127,7 @@ public class WrappedRepository {
                 newValue = literal.intValue() + 1;
                 connection.remove(results.get(0), context);
             } else {
-                throw new RdfException ("Found more than one Object with Subject " + subject + 
+                throw new BridgeDBException ("Found more than one Object with Subject " + subject + 
                     " and Predicate " + predicate + " in context(s) " + context);
             }
         } catch (Throwable ex) {
@@ -142,7 +143,7 @@ public class WrappedRepository {
         return newValue;
     }
 
-    public void addStatements(Set<Statement> statements, Resource... contexts) throws RdfException {
+    public void addStatements(Set<Statement> statements, Resource... contexts) throws BridgeDBException {
         RepositoryConnection connection = getConnection();
         for (Statement statement:statements){
             try {
@@ -258,9 +259,9 @@ public class WrappedRepository {
     }
     */
             
-    private void error(String message, Throwable cause) throws RdfException{
+    private void error(String message, Throwable cause) throws BridgeDBException{
         close();
-        throw new RdfException(message, cause);
+        throw new BridgeDBException(message, cause);
     }
 
     private void close(){

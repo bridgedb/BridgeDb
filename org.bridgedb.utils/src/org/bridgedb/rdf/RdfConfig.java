@@ -77,7 +77,7 @@ public class RdfConfig {
             case TEST:
                 return new File(getTestSailNativeStore());
              default:
-                throw new IDMapperLinksetException ("Unepected RdfStoreType " + storeType);
+                throw new BridgeDBException ("Unepected RdfStoreType " + storeType);
         }
     }
 
@@ -87,33 +87,21 @@ public class RdfConfig {
        
     private static String getSailNativeStore() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(SAIL_NATIVE_STORE_PROPERTY).trim();
-        } catch (IDMapperLinksetException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(SAIL_NATIVE_STORE_PROPERTY).trim();
         if (result != null) return result;
         return "../rdf/linksets";
     }
 
     private static String getLoadSailNativeStore() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(LOAD_SAIL_NATIVE_STORE_PROPERTY).trim();
-        } catch (IDMapperLinksetException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(LOAD_SAIL_NATIVE_STORE_PROPERTY).trim();
         if (result != null) return result;
         return getSailNativeStore();
     }
 
     private static String getTestSailNativeStore() throws BridgeDBException{
         String result;
-        try {
-            result = getProperties().getProperty(TEST_SAIL_NATIVE_STORE_PROPERTY).trim();
-        } catch (IDMapperLinksetException ex) {
-            return ex.getMessage();
-        }
+        result = getProperties().getProperty(TEST_SAIL_NATIVE_STORE_PROPERTY).trim();
         if (result != null) return result;
         return "../rdf/testLinksets";
     }

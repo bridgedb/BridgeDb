@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.linkset.LinkSetStore;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -71,7 +70,7 @@ public class RdfReader implements LinkSetStore{
             String result = rdfWrapper.getRDF(resource);
             return result;
         } catch (RDFHandlerException ex) {
-            throw new IDMapperLinksetException("Unable to read RDF", ex);
+            throw new BridgeDBException("Unable to read RDF", ex);
         } finally {
             shutDown(rdfWrapper);
         }
@@ -85,7 +84,7 @@ public class RdfReader implements LinkSetStore{
             List<Statement> result = rdfWrapper.getStatementList(resource, RdfWrapper.ANY_PREDICATE, RdfWrapper.ANY_OBJECT);
             return result;
         } catch (RDFHandlerException ex) {
-            throw new IDMapperLinksetException("Unable to read RDF", ex);
+            throw new BridgeDBException("Unable to read RDF", ex);
         } finally {
             shutDown(rdfWrapper);
         }
@@ -100,7 +99,7 @@ public class RdfReader implements LinkSetStore{
             rdfWrapper = RdfFactory.setupConnection(storeType);       
             return getSuperSet(resource, rdfWrapper, allReadyChecked);
         } catch (RDFHandlerException ex) {
-            throw new IDMapperLinksetException("Unable to read RDF", ex);
+            throw new BridgeDBException("Unable to read RDF", ex);
         } finally {
             shutDown(rdfWrapper);
         }
@@ -127,7 +126,7 @@ public class RdfReader implements LinkSetStore{
             try {
                 rdfWrapper.shutdown();
             } catch (RDFHandlerException ex) {
-                throw new IDMapperLinksetException ("Error shuting down RDFWrapper ", ex);
+                throw new BridgeDBException ("Error shuting down RDFWrapper ", ex);
             }
         }
     }

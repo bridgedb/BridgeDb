@@ -24,7 +24,6 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import org.bridgedb.rdf.IDMapperLinksetException;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.LinksetVoidInformation;
 import org.bridgedb.tools.metadata.constants.PavConstants;
@@ -65,27 +64,23 @@ public class RDFWriter implements RdfLoader{
         urlListener = listener;
         statements = new ArrayList<Statement>();
         this.mainCaller = mainCaller;
-        try {
-            String subjectUriSpace = information.getSubjectUriSpace();
-            String targetUriSpace = information.getTargetUriSpace();
-            String predicate = information.getPredicate();
-            symmetric = information.isSymmetric();
-            String justification = information.getJustification();
-            boolean transative = information.isTransative();
-            linksetResource = information.getLinksetResource();
-            inverseResource = invertResource(linksetResource);
-            mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, 
-            		justification, targetUriSpace, symmetric, transative);            
-            linksetContext = RdfFactory.getLinksetURL(mappingId);
-            if (symmetric) {
-                inverseContext = RdfFactory.getLinksetURL(mappingId + 1);             
-            } else {
-                inverseContext = null;
-            }
-        } catch (BridgeDBException ex) {
-            throw new IDMapperLinksetException("Error setting the context", ex);
+        String subjectUriSpace = information.getSubjectUriSpace();
+        String targetUriSpace = information.getTargetUriSpace();
+        String predicate = information.getPredicate();
+        symmetric = information.isSymmetric();
+        String justification = information.getJustification();
+        boolean transative = information.isTransative();
+        linksetResource = information.getLinksetResource();
+        inverseResource = invertResource(linksetResource);
+        mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, 
+                justification, targetUriSpace, symmetric, transative);            
+        linksetContext = RdfFactory.getLinksetURL(mappingId);
+        if (symmetric) {
+            inverseContext = RdfFactory.getLinksetURL(mappingId + 1);             
+        } else {
+            inverseContext = null;
         }
-     }
+    }
 
     private Resource invertResource(Resource resource){
         if (resource instanceof URI){
