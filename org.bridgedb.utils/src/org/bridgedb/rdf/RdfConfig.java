@@ -21,7 +21,6 @@ package org.bridgedb.rdf;
 
 import java.io.File;
 import java.util.Properties;
-import org.bridgedb.IDMapperException;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
@@ -42,7 +41,7 @@ public class RdfConfig {
     
     private static Properties properties;
 
-    private static boolean repositoryExists(StoreType storeType) throws IDMapperException {
+    private static boolean repositoryExists(StoreType storeType) throws BridgeDBException {
         File dataDir = getDataDir(storeType);
         return dataDir.exists();
     }
@@ -65,11 +64,11 @@ public class RdfConfig {
         return getProfileBaseURI() + linksetId;  
     }
   
-    public static String getProperty(String key) throws IDMapperException{
+    public static String getProperty(String key) throws BridgeDBException{
         return getProperties().getProperty(key);
     }
     
-    public static File getDataDir(StoreType storeType) throws IDMapperException {
+    public static File getDataDir(StoreType storeType) throws BridgeDBException {
         switch (storeType){
             case LIVE: 
                 return new File(getSailNativeStore());
@@ -82,11 +81,11 @@ public class RdfConfig {
         }
     }
 
-    public static boolean uniqueLoadRepository() throws IDMapperException{
+    public static boolean uniqueLoadRepository() throws BridgeDBException{
         return (!getSailNativeStore().equals(getLoadSailNativeStore()));
     }
-    
-    private static String getSailNativeStore() throws IDMapperException{
+       
+    private static String getSailNativeStore() throws BridgeDBException{
         String result;
         try {
             result = getProperties().getProperty(SAIL_NATIVE_STORE_PROPERTY).trim();
@@ -97,7 +96,7 @@ public class RdfConfig {
         return "../rdf/linksets";
     }
 
-    private static String getLoadSailNativeStore() throws IDMapperException{
+    private static String getLoadSailNativeStore() throws BridgeDBException{
         String result;
         try {
             result = getProperties().getProperty(LOAD_SAIL_NATIVE_STORE_PROPERTY).trim();
@@ -108,7 +107,7 @@ public class RdfConfig {
         return getSailNativeStore();
     }
 
-    private static String getTestSailNativeStore() throws IDMapperException{
+    private static String getTestSailNativeStore() throws BridgeDBException{
         String result;
         try {
             result = getProperties().getProperty(TEST_SAIL_NATIVE_STORE_PROPERTY).trim();

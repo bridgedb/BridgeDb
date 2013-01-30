@@ -33,7 +33,6 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.SimpleLayout;
-import org.bridgedb.IDMapperException;
 
 /**
  *
@@ -60,7 +59,7 @@ public class ConfigReader {
         return finder.getProperties();
     }
     
-    public static InputStream getInputStream(String fileName) throws IDMapperException{
+    public static InputStream getInputStream(String fileName) throws BridgeDBException{
         ConfigReader finder = new ConfigReader(fileName);
         configureLogger();
         return finder.getInputStream();
