@@ -65,7 +65,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
             
     private UriPattern(String namespace){
         this.nameSpace = namespace;
-        this.postfix = null;
+        this.postfix = "";
         byNameSpaceOnly.put(namespace, this);
         register.put(getResourceId(), this);
     } 
@@ -73,7 +73,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     private UriPattern(String namespace, String postfix){
         this.nameSpace = namespace;
         if (postfix == null || postfix.isEmpty()){
-            this.postfix = null;
+            this.postfix = "";
             byNameSpaceOnly.put(namespace, this);    
         } else {
             this.postfix = postfix;
@@ -96,7 +96,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     }
     
     public boolean hasPostfix(){
-        return postfix != null;
+        return !postfix.isEmpty();
     }
     
     public static Set<UriPattern> getUriPatterns() {
@@ -215,7 +215,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         URI id = getResourceId();
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI);
         repositoryConnection.add(id, VoidConstants.URI_SPACE_URI,  new LiteralImpl(nameSpace));
-        if (postfix != null){
+        if (!postfix.isEmpty()){
             repositoryConnection.add(id, BridgeDBConstants.POSTFIX_URI,  new LiteralImpl(postfix));
         }
         if (addPrimaries){
@@ -363,7 +363,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     }
 
     public String getUriSpace() throws BridgeDBException {
-        if (postfix != null){
+        if (hasPostfix()){
             throw new BridgeDBException("UriPattern " + this + " has a postfix");
         }
         return nameSpace;

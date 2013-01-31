@@ -88,7 +88,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         BridgeDBRdfHandler.init();
         Collection<UriPattern> patterns = UriPattern.getUriPatterns();
         for (UriPattern pattern:patterns){
-            System.out.println(pattern);
             this.registerUriPattern(pattern);
         }           
     }   
@@ -280,7 +279,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append(" FROM ");
         query.append(URL_TABLE_NAME);
         query.append(" WHERE '");
-        query.append(uri);
+        query.append(insertEscpaeCharacters(uri));
         query.append("' LIKE CONCAT(");
         query.append(PREFIX_COLUMN_NAME);
         query.append(",'%',");
@@ -297,9 +296,19 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         try {
             if (rs.next()){
                 String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                DataSource dataSource = DataSource.getBySystemCode(sysCode);
                 String prefix = rs.getString(PREFIX_COLUMN_NAME);
                 String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                while(rs.next()){
+                    String newPrefix = rs.getString(PREFIX_COLUMN_NAME);
+                    String newPostfix = rs.getString(POSTFIX_COLUMN_NAME);
+                    //If there is more than one result take the most specific.
+                    if (newPrefix.length() > prefix.length() || newPostfix.length() > postfix.length()){
+                        prefix = newPrefix;
+                        sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                        postfix = newPostfix;
+                    }
+                }
+                DataSource dataSource = DataSource.getBySystemCode(sysCode);
                 String id = uri.substring(prefix.length(), uri.length()-postfix.length());
                 Xref result =  new Xref(id, dataSource);
                 if (logger.isDebugEnabled()){
