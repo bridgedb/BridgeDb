@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
@@ -54,7 +55,7 @@ public class BridgeDBRdfHandler {
    
     static final Logger logger = Logger.getLogger(BridgeDBRdfHandler.class);
     public static String DEFAULT_BASE_URI = "http://no/BaseURI/Set/";
-    public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.RDFXML;
+    public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.TURTLE;
     public static final String CONFIG_FILE_NAME = "DataSource.ttl";
 
     public static void main(String[] args) throws RepositoryException, BridgeDBException, IOException, RDFParseException, RDFHandlerException {
@@ -97,6 +98,11 @@ public class BridgeDBRdfHandler {
         } catch (Exception ex) {
             throw new BridgeDBException ("Error parsing Rdf inputStream ", ex);
         } finally {
+            try {
+                stream.close();
+            } catch (IOException ex) {
+                logger.error("Error closing input Stream", ex);
+            }
             shutDown(repository, repositoryConnection);
         }
     }

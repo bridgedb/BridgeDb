@@ -48,12 +48,14 @@ public class DataSourceLoaderTest extends TestUtils{
         BridgeDBRdfHandler.parseRdfFile(primaryFile);
     }
     
+    @Test
     public void testInputStreamInput() throws Exception {
         report("InputStreamInput");
         InputStream stream = new FileInputStream(utilsFile);
         BridgeDBRdfHandler.parseRdfInputStream(stream);
     }
 
+    @Test
     public void testInit() throws Exception {
         report("InputStreamInput");
         BridgeDBRdfHandler.init();
