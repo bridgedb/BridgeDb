@@ -32,6 +32,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
+import org.bridgedb.rdf.BridgeDBRdfHandler;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.Mapping;
@@ -52,8 +54,8 @@ import org.bridgedb.utils.StoreType;
  */
 public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener {
 
-    private static final int PREFIX_LENGTH = 100;
-    private static final int POSTFIX_LENGTH = 50;
+    private static final int PREFIX_LENGTH = 400;
+    private static final int POSTFIX_LENGTH = 100;
     private static final int MIMETYPE_LENGTH = 50;
     
     private static final String URL_TABLE_NAME = "url";
@@ -77,12 +79,18 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      */
      public SQLUrlMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
         super(dropTables, storeType);
-        if (dropTables){
-            Map<String,DataSource> mappings = UriPatternMapper.getUriPatternMappings();
-            for (String uriPattern:mappings.keySet()){
-                this.registerUriPattern(mappings.get(uriPattern), uriPattern);
-            }
-        }
+        //if (dropTables){
+        //    Map<String,DataSource> mappings = UriPatternMapper.getUriPatternMappings();
+        //    for (String uriPattern:mappings.keySet()){
+        //        this.registerUriPattern(mappings.get(uriPattern), uriPattern);
+        //    }
+        //}
+        BridgeDBRdfHandler.init();
+        Collection<UriPattern> patterns = UriPattern.getUriPatterns();
+        for (UriPattern pattern:patterns){
+            System.out.println(pattern);
+            this.registerUriPattern(pattern);
+        }           
     }   
     
     @Override
@@ -510,29 +518,52 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
         String prefix = uriPattern.substring(0, pos);
 		String postfix = uriPattern.substring(pos + 3);
-
+        this.registerUriPattern(source, prefix, postfix);
+    }
+    
+    private void registerUriPattern (UriPattern uriPattern) throws BridgeDBException{
+        DataSource dataSource = uriPattern.getDataSource();
+        String prefix = uriPattern.getPrefix();
+        String postfix = uriPattern.getPostfix();
+        registerUriPattern(dataSource, prefix, postfix);
+    }
+    
+    @Override
+    public void registerUriPattern(DataSource dataSource, String prefix, String postfix) throws BridgeDBException {
+        checkDataSourceInDatabase(dataSource);
+        if (postfix == null){
+            postfix = "";
+        }
         String sysCode = getSysCode(prefix, postfix);
+        if (prefix.length() > PREFIX_LENGTH){
+            throw new BridgeDBException("Prefix Length ( " + prefix.length() + ") is too long for " + prefix);
+        }
+        if (postfix.length() > POSTFIX_LENGTH){
+            throw new BridgeDBException("Postfix Length ( " + prefix.length() + ") is too long for " + prefix);
+        }
+
+        prefix = insertEscpaeCharacters(prefix);
+        postfix = insertEscpaeCharacters(postfix);
         if (sysCode != null){
-            if (source.getSystemCode().equals(sysCode)) return; //Already known so fine.
-            throw new BridgeDBException ("UriPattern " + uriPattern + " already mapped to " + sysCode 
-                    + " Which does not match " + source.getSystemCode());
+            if (dataSource.getSystemCode().equals(sysCode)) return; //Already known so fine.
+            throw new BridgeDBException ("UriPattern " + prefix + "$id" + postfix + " already mapped to " + sysCode 
+                    + " Which does not match " + dataSource.getSystemCode());
         }
         String query = "INSERT INTO " + URL_TABLE_NAME + " (" 
                 + DATASOURCE_COLUMN_NAME + ", " 
                 + PREFIX_COLUMN_NAME + ", " 
                 + POSTFIX_COLUMN_NAME + ") VALUES "
-                + " ('" + source.getSystemCode() + "', "
+                + " ('" + dataSource.getSystemCode() + "', "
                 + "  '" + prefix + "',"
                 + "  '" + postfix + "')";
         Statement statement = createStatement();
         try {
             int changed = statement.executeUpdate(query);
         } catch (SQLException ex) {
-            throw new BridgeDBException ("Error inserting UriPattern ", ex, query);
+            throw new BridgeDBException ("Error inserting prefix " + prefix + " and postfix " + postfix , ex, query);
         }
     }
 
-    @Override
     public int registerMappingSet(String sourceUriSpace, String predicate, String targetUriSpace, boolean symetric, boolean transative) 
             throws BridgeDBException {
         DataSource source = getDataSource(sourceUriSpace);
@@ -540,7 +571,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         if (source == target){
             throw new BridgeDBException("source == target");
         }
-        return registerMappingSet(source, predicate, target, symetric, transative);
+         return registerMappingSet(source, predicate, target, symetric, transative);
     }
 
     @Override

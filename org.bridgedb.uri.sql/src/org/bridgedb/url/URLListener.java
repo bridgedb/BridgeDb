@@ -33,9 +33,9 @@ import org.bridgedb.utils.BridgeDBException;
 public interface URLListener {
     
     /**
-     * Associates a DataSource with a UriSpace.
+     * Associates a DataSource with a UriPattern.
      * <p>
-     * This adds the UriSpace as an alternative without removing any previous ones or changing the default/ primary UriSpace.
+     * This adds the UriPatterne as an alternative without removing any previous ones.
      * 
      * @param source A BridgeDB DataSource to associate with.
      * @param uriPattern is a template for generating valid URI's for identifiers. 
@@ -43,6 +43,18 @@ public interface URLListener {
      * @throws BridgeDBException 
      */
     public void registerUriPattern(DataSource source, String uriPattern) throws BridgeDBException;
+
+    /**
+     * Associates a DataSource with a UriPattern, represented as prefix and postfix
+     * <p>
+     * This adds the UriPatterne as an alternative without removing any previous ones.
+     * 
+     * @param source A BridgeDB DataSource to associate with.
+     * @param prefix part of the uri that comes before the id 
+     * @param postfix part of the uri (if any) that comes before the id 
+     * @throws BridgeDBException 
+     */
+    public void registerUriPattern(DataSource source, String prefix, String postfix) throws BridgeDBException;
 
     //Note: To change the primary UriSpace you need to change the DataSource. 
     

@@ -21,6 +21,7 @@ package org.bridgedb.rdf;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -98,6 +99,10 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         return postfix != null;
     }
     
+    public static Set<UriPattern> getUriPatterns() {
+        return new HashSet(register.values());
+    }
+
     public static UriPattern byNameSpace(String nameSpace){
         UriPattern result = byNameSpaceOnly.get(nameSpace);
         if (result == null){
@@ -158,11 +163,21 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         } 
      }
     
-    public DataSource getDataSource(){
+    public DataSource getPrimaryDataSource(){
         if (dataSourceUris == null){
             return null;
         }
         return dataSourceUris.getDataSource();
+    }
+    
+    public DataSource getDataSource(){
+        DataSourceUris main =  getMainDataSourceUris();
+        if (main == null){
+            return DataSource.register(getUriPattern(), "Grouping for " + getUriPattern())
+                    .urlPattern(getUriPattern())
+                    .asDataSource();
+        }
+        return main.getDataSource();
     }
     
     public DataSourceUris getMainDataSourceUris() {
@@ -283,11 +298,13 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     }
     
     public static Set<UriPattern> readUriPatterns(RepositoryConnection repositoryConnection, Resource dataSourceId, 
-            URI predicate) throws RepositoryException, BridgeDBException{
+            DataSourceUris parent, URI predicate) throws RepositoryException, BridgeDBException{
         Set<Resource> resources = getAllResources(repositoryConnection,  dataSourceId, predicate);
         HashSet<UriPattern> results = new HashSet<UriPattern>();
         for (Resource resource:resources){
-            results.add(readUriPattern(repositoryConnection, resource));
+            UriPattern uriPattern = readUriPattern(repositoryConnection, resource);
+            uriPattern.setDataSource(parent);
+            results.add(uriPattern);
         }
         return results;
     }

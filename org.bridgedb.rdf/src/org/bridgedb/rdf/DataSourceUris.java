@@ -200,7 +200,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
     private void writeUriPattern(RepositoryConnection repositoryConnection, URI primary, URI shared, 
             UriPattern pattern, boolean addPrimaries) throws RepositoryException {
         if (pattern != null){
-            if (inner.equals(pattern.getDataSource())){
+            if (inner.equals(pattern.getPrimaryDataSource())){
                 repositoryConnection.add(getResourceId(), primary, pattern.getResourceId());
             } else if (addPrimaries && this.equals(pattern.getMainDataSourceUris())){
                 repositoryConnection.add(getResourceId(), primary, pattern.getResourceId());
@@ -340,9 +340,9 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         wikiPathwaysPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
                 BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI, BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI);  
         
-        this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, 
+        this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, this,
                 BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI));
-        this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, 
+        this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, this,
                 BridgeDBConstants.HAS_URI_PATTERN_URI));
         
         //make sure there are no specific uris in other.
@@ -414,7 +414,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         return uriPattern;
     }
 
-     DataSource getDataSource() {
+    public DataSource getDataSource() {
         return inner;
     }
 

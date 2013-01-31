@@ -47,7 +47,7 @@ public class SQLListener implements MappingListener{
     protected static final int SYSCODE_LENGTH = 100;
     private static final int FULLNAME_LENGTH = 100;
     private static final int MAINURL_LENGTH = 100;
-    private static final int URLPATTERN_LENGTH = 100;
+    private static final int URLPATTERN_LENGTH = 400;
     private static final int ID_LENGTH = 100;
     private static final int TYPE_LENGTH = 100;
     private static final int URNBASE_LENGTH = 100;
@@ -452,7 +452,8 @@ public class SQLListener implements MappingListener{
         Statement statement = this.createStatement();
         String sysCode  = source.getSystemCode();
         if (sysCode == null) {
-            throw new BridgeDBException ("Currently unable to handle Datasources with null systemCode");
+            sysCode = source.getFullName();
+            DataSource.register(sysCode,source.getFullName());
         }
         if (sysCode.isEmpty()) {
             throw new BridgeDBException ("Currently unable to handle Datasources with empty systemCode");
@@ -495,7 +496,7 @@ public class SQLListener implements MappingListener{
                     " so unable to save " + source.getSystemCode());
         }
         values.append("'");
-        values.append(source.getSystemCode());
+        values.append(insertEscpaeCharacters(source.getSystemCode()));
         values.append("' , ");
         if (source.isPrimary()){
             values.append (1);
@@ -512,7 +513,7 @@ public class SQLListener implements MappingListener{
             insert.append (FULL_NAME_COLUMN_NAME);
             insert.append (" ");
             values.append (", '");
-            values.append (value);
+            values.append (insertEscpaeCharacters(value));
             values.append ("' ");
         }
         value = source.getMainUrl();
@@ -525,20 +526,20 @@ public class SQLListener implements MappingListener{
             insert.append (MAIN_URL_COLUMN_NAME);
             insert.append (" ");
             values.append (", '");
-            values.append (value);
+            values.append (insertEscpaeCharacters(value));
             values.append ("' ");
         }
         value = source.getUrl("$id");
         if (value != null && !value.isEmpty()){
             if (value.length() > URLPATTERN_LENGTH){
                 throw new BridgeDBException("Maximum length supported for URLPattern is " + URLPATTERN_LENGTH + 
-                        " so unable to save " + value);
+                        " so unable to save " +value.length() + " " + value);
             }
             insert.append (", ");
             insert.append (URL_PATTERN_COLUMN_NAME);
             insert.append (" ");
             values.append (", '");
-            values.append (value);
+            values.append (insertEscpaeCharacters(value));
             values.append ("' ");
         }
         value = source.getExample().getId();
@@ -551,7 +552,7 @@ public class SQLListener implements MappingListener{
             insert.append (ID_EXAMPLE_COLUMN_NAME);
             insert.append (" ");
             values.append (", '");
-            values.append (value);
+            values.append (insertEscpaeCharacters(value));
             values.append ("' ");
         }
         value = source.getType();
@@ -564,7 +565,7 @@ public class SQLListener implements MappingListener{
             insert.append (TYPE_COLUMN_NAME);
             insert.append (" ");
             values.append (", '");
-            values.append (value);
+            values.append (insertEscpaeCharacters(value));
             values.append ("' ");
         }
         value = source.getURN("");
@@ -579,12 +580,12 @@ public class SQLListener implements MappingListener{
             insert.append (URN_BASE_COLUMN_NAME);
             insert.append (" ");
             values.append (", '");
-            values.append (value);
+            values.append (insertEscpaeCharacters(value));
             values.append ("' ");
         }
-        if (source.getOrganism() != null){
-            throw new BridgeDBException("Sorry DataSource oraginism filed is upsupported");
-        }
+        //if (source.getOrganism() != null){
+        //    throw new BridgeDBException("Sorry DataSource oraginism filed is upsupported");
+        //}
         Statement statement = this.createStatement();
         String update = insert.toString() + ") " + values.toString() + " )";
         try {
@@ -628,7 +629,7 @@ public class SQLListener implements MappingListener{
             update.append (", ");
             update.append (FULL_NAME_COLUMN_NAME);
             update.append (" = '");
-            update.append (value);
+            update.append (insertEscpaeCharacters(value));
             update.append ("' ");
         }       
         value = source.getMainUrl();
@@ -640,7 +641,7 @@ public class SQLListener implements MappingListener{
             update.append (", ");
             update.append (MAIN_URL_COLUMN_NAME);
             update.append (" = '");
-            update.append (value);
+            update.append (insertEscpaeCharacters(value));
             update.append ("' ");
         }
         value = source.getUrl("$id");
@@ -652,7 +653,7 @@ public class SQLListener implements MappingListener{
             update.append (", ");
             update.append (URL_PATTERN_COLUMN_NAME);
             update.append (" = '");
-            update.append (value);
+            update.append (insertEscpaeCharacters(value));
             update.append ("' ");
         }
         value = source.getExample().getId();
@@ -664,7 +665,7 @@ public class SQLListener implements MappingListener{
             update.append (", ");
         update.append (ID_EXAMPLE_COLUMN_NAME);
         update.append (" = '");
-            update.append (value);
+            update.append (insertEscpaeCharacters(value));
             update.append ("' ");
         }
         value = source.getType();
@@ -676,7 +677,7 @@ public class SQLListener implements MappingListener{
             update.append (", ");
         update.append (TYPE_COLUMN_NAME);
         update.append (" = '");
-            update.append (value);
+            update.append (insertEscpaeCharacters(value));
             update.append ("' ");
         }
         value = source.getURN("");
@@ -690,7 +691,7 @@ public class SQLListener implements MappingListener{
             update.append (", ");
         update.append (URN_BASE_COLUMN_NAME);
         update.append (" = '");
-            update.append (value);
+            update.append (insertEscpaeCharacters(value));
             update.append ("' ");
         }
         if (source.getSystemCode().length() > SYSCODE_LENGTH ){
@@ -700,11 +701,11 @@ public class SQLListener implements MappingListener{
         update.append ("WHERE ");
         update.append (SYSCODE_COLUMN_NAME);
         update.append ("  = '");
-        update.append (source.getSystemCode());
+        update.append (insertEscpaeCharacters(source.getSystemCode()));
         update.append ("' ");
-        if (source.getOrganism() != null){
-            throw new BridgeDBException("Sorry DataSource oraginism filed is upsupported");
-        }
+        //if (source.getOrganism() != null){
+        //    throw new BridgeDBException("Sorry DataSource oraginism feildd is upsupported");
+        //}
         Statement statement = this.createStatement();
         try {
             statement.executeUpdate(update.toString());
@@ -827,5 +828,13 @@ public class SQLListener implements MappingListener{
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }
     }
-    
+
+   String insertEscpaeCharacters(String original) {
+       String result = original.replaceAll("\\\\", "\\\\\\\\");
+       result = result.replaceAll("'", "\\\\'");
+       result = result.replaceAll("\"", "\\\\\"");
+       return result;
+    }
+
+
 }
