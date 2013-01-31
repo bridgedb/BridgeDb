@@ -20,6 +20,8 @@
 package org.bridgedb.rdf;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import org.bridgedb.utils.TestUtils;
 import org.junit.Test;
 
@@ -37,13 +39,23 @@ public class DataSourceLoaderTest extends TestUtils{
      * Test of writeRdfToFile method, of class BridgeDBRdfHandler.
      */
     @Test
-    public void testRdfToFile() throws Exception {
-        report("writeRdfToFile");
+    public void testRdfFileInputOutput() throws Exception {
+        report("RdfFileInputOutput");
         BridgeDBRdfHandler.parseRdfFile(utilsFile);
         BridgeDBRdfHandler.writeRdfToFile(renameFile, false);
         BridgeDBRdfHandler.parseRdfFile(renameFile);
         BridgeDBRdfHandler.writeRdfToFile(primaryFile, true);
         BridgeDBRdfHandler.parseRdfFile(primaryFile);
     }
+    
+    public void testInputStreamInput() throws Exception {
+        report("InputStreamInput");
+        InputStream stream = new FileInputStream(utilsFile);
+        BridgeDBRdfHandler.parseRdfInputStream(stream);
+    }
 
+    public void testInit() throws Exception {
+        report("InputStreamInput");
+        BridgeDBRdfHandler.init();
+    }
 }

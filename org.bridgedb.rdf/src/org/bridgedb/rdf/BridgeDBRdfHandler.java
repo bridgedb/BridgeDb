@@ -23,6 +23,7 @@ import info.aduna.lang.FileFormat;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.Collection;
 import org.apache.log4j.Logger;
@@ -54,7 +55,8 @@ public class BridgeDBRdfHandler {
     static final Logger logger = Logger.getLogger(BridgeDBRdfHandler.class);
     public static String DEFAULT_BASE_URI = "http://no/BaseURI/Set/";
     public static RDFFormat DEFAULT_FILE_FORMAT = RDFFormat.RDFXML;
-   
+    public static final String CONFIG_FILE_NAME = "DataSource.ttl";
+
     public static void main(String[] args) throws RepositoryException, BridgeDBException, IOException, RDFParseException, RDFHandlerException {
         ConfigReader.logToConsole();
         File file1 = new File ("C:/OpenPhacts/BioDataSource.ttl");
@@ -79,6 +81,29 @@ public class BridgeDBRdfHandler {
         } finally {
             shutDown(repository, repositoryConnection);
         }
+    }
+    
+    static void parseRdfInputStream(InputStream stream) throws BridgeDBException {
+        Reporter.println("Parsing Rdf Input Stream.");
+        Repository repository = null;
+        RepositoryConnection repositoryConnection = null;
+        try {
+            repository = new SailRepository(new MemoryStore());
+            repository.initialize();
+            repositoryConnection = repository.getConnection();
+            repositoryConnection.add(stream, DEFAULT_BASE_URI, DEFAULT_FILE_FORMAT);
+            DataSourceUris.readAllDataSourceUris(repositoryConnection);
+            UriPattern.readAllUriPatterns(repositoryConnection);      
+        } catch (Exception ex) {
+            throw new BridgeDBException ("Error parsing Rdf inputStream ", ex);
+        } finally {
+            shutDown(repository, repositoryConnection);
+        }
+    }
+    
+    public static void init() throws BridgeDBException{
+        InputStream stream = ConfigReader.getInputStream(CONFIG_FILE_NAME);
+        parseRdfInputStream(stream);
     }
     
     public static void writeRdfToFile(File file, boolean addPrimaries) throws BridgeDBException{
@@ -177,5 +202,5 @@ public class BridgeDBRdfHandler {
             return (RDFFormat)fileFormat;
         }
     }
-    
+
 }
