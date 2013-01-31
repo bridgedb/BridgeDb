@@ -304,8 +304,6 @@ public abstract class URLMapperTest extends URLListenerTest{
         report("FreeSearchGood");
         Set<String> results = urlMapper.urlSearch(ds2Id3, 10);
         //Skip these if there are 10 or more possible ones. No Gurantee whiuch come back
-        System.out.println(ds2Id3);
-        System.out.println(results);
         if (results.size() < 10){
             assertTrue (results.contains(map3URL2));
             assertTrue (results.contains(map3URL2a));

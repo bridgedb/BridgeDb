@@ -79,17 +79,17 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      */
      public SQLUrlMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
         super(dropTables, storeType);
-        //if (dropTables){
+        if (dropTables){
         //    Map<String,DataSource> mappings = UriPatternMapper.getUriPatternMappings();
         //    for (String uriPattern:mappings.keySet()){
         //        this.registerUriPattern(mappings.get(uriPattern), uriPattern);
         //    }
-        //}
-        BridgeDBRdfHandler.init();
-        Collection<UriPattern> patterns = UriPattern.getUriPatterns();
-        for (UriPattern pattern:patterns){
-            this.registerUriPattern(pattern);
-        }           
+            BridgeDBRdfHandler.init();
+            Collection<UriPattern> patterns = UriPattern.getUriPatterns();
+            for (UriPattern pattern:patterns){
+                this.registerUriPattern(pattern);
+            }           
+        }
     }   
     
     @Override
@@ -269,6 +269,39 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     
     @Override
     public Xref toXref(String uri) throws BridgeDBException {
+        String postfix = getUriSpace(uri);
+        String id = getId(uri);
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URL_TABLE_NAME);
+        query.append(" WHERE '");
+        query.append(insertEscpaeCharacters(postfix));
+        query.append("' = ");
+        query.append(PREFIX_COLUMN_NAME);
+         
+        Statement statement = this.createStatement();
+        ResultSet rs;    
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        try {
+            if (rs.next()){
+                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                return new Xref(id, dataSource);
+            } else {
+                return toXrefUsingLike(uri);
+            }
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to get uriSpace. " + query, ex);
+        }        
+    }
+   
+    private Xref toXrefUsingLike(String uri) throws BridgeDBException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
         query.append(DATASOURCE_COLUMN_NAME);

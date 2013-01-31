@@ -19,6 +19,7 @@
 //
 package org.bridgedb.mysql;
 
+import java.util.Date;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLUrlMapper;
@@ -49,15 +50,15 @@ public class UriPatternSaveTest extends TestUtils {
 
     @Test
     public void testCheckUriPatterns() throws Exception {
+        Date start = new Date();
         report("getCheckUriPatterns");
         for (UriPattern pattern:UriPattern.getUriPatterns()){
             String uri = pattern.getPrefix() + "1234" + pattern.getPostfix();
-            System.out.println(uri);
             Xref xref = mapper.toXref(uri);
-            System.out.println(xref);
             assertEquals(pattern.getDataSource(), xref.getDataSource());
         }
-        
+        Date end = new Date();
+        System.out.println("That took " + (end.getTime()- start.getTime()));
      }
 
             
