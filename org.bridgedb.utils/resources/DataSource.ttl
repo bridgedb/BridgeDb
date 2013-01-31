@@ -706,8 +706,8 @@ bridgeDB:DataSource_ChEMBL_target a bridgeDB:DataSource ;
 	bridgeDB:hasWikiPathwaysPattern <https://www.ebi.ac.uk/chembldb/index.php/target/inspect/$id> .
 
 bridgeDB:DataSource_Chembl_13_Molecule a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl_13_Molecule" ;
-	bridgeDB:systemCode "Chembl_13_Molecule" ;
+	bridgeDB:fullName "Chembl 13 Molecule" ;
+	bridgeDB:systemCode "Chembl 13 Molecule" ;
 	bridgeDB:idExample "m1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
