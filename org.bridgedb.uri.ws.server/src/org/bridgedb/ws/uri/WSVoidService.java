@@ -102,14 +102,14 @@ public class WSVoidService extends WSFame{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/mappingSet")
     public String mappingSet() throws BridgeDBException {
         throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/mappingSet/{id}")
     public String mappingSet(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null || idString.isEmpty()){
@@ -120,14 +120,14 @@ public class WSVoidService extends WSFame{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/linkset")
     public String linkset() throws BridgeDBException {
         throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/linkset/{id}")
     public String linksetSet(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null || idString.isEmpty()){
@@ -138,7 +138,7 @@ public class WSVoidService extends WSFame{
     }
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/linkset/{id}/{resource}")
     public String linksetSet(@PathParam("id") String idString, @PathParam("resource") String resource) throws BridgeDBException {
         throw new BridgeDBException("id= "+ idString + " resource = " + resource);
@@ -150,14 +150,14 @@ public class WSVoidService extends WSFame{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/void")
     public String voidInfo() throws BridgeDBException {
         throw new BridgeDBException("Parameter id is missing");
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/void/{id}")
     public String voidInfo(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null || idString.isEmpty()){
