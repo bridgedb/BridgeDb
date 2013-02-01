@@ -114,22 +114,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML})
-    @Path("/" + WsUriConstants.MAP_URL + "XML")
-    public List<Mapping> mapURLXML(@QueryParam(WsUriConstants.URL) String URL,
-            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
-        return mapURL(URL, targetURISpace); 
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("/" + WsUriConstants.MAP_URL + "JSON")
-    public List<Mapping> mapURLJSON(@QueryParam(WsUriConstants.URL) String URL,
-            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
-        return mapURL(URL, targetURISpace); 
-    }
-
-    @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP_TO_URLS)
     @Override
@@ -153,7 +137,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.URL_EXISTS)
     @Override
     public URLExistsBean URLExists(@QueryParam(WsUriConstants.URL) String URL) throws BridgeDBException {
@@ -164,7 +148,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.URL_SEARCH)
     @Override
     public URLSearchBean URLSearch(@QueryParam(WsUriConstants.TEXT) String text,
@@ -182,7 +166,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.TO_XREF)
     @Override
     public XrefBean toXref(@QueryParam(WsUriConstants.URL) String URL) throws BridgeDBException {
@@ -193,7 +177,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAPPING)
     public Mapping getMapping() throws BridgeDBException {
        throw new BridgeDBException("Path parameter missing.");
@@ -201,7 +185,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @Override
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAPPING + "/{id}")
     public Mapping getMapping(@PathParam(WsUriConstants.ID) String idString) throws BridgeDBException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
@@ -212,7 +196,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @Override
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_SAMPLE_MAPPINGS) 
     public List<Mapping> getSampleMappings() throws BridgeDBException {
         return urlMapper.getSampleMapping();
@@ -220,7 +204,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @Override
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_OVERALL_STATISTICS) 
     public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {
         OverallStatistics overallStatistics = urlMapper.getOverallStatistics();
@@ -229,7 +213,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO + WsUriConstants.XML) 
     public List<MappingSetInfoBean> getMappingSetInfosXML(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws BridgeDBException {
@@ -238,7 +222,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     
     @Override
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO) 
     public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws BridgeDBException {
@@ -252,7 +236,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @Override
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO + "/{id}")
     public MappingSetInfoBean getMappingSetInfo(@PathParam("id") String idString) throws BridgeDBException {
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
@@ -263,14 +247,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.DATA_SOURCE)
     public DataSourceUriSpacesBean getDataSource() throws BridgeDBException {
         throw new BridgeDBException("id path parameter missing.");
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override
     @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
     public DataSourceUriSpacesBean getDataSource(@PathParam("id") String id) throws BridgeDBException {
@@ -351,7 +335,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     /*@GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateString")
     public ValidationBean getValidateString(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType, 
@@ -387,7 +371,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     /*@Override
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateString")
     public ValidationBean validateString(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType, 
@@ -437,7 +421,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @Override
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/validateString")
     public ValidationBean validateInputStream(@FormDataParam("file") InputStream uploadedInputStream, 
@@ -491,7 +475,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_XML)
     @Path("/validateStringXML")
     public ValidationBean validateString(JAXBElement<ValidationBean> input) throws BridgeDBException {
@@ -529,7 +513,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsVoid")
     public ValidationBean validateStringAsVoid(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -561,7 +545,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateInputStreamAsVoid")
     public ValidationBean validateInputStreamAsVoid(@FormDataParam("file") InputStream uploadedInputStream, 
             @FormDataParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -597,7 +581,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsVoidXML")
     public ValidationBean validateStringAsVoidXML(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -618,7 +602,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsLinkSet")
     public ValidationBean validateInputStreamAsLinkSet(@FormDataParam("file") InputStream uploadedInputStream, 
             @FormDataParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -654,7 +638,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsVoid")
     public ValidationBean getValidateStringAsVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -675,7 +659,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsVoidXML")
     public ValidationBean getValidateStringAsVoidXML(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -697,7 +681,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     /*@Override
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsLinksetVoid")
     public ValidationBean validateStringAsLinksetVoid(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -714,7 +698,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsLinkSet")
     public ValidationBean validateStringAsLinkSet(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -745,7 +729,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsLinkSetXML")
     public ValidationBean validateStringAsLinkSetXML(@FormParam(INFO)String info, 
             @FormParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -776,7 +760,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsLinkSet")
     public ValidationBean getValidateStringAsLinkSet(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
@@ -797,7 +781,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateStringAsLinkSetXML")
     public ValidationBean getValidateStringAsLinkSetXML(@QueryParam(INFO)String info, 
             @QueryParam(MIME_TYPE)String mimeType) throws BridgeDBException {
