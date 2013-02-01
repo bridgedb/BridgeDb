@@ -218,11 +218,8 @@ public class Test {
         } else { 
             String name = file.getName();
             name = name.substring(0, name.indexOf('.'));
-            System.out.println("£"+ name);
-            System.out.println(file.getAbsolutePath());
             IDMapper mapper = BridgeDb.connect("idmapper-pgdb:"+file.getAbsolutePath());
             printLinksets(mapper, name);
-            System.out.println("done file");
         }
     }
 
