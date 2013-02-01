@@ -269,7 +269,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     
     @Override
     public Xref toXref(String uri) throws BridgeDBException {
-        String postfix = getUriSpace(uri);
+        String prefix = getUriSpace(uri);
         String id = getId(uri);
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
@@ -277,10 +277,13 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append(" FROM ");
         query.append(URL_TABLE_NAME);
         query.append(" WHERE '");
-        query.append(insertEscpaeCharacters(postfix));
+        query.append(insertEscpaeCharacters(prefix));
         query.append("' = ");
         query.append(PREFIX_COLUMN_NAME);
-         
+        query.append(" AND '");
+        query.append(POSTFIX_COLUMN_NAME);
+        query.append("' = ''");
+                 
         Statement statement = this.createStatement();
         ResultSet rs;    
         try {
@@ -292,6 +295,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             if (rs.next()){
                 String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
                 DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                if (rs.next()){
+                     return toXrefUsingLike(uri);
+                }
                 return new Xref(id, dataSource);
             } else {
                 return toXrefUsingLike(uri);
