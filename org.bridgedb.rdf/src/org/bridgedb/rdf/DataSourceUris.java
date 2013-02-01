@@ -449,7 +449,6 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
                 }
                 grandParent = grandParent.uriParent;
             }
-            System.out.println("Setting parent of " + this + " to " + parentDSU);
             uriParent = parentDSU;
         } else {
             throw new BridgeDBException ("Parent on " + this + " already set to " + uriParent 

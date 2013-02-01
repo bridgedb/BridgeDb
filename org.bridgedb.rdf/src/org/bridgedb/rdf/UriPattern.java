@@ -359,7 +359,6 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         }
         if (parent != null){
             dataSourceUris = parent;
-            System.out.println("£" + parent);
         } else {
             String uriPattern = getUriPattern();        
             DataSource dataSource = DataSource.register(uriPattern, uriPattern).urlPattern(uriPattern).asDataSource();

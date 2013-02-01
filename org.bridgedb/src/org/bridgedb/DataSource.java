@@ -472,7 +472,6 @@ public final class DataSource
 		 */
 		public Builder type (String type)
 		{
-            System.out.println(current + " " + type);
             if (!current.type.equals(DEFAULT_TYPE) && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
                     !current.type.equals(type)){
                 throw new IllegalArgumentException("Illegal attemt to change type for " + current + 
