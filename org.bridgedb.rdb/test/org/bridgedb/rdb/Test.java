@@ -45,7 +45,7 @@ public class Test {
 	}
 
 	@org.junit.Test
-    @Ignore
+    @Ignore //CB Broken
 	public void testDerbyClient() throws IDMapperException, ClassNotFoundException
 	{
 		long start, end, delta;
