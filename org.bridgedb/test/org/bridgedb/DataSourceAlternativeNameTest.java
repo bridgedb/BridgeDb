@@ -50,14 +50,12 @@ public class DataSourceAlternativeNameTest {
 
     @Test 
     public void test121FullNameControlled() throws IDMapperException{
-        System.out.println("121FullNameControlled");
         String sysCode = "DataSourceAlternativeNameTest_121FullNameControlled";
         String fullName1 = "DataSourceAlternativeNameTest_test121FullNameControlled1";
         String fullName2 = "DataSourceAlternativeNameTest_test121FullNameControlled2";
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
         DataSource ds1 = DataSource.register(sysCode, fullName1).asDataSource();
         DataSource ds2 = DataSource.register(sysCode, fullName2).asDataSource();
-        System.out.println("now 3");
         DataSource ds3 = DataSource.register(sysCode, fullName1).asDataSource();
         Assert.assertEquals(ds1,ds3);
         Set<String> alternativeNames = ds1.getAlternativeFullNames();

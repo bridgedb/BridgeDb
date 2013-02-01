@@ -74,7 +74,7 @@ public class WSCoreService implements WSCoreInterface {
     }
         
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.GET_SUPPORTED_SOURCE_DATA_SOURCES)
     @Override
     public List<DataSourceBean> getSupportedSrcDataSources() throws BridgeDBException {
@@ -95,7 +95,7 @@ public class WSCoreService implements WSCoreInterface {
 
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.FREE_SEARCH)
     @Override
     public List<XrefBean> freeSearch(
@@ -125,7 +125,7 @@ public class WSCoreService implements WSCoreInterface {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.MAP_ID)
     @Override
     public List<XrefMapBean> mapID(
@@ -164,7 +164,7 @@ public class WSCoreService implements WSCoreInterface {
     } 
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.XREF_EXISTS)
     @Override
     public XrefExistsBean xrefExists( 
@@ -182,7 +182,7 @@ public class WSCoreService implements WSCoreInterface {
     }
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.GET_SUPPORTED_TARGET_DATA_SOURCES)
     @Override
     public List<DataSourceBean> getSupportedTgtDataSources() throws BridgeDBException {
@@ -201,7 +201,7 @@ public class WSCoreService implements WSCoreInterface {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path(WsConstants.IS_FREE_SEARCH_SUPPORTED)
     @Override
     public FreeSearchSupportedBean isFreeSearchSupported() {
@@ -209,7 +209,7 @@ public class WSCoreService implements WSCoreInterface {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.IS_MAPPING_SUPPORTED)
     @Override
     public MappingSupportedBean isMappingSupported(
@@ -228,7 +228,7 @@ public class WSCoreService implements WSCoreInterface {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.PROPERTY + "/{key}")
     @Override
     public PropertyBean getProperty(@PathParam("key")String key) {
@@ -237,7 +237,7 @@ public class WSCoreService implements WSCoreInterface {
     }
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.GET_KEYS)
     @Override
     public List<PropertyBean> getKeys() {
@@ -251,7 +251,7 @@ public class WSCoreService implements WSCoreInterface {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsConstants.GET_CAPABILITIES)
     @Override
     public CapabilitiesBean getCapabilities()  {

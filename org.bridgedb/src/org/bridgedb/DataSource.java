@@ -499,7 +499,7 @@ public final class DataSource
 		 */
 		public Builder type (String type)
 		{
-           if (!current.type.equals(DEFAULT_TYPE) && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
+            if (!current.type.equals(DEFAULT_TYPE) && DataSource.overwriteLevel == DataSourceOverwriteLevel.STRICT && 
                     !current.type.equals(type)){
                 throw new IllegalArgumentException("Illegal attemt to change type for " + current + 
                         " was " + current.type + " so can not set " + type);

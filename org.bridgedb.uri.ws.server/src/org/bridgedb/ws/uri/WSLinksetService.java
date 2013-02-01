@@ -259,7 +259,7 @@ public class WSLinksetService extends WSVoidService{
     // validateInputStream methods
     
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleVoid")
     public Response validateTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -280,7 +280,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleVoid")
     public Response validateTurtleVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -291,7 +291,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlVoid")
     public Response validateRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -312,7 +312,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlVoid")
     public Response validateRdfXmlVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -323,7 +323,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesVoid")
     public Response validateNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -344,7 +344,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesVoid")
     public Response validateNTriplesVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -355,7 +355,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleLinkSet")
     public Response validateTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -376,7 +376,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleLinkSet")
     public Response validateTurtleLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -387,7 +387,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlLinkSet")
     public Response validateRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -408,7 +408,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlLinkSet")
     public Response validateRdfXmlLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -419,7 +419,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesLinkSet")
     public Response validateNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -440,7 +440,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesLinkSet")
     public Response validateNTriplesLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -451,7 +451,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleMinimum")
     public Response validateTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -472,7 +472,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleMinimum")
     public Response validateTurtleMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -483,7 +483,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlMinimum")
     public Response validateRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -504,7 +504,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlMinimum")
     public Response validateRdfXmlMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -515,7 +515,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesMinimum")
     public Response validateNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -536,7 +536,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesMinimum")
     public Response validateNTriplesMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -547,7 +547,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleRdf")
     public Response validateTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -568,7 +568,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateTurtleRdf")
     public Response validateTurtleRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -579,7 +579,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlRdf")
     public Response validateRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -600,7 +600,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateRdfXmlRdf")
     public Response validateRdfXmlRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -611,7 +611,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesRdf")
     public Response validateNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -632,7 +632,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validateNTriplesRdf")
     public Response validateNTriplesRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -860,7 +860,7 @@ public class WSLinksetService extends WSVoidService{
     //load InputStream methods
     
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleVoid")
     public Response loadTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -881,7 +881,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleVoid")
     public Response loadTurtleVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -892,7 +892,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlVoid")
     public Response loadRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -913,7 +913,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlVoid")
     public Response loadRdfXmlVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -924,7 +924,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesVoid")
     public Response loadNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -945,7 +945,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesVoid")
     public Response loadNTriplesVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -956,7 +956,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleLinkSet")
     public Response loadTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -977,7 +977,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleLinkSet")
     public Response loadTurtleLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -988,7 +988,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlLinkSet")
     public Response loadRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1009,7 +1009,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlLinkSet")
     public Response loadRdfXmlLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1020,7 +1020,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesLinkSet")
     public Response loadNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1041,7 +1041,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesLinkSet")
     public Response loadNTriplesLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1052,7 +1052,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleMinimum")
     public Response loadTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1073,7 +1073,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleMinimum")
     public Response loadTurtleMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1084,7 +1084,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlMinimum")
     public Response loadRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1105,7 +1105,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlMinimum")
     public Response loadRdfXmlMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1116,7 +1116,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesMinimum")
     public Response loadNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1137,7 +1137,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesMinimum")
     public Response loadNTriplesMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1148,7 +1148,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleRdf")
     public Response loadTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1169,7 +1169,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadTurtleRdf")
     public Response loadTurtleRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1180,7 +1180,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlRdf")
     public Response loadRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1201,7 +1201,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadRdfXmlRdf")
     public Response loadRdfXmlRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1212,7 +1212,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesRdf")
     public Response loadNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1233,7 +1233,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/loadNTriplesRdf")
     public Response loadNTriplesRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1463,7 +1463,7 @@ public class WSLinksetService extends WSVoidService{
     //Save InputStream methods
     
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleVoid")
     public Response saveTurtleVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1484,7 +1484,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleVoid")
     public Response saveTurtleVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1495,7 +1495,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlVoid")
     public Response saveRdfXmlVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1516,7 +1516,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlVoid")
     public Response saveRdfXmlVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1527,7 +1527,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesVoid")
     public Response saveNTriplesVoid(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1548,7 +1548,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesVoid")
     public Response saveNTriplesVoidGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1559,7 +1559,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleLinkSet")
     public Response saveTurtleLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1580,7 +1580,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleLinkSet")
     public Response saveTurtleLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1591,7 +1591,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlLinkSet")
     public Response saveRdfXmlLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1612,7 +1612,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlLinkSet")
     public Response saveRdfXmlLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1623,7 +1623,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesLinkSet")
     public Response saveNTriplesLinkSet(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1644,7 +1644,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesLinkSet")
     public Response saveNTriplesLinkSetGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1655,7 +1655,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleMinimum")
     public Response saveTurtleMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1676,7 +1676,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleMinimum")
     public Response saveTurtleMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1687,7 +1687,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlMinimum")
     public Response saveRdfXmlMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1708,7 +1708,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlMinimum")
     public Response saveRdfXmlMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1719,7 +1719,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesMinimum")
     public Response saveNTriplesMinimum(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1740,7 +1740,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesMinimum")
     public Response saveNTriplesMinimumGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1751,7 +1751,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleRdf")
     public Response saveTurtleRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1772,7 +1772,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveTurtleRdf")
     public Response saveTurtleRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1783,7 +1783,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlRdf")
     public Response saveRdfXmlRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1804,7 +1804,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveRdfXmlRdf")
     public Response saveRdfXmlRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1815,7 +1815,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @POST
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesRdf")
     public Response saveNTriplesRdf(@FormDataParam("file") InputStream uploadedInputStream,
             @Context HttpServletRequest httpServletRequest) 
@@ -1836,7 +1836,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/saveNTriplesRdf")
     public Response saveNTriplesRdfGet(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1865,7 +1865,7 @@ public class WSLinksetService extends WSVoidService{
      //Index methods for Validate InputStream methods
     
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/validate")
     public Response validateIndex(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1900,7 +1900,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/save")
     public Response saveIndex(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
@@ -1948,7 +1948,7 @@ public class WSLinksetService extends WSVoidService{
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/load")
     public Response loadIndex(@Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
