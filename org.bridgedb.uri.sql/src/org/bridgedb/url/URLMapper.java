@@ -26,6 +26,7 @@ import java.util.Set;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.Xref;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.utils.BridgeDBException;
@@ -103,7 +104,9 @@ public interface URLMapper extends IDMapper{
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
 	 */
 	public Set<String> mapToURLs (Xref ref, String... targetURISpaces) throws BridgeDBException;
-
+    
+    //public Set<String> mapToURLs (Xref ref, UriPattern pattern);
+    
     /**
 	 * Get all mappings/cross-references for the given Xref, restricting the
 	 * result to contain only URLs from the given set of UriSpaces.

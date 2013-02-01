@@ -108,12 +108,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
                 query.append(" OR ");
                 query.append(TARGET_DATASOURCE_COLUMN_NAME);
                 query.append(" = '");
-                query.append(tgtDataSources[i].getSystemCode());
+                query.append(insertEscpaeCharacters(tgtDataSources[i].getSystemCode()));
                 query.append("'");
             }
             query.append(")");
         }
-        //ystem.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -148,6 +147,64 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             logger.info("Mapped " + ref + " to " + results.size() + " results");
         }
         return results;
+    }
+
+  	/**
+	 * Get all cross-references for the given entity, restricting the
+	 * result to contain only references from the given set of data sources.
+	 * @param ref the entity to get cross-references for. 
+     * @param tgtDataSources target ID types/data source. Can not be null
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+    public Set<Xref> mapID(Xref ref, DataSource tgtDataSource) throws BridgeDBException {
+        if (badXref(ref)) {
+            logger.warn("mapId called with a badXref " + ref);
+            return new HashSet<Xref>();
+        }
+        if (tgtDataSource == null){
+            throw new BridgeDBException("Target DataSource can not be null");
+        }
+        if (ref.getDataSource().equals(tgtDataSource)){
+            HashSet<Xref> results = new HashSet<Xref>();
+            results.add(ref);
+            return results;
+        }
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+            query.append(TARGET_ID_COLUMN_NAME);
+                query.append(" as ");
+                query.append(ID_COLUMN_NAME);
+                query.append(", ");
+            query.append(TARGET_DATASOURCE_COLUMN_NAME);
+                query.append(" as ");
+                query.append(SYSCODE_COLUMN_NAME);
+        query.append(" FROM ");
+            query.append(MAPPING_TABLE_NAME);
+                query.append(", ");
+            query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+            query.append(MAPPING_SET_ID_COLUMN_NAME);
+                query.append(" = ");
+                query.append(MAPPING_SET_TABLE_NAME);
+                query.append(".");
+                query.append(ID_COLUMN_NAME);
+        appendSourceXref(query, ref);
+        query.append(" AND ");
+            query.append(TARGET_DATASOURCE_COLUMN_NAME);
+            query.append(" = '");
+            query.append(insertEscpaeCharacters(tgtDataSource.getSystemCode()));
+            query.append("' ");
+
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        return resultSetToXrefSet(rs);
     }
 
     @Override

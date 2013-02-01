@@ -19,13 +19,18 @@
 //
 package org.bridgedb.mysql;
 
+import java.util.Set;
 import org.apache.log4j.Logger;
+import org.bridgedb.IDMapperException;
+import org.bridgedb.Xref;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Loads the test data in and then runs the IDmapper and IDCapabiliies tests
@@ -36,17 +41,31 @@ import org.junit.BeforeClass;
 public class MappingListenerTest extends org.bridgedb.mapping.MappingListenerTest {
     
     static final Logger logger = Logger.getLogger(MappingListenerTest.class);
-
+    static SQLIdMapper sqlIdMapper;
+    
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException{
         connectionOk = false;
         TestSqlFactory.checkMySQLAccess();
         listener = new SQLListener(true, StoreType.TEST);
         loadData();
-        idMapper = new SQLIdMapper(false, StoreType.TEST);
+        sqlIdMapper = new SQLIdMapper(false, StoreType.TEST);
+        idMapper  = sqlIdMapper;
         connectionOk = true;
         capabilities = idMapper.getCapabilities(); 
         logger.info("MySQL Setup successfull");
     }
-            
+    
+    @Test
+    public void testMapIDOneToOne() throws IDMapperException{
+        report("MapIDOneToOne");
+        Set<Xref> results = sqlIdMapper.mapID(map1xref1, DataSource2);
+        assertTrue(results.contains(map1xref2));
+        assertFalse(results.contains(map1xref3));
+        assertFalse(results.contains(map2xref1));
+        assertFalse(results.contains(map2xref2));
+        assertFalse(results.contains(map2xref2));
+    }
+ 
+      
 }
