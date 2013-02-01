@@ -96,7 +96,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP_URL)
     @Override
     public List<Mapping> mapURL(@QueryParam(WsUriConstants.URL) String URL,
@@ -115,7 +115,23 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML})
+    @Path("/" + WsUriConstants.MAP_URL + "XML")
+    public List<Mapping> mapURLXML(@QueryParam(WsUriConstants.URL) String URL,
+            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
+        return mapURL(URL, targetURISpace); 
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.MAP_URL + "JSON")
+    public List<Mapping> mapURLJSON(@QueryParam(WsUriConstants.URL) String URL,
+            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws IDMapperException {
+        return mapURL(URL, targetURISpace); 
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP_TO_URLS)
     @Override
     public List<Mapping> mapToURLs(
