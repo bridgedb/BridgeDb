@@ -37,8 +37,6 @@ org.bridgedb.linksets/conf/OPS-IMS
 org.bridgedb.linksets/rdf
 
 #ignore file created during tests
-org.bridgedb.transitive/test-data/linkset2To3.ttl
-org.bridgedb.tools.transitive/test-data/linkset2To3.ttl
 test/LinkSet*.ttl
 test/Minimum*.ttl
 
