@@ -1,0 +1,1 @@
+Please see the README.txt file in the BridgeDB root directory.

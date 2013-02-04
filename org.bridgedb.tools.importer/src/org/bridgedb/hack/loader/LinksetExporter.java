@@ -300,13 +300,13 @@ public class LinksetExporter {
         File dsfile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(dsfile);             
-        System.out.println("Parsing finished");
+        Reporter.println("Parsing finished");
         
         Class.forName("org.bridgedb.rdb.IDMapperRdb");
         File file = new File("C:/OpenPhacts/andra/");
         //exportFile(file);
         Set<DataSource> used = extractDataSources(file);     
-        System.out.println("finished extracting files " + used.size());
+        Reporter.println("finished extracting files " + used.size());
         
         for (DataSource ds:used){
             canExport(ds);
