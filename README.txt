@@ -2,18 +2,21 @@ Configuration
 -------------
 BridgeDB looks for the configuration file in the following locations. Once it 
 finds a configuration file the other locations are ignored. 
+* Directly in the run directory  (Mainly for java *.jar runs)
 * Environment Variable OPS-IMS-CONFIG: can be used to point to any location
 * Tomcat configuration folder: $CATALINA_HOME/conf/OPS-IMS
-* Class loader directory: The directory containing the jar files
-* /conf/OPS-IMS subdirectory of Class loader directory 
-     (For Tomcat this is TomcatXXX/conf/OPS-IMS)
-* ../conf/OPS-IMS sister directory of Class loader directory (Mainly for junit tests)
+* ../org.bridgedb.utils/resources
+* ../conf/OPS-IMS
+* conf/OPS-IMS
+* ../../BridgeDb/org.bridgedb.utils/resources
+* The jar/war file using getClass().getResource(name)
+* The jar/war by unzipping it
 
 The default configuration files can be found at
-	$BRIDGEDB_HOME/conf/OPS-IMS
+	$BRIDGEDB_HOME/org.bridgedb.utils/resources
 		
-The default configuration files show the defaults that will be used if no 
-configuration files are found. 
+The default configuration files will always be found by the ../org.bridgedb.utils/resources step during testing
+or by the last two steps during runs.
 
 You must either edit the configuration files to match your local setup or setup
 your data stores to use the defaults. If you edit the files to your configuration
@@ -35,12 +38,13 @@ databases
 Note that the sql script will fail, without reverting changes made up to the 
 point of failure, if any of the user accounts or databases already exist.
 
-
 RDF Repository Dependency
 -------------------------
+See: rdfConfig.txt
 SailNativeStore(s) will be created automatically as long as loader can 
 create/find the directory, 
 
+See: DirectoriesConfig.txt
 We recommend changing the relative directories to absolute directories.
 Please ensure the parent directories exist and have the correct permissions. 
 
@@ -48,6 +52,31 @@ The settings for testing (and therefor compilation) can be left as is.
 
 The BaseURI variable in the RDF configuration file should be the base of the 
 Webserver you will drop the web service into.
+
+IP_Register.txt
+--------------
+If you plan on using the WS to allow uploading of voids and linksets 
+the sending machines will have to be added to this list.
+The Sending machine can be added at runtime without the need to restart the service.
+
+log4j.properties
+---------------
+Edit this to change the logger setup.
+
+------
+Other files in $BRIDGEDB_HOME/org.bridgedb.utils/resources
+(Should not require a local change)
+
+DataSource.ttl 
+RDF format of all the BridgeDB DataSource(s) and Registered UriPatterns,
+
+DataSource.owl
+Ontology of above file. 
+Included for reference only.
+
+LinkSet,owl
+Ontology used by the Validator.
+Changes to this file will affect the Validator.
 
 -------------------------------------------------------------------------------
 
