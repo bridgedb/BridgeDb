@@ -171,7 +171,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     }
     
     public DataSource getDataSource(){
-        DataSourceUris main =  getMainDataSourceUris();
+        DataSourceUris main = getMainDataSourceUris();
         if (main == null){
             return DataSource.register(getUriPattern(), "Grouping for " + getUriPattern())
                     .urlPattern(getUriPattern())
@@ -413,5 +413,9 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         otherString = otherString.replaceFirst("https://","http://");
         return thisString.compareTo(otherString);
      }
+
+    public String getUri(String id) {
+        return nameSpace + id + postfix;
+    }
     
  }
