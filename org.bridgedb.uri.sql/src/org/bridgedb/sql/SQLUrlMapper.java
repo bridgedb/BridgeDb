@@ -73,11 +73,16 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     private static final String PROFILE_JUSTIFICATIONS_TABLE_NAME = "profileJustifications";
     private static final String PROFILE_TABLE_NAME = "profile";
     
+    private static final String CREATED_BY_COLUMN_NAME = "createdBy";
+    private static final String CREATED_ON_COLUMN_NAME = "createdOn";
     private static final String DATASOURCE_COLUMN_NAME = "dataSource";
+    private static final String JUSTIFICTAION_URI_COLUMN_NAME = "justificationURI";
     private static final String PREFIX_COLUMN_NAME = "prefix";
+    private static final String PROFILE_ID_COLUMN_NAME = "profileId";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
     private static final String MIMETYPE_COLUMN_NAME = "mimetype";
-
+    private static final String NAME_COLUMN_NAME = "name";
+    
     static final Logger logger = Logger.getLogger(SQLListener.class);
     
     /**
@@ -132,15 +137,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                     + "     mimeType VARCHAR(" + MIMETYPE_LENGTH + ") NOT NULL "
                     + "  ) ");
             sh.execute("CREATE TABLE " + PROFILE_TABLE_NAME + " ( " +
-            		"profileId INT " + autoIncrement + " PRIMARY KEY, " +
-            		"name VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " +
-            		"createdOn DATETIME, " +
-            		"createdBy VARCHAR(" + PREDICATE_LENGTH + ") " +
+            		PROFILE_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " +
+            		NAME_COLUMN_NAME + " VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " +
+            		CREATED_ON_COLUMN_NAME + " DATETIME, " +
+            		CREATED_BY_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") " +
             		")");
             sh.execute("CREATE TABLE " + PROFILE_JUSTIFICATIONS_TABLE_NAME + " ( " +
-            		"profileId INT NOT NULL, " +
-            		"justificationURI VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
-//            		"CONSTRAINT fk_profileId FOREIGN KEY (profileId) REFERENCES profile(profileId) ON DELETE CASCADE " +
+            		PROFILE_ID_COLUMN_NAME + " INT NOT NULL, " +
+            		JUSTIFICTAION_URI_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
             		")");
             sh.close();
 		} catch (SQLException e)
@@ -151,6 +155,103 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 		}
 	}
     
+    //profileURL can be null    
+    public Set<Xref> mapID(Xref ref, String profileURL, DataSource... tgtDataSource) throws BridgeDBException {
+        if (tgtDataSource == null || tgtDataSource.length == 0){
+            return mapIDSingleSource(ref, profileURL, null);
+        }
+        if (tgtDataSource.length == 1){
+            return mapIDSingleSource(ref, profileURL, tgtDataSource[0]);
+        }
+        HashSet<Xref> results = new HashSet<Xref>();
+        for (DataSource dataSource: tgtDataSource){
+            results.addAll(mapIDSingleSource(ref, profileURL, dataSource));
+        }
+        return results;
+    }
+    
+    //tgtDataSource can be null
+    //profileURL can be null
+    public Set<Xref> mapIDSingleSource(Xref ref, String profileURL, DataSource tgtDataSource) throws BridgeDBException {
+        if (badXref(ref)) {
+            logger.warn("mapId called with a badXref " + ref);
+            return new HashSet<Xref>();
+        }
+        StringBuilder query = startMappingQuery(ref);
+        appendMappingFromAndWhere(query, ref, profileURL, tgtDataSource);
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        Set<Xref> results = resultSetToXrefSet(rs);
+        if (ref.getDataSource().equals(tgtDataSource)){
+             results.add(ref);
+        }
+        return results;
+    }
+    
+    public Set<Mapping> mapFull (Xref sourceXref, String profileURL) throws BridgeDBException{
+        if (badXref(sourceXref)) {
+            logger.warn("mapId called with a badXref " + sourceXref);
+            return new HashSet<Mapping>();
+        }
+        StringBuilder query = startMappingQuery(sourceXref);
+        appendMappingFromAndWhere(query, sourceXref, profileURL, null);
+        appendMappingInfo(query);
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        Set<Mapping> results = resultSetToMappingSet(sourceXref, rs);
+        results.add(new Mapping(sourceXref.getId(), sourceXref.getDataSource().getSystemCode()));
+        return results;
+    }
+    
+    //tgtDataSource can be null
+    //profileURL can be null
+	public Set<Mapping> mapFull (Xref sourceXref, String profileURL, DataSource tgtDataSource) throws BridgeDBException{
+        if (badXref(sourceXref)) {
+            logger.warn("mapId called with a badXref " + sourceXref);
+            return new HashSet<Mapping>();
+        }
+        StringBuilder query = startMappingQuery(sourceXref);
+        appendMappingInfo(query);
+        appendMappingFromAndWhere(query, sourceXref, profileURL, tgtDataSource);
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        Set<Mapping> results = resultSetToMappingSet(sourceXref, rs);
+        if (sourceXref.getDataSource().equals(tgtDataSource)){
+            results.add(new Mapping(sourceXref.getId(), tgtDataSource.getSystemCode()));
+        }
+       return results;
+    }
+ 
+    //tgtDataSources can be null, empty or length1
+    //profileURL can be null
+    public Set<Mapping> mapFull (Xref ref, String profileURL, Collection<DataSource> tgtDataSources) 
+            throws BridgeDBException{
+        if (tgtDataSources == null || tgtDataSources.isEmpty()){
+            return mapFull (ref, profileURL);
+        } else {
+            Set<Mapping> results = new HashSet<Mapping>();
+            for (DataSource tgtDataSource: tgtDataSources){
+                results.addAll(mapFull(ref, profileURL, tgtDataSource));
+            }
+            return results;
+        }
+    }
+
     @Override
     public Map<String, Set<String>> mapURL(Collection<String> URLs, String profileURL, String... targetURISpaces) 
             throws BridgeDBException {
@@ -202,6 +303,51 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
+    private StringBuilder startMappingQuery(Xref ref){
+        StringBuilder query = new StringBuilder("SELECT ");
+            query.append(TARGET_ID_COLUMN_NAME);
+                query.append(" as ");
+                query.append(ID_COLUMN_NAME);
+                query.append(", ");
+            query.append(TARGET_DATASOURCE_COLUMN_NAME);
+                query.append(" as ");
+                query.append(SYSCODE_COLUMN_NAME);
+        return query;
+    }
+    
+    private void appendMappingInfo(StringBuilder query){
+        query.append(", ");
+        query.append(MAPPING_SET_ID_COLUMN_NAME);
+        query.append(", ");
+        query.append(PREDICATE_COLUMN_NAME);
+        query.append(", ");
+        query.append(MAPPING_TABLE_NAME);
+        query.append(".");
+        query.append(ID_COLUMN_NAME);
+        query.append(" as ");
+    }
+ 
+    private void appendMappingFromAndWhere(StringBuilder query, Xref ref, String profileURL, DataSource tgtDataSource) 
+            throws BridgeDBException{
+        query.append(" FROM ");
+            query.append(MAPPING_TABLE_NAME);
+                query.append(", ");
+            query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+            query.append(MAPPING_SET_ID_COLUMN_NAME);
+                query.append(" = ");
+                query.append(MAPPING_SET_DOT_ID_COLUMN_NAME);
+        appendSourceXref(query, ref);
+        if (tgtDataSource != null){
+            query.append(" AND ");
+                query.append(TARGET_DATASOURCE_COLUMN_NAME);
+                query.append(" = '");
+                query.append(insertEscpaeCharacters(tgtDataSource.getSystemCode()));
+                query.append("' ");   
+        }
+        appendProfileClause(query, profileURL);
+    }
+    
     /**
      * Adds the WHERE clause conditions for ensuring that the returned mappings
      * are from active linksets.
@@ -210,11 +356,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @param profileURL URL of the profile to use
      * @throws BridgeDbSqlException if the profile does not exist
      */
-    private void addProfileClause(StringBuilder query, String profileURL) throws BridgeDBException {
-        String profileJustificationQuery = "SELECT justificationURI FROM profileJustifications WHERE profileId = ";
+    private void appendProfileClause(StringBuilder query, String profileURL) throws BridgeDBException {
+        if (profileURL == null){
+            return;
+        }
         int profileID = extractIDFromURI(profileURL);
         if (profileID != 0) {
-        	try {
+            String profileJustificationQuery = "SELECT justificationURI FROM profileJustifications WHERE profileId = ";
+            try {
         		Statement statement = this.createStatement();    		
         		ResultSet rs = statement.executeQuery(profileJustificationQuery + "'" + profileID + "'");
         		if (!rs.next()) throw new BridgeDBException("Unknown profile identifier " + profileURL);
@@ -906,6 +1055,25 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
+    private Set<Mapping> resultSetToMappingSet(Xref sourceXref, ResultSet rs) throws BridgeDBException {
+        HashSet<Mapping> results = new HashSet<Mapping>();
+        try {
+            while (rs.next()){
+                Integer mappingId = rs.getInt("mappingId"); 
+                String targetId = rs.getString("id");
+                String targetSysCode = rs.getString("sysCode");
+                Integer mappingSetId = rs.getInt("mappingSetId");
+                String predicate = rs.getString("predicate");
+                Mapping urlMapping = new Mapping (mappingId, sourceXref.getId(), 
+                        sourceXref.getDataSource().getSystemCode(), predicate, targetId, targetSysCode, mappingSetId);       
+                results.add(urlMapping);
+            }
+            return results;
+       } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to parse results.", ex);
+       }
+    }
+
     private List<Mapping> resultSetToURLMappingList(ResultSet rs) throws BridgeDBException {
         ArrayList<Mapping> results = new ArrayList<Mapping>();
         try {
@@ -1220,7 +1388,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             }
             query.append(")");
         }
-        addProfileClause(query, profileURL);
+        appendProfileClause(query, profileURL);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -1232,7 +1400,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
     
-    private void addMapToSelf( Set<Mapping> mappings, String id, String sysCode, String... tgtSysCodes) throws BridgeDBException {
+     private void addMapToSelf( Set<Mapping> mappings, String id, String sysCode, String... tgtSysCodes) throws BridgeDBException {
         if (tgtSysCodes.length == 0){
            mappings.add(new Mapping (id, sysCode)); 
         } else {

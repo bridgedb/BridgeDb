@@ -508,7 +508,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
      * Converts a ResultSet to a Set of individual Xrefs.
      * @throws BridgeDBException 
      */
-    private Set<Xref> resultSetToXrefSet(ResultSet rs) throws BridgeDBException {
+    final Set<Xref> resultSetToXrefSet(ResultSet rs) throws BridgeDBException {
         HashSet<Xref> results = new HashSet<Xref>();
         try {
             while (rs.next()){

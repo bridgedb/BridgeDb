@@ -23,8 +23,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
+import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -41,6 +43,24 @@ import org.bridgedb.utils.BridgeDBException;
  */
 public interface URLMapper extends IDMapper{
 //TODO: Improve javadoc!
+    
+    
+    /**
+	 * Get all cross-references for the given entity, restricting the
+	 * result to contain only references from the given set of data sources.
+	 * @param ref the entity to get cross-references for. 
+     * @param tgtDataSources target ID types/data sources. Set this to null if you 
+     *   want to retrieve all results.
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public Set<Xref> mapID (Xref ref, String profileURL, DataSource... tgtDataSources) throws BridgeDBException;
+
+	public Set<Mapping> mapFull (Xref sourceXref, String profileURL) throws BridgeDBException;
+	public Set<Mapping> mapFull (Xref sourceXref, String profileURL, DataSource tgtDataSources) throws BridgeDBException;
+	public Set<Mapping> mapFull (Xref sourceXref, String profileURL, Collection<DataSource> tgtDataSources) throws BridgeDBException;
+
     /**
      * Similar to mapURL(String URL, String... targetURISpaces) except that more that one sourceURL can be provided 
      *   and the result is a mapping from each input sourceURL to the set off its mapped URLs.
