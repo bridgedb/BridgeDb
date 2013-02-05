@@ -29,6 +29,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -39,20 +40,22 @@ import org.bridgedb.utils.BridgeDBException;
  * To keep code size small URLs are represented as Strings.
  */
 public interface URLMapper extends IDMapper{
-
+//TODO: Improve javadoc!
     /**
      * Similar to mapURL(String URL, String... targetURISpaces) except that more that one sourceURL can be provided 
      *   and the result is a mapping from each input sourceURL to the set off its mapped URLs.
      * <p>
      * @See mapURL(String URL, String... targetURISpaces) for more details
      * @param sourceURLs One or more URL as a String
+     * @param profileURL the URL of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result.
      *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned. 
      * @return A map of each of the sourceURLs to the Set of URLs (as String) that would have been returned byu calling
      *    mapURL(sourceURL, targetURISpaces) individually.
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String... targetURISpaces) throws BridgeDBException;
+    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, String profileURL, String... targetURISpaces) 
+            throws BridgeDBException;
 
     /**
      * Similar to mapURL(String URL, String... targetURISpaces) except that the result will be a set of URLMappings.
@@ -60,12 +63,14 @@ public interface URLMapper extends IDMapper{
      * @See mapURL(String URL, String... targetURISpaces) for more details or the method.
      * @See URLMappings for details of what is included in the Results.
 	 * @param sourceURL the URL to get mappings/cross-references for. 
+	 * @param profileURL the URL of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
      *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
 	 * @return A Set containing the URL (in URLMapping Objects) that have been mapped/ cross referenced.
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Set<Mapping> mapURLFull(String URL, String... targetURISpaces) throws BridgeDBException;
+    public Set<Mapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) 
+            throws BridgeDBException;
 
     /**
 	 * Get all mappings/cross-references for the given URL, restricting the
@@ -79,12 +84,13 @@ public interface URLMapper extends IDMapper{
      * Similar to the mapID method in IDMapper.
      * 
 	 * @param sourceURL the URL to get mappings/cross-references for. 
+	 * @param profileURL the URL of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
      *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
 	 * @return A Set containing the URL (as Strings) that have been mapped/ cross referenced.
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
 	 */
-	public Set<String> mapURL (String URL, String... targetURISpaces) throws BridgeDBException;
+	public Set<String> mapURL (String URL, String profileURL, String... targetURISpaces) throws BridgeDBException;
 	
     /**
 	 * Get all mappings/cross-references for the given Xref, restricting the
@@ -103,10 +109,8 @@ public interface URLMapper extends IDMapper{
 	 * @return A Set containing the URL (as Strings) that have been mapped/ cross referenced.
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
 	 */
-	public Set<String> mapToURLs (Xref ref, String... targetURISpaces) throws BridgeDBException;
-    
-    //public Set<String> mapToURLs (Xref ref, UriPattern pattern);
-    
+	public Set<String> mapToURLs (Xref ref, String profileURL, String... targetURISpaces) throws BridgeDBException;
+
     /**
 	 * Get all mappings/cross-references for the given Xref, restricting the
 	 * result to contain only URLs from the given set of UriSpaces.
@@ -125,7 +129,8 @@ public interface URLMapper extends IDMapper{
      *    mapURL(Xref, targetURISpaces) individually.
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
 	 */
-	public  Map<Xref, Set<String>>  mapToURLs (Collection<Xref> srcXrefs, String... targetURISpaces) throws BridgeDBException;
+	public  Map<Xref, Set<String>>  mapToURLs (Collection<Xref> srcXrefs, String profileURL, String... targetURISpaces) 
+            throws BridgeDBException;
 
     /**
 	 * Get all mappings/cross-references for the given Xref, restricting the
@@ -144,7 +149,7 @@ public interface URLMapper extends IDMapper{
 	 * @return A Set containing the URL (in ToURLMapping Objects) that have been mapped/ cross referenced.
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
      */
-    public Set<Mapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws BridgeDBException;
+    public Set<Mapping> mapToURLsFull(Xref ref, String profileURL, String... targetURISpaces) throws BridgeDBException;
 
     /**
      * Check whether an URL is known by the given mapping source. 
@@ -253,7 +258,7 @@ public interface URLMapper extends IDMapper{
      * @See MappingSetInfo for details of exactly what is returned
      * @param sourceSysCode System Code of the Source DataSource
      * @param targetSysCode System Code of the Target DataSource
-     * @return Info for each Mapping Set
+     * @return Information for each Mapping Set
      * @throws BridgeDBException 
      */
      public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException;
@@ -265,6 +270,23 @@ public interface URLMapper extends IDMapper{
      * @throws BridgeDBException 
      */
     public Set<String> getUriSpaces(String dataSource) throws BridgeDBException;
+
+	/**
+	 * Obtains the Set of Profiles currently registered.
+	 * @See {@link ProfileInfo} for details of exactly what is returned
+	 * @return Information for each Profile
+	 * @throws BridgeDbSqlException 
+	 */
+	public List<ProfileInfo> getProfiles() throws BridgeDBException;
+
+	/**
+	 * Obtains the information about a specific profile.
+	 * @see {@link ProfileInfo} for details of exactly what is returned.
+	 * @param profileURI The URI of the profile to look up
+	 * @return Information about the specified profile
+	 * @throws BridgeDbSqlException
+	 */
+	public ProfileInfo getProfile(String profileURI) throws BridgeDBException;
 
     /**
      * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for the Source DataSource.

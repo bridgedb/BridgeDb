@@ -20,6 +20,7 @@
 package org.bridgedb.sql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -41,17 +42,17 @@ import org.bridgedb.utils.StoreType;
 public class SQLListener implements MappingListener{
 
     //Numbering should not clash with any GDB_COMPAT_VERSION;
-	public static final int SQL_COMPAT_VERSION = 21;
+	public static final int SQL_COMPAT_VERSION = 22;
   
     //Maximumn size in database
     protected static final int SYSCODE_LENGTH = 100;
-    private static final int FULLNAME_LENGTH = 100;
+    protected static final int FULLNAME_LENGTH = 100;
     private static final int MAINURL_LENGTH = 100;
     private static final int URLPATTERN_LENGTH = 400;
-    private static final int ID_LENGTH = 100;
+    protected static final int ID_LENGTH = 100;
     private static final int TYPE_LENGTH = 100;
     private static final int URNBASE_LENGTH = 100;
-    private static final int PREDICATE_LENGTH = 100;
+    protected static final int PREDICATE_LENGTH = 100;
     private static final int LINK_SET_ID_LENGTH = 100;
     private static final int KEY_LENGTH= 100; 
     private static final int PROPERTY_LENGTH = 100;
@@ -70,6 +71,7 @@ public class SQLListener implements MappingListener{
     static final String IS_PRIMARY_COLUMN_NAME = "isPrimary";
     static final String IS_PUBLIC_COLUMN_NAME = "isPublic";
     static final String IS_TRANSITIVE_COLUMN_NAME = "isTransitive";  
+    static final String JUSTIFICATION_COLUMN_NAME = "justification";
     static final String KEY_COLUMN_NAME = "theKey";
     static final String MAIN_URL_COLUMN_NAME = "mainUrl";
     static final String MAPPING_COUNT_COLUMN_NAME = "mappingCount";
@@ -95,7 +97,7 @@ public class SQLListener implements MappingListener{
     private int doubleCount = 0;  
     private StringBuilder insertQuery;
     private final boolean supportsIsValid;
-    private final String autoIncrement;
+    protected final String autoIncrement;
     private final static long REPORT_DELAY = 10000;
     private long lastUpdate = 0;
     
@@ -125,31 +127,35 @@ public class SQLListener implements MappingListener{
     }
         
     @Override
-    public synchronized int registerMappingSet(DataSource source, String predicate, DataSource target, 
+    public synchronized int registerMappingSet(DataSource source, String predicate, 
+    		String justification, DataSource target, 
             boolean symetric, boolean isTransitive) throws BridgeDBException {
         checkDataSourceInDatabase(source);
         checkDataSourceInDatabase(target);
-        int forwardId = registerMappingSet(source, target, predicate, isTransitive);
+        int forwardId = registerMappingSet(source, target, predicate, justification, isTransitive);
         if (symetric){
-            registerMappingSet(target, source, predicate, isTransitive);
+            registerMappingSet(target, source, predicate, justification, isTransitive);
         }
         return forwardId;
     }
 
     /**
-     * One way regiistration of Mapping Set.
+     * One way registration of Mapping Set.
+     * @param justification 
      * 
      */
-    private int registerMappingSet(DataSource source, DataSource target, String predicate, boolean isTransitive) 
+    private int registerMappingSet(DataSource source, DataSource target, String predicate, String justification, boolean isTransitive) 
             throws BridgeDBException {
         String query = "INSERT INTO " + MAPPING_SET_TABLE_NAME
                 + " (" + SOURCE_DATASOURCE_COLUMN_NAME + ", " 
                     + PREDICATE_COLUMN_NAME + ", " 
+                    + JUSTIFICATION_COLUMN_NAME + ", "
                     + TARGET_DATASOURCE_COLUMN_NAME + ", " 
                     + IS_TRANSITIVE_COLUMN_NAME + ") " 
                 + " VALUES (" 
                 + "'" + source.getSystemCode() + "', " 
                 + "'" + predicate + "', " 
+                + "'" + justification + "', "
                 + "'" + target.getSystemCode() + "',"
                 + "'" + booleanIntoQuery(isTransitive) + "')";
         Statement statement = createStatement();
@@ -364,6 +370,7 @@ public class SQLListener implements MappingListener{
                     + " (" + ID_COLUMN_NAME                   + " INT " + autoIncrement + " PRIMARY KEY, " 
                     + "     " + SOURCE_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
                     + "     " + PREDICATE_COLUMN_NAME         + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
+                    + "     " + JUSTIFICATION_COLUMN_NAME     + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
                     + "     " + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
                     + "     " + IS_TRANSITIVE_COLUMN_NAME     + " SMALLINT, "
                     + "     " + MAPPING_COUNT_COLUMN_NAME     + " INT "
@@ -418,6 +425,17 @@ public class SQLListener implements MappingListener{
 					"version of this software and databases");
 		}		
 	}
+	
+	private void checkConnection() throws BridgeDBException, SQLException {
+		if (possibleOpenConnection == null){
+			possibleOpenConnection = sqlAccess.getConnection();
+		} else if (possibleOpenConnection.isClosed()){
+			possibleOpenConnection = sqlAccess.getConnection();
+		}    else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
+			possibleOpenConnection.close();
+			possibleOpenConnection = sqlAccess.getConnection();
+		}
+	}
   
     /**
      * 
@@ -426,18 +444,45 @@ public class SQLListener implements MappingListener{
      */
     protected Statement createStatement() throws BridgeDBException{
         try {
-            if (possibleOpenConnection == null){
-                possibleOpenConnection = sqlAccess.getConnection();
-            } else if (possibleOpenConnection.isClosed()){
-                possibleOpenConnection = sqlAccess.getConnection();
-            }    else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
-                possibleOpenConnection.close();
-                possibleOpenConnection = sqlAccess.getConnection();
-            }  
+            checkConnection();  
             return possibleOpenConnection.createStatement();
         } catch (SQLException ex) {
             throw new BridgeDBException ("Error creating a new statement ", ex);
         }
+    }
+    
+    protected PreparedStatement createPreparedStatement(String sql) throws BridgeDBException {
+    	try {
+    		checkConnection();
+    		return possibleOpenConnection.prepareStatement(sql);
+    	} catch (SQLException ex) {
+    		throw new BridgeDBException ("Error creating a new prepared statement " + sql, ex);
+    	}
+    }
+    
+    protected void startTransaction() throws BridgeDBException {
+    	try {
+			checkConnection();
+			possibleOpenConnection.setAutoCommit(false);
+		} catch (SQLException ex) {
+			throw new BridgeDBException("Error starting transaction.", ex);
+		}
+    }
+    
+    protected void commitTransaction() throws BridgeDBException {
+    	try {
+			possibleOpenConnection.commit();
+		} catch (SQLException ex) {
+			throw new BridgeDBException("Error commiting transaction.", ex);
+		}
+    }
+    
+    protected void rollbackTransaction() throws BridgeDBException {
+    	try {
+    		possibleOpenConnection.rollback();    		
+    	} catch (SQLException ex) {
+    		throw new BridgeDBException("Error rolling back transaction.", ex);
+    	}
     }
     
     /**

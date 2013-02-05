@@ -19,6 +19,11 @@
 //
 package org.bridgedb.sql;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,20 +33,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.UriPattern;
+import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.Mapping;
 import org.bridgedb.url.URLListener;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.url.UriPatternMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 
 // SELECT id FROM test WHERE 'defdghij' like concat(prefix,'%', postfix);
 
@@ -60,7 +70,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     
     private static final String URL_TABLE_NAME = "url";
     private static final String MIMETYPE_TABLE_NAME = "mimeType";
-   
+    private static final String PROFILE_JUSTIFICATIONS_TABLE_NAME = "profileJustifications";
+    private static final String PROFILE_TABLE_NAME = "profile";
+    
     private static final String DATASOURCE_COLUMN_NAME = "dataSource";
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
@@ -98,6 +110,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         super.dropSQLTables();
  		dropTable(URL_TABLE_NAME);
  		dropTable(MIMETYPE_TABLE_NAME);
+ 		dropTable(PROFILE_TABLE_NAME);
+ 		dropTable(PROFILE_JUSTIFICATIONS_TABLE_NAME);
     }
  
     @Override
@@ -117,6 +131,17 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                     + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL, "
                     + "     mimeType VARCHAR(" + MIMETYPE_LENGTH + ") NOT NULL "
                     + "  ) ");
+            sh.execute("CREATE TABLE " + PROFILE_TABLE_NAME + " ( " +
+            		"profileId INT " + autoIncrement + " PRIMARY KEY, " +
+            		"name VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " +
+            		"createdOn DATETIME, " +
+            		"createdBy VARCHAR(" + PREDICATE_LENGTH + ") " +
+            		")");
+            sh.execute("CREATE TABLE " + PROFILE_JUSTIFICATIONS_TABLE_NAME + " ( " +
+            		"profileId INT NOT NULL, " +
+            		"justificationURI VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
+//            		"CONSTRAINT fk_profileId FOREIGN KEY (profileId) REFERENCES profile(profileId) ON DELETE CASCADE " +
+            		")");
             sh.close();
 		} catch (SQLException e)
 		{
@@ -127,22 +152,23 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	}
     
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> URLs, String... targetURISpaces) throws BridgeDBException {
+    public Map<String, Set<String>> mapURL(Collection<String> URLs, String profileURL, String... targetURISpaces) 
+            throws BridgeDBException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>>();
         for (String ref:URLs){
-            Set<String> mapped = this.mapURL(ref, targetURISpaces);
+            Set<String> mapped = this.mapURL(ref, profileURL, targetURISpaces);
             results.put(ref, mapped);
         }
         return results;
     }
 
     @Override
-    public Set<String> mapURL(String URL, String... targetURISpaces) throws BridgeDBException {
+    public Set<String> mapURL(String URL, String profileURL, String... targetURISpaces) throws BridgeDBException {
         String id = getId(URL);
         String uriSpace = getUriSpace(URL);
         String sysCode = getSysCode(uriSpace);
         String[] targetSysCodes = getSysCodes(targetURISpaces);
-        Set<Mapping> mappings = doMapping(id, sysCode, targetSysCodes);
+        Set<Mapping> mappings = doMapping(id, sysCode, profileURL, targetSysCodes);
         Set<String> results = new HashSet<String>();
         for (Mapping mapping: mappings){
             results.addAll(getURIs(mapping.getTargetId(), mapping.getTargetSysCode(), targetURISpaces));
@@ -152,21 +178,22 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Map<Xref, Set<String>> mapToURLs(Collection<Xref> srcXrefs, String... targetURISpaces) throws BridgeDBException {
+    public Map<Xref, Set<String>> mapToURLs(Collection<Xref> srcXrefs, String profileURL, String... targetURISpaces) 
+            throws BridgeDBException {
         HashMap<Xref, Set<String>> results = new HashMap<Xref, Set<String>>();
         for (Xref ref:srcXrefs){
-            Set<String> mapped = this.mapToURLs(ref, targetURISpaces);
+            Set<String> mapped = this.mapToURLs(ref, profileURL, targetURISpaces);
             results.put(ref, mapped);
         }
         return results;
     }
     
     @Override
-    public Set<String> mapToURLs(Xref ref, String... targetURISpaces) throws BridgeDBException {
+    public Set<String> mapToURLs(Xref ref, String profileURL, String... targetURISpaces) throws  BridgeDBException {
         String id = ref.getId();
         String sysCode = ref.getDataSource().getSystemCode();
         String[] targetSysCodes = getSysCodes(targetURISpaces);
-        Set<Mapping> mappings = doMapping(id, sysCode, targetSysCodes);
+        Set<Mapping> mappings = doMapping(id, sysCode, profileURL, targetSysCodes);
         Set<String> results = new HashSet<String>();
         for (Mapping mapping: mappings){
             results.addAll(getURIs(mapping.getTargetId(), mapping.getTargetSysCode(), targetURISpaces));
@@ -175,14 +202,55 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
+    /**
+     * Adds the WHERE clause conditions for ensuring that the returned mappings
+     * are from active linksets.
+     * 
+     * @param query Query with WHERE clause started
+     * @param profileURL URL of the profile to use
+     * @throws BridgeDbSqlException if the profile does not exist
+     */
+    private void addProfileClause(StringBuilder query, String profileURL) throws BridgeDBException {
+        String profileJustificationQuery = "SELECT justificationURI FROM profileJustifications WHERE profileId = ";
+        int profileID = extractIDFromURI(profileURL);
+        if (profileID != 0) {
+        	try {
+        		Statement statement = this.createStatement();    		
+        		ResultSet rs = statement.executeQuery(profileJustificationQuery + "'" + profileID + "'");
+        		if (!rs.next()) throw new BridgeDBException("Unknown profile identifier " + profileURL);
+        		query.append(" AND mappingSet.justification IN (");
+        		do {
+        			query.append("'").append(rs.getString("justificationURI")).append("'");
+        			if (!rs.isLast()) query.append(", ");
+        		} while (rs.next());
+        		query.append(")");
+        	} catch (SQLException ex) {
+        		throw new BridgeDBException("Error retrieving profile justifications for profileId " + profileURL, ex);
+        	}
+        }
+	}
+
+	private int extractIDFromURI(String profileURL) throws BridgeDBException {
+		try {
+			URI profileURI = new URIImpl(profileURL);
+			if (!profileURI.getNamespace().equals(RdfConfig.getProfileBaseURI())) {
+ 				throw new BridgeDBException("Invalid namespace for profile URI: " + profileURL);
+			}
+			int profileID = Integer.parseInt(profileURI.getLocalName());
+			return profileID;
+		} catch (IllegalArgumentException e) {
+			throw new BridgeDBException("Invalid URI form for a profileURL: " + profileURL);
+		}
+	}
+
     @Override
-    public Set<Mapping> mapURLFull(String URL, String... targetURISpaces) throws BridgeDBException {
+    public Set<Mapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws BridgeDBException {
         String id = getId(URL);
         String uriSpace = getUriSpace(URL);
         String sysCode = getSysCode(uriSpace);
         
         String[] targetSysCodes = getSysCodes(targetURISpaces);
-        Set<Mapping> results = doMapping(id, sysCode, targetSysCodes);
+        Set<Mapping> results = doMapping(id, sysCode, profileURL, targetSysCodes);
         for (Mapping mapping:results){
             mapping.addSourceURL(URL);
             addTargetURIs(mapping, targetURISpaces);
@@ -192,9 +260,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public Set<Mapping> mapToURLsFull(Xref ref, String... targetURISpaces) throws BridgeDBException {
+    public Set<Mapping> mapToURLsFull(Xref ref, String profileURL, String... targetURISpaces) throws  BridgeDBException {
         String[] targetSysCodes = getSysCodes(targetURISpaces);
-        Set<Mapping> results = doMapping(ref.getId(), ref.getDataSource().getSystemCode(), targetSysCodes);
+        Set<Mapping> results = doMapping(ref.getId(), ref.getDataSource().getSystemCode(), profileURL, targetSysCodes);
         for (Mapping mapping:results){
             addTargetURIs(mapping, targetURISpaces);
         }
@@ -411,7 +479,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     @Override
     public OverallStatistics getOverallStatistics() throws BridgeDBException {
         int numberOfMappings = getMappingsCount();
-        String linkSetQuery = "SELECT count(distinct(id)) as numberOfMappingSets, "
+        int numberOfProfiles = getNumberOfProfiles();
+        String linkSetQuery = "SELECT count(distinct(mappingSet.id)) as numberOfMappingSets, "
                 + "count(distinct(mappingSet.sourceDataSource)) as numberOfSourceDataSources, "
                 + "count(distinct(mappingSet.predicate)) as numberOfPredicates, "
                 + "count(distinct(mappingSet.targetDataSource)) as numberOfTargetDataSources "
@@ -419,13 +488,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         Statement statement = this.createStatement();
         try {
             ResultSet rs = statement.executeQuery(linkSetQuery);
-            if (rs.next()){
+			if (rs.next()){
                 int numberOfMappingSets = rs.getInt("numberOfMappingSets");
                 int numberOfSourceDataSources = rs.getInt("numberOfSourceDataSources");
                 int numberOfPredicates= rs.getInt("numberOfPredicates");
                 int numberOfTargetDataSources = rs.getInt("numberOfTargetDataSources");
                 return new OverallStatistics(numberOfMappings, numberOfMappingSets, 
-                        numberOfSourceDataSources, numberOfPredicates, numberOfTargetDataSources);
+                		numberOfSourceDataSources, numberOfPredicates, 
+                		numberOfTargetDataSources, numberOfProfiles);
             } else {
                 System.err.println(linkSetQuery);
                 throw new BridgeDBException("no Results for query. " + linkSetQuery);
@@ -435,6 +505,24 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDBException("Unable to run query. " + linkSetQuery, ex);
         }
     }
+
+    private int getNumberOfProfiles() throws BridgeDBException {
+    	String profileCountQuery = "SELECT count(*) as numberOfProfiles " +
+    			"FROM profile";
+    	Statement statement = this.createStatement();
+    	try {
+    		ResultSet rs = statement.executeQuery(profileCountQuery);
+    		if (rs.next()) {
+    			return rs.getInt("numberOfProfiles");
+    		} else {
+    			System.err.println(profileCountQuery);
+                throw new BridgeDBException("No Results for query. " + profileCountQuery);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDBException("Unable to run query. " + profileCountQuery, ex);
+        }      
+	}
 
     private int getMappingsCount() throws BridgeDBException{
         String linkQuery = "SELECT count(*) as numberOfMappings "
@@ -521,6 +609,55 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
         return resultSetToUriSpaces(rs);
     }
+    
+    @Override
+    public List<ProfileInfo> getProfiles() throws BridgeDBException {
+    	String query = ("SELECT profileId, name, createdOn, createdBy " +
+    			"FROM profile");
+    	Statement statement = this.createStatement();
+    	List<ProfileInfo> profiles = new ArrayList<ProfileInfo>();
+    	try {
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next()) {
+				int profileId = rs.getInt("profileId");
+				String name = rs.getString("name");
+				String createdOn = rs.getString("createdOn");
+				String createdBy = rs.getString("createdBy");
+				Set<String> justifications = getJustificationsForProfile(profileId);
+				String profileURL = RdfConfig.getProfileURI(profileId);
+				profiles.add(new ProfileInfo(profileURL, name, createdOn, createdBy, justifications));
+			}
+		} catch (SQLException e) {
+			throw new BridgeDBException("Unable to retrieve profiles.", e);
+		}
+    	return profiles;
+    }
+    
+    @Override
+    public ProfileInfo getProfile(String profileURI) throws BridgeDBException {
+    	int profileID = extractIDFromURI(profileURI);
+    	String query = ("SELECT profileId, name, createdOn, createdBy " +
+    			"FROM profile WHERE profileId = " + profileID);
+    	Statement statement = this.createStatement();
+    	ProfileInfo profile = null;
+		try {
+			ResultSet rs = statement.executeQuery(query);
+			if (!rs.next()) {
+				throw new BridgeDBException("No profile with the URI " + profileURI);
+			}
+			do {
+				int profileId = rs.getInt("profileId");
+				String name = rs.getString("name");
+				String createdOn = rs.getString("createdOn");
+				String createdBy = rs.getString("createdBy");
+				Set<String> justifications = getJustificationsForProfile(profileId);
+				profile = new ProfileInfo(profileURI, name, createdOn, createdBy, justifications);
+			} while (rs.next());
+		} catch (SQLException e) {
+			throw new BridgeDBException("Unable to retrieve profiles.", e);
+		}
+    	return profile;
+    }
 
     @Override
     public Set<String> getTargetUriSpace(int mappingSetId) throws BridgeDBException {
@@ -557,6 +694,24 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     // **** URLListener Methods
     
+    private Set<String> getJustificationsForProfile(int profileId) throws BridgeDBException {
+    	String query = ("SELECT justificationURI " +
+    			"FROM profileJustifications " +
+    			"WHERE profileId = " + profileId);
+    	Statement statement = this.createStatement();
+    	Set<String> justifications = new HashSet<String>();
+    	try {
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next()) {
+				String justification = rs.getString("justificationURI");
+				justifications.add(justification);
+			}
+		} catch (SQLException e) {
+			throw new BridgeDBException("Unable to retrieve profile justifications.", e);
+		}
+    	return justifications;
+	}
+
     @Override
     public void registerUriPattern(DataSource source, String uriPattern) throws BridgeDBException {
         checkDataSourceInDatabase(source);
@@ -612,14 +767,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
-    public int registerMappingSet(String sourceUriSpace, String predicate, String targetUriSpace, boolean symetric, boolean transative) 
-            throws BridgeDBException {
+    @Override
+    public int registerMappingSet(String sourceUriSpace, String predicate, String justification, String targetUriSpace, 
+            boolean symetric, boolean transative) throws BridgeDBException {
         DataSource source = getDataSource(sourceUriSpace);
-        DataSource target = getDataSource(targetUriSpace);  
-        if (source == target){
-            throw new BridgeDBException("source == target");
-        }
-         return registerMappingSet(source, predicate, target, symetric, transative);
+        DataSource target = getDataSource(targetUriSpace);      
+        return registerMappingSet(source, predicate, justification, target, symetric, transative);
     }
 
     @Override
@@ -954,6 +1107,69 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
+    public int registerProfile(String name, String createdOn, String createdBy, 
+    		List<String> justificationUris) 
+            throws BridgeDBException {
+    	//TODO: Need to validate that createdOn is a date
+    	//TODO: Need to validate that createdBy is a URI
+    	//TODO: Need to validate that justifcationUris is a List of URIs
+    	startTransaction();
+    	int profileId = createProfile(name, createdOn, createdBy);
+    	insertJustifications(profileId, justificationUris);
+    	commitTransaction();
+    	return profileId;
+    }
+
+	private int createProfile(String name, String createdOn, String createdBy)
+			throws BridgeDBException {
+		String insertStatement = "INSERT INTO profile "
+                    + "(name, createdOn, createdBy) " 
+                    + "VALUES (" 
+                    + "'" + name + "', "
+                    + "'" + createdOn + "', " 
+                    + "'" + createdBy + "')";
+		int profileId = 0;
+        try {
+        	Statement statement = createStatement();
+            statement.executeUpdate(insertStatement, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next())
+            {
+            	profileId = rs.getInt(1);
+            } else {
+            	rollbackTransaction();
+            	throw new BridgeDBException ("No result registering new profile " + insertStatement);
+            }            
+        } catch (BridgeDBException ex) {
+        	rollbackTransaction();
+        	throw ex;
+        } catch (SQLException ex) {
+        	rollbackTransaction();
+            throw new BridgeDBException ("Error registering new profile " + insertStatement, ex);
+        }
+        return profileId;
+	}
+	
+	private void insertJustifications(int profileId,
+			List<String> justificationUris) throws BridgeDBException {
+		String sql = "INSERT INTO profileJustifications " +
+				"(profileId, justificationURI) " +
+				"VALUES ( " + profileId + ", " + "?)";
+		try {
+			PreparedStatement statement = createPreparedStatement(sql);
+			for (String uri : justificationUris) {
+				statement.setString(1, uri);
+				statement.execute();
+			}
+		} catch (BridgeDBException ex) {
+			rollbackTransaction();
+			throw ex;
+		} catch (SQLException ex) {
+			rollbackTransaction();
+			throw new BridgeDBException("Error inserting justification.", ex);
+		}
+	}
+
     private void appendSystemCodes(StringBuilder query, String sourceSysCode, String targetSysCode) {
         boolean whereAdded = false;
         if (sourceSysCode != null && !sourceSysCode.isEmpty()){
@@ -974,18 +1190,19 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
-    private Set<Mapping> doMapping(String id, String sysCode, String... tgtSysCodes) throws BridgeDBException {
+    private Set<Mapping> doMapping(String id, String sysCode, String profileURL, String... tgtSysCodes) throws BridgeDBException {
         Set<Mapping> mappings;
         if (id == null || sysCode == null){
             mappings = new HashSet<Mapping>();
         } else {
-            mappings = doMappingQuery(id, sysCode, tgtSysCodes);
+            mappings = doMappingQuery(id, sysCode, profileURL, tgtSysCodes);
         }
         addMapToSelf(mappings, id, sysCode, tgtSysCodes);
         return mappings;
     }
 
-    private Set<Mapping> doMappingQuery(String id, String sysCode, String... tgtSysCodes) throws BridgeDBException {
+    private Set<Mapping> doMappingQuery(String id, String sysCode, String profileURL, String... tgtSysCodes) 
+            throws BridgeDBException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT targetId as id, targetDataSource as sysCode, mapping.id as mappingId, predicate, ");
         query.append("mappingSet.id as mappingSetId ");
@@ -1003,6 +1220,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             }
             query.append(")");
         }
+        addProfileClause(query, profileURL);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {

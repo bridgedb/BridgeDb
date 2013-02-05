@@ -41,6 +41,7 @@ import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.tools.metadata.constants.DctermsConstants;
+import org.bridgedb.tools.metadata.constants.DulConstants;
 import org.bridgedb.tools.metadata.constants.FoafConstants;
 import org.bridgedb.tools.metadata.constants.PavConstants;
 import org.bridgedb.url.URLMapper;
@@ -219,6 +220,7 @@ public class TransativeCreator {
         writeValue(targetDataSet);   
         semicolonNewlineTab();
         predicate = addPredicate(rdfWrapper, predicate);
+        addJustification(rdfWrapper);
         addLicense(rdfWrapper, leftLinkSet, leftContext, license);
         addDrived(derivedBy);
         return predicate;
@@ -260,6 +262,18 @@ public class TransativeCreator {
         writeValue(newPredicate);   
         semicolonNewlineTab();
         return newPredicate;
+    }
+    
+    private void addJustification(RdfWrapper rdfWrapper) throws IOException, RDFHandlerException {
+    	Value leftPredicate = 
+    			rdfWrapper.getTheSingeltonObject(leftLinkSet, DulConstants.EXPRESSES, leftContext);
+    	Value rightPredicate = 
+                rdfWrapper.getTheSingeltonObject(rightLinkSet, DulConstants.EXPRESSES, rightContext);  
+        Value justification = 
+        		JustificationMaker.combine(leftPredicate, rightPredicate);
+        writeValue(DulConstants.EXPRESSES);
+        writeValue(justification);   
+        semicolonNewlineTab();
     }
     
     private void addDrived(URI derivedBy) throws RDFHandlerException, IOException {

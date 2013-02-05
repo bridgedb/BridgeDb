@@ -43,6 +43,7 @@ public class LinksetStatementReaderTest extends TestUtils{
      public static final String INFO1 = "@prefix : <#> ."
                 + "@prefix void: <http://rdfs.org/ns/void#> ."
                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+                + "@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> ."
                 + "@prefix skos: <http://www.w3.org/2004/02/skos/core#> ."
                 + "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> ."
                 + "@prefix foo: <http://www.foo.com/>."
@@ -56,6 +57,7 @@ public class LinksetStatementReaderTest extends TestUtils{
                 + ":Test1_2 a void:Linkset  ;"
                 + "    void:subjectsTarget :TestDS1 ;"
                 + "    void:objectsTarget :TestDS2 ;"
+                + "    dul:expresses <http://www.bridgedb.org/unknown#justification> ;"
                 + "    void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ."
                 + "foo:T123 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/123> ."
                 + "foo:T456 <http://www.bridgedb.org/test#testPredicate> <http://www.example.com/456> ."
@@ -113,7 +115,7 @@ public class LinksetStatementReaderTest extends TestUtils{
         RDFFormat format = LinksetStatementReader.getRDFFormatByMimeType("text/turtle");
         LinksetStatementReader instance = new LinksetStatementReader(INFO1, format);
         Set result = instance.getVoidStatements();
-        assertEquals(8, result.size());
+        assertEquals(9, result.size());
     }
 
     /**

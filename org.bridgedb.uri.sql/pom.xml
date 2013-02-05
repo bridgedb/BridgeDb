@@ -81,13 +81,18 @@
             scope>system</scope>
             <systemPath>${project.basedir}/lib/virtjdbc4.jar</systemPath
         </dependency> -->
-	 <dependency>
-	  <groupId>org.bridgedb</groupId>
-	  <artifactId>org.bridgedb.tools.metadata</artifactId>
-	  <version>2.0.0-SNAPSHOT</version>
-	  <scope>test</scope>
-	  <type>jar</type>
-	 </dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-model</artifactId>
+			<version>${sesame.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>org.bridgedb</groupId>
+            <artifactId>org.bridgedb.tools.metadata</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
 	</dependencies>
     <pluginRepositories>
         <pluginRepository> 

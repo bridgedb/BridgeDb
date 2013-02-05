@@ -34,10 +34,12 @@ import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.linkset.LinksetInterfaceMinimal;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.url.Mapping;
 import org.bridgedb.url.URLMapper;
@@ -53,6 +55,8 @@ import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
+import org.bridgedb.ws.bean.ProfileBean;
+import org.bridgedb.ws.bean.ProfileBeanFactory;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLSearchBean;
@@ -99,9 +103,22 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.MAP_URL)
     @Override
     public List<Mapping> mapURL(@QueryParam(WsUriConstants.URL) String URL,
+    		@QueryParam(WsUriConstants.PROFILE_URL) String profileURL,
             @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
         if (logger.isDebugEnabled()){
-            logger.debug("mapURL called! URL = " + URL + " " + "targetURISpace = " + targetURISpace);
+            logger.debug("mapURL called! URL = " + URL);
+            logger.debug("   profileURL = " + profileURL);
+            if (targetURISpace!= null || !targetURISpace.isEmpty()){
+                logger.debug("   targetURISpace = " + targetURISpace);
+            }
+        }
+        if (URL == null) throw new BridgeDBException("URL parameter missing.");        
+        if (URL.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");        
+        if (profileURL == null || profileURL.isEmpty()){
+            profileURL = RdfConfig.getProfileURI(0);
+        }
+        if (targetURISpace == null) {
+        	targetURISpace = new ArrayList<String>();
         }
         if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
         if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
@@ -109,7 +126,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
         }
-        Set<Mapping> urlMappings = urlMapper.mapURLFull(URL, targetURISpaces);
+        Set<Mapping> urlMappings = urlMapper.mapURLFull(URL, profileURL, targetURISpaces);
         return new ArrayList<Mapping>(urlMappings); 
     }
 
@@ -120,6 +137,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public List<Mapping> mapToURLs(
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
+    		@QueryParam(WsUriConstants.PROFILE_URL) String profileURL,
             @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
          if (logger.isDebugEnabled()){
             logger.debug("mapToURLs called! id = " + id + " scrCode = " + scrCode + "targetURISpace = " + targetURISpace);
@@ -132,7 +150,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         for (int i = 0; i < targetURISpace.size(); i++){
             targetURISpaces[i] = targetURISpace.get(i);
         }
-        Set<Mapping> urlMappings = urlMapper.mapToURLsFull(source, targetURISpaces);
+        Set<Mapping> urlMappings = urlMapper.mapToURLsFull(source, profileURL, targetURISpaces);
         return new ArrayList<Mapping>(urlMappings); 
     }
 
@@ -234,6 +252,29 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return results;
     }
 
+	@Override
+	@GET
+	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@Path("/profile/{id}")
+	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDBException {
+		ProfileInfo profile = urlMapper.getProfile(RdfConfig.getProfileURI(Integer.parseInt(id)));
+		ProfileBean result = ProfileBeanFactory.asBean(profile);
+		return result;
+	}
+    
+	@Override
+    @GET
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Path("/profile") 
+	public List<ProfileBean> getProfiles() throws BridgeDBException {
+		List<ProfileInfo> profiles = urlMapper.getProfiles();
+		List<ProfileBean> results = new ArrayList<ProfileBean>();
+		for (ProfileInfo profile:profiles) {
+			results.add(ProfileBeanFactory.asBean(profile));
+		}
+		return results;
+	}
+    
     @Override
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

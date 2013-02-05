@@ -105,4 +105,8 @@ public class BridgeDBConstants {
 
     public static final URI HAS_DATA_SOURCE = new URIImpl(PREFIX + "hasDataSource");
     public static final URI IS_URI_PATTERN_OF = new URIImpl(PREFIX + "isUriPatternOf");
+    
+    private static final String bdb = "http://www.bridgedb.org/test#";	
+	public static final URI TEST_PREDICATE = new URIImpl(bdb + "testPredicate");
+
 }

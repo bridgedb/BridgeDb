@@ -33,6 +33,7 @@ import org.bridgedb.ws.WsUriConstants;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLSearchBean;
@@ -52,9 +53,11 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws BridgeDBException {
+    public List<Mapping> mapURL(String URL, String profileURL, List<String> targetUriSpace) 
+            throws  BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URL, URL);
+        params.add(WsUriConstants.PROFILE_URL, profileURL);
         for (String target:targetUriSpace){
             params.add(WsUriConstants.TARGET_URI_SPACE, target);
         }
@@ -68,10 +71,11 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<Mapping> mapToURLs(String id, String scrCode, List<String> targetUriSpace) throws BridgeDBException {
+    public List<Mapping> mapToURLs(String id, String scrCode, String profileURL, List<String> targetUriSpace) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.ID, id);
         params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
+        params.add(WsUriConstants.PROFILE_URL, profileURL);
         for (String target:targetUriSpace){
             params.add(WsUriConstants.TARGET_URI_SPACE, target);
         }
@@ -198,16 +202,26 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
                 webResource.path("/validateStringXML")
                 .type(MediaType.APPLICATION_XML)
                 .post(ValidationBean.class, input);
-//        System.out.println(response.getStatus());  
-//        System.out.println(response);  
-//        System.out.println(response.hasEntity());  
-//        System.out.println(response.getClass());  
-//        System.out.println(response.getType());  
-//         = response.getEntity(ValidationBean.class);
-        System.out.println(result);
         return result;
     }*/
 
+	@Override
+	public List<ProfileBean> getProfiles() {
+		List<ProfileBean> result = 
+				webResource.path("profile")
+				.accept(MediaType.APPLICATION_XML_TYPE)
+				.get(new GenericType<List<ProfileBean>>() {});
+		return result;
+	}
+
+	@Override
+	public ProfileBean getProfile(String id) throws BridgeDBException {
+		ProfileBean result = webResource.path("profile/" + id)
+		.accept(MediaType.APPLICATION_XML_TYPE)
+		.get(new GenericType<ProfileBean>() {});
+		return result;
+	}
+        
     @Override
     public String getSqlCompatVersion() throws BridgeDBException {
         //Make service call

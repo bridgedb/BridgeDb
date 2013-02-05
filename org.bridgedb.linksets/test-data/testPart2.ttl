@@ -1,10 +1,12 @@
 @prefix : <> .
 @prefix example: <http://example.com/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix foo: <http://www.foo.com/>.
 
 :Test1_2_part2 a void:Linkset  ;
     void:subjectsTarget example:TestDS1 ;
+    dul:expresses <http://www.bridgedb.org/unknown#justification> ;
     void:objectsTarget example:TestDS2 ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> .
 

@@ -51,7 +51,8 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         linksetLoader.clearExistingData(StoreType.TEST);
         linksetLoader.loadFile("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.VOID);
         linksetLoader.loadFile("../org.bridgedb.tools.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.VOID);
-        linksetLoader.loadFile("../org.bridgedb.tools.metadata/test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
+        //CB Jan 15 2013 Line below is different to none profile test
+        linksetLoader.loadFile("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
 	}
 
     @Test
@@ -69,7 +70,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
-        assertEquals ("http://data.kasabi.com/dataset/chembl-rdf/", info.getSourceSysCode());
+        assertEquals ("Chembl 13 Molecule", info.getSourceSysCode());
         assertEquals ("Cs", info.getTargetSysCode());
         assertEquals ("http://www.w3.org/2004/02/skos/core#exactMatch", info.getPredicate());
         //ystem.out.println(info);

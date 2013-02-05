@@ -87,6 +87,7 @@ public class TransativeCreatorTest extends TestUtils {
         }
     }
 
+    //TODO cleanup this test!
     @Test
     public void testCreateTransative() throws RDFHandlerException, IOException, BridgeDBException {
         report("CreateTransative");

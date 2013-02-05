@@ -1,9 +1,11 @@
 @prefix : <#> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix pav: <http://purl.org/pav/2.0/> .
+@prefix pav: <http://purl.org/pav/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 <> a void:DatasetDescription ;
@@ -17,6 +19,7 @@
     void:objectsTarget :chemblMolecule ;
     void:subset :conceptwiki ;
     void:linkPredicate skos:exactMatch ;
+    dul:expresses rdfs:isDefinedBy ;
     dcterms:creator <http://www.conceptwiki.org> .
 :chemspider a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;

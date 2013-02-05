@@ -73,7 +73,7 @@ public class LinksetStatementReaderAndImporterTest extends TestUtils{
         Set result = instance.getLinkStatements();
         assertEquals(3, result.size());
         result = instance.getVoidStatements();
-        assertEquals(4, result.size());
+        assertEquals(5, result.size());
     }
 
     /**
@@ -90,7 +90,7 @@ public class LinksetStatementReaderAndImporterTest extends TestUtils{
         Set result = instance.getLinkStatements();
         assertEquals(3, result.size());
         result = instance.getVoidStatements();
-        assertEquals(8, result.size());
+        assertEquals(9, result.size());
     }
 
     /**
@@ -105,6 +105,6 @@ public class LinksetStatementReaderAndImporterTest extends TestUtils{
         Set result = instance.getLinkStatements();
         assertEquals(3, result.size());
         result = instance.getVoidStatements();
-        assertEquals(4, result.size());
+        assertEquals(5, result.size());
     }
 }

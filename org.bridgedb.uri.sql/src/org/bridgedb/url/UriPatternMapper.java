@@ -101,6 +101,9 @@ public class UriPatternMapper {
                .urlPattern("http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id")
                 .idExample("6511").asDataSource();
        map.put("http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id", dataSource);
+       dataSource = DataSource.register("ChEBI", "Chemical Entities of Biological Interest")
+    		   .urlPattern("http://purl.obolibrary.org/obo/$id").idExample("CHEBI_16986").asDataSource();
+       map.put("http://purl.obolibrary.org/obo/$id", dataSource);
        return map;
     }
     

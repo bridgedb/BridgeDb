@@ -105,7 +105,7 @@ public class RdfFactory {
         return new URIImpl(RdfConfig.getTheBaseURI() + "linkset/" + linksetId);  
     }
   
-    public static URI getVoidURL(int voidId) throws BridgeDBException{
+    public static URI getVoidURL(int voidId) throws BridgeDBException {
         return new URIImpl(RdfConfig.getTheBaseURI() + "void/" + voidId);  
     }
 

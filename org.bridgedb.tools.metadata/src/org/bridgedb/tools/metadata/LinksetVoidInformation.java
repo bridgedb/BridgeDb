@@ -20,8 +20,12 @@
 package org.bridgedb.tools.metadata;
 
 import java.util.Set;
+import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.tools.metadata.constants.DulConstants;
+import org.bridgedb.tools.metadata.constants.OwlConstants;
 import org.bridgedb.tools.metadata.constants.PavConstants;
+import org.bridgedb.tools.metadata.constants.SkosConstants;
 import org.bridgedb.tools.metadata.rdf.LinksetStatements;
 import org.bridgedb.tools.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.tools.metadata.validator.ValidationType;
@@ -41,8 +45,10 @@ public class LinksetVoidInformation implements MetaData {
     private Resource linksetResource = null;
     private boolean transative; 
     private String predicate = null;
+    private boolean isSymmetric;
     private String subjectUriSpace = null;
     private String targetUriSpace = null;
+    private String linksetJustification = null;
     private String error = "";
     private int correctLinks = 0;
     private int wrongSubject = 0;
@@ -61,6 +67,8 @@ public class LinksetVoidInformation implements MetaData {
         collection = new MetaDataCollection(source, reader.getVoidStatements(), specification);
         ResourceMetaData linkset = findLinkSet();
         predicate = extractSingleStringByPredicate(linkset, VoidConstants.LINK_PREDICATE);  
+        linksetJustification = extractSingleStringByPredicate(linkset, DulConstants.EXPRESSES);  
+        isSymmetric = checkIsSymmetric();
         transative =  checkIsTransative(linkset);
         ResourceMetaData resourceMetaData = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
         subjectUriSpace = extractSingleStringByPredicate(resourceMetaData, VoidConstants.URI_SPACE_URI);
@@ -321,6 +329,37 @@ public class LinksetVoidInformation implements MetaData {
     @Override
     public Set<Statement> getRDF() {
         return collection.getRDF();
+    }
+
+    private boolean checkIsSymmetric() {
+        if (predicate.equals(OwlConstants.EQUIVALENT_CLASS.toString())){ 
+            return true; 
+        }
+        if (predicate.equals(OwlConstants.SAME_AS.toString())){ 
+           return true; 
+        }
+        if (predicate.equals(SkosConstants.EXACT_MATCH.toString())){ 
+           return true; 
+        }
+        if (predicate.equals(SkosConstants.CLOSE_MATCH.toString())){ 
+           return true; 
+        }
+        if (predicate.equals(SkosConstants.RELATED_MATCH.toString())){ 
+           return true; 
+        }
+        if (predicate.equals(BridgeDBConstants.TEST_PREDICATE.toString())){ 
+           return true; 
+        }
+        return false;
+   }
+
+    public boolean isSymmetric() {
+	   //current assumption is all linksets are semaantic
+	   return isSymmetric;
+    }
+   
+    public String getJustification() {
+		return linksetJustification;
     }
 
     

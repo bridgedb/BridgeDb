@@ -18,6 +18,7 @@
 // limitations under the License.
 //
 package org.bridgedb.linkset;
+
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -27,7 +28,7 @@ import org.bridgedb.utils.StoreType;
  * @author Christian
  */
 public class SetupLoaderWithTestData {
-        
+
    private static final boolean LOAD_DATA = true;
    
    public static void main(String[] args) throws BridgeDBException {

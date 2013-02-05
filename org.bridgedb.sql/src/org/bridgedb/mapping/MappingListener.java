@@ -33,6 +33,7 @@ public interface MappingListener {
      * Loads all the meta data for a Mapping Set.
      * @param source The SysCode of DataSource part of the source xref/url
      * @param predicate The predicate to be associated. Can be null
+     * @param justification The justification for the link. Can be null
      * @param target The SysCode of DataSource part of the target xref/url
      * @param symetric Flag to say if mapping should be loaded one way of both ways. 
      *     Creates two mapping sets this one and the inverse with one number higher.
@@ -40,7 +41,9 @@ public interface MappingListener {
      * @return Id of the forward mappingSet.
      * @throws BridgeDBException 
      */
-    public int registerMappingSet(DataSource source, String predicate, DataSource target, 
+	//XXX-AG: Assuming justification can be null since predicate can be null
+    public int registerMappingSet(DataSource source, String predicate, 
+    		String justification, DataSource target, 
             boolean symetric, boolean transative) throws BridgeDBException;
     
     /**

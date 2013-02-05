@@ -1,28 +1,41 @@
 @prefix : <#> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix pav: <http://purl.org/pav/2.0/> .
+@prefix pav: <http://purl.org/pav/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 <> a void:DatasetDescription ;
     dcterms:title "ConceptWiki to ChEMBL Molecule Linkset"^^xsd:string ;
     dcterms:description """A linkset connecting ConceptWiki concepts 
     	with ChEMBL-RDF Molecules."""^^xsd:string;
+    pav:createdBy <http://www.foo.com/> ;
+    pav:createdOn "2012-08-06"^^xsd:date;
     foaf:primaryTopic :conceptwiki_chemblMolecule .
 
 :conceptwiki_chemblMolecule a void:Linkset ;
+    dcterms:license "unknown" ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemblMolecule ;
     void:subset :conceptwiki ;
     void:linkPredicate skos:exactMatch ;
+    dul:expresses rdfs:isDefinedBy ;
+    dcterms:created "2012-02-28"^^xsd:date ;
     dcterms:creator <http://www.conceptwiki.org> .
 :conceptwiki a void:Dataset ;
 	dcterms:title "ConceptWiki"^^xsd:string ;
+    dcterms:license "unknown" ;
+    dcterms:subject "unknown" ;
+    pav:retrievedOn "2012-02-28"^^xsd:date ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chemblMolecule a void:Dataset ;
 	dcterms:title "ChEMBL Molecule"^^xsd:string ;
+    dcterms:license "unknown" ;
+    dcterms:subject "unknown" ;
+    pav:version "unknown" ;
     void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/molecule/> .
    
 <http://www.conceptwiki.org/concept/38932552-111f-4a4e-a46a-4ed1d7bdf9d5> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m276734> .

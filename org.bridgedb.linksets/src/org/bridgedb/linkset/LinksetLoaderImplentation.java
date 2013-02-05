@@ -181,7 +181,9 @@ public class LinksetLoaderImplentation{
         //TODO work out way to do this
         symmetric = true;
         boolean transative = information.isTransative();
-        mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, targetUriSpace, symmetric, transative);   
+        String justification = information.getJustification();
+        mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, justification, targetUriSpace, 
+                symmetric, transative);   
         linksetContext = RdfFactory.getLinksetURL(mappingId);
         linksetResource = information.getLinksetResource();
         if (symmetric) {

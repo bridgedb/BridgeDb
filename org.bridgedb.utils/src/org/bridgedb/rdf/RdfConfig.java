@@ -56,6 +56,18 @@ public class RdfConfig {
         return baseURI;
     }
     
+    public static String getProfileBaseURI() throws BridgeDBException{
+        return getTheBaseURI() + "profile/";  
+    }
+
+    public static String getProfileURI(int linksetId) throws BridgeDBException{
+        return getProfileBaseURI() + linksetId;  
+    }
+  
+    public static String getProperty(String key) throws BridgeDBException{
+        return getProperties().getProperty(key);
+    }
+    
     public static File getDataDir(StoreType storeType) throws BridgeDBException {
         switch (storeType){
             case LIVE: 
@@ -72,12 +84,7 @@ public class RdfConfig {
     public static boolean uniqueLoadRepository() throws BridgeDBException{
         return (!getSailNativeStore().equals(getLoadSailNativeStore()));
     }
-    
-    
-    public static String getProperty(String key) throws BridgeDBException{
-        return getProperties().getProperty(key);
-    }
-    
+       
     private static String getSailNativeStore() throws BridgeDBException{
         String result;
         result = getProperties().getProperty(SAIL_NATIVE_STORE_PROPERTY).trim();

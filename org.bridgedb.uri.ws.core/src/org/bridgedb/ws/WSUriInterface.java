@@ -25,6 +25,7 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
+import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLExistsBean;
 import org.bridgedb.ws.bean.URLSearchBean;
@@ -36,9 +37,11 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSUriInterface extends WSCoreInterface{
 
-    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws BridgeDBException;
+    public List<Mapping> mapURL(String URL, String profileURL, List<String> targetUriSpace) throws BridgeDBException;
+
+//    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws BridgeDBException;
     
-    public List<Mapping> mapToURLs(String id, String scrCode, List<String> targetUriSpace) 
+    public List<Mapping> mapToURLs(String id, String scrCode, String profileURL, List<String> targetUriSpace) 
             throws BridgeDBException;
 
     public URLExistsBean URLExists(String URL) throws BridgeDBException;
@@ -58,6 +61,13 @@ public interface WSUriInterface extends WSCoreInterface{
     public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws BridgeDBException;
 
     public DataSourceUriSpacesBean getDataSource(String dataSource) throws BridgeDBException;
+    
+    public List<ProfileBean> getProfiles() throws BridgeDBException;
+    
+    public ProfileBean getProfile(String id) throws BridgeDBException;
+    
+    //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
+    //        String includeWarnings) throws BridgeDBException;
 
     public String getSqlCompatVersion() throws BridgeDBException;
      

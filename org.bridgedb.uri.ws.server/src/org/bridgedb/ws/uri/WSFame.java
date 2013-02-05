@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.url.Mapping;

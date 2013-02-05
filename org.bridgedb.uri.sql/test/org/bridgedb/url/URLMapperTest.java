@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.Xref;
+import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
@@ -55,9 +56,9 @@ public abstract class URLMapperTest extends URLListenerTest{
         sourceURLs.add(map2URL2);
         sourceURLs.add(mapBadURL1);
         assertNotNull(map1URL1);
-        assertNotNull(map2URL2);
+        assertNotNull(map2URL2);     
         assertNotNull(mapBadURL1);
-        Map<String, Set<String>> results = urlMapper.mapURL(sourceURLs);
+        Map<String, Set<String>> results = urlMapper.mapURL(sourceURLs, RdfConfig.getProfileURI(0));
         Set<String> resultSet = results.get(map1URL1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1URL2));
@@ -90,7 +91,7 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertNotNull(map1URL1);
         assertNotNull(map2URL2);
         assertNotNull(mapBadURL1);
-        Map<Xref, Set<String>> results = urlMapper.mapToURLs(sourceXrefs);
+        Map<Xref, Set<String>> results = urlMapper.mapToURLs(sourceXrefs, RdfConfig.getProfileURI(0));
         Set<String> resultSet = results.get(map1xref1);
         assertNotNull(resultSet);
         assertTrue(resultSet.contains(map1URL2));
@@ -116,7 +117,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapIDOneToManyNoDataSources() throws BridgeDBException{
         report("MapIDOneToManyNoDataSources");
-        Set<String> results = urlMapper.mapURL(map1URL1);
+        Set<String> results = urlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0));
         assertTrue(results.contains(map1URL2));
         assertTrue(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -127,7 +128,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testToURLsOneToManyNoDataSources() throws BridgeDBException{
         report("MapXrefOneToManyNoDataSources");
-        Set<String> results = urlMapper.mapToURLs(map1xref1);
+        Set<String> results = urlMapper.mapToURLs(map1xref1, RdfConfig.getProfileURI(0));
         assertTrue(results.contains(map1URL2));
         assertTrue(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -138,7 +139,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapFullOneToManyNoDataSources() throws BridgeDBException{
         report("MapFullOneToManyNoDataSources");
-        Set<Mapping> results = urlMapper.mapURLFull(map3URL3);
+        Set<Mapping> results = urlMapper.mapURLFull(map3URL3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
         for (Mapping URLMapping:results){
             if (URLMapping.getTargetURL().contains(map3URL3)){
@@ -164,7 +165,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapXrefFullOneToManyNoDataSources() throws BridgeDBException{
         report("MapXrefFullOneToManyNoDataSources");
-        Set<Mapping> results = urlMapper.mapToURLsFull(map3xref3);
+        Set<Mapping> results = urlMapper.mapToURLsFull(map3xref3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
         for (Mapping URLMapping:results){
             if (URLMapping.getTargetURL().contains(map3URL3)){
@@ -190,7 +191,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapIDOneBad() throws BridgeDBException{
         report("MapIDOneBad");
-        Set<String> results = urlMapper.mapURL(mapBadURL1);
+        Set<String> results = urlMapper.mapURL(mapBadURL1, RdfConfig.getProfileURI(0));
         //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
         //Still optional as I am not sure text does.
         //Not all mappers will have the pattern matching to notice this is an invalid URI
@@ -200,21 +201,21 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapFullOneBad() throws BridgeDBException{
         report("MapFullOneBad");
-        Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1);
+        Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1, RdfConfig.getProfileURI(0));
         assertTrue(results.size() <= 1);
     }
 
     @Test
     public void testMapFullOneBadOneNameSpace() throws BridgeDBException{
         report("MapFullOneBadOneNameSpace");
-        Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1, URISpace2);
+        Set<Mapping> results = urlMapper.mapURLFull(mapBadURL1, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.size() <= 1);
     }
 
     @Test
     public void testMapIDOneToManyWithOneDataSource() throws BridgeDBException{
         report("MapIDOneToManyWithOneDataSource");
-        Set<String> results = urlMapper.mapURL(map1URL1, URISpace2);
+        Set<String> results = urlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.contains(map1URL2));
         assertFalse(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -225,7 +226,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapToURLsOneToManyWithOneDataSource() throws BridgeDBException{
         report("MapIDOneToManyWithOneDataSource");
-        Set<String> results = urlMapper.mapToURLs(map1xref1, URISpace2);
+        Set<String> results = urlMapper.mapToURLs(map1xref1, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.contains(map1URL2));
         assertFalse(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -236,7 +237,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapToSelfWithOneDataSource() throws BridgeDBException{
         report("MapToSelfWithOneDataSource");
-        Set<String> results = urlMapper.mapURL(map1URL2, URISpace2);
+        Set<String> results = urlMapper.mapURL(map1URL2, RdfConfig.getProfileURI(0), URISpace2);
         assertTrue(results.contains(map1URL2));
         assertFalse(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -247,7 +248,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapIDOneToManyWithTwoDataSources() throws BridgeDBException{
         report("MapIDOneToManyWithTwoDataSources");
-        Set<String> results = urlMapper.mapURL(map1URL1, URISpace2, URISpace3);
+        Set<String> results = urlMapper.mapURL(map1URL1, RdfConfig.getProfileURI(0), URISpace2, URISpace3);
         assertTrue(results.contains(map1URL2));
         assertTrue(results.contains(map1URL3));
         assertFalse(results.contains(map2URL1));
@@ -258,7 +259,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapIDOneToManyNoDataSources2() throws BridgeDBException{
         report("MapIDOneToManyNoDataSources");
-        Set<String> results = urlMapper.mapURL(map2URL1);
+        Set<String> results = urlMapper.mapURL(map2URL1, RdfConfig.getProfileURI(0));
         assertTrue(results.contains(map2URL2));
         assertTrue(results.contains(map2URL3));
         assertFalse(results.contains(map1URL2));
@@ -268,7 +269,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testMapNoneExistingDataSource() throws BridgeDBException{
         report("MapNoneExistingDataSource");
-        Set<String> results = urlMapper.mapURL(map1URL2, "http://wwww.THIS.should.NOT.Be.InThe.Data.zzz");
+        Set<String> results = urlMapper.mapURL(map1URL2, RdfConfig.getProfileURI(0), "http://wwww.THIS.should.NOT.Be.InThe.Data.zzz");
         assertEquals(0,results.size());
     }
 
@@ -336,7 +337,7 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testGetMapping() throws BridgeDBException {
         report("GetMapping");
-        Set<Mapping> results = urlMapper.mapURLFull(map3URL3);
+        Set<Mapping> results = urlMapper.mapURLFull(map3URL3, RdfConfig.getProfileURI(0));
         Integer mappingId = null;
         Integer setId = null;
         for (Mapping URLMapping:results){
