@@ -219,7 +219,17 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
     
-	public Set<Mapping> mapFullByDataSource (Xref sourceXref, String profileURL, DataSource tgtDataSource) throws BridgeDBException{
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileURL) throws BridgeDBException {
+        Xref sourceXref = toXref(sourceUri);
+        Set<Mapping> results = mapFull(sourceXref,  profileURL);
+        for (Mapping result:results){
+            result.addSourceURL(sourceUri);
+        }
+        return results;
+    }
+
+	public Set<Mapping> mapFull (Xref sourceXref, String profileURL, DataSource tgtDataSource) throws BridgeDBException{
         if (badXref(sourceXref)) {
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Mapping>();
@@ -249,43 +259,56 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
  
-    public Set<Mapping> mapFullByDataSource (Xref ref, String profileURL, DataSource... tgtDataSources) 
+    @Override
+    public Set<Mapping> mapFull (Xref ref, String profileURL, DataSource... tgtDataSources) 
             throws BridgeDBException{
         if (tgtDataSources == null || tgtDataSources.length == 0){
             return mapFull (ref, profileURL);
         } else {
             Set<Mapping> results = new HashSet<Mapping>();
             for (DataSource tgtDataSource: tgtDataSources){
-                results.addAll(mapFullByDataSource(ref, profileURL, tgtDataSource));
+                results.addAll(mapFull(ref, profileURL, tgtDataSource));
             }
             return results;
         }
     }
 
-	public Set<Mapping> mapFullByUriPattern (Xref sourceXref, String profileURL, UriPattern tgtUriPattern) throws BridgeDBException {
+	public Set<Mapping> mapFull (Xref sourceXref, String profileURL, UriPattern tgtUriPattern) throws BridgeDBException {
         if (tgtUriPattern == null){
             return mapFull(sourceXref, profileURL);
         }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
-        Set<Mapping> results = mapFullByDataSource(sourceXref, profileURL, tgtDataSource);
+        Set<Mapping> results = mapFull(sourceXref, profileURL, tgtDataSource);
         for (Mapping result:results){
             result.addTargetURL(tgtUriPattern.getUri(result.getTargetId()));
         }
         return results;
     }
 
-    public Set<Mapping> mapFullByUriPattern (Xref ref, String profileURL, UriPattern... tgtUriPatterns) 
+    @Override
+    public Set<Mapping> mapFull (Xref sourceXref, String profileURL, UriPattern... tgtUriPatterns) 
             throws BridgeDBException{
         if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-            return mapFull (ref, profileURL);
+            return mapFull (sourceXref, profileURL);
         } else {
             Set<Mapping> results = new HashSet<Mapping>();
             for (UriPattern tgtUriPattern: tgtUriPatterns){
-                results.addAll(mapFullByUriPattern(ref, profileURL, tgtUriPattern));
+                results.addAll(mapFull(sourceXref, profileURL, tgtUriPattern));
             }
             return results;
         }
     }
+
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileURL, UriPattern... tgtUriPatterns) throws BridgeDBException {
+        Xref sourceXref = toXref(sourceUri);
+        Set<Mapping> results = mapFull(sourceXref,  profileURL, tgtUriPatterns);
+        for (Mapping result:results){
+            result.addSourceURL(sourceUri);
+        }
+        return results;
+    }
+
 
     @Override
     public Map<String, Set<String>> mapURL(Collection<String> URLs, String profileURL, String... targetURISpaces) 
@@ -1553,6 +1576,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             }
             logger.warn("Unable to map " + source + " to any results for " + targetSt);
         } 
+    }
+
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileURL, DataSource... tgtDataSources) throws BridgeDBException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
  }

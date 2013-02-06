@@ -57,10 +57,22 @@ public interface URLMapper extends IDMapper{
 	 */
 	public Set<Xref> mapID (Xref ref, String profileURL, DataSource... tgtDataSources) throws BridgeDBException;
 
-	public Set<Mapping> mapFullByDataSource (Xref sourceXref, String profileURL, DataSource... tgtDataSources) 
+    public Set<Mapping> mapFull (Xref sourceXref, String profileURL) 
             throws BridgeDBException;
 
-	public Set<Mapping> mapFullByUriPattern (Xref sourceXref, String profileURL, UriPattern... tgtUriPattern) 
+	public Set<Mapping> mapFull (Xref sourceXref, String profileURL, DataSource... tgtDataSources) 
+            throws BridgeDBException;
+
+    public Set<Mapping> mapFull (Xref sourceXref, String profileURL, UriPattern... tgtUriPattern) 
+            throws BridgeDBException;
+
+	public Set<Mapping> mapFull (String sourceUri, String profileURL) 
+            throws BridgeDBException;
+
+    public Set<Mapping> mapFull (String sourceUri, String profileURL, DataSource... tgtDataSources) 
+            throws BridgeDBException;
+
+	public Set<Mapping> mapFull (String sourceUri, String profileURL, UriPattern... tgtUriPattern) 
             throws BridgeDBException;
 
     /**
