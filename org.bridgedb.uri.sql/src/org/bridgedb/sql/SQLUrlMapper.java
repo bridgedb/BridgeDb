@@ -187,6 +187,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
         Set<Xref> results = resultSetToXrefSet(rs);
+        //Add mapping to self
         if (ref.getDataSource().equals(tgtDataSource)){
              results.add(ref);
         }
@@ -209,16 +210,22 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
         Set<Mapping> results = resultSetToMappingSet(sourceXref, rs);
+        //Add mapping to self
         results.add(new Mapping(sourceXref.getId(), sourceXref.getDataSource().getSystemCode()));
+        //Add targetUris
+        for (Mapping mapping: results){
+            mapping.addTargetURLs(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
+        }
         return results;
     }
     
-    //tgtDataSource can be null
-    //profileURL can be null
-	public Set<Mapping> mapFull (Xref sourceXref, String profileURL, DataSource tgtDataSource) throws BridgeDBException{
+	public Set<Mapping> mapFullByDataSource (Xref sourceXref, String profileURL, DataSource tgtDataSource) throws BridgeDBException{
         if (badXref(sourceXref)) {
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Mapping>();
+        }
+        if (tgtDataSource == null){
+            return mapFull (sourceXref, profileURL);
         }
         StringBuilder query = startMappingQuery(sourceXref);
         appendMappingInfo(query);
@@ -231,22 +238,50 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
         Set<Mapping> results = resultSetToMappingSet(sourceXref, rs);
+        //Add map to self if correct
         if (sourceXref.getDataSource().equals(tgtDataSource)){
             results.add(new Mapping(sourceXref.getId(), tgtDataSource.getSystemCode()));
         }
-       return results;
+        //Add targetUris
+        for (Mapping mapping: results){
+            mapping.addTargetURLs(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
+        }
+        return results;
     }
  
-    //tgtDataSources can be null, empty or length1
-    //profileURL can be null
-    public Set<Mapping> mapFull (Xref ref, String profileURL, Collection<DataSource> tgtDataSources) 
+    public Set<Mapping> mapFullByDataSource (Xref ref, String profileURL, DataSource... tgtDataSources) 
             throws BridgeDBException{
-        if (tgtDataSources == null || tgtDataSources.isEmpty()){
+        if (tgtDataSources == null || tgtDataSources.length == 0){
             return mapFull (ref, profileURL);
         } else {
             Set<Mapping> results = new HashSet<Mapping>();
             for (DataSource tgtDataSource: tgtDataSources){
-                results.addAll(mapFull(ref, profileURL, tgtDataSource));
+                results.addAll(mapFullByDataSource(ref, profileURL, tgtDataSource));
+            }
+            return results;
+        }
+    }
+
+	public Set<Mapping> mapFullByUriPattern (Xref sourceXref, String profileURL, UriPattern tgtUriPattern) throws BridgeDBException {
+        if (tgtUriPattern == null){
+            return mapFull(sourceXref, profileURL);
+        }
+        DataSource tgtDataSource = tgtUriPattern.getDataSource();
+        Set<Mapping> results = mapFullByDataSource(sourceXref, profileURL, tgtDataSource);
+        for (Mapping result:results){
+            result.addTargetURL(tgtUriPattern.getUri(result.getTargetId()));
+        }
+        return results;
+    }
+
+    public Set<Mapping> mapFullByUriPattern (Xref ref, String profileURL, UriPattern... tgtUriPatterns) 
+            throws BridgeDBException{
+        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+            return mapFull (ref, profileURL);
+        } else {
+            Set<Mapping> results = new HashSet<Mapping>();
+            for (UriPattern tgtUriPattern: tgtUriPatterns){
+                results.addAll(mapFullByUriPattern(ref, profileURL, tgtUriPattern));
             }
             return results;
         }
@@ -1414,6 +1449,38 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
+    private Set<String> toUris(String id, String sysCode) throws BridgeDBException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URL_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(" = '");
+        query.append(insertEscpaeCharacters(sysCode));
+        query.append("' ");
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        HashSet<String> results = new HashSet<String>();
+        try {
+            while (rs.next()){
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String uri = prefix + id + postfix;
+                results.add(uri);
+            }
+       } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to parse results.", ex);
+       }
+       return results;
+   }
+
+    //Old
     private Set<String> getURIs(String id, String sysCode, String... targetURISpaces) throws BridgeDBException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT " + PREFIX_COLUMN_NAME);
@@ -1488,4 +1555,4 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } 
     }
 
-}
+ }
