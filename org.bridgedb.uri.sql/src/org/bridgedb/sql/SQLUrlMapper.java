@@ -156,29 +156,31 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	}
     
     //profileURL can be null    
-    public Set<Xref> mapID(Xref ref, String profileURL, DataSource... tgtDataSource) throws BridgeDBException {
+    public Set<Xref> mapID(Xref sourceXref, String profileURL, DataSource... tgtDataSource) throws BridgeDBException {
         if (tgtDataSource == null || tgtDataSource.length == 0){
-            return mapIDSingleSource(ref, profileURL, null);
+            return mapID(sourceXref, profileURL);
         }
         if (tgtDataSource.length == 1){
-            return mapIDSingleSource(ref, profileURL, tgtDataSource[0]);
+            return mapID(sourceXref, profileURL, tgtDataSource[0]);
         }
         HashSet<Xref> results = new HashSet<Xref>();
         for (DataSource dataSource: tgtDataSource){
-            results.addAll(mapIDSingleSource(ref, profileURL, dataSource));
+            results.addAll(mapID(sourceXref, profileURL, dataSource));
         }
         return results;
     }
     
-    //tgtDataSource can be null
     //profileURL can be null
-    public Set<Xref> mapIDSingleSource(Xref ref, String profileURL, DataSource tgtDataSource) throws BridgeDBException {
-        if (badXref(ref)) {
-            logger.warn("mapId called with a badXref " + ref);
+    public Set<Xref> mapID(Xref sourceXref, String profileURL, DataSource tgtDataSource) throws BridgeDBException {
+        if (badXref(sourceXref)) {
+            logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Xref>();
         }
-        StringBuilder query = startMappingQuery(ref);
-        appendMappingFromAndWhere(query, ref, profileURL, tgtDataSource);
+        if (tgtDataSource == null){
+            return mapID(sourceXref, profileURL);
+        }
+        StringBuilder query = startMappingQuery(sourceXref);
+        appendMappingFromAndWhere(query, sourceXref, profileURL, tgtDataSource);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -188,8 +190,96 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }    
         Set<Xref> results = resultSetToXrefSet(rs);
         //Add mapping to self
-        if (ref.getDataSource().equals(tgtDataSource)){
-             results.add(ref);
+        if (sourceXref.getDataSource().equals(tgtDataSource)){
+             results.add(sourceXref);
+        }
+        return results;
+    }
+    
+    public Set<Xref> mapID(Xref sourceXref, String profileURL) throws BridgeDBException {
+        if (badXref(sourceXref)) {
+            logger.warn("mapId called with a badXref " + sourceXref);
+            return new HashSet<Xref>();
+        }
+        StringBuilder query = startMappingQuery(sourceXref);
+        appendMappingFromAndWhere(query, sourceXref, profileURL, null);
+        Statement statement = this.createStatement();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+        Set<Xref> results = resultSetToXrefSet(rs);
+        //Add mapping to self
+        results.add(sourceXref);
+        return results;
+    }
+    
+    public Set<String> mapUri (Xref sourceXref, String profileURL, UriPattern... tgtUriPatterns) 
+            throws BridgeDBException {
+        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+            return mapUri (sourceXref, profileURL);
+        }
+        Set<String> results = new HashSet<String>();
+        for (UriPattern tgtUriPattern:tgtUriPatterns){
+            results.addAll(mapUri (sourceXref, profileURL, tgtUriPatterns));
+        }
+        return results;
+    }
+ 
+    public Set<String> mapUri (Xref sourceXref, String profileURL, UriPattern tgtUriPattern) 
+            throws BridgeDBException {
+        DataSource tgtDataSource = tgtUriPattern.getDataSource();
+        Set<Xref> targetXrefs = mapID(sourceXref, profileURL, tgtDataSource);
+        HashSet<String> results = new HashSet<String>();
+        for (Xref target:targetXrefs){
+            results.add (tgtUriPattern.getUri(target.getId()));
+        }
+        return results;
+    }
+    
+    public Set<String> mapUri (Xref sourceXref, String profileURL) 
+            throws BridgeDBException {
+        Set<Xref> targetXrefs = mapID(sourceXref, profileURL);
+        HashSet<String> results = new HashSet<String>();
+        for (Xref target:targetXrefs){
+            results.addAll (toUris(target));
+        }
+        return results;
+    }
+    
+    public Set<String> mapUri (String sourceUri, String profileURL, UriPattern... tgtUriPatterns) 
+            throws BridgeDBException {
+        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+            return mapUri (sourceUri, profileURL);
+        }
+        Set<String> results = new HashSet<String>();
+        for (UriPattern tgtUriPattern:tgtUriPatterns){
+            results.addAll(mapUri (sourceUri, profileURL, tgtUriPattern));
+        }
+        return results;
+    }
+ 
+    public Set<String> mapUri (String sourceUri, String profileURL, UriPattern tgtUriPattern) 
+            throws BridgeDBException {
+        Xref sourceXref = toXref(sourceUri);
+        DataSource tgtDataSource = tgtUriPattern.getDataSource();
+        Set<Xref> targetXrefs = mapID(sourceXref, profileURL, tgtDataSource);
+        HashSet<String> results = new HashSet<String>();
+        for (Xref target:targetXrefs){
+            results.add (tgtUriPattern.getUri(target.getId()));
+        }
+        return results;
+    }
+    
+    public Set<String> mapUri (String sourceUri, String profileURL) 
+            throws BridgeDBException {
+        Xref sourceXref = toXref(sourceUri);
+        Set<Xref> targetXrefs = mapID(sourceXref, profileURL);
+        HashSet<String> results = new HashSet<String>();
+        for (Xref target:targetXrefs){
+            results.addAll (toUris(target));
         }
         return results;
     }
@@ -200,8 +290,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             return new HashSet<Mapping>();
         }
         StringBuilder query = startMappingQuery(sourceXref);
-        appendMappingFromAndWhere(query, sourceXref, profileURL, null);
         appendMappingInfo(query);
+        appendMappingFromAndWhere(query, sourceXref, profileURL, null);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -309,8 +399,38 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileURL, UriPattern tgtUriPattern) throws BridgeDBException {
+        Xref sourceXref = toXref(sourceUri);
+        Set<Mapping> results = mapFull(sourceXref,  profileURL, tgtUriPattern);
+        for (Mapping result:results){
+            result.addSourceURL(sourceUri);
+        }
+        return results;
+    }
 
     @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileURL, DataSource... tgtDataSources) throws BridgeDBException {
+        Xref sourceXref = toXref(sourceUri);
+        Set<Mapping> results = mapFull(sourceXref,  profileURL, tgtDataSources);
+        for (Mapping result:results){
+            result.addSourceURL(sourceUri);
+        }
+        return results;
+    }
+
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileURL, DataSource tgtDataSource) throws BridgeDBException {
+        Xref sourceXref = toXref(sourceUri);
+        Set<Mapping> results = mapFull(sourceXref,  profileURL, tgtDataSource);
+        for (Mapping result:results){
+            result.addSourceURL(sourceUri);
+        }
+        return results;
+    }
+
+
+/*    @Override
     public Map<String, Set<String>> mapURL(Collection<String> URLs, String profileURL, String... targetURISpaces) 
             throws BridgeDBException {
         HashMap<String, Set<String>> results = new HashMap<String, Set<String>>();
@@ -360,16 +480,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         this.logResults(results, ref.toString(), targetSysCodes);
         return results;
     }
-
+*/
     private StringBuilder startMappingQuery(Xref ref){
         StringBuilder query = new StringBuilder("SELECT ");
             query.append(TARGET_ID_COLUMN_NAME);
-                query.append(" as ");
-                query.append(ID_COLUMN_NAME);
                 query.append(", ");
             query.append(TARGET_DATASOURCE_COLUMN_NAME);
-                query.append(" as ");
-                query.append(SYSCODE_COLUMN_NAME);
         return query;
     }
     
@@ -382,7 +498,6 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append(MAPPING_TABLE_NAME);
         query.append(".");
         query.append(ID_COLUMN_NAME);
-        query.append(" as ");
     }
  
     private void appendMappingFromAndWhere(StringBuilder query, Xref ref, String profileURL, DataSource tgtDataSource) 
@@ -450,7 +565,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 		}
 	}
 
-    @Override
+/*    @Override
     public Set<Mapping> mapURLFull(String URL, String profileURL, String... targetURISpaces) throws BridgeDBException {
         String id = getId(URL);
         String uriSpace = getUriSpace(URL);
@@ -476,7 +591,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         this.logResults(results, ref.toString(), targetSysCodes);
         return results;       
     }
-
+*/
     @Override
     public boolean uriExists(String URL) throws BridgeDBException {
         String id = getId(URL);
@@ -1117,11 +1232,11 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         HashSet<Mapping> results = new HashSet<Mapping>();
         try {
             while (rs.next()){
-                Integer mappingId = rs.getInt("mappingId"); 
-                String targetId = rs.getString("id");
-                String targetSysCode = rs.getString("sysCode");
-                Integer mappingSetId = rs.getInt("mappingSetId");
-                String predicate = rs.getString("predicate");
+                Integer mappingId = rs.getInt(MAPPING_TABLE_NAME + "." + ID_COLUMN_NAME); 
+                String targetId = rs.getString(TARGET_ID_COLUMN_NAME);
+                String targetSysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
+                String predicate = rs.getString(PREDICATE_COLUMN_NAME);
                 Mapping urlMapping = new Mapping (mappingId, sourceXref.getId(), 
                         sourceXref.getDataSource().getSystemCode(), predicate, targetId, targetSysCode, mappingSetId);       
                 results.add(urlMapping);
@@ -1472,6 +1587,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
     }
 
+    private Set<String> toUris(Xref ref) throws BridgeDBException {
+        return toUris(ref.getId(), ref.getDataSource().getSystemCode());
+    }
+    
     private Set<String> toUris(String id, String sysCode) throws BridgeDBException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME);
@@ -1578,9 +1697,4 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } 
     }
 
-    @Override
-    public Set<Mapping> mapFull(String sourceUri, String profileURL, DataSource... tgtDataSources) throws BridgeDBException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
- }
+}

@@ -81,12 +81,8 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
             query.append(TARGET_ID_COLUMN_NAME);
-                query.append(" as ");
-                query.append(ID_COLUMN_NAME);
                 query.append(", ");
             query.append(TARGET_DATASOURCE_COLUMN_NAME);
-                query.append(" as ");
-                query.append(SYSCODE_COLUMN_NAME);
         query.append(" FROM ");
             query.append(MAPPING_TABLE_NAME);
                 query.append(", ");
@@ -174,12 +170,8 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         StringBuilder query = new StringBuilder();
         query.append("SELECT ");
             query.append(TARGET_ID_COLUMN_NAME);
-                query.append(" as ");
-                query.append(ID_COLUMN_NAME);
                 query.append(", ");
             query.append(TARGET_DATASOURCE_COLUMN_NAME);
-                query.append(" as ");
-                query.append(SYSCODE_COLUMN_NAME);
         query.append(" FROM ");
             query.append(MAPPING_TABLE_NAME);
                 query.append(", ");
@@ -245,11 +237,11 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         appendTopConditions(query, 0, limit); 
         query.append(SOURCE_ID_COLUMN_NAME);
         query.append(" as ");
-        query.append(ID_COLUMN_NAME);
+        query.append(TARGET_ID_COLUMN_NAME);
         query.append(", ");
         query.append(SOURCE_DATASOURCE_COLUMN_NAME);
         query.append(" as ");
-        query.append(SYSCODE_COLUMN_NAME);
+        query.append(TARGET_DATASOURCE_COLUMN_NAME);
         query.append(" FROM ");
         query.append(MAPPING_TABLE_NAME);
         query.append(", ");
@@ -512,8 +504,8 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         HashSet<Xref> results = new HashSet<Xref>();
         try {
             while (rs.next()){
-                String id = rs.getString(ID_COLUMN_NAME);
-                String sysCode = rs.getString(SYSCODE_COLUMN_NAME);
+                String id = rs.getString(TARGET_ID_COLUMN_NAME);
+                String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
                 DataSource dataSource = DataSource.getBySystemCode(sysCode);
                 Xref xref = new Xref(id, dataSource);
                 results.add(xref);

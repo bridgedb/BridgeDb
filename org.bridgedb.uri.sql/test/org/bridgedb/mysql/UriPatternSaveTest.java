@@ -29,6 +29,7 @@ import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -58,7 +59,6 @@ public class UriPatternSaveTest extends TestUtils {
             assertEquals(pattern.getDataSource(), xref.getDataSource());
         }
         Date end = new Date();
-        System.out.println("That took " + (end.getTime()- start.getTime()));
      }
 
             

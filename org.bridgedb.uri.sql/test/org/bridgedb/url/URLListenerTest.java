@@ -20,6 +20,7 @@
 package org.bridgedb.url;
 
 import org.bridgedb.utils.BridgeDBException;
+import org.junit.Ignore;
 
 /**
  * Base class of all Test using URLs

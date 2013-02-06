@@ -20,12 +20,12 @@
 package org.bridgedb.mysql;
 
 import java.util.Date;
-import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * Runs the URLMapper interface tests over SQLURLMapper class
@@ -34,7 +34,6 @@ import org.junit.BeforeClass;
  *
  * @author Christian
  */
-//@Ignore
 public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
     
     private static final String CREATOR1 = "testCreator";
