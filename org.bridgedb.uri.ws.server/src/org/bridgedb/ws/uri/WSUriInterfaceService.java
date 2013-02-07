@@ -21,6 +21,7 @@ package org.bridgedb.ws.uri;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ws.rs.GET;
@@ -35,6 +36,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.linkset.LinksetInterfaceMinimal;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.sql.SQLUrlMapper;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -102,56 +104,152 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP_URL)
     @Override
-    public List<Mapping> mapURL(@QueryParam(WsUriConstants.URL) String URL,
+    public List<Mapping> map(@QueryParam(WsUriConstants.URL) String URL,
     		@QueryParam(WsUriConstants.PROFILE_URL) String profileURL,
-            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
+            @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
+            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
         if (logger.isDebugEnabled()){
-            logger.debug("mapURL called! URL = " + URL);
+            logger.debug("map called! URL = " + URL);
             logger.debug("   profileURL = " + profileURL);
-            if (targetURISpace!= null || !targetURISpace.isEmpty()){
-                logger.debug("   targetURISpace = " + targetURISpace);
+            if (targetCodes!= null || !targetCodes.isEmpty()){
+                logger.debug("   targetCodes = " + targetCodes);
+            }
+            if (targetUriPatterns!= null || !targetUriPatterns.isEmpty()){
+                logger.debug("   targetUriPatterns = " + targetUriPatterns);
             }
         }
         if (URL == null) throw new BridgeDBException("URL parameter missing.");        
         if (URL.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");        
-        if (profileURL == null || profileURL.isEmpty()){
-            profileURL = RdfConfig.getProfileURI(0);
+        DataSource[] targetDataSources = getDataSources(targetCodes);
+        UriPattern[] targetPatterns = getUriPatterns(targetUriPatterns);
+        Set<Mapping> urlMappings;
+        if (targetDataSources == null){
+            if (targetPatterns == null){
+                urlMappings = urlMapper.mapFull(URL, profileURL);
+            } else {
+                urlMappings = mapByTargetUriPattern(URL, profileURL, targetPatterns);
+            }
+        } else {
+            urlMappings = mapByTargetDataSource (URL, profileURL, targetDataSources);
+            if (targetPatterns != null){
+                urlMappings.addAll(mapByTargetUriPattern(URL, profileURL, targetPatterns));                
+            } 
         }
-        if (targetURISpace == null) {
-        	targetURISpace = new ArrayList<String>();
-        }
-        if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
-        if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
-        String[] targetURISpaces = new String[targetURISpace.size()];
-        for (int i = 0; i < targetURISpace.size(); i++){
-            targetURISpaces[i] = targetURISpace.get(i);
-        }
-        Set<Mapping> urlMappings = urlMapper.mapURLFull(URL, profileURL, targetURISpaces);
         return new ArrayList<Mapping>(urlMappings); 
     }
+    
+    //public List<Mapping> map(String id, String scrCode, String profileUri, List<String> targetCodes, 
+    //        List<String> targetUriPattern) throws BridgeDBException;
+    //}
+
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP_TO_URLS)
     @Override
-    public List<Mapping> mapToURLs(
+    public List<Mapping> map(
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
     		@QueryParam(WsUriConstants.PROFILE_URL) String profileURL,
-            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetURISpace) throws BridgeDBException {
-         if (logger.isDebugEnabled()){
-            logger.debug("mapToURLs called! id = " + id + " scrCode = " + scrCode + "targetURISpace = " + targetURISpace);
+            @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
+            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
+       if (logger.isDebugEnabled()){
+            logger.debug("map called! id = " + id);
+            logger.debug("   scrCode = " + scrCode);
+            logger.debug("   profileURL = " + profileURL);
+            if (targetCodes!= null || !targetCodes.isEmpty()){
+                logger.debug("   targetCodes = " + targetCodes);
+            }
+            if (targetUriPatterns!= null || !targetUriPatterns.isEmpty()){
+                logger.debug("   targetUriPatterns = " + targetUriPatterns);
+            }
         }
         if (id == null) throw new BridgeDBException (WsConstants.ID + " parameter can not be null");
         if (scrCode == null) throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter can not be null"); 
         DataSource dataSource = DataSource.getBySystemCode(scrCode);
-        Xref source = new Xref(id, dataSource);
-        String[] targetURISpaces = new String[targetURISpace.size()];
-        for (int i = 0; i < targetURISpace.size(); i++){
-            targetURISpaces[i] = targetURISpace.get(i);
+        Xref sourceXref = new Xref(id, dataSource);
+        //profile can be null
+        DataSource[] targetDataSources = getDataSources(targetCodes);
+        UriPattern[] targetPatterns = getUriPatterns(targetUriPatterns);
+        Set<Mapping> urlMappings;
+        if (targetDataSources == null){
+            if (targetPatterns == null){
+                urlMappings = urlMapper.mapFull(sourceXref, profileURL);
+            } else {
+                urlMappings = mapByTargetUriPattern(sourceXref, profileURL, targetPatterns);
+            }
+        } else {
+            urlMappings = mapByTargetDataSource (sourceXref, profileURL, targetDataSources);
+            if (targetPatterns != null){
+                urlMappings.addAll(mapByTargetUriPattern(sourceXref, profileURL, targetPatterns));                
+            } 
         }
-        Set<Mapping> urlMappings = urlMapper.mapToURLsFull(source, profileURL, targetURISpaces);
         return new ArrayList<Mapping>(urlMappings); 
+    }
+
+    private DataSource[] getDataSources(List<String> targetCodes){
+        if (targetCodes == null || targetCodes.isEmpty()){
+            return null;
+        }
+        HashSet<DataSource> targets = new HashSet<DataSource>();
+        for (String targetCode:targetCodes){
+            if (targetCode != null && !targetCode.isEmpty()){
+                targets.add(DataSource.getBySystemCode(targetCode));
+            }
+        }
+        if (targets.isEmpty()){
+            return null; 
+        }
+        return targets.toArray(new DataSource[0]);        
+    }
+            
+    private UriPattern[] getUriPatterns(List<String> targetUriPatterns){
+        if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
+            return null;
+        }
+        HashSet<UriPattern> targets = new HashSet<UriPattern>();
+        for (String targetUriPattern:targetUriPatterns){
+            UriPattern pattern = UriPattern.existingByPattern(targetUriPattern);
+            if (pattern != null){
+                targets.add(pattern);
+            }
+        }
+        if (targets.isEmpty()){
+            return new UriPattern[0]; 
+        }
+        return targets.toArray(new UriPattern[0]);        
+    }
+    
+    private Set<Mapping> mapByTargetDataSource(String sourceUri, String profileUri, DataSource[] targetDataSources) throws BridgeDBException{
+        if (targetDataSources.length > 0){
+            return urlMapper.mapFull(sourceUri, profileUri, targetDataSources);
+        } else {
+            return  new HashSet<Mapping>();
+        }    
+    }
+    
+    private Set<Mapping> mapByTargetDataSource(Xref sourceXref, String profileUri, DataSource[] targetDataSources) throws BridgeDBException{
+        if (targetDataSources.length > 0){
+            return urlMapper.mapFull(sourceXref, profileUri, targetDataSources);
+        } else {
+            return  new HashSet<Mapping>();
+        }    
+    }
+    
+    private Set<Mapping> mapByTargetUriPattern(String sourceUri, String profileUri, UriPattern[] targetUriPattern) throws BridgeDBException{
+        if (targetUriPattern.length > 0){
+            return urlMapper.mapFull(sourceUri, profileUri, targetUriPattern);
+        } else {
+            return  new HashSet<Mapping>();
+        }    
+    }
+    
+    private Set<Mapping> mapByTargetUriPattern(Xref sourceXref, String profileUri, UriPattern[] targetUriPattern) throws BridgeDBException{
+        if (targetUriPattern.length > 0){
+            return urlMapper.mapFull(sourceXref, profileUri, targetUriPattern);
+        } else {
+            return  new HashSet<Mapping>();
+        }    
     }
 
     @GET

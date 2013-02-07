@@ -37,12 +37,11 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSUriInterface extends WSCoreInterface{
 
-    public List<Mapping> mapURL(String URL, String profileURL, List<String> targetUriSpace) throws BridgeDBException;
+    public List<Mapping> map(String id, String scrCode, String profileUri, List<String> targetCodes, 
+            List<String> targetUriPattern) throws BridgeDBException;
 
-//    public List<Mapping> mapURL(String URL, List<String> targetUriSpace) throws BridgeDBException;
-    
-    public List<Mapping> mapToURLs(String id, String scrCode, String profileURL, List<String> targetUriSpace) 
-            throws BridgeDBException;
+    public List<Mapping> map(String uri, String profileUri, List<String> targetCodes, 
+            List<String> targetUriPattern) throws BridgeDBException;
 
     public URLExistsBean URLExists(String URL) throws BridgeDBException;
 

@@ -53,13 +53,37 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<Mapping> mapURL(String URL, String profileURL, List<String> targetUriSpace) 
-            throws  BridgeDBException {
+    public List<Mapping> map(String uri, String profileUri, List<String> targetCodes, List<String> targetUriPattern) 
+            throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsUriConstants.URL, URL);
-        params.add(WsUriConstants.PROFILE_URL, profileURL);
-        for (String target:targetUriSpace){
-            params.add(WsUriConstants.TARGET_URI_SPACE, target);
+        params.add(WsUriConstants.URL, uri);
+        params.add(WsUriConstants.PROFILE_URL, profileUri);
+        for (String target:targetCodes){
+            params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
+        }
+        for (String target:targetUriPattern){
+            params.add(WsUriConstants.TARGET_URI_PATTERN, target);
+        }
+        //Make service call
+        List<Mapping> result = 
+                webResource.path(WsUriConstants.MAP_URL)
+                .queryParams(params)
+                .accept(MediaType.APPLICATION_XML_TYPE)
+                .get(new GenericType<List<Mapping>>() {});
+         return result;
+    }
+    
+    @Override
+    public List<Mapping> map(String id, String scrCode, String profileUri, List<String> targetCodes, List<String> targetUriPattern) throws BridgeDBException {
+        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
+        params.add(WsConstants.ID, id);
+        params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
+        params.add(WsUriConstants.PROFILE_URL, profileUri);
+        for (String target:targetCodes){
+            params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
+        }
+        for (String target:targetUriPattern){
+            params.add(WsUriConstants.TARGET_URI_PATTERN, target);
         }
         //Make service call
         List<Mapping> result = 
@@ -70,24 +94,6 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
          return result;
     }
 
-    @Override
-    public List<Mapping> mapToURLs(String id, String scrCode, String profileURL, List<String> targetUriSpace) throws BridgeDBException {
-        MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsConstants.ID, id);
-        params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
-        params.add(WsUriConstants.PROFILE_URL, profileURL);
-        for (String target:targetUriSpace){
-            params.add(WsUriConstants.TARGET_URI_SPACE, target);
-        }
-        //Make service call
-        List<Mapping> result = 
-                webResource.path(WsUriConstants.MAP_TO_URLS)
-                .queryParams(params)
-                .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<Mapping>>() {});
-         return result;
-    }
-   
     @Override
     public URLExistsBean URLExists(String URL) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
@@ -231,5 +237,6 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
                 .get(new GenericType<String>() {});
          return result;
     }
+
 
 }

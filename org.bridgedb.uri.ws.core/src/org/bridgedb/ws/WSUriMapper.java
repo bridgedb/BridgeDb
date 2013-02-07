@@ -20,12 +20,9 @@
 package org.bridgedb.ws;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
@@ -43,12 +40,10 @@ import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.ProfileBeanFactory;
-import org.bridgedb.ws.bean.URLBean;
 import org.bridgedb.ws.bean.URLSearchBean;
 import org.bridgedb.ws.bean.UriSpaceBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
-import org.bridgedb.ws.bean.XrefMapBean;
 
 /**
  *
@@ -67,101 +62,191 @@ public class WSUriMapper extends WSCoreMapper implements URLMapper{
     }
 
     @Override
-    public Set<Xref> mapID(Xref sourceXref, String profileURL, DataSource... tgtDataSources) throws BridgeDBException {
-        ArrayList<String> tgtSysCodes = new ArrayList<String>();
-        for (int i = 0 ; i < tgtDataSources.length; i++){
-            tgtSysCodes.add(tgtDataSources[i].getSystemCode());
-        }
-        List<Mapping> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
-                profileURL, tgtSysCodes, NO_URI_PATTERNS);
+    public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource... tgtDataSources) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceXref, profileUri, tgtDataSources);
+        return extractXref(beans);
+    }
+    
+    private Set<Xref> extractXref(Collection<Mapping> beans){
         HashSet<Xref> results = new HashSet<Xref>();
         for (Mapping bean:beans){
-           DataSource targetDataSource = DataSource.getBySystemCode(bean.getSourceSysCode());
+           DataSource targetDataSource = DataSource.getBySystemCode(bean.getTargetSysCode());
            Xref targetXref = new Xref(bean.getTargetId(), targetDataSource);
            results.add(targetXref);
         }
-        return results;
+        return results;        
     }
     
     @Override
-    public Set<Mapping> mapFullByDataSource(Xref sourceXref, String profileURL, DataSource... tgtDataSources) 
+    public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceXref, profileUri);
+        return extractXref(beans);
+    }
+
+    @Override
+    public Set<Xref> mapID(Xref sourceXref, String profileUri) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceXref, profileUri);
+        return extractXref(beans);
+    }
+
+    @Override
+    public Set<String> mapUri(String sourceUri, String profileUri, UriPattern... tgtUriPatterns) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceUri, profileUri, tgtUriPatterns);
+        return extractUris(beans);
+     }
+
+    private Set<String> extractUris(Collection<Mapping> beans){
+        HashSet<String> results = new HashSet<String>();
+        for (Mapping bean:beans){
+            results.addAll(bean.getTargetURL());
+        }
+        return results;          
+    }
+    
+    @Override
+    public Set<String> mapUri(Xref sourceXref, String profileUri, UriPattern... tgtUriPatterns) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceXref, profileUri, tgtUriPatterns);
+        return extractUris(beans);
+    }
+
+    @Override
+    public Set<String> mapUri(Xref sourceXref, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceXref, profileUri, tgtUriPattern);
+        return extractUris(beans);
+    }
+
+    @Override
+    public Set<String> mapUri(Xref sourceXref, String profileUri) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceXref, profileUri);
+        return extractUris(beans);
+    }
+
+    @Override
+    public Set<String> mapUri(String sourceUri, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceUri, profileUri, tgtUriPattern);
+        return extractUris(beans);
+    }
+
+    @Override
+    public Set<String> mapUri(String sourceUri, String profileUri) throws BridgeDBException {
+        Collection<Mapping> beans = mapFull(sourceUri, profileUri);
+        return extractUris(beans);
+    }
+
+    @Override
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource... tgtDataSources) 
             throws BridgeDBException {
+        if (tgtDataSources == null){
+            return mapFull(sourceXref, profileUri);
+        }
+        if (sourceXref == null){
+            return new HashSet<Mapping>();
+        }
         ArrayList<String> tgtSysCodes = new ArrayList<String>();
-        if (tgtDataSources != null){
-            for (DataSource tgtDataSource:tgtDataSources){
-                tgtSysCodes.add(tgtDataSource.getSystemCode());
+        for (int i = 0 ; i < tgtDataSources.length; i++){
+            if (tgtDataSources[i] != null){
+                tgtSysCodes.add(tgtDataSources[i].getSystemCode());
             }
         }
         List<Mapping> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
-                profileURL, tgtSysCodes, NO_URI_PATTERNS);
+                profileUri, tgtSysCodes, NO_URI_PATTERNS);
         return new HashSet<Mapping>(beans); 
     }
  
     @Override
-    public Set<Mapping> mapFullByUriPattern (Xref sourceXref, String profileURL, UriPattern... tgtUriPatterns)
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern... tgtUriPatterns)
             throws BridgeDBException {
+        if (tgtUriPatterns == null){
+            return mapFull(sourceXref, profileUri);
+        }
         ArrayList<String> tgtUriPatternStrings = new ArrayList<String>();
-        if (tgtUriPatterns != null){
-            for (UriPattern tgtUriPattern:tgtUriPatterns){
+        for (UriPattern tgtUriPattern:tgtUriPatterns){
+            if (tgtUriPattern != null){
                 tgtUriPatternStrings.add(tgtUriPattern.getUriPattern());
             }
         }
         List<Mapping> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
-                profileURL, NO_URI_PATTERNS, tgtUriPatternStrings);
+                profileUri, NO_SYSCODES, tgtUriPatternStrings);
         return new HashSet<Mapping>(beans); 
     }
  
     @Override
-    public Map<String, Set<String>> mapURL(Collection<String> sourceURLs, 
-    		String profileURL, String... targetURISpaces) throws BridgeDBException {
-        HashMap<String, Set<String>> results = new HashMap<String, Set<String>> ();
-        for (String sourceURL:sourceURLs){
-            Set<String> urls = mapURL(sourceURL, profileURL, targetURISpaces);
-            results.put(sourceURL, urls);
-        }
-        return results;
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
+        DataSource[] tgtDataSources = new DataSource[1];
+        tgtDataSources[0] = tgtDataSource;
+        return mapFull(sourceXref, profileUri, tgtDataSource);
     }
 
     @Override
-    public Set<String> mapURL(String sourceURL, String profileURL,
-    		String... targetURISpaces) throws BridgeDBException {
-        List<Mapping> beans = uriService.map(sourceURL, profileURL, Arrays.asList(targetURISpaces));
-        HashSet<String> targetURLS = new HashSet<String>(); 
-        for (Mapping bean:beans){
-            targetURLS.addAll(bean.getTargetURL());
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri) throws BridgeDBException {
+        if (sourceXref == null){
+            return new HashSet<Mapping>();
         }
-        return targetURLS;
-    }
-
-    @Override
-    public Set<String> mapToURLs(Xref xref, String profileURL, String... targetURISpaces) throws BridgeDBException {
-        List<Mapping> beans = uriService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), profileURL, 
-                Arrays.asList(targetURISpaces));
-        HashSet<String> targetURLS = new HashSet<String>(); 
-        for (Mapping bean:beans){
-            targetURLS.addAll(bean.getTargetURL());
-        }
-        return targetURLS;
-    }
-
-    @Override
-    public Set<Mapping> mapToURLsFull(Xref xref, String profileURL, String... targetURISpaces) throws BridgeDBException {
-        List<Mapping> beans = uriService.mapToURLs(xref.getId(), xref.getDataSource().getSystemCode(), profileURL, 
-                Arrays.asList(targetURISpaces));
+        List<Mapping> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
+                profileUri, NO_SYSCODES, NO_URI_PATTERNS);
         return new HashSet<Mapping>(beans); 
     }
 
     @Override
-    public Map<Xref, Set<String>> mapToURLs(Collection<Xref> srcXrefs, String profileURL, String... targetURISpaces) 
-            throws BridgeDBException {
-        HashMap<Xref, Set<String>> results = new HashMap<Xref, Set<String>> ();
-        for (Xref ref:srcXrefs){
-            Set<String> urls = mapToURLs(ref, profileURL, targetURISpaces);
-            results.put(ref, urls);
-        }
-        return results;
-     }
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
+        UriPattern[] tgtUriPatterns = new UriPattern[1];
+        tgtUriPatterns[0] = tgtUriPattern;
+        return mapFull(sourceXref, profileUri, tgtUriPatterns);
+    }
 
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource... tgtDataSources) throws BridgeDBException {
+        if (tgtDataSources == null){
+            return mapFull(sourceUri, profileUri);
+        }
+        ArrayList<String> tgtSysCodes = new ArrayList<String>();
+        for (int i = 0 ; i < tgtDataSources.length; i++){
+            if (tgtDataSources[i] != null){
+                tgtSysCodes.add(tgtDataSources[i].getSystemCode());
+            }
+        }
+        List<Mapping> beans = uriService.map(sourceUri, profileUri, tgtSysCodes, NO_URI_PATTERNS);
+        return new HashSet<Mapping>(beans); 
+    }
+
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
+        DataSource[] tgtDataSources = new DataSource[1];
+        tgtDataSources[0] = tgtDataSource;
+        return mapFull(sourceUri, profileUri, tgtDataSource);
+    }
+
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileUri) throws BridgeDBException {
+        if (sourceUri == null){
+            return new HashSet<Mapping>();
+        }
+        List<Mapping> beans = uriService.map(sourceUri, profileUri, NO_SYSCODES, NO_URI_PATTERNS);
+        return new HashSet<Mapping>(beans); 
+    }
+
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
+        UriPattern[] tgtUriPatterns = new UriPattern[1];
+        tgtUriPatterns[0] = tgtUriPattern;
+        return mapFull(sourceUri, profileUri, tgtUriPatterns);
+    }
+
+    @Override
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern... tgtUriPatterns) throws BridgeDBException {
+        if (tgtUriPatterns == null){
+            return mapFull(sourceUri, profileUri);
+        }
+        ArrayList<String> tgtUriPatternStrings = new ArrayList<String>();
+        for (UriPattern tgtUriPattern:tgtUriPatterns){
+            if (tgtUriPattern != null){
+                tgtUriPatternStrings.add(tgtUriPattern.getUriPattern());
+            }
+        }
+        List<Mapping> beans = uriService.map(sourceUri, profileUri, NO_SYSCODES, tgtUriPatternStrings);
+        return new HashSet<Mapping>(beans); 
+    }
+    
     @Override
     public boolean uriExists(String URL) throws BridgeDBException {
         return uriService.URLExists(URL).exists();
@@ -171,12 +256,6 @@ public class WSUriMapper extends WSCoreMapper implements URLMapper{
     public Set<String> urlSearch(String text, int limit) throws BridgeDBException {
         URLSearchBean  bean = uriService.URLSearch(text, "" + limit);
         return bean.getURLSet();
-    }
-
-    @Override
-    public Set<Mapping> mapURLFull(String sourceURL, String profileURL, String... targetURISpaces) throws BridgeDBException {
-        List<Mapping> beans = uriService.mapURL(sourceURL, profileURL, Arrays.asList(targetURISpaces));
-        return new HashSet<Mapping>(beans);
     }
 
     @Override
@@ -262,5 +341,6 @@ public class WSUriMapper extends WSCoreMapper implements URLMapper{
     public int getSqlCompatVersion() throws BridgeDBException {
         return Integer.parseInt(uriService.getSqlCompatVersion());
     }
+
 
   }

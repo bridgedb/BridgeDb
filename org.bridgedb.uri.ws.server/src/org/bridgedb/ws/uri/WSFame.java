@@ -117,6 +117,10 @@ public class WSFame extends WSUriInterfaceService {
         //Long start = new Date().getTime();
         StringBuilder sb = topAndSide("IMS API",  httpServletRequest);
  
+        if (1 == 1){
+            sb.append("UNDER DEVELOPMENT! </body></html>");
+            return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        }
         List<Mapping> mappings = urlMapper.getSampleMapping(); 
         Mapping mapping1 = mappings.get(0);
         DataSource dataSource1 = DataSource.getBySystemCode(mapping1.getSourceSysCode());

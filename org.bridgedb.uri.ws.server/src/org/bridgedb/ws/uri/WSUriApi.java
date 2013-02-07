@@ -35,7 +35,8 @@ import org.bridgedb.ws.WsUriConstants;
 public class WSUriApi extends WSCoreApi {
      
     private final String FIRST_URL_PARAMETER = "?" + WsUriConstants.URL + "=";
-    private final String TARGET_URI_SPACE_PARAMETER = "&" + WsUriConstants.TARGET_URI_SPACE + "=";
+    private final String TARGET_DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
+    private final String TARGET_URI_PATTERN_PARAMETER = "&" + WsUriConstants.TARGET_URI_PATTERN + "=";
     
     public WSUriApi() {      
     }
@@ -151,9 +152,9 @@ public class WSUriApi extends WSCoreApi {
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsUriConstants.TARGET_URI_SPACE);
+ //                       sb.append(WsUriConstants.TARGET_URI_SPACE);
                         sb.append("\">");
-                        sb.append(WsUriConstants.TARGET_URI_SPACE);
+  //                      sb.append(WsUriConstants.TARGET_URI_SPACE);
                         sb.append("</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
@@ -173,7 +174,7 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URLEncoder.encode(URL2, "UTF-8"));
                 for (String URISpace:URI2Spaces){
-                    sb.append(TARGET_URI_SPACE_PARAMETER);
+//                    sb.append(TARGET_URI_SPACE_PARAMETER);
                     sb.append(URLEncoder.encode(URISpace, "UTF-8"));
                 }
                 sb.append("\">");
@@ -182,7 +183,7 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URL2);
                 for (String URISpace:URI2Spaces){
-                    sb.append(TARGET_URI_SPACE_PARAMETER);
+ //                   sb.append(TARGET_URI_SPACE_PARAMETER);
                     sb.append(URISpace);
                 }
                 sb.append("</a></li>");    
