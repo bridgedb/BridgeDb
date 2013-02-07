@@ -128,14 +128,14 @@ public interface URLMapper extends IDMapper{
 	 */
 	
     /**
-     * Check whether an URL is known by the given mapping source. 
+     * Check whether an URI is known by the given mapping source. 
      * <p>
      * This is an optionally supported operation.
-     * @param url URL to check
-     * @return if the URL exists, false if not
+     * @param uri URI to check
+     * @return if the URI exists, false if not
      * @throws BridgeDBException if failed, UnsupportedOperationException if it's not supported by the Driver.
      */
-    public boolean uriExists(String URL) throws BridgeDBException;
+    public boolean uriExists(String uri) throws BridgeDBException;
 
     /**
      * Free text search for matching symbols or identifiers.
@@ -183,9 +183,9 @@ public interface URLMapper extends IDMapper{
      * This behaviour was selected as there is no known algorithm that will 
      * always correctly split a uri into prefix, id and postfix
      * 
-     * @param URL A URL as a String
-     * @return The Xref implementation of this URL. 
-     * @throws BridgeDBException If the uri does not match a registered pattern
+     * @param uri A uri as a String
+     * @return The Xref implementation of this uri, or null if it is not known 
+     * @throws BridgeDBException Only for an SQl exception
      */
     public Xref toXref(String uri) throws BridgeDBException;
     

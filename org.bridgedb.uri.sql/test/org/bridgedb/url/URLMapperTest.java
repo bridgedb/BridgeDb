@@ -135,7 +135,7 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertThat(mappedTo, not(hasItems(map2URL2)));
     }
 
-    @Test (expected =  BridgeDBException.class)
+    @Test 
     public void testMapIDOneBad() throws BridgeDBException{
         report("MapIDOneBad");
         Set<String> results = urlMapper.mapUri(mapBadURL1, RdfConfig.getProfileURI(0));
@@ -145,14 +145,14 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertTrue(results.size() <= 1);
     }
 
-    @Test (expected =  BridgeDBException.class)
+    @Test 
     public void testMapFullOneBad() throws BridgeDBException{
         report("MapFullOneBad");
         Set<Mapping> results = urlMapper.mapFull(mapBadURL1, RdfConfig.getProfileURI(0));
         assertTrue(results.size() <= 1);
     }
 
-    @Test (expected =  BridgeDBException.class)
+    @Test 
     public void testMapFullOneBadOneNameSpace() throws BridgeDBException{
         report("MapFullOneBadOneNameSpace");
         Set<Mapping> results = urlMapper.mapFull(mapBadURL1, RdfConfig.getProfileURI(0), uriPattern2);
@@ -233,7 +233,9 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertTrue(urlMapper.uriExists(map3URL2));
         assertTrue(urlMapper.uriExists(map3URL3));
         assertFalse(urlMapper.uriExists(mapBadURL1));
+        System.out.println("1");
         assertFalse(urlMapper.uriExists(mapBadURL2));
+        System.out.println("2");
         assertFalse(urlMapper.uriExists(mapBadURL3));
     }
         
@@ -275,7 +277,7 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertEquals(map2xref2, result);
     }
 
-    @Test (expected = BridgeDBException.class)
+    @Test 
     public void testGetXrefBad() throws BridgeDBException {
         report("GetXrefBad");
         Xref xref = urlMapper.toXref(mapBadURL1);

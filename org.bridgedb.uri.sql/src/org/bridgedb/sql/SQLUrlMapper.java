@@ -508,38 +508,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	}
 
     @Override
-    public boolean uriExists(String URL) throws BridgeDBException {
-        String id = getId(URL);
-        String uriSpace = getUriSpace(URL);
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT DISTINCT ");
-        //TODO get DISTINCT working on Virtuosos
-        appendTopConditions(query, 0, 1); 
-        query.append("targetId ");
-        query.append("FROM mapping, mappingSet, url as source ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND mappingSet.sourceDataSource = source.dataSource ");
-        query.append("AND sourceId = '");
-            query.append(id);
-            query.append("' ");
-        query.append("AND source.");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(" = '");
-            query.append(uriSpace);
-            query.append("' ");
-        appendLimitConditions(query,0, 1);
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-            boolean result = rs.next();
-            if (logger.isDebugEnabled()){
-                logger.debug(URL + " exists = " + result);
-            }
-            return result;
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        }    
+    public boolean uriExists(String uri) throws BridgeDBException {
+        Xref xref = toXref(uri);
+        if (xref == null){
+            return false;
+        }
+        return this.xrefExists(xref);
     }
 
     @Override
@@ -660,7 +634,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 }
                 return result;
             }
-            throw new BridgeDBException("No uri pattern regsitered that matches " + uri);
+            return null;
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to get uriSpace. " + query, ex);
         }    
