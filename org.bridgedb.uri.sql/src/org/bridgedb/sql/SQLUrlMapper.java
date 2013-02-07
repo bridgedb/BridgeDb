@@ -733,22 +733,29 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
         ArrayList list =  new ArrayList<Mapping>(results);
         return list;
-
     }
-
 
     @Override
     public OverallStatistics getOverallStatistics() throws BridgeDBException {
         int numberOfMappings = getMappingsCount();
         int numberOfProfiles = getNumberOfProfiles();
-        String linkSetQuery = "SELECT count(distinct(mappingSet.id)) as numberOfMappingSets, "
-                + "count(distinct(mappingSet.sourceDataSource)) as numberOfSourceDataSources, "
-                + "count(distinct(mappingSet.predicate)) as numberOfPredicates, "
-                + "count(distinct(mappingSet.targetDataSource)) as numberOfTargetDataSources "
-                + "FROM mappingSet ";
+        StringBuilder query = new StringBuilder("SELECT count(distinct(");
+        query.append(ID_COLUMN_NAME);
+        query.append(")) as numberOfMappingSets, ");
+        query.append("count(distinct(");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+        query.append(")) as numberOfSourceDataSources, ");
+        query.append("count(distinct(");
+        query.append(PREDICATE_COLUMN_NAME);
+        query.append(")) as numberOfPredicates, ");
+        query.append("count(distinct(");
+        query.append(TARGET_DATASOURCE_COLUMN_NAME);
+        query.append(")) as numberOfTargetDataSources ");
+        query.append("FROM ");
+        query.append(MAPPING_SET_TABLE_NAME);
         Statement statement = this.createStatement();
         try {
-            ResultSet rs = statement.executeQuery(linkSetQuery);
+            ResultSet rs = statement.executeQuery(query.toString());
 			if (rs.next()){
                 int numberOfMappingSets = rs.getInt("numberOfMappingSets");
                 int numberOfSourceDataSources = rs.getInt("numberOfSourceDataSources");
@@ -758,12 +765,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 		numberOfSourceDataSources, numberOfPredicates, 
                 		numberOfTargetDataSources, numberOfProfiles);
             } else {
-                System.err.println(linkSetQuery);
-                throw new BridgeDBException("no Results for query. " + linkSetQuery);
+                System.err.println(query.toString());
+                throw new BridgeDBException("no Results for query. " + query.toString());
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new BridgeDBException("Unable to run query. " + linkSetQuery, ex);
+            throw new BridgeDBException("Unable to run query. " + query.toString(), ex);
         }
     }
 
