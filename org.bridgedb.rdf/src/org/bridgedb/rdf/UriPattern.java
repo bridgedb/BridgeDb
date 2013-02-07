@@ -110,7 +110,6 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         }
         return result;
     }
-    
     private static UriPattern byNameSpaceAndPostfix(String nameSpace, String postfix) {
         HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(nameSpace);
         if (postFixMap == null){
@@ -131,6 +130,35 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         String nameSpace = urlPattern.substring(0, pos);
         String postfix = urlPattern.substring(pos + 3);
         return byNameSpaceAndPostFix(nameSpace, postfix);
+    }
+
+    public static UriPattern existingByPattern(String uriPattern) {
+        if (uriPattern == null || uriPattern.isEmpty()){
+            return null;
+        }
+        String nameSpace;
+        String postfix;
+        String cleanPattern = uriPattern.trim();
+        if (cleanPattern.startsWith("<") && cleanPattern.endsWith(">")){
+            cleanPattern = cleanPattern.substring(1, cleanPattern.length()-1);
+        }
+        int pos = cleanPattern.indexOf("$id");
+        if (pos == -1) {
+            nameSpace = cleanPattern;
+            postfix = "";
+        } else {
+            nameSpace = cleanPattern.substring(0, pos);
+            postfix = cleanPattern.substring(pos + 3);
+        } 
+        if (postfix.isEmpty()){
+            return byNameSpaceOnly.get(nameSpace);
+        } else {
+            HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(nameSpace);
+            if (postFixMap == null){
+                return null;
+            }
+            return postFixMap.get(postfix);
+        }
     }
 
     public static UriPattern byNameSpaceAndPostFix(String nameSpace, String postfix) throws BridgeDBException{
