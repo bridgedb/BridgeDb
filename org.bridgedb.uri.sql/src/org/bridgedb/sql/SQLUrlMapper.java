@@ -26,6 +26,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
@@ -163,7 +164,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         if (tgtDataSource == null){
             return mapID(sourceXref, profileURL);
         }
-        StringBuilder query = startMappingQuery(sourceXref);
+        StringBuilder query = startMappingQuery();
         appendMappingFromAndWhere(query, sourceXref, profileURL, tgtDataSource);
         Statement statement = this.createStatement();
         ResultSet rs;
@@ -186,7 +187,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Xref>();
         }
-        StringBuilder query = startMappingQuery(sourceXref);
+        StringBuilder query = startMappingQuery();
         appendMappingFromAndWhere(query, sourceXref, profileURL, null);
         Statement statement = this.createStatement();
         ResultSet rs;
@@ -281,7 +282,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Mapping>();
         }
-        StringBuilder query = startMappingQuery(sourceXref);
+        StringBuilder query = startMappingQuery();
         appendMappingInfo(query);
         appendMappingFromAndWhere(query, sourceXref, profileURL, null);
         Statement statement = this.createStatement();
@@ -320,7 +321,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         if (tgtDataSource == null){
             return mapFull (sourceXref, profileURL);
         }
-        StringBuilder query = startMappingQuery(sourceXref);
+        StringBuilder query = startMappingQuery();
         appendMappingInfo(query);
         appendMappingFromAndWhere(query, sourceXref, profileURL, tgtDataSource);
         Statement statement = this.createStatement();
@@ -423,7 +424,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         return results;
     }
 
-    private StringBuilder startMappingQuery(Xref ref){
+    private StringBuilder startMappingQuery(){
         StringBuilder query = new StringBuilder("SELECT ");
             query.append(TARGET_ID_COLUMN_NAME);
                 query.append(", ");
@@ -441,17 +442,17 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         query.append(".");
         query.append(ID_COLUMN_NAME);
     }
- 
+    
+    private void appendSourceInfo(StringBuilder query){
+        query.append(", ");
+        query.append(SOURCE_ID_COLUMN_NAME);
+        query.append(", ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+    }
+    
     private void appendMappingFromAndWhere(StringBuilder query, Xref ref, String profileURL, DataSource tgtDataSource) 
-            throws BridgeDBException{
-        query.append(" FROM ");
-            query.append(MAPPING_TABLE_NAME);
-                query.append(", ");
-            query.append(MAPPING_SET_TABLE_NAME);
-        query.append(" WHERE ");
-            query.append(MAPPING_SET_ID_COLUMN_NAME);
-                query.append(" = ");
-                query.append(MAPPING_SET_DOT_ID_COLUMN_NAME);
+            throws BridgeDBException {
+        appendMappingFromJoinMapping(query);
         appendSourceXref(query, ref);
         if (tgtDataSource != null){
             query.append(" AND ");
@@ -462,7 +463,26 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         }
         appendProfileClause(query, profileURL);
     }
+
+    private void appendMappingFromJoinMapping(StringBuilder query){ 
+        appendMappingFrom(query);
+        appendMappingJoinMapping(query);
+    }
     
+    private void appendMappingFrom(StringBuilder query){ 
+        query.append(" FROM ");
+        query.append(MAPPING_TABLE_NAME);
+        query.append(", ");
+        query.append(MAPPING_SET_TABLE_NAME);
+    }
+
+    private void appendMappingJoinMapping(StringBuilder query){ 
+        query.append(" WHERE ");
+        query.append(MAPPING_SET_ID_COLUMN_NAME);
+        query.append(" = ");
+        query.append(MAPPING_SET_DOT_ID_COLUMN_NAME);
+     }
+
     /**
      * Adds the WHERE clause conditions for ensuring that the returned mappings
      * are from active linksets.
@@ -518,36 +538,31 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Set<String> urlSearch(String text, int limit) throws BridgeDBException {
-        //ystem.out.println("mapping: " + sourceURL);
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT DISTINCT ");
-        //TODO get DISTINCT working on Virtuosos
-        appendTopConditions(query, 0, limit); 
-        query.append(" sourceId as id, ");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(" FROM mapping, mappingSet, url ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND mappingSet.SourceDataSource = url.dataSource ");
-        query.append("AND sourceId = '");
-            query.append(text);
-            query.append("' ");
-        appendLimitConditions(query,0, limit);
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        }    
-        Set<String> results = resultSetToURLsSet(rs);
-        if (logger.isDebugEnabled()){
-            logger.debug("Freesearch for " + text + " gave " + results.size() + " results");
+        Set<Xref> xrefs = freeSearch(text, limit);
+        Set<String> results = new HashSet<String>();
+        for (Xref xref:xrefs){
+            results.addAll(toUris(xref));
+            if (results.size() >= limit){
+                break;
+            }
         }
-        return results;       
+        if (results.size() > limit){
+            int count = 0;
+            for (Iterator<String> i = results.iterator(); i.hasNext();) {
+                String element = i.next();
+                count++;
+                if (count > limit) {
+                    i.remove();
+                }
+            }
+        }
+        return results;
     }
     
     @Override
     public Xref toXref(String uri) throws BridgeDBException {
+        //First try splitting the uri follwoing normal rules
+        //This avoids the more expensive like
         String prefix = getUriSpace(uri);
         String id = getId(uri);
         StringBuilder query = new StringBuilder();
@@ -575,10 +590,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
                 DataSource dataSource = DataSource.getBySystemCode(sysCode);
                 if (rs.next()){
-                     return toXrefUsingLike(uri);
+                    //more than one option use like method
+                    return toXrefUsingLike(uri);
                 }
                 return new Xref(id, dataSource);
             } else {
+                //Nothing found so use the longer like method
                 return toXrefUsingLike(uri);
             }
         } catch (SQLException ex) {
@@ -642,12 +659,16 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public Mapping getMapping(int id) throws BridgeDBException {
-        StringBuilder query = new StringBuilder("SELECT mapping.id, sourceId, sourceDataSource, predicate,  "
-                + "targetId, targetDataSource, mappingSet.id ");
-        query.append("FROM mapping, mappingSet ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND mapping.id = ");
-            query.append(id);
+        StringBuilder query = startMappingQuery();
+        appendMappingInfo(query);
+        appendSourceInfo(query);
+        appendMappingFromJoinMapping(query);
+        query.append(" AND ");
+        query.append(MAPPING_TABLE_NAME);
+        query.append(".");
+        query.append(ID_COLUMN_NAME);
+        query.append(" = ");
+        query.append(id);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -655,7 +676,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
-        Mapping result = resultSetToMapping(rs);
+        Set<Mapping> results = resultSetToMappingSet(null, rs);
+        if (results.isEmpty()){
+            throw new BridgeDBException("No mapping found with id " + id);
+        }
+        if (results.size() > 1){
+            throw new BridgeDBException("Multiple mappings found with id " + id);
+        }
+        Mapping result = results.iterator().next(); 
         addSourceURIs(result);
         addTargetURIs(result);      
         if (logger.isDebugEnabled()){
@@ -669,21 +697,43 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         StringBuilder query = new StringBuilder("SELECT DISTINCT ");
         //TODO get DISTINCT working on Virtuosos
         this.appendTopConditions(query, 0, 5);
-        query.append("mapping.id as id, sourceId, sourceDataSource, predicate, targetId, targetDataSource, mappingSetId ");
-        query.append("FROM mapping, mappingSet, url as url1, url as url2 ");
-        query.append("WHERE mappingSetId = mappingSet.id ");
-        query.append("AND sourceDataSource = url1.dataSource ");
-        query.append("AND targetDataSource = url2.dataSource ");
+        query.append(TARGET_ID_COLUMN_NAME);
+        query.append(", ");
+        query.append(TARGET_DATASOURCE_COLUMN_NAME);
+        appendMappingInfo(query);
+        appendSourceInfo(query);
+        appendMappingFrom(query);
+        query.append(", ");
+        query.append(URL_TABLE_NAME);
+        query.append(" as url1, ");
+        query.append(URL_TABLE_NAME);
+        query.append(" as url2 ");
+        appendMappingJoinMapping(query);
+        query.append(" AND ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+        query.append(" = url1.");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(" AND  ");
+        query.append(TARGET_DATASOURCE_COLUMN_NAME);
+        query.append(" = url2.");
+        query.append(DATASOURCE_COLUMN_NAME);
         this.appendLimitConditions(query, 0, 5);
+        System.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
             rs = statement.executeQuery(query.toString());
-            return resultSetToURLMappingList(rs);
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to run query. " + query, ex);
-        }    
-        //ystem.out.println(query);
+        } 
+        Set<Mapping> results = resultSetToMappingSet(null, rs);
+        for (Mapping result:results){
+            addSourceURIs(result);
+            addTargetURIs(result);      
+        }
+        ArrayList list =  new ArrayList<Mapping>(results);
+        return list;
+
     }
 
 
@@ -1108,71 +1158,20 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
                 String targetSysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
                 Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
-                Mapping urlMapping = new Mapping (mappingId, sourceXref.getId(), 
-                        sourceXref.getDataSource().getSystemCode(), predicate, targetId, targetSysCode, mappingSetId);       
-                results.add(urlMapping);
-            }
-            return results;
-       } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-       }
-    }
-
-    private List<Mapping> resultSetToURLMappingList(ResultSet rs) throws BridgeDBException {
-        ArrayList<Mapping> results = new ArrayList<Mapping>();
-        try {
-            while (rs.next()){
-                Integer mappingId = rs.getInt("mapping.Id"); 
-                String sourceId = rs.getString("sourceId");
-                String sourceDataSource = rs.getString("sourceDataSource");
-                String targetId = rs.getString("targetId");
-                String targetDataSource = rs.getString("targetDataSource");
-                Integer mappingSetId = rs.getInt("mappingSetId");
-                String predicate = rs.getString("predicate");
-                Mapping urlMapping = new Mapping (mappingId, sourceId, sourceDataSource, predicate, 
-                        targetId, targetDataSource, mappingSetId);   
-                addSourceURIs(urlMapping);
-                addTargetURIs(urlMapping);
-                results.add(urlMapping);
-            }
-            return results;
-       } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-       }
-    }
-
-    /**
-     * Generates a single mapping from an id.
-     *
-     * This method (an probaly the calling methods) needs replacing with one created by identifiers.org
-     *
-     * @param rs Result set with exactky one result
-     * @return The mapping or null
-     * @throws BridgeDBException
-     */
-    private Mapping resultSetToMapping(ResultSet rs) throws BridgeDBException {
-        try {
-            Mapping urlMapping;
-            if (rs.next()){
-                Integer mappingId = rs.getInt("mapping.id"); 
-                String sourceId = rs.getString("sourceId");
-                String sourceSysCode = rs.getString("sourceDataSource");
-                String targetId = rs.getString("targetId");
-                String targetSysCode = rs.getString("targetDataSource");
-                Integer mappingSetId = rs.getInt("mappingSet.id");
-                String predicate = rs.getString("predicate");
-                urlMapping = new Mapping (mappingId, sourceId, sourceSysCode, predicate, 
+                String sourceId;
+                String sourceSysCode;
+                if (sourceXref == null){
+                    sourceId = rs.getString(SOURCE_ID_COLUMN_NAME);
+                    sourceSysCode = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
+                } else {
+                    sourceId = sourceXref.getId();
+                    sourceSysCode = sourceXref.getDataSource().getSystemCode();
+                }
+                Mapping urlMapping = new Mapping (mappingId, sourceId, sourceSysCode, predicate, 
                         targetId, targetSysCode, mappingSetId);       
-            } else {
-                return null;
+                results.add(urlMapping);
             }
-            while (rs.next()){
-                String sourceURL = rs.getString("source." + PREFIX_COLUMN_NAME) + rs.getString("sourceId");
-                urlMapping.addSourceURL(sourceURL);
-                String targetURL = rs.getString("target." + PREFIX_COLUMN_NAME) + rs.getString("targetId"); 
-                urlMapping.addTargetURL(targetURL);
-            }
-            return urlMapping;
+            return results;
        } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);
        }

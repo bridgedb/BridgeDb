@@ -555,7 +555,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             if (limit == null){
                 limit = DEFAULT_LIMIT;
             }
-            query.append("LIMIT " + position + ", " + limit);       
+            query.append(" LIMIT " + position + ", " + limit);       
         }
     }
 
