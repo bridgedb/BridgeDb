@@ -46,8 +46,8 @@ public class Mapping {
     private String targetSysCode;
     
     // Singleton names look better in the xml Bean 
-    private Set<String> sourceURL;
-    private Set<String> targetURL;
+    private Set<String> sourceUri;
+    private Set<String> targetUri;
     private Integer mappingSetId;
     private String predicate;
     
@@ -55,17 +55,17 @@ public class Mapping {
      * Default constructor for webService
      */
     public Mapping(){
-        this.sourceURL = new HashSet<String>();
-        this.targetURL = new HashSet<String>();
+        this.sourceUri = new HashSet<String>();
+        this.targetUri = new HashSet<String>();
     }
     
     public Mapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
             String targetId, String targetSysCode, Integer mappingSetId){
         this.id = id;
-        this.sourceURL = new HashSet<String>();
+        this.sourceUri = new HashSet<String>();
         this.sourceId = sourceId;
         this.sourceSysCode = sourceSysCode;
-        this.targetURL = new HashSet<String>();
+        this.targetUri = new HashSet<String>();
         this.targetId = targetId;
         this.targetSysCode = targetSysCode;
         this.mappingSetId = mappingSetId;
@@ -80,10 +80,10 @@ public class Mapping {
      */
     public Mapping (String id, String sysCode){
         this.id = null;
-        this.sourceURL = new HashSet<String>();
+        this.sourceUri = new HashSet<String>();
         this.sourceId = id;
         this.sourceSysCode = sysCode;
-        this.targetURL = new HashSet<String>();
+        this.targetUri = new HashSet<String>();
         this.targetId = id;
         this.targetSysCode = sysCode;
         this.mappingSetId = null;
@@ -120,47 +120,47 @@ public class Mapping {
     }
 
     /**
-     * @return the sourceURLs
+     * @return the sourceUris
      */
-    public Set<String> getSourceURL() {
-        return sourceURL;
+    public Set<String> getSourceUri() {
+        return sourceUri;
     }
 
-    public void addSourceURL(String sourceURL){
-        getSourceURL().add(sourceURL);
+    public void addSourceUri(String sourceUri){
+        getSourceUri().add(sourceUri);
         if (mapToSelf()){
-            getTargetURL().add(sourceURL);
+            getTargetUri().add(sourceUri);
         }
     }
     
-    public void addSourceURLs(Collection<String> sourceURLs){
-        getSourceURL().addAll(sourceURLs);
+    public void addSourceUris(Collection<String> sourceUris){
+        getSourceUri().addAll(sourceUris);
         if (mapToSelf()){
-            getTargetURL().addAll(sourceURLs);
+            getTargetUri().addAll(sourceUris);
         }
     }
     
     /**
-     * @return the target URLs
+     * @return the target Uris
      */
-    public Set<String> getTargetURL() {
-        return targetURL;
+    public Set<String> getTargetUri() {
+        return targetUri;
     }
 
-    public void addTargetURL(String targetURL){
-        getTargetURL().add(targetURL);
+    public void addTargetUri(String targetUri){
+        getTargetUri().add(targetUri);
     }
 
-    public void addTargetURLs(Collection<String> extraTargetURLs){
-        getTargetURL().addAll(extraTargetURLs);
+    public void addTargetUris(Collection<String> extraTargetUris){
+        getTargetUri().addAll(extraTargetUris);
     }
 
     public String toString(){
         StringBuilder output = new StringBuilder("mapping ");
         output.append(this.getId());
-        for (String sourceURL:getSourceURL()){
-            output.append("\n\tSourceURL: ");
-            output.append(sourceURL);
+        for (String sourceUri:getSourceUri()){
+            output.append("\n\tSourceUri: ");
+            output.append(sourceUri);
         }
         if (getSource() != null){
             output.append("\n\tSource: ");
@@ -168,9 +168,9 @@ public class Mapping {
         }
         output.append("\n\tPredicate(): ");
         output.append(getPredicate());
-        for (String targetURL:getTargetURL()){
-            output.append("\n\tTargetURL: ");
-            output.append(targetURL);
+        for (String targetUri:getTargetUri()){
+            output.append("\n\tTargetUri: ");
+            output.append(targetUri);
         }
         if (getTarget() != null){
             output.append("\n\tTarget: ");
@@ -187,8 +187,8 @@ public class Mapping {
         if (other instanceof Mapping){
             Mapping otherMapping = (Mapping)other;
             if (otherMapping.getId() != getId()) return false;
-            if (!otherMapping.sourceURL.equals(sourceURL)) return false;
-            if (!otherMapping.targetURL.equals(targetURL)) return false;
+            if (!otherMapping.sourceUri.equals(sourceUri)) return false;
+            if (!otherMapping.targetUri.equals(targetUri)) return false;
             if (!otherMapping.getMappingSetId().equals(getMappingSetId())) return false;
             //No need to check predicate as by defintion one id has one predicate
             return true;
@@ -291,17 +291,17 @@ public class Mapping {
     }
 
     /**
-     * @param sourceURLs the sourceURLs to set
+     * @param sourceUris the sourceUris to set
      */
-    public void setSourceURL(Set<String> sourceURLs) {
-        this.sourceURL = sourceURLs;
+    public void setSourceUri(Set<String> sourceUris) {
+        this.sourceUri = sourceUris;
     }
 
     /**
-     * @param targetURLs the targetURLs to set
+     * @param targetUris the targetUris to set
      */
-    public void setTargetURL(Set<String> targetURLs) {
-        this.targetURL = targetURLs;
+    public void setTargetUri(Set<String> targetUris) {
+        this.targetUri = targetUris;
     }
 
     /**

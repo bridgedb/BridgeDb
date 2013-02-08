@@ -97,7 +97,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     private Set<String> extractUris(Collection<Mapping> beans){
         HashSet<String> results = new HashSet<String>();
         for (Mapping bean:beans){
-            results.addAll(bean.getTargetURL());
+            results.addAll(bean.getTargetUri());
         }
         return results;          
     }

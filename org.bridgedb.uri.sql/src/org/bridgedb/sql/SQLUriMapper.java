@@ -297,7 +297,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         results.add(new Mapping(sourceXref.getId(), sourceXref.getDataSource().getSystemCode()));
         //Add targetUris
         for (Mapping mapping: results){
-            mapping.addTargetURLs(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
+            mapping.addTargetUris(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
         }
         return results;
     }
@@ -307,7 +307,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri);
         for (Mapping result:results){
-            result.addSourceURL(sourceUri);
+            result.addSourceUri(sourceUri);
         }
         return results;
     }
@@ -338,7 +338,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         //Add targetUris
         for (Mapping mapping: results){
-            mapping.addTargetURLs(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
+            mapping.addTargetUris(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
         }
         return results;
     }
@@ -365,7 +365,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
         Set<Mapping> results = mapFull(sourceXref, profileUri, tgtDataSource);
         for (Mapping result:results){
-            result.addTargetURL(tgtUriPattern.getUri(result.getTargetId()));
+            result.addTargetUri(tgtUriPattern.getUri(result.getTargetId()));
         }
         return results;
     }
@@ -389,7 +389,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtUriPatterns);
         for (Mapping result:results){
-            result.addSourceURL(sourceUri);
+            result.addSourceUri(sourceUri);
         }
         return results;
     }
@@ -399,7 +399,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtUriPattern);
         for (Mapping result:results){
-            result.addSourceURL(sourceUri);
+            result.addSourceUri(sourceUri);
         }
         return results;
     }
@@ -409,7 +409,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtDataSources);
         for (Mapping result:results){
-            result.addSourceURL(sourceUri);
+            result.addSourceUri(sourceUri);
         }
         return results;
     }
@@ -419,7 +419,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtDataSource);
         for (Mapping result:results){
-            result.addSourceURL(sourceUri);
+            result.addSourceUri(sourceUri);
         }
         return results;
     }
@@ -1424,12 +1424,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private void addSourceURIs(Mapping mapping) throws BridgeDBException {
         Set<String> URIs = getUris(mapping.getSourceId(), mapping.getSourceSysCode());
-        mapping.addSourceURLs(URIs);
+        mapping.addSourceUris(URIs);
     }
 
     private void addTargetURIs(Mapping mapping) throws BridgeDBException {
         Set<String> URIs = getUris(mapping.getTargetId(), mapping.getTargetSysCode());
-        mapping.addTargetURLs(URIs);
+        mapping.addTargetUris(URIs);
     }
 
 }

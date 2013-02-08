@@ -75,19 +75,19 @@ public abstract class UriMapperTest extends URLListenerTest{
         Set<Mapping> results = urlMapper.mapFull(map3URL3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
         for (Mapping URLMapping:results){
-            if (URLMapping.getTargetURL().contains(map3URL3)){
+            if (URLMapping.getTargetUri().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
-                mappedTo.addAll(URLMapping.getTargetURL());
+                mappedTo.addAll(URLMapping.getTargetUri());
                 String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
                     OwlConstants.EQUIVALENT_CLASS.stringValue()};
                 assertThat(URLMapping.getPredicate(), isIn(predicates));
                 assertNotNull(URLMapping.getId());
                 assertNotNull(URLMapping.getMappingSetId());
             }
-            assertTrue(URLMapping.getSourceURL().contains(map3URL3));
+            assertTrue(URLMapping.getSourceUri().contains(map3URL3));
         }
         String[] expectedMatches = {map3URL1, map3URL2, map3URL2a};
         assertThat(mappedTo, hasItems(expectedMatches));
@@ -101,12 +101,12 @@ public abstract class UriMapperTest extends URLListenerTest{
         Set<Mapping> results = urlMapper.mapFull(map3xref3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
         for (Mapping URLMapping:results){
-            if (URLMapping.getTargetURL().contains(map3URL3)){
+            if (URLMapping.getTargetUri().contains(map3URL3)){
                 assertNull(URLMapping.getId());
                 assertNull(URLMapping.getMappingSetId());        
                 assertNull(URLMapping.getPredicate() );
             } else {
-                mappedTo.addAll(URLMapping.getTargetURL());
+                mappedTo.addAll(URLMapping.getTargetUri());
                 String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
                     OwlConstants.EQUIVALENT_CLASS.stringValue()};
                 assertThat(URLMapping.getPredicate(), isIn(predicates));
@@ -274,18 +274,18 @@ public abstract class UriMapperTest extends URLListenerTest{
         Integer mappingId = null;
         Integer setId = null;
         for (Mapping URLMapping:results){
-            if (URLMapping.getTargetURL().contains(map3URL2)){
+            if (URLMapping.getTargetUri().contains(map3URL2)){
                 mappingId = URLMapping.getId();
                 setId = URLMapping.getMappingSetId();        
             }
         }
         Mapping result = urlMapper.getMapping(mappingId);
         assertEquals(mappingId, result.getId());
-        System.out.println(result.getSourceURL());
+        System.out.println(result.getSourceUri());
         System.out.println(map3URL3);
-        assertTrue(result.getSourceURL().contains(map3URL3));
+        assertTrue(result.getSourceUri().contains(map3URL3));
         assertEquals(TEST_PREDICATE, result.getPredicate());
-        assertTrue(result.getTargetURL().contains(map3URL2));
+        assertTrue(result.getTargetUri().contains(map3URL2));
         assertEquals(setId, result.getMappingSetId());
         assertEquals(map3xref3.getId(), result.getSourceId());
         assertEquals(map3xref3.getDataSource().getSystemCode(), result.getSourceSysCode());
@@ -299,9 +299,9 @@ public abstract class UriMapperTest extends URLListenerTest{
         List<Mapping> results = urlMapper.getSampleMapping();
         assertEquals(5, results.size());
         for (Mapping mapping:results){
-            Set<String> sources = mapping.getSourceURL();
+            Set<String> sources = mapping.getSourceUri();
             assertThat(sources.size(), greaterThan(0));
-            Set<String> targets = mapping.getTargetURL();
+            Set<String> targets = mapping.getTargetUri();
             assertThat(targets.size(), greaterThan(0));
         }
     }

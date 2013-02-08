@@ -145,14 +145,14 @@ public class WSFame extends WSUriInterfaceService {
         }
         Set<String> keys = idMapper.getCapabilities().getKeys();
         Mapping mapping3 = mappings.get(2);
-        String SourceUri3 = mapping3.getSourceURL().iterator().next();
+        String SourceUri3 = mapping3.getSourceUri().iterator().next();
         String text = SQLUriMapper.getId(SourceUri3);
         Mapping mapping4 = mappings.get(3);
-        String sourceUri4 = mapping4.getSourceURL().iterator().next();
+        String sourceUri4 = mapping4.getSourceUri().iterator().next();
         Mapping mapping5 = mappings.get(4);
         int mappingId = mapping5.getId();
         HashSet<String> URI2Spaces = new HashSet<String>();
-        String targetUri = mapping5.getTargetURL().iterator().next();
+        String targetUri = mapping5.getTargetUri().iterator().next();
         URI2Spaces.add(SQLUriMapper.getUriSpace(targetUri));            
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
 
