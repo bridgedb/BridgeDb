@@ -871,17 +871,17 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     
     @Override
     public List<ProfileInfo> getProfiles() throws BridgeDBException {
-    	String query = ("SELECT profileId, name, createdOn, createdBy " +
-    			"FROM profile");
+    	String query = ("SELECT * " 
+    			+ " FROM " + PROFILE_TABLE_NAME);
     	Statement statement = this.createStatement();
     	List<ProfileInfo> profiles = new ArrayList<ProfileInfo>();
     	try {
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next()) {
-				int profileId = rs.getInt("profileId");
-				String name = rs.getString("name");
-				String createdOn = rs.getString("createdOn");
-				String createdBy = rs.getString("createdBy");
+				int profileId = rs.getInt(PROFILE_ID_COLUMN_NAME);
+				String name = rs.getString(NAME_COLUMN_NAME);
+				String createdOn = rs.getString(CREATED_ON_COLUMN_NAME);
+				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
 				Set<String> justifications = getJustificationsForProfile(profileId);
 				String profileURL = RdfConfig.getProfileURI(profileId);
 				profiles.add(new ProfileInfo(profileURL, name, createdOn, createdBy, justifications));
@@ -895,8 +895,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     @Override
     public ProfileInfo getProfile(String profileURI) throws BridgeDBException {
     	int profileID = extractIDFromURI(profileURI);
-    	String query = ("SELECT profileId, name, createdOn, createdBy " +
-    			"FROM profile WHERE profileId = " + profileID);
+    	String query = ("SELECT * " +
+    			"FROM " + PROFILE_TABLE_NAME + " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileID);
     	Statement statement = this.createStatement();
     	ProfileInfo profile = null;
 		try {
@@ -905,10 +905,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 				throw new BridgeDBException("No profile with the URI " + profileURI);
 			}
 			do {
-				int profileId = rs.getInt("profileId");
-				String name = rs.getString("name");
-				String createdOn = rs.getString("createdOn");
-				String createdBy = rs.getString("createdBy");
+				int profileId = rs.getInt(PROFILE_ID_COLUMN_NAME);
+				String name = rs.getString(NAME_COLUMN_NAME);
+				String createdOn = rs.getString(CREATED_ON_COLUMN_NAME);
+				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
 				Set<String> justifications = getJustificationsForProfile(profileId);
 				profile = new ProfileInfo(profileURI, name, createdOn, createdBy, justifications);
 			} while (rs.next());
@@ -920,7 +920,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
     @Override
     public int getSqlCompatVersion() throws BridgeDBException {
-        String query = ("select schemaversion from info");
+        String query = ("select " + SCHEMA_VERSION_COLUMN_NAME + " from " + INFO_TABLE_NAME);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -937,15 +937,15 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     // **** URLListener Methods
     
     private Set<String> getJustificationsForProfile(int profileId) throws BridgeDBException {
-    	String query = ("SELECT justificationURI " +
-    			"FROM profileJustifications " +
-    			"WHERE profileId = " + profileId);
+    	String query = ("SELECT " + JUSTIFICTAION_URI_COLUMN_NAME 
+    			+ " FROM " + PROFILE_JUSTIFICATIONS_TABLE_NAME
+    			+ " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileId);
     	Statement statement = this.createStatement();
     	Set<String> justifications = new HashSet<String>();
     	try {
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next()) {
-				String justification = rs.getString("justificationURI");
+				String justification = rs.getString(JUSTIFICTAION_URI_COLUMN_NAME);
 				justifications.add(justification);
 			}
 		} catch (SQLException e) {
@@ -1010,10 +1010,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     @Override
-    public int registerMappingSet(String sourceUriSpace, String predicate, String justification, String targetUriSpace, 
-            boolean symetric, boolean transative) throws BridgeDBException {
-        DataSource source = getDataSource(sourceUriSpace);
-        DataSource target = getDataSource(targetUriSpace);      
+    public int registerMappingSet(UriPattern sourceUriPattern, String predicate, String justification, 
+            UriPattern targetUriPattern, boolean symetric, boolean transative) throws BridgeDBException {
+        DataSource source = sourceUriPattern.getDataSource();
+        DataSource target = targetUriPattern.getDataSource();      
         return registerMappingSet(source, predicate, justification, target, symetric, transative);
     }
 
@@ -1170,10 +1170,10 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
         try {
             while (rs.next()){
-                Integer count = rs.getInt("mappingCount");
-                results.add(new MappingSetInfo(rs.getString("id"), rs.getString("sourceDataSource"), 
-                        rs.getString("predicate"), rs.getString("targetDataSource"), count, 
-                        rs.getBoolean("isTransitive")));
+                Integer count = rs.getInt(MAPPING_COUNT_COLUMN_NAME);
+                results.add(new MappingSetInfo(rs.getString(ID_COLUMN_NAME), rs.getString(SOURCE_DATASOURCE_COLUMN_NAME), 
+                        rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), count, 
+                        rs.getBoolean(IS_TRANSITIVE_COLUMN_NAME)));
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);

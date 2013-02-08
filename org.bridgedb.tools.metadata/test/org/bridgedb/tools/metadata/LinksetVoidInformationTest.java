@@ -20,6 +20,7 @@
 package org.bridgedb.tools.metadata;
 
 import java.util.Set;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.constants.DctermsConstants;
 import org.bridgedb.tools.metadata.rdf.LinksetStatementReader;
@@ -71,10 +72,10 @@ public class LinksetVoidInformationTest extends TestUtils{
      * Test of getSubjectUriSpace method, of class LinksetVoidInformation.
      */
     @Test
-    public void testGetSubjectUriSpace() throws Exception {
+    public void testGetSubjectUriPattern() throws Exception {
         report("getSubjectUriSpace");
-        String result = instance.getSubjectUriSpace();
-        assertEquals("http://data.kasabi.com/dataset/chembl-rdf/", result);
+        UriPattern result = instance.getSubjectUriPattern();
+        assertEquals("http://data.kasabi.com/dataset/chembl-rdf/$id", result.toString());
     }
 
     /**
@@ -83,8 +84,8 @@ public class LinksetVoidInformationTest extends TestUtils{
     @Test
     public void testGetTargetUriSpace() throws Exception {
         report("getTargetUriSpace");
-        String result = instance.getTargetUriSpace();
-        assertEquals("http://rdf.chemspider.com/", result);
+        UriPattern result = instance.getTargetUriPattern();
+        assertEquals("http://rdf.chemspider.com/$id", result.toString());
     }
 
     /**

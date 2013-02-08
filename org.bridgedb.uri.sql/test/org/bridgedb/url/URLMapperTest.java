@@ -46,21 +46,6 @@ import org.junit.Test;
  */
 public abstract class URLMapperTest extends URLListenerTest{
                     
-    protected static UriPattern uriPattern1;
-    protected static UriPattern uriPattern2;
-    protected static UriPattern uriPattern3;
-    protected static UriPattern uriPatternBad;
-    
-    @BeforeClass
-    public static void setupUriPatterns() throws BridgeDBException{
-        setupURLs();
-        connectionOk = true;
-        uriPattern1 = UriPattern.byNameSpace(URISpace1);
-        uriPattern2 = UriPattern.byNameSpace(URISpace2);
-        uriPattern3 = UriPattern.byNameSpace(URISpace3);
-        uriPatternBad = UriPattern.byNameSpace("http://www.example.com/URLMapperTest/Bad");
-    }
-        
     @Test
     public void testMapIDOneToManyNoDataSources() throws BridgeDBException{
         report("MapIDOneToManyNoDataSources");

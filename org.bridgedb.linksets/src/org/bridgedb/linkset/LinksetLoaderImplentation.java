@@ -30,6 +30,7 @@ import org.bridgedb.linkset.rdf.LinksetStatementReaderAndImporter;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.linkset.rdf.RdfWrapper;
 import org.bridgedb.linkset.rdf.StatementReaderAndImporter;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.sql.SQLIdMapper;
 import org.bridgedb.sql.SQLUrlMapper;
@@ -175,14 +176,14 @@ public class LinksetLoaderImplentation{
     
     private void getLinksetContexts(URLListener urlListener) throws BridgeDBException {
         LinksetVoidInformation information = (LinksetVoidInformation)metaData;
-        String subjectUriSpace = information.getSubjectUriSpace();
-        String targetUriSpace = information.getTargetUriSpace();
+        UriPattern subjectUriPattern = information.getSubjectUriPattern();
+        UriPattern targetUriPattern = information.getTargetUriPattern();
         String predicate = information.getPredicate();
         //TODO work out way to do this
         symmetric = true;
         boolean transative = information.isTransative();
         String justification = information.getJustification();
-        mappingId = urlListener.registerMappingSet(subjectUriSpace, predicate, justification, targetUriSpace, 
+        mappingId = urlListener.registerMappingSet(subjectUriPattern, predicate, justification, targetUriPattern, 
                 symmetric, transative);   
         linksetContext = RdfFactory.getLinksetURL(mappingId);
         linksetResource = information.getLinksetResource();

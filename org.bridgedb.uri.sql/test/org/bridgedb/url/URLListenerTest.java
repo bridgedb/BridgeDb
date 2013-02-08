@@ -19,7 +19,9 @@
 //
 package org.bridgedb.url;
 
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 
 /**
@@ -38,7 +40,22 @@ public abstract class URLListenerTest extends URLMapperTestBase{
     private static final boolean ORIGINAL = false;
     private static final boolean TRANSATIVE = true;
     protected static int mappingSet2_3;
+ 
+    protected static UriPattern uriPattern1;
+    protected static UriPattern uriPattern2;
+    protected static UriPattern uriPattern3;
+    protected static UriPattern uriPatternBad;
     
+    @BeforeClass
+    public static void setupUriPatterns() throws BridgeDBException{
+        setupURLs();
+        connectionOk = true;
+        uriPattern1 = UriPattern.byNameSpace(URISpace1);
+        uriPattern2 = UriPattern.byNameSpace(URISpace2);
+        uriPattern3 = UriPattern.byNameSpace(URISpace3);
+        uriPatternBad = UriPattern.byNameSpace("http://www.example.com/URLMapperTest/Bad");
+    }
+        
     /**
      * Method for loading the Test data
      * Should be called in a @beforeClass method after setting listener
@@ -52,20 +69,20 @@ public abstract class URLListenerTest extends URLMapperTestBase{
         listener.registerUriPattern(DataSource3, URISpace3 + "$id");
         listener.registerUriPattern(DataSource3, URISpace3a + "$id");
 
-        int mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, 
-        		TEST_JUSTIFICATION1, URISpace2, SYMETRIC, ORIGINAL);
+        int mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
+        		TEST_JUSTIFICATION1, uriPattern2, SYMETRIC, ORIGINAL);
         listener.insertURLMapping(map1URL1, map1URL2, mappingSet, SYMETRIC);
         listener.insertURLMapping(map2URL1, map2URL2, mappingSet, SYMETRIC);
         listener.insertURLMapping(map3URL1, map3URL2, mappingSet, SYMETRIC);
         
-        mappingSet2_3 = listener.registerMappingSet(URISpace2, TEST_PREDICATE, 
-        		TEST_JUSTIFICATION2, URISpace3, SYMETRIC, ORIGINAL);
+        mappingSet2_3 = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
+        		TEST_JUSTIFICATION2, uriPattern3, SYMETRIC, ORIGINAL);
         listener.insertURLMapping(map1URL2, map1URL3, mappingSet2_3, SYMETRIC);
         listener.insertURLMapping(map2URL2, map2URL3, mappingSet2_3, SYMETRIC);
         listener.insertURLMapping(map3URL2, map3URL3, mappingSet2_3, SYMETRIC);
 
-        mappingSet = listener.registerMappingSet(URISpace1, TEST_PREDICATE, 
-        		TEST_JUSTIFICATION2, URISpace3, SYMETRIC, TRANSATIVE);
+        mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
+        		TEST_JUSTIFICATION2, uriPattern3, SYMETRIC, TRANSATIVE);
         listener.insertURLMapping(map1URL1, map1URL3, mappingSet, SYMETRIC);
         listener.insertURLMapping(map2URL1, map2URL3, mappingSet, SYMETRIC);
         listener.insertURLMapping(map3URL1, map3URL3, mappingSet, SYMETRIC);

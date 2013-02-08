@@ -60,7 +60,7 @@ public class SQLListener implements MappingListener{
     private static final int MAX_BLOCK_SIZE = 1000;
     
     static final String DATASOURCE_TABLE_NAME = "DataSource";
-    static final String INFO_TABLE_NAME = "info";
+    static final String INFO_TABLE_NAME = "info";  //Do not change as used by RDG packages as well
     static final String MAPPING_TABLE_NAME = "mapping";
     static final String MAPPING_SET_TABLE_NAME = "mappingSet";
     static final String PROPERTIES_TABLE_NAME = "properties";
@@ -79,7 +79,7 @@ public class SQLListener implements MappingListener{
     static final String MAPPING_SET_DOT_ID_COLUMN_NAME = MAPPING_SET_TABLE_NAME + "." + ID_COLUMN_NAME;
     static final String PREDICATE_COLUMN_NAME = "predicate";
     static final String PROPERTY_COLUMN_NAME = "property";
-    static final String SCHEMA_VERSION_COLUMN_NAME = "schemaversion";
+    static final String SCHEMA_VERSION_COLUMN_NAME = "schemaversion"; //Do not change as used by RDG packages as well
     static final String SOURCE_DATASOURCE_COLUMN_NAME = "sourceDataSource";
     static final String SOURCE_ID_COLUMN_NAME = "sourceId";
     static final String SYSCODE_COLUMN_NAME = "sysCode";

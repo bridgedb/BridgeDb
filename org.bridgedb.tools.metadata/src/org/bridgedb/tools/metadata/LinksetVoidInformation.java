@@ -20,6 +20,7 @@
 package org.bridgedb.tools.metadata;
 
 import java.util.Set;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.constants.DulConstants;
@@ -226,18 +227,18 @@ public class LinksetVoidInformation implements MetaData {
 
     // Methods used to extract specific Linkset info
     
-    public String getSubjectUriSpace() throws BridgeDBException {
+    public UriPattern getSubjectUriPattern() throws BridgeDBException {
         if (subjectUriSpace == null) {
             throw new BridgeDBException(error);
         }
-        return subjectUriSpace;
+        return UriPattern.byNameSpace(subjectUriSpace);
     }
 
-    public String getTargetUriSpace() throws BridgeDBException {
+    public UriPattern getTargetUriPattern() throws BridgeDBException {
         if (targetUriSpace == null) {
             throw new BridgeDBException(error);
         }
-        return targetUriSpace;
+        return UriPattern.byNameSpace(targetUriSpace);
     }
 
     public String getPredicate() throws BridgeDBException {
