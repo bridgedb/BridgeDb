@@ -22,7 +22,7 @@ package org.bridgedb.linkset;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.linkset.rdf.RdfReader;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.tools.metadata.validator.ValidationType;
@@ -67,7 +67,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
     public void testMappingInfo() throws BridgeDBException {
         report("MappingInfo");
         TestSqlFactory.checkSQLAccess();
-        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
+        SQLUriMapper sqlUrlMapper = new SQLUriMapper(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
         assertEquals ("Chembl 13 Molecule", info.getSourceSysCode());

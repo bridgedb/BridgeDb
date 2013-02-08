@@ -22,7 +22,7 @@ package org.bridgedb.mysql;
 import java.util.Date;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -41,12 +41,12 @@ import org.junit.Test;
  */
 public class UriPatternSaveTest extends TestUtils {
     
-    private static SQLUrlMapper mapper;
+    private static SQLUriMapper mapper;
     
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException{
         TestSqlFactory.checkSQLAccess();
-        mapper = new SQLUrlMapper(true, StoreType.TEST);
+        mapper = new SQLUriMapper(true, StoreType.TEST);
     }
 
     @Test

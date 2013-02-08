@@ -37,14 +37,14 @@ import org.bridgedb.linkset.rdf.RdfWrapper;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.tools.metadata.constants.DctermsConstants;
 import org.bridgedb.tools.metadata.constants.DulConstants;
 import org.bridgedb.tools.metadata.constants.FoafConstants;
 import org.bridgedb.tools.metadata.constants.PavConstants;
-import org.bridgedb.url.URLMapper;
+import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
@@ -64,7 +64,7 @@ import org.openrdf.rio.RDFHandlerException;
 public class TransativeCreator {
     
     private SQLAccess sqlAccess;
-    private URLMapper mapper;
+    private UriMapper mapper;
     private URI leftContext;
     private URI rightContext;
     private Resource leftLinkSet;
@@ -92,7 +92,7 @@ public class TransativeCreator {
     private TransativeCreator(int leftId, int rightId, String possibleFileName, StoreType storeType) 
             throws BridgeDBException, IOException{
         sqlAccess = SqlFactory.createTheSQLAccess(storeType);
-        mapper = new SQLUrlMapper(false, storeType);
+        mapper = new SQLUriMapper(false, storeType);
         createBufferedWriter(possibleFileName, leftId, rightId);
         leftContext = RdfFactory.getLinksetURL(leftId);
         rightContext = RdfFactory.getLinksetURL(rightId);

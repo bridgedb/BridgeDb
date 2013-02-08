@@ -29,7 +29,7 @@ import org.junit.Test;
  *
  * @author Christian
  */
-public class URLMapperTest  extends org.bridgedb.url.URLMapperTest{
+public class URLMapperTest  extends org.bridgedb.uri.UriMapperTest{
     
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException {

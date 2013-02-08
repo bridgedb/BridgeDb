@@ -41,9 +41,9 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.url.Mapping;
+import org.bridgedb.uri.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -146,14 +146,14 @@ public class WSFame extends WSUriInterfaceService {
         Set<String> keys = idMapper.getCapabilities().getKeys();
         Mapping mapping3 = mappings.get(2);
         String SourceUri3 = mapping3.getSourceURL().iterator().next();
-        String text = SQLUrlMapper.getId(SourceUri3);
+        String text = SQLUriMapper.getId(SourceUri3);
         Mapping mapping4 = mappings.get(3);
         String sourceUri4 = mapping4.getSourceURL().iterator().next();
         Mapping mapping5 = mappings.get(4);
         int mappingId = mapping5.getId();
         HashSet<String> URI2Spaces = new HashSet<String>();
         String targetUri = mapping5.getTargetURL().iterator().next();
-        URI2Spaces.add(SQLUrlMapper.getUriSpace(targetUri));            
+        URI2Spaces.add(SQLUriMapper.getUriSpace(targetUri));            
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
 
         sb.append("\n<p><a href=\"/");

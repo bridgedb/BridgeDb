@@ -28,7 +28,7 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.tools.metadata.LinksetVoidInformation;
 import org.bridgedb.tools.metadata.constants.PavConstants;
-import org.bridgedb.url.URLListener;
+import org.bridgedb.uri.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
@@ -56,10 +56,10 @@ public class RDFWriter implements RdfLoader{
     private final boolean symmetric;
     private final String mainCaller;
     private String accessedFrom;
-    private final URLListener urlListener;
+    private final UriListener urlListener;
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
-    public RDFWriter(StoreType storeType, LinksetVoidInformation information, URLListener listener, String mainCaller) 
+    public RDFWriter(StoreType storeType, LinksetVoidInformation information, UriListener listener, String mainCaller) 
             throws BridgeDBException{
         this.storeType = storeType;
         urlListener = listener;

@@ -38,13 +38,13 @@ import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.reader.StatementReader;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.tools.metadata.validator.ValidationType;
-import org.bridgedb.url.Mapping;
-import org.bridgedb.url.URLMapper;
+import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WSCoreService;
@@ -68,7 +68,7 @@ import org.openrdf.rio.RDFFormat;
 @Path("/")
 public class WSUriInterfaceService extends WSCoreService implements WSUriInterface {
 
-    protected URLMapper uriMapper;
+    protected UriMapper uriMapper;
     protected LinksetInterfaceMinimal linksetInterface;
 //    private String validationTypeString;
     public final String MIME_TYPE = "mimeType";
@@ -88,11 +88,11 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected WSUriInterfaceService() throws BridgeDBException {
         super();
         this.linksetInterface = new LinksetLoader();
-        uriMapper = new SQLUrlMapper(false, StoreType.LIVE);
+        uriMapper = new SQLUriMapper(false, StoreType.LIVE);
         idMapper = uriMapper;
     }
 
-    public WSUriInterfaceService(URLMapper urlMapper) throws BridgeDBException {
+    public WSUriInterfaceService(UriMapper urlMapper) throws BridgeDBException {
         super(urlMapper);
         this.uriMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();

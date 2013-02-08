@@ -30,8 +30,8 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
-import org.bridgedb.url.Mapping;
-import org.bridgedb.url.URLMapper;
+import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
@@ -48,7 +48,7 @@ import org.bridgedb.ws.bean.XrefBeanFactory;
  *
  * @author Christian
  */
-public class WSUriMapper extends WSCoreMapper implements URLMapper{
+public class WSUriMapper extends WSCoreMapper implements UriMapper{
     
     WSUriInterface uriService;
     private static final ArrayList<String> NO_SYSCODES = null;

@@ -17,8 +17,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.url;
+package org.bridgedb.uri;
 
+import org.bridgedb.uri.Mapping;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-public abstract class URLMapperTest extends URLListenerTest{
+public abstract class UriMapperTest extends URLListenerTest{
                     
     @Test
     public void testMapIDOneToManyNoDataSources() throws BridgeDBException{

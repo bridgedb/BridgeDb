@@ -38,7 +38,7 @@ import org.bridgedb.XrefIterator;
 import org.bridgedb.bio.BioDataSource;
 import org.bridgedb.mysql.MySQLSpecific;
 import org.bridgedb.sql.SQLAccess;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -71,7 +71,7 @@ public class Test {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private static void registerUriSpaces(SQLUrlMapper sqlMapper, Set<DataSource> dataSources) throws BridgeDBException{
+    private static void registerUriSpaces(SQLUriMapper sqlMapper, Set<DataSource> dataSources) throws BridgeDBException{
         for (DataSource source: dataSources){
             String uriSpace = source.getUrl("$id").trim();
             if (uriSpace.equals("$id")){
@@ -86,7 +86,7 @@ public class Test {
      * @param mapper MUST implement XrefIterator
      */
     public static void printLinksetLines(IDMapper mapper) throws BridgeDBException{
-        SQLUrlMapper sqlMapper = new SQLUrlMapper(false, StoreType.TEST);
+        SQLUriMapper sqlMapper = new SQLUriMapper(false, StoreType.TEST);
 
         XrefIterator iterator = (XrefIterator)mapper;
         Set<DataSource> srcDataSources;

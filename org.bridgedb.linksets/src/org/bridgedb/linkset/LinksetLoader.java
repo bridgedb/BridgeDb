@@ -27,10 +27,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfFactory;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.tools.metadata.validator.Validator;
-import org.bridgedb.url.URLListener;
+import org.bridgedb.uri.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.DirectoriesConfig;
@@ -226,7 +226,7 @@ public class LinksetLoader implements LinksetInterface{
         }
         RdfFactory.clear(storeType);
         logger.info(storeType + " RDF cleared");
-        URLListener listener = new SQLUrlMapper(true, storeType);
+        UriListener listener = new SQLUriMapper(true, storeType);
         logger.info(storeType + " SQL cleared");                
     }
 

@@ -16,8 +16,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.url;
+package org.bridgedb.uri;
 
+import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.junit.BeforeClass;
 import org.bridgedb.utils.IDMapperTestBase;
@@ -27,10 +28,10 @@ import org.bridgedb.utils.IDMapperTestBase;
  * 
  * @author Christian
  */
-public abstract class URLMapperTestBase extends IDMapperTestBase {
+public abstract class UriMapperTestBase extends IDMapperTestBase {
             
     //Must be instantiated by implementation of these tests.
-    protected static URLMapper urlMapper;
+    protected static UriMapper urlMapper;
 
     //Used by subsets during settup to check connection is ok.
     //If set to false will skip testClose(). 

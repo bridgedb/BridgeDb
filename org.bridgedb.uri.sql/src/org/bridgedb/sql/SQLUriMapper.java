@@ -38,9 +38,9 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
-import org.bridgedb.url.Mapping;
-import org.bridgedb.url.URLListener;
-import org.bridgedb.url.URLMapper;
+import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.UriListener;
+import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
@@ -53,7 +53,7 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
-public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener {
+public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener {
 
     private static final int PREFIX_LENGTH = 400;
     private static final int POSTFIX_LENGTH = 100;
@@ -85,7 +85,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
      * @param specific Code to hold the things that are different between different SQL implementaions.
      * @throws BridgeDBException
      */
-     public SQLUrlMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
+     public SQLUriMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
         super(dropTables, storeType);
         BridgeDBRdfHandler.init();
         if (dropTables){

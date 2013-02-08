@@ -17,8 +17,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.url;
+package org.bridgedb.uri;
 
+import org.bridgedb.uri.UriListener;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.junit.BeforeClass;
@@ -30,9 +31,9 @@ import org.junit.Ignore;
  * Adds a method for loading the test data.
  * @author Christian
  */
-public abstract class URLListenerTest extends URLMapperTestBase{
+public abstract class URLListenerTest extends UriMapperTestBase{
         
-    protected static URLListener listener;
+    protected static UriListener listener;
     protected static final String TEST_JUSTIFICATION1 = "http://www.bridgedb.org/test#testJustification1";
     protected static final String TEST_JUSTIFICATION2 = "http://www.bridgedb.org/test#testJustification2";
     protected static final String TEST_PREDICATE = "http://www.w3.org/2004/02/skos/core#exactMatch";

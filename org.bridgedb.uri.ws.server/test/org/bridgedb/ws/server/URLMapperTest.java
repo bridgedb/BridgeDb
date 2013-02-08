@@ -20,7 +20,7 @@
 package org.bridgedb.ws.server;
 
 import java.util.Date;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -34,7 +34,7 @@ import org.junit.BeforeClass;
  * @author Christian
  */
 //@Ignore
-public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
+public class URLMapperTest extends org.bridgedb.uri.UriMapperTest {
 
     private static final String CREATOR1 = "testCreator";
     private static final String PREDICATE1 = "testMapping";
@@ -45,9 +45,9 @@ public class URLMapperTest extends org.bridgedb.url.URLMapperTest {
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
-        listener = new SQLUrlMapper(true, StoreType.TEST);
+        listener = new SQLUriMapper(true, StoreType.TEST);
         loadData();
-        SQLUrlMapper sqlUrlMapper = new SQLUrlMapper(false, StoreType.TEST);
+        SQLUriMapper sqlUrlMapper = new SQLUriMapper(false, StoreType.TEST);
         urlMapper = new WSUriMapper(new WSUriInterfaceService(sqlUrlMapper)); 
     }
       

@@ -20,7 +20,7 @@
 package org.bridgedb.ws;
 
 import java.util.List;
-import org.bridgedb.url.Mapping;
+import org.bridgedb.uri.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;

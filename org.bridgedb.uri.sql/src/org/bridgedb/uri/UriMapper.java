@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.url;
+package org.bridgedb.uri;
 
 import java.util.List;
 import java.util.Set;
@@ -39,7 +39,7 @@ import org.bridgedb.utils.BridgeDBException;
  * Similar to the IDMapper interface except treats URLs as first class citizens.
  * To keep code size small URLs are represented as Strings.
  */
-public interface URLMapper extends IDMapper{
+public interface UriMapper extends IDMapper{
 //TODO: Improve javadoc!
     
     

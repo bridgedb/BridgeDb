@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.url;
+package org.bridgedb.uri;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.UriPattern;
@@ -31,7 +31,7 @@ import org.bridgedb.utils.BridgeDBException;
  * 
  * @author Christian
  */
-public interface URLListener {
+public interface UriListener {
     
     /**
      * Associates a DataSource with a UriPattern.

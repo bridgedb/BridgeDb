@@ -33,7 +33,7 @@ import org.bridgedb.linkset.rdf.StatementReaderAndImporter;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.sql.SQLIdMapper;
-import org.bridgedb.sql.SQLUrlMapper;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.tools.metadata.LinksetVoidInformation;
 import org.bridgedb.tools.metadata.MetaData;
 import org.bridgedb.tools.metadata.MetaDataCollection;
@@ -44,7 +44,7 @@ import org.bridgedb.tools.metadata.rdf.LinksetStatements;
 import org.bridgedb.tools.metadata.rdf.VoidStatements;
 import org.bridgedb.tools.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.tools.metadata.validator.ValidationType;
-import org.bridgedb.url.URLListener;
+import org.bridgedb.uri.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
@@ -161,7 +161,7 @@ public class LinksetLoaderImplentation{
     }
     
     private void linksetLoad() throws BridgeDBException{
-        URLListener urlListener = new SQLUrlMapper(false, storeType);
+        UriListener urlListener = new SQLUriMapper(false, storeType);
         getLinksetContexts(urlListener);
         resetBaseURI();
         loadVoid();
@@ -174,7 +174,7 @@ public class LinksetLoaderImplentation{
         }
     }
     
-    private void getLinksetContexts(URLListener urlListener) throws BridgeDBException {
+    private void getLinksetContexts(UriListener urlListener) throws BridgeDBException {
         LinksetVoidInformation information = (LinksetVoidInformation)metaData;
         UriPattern subjectUriPattern = information.getSubjectUriPattern();
         UriPattern targetUriPattern = information.getTargetUriPattern();
@@ -271,7 +271,7 @@ public class LinksetLoaderImplentation{
         }
     }
 
-    private void loadSQL(URLListener urlListener) throws BridgeDBException {
+    private void loadSQL(UriListener urlListener) throws BridgeDBException {
         LinksetStatements linksetStatements = (LinksetStatements) statements;
         for (Statement st:linksetStatements.getLinkStatements()){
             String sourceURL = st.getSubject().stringValue();
