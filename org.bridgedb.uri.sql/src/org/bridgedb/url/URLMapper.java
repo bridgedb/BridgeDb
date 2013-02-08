@@ -53,58 +53,58 @@ public interface URLMapper extends IDMapper{
 	 * Set when no cross references could be found. This method does not return null.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public Set<Xref> mapID(Xref sourceRef, String profileURL, DataSource... tgtDataSources) throws BridgeDBException;
+	public Set<Xref> mapID(Xref sourceRef, String profileUri, DataSource... tgtDataSources) throws BridgeDBException;
 
-  	public Set<Xref> mapID(Xref sourceXref, String profileURL, DataSource tgtDataSource) throws BridgeDBException;
+  	public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException;
 	
-    public Set<Xref> mapID(Xref sourceXref, String profileURL) throws BridgeDBException;
+    public Set<Xref> mapID(Xref sourceXref, String profileUri) throws BridgeDBException;
 
-    public Set<String> mapUri(String sourceUri, String profileURL, UriPattern... tgtUriPattern) 
+    public Set<String> mapUri(String sourceUri, String profileUri, UriPattern... tgtUriPattern) 
             throws BridgeDBException;
 
-    public Set<String> mapUri(Xref sourceXref, String profileURL, UriPattern tgtUriPattern) 
+    public Set<String> mapUri(Xref sourceXref, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
-    public Set<String> mapUri(Xref sourceXref, String profileURL) 
+    public Set<String> mapUri(Xref sourceXref, String profileUri) 
             throws BridgeDBException;
 
-    public Set<String> mapUri(Xref sourceXref, String profileURL, UriPattern... tgtUriPattern) 
+    public Set<String> mapUri(Xref sourceXref, String profileUri, UriPattern... tgtUriPattern) 
             throws BridgeDBException;
 
-    public Set<String> mapUri(String sourceUri, String profileURL, UriPattern tgtUriPattern) 
+    public Set<String> mapUri(String sourceUri, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
-    public Set<String> mapUri(String sourceUri, String profileURL) 
+    public Set<String> mapUri(String sourceUri, String profileUri) 
             throws BridgeDBException;
 
-	public Set<Mapping> mapFull(Xref sourceXref, String profileURL, DataSource... tgtDataSources) 
+	public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource... tgtDataSources) 
             throws BridgeDBException;
 
-	public Set<Mapping> mapFull(Xref sourceXref, String profileURL, DataSource tgtDataSources) 
+	public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource tgtDataSources) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(Xref sourceXref, String profileURL) 
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(Xref sourceXref, String profileURL, UriPattern... tgtUriPattern) 
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern... tgtUriPattern) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(Xref sourceXref, String profileURL, UriPattern tgtUriPattern) 
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(String sourceUri, String profileURL, DataSource... tgtDataSources) 
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource... tgtDataSources) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(String sourceUri, String profileURL, DataSource tgtDataSource) 
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource tgtDataSource) 
             throws BridgeDBException;
 
-	public Set<Mapping> mapFull(String sourceUri, String profileURL) 
+	public Set<Mapping> mapFull(String sourceUri, String profileUri) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(String sourceUri, String profileURL, UriPattern tgtUriPattern) 
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(String sourceUri, String profileURL, UriPattern... tgtUriPatterns)
+    public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern... tgtUriPatterns)
             throws BridgeDBException;
 
     
@@ -120,7 +120,7 @@ public interface URLMapper extends IDMapper{
      * Similar to the mapID method in IDMapper.
      * 
 	 * @param sourceURL the URL to get mappings/cross-references for. 
-	 * @param profileURL the URL of the profile to use when retrieving mappings
+	 * @param profileUri the URL of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
      *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
 	 * @return A Set containing the URL (as Strings) that have been mapped/ cross referenced.

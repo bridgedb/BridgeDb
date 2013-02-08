@@ -104,12 +104,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.MAP_URL)
     @Override
     public List<Mapping> map(@QueryParam(WsUriConstants.URL) String URL,
-    		@QueryParam(WsUriConstants.PROFILE_URL) String profileURL,
+    		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
         if (logger.isDebugEnabled()){
             logger.debug("map called! URL = " + URL);
-            logger.debug("   profileURL = " + profileURL);
+            logger.debug("   profileUri = " + profileUri);
             if (targetCodes!= null || !targetCodes.isEmpty()){
                 logger.debug("   targetCodes = " + targetCodes);
             }
@@ -124,14 +124,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         Set<Mapping> urlMappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
-                urlMappings = urlMapper.mapFull(URL, profileURL);
+                urlMappings = urlMapper.mapFull(URL, profileUri);
             } else {
-                urlMappings = mapByTargetUriPattern(URL, profileURL, targetPatterns);
+                urlMappings = mapByTargetUriPattern(URL, profileUri, targetPatterns);
             }
         } else {
-            urlMappings = mapByTargetDataSource (URL, profileURL, targetDataSources);
+            urlMappings = mapByTargetDataSource (URL, profileUri, targetDataSources);
             if (targetPatterns != null){
-                urlMappings.addAll(mapByTargetUriPattern(URL, profileURL, targetPatterns));                
+                urlMappings.addAll(mapByTargetUriPattern(URL, profileUri, targetPatterns));                
             } 
         }
         return new ArrayList<Mapping>(urlMappings); 
@@ -149,13 +149,13 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public List<Mapping> map(
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
-    		@QueryParam(WsUriConstants.PROFILE_URL) String profileURL,
+    		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
        if (logger.isDebugEnabled()){
             logger.debug("map called! id = " + id);
             logger.debug("   scrCode = " + scrCode);
-            logger.debug("   profileURL = " + profileURL);
+            logger.debug("   profileUri = " + profileUri);
             if (targetCodes!= null || !targetCodes.isEmpty()){
                 logger.debug("   targetCodes = " + targetCodes);
             }
@@ -173,14 +173,14 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         Set<Mapping> urlMappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
-                urlMappings = urlMapper.mapFull(sourceXref, profileURL);
+                urlMappings = urlMapper.mapFull(sourceXref, profileUri);
             } else {
-                urlMappings = mapByTargetUriPattern(sourceXref, profileURL, targetPatterns);
+                urlMappings = mapByTargetUriPattern(sourceXref, profileUri, targetPatterns);
             }
         } else {
-            urlMappings = mapByTargetDataSource (sourceXref, profileURL, targetDataSources);
+            urlMappings = mapByTargetDataSource (sourceXref, profileUri, targetDataSources);
             if (targetPatterns != null){
-                urlMappings.addAll(mapByTargetUriPattern(sourceXref, profileURL, targetPatterns));                
+                urlMappings.addAll(mapByTargetUriPattern(sourceXref, profileUri, targetPatterns));                
             } 
         }
         return new ArrayList<Mapping>(urlMappings); 

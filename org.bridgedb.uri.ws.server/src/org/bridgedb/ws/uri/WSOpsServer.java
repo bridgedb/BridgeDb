@@ -97,7 +97,9 @@ public class WSOpsServer extends WSLinksetService{
 
 	private String generateProfileSelector() throws BridgeDBException {
 		List<ProfileInfo> profiles = urlMapper.getProfiles();
-		StringBuilder sb = new StringBuilder("<p><select name=\"profileURL\">");
+		StringBuilder sb = new StringBuilder("<p><select name=\"");
+    	sb.append(WsUriConstants.PROFILE_URI);
+    	sb.append("\">");
 	   	sb.append("<option value=\"");
     	sb.append(RdfConfig.getProfileURI(0));
     	sb.append("\">Default profile</option>");

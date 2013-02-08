@@ -57,7 +57,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
             throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URL, uri);
-        params.add(WsUriConstants.PROFILE_URL, profileUri);
+        params.add(WsUriConstants.PROFILE_URI, profileUri);
         for (String target:targetCodes){
             params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
         }
@@ -78,7 +78,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.ID, id);
         params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
-        params.add(WsUriConstants.PROFILE_URL, profileUri);
+        params.add(WsUriConstants.PROFILE_URI, profileUri);
         for (String target:targetCodes){
             params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
         }

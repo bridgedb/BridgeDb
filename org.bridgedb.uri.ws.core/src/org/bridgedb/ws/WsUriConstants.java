@@ -26,7 +26,7 @@ package org.bridgedb.ws;
 public class WsUriConstants extends WsConstants{
     
     public static final String TARGET_URI_PATTERN = "targetUriPattern";
-    public static final String PROFILE_URL = "profileURL";
+    public static final String PROFILE_URI = "profileUri";
     public static final String URL = "URL";
     public static final String XML = "XML";
     
