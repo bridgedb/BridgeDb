@@ -101,7 +101,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("/" + WsUriConstants.MAP_URL)
+    @Path("/" + WsUriConstants.MAP)
     @Override
     public List<Mapping> map(@QueryParam(WsUriConstants.URL) String URL,
     		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
@@ -144,7 +144,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("/" + WsUriConstants.MAP_TO_URLS)
+    @Path("/" + WsUriConstants.MAP)
     @Override
     public List<Mapping> map(
             @QueryParam(WsConstants.ID) String id,

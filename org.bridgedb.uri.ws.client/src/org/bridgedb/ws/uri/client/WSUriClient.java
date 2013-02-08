@@ -66,7 +66,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         }
         //Make service call
         List<Mapping> result = 
-                webResource.path(WsUriConstants.MAP_URL)
+                webResource.path(WsUriConstants.MAP)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<Mapping>>() {});
@@ -87,7 +87,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         }
         //Make service call
         List<Mapping> result = 
-                webResource.path(WsUriConstants.MAP_URL)
+                webResource.path(WsUriConstants.MAP)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<Mapping>>() {});

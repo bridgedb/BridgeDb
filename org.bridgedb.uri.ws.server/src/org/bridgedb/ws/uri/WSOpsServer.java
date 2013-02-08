@@ -179,9 +179,9 @@ public class WSOpsServer extends WSLinksetService{
         sb.append("\n<p>The Main OPS method is <a href=\"/");
         sb.append(getServiceName());
         sb.append("/api/#");
-        sb.append(WsUriConstants.MAP_URL);
+        sb.append(WsUriConstants.MAP);
         sb.append("\">");
-        sb.append(WsUriConstants.MAP_URL);
+        sb.append(WsUriConstants.MAP);
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("\n<p><a href=\"/");
         sb.append(getServiceName());

@@ -76,9 +76,9 @@ public class WSUriApi extends WSCoreApi {
 
     protected final void introduce_URLMapper(StringBuilder sb, boolean freeSearchSupported) {
         sb.append("<dt><a href=\"#");
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append("\">");
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append("</a></dt>");
         sb.append("<dd>List the URLs that map to this URL</dd>");
         sb.append("<dt><a href=\"#");
@@ -135,9 +135,9 @@ public class WSUriApi extends WSCoreApi {
     private void describe_mapURL(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append("\">");
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>List the URLs that map to this URL</li>");
@@ -159,18 +159,18 @@ public class WSUriApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URLEncoder.encode(URL1, "UTF-8"));
                 sb.append("\">");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URL1);
                 sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URLEncoder.encode(URL2, "UTF-8"));
                 for (String URISpace:URI2Spaces){
@@ -179,7 +179,7 @@ public class WSUriApi extends WSCoreApi {
                 }
                 sb.append("\">");
                 sb.append(RdfConfig.getTheBaseURI());
-                sb.append(WsUriConstants.MAP_URL);
+                sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URL_PARAMETER);
                 sb.append(URL2);
                 for (String URISpace:URI2Spaces){
