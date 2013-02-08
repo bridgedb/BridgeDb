@@ -218,9 +218,7 @@ public abstract class URLMapperTest extends URLListenerTest{
         assertTrue(urlMapper.uriExists(map3URL2));
         assertTrue(urlMapper.uriExists(map3URL3));
         assertFalse(urlMapper.uriExists(mapBadURL1));
-        System.out.println("1");
         assertFalse(urlMapper.uriExists(mapBadURL2));
-        System.out.println("2");
         assertFalse(urlMapper.uriExists(mapBadURL3));
     }
         
@@ -282,6 +280,8 @@ public abstract class URLMapperTest extends URLListenerTest{
         }
         Mapping result = urlMapper.getMapping(mappingId);
         assertEquals(mappingId, result.getId());
+        System.out.println(result.getSourceURL());
+        System.out.println(map3URL3);
         assertTrue(result.getSourceURL().contains(map3URL3));
         assertEquals(TEST_PREDICATE, result.getPredicate());
         assertTrue(result.getTargetURL().contains(map3URL2));

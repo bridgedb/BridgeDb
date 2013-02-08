@@ -67,7 +67,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     private static final String CREATED_BY_COLUMN_NAME = "createdBy";
     private static final String CREATED_ON_COLUMN_NAME = "createdOn";
     private static final String DATASOURCE_COLUMN_NAME = "dataSource";
-    private static final String JUSTIFICTAION_URI_COLUMN_NAME = "justificationURI";
+    private static final String JUSTIFICATION_URI_COLUMN_NAME = "justificationURI";
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String PROFILE_ID_COLUMN_NAME = "profileId";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
@@ -131,7 +131,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             		")");
             sh.execute("CREATE TABLE " + PROFILE_JUSTIFICATIONS_TABLE_NAME + " ( " +
             		PROFILE_ID_COLUMN_NAME + " INT NOT NULL, " +
-            		JUSTIFICTAION_URI_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
+            		JUSTIFICATION_URI_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
             		")");
             sh.close();
 		} catch (SQLException e)
@@ -937,7 +937,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     // **** URLListener Methods
     
     private Set<String> getJustificationsForProfile(int profileId) throws BridgeDBException {
-    	String query = ("SELECT " + JUSTIFICTAION_URI_COLUMN_NAME 
+    	String query = ("SELECT " + JUSTIFICATION_URI_COLUMN_NAME 
     			+ " FROM " + PROFILE_JUSTIFICATIONS_TABLE_NAME
     			+ " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileId);
     	Statement statement = this.createStatement();
@@ -945,7 +945,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     	try {
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next()) {
-				String justification = rs.getString(JUSTIFICTAION_URI_COLUMN_NAME);
+				String justification = rs.getString(JUSTIFICATION_URI_COLUMN_NAME);
 				justifications.add(justification);
 			}
 		} catch (SQLException e) {
@@ -1266,7 +1266,7 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        }
     }
 
-/*    public int registerProfile(String name, String createdOn, String createdBy, 
+    public int registerProfile(String name, String createdOn, String createdBy, 
     		List<String> justificationUris) 
             throws BridgeDBException {
     	//TODO: Need to validate that createdOn is a date
@@ -1281,8 +1281,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 
 	private int createProfile(String name, String createdOn, String createdBy)
 			throws BridgeDBException {
-		String insertStatement = "INSERT INTO profile "
-                    + "(name, createdOn, createdBy) " 
+		String insertStatement = "INSERT INTO " + PROFILE_TABLE_NAME
+                    + "(" + NAME_COLUMN_NAME + ", " + CREATED_ON_COLUMN_NAME + ", " + CREATED_BY_COLUMN_NAME + ") " 
                     + "VALUES (" 
                     + "'" + name + "', "
                     + "'" + createdOn + "', " 
@@ -1311,8 +1311,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 	
 	private void insertJustifications(int profileId,
 			List<String> justificationUris) throws BridgeDBException {
-		String sql = "INSERT INTO profileJustifications " +
-				"(profileId, justificationURI) " +
+		String sql = "INSERT INTO " + PROFILE_JUSTIFICATIONS_TABLE_NAME  +
+                                                       
+				"( " + PROFILE_ID_COLUMN_NAME + ", " + JUSTIFICATION_URI_COLUMN_NAME + ") " +
 				"VALUES ( " + profileId + ", " + "?)";
 		try {
 			PreparedStatement statement = createPreparedStatement(sql);
@@ -1328,12 +1329,14 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
 			throw new BridgeDBException("Error inserting justification.", ex);
 		}
 	}
-*/
+
     private void appendSystemCodes(StringBuilder query, String sourceSysCode, String targetSysCode) {
         boolean whereAdded = false;
         if (sourceSysCode != null && !sourceSysCode.isEmpty()){
             whereAdded = true;
-            query.append(" WHERE sourceDataSource = \"" );
+            query.append(" WHERE ");
+            query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+            query.append(" = \"" );
             query.append(sourceSysCode);
             query.append("\" ");
         }
@@ -1343,7 +1346,8 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
             } else {
                 query.append(" WHERE " );            
             }
-            query.append("targetDataSource = \"" );
+            query.append(TARGET_DATASOURCE_COLUMN_NAME);
+            query.append(" = \"" );
             query.append(targetSysCode);
             query.append("\" ");
         }
@@ -1384,29 +1388,19 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
        return results;
    }
 
-    //Old
-    private Set<String> getURIs(String id, String sysCode, String... targetURISpaces) throws BridgeDBException {
+   private Set<String> getUris(String id, String sysCode) throws BridgeDBException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT " + PREFIX_COLUMN_NAME);
-        query.append(" FROM url ");
-        query.append("WHERE dataSource = '");
+        query.append("SELECT ");
+        query.append(PREFIX_COLUMN_NAME );
+        query.append(", ");
+        query.append(POSTFIX_COLUMN_NAME );
+        query.append(" FROM ");
+        query.append(URL_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(" = '");
         query.append(sysCode);
         query.append("' ");
-        if (targetURISpaces.length > 0){    
-            query.append("AND (");
-            query.append(PREFIX_COLUMN_NAME);
-            query.append(" = '");
-            query.append(targetURISpaces[0]);
-            query.append("' ");
-            for (int i = 1; i < targetURISpaces.length; i++){
-                query.append("OR ");
-                query.append(PREFIX_COLUMN_NAME);
-                query.append(" = '");
-                query.append(targetURISpaces[i]);
-                query.append("'");
-            }
-            query.append(")");
-        }
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -1417,8 +1411,9 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
         HashSet<String> results = new HashSet<String>();
         try {
             while (rs.next()){
-                String uriSpace = rs.getString(PREFIX_COLUMN_NAME);
-                String uri = uriSpace + id;
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String uri = prefix + id + postfix;
                 results.add(uri);
             }
        } catch (SQLException ex) {
@@ -1428,12 +1423,12 @@ public class SQLUrlMapper extends SQLIdMapper implements URLMapper, URLListener 
     }
 
     private void addSourceURIs(Mapping mapping) throws BridgeDBException {
-        Set<String> URIs = getURIs(mapping.getSourceId(), mapping.getSourceSysCode());
+        Set<String> URIs = getUris(mapping.getSourceId(), mapping.getSourceSysCode());
         mapping.addSourceURLs(URIs);
     }
 
-    private void addTargetURIs(Mapping mapping, String... targetURISpaces) throws BridgeDBException {
-        Set<String> URIs = getURIs(mapping.getTargetId(), mapping.getTargetSysCode(), targetURISpaces);
+    private void addTargetURIs(Mapping mapping) throws BridgeDBException {
+        Set<String> URIs = getUris(mapping.getTargetId(), mapping.getTargetSysCode());
         mapping.addTargetURLs(URIs);
     }
 
