@@ -167,7 +167,7 @@ public class WSFame extends WSUriInterfaceService {
         sb.append("<dl>");      
         api.introduce_IDMapper(sb, freeSearchSupported);
         api.introduce_IDMapperCapabilities(sb, keys, freeSearchSupported);     
-        api.introduce_URLMapper(sb, freeSearchSupported);
+        api.introduce_URIMapper(sb, freeSearchSupported);
         api.introduce_Info(sb);
         sb.append("</dl>");
         sb.append("</p>");

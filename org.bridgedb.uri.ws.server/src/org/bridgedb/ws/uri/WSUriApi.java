@@ -34,7 +34,7 @@ import org.bridgedb.ws.WsUriConstants;
  */
 public class WSUriApi extends WSCoreApi {
      
-    private final String FIRST_URL_PARAMETER = "?" + WsUriConstants.URL + "=";
+    private final String FIRST_URI_PARAMETER = "?" + WsUriConstants.URI + "=";
     private final String TARGET_DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
     private final String TARGET_URI_PATTERN_PARAMETER = "&" + WsUriConstants.TARGET_URI_PATTERN + "=";
     
@@ -47,16 +47,16 @@ public class WSUriApi extends WSCoreApi {
         sb.append("<h3>Ops Exstension Parameters</h3>");
         sb.append("<ul>");
         sb.append("<dt><a name=\"");
-                sb.append(WsUriConstants.URL);
+                sb.append(WsUriConstants.URI);
                 sb.append("\">");
-                sb.append(WsUriConstants.URL);
+                sb.append(WsUriConstants.URI);
                 sb.append("</a></dt>");
             sb.append("<ul>");
-            sb.append("<li>Limits the results to ones with this URL.</li>");
+            sb.append("<li>Limits the results to ones with this URI.</li>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
             sb.append("<li>Only one ");
-                    sb.append(WsUriConstants.URL);
+                    sb.append(WsUriConstants.URI);
                     sb.append(" parameters is supported.</li>");
             sb.append("</ul>");
          sb.append("<dt><a name=\"");
@@ -74,29 +74,29 @@ public class WSUriApi extends WSCoreApi {
          sb.append("</ul>");
    }
 
-    protected final void introduce_URLMapper(StringBuilder sb, boolean freeSearchSupported) {
+    protected final void introduce_URIMapper(StringBuilder sb, boolean freeSearchSupported) {
         sb.append("<dt><a href=\"#");
                 sb.append(WsUriConstants.MAP);
                 sb.append("\">");
                 sb.append(WsUriConstants.MAP);
                 sb.append("</a></dt>");
-        sb.append("<dd>List the URLs that map to this URL</dd>");
+        sb.append("<dd>List the URIs that map to this URI</dd>");
         sb.append("<dt><a href=\"#");
-                sb.append(WsUriConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URI_EXISTS);
                 sb.append("\">");
-                sb.append(WsUriConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URI_EXISTS);
                 sb.append("</a></dt>");
-        sb.append("<dd>State if the URL is know to the Mapping Service or not</dd>");
+        sb.append("<dd>State if the URI is know to the Mapping Service or not</dd>");
         if (freeSearchSupported){
             sb.append("<dt><a href=\"#");
-                    sb.append(WsUriConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URI_SEARCH);
                     sb.append("\">");
-                    sb.append(WsUriConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URI_SEARCH);
                     sb.append("</a></dt>");
-            sb.append("<dd>Searches for URLs that have this ending.</dd>");    
+            sb.append("<dd>Searches for URIs that have this ending.</dd>");    
         } else {
             sb.append("<dt>");
-                    sb.append(WsUriConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URI_SEARCH);
                     sb.append("</a></dt>");
 
             sb.append("<dd>This is currently not supported.</dd>");            
@@ -123,7 +123,7 @@ public class WSUriApi extends WSCoreApi {
             String text, int mappingId, String sysCode, boolean freeSearchSupported) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h2>URL based methods</h2>");
-        describe_mapURL(sb, URL1, URL2, URI2Spaces);
+        describe_map(sb, URL1, URL2, URI2Spaces);
         describe_URLExists(sb, URL1);
         if (freeSearchSupported) {
             describe_URLSearch(sb, text); 
@@ -132,7 +132,7 @@ public class WSUriApi extends WSCoreApi {
         describe_dataSource(sb, sysCode);
     }
         
-    private void describe_mapURL(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) 
+    private void describe_map(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.MAP);
@@ -140,13 +140,13 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(WsUriConstants.MAP);
                 sb.append("</h3>");
             sb.append("<ul>");
-            sb.append("<li>List the URLs that map to this URL</li>");
+            sb.append("<li>List the URIs that map to this URI</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsUriConstants.URL);
+                        sb.append(WsUriConstants.URI);
                         sb.append("\">");
-                        sb.append(WsUriConstants.URL);
+                        sb.append(WsUriConstants.URI);
                         sb.append("</a></li>");
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
@@ -160,18 +160,18 @@ public class WSUriApi extends WSCoreApi {
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
-                sb.append(FIRST_URL_PARAMETER);
+                sb.append(FIRST_URI_PARAMETER);
                 sb.append(URLEncoder.encode(URL1, "UTF-8"));
                 sb.append("\">");
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
-                sb.append(FIRST_URL_PARAMETER);
+                sb.append(FIRST_URI_PARAMETER);
                 sb.append(URL1);
                 sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
-                sb.append(FIRST_URL_PARAMETER);
+                sb.append(FIRST_URI_PARAMETER);
                 sb.append(URLEncoder.encode(URL2, "UTF-8"));
                 for (String URISpace:URI2Spaces){
 //                    sb.append(TARGET_URI_SPACE_PARAMETER);
@@ -180,7 +180,7 @@ public class WSUriApi extends WSCoreApi {
                 sb.append("\">");
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
-                sb.append(FIRST_URL_PARAMETER);
+                sb.append(FIRST_URI_PARAMETER);
                 sb.append(URL2);
                 for (String URISpace:URI2Spaces){
  //                   sb.append(TARGET_URI_SPACE_PARAMETER);
@@ -192,18 +192,18 @@ public class WSUriApi extends WSCoreApi {
     
     private void describe_URLExists(StringBuilder sb, String URL) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
-                sb.append(WsUriConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URI_EXISTS);
                 sb.append("\">");
-                sb.append(WsUriConstants.URL_EXISTS);
+                sb.append(WsUriConstants.URI_EXISTS);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>State if the URL is know to the Mapping Service or not</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsUriConstants.URL);
+                        sb.append(WsUriConstants.URI);
                         sb.append("\">");
-                        sb.append(WsUriConstants.URL);
+                        sb.append(WsUriConstants.URI);
                         sb.append("</a></li>");
                 sb.append("<ul>");
                 sb.append("<li>Currently limited to single URI</li>");
@@ -211,12 +211,12 @@ public class WSUriApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsUriConstants.URL_EXISTS);
-                    sb.append(FIRST_URL_PARAMETER);
+                    sb.append(WsUriConstants.URI_EXISTS);
+                    sb.append(FIRST_URI_PARAMETER);
                     sb.append(URLEncoder.encode(URL, "UTF-8"));
                     sb.append("\">");
-                    sb.append(WsUriConstants.URL_EXISTS);
-                    sb.append(FIRST_URL_PARAMETER);
+                    sb.append(WsUriConstants.URI_EXISTS);
+                    sb.append(FIRST_URI_PARAMETER);
                     sb.append(URL);
                     sb.append("</a></li>");    
             sb.append("</ul>");
@@ -224,9 +224,9 @@ public class WSUriApi extends WSCoreApi {
     
     private void describe_URLSearch(StringBuilder sb, String URL) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
-                sb.append(WsUriConstants.URL_SEARCH);
+                sb.append(WsUriConstants.URI_SEARCH);
                 sb.append("\">");
-                sb.append(WsUriConstants.URL_SEARCH);
+                sb.append(WsUriConstants.URI_SEARCH);
                 sb.append("</h3>");
             sb.append("<ul>");
             sb.append("<li>Searches for URLs that have this ending.</li>");
@@ -245,16 +245,16 @@ public class WSUriApi extends WSCoreApi {
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());
-                    sb.append(WsUriConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(URLEncoder.encode(URL, "UTF-8"));
-                    sb.append(WsUriConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("\">");
-                    sb.append(WsUriConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
                     sb.append(URL);
-                    sb.append(WsUriConstants.URL_SEARCH);
+                    sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("</a></li>");    
             sb.append("</ul>");        

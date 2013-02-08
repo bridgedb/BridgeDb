@@ -103,12 +103,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP)
     @Override
-    public List<Mapping> map(@QueryParam(WsUriConstants.URL) String URL,
+    public List<Mapping> map(@QueryParam(WsUriConstants.URI) String URI,
     		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
         if (logger.isDebugEnabled()){
-            logger.debug("map called! URL = " + URL);
+            logger.debug("map called! URL = " + URI);
             logger.debug("   profileUri = " + profileUri);
             if (targetCodes!= null || !targetCodes.isEmpty()){
                 logger.debug("   targetCodes = " + targetCodes);
@@ -117,21 +117,21 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 logger.debug("   targetUriPatterns = " + targetUriPatterns);
             }
         }
-        if (URL == null) throw new BridgeDBException("URL parameter missing.");        
-        if (URL.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");        
+        if (URI == null) throw new BridgeDBException("URL parameter missing.");        
+        if (URI.isEmpty()) throw new BridgeDBException("URL parameter may not be null.");        
         DataSource[] targetDataSources = getDataSources(targetCodes);
         UriPattern[] targetPatterns = getUriPatterns(targetUriPatterns);
         Set<Mapping> urlMappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
-                urlMappings = urlMapper.mapFull(URL, profileUri);
+                urlMappings = urlMapper.mapFull(URI, profileUri);
             } else {
-                urlMappings = mapByTargetUriPattern(URL, profileUri, targetPatterns);
+                urlMappings = mapByTargetUriPattern(URI, profileUri, targetPatterns);
             }
         } else {
-            urlMappings = mapByTargetDataSource (URL, profileUri, targetDataSources);
+            urlMappings = mapByTargetDataSource (URI, profileUri, targetDataSources);
             if (targetPatterns != null){
-                urlMappings.addAll(mapByTargetUriPattern(URL, profileUri, targetPatterns));                
+                urlMappings.addAll(mapByTargetUriPattern(URI, profileUri, targetPatterns));                
             } 
         }
         return new ArrayList<Mapping>(urlMappings); 
@@ -253,18 +253,18 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("/" + WsUriConstants.URL_EXISTS)
+    @Path("/" + WsUriConstants.URI_EXISTS)
     @Override
-    public URLExistsBean URLExists(@QueryParam(WsUriConstants.URL) String URL) throws BridgeDBException {
-        if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
-        if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
-        boolean exists = urlMapper.uriExists(URL);
-        return new URLExistsBean(URL, exists);
+    public URLExistsBean URLExists(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {
+        if (URI == null) throw new BridgeDBException(WsUriConstants.URI + " parameter missing.");
+        if (URI.isEmpty()) throw new BridgeDBException(WsUriConstants.URI + " parameter may not be null.");
+        boolean exists = urlMapper.uriExists(URI);
+        return new URLExistsBean(URI, exists);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("/" + WsUriConstants.URL_SEARCH)
+    @Path("/" + WsUriConstants.URI_SEARCH)
     @Override
     public URLSearchBean URLSearch(@QueryParam(WsUriConstants.TEXT) String text,
             @QueryParam(WsUriConstants.LIMIT) String limitString) throws BridgeDBException {
@@ -284,10 +284,10 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.TO_XREF)
     @Override
-    public XrefBean toXref(@QueryParam(WsUriConstants.URL) String URL) throws BridgeDBException {
-        if (URL == null) throw new BridgeDBException(WsUriConstants.URL + " parameter missing.");
-        if (URL.isEmpty()) throw new BridgeDBException(WsUriConstants.URL + " parameter may not be null.");
-        Xref xref = urlMapper.toXref(URL);
+    public XrefBean toXref(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {
+        if (URI == null) throw new BridgeDBException(WsUriConstants.URI + " parameter missing.");
+        if (URI.isEmpty()) throw new BridgeDBException(WsUriConstants.URI + " parameter may not be null.");
+        Xref xref = urlMapper.toXref(URI);
         return XrefBeanFactory.asBean(xref);
     }
 

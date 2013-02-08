@@ -56,7 +56,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     public List<Mapping> map(String uri, String profileUri, List<String> targetCodes, List<String> targetUriPattern) 
             throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsUriConstants.URL, uri);
+        params.add(WsUriConstants.URI, uri);
         params.add(WsUriConstants.PROFILE_URI, profileUri);
         for (String target:targetCodes){
             params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
@@ -95,12 +95,12 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public URLExistsBean URLExists(String URL) throws BridgeDBException {
+    public URLExistsBean URLExists(String uri) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsUriConstants.URL, URL);
+        params.add(WsUriConstants.URI, uri);
         //Make service call
         URLExistsBean result = 
-                webResource.path(WsUriConstants.URL_EXISTS)
+                webResource.path(WsUriConstants.URI_EXISTS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<URLExistsBean>() {});
@@ -114,7 +114,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         params.add(WsUriConstants.LIMIT, limitString);
         //Make service call
         URLSearchBean result = 
-                webResource.path(WsUriConstants.URL_SEARCH)
+                webResource.path(WsUriConstants.URI_SEARCH)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<URLSearchBean>() {});
@@ -122,9 +122,9 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public XrefBean toXref(String URL) throws BridgeDBException {
+    public XrefBean toXref(String uri) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsUriConstants.URL, URL);
+        params.add(WsUriConstants.URI, uri);
         //Make service call
         XrefBean result = 
                 webResource.path(WsUriConstants.TO_XREF)

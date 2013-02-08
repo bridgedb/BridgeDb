@@ -27,7 +27,7 @@ public class WsUriConstants extends WsConstants{
     
     public static final String TARGET_URI_PATTERN = "targetUriPattern";
     public static final String PROFILE_URI = "profileUri";
-    public static final String URL = "URL";
+    public static final String URI = "Uri";
     public static final String XML = "XML";
     
     public static final String DATA_SOURCE = "dataSource";
@@ -39,6 +39,6 @@ public class WsUriConstants extends WsConstants{
     public static final String MAP = "map";
     public static final String SQL_COMPAT_VERSION = "SqlCompatVersion";
     public static final String TO_XREF = "toXref";
-    public static final String URL_EXISTS = "URLExists";
-    public static final String URL_SEARCH = "URLSearch";
+    public static final String URI_EXISTS = "UriExists";
+    public static final String URI_SEARCH = "UriSearch";
 }
