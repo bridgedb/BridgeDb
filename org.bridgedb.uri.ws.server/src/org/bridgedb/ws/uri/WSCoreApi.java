@@ -451,9 +451,9 @@ public class WSCoreApi {
             sb.append("<ul>");
             sb.append("<li>Implements:  boolean isFreeSearchSupported()</li>");
             if (freeSearchSupported){
-                sb.append("<li>Returns True as freeSearch and URLSearch are supported.</li>");
+                sb.append("<li>Returns True as freeSearch and URISearch are supported.</li>");
             } else {
-                sb.append("<li>Returns False because underlying IDMappper does not support freeSearch or URLSearch.</li>");                
+                sb.append("<li>Returns False because underlying IDMappper does not support freeSearch or URISearch.</li>");                
             }
             sb.append("<li>Example: <a href=\"");
                     sb.append(RdfConfig.getTheBaseURI());

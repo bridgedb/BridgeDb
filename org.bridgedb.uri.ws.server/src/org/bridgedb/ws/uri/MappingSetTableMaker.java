@@ -358,11 +358,11 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
    }
 
     private void addMappingSetCell(StringBuilder sb, String id) throws BridgeDBException {
-        String idUrl = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
+        String idUri = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
         sb.append("\t\t<td><a href=\"");
-            sb.append(idUrl);
+            sb.append(idUri);
             sb.append("\">");
-            sb.append(idUrl);
+            sb.append(idUri);
             sb.append("</a></td>\n");
     }
 

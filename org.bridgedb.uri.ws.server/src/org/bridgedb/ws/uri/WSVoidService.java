@@ -57,7 +57,7 @@ public class WSVoidService extends WSFame{
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
-        List<MappingSetInfo> mappingSetInfos = urlMapper.getMappingSetInfos(scrCode, targetCode);
+        List<MappingSetInfo> mappingSetInfos = uriMapper.getMappingSetInfos(scrCode, targetCode);
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
         if (mappingSetInfos.isEmpty()){
             sb.append("\n<h1> No mapping found between ");
@@ -79,7 +79,7 @@ public class WSVoidService extends WSFame{
     @Path("/" + WsUriConstants.GRAPHVIZ)
     public Response graphvizDot() throws BridgeDBException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
-        List<MappingSetInfo> rawProvenaceinfos = urlMapper.getMappingSetInfos(null, null);
+        List<MappingSetInfo> rawProvenaceinfos = uriMapper.getMappingSetInfos(null, null);
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
         sb.append("digraph G {");
         for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){

@@ -68,7 +68,7 @@ import org.openrdf.rio.RDFFormat;
 @Path("/")
 public class WSUriInterfaceService extends WSCoreService implements WSUriInterface {
 
-    protected URLMapper urlMapper;
+    protected URLMapper uriMapper;
     protected LinksetInterfaceMinimal linksetInterface;
 //    private String validationTypeString;
     public final String MIME_TYPE = "mimeType";
@@ -88,13 +88,13 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected WSUriInterfaceService() throws BridgeDBException {
         super();
         this.linksetInterface = new LinksetLoader();
-        urlMapper = new SQLUrlMapper(false, StoreType.LIVE);
-        idMapper = urlMapper;
+        uriMapper = new SQLUrlMapper(false, StoreType.LIVE);
+        idMapper = uriMapper;
     }
 
     public WSUriInterfaceService(URLMapper urlMapper) throws BridgeDBException {
         super(urlMapper);
-        this.urlMapper = urlMapper;
+        this.uriMapper = urlMapper;
         this.linksetInterface = new LinksetLoader();
         logger.info("WS Service running using supplied urlMapper");
     }
@@ -124,7 +124,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         Set<Mapping> urlMappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
-                urlMappings = urlMapper.mapFull(URI, profileUri);
+                urlMappings = uriMapper.mapFull(URI, profileUri);
             } else {
                 urlMappings = mapByTargetUriPattern(URI, profileUri, targetPatterns);
             }
@@ -173,7 +173,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         Set<Mapping> urlMappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
-                urlMappings = urlMapper.mapFull(sourceXref, profileUri);
+                urlMappings = uriMapper.mapFull(sourceXref, profileUri);
             } else {
                 urlMappings = mapByTargetUriPattern(sourceXref, profileUri, targetPatterns);
             }
@@ -221,7 +221,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     
     private Set<Mapping> mapByTargetDataSource(String sourceUri, String profileUri, DataSource[] targetDataSources) throws BridgeDBException{
         if (targetDataSources.length > 0){
-            return urlMapper.mapFull(sourceUri, profileUri, targetDataSources);
+            return uriMapper.mapFull(sourceUri, profileUri, targetDataSources);
         } else {
             return  new HashSet<Mapping>();
         }    
@@ -229,7 +229,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     
     private Set<Mapping> mapByTargetDataSource(Xref sourceXref, String profileUri, DataSource[] targetDataSources) throws BridgeDBException{
         if (targetDataSources.length > 0){
-            return urlMapper.mapFull(sourceXref, profileUri, targetDataSources);
+            return uriMapper.mapFull(sourceXref, profileUri, targetDataSources);
         } else {
             return  new HashSet<Mapping>();
         }    
@@ -237,7 +237,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     
     private Set<Mapping> mapByTargetUriPattern(String sourceUri, String profileUri, UriPattern[] targetUriPattern) throws BridgeDBException{
         if (targetUriPattern.length > 0){
-            return urlMapper.mapFull(sourceUri, profileUri, targetUriPattern);
+            return uriMapper.mapFull(sourceUri, profileUri, targetUriPattern);
         } else {
             return  new HashSet<Mapping>();
         }    
@@ -245,7 +245,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     
     private Set<Mapping> mapByTargetUriPattern(Xref sourceXref, String profileUri, UriPattern[] targetUriPattern) throws BridgeDBException{
         if (targetUriPattern.length > 0){
-            return urlMapper.mapFull(sourceXref, profileUri, targetUriPattern);
+            return uriMapper.mapFull(sourceXref, profileUri, targetUriPattern);
         } else {
             return  new HashSet<Mapping>();
         }    
@@ -258,7 +258,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public URLExistsBean URLExists(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {
         if (URI == null) throw new BridgeDBException(WsUriConstants.URI + " parameter missing.");
         if (URI.isEmpty()) throw new BridgeDBException(WsUriConstants.URI + " parameter may not be null.");
-        boolean exists = urlMapper.uriExists(URI);
+        boolean exists = uriMapper.uriExists(URI);
         return new URLExistsBean(URI, exists);
     }
 
@@ -271,11 +271,11 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         if (text == null) throw new BridgeDBException(WsUriConstants.TEXT + " parameter missing.");
         if (text.isEmpty()) throw new BridgeDBException(WsUriConstants.TEXT + " parameter may not be null.");
         if (limitString == null || limitString.isEmpty()){
-            Set<String> urls = urlMapper.urlSearch(text, Integer.MAX_VALUE);
+            Set<String> urls = uriMapper.urlSearch(text, Integer.MAX_VALUE);
             return new URLSearchBean(text, urls);
         } else {
             int limit = Integer.parseInt(limitString);
-            Set<String> urls = urlMapper.urlSearch(text, limit);
+            Set<String> urls = uriMapper.urlSearch(text, limit);
             return new URLSearchBean(text, urls);
         }
     }
@@ -287,7 +287,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public XrefBean toXref(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {
         if (URI == null) throw new BridgeDBException(WsUriConstants.URI + " parameter missing.");
         if (URI.isEmpty()) throw new BridgeDBException(WsUriConstants.URI + " parameter may not be null.");
-        Xref xref = urlMapper.toXref(URI);
+        Xref xref = uriMapper.toXref(URI);
         return XrefBeanFactory.asBean(xref);
     }
 
@@ -306,7 +306,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         int id = Integer.parseInt(idString);
-        return urlMapper.getMapping(id);
+        return uriMapper.getMapping(id);
     }
 
     @Override
@@ -314,7 +314,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_SAMPLE_MAPPINGS) 
     public List<Mapping> getSampleMappings() throws BridgeDBException {
-        return urlMapper.getSampleMapping();
+        return uriMapper.getSampleMapping();
     }
 
     @Override
@@ -322,7 +322,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_OVERALL_STATISTICS) 
     public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {
-        OverallStatistics overallStatistics = urlMapper.getOverallStatistics();
+        OverallStatistics overallStatistics = uriMapper.getOverallStatistics();
         OverallStatisticsBean bean = OverallStatisticsBeanFactory.asBean(overallStatistics);
         return bean;
     }
@@ -341,7 +341,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.GET_MAPPING_INFO) 
     public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws BridgeDBException {
-        List<MappingSetInfo> infos = urlMapper.getMappingSetInfos(scrCode, targetCode);
+        List<MappingSetInfo> infos = uriMapper.getMappingSetInfos(scrCode, targetCode);
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
             results.add(MappingSetInfoBeanFactory.asBean(info));
@@ -354,7 +354,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Path("/profile/{id}")
 	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDBException {
-		ProfileInfo profile = urlMapper.getProfile(RdfConfig.getProfileURI(Integer.parseInt(id)));
+		ProfileInfo profile = uriMapper.getProfile(RdfConfig.getProfileURI(Integer.parseInt(id)));
 		ProfileBean result = ProfileBeanFactory.asBean(profile);
 		return result;
 	}
@@ -364,7 +364,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/profile") 
 	public List<ProfileBean> getProfiles() throws BridgeDBException {
-		List<ProfileInfo> profiles = urlMapper.getProfiles();
+		List<ProfileInfo> profiles = uriMapper.getProfiles();
 		List<ProfileBean> results = new ArrayList<ProfileBean>();
 		for (ProfileInfo profile:profiles) {
 			results.add(ProfileBeanFactory.asBean(profile));
@@ -380,7 +380,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         if (idString == null) throw new BridgeDBException("Path parameter missing.");
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         int id = Integer.parseInt(idString);
-        MappingSetInfo info = urlMapper.getMappingSetInfo(id);
+        MappingSetInfo info = uriMapper.getMappingSetInfo(id);
         return MappingSetInfoBeanFactory.asBean(info);
     }
 
@@ -398,7 +398,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public DataSourceUriPatternBean getDataSource(@PathParam("id") String id) throws BridgeDBException {
         if (id == null) throw new BridgeDBException("Path parameter missing.");
         if (id.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
-        List<String> uriPatterns = new ArrayList<String>(urlMapper.getUriPatterns(id));
+        List<String> uriPatterns = new ArrayList<String>(uriMapper.getUriPatterns(id));
         DataSource ds = DataSource.getBySystemCode(id);
         DataSourceUriPatternBean bean = new DataSourceUriPatternBean(ds, uriPatterns);
         return bean;
@@ -409,7 +409,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Override
     @Path("/" + WsUriConstants.SQL_COMPAT_VERSION)
     public String getSqlCompatVersion() throws BridgeDBException {
-        return "" + urlMapper.getSqlCompatVersion();
+        return "" + uriMapper.getSqlCompatVersion();
     }
 
     //**** LinksetInterfaceMinimal methods

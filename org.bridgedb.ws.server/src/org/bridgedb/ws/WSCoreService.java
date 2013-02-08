@@ -70,7 +70,7 @@ public class WSCoreService implements WSCoreInterface {
     public WSCoreService(IDMapper idMapper) throws BridgeDBException {
         this.idMapper = idMapper;
         ConfigReader.configureLogger();
-        logger.info("WS Service running using supplied urlMapper");
+        logger.info("WS Service running using supplied idMapper");
     }
         
     @GET

@@ -34,6 +34,7 @@ import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.WsUriConstants;
 
 /**
@@ -50,7 +51,7 @@ public class WSOpsServer extends WSLinksetService{
     }
     
     private final String statsBlock() throws BridgeDBException {
-    		OverallStatistics statistics = urlMapper.getOverallStatistics();
+    		OverallStatistics statistics = uriMapper.getOverallStatistics();
     		StringBuilder sb = new StringBuilder();
     		sb.append("<div id=\"navBar\"><h2>Service statistics</h2>");
     		sb.append("<ul>");
@@ -83,11 +84,19 @@ public class WSOpsServer extends WSLinksetService{
     	StringBuilder sb = new StringBuilder();
     	sb.append("<form method=\"get\" action=\"/");
         sb.append(getServiceName());
-    	sb.append("/mapURL\">");
+    	sb.append("/");
+    	sb.append(WsUriConstants.MAP);
+    	sb.append("\">");
     	sb.append("<fieldset>");
-    	sb.append("<legend>URL Mapper</legend>");
-    	sb.append("<p><label for=\"URL\">Input URI</label>");
-    	sb.append("<input type=\"text\" id=\"URL\" name=\"URL\" style=\"width:80%\"/></p>");
+    	sb.append("<legend>Mapper</legend>");
+    	sb.append("<p><label for=\"");
+    	sb.append(WsUriConstants.URI);
+    	sb.append("\">Input URI</label>");
+    	sb.append("<input type=\"text\" id=\"");
+    	sb.append(WsUriConstants.URI);
+    	sb.append("\" name=\"");
+    	sb.append(WsUriConstants.URI);
+    	sb.append("\" style=\"width:80%\"/></p>");
     	sb.append(generateProfileSelector());
     	sb.append("<p><input type=\"submit\" value=\"Submit\"/></p>");
     	sb.append("<p>Note: If the new page does not open click on the address bar and press enter</p>");
@@ -96,7 +105,7 @@ public class WSOpsServer extends WSLinksetService{
     }
 
 	private String generateProfileSelector() throws BridgeDBException {
-		List<ProfileInfo> profiles = urlMapper.getProfiles();
+		List<ProfileInfo> profiles = uriMapper.getProfiles();
 		StringBuilder sb = new StringBuilder("<p><select name=\"");
     	sb.append(WsUriConstants.PROFILE_URI);
     	sb.append("\">");
@@ -182,7 +191,7 @@ public class WSOpsServer extends WSLinksetService{
         sb.append(WsUriConstants.MAP);
         sb.append("\">");
         sb.append(WsUriConstants.MAP);
-        sb.append("<dd>List the URLs that map to this URL</dd>");
+        sb.append("<dd>List the URIs that map to this URI</dd>");
         sb.append("\n<p><a href=\"/");
         sb.append(getServiceName());
         sb.append("/api\">API Page</a></p>");

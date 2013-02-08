@@ -121,7 +121,7 @@ public class WSFame extends WSUriInterfaceService {
             sb.append("UNDER DEVELOPMENT! </body></html>");
             return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
         }
-        List<Mapping> mappings = urlMapper.getSampleMapping(); 
+        List<Mapping> mappings = uriMapper.getSampleMapping(); 
         Mapping mapping1 = mappings.get(0);
         DataSource dataSource1 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
         Xref firstSourceXref = new Xref (mapping1.getSourceId(), dataSource1);
@@ -145,15 +145,15 @@ public class WSFame extends WSUriInterfaceService {
         }
         Set<String> keys = idMapper.getCapabilities().getKeys();
         Mapping mapping3 = mappings.get(2);
-        String SourceUrl3 = mapping3.getSourceURL().iterator().next();
-        String text = SQLUrlMapper.getId(SourceUrl3);
+        String SourceUri3 = mapping3.getSourceURL().iterator().next();
+        String text = SQLUrlMapper.getId(SourceUri3);
         Mapping mapping4 = mappings.get(3);
-        String sourceUrl4 = mapping4.getSourceURL().iterator().next();
+        String sourceUri4 = mapping4.getSourceURL().iterator().next();
         Mapping mapping5 = mappings.get(4);
         int mappingId = mapping5.getId();
         HashSet<String> URI2Spaces = new HashSet<String>();
-        String targetURL = mapping5.getTargetURL().iterator().next();
-        URI2Spaces.add(SQLUrlMapper.getUriSpace(targetURL));            
+        String targetUri = mapping5.getTargetURL().iterator().next();
+        URI2Spaces.add(SQLUrlMapper.getUriSpace(targetUri));            
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
 
         sb.append("\n<p><a href=\"/");
@@ -176,7 +176,7 @@ public class WSFame extends WSUriInterfaceService {
         
         api.describe_IDMapper(sb, firstSourceXref, firstMaps, secondSourceXref, freeSearchSupported);
         api.describe_IDMapperCapabilities(sb, firstSourceXref, firstMaps, keys, freeSearchSupported);
-        api.describe_URLMapper(sb, SourceUrl3, sourceUrl4, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
+        api.describe_UriMapper(sb, SourceUri3, sourceUri4, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
         api.describe_Info(sb, firstSourceXref, firstMaps);
         api.describe_Graphviz(sb);
         
@@ -224,7 +224,7 @@ public class WSFame extends WSUriInterfaceService {
      * Allows Super classes to add to the side bar
      */
     protected void addSideBarStatisitics(StringBuilder sb) throws BridgeDBException{
-        OverallStatistics statistics = urlMapper.getOverallStatistics();
+        OverallStatistics statistics = uriMapper.getOverallStatistics();
         sb.append("\n<div class=\"menugroup\">Statisitics</div>");
         addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings");
         addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets");

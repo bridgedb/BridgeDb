@@ -65,8 +65,8 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                 sb.append("</a></dt>");
             sb.append("<ul>");
-            sb.append("<li>Limits the results to ones with URLs in this/these URISpace(s) as a target.</li>");
-            sb.append("<li>The URISpace of a URL is one defined when the mapping is loaded, not any with which the URL startWith.</li>");
+            sb.append("<li>Limits the results to ones with URIs in this/these URISpace(s) as a target.</li>");
+            sb.append("<li>The URISpace of a URI is one defined when the mapping is loaded, not any with which the URI startWith.</li>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
@@ -108,9 +108,6 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(WsUriConstants.MAPPING);
                 sb.append("</a></dt>");
         sb.append("<dd>Returns the mapping for with the specific id</dd>");
-        ///getSampleSourceURLs
-        //getMappingStatistics
-        //getMappingSetInfos
         sb.append("<dt><a href=\"#");
                 sb.append(WsUriConstants.DATA_SOURCE);
                 sb.append("\">");
@@ -119,20 +116,20 @@ public class WSUriApi extends WSCoreApi {
         sb.append("<dd>Returns the DataSource and associated UriSpace(s) with a specific id</dd>");
     }
     
-    protected final void describe_URLMapper(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces, 
+    protected final void describe_UriMapper(StringBuilder sb, String uri1, String uri2, Set<String> URI2Spaces, 
             String text, int mappingId, String sysCode, boolean freeSearchSupported) 
             throws UnsupportedEncodingException, BridgeDBException{
-        sb.append("<h2>URL based methods</h2>");
-        describe_map(sb, URL1, URL2, URI2Spaces);
-        describe_URLExists(sb, URL1);
+        sb.append("<h2>URI based methods</h2>");
+        describe_map(sb, uri1, uri2, URI2Spaces);
+        describe_uriExists(sb, uri1);
         if (freeSearchSupported) {
-            describe_URLSearch(sb, text); 
+            describe_uriSearch(sb, text); 
         }
         describe_mapping(sb, mappingId);
         describe_dataSource(sb, sysCode);
     }
         
-    private void describe_map(StringBuilder sb, String URL1, String URL2, Set<String> URI2Spaces) 
+    private void describe_map(StringBuilder sb, String uri1, String uri2, Set<String> URI2Spaces) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.MAP);
@@ -161,18 +158,18 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URI_PARAMETER);
-                sb.append(URLEncoder.encode(URL1, "UTF-8"));
+                sb.append(URLEncoder.encode(uri1, "UTF-8"));
                 sb.append("\">");
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URI_PARAMETER);
-                sb.append(URL1);
+                sb.append(uri1);
                 sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URI_PARAMETER);
-                sb.append(URLEncoder.encode(URL2, "UTF-8"));
+                sb.append(URLEncoder.encode(uri2, "UTF-8"));
                 for (String URISpace:URI2Spaces){
 //                    sb.append(TARGET_URI_SPACE_PARAMETER);
                     sb.append(URLEncoder.encode(URISpace, "UTF-8"));
@@ -181,7 +178,7 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(RdfConfig.getTheBaseURI());
                 sb.append(WsUriConstants.MAP);
                 sb.append(FIRST_URI_PARAMETER);
-                sb.append(URL2);
+                sb.append(uri2);
                 for (String URISpace:URI2Spaces){
  //                   sb.append(TARGET_URI_SPACE_PARAMETER);
                     sb.append(URISpace);
@@ -190,14 +187,14 @@ public class WSUriApi extends WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_URLExists(StringBuilder sb, String URL) throws UnsupportedEncodingException, BridgeDBException{
+    private void describe_uriExists(StringBuilder sb, String uri) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.URI_EXISTS);
                 sb.append("\">");
                 sb.append(WsUriConstants.URI_EXISTS);
                 sb.append("</h3>");
             sb.append("<ul>");
-            sb.append("<li>State if the URL is know to the Mapping Service or not</li>");
+            sb.append("<li>State if the URI is know to the Mapping Service or not</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
@@ -213,23 +210,23 @@ public class WSUriApi extends WSCoreApi {
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsUriConstants.URI_EXISTS);
                     sb.append(FIRST_URI_PARAMETER);
-                    sb.append(URLEncoder.encode(URL, "UTF-8"));
+                    sb.append(URLEncoder.encode(uri, "UTF-8"));
                     sb.append("\">");
                     sb.append(WsUriConstants.URI_EXISTS);
                     sb.append(FIRST_URI_PARAMETER);
-                    sb.append(URL);
+                    sb.append(uri);
                     sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
-    private void describe_URLSearch(StringBuilder sb, String URL) throws UnsupportedEncodingException, BridgeDBException{
+    private void describe_uriSearch(StringBuilder sb, String uri) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.URI_SEARCH);
                 sb.append("\">");
                 sb.append(WsUriConstants.URI_SEARCH);
                 sb.append("</h3>");
             sb.append("<ul>");
-            sb.append("<li>Searches for URLs that have this ending.</li>");
+            sb.append("<li>Searches for URIs that have this ending.</li>");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
@@ -247,13 +244,13 @@ public class WSUriApi extends WSCoreApi {
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
-                    sb.append(URLEncoder.encode(URL, "UTF-8"));
+                    sb.append(URLEncoder.encode(uri, "UTF-8"));
                     sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("\">");
                     sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
-                    sb.append(URL);
+                    sb.append(uri);
                     sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("</a></li>");    
@@ -276,7 +273,7 @@ public class WSUriApi extends WSCoreApi {
     }
 
     protected final void describe_Info(StringBuilder sb, Xref first, Set<Xref> firstMaps) throws BridgeDBException, UnsupportedEncodingException {
-        sb.append("<h2>URL based methods");
+        sb.append("<h2>URI based methods");
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.GET_MAPPING_INFO);
                 sb.append("\">");
