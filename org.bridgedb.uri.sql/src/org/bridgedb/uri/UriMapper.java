@@ -33,11 +33,11 @@ import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
- * Base interface for all URL mapping methods.
+ * Base interface for all Uri mapping methods.
  * Has methods for basic functionality such as looking up cross-references and backpage text.
  * 
- * Similar to the IDMapper interface except treats URLs as first class citizens.
- * To keep code size small URLs are represented as Strings.
+ * Similar to the IDMapper interface except treats Uris as first class citizens.
+ * To keep code size small Uris are represented as Strings.
  */
 public interface UriMapper extends IDMapper{
 //TODO: Improve javadoc!
@@ -109,21 +109,21 @@ public interface UriMapper extends IDMapper{
 
     
     /**
-	 * Get all mappings/cross-references for the given URL, restricting the
-	 * result to contain only URLs from the given set of UriSpaces.
+	 * Get all mappings/cross-references for the given Uri, restricting the
+	 * result to contain only Uris from the given set of UriSpaces.
      * <p>
-     * Result will include the sourceURL (even if uriExists(sourceUrl) would return null),
+     * Result will include the sourceUri (even if uriExists(sourceUri) would return null),
      *    if and only it has one of the targetURISpaces (or targetURISpaces is empty)
      *    Result will be empty if no mapping/ cross references could be found. 
      *    This method should never return null.
      * <p>
      * Similar to the mapID method in IDMapper.
      * 
-	 * @param sourceURL the URL to get mappings/cross-references for. 
-	 * @param profileUri the URL of the profile to use when retrieving mappings
+	 * @param sourceUri the Uri to get mappings/cross-references for. 
+	 * @param profileUri the Uri of the profile to use when retrieving mappings
      * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
-     *    Not including any TartgetURRSpace results in all mapped/ cross-references URLs to be returned.
-	 * @return A Set containing the URL (as Strings) that have been mapped/ cross referenced.
+     *    Not including any TartgetURRSpace results in all mapped/ cross-references Uris to be returned.
+	 * @return A Set containing the Uri (as Strings) that have been mapped/ cross referenced.
 	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
 	 */
 	
@@ -147,7 +147,7 @@ public interface UriMapper extends IDMapper{
      * @return a set of hit references
      * @throws BridgeDBException if failed
      */
-    public Set<String> urlSearch (String text, int limit) throws BridgeDBException;
+    public Set<String> uriSearch (String text, int limit) throws BridgeDBException;
 
     /**
      * Identical to IDMapper method.
@@ -190,13 +190,13 @@ public interface UriMapper extends IDMapper{
     public Xref toXref(String uri) throws BridgeDBException;
     
     /**
-     * Obtains the URLMapping information of the mapping of this id.
+     * Obtains the UriMapping information of the mapping of this id.
      * <p>
-     * @See URLMappings for details of what is included in the Results.
+     * @See UriMappings for details of what is included in the Results.
      * <p>
      * The behaviour of this method if called with a non existance id is still to be determinded.
      * @param id Identifier of the mapping
-     * @return a URLMapping with information about this mapping
+     * @return a UriMapping with information about this mapping
      * @throws BridgeDBException 
      */
     public Mapping getMapping(int id)  throws BridgeDBException;
@@ -205,7 +205,7 @@ public interface UriMapper extends IDMapper{
      * Gets a Sample of mappings.
      * 
      * Main use is for writing the api description page
-     * @return 5 URLs that would return true for the method urlExists(URL)
+     * @return 5 mapping which includes both source and traget Uris
      */
     public List<Mapping> getSampleMapping() throws BridgeDBException;
     
@@ -240,7 +240,7 @@ public interface UriMapper extends IDMapper{
      public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException;
     
     /**
-     * Obtains the Set of one or more UrlPatterns that are considered valid(have been registered) for this DataSource.
+     * Obtains the Set of one or more UriPatterns that are considered valid(have been registered) for this DataSource.
      * @param dataSource The SysCode of the DataSource 
      * @return UriPatterns (As Strings) in the nameSpace + "$id" + postfix format.
      * @throws BridgeDBException 

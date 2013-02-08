@@ -33,7 +33,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * Runs the URLMapper interface tests over SQLURLMapper class
+ * Runs the UriMapper interface tests over SQLUriMapper class
  * 
  * Creates the mapper, loads in the test data and then runs the tests.
  *

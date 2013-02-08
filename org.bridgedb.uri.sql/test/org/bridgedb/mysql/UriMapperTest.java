@@ -28,13 +28,13 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 
 /**
- * Runs the URLMapper interface tests over SQLURLMapper class
+ * Runs the UriMapper interface tests over SQLUriMapper class
  * 
  * Creates the mapper, loads in the test data and then runs the tests.
  *
  * @author Christian
  */
-public class URLMapperTest extends org.bridgedb.uri.UriMapperTest {
+public class UriMapperTest extends org.bridgedb.uri.UriMapperTest {
     
     private static final String CREATOR1 = "testCreator";
     private static final String PREDICATE1 = "testMapping";
@@ -48,7 +48,7 @@ public class URLMapperTest extends org.bridgedb.uri.UriMapperTest {
         connectionOk = true;
         listener = new SQLUriMapper(true, StoreType.TEST);
         loadData();
-        urlMapper =new SQLUriMapper(false, StoreType.TEST);
+        uriMapper =new SQLUriMapper(false, StoreType.TEST);
     }
             
 }

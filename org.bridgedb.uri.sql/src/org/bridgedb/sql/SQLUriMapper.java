@@ -47,7 +47,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
 /**
- * Implements the URLMapper and URLListener interfaces using SQL.
+ * Implements the UriMapper and UriListener interfaces using SQL.
  *
  * Takes into accounts the specific factors for the SQL version being used.
  *
@@ -59,7 +59,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final int POSTFIX_LENGTH = 100;
     private static final int MIMETYPE_LENGTH = 50;
     
-    private static final String URL_TABLE_NAME = "url";
+    private static final String URI_TABLE_NAME = "uri";
     private static final String MIMETYPE_TABLE_NAME = "mimeType";
     private static final String PROFILE_JUSTIFICATIONS_TABLE_NAME = "profileJustifications";
     private static final String PROFILE_TABLE_NAME = "profile";
@@ -77,7 +77,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     static final Logger logger = Logger.getLogger(SQLListener.class);
     
     /**
-     * Creates a new URLMapper including BridgeDB implementation based on a connection to the SQL Database.
+     * Creates a new UriMapper including BridgeDB implementation based on a connection to the SQL Database.
      *
      * @param dropTables Flag to determine if any existing tables should be dropped and new empty tables created.
      * @param sqlAccess The connection to the actual database. This could be MySQL, Virtuoso ect.
@@ -100,7 +100,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 	protected void dropSQLTables() throws BridgeDBException
 	{
         super.dropSQLTables();
- 		dropTable(URL_TABLE_NAME);
+ 		dropTable(URI_TABLE_NAME);
  		dropTable(MIMETYPE_TABLE_NAME);
  		dropTable(PROFILE_TABLE_NAME);
  		dropTable(PROFILE_JUSTIFICATIONS_TABLE_NAME);
@@ -113,7 +113,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 		try 
 		{
 			Statement sh = createStatement();
-            sh.execute("CREATE TABLE " + URL_TABLE_NAME
+            sh.execute("CREATE TABLE " + URI_TABLE_NAME
                     + "  (  " + DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
                     + "     " + PREFIX_COLUMN_NAME + " VARCHAR(" + PREFIX_LENGTH + ") NOT NULL, "
                     + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL "
@@ -488,7 +488,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * are from active linksets.
      * 
      * @param query Query with WHERE clause started
-     * @param profileUri URL of the profile to use
+     * @param profileUri Uri of the profile to use
      * @throws BridgeDbSqlException if the profile does not exist
      */
     private void appendProfileClause(StringBuilder query, String profileUri) throws BridgeDBException {
@@ -537,7 +537,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<String> urlSearch(String text, int limit) throws BridgeDBException {
+    public Set<String> uriSearch(String text, int limit) throws BridgeDBException {
         Set<Xref> xrefs = freeSearch(text, limit);
         Set<String> results = new HashSet<String>();
         for (Xref xref:xrefs){
@@ -576,7 +576,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append("SELECT ");
         query.append(DATASOURCE_COLUMN_NAME);
         query.append(" FROM ");
-        query.append(URL_TABLE_NAME);
+        query.append(Uri_TABLE_NAME);
         query.append(" WHERE '");
         query.append(insertEscpaeCharacters(prefix));
         query.append("' = ");
@@ -619,7 +619,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(", ");
         query.append(POSTFIX_COLUMN_NAME);
         query.append(" FROM ");
-        query.append(URL_TABLE_NAME);
+        query.append(URI_TABLE_NAME);
         query.append(" WHERE '");
         query.append(insertEscpaeCharacters(uri));
         query.append("' LIKE CONCAT(");
@@ -711,18 +711,18 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         appendSourceInfo(query);
         appendMappingFrom(query);
         query.append(", ");
-        query.append(URL_TABLE_NAME);
-        query.append(" as url1, ");
-        query.append(URL_TABLE_NAME);
-        query.append(" as url2 ");
+        query.append(URI_TABLE_NAME);
+        query.append(" as Uri1, ");
+        query.append(URI_TABLE_NAME);
+        query.append(" as Uri2 ");
         appendMappingJoinMapping(query);
         query.append(" AND ");
         query.append(SOURCE_DATASOURCE_COLUMN_NAME);
-        query.append(" = url1.");
+        query.append(" = Uri1.");
         query.append(DATASOURCE_COLUMN_NAME);
         query.append(" AND  ");
         query.append(TARGET_DATASOURCE_COLUMN_NAME);
-        query.append(" = url2.");
+        query.append(" = Uri2.");
         query.append(DATASOURCE_COLUMN_NAME);
         this.appendLimitConditions(query, 0, 5);
         System.out.println(query);
@@ -856,7 +856,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public Set<String> getUriPatterns(String dataSource) throws BridgeDBException {
-        String query = ("SELECT " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME + " FROM " + URL_TABLE_NAME
+        String query = ("SELECT " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME + " FROM " + URI_TABLE_NAME
                 + " WHERE " + DATASOURCE_COLUMN_NAME + " = '" + dataSource + "'");
         Statement statement = this.createStatement();
         ResultSet rs;
@@ -934,7 +934,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }       
     }
 
-    // **** URLListener Methods
+    // **** UriListener Methods
     
     private Set<String> getJustificationsForProfile(int profileId) throws BridgeDBException {
     	String query = ("SELECT " + JUSTIFICATION_URI_COLUMN_NAME 
@@ -994,7 +994,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throw new BridgeDBException ("UriPattern " + prefix + "$id" + postfix + " already mapped to " + sysCode 
                     + " Which does not match " + dataSource.getSystemCode());
         }
-        String query = "INSERT INTO " + URL_TABLE_NAME + " (" 
+        String query = "INSERT INTO " + URI_TABLE_NAME + " (" 
                 + DATASOURCE_COLUMN_NAME + ", " 
                 + PREFIX_COLUMN_NAME + ", " 
                 + POSTFIX_COLUMN_NAME + ") VALUES "
@@ -1018,71 +1018,71 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public void insertURLMapping(String sourceURL, String targetURL, int mappingSet, boolean symetric) throws BridgeDBException {
-        String sourceId = getId(sourceURL);
-        String targetId = getId(targetURL);
+    public void insertUriMapping(String sourceUri, String targetUri, int mappingSet, boolean symetric) throws BridgeDBException {
+        String sourceId = getId(sourceUri);
+        String targetId = getId(targetUri);
         this.insertLink(sourceId, targetId, mappingSet, symetric);
     }
 
 
     /**
-     * Method to split a URL into an URISpace and an ID.
+     * Method to split a Uri into an URISpace and an ID.
      *
      * Based on OPENRDF version with ":" added as and extra splitter.
      *
      * Ideally this would be replaced by a method from Identifiers.org
-     *    based on their knoweldge or ULI/URLs
-     * @param url URL to split
-     * @return The URISpace of the URL
+     *    based on their knoweldge or ULIs
+     * @param uri Uri to split
+     * @return The URISpace of the Uri
      */
-    public final static String getUriSpace(String url){
+    public final static String getUriSpace(String uri){
         String prefix = null;
-        url = url.trim();
-        if (url.contains("#")){
-            prefix = url.substring(0, url.lastIndexOf("#")+1);
-        } else if (url.contains("=")){
-            prefix = url.substring(0, url.lastIndexOf("=")+1);
-        } else if (url.contains("/")){
-            prefix = url.substring(0, url.lastIndexOf("/")+1);
-        } else if (url.contains(":")){
-            prefix = url.substring(0, url.lastIndexOf(":")+1);
+        uri = uri.trim();
+        if (uri.contains("#")){
+            prefix = uri.substring(0, uri.lastIndexOf("#")+1);
+        } else if (uri.contains("=")){
+            prefix = uri.substring(0, uri.lastIndexOf("=")+1);
+        } else if (uri.contains("/")){
+            prefix = uri.substring(0, uri.lastIndexOf("/")+1);
+        } else if (uri.contains(":")){
+            prefix = uri.substring(0, uri.lastIndexOf(":")+1);
         }
         //ystem.out.println(lookupPrefix);
         if (prefix == null){
-            throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
+            throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
         }
         if (prefix.isEmpty()){
-            throw new IllegalArgumentException("Url should not start with a '#', '/, or a ':'.");            
+            throw new IllegalArgumentException("Uri should not start with a '#', '/, or a ':'.");            
         }
         return prefix;
     }
 
     /**
-     * Method to split a URL into an URISpace and an ID.
+     * Method to split a Uri into an URISpace and an ID.
      *
      * Based on OPENRDF version with ":" added as and extra splitter.
      *
      * Ideally this would be replaced by a method from Identifiers.org
-     *    based on their knoweldge or ULI/URLs
-     * @param url URL to split
-     * @return The URISpace of the URL
+     *    based on their knowledge or ULI/URLs
+     * @param uri Uri to split
+     * @return The URISpace of the Uri
      */
-    public final static String getId(String url){
-        url = url.trim();
-        if (url.contains("#")){
-            return url.substring(url.lastIndexOf("#")+1, url.length());
-        } else if (url.contains("=")){
-            return url.substring(url.lastIndexOf("=")+1, url.length());
-        } else if (url.contains("/")){
-            return url.substring(url.lastIndexOf("/")+1, url.length());
-        } else if (url.contains(":")){
-            return url.substring(url.lastIndexOf(":")+1, url.length());
+    public final static String getId(String uri){
+        uri = uri.trim();
+        if (uri.contains("#")){
+            return uri.substring(uri.lastIndexOf("#")+1, uri.length());
+        } else if (uri.contains("=")){
+            return uri.substring(uri.lastIndexOf("=")+1, uri.length());
+        } else if (uri.contains("/")){
+            return uri.substring(uri.lastIndexOf("/")+1, uri.length());
+        } else if (uri.contains(":")){
+            return uri.substring(uri.lastIndexOf(":")+1, uri.length());
         }
-        throw new IllegalArgumentException("Url should have a '#', '/, or a ':' in it.");
+        throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
     }
 
     /**
-     * Generates a set of URl from a ResultSet.
+     * Generates a set of Uri from a ResultSet.
      *
      * This implementation just concats the URISpace and Id
      *
@@ -1091,10 +1091,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * This may require the method to be exstended with the Target NameSpaces.
      *
      * @param rs Result Set holding the information
-     * @return URLs generated
+     * @return Uris generated
      * @throws BridgeDBException
      */
-    private Set<String> resultSetToURLsSet(ResultSet rs) throws BridgeDBException {
+    private Set<String> resultSetToUrisSet(ResultSet rs) throws BridgeDBException {
         HashSet<String> results = new HashSet<String>();
         try {
             while (rs.next()){
@@ -1150,9 +1150,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     sourceId = sourceXref.getId();
                     sourceSysCode = sourceXref.getDataSource().getSystemCode();
                 }
-                Mapping urlMapping = new Mapping (mappingId, sourceId, sourceSysCode, predicate, 
+                Mapping uriMapping = new Mapping (mappingId, sourceId, sourceSysCode, predicate, 
                         targetId, targetSysCode, mappingSetId);       
-                results.add(urlMapping);
+                results.add(uriMapping);
             }
             return results;
        } catch (SQLException ex) {
@@ -1200,7 +1200,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append("SELECT ");
         query.append(DATASOURCE_COLUMN_NAME);
         query.append(" FROM ");
-        query.append(URL_TABLE_NAME);
+        query.append(URI_TABLE_NAME);
         query.append(" WHERE ");
         query.append(PREFIX_COLUMN_NAME);
         query.append(" = '");
@@ -1239,9 +1239,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     private DataSource getDataSource(String uriSpace) throws BridgeDBException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT dataSource ");
-        query.append("FROM url ");
-        query.append("WHERE ");
+        query.append("SELECT ");
+        query.append(DATASOURCE_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URI_TABLE_NAME);
+        query.append(" WHERE ");
         query.append(PREFIX_COLUMN_NAME);
         query.append(" = '");
             query.append(uriSpace);
@@ -1361,7 +1363,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         StringBuilder query = new StringBuilder();
         query.append("SELECT " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME);
         query.append(" FROM ");
-        query.append(URL_TABLE_NAME);
+        query.append(URI_TABLE_NAME);
         query.append(" WHERE ");
         query.append(DATASOURCE_COLUMN_NAME);
         query.append(" = '");
@@ -1395,7 +1397,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(", ");
         query.append(POSTFIX_COLUMN_NAME );
         query.append(" FROM ");
-        query.append(URL_TABLE_NAME);
+        query.append(URI_TABLE_NAME);
         query.append(" WHERE ");
         query.append(DATASOURCE_COLUMN_NAME);
         query.append(" = '");

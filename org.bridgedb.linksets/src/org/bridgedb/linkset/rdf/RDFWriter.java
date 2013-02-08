@@ -155,7 +155,7 @@ public class RDFWriter implements RdfLoader{
         String sourceURL = st.getSubject().stringValue();
         String targetURL = st.getObject().stringValue();
         try {
-            urlListener.insertURLMapping(sourceURL, targetURL, mappingId, symmetric);
+            urlListener.insertUriMapping(sourceURL, targetURL, mappingId, symmetric);
         } catch (BridgeDBException ex) {
             throw new RDFHandlerException ("Error inserting mapping. ", ex);
         }

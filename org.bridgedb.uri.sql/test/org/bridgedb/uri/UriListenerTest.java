@@ -26,12 +26,12 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 
 /**
- * Base class of all Test using URLs
+ * Base class of all Test using Uris
  *
  * Adds a method for loading the test data.
  * @author Christian
  */
-public abstract class URLListenerTest extends UriMapperTestBase{
+public abstract class UriListenerTest extends UriMapperTestBase{
         
     protected static UriListener listener;
     protected static final String TEST_JUSTIFICATION1 = "http://www.bridgedb.org/test#testJustification1";
@@ -49,12 +49,12 @@ public abstract class URLListenerTest extends UriMapperTestBase{
     
     @BeforeClass
     public static void setupUriPatterns() throws BridgeDBException{
-        setupURLs();
+        setupUris();
         connectionOk = true;
-        uriPattern1 = UriPattern.byNameSpace(URISpace1);
-        uriPattern2 = UriPattern.byNameSpace(URISpace2);
-        uriPattern3 = UriPattern.byNameSpace(URISpace3);
-        uriPatternBad = UriPattern.byNameSpace("http://www.example.com/URLMapperTest/Bad");
+        uriPattern1 = UriPattern.byNameSpace(uriSpace1);
+        uriPattern2 = UriPattern.byNameSpace(uriSpace2);
+        uriPattern3 = UriPattern.byNameSpace(uriSpace3);
+        uriPatternBad = UriPattern.byNameSpace("http://www.example.com/UriMapperTest/Bad");
     }
         
     /**
@@ -64,29 +64,29 @@ public abstract class URLListenerTest extends UriMapperTestBase{
      * @throws BridgeDBException
      */
     public static void loadData() throws BridgeDBException{
-        listener.registerUriPattern(DataSource1, URISpace1 + "$id");
-        listener.registerUriPattern(DataSource2, URISpace2 + "$id");
-        listener.registerUriPattern(DataSource2, URISpace2a + "$id");
-        listener.registerUriPattern(DataSource3, URISpace3 + "$id");
-        listener.registerUriPattern(DataSource3, URISpace3a + "$id");
+        listener.registerUriPattern(DataSource1, uriSpace1 + "$id");
+        listener.registerUriPattern(DataSource2, uriSpace2 + "$id");
+        listener.registerUriPattern(DataSource2, uriSpace2a + "$id");
+        listener.registerUriPattern(DataSource3, uriSpace3 + "$id");
+        listener.registerUriPattern(DataSource3, uriSpace3a + "$id");
 
         int mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
         		TEST_JUSTIFICATION1, uriPattern2, SYMETRIC, ORIGINAL);
-        listener.insertURLMapping(map1URL1, map1URL2, mappingSet, SYMETRIC);
-        listener.insertURLMapping(map2URL1, map2URL2, mappingSet, SYMETRIC);
-        listener.insertURLMapping(map3URL1, map3URL2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
         mappingSet2_3 = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
         		TEST_JUSTIFICATION2, uriPattern3, SYMETRIC, ORIGINAL);
-        listener.insertURLMapping(map1URL2, map1URL3, mappingSet2_3, SYMETRIC);
-        listener.insertURLMapping(map2URL2, map2URL3, mappingSet2_3, SYMETRIC);
-        listener.insertURLMapping(map3URL2, map3URL3, mappingSet2_3, SYMETRIC);
+        listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
+        listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
+        listener.insertUriMapping(map3Uri2, map3Uri3, mappingSet2_3, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
         		TEST_JUSTIFICATION2, uriPattern3, SYMETRIC, TRANSATIVE);
-        listener.insertURLMapping(map1URL1, map1URL3, mappingSet, SYMETRIC);
-        listener.insertURLMapping(map2URL1, map2URL3, mappingSet, SYMETRIC);
-        listener.insertURLMapping(map3URL1, map3URL3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map1Uri1, map1Uri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2Uri1, map2Uri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
 
         listener.closeInput();
     }

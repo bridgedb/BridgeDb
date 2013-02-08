@@ -48,7 +48,7 @@ public class URLMapperTest extends org.bridgedb.uri.UriMapperTest {
         listener = new SQLUriMapper(true, StoreType.TEST);
         loadData();
         SQLUriMapper sqlUrlMapper = new SQLUriMapper(false, StoreType.TEST);
-        urlMapper = new WSUriMapper(new WSUriInterfaceService(sqlUrlMapper)); 
+        uriMapper = new WSUriMapper(new WSUriInterfaceService(sqlUrlMapper)); 
     }
       
 }

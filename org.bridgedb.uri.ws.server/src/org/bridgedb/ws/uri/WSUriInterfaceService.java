@@ -271,11 +271,11 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         if (text == null) throw new BridgeDBException(WsUriConstants.TEXT + " parameter missing.");
         if (text.isEmpty()) throw new BridgeDBException(WsUriConstants.TEXT + " parameter may not be null.");
         if (limitString == null || limitString.isEmpty()){
-            Set<String> urls = uriMapper.urlSearch(text, Integer.MAX_VALUE);
+            Set<String> urls = uriMapper.uriSearch(text, Integer.MAX_VALUE);
             return new UriSearchBean(text, urls);
         } else {
             int limit = Integer.parseInt(limitString);
-            Set<String> urls = uriMapper.urlSearch(text, limit);
+            Set<String> urls = uriMapper.uriSearch(text, limit);
             return new UriSearchBean(text, urls);
         }
     }

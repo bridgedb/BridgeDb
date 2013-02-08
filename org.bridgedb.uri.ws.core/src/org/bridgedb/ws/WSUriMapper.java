@@ -252,7 +252,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
 
     @Override
-    public Set<String> urlSearch(String text, int limit) throws BridgeDBException {
+    public Set<String> uriSearch(String text, int limit) throws BridgeDBException {
         UriSearchBean  bean = uriService.UriSearch(text, "" + limit);
         return bean.getUriSet();
     }

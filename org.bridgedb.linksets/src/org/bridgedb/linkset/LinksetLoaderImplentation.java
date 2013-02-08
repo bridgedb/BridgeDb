@@ -276,7 +276,7 @@ public class LinksetLoaderImplentation{
         for (Statement st:linksetStatements.getLinkStatements()){
             String sourceURL = st.getSubject().stringValue();
             String targetURL = st.getObject().stringValue();
-            urlListener.insertURLMapping(sourceURL, targetURL, mappingId, symmetric);
+            urlListener.insertUriMapping(sourceURL, targetURL, mappingId, symmetric);
         }
     }
         

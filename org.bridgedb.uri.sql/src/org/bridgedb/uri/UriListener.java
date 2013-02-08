@@ -24,9 +24,9 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
- * Import Interface that supports the adding of URLs.
+ * Import Interface that supports the adding of Uris.
  * <p>
- * This is similar to MappingListener allowing UriSpaces and URLs to be used directly.
+ * This is similar to MappingListener allowing UriSpaces and Uris to be used directly.
  * But also with added support for multiple UriSpaces version like Identifiers.org does.
  * 
  * @author Christian
@@ -67,10 +67,10 @@ public interface UriListener {
      * Similar to MappingListener.registerMappingSet(DataSource source, String predicate, DataSource target, 
      *    boolean symetric, boolean isTransitive)
      * In fact implementations are encouraged to obtain the DataSources and call the MappingListener method.
-     * @param sourceUriPattern A registered UriPattern used by the source URLS
+     * @param sourceUriPattern A registered UriPattern used by the source UriS
      * @param predicate The predicate to be associated. Can be null
      * @param justification The URI that states why the link holds. Can be null
-     * @param targetUriPattern A registered UriPattern used by the source URLS
+     * @param targetUriPattern A registered UriPattern used by the source UriS
      * @param symetric Flag to say if mapping should be loaded one way of both ways. 
      *     Creates two mapping sets this one and the inverse with one number higher.
      * @param transative Flag to indicate if the mapping was created using transativity
@@ -87,7 +87,7 @@ public interface UriListener {
      * Similar to MappingListener.insertLink(String sourceId, String targetId, int mappingSet, boolean symetric)
      * In fact implementations are encouraged to obtain the ids and call the MappingListener method.
      * <p>
-     * For speed the implementations are not required to verify that the UriSpace part of the URLs matches the de
+     * For speed the implementations are not required to verify that the UriSpace part of the Uris matches the de
      * <p>
      * Implementatins may buffer the inserts, so closeInput must be called after the last insert or inserts may be lost. 
      * <p>
@@ -102,7 +102,7 @@ public interface UriListener {
      * @param symetric If true the inverse mapping will be inserted into the mapping set one number higher.
      * @throws BridgeDBException 
      */
-   public void insertURLMapping(String sourceURL, String targetURL, int mappingSet, boolean symetric) 
+   public void insertUriMapping(String sourceUri, String targetUri, int mappingSet, boolean symetric) 
             throws BridgeDBException;
     
     /**
