@@ -58,9 +58,9 @@ import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.ProfileBeanFactory;
-import org.bridgedb.ws.bean.URLBean;
-import org.bridgedb.ws.bean.URLExistsBean;
-import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.UriBean;
+import org.bridgedb.ws.bean.UriExistsBean;
+import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.openrdf.rio.RDFFormat;
@@ -255,28 +255,28 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.URI_EXISTS)
     @Override
-    public URLExistsBean URLExists(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {
+    public UriExistsBean UriExists(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {
         if (URI == null) throw new BridgeDBException(WsUriConstants.URI + " parameter missing.");
         if (URI.isEmpty()) throw new BridgeDBException(WsUriConstants.URI + " parameter may not be null.");
         boolean exists = uriMapper.uriExists(URI);
-        return new URLExistsBean(URI, exists);
+        return new UriExistsBean(URI, exists);
     }
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.URI_SEARCH)
     @Override
-    public URLSearchBean URLSearch(@QueryParam(WsUriConstants.TEXT) String text,
+    public UriSearchBean UriSearch(@QueryParam(WsUriConstants.TEXT) String text,
             @QueryParam(WsUriConstants.LIMIT) String limitString) throws BridgeDBException {
         if (text == null) throw new BridgeDBException(WsUriConstants.TEXT + " parameter missing.");
         if (text.isEmpty()) throw new BridgeDBException(WsUriConstants.TEXT + " parameter may not be null.");
         if (limitString == null || limitString.isEmpty()){
             Set<String> urls = uriMapper.urlSearch(text, Integer.MAX_VALUE);
-            return new URLSearchBean(text, urls);
+            return new UriSearchBean(text, urls);
         } else {
             int limit = Integer.parseInt(limitString);
             Set<String> urls = uriMapper.urlSearch(text, limit);
-            return new URLSearchBean(text, urls);
+            return new UriSearchBean(text, urls);
         }
     }
 

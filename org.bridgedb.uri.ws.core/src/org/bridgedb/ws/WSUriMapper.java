@@ -40,7 +40,7 @@ import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.ProfileBeanFactory;
-import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 
@@ -247,19 +247,19 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
     
     @Override
-    public boolean uriExists(String URL) throws BridgeDBException {
-        return uriService.URLExists(URL).exists();
+    public boolean uriExists(String Uri) throws BridgeDBException {
+        return uriService.UriExists(Uri).exists();
     }
 
     @Override
     public Set<String> urlSearch(String text, int limit) throws BridgeDBException {
-        URLSearchBean  bean = uriService.URLSearch(text, "" + limit);
-        return bean.getURLSet();
+        UriSearchBean  bean = uriService.UriSearch(text, "" + limit);
+        return bean.getUriSet();
     }
 
     @Override
-    public Xref toXref(String URL) throws BridgeDBException {
-        XrefBean bean = uriService.toXref(URL);
+    public Xref toXref(String Uri) throws BridgeDBException {
+        XrefBean bean = uriService.toXref(Uri);
         return XrefBeanFactory.asXref(bean);
     }
 

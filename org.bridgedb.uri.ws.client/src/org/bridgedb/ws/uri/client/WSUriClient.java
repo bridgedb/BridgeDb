@@ -34,9 +34,9 @@ import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
-import org.bridgedb.ws.bean.URLBean;
-import org.bridgedb.ws.bean.URLExistsBean;
-import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.UriBean;
+import org.bridgedb.ws.bean.UriExistsBean;
+import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**
@@ -95,29 +95,29 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public URLExistsBean URLExists(String uri) throws BridgeDBException {
+    public UriExistsBean UriExists(String uri) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URI, uri);
         //Make service call
-        URLExistsBean result = 
+        UriExistsBean result = 
                 webResource.path(WsUriConstants.URI_EXISTS)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<URLExistsBean>() {});
+                .get(new GenericType<UriExistsBean>() {});
          return result;
     }
 
     @Override
-    public URLSearchBean URLSearch(String text, String limitString) throws BridgeDBException {
+    public UriSearchBean UriSearch(String text, String limitString) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.TEXT, text);
         params.add(WsUriConstants.LIMIT, limitString);
         //Make service call
-        URLSearchBean result = 
+        UriSearchBean result = 
                 webResource.path(WsUriConstants.URI_SEARCH)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<URLSearchBean>() {});
+                .get(new GenericType<UriSearchBean>() {});
          return result;
     }
 

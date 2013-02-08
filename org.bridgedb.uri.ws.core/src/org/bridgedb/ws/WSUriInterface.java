@@ -26,9 +26,9 @@ import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
-import org.bridgedb.ws.bean.URLBean;
-import org.bridgedb.ws.bean.URLExistsBean;
-import org.bridgedb.ws.bean.URLSearchBean;
+import org.bridgedb.ws.bean.UriBean;
+import org.bridgedb.ws.bean.UriExistsBean;
+import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**
@@ -43,11 +43,11 @@ public interface WSUriInterface extends WSCoreInterface{
     public List<Mapping> map(String uri, String profileUri, List<String> targetCodes, 
             List<String> targetUriPattern) throws BridgeDBException;
 
-    public URLExistsBean URLExists(String URL) throws BridgeDBException;
+    public UriExistsBean UriExists(String Uri) throws BridgeDBException;
 
-    public URLSearchBean URLSearch(String text, String limitString) throws BridgeDBException;
+    public UriSearchBean UriSearch(String text, String limitString) throws BridgeDBException;
 
-    public XrefBean toXref(String URL) throws BridgeDBException;
+    public XrefBean toXref(String Uri) throws BridgeDBException;
 
     public Mapping getMapping(String id) throws BridgeDBException;
 

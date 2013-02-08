@@ -25,36 +25,36 @@ import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="URLSearch")
-public class URLSearchBean {
-    private List<String> URL;
+@XmlRootElement(name="UriSearch")
+public class UriSearchBean {
+    private List<String> Uri;
 
     private String term;
 
-    public URLSearchBean(){
+    public UriSearchBean(){
     }
     
-    public URLSearchBean(String term, Set<String> URLs){
-        if (URLs == null || URLs.isEmpty()){
-            URL = new ArrayList<String>();
+    public UriSearchBean(String term, Set<String> Uris){
+        if (Uris == null || Uris.isEmpty()){
+            Uri = new ArrayList<String>();
         } else {
-            URL = new ArrayList(URLs);
+            Uri = new ArrayList(Uris);
         }
         this.term = term;
     }
 
     /**
-     * @return the URL
+     * @return the Uri
      */
-    public List<String> getURL() {
-        return URL;
+    public List<String> getUri() {
+        return Uri;
     }
 
     /**
-     * @param URL the URL to set
+     * @param Uri the Uri to set
      */
-    public void setURL(List<String> URL) {
-        this.URL = URL;
+    public void setUri(List<String> Uri) {
+        this.Uri = Uri;
     }
 
     /**
@@ -71,11 +71,11 @@ public class URLSearchBean {
         this.term = term;
     }
 
-    public Set<String> getURLSet() {
-        if (URL == null || URL.isEmpty()){
+    public Set<String> getUriSet() {
+        if (Uri == null || Uri.isEmpty()){
             return new HashSet<String>();
         } else {
-            return new HashSet(URL);
+            return new HashSet(Uri);
         }
     }
  

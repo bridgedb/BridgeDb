@@ -25,53 +25,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Christian
  */
-@XmlRootElement(name="URLExist")
-public class URLExistsBean {
-    
-    protected Boolean exists;
-    protected  String URL;
-    
-    public URLExistsBean(){
-    }
-    
-    public URLExistsBean(String URL, boolean exists){
-        this.exists = exists;
-        this.URL = URL;
-    }
-    
+@XmlRootElement(name="Uri")
+public class UriBean {
+    private String Uri;
+
     /**
-     * @return the isSupported
+     * @return the Uri
      */
-    public Boolean getExists() {
-        return exists;
+    public String getUri() {
+        return Uri;
     }
 
     /**
-     * @return the isSupported
+     * @param Uri the Uri to set
      */
-    public boolean exists() {
-        return exists;
+    public void setUri(String Uri) {
+        this.Uri = Uri;
     }
-    /**
-     * @param isSupported the isSupported to set
-     */
-    public void setExists(Boolean exists) {
-        this.exists = exists;
-    }
-
-    /**
-     * @return the URL
-     */
-    public String getURL() {
-        return URL;
-    }
-
-    /**
-     * @param URL the URL to set
-     */
-    public void setURL(String URL) {
-        this.URL = URL;
-    }
-    
-  
 }
