@@ -22,7 +22,7 @@ package org.bridgedb.ws;
 import java.util.List;
 import org.bridgedb.url.Mapping;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
+import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
@@ -59,7 +59,7 @@ public interface WSUriInterface extends WSCoreInterface{
 
     public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws BridgeDBException;
 
-    public DataSourceUriSpacesBean getDataSource(String dataSource) throws BridgeDBException;
+    public DataSourceUriPatternBean getDataSource(String dataSource) throws BridgeDBException;
     
     public List<ProfileBean> getProfiles() throws BridgeDBException;
     

@@ -240,12 +240,12 @@ public interface URLMapper extends IDMapper{
      public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException;
     
     /**
-     * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for this DataSource.
+     * Obtains the Set of one or more UrlPatterns that are considered valid(have been registered) for this DataSource.
      * @param dataSource The SysCode of the DataSource 
-     * @return UriSpaces (As Strings) of the UriSpace registered for this DataSource.
+     * @return UriPatterns (As Strings) in the nameSpace + "$id" + postfix format.
      * @throws BridgeDBException 
      */
-    public Set<String> getUriSpaces(String dataSource) throws BridgeDBException;
+    public Set<String> getUriPatterns(String dataSource) throws BridgeDBException;
 
 	/**
 	 * Obtains the Set of Profiles currently registered.
@@ -264,26 +264,6 @@ public interface URLMapper extends IDMapper{
 	 */
 	public ProfileInfo getProfile(String profileURI) throws BridgeDBException;
 
-    /**
-     * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for the Source DataSource.
-     * 
-     * Looks for the mapping set, finds the Source DataSource and returns the UriSpaces for that DataSource.
-     * @param mappingSet The id of the mappingSet to check.
-     * @return UriSpaces (As Strings) of the UriSpace registered for this DataSource.
-     * @throws BridgeDBException 
-     */
-    public Set<String> getSourceUriSpace(int mappingSetId) throws BridgeDBException;
-
-    /**
-     * Obtains the Set of one or more UrlSpaces that are considered valid(have been registered) for the target DataSource.
-     * 
-     * Looks for the mapping set, finds the Target DataSource and returns the UriSpaces for that DataSource.
-     * @param mappingSet The id of the mappingSet to check.
-     * @return UriSpaces (As Strings) of the UriSpace registered for this DataSource.
-     * @throws BridgeDBException 
-     */
-    public Set<String> getTargetUriSpace(int mappingSetId) throws BridgeDBException;
-    
     /**
      * Returns the SQL_COMPAT_VERSION.
      * 

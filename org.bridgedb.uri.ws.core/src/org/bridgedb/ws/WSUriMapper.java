@@ -33,7 +33,7 @@ import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.url.Mapping;
 import org.bridgedb.url.URLMapper;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
+import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
@@ -41,7 +41,6 @@ import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.ProfileBeanFactory;
 import org.bridgedb.ws.bean.URLSearchBean;
-import org.bridgedb.ws.bean.UriSpaceBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefBeanFactory;
 
@@ -297,14 +296,9 @@ public class WSUriMapper extends WSCoreMapper implements URLMapper{
     }
    
     @Override
-    public Set<String> getUriSpaces(String dataSource) throws BridgeDBException {
-        DataSourceUriSpacesBean bigBean = uriService.getDataSource(dataSource);
-        List<UriSpaceBean> beans = bigBean.getUriSpace(); 
-        HashSet<String> results = new HashSet<String>();
-        for (UriSpaceBean bean:beans){
-            results.add(bean.getUriSpace());
-        }
-        return results;
+    public Set<String> getUriPatterns(String dataSource) throws BridgeDBException {
+        DataSourceUriPatternBean bean = uriService.getDataSource(dataSource);
+        return new HashSet<String>(bean.getUriPattern());
     }
 
 	@Override
@@ -325,18 +319,6 @@ public class WSUriMapper extends WSCoreMapper implements URLMapper{
 		return result;
 	}
     
-    @Override
-    public Set<String> getSourceUriSpace(int mappingSetId) throws BridgeDBException {
-        MappingSetInfo info = getMappingSetInfo(mappingSetId);
-        return getUriSpaces(info.getSourceSysCode());
-    }
-
-    @Override
-    public Set<String> getTargetUriSpace(int mappingSetId) throws BridgeDBException {
-        MappingSetInfo info = getMappingSetInfo(mappingSetId);
-        return getUriSpaces(info.getTargetSysCode());
-    }
-
     @Override
     public int getSqlCompatVersion() throws BridgeDBException {
         return Integer.parseInt(uriService.getSqlCompatVersion());

@@ -51,8 +51,7 @@ import org.bridgedb.ws.WSCoreService;
 import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.WsUriConstants;
-import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
-import org.bridgedb.ws.bean.DataSourceUriSpacesBeanFactory;
+import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
@@ -388,7 +387,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.DATA_SOURCE)
-    public DataSourceUriSpacesBean getDataSource() throws BridgeDBException {
+    public DataSourceUriPatternBean getDataSource() throws BridgeDBException {
         throw new BridgeDBException("id path parameter missing.");
     }
 
@@ -396,12 +395,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Override
     @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
-    public DataSourceUriSpacesBean getDataSource(@PathParam("id") String id) throws BridgeDBException {
+    public DataSourceUriPatternBean getDataSource(@PathParam("id") String id) throws BridgeDBException {
         if (id == null) throw new BridgeDBException("Path parameter missing.");
         if (id.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
-        Set<String> urls = urlMapper.getUriSpaces(id);
+        List<String> uriPatterns = new ArrayList<String>(urlMapper.getUriPatterns(id));
         DataSource ds = DataSource.getBySystemCode(id);
-        DataSourceUriSpacesBean bean = DataSourceUriSpacesBeanFactory.asBean(ds, urls);
+        DataSourceUriPatternBean bean = new DataSourceUriPatternBean(ds, uriPatterns);
         return bean;
     }
     

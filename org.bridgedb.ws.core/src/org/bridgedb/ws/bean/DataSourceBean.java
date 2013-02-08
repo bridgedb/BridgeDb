@@ -21,6 +21,7 @@ package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.bridgedb.DataSource;
 
 @XmlRootElement(name="DataSource")
 @XmlType(propOrder={"sysCode","urlPattern", "mainUrl", "fullName", "idExample", "isPrimary", "organism", "urnBase", "type"})
@@ -38,6 +39,50 @@ public class DataSourceBean {
 
     //Webservice constructor
     public DataSourceBean(){
+    }
+
+    public DataSourceBean(DataSource dataSource){
+        sysCode = dataSource.getSystemCode();
+        fullName = dataSource.getFullName();
+        String urlPattern = dataSource.getUrl("$id");
+        if (urlPattern.length() > 3 ){
+            urlPattern = urlPattern;
+        } else {
+            urlPattern = null;
+        }
+        idExample = dataSource.getExample().getId();
+        isPrimary = dataSource.isPrimary();
+        type = dataSource.getType();
+    	organism = dataSource.getOrganism();
+        String emptyUrn = dataSource.getURN("");
+        if (emptyUrn.length() > 1){
+            urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
+        } else {
+            urnBase = null;
+        }
+        mainUrl = dataSource.getMainUrl(); 
+    }
+
+    public DataSource asDataSource() {
+        DataSource.Builder builder = DataSource.register(sysCode, fullName);
+        if (urlPattern != null){
+            builder = builder.urlPattern(urlPattern);
+        }
+        if (idExample != null){
+            builder = builder.idExample(idExample);
+        }
+        builder = builder.primary(isPrimary);
+        builder = builder.type(type);
+        if (organism != null){
+            builder = builder.organism(organism);
+        }
+        if (urnBase != null){
+            builder = builder.urnBase(type);
+        }
+        if (mainUrl != null){
+            builder = builder.mainUrl(mainUrl);
+        }
+        return builder.asDataSource();
     }
 
     /**

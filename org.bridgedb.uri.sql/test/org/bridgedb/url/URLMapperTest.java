@@ -382,31 +382,8 @@ public abstract class URLMapperTest extends URLListenerTest{
     @Test
     public void testGetUriSpaces() throws BridgeDBException {
         report("GetUriSpaces");
-        Set<String> results = urlMapper.getUriSpaces(map2xref3.getDataSource().getSystemCode());
-        assertTrue (results.contains(URISpace3));
-    }
-    
-    @Test
-    public void testGetSourceUriSpace() throws BridgeDBException {
-        report("GetSourceUriSpace");
-        Set<String> results = urlMapper.getSourceUriSpace(mappingSet2_3);
-        assertFalse (results.contains(URISpace1));
-        assertTrue (results.contains(URISpace2));
-        assertTrue (results.contains(URISpace2a));
-        assertFalse (results.contains(URISpace3));
-        assertFalse (results.contains(URISpace3a));
-    }
-
-    @Test
-    public void testGetTargetUriSpace() throws BridgeDBException {
-        report("GetTargetUriSpace");
-        MappingSetInfo result = urlMapper.getMappingSetInfo(mappingSet2_3);
-        Set<String> results = urlMapper.getTargetUriSpace(mappingSet2_3);
-        assertFalse (results.contains(URISpace1));
-        assertFalse (results.contains(URISpace2));
-        assertFalse (results.contains(URISpace2a));
-        assertTrue (results.contains(URISpace3));
-        assertTrue (results.contains(URISpace3a));
+        Set<String> results = urlMapper.getUriPatterns(map2xref3.getDataSource().getSystemCode());
+        assertTrue (results.contains(uriPattern3.toString()));
     }
     
     @Test

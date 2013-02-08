@@ -22,6 +22,7 @@ package org.bridgedb.ws.bean;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.bridgedb.DataSource;
 
 /**
  *
@@ -29,31 +30,33 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name="DataSourceUriSpaces")
 @XmlType(propOrder={"sysCode","urlPattern", "mainUrl", "fullName", "idExample", "isPrimary", "organism", "urnBase", "type", "uriSpace"})
-public class DataSourceUriSpacesBean {
-    private List<UriSpaceBean> uriSpace;
-  	private String sysCode;
-	private String fullName;
-    private String urlPattern;
-	private String idExample;
-	private boolean isPrimary;
-	private String type;
-    //I wonder how to do this?
-	private Object organism;
-	private String urnBase;    
-	private String mainUrl;
+public class DataSourceUriPatternBean extends DataSourceBean{
+    private List<String> uriPattern;
 
     /**
-     * @return the uriSpace
+     * Empty Constructor for WebServcices
      */
-    public List<UriSpaceBean> getUriSpace() {
-        return uriSpace;
+    public DataSourceUriPatternBean(){
+        
+    }
+    
+    public DataSourceUriPatternBean(DataSource dataSource, List<String> uriPatterns){
+        super(dataSource);
+        uriPattern = uriPatterns;
+    }
+    
+    /**
+     * @return the UriPattern(s)
+     */
+    public List<String> getUriPattern() {
+        return uriPattern;
     }
 
     /**
-     * @param uriSpace the uriSpace to set
+     * @param uriPattern the uriPattern(s) to set
      */
-    public void setUriSpace(List<UriSpaceBean> uriSpace) {
-        this.uriSpace = uriSpace;
+    public void setUriPattern(List<String> uriPatterns) {
+        this.uriPattern = uriPattern;
     }
 
     /**

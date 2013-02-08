@@ -161,6 +161,25 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         }
     }
 
+    public static UriPattern existingByNameSpaceandPrefix(String nameSpace, String postfix) {
+        if (nameSpace == null || nameSpace.isEmpty()){
+            return null;
+        }
+        if (postfix == null || postfix.isEmpty()){
+            return byNameSpaceOnly.get(nameSpace);
+        } else {
+            HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(nameSpace);
+            if (postFixMap == null){
+                return null;
+            }
+            return postFixMap.get(postfix);
+        }
+    }
+
+   public static UriPattern existingByNameSpace(String nameSpace) {
+        return byNameSpaceOnly.get(nameSpace);
+    }
+
     public static UriPattern byNameSpaceAndPostFix(String nameSpace, String postfix) throws BridgeDBException{
         if (postfix.isEmpty() || postfix.equals("NULL")){
             return byNameSpace(nameSpace);

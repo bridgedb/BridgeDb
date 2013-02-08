@@ -30,7 +30,7 @@ import org.bridgedb.ws.WSCoreClient;
 import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.WsUriConstants;
-import org.bridgedb.ws.bean.DataSourceUriSpacesBean;
+import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
@@ -189,12 +189,12 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public DataSourceUriSpacesBean getDataSource(String dataSource) throws BridgeDBException{
+    public DataSourceUriPatternBean getDataSource(String dataSource) throws BridgeDBException{
         //Make service call
-        DataSourceUriSpacesBean result = 
+        DataSourceUriPatternBean result = 
                 webResource.path(WsUriConstants.DATA_SOURCE + "/" + dataSource)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<DataSourceUriSpacesBean>() {});
+                .get(new GenericType<DataSourceUriPatternBean>() {});
          return result;
     }
 

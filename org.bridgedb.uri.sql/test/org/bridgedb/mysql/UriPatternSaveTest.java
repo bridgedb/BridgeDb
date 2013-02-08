@@ -51,14 +51,15 @@ public class UriPatternSaveTest extends TestUtils {
 
     @Test
     public void testCheckUriPatterns() throws Exception {
-        Date start = new Date();
+        //Date start = new Date();
         report("getCheckUriPatterns");
         for (UriPattern pattern:UriPattern.getUriPatterns()){
             String uri = pattern.getPrefix() + "1234" + pattern.getPostfix();
             Xref xref = mapper.toXref(uri);
             assertEquals(pattern.getDataSource(), xref.getDataSource());
         }
-        Date end = new Date();
+        //Date end = new Date();
+        //System.out.println(end.getTime()-start.getTime());
      }
 
             
