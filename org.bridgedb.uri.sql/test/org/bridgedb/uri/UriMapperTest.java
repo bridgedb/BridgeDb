@@ -59,7 +59,7 @@ public abstract class UriMapperTest extends UriListenerTest{
     }
     
     @Test
-    public void testToURLsOneToManyNoDataSources() throws BridgeDBException{
+    public void testToUrisOneToManyNoDataSources() throws BridgeDBException{
         report("MapXrefOneToManyNoDataSources");
         Set<String> results = uriMapper.mapUri(map1xref1, RdfConfig.getProfileURI(0));
         assertTrue(results.contains(map1Uri2));
@@ -74,20 +74,20 @@ public abstract class UriMapperTest extends UriListenerTest{
         report("MapFullOneToManyNoDataSources");
         Set<Mapping> results = uriMapper.mapFull(map3Uri3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
-        for (Mapping URLMapping:results){
-            if (URLMapping.getTargetUri().contains(map3Uri3)){
-                assertNull(URLMapping.getId());
-                assertNull(URLMapping.getMappingSetId());        
-                assertNull(URLMapping.getPredicate() );
+        for (Mapping mapping:results){
+            if (mapping.getTargetUri().contains(map3Uri3)){
+                assertNull(mapping.getId());
+                assertNull(mapping.getMappingSetId());        
+                assertNull(mapping.getPredicate() );
             } else {
-                mappedTo.addAll(URLMapping.getTargetUri());
+                mappedTo.addAll(mapping.getTargetUri());
                 String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
                     OwlConstants.EQUIVALENT_CLASS.stringValue()};
-                assertThat(URLMapping.getPredicate(), isIn(predicates));
-                assertNotNull(URLMapping.getId());
-                assertNotNull(URLMapping.getMappingSetId());
+                assertThat(mapping.getPredicate(), isIn(predicates));
+                assertNotNull(mapping.getId());
+                assertNotNull(mapping.getMappingSetId());
             }
-            assertTrue(URLMapping.getSourceUri().contains(map3Uri3));
+            assertTrue(mapping.getSourceUri().contains(map3Uri3));
         }
         String[] expectedMatches = {map3Uri1, map3Uri2, map3Uri2a};
         assertThat(mappedTo, hasItems(expectedMatches));
@@ -100,20 +100,20 @@ public abstract class UriMapperTest extends UriListenerTest{
         report("MapXrefFullOneToManyNoDataSources");
         Set<Mapping> results = uriMapper.mapFull(map3xref3, RdfConfig.getProfileURI(0));
         Set<String> mappedTo = new HashSet<String>();
-        for (Mapping URLMapping:results){
-            if (URLMapping.getTargetUri().contains(map3Uri3)){
-                assertNull(URLMapping.getId());
-                assertNull(URLMapping.getMappingSetId());        
-                assertNull(URLMapping.getPredicate() );
+        for (Mapping mapping:results){
+            if (mapping.getTargetUri().contains(map3Uri3)){
+                assertNull(mapping.getId());
+                assertNull(mapping.getMappingSetId());        
+                assertNull(mapping.getPredicate() );
             } else {
-                mappedTo.addAll(URLMapping.getTargetUri());
+                mappedTo.addAll(mapping.getTargetUri());
                 String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
                     OwlConstants.EQUIVALENT_CLASS.stringValue()};
-                assertThat(URLMapping.getPredicate(), isIn(predicates));
-                assertNotNull(URLMapping.getId());
-                assertNotNull(URLMapping.getMappingSetId());
+                assertThat(mapping.getPredicate(), isIn(predicates));
+                assertNotNull(mapping.getId());
+                assertNotNull(mapping.getMappingSetId());
             }
-            assertEquals(map3xref3, URLMapping.getSource());
+            assertEquals(map3xref3, mapping.getSource());
         }
         String[] expectedMatches = {map3Uri1, map3Uri2, map3Uri2a};
         assertThat(mappedTo, hasItems(expectedMatches));
@@ -157,7 +157,7 @@ public abstract class UriMapperTest extends UriListenerTest{
     }
  
     @Test
-    public void testMapToURLsOneToManyWithOneDataSource() throws BridgeDBException{
+    public void testMapToUrisOneToManyWithOneDataSource() throws BridgeDBException{
         report("MapIDOneToManyWithOneDataSource");
         Set<String> results = uriMapper.mapUri(map1xref1, RdfConfig.getProfileURI(0), uriPattern2);
         assertTrue(results.contains(map1Uri2));
@@ -207,8 +207,8 @@ public abstract class UriMapperTest extends UriListenerTest{
     }
 
     @Test
-    public void testURLSupported() throws Exception {
-        report("URLSupported");
+    public void testUriSupported() throws Exception {
+        report("UriSupported");
         assertTrue(uriMapper.uriExists(map1Uri1));
         assertTrue(uriMapper.uriExists(map1Uri2));
         assertTrue(uriMapper.uriExists(map1Uri3));
@@ -273,10 +273,10 @@ public abstract class UriMapperTest extends UriListenerTest{
         Set<Mapping> results = uriMapper.mapFull(map3Uri3, RdfConfig.getProfileURI(0));
         Integer mappingId = null;
         Integer setId = null;
-        for (Mapping URLMapping:results){
-            if (URLMapping.getTargetUri().contains(map3Uri2)){
-                mappingId = URLMapping.getId();
-                setId = URLMapping.getMappingSetId();        
+        for (Mapping mapping:results){
+            if (mapping.getTargetUri().contains(map3Uri2)){
+                mappingId = mapping.getId();
+                setId = mapping.getMappingSetId();        
             }
         }
         Mapping result = uriMapper.getMapping(mappingId);
@@ -295,7 +295,7 @@ public abstract class UriMapperTest extends UriListenerTest{
     
     @Test
     public void testGetSampleMappings() throws BridgeDBException {
-        report("GetSampleSourceURL");
+        report("GetSampleMappings");
         List<Mapping> results = uriMapper.getSampleMapping();
         assertEquals(5, results.size());
         for (Mapping mapping:results){
