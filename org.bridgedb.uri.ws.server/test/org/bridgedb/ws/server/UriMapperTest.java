@@ -29,12 +29,11 @@ import org.bridgedb.ws.WSUriMapper;
 import org.junit.BeforeClass;
 
 /**
- * This class depends on URLListenerTest having loaded the data.
  * 
  * @author Christian
  */
 //@Ignore
-public class URLMapperTest extends org.bridgedb.uri.UriMapperTest {
+public class UriMapperTest extends org.bridgedb.uri.UriMapperTest {
 
     private static final String CREATOR1 = "testCreator";
     private static final String PREDICATE1 = "testMapping";
@@ -47,8 +46,8 @@ public class URLMapperTest extends org.bridgedb.uri.UriMapperTest {
         connectionOk = true;
         listener = new SQLUriMapper(true, StoreType.TEST);
         loadData();
-        SQLUriMapper sqlUrlMapper = new SQLUriMapper(false, StoreType.TEST);
-        uriMapper = new WSUriMapper(new WSUriInterfaceService(sqlUrlMapper)); 
+        SQLUriMapper sqlUriMapper = new SQLUriMapper(false, StoreType.TEST);
+        uriMapper = new WSUriMapper(new WSUriInterfaceService(sqlUriMapper)); 
     }
       
 }
