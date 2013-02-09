@@ -53,13 +53,13 @@ public class RdfReader implements LinkSetStore{
 
     @Override
     public String getLinksetRDF(int linksetId) throws BridgeDBException{
-        Resource linkSetGraph = RdfFactory.getLinksetURL(linksetId); 
+        Resource linkSetGraph = RdfFactory.getLinksetUri(linksetId); 
         return getRDF(linkSetGraph);
     }
 
     @Override
     public String getVoidRDF(int voidId) throws BridgeDBException{
-        Resource voidGraph = RdfFactory.getVoidURL(voidId); 
+        Resource voidGraph = RdfFactory.getVoidUri(voidId); 
         return getRDF(voidGraph);
     }
 

@@ -228,7 +228,7 @@ public class RdfWrapper {
         }
     }
 
-    //public static URI getLinksetURL(Value linksetId){
+    //public static URI getLinksetUri(Value linksetId){
     //    return new URIImpl(RdfWrapper.getTheBaseURI() + "linkset/" + linksetId.stringValue());  
     //}
     

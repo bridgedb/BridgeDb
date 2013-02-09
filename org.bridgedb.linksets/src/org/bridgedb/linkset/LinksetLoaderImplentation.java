@@ -185,10 +185,10 @@ public class LinksetLoaderImplentation{
         String justification = information.getJustification();
         mappingId = urlListener.registerMappingSet(subjectUriPattern, predicate, justification, targetUriPattern, 
                 symmetric, transative);   
-        linksetContext = RdfFactory.getLinksetURL(mappingId);
+        linksetContext = RdfFactory.getLinksetUri(mappingId);
         linksetResource = information.getLinksetResource();
         if (symmetric) {
-            inverseContext = RdfFactory.getLinksetURL(mappingId + 1);             
+            inverseContext = RdfFactory.getLinksetUri(mappingId + 1);             
             inverseResource = invertResource(linksetResource);
         } else {
             inverseContext = null;
@@ -291,7 +291,7 @@ public class LinksetLoaderImplentation{
         }
         int id = oldId + 1;
         mapper.putProperty(LAST_USED_VOID_ID, ""+id);
-        return RdfFactory.getVoidURL(id);
+        return RdfFactory.getVoidUri(id);
     }
 
 }

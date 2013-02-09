@@ -33,7 +33,7 @@ public interface RdfLoader {
 
     public void addHeaderStatement(Statement st) throws RDFHandlerException;
 
-    public void insertURLMapping(Statement st) throws RDFHandlerException;
+    public void insertUriMapping(Statement st) throws RDFHandlerException;
 
     public void closeInput()throws BridgeDBException;
 

@@ -56,13 +56,13 @@ public class RDFWriter implements RdfLoader{
     private final boolean symmetric;
     private final String mainCaller;
     private String accessedFrom;
-    private final UriListener urlListener;
+    private final UriListener uriListener;
     private static final URI HIGHEST_LINKSET_ID_PREDICATE = new URIImpl("http://www.bridgedb.org/highested_linkset_id");
     private static final Resource ANY_RESOURCE = null;
     public RDFWriter(StoreType storeType, LinksetVoidInformation information, UriListener listener, String mainCaller) 
             throws BridgeDBException{
         this.storeType = storeType;
-        urlListener = listener;
+        uriListener = listener;
         statements = new ArrayList<Statement>();
         this.mainCaller = mainCaller;
         UriPattern subjectUriPattern = information.getSubjectUriPattern();
@@ -73,11 +73,11 @@ public class RDFWriter implements RdfLoader{
         boolean transative = information.isTransative();
         linksetResource = information.getLinksetResource();
         inverseResource = invertResource(linksetResource);
-        mappingId = urlListener.registerMappingSet(subjectUriPattern, predicate, 
+        mappingId = uriListener.registerMappingSet(subjectUriPattern, predicate, 
                 justification, targetUriPattern, symmetric, transative);            
-        linksetContext = RdfFactory.getLinksetURL(mappingId);
+        linksetContext = RdfFactory.getLinksetUri(mappingId);
         if (symmetric) {
-            inverseContext = RdfFactory.getLinksetURL(mappingId + 1);             
+            inverseContext = RdfFactory.getLinksetUri(mappingId + 1);             
         } else {
             inverseContext = null;
         }
@@ -147,15 +147,15 @@ public class RDFWriter implements RdfLoader{
 
     @Override
     public void closeInput() throws BridgeDBException {
-        urlListener.closeInput();
+        uriListener.closeInput();
     }
 
     @Override
-    public void insertURLMapping(Statement st) throws RDFHandlerException {
-        String sourceURL = st.getSubject().stringValue();
-        String targetURL = st.getObject().stringValue();
+    public void insertUriMapping(Statement st) throws RDFHandlerException {
+        String sourceUri = st.getSubject().stringValue();
+        String targetUri = st.getObject().stringValue();
         try {
-            urlListener.insertUriMapping(sourceURL, targetURL, mappingId, symmetric);
+            uriListener.insertUriMapping(sourceUri, targetUri, mappingId, symmetric);
         } catch (BridgeDBException ex) {
             throw new RDFHandlerException ("Error inserting mapping. ", ex);
         }

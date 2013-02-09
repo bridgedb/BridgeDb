@@ -67,9 +67,9 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
     public void testMappingInfo() throws BridgeDBException {
         report("MappingInfo");
         TestSqlFactory.checkSQLAccess();
-        SQLUriMapper sqlUrlMapper = new SQLUriMapper(false, StoreType.TEST);
+        SQLUriMapper sqlUriMapper = new SQLUriMapper(false, StoreType.TEST);
         
-        MappingSetInfo info = sqlUrlMapper.getMappingSetInfo(1);
+        MappingSetInfo info = sqlUriMapper.getMappingSetInfo(1);
         assertEquals ("Chembl 13 Molecule", info.getSourceSysCode());
         assertEquals ("Cs", info.getTargetSysCode());
         assertEquals ("http://www.w3.org/2004/02/skos/core#exactMatch", info.getPredicate());

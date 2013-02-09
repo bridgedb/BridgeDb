@@ -94,8 +94,8 @@ public class TransativeCreator {
         sqlAccess = SqlFactory.createTheSQLAccess(storeType);
         mapper = new SQLUriMapper(false, storeType);
         createBufferedWriter(possibleFileName, leftId, rightId);
-        leftContext = RdfFactory.getLinksetURL(leftId);
-        rightContext = RdfFactory.getLinksetURL(rightId);
+        leftContext = RdfFactory.getLinksetUri(leftId);
+        rightContext = RdfFactory.getLinksetUri(rightId);
     }
             
     public static String createTransative(int leftId, int rightId, String possibleFileName, StoreType storeType, 

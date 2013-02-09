@@ -115,7 +115,7 @@ public class LinksetHandler extends RDFHandlerBase{
         } else {
             if (st.getPredicate().equals(linkPredicate)) {
                 /* Only store those statements that correspond to the link predicate */
-                rdfLoader.insertURLMapping(st);
+                rdfLoader.insertUriMapping(st);
             }
         }
     }
@@ -139,7 +139,7 @@ public class LinksetHandler extends RDFHandlerBase{
             /* Assumes all metadata is declared before the links */
             processingHeader = false;
             rdfLoader.processFirstNoneHeader(st);
-            rdfLoader.insertURLMapping(st);
+            rdfLoader.insertUriMapping(st);
             return;
         }
         if (predicate.equals(VoidConstants.LINK_PREDICATE)) {

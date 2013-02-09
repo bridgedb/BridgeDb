@@ -101,11 +101,11 @@ public class RdfFactory {
         return dataDir.exists();
     }
     
-    public static URI getLinksetURL(int linksetId) throws BridgeDBException{
+    public static URI getLinksetUri(int linksetId) throws BridgeDBException{
         return new URIImpl(RdfConfig.getTheBaseURI() + "linkset/" + linksetId);  
     }
   
-    public static URI getVoidURL(int voidId) throws BridgeDBException {
+    public static URI getVoidUri(int voidId) throws BridgeDBException {
         return new URIImpl(RdfConfig.getTheBaseURI() + "void/" + voidId);  
     }
 
