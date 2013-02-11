@@ -118,14 +118,14 @@ public class Mapping {
     public Integer getId() {
         return id;
     }
-
+    
     /**
      * @return the sourceUris
      */
     public Set<String> getSourceUri() {
         return sourceUri;
     }
-
+ 
     public void addSourceUri(String sourceUri){
         getSourceUri().add(sourceUri);
         if (mapToSelf()){
@@ -276,6 +276,11 @@ public class Mapping {
         this.targetSysCode = targetSysCode;
     }
 
+    public Xref getTargetXref(){
+        DataSource ds = DataSource.getBySystemCode(targetSysCode);
+        return new Xref(targetId, ds);
+    }
+
     /**
      * @return the sourceSysCode
      */
@@ -288,6 +293,11 @@ public class Mapping {
      */
     public void setSourceSysCode(String sourceSysCode) {
         this.sourceSysCode = sourceSysCode;
+    }
+
+    public Xref getSourceXref(){
+        DataSource ds = DataSource.getBySystemCode(sourceSysCode);
+        return new Xref(sourceId, ds);
     }
 
     /**
