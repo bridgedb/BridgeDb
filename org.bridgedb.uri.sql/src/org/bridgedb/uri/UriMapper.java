@@ -37,96 +37,317 @@ import org.bridgedb.utils.BridgeDBException;
  * Has methods for basic functionality such as looking up cross-references and backpage text.
  * 
  * Similar to the IDMapper interface except treats Uris as first class citizens.
+ * Also adds the notion of Profile.
  * To keep code size small Uris are represented as Strings.
+ *
+ * <p>
+ * The Parameter Xref sourceRef provides the entity to get cross-references for. 
+ * <br>
+ * If no mappings are known for this Xref an empty set is returned.
+ * Similarly apply the other parameters could result in an empty set.
+ * <br>
+ * If sourceRef is null, has a null Id or a null DataSource a empty set is returned.
+ * 
+ * <p>
+ * The Parameter String sourceUri provides the entity to get cross-references for. 
+ * <br>
+ * If no Uri Pattern is known that matches this Uri an empty set is returned.
+ * Strings which do not represent Uris will not match any Uri pattern so byu the avove rule will return an empty set.
+ * If sourceUri is null, or empty an empty set is returned.
+ * 
+ * <p>
+ * The Parameter String profileUri is used to determine which mappings to include. @see Profile
+ * This allows the Mapper to include weaker mappings such as broader than, and related to.
+ * <br>
+ * If no profile is specified than the default profile is used. @see Profile.getDefaultProfile()
+ *
+ * <p>
+ * The parameters DataSource... tgtDataSources and DataSource tgtDataSource refer to the target ID types/data sources. 
+ * Only Xrefs/Uris with this/these DataSource(s) are returned.
+ * See below of action on nulls and empty arrays.
+ * 
+ * <p>
+ * The parameters UriPattern... tgtUriPatterns and UriPattern tgtUriPattern refer to the target pattern. 
+ * Only Uris with this/these Patterns are returned.
+ * See below of action on nulls and empty arrays.
+ * 
+ * <p> Setting the optional array parameters DataSource... tgtDataSources and UriPattern... tgtUriPatterns to null
+ *     is the same as calling the method which does not include this parameter.
+ *     This will result in all mappings being returned, (depending only on the other parameters)
+ * <br>
+ * A non null empty array returns an empty set. 
+ * <br>
+ * Individual nulls in the array are ignored. 
+ * In other words the same result is returned as if the array did not have the null value.
+ * A non null array with just nulls returns an empty set.
+ * 
+ * <p> Specifically setting the single parameters DataSource tgtDataSource and UriPattern tgtUriPattern to null
+ * In such a way that the method with the single parameter (and not the one without or the ... method is called)
+ * results in an empty set being returned.
  */
 public interface UriMapper extends IDMapper{
-//TODO: Improve javadoc!
-    
     
     /**
 	 * Get all cross-references for the given entity, restricting the
-	 * result to contain only references from the given set of data sources.
-	 * @param ref the entity to get cross-references for. 
-     * @param tgtDataSources target ID types/data sources. Set this to null if you 
-     *   want to retrieve all results.
+	 * result to contain only references from the given profile and set of data sources,
+     * and only results which match the given profile.
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtDataSources @see Class java docs. 
+     *    
 	 * @return A Set containing the cross references, or an empty
 	 * Set when no cross references could be found. This method does not return null.
 	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
 	 */
-	public Set<Xref> mapID(Xref sourceRef, String profileUri, DataSource... tgtDataSources) throws BridgeDBException;
+	public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource... tgtDataSources) throws BridgeDBException;
 
+    /**
+	 * Get all cross-references for the given entity, restricting the
+	 * result to contain only references from the given set of data source,
+     * and only results which match the given profile.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtDataSources @see Class java docs. 
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
   	public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException;
 	
+    /**
+	 * Get all cross-references for the given entity, restricting the
+	 * result to contain only references which match the given profile.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
     public Set<Xref> mapID(Xref sourceXref, String profileUri) throws BridgeDBException;
 
-    public Set<String> mapUri(String sourceUri, String profileUri, UriPattern... tgtUriPattern) 
+    /**
+	 * Get all Uris mapped to the given Uri, restricting the
+	 * result to contain only references which match the given UriPatterns and profile.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPatterns @see Class java docs.
+	 * @return A Set containing the Uris, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
+    public Set<String> mapUri(String sourceUri, String profileUri, UriPattern... tgtUriPatterns) 
             throws BridgeDBException;
 
+    /**
+	 * Get all Uris mapped to the given entity, restricting the
+	 * result to contain only references which match the given UriPattern and profile.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPattern @see Class java docs.
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
     public Set<String> mapUri(Xref sourceXref, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
+    /**
+	 * Get all Uris mapped to the given entity, restricting the
+	 * result to contain only references which match the profile.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPattern @see Class java docs.
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
     public Set<String> mapUri(Xref sourceXref, String profileUri) 
             throws BridgeDBException;
 
-    public Set<String> mapUri(Xref sourceXref, String profileUri, UriPattern... tgtUriPattern) 
+    /**
+	 * Get all Uris mapped to the given entity, restricting the
+	 * result to contain only references which match the UriPatterns and profile.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPatterns @see Class java docs.
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
+    public Set<String> mapUri(Xref sourceXref, String profileUri, UriPattern... tgtUriPatterns) 
             throws BridgeDBException;
 
+    /**
+	 * Get all Uris mapped to the given Uri, restricting the
+	 * result to contain only references which match the given UriPattern and profile.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPattern @see Class java docs.
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
     public Set<String> mapUri(String sourceUri, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
+    /**
+	 * Get all Uris mapped to the given Uri, restricting the
+	 * result to contain only references which match the given profile.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+	 * @return A Set containing the cross references, or an empty
+	 * Set when no cross references could be found. This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+     */
     public Set<String> mapUri(String sourceUri, String profileUri) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtDataSources @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
 	public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource... tgtDataSources) 
             throws BridgeDBException;
 
-	public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource tgtDataSources) 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtDataSource @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+	public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource tgtDataSource) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
     public Set<Mapping> mapFull(Xref sourceXref, String profileUri) 
             throws BridgeDBException;
 
-    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern... tgtUriPattern) 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPatterns @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
+    public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern... tgtUriPatterns) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceXref @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPattern @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
     public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtDataSources @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
     public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource... tgtDataSources) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtDataSource @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
     public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource tgtDataSource) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
 	public Set<Mapping> mapFull(String sourceUri, String profileUri) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPattern @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
     public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException;
 
+    /**
+	 * Get the set of mappings based the parameters supplied.
+     * 
+	 * @param sourceUri @see Class java docs. 
+     * @param profileUri @see Class java docs. 
+     * @param tgtUriPatterns @see Class java docs. 
+     *    
+	 * @return A Set containing the mappings or an empty et when no cross references could be found. 
+     *    This method does not return null.
+	 * @throws IDMapperException if the mapping service is (temporarily) unavailable 
+	 */
     public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern... tgtUriPatterns)
             throws BridgeDBException;
 
-    
-    /**
-	 * Get all mappings/cross-references for the given Uri, restricting the
-	 * result to contain only Uris from the given set of UriSpaces.
-     * <p>
-     * Result will include the sourceUri (even if uriExists(sourceUri) would return null),
-     *    if and only it has one of the targetURISpaces (or targetURISpaces is empty)
-     *    Result will be empty if no mapping/ cross references could be found. 
-     *    This method should never return null.
-     * <p>
-     * Similar to the mapID method in IDMapper.
-     * 
-	 * @param sourceUri the Uri to get mappings/cross-references for. 
-	 * @param profileUri the Uri of the profile to use when retrieving mappings
-     * @param targetURISpaces (Optional) Target UriSpaces that can be included in the result. 
-     *    Not including any TartgetURRSpace results in all mapped/ cross-references Uris to be returned.
-	 * @return A Set containing the Uri (as Strings) that have been mapped/ cross referenced.
-	 * @throws BridgeDBException Could be because the mapping service is (temporarily) unavailable 
-	 */
-	
     /**
      * Check whether an URI is known by the given mapping source. 
      * <p>
