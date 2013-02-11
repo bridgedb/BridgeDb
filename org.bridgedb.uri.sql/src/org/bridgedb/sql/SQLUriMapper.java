@@ -210,7 +210,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         Set<String> results = new HashSet<String>();
         for (UriPattern tgtUriPattern:tgtUriPatterns){
-            results.addAll(mapUri (sourceXref, profileUri, tgtUriPatterns));
+            results.addAll(mapUri (sourceXref, profileUri, tgtUriPattern));
         }
         return results;
     }
