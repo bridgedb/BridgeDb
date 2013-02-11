@@ -561,6 +561,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     
     @Override
     public Xref toXref(String uri) throws BridgeDBException {
+        if (uri == null || uri.isEmpty()){
+            return null;
+        }
         //First try splitting the uri follwoing normal rules
         //This avoids the more expensive like
         String prefix = getUriSpace(uri);
