@@ -173,7 +173,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
         DataSource[] tgtDataSources = new DataSource[1];
         tgtDataSources[0] = tgtDataSource;
-        return mapFull(sourceXref, profileUri, tgtDataSource);
+        return mapFull(sourceXref, profileUri, tgtDataSources);
     }
 
     @Override
