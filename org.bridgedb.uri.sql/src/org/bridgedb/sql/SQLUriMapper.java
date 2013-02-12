@@ -23,8 +23,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -1277,12 +1279,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
        }
     }
 
-    public int registerProfile(String name, String createdOn, String createdBy, 
-    		List<String> justificationUris) 
+    public int registerProfile(String name, URI createdBy, List<URI> justificationUris) 
             throws BridgeDBException {
-    	//TODO: Need to validate that createdOn is a date
-    	//TODO: Need to validate that createdBy is a URI
-    	//TODO: Need to validate that justifcationUris is a List of URIs
+        return registerProfile(name, new Date(), createdBy, justificationUris); 
+    }
+    
+    public int registerProfile(String name, Date createdOn, URI createdBy, List<URI> justificationUris) 
+            throws BridgeDBException {
     	startTransaction();
     	int profileId = createProfile(name, createdOn, createdBy);
     	insertJustifications(profileId, justificationUris);
@@ -1290,13 +1293,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     	return profileId;
     }
 
-	private int createProfile(String name, String createdOn, String createdBy)
+	private int createProfile(String name, Date createdOn, URI createdBy)
 			throws BridgeDBException {
+        Timestamp timestamp = new Timestamp(createdOn.getTime());
 		String insertStatement = "INSERT INTO " + PROFILE_TABLE_NAME
                     + "(" + NAME_COLUMN_NAME + ", " + CREATED_ON_COLUMN_NAME + ", " + CREATED_BY_COLUMN_NAME + ") " 
                     + "VALUES (" 
                     + "'" + name + "', "
-                    + "'" + createdOn + "', " 
+                    + "'" + timestamp + "', " 
                     + "'" + createdBy + "')";
 		int profileId = 0;
         try {
@@ -1320,16 +1324,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return profileId;
 	}
 	
-	private void insertJustifications(int profileId,
-			List<String> justificationUris) throws BridgeDBException {
+	private void insertJustifications(int profileId, List<URI> justificationUris) throws BridgeDBException {
 		String sql = "INSERT INTO " + PROFILE_JUSTIFICATIONS_TABLE_NAME  +
                                                        
 				"( " + PROFILE_ID_COLUMN_NAME + ", " + JUSTIFICATION_URI_COLUMN_NAME + ") " +
 				"VALUES ( " + profileId + ", " + "?)";
 		try {
 			PreparedStatement statement = createPreparedStatement(sql);
-			for (String uri : justificationUris) {
-				statement.setString(1, uri);
+			for (URI uri : justificationUris) {
+				statement.setString(1, uri.stringValue());
 				statement.execute();
 			}
 		} catch (BridgeDBException ex) {
