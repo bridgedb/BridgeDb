@@ -52,7 +52,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test 
     public void testMapIDOneBad() throws BridgeDBException{
         report("MapIDOneBad");
-        Set<String> results = uriMapper.mapUri(mapBadUri1, RdfConfig.getProfileURI(0));
+        Set<String> results = uriMapper.mapUri(mapBadUri1, Profile.getDefaultProfile());
         //According to Martijn and the OPS needs mappers should return the incoming URI where appropiate.
         //Still optional as I am not sure text does.
         //Not all mappers will have the pattern matching to notice this is an invalid URI
@@ -62,21 +62,21 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test 
     public void testMapFullOneBad() throws BridgeDBException{
         report("MapFullOneBad");
-        Set<Mapping> results = uriMapper.mapFull(mapBadUri1, RdfConfig.getProfileURI(0));
+        Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Profile.getDefaultProfile());
         assertTrue(results.size() <= 1);
     }
 
     @Test 
     public void testMapFullOneBadOneNameSpace() throws BridgeDBException{
         report("MapFullOneBadOneNameSpace");
-        Set<Mapping> results = uriMapper.mapFull(mapBadUri1, RdfConfig.getProfileURI(0), uriPattern2);
+        Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Profile.getDefaultProfile(), uriPattern2);
         assertTrue(results.size() <= 1);
     }
 
     @Test
     public void testMapNoneExistingDataSource() throws BridgeDBException{
         report("MapNoneExistingDataSource");
-        Set<String> results = uriMapper.mapUri(map1Uri2, RdfConfig.getProfileURI(0), uriPatternBad);
+        Set<String> results = uriMapper.mapUri(map1Uri2, Profile.getDefaultProfile(), uriPatternBad);
         assertEquals(0,results.size());
     }
 
@@ -144,7 +144,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetMapping() throws BridgeDBException {
         report("GetMapping");
-        Set<Mapping> results = uriMapper.mapFull(map3Uri3, RdfConfig.getProfileURI(0));
+        Set<Mapping> results = uriMapper.mapFull(map3Uri3, Profile.getDefaultProfile());
         Integer mappingId = null;
         Integer setId = null;
         for (Mapping mapping:results){

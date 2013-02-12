@@ -43,7 +43,7 @@ public class Profile {
      * @throws BridgeDBException 
      */
     public static String getDefaultProfile() throws BridgeDBException{
-        return RdfConfig.getProfileURI(0);
+        return getProfileURI(0);
     }
     
     /**
@@ -53,6 +53,16 @@ public class Profile {
      * @throws BridgeDBException 
      */
     public static String getAllProfile() throws BridgeDBException{
-        return RdfConfig.getProfileURI(-1);
+        return getProfileURI(-1);
     }
+    
+    public static String getProfileBaseURI() throws BridgeDBException{
+        return RdfConfig.getTheBaseURI() + "profile/";  
+    }
+
+    public static String getProfileURI(int linksetId) throws BridgeDBException{
+        return getProfileBaseURI() + linksetId;  
+    }
+  
+
 }

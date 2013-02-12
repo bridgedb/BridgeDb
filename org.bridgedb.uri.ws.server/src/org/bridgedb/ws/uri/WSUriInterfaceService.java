@@ -44,6 +44,7 @@ import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.Profile;
 import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -354,7 +355,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Path("/profile/{id}")
 	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDBException {
-		ProfileInfo profile = uriMapper.getProfile(RdfConfig.getProfileURI(Integer.parseInt(id)));
+		ProfileInfo profile = uriMapper.getProfile(Profile.getProfileURI(Integer.parseInt(id)));
 		ProfileBean result = ProfileBeanFactory.asBean(profile);
 		return result;
 	}

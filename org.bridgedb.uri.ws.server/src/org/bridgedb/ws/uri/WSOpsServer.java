@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.uri.Profile;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.WsUriConstants;
@@ -110,7 +111,7 @@ public class WSOpsServer extends WSLinksetService{
     	sb.append(WsUriConstants.PROFILE_URI);
     	sb.append("\">");
 	   	sb.append("<option value=\"");
-    	sb.append(RdfConfig.getProfileURI(0));
+    	sb.append(Profile.getAllProfile());
     	sb.append("\">Default profile</option>");
 		for (ProfileInfo profile : profiles) {
 			sb.append("<option value=\"");

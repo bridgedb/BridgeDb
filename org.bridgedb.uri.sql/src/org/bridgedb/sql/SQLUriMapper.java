@@ -39,6 +39,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.Profile;
 import org.bridgedb.uri.UriListener;
 import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
@@ -522,7 +523,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 	private int extractIDFromURI(String profileUri) throws BridgeDBException {
 		try {
 			URI profileURI = new URIImpl(profileUri);
-			if (!profileURI.getNamespace().equals(RdfConfig.getProfileBaseURI())) {
+			if (!profileURI.getNamespace().equals(Profile.getProfileBaseURI())) {
  				throw new BridgeDBException("Invalid namespace for profile URI: " + profileUri);
 			}
 			int profileID = Integer.parseInt(profileURI.getLocalName());
@@ -891,7 +892,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 				String createdOn = rs.getString(CREATED_ON_COLUMN_NAME);
 				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
 				Set<String> justifications = getJustificationsForProfile(profileId);
-				String profileUri = RdfConfig.getProfileURI(profileId);
+				String profileUri = Profile.getProfileURI(profileId);
 				profiles.add(new ProfileInfo(profileUri, name, createdOn, createdBy, justifications));
 			}
 		} catch (SQLException e) {
