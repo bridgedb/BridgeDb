@@ -314,6 +314,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
 	public Set<Mapping> mapFull (Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException{
+        Set<Mapping> results = mapPart(sourceXref, profileUri, tgtDataSource);
+        //Add targetUris
+        for (Mapping mapping: results){
+            mapping.addTargetUris(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
+        }
+        return results;
+    }
+ 
+	private Set<Mapping> mapPart (Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException{
         if (badXref(sourceXref)) {
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Mapping>();
@@ -336,13 +345,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceXref.getDataSource().equals(tgtDataSource)){
             results.add(new Mapping(sourceXref.getId(), tgtDataSource.getSystemCode()));
         }
-        //Add targetUris
-        for (Mapping mapping: results){
-            mapping.addTargetUris(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
-        }
         return results;
     }
- 
+
     @Override
     public Set<Mapping> mapFull (Xref ref, String profileUri, DataSource... tgtDataSources) 
             throws BridgeDBException{
@@ -363,7 +368,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return mapFull(sourceXref, profileUri);
         }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
-        Set<Mapping> results = mapFull(sourceXref, profileUri, tgtDataSource);
+        Set<Mapping> results = mapPart(sourceXref, profileUri, tgtDataSource);
         for (Mapping result:results){
             result.addTargetUri(tgtUriPattern.getUri(result.getTargetId()));
         }
