@@ -57,9 +57,9 @@ public class ProfileTest extends org.bridgedb.uri.UriListenerTest {
         report("RegisterProfile");
         String name = "ProfileTest1";
         URI createdBy = new URIImpl("http://example.com/ProfileTest");
-        List<URI> justificationUris = new ArrayList<URI>();
-        justificationUris.add(new URIImpl("http://example.com/Justifictaion1")); 
-        justificationUris.add(new URIImpl("http://example.com/Justifictaion2")); 
+        URI[] justificationUris = new URI[2];
+        justificationUris[0] = new URIImpl("http://example.com/Justifictaion1"); 
+        justificationUris[1] = new URIImpl("http://example.com/Justifictaion2"); 
         int id = sqlUriMapper.registerProfile(name, createdBy,justificationUris);
     }
 

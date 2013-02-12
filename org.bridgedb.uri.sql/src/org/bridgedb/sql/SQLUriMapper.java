@@ -61,6 +61,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final int PREFIX_LENGTH = 400;
     private static final int POSTFIX_LENGTH = 100;
     private static final int MIMETYPE_LENGTH = 50;
+    private static final int CREATED_BY_LENGTH = 150;
     
     private static final String URI_TABLE_NAME = "uri";
     private static final String MIMETYPE_TABLE_NAME = "mimeType";
@@ -95,7 +96,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             Collection<UriPattern> patterns = UriPattern.getUriPatterns();
             for (UriPattern pattern:patterns){
                 this.registerUriPattern(pattern);
-            }           
+            }
+            createDefaultProfiles();
         }
     }   
     
@@ -130,7 +132,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             		PROFILE_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " +
             		NAME_COLUMN_NAME + " VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " +
             		CREATED_ON_COLUMN_NAME + " DATETIME, " +
-            		CREATED_BY_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") " +
+            		CREATED_BY_COLUMN_NAME + " VARCHAR(" + CREATED_BY_LENGTH + ") " +
             		")");
             sh.execute("CREATE TABLE " + PROFILE_JUSTIFICATIONS_TABLE_NAME + " ( " +
             		PROFILE_ID_COLUMN_NAME + " INT NOT NULL, " +
@@ -1279,12 +1281,24 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
        }
     }
 
-    public int registerProfile(String name, URI createdBy, List<URI> justificationUris) 
+    public int registerProfile(String name, URI createdBy, URI... justificationUris) 
             throws BridgeDBException {
         return registerProfile(name, new Date(), createdBy, justificationUris); 
     }
     
-    public int registerProfile(String name, Date createdOn, URI createdBy, List<URI> justificationUris) 
+    private void createDefaultProfiles() throws BridgeDBException {
+        String name = "default";
+        URI createdBy = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.uri.sql/src/org/bridgedb/sql/SQLUrlMapper.java");
+        URI justification = new URIImpl(Profile.getDefaultJustifictaion());
+        int id = registerProfile(name, createdBy, justification);
+        String uri = Profile.getProfileURI(id);
+        if (!uri.equals(Profile.getDefaultProfile())){
+            throw new BridgeDBException("Incorrect Default URI created. Created " + uri + " but should have been "
+                    + Profile.getDefaultProfile());
+        }
+    }
+
+    public int registerProfile(String name, Date createdOn, URI createdBy, URI... justificationUris) 
             throws BridgeDBException {
     	startTransaction();
     	int profileId = createProfile(name, createdOn, createdBy);
@@ -1324,7 +1338,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return profileId;
 	}
 	
-	private void insertJustifications(int profileId, List<URI> justificationUris) throws BridgeDBException {
+	private void insertJustifications(int profileId, URI... justificationUris) throws BridgeDBException {
 		String sql = "INSERT INTO " + PROFILE_JUSTIFICATIONS_TABLE_NAME  +
                                                        
 				"( " + PROFILE_ID_COLUMN_NAME + ", " + JUSTIFICATION_URI_COLUMN_NAME + ") " +
