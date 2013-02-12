@@ -195,7 +195,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         StringBuilder query = startMappingQuery();
         appendMappingFromAndWhere(query, sourceXref, profileUri, null);
         Statement statement = this.createStatement();
-        System.out.println(query);
         ResultSet rs;
         try {
             rs = statement.executeQuery(query.toString());
@@ -739,7 +738,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(" = Uri2.");
         query.append(DATASOURCE_COLUMN_NAME);
         this.appendLimitConditions(query, 0, 5);
-        System.out.println(query);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {

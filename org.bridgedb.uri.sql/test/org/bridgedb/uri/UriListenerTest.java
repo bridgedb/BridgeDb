@@ -216,18 +216,27 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map1AUri1, map1Uri2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2AUri1, map2Uri2, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3AUri1, map3Uri2, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
         		TEST_JUSTIFICATION1, uriPattern3, SYMETRIC, ORIGINAL);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map1AUri2, map1Uri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2AUri2, map2Uri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3AUri2, map3Uri3, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
         		Profile.getJustifictaionURI("Test_Differtent"), uriPattern3, SYMETRIC, TRANSATIVE);
         listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map1AUri1, map1Uri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map2AUri1, map2Uri3, mappingSet, SYMETRIC);
+        listener.insertUriMapping(map3AUri1, map3Uri3, mappingSet, SYMETRIC);
 
         listener.closeInput();
     }
