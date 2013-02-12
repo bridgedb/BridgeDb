@@ -252,4 +252,19 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         int result = uriMapper.getSqlCompatVersion();
         assertEquals(SQLListener.SQL_COMPAT_VERSION, result);
     }
+    
+    @Test
+    public void testCheckUriPatterns() throws Exception {
+        //Date start = new Date();
+        report("getCheckUriPatterns");
+        for (UriPattern pattern:UriPattern.getUriPatterns()){
+            String uri = pattern.getPrefix() + "1234" + pattern.getPostfix();
+            Xref xref = uriMapper.toXref(uri);
+            assertEquals(pattern.getDataSource(), xref.getDataSource());
+        }
+        //Date end = new Date();
+        //System.out.println(end.getTime()-start.getTime());
+     }
+
+
 }

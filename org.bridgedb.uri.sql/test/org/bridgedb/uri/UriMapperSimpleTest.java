@@ -27,17 +27,8 @@ import org.junit.Test;
  *
  * @author Christian
  */
-public class UriMapperSimpleTest extends UriListenerTest{
+public abstract class UriMapperSimpleTest extends UriListenerTest{
 
-    static UriMapper instance;
-    
-    @BeforeClass
-    public static void setUp() throws BridgeDBException {
-        instance = new SQLUriMapper(true, StoreType.TEST);
-        listener = (UriListener)instance;
-        loadData();
-    }
-    
     /**
      * Test of mapID method, of class UriMapper.
      */
@@ -46,7 +37,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         report("MapID_sourceXref_profileUri_tgtDataSources");
         Xref sourceXref = map2xref2;
         String profileUri = Profile.getDefaultProfile();
-        Set results = instance.mapID(sourceXref, profileUri, DataSource2, DataSource3);
+        Set results = uriMapper.mapID(sourceXref, profileUri, DataSource2, DataSource3);
         assertFalse(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
         assertTrue(results.contains(map2xref3));
@@ -64,7 +55,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map2xref2;
         String profileUri = Profile.getDefaultProfile();
         DataSource tgtDataSource = DataSource3;
-        Set results = instance.mapID(sourceXref, profileUri, tgtDataSource);
+        Set results = uriMapper.mapID(sourceXref, profileUri, tgtDataSource);
         assertFalse(results.contains(map2xref1));
         assertFalse(results.contains(map2xref2));
         assertTrue(results.contains(map2xref3));
@@ -81,7 +72,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         report("MapID_sourceXref_profileUri");
         Xref sourceXref = map2xref2;
         String profileUri = Profile.getDefaultProfile();
-        Set results = instance.mapID(sourceXref, profileUri);
+        Set results = uriMapper.mapID(sourceXref, profileUri);
         assertTrue(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
         assertTrue(results.contains(map2xref3));
@@ -99,7 +90,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         String sourceUri = map3Uri3;
         String profileUri = Profile.getDefaultProfile();
         UriPattern[] tgtUriPatterns = null;
-        Set results = instance.mapUri(sourceUri, profileUri, uriPattern2, uriPattern3);
+        Set results = uriMapper.mapUri(sourceUri, profileUri, uriPattern2, uriPattern3);
         assertFalse(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
@@ -117,7 +108,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern tgtUriPattern = uriPattern3;
-        Set results = instance.mapUri(sourceXref, profileUri, tgtUriPattern);
+        Set results = uriMapper.mapUri(sourceXref, profileUri, tgtUriPattern);
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
@@ -134,7 +125,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         report("MapUri_sourceXref_profileUri");
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
-        Set results = instance.mapUri(sourceXref, profileUri);
+        Set results = uriMapper.mapUri(sourceXref, profileUri);
         assertTrue(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
         assertTrue(results.contains(map3Uri2a));
@@ -152,7 +143,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern[] tgtUriPatterns = null;
-        Set results = instance.mapUri(sourceXref, profileUri, uriPattern2, uriPattern3);
+        Set results = uriMapper.mapUri(sourceXref, profileUri, uriPattern2, uriPattern3);
         assertFalse(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
@@ -170,7 +161,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         String sourceUri = map3Uri2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern tgtUriPattern = uriPattern3;
-        Set results = instance.mapUri(sourceUri, profileUri, tgtUriPattern);
+        Set results = uriMapper.mapUri(sourceUri, profileUri, tgtUriPattern);
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
         assertFalse(results.contains(map3Uri2a));
@@ -187,7 +178,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         report("MapUri_sourceUri_profileUri");
         String sourceUri = map3Uri2;
         String profileUri = Profile.getDefaultProfile();
-        Set results = instance.mapUri(sourceUri, profileUri);
+        Set results = uriMapper.mapUri(sourceUri, profileUri);
         assertTrue(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
         assertTrue(results.contains(map3Uri2a));
@@ -205,7 +196,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         DataSource[] tgtDataSources = null;
-        Set<Mapping> results = instance.mapFull(sourceXref, profileUri, DataSource2, DataSource3);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, DataSource2, DataSource3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -244,7 +235,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         DataSource tgtDataSource = DataSource3;
-        Set<Mapping> results = instance.mapFull(sourceXref, profileUri, tgtDataSource);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, tgtDataSource);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -283,7 +274,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         report("MapFull_sourceXref_profileUri_tgtDataSources");
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
-        Set<Mapping> results = instance.mapFull(sourceXref, profileUri);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -322,7 +313,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern[] tgtUriPatterns = null;
-        Set<Mapping> results = instance.mapFull(sourceXref, profileUri, uriPattern2, uriPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, uriPattern2, uriPattern3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -361,7 +352,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern tgtUriPattern = uriPattern3;
-        Set<Mapping> results = instance.mapFull(sourceXref, profileUri, tgtUriPattern);
+        Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, tgtUriPattern);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -402,7 +393,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         String profileUri = Profile.getDefaultProfile();
         DataSource[] tgtDataSources = null;
         Set expResult = null;
-        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, DataSource2, DataSource3);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, DataSource2, DataSource3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -444,7 +435,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         DataSource tgtDataSource = DataSource3;
-        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, tgtDataSource);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, tgtDataSource);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -485,7 +476,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
-        Set<Mapping> results = instance.mapFull(sourceUri, profileUri);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -527,7 +518,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern tgtUriPattern = uriPattern3;
-        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, tgtUriPattern);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, tgtUriPattern);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
@@ -569,7 +560,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern[] tgtUriPatterns = null;
-        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, uriPattern2, uriPattern3);
+        Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, uriPattern2, uriPattern3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 

@@ -20,17 +20,12 @@
 package org.bridgedb.mysql;
 
 import java.util.Date;
-import org.bridgedb.Xref;
-import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
-import org.bridgedb.utils.TestUtils;
-import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * Runs the UriMapper interface tests over SQLUriMapper class
@@ -39,28 +34,21 @@ import org.junit.Test;
  *
  * @author Christian
  */
-public class UriPatternSaveTest extends TestUtils {
+public class UriMapperSimpleTest extends org.bridgedb.uri.UriMapperSimpleTest {
     
-    private static SQLUriMapper mapper;
-    
+    private static final String CREATOR1 = "testCreator";
+    private static final String PREDICATE1 = "testMapping";
+    private static final long CREATION1 = new Date().getTime();
+
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException{
+
+        connectionOk = false;
         TestSqlFactory.checkSQLAccess();
-        mapper = new SQLUriMapper(true, StoreType.TEST);
+        connectionOk = true;
+        listener = new SQLUriMapper(true, StoreType.TEST);
+        loadData();
+        uriMapper =new SQLUriMapper(false, StoreType.TEST);
     }
-
-    @Test
-    public void testCheckUriPatterns() throws Exception {
-        //Date start = new Date();
-        report("getCheckUriPatterns");
-        for (UriPattern pattern:UriPattern.getUriPatterns()){
-            String uri = pattern.getPrefix() + "1234" + pattern.getPostfix();
-            Xref xref = mapper.toXref(uri);
-            assertEquals(pattern.getDataSource(), xref.getDataSource());
-        }
-        //Date end = new Date();
-        //System.out.println(end.getTime()-start.getTime());
-     }
-
             
 }
