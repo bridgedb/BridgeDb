@@ -33,7 +33,7 @@ public class UriMapperSimpleTest extends UriListenerTest{
     
     @BeforeClass
     public static void setUp() throws BridgeDBException {
-        instance = new SQLUriMapper(false, StoreType.TEST);
+        instance = new SQLUriMapper(true, StoreType.TEST);
         listener = (UriListener)instance;
         loadData();
     }
@@ -317,118 +317,288 @@ public class UriMapperSimpleTest extends UriListenerTest{
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    @Ignore
     public void testMapFull_sourceXref_profileUri_tgtUriPatterns() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtUriPatterns");
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern[] tgtUriPatterns = null;
-        Set expResult = null;
-        Set result = instance.mapFull(sourceXref, profileUri, tgtUriPatterns);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Set<Mapping> results = instance.mapFull(sourceXref, profileUri, uriPattern2, uriPattern3);
+        Set<String> targetUris = new HashSet<String>();
+        Set<Xref> targetXrefs = new HashSet<Xref>();
+        Set<Integer> ids = new HashSet<Integer>(); 
+        for (Mapping mapping:results){
+            assertEquals(sourceXref, mapping.getSourceXref());
+            if (!mapping.getTargetXref().equals(sourceXref)){
+                assertThat(mapping.getPredicate(), not(equalTo(null)));            
+                assertThat(mapping.getId(), not(equalTo(null)));
+                assertThat(mapping.getMappingSetId(), not(equalTo(null)));
+            }
+            targetUris.addAll(mapping.getTargetUri());
+            targetXrefs.add(mapping.getTargetXref());
+            assertFalse(ids.contains(mapping.getId()));
+            ids.add(mapping.getId());
+        }
+        assertFalse(targetUris.contains(map3Uri1));
+        assertTrue(targetUris.contains(map3Uri2));
+        assertFalse(targetUris.contains(map3Uri2a));
+        assertTrue(targetUris.contains(map3Uri3));
+        assertFalse(targetUris.contains(map2Uri2));
+        assertFalse(targetUris.contains(map1Uri3));
+        assertFalse(targetXrefs.contains(map3xref1));
+        assertTrue(targetXrefs.contains(map3xref2));
+        assertTrue(targetXrefs.contains(map3xref3));
+        assertFalse(targetXrefs.contains(map1xref2));
+        assertFalse(targetXrefs.contains(map1xref1));
+        assertFalse(targetXrefs.contains(map2xref2));   
     }
 
     /**
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    @Ignore
     public void testMapFull_sourceXref_profileUri_tgtUriPattern() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtUriPattern");
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
-        UriPattern tgtUriPattern = null;
-        Set expResult = null;
-        Set result = instance.mapFull(sourceXref, profileUri, tgtUriPattern);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        UriPattern tgtUriPattern = uriPattern3;
+        Set<Mapping> results = instance.mapFull(sourceXref, profileUri, tgtUriPattern);
+        Set<String> targetUris = new HashSet<String>();
+        Set<Xref> targetXrefs = new HashSet<Xref>();
+        Set<Integer> ids = new HashSet<Integer>(); 
+        for (Mapping mapping:results){
+            assertEquals(sourceXref, mapping.getSourceXref());
+            if (!mapping.getTargetXref().equals(sourceXref)){
+                assertThat(mapping.getPredicate(), not(equalTo(null)));            
+                assertThat(mapping.getId(), not(equalTo(null)));
+                assertThat(mapping.getMappingSetId(), not(equalTo(null)));
+            }
+            targetUris.addAll(mapping.getTargetUri());
+            targetXrefs.add(mapping.getTargetXref());
+            assertFalse(ids.contains(mapping.getId()));
+            ids.add(mapping.getId());
+        }
+        assertFalse(targetUris.contains(map3Uri1));
+        assertFalse(targetUris.contains(map3Uri2));
+        assertFalse(targetUris.contains(map3Uri2a));
+        assertTrue(targetUris.contains(map3Uri3));
+        assertFalse(targetUris.contains(map2Uri2));
+        assertFalse(targetUris.contains(map1Uri3));
+        assertFalse(targetXrefs.contains(map3xref1));
+        assertFalse(targetXrefs.contains(map3xref2));
+        assertTrue(targetXrefs.contains(map3xref3));
+        assertFalse(targetXrefs.contains(map1xref2));
+        assertFalse(targetXrefs.contains(map1xref1));
+        assertFalse(targetXrefs.contains(map2xref2));   
     }
 
     /**
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    @Ignore
     public void testMapFull_sourceUri_profileUri_tgtDataSources() throws Exception {
         report("MapFull_sourceUri_profileUri_tgtDataSources");
         String sourceUri = map3Uri2;
+        Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         DataSource[] tgtDataSources = null;
         Set expResult = null;
-        Set result = instance.mapFull(sourceUri, profileUri, tgtDataSources);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, DataSource2, DataSource3);
+        Set<String> targetUris = new HashSet<String>();
+        Set<Xref> targetXrefs = new HashSet<Xref>();
+        Set<Integer> ids = new HashSet<Integer>(); 
+        for (Mapping mapping:results){
+            assertEquals(sourceXref, mapping.getSourceXref());
+            assertTrue(mapping.getSourceUri().contains(sourceUri));
+            assertTrue(mapping.getSourceUri().size() == 1);
+            if (!mapping.getTargetXref().equals(sourceXref)){
+                assertThat(mapping.getPredicate(), not(equalTo(null)));            
+                assertThat(mapping.getId(), not(equalTo(null)));
+                assertThat(mapping.getMappingSetId(), not(equalTo(null)));
+            }
+            targetUris.addAll(mapping.getTargetUri());
+            targetXrefs.add(mapping.getTargetXref());
+            assertFalse(ids.contains(mapping.getId()));
+            ids.add(mapping.getId());
+        }
+        assertFalse(targetUris.contains(map3Uri1));
+        assertTrue(targetUris.contains(map3Uri2));
+        assertTrue(targetUris.contains(map3Uri2a));
+        assertTrue(targetUris.contains(map3Uri3));
+        assertFalse(targetUris.contains(map2Uri2));
+        assertFalse(targetUris.contains(map1Uri3));
+        assertFalse(targetXrefs.contains(map3xref1));
+        assertTrue(targetXrefs.contains(map3xref2));
+        assertTrue(targetXrefs.contains(map3xref3));
+        assertFalse(targetXrefs.contains(map1xref2));
+        assertFalse(targetXrefs.contains(map1xref1));
+        assertFalse(targetXrefs.contains(map2xref2));   
     }
 
     /**
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    @Ignore
     public void testMapFull_sourceUri_profileUri_tgtDataSource() throws Exception {
         report("MapFull_sourceUri_profileUri_tgtDataSource");
         String sourceUri = map3Uri2;
+        Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
-        DataSource tgtDataSource = null;
-        Set expResult = null;
-        Set result = instance.mapFull(sourceUri, profileUri, tgtDataSource);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        DataSource tgtDataSource = DataSource3;
+        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, tgtDataSource);
+        Set<String> targetUris = new HashSet<String>();
+        Set<Xref> targetXrefs = new HashSet<Xref>();
+        Set<Integer> ids = new HashSet<Integer>(); 
+        for (Mapping mapping:results){
+            assertEquals(sourceXref, mapping.getSourceXref());
+            assertTrue(mapping.getSourceUri().contains(sourceUri));
+            assertTrue(mapping.getSourceUri().size() == 1);
+            if (!mapping.getTargetXref().equals(sourceXref)){
+                assertThat(mapping.getPredicate(), not(equalTo(null)));            
+                assertThat(mapping.getId(), not(equalTo(null)));
+                assertThat(mapping.getMappingSetId(), not(equalTo(null)));
+            }
+            targetUris.addAll(mapping.getTargetUri());
+            targetXrefs.add(mapping.getTargetXref());
+            assertFalse(ids.contains(mapping.getId()));
+            ids.add(mapping.getId());
+        }
+        assertFalse(targetUris.contains(map3Uri1));
+        assertFalse(targetUris.contains(map3Uri2));
+        assertFalse(targetUris.contains(map3Uri2a));
+        assertTrue(targetUris.contains(map3Uri3));
+        assertFalse(targetUris.contains(map2Uri2));
+        assertFalse(targetUris.contains(map1Uri3));
+        assertFalse(targetXrefs.contains(map3xref1));
+        assertFalse(targetXrefs.contains(map3xref2));
+        assertTrue(targetXrefs.contains(map3xref3));
+        assertFalse(targetXrefs.contains(map1xref2));
+        assertFalse(targetXrefs.contains(map1xref1));
+        assertFalse(targetXrefs.contains(map2xref2));   
     }
 
     /**
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    @Ignore
     public void testMapFull_MapFull_sourceUri_profileUri() throws Exception {
         report("MapFull_sourceUri_profileUri");
         String sourceUri = map3Uri2;
+        Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
-        Set expResult = null;
-        Set result = instance.mapFull(sourceUri, profileUri);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Set<Mapping> results = instance.mapFull(sourceUri, profileUri);
+        Set<String> targetUris = new HashSet<String>();
+        Set<Xref> targetXrefs = new HashSet<Xref>();
+        Set<Integer> ids = new HashSet<Integer>(); 
+        for (Mapping mapping:results){
+            assertEquals(sourceXref, mapping.getSourceXref());
+            assertTrue(mapping.getSourceUri().contains(sourceUri));
+            assertTrue(mapping.getSourceUri().size() == 1);
+            if (!mapping.getTargetXref().equals(sourceXref)){
+                assertThat(mapping.getPredicate(), not(equalTo(null)));            
+                assertThat(mapping.getId(), not(equalTo(null)));
+                assertThat(mapping.getMappingSetId(), not(equalTo(null)));
+            }
+            targetUris.addAll(mapping.getTargetUri());
+            targetXrefs.add(mapping.getTargetXref());
+            assertFalse(ids.contains(mapping.getId()));
+            ids.add(mapping.getId());
+        }
+        assertTrue(targetUris.contains(map3Uri1));
+        assertTrue(targetUris.contains(map3Uri2));
+        assertTrue(targetUris.contains(map3Uri2a));
+        assertTrue(targetUris.contains(map3Uri3));
+        assertFalse(targetUris.contains(map2Uri2));
+        assertFalse(targetUris.contains(map1Uri3));
+        assertTrue(targetXrefs.contains(map3xref1));
+        assertTrue(targetXrefs.contains(map3xref2));
+        assertTrue(targetXrefs.contains(map3xref3));
+        assertFalse(targetXrefs.contains(map1xref2));
+        assertFalse(targetXrefs.contains(map1xref1));
+        assertFalse(targetXrefs.contains(map2xref2));   
     }
 
     /**
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    @Ignore
     public void testMapFull_sourceUri_profileUri_tgtUriPattern() throws Exception {
         report("MapFull_sourceUri_profileUri_tgtUriPattern");
         String sourceUri = map3Uri2;
+        Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
-        UriPattern tgtUriPattern = null;
-        Set expResult = null;
-        Set result = instance.mapFull(sourceUri, profileUri, tgtUriPattern);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        UriPattern tgtUriPattern = uriPattern3;
+        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, tgtUriPattern);
+        Set<String> targetUris = new HashSet<String>();
+        Set<Xref> targetXrefs = new HashSet<Xref>();
+        Set<Integer> ids = new HashSet<Integer>(); 
+        for (Mapping mapping:results){
+            assertEquals(sourceXref, mapping.getSourceXref());
+            assertTrue(mapping.getSourceUri().contains(sourceUri));
+            assertTrue(mapping.getSourceUri().size() == 1);
+            if (!mapping.getTargetXref().equals(sourceXref)){
+                assertThat(mapping.getPredicate(), not(equalTo(null)));            
+                assertThat(mapping.getId(), not(equalTo(null)));
+                assertThat(mapping.getMappingSetId(), not(equalTo(null)));
+            }
+            targetUris.addAll(mapping.getTargetUri());
+            targetXrefs.add(mapping.getTargetXref());
+            assertFalse(ids.contains(mapping.getId()));
+            ids.add(mapping.getId());
+        }
+        assertFalse(targetUris.contains(map3Uri1));
+        assertFalse(targetUris.contains(map3Uri2));
+        assertFalse(targetUris.contains(map3Uri2a));
+        assertTrue(targetUris.contains(map3Uri3));
+        assertFalse(targetUris.contains(map2Uri2));
+        assertFalse(targetUris.contains(map1Uri3));
+        assertFalse(targetXrefs.contains(map3xref1));
+        assertFalse(targetXrefs.contains(map3xref2));
+        assertTrue(targetXrefs.contains(map3xref3));
+        assertFalse(targetXrefs.contains(map1xref2));
+        assertFalse(targetXrefs.contains(map1xref1));
+        assertFalse(targetXrefs.contains(map2xref2));   
     }
 
     /**
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    @Ignore
     public void testMapFull_sourceUri_profileUri_tgtUriPatterns() throws Exception {
         report("MapFull_sourceUri_profileUri_tgtUriPatterns");
         String sourceUri = map3Uri2;
+        Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern[] tgtUriPatterns = null;
-        Set expResult = null;
-        Set result = instance.mapFull(sourceUri, profileUri, tgtUriPatterns);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Set<Mapping> results = instance.mapFull(sourceUri, profileUri, uriPattern2, uriPattern3);
+        Set<String> targetUris = new HashSet<String>();
+        Set<Xref> targetXrefs = new HashSet<Xref>();
+        Set<Integer> ids = new HashSet<Integer>(); 
+        for (Mapping mapping:results){
+            assertEquals(sourceXref, mapping.getSourceXref());
+            assertTrue(mapping.getSourceUri().contains(sourceUri));
+            assertTrue(mapping.getSourceUri().size() == 1);
+            if (!mapping.getTargetXref().equals(sourceXref)){
+                assertThat(mapping.getPredicate(), not(equalTo(null)));            
+                assertThat(mapping.getId(), not(equalTo(null)));
+                assertThat(mapping.getMappingSetId(), not(equalTo(null)));
+            }
+            targetUris.addAll(mapping.getTargetUri());
+            targetXrefs.add(mapping.getTargetXref());
+            assertFalse(ids.contains(mapping.getId()));
+            ids.add(mapping.getId());
+        }
+        assertFalse(targetUris.contains(map3Uri1));
+        assertTrue(targetUris.contains(map3Uri2));
+        assertFalse(targetUris.contains(map3Uri2a));
+        assertTrue(targetUris.contains(map3Uri3));
+        assertFalse(targetUris.contains(map2Uri2));
+        assertFalse(targetUris.contains(map1Uri3));
+        assertFalse(targetXrefs.contains(map3xref1));
+        assertTrue(targetXrefs.contains(map3xref2));
+        assertTrue(targetXrefs.contains(map3xref3));
+        assertFalse(targetXrefs.contains(map1xref2));
+        assertFalse(targetXrefs.contains(map1xref1));
+        assertFalse(targetXrefs.contains(map2xref2));   
     }
 
     /**
