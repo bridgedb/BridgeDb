@@ -36,6 +36,7 @@ import org.bridgedb.utils.BridgeDBException;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -45,82 +46,9 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-public abstract class UriMapperTest extends UriListenerTest{
+@Ignore
+public abstract class UriMapperSpecialTest extends UriListenerTest{
                     
-    @Test
-    public void testMapIDOneToManyNoDataSources() throws BridgeDBException{
-        report("MapIDOneToManyNoDataSources");
-        Set<String> results = uriMapper.mapUri(map1Uri1, RdfConfig.getProfileURI(0));
-        assertTrue(results.contains(map1Uri2));
-        assertTrue(results.contains(map1Uri3));
-        assertFalse(results.contains(map2Uri1));
-        assertFalse(results.contains(map2Uri2));
-        assertFalse(results.contains(map2Uri2));
-    }
-    
-    @Test
-    public void testToUrisOneToManyNoDataSources() throws BridgeDBException{
-        report("MapXrefOneToManyNoDataSources");
-        Set<String> results = uriMapper.mapUri(map1xref1, RdfConfig.getProfileURI(0));
-        assertTrue(results.contains(map1Uri2));
-        assertTrue(results.contains(map1Uri3));
-        assertFalse(results.contains(map2Uri1));
-        assertFalse(results.contains(map2Uri2));
-        assertFalse(results.contains(map2Uri2));
-    }
-
-    @Test
-    public void testMapFullOneToManyNoDataSources() throws BridgeDBException{
-        report("MapFullOneToManyNoDataSources");
-        Set<Mapping> results = uriMapper.mapFull(map3Uri3, RdfConfig.getProfileURI(0));
-        Set<String> mappedTo = new HashSet<String>();
-        for (Mapping mapping:results){
-            if (mapping.getTargetUri().contains(map3Uri3)){
-                assertNull(mapping.getId());
-                assertNull(mapping.getMappingSetId());        
-                assertNull(mapping.getPredicate() );
-            } else {
-                mappedTo.addAll(mapping.getTargetUri());
-                String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
-                    OwlConstants.EQUIVALENT_CLASS.stringValue()};
-                assertThat(mapping.getPredicate(), isIn(predicates));
-                assertNotNull(mapping.getId());
-                assertNotNull(mapping.getMappingSetId());
-            }
-            assertTrue(mapping.getSourceUri().contains(map3Uri3));
-        }
-        String[] expectedMatches = {map3Uri1, map3Uri2, map3Uri2a};
-        assertThat(mappedTo, hasItems(expectedMatches));
-        assertThat(mappedTo, not(hasItems(map1Uri1)));
-        assertThat(mappedTo, not(hasItems(map2Uri2)));
-    }
-
-    @Test
-    public void testMapXrefFullOneToManyNoDataSources() throws BridgeDBException{
-        report("MapXrefFullOneToManyNoDataSources");
-        Set<Mapping> results = uriMapper.mapFull(map3xref3, RdfConfig.getProfileURI(0));
-        Set<String> mappedTo = new HashSet<String>();
-        for (Mapping mapping:results){
-            if (mapping.getTargetUri().contains(map3Uri3)){
-                assertNull(mapping.getId());
-                assertNull(mapping.getMappingSetId());        
-                assertNull(mapping.getPredicate() );
-            } else {
-                mappedTo.addAll(mapping.getTargetUri());
-                String[] predicates = {TEST_PREDICATE, SkosConstants.EXACT_MATCH.stringValue(), 
-                    OwlConstants.EQUIVALENT_CLASS.stringValue()};
-                assertThat(mapping.getPredicate(), isIn(predicates));
-                assertNotNull(mapping.getId());
-                assertNotNull(mapping.getMappingSetId());
-            }
-            assertEquals(map3xref3, mapping.getSource());
-        }
-        String[] expectedMatches = {map3Uri1, map3Uri2, map3Uri2a};
-        assertThat(mappedTo, hasItems(expectedMatches));
-        assertThat(mappedTo, not(hasItems(map1Uri1)));
-        assertThat(mappedTo, not(hasItems(map2Uri2)));
-    }
-
     @Test 
     public void testMapIDOneBad() throws BridgeDBException{
         report("MapIDOneBad");
@@ -144,60 +72,6 @@ public abstract class UriMapperTest extends UriListenerTest{
         Set<Mapping> results = uriMapper.mapFull(mapBadUri1, RdfConfig.getProfileURI(0), uriPattern2);
         assertTrue(results.size() <= 1);
     }
-
-    @Test
-    public void testMapIDOneToManyWithOneDataSource() throws BridgeDBException{
-        report("MapIDOneToManyWithOneDataSource");
-        Set<String> results = uriMapper.mapUri(map1Uri1, RdfConfig.getProfileURI(0), uriPattern2);
-        assertTrue(results.contains(map1Uri2));
-        assertFalse(results.contains(map1Uri3));
-        assertFalse(results.contains(map2Uri1));
-        assertFalse(results.contains(map2Uri2));
-        assertFalse(results.contains(map2Uri2));
-    }
- 
-    @Test
-    public void testMapToUrisOneToManyWithOneDataSource() throws BridgeDBException{
-        report("MapIDOneToManyWithOneDataSource");
-        Set<String> results = uriMapper.mapUri(map1xref1, RdfConfig.getProfileURI(0), uriPattern2);
-        assertTrue(results.contains(map1Uri2));
-        assertFalse(results.contains(map1Uri3));
-        assertFalse(results.contains(map2Uri1));
-        assertFalse(results.contains(map2Uri2));
-        assertFalse(results.contains(map2Uri2));
-    }
- 
-    @Test
-    public void testMapToSelfWithOneDataSource() throws BridgeDBException{
-        report("MapToSelfWithOneDataSource");
-        Set<String> results = uriMapper.mapUri(map1Uri2, RdfConfig.getProfileURI(0), uriPattern2);
-        assertTrue(results.contains(map1Uri2));
-        assertFalse(results.contains(map1Uri3));
-        assertFalse(results.contains(map2Uri1));
-        assertFalse(results.contains(map2Uri2));
-        assertFalse(results.contains(map2Uri2));
-    }
-
-    @Test
-    public void testMapIDOneToManyWithTwoDataSources() throws BridgeDBException{
-        report("MapIDOneToManyWithTwoDataSources");
-        Set<String> results = uriMapper.mapUri(map1Uri1, RdfConfig.getProfileURI(0), uriPattern2, uriPattern3);
-        assertTrue(results.contains(map1Uri2));
-        assertTrue(results.contains(map1Uri3));
-        assertFalse(results.contains(map2Uri1));
-        assertFalse(results.contains(map2Uri2));
-        assertFalse(results.contains(map2Uri2));
-    }
- 
-    @Test
-    public void testMapIDOneToManyNoDataSources2() throws BridgeDBException{
-        report("MapIDOneToManyNoDataSources");
-        Set<String> results = uriMapper.mapUri(map2Uri1, RdfConfig.getProfileURI(0));
-        assertTrue(results.contains(map2Uri2));
-        assertTrue(results.contains(map2Uri3));
-        assertFalse(results.contains(map1Uri2));
-        assertFalse(results.contains(map3Uri2));
-     }
 
     @Test
     public void testMapNoneExistingDataSource() throws BridgeDBException{
