@@ -44,6 +44,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertFalse(results.contains(map1xref2));
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
+        checkForNoOtherProfileXrefs(results);
     }
 
     /**
@@ -62,6 +63,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertFalse(results.contains(map1xref2));
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
+        checkForNoOtherProfileXrefs(results);
     }
 
     /**
@@ -79,6 +81,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertFalse(results.contains(map1xref2));
         assertFalse(results.contains(map1xref1));
         assertFalse(results.contains(map3xref2));
+        checkForNoOtherProfileXrefs(results);
     }
 
     /**
@@ -97,6 +100,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
+        checkForNoOtherProfileUri(results);
     }
 
     /**
@@ -115,6 +119,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
+        checkForNoOtherProfileUri(results);
     }
 
     /**
@@ -132,6 +137,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
+        checkForNoOtherProfileUri(results);
     }
 
     /**
@@ -150,6 +156,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
+        checkForNoOtherProfileUri(results);
     }
 
     /**
@@ -168,6 +175,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
+        checkForNoOtherProfileUri(results);
     }
 
     /**
@@ -185,6 +193,7 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(results.contains(map3Uri3));
         assertFalse(results.contains(map2Uri2));
         assertFalse(results.contains(map1Uri3));
+        checkForNoOtherProfileUri(results);
     }
 
     /**
@@ -218,6 +227,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertTrue(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -258,6 +269,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertFalse(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -296,6 +309,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertTrue(targetXrefs.contains(map3xref1));
         assertTrue(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -335,6 +350,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertTrue(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -374,6 +391,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertFalse(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -417,6 +436,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertTrue(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -459,6 +480,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertFalse(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -500,6 +523,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertTrue(targetXrefs.contains(map3xref1));
         assertTrue(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -542,6 +567,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertFalse(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));
@@ -584,6 +611,8 @@ public abstract class UriMapperNullProfileTest extends UriListenerTest{
         assertTrue(targetUris.contains(map3Uri3));
         assertFalse(targetUris.contains(map2Uri2));
         assertFalse(targetUris.contains(map1Uri3));
+        checkForNoOtherProfileUri(targetUris);
+
         assertFalse(targetXrefs.contains(map3xref1));
         assertTrue(targetXrefs.contains(map3xref2));
         assertTrue(targetXrefs.contains(map3xref3));

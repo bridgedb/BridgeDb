@@ -195,6 +195,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         StringBuilder query = startMappingQuery();
         appendMappingFromAndWhere(query, sourceXref, profileUri, null);
         Statement statement = this.createStatement();
+        System.out.println(query);
         ResultSet rs;
         try {
             rs = statement.executeQuery(query.toString());
@@ -503,7 +504,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     private void appendProfileClause(StringBuilder query, String profileUri) throws BridgeDBException {
         if (profileUri == null){
-            return;
+            profileUri = Profile.getDefaultProfile();
         }
         int profileID = extractIDFromURI(profileUri);
         if (profileID != 0) {
