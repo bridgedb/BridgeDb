@@ -47,9 +47,6 @@ public class UriMapperTestProfileTest extends org.bridgedb.uri.UriMapperTestProf
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
         SQLUriMapper mapper = new SQLUriMapper(true, StoreType.TEST);
-        int id = mapper.registerProfile("Test profile 1", new URIImpl("http://example.com/UriMapperTestProfileTest"), 
-                new URIImpl(TEST_JUSTIFICATION1));
-        test_profile = Profile.getProfileURI(id);
 
         listener = mapper;
         loadData();

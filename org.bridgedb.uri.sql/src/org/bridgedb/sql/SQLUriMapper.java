@@ -1297,13 +1297,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     private void createDefaultProfiles() throws BridgeDBException {
-        String name = "default";
+        String name = "Default";
         URI createdBy = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.uri.sql/src/org/bridgedb/sql/SQLUrlMapper.java");
         URI justification = new URIImpl(Profile.getDefaultJustifictaion());
         int id = registerProfile(name, createdBy, justification);
         String uri = Profile.getProfileURI(id);
         if (!uri.equals(Profile.getDefaultProfile())){
-            throw new BridgeDBException("Incorrect Default URI created. Created " + uri + " but should have been "
+            throw new BridgeDBException("Incorrect Default Profile URI created. Created " + uri + " but should have been "
+                    + Profile.getDefaultProfile());
+        }
+        name = "Test";
+        justification = new URIImpl(Profile.getTestJustifictaion());
+        id = registerProfile(name, createdBy, justification);
+        uri = Profile.getProfileURI(id);
+        if (!uri.equals(Profile.getTestProfile())){
+            throw new BridgeDBException("Incorrect Test Profile URI created. Created " + uri + " but should have been "
                     + Profile.getDefaultProfile());
         }
     }

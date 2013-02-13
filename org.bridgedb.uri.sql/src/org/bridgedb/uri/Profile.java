@@ -46,6 +46,9 @@ public class Profile {
         return getProfileURI(1);
     }
     
+    public static String getTestProfile() throws BridgeDBException{
+        return getProfileURI(2);
+    }
     /**
      * The profile used to indicate that all mappings should be returned.
      * <p>
@@ -65,15 +68,11 @@ public class Profile {
     }
   
     public static String getDefaultJustifictaion() throws BridgeDBException{
-        return getJustifictaionURI("Default");
+        return "http://www.w3.org/2000/01/rdf-schema#isDefinedBy";
     }
 
-    public static String getJustifictaionBaseURI() throws BridgeDBException{
-        return RdfConfig.getTheBaseURI() + "justification/";  
-    }
-
-    public static String getJustifictaionURI(String justificationId) throws BridgeDBException{
-        return getProfileBaseURI() + justificationId;  
+    public static String getTestJustifictaion() throws BridgeDBException{
+        return "http://www.bridgedb.org/test#testJustification";
     }
 
 }

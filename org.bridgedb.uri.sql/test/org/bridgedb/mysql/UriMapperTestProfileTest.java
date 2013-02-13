@@ -53,9 +53,6 @@ public class UriMapperTestProfileTest extends org.bridgedb.uri.UriMapperTestProf
         loadData();
         uriMapper = mapper;
         
-        int id = mapper.registerProfile("Test profile 1", new URIImpl("http://example.com/UriMapperTestProfileTest"), 
-                new URIImpl(TEST_JUSTIFICATION1));
-        test_profile = Profile.getProfileURI(id);
     }
             
 }

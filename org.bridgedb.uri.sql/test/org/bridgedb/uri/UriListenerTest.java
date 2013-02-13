@@ -38,8 +38,6 @@ import static org.junit.Assert.*;
 public abstract class UriListenerTest extends IDMapperTestBase{
         
     protected static UriListener listener;
-    protected static final String TEST_JUSTIFICATION1 = "http://www.bridgedb.org/test#testJustification1";
-    protected static final String TEST_JUSTIFICATION2 = "http://www.bridgedb.org/test#testJustification2";
     protected static final String TEST_PREDICATE = "http://www.w3.org/2004/02/skos/core#exactMatch";
         
     private static final boolean SYMETRIC = true;
@@ -213,7 +211,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		TEST_JUSTIFICATION1, uriPattern2, SYMETRIC, ORIGINAL);
+        		Profile.getTestJustifictaion(), uriPattern2, SYMETRIC, ORIGINAL);
         listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
@@ -222,7 +220,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map3AUri1, map3Uri2, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
-        		TEST_JUSTIFICATION1, uriPattern3, SYMETRIC, ORIGINAL);
+        		Profile.getTestJustifictaion(), uriPattern3, SYMETRIC, ORIGINAL);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);
@@ -231,7 +229,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map3AUri2, map3Uri3, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getJustifictaionURI("Test_Differtent"), uriPattern3, SYMETRIC, TRANSATIVE);
+        		Profile.getTestProfile(), uriPattern3, SYMETRIC, TRANSATIVE);
         listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);
