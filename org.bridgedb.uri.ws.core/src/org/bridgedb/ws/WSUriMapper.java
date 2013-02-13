@@ -78,7 +78,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     
     @Override
     public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
-        Collection<Mapping> beans = mapFull(sourceXref, profileUri);
+        Collection<Mapping> beans = mapFull(sourceXref, profileUri, tgtDataSource);
         return extractXref(beans);
     }
 
@@ -135,11 +135,11 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     @Override
     public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource... tgtDataSources) 
             throws BridgeDBException {
-        if (tgtDataSources == null){
-            return mapFull(sourceXref, profileUri);
-        }
         if (sourceXref == null){
             return new HashSet<Mapping>();
+        }
+        if (tgtDataSources == null || tgtDataSources.length == 0){
+            return mapFull(sourceXref, profileUri);
         }
         ArrayList<String> tgtSysCodes = new ArrayList<String>();
         for (int i = 0 ; i < tgtDataSources.length; i++){
@@ -147,6 +147,9 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
                 tgtSysCodes.add(tgtDataSources[i].getSystemCode());
             }
         }
+        if (tgtSysCodes.isEmpty()){
+            return new HashSet<Mapping>();
+        }        
         List<Mapping> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
                 profileUri, tgtSysCodes, NO_URI_PATTERNS);
         return new HashSet<Mapping>(beans); 
@@ -155,7 +158,10 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     @Override
     public Set<Mapping> mapFull(Xref sourceXref, String profileUri, UriPattern... tgtUriPatterns)
             throws BridgeDBException {
-        if (tgtUriPatterns == null){
+        if (sourceXref == null){
+            return new HashSet<Mapping>();
+        }
+        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
             return mapFull(sourceXref, profileUri);
         }
         ArrayList<String> tgtUriPatternStrings = new ArrayList<String>();
@@ -163,6 +169,9 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
             if (tgtUriPattern != null){
                 tgtUriPatternStrings.add(tgtUriPattern.getUriPattern());
             }
+        }
+        if (tgtUriPatternStrings.isEmpty()){
+            return new HashSet<Mapping>();
         }
         List<Mapping> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
                 profileUri, NO_SYSCODES, tgtUriPatternStrings);
@@ -173,6 +182,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     public Set<Mapping> mapFull(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
         DataSource[] tgtDataSources = new DataSource[1];
         tgtDataSources[0] = tgtDataSource;
+
         return mapFull(sourceXref, profileUri, tgtDataSources);
     }
 
@@ -195,14 +205,20 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
 
     @Override
     public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource... tgtDataSources) throws BridgeDBException {
-        if (tgtDataSources == null){
+        if (tgtDataSources == null || tgtDataSources.length == 0){
             return mapFull(sourceUri, profileUri);
+        }
+        if (sourceUri == null){
+            return new HashSet<Mapping>();
         }
         ArrayList<String> tgtSysCodes = new ArrayList<String>();
         for (int i = 0 ; i < tgtDataSources.length; i++){
             if (tgtDataSources[i] != null){
                 tgtSysCodes.add(tgtDataSources[i].getSystemCode());
             }
+        }
+        if (tgtSysCodes.isEmpty()){
+            return new HashSet<Mapping>();
         }
         List<Mapping> beans = uriService.map(sourceUri, profileUri, tgtSysCodes, NO_URI_PATTERNS);
         return new HashSet<Mapping>(beans); 
@@ -212,7 +228,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
         DataSource[] tgtDataSources = new DataSource[1];
         tgtDataSources[0] = tgtDataSource;
-        return mapFull(sourceUri, profileUri, tgtDataSource);
+        return mapFull(sourceUri, profileUri, tgtDataSources);
     }
 
     @Override
@@ -233,14 +249,20 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
 
     @Override
     public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern... tgtUriPatterns) throws BridgeDBException {
-        if (tgtUriPatterns == null){
+        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
             return mapFull(sourceUri, profileUri);
+        }
+        if (sourceUri == null){
+            return new HashSet<Mapping>();
         }
         ArrayList<String> tgtUriPatternStrings = new ArrayList<String>();
         for (UriPattern tgtUriPattern:tgtUriPatterns){
             if (tgtUriPattern != null){
                 tgtUriPatternStrings.add(tgtUriPattern.getUriPattern());
             }
+        }
+        if (tgtUriPatternStrings.isEmpty()){
+            return new HashSet<Mapping>();
         }
         List<Mapping> beans = uriService.map(sourceUri, profileUri, NO_SYSCODES, tgtUriPatternStrings);
         return new HashSet<Mapping>(beans); 

@@ -29,7 +29,9 @@ import org.junit.Test;
  */
 public abstract class UriMapperTestProfileTest extends UriListenerTest{
 
-   /**
+    protected static String test_profile;
+
+    /**
      * Test of mapID method, of class UriMapper.
      */
     @Test

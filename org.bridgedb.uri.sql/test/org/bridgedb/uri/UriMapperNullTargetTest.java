@@ -172,7 +172,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
      */
     @Test
     public void testMapUri_sourceXref_profileUri_null_pattern() throws Exception {
-        report("MapUri_sourceXref_profileUri");
+        report("MapUri_sourceXref_profileUri_null_pattern");
         Xref sourceXref = map3xref2;
         String profileUri = Profile.getDefaultProfile();
         UriPattern[] targets = null;

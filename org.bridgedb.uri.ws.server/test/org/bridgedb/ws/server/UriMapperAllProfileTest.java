@@ -27,13 +27,14 @@ import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.uri.WSUriInterfaceService;
 import org.bridgedb.ws.WSUriMapper;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 /**
  * 
  * @author Christian
  */
 //@Ignore
-public class UriMapperTest extends org.bridgedb.uri.UriMapperSpecialTest {
+public class UriMapperAllProfileTest extends org.bridgedb.uri.UriMapperAllProfileTest {
 
     private static final String CREATOR1 = "testCreator";
     private static final String PREDICATE1 = "testMapping";
