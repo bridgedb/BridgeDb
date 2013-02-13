@@ -167,7 +167,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return new HashSet<Xref>();
         }
         if (tgtDataSource == null){
-            return mapID(sourceXref, profileUri);
+            logger.warn("mapId called with a null tgtDatasource and " + sourceXref);
+            return new HashSet<Xref>();
         }
         StringBuilder query = startMappingQuery();
         appendMappingFromAndWhere(query, sourceXref, profileUri, tgtDataSource);
@@ -223,6 +224,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public Set<String> mapUri (Xref sourceXref, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException {
+        if (tgtUriPattern == null){
+            logger.warn("mapUri called with a null tgtDatasource and " + sourceXref);
+            return new HashSet<String>();
+        }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
         Set<Xref> targetXrefs = mapID(sourceXref, profileUri, tgtDataSource);
         HashSet<String> results = new HashSet<String>();
@@ -260,6 +265,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     public Set<String> mapUri (String sourceUri, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException {
         Xref sourceXref = toXref(sourceUri);
+        if (tgtUriPattern == null){
+            logger.warn("mapUri called with a null tgtDatasource and " + sourceUri);
+            return new HashSet<String>();
+        }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
         Set<Xref> targetXrefs = mapID(sourceXref, profileUri, tgtDataSource);
         HashSet<String> results = new HashSet<String>();
@@ -333,7 +342,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return new HashSet<Mapping>();
         }
         if (tgtDataSource == null){
-            return mapFull (sourceXref, profileUri);
+            logger.warn("map called with a null tgtDatasource and " + sourceXref);
+            return new HashSet<Mapping>();
         }
         StringBuilder query = startMappingQuery();
         appendMappingInfo(query);
@@ -370,7 +380,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
 	public Set<Mapping> mapFull (Xref sourceXref, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
         if (tgtUriPattern == null){
-            return mapFull(sourceXref, profileUri);
+            logger.warn("mapFull called with a null tgtDatasource and " + sourceXref);
+            return new HashSet<Mapping>();
         }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
         Set<Mapping> results = mapPart(sourceXref, profileUri, tgtDataSource);
