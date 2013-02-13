@@ -94,7 +94,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
                 query.append(".");
                 query.append(ID_COLUMN_NAME);
         appendSourceXref(query, ref);
-        if (tgtDataSources.length > 0){    
+        if (tgtDataSources != null && tgtDataSources.length > 0){    
             query.append(" AND ( ");
             query.append(TARGET_DATASOURCE_COLUMN_NAME);
             query.append(" = '");
