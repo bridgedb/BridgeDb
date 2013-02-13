@@ -155,8 +155,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         }
         Mapping result = uriMapper.getMapping(mappingId);
         assertEquals(mappingId, result.getId());
-        System.out.println(result.getSourceUri());
-        System.out.println(map3Uri3);
         assertTrue(result.getSourceUri().contains(map3Uri3));
         assertEquals(TEST_PREDICATE, result.getPredicate());
         assertTrue(result.getTargetUri().contains(map3Uri2));
@@ -263,7 +261,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
             assertEquals(pattern.getDataSource(), xref.getDataSource());
         }
         //Date end = new Date();
-        //System.out.println(end.getTime()-start.getTime());
+        //ystem.out.println(end.getTime()-start.getTime());
      }
 
 

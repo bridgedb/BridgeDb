@@ -79,7 +79,6 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Xref sourceXref = map2xref2;
         String profileUri = Profile.getAllProfile();
         Set results = uriMapper.mapID(sourceXref, profileUri);
-        System.out.println(results);
         assertTrue(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
         assertTrue(results.contains(map2xref3));
