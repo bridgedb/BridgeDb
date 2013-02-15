@@ -348,7 +348,7 @@ public class SQLListener implements MappingListener{
 					"INSERT INTO " + INFO_TABLE_NAME + " VALUES ( " + SQL_COMPAT_VERSION + ")");
             //TODO add organism as required
             sh.execute("CREATE TABLE " + DATASOURCE_TABLE_NAME 
-                    + "  (  " + SYSCODE_COLUMN_NAME     + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL,   "
+                    + "  (  " + SYSCODE_COLUMN_NAME     + " VARBINARY(" + SYSCODE_LENGTH + ") NOT NULL,   "
                     + "     " + IS_PRIMARY_COLUMN_NAME  + " SMALLINT,                                  "
                     + "     " + FULL_NAME_COLUMN_NAME   + " VARCHAR(" + FULLNAME_LENGTH + "),      "
                     + "     " + MAIN_URL_COLUMN_NAME    + " VARCHAR(" + MAINURL_LENGTH + "),        "
