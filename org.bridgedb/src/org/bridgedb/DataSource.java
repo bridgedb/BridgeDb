@@ -798,15 +798,31 @@ public final class DataSource
         if (byName == byCode){
             return returnOrCreateNew(byName, sysCode, fullName);
         }
-        if ((sysCode == null || sysCode.isEmpty()) && (byName.sysCode == null || byName.sysCode.isEmpty())){
-            return returnOrCreateNew(byName, sysCode, fullName);
+        if (sysCode == null || sysCode.isEmpty()) {
+            if (byName.sysCode == null || byName.sysCode.isEmpty()){
+                return returnOrCreateNew(byName, sysCode, fullName);
+            } else {
+                throw new IllegalArgumentException("SysCode is null/Empty but byName " + byName 
+                        + " already has a sysCode set");
+            }
         }
-        if ((fullName == null || fullName.isEmpty()) && (byCode.fullName == null || byCode.fullName.isEmpty())){
-            return returnOrCreateNew(byCode, sysCode, fullName);
+        if (fullName == null || fullName.isEmpty()) {
+            if  (byCode.fullName == null || byCode.fullName.isEmpty()){
+                return returnOrCreateNew(byCode, sysCode, fullName);
+            } else {
+                throw new IllegalArgumentException("FullName is null/Empty but byCode " + byCode 
+                        + " already has a fullName set");                
+            }    
+        }
+        String fn;
+        if (fullName == null){
+            fn = "(null)";
+        } else {
+            fn = fullName;
         }
         throw new IllegalArgumentException("Multiple possible DataSources found. " 
                 + "SysCode " + sysCode + " already maps to " + byCode 
-                + " while fullName " + fullName + " maps to " + byName);
+                + " while fullName " + fn + " maps to " + byName);
     }
 
     public void registerAlias(String alias)
