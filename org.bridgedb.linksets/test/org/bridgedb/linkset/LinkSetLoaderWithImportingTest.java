@@ -70,7 +70,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         SQLUriMapper sqlUriMapper = new SQLUriMapper(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUriMapper.getMappingSetInfo(1);
-        assertEquals ("Chembl 13 Molecule", info.getSourceSysCode());
+        assertEquals ("Chembl13Molecule", info.getSourceSysCode());
         assertEquals ("Cs", info.getTargetSysCode());
         assertEquals ("http://www.w3.org/2004/02/skos/core#exactMatch", info.getPredicate());
         //ystem.out.println(info);

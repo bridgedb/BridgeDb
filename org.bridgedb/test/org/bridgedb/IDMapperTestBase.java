@@ -79,13 +79,13 @@ public abstract class IDMapperTestBase {
     public static void setupXref() throws IDMapperException{
         //If the actual source to be tested does not contain these please overwrite with ones that do exist.
         DataSource1 = DataSource.register("ConceptWiki", "ConceptWiki"). urlPattern("http://www.conceptwiki.org/concept/$id")
-                .idExample("38932552-111f-4a4e-a46a-4ed1d7bdf9d5").asDataSource();
+                .idExample("33a28bb2-35ed-4d94-adfd-3c96053cbaaf").asDataSource();
         DataSource2 = DataSource.register("Cs", "Chemspider").urlPattern("http://www.chemspider.com/Chemical-Structure.$id.html")
-                .idExample("187440").asDataSource();
-        DataSource3 = DataSource.register("Chembl 13 Molecule", "Chembl 13 Molecule").urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/$id")
-                .idExample("m276734").asDataSource();
+                .idExample("56586").asDataSource();
+        DataSource3 = DataSource.register("Chembl13Molecule", "Chembl 13 Molecule").urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/$id")
+                .idExample("m1").asDataSource();
         //This DataSource MUST not be supported
-        DataSourceBad = DataSource.register("TestDSBad", "TestDSBad")
+        DataSourceBad = DataSource.register("TestDSBad", null)
                 .urlPattern("www.NotInTheURlMapper.com#$id").asDataSource();
 
         //Set of Xrefs that are expected to map together.

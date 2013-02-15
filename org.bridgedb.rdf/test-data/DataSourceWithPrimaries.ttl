@@ -655,7 +655,7 @@ bridgeDB:DataSource_ChemBank a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_Chembl_13_Internal a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl 13 Internal" ;
-	bridgeDB:systemCode "Chembl 13 Internal" ;
+	bridgeDB:systemCode "Chembl13Internal" ;
 	bridgeDB:idExample "CHEMBL6329" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
@@ -664,7 +664,7 @@ bridgeDB:DataSource_Chembl_13_Internal a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_Chembl_13_Molecule a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl 13 Molecule" ;
-	bridgeDB:systemCode "Chembl 13 Molecule" ;
+	bridgeDB:systemCode "Chembl13Molecule" ;
 	bridgeDB:idExample "m1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
@@ -674,7 +674,7 @@ bridgeDB:DataSource_Chembl_13_Molecule a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_Chembl_13_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl 13 Target" ;
-	bridgeDB:systemCode "Chembl 13 Target" ;
+	bridgeDB:systemCode "Chembl13Target" ;
 	bridgeDB:idExample "t1" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
@@ -684,7 +684,7 @@ bridgeDB:DataSource_Chembl_13_Target a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_Chembl_2_Compound a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl 2 Compound" ;
-	bridgeDB:systemCode "Chembl 2 Compound" ;
+	bridgeDB:systemCode "Chembl2Compound" ;
 	bridgeDB:idExample "698788" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
@@ -693,7 +693,7 @@ bridgeDB:DataSource_Chembl_2_Compound a bridgeDB:DataSource ;
 
 bridgeDB:DataSource_Chembl_2_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl 2 Target" ;
-	bridgeDB:systemCode "Chembl 2 Target" ;
+	bridgeDB:systemCode "Chembl2Target" ;
 	bridgeDB:idExample "698788" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
