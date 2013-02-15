@@ -422,13 +422,14 @@ public interface UriMapper extends IDMapper{
      */
     public Mapping getMapping(int id)  throws BridgeDBException;
         
-    /**
+    /*
      * Gets a Sample of mappings.
      * 
      * Main use is for writing the api description page
      * @return 5 mapping which includes both source and traget Uris
      */
-    public List<Mapping> getSampleMapping() throws BridgeDBException;
+    //Christian 15 Feb 2013 Stripped out as too slow 
+   // public List<Mapping> getSampleMapping() throws BridgeDBException;
     
     /**
      * Obtains some general high level statistics about the data held.

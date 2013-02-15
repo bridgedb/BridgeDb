@@ -51,7 +51,7 @@ public interface WSUriInterface extends WSCoreInterface{
 
     public Mapping getMapping(String id) throws BridgeDBException;
 
-    public List<Mapping> getSampleMappings() throws BridgeDBException;
+    //public List<Mapping> getSampleMappings() throws BridgeDBException;
 
     public OverallStatisticsBean getOverallStatistics() throws BridgeDBException;
 

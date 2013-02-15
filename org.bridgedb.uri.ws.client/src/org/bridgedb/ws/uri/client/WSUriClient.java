@@ -157,14 +157,14 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
          return result;
     }
 
-    @Override
+    /*@Override
     public List<Mapping> getSampleMappings() throws BridgeDBException {
         List<Mapping> result = 
                 webResource.path(WsUriConstants.GET_SAMPLE_MAPPINGS)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<List<Mapping>>() {});
          return result;
-    }
+    }*/
 
     @Override
     public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {

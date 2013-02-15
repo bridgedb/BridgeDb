@@ -121,7 +121,7 @@ public class WSFame extends WSUriInterfaceService {
             sb.append("UNDER DEVELOPMENT! </body></html>");
             return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
         }
-        List<Mapping> mappings = uriMapper.getSampleMapping(); 
+        List<Mapping> mappings = null; //uriMapper.getSampleMapping(); 
         Mapping mapping1 = mappings.get(0);
         DataSource dataSource1 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
         Xref firstSourceXref = new Xref (mapping1.getSourceId(), dataSource1);

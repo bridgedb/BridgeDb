@@ -311,13 +311,13 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return uriMapper.getMapping(id);
     }
 
-    @Override
+    /*@Override
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_SAMPLE_MAPPINGS) 
     public List<Mapping> getSampleMappings() throws BridgeDBException {
         return uriMapper.getSampleMapping();
-    }
+    }*/
 
     @Override
     @GET

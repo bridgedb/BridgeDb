@@ -293,10 +293,10 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         return uriService.getMapping("" + id);
     }
 
-    @Override
-    public List<Mapping> getSampleMapping() throws BridgeDBException {
-        return uriService.getSampleMappings();
-    }
+    //@Override Too slow
+    //public List<Mapping> getSampleMapping() throws BridgeDBException {
+    //    return uriService.getSampleMappings();
+    //}
     
     @Override
     public OverallStatistics getOverallStatistics() throws BridgeDBException {

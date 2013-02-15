@@ -167,7 +167,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         assertEquals(map3xref2.getDataSource().getSystemCode(), result.getTargetSysCode());
     }
     
-    @Test
+    /*@Test
     public void testGetSampleMappings() throws BridgeDBException {
         report("GetSampleMappings");
         List<Mapping> results = uriMapper.getSampleMapping();
@@ -178,7 +178,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
             Set<String> targets = mapping.getTargetUri();
             assertThat(targets.size(), greaterThan(0));
         }
-    }
+    }*/
 
     @Test
     public void testGetOverallStatistics() throws BridgeDBException {

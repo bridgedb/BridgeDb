@@ -723,7 +723,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return result;    
     }
 
-    @Override
+    //@Override too slow
     public List<Mapping> getSampleMapping() throws BridgeDBException {
         StringBuilder query = new StringBuilder("SELECT DISTINCT ");
         //TODO get DISTINCT working on Virtuosos
