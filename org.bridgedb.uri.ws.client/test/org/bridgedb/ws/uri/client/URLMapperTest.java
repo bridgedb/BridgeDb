@@ -34,7 +34,6 @@ public class URLMapperTest  extends org.bridgedb.uri.UriMapperSpecialTest{
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException {
         WSUriInterface webService = WsUriClientFactory.createTestWSClient();
-        mappingSet2_3 = 29;
         uriMapper = new WSUriMapper(webService);
     }
     

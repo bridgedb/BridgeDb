@@ -40,9 +40,9 @@ import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.ProfileBeanFactory;
+import org.bridgedb.ws.bean.UriPatternBean;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
-import org.bridgedb.ws.bean.XrefBeanFactory;
 
 /**
  *
@@ -282,7 +282,10 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     @Override
     public Xref toXref(String Uri) throws BridgeDBException {
         XrefBean bean = uriService.toXref(Uri);
-        return XrefBeanFactory.asXref(bean);
+        if (bean == null){
+            return null;
+        }
+        return bean.asXref();
     }
 
     @Override
@@ -320,7 +323,17 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     @Override
     public Set<String> getUriPatterns(String dataSource) throws BridgeDBException {
         DataSourceUriPatternBean bean = uriService.getDataSource(dataSource);
-        return new HashSet<String>(bean.getUriPattern());
+        if (bean == null || bean.getUriPatterns() == null){
+            System.out.println("failed with " + dataSource);
+            System.out.println(bean);
+            return new HashSet<String>();
+        } else {
+            Set<String> results = new HashSet<String>();
+            for (UriPatternBean pattern:bean.getUriPatterns()){
+                results.add(pattern.getPattern());
+            }
+            return results;
+        }
     }
 
 	@Override

@@ -39,13 +39,11 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
-import org.bridgedb.ws.bean.DataSourceBeanFactory;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSupportedBean;
 import org.bridgedb.ws.bean.MappingSupportedBeanFactory;
 import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.XrefBean;
-import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.bridgedb.ws.bean.XrefExistsBean;
 import org.bridgedb.ws.bean.XrefExistsBeanFactory;
 import org.bridgedb.ws.bean.XrefMapBean;
@@ -84,7 +82,7 @@ public class WSCoreService implements WSCoreInterface {
         try {
             Set<DataSource> dataSources = capabilities.getSupportedSrcDataSources();
             for (DataSource dataSource:dataSources){
-                DataSourceBean bean = DataSourceBeanFactory.asBean(dataSource);
+                DataSourceBean bean = new DataSourceBean(dataSource);
                 sources.add(bean);
             }
         } catch (IDMapperException e){
@@ -119,7 +117,7 @@ public class WSCoreService implements WSCoreInterface {
     protected List<XrefBean> setXrefToListXrefBeans(Set<Xref> xrefs){
        ArrayList<XrefBean> results = new ArrayList<XrefBean>();
         for (Xref xref:xrefs){
-           results.add(XrefBeanFactory.asBean(xref));
+           results.add(new XrefBean(xref));
         }
         return results;        
     }
@@ -190,7 +188,7 @@ public class WSCoreService implements WSCoreInterface {
         try {
             Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
             for (DataSource dataSource:dataSources){
-                DataSourceBean bean = DataSourceBeanFactory.asBean(dataSource);
+                DataSourceBean bean = new DataSourceBean(dataSource);
                 targets.add(bean);
             }
         } catch (IDMapperException e){

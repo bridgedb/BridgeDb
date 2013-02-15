@@ -63,7 +63,6 @@ import org.bridgedb.ws.bean.UriBean;
 import org.bridgedb.ws.bean.UriExistsBean;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
-import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.openrdf.rio.RDFFormat;
 
 @Path("/")
@@ -288,8 +287,10 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public XrefBean toXref(@QueryParam(WsUriConstants.URI) String URI) throws BridgeDBException {
         if (URI == null) throw new BridgeDBException(WsUriConstants.URI + " parameter missing.");
         if (URI.isEmpty()) throw new BridgeDBException(WsUriConstants.URI + " parameter may not be null.");
+        logger.info(URI);
         Xref xref = uriMapper.toXref(URI);
-        return XrefBeanFactory.asBean(xref);
+        logger.info(xref);
+        return new XrefBean(xref);
     }
 
     @GET

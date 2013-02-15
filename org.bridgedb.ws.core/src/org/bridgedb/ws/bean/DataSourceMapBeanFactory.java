@@ -39,22 +39,25 @@ public class DataSourceMapBeanFactory {
 
     public static DataSourceMapBean asBean(DataSource source, Set<DataSource> tgtDataSource){
         DataSourceMapBean bean = new DataSourceMapBean();
-        bean.source = DataSourceBeanFactory.asBean(source);
+        bean.source = new DataSourceBean(source);
         bean.target = new ArrayList<DataSourceBean>();
         for (DataSource tgt:tgtDataSource){
-           bean.target.add(DataSourceBeanFactory.asBean(tgt));
+           bean.target.add(new DataSourceBean(tgt));
         }
         return bean;
     }
 
     public static DataSource getKey(DataSourceMapBean bean) throws BridgeDBException {
-        return DataSourceBeanFactory.asDataSource(bean.source);
+        if (bean.source == null){
+            return null;
+        }
+        return bean.source.asDataSource();
     }
 
     public static Set<DataSource> getMappedSet(DataSourceMapBean bean) throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean trg:bean.target){
-            results.add(DataSourceBeanFactory.asDataSource(trg));
+            results.add(trg.asDataSource());
         }
         return results;
     }

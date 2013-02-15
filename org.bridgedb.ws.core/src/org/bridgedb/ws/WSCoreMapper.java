@@ -33,10 +33,8 @@ import org.bridgedb.Xref;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
-import org.bridgedb.ws.bean.DataSourceBeanFactory;
 import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.XrefBean;
-import org.bridgedb.ws.bean.XrefBeanFactory;
 import org.bridgedb.ws.bean.XrefMapBean;
 
 /**
@@ -70,12 +68,17 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         if (codes.isEmpty()) return results; //No valid srcrefs so return empty set
         List<XrefMapBean>  beans = webService.mapID(ids, codes, targetCodes);
         for (XrefMapBean bean:beans){
-            Xref source = XrefBeanFactory.asXref(bean.getSource());
-            Set<Xref> targets = results.get(source);
+            Xref source = null;
+            Set<Xref> targets = null;
+            if (bean.getSource() != null){
+                System.out.println(bean.getSource());
+                source = bean.getSource().asXref();
+                targets = results.get(source);
+            }
             if (targets == null){
                 targets = new HashSet<Xref>(); 
             }
-            targets.add(XrefBeanFactory.asXref(bean.getTarget()));
+            targets.add(bean.getTarget().asXref());
             results.put(source, targets);
         }
         return results;
@@ -95,7 +98,9 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         List<XrefMapBean>  beans = webService.mapID(ids, codes, targetCodes);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefMapBean bean:beans){
-            results.add(XrefBeanFactory.asXref(bean.getTarget()));
+            if (bean.getTarget() != null){
+                results.add(bean.getTarget().asXref());
+            }
         }
         return results;
     }
@@ -114,7 +119,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         List<XrefBean>  beans = webService.freeSearch(text, "" + limit);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefBean bean:beans){
-            results.add(XrefBeanFactory.asXref(bean));
+            results.add(bean.asXref());
         }
         return results;
     }
@@ -158,7 +163,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         List<DataSourceBean> beans = webService.getSupportedSrcDataSources();
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean bean:beans){
-            results.add(DataSourceBeanFactory.asDataSource(bean));
+            results.add(bean.asDataSource());
         }
         return results;
     }
@@ -168,7 +173,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         List<DataSourceBean> beans = webService.getSupportedTgtDataSources();
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean bean:beans){
-            results.add(DataSourceBeanFactory.asDataSource(bean));
+            results.add(bean.asDataSource());
         }
         return results;
     }

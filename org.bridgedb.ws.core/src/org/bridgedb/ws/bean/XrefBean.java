@@ -20,6 +20,8 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.DataSource;
+import org.bridgedb.Xref;
 
 @XmlRootElement(name="Xref")
 public class XrefBean {
@@ -30,6 +32,23 @@ public class XrefBean {
         
     public String getId() {
         return id;
+    }
+  
+    public XrefBean (Xref xref){
+        if (xref != null){
+            id = xref.getId();
+            dataSource = new DataSourceBean(xref.getDataSource());
+        }
+    }
+
+    public Xref asXref(){
+        DataSource ds;
+        if (dataSource != null){
+             ds = dataSource.asDataSource();
+        } else {
+            ds = null;
+        }
+        return new Xref(id, ds);
     }
     
     public void setId(String id) {

@@ -60,10 +60,10 @@ public class CapabilitiesBean implements IDMapperCapabilities{
             Set<DataSource> sources = capabilities.getSupportedSrcDataSources();
             Set<DataSource> targets = capabilities.getSupportedTgtDataSources();
             for (DataSource dataSource:targets){
-                targetDataSource.add(DataSourceBeanFactory.asBean(dataSource));
+                targetDataSource.add(new DataSourceBean(dataSource));
             }
             for (DataSource source:sources){
-                sourceDataSource.add(DataSourceBeanFactory.asBean(source));
+                sourceDataSource.add(new DataSourceBean(source));
                 HashSet<DataSource> mappedTargets = new HashSet<DataSource>();
                 for (DataSource target:targets){
                     if (capabilities.isMappingSupported(source, target)){
@@ -92,7 +92,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     public Set<DataSource> getSupportedSrcDataSources() throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:sourceDataSource){
-            results.add(DataSourceBeanFactory.asDataSource(bean));
+            results.add(bean.asDataSource());
         }
         return results;
     }
@@ -101,7 +101,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     public Set<DataSource> getSupportedTgtDataSources() throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:targetDataSource){
-            results.add(DataSourceBeanFactory.asDataSource(bean));
+            results.add(bean.asDataSource());
         }
         return results;
     }

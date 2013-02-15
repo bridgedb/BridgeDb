@@ -30,7 +30,7 @@ public class XrefExistsBeanFactory {
     public static XrefExistsBean asBean(Xref xref, boolean exists){
         XrefExistsBean bean = new XrefExistsBean();
         bean.exists = exists;
-        bean.Xref = XrefBeanFactory.asBean(xref);
+        bean.Xref = new XrefBean(xref);
         return bean;
     }
     

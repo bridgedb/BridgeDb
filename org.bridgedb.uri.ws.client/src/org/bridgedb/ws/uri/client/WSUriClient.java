@@ -24,6 +24,9 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import org.bridgedb.DataSource;
+import org.bridgedb.DataSourceOverwriteLevel;
+import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.uri.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreClient;
@@ -48,8 +51,10 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     public final String NO_REPORT = null;
     public final String NO_EXCEPTION = null;
     
-    public WSUriClient(String serviceAddress) {
+    public WSUriClient(String serviceAddress) throws BridgeDBException {
         super(serviceAddress);
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        BridgeDBRdfHandler.init();
     }
 
     @Override
@@ -58,11 +63,15 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URI, uri);
         params.add(WsUriConstants.PROFILE_URI, profileUri);
-        for (String target:targetCodes){
-            params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
+        if (targetCodes != null){
+            for (String target:targetCodes){
+                params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
+            }
         }
-        for (String target:targetUriPattern){
-            params.add(WsUriConstants.TARGET_URI_PATTERN, target);
+        if (targetUriPattern != null){
+            for (String target:targetUriPattern){
+                params.add(WsUriConstants.TARGET_URI_PATTERN, target);
+            }
         }
         //Make service call
         List<Mapping> result = 
@@ -121,17 +130,21 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
          return result;
     }
 
+    private String encode (String original){
+        return original.replaceAll("%", "%20");
+    }
     @Override
     public XrefBean toXref(String uri) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        params.add(WsUriConstants.URI, uri);
+        params.add(WsUriConstants.URI, encode(uri));
         //Make service call
         XrefBean result = 
                 webResource.path(WsUriConstants.TO_XREF)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<XrefBean>() {});
-         return result;
+        System.out.println("result = " + result);
+        return result;
     }
 
     @Override
@@ -191,11 +204,13 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     @Override
     public DataSourceUriPatternBean getDataSource(String dataSource) throws BridgeDBException{
         //Make service call
+        System.out.println(dataSource);
         DataSourceUriPatternBean result = 
                 webResource.path(WsUriConstants.DATA_SOURCE + "/" + dataSource)
                 .accept(MediaType.APPLICATION_XML_TYPE)
                 .get(new GenericType<DataSourceUriPatternBean>() {});
-         return result;
+        System.out.println(result);
+        return result;
     }
 
    /*TODO FIX this

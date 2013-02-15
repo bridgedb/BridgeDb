@@ -43,7 +43,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     private static final boolean SYMETRIC = true;
     private static final boolean ORIGINAL = false;
     private static final boolean TRANSATIVE = true;
-    protected static int mappingSet2_3;
+    protected static final int mappingSet2_3 = 3;
  
     protected static UriPattern uriPattern1;
     protected static UriPattern uriPattern2;
@@ -198,8 +198,9 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
-        mappingSet2_3 = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
+        mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
         		Profile.getDefaultJustifictaion(), uriPattern3, SYMETRIC, ORIGINAL);
+        assertEquals(mappingSet2_3, mappingSet);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3Uri3, mappingSet2_3, SYMETRIC);

@@ -24,7 +24,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.bridgedb.DataSource;
 
 @XmlRootElement(name="DataSource")
-@XmlType(propOrder={"sysCode","urlPattern", "mainUrl", "fullName", "idExample", "isPrimary", "organism", "urnBase", "type"})
+//@XmlType(propOrder={"sysCode","urlPattern", "mainUrl", "fullName", "idExample", "isPrimary", "organism", "urnBase", "type"})
+@XmlType(propOrder={"sysCode","urlPattern", "mainUrl", "fullName", "idExample", "isPrimary", "urnBase", "type"})
 public class DataSourceBean {
   	String sysCode;
 	String fullName;
@@ -33,7 +34,7 @@ public class DataSourceBean {
 	boolean isPrimary;
 	String type;
     //I wonder how to do this?
-	Object organism;
+	//Object organism;
 	String urnBase;    
 	String mainUrl;
 
@@ -42,27 +43,29 @@ public class DataSourceBean {
     }
 
     public DataSourceBean(DataSource dataSource){
-        sysCode = dataSource.getSystemCode();
-        fullName = dataSource.getFullName();
-        String urlPattern = dataSource.getUrl("$id");
-        if (urlPattern.length() > 3 ){
-            urlPattern = urlPattern;
-        } else {
-            urlPattern = null;
+        if (dataSource != null){
+            sysCode = dataSource.getSystemCode();
+            fullName = dataSource.getFullName();
+            String urlPattern = dataSource.getUrl("$id");
+            if (urlPattern.length() > 3 ){
+                urlPattern = urlPattern;
+            } else {
+                urlPattern = null;
+            }
+            idExample = dataSource.getExample().getId();
+            isPrimary = dataSource.isPrimary();
+            type = dataSource.getType();
+//            organism = dataSource.getOrganism();
+            String emptyUrn = dataSource.getURN("");
+            if (emptyUrn.length() > 1){
+                urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
+            } else {
+                urnBase = null;
+            }
+            mainUrl = dataSource.getMainUrl(); 
         }
-        idExample = dataSource.getExample().getId();
-        isPrimary = dataSource.isPrimary();
-        type = dataSource.getType();
-    	organism = dataSource.getOrganism();
-        String emptyUrn = dataSource.getURN("");
-        if (emptyUrn.length() > 1){
-            urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
-        } else {
-            urnBase = null;
-        }
-        mainUrl = dataSource.getMainUrl(); 
     }
-
+    
     public DataSource asDataSource() {
         DataSource.Builder builder = DataSource.register(sysCode, fullName);
         if (urlPattern != null){
@@ -73,11 +76,11 @@ public class DataSourceBean {
         }
         builder = builder.primary(isPrimary);
         builder = builder.type(type);
-        if (organism != null){
-            builder = builder.organism(organism);
-        }
+//        if (organism != null){
+//            builder = builder.organism(organism);
+//        }
         if (urnBase != null){
-            builder = builder.urnBase(type);
+            builder = builder.urnBase(urnBase);
         }
         if (mainUrl != null){
             builder = builder.mainUrl(mainUrl);
@@ -171,14 +174,14 @@ public class DataSourceBean {
 
     /**
      * @return the organism
-     */
+     * /
     public Object getOrganism() {
         return organism;
     }
 
     /**
      * @param organism the organism to set
-     */
+     * /
     public void setOrganism(Object organism) {
         this.organism = organism;
     }
@@ -212,6 +215,12 @@ public class DataSourceBean {
     }
      
     public String toString(){
-        return sysCode;
+        if (sysCode == null){
+            return "FullName = " + fullName;
+        }
+        if (fullName == null){
+            return "sysCode = " + sysCode;
+        }
+        return sysCode + ":" + fullName;
     }
 }

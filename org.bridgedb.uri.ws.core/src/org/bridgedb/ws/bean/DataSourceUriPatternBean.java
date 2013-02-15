@@ -19,6 +19,7 @@
 //
 package org.bridgedb.ws.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -28,161 +29,57 @@ import org.bridgedb.DataSource;
  *
  * @author Christian
  */
-@XmlRootElement(name="DataSourceUriSpaces")
-@XmlType(propOrder={"sysCode","urlPattern", "mainUrl", "fullName", "idExample", "isPrimary", "organism", "urnBase", "type", "uriSpace"})
-public class DataSourceUriPatternBean extends DataSourceBean{
-    private List<String> uriPattern;
+@XmlRootElement(name="DataSourceUriPattern")
+public class DataSourceUriPatternBean {
+    private List<UriPatternBean> uriPatterns;
 
+    private DataSourceBean DataSource;
+    
     /**
      * Empty Constructor for WebServcices
      */
     public DataSourceUriPatternBean(){
-        
+        uriPatterns = new ArrayList<UriPatternBean>();
     }
     
-    public DataSourceUriPatternBean(DataSource dataSource, List<String> uriPatterns){
-        super(dataSource);
-        uriPattern = uriPatterns;
+    public DataSourceUriPatternBean(DataSource dataSource, List<String> patterns){
+        DataSource = new DataSourceBean(dataSource);
+        uriPatterns = new ArrayList<UriPatternBean>();
+        for (String pattern:patterns){
+            uriPatterns.add(new UriPatternBean(pattern));
+        }
     }
     
     /**
      * @return the UriPattern(s)
      */
-    public List<String> getUriPattern() {
-        return uriPattern;
+    public List<UriPatternBean> getUriPatterns() {
+        return uriPatterns;
     }
 
     /**
      * @param uriPattern the uriPattern(s) to set
      */
-    public void setUriPattern(List<String> uriPatterns) {
-        this.uriPattern = uriPattern;
+    public void setUriPatterns(List<UriPatternBean> uriPatterns) {
+        this.uriPatterns = uriPatterns;
     }
 
     /**
-     * @return the sysCode
+     * @return the DataSource
      */
-    public String getSysCode() {
-        return sysCode;
+    public DataSourceBean getDataSource() {
+        return DataSource;
     }
 
     /**
-     * @param sysCode the sysCode to set
+     * @param DataSource the DataSource to set
      */
-    public void setSysCode(String sysCode) {
-        this.sysCode = sysCode;
+    public void setDataSource(DataSourceBean DataSource) {
+        this.DataSource = DataSource;
     }
 
-    /**
-     * @return the fullName
-     */
-    public String getFullName() {
-        return fullName;
+    @Override
+    public String toString(){
+        return uriPatterns + "->" + DataSource;
     }
-
-    /**
-     * @param fullName the fullName to set
-     */
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    /**
-     * @return the urlPattern
-     */
-    public String getUrlPattern() {
-        return urlPattern;
-    }
-
-    /**
-     * @param urlPattern the urlPattern to set
-     */
-    public void setUrlPattern(String urlPattern) {
-        this.urlPattern = urlPattern;
-    }
-
-    /**
-     * @return the idExample
-     */
-    public String getIdExample() {
-        return idExample;
-    }
-
-    /**
-     * @param idExample the idExample to set
-     */
-    public void setIdExample(String idExample) {
-        this.idExample = idExample;
-    }
-
-    /**
-     * @return the isPrimary
-     */
-    public boolean isIsPrimary() {
-        return isPrimary;
-    }
-
-    /**
-     * @param isPrimary the isPrimary to set
-     */
-    public void setIsPrimary(boolean isPrimary) {
-        this.isPrimary = isPrimary;
-    }
-
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * @return the organism
-     */
-    public Object getOrganism() {
-        return organism;
-    }
-
-    /**
-     * @param organism the organism to set
-     */
-    public void setOrganism(Object organism) {
-        this.organism = organism;
-    }
-
-    /**
-     * @return the urnBase
-     */
-    public String getUrnBase() {
-        return urnBase;
-    }
-
-    /**
-     * @param urnBase the urnBase to set
-     */
-    public void setUrnBase(String urnBase) {
-        this.urnBase = urnBase;
-    }
-
-    /**
-     * @return the mainUrl
-     */
-    public String getMainUrl() {
-        return mainUrl;
-    }
-
-    /**
-     * @param mainUrl the mainUrl to set
-     */
-    public void setMainUrl(String mainUrl) {
-        this.mainUrl = mainUrl;
-    }
-
 }

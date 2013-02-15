@@ -19,11 +19,13 @@
 //
 package org.bridgedb.uri;
 
+import java.net.URLEncoder;
 import org.bridgedb.uri.Mapping;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.UriPattern;
@@ -257,8 +259,16 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         report("getCheckUriPatterns");
         for (UriPattern pattern:UriPattern.getUriPatterns()){
             String uri = pattern.getPrefix() + "1234" + pattern.getPostfix();
-            Xref xref = uriMapper.toXref(uri);
-            assertEquals(pattern.getDataSource(), xref.getDataSource());
+            DataSource dataSource = pattern.getDataSource();
+            if (dataSource.getSystemCode() != null && !uri.startsWith("http://www.example.com/")){
+                System.out.println(pattern);
+                System.out.println(URLEncoder.encode(uri));
+                Xref xref = uriMapper.toXref(uri);
+                System.out.println("   " + pattern.getDataSource());
+                System.out.println("   " + xref);
+                System.out.println("   " + xref.getDataSource());
+                assertEquals(pattern.getDataSource(), xref.getDataSource());
+            }
         }
         //Date end = new Date();
         //ystem.out.println(end.getTime()-start.getTime());

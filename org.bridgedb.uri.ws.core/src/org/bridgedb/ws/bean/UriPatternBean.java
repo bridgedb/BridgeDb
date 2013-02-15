@@ -19,27 +19,45 @@
 //
 package org.bridgedb.ws.bean;
 
+import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import org.bridgedb.DataSource;
-import org.bridgedb.Xref;
 
-public class XrefBeanFactory {
-    
-    public static XrefBean asBean(Xref xref){
-        if (xref == null){
-            return null;
-        }
-        XrefBean bean = new XrefBean();
-        bean.id = xref.getId();
-        bean.dataSource = DataSourceBeanFactory.asBean(xref.getDataSource());
-        return bean;
+/**
+ *
+ * @author Christian
+ */
+@XmlRootElement(name="UriPattern")
+public class UriPatternBean {
+    private String Pattern;
+
+    /**
+     * Empty Constructor for WebServcices
+     */
+    public UriPatternBean(){
     }
     
-    public static Xref asXref(XrefBean bean) {
-        if (bean == null){
-            return null;
-        }
-        DataSource ds = DataSourceBeanFactory.asDataSource(bean.dataSource);
-        return new Xref(bean.id, ds);
+    public UriPatternBean(String pattern){
+        this.Pattern = pattern;
+    }
+    
+    /**
+     * @return the UriPattern
+     */
+    public String getPattern() {
+        return Pattern;
     }
 
+    /**
+     * @param uriPattern the uriPattern to set
+     */
+    public void setPattern(String pattern) {
+        this.Pattern = pattern;
+    }
+
+    @Override
+    public String toString(){
+        return Pattern;
+    }
 }
