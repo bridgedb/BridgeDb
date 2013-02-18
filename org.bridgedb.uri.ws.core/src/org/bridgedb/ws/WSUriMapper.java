@@ -52,6 +52,9 @@ import org.bridgedb.ws.bean.XrefBean;
 public class WSUriMapper extends WSCoreMapper implements UriMapper{
     
     WSUriInterface uriService;
+    private static final String NO_ID = null;
+    private static final String NO_SYSCODE = null;
+    private static final String NO_URI = null;
     private static final ArrayList<String> NO_SYSCODES = null;
     private static final ArrayList<String> NO_URI_PATTERNS = null;
     
@@ -151,7 +154,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
             return new HashSet<Mapping>();
         }        
         List<MappingBean> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
-                profileUri, tgtSysCodes, NO_URI_PATTERNS);
+                NO_URI, profileUri, tgtSysCodes, NO_URI_PATTERNS);
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (MappingBean bean:beans){
             results.add(MappingBean.asMapping(bean)) ;   
@@ -178,7 +181,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
             return new HashSet<Mapping>();
         }
         List<MappingBean> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
-                profileUri, NO_SYSCODES, tgtUriPatternStrings);
+                NO_URI, profileUri, NO_SYSCODES, tgtUriPatternStrings);
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (MappingBean bean:beans){
             results.add(MappingBean.asMapping(bean)) ;   
@@ -200,7 +203,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
             return new HashSet<Mapping>();
         }
         List<MappingBean> beans = uriService.map(sourceXref.getId(), sourceXref.getDataSource().getSystemCode(), 
-                profileUri, NO_SYSCODES, NO_URI_PATTERNS);
+                NO_URI, profileUri, NO_SYSCODES, NO_URI_PATTERNS);
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (MappingBean bean:beans){
             results.add(MappingBean.asMapping(bean)) ;   
@@ -232,7 +235,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         if (tgtSysCodes.isEmpty()){
             return new HashSet<Mapping>();
         }
-        List<MappingBean> beans = uriService.map(sourceUri, profileUri, tgtSysCodes, NO_URI_PATTERNS);
+        List<MappingBean> beans = uriService.map(NO_ID, NO_SYSCODE, sourceUri, profileUri, tgtSysCodes, NO_URI_PATTERNS);
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (MappingBean bean:beans){
             results.add(MappingBean.asMapping(bean)) ;   
@@ -252,7 +255,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         if (sourceUri == null){
             return new HashSet<Mapping>();
         }
-        List<MappingBean> beans = uriService.map(sourceUri, profileUri, NO_SYSCODES, NO_URI_PATTERNS);
+        List<MappingBean> beans = uriService.map(NO_ID, NO_SYSCODE, sourceUri, profileUri, NO_SYSCODES, NO_URI_PATTERNS);
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (MappingBean bean:beans){
             results.add(MappingBean.asMapping(bean)) ;   
@@ -284,7 +287,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         if (tgtUriPatternStrings.isEmpty()){
             return new HashSet<Mapping>();
         }
-        List<MappingBean> beans = uriService.map(sourceUri, profileUri, NO_SYSCODES, tgtUriPatternStrings);
+        List<MappingBean> beans = uriService.map(NO_ID, NO_SYSCODE, sourceUri, profileUri, NO_SYSCODES, tgtUriPatternStrings);
         HashSet<Mapping> results = new HashSet<Mapping>();
         for (MappingBean bean:beans){
             results.add(MappingBean.asMapping(bean)) ;   

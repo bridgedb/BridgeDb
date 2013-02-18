@@ -104,12 +104,24 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP)
     @Override
-    public List<MappingBean> map(@QueryParam(WsUriConstants.URI) String uri,
-    		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
+    public List<MappingBean> map(
+            @QueryParam(WsConstants.ID) String id,
+            @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
+    		@QueryParam(WsUriConstants.URI) String uri,
+     		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
-        if (logger.isDebugEnabled()){
-            logger.debug("map called! URI = " + uri);
+       if (logger.isDebugEnabled()){
+            logger.debug("map called! ");
+            if (id != null){
+                logger.debug("id = " + id);
+            }
+            if (scrCode != null){
+                logger.debug("   scrCode = " + scrCode);             
+            }
+            if (uri != null){
+                logger.debug("   uri = " + uri);             
+            }
             logger.debug("   profileUri = " + profileUri);
             if (targetCodes!= null || !targetCodes.isEmpty()){
                 logger.debug("   targetCodes = " + targetCodes);
@@ -118,10 +130,33 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 logger.debug("   targetUriPatterns = " + targetUriPatterns);
             }
         }
-        if (uri == null) throw new BridgeDBException("Uri parameter missing.");        
-        if (uri.isEmpty()) throw new BridgeDBException("Uri parameter may not be null.");        
         DataSource[] targetDataSources = getDataSources(targetCodes);
         UriPattern[] targetPatterns = getUriPatterns(targetUriPatterns);
+        if (id == null){
+            if (scrCode != null) {
+                throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter " + scrCode 
+                        + " should only be used together with " + WsConstants.ID + " parameter "); 
+            }
+            if (uri == null){
+                throw new BridgeDBException ("Please provide either a " + WsConstants.ID + " or a "
+                        + WsUriConstants.URI + " parameter.");                 
+            }  
+            return map(uri, profileUri, targetDataSources, targetPatterns);
+        } else {
+            if (uri != null){
+                throw new BridgeDBException ("Please provide either a " + WsConstants.ID + " or a "
+                        + WsConstants.DATASOURCE_SYSTEM_CODE + " parameter, but not both.");                 
+            }
+            if (scrCode == null) {
+                throw new BridgeDBException (WsConstants.ID + " parameter must come with a " 
+                        + WsConstants.DATASOURCE_SYSTEM_CODE + " parameter."); 
+            }
+        }
+        return map(id, scrCode, profileUri, targetDataSources, targetPatterns);
+    }
+
+    private List<MappingBean> map(String uri, String profileUri, DataSource[] targetDataSources, 
+            UriPattern[] targetPatterns) throws BridgeDBException {
         Set<Mapping> mappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
@@ -142,39 +177,10 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return results; 
     }
     
-    //public List<Mapping> map(String id, String scrCode, String profileUri, List<String> targetCodes, 
-    //        List<String> targetUriPattern) throws BridgeDBException;
-    //}
-
-
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("/" + WsUriConstants.MAP)
-    @Override
-    public List<MappingBean> map(
-            @QueryParam(WsConstants.ID) String id,
-            @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
-    		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
-            @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
-            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
-       if (logger.isDebugEnabled()){
-            logger.debug("map called! id = " + id);
-            logger.debug("   scrCode = " + scrCode);
-            logger.debug("   profileUri = " + profileUri);
-            if (targetCodes!= null || !targetCodes.isEmpty()){
-                logger.debug("   targetCodes = " + targetCodes);
-            }
-            if (targetUriPatterns!= null || !targetUriPatterns.isEmpty()){
-                logger.debug("   targetUriPatterns = " + targetUriPatterns);
-            }
-        }
-        if (id == null) throw new BridgeDBException (WsConstants.ID + " parameter can not be null");
-        if (scrCode == null) throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter can not be null"); 
+    private List<MappingBean> map(String id, String scrCode, String profileUri, DataSource[] targetDataSources, 
+            UriPattern[] targetPatterns) throws BridgeDBException {
         DataSource dataSource = DataSource.getBySystemCode(scrCode);
         Xref sourceXref = new Xref(id, dataSource);
-        //profile can be null
-        DataSource[] targetDataSources = getDataSources(targetCodes);
-        UriPattern[] targetPatterns = getUriPatterns(targetUriPatterns);
         Set<Mapping> mappings;
         if (targetDataSources == null){
             if (targetPatterns == null){

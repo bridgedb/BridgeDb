@@ -37,10 +37,7 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSUriInterface extends WSCoreInterface{
 
-    public List<MappingBean> map(String id, String scrCode, String profileUri, List<String> targetCodes, 
-            List<String> targetUriPattern) throws BridgeDBException;
-
-    public List<MappingBean> map(String uri, String profileUri, List<String> targetCodes, 
+    public List<MappingBean> map(String id, String scrCode, String uri, String profileUri, List<String> targetCodes, 
             List<String> targetUriPattern) throws BridgeDBException;
 
     public UriExistsBean UriExists(String Uri) throws BridgeDBException;
