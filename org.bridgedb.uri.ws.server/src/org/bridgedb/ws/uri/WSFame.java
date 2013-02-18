@@ -123,12 +123,12 @@ public class WSFame extends WSUriInterfaceService {
         }
         List<Mapping> mappings = null; //uriMapper.getSampleMapping(); 
         Mapping mapping1 = mappings.get(0);
-        DataSource dataSource1 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
-        Xref firstSourceXref = new Xref (mapping1.getSourceId(), dataSource1);
+        DataSource dataSource1 = null; //DataSource.getBySystemCode(mapping1.getSourceSysCode());
+        Xref firstSourceXref = null;//new Xref (mapping1.getSourceId(), dataSource1);
         String sysCode = firstSourceXref.getDataSource().getSystemCode();
         Mapping mapping2 = mappings.get(1);
-        DataSource dataSource2 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
-        Xref secondSourceXref =  new Xref (mapping2.getSourceId(), dataSource2);
+        DataSource dataSource2 = null;//DataSource.getBySystemCode(mapping1.getSourceSysCode());
+        Xref secondSourceXref =  null;//new Xref (mapping2.getSourceId(), dataSource2);
         Set<Xref> firstMaps;
         try{ 
             firstMaps = idMapper.mapID(firstSourceXref);

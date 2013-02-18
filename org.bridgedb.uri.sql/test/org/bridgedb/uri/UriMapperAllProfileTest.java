@@ -233,14 +233,14 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            assertEquals(sourceXref, mapping.getSource());
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -277,15 +277,15 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            assertEquals(sourceXref, mapping.getSource());
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
-            assertEquals(tgtDataSource, mapping.getTargetXref().getDataSource());
+            targetXrefs.add(mapping.getTarget());
+            assertEquals(tgtDataSource, mapping.getTarget().getDataSource());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -324,14 +324,14 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            assertEquals(sourceXref, mapping.getSource());
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -368,14 +368,14 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            assertEquals(sourceXref, mapping.getSource());
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -412,14 +412,14 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            assertEquals(sourceXref, mapping.getSource());
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -458,16 +458,16 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
+            assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
             assertTrue(mapping.getSourceUri().size() == 1);
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -505,16 +505,16 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
+            assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
             assertTrue(mapping.getSourceUri().size() == 1);
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -551,16 +551,16 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
+            assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
             assertTrue(mapping.getSourceUri().size() == 1);
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -598,16 +598,16 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
+            assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
             assertTrue(mapping.getSourceUri().size() == 1);
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }
@@ -645,16 +645,16 @@ public abstract class UriMapperAllProfileTest extends UriListenerTest{
         Set<Xref> targetXrefs = new HashSet<Xref>();
         Set<Integer> ids = new HashSet<Integer>(); 
         for (Mapping mapping:results){
-            assertEquals(sourceXref, mapping.getSourceXref());
+            assertEquals(sourceXref, mapping.getSource());
             assertTrue(mapping.getSourceUri().contains(sourceUri));
             assertTrue(mapping.getSourceUri().size() == 1);
-            if (!mapping.getTargetXref().equals(sourceXref)){
+            if (!mapping.getTarget().equals(sourceXref)){
                 assertThat(mapping.getPredicate(), not(equalTo(null)));            
                 assertThat(mapping.getId(), not(equalTo(null)));
                 assertThat(mapping.getMappingSetId(), not(equalTo(null)));
             }
             targetUris.addAll(mapping.getTargetUri());
-            targetXrefs.add(mapping.getTargetXref());
+            targetXrefs.add(mapping.getTarget());
             assertFalse(ids.contains(mapping.getId()));
             ids.add(mapping.getId());
         }

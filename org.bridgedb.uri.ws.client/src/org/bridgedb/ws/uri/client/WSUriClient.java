@@ -34,6 +34,7 @@ import org.bridgedb.ws.WSUriInterface;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.WsUriConstants;
 import org.bridgedb.ws.bean.DataSourceUriPatternBean;
+import org.bridgedb.ws.bean.MappingBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
@@ -58,7 +59,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public List<Mapping> map(String uri, String profileUri, List<String> targetCodes, List<String> targetUriPattern) 
+    public List<MappingBean> map(String uri, String profileUri, List<String> targetCodes, List<String> targetUriPattern) 
             throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.URI, uri);
@@ -74,16 +75,16 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
             }
         }
         //Make service call
-        List<Mapping> result = 
+        List<MappingBean> result = 
                 webResource.path(WsUriConstants.MAP)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<Mapping>>() {});
+                .get(new GenericType<List<MappingBean>>() {});
          return result;
     }
     
     @Override
-    public List<Mapping> map(String id, String scrCode, String profileUri, List<String> targetCodes, List<String> targetUriPattern) throws BridgeDBException {
+    public List<MappingBean> map(String id, String scrCode, String profileUri, List<String> targetCodes, List<String> targetUriPattern) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsConstants.ID, id);
         params.add(WsConstants.DATASOURCE_SYSTEM_CODE, scrCode);
@@ -95,11 +96,11 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
             params.add(WsUriConstants.TARGET_URI_PATTERN, target);
         }
         //Make service call
-        List<Mapping> result = 
+        List<MappingBean> result = 
                 webResource.path(WsUriConstants.MAP)
                 .queryParams(params)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<List<Mapping>>() {});
+                .get(new GenericType<List<MappingBean>>() {});
          return result;
     }
 
@@ -148,12 +149,12 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
-    public Mapping getMapping(String id) throws BridgeDBException {
+    public MappingBean getMapping(String id) throws BridgeDBException {
         //Make service call
-        Mapping result = 
+        MappingBean result = 
                 webResource.path(WsUriConstants.MAPPING + "/" + id)
                 .accept(MediaType.APPLICATION_XML_TYPE)
-                .get(new GenericType<Mapping>() {});
+                .get(new GenericType<MappingBean>() {});
          return result;
     }
 

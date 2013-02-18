@@ -20,9 +20,9 @@
 package org.bridgedb.ws;
 
 import java.util.List;
-import org.bridgedb.uri.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.DataSourceUriPatternBean;
+import org.bridgedb.ws.bean.MappingBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
@@ -37,10 +37,10 @@ import org.bridgedb.ws.bean.XrefBean;
  */
 public interface WSUriInterface extends WSCoreInterface{
 
-    public List<Mapping> map(String id, String scrCode, String profileUri, List<String> targetCodes, 
+    public List<MappingBean> map(String id, String scrCode, String profileUri, List<String> targetCodes, 
             List<String> targetUriPattern) throws BridgeDBException;
 
-    public List<Mapping> map(String uri, String profileUri, List<String> targetCodes, 
+    public List<MappingBean> map(String uri, String profileUri, List<String> targetCodes, 
             List<String> targetUriPattern) throws BridgeDBException;
 
     public UriExistsBean UriExists(String Uri) throws BridgeDBException;
@@ -49,7 +49,7 @@ public interface WSUriInterface extends WSCoreInterface{
 
     public XrefBean toXref(String Uri) throws BridgeDBException;
 
-    public Mapping getMapping(String id) throws BridgeDBException;
+    public MappingBean getMapping(String id) throws BridgeDBException;
 
     //public List<Mapping> getSampleMappings() throws BridgeDBException;
 

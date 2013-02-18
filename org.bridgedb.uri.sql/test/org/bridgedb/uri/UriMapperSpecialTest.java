@@ -161,10 +161,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         assertEquals(TEST_PREDICATE, result.getPredicate());
         assertTrue(result.getTargetUri().contains(map3Uri2));
         assertEquals(setId, result.getMappingSetId());
-        assertEquals(map3xref3.getId(), result.getSourceId());
-        assertEquals(map3xref3.getDataSource().getSystemCode(), result.getSourceSysCode());
-        assertEquals(map3xref2.getId(), result.getTargetId());
-        assertEquals(map3xref2.getDataSource().getSystemCode(), result.getTargetSysCode());
+        assertEquals(map3xref3, result.getSource());
+        assertEquals(map3xref2, result.getTarget());
     }
     
     /*@Test

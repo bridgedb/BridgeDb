@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 
@@ -36,16 +37,12 @@ import org.bridgedb.Xref;
  * <li>UriSpace: 
  * @author Christian
  */
-@XmlRootElement(name="Mapping")
 public class Mapping {
  
     private Integer id;
-    private String sourceId;
-    private String sourceSysCode;
-    private String targetId;
-    private String targetSysCode;
+    private Xref source;
+    private Xref target;
     
-    // Singleton names look better in the xml Bean 
     private Set<String> sourceUri;
     private Set<String> targetUri;
     private Integer mappingSetId;
@@ -59,15 +56,12 @@ public class Mapping {
         this.targetUri = new HashSet<String>();
     }
     
-    public Mapping (Integer id, String sourceId, String sourceSysCode, String predicate, 
-            String targetId, String targetSysCode, Integer mappingSetId){
+    public Mapping (Integer id, Xref source, String predicate, Xref target, Integer mappingSetId){
         this.id = id;
         this.sourceUri = new HashSet<String>();
-        this.sourceId = sourceId;
-        this.sourceSysCode = sourceSysCode;
+        this.source = source;
         this.targetUri = new HashSet<String>();
-        this.targetId = targetId;
-        this.targetSysCode = targetSysCode;
+        this.target = target;
         this.mappingSetId = mappingSetId;
         this.predicate = predicate;
     }
@@ -78,38 +72,18 @@ public class Mapping {
      * @param id
      * @param sysCode 
      */
-    public Mapping (String id, String sysCode){
+    public Mapping (Xref xref){
         this.id = null;
         this.sourceUri = new HashSet<String>();
-        this.sourceId = id;
-        this.sourceSysCode = sysCode;
+        this.source = xref;
         this.targetUri = new HashSet<String>();
-        this.targetId = id;
-        this.targetSysCode = sysCode;
+        this.target = xref;
         this.mappingSetId = null;
         this.predicate = null;
     }
 
     private boolean mapToSelf(){
-        if (sourceSysCode == null){
-            if (targetSysCode != null){
-                return false;
-            }
-        } else {
-            if (!sourceSysCode.equals(targetSysCode)){
-                return false;
-            } 
-        }
-        if (sourceId == null){
-            if (targetId != null){
-                return false;
-            }
-        } else {
-            if (!sourceId.equals(targetId)){
-                return false;
-            }
-        }
-        return true;
+        return source == target;
     }
 
     /**
@@ -215,16 +189,14 @@ public class Mapping {
      * @return the source
      */
     public Xref getSource() {
-        DataSource ds = DataSource.getBySystemCode(getSourceSysCode());
-        return new Xref(getSourceId(), ds);
+        return source;
     }
 
     /**
      * @return the target
      */
     public Xref getTarget() {
-        DataSource ds = DataSource.getBySystemCode(getTargetSysCode());
-        return new Xref(getTargetId(), ds);
+        return target;
     }
 
     /**
@@ -236,61 +208,57 @@ public class Mapping {
 
     /**
      * @return the sourceId
-     */
+     * /
     public String getSourceId() {
         return sourceId;
     }
 
     /**
      * @param sourceId the sourceId to set
-     */
+     * /
     public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
     }
 
     /**
      * @return the targetId
-     */
+     * /
     public String getTargetId() {
         return targetId;
     }
 
     /**
      * @param targetId the targetId to set
-     */
+     * /
     public void setTargetId(String targetId) {
         this.targetId = targetId;
     }
 
     /**
      * @return the targetSysCode
-     */
+     * / 
     public String getTargetSysCode() {
         return targetSysCode;
     }
 
     /**
      * @param targetSysCode the targetSysCode to set
-     */
+     * /
     public void setTargetSysCode(String targetSysCode) {
         this.targetSysCode = targetSysCode;
     }
-
-    public Xref getTargetXref(){
-        DataSource ds = DataSource.getBySystemCode(targetSysCode);
-        return new Xref(targetId, ds);
-    }
-
+   */
+    
     /**
      * @return the sourceSysCode
-     */
+     * /
     public String getSourceSysCode() {
         return sourceSysCode;
     }
 
     /**
      * @param sourceSysCode the sourceSysCode to set
-     */
+     * /
     public void setSourceSysCode(String sourceSysCode) {
         this.sourceSysCode = sourceSysCode;
     }

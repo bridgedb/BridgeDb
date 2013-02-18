@@ -89,6 +89,8 @@ public class SQLListener implements MappingListener{
     static final String URL_PATTERN_COLUMN_NAME = "urlPattern";
     static final String URN_BASE_COLUMN_NAME = "urnBase";
 
+    static final String FULL_NAME_PREFIX = "_";
+    
     protected SQLAccess sqlAccess;
     protected Connection possibleOpenConnection;
     private final int blockSize;
@@ -139,6 +141,23 @@ public class SQLListener implements MappingListener{
         return forwardId;
     }
 
+    final String getDataSourceKey(DataSource dataSource){
+        if (dataSource.getSystemCode() == null){
+            return insertEscpaeCharacters(FULL_NAME_PREFIX + dataSource.getFullName());
+        } else {
+            return insertEscpaeCharacters(dataSource.getSystemCode());
+        }
+    }
+    
+    final DataSource keyToDataSource(String key){
+        if (key.startsWith(FULL_NAME_PREFIX)){
+            String fullName = key.substring(FULL_NAME_PREFIX.length());
+            return DataSource.getByFullName(fullName);
+        } else {
+            return DataSource.getBySystemCode(key);
+        }
+    }
+    
     /**
      * One way registration of Mapping Set.
      * @param justification 
@@ -153,10 +172,10 @@ public class SQLListener implements MappingListener{
                     + TARGET_DATASOURCE_COLUMN_NAME + ", " 
                     + IS_TRANSITIVE_COLUMN_NAME + ") " 
                 + " VALUES (" 
-                + "'" + source.getSystemCode() + "', " 
+                + "'" + getDataSourceKey(source) + "', " 
                 + "'" + predicate + "', " 
                 + "'" + justification + "', "
-                + "'" + target.getSystemCode() + "',"
+                + "'" + getDataSourceKey(target) + "',"
                 + "'" + booleanIntoQuery(isTransitive) + "')";
         Statement statement = createStatement();
         try {
@@ -179,7 +198,7 @@ public class SQLListener implements MappingListener{
             throw new BridgeDBException ("Error getting new indetity with " + query, ex);
         }
         lastUpdate = new Date().getTime();
-        logger.info("Registered new Mappingset " + autoinc + " from " + source.getSystemCode() + " to " + target.getSystemCode());
+        logger.info("Registered new Mappingset " + autoinc + " from " + getDataSourceKey(source) + " to " + getDataSourceKey(target));
         return autoinc;
     }
 
@@ -495,18 +514,10 @@ public class SQLListener implements MappingListener{
      */
     void checkDataSourceInDatabase(DataSource source) throws BridgeDBException{
         Statement statement = this.createStatement();
-        String sysCode  = source.getSystemCode();
-        if (sysCode == null) {
-            sysCode = source.getFullName();
-            DataSource.register(sysCode,source.getFullName());
-        }
-        if (sysCode.isEmpty()) {
-            throw new BridgeDBException ("Currently unable to handle Datasources with empty systemCode");
-        }
         String query = "SELECT " + SYSCODE_COLUMN_NAME
                 + "   from " + DATASOURCE_TABLE_NAME
                 + "   where "
-                + "      " + SYSCODE_COLUMN_NAME + " = '" + source.getSystemCode() + "'"; 
+                + "      " + SYSCODE_COLUMN_NAME + " = '" + getDataSourceKey(source) + "'"; 
         boolean found;
         try {
             ResultSet rs = statement.executeQuery(query);
@@ -536,12 +547,12 @@ public class SQLListener implements MappingListener{
         insert.append(", ");
         insert.append(IS_PRIMARY_COLUMN_NAME);
         StringBuilder values = new StringBuilder ("Values ( ");
-        if (source.getSystemCode().length() > SYSCODE_LENGTH ){
+        if (getDataSourceKey(source).length() > SYSCODE_LENGTH ){
             throw new BridgeDBException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
-                    " so unable to save " + source.getSystemCode());
+                    " so unable to save " + getDataSourceKey(source));
         }
         values.append("'");
-        values.append(insertEscpaeCharacters(source.getSystemCode()));
+        values.append(insertEscpaeCharacters(getDataSourceKey(source)));
         values.append("' , ");
         if (source.isPrimary()){
             values.append (1);
@@ -739,14 +750,14 @@ public class SQLListener implements MappingListener{
             update.append (insertEscpaeCharacters(value));
             update.append ("' ");
         }
-        if (source.getSystemCode().length() > SYSCODE_LENGTH ){
+        if (getDataSourceKey(source).length() > SYSCODE_LENGTH ){
             throw new BridgeDBException("Maximum length supported for SystemCode is " + SYSCODE_LENGTH + 
-                    " so unable to save " + source.getSystemCode());
+                    " so unable to save " + getDataSourceKey(source));
         }
         update.append ("WHERE ");
         update.append (SYSCODE_COLUMN_NAME);
         update.append ("  = '");
-        update.append (insertEscpaeCharacters(source.getSystemCode()));
+        update.append (getDataSourceKey(source));
         update.append ("' ");
         //if (source.getOrganism() != null){
         //    throw new BridgeDBException("Sorry DataSource oraginism feildd is upsupported");

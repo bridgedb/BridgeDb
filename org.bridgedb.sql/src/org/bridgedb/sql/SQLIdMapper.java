@@ -98,13 +98,13 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append(" AND ( ");
             query.append(TARGET_DATASOURCE_COLUMN_NAME);
             query.append(" = '");
-            query.append(tgtDataSources[0].getSystemCode());
+            query.append(getDataSourceKey(tgtDataSources[0]));
             query.append("' ");
             for (int i = 1; i < tgtDataSources.length; i++){
                 query.append(" OR ");
                 query.append(TARGET_DATASOURCE_COLUMN_NAME);
                 query.append(" = '");
-                query.append(insertEscpaeCharacters(tgtDataSources[i].getSystemCode()));
+                query.append(getDataSourceKey(tgtDataSources[i]));
                 query.append("'");
             }
             query.append(")");
@@ -186,7 +186,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         query.append(" AND ");
             query.append(TARGET_DATASOURCE_COLUMN_NAME);
             query.append(" = '");
-            query.append(insertEscpaeCharacters(tgtDataSource.getSystemCode()));
+            query.append(getDataSourceKey(tgtDataSource));
             query.append("' ");
 
         Statement statement = this.createStatement();
@@ -374,12 +374,12 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         query.append(" WHERE ");
         query.append(SOURCE_DATASOURCE_COLUMN_NAME);
         query.append(" = '");
-            query.append(src.getSystemCode());
+            query.append(getDataSourceKey(src));
             query.append("' ");        
         query.append(" AND ");
         query.append(TARGET_DATASOURCE_COLUMN_NAME);
         query.append(" = '");
-            query.append(tgt.getSystemCode());
+            query.append(getDataSourceKey(tgt));
             query.append("' ");        
         
         Statement statement = this.createStatement();
@@ -474,7 +474,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         query.append(" AND ");
             query.append(SOURCE_DATASOURCE_COLUMN_NAME);
             query.append(" = '");
-            query.append(ref.getDataSource().getSystemCode());
+            query.append(getDataSourceKey(ref.getDataSource()));
             query.append("' ");        
     }
     

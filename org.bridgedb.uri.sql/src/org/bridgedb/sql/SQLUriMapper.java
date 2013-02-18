@@ -308,10 +308,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }    
         Set<Mapping> results = resultSetToMappingSet(sourceXref, rs);
         //Add mapping to self
-        results.add(new Mapping(sourceXref.getId(), sourceXref.getDataSource().getSystemCode()));
+        results.add(new Mapping(sourceXref));
         //Add targetUris
         for (Mapping mapping: results){
-            mapping.addTargetUris(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
+            mapping.addTargetUris(toUris(mapping.getTarget()));
         }
         return results;
     }
@@ -331,7 +331,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Set<Mapping> results = mapPart(sourceXref, profileUri, tgtDataSource);
         //Add targetUris
         for (Mapping mapping: results){
-            mapping.addTargetUris(toUris(mapping.getTargetId(), mapping.getTargetSysCode()));
+            mapping.addTargetUris(toUris(mapping.getTarget()));
         }
         return results;
     }
@@ -358,7 +358,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Set<Mapping> results = resultSetToMappingSet(sourceXref, rs);
         //Add map to self if correct
         if (sourceXref.getDataSource().equals(tgtDataSource)){
-            results.add(new Mapping(sourceXref.getId(), tgtDataSource.getSystemCode()));
+            results.add(new Mapping(sourceXref));
         }
         return results;
     }
@@ -386,7 +386,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
         Set<Mapping> results = mapPart(sourceXref, profileUri, tgtDataSource);
         for (Mapping result:results){
-            result.addTargetUri(tgtUriPattern.getUri(result.getTargetId()));
+            result.addTargetUri(tgtUriPattern.getUri(result.getTarget().getId()));
         }
         return results;
     }
@@ -479,7 +479,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             query.append(" AND ");
                 query.append(TARGET_DATASOURCE_COLUMN_NAME);
                 query.append(" = '");
-                query.append(insertEscpaeCharacters(tgtDataSource.getSystemCode()));
+                query.append(getDataSourceKey(tgtDataSource));
                 query.append("' ");   
         }
         appendProfileClause(query, profileUri);
@@ -1002,7 +1002,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (postfix == null){
             postfix = "";
         }
-        String sysCode = getSysCode(prefix, postfix);
         if (prefix.length() > PREFIX_LENGTH){
             throw new BridgeDBException("Prefix Length ( " + prefix.length() + ") is too long for " + prefix);
         }
@@ -1012,16 +1011,17 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
         prefix = insertEscpaeCharacters(prefix);
         postfix = insertEscpaeCharacters(postfix);
-        if (sysCode != null){
-            if (dataSource.getSystemCode().equals(sysCode)) return; //Already known so fine.
-            throw new BridgeDBException ("UriPattern " + prefix + "$id" + postfix + " already mapped to " + sysCode 
-                    + " Which does not match " + dataSource.getSystemCode());
+        String dataSourceKey = getDataSourceKey(prefix, postfix);
+        if (dataSourceKey != null){
+            if (getDataSourceKey(dataSource).equals(dataSourceKey)) return; //Already known so fine.
+            throw new BridgeDBException ("UriPattern " + prefix + "$id" + postfix + " already mapped to " + dataSourceKey 
+                    + " Which does not match " + getDataSourceKey(dataSource));
         }
         String query = "INSERT INTO " + URI_TABLE_NAME + " (" 
                 + DATASOURCE_COLUMN_NAME + ", " 
                 + PREFIX_COLUMN_NAME + ", " 
                 + POSTFIX_COLUMN_NAME + ") VALUES "
-                + " ('" + dataSource.getSystemCode() + "', "
+                + " ('" + getDataSourceKey(dataSource) + "', "
                 + "  '" + prefix + "',"
                 + "  '" + postfix + "')";
         Statement statement = createStatement();
@@ -1161,20 +1161,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             while (rs.next()){
                 Integer mappingId = rs.getInt(MAPPING_TABLE_NAME + "." + ID_COLUMN_NAME); 
                 String targetId = rs.getString(TARGET_ID_COLUMN_NAME);
-                String targetSysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                String targetKey = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                DataSource targetDatasource = keyToDataSource(targetKey);
+                Xref target = new Xref(targetId, targetDatasource);
                 Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
-                String sourceId;
-                String sourceSysCode;
+                Xref source;
                 if (sourceXref == null){
-                    sourceId = rs.getString(SOURCE_ID_COLUMN_NAME);
-                    sourceSysCode = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
+                    String sourceId = rs.getString(SOURCE_ID_COLUMN_NAME);
+                    String key = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
+                    DataSource sourceDataSource = keyToDataSource(key);
+                    source = new Xref(sourceId, sourceDataSource);
                 } else {
-                    sourceId = sourceXref.getId();
-                    sourceSysCode = sourceXref.getDataSource().getSystemCode();
+                    source = sourceXref;
                 }
-                Mapping uriMapping = new Mapping (mappingId, sourceId, sourceSysCode, predicate, 
-                        targetId, targetSysCode, mappingSetId);       
+                Mapping uriMapping = new Mapping (mappingId, source, predicate, target, mappingSetId);       
                 results.add(uriMapping);
             }
             return results;
@@ -1215,7 +1216,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @return sysCode of an existig DataSource or null
      * @throws BridgeDBException
      */
-    private String getSysCode(String prefix, String postfix) throws BridgeDBException {
+    private String getDataSourceKey(String prefix, String postfix) throws BridgeDBException {
         if (postfix == null){
             postfix = "";
         }
@@ -1399,11 +1400,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    private Set<String> toUris(Xref ref) throws BridgeDBException {
-        return toUris(ref.getId(), ref.getDataSource().getSystemCode());
-    }
-    
-    private Set<String> toUris(String id, String sysCode) throws BridgeDBException {
+    private Set<String> toUris(Xref xref) throws BridgeDBException {
+        DataSource dataSource = xref.getDataSource();
         StringBuilder query = new StringBuilder();
         query.append("SELECT " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME);
         query.append(" FROM ");
@@ -1411,7 +1409,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(" WHERE ");
         query.append(DATASOURCE_COLUMN_NAME);
         query.append(" = '");
-        query.append(insertEscpaeCharacters(sysCode));
+        query.append(getDataSourceKey(dataSource));
         query.append("' ");
         Statement statement = this.createStatement();
         ResultSet rs;
@@ -1425,7 +1423,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             while (rs.next()){
                 String prefix = rs.getString(PREFIX_COLUMN_NAME);
                 String postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                String uri = prefix + id + postfix;
+                String uri = prefix + xref.getId() + postfix;
                 results.add(uri);
             }
        } catch (SQLException ex) {
@@ -1434,47 +1432,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
        return results;
    }
 
-   private Set<String> getUris(String id, String sysCode) throws BridgeDBException {
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
-        query.append(PREFIX_COLUMN_NAME );
-        query.append(", ");
-        query.append(POSTFIX_COLUMN_NAME );
-        query.append(" FROM ");
-        query.append(URI_TABLE_NAME);
-        query.append(" WHERE ");
-        query.append(DATASOURCE_COLUMN_NAME);
-        query.append(" = '");
-        query.append(sysCode);
-        query.append("' ");
-        Statement statement = this.createStatement();
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());
-        } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to run query. " + query, ex);
-        }    
-        HashSet<String> results = new HashSet<String>();
-        try {
-            while (rs.next()){
-                String prefix = rs.getString(PREFIX_COLUMN_NAME);
-                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                String uri = prefix + id + postfix;
-                results.add(uri);
-            }
-       } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to parse results.", ex);
-       }
-       return results;
-    }
-
     private void addSourceURIs(Mapping mapping) throws BridgeDBException {
-        Set<String> URIs = getUris(mapping.getSourceId(), mapping.getSourceSysCode());
+        Set<String> URIs = toUris(mapping.getSource());
         mapping.addSourceUris(URIs);
     }
 
     private void addTargetURIs(Mapping mapping) throws BridgeDBException {
-        Set<String> URIs = getUris(mapping.getTargetId(), mapping.getTargetSysCode());
+        Set<String> URIs = toUris(mapping.getTarget());
         mapping.addTargetUris(URIs);
     }
 
