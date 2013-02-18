@@ -20,6 +20,7 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.statistics.OverallStatistics;
 
 /**
  *
@@ -34,19 +35,24 @@ public class OverallStatisticsBean {
     Integer numberOfTargetDataSources;
     Integer numberOfProfiles;
     
-    public OverallStatisticsBean(Integer numberOfMappings, Integer numberOfMappingSets, 
-            Integer numberOfSourceDataSources, Integer numberOfPredicates, 
-            Integer numberOfTargetDataSources, Integer numberOfProfiles){
-        this.numberOfMappings = numberOfMappings;
-        this.numberOfMappingSets = numberOfMappingSets;
-        this.numberOfSourceDataSources = numberOfSourceDataSources;
-        this.numberOfPredicates = numberOfPredicates;
-        this.numberOfTargetDataSources = numberOfTargetDataSources;
-        this.numberOfProfiles = numberOfProfiles;
-    }
-
     //Webservice constructor
     public OverallStatisticsBean(){
+    }
+    
+    public static OverallStatistics asOverallStatistics(OverallStatisticsBean bean){
+        return new OverallStatistics (bean.numberOfMappings, bean.numberOfMappingSets, bean.numberOfSourceDataSources, 
+                bean.numberOfPredicates, bean.numberOfTargetDataSources, bean.numberOfProfiles);      
+    }
+
+    public static OverallStatisticsBean asBean(OverallStatistics stats){
+        OverallStatisticsBean bean = new OverallStatisticsBean();
+        bean.numberOfMappings = stats.getNumberOfMappings();
+        bean.numberOfMappingSets = stats.getNumberOfMappingSets();
+        bean.numberOfSourceDataSources = stats.getNumberOfSourceDataSources();
+        bean.numberOfPredicates = stats.getNumberOfPredicates();
+        bean.numberOfTargetDataSources = stats.getNumberOfTargetDataSources();
+        bean.numberOfProfiles = stats.getNumberOfProfiles();      
+        return bean;
     }
     
     public String toString(){

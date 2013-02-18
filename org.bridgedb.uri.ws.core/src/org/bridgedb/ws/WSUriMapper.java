@@ -36,11 +36,8 @@ import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
-import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
-import org.bridgedb.ws.bean.ProfileBeanFactory;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 
@@ -328,13 +325,13 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     @Override
     public OverallStatistics getOverallStatistics() throws BridgeDBException {
         OverallStatisticsBean bean = uriService.getOverallStatistics();
-        return OverallStatisticsBeanFactory.asOverallStatistics(bean);
+        return OverallStatisticsBean.asOverallStatistics(bean);
     }
 
     @Override
     public MappingSetInfo getMappingSetInfo(int mappingSetId) throws BridgeDBException {
         MappingSetInfoBean bean = uriService.getMappingSetInfo("" + mappingSetId);
-        return MappingSetInfoBeanFactory.asMappingSetInfo(bean);
+        return MappingSetInfoBean.asMappingSetInfo(bean);
     }
 
     @Override
@@ -342,7 +339,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         List<MappingSetInfoBean> beans = uriService.getMappingSetInfos(sourceSysCode, targetSysCode);
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 
         for (MappingSetInfoBean bean:beans){
-            results.add(MappingSetInfoBeanFactory.asMappingSetInfo(bean));
+            results.add(MappingSetInfoBean.asMappingSetInfo(bean));
         }
         return results;  
     }
@@ -362,7 +359,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
 		List<ProfileBean> beans = uriService.getProfiles();
 		List<ProfileInfo> results = new ArrayList<ProfileInfo>();
 		for (ProfileBean bean:beans) {
-			results.add(ProfileBeanFactory.asProfileInfo(bean));
+			results.add(ProfileBean.asProfileInfo(bean));
 		}
 		return results;
 	}
@@ -371,7 +368,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
 	public ProfileInfo getProfile(String profileURI)
 			throws BridgeDBException {
 		ProfileBean profile = uriService.getProfile(profileURI);
-		ProfileInfo result = ProfileBeanFactory.asProfileInfo(profile);
+		ProfileInfo result = ProfileBean.asProfileInfo(profile);
 		return result;
 	}
     

@@ -55,11 +55,8 @@ import org.bridgedb.ws.WsUriConstants;
 import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
-import org.bridgedb.ws.bean.MappingSetInfoBeanFactory;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
-import org.bridgedb.ws.bean.ProfileBeanFactory;
 import org.bridgedb.ws.bean.UriExistsBean;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -343,7 +340,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.GET_OVERALL_STATISTICS) 
     public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {
         OverallStatistics overallStatistics = uriMapper.getOverallStatistics();
-        OverallStatisticsBean bean = OverallStatisticsBeanFactory.asBean(overallStatistics);
+        OverallStatisticsBean bean = OverallStatisticsBean.asBean(overallStatistics);
         return bean;
     }
     
@@ -364,7 +361,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         List<MappingSetInfo> infos = uriMapper.getMappingSetInfos(scrCode, targetCode);
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
-            results.add(MappingSetInfoBeanFactory.asBean(info));
+            results.add(MappingSetInfoBean.asBean(info));
         }
         return results;
     }
@@ -375,7 +372,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Path("/profile/{id}")
 	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDBException {
 		ProfileInfo profile = uriMapper.getProfile(Profile.getProfileURI(Integer.parseInt(id)));
-		ProfileBean result = ProfileBeanFactory.asBean(profile);
+		ProfileBean result = ProfileBean.asBean(profile);
 		return result;
 	}
     
@@ -387,7 +384,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 		List<ProfileInfo> profiles = uriMapper.getProfiles();
 		List<ProfileBean> results = new ArrayList<ProfileBean>();
 		for (ProfileInfo profile:profiles) {
-			results.add(ProfileBeanFactory.asBean(profile));
+			results.add(ProfileBean.asBean(profile));
 		}
 		return results;
 	}
@@ -401,7 +398,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         if (idString.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
         int id = Integer.parseInt(idString);
         MappingSetInfo info = uriMapper.getMappingSetInfo(id);
-        return MappingSetInfoBeanFactory.asBean(info);
+        return MappingSetInfoBean.asBean(info);
     }
 
     @GET

@@ -20,6 +20,7 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.statistics.MappingSetInfo;
 
 /**
  *
@@ -40,15 +41,22 @@ public class MappingSetInfoBean {
     public MappingSetInfoBean(){
     }
     
-    public MappingSetInfoBean(String id, String sourceSysCode, String predicate, String targetSysCode, 
-            Integer numberOfLinks, boolean isTransitive){
-        this.id = id;
-        this.sourceSysCode = sourceSysCode;
-        this.predicate = predicate;
-        this.targetSysCode = targetSysCode;
-        this.numberOfLinks = numberOfLinks;
-        this.isTransitive = isTransitive;
+    public static MappingSetInfo asMappingSetInfo(MappingSetInfoBean bean){
+        return new MappingSetInfo(bean.getId(), bean.getSourceSysCode(), bean.getPredicate(), bean.getTargetSysCode(), 
+            bean.getNumberOfLinks(), bean.isIsTransitive());
     }
+
+    public static MappingSetInfoBean asBean(MappingSetInfo info) {
+        MappingSetInfoBean bean = new MappingSetInfoBean();
+        bean.id = info.getId();
+        bean.sourceSysCode = info.getSourceSysCode();
+        bean.predicate = info.getPredicate();
+        bean.targetSysCode = info.getTargetSysCode();
+        bean.numberOfLinks = info.getNumberOfLinks();
+        bean.isTransitive = info.isTransitive();
+        return bean;
+    }
+    
     
     /**
      * @return the id
