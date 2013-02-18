@@ -259,12 +259,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
             String uri = pattern.getPrefix() + "1234" + pattern.getPostfix();
             DataSource dataSource = pattern.getDataSource();
             if (dataSource.getSystemCode() != null && !uri.startsWith("http://www.example.com/")){
-                System.out.println(pattern);
-                System.out.println(URLEncoder.encode(uri));
                 Xref xref = uriMapper.toXref(uri);
-                System.out.println("   " + pattern.getDataSource());
-                System.out.println("   " + xref);
-                System.out.println("   " + xref.getDataSource());
                 assertEquals(pattern.getDataSource(), xref.getDataSource());
             }
         }

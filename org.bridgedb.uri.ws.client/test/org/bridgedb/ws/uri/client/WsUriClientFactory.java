@@ -49,8 +49,6 @@ public class WsUriClientFactory extends org.bridgedb.utils.IDMapperTestBase{
             org.junit.Assume.assumeTrue(false);        
         }
         if (!webService.isMappingSupported(DataSource1.getSystemCode(), DataSource2.getSystemCode()).isMappingSupported()){
-            System.out.println(DataSource1);
-            System.out.println(DataSource2);
         //ystem.out.println("in WSCoreInterface 5a");
             System.err.println ("***** SKIPPING WSClientTest ******");
             System.err.println ("It appears the Test data is not loaded");
