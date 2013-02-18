@@ -70,7 +70,9 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         if (uri != null){
             params.add(WsUriConstants.URI, uri);            
         }
-        params.add(WsUriConstants.PROFILE_URI, profileUri);
+        if (profileUri != null){
+            params.add(WsUriConstants.PROFILE_URI, profileUri);        
+        }
         if (targetCodes != null){
             for (String target:targetCodes){
                 params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, target);
