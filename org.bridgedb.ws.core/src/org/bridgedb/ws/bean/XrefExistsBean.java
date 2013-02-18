@@ -20,6 +20,7 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.Xref;
 
 /**
  *
@@ -34,6 +35,13 @@ public class XrefExistsBean {
     public XrefExistsBean(){
     }
         
+    public static XrefExistsBean asBean(Xref xref, boolean exists){
+        XrefExistsBean bean = new XrefExistsBean();
+        bean.exists = exists;
+        bean.Xref = XrefBean.asBean(xref);
+        return bean;
+    }
+    
     /**
      * @return the isSupported
      */

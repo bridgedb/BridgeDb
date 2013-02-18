@@ -20,6 +20,7 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.Xref;
 
 @XmlRootElement(name="XrefMapping")
 public class XrefMapBean {
@@ -28,6 +29,13 @@ public class XrefMapBean {
     
     public XrefMapBean(){}
 
+    public static XrefMapBean asBean(Xref source, Xref target) {
+        XrefMapBean bean = new XrefMapBean();
+        bean.source = XrefBean.asBean(source);
+        bean.target = XrefBean.asBean(target);
+        return bean;
+    }
+    
     /**
      * @return the source
      */

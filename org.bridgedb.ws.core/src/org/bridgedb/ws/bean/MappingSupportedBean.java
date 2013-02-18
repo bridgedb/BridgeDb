@@ -20,6 +20,7 @@
 package org.bridgedb.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.DataSource;
 
 /**
  *
@@ -33,6 +34,14 @@ public class MappingSupportedBean {
     DataSourceBean target;
 
     public MappingSupportedBean(){
+    }
+    
+    public static MappingSupportedBean asBean(DataSource sourceDataSource, DataSource targetDataSource, boolean supported){
+        MappingSupportedBean bean = new MappingSupportedBean();
+        bean.source = DataSourceBean.asBean(sourceDataSource);
+        bean.target = DataSourceBean.asBean(targetDataSource);
+        bean.isMappingSupported = supported;
+        return bean;
     }
     
     /**

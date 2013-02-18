@@ -19,8 +19,13 @@
 //
 package org.bridgedb.ws.bean;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bridgedb.DataSource;
+import org.bridgedb.utils.BridgeDBException;
 
 @XmlRootElement(name="DataSourceMapping")
 public class DataSourceMapBean {
@@ -30,6 +35,31 @@ public class DataSourceMapBean {
     
     public DataSourceMapBean(){}
 
+    public static DataSourceMapBean asBean(DataSource source, Set<DataSource> tgtDataSource){
+        DataSourceMapBean bean = new DataSourceMapBean();
+        bean.source = DataSourceBean.asBean(source);
+        bean.target = new ArrayList<DataSourceBean>();
+        for (DataSource tgt:tgtDataSource){
+           bean.target.add(DataSourceBean.asBean(tgt));
+        }
+        return bean;
+    }
+
+    public static DataSource AsDataSource(DataSourceMapBean bean) throws BridgeDBException {
+        if (bean.source == null){
+            return null;
+        }
+        return DataSourceBean.asDataSource(bean.source);
+    }
+
+    public static Set<DataSource> getMappedSet(DataSourceMapBean bean) throws BridgeDBException {
+        HashSet<DataSource> results = new HashSet<DataSource>();
+        for (DataSourceBean trg:bean.target){
+            results.add(DataSourceBean.asDataSource(trg));
+        }
+        return results;
+    }
+    
     /**
      * @return the source
      */

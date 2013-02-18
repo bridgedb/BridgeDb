@@ -41,13 +41,10 @@ import org.bridgedb.ws.bean.CapabilitiesBean;
 import org.bridgedb.ws.bean.DataSourceBean;
 import org.bridgedb.ws.bean.FreeSearchSupportedBean;
 import org.bridgedb.ws.bean.MappingSupportedBean;
-import org.bridgedb.ws.bean.MappingSupportedBeanFactory;
 import org.bridgedb.ws.bean.PropertyBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.bridgedb.ws.bean.XrefExistsBean;
-import org.bridgedb.ws.bean.XrefExistsBeanFactory;
 import org.bridgedb.ws.bean.XrefMapBean;
-import org.bridgedb.ws.bean.XrefMapBeanFactory;
 
 @Path("/")
 public class WSCoreService implements WSCoreInterface {
@@ -152,7 +149,7 @@ public class WSCoreService implements WSCoreInterface {
             Map<Xref, Set<Xref>>  mappings = idMapper.mapID(srcXrefs, targetDataSources);
             for (Xref source:mappings.keySet()){
                 for (Xref target:mappings.get(source)){
-                    results.add(XrefMapBeanFactory.asBean(source, target));
+                    results.add(XrefMapBean.asBean(source, target));
                 }
             }
         } catch (IDMapperException e){
@@ -173,7 +170,7 @@ public class WSCoreService implements WSCoreInterface {
         DataSource dataSource = DataSource.getBySystemCode(scrCode);
         Xref source = new Xref(id, dataSource);
         try {
-            return XrefExistsBeanFactory.asBean(source, idMapper.xrefExists(source));
+            return XrefExistsBean.asBean(source, idMapper.xrefExists(source));
         } catch (IDMapperException e){
             throw BridgeDBException.convertToBridgeDB(e);
         }
@@ -218,7 +215,7 @@ public class WSCoreService implements WSCoreInterface {
         DataSource src = DataSource.getBySystemCode(sourceCode);
         DataSource tgt = DataSource.getBySystemCode(targetCode);
         try {
-            return MappingSupportedBeanFactory.asBean(src, tgt, idMapper.getCapabilities().isMappingSupported(src, tgt));
+            return MappingSupportedBean.asBean(src, tgt, idMapper.getCapabilities().isMappingSupported(src, tgt));
         } catch (IDMapperException e){
             throw BridgeDBException.convertToBridgeDB(e);
         }
