@@ -37,14 +37,14 @@ public class XrefBean {
     public XrefBean (Xref xref){
         if (xref != null){
             id = xref.getId();
-            dataSource = new DataSourceBean(xref.getDataSource());
+            dataSource = DataSourceBean.asBean(xref.getDataSource());
         }
     }
 
     public Xref asXref(){
         DataSource ds;
         if (dataSource != null){
-             ds = dataSource.asDataSource();
+             ds = DataSourceBean.asDataSource(dataSource);
         } else {
             ds = null;
         }

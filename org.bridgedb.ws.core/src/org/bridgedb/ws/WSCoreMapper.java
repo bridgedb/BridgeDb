@@ -163,7 +163,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         List<DataSourceBean> beans = webService.getSupportedSrcDataSources();
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean bean:beans){
-            results.add(bean.asDataSource());
+            results.add(DataSourceBean.asDataSource(bean));
         }
         return results;
     }
@@ -173,7 +173,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         List<DataSourceBean> beans = webService.getSupportedTgtDataSources();
         HashSet<DataSource> results = new HashSet<DataSource>();
         for (DataSourceBean bean:beans){
-            results.add(bean.asDataSource());
+            results.add(DataSourceBean.asDataSource(bean));
         }
         return results;
     }

@@ -42,48 +42,55 @@ public class DataSourceBean {
     public DataSourceBean(){
     }
 
-    public DataSourceBean(DataSource dataSource){
-        if (dataSource != null){
-            sysCode = dataSource.getSystemCode();
-            fullName = dataSource.getFullName();
-            String urlPattern = dataSource.getUrl("$id");
-            if (urlPattern.length() > 3 ){
-                urlPattern = urlPattern;
-            } else {
-                urlPattern = null;
-            }
-            idExample = dataSource.getExample().getId();
-            isPrimary = dataSource.isPrimary();
-            type = dataSource.getType();
-//            organism = dataSource.getOrganism();
-            String emptyUrn = dataSource.getURN("");
-            if (emptyUrn.length() > 1){
-                urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
-            } else {
-                urnBase = null;
-            }
-            mainUrl = dataSource.getMainUrl(); 
+    public static DataSourceBean asBean(DataSource dataSource){
+        if (dataSource == null){
+            return null;
         }
+        DataSourceBean bean = new DataSourceBean();
+        bean.sysCode = dataSource.getSystemCode();
+        bean.fullName = dataSource.getFullName();
+        String urlPattern = dataSource.getUrl("$id");
+        if (urlPattern.length() > 3 ){
+            bean.urlPattern = urlPattern;
+        } else {
+            bean.urlPattern = null;
+        }
+        bean.idExample = dataSource.getExample().getId();
+        bean.isPrimary = dataSource.isPrimary();
+        bean.type = dataSource.getType();
+        //Object organism = dataSource.getOrganism();
+        //if (organism instanceof Organism)
+        String emptyUrn = dataSource.getURN("");
+        if (emptyUrn.length() > 1){
+            bean.urnBase = emptyUrn.substring(0, emptyUrn.length()-1);    
+        } else {
+            bean.urnBase = null;
+        }
+        bean.mainUrl = dataSource.getMainUrl(); 
+        return bean;
     }
     
-    public DataSource asDataSource() {
-        DataSource.Builder builder = DataSource.register(sysCode, fullName);
-        if (urlPattern != null){
-            builder = builder.urlPattern(urlPattern);
+    public static DataSource asDataSource(DataSourceBean bean) {
+        if (bean == null){
+            return null;
         }
-        if (idExample != null){
-            builder = builder.idExample(idExample);
+        DataSource.Builder builder = DataSource.register(bean.sysCode, bean.fullName);
+        if (bean.urlPattern != null){
+            builder = builder.urlPattern(bean.urlPattern);
         }
-        builder = builder.primary(isPrimary);
-        builder = builder.type(type);
+        if (bean.idExample != null){
+            builder = builder.idExample(bean.idExample);
+        }
+        builder = builder.primary(bean.isPrimary);
+        builder = builder.type(bean.type);
 //        if (organism != null){
 //            builder = builder.organism(organism);
 //        }
-        if (urnBase != null){
-            builder = builder.urnBase(urnBase);
+        if (bean.urnBase != null){
+            builder = builder.urnBase(bean.urnBase);
         }
-        if (mainUrl != null){
-            builder = builder.mainUrl(mainUrl);
+        if (bean.mainUrl != null){
+            builder = builder.mainUrl(bean.mainUrl);
         }
         return builder.asDataSource();
     }

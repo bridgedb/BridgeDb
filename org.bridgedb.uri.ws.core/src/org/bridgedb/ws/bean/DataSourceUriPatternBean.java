@@ -42,7 +42,7 @@ public class DataSourceUriPatternBean {
     }
     
     public DataSourceUriPatternBean(DataSource dataSource, Set<String> patterns){
-        DataSource = new DataSourceBean(dataSource);
+        DataSource = DataSourceBean.asBean(dataSource);
         UriPattern = patterns;
     }
     

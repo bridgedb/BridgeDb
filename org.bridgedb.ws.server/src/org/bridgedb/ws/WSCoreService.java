@@ -82,7 +82,7 @@ public class WSCoreService implements WSCoreInterface {
         try {
             Set<DataSource> dataSources = capabilities.getSupportedSrcDataSources();
             for (DataSource dataSource:dataSources){
-                DataSourceBean bean = new DataSourceBean(dataSource);
+                DataSourceBean bean = DataSourceBean.asBean(dataSource);
                 sources.add(bean);
             }
         } catch (IDMapperException e){
@@ -188,7 +188,7 @@ public class WSCoreService implements WSCoreInterface {
         try {
             Set<DataSource> dataSources = idMapper.getCapabilities().getSupportedSrcDataSources();
             for (DataSource dataSource:dataSources){
-                DataSourceBean bean = new DataSourceBean(dataSource);
+                DataSourceBean bean = DataSourceBean.asBean(dataSource);
                 targets.add(bean);
             }
         } catch (IDMapperException e){

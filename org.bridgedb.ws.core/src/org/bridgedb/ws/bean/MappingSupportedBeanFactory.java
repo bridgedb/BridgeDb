@@ -31,8 +31,8 @@ public class MappingSupportedBeanFactory {
     
     public static MappingSupportedBean asBean(DataSource sourceDataSource, DataSource targetDataSource, boolean supported){
         MappingSupportedBean bean = new MappingSupportedBean();
-        bean.source = new DataSourceBean(sourceDataSource);
-        bean.target = new DataSourceBean(targetDataSource);
+        bean.source = DataSourceBean.asBean(sourceDataSource);
+        bean.target = DataSourceBean.asBean(targetDataSource);
         bean.isMappingSupported = supported;
         return bean;
     }

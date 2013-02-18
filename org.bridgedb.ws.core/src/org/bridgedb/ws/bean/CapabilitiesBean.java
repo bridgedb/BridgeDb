@@ -60,10 +60,10 @@ public class CapabilitiesBean implements IDMapperCapabilities{
             Set<DataSource> sources = capabilities.getSupportedSrcDataSources();
             Set<DataSource> targets = capabilities.getSupportedTgtDataSources();
             for (DataSource dataSource:targets){
-                targetDataSource.add(new DataSourceBean(dataSource));
+                targetDataSource.add(DataSourceBean.asBean(dataSource));
             }
             for (DataSource source:sources){
-                sourceDataSource.add(new DataSourceBean(source));
+                sourceDataSource.add(DataSourceBean.asBean(source));
                 HashSet<DataSource> mappedTargets = new HashSet<DataSource>();
                 for (DataSource target:targets){
                     if (capabilities.isMappingSupported(source, target)){
@@ -92,7 +92,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     public Set<DataSource> getSupportedSrcDataSources() throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:sourceDataSource){
-            results.add(bean.asDataSource());
+            results.add(DataSourceBean.asDataSource(bean));
         }
         return results;
     }
@@ -101,7 +101,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     public Set<DataSource> getSupportedTgtDataSources() throws BridgeDBException {
         HashSet<DataSource> results = new HashSet<DataSource>();       
         for (DataSourceBean bean:targetDataSource){
-            results.add(bean.asDataSource());
+            results.add(DataSourceBean.asDataSource(bean));
         }
         return results;
     }
@@ -109,7 +109,7 @@ public class CapabilitiesBean implements IDMapperCapabilities{
     @Override
     public boolean isMappingSupported(DataSource src, DataSource tgt) throws BridgeDBException {
         for (DataSourceMapBean bean:supportedMapping){
-            if (DataSourceMapBeanFactory.getKey(bean) == src ){
+            if (DataSourceMapBeanFactory.AsDataSource(bean) == src ){
                 Set<DataSource> targets = DataSourceMapBeanFactory.getMappedSet(bean);
                 return targets.contains(tgt);
             }
