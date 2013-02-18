@@ -304,7 +304,10 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         logger.info(URI);
         Xref xref = uriMapper.toXref(URI);
         logger.info(xref);
-        return new XrefBean(xref);
+        if (xref == null){
+            return new XrefBean();  //Returns an empty bean
+        }
+        return XrefBean.asBean(xref);
     }
 
     @GET

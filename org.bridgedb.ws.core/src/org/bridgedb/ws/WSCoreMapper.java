@@ -72,13 +72,13 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
             Set<Xref> targets = null;
             if (bean.getSource() != null){
                 System.out.println(bean.getSource());
-                source = bean.getSource().asXref();
+                source = XrefBean.asXref(bean.getSource());
                 targets = results.get(source);
             }
             if (targets == null){
                 targets = new HashSet<Xref>(); 
             }
-            targets.add(bean.getTarget().asXref());
+            targets.add(XrefBean.asXref(bean.getTarget()));
             results.put(source, targets);
         }
         return results;
@@ -99,7 +99,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefMapBean bean:beans){
             if (bean.getTarget() != null){
-                results.add(bean.getTarget().asXref());
+                results.add(XrefBean.asXref(bean.getTarget()));
             }
         }
         return results;
@@ -119,7 +119,7 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
         List<XrefBean>  beans = webService.freeSearch(text, "" + limit);
         HashSet<Xref> results = new HashSet<Xref>();
         for (XrefBean bean:beans){
-            results.add(bean.asXref());
+            results.add(XrefBean.asXref(bean));
         }
         return results;
     }

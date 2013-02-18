@@ -31,8 +31,8 @@ public class XrefMapBeanFactory {
 
     public static XrefMapBean asBean(Xref source, Xref target) {
         XrefMapBean bean = new XrefMapBean();
-        bean.source = new XrefBean(source);
-        bean.target = new XrefBean(target);
+        bean.source = XrefBean.asBean(source);
+        bean.target = XrefBean.asBean(target);
         return bean;
     }
 

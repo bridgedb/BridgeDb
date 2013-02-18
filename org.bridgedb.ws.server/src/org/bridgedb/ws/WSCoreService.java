@@ -117,7 +117,7 @@ public class WSCoreService implements WSCoreInterface {
     protected List<XrefBean> setXrefToListXrefBeans(Set<Xref> xrefs){
        ArrayList<XrefBean> results = new ArrayList<XrefBean>();
         for (Xref xref:xrefs){
-           results.add(new XrefBean(xref));
+           results.add(XrefBean.asBean(xref));
         }
         return results;        
     }

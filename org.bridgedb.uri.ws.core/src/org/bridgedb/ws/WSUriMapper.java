@@ -311,7 +311,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         if (bean == null){
             return null;
         }
-        return bean.asXref();
+        return XrefBean.asXref(bean);
     }
 
     @Override

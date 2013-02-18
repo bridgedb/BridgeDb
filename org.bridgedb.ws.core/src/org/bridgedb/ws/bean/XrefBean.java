@@ -28,27 +28,34 @@ public class XrefBean {
     String id;
     DataSourceBean dataSource;
     
-    public XrefBean(){}
+    public XrefBean(){
+        id = null;
+        dataSource = null;
+    }
         
     public String getId() {
         return id;
     }
   
-    public XrefBean (Xref xref){
-        if (xref != null){
-            id = xref.getId();
-            dataSource = DataSourceBean.asBean(xref.getDataSource());
+    public static XrefBean asBean(Xref xref){
+        if (xref == null){
+            return null;
         }
+        XrefBean bean = new XrefBean();
+        bean.id = xref.getId();
+        bean.dataSource = DataSourceBean.asBean(xref.getDataSource());
+        return bean;
     }
 
-    public Xref asXref(){
-        DataSource ds;
-        if (dataSource != null){
-             ds = DataSourceBean.asDataSource(dataSource);
-        } else {
-            ds = null;
+    public static Xref asXref(XrefBean bean){
+        if (bean == null){
+            return null;
         }
-        return new Xref(id, ds);
+        DataSource ds = DataSourceBean.asDataSource(bean.dataSource);
+        if (ds == null && bean.id == null){
+            return null;
+        }
+        return new Xref(bean.id, ds);
     }
     
     public void setId(String id) {

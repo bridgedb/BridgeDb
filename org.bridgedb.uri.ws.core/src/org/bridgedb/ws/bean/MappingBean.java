@@ -60,16 +60,17 @@ public class MappingBean {
         MappingBean bean = new MappingBean();
         bean.setId(mapping.getId());
         bean.setSourceUri(mapping.getSourceUri());
-        bean.setSource(new XrefBean(mapping.getSource()));
+        bean.setSource(XrefBean.asBean(mapping.getSource()));
         bean.setTargetUri(mapping.getTargetUri());
-        bean.setTarget(new XrefBean(mapping.getTarget()));
+        bean.setTarget(XrefBean.asBean(mapping.getTarget()));
         bean.setMappingSetId(mapping.getMappingSetId());
         bean.setPredicate(mapping.getPredicate());
         return bean;
     }
 
     public static Mapping asMapping (MappingBean bean){
-        Mapping result = new Mapping (bean.getId(),  bean.getSource().asXref(), bean.getPredicate(), bean.getTarget().asXref(), 
+        Mapping result = new Mapping (bean.getId(),  XrefBean.asXref(bean.getSource()), bean.getPredicate(), 
+                XrefBean.asXref(bean.getTarget()), 
                 bean.getMappingSetId());
         result.setSourceUri(bean.getSourceUri());
         result.setTargetUri(bean.getTargetUri());
