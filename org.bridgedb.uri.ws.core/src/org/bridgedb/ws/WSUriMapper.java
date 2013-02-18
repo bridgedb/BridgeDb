@@ -41,7 +41,6 @@ import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.OverallStatisticsBeanFactory;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.ProfileBeanFactory;
-import org.bridgedb.ws.bean.UriPatternBean;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 
@@ -351,16 +350,10 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     @Override
     public Set<String> getUriPatterns(String dataSource) throws BridgeDBException {
         DataSourceUriPatternBean bean = uriService.getDataSource(dataSource);
-        if (bean == null || bean.getUriPatterns() == null){
-            System.out.println("failed with " + dataSource);
-            System.out.println(bean);
+        if (bean == null) {
             return new HashSet<String>();
         } else {
-            Set<String> results = new HashSet<String>();
-            for (UriPatternBean pattern:bean.getUriPatterns()){
-                results.add(pattern.getPattern());
-            }
-            return results;
+            return bean.getUriPattern();
         }
     }
 

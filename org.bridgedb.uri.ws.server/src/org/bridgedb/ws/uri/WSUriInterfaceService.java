@@ -415,9 +415,8 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     public DataSourceUriPatternBean getDataSource(@PathParam("id") String id) throws BridgeDBException {
         if (id == null) throw new BridgeDBException("Path parameter missing.");
         if (id.isEmpty()) throw new BridgeDBException("Path parameter may not be null.");
-        List<String> uriPatterns = new ArrayList<String>(uriMapper.getUriPatterns(id));
         DataSource ds = DataSource.getBySystemCode(id);
-        DataSourceUriPatternBean bean = new DataSourceUriPatternBean(ds, uriPatterns);
+        DataSourceUriPatternBean bean = new DataSourceUriPatternBean(ds, uriMapper.getUriPatterns(id));
         return bean;
     }
     

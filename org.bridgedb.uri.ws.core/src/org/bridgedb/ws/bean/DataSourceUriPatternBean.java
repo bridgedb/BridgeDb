@@ -19,10 +19,9 @@
 //
 package org.bridgedb.ws.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import org.bridgedb.DataSource;
 
 /**
@@ -31,7 +30,7 @@ import org.bridgedb.DataSource;
  */
 @XmlRootElement(name="DataSourceUriPattern")
 public class DataSourceUriPatternBean {
-    private List<UriPatternBean> uriPatterns;
+    private Set<String> UriPattern;
 
     private DataSourceBean DataSource;
     
@@ -39,31 +38,14 @@ public class DataSourceUriPatternBean {
      * Empty Constructor for WebServcices
      */
     public DataSourceUriPatternBean(){
-        uriPatterns = new ArrayList<UriPatternBean>();
+        UriPattern = new HashSet<String>();
     }
     
-    public DataSourceUriPatternBean(DataSource dataSource, List<String> patterns){
+    public DataSourceUriPatternBean(DataSource dataSource, Set<String> patterns){
         DataSource = new DataSourceBean(dataSource);
-        uriPatterns = new ArrayList<UriPatternBean>();
-        for (String pattern:patterns){
-            uriPatterns.add(new UriPatternBean(pattern));
-        }
+        UriPattern = patterns;
     }
     
-    /**
-     * @return the UriPattern(s)
-     */
-    public List<UriPatternBean> getUriPatterns() {
-        return uriPatterns;
-    }
-
-    /**
-     * @param uriPattern the uriPattern(s) to set
-     */
-    public void setUriPatterns(List<UriPatternBean> uriPatterns) {
-        this.uriPatterns = uriPatterns;
-    }
-
     /**
      * @return the DataSource
      */
@@ -80,6 +62,20 @@ public class DataSourceUriPatternBean {
 
     @Override
     public String toString(){
-        return uriPatterns + "->" + DataSource;
+        return UriPattern + "->" + DataSource;
+    }
+
+    /**
+     * @return the UriPattern
+     */
+    public Set<String> getUriPattern() {
+        return UriPattern;
+    }
+
+    /**
+     * @param UriPattern the UriPattern to set
+     */
+    public void setUriPattern(Set<String> UriPattern) {
+        this.UriPattern = UriPattern;
     }
 }
