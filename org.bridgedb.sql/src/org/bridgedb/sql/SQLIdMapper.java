@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourceOverwriteLevel;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
@@ -63,8 +64,15 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         super(dropTables, storeType);
         useLimit = SqlFactory.supportsLimit();
         useTop = SqlFactory.supportsTop();
+        validateData();
      }   
 
+    public final void validateData() throws BridgeDBException{
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        //These will throw an exception if any of the syscodes are unknown.
+        getSupportedSrcDataSources();
+        getSupportedTgtDataSources();        
+    }
     //*** IDMapper Methods 
     
     @Override

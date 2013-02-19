@@ -27,7 +27,9 @@ import java.sql.Statement;
 import java.util.Date;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourceOverwriteLevel;
 import org.bridgedb.mapping.MappingListener;
+import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 
@@ -59,21 +61,21 @@ public class SQLListener implements MappingListener{
     private static final int SQL_TIMEOUT = 2;
     private static final int MAX_BLOCK_SIZE = 1000;
     
-    static final String DATASOURCE_TABLE_NAME = "DataSource";
+    //static final String DATASOURCE_TABLE_NAME = "DataSource";
     static final String INFO_TABLE_NAME = "info";  //Do not change as used by RDG packages as well
     static final String MAPPING_TABLE_NAME = "mapping";
     static final String MAPPING_SET_TABLE_NAME = "mappingSet";
     static final String PROPERTIES_TABLE_NAME = "properties";
 
-    static final String FULL_NAME_COLUMN_NAME = "fullName";
+    //static final String FULL_NAME_COLUMN_NAME = "fullName";
     static final String ID_COLUMN_NAME = "id";
-    static final String ID_EXAMPLE_COLUMN_NAME = "idExample";
-    static final String IS_PRIMARY_COLUMN_NAME = "isPrimary";
+    //static final String ID_EXAMPLE_COLUMN_NAME = "idExample";
+    //static final String IS_PRIMARY_COLUMN_NAME = "isPrimary";
     static final String IS_PUBLIC_COLUMN_NAME = "isPublic";
     static final String IS_TRANSITIVE_COLUMN_NAME = "isTransitive";  
     static final String JUSTIFICATION_COLUMN_NAME = "justification";
     static final String KEY_COLUMN_NAME = "theKey";
-    static final String MAIN_URL_COLUMN_NAME = "mainUrl";
+    //static final String MAIN_URL_COLUMN_NAME = "mainUrl";
     static final String MAPPING_COUNT_COLUMN_NAME = "mappingCount";
     static final String MAPPING_SET_ID_COLUMN_NAME = "mappingSetId";
     static final String MAPPING_SET_DOT_ID_COLUMN_NAME = MAPPING_SET_TABLE_NAME + "." + ID_COLUMN_NAME;
@@ -106,6 +108,8 @@ public class SQLListener implements MappingListener{
     static final Logger logger = Logger.getLogger(SQLListener.class);
 
     public SQLListener(boolean dropTables, StoreType storeType) throws BridgeDBException{
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        BridgeDBRdfHandler.init();
         this.sqlAccess = SqlFactory.createTheSQLAccess(storeType);
         this.supportsIsValid = SqlFactory.supportsIsValid();
         this.autoIncrement = SqlFactory.getAutoIncrementCommand();
@@ -115,7 +119,7 @@ public class SQLListener implements MappingListener{
             logger.info("Recreated all tables!");
         } else {
             checkVersion();
-            loadDataSources();
+            //loadDataSources();
         }
         if (SqlFactory.supportsMultipleInserts()){
             blockSize = MAX_BLOCK_SIZE;
@@ -132,8 +136,8 @@ public class SQLListener implements MappingListener{
     public synchronized int registerMappingSet(DataSource source, String predicate, 
     		String justification, DataSource target, 
             boolean symetric, boolean isTransitive) throws BridgeDBException {
-        checkDataSourceInDatabase(source);
-        checkDataSourceInDatabase(target);
+        //checkDataSourceInDatabase(source);
+        //checkDataSourceInDatabase(target);
         int forwardId = registerMappingSet(source, target, predicate, justification, isTransitive);
         if (symetric){
             registerMappingSet(target, source, predicate, justification, isTransitive);
@@ -366,7 +370,7 @@ public class SQLListener implements MappingListener{
   			sh.execute( //Add compatibility version of GDB
 					"INSERT INTO " + INFO_TABLE_NAME + " VALUES ( " + SQL_COMPAT_VERSION + ")");
             //TODO add organism as required
-            sh.execute("CREATE TABLE " + DATASOURCE_TABLE_NAME 
+            /*sh.execute("CREATE TABLE " + DATASOURCE_TABLE_NAME 
                     + "  (  " + SYSCODE_COLUMN_NAME     + " VARBINARY(" + SYSCODE_LENGTH + ") NOT NULL,   "
                     + "     " + IS_PRIMARY_COLUMN_NAME  + " SMALLINT,                                  "
                     + "     " + FULL_NAME_COLUMN_NAME   + " VARCHAR(" + FULLNAME_LENGTH + "),      "
@@ -375,7 +379,7 @@ public class SQLListener implements MappingListener{
                     + "     " + ID_EXAMPLE_COLUMN_NAME  + " VARCHAR(" + ID_LENGTH + "),           "
                     + "     " + TYPE_COLUMN_NAME        + " VARCHAR(" + TYPE_LENGTH + "),              "
                     + "     " + URN_BASE_COLUMN_NAME    + " VARCHAR(" + URNBASE_LENGTH + ")         "
-                    + "  ) ");
+                    + "  ) ");*/
             String query = "CREATE TABLE " + MAPPING_TABLE_NAME 
                     + "( " + ID_COLUMN_NAME             + " INT " + autoIncrement + " PRIMARY KEY, " 
                     + "  " + SOURCE_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, "
@@ -504,14 +508,14 @@ public class SQLListener implements MappingListener{
     	}
     }
     
-    /**
+    /*
      * Verifies that the Data Source is saved in the database.
      * Updating or adding the Data Source as required.
      * <p>
      * This is required to allow the DataSource registry to be rebuilt if the service is restarted.
      * @param source A DataSource to check
      * @throws BridgeDBException 
-     */
+     * /
     void checkDataSourceInDatabase(DataSource source) throws BridgeDBException{
         Statement statement = this.createStatement();
         String query = "SELECT " + SYSCODE_COLUMN_NAME
@@ -530,15 +534,15 @@ public class SQLListener implements MappingListener{
         } else {
             writeDataSource(source);
         }
-    }
+    }*/
     
-    /**
+    /*
      * Adds a DataSource to the SQL database.
      * <p>
      * By the time this methods is called the assumption is that the DataSource did not yet exist in the database.
      * @param source DataSource to save.
      * @throws BridgeDBException 
-     */
+     * /
     private void writeDataSource(DataSource source) throws BridgeDBException{
         StringBuilder insert = new StringBuilder ("INSERT INTO ");
         insert.append(DATASOURCE_TABLE_NAME);
@@ -649,7 +653,7 @@ public class SQLListener implements MappingListener{
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to writeDataSource " + update, ex);
         }
-    }
+    }*/
 
     /**
      * Writes all booleans as 1 or 0 because Virtuoso appears not able to handle the boolean type.
@@ -662,12 +666,12 @@ public class SQLListener implements MappingListener{
         return "0";
     }
     
-    /**
+    /*
      * Updates the DataBase record assoicated with a DataSource that has previous been dettermined to already exist.
      * 
      * @param source DataSource whose info will be updated/ confirmed.
      * @throws BridgeDBException 
-     */
+     * /
     private void updateDataSource(DataSource source) throws BridgeDBException{
         StringBuilder update = new StringBuilder("UPDATE ");
         update.append (DATASOURCE_TABLE_NAME);
@@ -768,7 +772,7 @@ public class SQLListener implements MappingListener{
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to updateDataSource " + update, ex);
         }
-    }
+    }*/
 
     /**
      * Updates the property LastUpdayes with the current date and time.
@@ -798,12 +802,12 @@ public class SQLListener implements MappingListener{
         }
     }
 
-    /**
+    /*
      * Loads all the DataSources stored in the database into the DataSource registry.
      * <p>
      * This together with checkDataSourceInDatabase ensures that the DataSource registry is constant between runs.
      * @throws BridgeDBException 
-     */
+     * /
     private void loadDataSources() throws BridgeDBException{
         try {
             Statement statement = this.createStatement();
@@ -844,7 +848,7 @@ public class SQLListener implements MappingListener{
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to load DataSources");
         }
-    }
+    }*/
     
     /**
      * Updates the count variable for each Mapping Sets.

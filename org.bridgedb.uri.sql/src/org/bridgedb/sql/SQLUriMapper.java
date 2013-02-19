@@ -91,7 +91,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
      public SQLUriMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
         super(dropTables, storeType);
-        BridgeDBRdfHandler.init();
         if (dropTables){
             Collection<UriPattern> patterns = UriPattern.getUriPatterns();
             for (UriPattern pattern:patterns){
@@ -979,7 +978,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public void registerUriPattern(DataSource source, String uriPattern) throws BridgeDBException {
-        checkDataSourceInDatabase(source);
+        //checkDataSourceInDatabase(source);
         int pos = uriPattern.indexOf("$id");
         if (pos == -1) {
             throw new BridgeDBException ("uriPattern " + uriPattern + " does not contain \"$id\"");
@@ -998,7 +997,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     
     @Override
     public void registerUriPattern(DataSource dataSource, String prefix, String postfix) throws BridgeDBException {
-        checkDataSourceInDatabase(dataSource);
+        //checkDataSourceInDatabase(dataSource);
         if (postfix == null){
             postfix = "";
         }
