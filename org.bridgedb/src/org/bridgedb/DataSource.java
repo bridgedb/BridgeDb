@@ -123,7 +123,7 @@ public final class DataSource
      * @since Version 2
      */
     public static void setOverwriteLevel(DataSourceOverwriteLevel level){
-        overwriteLevel = level;
+       overwriteLevel = level;
     }
 	
 	/** 
@@ -846,26 +846,43 @@ public final class DataSource
 	 * @param systemCode short unique code to query for
 	 * @return pre-existing DataSource object by system code, 
 	 * 	if it exists, or creates a new one. 
+     * <p>
+     * Since Version 2 if Overwrite Level is Strict this method no longer creates a new DataSource. 
+     * Rather it throws an IllegalArgumentException.
 	 */
 	public static DataSource getBySystemCode(String systemCode)
 	{
-		if (!bySysCode.containsKey(systemCode) && isSuitableKey(systemCode))
-		{
+        if (bySysCode.containsKey(systemCode)){
+            return bySysCode.get(systemCode);
+        }
+        if (overwriteLevel == DataSourceOverwriteLevel.STRICT){
+            throw new IllegalArgumentException("No know DataSource known for " + systemCode);
+        }
+        if (isSuitableKey(systemCode)){
 			register (systemCode, null);
-		}
-		return bySysCode.get(systemCode);
+        }
+        return bySysCode.get(systemCode);
 	}
 	
 	/** 
 	 * returns pre-existing DataSource object by 
 	 * full name, if it exists, 
 	 * or creates a new one. 
+     * <p>
+     * Since Version 2 if Overwrite Level is Strict this method no longer creates a new DataSource. 
+     * Rather it throws an IllegalArgumentException.
 	 * @param fullName full name to query for
 	 * @return DataSource
 	 */
 	public static DataSource getByFullName(String fullName)
 	{
-		if (!byFullName.containsKey(fullName) && isSuitableKey(fullName))
+		if (byFullName.containsKey(fullName)){
+    		return byFullName.get(fullName);
+        }
+        if (overwriteLevel == DataSourceOverwriteLevel.STRICT){
+            throw new IllegalArgumentException("No know DataSource known for " + fullName);
+        }
+		if (isSuitableKey(fullName))
 		{
 			register (null, fullName);
 		}
