@@ -304,11 +304,10 @@ public class SQLListener implements MappingListener{
 	 */
 	protected void dropSQLTables() throws BridgeDBException
 	{
- 		dropTable("info");
- 		dropTable("mapping");
- 		dropTable("DataSource");
- 		dropTable("mappingSet");
- 		dropTable("properties");
+ 		dropTable(INFO_TABLE_NAME);
+ 		dropTable(MAPPING_TABLE_NAME);
+ 		dropTable(MAPPING_SET_TABLE_NAME);
+ 		dropTable(PROPERTIES_TABLE_NAME);
      }
     
     /**

@@ -60,6 +60,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private static final int PREFIX_LENGTH = 400;
     private static final int POSTFIX_LENGTH = 100;
+    private static final int PROFILE_URI_LENGTH = 100;
     private static final int MIMETYPE_LENGTH = 50;
     private static final int CREATED_BY_LENGTH = 150;
     
@@ -74,6 +75,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String JUSTIFICATION_URI_COLUMN_NAME = "justificationURI";
     private static final String PREFIX_COLUMN_NAME = "prefix";
     private static final String PROFILE_ID_COLUMN_NAME = "profileId";
+    private static final String PROFILE_URI_COLUMN_NAME = "profileUri";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
     private static final String MIMETYPE_COLUMN_NAME = "mimetype";
     private static final String NAME_COLUMN_NAME = "name";
@@ -127,16 +129,17 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL, "
                     + "     mimeType VARCHAR(" + MIMETYPE_LENGTH + ") NOT NULL "
                     + "  ) ");
-            sh.execute("CREATE TABLE " + PROFILE_TABLE_NAME + " ( " +
-            		PROFILE_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " +
-            		NAME_COLUMN_NAME + " VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " +
-            		CREATED_ON_COLUMN_NAME + " DATETIME, " +
-            		CREATED_BY_COLUMN_NAME + " VARCHAR(" + CREATED_BY_LENGTH + ") " +
-            		")");
-            sh.execute("CREATE TABLE " + PROFILE_JUSTIFICATIONS_TABLE_NAME + " ( " +
-            		PROFILE_ID_COLUMN_NAME + " INT NOT NULL, " +
-            		JUSTIFICATION_URI_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " +
-            		")");
+            sh.execute("CREATE TABLE " + PROFILE_TABLE_NAME + " ( " 
+            		+ PROFILE_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " 
+                    + PROFILE_URI_COLUMN_NAME + " VARCHAR(" + PROFILE_URI_LENGTH + "), "
+            		+ NAME_COLUMN_NAME + " VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " 
+            		+ CREATED_ON_COLUMN_NAME + " DATETIME, " 
+            		+ CREATED_BY_COLUMN_NAME + " VARCHAR(" + CREATED_BY_LENGTH + ") "
+            		+ ")");
+            sh.execute("CREATE TABLE " + PROFILE_JUSTIFICATIONS_TABLE_NAME + " ( " 
+                    + PROFILE_URI_COLUMN_NAME + " VARCHAR(" + PROFILE_URI_LENGTH + ") NOT NULL, "
+            		+ JUSTIFICATION_URI_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " 
+            		+ ")");
             sh.close();
 		} catch (SQLException e)
 		{
@@ -515,12 +518,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (profileUri == null){
             profileUri = Profile.getDefaultProfile();
         }
-        int profileID = extractIDFromURI(profileUri);
-        if (profileID != 0) {
-            String profileJustificationQuery = "SELECT justificationURI FROM profileJustifications WHERE profileId = ";
+        if (!profileUri.equals(Profile.getAllProfile())) {
+            String profileJustificationQuery = "SELECT " + JUSTIFICATION_URI_COLUMN_NAME
+                    + " FROM " + PROFILE_JUSTIFICATIONS_TABLE_NAME 
+                    + " WHERE " + PROFILE_URI_COLUMN_NAME + " = ";
             try {
         		Statement statement = this.createStatement();    		
-        		ResultSet rs = statement.executeQuery(profileJustificationQuery + "'" + profileID + "'");
+        		ResultSet rs = statement.executeQuery(profileJustificationQuery + "'" + profileUri + "'");
         		if (!rs.next()) throw new BridgeDBException("Unknown profile identifier " + profileUri);
         		query.append(" AND mappingSet.justification IN (");
         		do {
@@ -897,47 +901,34 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     			+ " FROM " + PROFILE_TABLE_NAME);
     	Statement statement = this.createStatement();
     	List<ProfileInfo> profiles = new ArrayList<ProfileInfo>();
+        ResultSet rs;
     	try {
-			ResultSet rs = statement.executeQuery(query);
-			while (rs.next()) {
-				int profileId = rs.getInt(PROFILE_ID_COLUMN_NAME);
-				String name = rs.getString(NAME_COLUMN_NAME);
-				String createdOn = rs.getString(CREATED_ON_COLUMN_NAME);
-				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
-				Set<String> justifications = getJustificationsForProfile(profileId);
-				String profileUri = Profile.getProfileURI(profileId);
-				profiles.add(new ProfileInfo(profileUri, name, createdOn, createdBy, justifications));
-			}
+			rs = statement.executeQuery(query);
 		} catch (SQLException e) {
 			throw new BridgeDBException("Unable to retrieve profiles.", e);
 		}
-    	return profiles;
+        return resultSetToProfileInfos(rs);
     }
     
     @Override
     public ProfileInfo getProfile(String profileURI) throws BridgeDBException {
-    	int profileID = extractIDFromURI(profileURI);
     	String query = ("SELECT * " +
-    			"FROM " + PROFILE_TABLE_NAME + " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileID);
+    			"FROM " + PROFILE_TABLE_NAME + " WHERE " + PROFILE_URI_COLUMN_NAME + " = " + profileURI);
     	Statement statement = this.createStatement();
-    	ProfileInfo profile = null;
+        ResultSet rs;
 		try {
-			ResultSet rs = statement.executeQuery(query);
-			if (!rs.next()) {
-				throw new BridgeDBException("No profile with the URI " + profileURI);
-			}
-			do {
-				int profileId = rs.getInt(PROFILE_ID_COLUMN_NAME);
-				String name = rs.getString(NAME_COLUMN_NAME);
-				String createdOn = rs.getString(CREATED_ON_COLUMN_NAME);
-				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
-				Set<String> justifications = getJustificationsForProfile(profileId);
-				profile = new ProfileInfo(profileURI, name, createdOn, createdBy, justifications);
-			} while (rs.next());
+			rs = statement.executeQuery(query);
 		} catch (SQLException e) {
 			throw new BridgeDBException("Unable to retrieve profiles.", e);
 		}
-    	return profile;
+        List<ProfileInfo> profiles = resultSetToProfileInfos(rs);
+        if (profiles.isEmpty()) {
+            throw new BridgeDBException("No profile with the URI " + profileURI);
+        }
+        if (profiles.isEmpty()) {
+            throw new BridgeDBException("More than one profile found with the URI " + profileURI);
+        }
+    	return profiles.get(0);
     }
 
     @Override
@@ -958,10 +949,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     // **** UriListener Methods
     
-    private Set<String> getJustificationsForProfile(int profileId) throws BridgeDBException {
+    private Set<String> getJustificationsForProfile(String profileUri) throws BridgeDBException {
     	String query = ("SELECT " + JUSTIFICATION_URI_COLUMN_NAME 
     			+ " FROM " + PROFILE_JUSTIFICATIONS_TABLE_NAME
-    			+ " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileId);
+    			+ " WHERE " + PROFILE_URI_COLUMN_NAME + " = " + profileUri);
     	Statement statement = this.createStatement();
     	Set<String> justifications = new HashSet<String>();
     	try {
@@ -1204,6 +1195,23 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
+    private List<ProfileInfo> resultSetToProfileInfos(ResultSet rs ) throws BridgeDBException{
+     	List<ProfileInfo> profiles = new ArrayList<ProfileInfo>();
+    	try {
+			while (rs.next()) {
+				int profileId = rs.getInt(PROFILE_ID_COLUMN_NAME);
+				String name = rs.getString(NAME_COLUMN_NAME);
+				String createdOn = rs.getString(CREATED_ON_COLUMN_NAME);
+				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
+				String profileUri = rs.getString(PROFILE_URI_COLUMN_NAME);
+				Set<String> justifications = getJustificationsForProfile(profileUri);
+				profiles.add(new ProfileInfo(profileUri, name, createdOn, createdBy, justifications));
+			}
+		} catch (SQLException e) {
+			throw new BridgeDBException("Unable to retrieve profiles.", e);
+		}
+    	return profiles;
+    }
 
     /**
      * Finds the SysCode of the DataSource which includes this prefix and postfix
@@ -1291,7 +1299,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
        }
     }
 
-    public int registerProfile(String name, URI createdBy, URI... justificationUris) 
+    public String registerProfile(String name, URI createdBy, URI... justificationUris) 
             throws BridgeDBException {
         return registerProfile(name, new Date(), createdBy, justificationUris); 
     }
@@ -1300,32 +1308,30 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         String name = "Default";
         URI createdBy = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.uri.sql/src/org/bridgedb/sql/SQLUrlMapper.java");
         URI justification = new URIImpl(Profile.getDefaultJustifictaion());
-        int id = registerProfile(name, createdBy, justification);
-        String uri = Profile.getProfileURI(id);
+        String uri = registerProfile(name, createdBy, justification);
         if (!uri.equals(Profile.getDefaultProfile())){
             throw new BridgeDBException("Incorrect Default Profile URI created. Created " + uri + " but should have been "
                     + Profile.getDefaultProfile());
         }
         name = "Test";
         justification = new URIImpl(Profile.getTestJustifictaion());
-        id = registerProfile(name, createdBy, justification);
-        uri = Profile.getProfileURI(id);
+        uri = registerProfile(name, createdBy, justification);
         if (!uri.equals(Profile.getTestProfile())){
             throw new BridgeDBException("Incorrect Test Profile URI created. Created " + uri + " but should have been "
                     + Profile.getDefaultProfile());
         }
     }
 
-    public int registerProfile(String name, Date createdOn, URI createdBy, URI... justificationUris) 
+    public String registerProfile(String name, Date createdOn, URI createdBy, URI... justificationUris) 
             throws BridgeDBException {
     	startTransaction();
-    	int profileId = createProfile(name, createdOn, createdBy);
-    	insertJustifications(profileId, justificationUris);
+    	String profileUri = createProfile(name, createdOn, createdBy);
+    	insertJustifications(profileUri, justificationUris);
     	commitTransaction();
-    	return profileId;
+    	return profileUri;
     }
 
-	private int createProfile(String name, Date createdOn, URI createdBy)
+	private String createProfile(String name, Date createdOn, URI createdBy)
 			throws BridgeDBException {
         Timestamp timestamp = new Timestamp(createdOn.getTime());
 		String insertStatement = "INSERT INTO " + PROFILE_TABLE_NAME
@@ -1353,27 +1359,42 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         	rollbackTransaction();
             throw new BridgeDBException ("Error registering new profile " + insertStatement, ex);
         }
-        return profileId;
+        return createProfileUri(profileId);
 	}
 	
-	private void insertJustifications(int profileId, URI... justificationUris) throws BridgeDBException {
+	private String createProfileUri(int profileId) throws BridgeDBException {
+        String uri = Profile .getProfileURI(profileId);
+		String updateStatement = "UPDATE " + PROFILE_TABLE_NAME
+                + " SET " + PROFILE_URI_COLUMN_NAME + "=\"" + uri + "\" "
+                + " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileId;
+        try {
+        	Statement statement = createStatement();
+            int updates = statement.executeUpdate(updateStatement);
+            if (updates != 1){
+                throw new BridgeDBException ("Unexpected " + updates + " number of profiles updated.");
+            }
+        } catch (SQLException ex) {
+        	rollbackTransaction();
+            throw new BridgeDBException ("Error adding profile uri " + updateStatement, ex);
+        }
+        return uri;
+	}
+
+    private void insertJustifications(String profileUri, URI... justificationUris) throws BridgeDBException {
 		String sql = "INSERT INTO " + PROFILE_JUSTIFICATIONS_TABLE_NAME  +
                                                        
-				"( " + PROFILE_ID_COLUMN_NAME + ", " + JUSTIFICATION_URI_COLUMN_NAME + ") " +
-				"VALUES ( " + profileId + ", " + "?)";
-		try {
-			PreparedStatement statement = createPreparedStatement(sql);
-			for (URI uri : justificationUris) {
+				"( " + PROFILE_URI_COLUMN_NAME + ", " + JUSTIFICATION_URI_COLUMN_NAME + ") " +
+				"VALUES ( \"" + profileUri + "\", " + "?)";
+        PreparedStatement statement = createPreparedStatement(sql);
+        for (URI uri : justificationUris) {
+            try {
 				statement.setString(1, uri.stringValue());
 				statement.execute();
-			}
-		} catch (BridgeDBException ex) {
-			rollbackTransaction();
-			throw ex;
-		} catch (SQLException ex) {
-			rollbackTransaction();
-			throw new BridgeDBException("Error inserting justification.", ex);
-		}
+            } catch (SQLException ex) {
+            	rollbackTransaction();
+                throw new BridgeDBException("Error inserting justification." + sql + " with " + uri, ex);
+            }
+        }
 	}
 
     private void appendSystemCodes(StringBuilder query, String sourceSysCode, String targetSysCode) {

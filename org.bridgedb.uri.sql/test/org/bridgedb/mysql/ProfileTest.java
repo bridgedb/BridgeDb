@@ -60,7 +60,7 @@ public class ProfileTest extends org.bridgedb.uri.UriListenerTest {
         URI[] justificationUris = new URI[2];
         justificationUris[0] = new URIImpl("http://example.com/Justifictaion1"); 
         justificationUris[1] = new URIImpl("http://example.com/Justifictaion2"); 
-        int id = sqlUriMapper.registerProfile(name, createdBy,justificationUris);
+        String uri = sqlUriMapper.registerProfile(name, createdBy,justificationUris);
     }
 
 }
