@@ -356,7 +356,11 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
 
     @Override
     public void addParent(LeafMetaData parentLeaf) {
-        //Do nothing I think;
+        if (parentLeaf != null){
+            LinkedResource parent = (LinkedResource) parentLeaf;
+            rawRDF.addAll(parent.rawRDF);
+            ids.addAll(parent.ids);
+        }
     }
 
     @Override

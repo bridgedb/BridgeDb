@@ -53,8 +53,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             throws BridgeDBException {
         Set<Statement> statements = new HashSet(incomingStatements);
         this.metaDataRegistry = specification;
-        Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
         Set<Resource> ids = findIds(statements);
+        Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
         for (Resource id:ids){
             if (!resourcesMap.containsKey(id)){
                ResourceMetaData resourceMetaData =  getResourceMetaData(id, statements);
@@ -139,6 +139,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             ResourceMetaData parent = resourcesMap.get(statement.getSubject());
             if (parent == null){
                 errors.add("No resource found for " + statement.getSubject() + " unable to find parent");                
+                throw new IllegalStateException("No resource found for " + statement.getSubject() + " unable to find parent");
             } 
             Value object = statement.getObject();
             if (object instanceof Resource){
@@ -206,7 +207,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         for (ResourceMetaData resource:resourcesMap.values()){
             if (!resource.isSuperset()){
                 if (!resource.hasRequiredValues()){
-                    return false;
+                     return false;
                 } else {
                 }
             }

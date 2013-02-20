@@ -44,7 +44,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class LinksetVoidInformationTest extends TestUtils{
     
-    private static LinksetVoidInformation instance;
+    static LinksetVoidInformation instance;
     
     public LinksetVoidInformationTest() {
     }
