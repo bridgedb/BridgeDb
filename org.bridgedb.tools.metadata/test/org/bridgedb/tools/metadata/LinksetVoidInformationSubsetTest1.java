@@ -42,11 +42,11 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
-public class LinksetVoidInformationSubsetTest extends LinksetVoidInformationTest{
+public class LinksetVoidInformationSubsetTest1 extends LinksetVoidInformationSubsetTest{
     
-    public static String LINK_FILE = "test-data/chemspider2chemblrdf-linksetSubSet.ttl";
+    public static String LINK_FILE = "test-data/chemspider2chemblrdf-linksetSubSet1.ttl";
     
-    public LinksetVoidInformationSubsetTest() {
+    public LinksetVoidInformationSubsetTest1() {
     }
 
     @BeforeClass
@@ -54,18 +54,6 @@ public class LinksetVoidInformationSubsetTest extends LinksetVoidInformationTest
         LinksetStatements statements = new LinksetStatementReader(LINK_FILE);
         instance = new LinksetVoidInformation(FileTest.LINK_FILE, statements, ValidationType.LINKS);
     }
-
-    /**
-     * Test of getLinksetResource method, of class LinksetVoidInformation.
-     */
-    @Test
-    public void testGetLinksetResource() throws Exception {
-        report("getLinksetResource");
-        Resource result = instance.getLinksetResource();
-        Resource expected = new URIImpl("http://data.kasabi.com/dataset/chembl-rdf/void.ttl/chembl-rdf-compounds_cs_linkset_jan2013");
-        assertEquals(expected, result);
-    }
-
 
 
 }
