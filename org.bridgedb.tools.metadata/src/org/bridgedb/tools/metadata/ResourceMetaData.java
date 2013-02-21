@@ -172,24 +172,23 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         if (!isParent){
             //Wrong method called 
             appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
-        } else if (!this.hasCorrectTypes()) {
-            //Report all to pick up the incorrect type
+        } else { 
             appendSpecific(builder, tabLevel);
-            for (MetaDataBase child:childMetaData){
-                child.appendValidityReport(builder, false, false, tabLevel + 1);
-            }
-            if (hasRequiredValues()) {
-                tab(builder, tabLevel+1);
-                builder.append("All Required values found but above incorrectly typed. ");
-                newLine(builder);
-            } else {
-                tab(builder, tabLevel+1);
-                builder.append("WARNING: Incomplete so can only be used as a superset ");
-                newLine(builder);                
-            }
-        } else if (includeWarnings) {
-            appendSpecific(builder, tabLevel);
-            if (hasRequiredValues()) {
+            if (!this.hasCorrectTypes()) {            
+                //Report all to pick up the incorrect type
+                for (MetaDataBase child:childMetaData){
+                    child.appendValidityReport(builder, false, false, tabLevel + 1);
+                }
+                if (hasRequiredValues()) {
+                    tab(builder, tabLevel+1);
+                    builder.append("All Required values found but above incorrectly typed. ");
+                    newLine(builder);
+                } else {
+                    tab(builder, tabLevel+1);
+                    builder.append("WARNING: Incomplete so can only be used as a superset ");
+                    newLine(builder);                
+                }
+            } else if (hasRequiredValues()) {
                 tab(builder, tabLevel+1);
                 builder.append("All Required values found and correctly typed. ");
                 newLine(builder);
@@ -198,8 +197,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
                 builder.append("WARNING: Incomplete so can only be used as a superset ");
                 newLine(builder);                
             }
-        } else {
-            //Not including warnings so keep report small
+            newLine(builder);                
         }
     }
     
