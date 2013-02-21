@@ -68,6 +68,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         }
         addSubsets(subsetStatements);
         checkAllRemainingAreLinks(statements);
+        LinkedResource.setLinked();
         this.source = source;
     }
     

@@ -68,7 +68,9 @@
     pav:sourceAccessedOn "2012-02-22T10:59:38Z"^^xsd:dateTime ;
 # ADDED BY CHRISTIAN
     <http://purl.org/pav/createdWith> <http://missingInfo.com>;
+    <http://rdfs.org/ns/void#dataDump> <http://missingInfo.com>;
    pav:sourceAccessedBy <http://missingInfo.com> .
+
 
 # Description of the ChemSpider dataset
 :chemSpiderDataset 
@@ -100,6 +102,7 @@
 	pav:retrievedFrom <https://www.dropbox.com/sh/6zboa8z9i9vrzyl/7NxayhkUH0/ChEMBL20120731.zip>;
 	pav:retrievedOn "2012-08-02T10:23:56Z"^^xsd:dateTime;
 	pav:retrievedBy <http://www.cs.man.ac.uk/~graya/me.ttl> ;
+   <http://rdfs.org/ns/void#dataDump> <http://missingInfo.com>;
     pav:createdWith <http://example.com> ;
 .
 

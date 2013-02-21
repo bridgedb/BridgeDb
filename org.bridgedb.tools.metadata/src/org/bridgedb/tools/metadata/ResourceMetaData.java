@@ -37,7 +37,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     private final URI resourceType;
     private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
-    private boolean isParent = false;
+    private boolean isParent1 = false;
+    private boolean isLinked = false;
     private boolean directlyLinkedTo = false;
     private static String UNSPECIFIED = "unspecified";
     private String label; 
@@ -169,7 +170,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }
      
     public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws BridgeDBException{
-        if (!isParent){
+        if (!isSuperset()){
             //Wrong method called 
             appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
         } else { 
@@ -209,11 +210,11 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             LeafMetaData parentLeaf = parent.getLeafByPredicate(predicate);
             leaf.addParent(parentLeaf);
         }
-        parent.isParent = true;
+        parent.isParent1 = true;
     }
 
     boolean isSuperset() {
-        return isParent;
+        return isParent1 && !isLinked;
     }
 
     public void appendSummary(StringBuilder builder, int tabLevel) throws BridgeDBException {
@@ -229,7 +230,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
                     builder.append(" OK!");
                 } else if (this.hasRequiredValues()){
                     builder.append(" has missing MUST values.");
-                } else if (isParent){
+                } else if (isSuperset()){
                     builder.append(" can only be used as a superset.");
                 } else {
                     builder.append(" incomplete!");
@@ -247,5 +248,9 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     void addChildren(List<MetaDataBase> childMetaData) {
         super.addChildren(childMetaData);
+    }
+
+    void setAsLinked() {
+        isLinked = true;
     }
 }
