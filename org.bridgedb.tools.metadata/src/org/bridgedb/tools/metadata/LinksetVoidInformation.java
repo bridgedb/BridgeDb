@@ -73,7 +73,6 @@ public class LinksetVoidInformation implements MetaData {
      }
     
     private ResourceMetaData findLinkSet(){
-        System.out.println("***");
         Set<ResourceMetaData> possibleResults = collection.getResourceMetaDataByType(VoidConstants.LINKSET);
         if (possibleResults == null){
             error = "No Resource found with the type " + VoidConstants.LINKSET + ". ";
@@ -91,10 +90,8 @@ public class LinksetVoidInformation implements MetaData {
                 if (linkset == null){
                     linkset = possible;
                 } else if (linkset.isSuperset()){
-                    System.out.println(linkset.id + " is superset");
                     linkset = possible;
                 } else if (possible.isSuperset()){
-                    System.out.println(possible.id + " is superset");
                     //ignore possible
                 } else {
                     error = "Found more than one Resource with the type " + VoidConstants.LINKSET + ". \n\t" + possibleResults;
@@ -102,8 +99,7 @@ public class LinksetVoidInformation implements MetaData {
                 }
             }
         } else {
-            System.out.println("Only 1 found");
-             linkset = possibleResults.iterator().next();
+              linkset = possibleResults.iterator().next();
         }
         linksetResource = linkset.getId();
         return linkset;
