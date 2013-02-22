@@ -59,8 +59,9 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (!resourcesMap.containsKey(id)){
                ResourceMetaData resourceMetaData =  getResourceMetaData(id, statements);
                if (resourceMetaData == null){
-                   logger.warn(id + " has no known rdf:type ");
-                   errors.add(id + " has no known rdf:type ");                   
+                    logger.warn(id + " has no known rdf:type ");
+                    errors.add(id + " has no known rdf:type ");                   
+                    throw new IllegalStateException("No type for " + id);               
                } else {
                    resourcesMap.put(id, resourceMetaData);
                }
@@ -80,16 +81,26 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI, statements);
         ResourceMetaData resourceMetaData = null;
         for (Value type:types){
-            ResourceMetaData rmd =  metaDataRegistry.getResourceByType(type);
-            if (rmd != null){
+            if (resourceMetaData == null){
+                resourceMetaData = metaDataRegistry.getExistingResourceByType(type);
+            } else if (metaDataRegistry.getExistingResourceByType(type) != null){
+                errors.add(id + " has multiple types " + resourceMetaData.getType() + " and " + type);
+                errors.add(id + " will has only been validated as " + resourceMetaData.getType());
+            }
+        }
+        if (resourceMetaData == null){
+            for (Value type:types){
                 if (resourceMetaData == null){
-                   resourceMetaData = rmd; 
-                   resourceMetaData.loadValues(id, statements, this);
+                    resourceMetaData = metaDataRegistry.getResourceByType(type);
                 } else {
-                   errors.add(id + " has a second known rdf:type " + type);
+                    errors.add(id + " has multiple unknown types " + resourceMetaData.getType() + " and " + type);
                 }
             }
-        } 
+        }
+        if (resourceMetaData == null){
+            resourceMetaData = metaDataRegistry.getResourceByType(null);
+        }
+        resourceMetaData.loadValues(id, statements, this);
         return resourceMetaData;
     }
     
@@ -104,7 +115,6 @@ public class MetaDataCollection extends AppendBase implements MetaData {
                  Value object = statement.getObject();
                  if (object instanceof Resource){
                      results.add((Resource)object);
-                     errors.add(VoidConstants.SUBSET + " has unexpected non resource object " + object);
                  }
             }
         }  

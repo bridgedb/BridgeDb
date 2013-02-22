@@ -166,6 +166,15 @@ public class MetaDataSpecification {
         return new URIImpl(id);
     }
     
+    public ResourceMetaData getExistingResourceByType(Value type){
+        ResourceMetaData resourceMetaData =  resourcesByType.get(type);
+        if (resourceMetaData == null){
+            return null;
+        } else {
+            return resourceMetaData.getSchemaClone();
+        }
+    }
+    
     public ResourceMetaData getResourceByType(Value type) throws BridgeDBException{
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
@@ -267,5 +276,6 @@ public class MetaDataSpecification {
         }
         return new PropertyMetaData(predicate, type, requirementLevel, range.toString());
     }
+
 
 }
