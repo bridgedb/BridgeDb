@@ -210,6 +210,9 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 if (rmd == null){
                     return false;
                 } else {
+                    if (!resourceType.equals(rmd.getType())){
+                        return false;
+                    }
                     if (!rmd.hasRequiredValues()){
                         return false;
                     }
@@ -275,6 +278,15 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     builder.append("ERROR: Resource ");
                     builder.append(id);
                     builder.append(" is missing or not correctly typed. ");
+                    newLine(builder);
+                } else if (!resourceType.equals(rmd.getType())){
+                    tab(builder, tabLevel);
+                    builder.append("ERROR: ");
+                    builder.append(name);
+                    builder.append(" found with type ");
+                    builder.append(rmd.getType());            
+                    builder.append(" but the requirment is type ");
+                    builder.append(resourceType);            
                     newLine(builder);
                 } else {
                     String linkReport = rmd.validityReport(includeWarnings);
