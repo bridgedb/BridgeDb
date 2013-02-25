@@ -43,11 +43,20 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     private static String UNSPECIFIED = "unspecified";
     private String label; 
 
-    ResourceMetaData(URI type) {
-        super(type.getLocalName(), UNSPECIFIED, RequirementLevel.SHOULD, new ArrayList<MetaDataBase>());
-        childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
+    ResourceMetaData(Resource id, URI type) {
+        super(getLocalName(type), UNSPECIFIED, RequirementLevel.SHOULD, new ArrayList<MetaDataBase>());
+        if (type != null){
+            childMetaData.add(PropertyMetaData.getTypeProperty(id,type.getLocalName()));
+        }
         this.resourceType = type;
-        label = "(" + type + ") ";
+        setupValues(id);
+    }
+    
+    private static String getLocalName(URI type){
+        if (type == null){
+            return "(" + UNSPECIFIED + ")";
+        }
+        return type.getLocalName();
     }
     
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
@@ -57,10 +66,10 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         label = "(" + type + ") ";
     }
         
-    private ResourceMetaData(ResourceMetaData other) {
-        super(other);
+    private ResourceMetaData(Resource id, ResourceMetaData other, MetaDataCollection collection) {
+        super(id, other, collection);
         this.resourceType = other.resourceType;
-        label = "(" + type + ") ";
+//        setupValues(id);
     }
 
     /*private ResourceMetaData(String name){
@@ -69,12 +78,12 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }*/
     
     @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
-        super.loadValues(id, data, collection);
+    public void loadValues(Set<Statement> data) {
+        super.loadValues(data);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
             PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate, type);
-            metaData.loadValues(id, data, collection);
+            metaData.loadValues(data);
             childMetaData.add(metaData);
         }
     }
@@ -90,6 +99,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             label = "(" + type + ") " + label;
         }
     }
+    
     private Set<URI> getUsedPredicates(Set<Statement> data){
         Set<URI> results = new HashSet<URI>();
         for (Statement statement: data){
@@ -118,8 +128,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return resourceType;
     }
 
-    public ResourceMetaData getSchemaClone() {
-        return new ResourceMetaData(this);
+    public ResourceMetaData getSchemaClone(Resource id, MetaDataCollection collection) {
+        return new ResourceMetaData(id, this, collection);
     }
 
     @Override

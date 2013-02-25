@@ -25,7 +25,7 @@ import org.openrdf.model.URI;
  *
  * @author Christian
  */
-public interface LeafMetaData {
+public interface LeafMetaData extends MetaData {
 
     public URI getPredicate();
 

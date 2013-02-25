@@ -82,8 +82,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         ResourceMetaData resourceMetaData = null;
         for (Value type:types){
             if (resourceMetaData == null){
-                resourceMetaData = metaDataRegistry.getExistingResourceByType(type);
-            } else if (metaDataRegistry.getExistingResourceByType(type) != null){
+                resourceMetaData = metaDataRegistry.getExistingResourceByType(type, id, this);
+            } else if (metaDataRegistry.getExistingResourceByType(type, id, this) != null){
                 errors.add(id + " has multiple types " + resourceMetaData.getType() + " and " + type);
                 errors.add(id + " will has only been validated as " + resourceMetaData.getType());
             }
@@ -91,16 +91,16 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         if (resourceMetaData == null){
             for (Value type:types){
                 if (resourceMetaData == null){
-                    resourceMetaData = metaDataRegistry.getResourceByType(type);
+                    resourceMetaData = metaDataRegistry.getResourceByType(type, id, this);
                 } else {
                     errors.add(id + " has multiple unknown types " + resourceMetaData.getType() + " and " + type);
                 }
             }
         }
         if (resourceMetaData == null){
-            resourceMetaData = metaDataRegistry.getResourceByType(null);
+            resourceMetaData = metaDataRegistry.getResourceByType(null, id, this);
         }
-        resourceMetaData.loadValues(id, statements, this);
+        resourceMetaData.loadValues(statements);
         return resourceMetaData;
     }
     
@@ -159,7 +159,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
                     logger.warn("No resource found for " + object + " unable to find child");
                 } else {
                     if (parent != null){
-                        child.addParent(parent);                           
+                         child.addParent(parent);                           
                     }
                 }
             } else {
@@ -218,7 +218,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         for (ResourceMetaData resource:resourcesMap.values()){
             if (!resource.isSuperset()){
                 if (!resource.hasRequiredValues()){
-                     return false;
+                      return false;
                 } else {
                 }
             }

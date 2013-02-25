@@ -33,6 +33,7 @@ import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -42,11 +43,12 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Christian
  */
-public class LinksetVoidInformationSubsetTest1 extends LinksetVoidInformationSubsetTest{
+@Ignore
+public class LinksetVoidInformationSubset1Test extends LinksetVoidInformationSubsetTest{
     
-    public static String LINK_FILE = "test-data/chemspider2chemblrdf-linksetSubSet1.ttl";
+    public static String LINK_FILE = "test-data/chemspider2chemblrdf-linksetSubSet_1.ttl";
     
-    public LinksetVoidInformationSubsetTest1() {
+    public LinksetVoidInformationSubset1Test() {
     }
 
     @BeforeClass

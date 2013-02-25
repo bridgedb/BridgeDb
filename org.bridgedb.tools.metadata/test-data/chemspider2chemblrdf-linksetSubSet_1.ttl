@@ -25,11 +25,20 @@
     pav:lastUpdateOn "2012-09-14T11:15:32Z"^^xsd:dateTime;
     foaf:primaryTopic :chembl-rdf-compounds_cs_linkset ;
     .
- 
+
+:chemblSuper
+ #   a void:Dataset;
+    dcterms:title "ChEMBL-RDF 13.OPS.2"@en;
+    dcterms:description "The ChEMBL database in RDF format."@en;
+    foaf:homepage <http://github.com/egonw/chembl.rdf/>;
+    foaf:page <http://www.biosharing.org/biodbcore-000015>;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+    void:uriSpace "http://data.kasabi.com/dataset/chembl-rdf/"^^xsd:string ;
+    void:subset :chemblrdf.
+
 # Pointer to the ChemSpider VoID file
 :chemblrdf
 # General metadata
-    a void:Dataset;
     dcterms:title "ChEMBL-RDF 13.OPS.2"@en;
     dcterms:description "The ChEMBL database in RDF format."@en;
     foaf:homepage <http://github.com/egonw/chembl.rdf/>;

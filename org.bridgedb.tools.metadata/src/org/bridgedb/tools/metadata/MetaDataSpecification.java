@@ -12,6 +12,7 @@ import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
+import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
@@ -166,23 +167,23 @@ public class MetaDataSpecification {
         return new URIImpl(id);
     }
     
-    public ResourceMetaData getExistingResourceByType(Value type){
+    public ResourceMetaData getExistingResourceByType(Value type, Resource id, MetaDataCollection collection){
         ResourceMetaData resourceMetaData =  resourcesByType.get(type);
         if (resourceMetaData == null){
             return null;
         } else {
-            return resourceMetaData.getSchemaClone();
+            return resourceMetaData.getSchemaClone(id, collection);
         }
     }
     
-    public ResourceMetaData getResourceByType(Value type) throws BridgeDBException{
+    public ResourceMetaData getResourceByType(Value type, Resource id, MetaDataCollection collection) throws BridgeDBException{
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
             logger.warn("Unable to find specifications for type: " + type);
             URI uri = (URI)type;
-            return new ResourceMetaData(uri);
+            return new ResourceMetaData(id, uri);
         } else {
-            return resourceMetaData.getSchemaClone();
+            return resourceMetaData.getSchemaClone(id, collection);
         }
     }
    

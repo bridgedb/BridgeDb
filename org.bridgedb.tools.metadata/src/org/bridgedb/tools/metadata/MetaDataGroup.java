@@ -22,6 +22,7 @@ package org.bridgedb.tools.metadata;
 import java.util.ArrayList;
 import java.util.List;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.Resource;
 
 /**
  *
@@ -37,17 +38,17 @@ public class MetaDataGroup extends HasChildrenMetaData implements MetaData{
         super(name, type, requirementLevel, childMetaData);
     }
     
-    public MetaDataGroup(MetaDataGroup other){
-        super(other);
+    public MetaDataGroup(Resource id, MetaDataGroup other, MetaDataCollection collection){
+        super(id, other, collection);
     }
     
     @Override
-    MetaDataGroup getSchemaClone() {
-        List<MetaDataBase> children = new ArrayList<MetaDataBase>();
-        for (MetaDataBase child:childMetaData){
-            children.add(child.getSchemaClone());
-        }
-        return new MetaDataGroup(this);
+    MetaDataGroup getSchemaClone(Resource id, MetaDataCollection collection) {
+        //List<MetaDataBase> children = new ArrayList<MetaDataBase>();
+        //for (MetaDataBase child:childMetaData){
+        //    children.add(child.getSchemaClone(id, collection));
+        //}
+        return new MetaDataGroup(id, this, collection);
     }
 
     @Override

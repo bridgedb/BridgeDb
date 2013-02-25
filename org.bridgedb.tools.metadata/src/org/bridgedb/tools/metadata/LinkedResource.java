@@ -76,11 +76,12 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     //    String requirementLevelSt = element.getAttribute(SchemaConstants.REQUIREMENT_LEVEL);
     //}
  
-    LinkedResource(LinkedResource other){
-        super(other);
+    LinkedResource(Resource id, LinkedResource other, MetaDataCollection collection){
+        super(id, other);
+        setupValues(id);
         predicate = other.predicate;
         resourceType = other.resourceType;
-        this.collection = other.collection;
+        this.collection = collection;
         this.registry = other.registry;
         this.cardinality = other.cardinality;
         register.add(this);
@@ -88,9 +89,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
 
     
     @Override
-    void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
-        setupValues(id);
-        this.collection = collection;
+    void loadValues(Set<Statement> data) {
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
@@ -105,14 +104,14 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
-    LinkedResource getSchemaClone() {
-        return new LinkedResource(this);
+    LinkedResource getSchemaClone(Resource id, MetaDataCollection collection) {
+        return new LinkedResource(id, this, collection);
     }
 
     @Override
     void appendSchema(StringBuilder builder, int tabLevel) {
         try {
-            ResourceMetaData resource = registry.getResourceByType(resourceType);
+            ResourceMetaData resource = registry.getResourceByType(resourceType, id, collection);
             tab(builder, tabLevel);
             builder.append("Resource Link ");
             builder.append(name);
@@ -382,9 +381,13 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     @Override
     public void addParent(LeafMetaData parentLeaf) {
         if (parentLeaf != null){
-            LinkedResource parent = (LinkedResource) parentLeaf;
-            rawRDF.addAll(parent.rawRDF);
-            ids.addAll(parent.ids);
+            if (parentLeaf instanceof LinkedResource){
+                LinkedResource parent = (LinkedResource) parentLeaf;
+                rawRDF.addAll(parent.rawRDF);
+                ids.addAll(parent.ids);
+            } else {
+                loadValues(parentLeaf.getRDF());
+            }
         }
     }
 

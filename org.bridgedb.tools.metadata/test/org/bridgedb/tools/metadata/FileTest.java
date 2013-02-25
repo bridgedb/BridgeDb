@@ -88,21 +88,34 @@ public class FileTest extends TestUtils{
         checkFile("test-data/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
-    @Test
-    @Ignore
-    public void testChemspiderSmall() throws IDMapperException{
-        MetaDataSpecification dataSetRegistry = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
-        checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
-   } 
-
-    @Test
-    public void testChemblRdfVoidTtl() throws IDMapperException{
+   @Test
+   public void testChemblRdfVoidTtl() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
+    @Test
+    public void testchemspider2chemblrdflinksetSubSetAsVoid() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkFile("test-data/chemspider2chemblrdf-linksetSubSet.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+    public void testchemspider2chemblrdflinksetSubSetAsLinks() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
+        checkFile("test-data/chemspider2chemblrdf-linksetSubSet.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+@Ignore    
+    public void testchemspider2chemblrdflinksetSubSet_1AsLinks() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
+        checkFile("test-data/chemspider2chemblrdf-linksetSubSet_1.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    }  
     @Test
     public void testLINK_FILE() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
@@ -117,4 +130,5 @@ public class FileTest extends TestUtils{
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);
         checkFile("test-data/linksetFirst.ttl", 3, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
+   
 }
