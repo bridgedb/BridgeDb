@@ -35,6 +35,7 @@ import org.openrdf.model.Statement;
  *
  * @author Christian
  */
+@Ignore
 public class FileTest extends TestUtils{
     
     public static boolean FILE_HAS_EXTRA_RDF = false;
@@ -87,22 +88,34 @@ public class FileTest extends TestUtils{
         checkFile("test-data/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
-    @Test
-    @Ignore
-    public void testChemspiderSmall() throws BridgeDBException{
-        MetaDataSpecification dataSetRegistry = 
-                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
-        checkFile("test-data/chemspider-void-small.ttl", 4, FILE_HAS_ONLY_EXPECTED_RDF, dataSetRegistry);
-   } 
-
-    @Test
-    public void testChemblRdfVoidTtl() throws BridgeDBException{
+   @Test
+   public void testChemblRdfVoidTtl() throws BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkFile("test-data/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
     @Test
+    public void testchemspider2chemblrdflinksetSubSetAsVoid() throws BridgeDBException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkFile("test-data/chemspider2chemblrdf-linksetSubSet.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+    public void testchemspider2chemblrdflinksetSubSetAsLinks() throws BridgeDBException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
+        checkFile("test-data/chemspider2chemblrdf-linksetSubSet.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+    public void testchemspider2chemblrdflinksetSubSet_1AsLinks() throws BridgeDBException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
+        checkFile("test-data/chemspider2chemblrdf-linksetSubSet_1.ttl", 6, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    }  
+
     public void testLINK_FILE() throws BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
@@ -116,4 +129,5 @@ public class FileTest extends TestUtils{
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKSMINIMAL);
         checkFile("test-data/linksetFirst.ttl", 3, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
+   
 }

@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.rdf.constants.RdfConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.bridgedb.tools.metadata.constants.OwlConstants;
 import org.bridgedb.tools.metadata.constants.RdfsConstants;
@@ -70,13 +71,19 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         return result;
     }
     
-    public static PropertyMetaData getTypeProperty(String type){
+    public static PropertyMetaData getTypeProperty(Resource id, String type){
+        PropertyMetaData result = new PropertyMetaData(id, type);
+        return result;
+    }
+
+   public static PropertyMetaData getTypeProperty(String type){
         PropertyMetaData result = new PropertyMetaData(type);
         return result;
     }
 
-    private PropertyMetaData(PropertyMetaData other) {
-        super(other);
+   private PropertyMetaData(Resource id, PropertyMetaData other) {
+        super(id, other);
+        setupValues(id);
         predicate = other.predicate;
         metaDataType = other.metaDataType;
         this.cardinality = other.cardinality;
@@ -89,6 +96,13 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         this.cardinality = this.NO_CARDINALITY;
     }
     
+    private PropertyMetaData(Resource id, String type){
+        super(id, "Type", type, RequirementLevel.MUST);
+        this.predicate = RdfConstants.TYPE_URI;
+        metaDataType = new UriType();
+        this.cardinality = this.NO_CARDINALITY;
+    }
+
     private PropertyMetaData(String type){
         super("Type", type, RequirementLevel.MUST);
         this.predicate = RdfConstants.TYPE_URI;
@@ -97,14 +111,15 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
-        setupValues(id);
+    public void loadValues(Set<Statement> data) {
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
-                 iterator.remove();
-                 rawRDF.add(statement);
-                 values.add(statement.getObject());
+                if (!statement.getPredicate().equals(VoidConstants.SUBSET)){
+                    iterator.remove();
+                }
+                rawRDF.add(statement);
+                values.add(statement.getObject());
             }
         }  
     }
@@ -196,8 +211,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public PropertyMetaData getSchemaClone() {
-        return new PropertyMetaData(this);
+    public PropertyMetaData getSchemaClone(Resource id, MetaDataCollection collection) {
+        return new PropertyMetaData(id, this);
     }
 
     @Override

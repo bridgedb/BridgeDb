@@ -51,15 +51,23 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
         this.documentation = MetaDataSpecification.getDocumentationRoot();
     }
     
-    MetaDataBase(MetaDataBase other){
+    MetaDataBase(Resource id, String name, String type, RequirementLevel requirementLevel){
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.requirementLevel = requirementLevel;
+        this.documentation = MetaDataSpecification.getDocumentationRoot();
+    }
+    
+    MetaDataBase(Resource id, MetaDataBase other){
+        this.id = id;
         this.name = other.name;
         this.type = other.type;
         this.requirementLevel = other.requirementLevel;
         this.documentation = other.documentation;
     }
     
-    //abstract void loadValues(Resource id, Set<Statement> data, MetaData parent, MetaDataCollection collection);
-    abstract void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection);
+    abstract void loadValues(Set<Statement> data);
 
     void setupValues(Resource id){
         this.id = id;       
@@ -72,7 +80,7 @@ public abstract class MetaDataBase extends AppendBase implements MetaData{
         //newLine(builder);
     }
 
-    abstract MetaDataBase getSchemaClone();
+    abstract MetaDataBase getSchemaClone(Resource id, MetaDataCollection collection);
     
     abstract boolean hasValues();
 

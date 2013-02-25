@@ -3,6 +3,7 @@ package org.bridgedb.tools.metadata;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
+import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.URIImpl;
@@ -48,7 +50,8 @@ public class MetaDataSpecification {
    // Map<Resource, ResourceMetaData> resourcesById = new HashMap<Resource, ResourceMetaData>();
     static String documentationRoot = "";
     private static String THING_ID = "http://www.w3.org/2002/07/owl#Thing";
-        
+    private final Set<URI> linkingPredicates;    
+    
     static final Logger logger = Logger.getLogger(MetaDataSpecification.class);
  
     public MetaDataSpecification(ValidationType type) throws BridgeDBException{
@@ -60,6 +63,7 @@ public class MetaDataSpecification {
         } catch (OWLOntologyCreationException ex) {
             throw new BridgeDBException("Unable to read owl from inputStream", ex);
         }
+        linkingPredicates = new HashSet<URI>();
         loadSpecification();
     }
     
@@ -165,14 +169,23 @@ public class MetaDataSpecification {
         return new URIImpl(id);
     }
     
-    public ResourceMetaData getResourceByType(Value type) throws BridgeDBException{
+    public ResourceMetaData getExistingResourceByType(Value type, Resource id, MetaDataCollection collection){
+        ResourceMetaData resourceMetaData =  resourcesByType.get(type);
+        if (resourceMetaData == null){
+            return null;
+        } else {
+            return resourceMetaData.getSchemaClone(id, collection);
+        }
+    }
+    
+    public ResourceMetaData getResourceByType(Value type, Resource id, MetaDataCollection collection) throws BridgeDBException{
         ResourceMetaData resourceMetaData = resourcesByType.get(type);
         if (resourceMetaData == null){
             logger.warn("Unable to find specifications for type: " + type);
             URI uri = (URI)type;
-            return new ResourceMetaData(uri);
+            return new ResourceMetaData(id, uri);
         } else {
-            return resourceMetaData.getSchemaClone();
+            return resourceMetaData.getSchemaClone(id, collection);
         }
     }
    
@@ -244,6 +257,7 @@ public class MetaDataSpecification {
             }
             IRI iri = owlClass.getIRI();
             ontology.containsClassInSignature(iri);
+            linkingPredicates.add(predicate);
             return new LinkedResource(predicate, type, cardinality, requirementLevel, new URIImpl(iri.toString()), this);
         }
         return new PropertyMetaData(predicate, type, cardinality, requirementLevel, range.toString());
@@ -262,9 +276,15 @@ public class MetaDataSpecification {
             }
             IRI iri = owlClass.getIRI();
             ontology.containsClassInSignature(iri);
+            linkingPredicates.add(predicate);
             return new LinkedResource(predicate, type, requirementLevel, new URIImpl(iri.toString()), this);
         }
         return new PropertyMetaData(predicate, type, requirementLevel, range.toString());
     }
+
+    Set<URI> getLinkingPredicates() {
+        return linkingPredicates;
+    }
+
 
 }

@@ -19,10 +19,12 @@
 //
 package org.bridgedb.tools.metadata;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
@@ -53,20 +55,20 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             throws BridgeDBException {
         Set<Statement> statements = new HashSet(incomingStatements);
         this.metaDataRegistry = specification;
-        Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
         Set<Resource> ids = findIds(statements);
+//        Set<Statement> subsetStatements = extractStatementsByPredicate(VoidConstants.SUBSET, statements);
+        loadLinkedResources(statements);
         for (Resource id:ids){
             if (!resourcesMap.containsKey(id)){
                ResourceMetaData resourceMetaData =  getResourceMetaData(id, statements);
                if (resourceMetaData == null){
-                   logger.warn(id + " has no known rdf:type ");
-                   errors.add(id + " has no known rdf:type ");                   
-               } else {
-                   resourcesMap.put(id, resourceMetaData);
+                    logger.warn(id + " has no known rdf:type ");
+                    errors.add(id + " has no known rdf:type ");                   
+                    throw new IllegalStateException("No type for " + id);               
                }
             }
         }
-        addSubsets(subsetStatements);
+//        addSubsets(subsetStatements);
         checkAllRemainingAreLinks(statements);
         this.source = source;
     }
@@ -75,20 +77,119 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         this(dataFileName, new StatementReader(dataFileName).getVoidStatements(), metaDataRegistry);
     }
         
+    private void loadLinkedResources(Set<Statement> statements) throws BridgeDBException{
+        HashMap<Resource,Set<Resource>> hierarchy = new HashMap<Resource,Set<Resource>>();
+        Set<URI> linkingPredicates = metaDataRegistry.getLinkingPredicates();
+        for (Iterator<Statement> iterator = statements.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
+            if (statement.getPredicate().equals(VoidConstants.SUBSET)){
+                Resource subject = statement.getSubject();
+                Value objectValue = statement.getObject();
+                if (subject.equals(objectValue)){
+                    errors.add("Found a subset statement with subject == object " + statement);
+                    iterator.remove();                    
+                } else if (objectValue instanceof Resource){
+                    Resource object = (Resource)objectValue;
+                    Set<Resource> supers = hierarchy.get(object);
+                    if (supers == null){
+                        supers = new HashSet<Resource>();
+                    }
+                    supers.add(subject);
+                    hierarchy.put(object, supers);
+                } else {
+                    errors.add("Found a subset statement with none Resource object " + statement);
+                    iterator.remove();
+                }                
+            } else if (linkingPredicates.contains(statement.getPredicate())){
+                Resource subject = statement.getSubject();
+                Value objectValue = statement.getObject();
+                if (subject.equals(objectValue)){
+                    errors.add("Found a link statement with subject == object " + statement);
+                    iterator.remove();                    
+                } else if (objectValue instanceof Resource){
+                    Resource object = (Resource)objectValue;
+                    Set<Resource> supers = hierarchy.get(subject);
+                    if (supers == null){
+                        supers = new HashSet<Resource>();
+                    }
+                    supers.add(object);
+                    hierarchy.put(subject, supers);
+                } else {
+                    errors.add("Found a linking statement with none Resource object " + statement);
+                    iterator.remove();
+                }
+            }
+        }
+        loadLinkedResources (hierarchy, statements);
+    }
+
+    private void loadLinkedResources (HashMap<Resource,Set<Resource>> hierarchy, Set<Statement> statements) 
+            throws BridgeDBException{
+        for (Resource child:hierarchy.keySet()){
+            loadLinkedResources(child, hierarchy, statements);
+        }            
+    }
+    
+    private void loadLinkedResources (Resource start, HashMap<Resource,Set<Resource>> hierarchy, Set<Statement> statements) 
+            throws BridgeDBException{
+        for (Resource parent:hierarchy.get(start)){
+            loadLinkedResources(start, parent, hierarchy, statements);
+        }            
+    }
+    
+    private void loadLinkedResources (Resource start, Resource current, HashMap<Resource, Set<Resource>> hierarchy, 
+            Set<Statement> statements) throws BridgeDBException{
+        if (start.equals(current)){
+            throw new BridgeDBException("Illegal circular subset reference including " + hierarchy);
+        }
+        if (hierarchy.get(current) == null){
+            ResourceMetaData resourceMetaData = getResourceMetaData(current, statements);
+        } else {
+            for (Resource parent:hierarchy.get(current)){
+                loadLinkedResources(start, parent, hierarchy, statements);
+            }
+        }
+    }
+    
     private ResourceMetaData getResourceMetaData (Resource id, Set<Statement> statements) throws BridgeDBException{
+        if (resourcesMap.containsKey(id)){
+            return resourcesMap.get(id);
+        }
         Set<Value> types = findBySubjectPredicate(id, RdfConstants.TYPE_URI, statements);
         ResourceMetaData resourceMetaData = null;
         for (Value type:types){
-            ResourceMetaData rmd =  metaDataRegistry.getResourceByType(type);
-            if (rmd != null){
-                if (resourceMetaData == null){
-                   resourceMetaData = rmd; 
-                   resourceMetaData.loadValues(id, statements, this);
-                } else {
-                   errors.add(id + " has a second known rdf:type " + type);
+            if (resourceMetaData == null){
+                resourceMetaData = metaDataRegistry.getExistingResourceByType(type, id, this);
+            } else if (metaDataRegistry.getExistingResourceByType(type, id, this) != null){
+                errors.add(id + " has multiple types " + resourceMetaData.getType() + " and " + type);
+                errors.add(id + " will has only been validated as " + resourceMetaData.getType());
+            }
+        }
+        if (resourceMetaData == null){
+            for (Value type:getSupersetTypes(id, statements)){
+               if (resourceMetaData == null){
+                    resourceMetaData = metaDataRegistry.getExistingResourceByType(type, id, this);
+                } else if (metaDataRegistry.getExistingResourceByType(type, id, this) != null){
+                    errors.add(id + " has multiple super types " + resourceMetaData.getType() + " and " + type);
+                    errors.add(id + " will has only been validated as " + resourceMetaData.getType());
                 }
             }
-        } 
+        }
+        if (resourceMetaData == null){
+            for (Value type:types){
+                if (resourceMetaData == null){
+                    resourceMetaData = metaDataRegistry.getResourceByType(type, id, this);
+                } else {
+                    errors.add(id + " has multiple unknown types " + resourceMetaData.getType() + " and " + type);
+                }
+            }
+        }
+        if (resourceMetaData == null){
+            resourceMetaData = metaDataRegistry.getResourceByType(null, id, this);
+        }
+        resourceMetaData.loadValues(statements);
+        addSupersets(resourceMetaData, statements);
+        resourcesMap.put(id, resourceMetaData);
         return resourceMetaData;
     }
     
@@ -98,14 +199,13 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
                  results.add(statement.getSubject());
             }
-            if (statement.getPredicate().equals(VoidConstants.SUBSET)){
-                 results.add(statement.getSubject());
-                 Value object = statement.getObject();
-                 if (object instanceof Resource){
-                     results.add((Resource)object);
-                     errors.add(VoidConstants.SUBSET + " has unexpected non resource object " + object);
-                 }
-            }
+//            if (statement.getPredicate().equals(VoidConstants.SUBSET)){
+//                 results.add(statement.getSubject());
+//                 Value object = statement.getObject();
+//                 if (object instanceof Resource){
+//                     results.add((Resource)object);
+//                 }
+//            }
         }  
         return results;
     }
@@ -134,11 +234,38 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         return values;
     }
 
+    private Set<Resource> findByPredicateObject(URI predicate, Value object, Set<Statement> statements){
+        HashSet<Resource> subjects = new HashSet<Resource>();         
+        for (Statement statement: statements){
+            if (statement.getPredicate().equals(predicate)){
+               if (statement.getObject().equals(object)){
+                    subjects.add(statement.getSubject());
+                }
+            }
+        }  
+        return subjects;
+    }
+
+    private void addSupersets(ResourceMetaData child, Set<Statement> statements){
+        for (Iterator<Statement> iterator = statements.iterator(); iterator.hasNext();) {
+            Statement statement = iterator.next();
+            if (statement.getObject().equals(child.id) && statement.getPredicate().equals(VoidConstants.SUBSET)){
+                iterator.remove();
+                ResourceMetaData parent =  getResourceByID(statement.getSubject());
+                if (parent == null){
+                    int here = 1/0;
+                }
+                child.addParent(parent);
+            }
+        }                 
+    }
+
     private void addSubsets(Set<Statement> subsetStatements) {
         for (Statement statement: subsetStatements){
             ResourceMetaData parent = resourcesMap.get(statement.getSubject());
             if (parent == null){
                 errors.add("No resource found for " + statement.getSubject() + " unable to find parent");                
+                throw new IllegalStateException("No resource found for " + statement.getSubject() + " unable to find parent");
             } 
             Value object = statement.getObject();
             if (object instanceof Resource){
@@ -147,7 +274,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
                     logger.warn("No resource found for " + object + " unable to find child");
                 } else {
                     if (parent != null){
-                        child.addParent(parent);                           
+                         child.addParent(parent);                           
                     }
                 }
             } else {
@@ -206,7 +333,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         for (ResourceMetaData resource:resourcesMap.values()){
             if (!resource.isSuperset()){
                 if (!resource.hasRequiredValues()){
-                    return false;
+                      return false;
                 } else {
                 }
             }
@@ -348,6 +475,16 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             }
         }
         return result;
+    }
+
+    private Set<Value> getSupersetTypes(Resource id, Set<Statement> statements) {
+        Set<Value> types = new HashSet<Value>();
+        Set<Resource> superResources = findByPredicateObject(VoidConstants.SUBSET, id, statements);
+        for (Resource superResource:superResources){
+            ResourceMetaData parent = resourcesMap.get(superResource);
+            types.add(parent.getType());
+        }
+        return types;
     }
 
 }

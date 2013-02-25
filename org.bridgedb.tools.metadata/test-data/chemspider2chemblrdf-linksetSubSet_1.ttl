@@ -1,0 +1,146 @@
+@prefix : <http://data.kasabi.com/dataset/chembl-rdf/void.ttl/>.
+
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix freq: <http://purl.org/cld/freq/> .
+@prefix pav: <http://purl.org/pav/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix voag: <http://voag.linkedmodel.org/schema/voag#> .
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+@prefix chembl: <http://data.kasabi.com/dataset/chembl-rdf/chemblid/> .
+
+# Metadata about this file
+<>
+    a void:DatasetDescription;
+    dcterms:title "ChEMBL-RDF Compounds to ChemSpider linkset"@en;
+    dcterms:description """A VoID linkset that links compounds in ChEMBL-RDF
+        with compounds in ChemSpider."""@en; 
+    pav:createdBy <http://egonw.github.com/#me> ;
+    pav:createdOn "2012-08-13T15:00:00Z"^^xsd:dateTime ;
+    pav:lastUpdateOn "2012-09-14T11:15:32Z"^^xsd:dateTime;
+    foaf:primaryTopic :chembl-rdf-compounds_cs_linkset ;
+    .
+
+:chemblSuper
+    a void:Dataset;
+    dcterms:title "ChEMBL-RDF 13.OPS.2"@en;
+    dcterms:description "The ChEMBL database in RDF format."@en;
+    foaf:homepage <http://github.com/egonw/chembl.rdf/>;
+    foaf:page <http://www.biosharing.org/biodbcore-000015>;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+    void:uriSpace "http://data.kasabi.com/dataset/chembl-rdf/"^^xsd:string ;
+    void:subset :chemblrdf.
+
+# Pointer to the ChemSpider VoID file
+:chemblrdf
+# General metadata
+    dcterms:title "ChEMBL-RDF 13.OPS.2"@en;
+    dcterms:description "The ChEMBL database in RDF format."@en;
+    foaf:homepage <http://github.com/egonw/chembl.rdf/>;
+    foaf:page <http://www.biosharing.org/biodbcore-000015>;
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+    void:uriSpace "http://data.kasabi.com/dataset/chembl-rdf/"^^xsd:string ;
+# Provenance
+	pav:version "v13_ops";
+    pav:importedFrom :chembl_dataset;
+    pav:importedBy <http://egonw.github.com/#me> ;
+    pav:importedOn "2012-05-15T15:34:40Z"^^xsd:dateTime;
+# Vocabularies, topics, resources
+	void:vocabulary 
+		<http://www.w3.org/1999/02/22-rdf-syntax-ns#>,
+		<http://www.w3.org/2000/01/rdf-schema#>,
+		<http://www.w3.org/2002/07/owl#>,
+		<http://www.w3.org/2001/XMLSchema#>,
+		<http://purl.org/dc/elements/1.1/>, 
+		<http://purl.org/ontology/bibo/>,
+		<http://xmlns.com/foaf/0.1/>, 
+		<http://purl.org/spar/cito/>, 
+		<http://www.w3.org/2004/02/skos/core#> ,
+		<http://purl.obolibrary.org/obo#>,
+		<http://www.blueobelisk.org/ontologies/chemoinformatics-algorithms/#>,
+		<http://www.blueobelisk.org/chemistryblogs/>,
+		<http://www.nmrshiftdb.org/onto#>,
+		<http://www.ifomis.org/bfo/1.1/snap#>,
+		<http://semanticscience.org/resource/>,
+		<http://purl.org/obo/owl/CHEBI#>;
+# Update frequency
+	#Need to verify the update frequency!
+	voag:frequencyOfChange freq:semiannual;
+# Other metadata
+    void:distinctSubjects "18018451"^^xsd:integer ;
+	# State when the dataset was accessed for creating linkset
+    pav:sourceAccessedOn "2012-02-22T10:59:38Z"^^xsd:dateTime ;
+# ADDED BY CHRISTIAN
+    <http://purl.org/pav/createdWith> <http://missingInfo.com>;
+   pav:sourceAccessedBy <http://missingInfo.com> .
+
+# Description of the ChemSpider dataset
+:chemSpiderDataset 
+# General metadata
+	a void:Dataset;
+	dcterms:title "ChemSpider"@en;
+	dcterms:description "ChemSpider's Public Dataset"@en;
+	foaf:homepage <http://rdf.chemspider.com/>;
+	foaf:page <http://www.chemspider.com/>;
+	dcterms:license <http://www.chemspider.com/Disclaimer.aspx>;
+	void:uriSpace "http://rdf.chemspider.com/"^^xsd:string;
+#Vocabularies, topics, resources
+	void:vocabulary <http://purl.org/dc/elements/1.1/>,
+		<http://purl.org/dc/terms/>,
+		<http://www.openarchives.org/ore/terms/>,
+		<http://www.polymerinformatics.com/ChemAxiom/ChemDomain.owl#>,
+		<http://xmlns.com/foaf/0.1/>;
+	dcterms:subject <http://dbpedia.org/resource/Molecule>;
+	void:exampleResource <http://rdf.chemspider.com/2157>;
+#Dataset Access	
+	void:sparqlEndpoint <http://rdf.chemspider.com/sparql>;
+#Update Frequency
+	voag:frequencyOfChange freq:continuous;
+	# Linkset declared as a subset. Inherits properties
+    void:subset :chembl-rdf-compounds_cs_linkset ;
+# ADDED BY CHRISTIAN
+    pav:sourceAccessedBy <http://missingInfo.com> ;
+    pav:sourceAccessedOn "2012-08-02T10:23:56Z"^^xsd:dateTime;
+	pav:retrievedFrom <https://www.dropbox.com/sh/6zboa8z9i9vrzyl/7NxayhkUH0/ChEMBL20120731.zip>;
+	pav:retrievedOn "2012-08-02T10:23:56Z"^^xsd:dateTime;
+	pav:retrievedBy <http://www.cs.man.ac.uk/~graya/me.ttl> ;
+    pav:createdWith <http://example.com> ;
+.
+
+:chembl-rdf-compounds_cs_linkset
+a void:Linkset;
+# General linkset metadata
+    dcterms:title "ChEMBL-RDF Compounds ChemSpider Linkset"@en;
+    dcterms:description "Linkset relating ChEMBL-RDF compounds to ChemSpider compounds."@en;
+    #Explicit declaration of license for the linkset is preferred
+    dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/> ;
+# Link information
+    void:subjectsTarget :chemblrdf ;
+    void:objectsTarget :chemSpiderDataset  ;
+    void:linkPredicate skos:exactMatch ;
+    dul:expresses <http://???> ;
+# Linkset provenance
+    pav:authoredOn "2012-02-22T10:59:38Z"^^xsd:dateTime ;
+    pav:authoredBy <http://www.chemspider.com/> ;
+    pav:createdBy <http://egonw.github.com/#me> ;
+    pav:createdOn "2012-05-15T11:29:01Z"^^xsd:dateTime ;
+# ADDED BY CHRISTIAN
+    <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses> <http://missingInfo.com>;
+    .
+
+:chembl-rdf-compounds_cs_linkset void:subset :chembl-rdf-compounds_cs_linkset_jan2013.
+
+:chembl-rdf-compounds_cs_linkset_jan2013
+    pav:authoredOn "2013-01-22T10:59:38Z"^^xsd:dateTime ;
+    pav:createdOn "2013-01-15T11:29:01Z"^^xsd:dateTime ;
+    void:triples "1083967"^^xsd:integer ;
+    a void:Linkset .
+
+chembl:CHEMBL1236438 skos:exactMatch <http://rdf.chemspider.com/43> .
+chembl:CHEMBL144103 skos:exactMatch <http://rdf.chemspider.com/60> .
+#...
