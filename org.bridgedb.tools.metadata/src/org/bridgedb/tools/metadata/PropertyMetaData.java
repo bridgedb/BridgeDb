@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.rdf.constants.RdfConstants;
+import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.rdf.constants.XMLSchemaConstants;
 import org.bridgedb.tools.metadata.constants.OwlConstants;
 import org.bridgedb.tools.metadata.constants.RdfsConstants;
@@ -114,9 +115,11 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
-                 iterator.remove();
-                 rawRDF.add(statement);
-                 values.add(statement.getObject());
+                if (!statement.getPredicate().equals(VoidConstants.SUBSET)){
+                    iterator.remove();
+                }
+                rawRDF.add(statement);
+                values.add(statement.getObject());
             }
         }  
     }

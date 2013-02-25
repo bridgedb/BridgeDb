@@ -36,6 +36,7 @@ import org.openrdf.model.Statement;
  *
  * @author Christian
  */
+@Ignore
 public class FileTest extends TestUtils{
     
     public static boolean FILE_HAS_EXTRA_RDF = false;
@@ -110,11 +111,10 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
-@Ignore    
     public void testchemspider2chemblrdflinksetSubSet_1AsLinks() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
-        checkFile("test-data/chemspider2chemblrdf-linksetSubSet_1.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+        checkFile("test-data/chemspider2chemblrdf-linksetSubSet_1.ttl", 6, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     }  
     @Test
     public void testLINK_FILE() throws IDMapperException{

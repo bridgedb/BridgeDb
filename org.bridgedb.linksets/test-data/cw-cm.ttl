@@ -15,10 +15,10 @@
 :conceptwiki_chemblMolecule a void:Linkset ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemblMolecule ;
-    void:subset :conceptwiki ;
     void:linkPredicate skos:exactMatch ;
     dcterms:creator <http://www.conceptwiki.org> .
 :conceptwiki a void:Dataset ;
+    void:subset :conceptwiki_chemblMolecule ;
 	dcterms:title "ConceptWiki"^^xsd:string ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chemblMolecule a void:Dataset ;

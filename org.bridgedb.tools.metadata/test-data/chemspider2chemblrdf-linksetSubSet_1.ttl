@@ -27,7 +27,7 @@
     .
 
 :chemblSuper
- #   a void:Dataset;
+    a void:Dataset;
     dcterms:title "ChEMBL-RDF 13.OPS.2"@en;
     dcterms:description "The ChEMBL database in RDF format."@en;
     foaf:homepage <http://github.com/egonw/chembl.rdf/>;
@@ -113,6 +113,7 @@
 .
 
 :chembl-rdf-compounds_cs_linkset
+a void:Linkset;
 # General linkset metadata
     dcterms:title "ChEMBL-RDF Compounds ChemSpider Linkset"@en;
     dcterms:description "Linkset relating ChEMBL-RDF compounds to ChemSpider compounds."@en;

@@ -41,7 +41,6 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     private MetaDataCollection collection;
     private final MetaDataSpecification registry;
     private final int cardinality;  
-    private static final Set<LinkedResource> register = new HashSet<LinkedResource>();
     
     LinkedResource(URI predicate, String type, RequirementLevel requirementLevel, URI resourceType, 
             MetaDataSpecification registry){
@@ -55,16 +54,6 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         this.resourceType = resourceType;
         this.registry = registry;
         this.cardinality = cardinality;
-        register.add(this);
-    }
-
-    public static void setLinked(){
-        for (LinkedResource lr: register){
-            for (Resource id: lr.ids){
-                ResourceMetaData rmd = lr.collection.getResourceByID(id);
-                rmd.setAsLinked();
-            }
-        }
     }
             
     //LinkedResource(Element element) throws BridgeDBException {
@@ -84,7 +73,6 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         this.collection = collection;
         this.registry = other.registry;
         this.cardinality = other.cardinality;
-        register.add(this);
     }
 
     
@@ -97,7 +85,10 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 if (value instanceof Resource){
                     iterator.remove();
                     rawRDF.add(statement);
-                    ids.add((Resource)value);
+                    Resource otherID = (Resource)value;
+                    ids.add(otherID);
+                    ResourceMetaData rmd = collection.getResourceByID(otherID);
+                    rmd.setAsLinked();
                 }
             }
         } 
