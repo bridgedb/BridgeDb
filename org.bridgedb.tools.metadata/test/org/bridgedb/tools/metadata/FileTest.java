@@ -138,4 +138,11 @@ public class FileTest extends TestUtils{
         checkFile( "test-data/CW-Void_v6.ttl", 28, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
     
+    @Test
+    @Ignore
+    public void testChemSpider() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
+        checkFile( "test-data/void_2013-01-17.ttl", 21, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
 }

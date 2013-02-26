@@ -277,6 +277,8 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     tab(builder, tabLevel);
                     builder.append("ERROR: ");
                     builder.append(name);
+                    builder.append(" ");
+                    builder.append(id);
                     builder.append(" found with type ");
                     builder.append(rmd.getType());            
                     builder.append(" but the requirment is type ");

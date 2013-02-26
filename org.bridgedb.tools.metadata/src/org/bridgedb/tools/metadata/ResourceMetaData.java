@@ -147,11 +147,16 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) 
             throws BridgeDBException {
         appendSpecific(builder, tabLevel);
-         if (type.equals(UNSPECIFIED)){
-            if (includeWarnings){
-                tab(builder, tabLevel+1);
+        if (type.equals(UNSPECIFIED)){
+            tab(builder, tabLevel+1);
+            if (this.resourceType == null){
                 builder.append("INFO: ");
-                builder.append(" No requirments have been specified for this type.");
+                builder.append(" No type specified so unable to validate.");
+                newLine(builder);
+            } else {
+                builder.append("INFO: ");
+                builder.append(" No requirments have been specified for type ");
+                builder.append(this.resourceType);
                 newLine(builder);
             }
         } else {
