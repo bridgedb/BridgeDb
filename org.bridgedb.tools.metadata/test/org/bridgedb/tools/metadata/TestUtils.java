@@ -67,6 +67,7 @@ public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
         if (!ok){
             //This test will fail but with extra info
             String report = metaData.validityReport(NO_WARNINGS);
+            report(report);
             assertThat(report, not(containsString("ERROR")));
             assertTrue(ok);
         }        
