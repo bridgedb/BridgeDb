@@ -1,0 +1,322 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix freq: <http://purl.org/cld/freq/>.
+@prefix pav: <http://purl.org/pav/>.
+@prefix voag: <http://voag.linkedmodel.org/schema/voag#>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix : <http://ops.conceptwiki.org/void_2013-02-14.ttl#>.  
+
+<http://ops.conceptwiki.org/void_2013-02-14.ttl> dcterms:description "A Void description for the ConceptWiki"@en;
+                                                        dcterms:title "A VoID Description of the ConceptWiki"@en;
+                                                        pav:createdBy <http://ops.conceptwiki.org/>;
+                                                        pav:createdOn "2013-02-14T10:49:00Z"^^xsd:dateTime;
+                                                        pav:lastUpdateOn "2013-02-14T16:02:27Z"^^xsd:dateTime;
+                                                        pav:previousVersion <http://ops.conceptwiki.org/void_2012-12-14.ttl>;
+                                                        a void:DatasetDescription;
+                                                        foaf:primaryTopic :ConceptWikiDataset .
+:ConceptWikiDataset dcterms:created "2007-03-01T00:00:00Z"^^xsd:dateTime;
+                   dcterms:description "ConceptWiki's Dataset"@en;
+                   dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/>;
+                   dcterms:modified "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                   dcterms:publisher <http://ops.conceptwiki.org/>;
+                   dcterms:subject <http://dbpedia.org/resource/concept>;
+                   dcterms:title "ConceptWiki Dataset"@en;
+                   void:exampleResource <http://conceptwiki.org/concept/index/8e3a87ae-345d-4c25-bd7a-5b3221c6e3fa.rdf>;
+                   void:feature <http://www.w3.org/ns/formats/data/Turtle>;
+                   void:subset :ConceptWikiSwissProt,
+                               :ConceptWikiChemSpider,
+                               :ConceptWikiUmls,
+                               :ConceptWikiDrugBank,
+                               :ConceptWikiChembl;
+                   void:uriSpace "http://www.conceptwiki.org/concept/"^^xsd:string;
+                   void:vocabulary <http://purl.obolibrary.org/obo/>,
+                                   dctype:,
+                                   dcterms:,
+                                   pav:,
+                                   void:,
+                                   <http://www.obofoundry.org/ro/ro.owl#>,
+                                   dul:,
+                                   rdf:,
+                                   xsd:,
+                                   skos:,
+                                   foaf:;
+                   voag:frequencyOfChange freq:monthly;
+                   a void:Dataset;
+                   foaf:homepage <http://ops.conceptwiki.org/> .
+:ConceptWikiSwissProt dcterms:description "The subset of ConceptWiki that contains SwissProt data."@en;
+                   dcterms:title "ConceptWiki SwissProt Data set"@en;
+                   void:dataDump <http://downloads.nbiceng.net/conceptwiki/swissprot.ttl>;
+                   void:subset :SwissProtExactMatch, :ConceptWikiPdb, :SwissProtPdbExactMatch;
+                   a void:Dataset;
+                   prov:wasDerivedFrom :SwissProt, :ConceptWikiDataset  .
+:ConceptWikiChemSpider dcterms:description "The subset of ConceptWiki that contains ChemSpider data."@en;
+                   dcterms:title "ConceptWiki ChemSpider Data set"@en;
+                   void:dataDump <http://downloads.nbiceng.net/conceptwiki/chemspider.ttl>;
+                   void:subset :ChemSpiderExactMatch;
+                   a void:Dataset;
+                   prov:wasDerivedFrom <ftp://ftp.rsc-us.org/OPS/20130117/Void_2013_01_17.ttl>, :ConceptWikiDataset  .
+:ConceptWikiUmls dcterms:description "The subset of ConceptWiki that contains UMLS data."@en;
+                dcterms:title "ConceptWiki UMLS Data set"@en;
+                void:dataDump <http://downloads.nbiceng.net/conceptwiki/umls.ttl>;
+                void:subset :ConceptWikiMesh, :ConceptWikiGo, :ConceptWikiNci;
+                a void:Dataset;
+                prov:wasDerivedFrom :Umls, :ConceptWikiDataset  .
+:ConceptWikiDrugBank dcterms:description "The subset of ConceptWiki that contains DrugBank data."@en;
+                   dcterms:title "ConceptWiki DrugBank Data set"@en;
+                   void:dataDump <http://downloads.nbiceng.net/conceptwiki/drugbank.ttl>;
+                   void:uriSpace "http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/"^^xsd:string;
+                   void:subset :DrugBankTargetsExactMatch, :DrugBankCompoundsExactMatch;
+                   a void:Dataset;
+                   prov:wasDerivedFrom :DrugBank, :ConceptWikiDataset  .
+:ConceptWikiChembl dcterms:description "The subset of ConceptWiki that contains Chembl data."@en;
+                dcterms:title "ConceptWiki Chembl Data set"@en;
+                void:dataDump <http://downloads.nbiceng.net/conceptwiki/chembl.ttl>;
+                void:uriSpace "http://data.kasabi.com/dataset/chembl-rdf/chemblid/"^^xsd:string;
+                void:subset :ChemblTargetsExactMatch, :ChemblMoleculesExactMatch;
+                a void:Dataset;
+                prov:wasDerivedFrom <http://data.kasabi.com/dataset/chembl-rdf/chemblid/>, :ConceptWikiDataset  .
+:ConceptWikiPdb dcterms:description "The subset of ConceptWikiSwissProt that contains PDB data."@en;
+      		  	dcterms:title "ConceptWiki PDB, from SwissProt Data set"@en;
+      			void:dataDump <http://downloads.nbiceng.net/conceptwiki/SwissProtPdb.ttl> ;
+      			void:uriSpace "http://www.pdb.org/pdb/explore/explore.do?pdbId="^^xsd:string;
+     			a void:Dataset;
+     			prov:wasDerivedFrom :ConceptWikiSwissProt  .   
+:ConceptWikiMesh dcterms:description "The subset of ConceptWikiUMLS that contains MeSH data."@en;
+      			dcterms:title "ConceptWiki Mesh, from UMLS Data set"@en;
+      			void:dataDump <http://downloads.nbiceng.net/conceptwiki/Umls.ttl> ;
+      			void:uriSpace "http://purl.bioontology.org/ontology/MSH/"^^xsd:string;
+     			a void:Dataset;
+     			prov:wasDerivedFrom :ConceptWikiUmls  .     
+:ConceptWikiGo dcterms:description "The subset of ConceptWikiUMLS that contains GO data."@en;
+      			dcterms:title "ConceptWiki GO, from UMLS Data set"@en;
+      			void:dataDump <http://downloads.nbiceng.net/conceptwiki/Umls.ttl> ;
+      			void:uriSpace "http://www.pdb.org/pdb/explore/explore.do?pdbId="^^xsd:string;
+     			a void:Dataset;
+     			prov:wasDerivedFrom :ConceptWikiUmls  .      
+:ConceptWikiNci dcterms:description "The subset of ConceptWiki that contains PDB data."@en;
+      			dcterms:title "ConceptWiki NCI, from UMLS Data set"@en;
+      			void:dataDump <http://downloads.nbiceng.net/conceptwiki/Umls.ttl> ;
+      			void:uriSpace "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#"^^xsd:string;
+     			a void:Dataset;
+     			prov:wasDerivedFrom :ConceptWikiUmls  .                      
+:SwissProt pav:retrievedBy <http://www.nbic.nl/support/bet/>;
+       		pav:retrievedFrom <ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz>;
+       		pav:retrievedOn "2012-09-13T15:36:27Z"^^xsd:dateTime;
+       		pav:version "2012_08"^^xsd:string;
+       		dcterms:license <http://creativecommons.org/licenses/by-nd/3.0/> ;
+       		a dctype:Dataset;       		
+       		foaf:homepage <http://www.uniprot.org/>.		
+:SwissProtExactMatch dcterms:description "Swiss-Prot-ConceptWiki ID linkset of concepts imported into ConceptWiki."@en;
+                  	dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                  	dcterms:title "ConceptWiki Swiss-Prot Exact Match Linkset"@en;
+            		pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+              		pav:authoredOn "2012-09-13T12:16:00Z"^^xsd:dateTime;
+              		pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+              		pav:createdOn "2012-09-13T16:02:27Z"^^xsd:dateTime;
+                  	pav:createdWith <http://ops.conceptwiki.org/>;
+                  	pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/swissprot-old>;
+            		void:dataDump <http://downloads.nbiceng.net/conceptwiki/SPVoid-2013-02-14>;
+              		void:linkPredicate skos:exactMatch;
+              		dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+              		void:subjectsTarget :ConceptWikiDataset;
+				  	void:objectsTarget :ConceptWikiSwissProt;
+ 				  	void:triples 997580;
+ 					a void:Linkset.
+:SwissProtPdbExactMatch dcterms:description "Swiss-Prot PDB data-ConceptWiki ID linkset of concepts imported into ConceptWiki."@en;
+                  	dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                  	dcterms:title "ConceptWiki Swiss-Prot PDB Exact Match Linkset"@en;
+            		pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+              		pav:authoredOn "2012-09-13T12:16:00Z"^^xsd:dateTime;
+              		pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+              		pav:createdOn "2012-09-13T16:02:27Z"^^xsd:dateTime;
+					pav:createdWith <http://ops.conceptwiki.org/>;
+                  	pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/swissprotPdb-old>;
+                  	void:dataDump <http://downloads.nbiceng.net/conceptwiki/SPPdbVoid-2013-02-14>;
+            		void:uriSpace "http://www.pdb.org/pdb/explore/explore.do?pdbId="^^xsd:string;
+              		void:linkPredicate skos:exactMatch;
+              		dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+              		void:subjectsTarget :ConceptWikiSwissProt;
+				  	void:objectsTarget :ConceptWikiPdb;
+ 				  	void:triples 81079;
+ 					a void:Linkset. 
+:DrugBank pav:retrievedBy <http://www.nbic.nl/support/bet/>;
+          pav:retrievedFrom <ftp://ftp.ontotext.com/pub/lld/drugbank.tar.gz>;
+          pav:retrievedOn "2012-02-06T18:34:29Z"^^xsd:dateTime;
+          pav:version "3"^^xsd:string;
+          a dctype:Dataset;
+          foaf:homepage <http://www.drugbank.ca/>.      
+:DrugBankTargetsExactMatch dcterms:description "DrugBank Targets data-ConceptWiki ID linkset of protein concepts imported into ConceptWiki."@en;
+                  			dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                  			dcterms:title "ConceptWiki DrugBank Targets Exact Match Linkset"@en;
+                  			pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                  			pav:authoredOn "2012-09-13T12:16:00Z"^^xsd:dateTime;
+                  			pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                  			pav:createdOn "2012-09-13T16:02:27Z"^^xsd:dateTime;
+                  			pav:createdWith <http://ops.conceptwiki.org/>;
+                  			pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/DrugBankTargets-old>;
+                  			void:dataDump <http://downloads.nbiceng.net/conceptwiki/DrugBankVoid-2013-02-14>;
+                  			void:linkPredicate skos:exactMatch;
+                  			dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+                  			void:subjectsTarget :ConceptWikiDataset;
+				  			void:objectsTarget :ConceptWikiDrugBank;
+ 				  			void:triples 3634;
+ 				  			a void:Linkset.   
+:DrugBankCompoundsExactMatch dcterms:description "DrugBank Compound data-ConceptWiki ID linkset of compound concepts imported into ConceptWiki."@en;
+                  			dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                  			dcterms:title "ConceptWiki DrugBank Targets Exact Match Linkset"@en;
+                  			pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                  			pav:authoredOn "2012-09-13T12:16:00Z"^^xsd:dateTime;
+            				pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+              				pav:createdOn "2012-09-13T16:02:27Z"^^xsd:dateTime;
+              				pav:createdWith <http://ops.conceptwiki.org/>;
+              				pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/DrugBankTargets-old>;
+                  			void:dataDump <http://downloads.nbiceng.net/conceptwiki/DrugBankVoid-2013-02-14>;
+                  			void:linkPredicate skos:exactMatch;
+                  			dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+                  			void:subjectsTarget :ConceptWikiDataset;
+							void:objectsTarget :ConceptWikiDrugBank;
+ 			  				void:triples 6399;
+ 			  				a void:Linkset.                                                        
+#Id changed by Christian
+:ChemSpider pav:retrievedBy <https://wiki.nbic.nl/index.php/User:Leon>;
+          pav:retrievedFrom <ftp:ftp://ftp.rsc-us.org/>;
+          pav:retrievedOn "2013-02-14T18:34:29Z"^^xsd:dateTime;
+          pav:version "2013-01-17"^^xsd:string;
+          a void:Dataset;
+          foaf:homepage <http://www.chemspider.com/>;
+          #Following stubs added by Christian
+          dcterms:license <http://www.example.com/missing>;
+          dcterms:description "missing";
+          dcterms:title "missing";
+          void:uriSpace "http://www.example.com/".
+:ChemSpiderExactMatch dcterms:description "ChemSpider ID ConceptWiki ID linkset of compounds imported into ConceptWiki."@en;
+                     dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                     dcterms:title "ConceptWiki ChemSpider Exact Match Linkset"@en;
+                     pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                     pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                     pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                     pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                     pav:createdWith <http://ops.conceptwiki.org/>;
+                     pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/CSvoid_2012-11-14.ttl>;
+                     void:dataDump <http://downloads.nbiceng.net/conceptwiki/CSvoid_2013-01-17.ttl>;
+                     void:linkPredicate skos:exactMatch;
+                     void:objectsTarget :ChemSpider;
+                     void:subjectsTarget :ConceptWikiChemSpider;
+                     void:triples 1089403 ;
+                     dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+                     a void:Linkset.
+:ChemblTargetsExactMatch  dcterms:description "Chembl Targets ID to ConceptWiki ID linkset."@en;
+                     dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                     dcterms:title "ConceptWiki Chembl Targets Exact Match Linkset"@en;
+                     pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                     pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                     pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                     pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                     pav:createdWith <http://ops.conceptwiki.org/>;
+                     pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/Chembl13.ttl>;
+                     void:dataDump <http://downloads.nbiceng.net/conceptwiki/Chembl15.ttl>;
+                     void:linkPredicate skos:exactMatch;
+                     void:objectsTarget :ConceptWikiDataset;
+                     void:subjectsTarget :ConceptWikiChembl;
+                     void:triples 1089403 ;
+                     dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+                     a void:Linkset.
+:ChemblMoleculesExactMatch  dcterms:description "Chembl Compounds ID to ConceptWiki ID linkset."@en;
+                     dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                     dcterms:title "ConceptWiki Chembl Compounds Exact Match Linkset"@en;
+                     pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                     pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                     pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                     pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                     pav:createdWith <http://ops.conceptwiki.org/>;
+                     pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/Chembl13.ttl>;
+                     void:dataDump <http://downloads.nbiceng.net/conceptwiki/Chembl15.ttl>;
+                     void:linkPredicate skos:exactMatch;
+                     void:objectsTarget :ConceptWikiDataset;
+                     void:subjectsTarget :ConceptWikiChembl;
+                     void:triples 1089403 ;
+                     dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+                     a void:Linkset.
+:Umls dcterms:license <https://uts.nlm.nih.gov//license.html>;
+      dcterms:publisher <http://www.nlm.nih.gov/>;
+      dcterms:title "The UMLS Dataset"@en;
+      pav:retrievedBy <https://wiki.nbic.nl/index.php/User:Leon>;
+      pav:retrievedFrom <http://www.nlm.nih.gov/research/umls/licensedcontent/umlsknowledgesources.html>;
+      pav:retrievedOn "2012-08-04T03:01:34Z"^^xsd:dateTime;
+      pav:version "2012AB UMLS Files"^^xsd:string;
+      a dctype:Dataset;
+      dcterms:hasPart :Mesh, :Go, :Nci;
+      foaf:homepage <http://www.nlm.nih.gov/research/umls/index.html>  .
+:Mesh dcterms:description "The subset of UMLS that contains MeSH data."@en;
+      dcterms:title "UMLS MeSH Subset"@en;
+      void:dataDump <http://downloads.nbiceng.net/conceptwiki/umls.ttl> ;
+      void:uriSpace "http://purl.bioontology.org/ontology/MSH/"^^xsd:string;
+      a dctype:Dataset;
+      prov:wasDerivedFrom :Umls.
+:Go dcterms:description "The subset of UMLS that contains GO data."@en;
+      dcterms:title "UMLS GO Subset"@en;
+      void:dataDump <http://downloads.nbiceng.net/conceptwiki/umls.ttl> ;
+      void:uriSpace "http://purl.org/obo/owl/GO#"^^xsd:string;
+      a dctype:Dataset;
+      prov:wasDerivedFrom :Umls.
+:Nci dcterms:description "The subset of UMLS that contains NCI data."@en;
+      dcterms:title "UMLS NCI Subset"@en;
+      void:dataDump <http://downloads.nbiceng.net/conceptwiki/umls.ttl> ;
+      void:uriSpace "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#"^^xsd:string;
+      a dctype:Dataset;
+      prov:wasDerivedFrom :Umls.     
+:UmlsMeshExactMatch dcterms:description "UMLS ID/MeSH ID and ConceptWiki ID linkset of concepts imported into ConceptWiki."@en;
+                 dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                 dcterms:title "ConceptWiki UMLS/MeSH Exact Match Linkset"@en;
+                 pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                 pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                 pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                 pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                 pav:createdWith <http://ops.conceptwiki.org/>;
+                 pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/2012AA UMLS Files.ttl>;
+                 void:dataDump <http://downloads.nbiceng.net/conceptwiki/umlsMeshVoid_2013AA.ttl>;
+                 void:linkPredicate skos:exactMatch;
+                 dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+                 void:subjectsTarget :ConceptWikiDataset;
+				 void:objectsTarget :ConceptWikiMesh;
+ 				 void:triples 321092; 
+                 a void:Linkset.                 
+:UmlsGoExactMatch dcterms:description "UMLS ID/GO ID and ConceptWiki ID linkset of concepts imported into ConceptWiki."@en;
+                 dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                 dcterms:title "ConceptWiki UMLS/GO Exact Match Linkset"@en;
+                 pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                 pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                 pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                 pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                 pav:createdWith <http://ops.conceptwiki.org/>;
+                 pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/2012AA UMLS Files.ttl>;
+                 void:dataDump <http://downloads.nbiceng.net/conceptwiki/umlsGoVoid_2013AA.ttl>;
+                 void:linkPredicate skos:exactMatch;
+                 dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+				 void:subjectsTarget :ConceptWikiDataset;
+				 void:objectsTarget :ConceptWikiGo;
+                 void:triples 58000;
+                 a void:Linkset.
+:UmlsNciExactMatch dcterms:description "UMLS ID/NCI ID and ConceptWiki ID linkset of concepts imported into ConceptWiki."@en;
+                 dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                 dcterms:title "ConceptWiki UMLS/NCI Exact Match Linkset"@en;
+                 pav:authoredBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                 pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                 pav:createdBy <https://wiki.nbic.nl/index.php/User:Leon>;
+                 pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                 pav:createdWith <http://ops.conceptwiki.org/>;
+                 pav:previousVersion <http://downloads.nbiceng.net/conceptwiki/2012AA UMLS Files.ttl>;
+                 void:dataDump <http://downloads.nbiceng.net/conceptwiki/umlsNciVoid_2013AA.ttl>;
+                 void:linkPredicate skos:exactMatch;
+                 dul:expresses <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number>;
+                 void:subjectsTarget :ConceptWikiDataset;
+				 void:objectsTarget :ConceptWikiNci;
+                 void:triples 379096;
+				 a void:Linkset.

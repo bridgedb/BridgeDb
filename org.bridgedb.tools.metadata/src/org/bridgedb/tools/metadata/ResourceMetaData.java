@@ -77,13 +77,13 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         type = null;
     }*/
     
-    @Override
-    public void loadValues(Set<Statement> data) {
-        super.loadValues(data);
+   @Override
+    public void loadValues(Set<Statement> data, Set<String> errors) {
+        super.loadValues(data, errors);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
             PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate, type);
-            metaData.loadValues(data);
+            metaData.loadValues(data, errors);
             childMetaData.add(metaData);
         }
     }
@@ -212,13 +212,13 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         }
     }
     
-    void addParent(ResourceMetaData parent) {
+    void addParent(ResourceMetaData parent, Set<String> errors) {
         parents.add(parent);
         Set<LeafMetaData> leaves = getLeaves();
         for (LeafMetaData leaf: leaves){
             URI predicate = leaf.getPredicate();
             LeafMetaData parentLeaf = parent.getLeafByPredicate(predicate);
-            leaf.addParent(parentLeaf);
+            leaf.addParent(parentLeaf, errors);
         }
         parent.isParent1 = true;
     }

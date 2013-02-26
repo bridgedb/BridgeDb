@@ -111,7 +111,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void loadValues(Set<Statement> data) {
+    public void loadValues(Set<Statement> data, Set<String> errors) {
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
@@ -418,7 +418,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
     }
 
     @Override
-    public void addParent(LeafMetaData parentLeaf) {
+    public void addParent(LeafMetaData parentLeaf, Set<String> errors) {
         if (parentLeaf == null){
             return;
         }
@@ -428,7 +428,7 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
                 values.addAll(pmd.values);
             }
         } else {
-            throw new UnsupportedOperationException("Unexpected LeafMetaData type of " + parentLeaf.getClass());
+            errors.add("Unexpected LeafMetaData type of " + parentLeaf.getClass());
         }
     }
 

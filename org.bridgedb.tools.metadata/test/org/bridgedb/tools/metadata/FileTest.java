@@ -36,7 +36,7 @@ import org.openrdf.model.Statement;
  *
  * @author Christian
  */
-@Ignore
+
 public class FileTest extends TestUtils{
     
     public static boolean FILE_HAS_EXTRA_RDF = false;
@@ -131,4 +131,11 @@ public class FileTest extends TestUtils{
         checkFile("test-data/linksetFirst.ttl", 3, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
    
+    @Test
+    public void testCwVoid6() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
+        checkFile( "test-data/CW-Void_v6.ttl", 28, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+    
 }

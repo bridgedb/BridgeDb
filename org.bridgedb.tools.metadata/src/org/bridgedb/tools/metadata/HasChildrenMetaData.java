@@ -123,9 +123,9 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     
     // ** MetaDataBase methods 
     @Override
-    void loadValues(Set<Statement> data) {
+    void loadValues(Set<Statement> data, Set<String> errors) {
         for (MetaDataBase child:childMetaData){
-            child.loadValues(data);
+            child.loadValues(data, errors);
         }
     }
 

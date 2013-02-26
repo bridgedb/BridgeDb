@@ -40,6 +40,7 @@ public abstract class TestUtils extends org.bridgedb.utils.TestUtils{
         boolean ok = (ids.size() == numberOfIds);
         if (!ok){
             //This test will fail but with extra info
+            report("Found " + ids.size());
             assertEquals(numberOfIds + " ids Expected ", ids);
             report(metaData.toString());
             assertTrue(ok);

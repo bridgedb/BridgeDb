@@ -143,10 +143,11 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             throw new BridgeDBException("Illegal circular subset reference including " + hierarchy);
         }
         if (hierarchy.get(current) == null){
-            ResourceMetaData resourceMetaData = getResourceMetaData(current, statements);
+           ResourceMetaData resourceMetaData = getResourceMetaData(current, statements);
         } else {
             for (Resource parent:hierarchy.get(current)){
                 loadLinkedResources(start, parent, hierarchy, statements);
+                ResourceMetaData resourceMetaData = getResourceMetaData(current, statements);
             }
         }
     }
@@ -187,7 +188,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         if (resourceMetaData == null){
             resourceMetaData = metaDataRegistry.getResourceByType(null, id, this);
         }
-        resourceMetaData.loadValues(statements);
+        resourceMetaData.loadValues(statements, errors);
         addSupersets(resourceMetaData, statements);
         resourcesMap.put(id, resourceMetaData);
         return resourceMetaData;
@@ -255,7 +256,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
                 if (parent == null){
                     int here = 1/0;
                 }
-                child.addParent(parent);
+                child.addParent(parent, errors);
             }
         }                 
     }
@@ -274,7 +275,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
                     logger.warn("No resource found for " + object + " unable to find child");
                 } else {
                     if (parent != null){
-                         child.addParent(parent);                           
+                         child.addParent(parent, errors);                           
                     }
                 }
             } else {

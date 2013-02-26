@@ -77,7 +77,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
 
     
     @Override
-    void loadValues(Set<Statement> data) {
+    void loadValues(Set<Statement> data, Set<String> errors) {
         for (Iterator<Statement> iterator = data.iterator(); iterator.hasNext();) {
             Statement statement = iterator.next();
             if (statement.getSubject().equals(id) && statement.getPredicate().equals(predicate)){
@@ -88,11 +88,15 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     Resource otherID = (Resource)value;
                     ids.add(otherID);
                     ResourceMetaData rmd = collection.getResourceByID(otherID);
-                    rmd.setAsLinked();
+                    if (rmd == null){
+                        errors.add("Unable to find a resource for " + otherID );
+                    } else {
+                        rmd.setAsLinked();
+                    }
                 }
             }
         } 
-    }
+     }
 
     @Override
     LinkedResource getSchemaClone(Resource id, MetaDataCollection collection) {
@@ -370,14 +374,14 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     }
 
     @Override
-    public void addParent(LeafMetaData parentLeaf) {
+    public void addParent(LeafMetaData parentLeaf, Set<String> errors) {
         if (parentLeaf != null){
             if (parentLeaf instanceof LinkedResource){
                 LinkedResource parent = (LinkedResource) parentLeaf;
                 rawRDF.addAll(parent.rawRDF);
                 ids.addAll(parent.ids);
             } else {
-                loadValues(parentLeaf.getRDF());
+                loadValues(parentLeaf.getRDF(), errors);
             }
         }
     }
