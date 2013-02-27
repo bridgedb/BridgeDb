@@ -82,10 +82,17 @@ public class UrlTest extends TestUtils{
     }
 
     @Test
-    public void testChemspider() throws IDMapperException{
+    public void testDrugbank() throws IDMapperException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
 
+    @Test
+    public void testChebi93() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl", 2, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+ 
 }

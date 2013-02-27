@@ -4,18 +4,15 @@
  */
 package org.bridgedb.rdf.reader;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
 
 
 /**
@@ -30,6 +27,10 @@ public class UrlReader {
     private String RAW_GITHUB = "https://raw.github.com";
     private String HTML_GITHUB = "https://github.com";
     private String BLOB = "blob/";
+    private String encodedAuthorization;
+    private String login = "OpsReadOnly";
+    private String password = "Gerhard1";
+    private String method = "GET";
     
     public UrlReader(String address) throws BridgeDBException{
         this.address = address;
@@ -40,6 +41,8 @@ public class UrlReader {
                 scrubbedAddress = scrubbedAddress.replaceFirst(BLOB, "");
             }
         }
+        String authorization = login + ':'  + password;
+        encodedAuthorization = new String(Base64.encodeBase64(authorization.getBytes()));
     }
     
     public final String getPath() throws BridgeDBException{
@@ -52,15 +55,37 @@ public class UrlReader {
         return uri.getScheme() + ":" + uri.getSchemeSpecificPart();
     }
 
-    public InputStream getInputStream() throws IOException{
-        if (scrubbedAddress.startsWith(OPENPHACTS_GITHUB)){
-            if (!scrubbedAddress.contains("?login=")){
-                scrubbedAddress = scrubbedAddress + "?login=OpsReadOnly&token=27cca7f3c4ef1005467366c2ae6df305";
+    //taken from https://github.com/kohsuke/github-api
+    //http://opensource.org/licenses/mit-license.php
+    private HttpURLConnection setupConnection(URL url) throws IOException {
+        HttpURLConnection uc = (HttpURLConnection) url.openConnection();
+
+        // if the authentication is needed but no credential is given, try it anyway (so that some calls
+        // that do work with anonymous access in the reduced form should still work.)
+        // if OAuth token is present, it'll be set in the URL, so need to set the Authorization header
+        uc.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+
+        try {
+            uc.setRequestMethod(method);
+        } catch (ProtocolException e) {
+            // JDK only allows one of the fixed set of verbs. Try to override that
+            try {
+                Field $method = HttpURLConnection.class.getDeclaredField("method");
+                $method.setAccessible(true);
+                $method.set(uc,method);
+            } catch (Exception x) {
+                throw (IOException)new IOException("Failed to set the custom verb").initCause(x);
             }
         }
-        System.out.println(scrubbedAddress);
-        URL uri = new URL(scrubbedAddress);
-        return uri.openStream();
+        //uc.setRequestProperty("Accept-Encoding", "gzip");
+        return uc;
     }
+    
+    public InputStream getInputStream() throws IOException{
+        System.out.println(scrubbedAddress);
+        URL url = new URL(scrubbedAddress);
+        HttpURLConnection uc = setupConnection(url);
+        return uc.getInputStream();
+   }
     
 }
