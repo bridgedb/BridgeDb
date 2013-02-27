@@ -20,9 +20,14 @@
 package org.bridgedb.tools.metadata;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.rdf.reader.UrlReader;
 import org.bridgedb.tools.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
@@ -43,19 +48,42 @@ public class UrlTest extends TestUtils{
     public static boolean FILE_HAS_ONLY_EXPECTED_RDF = true;
     public static String LINK_FILE = "test-data/chemspider2chemblrdf-linkset.ttl";
 
-    private void checkUrl(String address, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) 
-            throws BridgeDBException{
-        report("Checking " + address);
-        StatementReader reader = new StatementReader(address);
-        Set<Statement> statements = reader.getVoidStatements();
-        MetaDataCollection metaData = new MetaDataCollection(address, statements, registry);
-        checkCorrectNumberOfIds (metaData, numberOfIds);
-        checkRequiredValues(metaData);
-        checkCorrectTypes(metaData);
-        if (checkAllStatements){
-            checkAllStatementsUsed(metaData);
+    private void checkUrl(String address, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws BridgeDBException 
+            {
+        try{
+            report("Checking " + address);
+            StatementReader reader = new StatementReader(address);
+            Set<Statement> statements = reader.getVoidStatements();
+            MetaDataCollection metaData = new MetaDataCollection(address, statements, registry);
+            checkCorrectNumberOfIds (metaData, numberOfIds);
+            checkRequiredValues(metaData);
+            checkCorrectTypes(metaData);
+            if (checkAllStatements){
+                checkAllStatementsUsed(metaData);
+            }
+            metaData.validate();
+        } catch (BridgeDBException ex){
+            UrlReader reader = new UrlReader(address);
+            InputStream stream = null;
+            boolean ioError = false;
+            try {
+                stream = reader.getInputStream();
+            } catch (IOException ex1) {
+                ioError = true;
+                System.err.println("**** SKIPPPING tests due to Connection error.");
+                System.err.println (ex1.toString());
+                org.junit.Assume.assumeTrue(false); 
+            } finally {
+                if (stream != null){
+                    try {
+                        stream.close();
+                    } catch (IOException ex1) {
+                        ioError = true;
+                    }
+                }
+            }
+            throw ex;
         }
-        metaData.validate();
     }
     
     private void validateFile(String fileName, int numberOfIds, boolean checkAllStatements, MetaDataSpecification registry) throws BridgeDBException{
