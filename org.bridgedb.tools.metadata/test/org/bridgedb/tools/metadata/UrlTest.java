@@ -95,4 +95,55 @@ public class UrlTest extends TestUtils{
         checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl", 2, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
  
+    @Test
+    public void testChebi99() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi99_void.ttl", 2, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+    @Ignore //Uses in void:inDataset
+    public void testChebiHasPartsLinkset100() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebiHasPartsLinkset100.ttl", 2, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+    public void testChebiVoid100() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebiVoid100.ttl", 3, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+    
+    @Test
+    public void testChemblRdfVoid() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+    
+    @Test
+    public void testChemspiderVoid() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider-void.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+    @Ignore //remote subjects
+    public void testChemspider2ChemblrdfLinkset() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2chemblrdf-linkset.ttl", 4, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
+    @Test
+    @Ignore //remote subjects and BNodeImpl instead of URI
+    public void testChemspider2DrugbankLinkset() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+        checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2drugbank-linkset.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
 }
