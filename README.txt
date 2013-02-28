@@ -59,6 +59,13 @@ If you plan on using the WS to allow uploading of voids and linksets
 the sending machines will have to be added to this list.
 The Sending machine can be added at runtime without the need to restart the service.
 
+accounts.txt
+------------
+List a number of Uris http or ftp
+For which a user name and password are required.
+If you wish to read from any of these sites you will have to copy and edit this file.
+Otherwise you will not be able to read from these Uris.
+
 log4j.properties
 ---------------
 Edit this to change the logger setup.
