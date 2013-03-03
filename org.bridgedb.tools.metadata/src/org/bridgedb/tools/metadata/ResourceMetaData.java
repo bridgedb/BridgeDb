@@ -37,16 +37,26 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     private final URI resourceType;
     private final Set<ResourceMetaData> parents = new HashSet<ResourceMetaData>();
-    private boolean isParent = false;
+    private boolean isParent1 = false;
+    private boolean isLinked = false;
     private boolean directlyLinkedTo = false;
     private static String UNSPECIFIED = "unspecified";
     private String label; 
 
-    ResourceMetaData(URI type) {
-        super(type.getLocalName(), UNSPECIFIED, RequirementLevel.SHOULD, new ArrayList<MetaDataBase>());
-        childMetaData.add(PropertyMetaData.getTypeProperty(type.getLocalName()));
+    ResourceMetaData(Resource id, URI type) {
+        super(getLocalName(type), UNSPECIFIED, RequirementLevel.SHOULD, new ArrayList<MetaDataBase>());
+        if (type != null){
+            childMetaData.add(PropertyMetaData.getTypeProperty(id,type.getLocalName()));
+        }
         this.resourceType = type;
-        label = "(" + type + ") ";
+        setupValues(id);
+    }
+    
+    private static String getLocalName(URI type){
+        if (type == null){
+            return "(" + UNSPECIFIED + ")";
+        }
+        return type.getLocalName();
     }
     
     ResourceMetaData(URI type, List<MetaDataBase> childMetaData) {
@@ -56,10 +66,10 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         label = "(" + type + ") ";
     }
         
-    private ResourceMetaData(ResourceMetaData other) {
-        super(other);
+    private ResourceMetaData(Resource id, ResourceMetaData other, MetaDataCollection collection) {
+        super(id, other, collection);
         this.resourceType = other.resourceType;
-        label = "(" + type + ") ";
+//        setupValues(id);
     }
 
     /*private ResourceMetaData(String name){
@@ -67,13 +77,13 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         type = null;
     }*/
     
-    @Override
-    public void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
-        super.loadValues(id, data, collection);
+   @Override
+    public void loadValues(Set<Statement> data, Set<String> errors) {
+        super.loadValues(data, errors);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
             PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate, type);
-            metaData.loadValues(id, data, collection);
+            metaData.loadValues(data, errors);
             childMetaData.add(metaData);
         }
     }
@@ -89,6 +99,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
             label = "(" + type + ") " + label;
         }
     }
+    
     private Set<URI> getUsedPredicates(Set<Statement> data){
         Set<URI> results = new HashSet<URI>();
         for (Statement statement: data){
@@ -117,8 +128,8 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         return resourceType;
     }
 
-    public ResourceMetaData getSchemaClone() {
-        return new ResourceMetaData(this);
+    public ResourceMetaData getSchemaClone(Resource id, MetaDataCollection collection) {
+        return new ResourceMetaData(id, this, collection);
     }
 
     @Override
@@ -136,11 +147,16 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     public void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) 
             throws BridgeDBException {
         appendSpecific(builder, tabLevel);
-         if (type.equals(UNSPECIFIED)){
-            if (includeWarnings){
-                tab(builder, tabLevel+1);
+        if (type.equals(UNSPECIFIED)){
+            tab(builder, tabLevel+1);
+            if (this.resourceType == null){
                 builder.append("INFO: ");
-                builder.append(" No requirments have been specified for this type.");
+                builder.append(" No type specified so unable to validate.");
+                newLine(builder);
+            } else {
+                builder.append("INFO: ");
+                builder.append(" No requirments have been specified for type ");
+                builder.append(this.resourceType);
                 newLine(builder);
             }
         } else {
@@ -169,27 +185,26 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
     }
      
     public void appendParentValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws BridgeDBException{
-        if (!isParent){
+        if (!isSuperset()){
             //Wrong method called 
             appendValidityReport(builder, checkAllpresent, includeWarnings, tabLevel);
-        } else if (!this.hasCorrectTypes()) {
-            //Report all to pick up the incorrect type
+        } else { 
             appendSpecific(builder, tabLevel);
-            for (MetaDataBase child:childMetaData){
-                child.appendValidityReport(builder, false, false, tabLevel + 1);
-            }
-            if (hasRequiredValues()) {
-                tab(builder, tabLevel+1);
-                builder.append("All Required values found but above incorrectly typed. ");
-                newLine(builder);
-            } else {
-                tab(builder, tabLevel+1);
-                builder.append("WARNING: Incomplete so can only be used as a superset ");
-                newLine(builder);                
-            }
-        } else if (includeWarnings) {
-            appendSpecific(builder, tabLevel);
-            if (hasRequiredValues()) {
+            if (!this.hasCorrectTypes()) {            
+                //Report all to pick up the incorrect type
+                for (MetaDataBase child:childMetaData){
+                    child.appendValidityReport(builder, false, false, tabLevel + 1);
+                }
+                if (hasRequiredValues()) {
+                    tab(builder, tabLevel+1);
+                    builder.append("All Required values found but above incorrectly typed. ");
+                    newLine(builder);
+                } else {
+                    tab(builder, tabLevel+1);
+                    builder.append("WARNING: Incomplete so can only be used as a superset ");
+                    newLine(builder);                
+                }
+            } else if (hasRequiredValues()) {
                 tab(builder, tabLevel+1);
                 builder.append("All Required values found and correctly typed. ");
                 newLine(builder);
@@ -198,24 +213,23 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
                 builder.append("WARNING: Incomplete so can only be used as a superset ");
                 newLine(builder);                
             }
-        } else {
-            //Not including warnings so keep report small
+            newLine(builder);                
         }
     }
     
-    void addParent(ResourceMetaData parent) {
+    void addParent(ResourceMetaData parent, Set<String> errors) {
         parents.add(parent);
         Set<LeafMetaData> leaves = getLeaves();
         for (LeafMetaData leaf: leaves){
             URI predicate = leaf.getPredicate();
             LeafMetaData parentLeaf = parent.getLeafByPredicate(predicate);
-            leaf.addParent(parentLeaf);
+            leaf.addParent(parentLeaf, errors);
         }
-        parent.isParent = true;
+        parent.isParent1 = true;
     }
 
     boolean isSuperset() {
-        return isParent;
+        return isParent1 && !isLinked;
     }
 
     public void appendSummary(StringBuilder builder, int tabLevel) throws BridgeDBException {
@@ -231,7 +245,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
                     builder.append(" OK!");
                 } else if (this.hasRequiredValues()){
                     builder.append(" has missing MUST values.");
-                } else if (isParent){
+                } else if (isSuperset()){
                     builder.append(" can only be used as a superset.");
                 } else {
                     builder.append(" incomplete!");
@@ -249,5 +263,9 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
 
     void addChildren(List<MetaDataBase> childMetaData) {
         super.addChildren(childMetaData);
+    }
+
+    void setAsLinked() {
+        isLinked = true;
     }
 }

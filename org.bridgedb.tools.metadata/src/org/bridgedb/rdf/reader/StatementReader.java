@@ -67,8 +67,13 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
     protected Set<Statement> statements = new HashSet<Statement>();
     boolean parsed = false;
     
-    public StatementReader(String fileName) throws BridgeDBException{
-        parse(new File(fileName.trim()), DEFAULT_BASE_URI);
+    public StatementReader(String address) throws BridgeDBException{
+        address = address.trim();
+        if (address.startsWith("http") || address.startsWith("ftp")){
+            parse(address);
+        } else {
+            parse(new File(address), DEFAULT_BASE_URI);
+        }
     }
     
     public StatementReader(File file) throws BridgeDBException{
@@ -98,6 +103,29 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
         } finally {
             if (reader != null){
                 reader.close();
+            }
+        }        
+    }
+    
+    private void parse(String address) throws BridgeDBException{
+        InputStreamReader reader = null;
+        try {
+            UrlReader urlReader = new  UrlReader(address);
+            String baseURI = urlReader.getBase();
+            String fileName = urlReader.getPath();
+            RDFParser parser = getParser(fileName);
+            InputStream inputStream = urlReader.getInputStream();
+            reader = new InputStreamReader(inputStream);
+            parse(reader, parser, baseURI);
+        } catch (Exception ex) {
+            throw new BridgeDBException("Error reading " + address, ex);
+        } finally {
+            if (reader != null){
+                try {
+                    reader.close();
+                } catch (IOException ex) {
+                    throw new BridgeDBException("Error closing input Stream. ", ex);
+                }
             }
         }        
     }
@@ -164,6 +192,10 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
     
     private static RDFParser getParser(File file){
         String fileName = file.getName();
+        return getParser(fileName);
+    }
+    
+    private static RDFParser getParser(String fileName){
         if (fileName.endsWith(".n3")){
             fileName = "try.ttl";
         }
@@ -179,7 +211,7 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
             return reg.get(format).getParser();
         }
     }
-    
+
     private RDFParser getParser(RDFFormat format) {
         RDFParserRegistry reg = RDFParserRegistry.getInstance();
         RDFParserFactory factory = reg.get(format);

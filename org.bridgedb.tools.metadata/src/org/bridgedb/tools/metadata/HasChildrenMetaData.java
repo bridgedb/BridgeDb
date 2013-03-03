@@ -47,11 +47,12 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
         this.childMetaData = childMetaData;
     }
     
-    HasChildrenMetaData(HasChildrenMetaData other){
-        super(other);
+    HasChildrenMetaData(Resource id, HasChildrenMetaData other, MetaDataCollection collection){
+        super(id, other);
+        setupValues(id);
         childMetaData = new ArrayList<MetaDataBase>();
         for (MetaDataBase child:other.childMetaData){
-            childMetaData.add(child.getSchemaClone());
+            childMetaData.add(child.getSchemaClone(id, collection));
         }
 
     }
@@ -122,10 +123,9 @@ public abstract class HasChildrenMetaData  extends MetaDataBase implements MetaD
     
     // ** MetaDataBase methods 
     @Override
-    void loadValues(Resource id, Set<Statement> data, MetaDataCollection collection) {
-        setupValues(id);
+    void loadValues(Set<Statement> data, Set<String> errors) {
         for (MetaDataBase child:childMetaData){
-            child.loadValues(id, data, collection);
+            child.loadValues(data, errors);
         }
     }
 

@@ -19,16 +19,17 @@
 //
 package org.bridgedb.tools.metadata;
 
+import java.util.Set;
 import org.openrdf.model.URI;
 
 /**
  *
  * @author Christian
  */
-public interface LeafMetaData {
+public interface LeafMetaData extends MetaData {
 
     public URI getPredicate();
 
-    public void addParent(LeafMetaData parentLeaf);
+    public void addParent(LeafMetaData parentLeaf, Set<String> errors);
     
 }

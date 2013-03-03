@@ -21,6 +21,7 @@ package org.bridgedb.tools.metadata;
 
 import java.util.List;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.Resource;
 
 /**
  *
@@ -39,14 +40,14 @@ public class MetaDataAlternatives extends HasChildrenMetaData implements MetaDat
         super(name, type, requirementLevel, childMetaData);
     }
     
-    public MetaDataAlternatives(MetaDataAlternatives other){
-        super(other);
+    public MetaDataAlternatives(Resource id, MetaDataAlternatives other, MetaDataCollection collection){
+        super(id, other, collection);
     }
     
 
     @Override
-    MetaDataAlternatives getSchemaClone() {
-        return new MetaDataAlternatives(this);
+    MetaDataAlternatives getSchemaClone(Resource id, MetaDataCollection collection) {
+        return new MetaDataAlternatives(id, this, collection);
     }
 
     @Override

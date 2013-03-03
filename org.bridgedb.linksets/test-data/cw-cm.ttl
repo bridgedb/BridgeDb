@@ -20,12 +20,12 @@
     dcterms:license "unknown" ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemblMolecule ;
-    void:subset :conceptwiki ;
     void:linkPredicate skos:exactMatch ;
     dul:expresses rdfs:isDefinedBy ;
     dcterms:created "2012-02-28"^^xsd:date ;
     dcterms:creator <http://www.conceptwiki.org> .
 :conceptwiki a void:Dataset ;
+    void:subset :conceptwiki_chemblMolecule ;
 	dcterms:title "ConceptWiki"^^xsd:string ;
     dcterms:license "unknown" ;
     dcterms:subject "unknown" ;

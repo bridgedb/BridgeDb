@@ -19,6 +19,7 @@
 //
 package org.bridgedb.tools.metadata;
 
+import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
@@ -89,11 +90,25 @@ public class LinksetVoidInformation implements MetaData {
             error = "Found no Resource with the type " + VoidConstants.LINKSET + ". ";
             return null;
         }
-        if (possibleResults.size()> 1){
-            error = "Found more than one Resource with the type " + VoidConstants.LINKSET + ". \n\t" + possibleResults;
-            return null;
+        ResourceMetaData linkset = null;
+        if (possibleResults.size() > 1){
+            Iterator<ResourceMetaData> iterator = possibleResults.iterator();
+            while (iterator.hasNext()) {
+                ResourceMetaData possible = iterator.next();
+                if (linkset == null){
+                    linkset = possible;
+                } else if (linkset.isSuperset()){
+                    linkset = possible;
+                } else if (possible.isSuperset()){
+                    //ignore possible
+                } else {
+                    error = "Found more than one Resource with the type " + VoidConstants.LINKSET + ". \n\t" + possibleResults;
+                    return null;
+                }
+            }
+        } else {
+              linkset = possibleResults.iterator().next();
         }
-        ResourceMetaData linkset = possibleResults.iterator().next();
         linksetResource = linkset.getId();
         return linkset;
     }
@@ -268,7 +283,7 @@ public class LinksetVoidInformation implements MetaData {
 
     @Override
     public boolean hasRequiredValues() {
-        return collection.hasRequiredValues() &&  (linksetResource != null) && (predicate != null) && 
+         return collection.hasRequiredValuesOrIsSuperset() &&  (linksetResource != null) && (predicate != null) && 
                 (subjectUriSpace != null) && (targetUriSpace != null);
     }
 

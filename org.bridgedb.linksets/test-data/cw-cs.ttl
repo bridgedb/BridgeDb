@@ -23,7 +23,6 @@
 :conceptwiki_chemspider a void:Linkset ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemspider ;
-    void:subset :conceptwiki ;
     void:linkPredicate skos:exactMatch ;
     dul:expresses rdfs:isDefinedBy ;
     dcterms:created "2012-02-28"^^xsd:date ;
@@ -31,8 +30,8 @@
 :conceptwiki a void:Dataset ;
 	dcterms:title "ConceptWiki"^^xsd:string ;
     dcterms:license "unknown" ;
-    dcterms:subject "unknown" ;
     pav:retrievedOn "2012-02-28"^^xsd:date ;
+    void:subset :conceptwiki_chemspider ;
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chemspider a void:Dataset ;
 	dcterms:title "ChemSpider"^^xsd:string ;
