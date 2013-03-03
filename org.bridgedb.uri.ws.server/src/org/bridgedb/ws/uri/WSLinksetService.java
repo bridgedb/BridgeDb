@@ -239,6 +239,14 @@ public class WSLinksetService extends WSVoidService{
         return validateString(info, mimeType, ValidationType.LINKSMINIMAL, httpServletRequest);
     }
 
+    private String readException(Exception e){
+        if (e instanceof BridgeDBException){
+            return e.toString();
+        }
+        BridgeDBException wrapper = new BridgeDBException("Unexpected error in WebService",e);
+        return e.toString();
+    }
+    
     private Response validateString(String info, String mimeType, ValidationType validationType, 
             HttpServletRequest httpServletRequest) throws BridgeDBException, UnsupportedEncodingException {
        String report = null;
@@ -248,7 +256,7 @@ public class WSLinksetService extends WSVoidService{
                 report = linksetInterface.validateString("Webservice Call", info, format, StoreType.TEST, validationType, true);
             }
         } catch (Exception e){
-            report = e.toString();
+            report = readException(e);
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
         addValidationForm(sb, validationType, info, report);
@@ -650,7 +658,7 @@ public class WSLinksetService extends WSVoidService{
                 report = linksetInterface.validateInputStream("Webservice Call", input, format, StoreType.TEST, validationType, true);
             }
         } catch (Exception e){
-            report = e.toString();
+            report = readException(e);
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
         addValidateForm(sb, validationType, report);
@@ -846,7 +854,7 @@ public class WSLinksetService extends WSVoidService{
                     report = linksetInterface.loadString("Webservice Call", info, format, StoreType.TEST, validationType);
                 }
             } catch (Exception e){
-                report = e.toString();
+                report = readException(e);
             }
             StringBuilder sb = topAndSide("Welcome Admin! Load a " + validationType.getName(), httpServletRequest);
             addLoadForm(sb, validationType, info, report);
@@ -1252,7 +1260,7 @@ public class WSLinksetService extends WSVoidService{
                     report = linksetInterface.loadInputStream("Webservice Call", input, format, StoreType.TEST, validationType);
                 }
             } catch (Exception e){
-                report = e.toString();
+                report = readException(e);
             }
             StringBuilder sb = topAndSide(validationType.getName() + " Loader", httpServletRequest);
             addLoadForm(sb, validationType, report);
@@ -1450,7 +1458,7 @@ public class WSLinksetService extends WSVoidService{
                 report = linksetInterface.saveString("Webservice Call", info, format, StoreType.TEST, validationType);
             }
         } catch (Exception e){
-            report = e.toString();
+            report = readException(e);
         }
         StringBuilder sb = topAndSide("Save but not Load: " + validationType.getName(), httpServletRequest);
         addSaveForm(sb, validationType, info, report);
@@ -1854,7 +1862,7 @@ public class WSLinksetService extends WSVoidService{
                 report = linksetInterface.saveInputStream("Webservice Call", input, format, StoreType.TEST, validationType);
             }
         } catch (Exception e){
-            report = e.toString();
+            report = readException(e);
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Saver (Load to be done later by admin)", httpServletRequest);
         addSaveForm(sb, validationType, report);

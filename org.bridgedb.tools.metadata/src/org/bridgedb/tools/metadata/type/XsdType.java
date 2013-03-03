@@ -104,7 +104,8 @@ public enum XsdType implements MetaDataType{
         if (result != null){
             return result;
         }
-        throw new BridgeDBException("No XSD type known for " + type);
+        return null;
+        //throw new BridgeDBException("No XSD type known for " + type);
     }
     
     private static HashMap<String,XsdType> getRegister(){
@@ -132,6 +133,9 @@ public enum XsdType implements MetaDataType{
     }
 
     private boolean sameOrSubType(XsdType other) {
+        if (other == null){
+            return false;
+        }
         if (this.equals(other)){
             return true;
         }

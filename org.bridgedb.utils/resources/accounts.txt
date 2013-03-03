@@ -1,0 +1,35 @@
+#Use this file to add logins and passwords to read uris.
+#For example to read uris from remote sites.
+
+#This information is exposed through the AccountsReader.java which returns an AccountsInfo object
+
+#It is REQUIRED that you make a copy of this file and save it in a higher priority location
+#Please see the README.txt file in the BridgeDB root directory.
+#Do not put real passwords directly in this file.
+#Do add uris for which passwords could be obtained
+#This file is updated to a PUBLIC github repository
+
+#All Properties keys should be in a two part format separated by a full stop.
+#First part is a group identifier
+#Second part is the account settings
+    #uri   : first part of the uri.
+           # key for finding the account settings
+    #login : or user name
+    #password
+#To add second parts please edit the Java classes AccountInfo and AccountsReader
+
+#Additional property groups can be added without any code change.
+#Just use a unique first part
+
+#The ops github repository includes a Read Only account.
+#Please ask Christian for the password of that account
+opsgithub.uri            https://raw.github.com/openphacts/
+opsgithub.login          OpsReadOnly
+opsgithub.password       askChrisian
+
+#The rsc has a FTP account.
+#Please contact them directly if you require the user name and password.
+#OpenPhacts members can also ask Christian
+chemspiderftp.uri        ftp://ftp.rsc-us.org
+chemspiderftp.login      askRSC
+chemspiderftp.password   askRSC

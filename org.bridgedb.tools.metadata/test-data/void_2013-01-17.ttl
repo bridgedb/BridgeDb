@@ -1,0 +1,229 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix dctype: <http://purl.org/dc/dcmitype>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix freq: <http://purl.org/cld/freq/>.
+@prefix pav: <http://purl.org/pav/>.
+@prefix voag: <http://voag.linkedmodel.org/schema/voag#>.
+@prefix void: <http://rdfs.org/ns/void#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix : <ftp://ftp.rsc-us.org/OPS/20130117/void_2013-01-17.ttl#>.
+
+<ftp://ftp.rsc-us.org/OPS/20130117/void_2013-01-17.ttl> dcterms:description "ChemSpider's Public Dataset"@en;
+                                                        dcterms:title "A VoID Description of the ChemSpider Dataset"@en;
+                                                        pav:createdBy <http://www.chemspider.com/>;
+                                                        pav:createdOn "2012-10-24T10:49:00Z"^^xsd:dateTime;
+                                                        pav:lastUpdateOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                                                        pav:previousVersion <ftp://ftp.rsc-us.org/OPS/20121114/void_2012-11-14.ttl>;
+                                                        a void:DatasetDescription;
+                                                        foaf:primaryTopic :chemSpiderDataset.
+:chebi pav:retrievedBy <http://www.chemspider.com/UserProfile.aspx?username=CSDepositionService>;
+       pav:retrievedFrom <ftp://ftp.ebi.ac.uk/pub/databases/chebi/SDF/ChEBI_complete.sdf.gz>;
+       pav:retrievedOn "2012-07-11T15:36:27Z"^^xsd:dateTime;
+       pav:version "93"^^xsd:string;
+       a dctype:Dataset;
+       foaf:homepage <http://www.ebi.ac.uk/chebi/>.
+:chebi_exactMatch dcterms:description "ChEBI linkset of compounds deposited into ChemSpider that match exactly with ChemSpider compounds."@en;
+                  dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                  dcterms:title "ChemSpider ChEBI Exact Match Linkset"@en;
+                  pav:authoredBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                  pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                  pav:createdBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                  pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                  pav:createdWith <http://www.chemspider.com/>;
+                  pav:previousVersion <ftp://ftp.rsc-us.org/OPS/20121114/void_2012-11-14.ttl#chebi_exactMatch>;
+                  void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/ChEBI/LINKSET_EXACT_ChEBI20130117.ttl.gz>;
+                  void:linkPredicate skos:exactMatch;
+                  void:objectsTarget <https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl#chebi>;
+                  void:subjectsTarget :chemspider-chebi;
+                  void:triples 19700 ;
+                  dul:expresses <http://semanticscience.org/resource/CHEMINF_000059>;
+                  a void:Linkset.
+:chemSpiderDataset dcterms:created "2007-03-01T00:00:00Z"^^xsd:dateTime;
+                   dcterms:description "ChemSpider's Public Dataset"@en;
+                   dcterms:license <http://creativecommons.org/licenses/by-sa/3.0/>;
+                   dcterms:modified "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                   dcterms:publisher <http://www.chemspider.com/>;
+                   dcterms:subject <http://dbpedia.org/resource/Molecule>;
+                   dcterms:title "ChemSpider Dataset"@en;
+                   void:example_resource <http://rdf.chemspider.com/2157>;
+                   void:feature <http://www.w3.org/ns/formats/data/Turtle>;
+                   void:subset :chemspider-chebi,
+                               :chemspider-chembl,
+                               :chemspider-drugbank,
+                               :chemspider-mesh,
+                               :chemspider-pdb;
+                   void:uriSpace "http://rdf.chemspider.com/"^^xsd:string;
+                   void:vocabulary <http://purl.obolibrary.org/obo/>,
+                                   dctype:,
+                                   dcterms:,
+                                   pav:,
+                                   <http://qudt.org/1.1/schema/qudt#>,
+                                   void:,
+                                   <http://semanticscience.org/ontology/cheminf.owl/>,
+                                   <http://www.obofoundry.org/ro/ro.owl#>,
+                                   dul:,
+                                   rdf:,
+                                   xsd:,
+                                   skos:,
+                                   foaf:;
+                   voag:frequencyOfChange freq:monthly;
+                   a void:Dataset;
+                   foaf:homepage <http://rdf.chemspider.com/>;
+                   foaf:page <http://thedatahub.org/dataset/chemspider>,
+                             <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000138>.
+:chembl pav:retrievedBy <http://www.chemspider.com/UserProfile.aspx?username=RSC-Sharpe>;
+        pav:retrievedFrom <ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_14/chembl_14.sdf.gz>;
+        pav:retrievedOn "2012-12-11T11:34:02Z"^^xsd:dateTime;
+        pav:version "14"^^xsd:string;
+        a dctype:Dataset;
+        foaf:homepage <http://www.ebi.ac.uk/chembl/>.
+:chembl_exactMatch dcterms:description "ChEMBL linkset of compounds deposited into ChemSpider that match exactly with ChemSpider compounds."@en;
+                   dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                   dcterms:title "ChemSpider ChEMBL Exact Match Linkset"@en;
+                   pav:authoredBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                   pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                   pav:createdBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                   pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                   pav:createdWith <http://www.chemspider.com/>;
+                   pav:previousVersion <ftp://ftp.rsc-us.org/OPS/20121114/void_2012-11-14.ttl#chembl_exactMatch>;
+                   void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/ChEMBL/LINKSET_EXACT_ChEMBL20130117.ttl.gz>;
+                   void:linkPredicate skos:exactMatch;
+                   void:objectsTarget <http://linkedchemistry.info/void.ttl#chemblrdf_compounds>;
+                   void:subjectsTarget :chemspider-chembl;
+                   void:triples 1163017 ;
+                   dul:expresses <http://semanticscience.org/resource/CHEMINF_000059>;
+                   a void:Linkset.
+:chemspider-chebi dcterms:description "The subset of ChemSpider that contains ChEBI data."@en;
+                  dcterms:title "ChemSpider ChEBI Subset"@en;
+                  void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/PROPERTIES_CHEBI20130117.ttl.gz>,
+                                <ftp://ftp.rsc-us.org/OPS/20130117/SYNONYMS_CHEBI20130117.ttl.gz>;
+                  void:subset :chebi_exactMatch;
+                  a void:Dataset;
+                  prov:wasDerivedFrom :chebi;
+                  foaf:page <http://www.ebi.ac.uk/chebi/>.
+:chemspider-chembl dcterms:description "The subset of ChemSpider that contains ChEMBL data."@en;
+                   dcterms:title "ChemSpider ChEMBL Subset"@en;
+                   void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/PROPERTIES_CHEMBL20130117.ttl.gz>,
+                                 <ftp://ftp.rsc-us.org/OPS/20130117/SYNONYMS_CHEMBL20130117.ttl.gz>;
+                   void:subset :chembl_exactMatch;
+                   a void:Dataset;
+                   prov:wasDerivedFrom :chembl;
+                   foaf:page <http://www.ebi.ac.uk/chembl/>.
+:chemspider-drugbank dcterms:description "The subset of ChemSpider that contains DrugBank data."@en;
+                     dcterms:title "ChemSpider DrugBank Subset"@en;
+                     void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/PROPERTIES_DRUGBANK20130117.ttl.gz>,
+                                   <ftp://ftp.rsc-us.org/OPS/20130117/SYNONYMS_DRUGBANK20130117.ttl.gz>;
+                     void:subset :drugbank_exactMatch;
+                     a void:Dataset;
+                     prov:wasDerivedFrom :drugbank;
+                     foaf:page <http://www.drugbank.ca/>.
+:chemspider-mesh dcterms:description "The subset of ChemSpider that contains MeSH data."@en;
+                 dcterms:title "ChemSpider MeSH Subset"@en;
+                 void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/PROPERTIES_MESH20130117.ttl.gz>,
+                               <ftp://ftp.rsc-us.org/OPS/20130117/SYNONYMS_MESH20130117.ttl.gz>;
+                 void:subset :mesh_exactMatch;
+                 a void:Dataset;
+                 prov:wasDerivedFrom :mesh;
+                 foaf:page <http://www.nlm.nih.gov/mesh/>.
+:chemspider-pdb dcterms:description "The subset of ChemSpider that contains PDB data."@en;
+                dcterms:title "ChemSpider PDB Subset"@en;
+                void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/PROPERTIES_PDB20130117.ttl.gz>,
+                              <ftp://ftp.rsc-us.org/OPS/20130117/SYNONYMS_PDB20130117.ttl.gz>;
+                void:subset :pdb_exactMatch,
+                            :pdb_relatedMatch;
+                a void:Dataset;
+                prov:wasDerivedFrom :pdb;
+                foaf:page <http://www.wwpdb.org/>.
+:drugbank pav:retrievedBy <http://www.chemspider.com/UserProfile.aspx?username=CSDepositionService>;
+          pav:retrievedFrom <ftp://ftp.ontotext.com/pub/lld/drugbank.tar.gz>;
+          pav:retrievedOn "2012-02-06T18:34:29Z"^^xsd:dateTime;
+          pav:version "3"^^xsd:string;
+          a dctype:Dataset;
+          foaf:homepage <http://www.drugbank.ca/>.
+:drugbank_exactMatch dcterms:description "DrugBank linkset of compounds deposited into ChemSpider that match exactly with ChemSpider compounds."@en;
+                     dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                     dcterms:title "ChemSpider DrugBank Exact Match Linkset"@en;
+                     pav:authoredBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                     pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                     pav:createdBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                     pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                     pav:createdWith <http://www.chemspider.com/>;
+                     pav:previousVersion <ftp://ftp.rsc-us.org/OPS/20121114/void_2012-11-14.ttl#drugbank_exactMatch>;
+                     void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/DrugBank/LINKSET_EXACT_DrugBank20130117.ttl.gz>;
+                     void:linkPredicate skos:exactMatch;
+                     void:objectsTarget <https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs>;
+                     void:subjectsTarget :chemspider-drugbank;
+                     void:triples 8684 ;
+                     dul:expresses <http://semanticscience.org/resource/CHEMINF_000059>;
+                     a void:Linkset.
+:mesh dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/>;
+      dcterms:publisher <http://www.nlm.nih.gov/mesh/>;
+      dcterms:title "The MeSH Dataset"@en;
+      pav:retrievedBy <http://www.chemspider.com/UserProfile.aspx?username=valt1>;
+      pav:retrievedFrom <http://www.nlm.nih.gov/mesh/filelist.html>;
+      pav:retrievedOn "2008-08-04T03:01:34Z"^^xsd:dateTime;
+      void:uriSpace "http://purl.bioontology.org/ontology/MSH/"^^xsd:string;
+      a dctype:Dataset;
+      foaf:homepage <http://www.nlm.nih.gov/mesh/>.
+:mesh_exactMatch dcterms:description "MeSH linkset of compounds deposited into ChemSpider that match exactly with ChemSpider compounds."@en;
+                 dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                 dcterms:title "ChemSpider MeSH Exact Match Linkset"@en;
+                 pav:authoredBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                 pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                 pav:createdBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                 pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                 pav:createdWith <http://www.chemspider.com/>;
+                 pav:previousVersion <ftp://ftp.rsc-us.org/OPS/20121114/void_2012-11-14.ttl#mesh_exactMatch>;
+                 void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/MeSH/LINKSET_EXACT_MeSH20130117.ttl.gz>;
+                 void:linkPredicate skos:exactMatch;
+                 void:objectsTarget :mesh;
+                 void:subjectsTarget :chemspider-mesh;
+                 void:triples 31300 ;
+                 dul:expresses <http://semanticscience.org/resource/CHEMINF_000059>;
+                 a void:Linkset.
+:pdb dcterms:license <http://www.rcsb.org/pdb/static.do?p=general_information/about_pdb/policies_references.html>;
+     dcterms:publisher <http://www.wwpdb.org/>;
+     dcterms:title "The PDB Dataset"@en;
+     pav:retrievedBy <http://www.chemspider.com/UserProfile.aspx?username=CSDepositionService>;
+     pav:retrievedFrom <http://ligand-expo.rcsb.org/dictionaries/all-sdf.sdf.gz>;
+     pav:retrievedOn "2012-02-06T18:47:52Z"^^xsd:dateTime;
+     void:uriSpace "http://purl.uniprot.org/pdb/"^^xsd:string;
+     a dctype:Dataset;
+     foaf:homepage <http://www.wwpdb.org/>.
+:pdb_exactMatch dcterms:description "PDB linkset of compounds deposited into ChemSpider that match exactly with ChemSpider compounds."@en;
+                dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                dcterms:title "ChemSpider PDB Exact Match Linkset"@en;
+                pav:authoredBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                pav:createdBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                pav:createdWith <http://www.chemspider.com/>;
+                pav:previousVersion <ftp://ftp.rsc-us.org/OPS/20121114/void_2012-11-14.ttl#pdb_exactMatch>;
+                void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/PDB/LINKSET_EXACT_PDB20130117.ttl.gz>;
+                void:linkPredicate skos:exactMatch;
+                void:objectsTarget :pdb;
+                void:subjectsTarget :chemspider-pdb;
+                void:triples 16330 ;
+                dul:expresses <http://semanticscience.org/resource/CHEMINF_000059>;
+                a void:Linkset.
+:pdb_relatedMatch dcterms:description "PDB linkset of compounds deposited into ChemSpider that are related to ChemSpider compounds."@en;
+                  dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+                  dcterms:title "ChemSpider PDB Related Match Linkset"@en;
+                  pav:authoredBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                  pav:authoredOn "2012-10-30T12:16:00Z"^^xsd:dateTime;
+                  pav:createdBy <http://www.chemspider.com/UserProfile.aspx?username=jonsteele>;
+                  pav:createdOn "2013-01-17T16:02:27Z"^^xsd:dateTime;
+                  pav:createdWith <http://www.chemspider.com/>;
+                  pav:previousVersion <ftp://ftp.rsc-us.org/OPS/20121114/void_2012-11-14.ttl#pdb_relatedMatch>;
+                  void:dataDump <ftp://ftp.rsc-us.org/OPS/20130117/PDB/LINKSET_RELATED_PDB20130117.ttl.gz>;
+                  void:linkPredicate skos:relatedMatch;
+                  void:objectsTarget :pdb;
+                  void:subjectsTarget :chemspider-pdb;
+                  void:triples 41481 ;
+                  dul:expresses <http://semanticscience.org/resource/CHEMINF_000454>;
+                  a void:Linkset.
