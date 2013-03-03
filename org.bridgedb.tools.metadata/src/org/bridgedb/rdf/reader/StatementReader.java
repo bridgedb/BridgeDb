@@ -69,7 +69,7 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
     
     public StatementReader(String address) throws BridgeDBException{
         address = address.trim();
-        if (address.startsWith("http")){
+        if (address.startsWith("http") || address.startsWith("ftp")){
             parse(address);
         } else {
             parse(new File(address), DEFAULT_BASE_URI);
@@ -111,8 +111,9 @@ public class StatementReader extends RDFHandlerBase implements VoidStatements {
         InputStreamReader reader = null;
         try {
             UrlReader urlReader = new  UrlReader(address);
-            String baseURI = urlReader.getPath();
-            RDFParser parser = getParser(baseURI);
+            String baseURI = urlReader.getBase();
+            String fileName = urlReader.getPath();
+            RDFParser parser = getParser(fileName);
             InputStream inputStream = urlReader.getInputStream();
             reader = new InputStreamReader(inputStream);
             parse(reader, parser, baseURI);

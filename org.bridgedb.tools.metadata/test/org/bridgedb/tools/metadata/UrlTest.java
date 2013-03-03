@@ -31,6 +31,7 @@ import org.bridgedb.rdf.reader.UrlReader;
 import org.bridgedb.tools.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.ConfigReader;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
@@ -174,4 +175,15 @@ public class UrlTest extends TestUtils{
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
         checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2drugbank-linkset.ttl", 5, FILE_HAS_EXTRA_RDF, dataSetRegistry);
     } 
+
+    @Test
+    @Ignore //does not work offline
+    public void testChemspiderFtpVoid() throws IDMapperException{
+        MetaDataSpecification dataSetRegistry = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
+                ConfigReader.logToConsole();
+
+        checkUrl("ftp://ftp.rsc-us.org/OPS/20130117/void_2013-01-17.ttl#chemSpiderDataset", 21, FILE_HAS_EXTRA_RDF, dataSetRegistry);
+    } 
+
 }
