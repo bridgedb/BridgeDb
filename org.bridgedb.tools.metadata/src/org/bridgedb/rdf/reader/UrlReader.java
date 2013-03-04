@@ -4,8 +4,10 @@
  */
 package org.bridgedb.rdf.reader;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
@@ -82,7 +84,7 @@ public class UrlReader {
 
     public InputStream getInputStream() throws BridgeDBException, IOException{
         String schema = uri.getScheme().toLowerCase();
-        if (schema.equals("https")){
+        if (schema.equals("https") || schema.equals("http")){
             return getHttpsInputStream();
         } else if (schema.equals("ftp")){
             return getFtpInputStream();
@@ -235,6 +237,24 @@ System.out.println(path);
         }
     } 
 
+    public static void main(String[] args) throws Exception {
+        UrlReader reader = new UrlReader("http://ops-virtuoso.scai.fraunhofer.de/download/peregrine_linksets.tgz");
+        InputStream inputStream = reader.getInputStream();
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+
+        String inputLine;
+        while ((inputLine = in.readLine()) != null)
+            System.out.println(inputLine);
+        in.close();       
+    }
+//        InputStream inputStream = getOpenPhactsGithubInputStream("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs");
+//        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+//
+//        String inputLine;
+//        while ((inputLine = in.readLine()) != null)
+//            System.out.println(inputLine);
+//        in.close();
+ //       URI uri = new URI("https://github.com:8080/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs");
 
 
 }
