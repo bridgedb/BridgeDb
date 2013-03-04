@@ -298,7 +298,7 @@ public class LinksetExporter {
         writeBioDataSource();
         
         File dsfile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
-        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
         BridgeDBRdfHandler.parseRdfFile(dsfile);             
         Reporter.println("Parsing finished");
         
@@ -317,6 +317,11 @@ public class LinksetExporter {
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(dsfile);
         
+        File esportDsfile = new File("resources/ExportDataSource.ttl");
+        BridgeDBRdfHandler.writeRdfToFile(esportDsfile, used, true);
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
+        BridgeDBRdfHandler.parseRdfFile(esportDsfile);
+
         //LinksetExporter exporter = new LinksetExporter(file);
         //File directory = new File("C:/OpenPhacts/linksets/Ag_Derby_20120602");
         //exporter.exportAll(directory);
