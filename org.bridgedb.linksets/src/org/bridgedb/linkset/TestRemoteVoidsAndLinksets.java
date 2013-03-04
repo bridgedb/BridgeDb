@@ -90,5 +90,6 @@ public class TestRemoteVoidsAndLinksets {
 
         checker.checkUrl("http://ops-virtuoso.scai.fraunhofer.de/download/peregrine-dict-void.ttl", 2);
         checker.checkUrl("http://ops-virtuoso.scai.fraunhofer.de/download/pm-dict-void.ttl", 2);
+        checker.checkFile("C:/OpenPhacts/linksets/LinksetsUBO/Peregrine_AF_703906.n3",1);
     }
 }
