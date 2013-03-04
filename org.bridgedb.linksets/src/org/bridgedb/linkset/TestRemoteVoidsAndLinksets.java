@@ -87,5 +87,8 @@ public class TestRemoteVoidsAndLinksets {
         checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2chemblrdf-linkset.ttl", 4);
         checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2drugbank-linkset.ttl", 5);
         checker.checkUrl("ftp://ftp.rsc-us.org/OPS/20130117/void_2013-01-17.ttl#chemSpiderDataset", 21);
+
+        checker.checkUrl("http://ops-virtuoso.scai.fraunhofer.de/download/peregrine-dict-void.ttl", 2);
+        checker.checkUrl("http://ops-virtuoso.scai.fraunhofer.de/download/pm-dict-void.ttl", 2);
     }
 }
