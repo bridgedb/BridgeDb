@@ -1006,7 +1006,7 @@ bridgeDB:DataSource_dbSNP a bridgeDB:DataSource ;
 	bridgeDB:mainUrl "http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp" ;
 	bridgeDB:idExample "121909098" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "true" ;
+	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/dbsnp/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id> .
@@ -2678,7 +2678,7 @@ bridgeDB:DataSource_miRBase_Sequence a bridgeDB:DataSource ;
 	bridgeDB:mainUrl "http://microrna.sanger.ac.uk/" ;
 	bridgeDB:idExample "MI0000001" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
+	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mirbase/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?acc=$id> .
