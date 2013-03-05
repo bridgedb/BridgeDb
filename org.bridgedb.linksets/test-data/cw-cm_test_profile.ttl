@@ -20,7 +20,6 @@
     dcterms:license "unknown" ;
     void:subjectsTarget :conceptwiki ;
     void:objectsTarget :chemblMolecule ;
-    void:subset :conceptwiki ;
     void:linkPredicate skos:exactMatch ;
     dul:expresses <http://www.bridgedb.org/test#testJustification> ;
     dcterms:created "2012-02-28"^^xsd:date ;
