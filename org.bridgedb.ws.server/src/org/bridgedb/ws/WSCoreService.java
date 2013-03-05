@@ -135,9 +135,13 @@ public class WSCoreService implements WSCoreInterface {
                 " and " + WsConstants.DATASOURCE_SYSTEM_CODE + " parameters");
         ArrayList<Xref> srcXrefs = new ArrayList<Xref>();
         for (int i = 0; i < id.size() ;i++){
-            DataSource dataSource = DataSource.getBySystemCode(scrCode.get(i));
-            Xref source = new Xref(id.get(i), dataSource);
-            srcXrefs.add(source);
+            try {
+                DataSource dataSource = DataSource.getBySystemCode(scrCode.get(i));
+                Xref source = new Xref(id.get(i), dataSource);
+                srcXrefs.add(source);
+            } catch (IllegalArgumentException ex){
+                logger.error(ex.getMessage());
+            }
         }
         DataSource[] targetDataSources = new DataSource[targetCodes.size()];
         for (int i=0; i< targetCodes.size(); i++){
@@ -166,8 +170,14 @@ public class WSCoreService implements WSCoreInterface {
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode) throws BridgeDBException {
         if (id == null) throw new BridgeDBException (WsConstants.ID + " parameter can not be null");
-        if (scrCode == null) throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter can not be null");            
-        DataSource dataSource = DataSource.getBySystemCode(scrCode);
+        if (scrCode == null) throw new BridgeDBException (WsConstants.DATASOURCE_SYSTEM_CODE + " parameter can not be null");  
+        DataSource dataSource;
+        try {
+            dataSource = DataSource.getBySystemCode(scrCode);
+        } catch (IllegalArgumentException ex){
+             logger.error(ex.getMessage());
+             return XrefExistsBean.asBean(id, scrCode, false);
+        }
         Xref source = new Xref(id, dataSource);
         try {
             return XrefExistsBean.asBean(source, idMapper.xrefExists(source));

@@ -70,9 +70,25 @@ public class DataSourceBean {
         return bean;
     }
     
+    public static DataSourceBean asBean(String sysCode){
+        DataSourceBean bean = new DataSourceBean();
+        bean.sysCode = sysCode;
+        bean.fullName = null;
+        bean.urlPattern = null;
+        bean.idExample = null;
+        bean.isPrimary = false;
+        bean.type = null;
+        bean.urnBase = null;
+        bean.mainUrl = null;; 
+        return bean;
+    }
+    
     public static DataSource asDataSource(DataSourceBean bean) {
         if (bean == null){
             return null;
+        }
+        if (bean.fullName == null){
+            throw new IllegalArgumentException("No know DataSource known for " + bean.sysCode);
         }
         DataSource.Builder builder = DataSource.register(bean.sysCode, bean.fullName);
         if (bean.urlPattern != null){

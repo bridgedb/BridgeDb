@@ -42,7 +42,14 @@ public class XrefExistsBean {
         return bean;
     }
     
-    /**
+    public static XrefExistsBean asBean(String id, String scrCode, boolean exists){
+        XrefExistsBean bean = new XrefExistsBean();
+        bean.exists = exists;
+        bean.Xref = XrefBean.asBean(id, scrCode);
+        return bean;
+    }
+
+   /**
      * @return the isSupported
      */
     public Boolean getExists() {

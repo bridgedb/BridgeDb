@@ -28,6 +28,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.DataSourceOverwriteLevel;
 import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.Profile;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreClient;
 import org.bridgedb.ws.WSUriInterface;
@@ -222,6 +223,9 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
 
 	@Override
 	public ProfileBean getProfile(String id) throws BridgeDBException {
+        if (id.startsWith(Profile.getProfileBaseURI())){
+            id = id.substring(Profile.getProfileBaseURI().length());
+        }
 		ProfileBean result = webResource.path("profile/" + id)
 		.accept(MediaType.APPLICATION_XML_TYPE)
 		.get(new GenericType<ProfileBean>() {});

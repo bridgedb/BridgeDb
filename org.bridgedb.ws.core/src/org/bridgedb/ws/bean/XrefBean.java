@@ -47,6 +47,13 @@ public class XrefBean {
         return bean;
     }
 
+     public static XrefBean asBean(String id, String scrCode){
+        XrefBean bean = new XrefBean();
+        bean.id = id;
+        bean.dataSource = DataSourceBean.asBean(scrCode);
+        return bean;
+    }
+
     public static Xref asXref(XrefBean bean){
         if (bean == null){
             return null;
