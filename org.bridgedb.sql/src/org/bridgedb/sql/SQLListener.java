@@ -90,7 +90,8 @@ public class SQLListener implements MappingListener{
     static final String TYPE_COLUMN_NAME = "type";
     static final String URL_PATTERN_COLUMN_NAME = "urlPattern";
     static final String URN_BASE_COLUMN_NAME = "urnBase";
-
+    static final String LAST_UDPATES = "LastUpdates";
+    
     static final String FULL_NAME_PREFIX = "_";
     
     protected SQLAccess sqlAccess;
@@ -780,7 +781,7 @@ public class SQLListener implements MappingListener{
      */
     private void updateLastUpdated() throws BridgeDBException {
         String date = new Date().toString();
-        putProperty("LastUpdates", date);
+        putProperty(LAST_UDPATES, date);
     }
 
     public void putProperty(String key, String value) throws BridgeDBException {

@@ -33,6 +33,10 @@ public class ProfileInfo {
     String createdOn;
     Set<String> justification;
     
+    public static final String DEFAULT_PROFILE_NAME = "Default";
+    public static final String TEST_PROFILE_NAME = "Test";
+    public static final String ALL_PROFILE_NAME = "All";
+    
     public ProfileInfo(String uri, String name,  String createdOn, String createdBy, Set<String> justifications) {
         this.uri = uri;
         this.name = name;
