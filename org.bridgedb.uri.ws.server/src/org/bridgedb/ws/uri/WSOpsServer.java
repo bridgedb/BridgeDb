@@ -51,38 +51,35 @@ public class WSOpsServer extends WSLinksetService{
         logger.info("WsOpsServer setup");        
     }
     
-    private final String statsBlock() throws BridgeDBException {
-    		OverallStatistics statistics = uriMapper.getOverallStatistics();
-    		StringBuilder sb = new StringBuilder();
-    		sb.append("<div id=\"navBar\"><h2>Service statistics</h2>");
-    		sb.append("<ul>");
-    		sb.append("<li>");
-    		sb.append(formatter.format(statistics.getNumberOfMappings()));
-    		sb.append(" Mappings</li>");
-    		sb.append("<li>From ");
-    		sb.append(formatter.format(statistics.getNumberOfMappingSets()));
-    		sb.append(" Mapping Sets</li>");
-    		sb.append("<li>Covering ");
-    		sb.append(formatter.format(statistics.getNumberOfSourceDataSources()));
-    		sb.append(" Source Data Sources</li>");
-    		sb.append("<li>Using ");
-    		sb.append(formatter.format(statistics.getNumberOfPredicates()));
-    		sb.append(" Predicates</li>");
-    		sb.append("<li>Mapping to ");
-    		sb.append(formatter.format(statistics.getNumberOfTargetDataSources()));
-    		sb.append(" Target Data Sources</li>");
-    		sb.append("<li>Number of profiles: ");
-    		sb.append(statistics.getNumberOfProfiles());
-    		sb.append("</li>");
-    		sb.append("<li>Last update: ");
-    		sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
-    		sb.append("</li>");
-    		sb.append("</ul></p></div>");        
-    		return sb.toString();
+    private final void statsBlock(StringBuilder sb) throws BridgeDBException {
+        OverallStatistics statistics = uriMapper.getOverallStatistics();
+        sb.append("<div id=\"navBar\"><h2>Service statistics</h2>");
+        sb.append("<ul>");
+        sb.append("<li>");
+        sb.append(formatter.format(statistics.getNumberOfMappings()));
+        sb.append(" Mappings</li>");
+        sb.append("<li>From ");
+        sb.append(formatter.format(statistics.getNumberOfMappingSets()));
+        sb.append(" Mapping Sets</li>");
+        sb.append("<li>Covering ");
+        sb.append(formatter.format(statistics.getNumberOfSourceDataSources()));
+        sb.append(" Source Data Sources</li>");
+        sb.append("<li>Using ");
+        sb.append(formatter.format(statistics.getNumberOfPredicates()));
+        sb.append(" Predicates</li>");
+        sb.append("<li>Mapping to ");
+        sb.append(formatter.format(statistics.getNumberOfTargetDataSources()));
+        sb.append(" Target Data Sources</li>");
+        sb.append("<li>Number of profiles: ");
+        sb.append(statistics.getNumberOfProfiles());
+        sb.append("</li>");
+        sb.append("<li>Last update: ");
+        sb.append(idMapper.getCapabilities().getProperty("LastUpdates"));
+        sb.append("</li>");
+        sb.append("</ul></p></div>\n");        
     }
     
-    private final String uriMappingForm() throws BridgeDBException {
-    	StringBuilder sb = new StringBuilder();
+    private final void uriMappingForm(StringBuilder sb) throws BridgeDBException {
     	sb.append("<form method=\"get\" action=\"/");
         sb.append(getServiceName());
     	sb.append("/");
@@ -98,21 +95,17 @@ public class WSOpsServer extends WSLinksetService{
     	sb.append("\" name=\"");
     	sb.append(WsUriConstants.URI);
     	sb.append("\" style=\"width:80%\"/></p>");
-    	sb.append(generateProfileSelector());
+    	generateProfileSelector(sb);
     	sb.append("<p><input type=\"submit\" value=\"Submit\"/></p>");
     	sb.append("<p>Note: If the new page does not open click on the address bar and press enter</p>");
-    	sb.append("</fieldset></form>");
-    	return sb.toString();
+    	sb.append("</fieldset></form>\n");
     }
 
-	private String generateProfileSelector() throws BridgeDBException {
+	private void generateProfileSelector(StringBuilder sb) throws BridgeDBException {
 		List<ProfileInfo> profiles = uriMapper.getProfiles();
-		StringBuilder sb = new StringBuilder("<p><select name=\"");
+        sb.append("<p><select name=\"");
     	sb.append(WsUriConstants.PROFILE_URI);
     	sb.append("\">");
-	   	sb.append("<option value=\"");
-    	sb.append(Profile.getAllProfile());
-    	sb.append("\">Default profile</option>");
 		for (ProfileInfo profile : profiles) {
 			sb.append("<option value=\"");
 			sb.append(profile.getUri());
@@ -120,8 +113,7 @@ public class WSOpsServer extends WSLinksetService{
 			sb.append(profile.getName());
 			sb.append("</option>");
 		}
-    	sb.append("</select>");
-    	return sb.toString();
+    	sb.append("</select>\n");
 	}
            
     /**
@@ -140,8 +132,41 @@ public class WSOpsServer extends WSLinksetService{
         if (logger.isDebugEnabled()){
             logger.debug("welcomeMessage called!");
         }
-        StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
+        StringBuilder sb = topAndSide ("Open PHACTS Identity Mapping Service"); //topAndSide("IMS Mapping Service",  httpServletRequest);
+        
+        sb.append("<div id=\"content\">");
+        sb.append("<p>Welcome to the Identity Mapping Service. </p>");        
+                
+        sb.append("\n<p>A List of which mappings we current have can be found at ");
+        sb.append("<a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/getMappingInfo\">Mapping Info Page</a></p>");
+        
+        uriMappingForm(sb);
+        
+        sb.append("<h2>Usage Information</h2>");
+        sb.append("\n<p>The Main OPS method is <a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/api/#");
+        sb.append(WsUriConstants.MAP);
+        sb.append("\">");
+        sb.append(WsUriConstants.MAP);
+        sb.append("<dd>List the URIs that map to this URI</dd>");
+        sb.append("\n<p><a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/api\">API Page</a></p>");
+        sb.append("</body></html>");
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
 
+    protected StringBuilder topAndSide(String header) throws BridgeDBException{
+        StringBuilder sb = header(header);
+        top(sb, header);      
+        statsBlock(sb);
+        return sb;
+    }
+    protected StringBuilder header(String header) throws BridgeDBException{
+        StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\"?>");
         sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
                 + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -160,6 +185,10 @@ public class WSOpsServer extends WSLinksetService{
         		"legend { color: #fff; background: #ffa20c; border: 1px solid #781351; padding: 2px 6px }" +
         		"</style>" +
         		"</head><body>");
+        return sb;
+    }
+    
+    protected void top(StringBuilder sb, String header) throws BridgeDBException{
         sb.append("<div id=\"container\">");
         sb.append("<div id=\"top\">");
         sb.append("<a href=\"http://www.cs.manchester.ac.uk/\">" +
@@ -171,35 +200,9 @@ public class WSOpsServer extends WSLinksetService{
         		"src=\"http://www.openphacts.org/images/stories/banner.jpg\" " +
         		"alt=\"Open PHACTS\" height=\"50\"></img></a>");
         sb.append("<h1>Open PHACTS Identity Mapping Service</h1>");
-        sb.append("</div>");
-        
-        sb.append(statsBlock());
-        
-        sb.append("<div id=\"content\">");
-        sb.append("<p>Welcome to the Identity Mapping Service. </p>");        
-                
-        sb.append("\n<p>A List of which mappings we current have can be found at ");
-        sb.append("<a href=\"/");
-        sb.append(getServiceName());
-        sb.append("/getMappingInfo\">Mapping Info Page</a></p>");
-        
-        sb.append(uriMappingForm());
-        
-        sb.append("<h2>Usage Information</h2>");
-        sb.append("\n<p>The Main OPS method is <a href=\"/");
-        sb.append(getServiceName());
-        sb.append("/api/#");
-        sb.append(WsUriConstants.MAP);
-        sb.append("\">");
-        sb.append(WsUriConstants.MAP);
-        sb.append("<dd>List the URIs that map to this URI</dd>");
-        sb.append("\n<p><a href=\"/");
-        sb.append(getServiceName());
-        sb.append("/api\">API Page</a></p>");
-        sb.append("</body></html>");
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        sb.append("</div>");   
     }
-
+    
     /**
      * Forwarding page for "/api".
      * 
