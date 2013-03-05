@@ -93,11 +93,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      public SQLUriMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
         super(dropTables, storeType);
         if (dropTables){
-            Collection<UriPattern> patterns = UriPattern.getUriPatterns();
-            for (UriPattern pattern:patterns){
-                this.registerUriPattern(pattern);
-            }
             createDefaultProfiles();
+        }
+        clearUriPatterns();
+        Collection<UriPattern> patterns = UriPattern.getUriPatterns();
+        for (UriPattern pattern:patterns){
+            this.registerUriPattern(pattern);
         }
     }   
     
@@ -1491,5 +1492,17 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Set<String> URIs = toUris(mapping.getTarget());
         mapping.addTargetUris(URIs);
     }
+
+    private void clearUriPatterns() throws BridgeDBException {
+        String update = "DELETE FROM " + URI_TABLE_NAME;
+        try {
+        	Statement statement = createStatement();
+            statement.executeUpdate(update);
+        } catch (BridgeDBException ex){
+             throw ex;
+        } catch (SQLException ex) {
+            throw new BridgeDBException ("Error clearing uri patterns " + update, ex);
+        }
+     }
 
 }
