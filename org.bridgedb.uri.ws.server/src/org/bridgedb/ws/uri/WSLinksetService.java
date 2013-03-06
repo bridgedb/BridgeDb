@@ -260,7 +260,7 @@ public class WSLinksetService extends WSVoidService{
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
         addValidationForm(sb, validationType, info, report);
-        sb.append(END);
+        footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
@@ -662,7 +662,7 @@ public class WSLinksetService extends WSVoidService{
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
         addValidateForm(sb, validationType, report);
-        sb.append(END);
+        footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
    
@@ -858,7 +858,7 @@ public class WSLinksetService extends WSVoidService{
             }
             StringBuilder sb = topAndSide("Welcome Admin! Load a " + validationType.getName(), httpServletRequest);
             addLoadForm(sb, validationType, info, report);
-            sb.append(END);
+            footerAndEnd(sb);
             return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
         } else {
             return redirectToSave(httpServletRequest);
@@ -1264,7 +1264,7 @@ public class WSLinksetService extends WSVoidService{
             }
             StringBuilder sb = topAndSide(validationType.getName() + " Loader", httpServletRequest);
             addLoadForm(sb, validationType, report);
-            sb.append(END);
+            footerAndEnd(sb);
             return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
         } else {
             return redirectToSave(httpServletRequest);
@@ -1464,7 +1464,7 @@ public class WSLinksetService extends WSVoidService{
         addSaveForm(sb, validationType, info, report);
         sb.append("<h1>WARNING Data not Loaded</h1>");
         sb.append("<h2>Please contact an Admin to Load this data</h2>");
-        sb.append(END);
+        footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
@@ -1866,7 +1866,7 @@ public class WSLinksetService extends WSVoidService{
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Saver (Load to be done later by admin)", httpServletRequest);
         addSaveForm(sb, validationType, report);
-        sb.append(END);
+        footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
@@ -1903,7 +1903,7 @@ public class WSLinksetService extends WSVoidService{
             addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
             addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
         //}
-        sb.append(END);
+        footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
@@ -1946,8 +1946,8 @@ public class WSLinksetService extends WSVoidService{
             addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
             addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
         //}
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        footerAndEnd(sb);
+       return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
     private Response redirectToSave(HttpServletRequest httpServletRequest) throws BridgeDBException {
@@ -1986,8 +1986,8 @@ public class WSLinksetService extends WSVoidService{
             addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
             addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
         //}
-        sb.append(END);
-        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+        footerAndEnd(sb);
+       return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
     /**

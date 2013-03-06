@@ -186,19 +186,117 @@ public class WSFame extends WSUriInterfaceService {
     }
     
     protected StringBuilder topAndSide(String header, HttpServletRequest httpServletRequest) throws BridgeDBException{
-        StringBuilder sb = new StringBuilder(HEADER_TO_TITLE);
-        sb.append(header);
-        sb.append(HEADER_AFTER_TITLE);
-        sb.append(TOGGLER);
-        sb.append(HEADER_END);
-        sb.append(BODY);
-        sb.append(TOP_LEFT);
-        sb.append(header);
-        sb.append(TOP_RIGHT);
-        sb.append(SIDE_BAR_BEGIN);
-        addSideBarMiddle(sb, httpServletRequest);
-        sb.append(SIDE_BAR_END);
+        StringBuilder sb = header(header);
+        top(sb, header);      
+        sideBar(sb, httpServletRequest);
+        sb.append("<div id=\"content\">");
         return sb;
+    }
+    
+    protected StringBuilder header(String header) throws BridgeDBException{
+        StringBuilder sb = new StringBuilder();
+        sb.append("<?xml version=\"1.0\"?>");
+        sb.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" ");
+        sb.append("\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+        sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+        sb.append("<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\"/>");
+        sb.append("<head>\n");
+        sb.append("<title>");
+        sb.append(header);
+        sb.append("</title>\n");
+        style(sb);
+        toggler(sb);
+        sb.append("</head><body>");
+        return sb;
+    }
+
+    protected void style(StringBuilder sb) throws BridgeDBException{
+        sb.append("<style>\n");
+        sb.append("#container { width: 100%; margin: 10px auto; background-color: #fff; color: #333; border: ");
+            sb.append("1px solid gray; line-height: 130%; font-family: perpetua, garamond, serif; font-size: 110%; ");
+            sb.append("min-width: 40em; }\n");
+        sb.append("#top { padding: .5em; background-color: #808080; border-bottom: 1px solid gray; }\n");
+        sb.append("#top h1 { padding: .25em .5em .25em .5em; margin-left: 200px; margin-bottom: 0; margin-right: 0; margin-top: 0 }\n");
+        sb.append("#top a { text-decoration: none; color: #ffffff; }\n");
+        sb.append("#navBar { float: left; width: 200px; margin: 0em; padding: 5px; min-width: 200px; border-right: 1px solid gray; min-height: 100%} \n");
+        sb.append("#content { margin-left: 210px; border-left: 1px solid gray; padding: 1em; min-width: 20em; min-height: 500px; }\n");
+        sb.append("#footer { clear:both; }\n");
+        sb.append("fieldset {border: 1px solid #781351;width: 20em}\n");
+        sb.append("legend { color: #fff; background: #ffa20c; border: 1px solid #781351; padding: 2px 6px }\n");
+        sb.append("</style>\n");
+        sb.append("<style type=\"text/css\">");
+        sb.append("	.texthotlink, .texthotlink_hilight { width: 150px; font-size: 85%; padding: .25em; cursor: ");
+            sb.append("pointer; color: black; font-family: Arial, sans-serif;	}\n");
+        sb.append("	.texthotlink_hilight {background-color: #fff6ac;}\n");
+        sb.append("		.menugroup { font-size: 150%; font-weight: bold; padding-top: .25em; }\n");
+        sb.append("		input { background-color: #EEEEFF; } body, td { background-color: white; font-family: sans-serif; }\n");
+        sb.append("	</style>\n");            
+    }
+
+    protected void toggler(StringBuilder sb) throws BridgeDBException{
+        sb.append("<script language=\"javascript\">\n");
+        sb.append("		function getObj(id) {\n");
+        sb.append("			return document.getElementById(id)\n");
+        sb.append("		}\n");
+        sb.append("		function DHTML_TextHilight(id) {\n");
+        sb.append("			getObj(id).classNameOld = getObj(id).className;\n");
+        sb.append("			getObj(id).className = getObj(id).className + \"_hilight\";\n");
+        sb.append("		}\n");
+        sb.append("		function DHTML_TextRestore(id) {\n");
+        sb.append("			if (getObj(id).classNameOld != \"\")\n");
+        sb.append("				getObj(id).className = getObj(id).classNameOld;\n");
+        sb.append("		}\n");
+        sb.append("     function getItem(id){\n");
+        sb.append("         var itm = false;\n");
+        sb.append("         if(document.getElementById)\n");
+        sb.append("             itm = document.getElementById(id);\n");
+        sb.append("         else if(document.all)\n");
+        sb.append("             itm = document.all[id];\n");
+        sb.append("         else if(document.layers)\n");
+        sb.append("             itm = document.layers[id];\n");
+        sb.append("         return itm;\n");
+        sb.append("    }\n\n");
+        sb.append("    function toggleItem(id)\n");
+        sb.append("{\n");
+        sb.append("    itm = getItem(id);\n");
+        sb.append("    if(!itm)\n");
+        sb.append("        return false;\n");
+        sb.append("    if(itm.style.display == 'none')\n");
+        sb.append("        itm.style.display = '';\n");
+        sb.append("    else\n");
+        sb.append("        itm.style.display = 'none';\n");
+        sb.append("    return false;\n");
+        sb.append("}\n\n");
+        sb.append("function hideDetails()\n");
+        sb.append("{\n");
+        sb.append("     toggleItem('ops')\n");
+        sb.append("     toggleItem('sparql')\n");
+        sb.append("     return true;\n");
+        sb.append("}\n\n");
+        sb.append("</script>\n");
+    }
+
+     protected void top(StringBuilder sb, String header) throws BridgeDBException{
+        sb.append("<div id=\"container\">");
+        sb.append("<div id=\"top\">");
+        sb.append("<a href=\"http://www.cs.manchester.ac.uk/\">" +
+        		"<img style=\"float: left; border: none; padding: 0px; margin: 0px;\" " +
+        		"src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" " +
+        		"alt=\"The University of Manchester\" height=\"50\"></img></a>");
+        sb.append("<a href=\"http://www.openphacts.org/\">" +
+        		"<img style=\"float: right; border: none; padding: 0px; margin: 0px;\" " +
+        		"src=\"http://www.openphacts.org/images/stories/banner.jpg\" " +
+        		"alt=\"Open PHACTS\" height=\"50\"></img></a>");
+        sb.append("<h1>");
+        sb.append(header);
+        sb.append("</h1>");
+        sb.append("</div>");   
+    }
+    
+    protected void sideBar(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
+        sb.append("<div id=\"navBar\">");
+        addSideBarMiddle(sb, httpServletRequest);
+        sb.append("</div>\n");        
     }
     
     /**
@@ -214,7 +312,7 @@ public class WSFame extends WSUriInterfaceService {
      */
     protected void addSideBarIMS(StringBuilder sb) throws BridgeDBException{
         sb.append("<div class=\"menugroup\">OPS Identity Mapping Service</div>");
-        addSideBarItem(sb, "", "Home");
+        addSideBarItem(sb, "ims-home", "Home");
         addSideBarItem(sb, "getMappingInfo", "Mappings Summary");
         addSideBarItem(sb, "graphviz", "Mappings Summary in Graphviz format");
         addSideBarItem(sb, "ims-api", "IMS API");
@@ -257,151 +355,12 @@ public class WSFame extends WSUriInterfaceService {
         sb.append("</div>");
      }
 
-    private final String HEADER_TO_TITLE = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
-            + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
-            + "<html xmlns:v=\"urn:schemas-microsoft-com:vml\">\n"
-            + "<head>\n"
-            + " <title>"
-            + "     Manchester University OpenPhacts ";
-    private final String HEADER_AFTER_TITLE = "	</title>\n"
-            + "	<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\"></meta>\n"
-            + "	<script>"
-            + "		function getObj(id) {"
-            + "			return document.getElementById(id)"
-            + "		}"
-            + "		function DHTML_TextHilight(id) {"
-            + "			getObj(id).classNameOld = getObj(id).className;"
-            + "			getObj(id).className = getObj(id).className + \"_hilight\";"
-            + "		}"
-            + "		function DHTML_TextRestore(id) {"
-            + "			if (getObj(id).classNameOld != \"\")"
-            + "				getObj(id).className = getObj(id).classNameOld;"
-            + "		}"
-            + "	</script>\n";
-    private final String TOGGLER ="<script language=\"javascript\">\n"
-            + "function getItem(id)\n"
-            + "{\n"
-            + "    var itm = false;\n"
-            + "    if(document.getElementById)\n"
-            + "        itm = document.getElementById(id);\n"
-            + "    else if(document.all)\n"
-            + "        itm = document.all[id];\n"
-            + "     else if(document.layers)\n"
-            + "        itm = document.layers[id];\n"
-            + "    return itm;\n"
-            + "}\n\n"
-            + "function toggleItem(id)\n"
-            + "{\n"
-            + "    itm = getItem(id);\n"
-            + "    if(!itm)\n"
-            + "        return false;\n"
-            + "    if(itm.style.display == 'none')\n"
-            + "        itm.style.display = '';\n"
-            + "    else\n"
-            + "        itm.style.display = 'none';\n"
-            + "    return false;\n"
-            + "}\n\n"
-            + "function hideDetails()\n"
-            + "{\n"
-            + "     toggleItem('ops')\n"
-            + "     toggleItem('sparql')\n"
-            + "     return true;\n"
-            + "}\n\n"
-            + "</script>\n";
-    private final String HEADER_END = "	<style type=\"text/css\">"
-            + "		.texthotlink, .texthotlink_hilight {"
-            + "			width: 150px;"
-            + "			font-size: 85%;"
-            + "			padding: .25em;"
-            + "			cursor: pointer;"
-            + "			color: black;"
-            + "			font-family: Arial, sans-serif;"
-            + "		}"
-            + "		.texthotlink_hilight {"
-            + "			background-color: #fff6ac;"
-            + "		}"
-            + "		.menugroup {"
-            + "			font-size: 90%;"
-            + "			font-weight: bold;"
-            + "			padding-top: .25em;"
-            + "		}"
-            + "		input { background-color: #EEEEFF; }"
-            + "		body, td {"
-            + "			background-color: white;"
-            + "			font-family: sans-serif;"
-            + "		}"
-            + "	</style>\n"
-            + "</head>\n";            
-    private final String BODY ="<body style=\"margin: 0px\">";
-    private final String TOP_LEFT ="	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">\n"
-            + "		<tr valign=\"top\">\n"
-            + "			<td style=\"background-color: white;\">"
-            + "				<a href=\"http://www.openphacts.org/\">"
-            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" "
-            + "                     src=\"http://www.openphacts.org/images/stories/banner.jpg\" "
-            + "                     alt=\"Open PHACTS\" height=\"50\">"
-            + "                 </img>"
-            + "             </a>"
-            + "			</td>\n"
-            + "			<td style=\"font-size: 200%; font-weight: bold; font-family: Arial;\">\n";
-    private final String TOP_RIGHT = "         </td>"
-            + "			<td style=\"background-color: white;\">"
-            + "				<a href=\"http://www.cs.manchester.ac.uk//\">"
-            + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" align=\"right\" "
-            + "                     src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" "
-            + "                    alt=\"The University of Manchester\" height=\"50\">"
-            + "                 </img>"
-            + "             </a>"
-            + "			</td>"
-            + "		</tr>"
-            + "	</table>";
-    private final String SIDE_BAR_BEGIN = "	<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\">"
-            + "		<tr valign=\"top\">"
-            + "			<td style=\"border-top: 1px solid #D5D5FF\">";
-    private final String SIDE_BAR_QUERY_EXPANDER = "<div class=\"menugroup\">Query Expander</div>"
-            + "				<div id=\"menuQueryExpanderHome_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderHome_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderHome_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander&quot;;\">Home</div>"
-            + "				<div id=\"menuQueryExpanderAPI_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderAPI_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderAPI_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/ims-api&quot;;\">API</div>"
-            + "				<div id=\"menuQueryExpanderExamples_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderExamples_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderExamples_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/examples&quot;;\">Examples</div>"
-            + "				<div id=\"menuQueryExpanderURISpacesPerGraph_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderURISpacesPerGraph_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/URISpacesPerGraph&quot;;\">"
-            + "                   URISpaces per Graph</div>"
-            + "				<div id=\"menuQueryExpanderMapURI_text\" class=\"texthotlink\" "
-            + "                   onmouseout=\"DHTML_TextRestore('menuQueryExpanderMapURI_text'); return true; \" "
-            + "                   onmouseover=\"DHTML_TextHilight('menuQueryExpanderMapURI_text'); return true; \" "
-            + "                   onclick=\"document.location = &quot;/QueryExpander/mapURI&quot;;\">"
-            + "                   Check Mapping for an URI</div>";          
-    
-    private final String SIDE_BAR_END =
-              "			</td>"
-            + "			<td width=\"5\" style=\"border-right: 1px solid #D5D5FF\"></td>"
-            + "			<td style=\"border-top: 1px solid #D5D5FF; width:100%\">";
-    
-    final String FORM_OUTPUT_FORMAT = " \n<p>Output Format:"
-            + "     <select size=\"1\" name=\"format\">"
-            + "         <option value=\"html\">HTML page</option>"
-            + "         <option value=\"xml\">XML/JASON</option>"
-            + " 	</select>"
-            + " </p>";
-    private final String MAIN_END = "			</td>"
-            + "		</tr>"
-            + "	</table>"
-            + "	<div style=\"border-top: 1px solid #D5D5FF; padding: .5em; font-size: 80%;\">"
-            + "		This site is run by <a href=\"https://wiki.openphacts.org/index.php/User:Christian\">Christian Brenninkmeijer</a>."
-            + "	</div>";
-    private final String BODY_END = "</body>"
-            + "</html>";
-    final String END = MAIN_END + BODY_END;
+    protected void footerAndEnd(StringBuilder sb) throws BridgeDBException{
+        sb.append("</div>\n<div id=\"footer\">");
+        sb.append("This site is run by <a href=\"https://wiki.openphacts.org/index.php/User:Christian\">Christian Brenninkmeijer</a>.");
+        sb.append("\n<div></body></html>");
+    }
+
 
 
 }

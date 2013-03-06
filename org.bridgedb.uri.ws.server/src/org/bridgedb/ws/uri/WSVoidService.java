@@ -68,9 +68,10 @@ public class WSVoidService extends WSFame{
         } else {
             sb.append("\n<p>Warning summary lines are just a sum of the mappings from all mapping files.");
             sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
+            sb.append("\n<p>Click on the arrows in the first column to expand or contract the table.</p>");
             MappingSetTableMaker.addTable(sb, mappingSetInfos);
         }
-        sb.append("</body></html>");
+        footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
