@@ -26,6 +26,7 @@ import java.util.Set;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.WsUriConstants;
 
 /**
@@ -59,14 +60,40 @@ public class WSUriApi extends WSCoreApi {
                     sb.append(WsUriConstants.URI);
                     sb.append(" parameters is supported.</li>");
             sb.append("</ul>");
+        sb.append("<dt><a name=\"");
+                sb.append(WsUriConstants.PROFILE_URI);
+                sb.append("\">");
+                sb.append(WsUriConstants.PROFILE_URI);
+                sb.append("</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>If not provided the default profile is used.</li>");
+            sb.append("<li>While the current API includes this parameter there is not yet any profiled based data.</li>");
+            sb.append("<li>It it not recommended to use this parameter except for testing until farther notice.</li>");
+            sb.append("</ul>");        
+        sb.append("<dt><a name=\"");
+                sb.append(WsUriConstants.TARGET_URI_PATTERN);
+                sb.append("\">");
+                sb.append(WsUriConstants.TARGET_URI_PATTERN);
+                sb.append("</a></dt>");
+            sb.append("<ul>");
+            sb.append("<li>Limits the results to ones with URIs with this pattern.</li>");
+            sb.append("<li>The URISpace of a URI is one defined when the mapping is loaded, not any with which the URI startWith.</li>");
+            sb.append("<li>String Format</li>");
+            sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
+            sb.append("<li>Typically there can but need not be more than one.</li>");
+            sb.append("</ul>");
          sb.append("<dt><a name=\"");
                 sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                 sb.append("\">");
                 sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                 sb.append("</a></dt>");
             sb.append("<ul>");
-            sb.append("<li>Limits the results to ones with URIs in this/these URISpace(s) as a target.</li>");
-            sb.append("<li>The URISpace of a URI is one defined when the mapping is loaded, not any with which the URI startWith.</li>");
+            sb.append("<li>Acts in exactly the same way as non URI based methods.</li>");
+            sb.append("<li>Note: If both ");
+                sb.append(WsUriConstants.TARGET_URI_PATTERN);
+                sb.append(" and  ");
+                sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                sb.append(" are specified the result is the union of results of running this method twice with each paramteter individually.");
             sb.append("<li>String Format</li>");
             sb.append("<li>Do NOT include the @gt and @lt seen arround URIs in RDF</li>");
             sb.append("<li>Typically there can but need not be more than one.</li>");
@@ -137,21 +164,57 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(WsUriConstants.MAP);
                 sb.append("</h3>");
             sb.append("<ul>");
-            sb.append("<li>List the URIs that map to this URI</li>");
+            sb.append("<li>List the URIs that map to this URI or Xref</li>");
+            sb.append("<li>WARNING: Providing both URI and Xref parameters always causes an Exception. Even if they match!</li>");
+            sb.append("<li>Note: it is not recommened to use both <a href=\"#");
+                sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                sb.append("\">");
+                sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                sb.append("</a> and <a href=\"#");
+                sb.append(WsUriConstants.TARGET_URI_PATTERN);
+                sb.append("\">");
+                sb.append(WsUriConstants.TARGET_URI_PATTERN);
+                sb.append("</a>. If both are supplied the result is the union of the calls with each individually.</li> ");
             sb.append("<li>Required arguements:</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#");
+                sb.append("<li>URI based</li>");
+                sb.append("<ul>");
+                    sb.append("<li><a href=\"#");
                         sb.append(WsUriConstants.URI);
                         sb.append("\">");
                         sb.append(WsUriConstants.URI);
                         sb.append("</a></li>");
+                    sb.append("</ul>");
+                sb.append("<li>Xref based</li>");
+                sb.append("<ul>");
+                    sb.append("<li><a href=\"#");
+                        sb.append(ID_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.ID);
+                        sb.append("</a></li>");
+                    sb.append("<li><a href=\"#");
+                        sb.append(ID_CODE);
+                        sb.append("\">");
+                        sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
+                        sb.append("</a></li>");
+                   sb.append("</ul>");
                 sb.append("</ul>");
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
- //                       sb.append(WsUriConstants.TARGET_URI_SPACE);
+                        sb.append(WsUriConstants.PROFILE_URI);
                         sb.append("\">");
-  //                      sb.append(WsUriConstants.TARGET_URI_SPACE);
+                        sb.append(WsUriConstants.PROFILE_URI);
+                        sb.append("</a></li> ");
+                sb.append("<li><a href=\"#");
+                        sb.append(WsUriConstants.TARGET_URI_PATTERN);
+                        sb.append("\">");
+                        sb.append(WsUriConstants.TARGET_URI_PATTERN);
+                        sb.append("</a></li> ");
+                sb.append("<li><a href=\"#");
+                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
+                        sb.append("\">");
+                        sb.append(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE);
                         sb.append("</a></li> ");
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
@@ -184,6 +247,7 @@ public class WSUriApi extends WSCoreApi {
                     sb.append(URISpace);
                 }
                 sb.append("</a></li>");    
+                sb.append("<li>There is currently no Profile Example as there in no Profile Data Loaded. </li>");
             sb.append("</ul>");
     }
     
@@ -219,7 +283,7 @@ public class WSUriApi extends WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_uriSearch(StringBuilder sb, String uri) throws UnsupportedEncodingException, BridgeDBException{
+    private void describe_uriSearch(StringBuilder sb, String text) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.URI_SEARCH);
                 sb.append("\">");
@@ -244,14 +308,12 @@ public class WSUriApi extends WSCoreApi {
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
-                    sb.append(URLEncoder.encode(uri, "UTF-8"));
-                    sb.append(WsUriConstants.URI_SEARCH);
+                    sb.append(URLEncoder.encode(text, "UTF-8"));
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("\">");
                     sb.append(WsUriConstants.URI_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
-                    sb.append(uri);
-                    sb.append(WsUriConstants.URI_SEARCH);
+                    sb.append(text);
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("</a></li>");    
             sb.append("</ul>");        

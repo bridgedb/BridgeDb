@@ -37,7 +37,7 @@ public class WSCoreApi {
     public WSCoreApi() {      
     }
             
-    private static final String ID_CODE = "id_code";
+    static final String ID_CODE = "id_code";
     private static final String FIRST_ID_PARAMETER = "?" + WsConstants.ID + "=";
     private static final String ID_PARAMETER = "&" + WsConstants.ID + "=";
     private static final String DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsConstants.DATASOURCE_SYSTEM_CODE + "=";
@@ -303,7 +303,7 @@ public class WSCoreApi {
                         sb.append("\">");
                         sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
                         sb.append("</a></li>");
-                sb.append("<li>Currently on a single ");
+                sb.append("<li>Currently only a single ");
                         sb.append(WsConstants.ID);
                         sb.append(" and single ");
                         sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);

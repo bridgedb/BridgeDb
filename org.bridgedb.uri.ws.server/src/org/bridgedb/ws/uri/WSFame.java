@@ -117,18 +117,13 @@ public class WSFame extends WSUriInterfaceService {
         //Long start = new Date().getTime();
         StringBuilder sb = topAndSide("IMS API",  httpServletRequest);
  
-        if (1 == 1){
-            sb.append("UNDER DEVELOPMENT! </body></html>");
-            return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
-        }
-        List<Mapping> mappings = null; //uriMapper.getSampleMapping(); 
-        Mapping mapping1 = mappings.get(0);
-        DataSource dataSource1 = null; //DataSource.getBySystemCode(mapping1.getSourceSysCode());
-        Xref firstSourceXref = null;//new Xref (mapping1.getSourceId(), dataSource1);
+        Mapping mapping1 = uriMapper.getMapping(1);
+       // DataSource dataSource1 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
+        Xref firstSourceXref = mapping1.getSource();
         String sysCode = firstSourceXref.getDataSource().getSystemCode();
-        Mapping mapping2 = mappings.get(1);
-        DataSource dataSource2 = null;//DataSource.getBySystemCode(mapping1.getSourceSysCode());
-        Xref secondSourceXref =  null;//new Xref (mapping2.getSourceId(), dataSource2);
+        Mapping mapping2 = uriMapper.getMapping(2);
+       // DataSource dataSource2 = null;//DataSource.getBySystemCode(mapping1.getSourceSysCode());
+        Xref secondSourceXref =  mapping2.getSource();
         Set<Xref> firstMaps;
         try{ 
             firstMaps = idMapper.mapID(firstSourceXref);
@@ -144,23 +139,18 @@ public class WSFame extends WSUriInterfaceService {
             }
         }
         Set<String> keys = idMapper.getCapabilities().getKeys();
-        Mapping mapping3 = mappings.get(2);
+        Mapping mapping3 = uriMapper.getMapping(3);
         String SourceUri3 = mapping3.getSourceUri().iterator().next();
         String text = SQLUriMapper.getId(SourceUri3);
-        Mapping mapping4 = mappings.get(3);
+        Mapping mapping4 = uriMapper.getMapping(4);
         String sourceUri4 = mapping4.getSourceUri().iterator().next();
-        Mapping mapping5 = mappings.get(4);
+        Mapping mapping5 = uriMapper.getMapping(5);
         int mappingId = mapping5.getId();
         HashSet<String> URI2Spaces = new HashSet<String>();
         String targetUri = mapping5.getTargetUri().iterator().next();
         URI2Spaces.add(SQLUriMapper.getUriSpace(targetUri));            
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
 
-        sb.append("\n<p><a href=\"/");
-        sb.append(getServiceName());
-        sb.append("\">Home Page</a></p>");
-                
-        sb.append("\n<p>");
         WSUriApi api = new WSUriApi();
 
         sb.append("<h2>Support services include:<h2>");
