@@ -20,6 +20,7 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 import org.bridgedb.DataSource;
+import org.bridgedb.DataSourceOverwriteLevel;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.Xref;
 import org.junit.Before;
@@ -31,6 +32,7 @@ public class Test
 	@Before
 	public void setUp()
 	{
+        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.VERSION1);
 		// cause static initializer to run.
 		BioDataSource.init();
 	}
