@@ -39,6 +39,7 @@ org.bridgedb.linksets/rdf
 #ignore file created during tests
 test/LinkSet*.ttl
 test/Minimum*.ttl
+org.bridgedb.tools.transitive/test-data/linkset2To3.ttl
 
 #ignore default rdf directories
 rdf/linksets
