@@ -119,37 +119,20 @@ public class WSFame extends WSUriInterfaceService {
  
         Mapping mapping1 = uriMapper.getMapping(1);
        // DataSource dataSource1 = DataSource.getBySystemCode(mapping1.getSourceSysCode());
-        Xref firstSourceXref = mapping1.getSource();
-        String sysCode = firstSourceXref.getDataSource().getSystemCode();
-        Mapping mapping2 = uriMapper.getMapping(2);
-       // DataSource dataSource2 = null;//DataSource.getBySystemCode(mapping1.getSourceSysCode());
-        Xref secondSourceXref =  mapping2.getSource();
-        Set<Xref> firstMaps;
-        try{ 
-            firstMaps = idMapper.mapID(firstSourceXref);
-        } catch (IDMapperException e){
-            throw BridgeDBException.convertToBridgeDB(e);
-        }
+        Xref sourceXref1 = mapping1.getSource();
+        String sourceSysCode1 = sourceXref1.getDataSource().getSystemCode();
+        String sourceUri1 = mapping1.getSourceUri().iterator().next();
+        String tragetSysCode1 = mapping1.getTarget().getDataSource().getSystemCode();
+        String text1 = SQLUriMapper.getId(sourceUri1);
 
-        Iterator<Xref> setIterator = firstMaps.iterator();
-        while (setIterator.hasNext()) {
-            Xref xref = setIterator.next();
-            if (xref.getDataSource() == firstSourceXref.getDataSource()){
-                setIterator.remove();
-            }
-        }
-        Set<String> keys = idMapper.getCapabilities().getKeys();
-        Mapping mapping3 = uriMapper.getMapping(3);
-        String SourceUri3 = mapping3.getSourceUri().iterator().next();
-        String text = SQLUriMapper.getId(SourceUri3);
-        Mapping mapping4 = uriMapper.getMapping(4);
-        String sourceUri4 = mapping4.getSourceUri().iterator().next();
-        Mapping mapping5 = uriMapper.getMapping(5);
-        int mappingId = mapping5.getId();
-        HashSet<String> URI2Spaces = new HashSet<String>();
-        String targetUri = mapping5.getTargetUri().iterator().next();
-        URI2Spaces.add(SQLUriMapper.getUriSpace(targetUri));            
+        Mapping mapping2 = uriMapper.getMapping(2);
+        Xref sourceXref2 =  mapping2.getSource();
+        String sourceUri2 = mapping2.getSourceUri().iterator().next();
+        String targetUri2 = mapping2.getTargetUri().iterator().next();      
+        String targetUriSpace2 = SQLUriMapper.getUriSpace(targetUri2);
+                
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
+        Set<String> keys = idMapper.getCapabilities().getKeys();
 
         WSUriApi api = new WSUriApi();
 
@@ -164,10 +147,10 @@ public class WSFame extends WSUriInterfaceService {
         
         api.describeParameter(sb);        
         
-        api.describe_IDMapper(sb, firstSourceXref, firstMaps, secondSourceXref, freeSearchSupported);
-        api.describe_IDMapperCapabilities(sb, firstSourceXref, firstMaps, keys, freeSearchSupported);
-        api.describe_UriMapper(sb, SourceUri3, sourceUri4, URI2Spaces, text, mappingId, sysCode, freeSearchSupported);
-        api.describe_Info(sb, firstSourceXref, firstMaps);
+        api.describe_IDMapper(sb, sourceXref1, tragetSysCode1, sourceXref2, freeSearchSupported);
+        api.describe_IDMapperCapabilities(sb, sourceXref1, tragetSysCode1, keys, freeSearchSupported);
+        api.describe_UriMapper(sb, sourceUri1, sourceUri2, targetUriSpace2, text1, 1, sourceSysCode1, freeSearchSupported);
+        api.describe_Info(sb, sourceXref1, sourceSysCode1, tragetSysCode1);
         api.describe_Graphviz(sb);
         
         sb.append("</body></html>");

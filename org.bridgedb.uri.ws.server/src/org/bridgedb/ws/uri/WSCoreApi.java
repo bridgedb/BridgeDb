@@ -190,14 +190,14 @@ public class WSCoreApi {
         sb.append("<dd>Not supported as Close() is not allowed</dd>");
     }
 
-    protected void describe_IDMapper(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second,
+    protected void describe_IDMapper(StringBuilder sb, Xref sourceXref1, String tragetSysCode1, Xref sourceXref2,
             boolean freeSearchSupported) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h2>Implementations of BridgeDB's IDMapper methods</h2>");
 
-        describe_mapID(sb, first, firstMaps, second);    
-        describe_xrefExists(sb, first);
+        describe_mapID(sb, sourceXref1, tragetSysCode1, sourceXref2);    
+        describe_xrefExists(sb, sourceXref1);
         if (freeSearchSupported){
-            describe_freeSearch(sb, first);
+            describe_freeSearch(sb, sourceXref1);
         }
         describe_getCapabilities(sb); 
         sb.append("<h3>Other IDMapper Functions</h3>");
@@ -209,7 +209,7 @@ public class WSCoreApi {
         sb.append("</dl>");
     }
     
-    private void describe_mapID(StringBuilder sb, Xref first, Set<Xref> firstMaps, Xref second) 
+    private void describe_mapID(StringBuilder sb, Xref sourceXref1, String tragetSysCode1, Xref sourceXref2) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                     sb.append(WsConstants.MAP_ID);
@@ -248,33 +248,31 @@ public class WSCoreApi {
                     StringBuilder sbInnerEncoded = new StringBuilder(WsConstants.MAP_ID);
                     sbInnerPure.append(FIRST_ID_PARAMETER);
                     sbInnerEncoded.append(FIRST_ID_PARAMETER);
-                    sbInnerPure.append(first.getId());
-                    sbInnerEncoded.append(first.getId());
+                    sbInnerPure.append(sourceXref1.getId());
+                    sbInnerEncoded.append(sourceXref1.getId());
                     sbInnerPure.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
                     sbInnerEncoded.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
-                    sbInnerPure.append(first.getDataSource().getSystemCode());
-                    sbInnerEncoded.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
+                    sbInnerPure.append(sourceXref1.getDataSource().getSystemCode());
+                    sbInnerEncoded.append(URLEncoder.encode(sourceXref1.getDataSource().getSystemCode(), "UTF-8"));
                     sbInnerPure.append(ID_PARAMETER);
                     sbInnerEncoded.append(ID_PARAMETER);
-                    sbInnerPure.append(second.getId());
-                    sbInnerEncoded.append(URLEncoder.encode(second.getId(), "UTF-8"));
+                    sbInnerPure.append(sourceXref2.getId());
+                    sbInnerEncoded.append(URLEncoder.encode(sourceXref2.getId(), "UTF-8"));
                     sbInnerPure.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
                     sbInnerEncoded.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
-                    sbInnerPure.append(second.getDataSource().getSystemCode());
-                    sbInnerEncoded.append(URLEncoder.encode(second.getDataSource().getSystemCode(), "UTF-8"));
+                    sbInnerPure.append(sourceXref2.getDataSource().getSystemCode());
+                    sbInnerEncoded.append(URLEncoder.encode(sourceXref2.getDataSource().getSystemCode(), "UTF-8"));
                     sb.append(sbInnerEncoded.toString());
                     sb.append("\">");
                     sb.append(sbInnerPure.toString());
                     sb.append("</a></li>");    
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
-                    for (Xref map:firstMaps){
-                        String targetPart = "&" + WsConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
-                        sbInnerPure.append(targetPart);
-                        sbInnerEncoded.append(targetPart);
-                        sbInnerPure.append(map.getDataSource().getSystemCode());
-                        sbInnerEncoded.append(URLEncoder.encode(map.getDataSource().getSystemCode(), "UTF-8"));
-                    }
+                    String targetPart = "&" + WsConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
+                    sbInnerPure.append(targetPart);
+                    sbInnerEncoded.append(targetPart);
+                    sbInnerPure.append(tragetSysCode1);
+                    sbInnerEncoded.append(URLEncoder.encode(tragetSysCode1, "UTF-8"));
                     sb.append(sbInnerEncoded.toString());
                     sb.append("\">");
                     sb.append(sbInnerPure.toString());
@@ -282,7 +280,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_xrefExists(StringBuilder sb, Xref first) throws UnsupportedEncodingException, BridgeDBException{
+    private void describe_xrefExists(StringBuilder sb, Xref xref1) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsConstants.XREF_EXISTS);
                 sb.append("\">");
@@ -313,20 +311,20 @@ public class WSCoreApi {
                 sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsConstants.XREF_EXISTS);
                     sb.append(FIRST_ID_PARAMETER);
-                    sb.append(URLEncoder.encode(first.getId(), "UTF-8"));
+                    sb.append(URLEncoder.encode(xref1.getId(), "UTF-8"));
                     sb.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
-                    sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
+                    sb.append(URLEncoder.encode(xref1.getDataSource().getSystemCode(), "UTF-8"));
                     sb.append("\">");
                     sb.append(WsConstants.XREF_EXISTS);
                     sb.append(FIRST_ID_PARAMETER);
-                    sb.append(first.getId());
+                    sb.append(xref1.getId());
                     sb.append(FIRST_ID_PARAMETER);
-                    sb.append(first.getDataSource().getSystemCode());
+                    sb.append(xref1.getDataSource().getSystemCode());
                     sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
-    private void describe_freeSearch(StringBuilder sb, Xref first) throws UnsupportedEncodingException, BridgeDBException{
+    private void describe_freeSearch(StringBuilder sb, Xref xref1) throws UnsupportedEncodingException, BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.FREE_SEARCH);
                 sb.append("\">");
@@ -352,12 +350,12 @@ public class WSCoreApi {
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsConstants.FREE_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
-                    sb.append(URLEncoder.encode(first.getId(), "UTF-8"));
+                    sb.append(URLEncoder.encode(xref1.getId(), "UTF-8"));
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("\">");
                     sb.append(WsConstants.FREE_SEARCH);
                     sb.append(FIRST_TEXT_PARAMETER);
-                    sb.append(first.getId());
+                    sb.append(xref1.getId());
                     sb.append(LIMIT5_PARAMETER);
                     sb.append("</a></li>");    
             sb.append("</ul>");
@@ -432,12 +430,12 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    protected void describe_IDMapperCapabilities(StringBuilder sb, Xref first, Set<Xref> firstMaps, Set<String> keys, 
+    protected void describe_IDMapperCapabilities(StringBuilder sb, Xref xref1, String tragetSysCode1, Set<String> keys, 
             boolean freeSearchSupported) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h2>Implementations of BridgeDB's IDMapperCapabilities methods</h2>");
         describe_isFreeSearchSupported(sb, freeSearchSupported);
         describe_getSupportedDataSources(sb);
-        describe_isMappingSupported(sb, first, firstMaps); 
+        describe_isMappingSupported(sb, xref1, tragetSysCode1); 
         describe_getProperty(sb, keys);            
         describe_getKeys(sb, keys);
     }
@@ -498,7 +496,7 @@ public class WSCoreApi {
             sb.append("</ul>");
     }
     
-    private void describe_isMappingSupported(StringBuilder sb, Xref first, Set<Xref> firstMaps) 
+    private void describe_isMappingSupported(StringBuilder sb, Xref sourceXref1, String targetSysCode) 
             throws UnsupportedEncodingException, BridgeDBException{
          sb.append("<h3><a name=\"");
                 sb.append(WsConstants.IS_MAPPING_SUPPORTED);
@@ -525,15 +523,15 @@ public class WSCoreApi {
                     sb.append(RdfConfig.getTheBaseURI());
                     sb.append(WsConstants.IS_MAPPING_SUPPORTED);
                     sb.append(FIRST_SOURCE_PARAMETER);
-                    sb.append(first.getDataSource().getSystemCode());
+                    sb.append(sourceXref1.getDataSource().getSystemCode());
                     sb.append(TARGET_PARAMETER);
-                    sb.append(firstMaps.iterator().next().getDataSource().getSystemCode());
+                    sb.append(targetSysCode);
                     sb.append("\">");
                     sb.append(WsConstants.IS_MAPPING_SUPPORTED);
                     sb.append(FIRST_SOURCE_PARAMETER);
-                    sb.append(URLEncoder.encode(first.getDataSource().getSystemCode(), "UTF-8"));
+                    sb.append(URLEncoder.encode(sourceXref1.getDataSource().getSystemCode(), "UTF-8"));
                     sb.append(TARGET_PARAMETER);
-                    sb.append(URLEncoder.encode(firstMaps.iterator().next().getDataSource().getSystemCode(), "UTF-8"));
+                    sb.append(URLEncoder.encode(targetSysCode, "UTF-8"));
                     sb.append("</a></li>");    
             sb.append("</ul>");
     }
