@@ -191,7 +191,7 @@ public class TransativeCreator {
         buffer.newLine();
     	buffer.write("\t");
     	writeValue(DctermsConstants.CREATOR);
-    	buffer.write("<> ;\n\t");
+    	buffer.write("<https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.tools.transitive/src/org/bridgedb/linkset/transative/TransativeCreator.java> ;\n\t");
         buffer.newLine();
     	buffer.write("\t");
     	addDate(DctermsConstants.CREATED);
