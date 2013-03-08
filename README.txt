@@ -85,6 +85,12 @@ LinkSet,owl
 Ontology used by the Validator.
 Changes to this file will affect the Validator.
 
+----
+SANDBOX:
+ConfigReader.java in the Utils package includes a SANDBOX option.
+Sandbox should be not be enabled in the Master branch.
+Should you see unexpected SANDBOX message set SANDBOX to false as the files it expects are not included! 
+
 -------------------------------------------------------------------------------
 
 Compilation
