@@ -538,7 +538,13 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         try {
             while (rs.next()){
                 String sysCode = rs.getString(SYSCODE_COLUMN_NAME);
-                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                DataSource dataSource;
+                if (sysCode.startsWith("_")){
+                    String fullName = sysCode.substring(1);
+                    dataSource = DataSource.getByFullName(fullName);
+                } else {
+                    dataSource = DataSource.getBySystemCode(sysCode);
+                }
                 results.add(dataSource);
             }
             return results;
