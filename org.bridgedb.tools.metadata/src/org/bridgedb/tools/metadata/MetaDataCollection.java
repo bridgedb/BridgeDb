@@ -253,10 +253,11 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (statement.getObject().equals(child.id) && statement.getPredicate().equals(VoidConstants.SUBSET)){
                 iterator.remove();
                 ResourceMetaData parent =  getResourceByID(statement.getSubject());
-                if (parent == null){
-                    int here = 1/0;
+                if (parent != null){
+                    child.addParent(parent, errors);
+                } else {
+                    logger.error("No parent found for " + statement);
                 }
-                child.addParent(parent, errors);
             }
         }                 
     }
