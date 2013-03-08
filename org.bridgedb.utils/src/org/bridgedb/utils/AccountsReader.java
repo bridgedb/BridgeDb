@@ -20,7 +20,6 @@ public class AccountsReader {
     
     private static HashSet<AccountInfo> infos = null;
 
-    private static final String FILE_NAME = "accounts.txt";
     private static final String URI = "uri";
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
@@ -29,7 +28,7 @@ public class AccountsReader {
         if (infos != null){
             return;
         }
-        Properties properties = ConfigReader.getProperties(FILE_NAME);
+        Properties properties = ConfigReader.getAccountsProperties();
         infos = new HashSet<AccountInfo>();
         Set<String> names = properties.stringPropertyNames();
         for (String name:names){
@@ -52,11 +51,11 @@ public class AccountsReader {
                     } else if (parts[1].equals(PASSWORD)){
                         info.setPassword(properties.getProperty(name));
                     } else {
-                        throw new BridgeDBException ("Unexpected property " + name + " in " + FILE_NAME);                    
+                        throw new BridgeDBException ("Unexpected property " + name + " in " + ConfigReader.ACCOUNTS_FILE_NAME);                    
                     }
                     infos.add(info);
                 } else {
-                    throw new BridgeDBException ("Unexpected property " + name + " in " + FILE_NAME);
+                    throw new BridgeDBException ("Unexpected property " + name + " in " + ConfigReader.ACCOUNTS_FILE_NAME);
                 }
             }
         }

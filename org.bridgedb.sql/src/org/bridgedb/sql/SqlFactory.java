@@ -38,7 +38,6 @@ public class SqlFactory {
     /**
      * Name of the file assumed to hold the SQl configurations.
      */
-    public static final String CONFIG_FILE_NAME = "sqlConfig.txt";
     
     //Name of the properties that will be looked for in the config file.
     public static final String SQL_PORT_PROPERTY = "SqlPort";
@@ -214,7 +213,7 @@ public class SqlFactory {
      */
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            properties = ConfigReader.getSQLProperties();
         }
         return properties;
     }

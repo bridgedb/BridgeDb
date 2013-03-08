@@ -34,7 +34,6 @@ public class RdfConfig {
     public static final String LOAD_SAIL_NATIVE_STORE_PROPERTY = "LoadSailNativeStore";
     public static final String TEST_SAIL_NATIVE_STORE_PROPERTY = "TestSailNativeStore";
     public static final String BASE_URI_PROPERTY = "BaseURI";
-    public static final String CONFIG_FILE_NAME = "rdfConfig.txt";
 
     private static String path;
     private static String baseURI = null;
@@ -100,7 +99,7 @@ public class RdfConfig {
  
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            properties = ConfigReader.getRDFProperties();
         }
         return properties;
     }

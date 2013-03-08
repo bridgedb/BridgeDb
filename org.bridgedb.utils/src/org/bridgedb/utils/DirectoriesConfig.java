@@ -32,7 +32,6 @@ public class DirectoriesConfig {
     public static final String TRANSATIVE_DIRECTORY_PROPERTY = "TransativeDirectory";
     public static final String EXPORT_DIRECTORY_PROPERTY = "ExportDirectory";
     public static final String TEST_DIRECTORY_PROPERTY = "TestDirectory";
-    public static final String CONFIG_FILE_NAME = "DirectoriesConfig.txt";
 
     private static boolean useTest = false;
     private static Properties properties;
@@ -108,7 +107,7 @@ public class DirectoriesConfig {
      
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            properties = ConfigReader.getDIRECTORIESProperties();
         }
         return properties;
     }

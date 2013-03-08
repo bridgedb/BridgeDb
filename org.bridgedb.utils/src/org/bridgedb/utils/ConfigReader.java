@@ -43,6 +43,23 @@ import org.apache.log4j.SimpleLayout;
  */
 public class ConfigReader {
     
+    /** 
+     * Sets the build into sandbox mode.
+     * Warning in SANDBOX mode the system will not build without builder provided config files.
+     * If SANDBOX is true in the MASTER branch this is an ERROR. Please fix and contact developer team ASAP!
+     */
+    public static boolean SANDBOX = true;
+    public static final String ACCOUNTS_FILE_NAME = "accounts.txt";
+    public static final String IP_CONFIG_FILE_NAME = "IP_Register.txt";
+    public static final String DIRECTORIES_CONFIG_FILE_NAME = "DirectoriesConfig.txt";
+    public static final String RDF_CONFIG_FILE_NAME = "rdfConfig.txt";
+    public static final String SQL_CONFIG_FILE_NAME = "sqlConfig.txt";
+
+    //SANDBOX config files MUST be provided 
+    public static final String SANDBOX_DIRECTORIES_CONFIG_FILE_NAME = "sandboxDirectoriesConfig.txt";
+    public static final String SANDBOX_RDF_CONFIG_FILE_NAME = "sandboxRdfConfig.txt";
+    public static final String SANDBOX_SQL_CONFIG_FILE_NAME = "sandboxSqlConfig.txt";
+
     public static final String CONFIG_FILE_PATH_PROPERTY = "ConfigPath";
     public static final String CONFIG_FILE_PATH_SOURCE_PROPERTY = "ConfigPathSource";
     public static final String LOG_PROPERTIES_FILE = "log4j.properties";
@@ -58,27 +75,68 @@ public class ConfigReader {
     
     static final Logger logger = Logger.getLogger(ConfigReader.class);
     
-    public static Properties getProperties(String fileName) throws BridgeDBException{
-        ConfigReader finder = new ConfigReader(fileName);
-        configureLogger();
-        return finder.getProperties();
+    public static Properties getAccountsProperties() throws BridgeDBException{
+        //No reason for a seperate sandbox file as external passwords are not sandbox dependent
+        return getProperties(ACCOUNTS_FILE_NAME);            
     }
     
+    public static Properties getDIRECTORIESProperties() throws BridgeDBException{
+        if (SANDBOX){
+            return getProperties(SANDBOX_DIRECTORIES_CONFIG_FILE_NAME);
+        } else {
+            return getProperties(DIRECTORIES_CONFIG_FILE_NAME);            
+        }
+    }
+ 
+    public static Properties getIPConfigProperties() throws BridgeDBException{
+        //SANDBOX could be added if required. However please warn all using sandbox
+        return getProperties(IP_CONFIG_FILE_NAME);            
+    }
+    
+    public static Properties getRDFProperties() throws BridgeDBException{
+        if (SANDBOX){
+            return getProperties(SANDBOX_RDF_CONFIG_FILE_NAME);
+        } else {
+            return getProperties(RDF_CONFIG_FILE_NAME);            
+        }
+    }
+ 
+    public static Properties getSQLProperties() throws BridgeDBException{
+        if (SANDBOX){
+            return getProperties(SANDBOX_SQL_CONFIG_FILE_NAME);
+        } else {
+            return getProperties(SQL_CONFIG_FILE_NAME);            
+        }
+    }
+ 
     public static InputStream getInputStream(String fileName) throws BridgeDBException{
         ConfigReader finder = new ConfigReader(fileName);
         configureLogger();
         return finder.getInputStream();
     }
-
+    
+    private static Properties getProperties(String fileName) throws BridgeDBException{
+        ConfigReader finder = new ConfigReader(fileName);
+        configureLogger();
+        return finder.getProperties();
+    }
+    
     public static synchronized void configureLogger() throws BridgeDBException{
-        if (loggerSetup){
-            return;
+        if (!loggerSetup){
+            ConfigReader finder = new ConfigReader(LOG_PROPERTIES_FILE);
+            Properties props = finder.getProperties();
+            PropertyConfigurator.configure(props);
+            logger.info("Logger configured from " + finder.foundAt + " by " + finder.findMethod);
+            loggerSetup = true;
+            if (SANDBOX){
+                logger.warn("WARNING SANDBOX MODE ACTIVE!");
+                logger.warn("SANDBOX requires config files not in the normal build");
+                logger.warn("To deactivate sandbox change the flag in the class ConfigReader in the package BridgeDB Utils");
+                System.err.println("WARNING SANDBOX MODE ACTIVE!");
+                System.err.println("SANDBOX requires config files not in the normal build");
+                System.err.println("To deactivate sandbox change the flag in the class ConfigReader in the package BridgeDB Utils");            
+            }
         }
-        ConfigReader finder = new ConfigReader(LOG_PROPERTIES_FILE);
-        Properties props = finder.getProperties();
-        PropertyConfigurator.configure(props);
-        logger.info("Logger configured from " + finder.foundAt + " by " + finder.findMethod);
-        loggerSetup = true;
     }
      
     public static void logToConsole() throws BridgeDBException{

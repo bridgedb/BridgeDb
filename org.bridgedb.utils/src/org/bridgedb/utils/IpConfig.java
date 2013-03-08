@@ -30,14 +30,12 @@ public class IpConfig {
 
     static final Logger logger = Logger.getLogger(IpConfig.class);
 
-    public static final String CONFIG_FILE_NAME = "IP_Register.txt";
-
     private static Properties properties;
 
     public static boolean isAdminIPAddress(String ipAddress) throws BridgeDBException {
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){
-            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            properties = ConfigReader.getIPConfigProperties();
             owner = properties.getProperty(ipAddress);
         }
         return owner != null;
@@ -46,7 +44,7 @@ public class IpConfig {
     public static String checkIPAddress(String ipAddress) throws BridgeDBException{
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){
-            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            properties = ConfigReader.getIPConfigProperties();
             owner = properties.getProperty(ipAddress);
             if (owner == null){
                 logger.warn("Attempt to check IP address " + ipAddress);
@@ -57,7 +55,7 @@ public class IpConfig {
     
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getProperties(CONFIG_FILE_NAME);
+            properties = ConfigReader.getIPConfigProperties();
         }
         return properties;
     }
