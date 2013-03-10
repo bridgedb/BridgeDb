@@ -4300,14 +4300,6 @@ bridgeDB:DataSource_Unipathway a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/unipathway/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id> .
 
-bridgeDB:DataSource_UniProt a bridgeDB:DataSource ;
-	bridgeDB:fullName "UniProt" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasUriPattern <http://www.uniprot.org/uniprot/$id> .
-
 bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
 	bridgeDB:fullName "Uniprot Enzyme" ;
 	bridgeDB:systemCode "Enzyme" ;
@@ -4324,9 +4316,10 @@ bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.uniprot.org/entry/$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/uniprot/$id> ;
-	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
+	bridgeDB:hasPrimaryIdentifiersOrgPattern <http://identifiers.org/uniprot/$id> ;
+	bridgeDB:hasPrimarySourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasPrimaryWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasUriPattern <http://www.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_UNIPROT_ID a bridgeDB:DataSource ;
 	bridgeDB:fullName "UNIPROT_ID" ;
