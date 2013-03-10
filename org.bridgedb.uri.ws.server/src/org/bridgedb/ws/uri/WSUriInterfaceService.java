@@ -58,6 +58,7 @@ import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
 import org.bridgedb.ws.bean.ProfileBean;
 import org.bridgedb.ws.bean.UriExistsBean;
+import org.bridgedb.ws.bean.UriMappings;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
 import org.openrdf.rio.RDFFormat;
@@ -149,6 +150,31 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             }
         }
         return map(id, scrCode, profileUri, targetDataSources, targetPatterns);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.MAP_URI)
+    public UriMappings mapUri(
+    		@QueryParam(WsUriConstants.URI) List<String> uri,
+     		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
+            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) String targetUriPattern) throws BridgeDBException {
+       if (logger.isDebugEnabled()){
+            logger.debug("map called! ");
+            if (uri != null){
+                logger.debug("   uri = " + uri);             
+            }
+            logger.debug("   profileUri = " + profileUri);
+            if (targetUriPattern!= null || !targetUriPattern.isEmpty()){
+                logger.debug("   targetUriPatterns = " + targetUriPattern);
+            }
+        }
+       Set<String> results = new HashSet<String>();
+       UriPattern pattern = UriPattern.existingByPattern(targetUriPattern);
+       for(String single:uri){
+           results.addAll(uriMapper.mapUri(profileUri, profileUri, pattern));
+       }
+       return UriMappings.asBean(uri, results);
     }
 
     private List<MappingBean> map(String uri, String profileUri, DataSource[] targetDataSources, 
