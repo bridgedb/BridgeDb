@@ -93,7 +93,8 @@ public class TransativeCreatorTest extends TestUtils {
         report("CreateTransative");
         String fileName = "../org.bridgedb.tools.transitive/test-data/linkset2To3.ttl";
         TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-        new LinksetLoader().checkFileValid(fileName, VALIDATE_ONLY, ValidationType.LINKSMINIMAL);
+        LinksetLoader linksetLoader = new LinksetLoader();
+        linksetLoader.loadFile(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
 
 }

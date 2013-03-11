@@ -76,6 +76,7 @@ public class TestRemoteVoidsAndLinksets {
     public static void main(String[] args) throws IDMapperException {
         ConfigReader.logToConsole();
         TestRemoteVoidsAndLinksets checker = new TestRemoteVoidsAndLinksets();
+        checker.checkFile("C:/OpenPhacts/linksets/LinksetsUBO/ProMiner_CHEBI_72213.n3", 3);
         checker.checkFile("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", 4);
         checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs", 5);
         checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl", 2);
