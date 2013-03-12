@@ -222,7 +222,6 @@ public class UrlReader {
             ftp.enterLocalPassiveMode();
             ftp.setUseEPSVwithIPv4(useEpsvWithIPv4);
             String path = uri.getPath();
-System.out.println(path);
             return ftp.retrieveFileStream(path);
         }
         catch (FTPConnectionClosedException ex)
@@ -247,14 +246,5 @@ System.out.println(path);
             System.out.println(inputLine);
         in.close();       
     }
-//        InputStream inputStream = getOpenPhactsGithubInputStream("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs");
-//        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-//
-//        String inputLine;
-//        while ((inputLine = in.readLine()) != null)
-//            System.out.println(inputLine);
-//        in.close();
- //       URI uri = new URI("https://github.com:8080/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs");
-
 
 }
