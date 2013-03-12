@@ -81,16 +81,13 @@ public class TestRemoteVoidsAndLinksets {
         checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs", 5);
         checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl", 2);
         checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi99_void.ttl", 2);
-        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebiHasPartsLinkset100.ttl", 2);
-        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebiVoid100.ttl", 3);
+        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/has_functional_parentChEBI100Linkset.ttl", 2);
+        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/has_parent_hydrideChEBI100Linkset.ttl", 3);
         checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl", 5);
         checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider-void.ttl", 4);
         checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2chemblrdf-linkset.ttl", 4);
         checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2drugbank-linkset.ttl", 5);
         checker.checkUrl("ftp://ftp.rsc-us.org/OPS/20130117/void_2013-01-17.ttl#chemSpiderDataset", 21);
 
-        checker.checkUrl("http://ops-virtuoso.scai.fraunhofer.de/download/peregrine-dict-void.ttl", 2);
-        checker.checkUrl("http://ops-virtuoso.scai.fraunhofer.de/download/pm-dict-void.ttl", 2);
-        checker.checkFile("C:/OpenPhacts/linksets/LinksetsUBO/Peregrine_AF_703906.n3",1);
-    }
+   }
 }
