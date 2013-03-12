@@ -31,12 +31,15 @@ public enum RequirementLevel {
     public static RequirementLevel parseString(String string) throws BridgeDBException{
        string = string.trim();
        string = string.replaceAll("\"", "");
+       if (string.contains("#")){
+           string = string.substring(string.lastIndexOf("#")+1);
+       }
        for(RequirementLevel type:RequirementLevel.values()){
            if (type.toString().equalsIgnoreCase(string)){
                return type;
            }
        }
-       throw new BridgeDBException ("Unable to parse " + string + " to a ValidationType. "
+       throw new BridgeDBException ("Unable to parse " + string + " to a RequirementLevel. "
                + "Legal values are " + valuesString());
     }
     

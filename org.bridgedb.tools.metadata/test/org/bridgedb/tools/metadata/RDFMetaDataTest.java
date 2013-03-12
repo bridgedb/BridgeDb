@@ -42,8 +42,10 @@ public class RDFMetaDataTest extends MetaDataTestBase{
     public void testMissingRequiredValue() throws BridgeDBException{
         report("HasMissingRequiredValues");
         d1LicenseStatement = null;
-        MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet1()", loadDirectDataSet1(), rdfRegistry);
-        checkRequiredValues(metaData);
+        Set<Statement> statements = loadDirectDataSet1();
+        MetaDataCollection metaData = new MetaDataCollection("loadDirectDataSet1()", statements, rdfRegistry);
+        boolean result = metaData.hasRequiredValuesOrIsSuperset();
+        assertTrue(result);
     } 
 
     @Test

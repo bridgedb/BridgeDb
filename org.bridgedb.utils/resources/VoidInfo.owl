@@ -1,0 +1,1192 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY pav "http://purl.org/pav/" >
+    <!ENTITY void "http://rdfs.org/ns/void#" >
+    <!ENTITY terms "http://purl.org/dc/terms/" >
+    <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY voag2 "http://voag.linkedmodel.org/voag#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY voag "http://voag.linkedmodel.org/schema/voag#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY DUL "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#"
+     xml:base="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl"
+     xmlns:DUL="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:voag2="http://voag.linkedmodel.org/voag#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:void="http://rdfs.org/ns/void#"
+     xmlns:voag="http://voag.linkedmodel.org/schema/voag#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:pav="http://purl.org/pav/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:AnnotationProperty rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel">
+        <rdfs:subPropertyOf rdf:resource="&rdfs;comment"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/dc/terms/license -->
+
+    <owl:ObjectProperty rdf:about="&terms;license">
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://purl.org/dc/terms/publisher -->
+
+    <owl:ObjectProperty rdf:about="&terms;publisher"/>
+    
+
+
+    <!-- http://purl.org/dc/terms/subject -->
+
+    <owl:ObjectProperty rdf:about="&terms;subject"/>
+    
+
+
+    <!-- http://purl.org/pav/authoredBy -->
+
+    <owl:ObjectProperty rdf:about="&pav;authoredBy"/>
+    
+
+
+    <!-- http://purl.org/pav/createdBy -->
+
+    <owl:ObjectProperty rdf:about="&pav;createdBy"/>
+    
+
+
+    <!-- http://purl.org/pav/createdWith -->
+
+    <owl:ObjectProperty rdf:about="&pav;createdWith"/>
+    
+
+
+    <!-- http://purl.org/pav/derivedFrom -->
+
+    <owl:ObjectProperty rdf:about="&pav;derivedFrom"/>
+    
+
+
+    <!-- http://purl.org/pav/importedBy -->
+
+    <owl:ObjectProperty rdf:about="&pav;importedBy"/>
+    
+
+
+    <!-- http://purl.org/pav/importedFrom -->
+
+    <owl:ObjectProperty rdf:about="&pav;importedFrom"/>
+    
+
+
+    <!-- http://purl.org/pav/retrievedBy -->
+
+    <owl:ObjectProperty rdf:about="&pav;retrievedBy"/>
+    
+
+
+    <!-- http://purl.org/pav/retrievedFrom -->
+
+    <owl:ObjectProperty rdf:about="&pav;retrievedFrom"/>
+    
+
+
+    <!-- http://purl.org/pav/sourceAccessedBy -->
+
+    <owl:ObjectProperty rdf:about="&pav;sourceAccessedBy"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#dataDump -->
+
+    <owl:ObjectProperty rdf:about="&void;dataDump"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#exampleResource -->
+
+    <owl:ObjectProperty rdf:about="&void;exampleResource"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#linkPredicate -->
+
+    <owl:ObjectProperty rdf:about="&void;linkPredicate"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#objectsTarget -->
+
+    <owl:ObjectProperty rdf:about="&void;objectsTarget"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#sparqlEndpoint -->
+
+    <owl:ObjectProperty rdf:about="&void;sparqlEndpoint"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#subjectsTarget -->
+
+    <owl:ObjectProperty rdf:about="&void;subjectsTarget"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#vocabulary -->
+
+    <owl:ObjectProperty rdf:about="&void;vocabulary"/>
+    
+
+
+    <!-- http://voag.linkedmodel.org/schema/voag#frequencyOfChange -->
+
+    <owl:ObjectProperty rdf:about="&voag;frequencyOfChange"/>
+    
+
+
+    <!-- http://voag.linkedmodel.org/voag#frequencyOfChange -->
+
+    <owl:ObjectProperty rdf:about="&voag2;frequencyOfChange"/>
+    
+
+
+    <!-- http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses -->
+
+    <owl:ObjectProperty rdf:about="&DUL;expresses"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/homepage -->
+
+    <owl:ObjectProperty rdf:about="&foaf;homepage"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/page -->
+
+    <owl:ObjectProperty rdf:about="&foaf;page"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/primaryTopic -->
+
+    <owl:ObjectProperty rdf:about="&foaf;primaryTopic"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/dc/terms/created -->
+
+    <owl:DatatypeProperty rdf:about="&terms;created"/>
+    
+
+
+    <!-- http://purl.org/dc/terms/description -->
+
+    <owl:DatatypeProperty rdf:about="&terms;description"/>
+    
+
+
+    <!-- http://purl.org/dc/terms/modified -->
+
+    <owl:DatatypeProperty rdf:about="&terms;modified"/>
+    
+
+
+    <!-- http://purl.org/dc/terms/title -->
+
+    <owl:DatatypeProperty rdf:about="&terms;title"/>
+    
+
+
+    <!-- http://purl.org/pav/authoredOn -->
+
+    <owl:DatatypeProperty rdf:about="&pav;authoredOn"/>
+    
+
+
+    <!-- http://purl.org/pav/createdOn -->
+
+    <owl:DatatypeProperty rdf:about="&pav;createdOn"/>
+    
+
+
+    <!-- http://purl.org/pav/importedOn -->
+
+    <owl:DatatypeProperty rdf:about="&pav;importedOn"/>
+    
+
+
+    <!-- http://purl.org/pav/lastUpdateOn -->
+
+    <owl:DatatypeProperty rdf:about="&pav;lastUpdateOn"/>
+    
+
+
+    <!-- http://purl.org/pav/previousVersion -->
+
+    <owl:DatatypeProperty rdf:about="&pav;previousVersion"/>
+    
+
+
+    <!-- http://purl.org/pav/retrievedOn -->
+
+    <owl:DatatypeProperty rdf:about="&pav;retrievedOn"/>
+    
+
+
+    <!-- http://purl.org/pav/sourceAccessedOn -->
+
+    <owl:DatatypeProperty rdf:about="&pav;sourceAccessedOn"/>
+    
+
+
+    <!-- http://purl.org/pav/version -->
+
+    <owl:DatatypeProperty rdf:about="&pav;version"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#triples -->
+
+    <owl:DatatypeProperty rdf:about="&void;triples"/>
+    
+
+
+    <!-- http://rdfs.org/ns/void#uriSpace -->
+
+    <owl:DatatypeProperty rdf:about="&void;uriSpace"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel -->
+
+    <owl:Class rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://rdfs.org/ns/void#Dataset -->
+
+    <owl:Class rdf:about="&void;Dataset">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;uriSpace"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;sourceAccessedBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;title"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&voag;frequencyOfChange"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&foaf;page"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;sourceAccessedOn"/>
+                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;dataDump"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdWith"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&terms;publisher"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&terms;created"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&terms;modified"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;derivedFrom"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;importedBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;importedFrom"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;importedOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;retrievedBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;retrievedFrom"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;retrievedOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;vocabulary"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;previousVersion"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&foaf;homepage"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;license"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;version"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;sparqlEndpoint"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;subject"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;exampleResource"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;previousVersion"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;sourceAccessedOn"/>
+                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DirectMust"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&foaf;homepage"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;vocabulary"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&terms;publisher"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&terms;created"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&terms;modified"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;derivedFrom"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;importedBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;importedFrom"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;importedOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;retrievedBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;retrievedFrom"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;retrievedOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdWith"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;exampleResource"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;subject"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;license"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DirectMust"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;dataDump"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&voag;frequencyOfChange"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;sparqlEndpoint"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DirectMust"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;sourceAccessedBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&foaf;page"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;uriSpace"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;version"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DirectMust"/>
+        <owl:annotatedSource rdf:resource="&void;Dataset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;title"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    
+
+
+    <!-- http://rdfs.org/ns/void#DatasetDescription -->
+
+    <owl:Class rdf:about="&void;DatasetDescription">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                <owl:someValuesFrom rdf:resource="&rdfs;Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;lastUpdateOn"/>
+                <owl:someValuesFrom rdf:resource="&rdfs;Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;title"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&foaf;primaryTopic"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;DatasetDescription"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;DatasetDescription"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;DatasetDescription"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;title"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;DatasetDescription"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;lastUpdateOn"/>
+                <owl:someValuesFrom rdf:resource="&rdfs;Literal"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should"/>
+        <owl:annotatedSource rdf:resource="&void;DatasetDescription"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&foaf;primaryTopic"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;DatasetDescription"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                <owl:someValuesFrom rdf:resource="&rdfs;Literal"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    
+
+
+    <!-- http://rdfs.org/ns/void#Linkset -->
+
+    <owl:Class rdf:about="&void;Linkset">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;title"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;license"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;previousVersion"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;version"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;objectsTarget"/>
+                <owl:onClass rdf:resource="&void;Dataset"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;authoredBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;authoredOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&pav;createdWith"/>
+                        <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;subjectsTarget"/>
+                <owl:onClass rdf:resource="&void;Dataset"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;linkPredicate"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&DUL;expresses"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdBy"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Minimal"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;objectsTarget"/>
+                <owl:onClass rdf:resource="&void;Dataset"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Minimal"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&DUL;expresses"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;previousVersion"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Minimal"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;subjectsTarget"/>
+                <owl:onClass rdf:resource="&void;Dataset"/>
+                <owl:qualifiedCardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:qualifiedCardinality>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;description"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:intersectionOf rdf:parseType="Collection">
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;authoredBy"/>
+                                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                            </owl:Restriction>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="&pav;authoredOn"/>
+                                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+                            </owl:Restriction>
+                        </owl:intersectionOf>
+                    </owl:Class>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="&pav;createdWith"/>
+                        <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;version"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;license"/>
+                <owl:someValuesFrom rdf:resource="&owl;Thing"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Minimal"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&void;linkPredicate"/>
+                <owl:cardinality rdf:datatype="&xsd;nonNegativeInteger">1</owl:cardinality>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&pav;createdOn"/>
+                <owl:someValuesFrom rdf:resource="&xsd;dateTime"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    <owl:Axiom>
+        <RequirementLevel rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must"/>
+        <owl:annotatedSource rdf:resource="&void;Linkset"/>
+        <owl:annotatedProperty rdf:resource="&rdfs;subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="&terms;title"/>
+                <owl:someValuesFrom rdf:resource="&xsd;string"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+    </owl:Axiom>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DirectMust -->
+
+    <owl:NamedIndividual rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#DirectMust">
+        <rdf:type rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May -->
+
+    <owl:NamedIndividual rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#May">
+        <rdf:type rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Minimal -->
+
+    <owl:NamedIndividual rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Minimal">
+        <rdf:type rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must -->
+
+    <owl:NamedIndividual rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Must">
+        <rdf:type rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should -->
+
+    <owl:NamedIndividual rdf:about="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#Should">
+        <rdf:type rdf:resource="http://openphacts.cs.man.ac.uk:9090/Void/ontology.owl#RequirementLevel"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.2.3.1824) http://owlapi.sourceforge.net -->
+

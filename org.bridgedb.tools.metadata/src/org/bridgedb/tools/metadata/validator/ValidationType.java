@@ -28,20 +28,18 @@ import org.openrdf.model.impl.URIImpl;
  * @author Christian
  */
 public enum ValidationType {
-    ANY_RDF ("LinkSet.owl", "Rdf", "http://example.com" ,false, true),
-    VOID ("LinkSet.owl", "Void", "http://rdfs.org/ns/void#Dataset", false, false),
-    LINKS("LinkSet.owl", "LinkSet", "http://rdfs.org/ns/void#Linkset", true, false),
+    ANY_RDF ("Rdf", "http://example.com" ,false, true),
+    VOID ("Void", "http://rdfs.org/ns/void#Dataset", false, false),
+    LINKS("LinkSet", "http://rdfs.org/ns/void#Linkset", true, false),
     //todo make minal set
-    LINKSMINIMAL("LinkSet.owl", "Minimum", "http://rdfs.org/ns/void#Linkset", true, true);
+    LINKSMINIMAL("Minimum", "http://rdfs.org/ns/void#Linkset", true, true);
    
-    private final String owlFile;
     private final String name;
     private final URI directType;
     private final boolean linkset;
     private final boolean minimal;
     
-    private ValidationType(String owlFile, String name, String type, boolean linkset, boolean isMinimal){
-        this.owlFile = owlFile;
+    private ValidationType(String name, String type, boolean linkset, boolean isMinimal){
         this.name = name;
         this.directType = new URIImpl(type);
         this.linkset = linkset;
@@ -64,10 +62,6 @@ public enum ValidationType {
             result = result + ", " + ValidationType.values()[i].toString();
         }
         return result;
-    }
-    
-    public String getOwlFileName(){
-        return owlFile;
     }
     
     public String getName(){

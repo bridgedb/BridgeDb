@@ -347,6 +347,7 @@ public class MetaDataTestBase extends TestUtils{
         data.addAll(loadMinDataSet2());
         addStatement(data, linkIdStatement); 
         addStatement(data, linkPredicateStatement);
+        addStatement(data, linkJustificationStatement);
         addStatement(data, subjectStatement);
         addStatement(data, objectStatement);
         return data;
@@ -363,7 +364,6 @@ public class MetaDataTestBase extends TestUtils{
         addStatement(data, linkTitleStatement);
         addStatement(data, linkDescriptionStatement );
         addStatement(data, linkLicenseStatement);
-        addStatement(data, linkJustificationStatement);
         addStatement(data, linkAuthoredByStatement);
         addStatement(data, linkAuthoredOnStatement);
         addStatement(data, linkCreatedByStatement);

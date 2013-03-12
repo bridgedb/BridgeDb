@@ -54,7 +54,8 @@ public class ConfigReader {
     public static final String DIRECTORIES_CONFIG_FILE_NAME = "DirectoriesConfig.txt";
     public static final String RDF_CONFIG_FILE_NAME = "rdfConfig.txt";
     public static final String SQL_CONFIG_FILE_NAME = "sqlConfig.txt";
-
+    public static final String VOID_OWL_FILE = "VoidInfo.owl";
+    
     //SANDBOX config files MUST be provided 
     public static final String SANDBOX_DIRECTORIES_CONFIG_FILE_NAME = "sandboxDirectoriesConfig.txt";
     public static final String SANDBOX_RDF_CONFIG_FILE_NAME = "sandboxRdfConfig.txt";
