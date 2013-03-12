@@ -19,6 +19,7 @@
 //
 package org.bridgedb.tools.metadata;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -35,27 +36,31 @@ import org.openrdf.model.Value;
 public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaData{
 
     private final URI predicate;
-    private final URI resourceType;
+    private final Set<URI> resourceTypes;
     private final Set<Resource> ids = new HashSet<Resource>();
     private final Set<Statement> rawRDF = new HashSet<Statement>();
     private MetaDataCollection collection;
     private final MetaDataSpecification registry;
     private final int cardinality;  
     
-    LinkedResource(URI predicate, String type, RequirementLevel requirementLevel, URI resourceType, 
-            MetaDataSpecification registry){
-        this(predicate, type, NO_CARDINALITY, requirementLevel, resourceType, registry);
-    }
-    
-    LinkedResource(URI predicate, String type, int cardinality, RequirementLevel requirementLevel, URI resourceType, 
-            MetaDataSpecification registry){
+    LinkedResource(URI predicate, String type, int cardinality, RequirementLevel requirementLevel, Set<URI> resourceTypes, 
+            MetaDataSpecification registry) throws BridgeDBException{
         super(predicate.getLocalName(), type, requirementLevel);
         this.predicate = predicate;
-        this.resourceType = resourceType;
+        this.resourceTypes = resourceTypes;
         this.registry = registry;
         this.cardinality = cardinality;
+        checkRequirementLevel();
     }
             
+    private void checkRequirementLevel() throws BridgeDBException{
+        if (requirementLevel == null){
+            throw new BridgeDBException("Unexpected null requirement");
+        }
+        if (requirementLevel == RequirementLevel.UNSPECIFIED){
+            throw new BridgeDBException("Unexpected unspecified requirement");
+        }
+}
     //LinkedResource(Element element) throws BridgeDBException {
     //    super(element);
     //    String typeSt = element.getAttribute(SchemaConstants.TYPE);
@@ -69,7 +74,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
         super(id, other);
         setupValues(id);
         predicate = other.predicate;
-        resourceType = other.resourceType;
+        resourceTypes = other.resourceTypes;
         this.collection = collection;
         this.registry = other.registry;
         this.cardinality = other.cardinality;
@@ -106,7 +111,6 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     @Override
     void appendSchema(StringBuilder builder, int tabLevel) {
         try {
-            ResourceMetaData resource = registry.getResourceByType(resourceType, id, collection);
             tab(builder, tabLevel);
             builder.append("Resource Link ");
             builder.append(name);
@@ -119,7 +123,18 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 builder.append("Cardinality ");
                 builder.append(cardinality);        
             }
-            resource.appendSchema(builder, tabLevel + 1);
+            boolean first = false;
+            for (URI resourceType:resourceTypes){
+                if (!first){
+                   tab(builder, tabLevel+1);
+                   builder.append("OR");
+                   newLine(builder);
+                } else {
+                    first = false;
+                }
+                ResourceMetaData resource = registry.getResourceByType(resourceType, id, collection);
+                resource.appendSchema(builder, tabLevel + 2);
+            }
         } catch (BridgeDBException ex) {
             appendException(builder, tabLevel, ex);
         }
@@ -134,7 +149,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
             builder.append(ex);
             newLine(builder, tabLevel + 1);
             builder.append("Please check there is a reource declared with the type ");
-            builder.append(resourceType);        
+            builder.append(resourceTypes);        
             newLine(builder);        
     }
     
@@ -204,7 +219,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                 if (rmd == null){
                     return false;
                 } else {
-                    if (!resourceType.equals(rmd.getType())){
+                    if (!resourceTypes.contains(rmd.getType())){
                         return false;
                     }
                     if (!rmd.hasRequiredValues()){
@@ -237,7 +252,8 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     void appendValidityReport(StringBuilder builder, boolean checkAllpresent, boolean includeWarnings, int tabLevel) throws BridgeDBException {
         if (this.cardinality > 0 && ids.isEmpty()){
             tab(builder, tabLevel);
-            builder.append("ERROR: ");
+            builder.append(requirementLevel);
+            builder.append(" ERROR: ");
             builder.append(name);
             builder.append(" is missing. ");
             newLine(builder, tabLevel + 1);
@@ -273,7 +289,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     builder.append(id);
                     builder.append(" is missing or not correctly typed. ");
                     newLine(builder);
-                } else if (!resourceType.equals(rmd.getType())){
+                } else if (!resourceTypes.contains(rmd.getType())){
                     tab(builder, tabLevel);
                     builder.append("ERROR: ");
                     builder.append(name);
@@ -282,7 +298,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
                     builder.append(" found with type ");
                     builder.append(rmd.getType());            
                     builder.append(" but the requirment is type ");
-                    builder.append(resourceType);            
+                    builder.append(resourceTypes);            
                     newLine(builder);
                 } else {
                     String linkReport = rmd.validityReport(includeWarnings);
@@ -392,6 +408,7 @@ public class LinkedResource extends MetaDataBase implements MetaData, LeafMetaDa
     public Set<Statement> getRDF() {
         return rawRDF;
     }
+
 
 
 }

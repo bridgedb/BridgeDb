@@ -253,10 +253,14 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
             appendUnspecifiedReport(builder, includeWarnings, tabLevel);            
         } else if (!hasCorrectTypes()){
             appendIncorrectTypeReport(builder, tabLevel, includeWarnings);
-        } else if (checkAllpresent && values.isEmpty()){
-            appendEmptyReport(builder, tabLevel, includeWarnings);
-        } else if (this.cardinality != NO_CARDINALITY && this.cardinality != values.size()){
-            appendIncorrectCardinalityReport(builder, tabLevel, includeWarnings);
+        } else if (checkAllpresent) {
+            if(values.isEmpty()){
+                appendEmptyReport(builder, tabLevel, includeWarnings);
+            } else if (this.cardinality != NO_CARDINALITY && this.cardinality != values.size()){
+                appendIncorrectCardinalityReport(builder, tabLevel, includeWarnings);
+            } else {
+                //Ok so nothing to append
+            }
         } else {
             //Ok so nothing to append
         }

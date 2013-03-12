@@ -18,6 +18,7 @@ import org.openrdf.model.impl.URIImpl;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAnnotationValue;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -104,6 +105,8 @@ public class MetaDataSpecification {
                 }
             } else if (axiom instanceof OWLDeclarationAxiom){
                 //ok do nothing
+            } else if (axiom instanceof OWLAnnotationAssertionAxiom){
+                //ok do nothing                
             } else if (axiom instanceof OWLSubObjectPropertyOfAxiom){
                 //ok do nothing
             } else if (axiom instanceof OWLClassAssertionImpl){
@@ -265,9 +268,6 @@ public class MetaDataSpecification {
   
     private MetaDataBase parseExpression(OWLClassExpression expr, String type, RequirementLevel requirementLevel) 
             throws BridgeDBException {
-        if (expr instanceof OWLCardinalityRestriction){
-            return parseOWLCardinalityRestriction((OWLCardinalityRestriction)expr, type, requirementLevel);
-        } 
         if (expr instanceof OWLQuantifiedRestriction){
             return parseOWLQuantifiedRestriction ((OWLQuantifiedRestriction) expr, type, requirementLevel);
         }
@@ -302,12 +302,13 @@ public class MetaDataSpecification {
         throw new BridgeDBException("Unexpected expression." + expression);
     }
     
-    private MetaDataBase parseOWLCardinalityRestriction(OWLCardinalityRestriction restriction, String type, RequirementLevel requirementLevel) throws BridgeDBException{
+    private MetaDataBase parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction, String type, 
+            RequirementLevel requirementLevel) throws BridgeDBException{
         URI predicate;
         OWLPropertyRange range = restriction.getFiller();
         OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
-        int cardinality = restriction.getCardinality();
         predicate = toURI(owlPropertyExpression);
+        int cardinality = getCardinality(restriction);
         if (range instanceof OWLClass){
             OWLClass owlClass = (OWLClass)range;
             if (owlClass.isOWLThing()){
@@ -316,30 +317,35 @@ public class MetaDataSpecification {
             IRI iri = owlClass.getIRI();
             ontology.containsClassInSignature(iri);
             linkingPredicates.add(predicate);
-            return new LinkedResource(predicate, type, cardinality, requirementLevel, new URIImpl(iri.toString()), this);
-        }
-        return new PropertyMetaData(predicate, type, cardinality, requirementLevel, range.toString());
-    }
-
-    private MetaDataBase parseOWLQuantifiedRestriction(OWLQuantifiedRestriction restriction, String type, 
-            RequirementLevel requirementLevel) throws BridgeDBException{
-        URI predicate;
-        OWLPropertyRange range = restriction.getFiller();
-        OWLPropertyExpression owlPropertyExpression = restriction.getProperty();
-        predicate = toURI(owlPropertyExpression);
-        if (range instanceof OWLClass){
-            OWLClass owlClass = (OWLClass)range;
-            if (owlClass.isOWLThing()){
-                return new PropertyMetaData(predicate, type, requirementLevel, range.toString());
+            Set<URI> linkedTypes = new HashSet<URI>();
+            linkedTypes.add(new URIImpl(iri.toString()));
+            return new LinkedResource(predicate, type, cardinality, requirementLevel, linkedTypes, this);
+        } else if (range instanceof OWLObjectUnionOf){
+            Set<URI> linkedTypes = new HashSet<URI>();
+            OWLObjectUnionOf objectUnionOf = (OWLObjectUnionOf)range;
+            for (OWLClassExpression expr:objectUnionOf.getOperands()){
+                if (expr instanceof OWLClass){
+                    OWLClass owlClass = (OWLClass)expr;
+                    IRI iri = owlClass.getIRI();
+                    linkedTypes.add(new URIImpl(iri.toString()));       
+                } else {
+                    linkedTypes.add(new URIImpl(expr.toString()));
+                }
             }
-            IRI iri = owlClass.getIRI();
-            ontology.containsClassInSignature(iri);
-            linkingPredicates.add(predicate);
-            return new LinkedResource(predicate, type, requirementLevel, new URIImpl(iri.toString()), this);
+            return new LinkedResource(predicate, type, cardinality, requirementLevel, linkedTypes, this);
+        } else {
+            return new PropertyMetaData(predicate, type, cardinality, requirementLevel, range.toString());
         }
-        return new PropertyMetaData(predicate, type, requirementLevel, range.toString());
     }
 
+    private int getCardinality(OWLQuantifiedRestriction restriction){
+        if (restriction instanceof OWLCardinalityRestriction){
+            OWLCardinalityRestriction card = (OWLCardinalityRestriction)restriction;
+            return card.getCardinality();
+        }
+        return MetaDataBase.NO_CARDINALITY;
+    }
+       
     Set<URI> getLinkingPredicates() {
         return linkingPredicates;
     }
