@@ -2151,14 +2151,6 @@ bridgeDB:DataSource_http_identifiers_org_biomodels_sbo_id a bridgeDB:DataSource 
 	bridgeDB:hasPrimaryUrlPattern <http://identifiers.org/biomodels.sbo/$id> ;
 	bridgeDB:hasPrimaryWikiPathwaysPattern <http://identifiers.org/biomodels.sbo/$id> .
 
-bridgeDB:DataSource_http_purl_uniprot_org_uniprot_id a bridgeDB:DataSource ;
-	bridgeDB:fullName "http://purl.uniprot.org/uniprot/$id" ;
-	bridgeDB:systemCode "http://purl.uniprot.org/uniprot/$id" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasPrimaryUrlPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasPrimaryWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
-
 bridgeDB:DataSource_http_stke_sciencemag_org_cgi_cm_stkecm_id a bridgeDB:DataSource ;
 	bridgeDB:fullName "http://stke.sciencemag.org/cgi/cm/stkecm;$id" ;
 	bridgeDB:systemCode "http://stke.sciencemag.org/cgi/cm/stkecm;$id" ;
@@ -4478,15 +4470,6 @@ bridgeDB:DataSource_Unipathway a bridgeDB:DataSource ;
 	bridgeDB:hasPrimaryIdentifiersOrgPattern <http://identifiers.org/unipathway/$id> ;
 	bridgeDB:hasPrimaryWikiPathwaysPattern <http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id> .
 
-bridgeDB:DataSource_UniProt a bridgeDB:DataSource ;
-	bridgeDB:fullName "UniProt" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasPrimaryUriPattern <http://www.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasUriParent bridgeDB:DataSource_http_purl_uniprot_org_uniprot_id .
-
 bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
 	bridgeDB:fullName "Uniprot Enzyme" ;
 	bridgeDB:systemCode "Enzyme" ;
@@ -4504,9 +4487,9 @@ bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasPrimaryUrlPattern <http://www.ebi.uniprot.org/entry/$id> ;
 	bridgeDB:hasPrimaryIdentifiersOrgPattern <http://identifiers.org/uniprot/$id> ;
-	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasUriParent bridgeDB:DataSource_http_purl_uniprot_org_uniprot_id .
+	bridgeDB:hasPrimarySourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasPrimaryWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasPrimaryUriPattern <http://www.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_UNIPROT_ID a bridgeDB:DataSource ;
 	bridgeDB:fullName "UNIPROT_ID" ;
@@ -4514,8 +4497,7 @@ bridgeDB:DataSource_UNIPROT_ID a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasUriParent bridgeDB:DataSource_http_purl_uniprot_org_uniprot_id .
+	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_UniSTS a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniSTS" ;
@@ -7152,8 +7134,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://purl.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/uniprot/" ;
-	bridgeDB:hasDataSource bridgeDB:DataSource_http_purl_uniprot_org_uniprot_id ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_UniProt , bridgeDB:DataSource_Uniprot_TrEMBL , bridgeDB:DataSource_UNIPROT_ID .
+	bridgeDB:hasDataSource bridgeDB:DataSource_Uniprot_TrEMBL ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_UNIPROT_ID .
 
 <http://rdf.chemspider.com/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://rdf.chemspider.com/" ;
@@ -8090,7 +8072,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.uniprot.org/uniprot/" ;
-	bridgeDB:hasDataSource bridgeDB:DataSource_UniProt .
+	bridgeDB:hasDataSource bridgeDB:DataSource_Uniprot_TrEMBL .
 
 <http://www.vbase2.org/vgene.php?id=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://www.vbase2.org/vgene.php?id=" ;
