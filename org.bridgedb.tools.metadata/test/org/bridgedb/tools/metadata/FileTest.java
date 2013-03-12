@@ -110,6 +110,7 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
+    @Ignore
     public void testchemspider2chemblrdflinksetSubSet_1AsLinks() throws BridgeDBException{
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
