@@ -34,7 +34,6 @@ import org.junit.Ignore;
  *
  * @author Christian
  */
-@Ignore
 public abstract class IDMapperCapabilitiesTest extends IDMapperTestBase{
     
     //Must be instantiated by implementation of these tests.
