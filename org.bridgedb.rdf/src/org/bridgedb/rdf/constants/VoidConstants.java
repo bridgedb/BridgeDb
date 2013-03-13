@@ -35,6 +35,7 @@ public class VoidConstants {
     public static final URI DATASET_DESCRIPTION = new URIImpl(voidns + "DatasetDescription");
     public static final URI EXAMPLE_RESOURCE = new URIImpl(voidns + "exampleResource");
     public static final URI LINK_PREDICATE = new URIImpl(voidns + "linkPredicate");
+    public static final URI IN_DATASET = new URIImpl(voidns + "inDataset");
     public static final URI LINKSET = new URIImpl(voidns + "Linkset");
     public static final URI TARGET = new URIImpl(voidns + "target");
     public static final URI TRIPLES = new URIImpl(voidns + "triples");
@@ -45,8 +46,6 @@ public class VoidConstants {
     private static final String URI_SPACE = "uriSpace";
     public static final String URI_SPACE_SHORT = PREFIX_NAME + URI_SPACE;
     public static final URI URI_SPACE_URI = new URIImpl(voidns + URI_SPACE);
-    public static final URI VOCABULARY = new URIImpl(voidns + "vocabulary");
-
-    
+    public static final URI VOCABULARY = new URIImpl(voidns + "vocabulary");    
 
 }

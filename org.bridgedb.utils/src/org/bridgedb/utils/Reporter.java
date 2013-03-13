@@ -38,8 +38,14 @@ public class Reporter {
      * This method just for the ease of searching for System,out lines added for debugging.
      * @param message 
      */
+    
     public static void println(String message){
         logger.info(message);
         System.out.println(message);
+    }
+
+    public static void error(String message){
+        logger.error(message);
+        System.err.println(message);
     }
 }

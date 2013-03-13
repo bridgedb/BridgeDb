@@ -15,8 +15,11 @@ import org.bridgedb.tools.metadata.validator.MetaDataSpecificationRegistry;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.bridgedb.utils.Reporter;
+import org.bridgedb.utils.StoreType;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
+import org.openrdf.rio.RDFFormat;
 
 /**
  *
@@ -25,69 +28,59 @@ import org.openrdf.model.Statement;
 public class TestRemoteVoidsAndLinksets {
  
     private static boolean NO_WARNINGS = false;
-    private MetaDataSpecification registry;
+    private static boolean EXCEPTION_ON_ERROR = false;
+    private LinksetLoader loader = new LinksetLoader();
     
     static final Logger logger = Logger.getLogger(TestRemoteVoidsAndLinksets.class);
     
-    public TestRemoteVoidsAndLinksets() throws IDMapperException{
-        registry = MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.VOID);
-    }
-        
-    private void checkFile(String fileName, int numberOfIds) throws BridgeDBException{
-        logger.info("Checking " + fileName);
-        File input = new File(fileName);
-        StatementReader reader = new StatementReader(input);
-        check(fileName, reader, numberOfIds); 
+    private void checkVoid(String SourceName) throws BridgeDBException{
+        check(SourceName, ValidationType.VOID, EXCEPTION_ON_ERROR);
     }
     
-    private void checkUrl(String url, int numberOfIds) throws BridgeDBException{
-        logger.info("Checking " + url);
-        StatementReader reader = new StatementReader(url);
-        check(url, reader, numberOfIds); 
+    private void checkMinimum(String SourceName) throws BridgeDBException {
+        check(SourceName, ValidationType.LINKSMINIMAL, NO_WARNINGS);
     }
     
-    private void check(String SourceName, StatementReader reader, int numberOfIds) throws BridgeDBException{       
-        Set<Statement> statements = reader.getVoidStatements();
-        MetaDataCollection metaData = new MetaDataCollection(SourceName, statements, registry);
-        Set<Resource> ids = metaData.getIds();
-        boolean ok = (ids.size() == numberOfIds);
-        if (!ok){
-            logger.error("Incorrect number of Ids found in " + SourceName + " Expected " + numberOfIds + " found " + ids.size());
-        }        
-        if (!metaData.hasRequiredValuesOrIsSuperset()){
-            logger.error("Missing values in " + SourceName);
-            ok = false;
-        }             
-        if (! metaData.hasCorrectTypes()){
-            logger.error("Incorrect Types in " + SourceName);
-            ok = false;
-        }             
-        String report = metaData.validityReport(NO_WARNINGS);
+    private void check(String SourceName, ValidationType validationType, boolean allowErrors) throws BridgeDBException {
+        System.out.println(validationType + "  " + validationType.isLinkset());
+        String report = loader.validateAddress(SourceName, StoreType.TEST, validationType, NO_WARNINGS);
         if (report.contains("ERROR")){
-            logger.error("Validation error in " + SourceName);
-            logger.error(report);
-            ok = false;
-        }             
-        if (ok){
-            logger.info("No problems found with  " + SourceName);
+            output("Validation error in " + SourceName, allowErrors);
+            output(report, allowErrors);
+            if (!allowErrors){
+                throw new BridgeDBException ("Check failed");
+            }
+        } else {
+            Reporter.println("No problems found with  " + SourceName);
         }
     }
  
+    private void output(String text, boolean allowErrors){
+        if (allowErrors){
+            Reporter.println(text);
+        } else {
+            Reporter.error(text);
+        }
+    }
+    
+    public TestRemoteVoidsAndLinksets() throws IDMapperException{
+        checkMinimum("C:/Dropbox/linksets/sample1To2.ttl");
+        checkMinimum("https://www.dropbox.com/s/9a5vb5cchjtlxyc/sample1To2.ttl");
+        checkVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs");
+        checkVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl");
+        checkVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi99_void.ttl");
+        loader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/ChEBI100VoID.ttl", StoreType.TEST, ValidationType.VOID);
+        checkVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/has_functional_parentChEBI100Linkset.ttl");
+        checkVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/has_parent_hydrideChEBI100Linkset.ttl");
+        checkVoid("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl");
+        checkVoid("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider-void.ttl");
+//        checkVoid("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2chemblrdf-linkset.ttl");
+//        checkVoid("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2drugbank-linkset.ttl");
+ //       checkVoid("ftp://ftp.rsc-us.org/OPS/20130117/void_2013-01-17.ttl#chemSpiderDataset");
+     }
+        
     public static void main(String[] args) throws IDMapperException {
-        ConfigReader.logToConsole();
         TestRemoteVoidsAndLinksets checker = new TestRemoteVoidsAndLinksets();
-        checker.checkFile("C:/OpenPhacts/linksets/LinksetsUBO/ProMiner_CHEBI_72213.n3", 3);
-        checker.checkFile("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", 4);
-        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs", 5);
-        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl", 2);
-        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi99_void.ttl", 2);
-        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/has_functional_parentChEBI100Linkset.ttl", 2);
-        checker.checkUrl("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/has_parent_hydrideChEBI100Linkset.ttl", 3);
-        checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl", 5);
-        checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider-void.ttl", 4);
-        checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2chemblrdf-linkset.ttl", 4);
-        checker.checkUrl("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chemspider2drugbank-linkset.ttl", 5);
-        checker.checkUrl("ftp://ftp.rsc-us.org/OPS/20130117/void_2013-01-17.ttl#chemSpiderDataset", 21);
+    }
 
-   }
 }

@@ -36,6 +36,7 @@ import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.StatementImpl;
 
 /**
  *
@@ -60,7 +61,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         loadLinkedResources(statements);
         for (Resource id:ids){
             if (!resourcesMap.containsKey(id)){
-               ResourceMetaData resourceMetaData =  getResourceMetaData(id, statements);
+               ResourceMetaData resourceMetaData =  getResourceMetaData(id, statements);               
                if (resourceMetaData == null){
                     logger.warn(id + " has no known rdf:type ");
                     errors.add(id + " has no known rdf:type ");                   
@@ -73,8 +74,8 @@ public class MetaDataCollection extends AppendBase implements MetaData {
         this.source = source;
     }
     
-    public MetaDataCollection (String dataFileName, MetaDataSpecification metaDataRegistry) throws BridgeDBException{
-        this(dataFileName, new StatementReader(dataFileName).getVoidStatements(), metaDataRegistry);
+    public MetaDataCollection (String address, MetaDataSpecification metaDataRegistry) throws BridgeDBException{
+        this(address, new StatementReader(address).getVoidStatements(), metaDataRegistry);
     }
         
     private void loadLinkedResources(Set<Statement> statements) throws BridgeDBException{
@@ -196,6 +197,7 @@ public class MetaDataCollection extends AppendBase implements MetaData {
     
     private Set<Resource> findIds(Set<Statement> statements){
         HashSet<Resource> results = new HashSet<Resource>();
+        Statement linksetType = null;
         for (Statement statement: statements) {
             if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
                  results.add(statement.getSubject());
@@ -207,7 +209,19 @@ public class MetaDataCollection extends AppendBase implements MetaData {
                      results.add((Resource)object);
                  }
             }
+            if (statement.getPredicate().equals(VoidConstants.IN_DATASET)){
+                 results.add(statement.getSubject());
+                 Value object = statement.getObject();
+                 if (object instanceof Resource){
+                     Resource objectR = (Resource)object;
+                     results.add(objectR);
+                     linksetType = new StatementImpl(objectR, RdfConstants.TYPE_URI, VoidConstants.LINKSET);
+                 }
+            }
         }  
+        if (linksetType != null){
+            statements.add(linksetType);
+        }
         return results;
     }
     

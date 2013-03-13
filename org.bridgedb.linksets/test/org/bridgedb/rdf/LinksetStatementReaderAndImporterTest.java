@@ -85,7 +85,7 @@ public class LinksetStatementReaderAndImporterTest extends TestUtils{
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/testPart1.ttl", StoreType.TEST, validationType);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/testPart1.ttl", StoreType.TEST, validationType);
         LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.TEST);
         Set result = instance.getLinkStatements();
         assertEquals(3, result.size());

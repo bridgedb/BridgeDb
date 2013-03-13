@@ -38,14 +38,14 @@ public interface LinksetInterface extends LinksetInterfaceMinimal{
     public String validateInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType, boolean includeWarnings) throws BridgeDBException;
     
-    public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
+    public String validateAddress(String address, StoreType storeType, ValidationType type, boolean includeWarnings) 
             throws BridgeDBException;
     
     @Override
     public String loadString(String source, String info, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws BridgeDBException;
     
-    public void loadFile(String fileName, StoreType storeType, ValidationType type) throws BridgeDBException;
+    public void load(String path, StoreType storeType, ValidationType type) throws BridgeDBException;
     
     @Override
     public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 

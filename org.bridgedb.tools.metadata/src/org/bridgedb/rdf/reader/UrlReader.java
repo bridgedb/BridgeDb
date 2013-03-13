@@ -43,6 +43,8 @@ public class UrlReader {
     private static String RAW_GITHUB = "https://raw.github.com";
     private static String HTML_GITHUB = "https://github.com";
     private static String BLOB = "blob/";
+    private static String HTML_DROPBOX = "https://www.dropbox.com";
+    private static String RAW_DROPBOX = "https://dl.dropbox.com";
     private static String method = "GET";
     private static final boolean useEpsvWithIPv4 = false; //keep
   
@@ -100,6 +102,9 @@ public class UrlReader {
             if (scrubbedAddress.contains(BLOB)){
                 scrubbedAddress = scrubbedAddress.replaceFirst(BLOB, "");
             }
+        }
+        if (scrubbedAddress.startsWith(HTML_DROPBOX)){
+            scrubbedAddress = scrubbedAddress.replaceFirst(HTML_DROPBOX, RAW_DROPBOX);
         }
         return scrubbedAddress;
     }

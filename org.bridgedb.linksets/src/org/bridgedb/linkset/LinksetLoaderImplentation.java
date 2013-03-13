@@ -102,6 +102,30 @@ public class LinksetLoaderImplentation{
         }
     }
     
+    protected LinksetLoaderImplentation(String address, ValidationType validationType, StoreType storeType) throws BridgeDBException {
+        logger.info("Reading " + address);
+        URI uri;
+        try{
+            uri = new URIImpl(address);
+        } catch (Exception e){
+            File file = new File(address);
+            uri = new URIImpl(file.toURI().toString());
+        }
+        accessedFrom = uri;
+        this.validationType = validationType;
+        this.storeType = storeType;
+        if (validationType.isLinkset()){
+            LinksetStatements linkStatements = new LinksetStatementReaderAndImporter(address, storeType);     
+            statements = linkStatements;     
+            metaData = new LinksetVoidInformation(address, linkStatements, validationType);        
+        } else {
+            statements = new StatementReaderAndImporter(address, storeType);     
+            MetaDataSpecification specification = 
+                MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(validationType);
+            metaData = new MetaDataCollection(address, statements.getVoidStatements(), specification);
+        }
+    }
+
     protected LinksetLoaderImplentation(String source, String info, RDFFormat format, ValidationType validationType, 
             StoreType storeType) throws BridgeDBException {
         logger.info("Reading a String length " + info.length());

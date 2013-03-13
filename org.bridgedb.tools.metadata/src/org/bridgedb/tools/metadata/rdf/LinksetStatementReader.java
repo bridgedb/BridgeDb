@@ -43,8 +43,8 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
     
     URI linkPredicate = null;
     
-    public LinksetStatementReader(String fileName) throws BridgeDBException{
-        super(fileName);
+    public LinksetStatementReader(String address) throws BridgeDBException{
+        super(address);
     }
     
     public LinksetStatementReader(File file) throws BridgeDBException{

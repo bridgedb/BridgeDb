@@ -25,6 +25,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.sql.SQLUriMapper;
@@ -97,16 +99,21 @@ public class LinksetLoader implements LinksetInterface{
     }
 
     @Override
-    public String validateFile(String fileName, StoreType storeType, ValidationType type, boolean includeWarnings) 
+    public String validateAddress(String address, StoreType storeType, ValidationType validationType, boolean includeWarnings) 
             throws BridgeDBException {
-        if (fileName == null){
+        if (address == null){
             throw new BridgeDBException("File name may not be null");
         }
-        if (fileName.trim().isEmpty()){
+        if (address.trim().isEmpty()){
             throw new BridgeDBException("File name may not be empty");
         }
-        File file = new File(fileName.trim());
-        return validityFile(file, storeType, type, includeWarnings);
+        File file = new File(address.trim());
+        if (file.exists()){
+            return validityFile(file, storeType, validationType, includeWarnings);
+        } else {
+            LinksetLoaderImplentation loader = new LinksetLoaderImplentation(address, validationType, storeType);
+            return loader.validityReport(includeWarnings);
+        }
     }
     
     @Override
@@ -115,7 +122,7 @@ public class LinksetLoader implements LinksetInterface{
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(source, info, format, validationType, storeType);
         loader.validate();
         File file = saveString(info, format, validationType);
-        load(file, storeType, validationType);
+        loadFile(file, storeType, validationType);
         return "Loaded file " + file.getAbsolutePath();
     }
     
@@ -129,14 +136,14 @@ public class LinksetLoader implements LinksetInterface{
             logger.warn("Linkset saved to " + file.getAbsolutePath());
             return "Saved linkset to: " + file.getName();
         } else {
-            load(file, StoreType.TEST, validationType);            
+            loadFile(file, StoreType.TEST, validationType);            
             logger.warn("Saved void to: " + file.getName() + " Also loaded into test."); 
             return "Saved void to: " + file.getName() + " Void is temporarily available to validated other voids."
                     + " Please ask an admin to make this permenant.";
         }
     }
 
-    private static void load(File file, StoreType storeType, ValidationType validationType) 
+    private static void loadFile(File file, StoreType storeType, ValidationType validationType) 
     		throws BridgeDBException {
         if (storeType == null){
             throw new BridgeDBException ("Can not load if no storeType set");
@@ -146,7 +153,7 @@ public class LinksetLoader implements LinksetInterface{
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
             for (File child:children){
-                load(child, storeType, validationType);
+                loadFile(child, storeType, validationType);
             }
         } else { 
             LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
@@ -155,10 +162,34 @@ public class LinksetLoader implements LinksetInterface{
         }
     }
 
+    private void loadURI(String address, StoreType storeType, ValidationType validationType) 
+    		throws BridgeDBException {
+        if (storeType == null){
+            throw new BridgeDBException ("Can not load if no storeType set");
+        }
+        LinksetLoaderImplentation loader = new LinksetLoaderImplentation(address, validationType, storeType);
+        loader.validate();
+        loader.load();
+    }
+
+    private void loadUri(java.net.URI uri, StoreType storeType, ValidationType type) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
     @Override
-    public void loadFile(String fileName, StoreType storeType, ValidationType type) throws BridgeDBException {
-        File file = new File(fileName.trim());
-        load(file, storeType, type);
+    public void load(String path, StoreType storeType, ValidationType validationType) throws BridgeDBException {
+        path = path.trim();
+        File file;
+        try {
+            java.net.URL url = new java.net.URL(path);
+            RDFFormat format = null;
+            loadURI(path, storeType, validationType);
+        } catch (IOException ex) {
+            //ok not a uri so try as a file
+            //No cleaner way to do this known
+            file = new File(path);
+            loadFile(file, storeType, validationType);
+        }
     }
     
     @Override
@@ -169,7 +200,7 @@ public class LinksetLoader implements LinksetInterface{
             logger.warn("Linkset saved to " + file.getAbsolutePath());
             return "Saved linkset to: " + file.getName();
         } else {
-            load(file, StoreType.TEST, validationType);            
+            loadFile(file, StoreType.TEST, validationType);            
             logger.warn("Saved void to: " + file.getName() + " Also loaded into test."); 
             return "Saved void to: " + file.getName() + " Void is temporarily available to validated other voids."
                     + " Please ask an admin to make this permenant.";
@@ -180,7 +211,7 @@ public class LinksetLoader implements LinksetInterface{
     public String saveInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws BridgeDBException{
         File file = saveInputStream(inputStream, format, validationType);
-        load(file, storeType, validationType);
+        loadFile(file, storeType, validationType);
         return "Loaded file " + file.getAbsolutePath();
     }
 
@@ -191,7 +222,7 @@ public class LinksetLoader implements LinksetInterface{
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
             for (File child:children){
-                load(child, storeType, validationType);
+                loadFile(child, storeType, validationType);
             }
         } else { 
             LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
@@ -333,13 +364,13 @@ public class LinksetLoader implements LinksetInterface{
         
         if (load){
             try{
-                linksetLoader.loadFile(fileName, storeType, validationType);
+                linksetLoader.load(fileName, storeType, validationType);
                 Reporter.println("Load successful");
             }catch (Exception e){
-                Reporter.println(linksetLoader.validateFile(fileName, storeType, validationType, true));
+                Reporter.println(linksetLoader.validateAddress(fileName, storeType, validationType, true));
             }
         } else {
-            Reporter.println(linksetLoader.validateFile(fileName, storeType, validationType, true));
+            Reporter.println(linksetLoader.validateAddress(fileName, storeType, validationType, true));
         }       
     }
 
@@ -380,7 +411,5 @@ public class LinksetLoader implements LinksetInterface{
         Reporter.println(issue);
         System.exit(1);
     }
-
-   
 
 }

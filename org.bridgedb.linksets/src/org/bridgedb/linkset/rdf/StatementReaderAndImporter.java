@@ -98,7 +98,8 @@ public class StatementReaderAndImporter implements VoidStatements{
             if (predicate.equals(VoidConstants.SUBSET)){
                 toLoadURIs.add(statement.getSubject());
             }
-            if (predicate.equals(VoidConstants.SUBJECTSTARGET) || (predicate.equals(VoidConstants.OBJECTSTARGET))){
+            if (predicate.equals(VoidConstants.SUBJECTSTARGET) || predicate.equals(VoidConstants.OBJECTSTARGET)
+                    || predicate.equals(VoidConstants.IN_DATASET)){
                 Value value = statement.getObject();
                 if (value instanceof URI){
                     URI object = (URI)value;
@@ -117,6 +118,7 @@ public class StatementReaderAndImporter implements VoidStatements{
         RdfReader testReader = new RdfReader(StoreType.TEST);
         for (Resource resource:toLoadURIs){
             if (!loadedURIs.contains(resource)){
+System.out.println(resource);            
                 List<Statement> newStatements = liveReader.getStatementsForResource(resource); 
                  if (useLoad && (newStatements == null || newStatements.isEmpty())){
                     newStatements = loadReader.getStatementsForResource(resource);
@@ -125,6 +127,7 @@ public class StatementReaderAndImporter implements VoidStatements{
                     newStatements = testReader.getStatementsForResource(resource);
                 }
                 newStatements.addAll(liveReader.getSuperSet(resource));
+System.out.println("  " + newStatements.size());
                 if (useLoad) {
                     newStatements.addAll(loadReader.getSuperSet(resource));
                     }

@@ -52,9 +52,9 @@ public class LinksetLoaderTest {
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
         ValidationType validationType = ValidationType.LINKSMINIMAL;
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
-        linksetLoader.loadFile("../org.bridgedb.linksets/test-data/cs-cm.ttl", StoreType.TEST, validationType);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.TEST, validationType);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.TEST, validationType);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/cs-cm.ttl", StoreType.TEST, validationType);
  	}
 
     @Test
@@ -90,7 +90,7 @@ public class LinksetLoaderTest {
     
     @Test(expected=BridgeDBException.class)
     public void testFileNotFound() throws BridgeDBException, FileNotFoundException, BridgeDBException {
-        new LinksetLoader().validateFile("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, false);
+        new LinksetLoader().validateAddress("noFile.xyz", VALIDATE_ONLY, ValidationType.LINKSMINIMAL, false);
     }
 
 }

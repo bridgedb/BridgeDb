@@ -69,7 +69,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     @Test
     public void testValidateFile() throws Exception {
         report("validateFile");
-        String result = linksetInterface.validateFile(cwCsFileName, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
+        String result = linksetInterface.validateAddress(cwCsFileName, StoreType.TEST, ValidationType.LINKSMINIMAL, false);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 3 links"));
     }
@@ -81,7 +81,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     public void testValidateFileAsDatasetVoid() throws Exception {
         report("validateFileAsDatasetVoid");
         String fileName = "../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl";
-        String result = linksetInterface.validateFile(fileName, StoreType.TEST, ValidationType.VOID, true);
+        String result = linksetInterface.validateAddress(fileName, StoreType.TEST, ValidationType.VOID, true);
         assertThat(result, not(containsString("ERROR"))); 
         assertThat(result, containsString("INFO")); 
     }
@@ -104,7 +104,7 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     public void testValidateFileAsLinkset() throws Exception {
         report("validateFileAsLinkset");
         String fileName = "../org.bridgedb.linksets/test-data/loadLinkSetwithLinks.xml";
-        String result = linksetInterface.validateFile(fileName, StoreType.TEST, ValidationType.LINKS, false);
+        String result = linksetInterface.validateAddress(fileName, StoreType.TEST, ValidationType.LINKS, false);
         assertThat(result, not(containsString("ERROR")));
         assertThat(result, containsString("Found 2 links"));
    }
@@ -115,10 +115,10 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
     @Test
     public void testLoadFile() throws Exception {
         report("load File");
-        linksetInterface.loadFile(cwCsFileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetInterface.load(cwCsFileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
 
-    /**
+     /**
      * Test of validate method, of class LinksetInterface.
      */
     @Test

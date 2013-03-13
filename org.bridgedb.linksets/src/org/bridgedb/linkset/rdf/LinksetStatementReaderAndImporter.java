@@ -44,8 +44,8 @@ public class LinksetStatementReaderAndImporter extends StatementReaderAndImporte
         loadInfo(storeType);
     }
 
-    public LinksetStatementReaderAndImporter(String fileName, StoreType storeType) throws BridgeDBException{
-        LinksetStatementReader reader = new LinksetStatementReader(fileName);
+    public LinksetStatementReaderAndImporter(String address, StoreType storeType) throws BridgeDBException{
+        LinksetStatementReader reader = new LinksetStatementReader(address);
         voidStatements = reader.getVoidStatements();
         linkStatements = reader.getLinkStatements();
         loadInfo(storeType);

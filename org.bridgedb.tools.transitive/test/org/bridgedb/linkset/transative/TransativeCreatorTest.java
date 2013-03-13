@@ -55,8 +55,8 @@ public class TransativeCreatorTest extends TestUtils {
         
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData( StoreType.TEST);        
-        linksetLoader.loadFile("../org.bridgedb.tools.transitive/test-data/sample1To2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
-        linksetLoader.loadFile("../org.bridgedb.tools.transitive/test-data/sample1To3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
     
     @Test(expected =  BridgeDBException.class)
@@ -80,7 +80,7 @@ public class TransativeCreatorTest extends TestUtils {
         String fileName = "../org.bridgedb.tools.transitive/test-data/linkset2To3.ttl";
         TransativeCreator.createTransative(2, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         LinksetLoader linksetLoader = new LinksetLoader();
-        linksetLoader.loadFile(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }
 
 }
