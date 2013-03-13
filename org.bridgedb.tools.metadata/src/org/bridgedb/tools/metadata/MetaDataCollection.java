@@ -200,13 +200,13 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             if (statement.getPredicate().equals(RdfConstants.TYPE_URI)){
                  results.add(statement.getSubject());
             }
-//            if (statement.getPredicate().equals(VoidConstants.SUBSET)){
-//                 results.add(statement.getSubject());
-//                 Value object = statement.getObject();
-//                 if (object instanceof Resource){
-//                     results.add((Resource)object);
-//                 }
-//            }
+            if (statement.getPredicate().equals(VoidConstants.SUBSET)){
+                 results.add(statement.getSubject());
+                 Value object = statement.getObject();
+                 if (object instanceof Resource){
+                     results.add((Resource)object);
+                 }
+            }
         }  
         return results;
     }

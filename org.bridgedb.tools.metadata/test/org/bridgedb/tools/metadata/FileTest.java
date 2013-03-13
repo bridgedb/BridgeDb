@@ -110,8 +110,8 @@ public class FileTest extends TestUtils{
     } 
 
     @Test
-    @Ignore
     public void testchemspider2chemblrdflinksetSubSet_1AsLinks() throws BridgeDBException{
+        report("chemspider2chemblrdflinksetSubSet_1AsLinks");
         MetaDataSpecification dataSetRegistry = 
                 MetaDataSpecificationRegistry.getMetaDataSpecificationByValidatrionType(ValidationType.LINKS);
         checkFile("test-data/chemspider2chemblrdf-linksetSubSet_1.ttl", 6, FILE_HAS_EXTRA_RDF, dataSetRegistry);
