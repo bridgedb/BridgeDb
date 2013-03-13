@@ -59,32 +59,18 @@ public class TransativeCreatorTest extends TestUtils {
         linksetLoader.loadFile("../org.bridgedb.tools.transitive/test-data/sample1To3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
     
-    @Test
-    @Ignore
+    @Test(expected =  BridgeDBException.class)
     public void testNoLinkToSelf() throws RDFHandlerException, IOException, BridgeDBException {
         report("NoLinkToSelf");
-        String fileName = null;
-        try {
-            TransativeCreator.createTransative(1, 2, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-            assertFalse(true);
-        } catch (Exception e){
-            String error = "Source of mappingSet 1(TestDS2) is the same as the Target of 2. No need for a transative mapping";
-            assertEquals(error, e.getMessage());
-        }
+        String fileName = "test-data/empty1.ttl";
+        TransativeCreator.createTransative(1, 2, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
     }
 
-    @Test
-    @Ignore
-    public void testNoLink() {
+    @Test(expected =  BridgeDBException.class)
+    public void testNoLink() throws RDFHandlerException, IOException, BridgeDBException {
         report("NoLink");
-        String fileName = null;
-        try {
-            TransativeCreator.createTransative(1, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-            assertFalse(true);
-        } catch (Exception e){
-            String error = "Target of mappingSet 1 is TestDS2 Which is not the same as the Source of 3 which is TestDS1";
-            assertEquals(error, e.getMessage());
-        }
+        String fileName = "test-data/empty2.ttl";
+        TransativeCreator.createTransative(1, 3, fileName, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
     }
 
     //TODO cleanup this test!
