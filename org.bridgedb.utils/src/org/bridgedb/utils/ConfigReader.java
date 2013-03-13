@@ -48,7 +48,7 @@ public class ConfigReader {
      * Warning in SANDBOX mode the system will not build without builder provided config files.
      * If SANDBOX is true in the MASTER branch this is an ERROR. Please fix and contact developer team ASAP!
      */
-    public static boolean SANDBOX = false;
+    public static boolean SANDBOX = true;
     public static final String ACCOUNTS_FILE_NAME = "accounts.txt";
     public static final String IP_CONFIG_FILE_NAME = "IP_Register.txt";
     public static final String DIRECTORIES_CONFIG_FILE_NAME = "DirectoriesConfig.txt";
