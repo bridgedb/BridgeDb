@@ -18,6 +18,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -34,11 +35,10 @@ import org.bridgedb.utils.BridgeDBException;
  */
 public class UrlReader {
     
-    private java.net.URI uri;;
+    private final java.net.URI uri;;
     private String username;
     private String password;
-    public String base;
-    
+    private final String base;
     private static String OPENPHACTS_GITHUB = "https://raw.github.com/openphacts/";
     private static String RAW_GITHUB = "https://raw.github.com";
     private static String HTML_GITHUB = "https://github.com";
@@ -51,19 +51,19 @@ public class UrlReader {
     static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UrlReader.class);
      
     public UrlReader(String address) throws BridgeDBException{
-       try {
-            uri = new URI(address);
+        try {
+            java.net.URI tempUri = new URI(address);
+            String path = tempUri.getPath();
+            String host = tempUri.getHost();
+            int hostEnd = address.indexOf(host) + host.length();
+            if (path.isEmpty()){
+                base = address.substring(0, hostEnd);
+            } else {
+                int pathEnd = address.indexOf(path, hostEnd) + path.length();
+                base = address.substring(0, pathEnd);
+            }
         } catch (URISyntaxException ex) {
            throw new BridgeDBException("Unable to convert " + address + " to a URI");
-        }
-        String path = uri.getPath();
-        String host = uri.getHost();
-        int hostEnd = address.indexOf(host) + host.length();
-        if (path.isEmpty()){
-            base = address.substring(0, hostEnd);
-        } else {
-            int pathEnd = address.indexOf(path, hostEnd) + path.length();
-            base = address.substring(0, pathEnd);
         }
         String scrubbedAddress = scrub(address);
         try {
@@ -91,12 +91,18 @@ public class UrlReader {
 
     public InputStream getInputStream() throws BridgeDBException, IOException{
         String schema = uri.getScheme().toLowerCase();
+        InputStream pure;
         if (schema.equals("https") || schema.equals("http")){
-            return getHttpsInputStream();
+            pure = getHttpsInputStream();
         } else if (schema.equals("ftp")){
-            return getFtpInputStream();
+            pure = getFtpInputStream();
         } else {
             throw new BridgeDBException ("Unexpected schema " + schema + " in " + uri);
+        }
+        if (uri.getPath().endsWith("gz")){
+            return new GZIPInputStream(pure);
+        } else {
+            return pure;
         }
     }
     
