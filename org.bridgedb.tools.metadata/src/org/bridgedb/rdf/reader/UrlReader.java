@@ -51,19 +51,10 @@ public class UrlReader {
     static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(UrlReader.class);
      
     public UrlReader(String address) throws BridgeDBException{
-        String scrubbedAddress = scrub(address);
-        try {
-            uri = new URI(scrubbedAddress);
+       try {
+            uri = new URI(address);
         } catch (URISyntaxException ex) {
-           throw new BridgeDBException("Unable to convert " + scrubbedAddress + " to a URI");
-        }
-        AccountInfo info = AccountsReader.findByUri(scrubbedAddress);
-        if (info != null){
-            username = info.getLogin();
-            password = info.getPassword();
-        } else {
-            username = null;
-            password = null;
+           throw new BridgeDBException("Unable to convert " + address + " to a URI");
         }
         String path = uri.getPath();
         String host = uri.getHost();
@@ -73,6 +64,20 @@ public class UrlReader {
         } else {
             int pathEnd = address.indexOf(path, hostEnd) + path.length();
             base = address.substring(0, pathEnd);
+        }
+        String scrubbedAddress = scrub(address);
+        try {
+            uri = new URI(scrubbedAddress);
+        } catch (URISyntaxException ex) {
+           throw new BridgeDBException("Unable to convert (scrubbed) " + scrubbedAddress + " to a URI");
+        }
+        AccountInfo info = AccountsReader.findByUri(scrubbedAddress);
+        if (info != null){
+            username = info.getLogin();
+            password = info.getPassword();
+        } else {
+            username = null;
+            password = null;
         }
     }
     
@@ -242,14 +247,14 @@ public class UrlReader {
     } 
 
     public static void main(String[] args) throws Exception {
-        UrlReader reader = new UrlReader("http://ops-virtuoso.scai.fraunhofer.de/download/peregrine_linksets.tgz");
+        UrlReader reader = new UrlReader("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl");
         InputStream inputStream = reader.getInputStream();
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 
         String inputLine;
         while ((inputLine = in.readLine()) != null)
             System.out.println(inputLine);
-        in.close();       
+        in.close();   
     }
 
 }

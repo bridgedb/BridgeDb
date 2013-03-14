@@ -315,7 +315,7 @@ public class MetaDataSpecification {
                 return new PropertyMetaData(predicate, type, cardinality, requirementLevel, range.toString());
             }
             IRI iri = owlClass.getIRI();
-            ontology.containsClassInSignature(iri);
+ //           ontology.containsClassInSignature(iri);
             linkingPredicates.add(predicate);
             Set<URI> linkedTypes = new HashSet<URI>();
             linkedTypes.add(new URIImpl(iri.toString()));
@@ -332,6 +332,7 @@ public class MetaDataSpecification {
                     linkedTypes.add(new URIImpl(expr.toString()));
                 }
             }
+            linkingPredicates.add(predicate);
             return new LinkedResource(predicate, type, cardinality, requirementLevel, linkedTypes, this);
         } else {
             return new PropertyMetaData(predicate, type, cardinality, requirementLevel, range.toString());

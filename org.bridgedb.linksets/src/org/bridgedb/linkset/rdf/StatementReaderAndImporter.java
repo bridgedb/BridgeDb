@@ -118,7 +118,6 @@ public class StatementReaderAndImporter implements VoidStatements{
         RdfReader testReader = new RdfReader(StoreType.TEST);
         for (Resource resource:toLoadURIs){
             if (!loadedURIs.contains(resource)){
-System.out.println(resource);            
                 List<Statement> newStatements = liveReader.getStatementsForResource(resource); 
                  if (useLoad && (newStatements == null || newStatements.isEmpty())){
                     newStatements = loadReader.getStatementsForResource(resource);
@@ -127,7 +126,6 @@ System.out.println(resource);
                     newStatements = testReader.getStatementsForResource(resource);
                 }
                 newStatements.addAll(liveReader.getSuperSet(resource));
-System.out.println("  " + newStatements.size());
                 if (useLoad) {
                     newStatements.addAll(loadReader.getSuperSet(resource));
                     }

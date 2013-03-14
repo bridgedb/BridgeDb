@@ -204,10 +204,10 @@ public class MetaDataCollection extends AppendBase implements MetaData {
             }
             if (statement.getPredicate().equals(VoidConstants.SUBSET)){
                  results.add(statement.getSubject());
-                 Value object = statement.getObject();
-                 if (object instanceof Resource){
-                     results.add((Resource)object);
-                 }
+                 //Value object = statement.getObject();
+                 //if (object instanceof Resource){
+                 //    results.add((Resource)object);
+                 //}
             }
             if (statement.getPredicate().equals(VoidConstants.IN_DATASET)){
                  results.add(statement.getSubject());
