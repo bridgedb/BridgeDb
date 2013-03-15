@@ -40,8 +40,10 @@ import org.openrdf.rio.RDFHandlerException;
 public class LinksetStatementReader extends StatementReader implements LinksetStatements{
     
     Set<Statement> linkStatements;
-    
+    private Statement firstPossibleLinkStatement;
+    private Statement inDataSetStatement; 
     URI linkPredicate = null;
+    private State state;
     
     public LinksetStatementReader(String address) throws BridgeDBException{
         super(address);
@@ -63,29 +65,60 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
         return linkStatements;
     }
 
+    public void startRDF() throws RDFHandlerException {
+        super.startRDF();
+        state = State.ORIGINAL;
+    }
+    
     public void handleStatement(Statement statement) throws RDFHandlerException {
-        if (linkPredicate == null){
-            if (statement.getPredicate().equals(VoidConstants.LINK_PREDICATE)){
-                Value value = statement.getObject();
-                if (value instanceof URI){
-                    linkPredicate = (URI)value;
-                    moveLinksAlreadyFound();
-                } else {
-                    throw new RDFHandlerException("Predicate " + VoidConstants.LINK_PREDICATE + " muts have a URI object.");
-                }
+        switch (state){
+            case ORIGINAL:
+                handleOriginalStatement(statement);
+                break;
+            case LINK_PREDICATE_FOUND:
+                handleLinkPredicateFoundStatement(statement);
+                break;
+            case IN_DATASET_FOUND:
+                findAndSaveLinkStatement(statement);
+                break;
+            case IN_DATASET_AND_LINKS_FOUND:    
+                checkandSaveInDataLinkStatements(statement);
+                break;
+            default:
+                throw new IllegalStateException ("Unexpected State " + state);
+        }
+    }
+
+    public void handleOriginalStatement(Statement statement) throws RDFHandlerException {
+        if (statement.getPredicate().equals(VoidConstants.LINK_PREDICATE)){
+            Value value = statement.getObject();
+            if (value instanceof URI){
+                linkPredicate = (URI)value;
+                moveLinksAlreadyFound();
+                state = State.LINK_PREDICATE_FOUND;
+            } else {
+                throw new RDFHandlerException("Predicate " + VoidConstants.LINK_PREDICATE + " muts have a URI object.");
             }
-            statements.add(statement);
+        }
+        if (statement.getPredicate().equals(VoidConstants.IN_DATASET1)){
+            System.out.println("In with " + statement);
+            System.out.println(statements);
+            inDataSetStatement = statement;
+            findLinkAndMoveStatements();
+        }
+        statements.add(statement);
+    }
+
+    public void handleLinkPredicateFoundStatement(Statement statement) throws RDFHandlerException {
+        if (statement.getPredicate().equals(linkPredicate)){
+            linkStatements.add(statement);
         } else {
-             if (statement.getPredicate().equals(linkPredicate)){
-                 linkStatements.add(statement);
-             } else {
-                if (statement.getPredicate().equals(VoidConstants.LINK_PREDICATE)){
-                    throw new RDFHandlerException("Two statements found with predicate " + VoidConstants.LINK_PREDICATE +
-                            "\n\tLinksets can have only one declared " + VoidConstants.LINKSET + " type Resource\n" +
-                            "\tAnd that must have the only " +  VoidConstants.LINK_PREDICATE + " statement in the whole file");
-                }
-                statements.add(statement);         
-             }
+            if (statement.getPredicate().equals(VoidConstants.LINK_PREDICATE)){
+                throw new RDFHandlerException("Two statements found with predicate " + VoidConstants.LINK_PREDICATE +
+                        "\n\tLinksets can have only one declared " + VoidConstants.LINKSET + " type Resource\n" +
+                        "\tAnd that must have the only " +  VoidConstants.LINK_PREDICATE + " statement in the whole file");
+            }
+            statements.add(statement);         
         }
     }
 
@@ -103,6 +136,47 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
         }      
     }
 
+    private void findAndSaveLinkStatement(Statement statement){
+        if (linkStatements == null){
+            linkStatements = new HashSet<Statement>();
+        }
+        firstPossibleLinkStatement = statement;
+        System.out.println("1 " + firstPossibleLinkStatement);
+        linkPredicate = firstPossibleLinkStatement.getPredicate();
+        System.out.println ("LP1: " + linkPredicate);
+        state = State.IN_DATASET_AND_LINKS_FOUND; 
+        linkStatements.add(statement);
+    }
+    
+    private void findLinkAndMoveStatements() throws RDFHandlerException{
+        if (statements.isEmpty()){
+            state = State.IN_DATASET_FOUND;
+            return;
+        }
+        //State set in below call
+        findAndSaveLinkStatement(statements.iterator().next());
+        statements.remove(firstPossibleLinkStatement);
+        Iterator<Statement> iterator = statements.iterator();
+        while (iterator.hasNext()){
+            Statement statement = iterator.next();
+            checkandSaveInDataLinkStatements(statement);
+            iterator.remove();
+        }           
+    }
+    
+    private void checkandSaveInDataLinkStatements(Statement statement) throws RDFHandlerException{
+        if (statement.getPredicate().equals(linkPredicate)){
+            linkStatements.add(statement);
+        } else {
+        System.out.println ("LP2: " + linkPredicate);
+            throw new RDFHandlerException("Found inDataSet statement " + inDataSetStatement 
+                    + "\n so expecting all other statements to be links with the same predicate, but found\n"
+                    + firstPossibleLinkStatement
+                    + "\n and \n"
+                    + statement);
+        }           
+    }
+
     public void endRDF() throws RDFHandlerException {
         super.endRDF();
         if (linkPredicate == null){
@@ -111,8 +185,12 @@ public class LinksetStatementReader extends StatementReader implements LinksetSt
         }   
         if (linkStatements == null ||  linkStatements.isEmpty()){
             throw new RDFHandlerException ("Linkset error! Found the linkPredicate " + linkPredicate + ".\n"
-                    + "But no linkStatements usig this predicate");
+                    + "But no linkStatements using this predicate");
             
         }
+    }
+    
+    private enum State{
+        ORIGINAL, LINK_PREDICATE_FOUND, IN_DATASET_FOUND, IN_DATASET_AND_LINKS_FOUND;
     }
 }

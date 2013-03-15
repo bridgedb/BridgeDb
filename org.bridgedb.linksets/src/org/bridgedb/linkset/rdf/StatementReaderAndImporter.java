@@ -99,7 +99,7 @@ public class StatementReaderAndImporter implements VoidStatements{
                 toLoadURIs.add(statement.getSubject());
             }
             if (predicate.equals(VoidConstants.SUBJECTSTARGET) || predicate.equals(VoidConstants.OBJECTSTARGET)
-                    || predicate.equals(VoidConstants.IN_DATASET)){
+                    || predicate.equals(VoidConstants.IN_DATASET1)){
                 Value value = statement.getObject();
                 if (value instanceof URI){
                     URI object = (URI)value;

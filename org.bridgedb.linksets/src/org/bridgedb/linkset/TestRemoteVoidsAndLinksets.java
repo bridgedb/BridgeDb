@@ -27,6 +27,10 @@ public class TestRemoteVoidsAndLinksets {
         check(SourceName, ValidationType.VOID, EXCEPTION_ON_ERROR);
     }
     
+    private void checkLinkset(String SourceName) throws BridgeDBException{
+        check(SourceName, ValidationType.LINKS, EXCEPTION_ON_ERROR);
+    }
+    
     private void checkMinimum(String SourceName) throws BridgeDBException {
         check(SourceName, ValidationType.LINKSMINIMAL, NO_WARNINGS);
     }
@@ -77,7 +81,7 @@ public class TestRemoteVoidsAndLinksets {
         loadVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl");
         loadVoid("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl");
         loadVoid("ftp://ftp.rsc-us.org/OPS/20130314/void_2013-03-14.ttl");
-        checkVoid("ftp://ftp.rsc-us.org/OPS/20130314/CHEBI/LINKSET_EXACT_CHEBI20130314.ttl.gz");
+        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/CHEBI/LINKSET_EXACT_CHEBI20130314.ttl.gz");
 /*        checkMinimum("C:/Dropbox/linksets/sample1To2.ttl");
         checkMinimum("https://www.dropbox.com/s/9a5vb5cchjtlxyc/sample1To2.ttl");
         checkVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs");

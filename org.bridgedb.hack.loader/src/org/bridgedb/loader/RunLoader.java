@@ -45,8 +45,8 @@ public class RunLoader {
 
         LinksetLoader linksetLoader = new LinksetLoader();
 
-        String root = "C:/Dropbox/linksets/";
-        linksetLoader.clearExistingData(StoreType.LOAD);
+        String root = "C:/temp/linksets/";
+/*        linksetLoader.clearExistingData(StoreType.LOAD);
         //1-2
         linksetLoader.load(root + "originals/ConceptWiki-Chembl2Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         //3-4
@@ -117,6 +117,18 @@ public class RunLoader {
         TransativeCreator.createTransative(22,41,root + "transitive/Enzyme-Chembl13id-via-Chembl13Targets.ttl", 
                 StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         linksetLoader.load(root + "transitive/Enzyme-Chembl13id-via-Chembl13Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl", StoreType.LOAD, ValidationType.VOID);
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl", StoreType.LOAD, ValidationType.VOID);
+        linksetLoader.load("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl", StoreType.LOAD, ValidationType.VOID);
+        linksetLoader.load("ftp://ftp.rsc-us.org/OPS/20130314/void_2013-03-14.ttl", StoreType.LOAD, ValidationType.VOID);
+        //49-50
+        linksetLoader.load("ftp://ftp.rsc-us.org/OPS/20130314/CHEBI/LINKSET_EXACT_CHEBI20130314.ttl.gz", StoreType.LOAD, ValidationType.LINKS);
+        */
+        
+        TransativeCreator.createTransative(50,4,root + "transitive/Chebi-ConceptWiki-via-ChemSpider.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.load(root + "transitive/Chebi-ConceptWiki-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         
     }
 
