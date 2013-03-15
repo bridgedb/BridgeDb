@@ -64,15 +64,8 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         super(dropTables, storeType);
         useLimit = SqlFactory.supportsLimit();
         useTop = SqlFactory.supportsTop();
-        validateData();
      }   
 
-    public final void validateData() throws BridgeDBException{
-        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
-        //These will throw an exception if any of the syscodes are unknown.
-        getSupportedSrcDataSources();
-        getSupportedTgtDataSources();        
-    }
     //*** IDMapper Methods 
     
     @Override
@@ -514,7 +507,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             while (rs.next()){
                 String id = rs.getString(TARGET_ID_COLUMN_NAME);
                 String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
-                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                DataSource dataSource = findDataSource(sysCode);
                 Xref xref = new Xref(id, dataSource);
                 results.add(xref);
             }
@@ -524,6 +517,22 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
        }
     }
 
+    final DataSource findDataSource(String code){
+        if (code.startsWith("_")){
+            String fullName = code.substring(1);
+            try {
+                return DataSource.getByFullName(fullName);
+            } catch (IllegalArgumentException ex){
+                return DataSource.register(null, fullName).asDataSource();
+            }
+        } else {
+            try {
+                return DataSource.getBySystemCode(code);
+            } catch (IllegalArgumentException ex){
+                return DataSource.register(code, code).asDataSource();
+            }
+        }
+    }
     /**
      * Converts a ResultSet to a Set of BridgeDB DataSources by obtaining the SysCode from the ResultsSet a
      * and looking the DataSource up in the DataSource Registry.
@@ -538,14 +547,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         try {
             while (rs.next()){
                 String sysCode = rs.getString(SYSCODE_COLUMN_NAME);
-                DataSource dataSource;
-                if (sysCode.startsWith("_")){
-                    String fullName = sysCode.substring(1);
-                    dataSource = DataSource.getByFullName(fullName);
-                } else {
-                    dataSource = DataSource.getBySystemCode(sysCode);
-                }
-                results.add(dataSource);
+                results.add(findDataSource(sysCode));
             }
             return results;
        } catch (SQLException ex) {

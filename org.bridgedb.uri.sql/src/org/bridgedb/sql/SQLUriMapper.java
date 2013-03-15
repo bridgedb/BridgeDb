@@ -677,7 +677,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                         postfix = newPostfix;
                     }
                 }
-                DataSource dataSource = DataSource.getBySystemCode(sysCode);
+                DataSource dataSource = findDataSource(sysCode);
                 String id = uri.substring(prefix.length(), uri.length()-postfix.length());
                 Xref result =  new Xref(id, dataSource);
                 if (logger.isDebugEnabled()){
@@ -1321,7 +1321,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         try {
             if (rs.next()){
                 String sysCode = rs.getString("dataSource");
-                return DataSource.getBySystemCode(sysCode);
+                return findDataSource(sysCode);
             }
             DataSource.Builder builder = DataSource.register(uriSpace, uriSpace).urlPattern(uriSpace+"$id");
             return builder.asDataSource();
