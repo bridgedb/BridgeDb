@@ -19,6 +19,7 @@
 //
 package org.bridgedb.sql;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,9 +46,11 @@ import org.bridgedb.uri.Profile;
 import org.bridgedb.uri.UriListener;
 import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.StoreType;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
+import org.openrdf.rio.RDFHandlerException;
 
 /**
  * Implements the UriMapper and UriListener interfaces using SQL.
@@ -100,6 +103,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         for (UriPattern pattern:patterns){
             this.registerUriPattern(pattern);
         }
+        checkDataSources();
     }   
     
     @Override
@@ -146,6 +150,32 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 			throw new BridgeDBException ("Error creating the tables ", e);
 		}
 	}
+    
+    private void checkDataSources() throws BridgeDBException{
+        checkDataSources(SOURCE_DATASOURCE_COLUMN_NAME);
+        checkDataSources(TARGET_DATASOURCE_COLUMN_NAME);
+    }
+    
+    private void checkDataSources(String columnName) throws BridgeDBException{
+        Set<String> toCheckNames = getPatternDataSources(columnName);
+        for (String toCheckName:toCheckNames){
+            System.out.println(toCheckName);
+            UriPattern pattern = UriPattern.existingByPattern(toCheckName);
+            System.out.println("  " + pattern);
+            if (pattern != null){
+                DataSource ds = pattern.getDataSource();
+                String code;
+                if (ds.getSystemCode() == null && ds.getSystemCode().isEmpty()){
+                    code = "_" + ds.getFullName();
+                } else {
+                    code = ds.getSystemCode();
+                }
+                System.out.println("      " + ds);
+                System.out.println("      " + code);
+                replaceSysCode (toCheckName, code);
+            }
+        }
+    }
     
     @Override
     public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource... tgtDataSource) throws BridgeDBException {
@@ -1503,6 +1533,51 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         } catch (SQLException ex) {
             throw new BridgeDBException ("Error clearing uri patterns " + update, ex);
         }
-     }
+    }
 
+    private Set<String> getPatternDataSources(String column) throws BridgeDBException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(column);
+        query.append(" FROM ");
+        query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(column);
+        query.append(" LIKE \"%$id%\"");
+        
+        Statement statement = this.createStatement();
+        Set<String> results = new HashSet<String>();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            while (rs.next()){
+                results.add(rs.getString(column));
+            }
+            return results;        
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+    }
+
+    private void replaceSysCode(String oldCode, String newCode) throws BridgeDBException {
+        replaceSysCode (SOURCE_DATASOURCE_COLUMN_NAME, oldCode, newCode);
+        replaceSysCode (TARGET_DATASOURCE_COLUMN_NAME, oldCode, newCode);
+    }
+
+    private void replaceSysCode(String columnName, String oldCode, String newCode) throws BridgeDBException {
+        String update = "UPDATE " + MAPPING_SET_TABLE_NAME + " SET " + columnName + " =\"" + newCode + "\" WHERE " 
+                + columnName + " = \"" + oldCode + "\""; 
+        Statement statement = this.createStatement();
+        try {
+            statement.executeUpdate(update);
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Error updating " + update, ex);
+        }
+    }
+
+   public static void main(String[] args) throws BridgeDBException, RDFHandlerException, IOException  {
+        ConfigReader.logToConsole();
+        BridgeDBRdfHandler.init();
+        SQLUriMapper test = new SQLUriMapper(false, StoreType.LOAD);
+    }
 }
+ 

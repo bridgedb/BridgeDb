@@ -636,6 +636,7 @@ bridgeDB:DataSource_ChEBI a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/obo.chebi/$id> ;
 	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/chebi:$id> ;
+    bridgeDB:hasUriPattern <http://purl.obolibrary.org/obo/CHEBI_$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/chebi:$id> .
 
 bridgeDB:DataSource_ChemBank a bridgeDB:DataSource ;
@@ -3192,6 +3193,7 @@ bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pdb/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
+    bridgeDB:hasUriPattern <http://purl.uniprot.org/pdb/$id> ;
 	bridgeDB:hasUriPattern <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> .
 
 bridgeDB:DataSource_PeptideAtlas a bridgeDB:DataSource ;
