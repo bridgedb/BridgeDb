@@ -636,7 +636,8 @@ bridgeDB:DataSource_ChEBI a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/obo.chebi/$id> ;
 	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/chebi:$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/chebi:$id> .
+	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/chebi:$id> ;
+	bridgeDB:hasUriPattern <http://purl.obolibrary.org/obo/CHEBI_$id> .
 
 bridgeDB:DataSource_ChemBank a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChemBank" ;
@@ -3192,7 +3193,7 @@ bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pdb/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
-	bridgeDB:hasUriPattern <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> .
+	bridgeDB:hasUriPattern <http://purl.uniprot.org/pdb/$id> , <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> .
 
 bridgeDB:DataSource_PeptideAtlas a bridgeDB:DataSource ;
 	bridgeDB:fullName "PeptideAtlas" ;
@@ -6946,6 +6947,10 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	<http://rdfs.org/ns/void#uriSpace> "http://purl.bioontology.org/ontology/NCIM/" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Bioontology_UMLS_NCIM .
 
+<http://purl.obolibrary.org/obo/CHEBI_$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.obolibrary.org/obo/CHEBI_" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_ChEBI .
+
 <http://purl.org/obo/owl/GO#$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://purl.org/obo/owl/GO#" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_OBO_GO .
@@ -6953,6 +6958,10 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://purl.uniprot.org/enzyme/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/enzyme/" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Uniprot_Enzyme .
+
+<http://purl.uniprot.org/pdb/$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/pdb/" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_PDB .
 
 <http://purl.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://purl.uniprot.org/uniprot/" ;
