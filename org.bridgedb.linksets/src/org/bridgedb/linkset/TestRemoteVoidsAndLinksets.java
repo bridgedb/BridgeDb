@@ -81,7 +81,12 @@ public class TestRemoteVoidsAndLinksets {
         loadVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl");
         loadVoid("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl");
         loadVoid("ftp://ftp.rsc-us.org/OPS/20130314/void_2013-03-14.ttl");
-        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/CHEBI/LINKSET_EXACT_CHEBI20130314.ttl.gz");
+//        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/CHEBI/LINKSET_EXACT_CHEBI20130314.ttl.gz");
+        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/CHEMBL/LINKSET_EXACT_CHEMBL20130314.ttl.gz");
+        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/DRUGBANK/LINKSET_EXACT_DRUGBANK20130314.ttl.gz");
+        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/MESH/LINKSET_EXACT_MESH20130314.ttl.gz");
+        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/PDB/LINKSET_EXACT_PDB20130314.ttl.gz");
+        checkLinkset("ftp://ftp.rsc-us.org/OPS/20130314/PDB/LINKSET_RELATED_PDB20130314.ttl.gz");
 /*        checkMinimum("C:/Dropbox/linksets/sample1To2.ttl");
         checkMinimum("https://www.dropbox.com/s/9a5vb5cchjtlxyc/sample1To2.ttl");
         checkVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl#db-drugs");
