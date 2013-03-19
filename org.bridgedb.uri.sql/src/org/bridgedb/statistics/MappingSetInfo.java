@@ -19,6 +19,8 @@
 //
 package org.bridgedb.statistics;
 
+import java.util.Set;
+
 /**
  * Holder class for the main Meta Data of MappingSet.
  *
@@ -30,17 +32,17 @@ public class MappingSetInfo {
     private final String sourceSysCode;
     private final String predicate;
     private final String targetSysCode;
+    private Set<String> viaSystemCode;
     private Integer numberOfLinks;
-    private boolean isTransitive;
 
     public MappingSetInfo(String id, String sourceSysCode, String predicate, String targetSysCode, 
-            Integer numberOfLinks, boolean isTransitive){
+            Integer numberOfLinks, Set<String> viaSystemCodes){
         this.id = id;
         this.predicate = predicate;
         this.sourceSysCode = sourceSysCode;
         this.targetSysCode = targetSysCode;
         this.numberOfLinks = numberOfLinks;
-        this.isTransitive = isTransitive;
+        viaSystemCode = viaSystemCodes;
     }
     
     /**
@@ -98,11 +100,22 @@ public class MappingSetInfo {
      * @return the isTransitive
      */
     public boolean isTransitive() {
-        return isTransitive;
+        return !viaSystemCode.isEmpty();
     }
 
-    public void setTransitive(boolean newValue) {
-        isTransitive = newValue;
+    /**
+     * @return the viaSystemCode
+     */
+    public Set<String> getViaSystemCode() {
+        return viaSystemCode;
     }
+
+    /**
+     * @param viaSystemCode the viaSystemCode to set
+     */
+    public void setViaSystemCode(Set<String> viaSystemCode) {
+        this.viaSystemCode = viaSystemCode;
+    }
+
 
  }

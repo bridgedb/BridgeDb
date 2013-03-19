@@ -1237,9 +1237,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         try {
             while (rs.next()){
                 Integer count = rs.getInt(MAPPING_COUNT_COLUMN_NAME);
-                results.add(new MappingSetInfo(rs.getString(ID_COLUMN_NAME), rs.getString(SOURCE_DATASOURCE_COLUMN_NAME), 
+                String id = rs.getString(ID_COLUMN_NAME);
+                Set<String> viaSysCodes = new HashSet<String>();
+                results.add(new MappingSetInfo(id, rs.getString(SOURCE_DATASOURCE_COLUMN_NAME), 
                         rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), count, 
-                        rs.getBoolean(IS_TRANSITIVE_COLUMN_NAME)));
+                        viaSysCodes));
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);

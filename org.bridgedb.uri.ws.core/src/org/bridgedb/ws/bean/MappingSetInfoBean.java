@@ -19,6 +19,7 @@
 //
 package org.bridgedb.ws.bean;
 
+import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.statistics.MappingSetInfo;
 
@@ -33,7 +34,7 @@ public class MappingSetInfoBean {
     private String predicate;
     private String targetSysCode;
     private Integer numberOfLinks;
-    private boolean isTransitive;
+    private Set<String> viaSystemCode;
 
     /**
      * WS Constructor
@@ -43,7 +44,7 @@ public class MappingSetInfoBean {
     
     public static MappingSetInfo asMappingSetInfo(MappingSetInfoBean bean){
         return new MappingSetInfo(bean.getId(), bean.getSourceSysCode(), bean.getPredicate(), bean.getTargetSysCode(), 
-            bean.getNumberOfLinks(), bean.isIsTransitive());
+            bean.getNumberOfLinks(), bean.getViaSystemCode());
     }
 
     public static MappingSetInfoBean asBean(MappingSetInfo info) {
@@ -53,7 +54,7 @@ public class MappingSetInfoBean {
         bean.predicate = info.getPredicate();
         bean.targetSysCode = info.getTargetSysCode();
         bean.numberOfLinks = info.getNumberOfLinks();
-        bean.isTransitive = info.isTransitive();
+        bean.viaSystemCode = info.getViaSystemCode();
         return bean;
     }
     
@@ -132,14 +133,21 @@ public class MappingSetInfoBean {
      * @return the isTransitive
      */
     public boolean isIsTransitive() {
-        return isTransitive;
+        return !viaSystemCode.isEmpty();
     }
 
     /**
-     * @param isTransitive the isTransitive to set
+     * @return the viaSystemCode
      */
-    public void setIsTransitive(boolean isTransitive) {
-        this.isTransitive = isTransitive;
+    public Set<String> getViaSystemCode() {
+        return viaSystemCode;
+    }
+
+    /**
+     * @param viaSystemCode the viaSystemCode to set
+     */
+    public void setViaSystemCode(Set<String> viaSystemCode) {
+        this.viaSystemCode = viaSystemCode;
     }
     
 }

@@ -295,6 +295,10 @@ public class TransativeCreator {
         buffer.newLine();
     }
 
+    private void addVia(RdfWrapper rdfWrapper) throws IOException, RDFHandlerException {
+        
+    }
+    
 	private void addDate(URI predicate) throws RDFHandlerException, IOException {
 		try {
             GregorianCalendar c = new GregorianCalendar();
