@@ -46,7 +46,7 @@ public class RunLoader {
         LinksetLoader linksetLoader = new LinksetLoader();
 
         String root = "C:/Dropbox/linksets/";
-        //String root = "/var/local/ops/linksets";
+        //String root = "/var/local/ops/linksets/";
         linksetLoader.clearExistingData(StoreType.LOAD);
         //1-2
         linksetLoader.loadFile(root + "originals/ConceptWiki-Chembl2Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
