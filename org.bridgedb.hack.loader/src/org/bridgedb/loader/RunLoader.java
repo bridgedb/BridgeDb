@@ -99,9 +99,9 @@ public class RunLoader {
         linksetLoader.loadFile(root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         
         //39-40  //Inserted in place of Junk
-        TransativeCreator.createTransative(3,29,root + "transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl", 
+        TransativeCreator.createTransative(3,18,root + "transitive/ConceptWiki-Chembl13Id-via-ChemSpider.ttl", 
                 StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-        linksetLoader.loadFile(root + "transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile(root + "transitive/ConceptWiki-Chembl13Id-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
       
         //41-42
         linksetLoader.loadFile(root + "originals/Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
