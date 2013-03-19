@@ -46,6 +46,7 @@ public class RunLoader {
         LinksetLoader linksetLoader = new LinksetLoader();
 
         String root = "C:/Dropbox/linksets/";
+        //String root = "/var/local/ops/linksets/";
         linksetLoader.clearExistingData(StoreType.LOAD);
         //1-2
         linksetLoader.loadFile(root + "originals/ConceptWiki-Chembl2Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
@@ -66,7 +67,7 @@ public class RunLoader {
         //17-18 
         linksetLoader.loadFile(root + "originals/Chembl13Id-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         //19-20 
-        linksetLoader.loadFile(root + "originals/Chembl13Molecule-Chembl13Id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.loadFile(root + "originals/Chembl13Molecule-Chembl13Id_nov12.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         //21-22
         linksetLoader.loadFile(root + "originals/Chembl13Targets-Enzyme.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         //23-24 
@@ -97,9 +98,11 @@ public class RunLoader {
                 StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         linksetLoader.loadFile(root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         
-        //39-40  junk to keep numbers the same
-        linksetLoader.loadFile(root + "sample1To2.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-                                       
+        //39-40  //Inserted in place of Junk
+        TransativeCreator.createTransative(3,18,root + "transitive/ConceptWiki-Chembl13Id-via-ChemSpider.ttl", 
+                StoreType.LOAD, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        linksetLoader.loadFile(root + "transitive/ConceptWiki-Chembl13Id-via-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+      
         //41-42
         linksetLoader.loadFile(root + "originals/Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         
