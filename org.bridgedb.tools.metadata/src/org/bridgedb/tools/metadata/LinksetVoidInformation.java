@@ -270,10 +270,10 @@ public class LinksetVoidInformation implements MetaData {
         return linksetResource;
     }
 
-    public boolean isTransative(){
-        return transative;
-        
+    public Set<String> getViaLabels(){
+        return null; //TODO      
     }
+    
     // **** MetaData methdos  ***
     
     @Override

@@ -1076,10 +1076,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public int registerMappingSet(UriPattern sourceUriPattern, String predicate, String justification, 
-            UriPattern targetUriPattern, boolean symetric, boolean transative) throws BridgeDBException {
+            UriPattern targetUriPattern, boolean symetric, Set<String> viaLabels) throws BridgeDBException {
         DataSource source = sourceUriPattern.getDataSource();
         DataSource target = targetUriPattern.getDataSource();      
-        return registerMappingSet(source, predicate, justification, target, symetric, transative);
+        return registerMappingSet(source, predicate, justification, target, symetric, viaLabels);
     }
 
     @Override

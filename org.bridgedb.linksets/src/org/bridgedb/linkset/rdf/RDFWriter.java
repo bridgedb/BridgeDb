@@ -21,6 +21,7 @@ package org.bridgedb.linkset.rdf;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -70,11 +71,11 @@ public class RDFWriter implements RdfLoader{
         String predicate = information.getPredicate();
         symmetric = information.isSymmetric();
         String justification = information.getJustification();
-        boolean transative = information.isTransative();
+        Set<String> vaiLabels = information.getViaLabels();
         linksetResource = information.getLinksetResource();
         inverseResource = invertResource(linksetResource);
         mappingId = uriListener.registerMappingSet(subjectUriPattern, predicate, 
-                justification, targetUriPattern, symmetric, transative);            
+                justification, targetUriPattern, symmetric, vaiLabels);            
         linksetContext = RdfFactory.getLinksetUri(mappingId);
         if (symmetric) {
             inverseContext = RdfFactory.getLinksetUri(mappingId + 1);             

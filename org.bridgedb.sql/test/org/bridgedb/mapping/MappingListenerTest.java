@@ -19,6 +19,8 @@
 //
 package org.bridgedb.mapping;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IDMapperTest;
 
@@ -33,8 +35,7 @@ public abstract class MappingListenerTest extends IDMapperTest{
     protected static final String TEST_JUSTIFICATION1 = "http://www.bridgedb.org/test#testJustification1";
     protected static final String TEST_JUSTIFICATION2 = "http://www.bridgedb.org/test#testJustification2";
     private static final boolean SYMETRIC = true;
-    private static final boolean ORIGINAL = false;
-    private static final boolean TRANSATIVE = true;
+    private static final Set<String> NO_VIA = null;
     
     protected static MappingListener listener;
 
@@ -46,15 +47,17 @@ public abstract class MappingListenerTest extends IDMapperTest{
      * @throws BridgeDBException
      */
     public static void loadData() throws BridgeDBException{
-        int mappingSet = listener.registerMappingSet(DataSource1, TEST_PREDICATE, TEST_JUSTIFICATION1, DataSource2, SYMETRIC, ORIGINAL);
+        int mappingSet = listener.registerMappingSet(DataSource1, TEST_PREDICATE, TEST_JUSTIFICATION1, DataSource2, SYMETRIC, NO_VIA);
         listener.insertLink(map1xref1.getId(), map1xref2.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map2xref1.getId(), map2xref2.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map3xref1.getId(), map3xref2.getId(), mappingSet, SYMETRIC);
-        mappingSet = listener.registerMappingSet(DataSource2, TEST_PREDICATE, TEST_JUSTIFICATION2, DataSource3, SYMETRIC, ORIGINAL);
+        HashSet<String> via = new HashSet<String>();
+        mappingSet = listener.registerMappingSet(DataSource2, TEST_PREDICATE, TEST_JUSTIFICATION2, DataSource3, SYMETRIC, via);
         listener.insertLink(map1xref2.getId(), map1xref3.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map2xref2.getId(), map2xref3.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map3xref2.getId(), map3xref3.getId(), mappingSet, SYMETRIC);
-        mappingSet = listener.registerMappingSet(DataSource1, TEST_PREDICATE, TEST_JUSTIFICATION2, DataSource3, SYMETRIC, TRANSATIVE);
+        via.add("test via");
+        mappingSet = listener.registerMappingSet(DataSource1, TEST_PREDICATE, TEST_JUSTIFICATION2, DataSource3, SYMETRIC, via);
         listener.insertLink(map1xref1.getId(), map1xref3.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map2xref1.getId(), map2xref3.getId(), mappingSet, SYMETRIC);
         listener.insertLink(map3xref1.getId(), map3xref3.getId(), mappingSet, SYMETRIC);

@@ -110,16 +110,6 @@ public class LinksetVoidInformationTest extends TestUtils{
     }
 
     /**
-     * Test of isTransative method, of class LinksetVoidInformation.
-     */
-    @Test
-    public void testIsTransative() {
-        report("isTransative");
-        boolean result = instance.isTransative();
-        assertFalse(result);
-    }
-
-    /**
      * Test of Schema method, of class LinksetVoidInformation.
      */
     @Test

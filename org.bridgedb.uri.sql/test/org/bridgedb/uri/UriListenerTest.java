@@ -19,6 +19,7 @@
 //
 package org.bridgedb.uri;
 
+import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.Xref;
 import org.bridgedb.uri.UriListener;
@@ -41,8 +42,8 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static final String TEST_PREDICATE = "http://www.w3.org/2004/02/skos/core#exactMatch";
         
     private static final boolean SYMETRIC = true;
-    private static final boolean ORIGINAL = false;
-    private static final boolean TRANSATIVE = true;
+    private static final Set<String> NO_VIA = null;
+
     protected static final int mappingSet2_3 = 3;
  
     protected static UriPattern uriPattern1;
@@ -193,26 +194,26 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.registerUriPattern(DataSource3, uriSpace3a + "$id");
 
         int mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getDefaultJustifictaion(), uriPattern2, SYMETRIC, ORIGINAL);
+        		Profile.getDefaultJustifictaion(), uriPattern2, SYMETRIC, NO_VIA);
         listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
-        		Profile.getDefaultJustifictaion(), uriPattern3, SYMETRIC, ORIGINAL);
+        		Profile.getDefaultJustifictaion(), uriPattern3, SYMETRIC, NO_VIA);
         assertEquals(mappingSet2_3, mappingSet);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3Uri3, mappingSet2_3, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getDefaultJustifictaion(), uriPattern3, SYMETRIC, TRANSATIVE);
+        		Profile.getDefaultJustifictaion(), uriPattern3, SYMETRIC, NO_VIA);
         listener.insertUriMapping(map1Uri1, map1Uri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getTestJustifictaion(), uriPattern2, SYMETRIC, ORIGINAL);
+        		Profile.getTestJustifictaion(), uriPattern2, SYMETRIC, NO_VIA);
         listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
@@ -221,7 +222,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map3AUri1, map3Uri2, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
-        		Profile.getTestJustifictaion(), uriPattern3, SYMETRIC, ORIGINAL);
+        		Profile.getTestJustifictaion(), uriPattern3, SYMETRIC, NO_VIA);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);
@@ -229,8 +230,10 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map2AUri2, map2Uri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3AUri2, map3Uri3, mappingSet, SYMETRIC);
 
+        HashSet<String> via = new HashSet<String>();
+        via.add("test via");
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getTestProfile(), uriPattern3, SYMETRIC, TRANSATIVE);
+        		Profile.getTestProfile(), uriPattern3, SYMETRIC, via);
         listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);

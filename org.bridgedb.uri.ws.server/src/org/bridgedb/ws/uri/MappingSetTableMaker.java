@@ -391,13 +391,13 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
 
     public static void main(String[] args) throws BridgeDBException {
         List<MappingSetInfo> data = new ArrayList<MappingSetInfo>();
-        data.add(new MappingSetInfo("1", "S1", "p1", "T1", 25000, false));
-        data.add(new MappingSetInfo("2", "S1", "p1", "T1", 50000, false));
-        data.add(new MappingSetInfo("3", "S1", "p1", "T2", 50001, false));
-        data.add(new MappingSetInfo("4", "S1", "p1", "T2", 25, false));
-        data.add(new MappingSetInfo("5", "S2", "p1", "T1", 25, false));
-        data.add(new MappingSetInfo("6", "S3", "p1", "T1", 12325, false));
-        data.add(new MappingSetInfo("7", "S3", "p1", "T2", 234525, false));
+        data.add(new MappingSetInfo("1", "S1", "p1", "T1", 25000, null));
+        data.add(new MappingSetInfo("2", "S1", "p1", "T1", 50000, null));
+        data.add(new MappingSetInfo("3", "S1", "p1", "T2", 50001, null));
+        data.add(new MappingSetInfo("4", "S1", "p1", "T2", 25, null));
+        data.add(new MappingSetInfo("5", "S2", "p1", "T1", 25, null));
+        data.add(new MappingSetInfo("6", "S3", "p1", "T1", 12325, null));
+        data.add(new MappingSetInfo("7", "S3", "p1", "T2", 234525, null));
         MappingSetTableMaker maker = new MappingSetTableMaker(data);
         StringBuilder sb = new StringBuilder();
         maker.tableMaker(sb);

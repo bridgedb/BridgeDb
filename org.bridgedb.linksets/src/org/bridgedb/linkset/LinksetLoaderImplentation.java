@@ -22,6 +22,7 @@ package org.bridgedb.linkset;
 import java.io.File;
 import java.io.InputStream;
 import java.util.GregorianCalendar;
+import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -205,10 +206,10 @@ public class LinksetLoaderImplentation{
         String predicate = information.getPredicate();
         //TODO work out way to do this
         symmetric = true;
-        boolean transative = information.isTransative();
+        Set<String> vaiLabels = information.getViaLabels();
         String justification = information.getJustification();
         mappingId = urlListener.registerMappingSet(subjectUriPattern, predicate, justification, targetUriPattern, 
-                symmetric, transative);   
+                symmetric, vaiLabels);   
         linksetContext = RdfFactory.getLinksetUri(mappingId);
         linksetResource = information.getLinksetResource();
         if (symmetric) {

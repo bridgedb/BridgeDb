@@ -25,6 +25,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourceOverwriteLevel;
@@ -66,13 +69,13 @@ public class SQLListener implements MappingListener{
     static final String MAPPING_TABLE_NAME = "mapping";
     static final String MAPPING_SET_TABLE_NAME = "mappingSet";
     static final String PROPERTIES_TABLE_NAME = "properties";
+    static final String VIA_TABLE_NAME = "via";
 
     //static final String FULL_NAME_COLUMN_NAME = "fullName";
     static final String ID_COLUMN_NAME = "id";
     //static final String ID_EXAMPLE_COLUMN_NAME = "idExample";
     //static final String IS_PRIMARY_COLUMN_NAME = "isPrimary";
     static final String IS_PUBLIC_COLUMN_NAME = "isPublic";
-    static final String IS_TRANSITIVE_COLUMN_NAME = "isTransitive";  
     static final String JUSTIFICATION_COLUMN_NAME = "justification";
     static final String KEY_COLUMN_NAME = "theKey";
     //static final String MAIN_URL_COLUMN_NAME = "mainUrl";
@@ -91,6 +94,7 @@ public class SQLListener implements MappingListener{
     static final String URL_PATTERN_COLUMN_NAME = "urlPattern";
     static final String URN_BASE_COLUMN_NAME = "urnBase";
     static final String LAST_UDPATES = "LastUpdates";
+    static final String VIA_DATASOURCE_COLUMN_NAME = "viaDataSource";
     
     static final String FULL_NAME_PREFIX = "_";
     
@@ -136,12 +140,14 @@ public class SQLListener implements MappingListener{
     @Override
     public synchronized int registerMappingSet(DataSource source, String predicate, 
     		String justification, DataSource target, 
-            boolean symetric, boolean isTransitive) throws BridgeDBException {
+            boolean symetric, Set<String> viaLabels) throws BridgeDBException {
         //checkDataSourceInDatabase(source);
         //checkDataSourceInDatabase(target);
-        int forwardId = registerMappingSet(source, target, predicate, justification, isTransitive);
+        int forwardId = registerMappingSet(source, target, predicate, justification);
+        registerVia(forwardId, viaLabels);
         if (symetric){
-            registerMappingSet(target, source, predicate, justification, isTransitive);
+            int symetricId = registerMappingSet(target, source, predicate, justification);
+            registerVia(symetricId, viaLabels);
         }
         return forwardId;
     }
@@ -168,20 +174,18 @@ public class SQLListener implements MappingListener{
      * @param justification 
      * 
      */
-    private int registerMappingSet(DataSource source, DataSource target, String predicate, String justification, boolean isTransitive) 
+    private int registerMappingSet(DataSource source, DataSource target, String predicate, String justification) 
             throws BridgeDBException {
         String query = "INSERT INTO " + MAPPING_SET_TABLE_NAME
                 + " (" + SOURCE_DATASOURCE_COLUMN_NAME + ", " 
                     + PREDICATE_COLUMN_NAME + ", " 
                     + JUSTIFICATION_COLUMN_NAME + ", "
-                    + TARGET_DATASOURCE_COLUMN_NAME + ", " 
-                    + IS_TRANSITIVE_COLUMN_NAME + ") " 
+                    + TARGET_DATASOURCE_COLUMN_NAME + ") " 
                 + " VALUES (" 
                 + "'" + getDataSourceKey(source) + "', " 
                 + "'" + predicate + "', " 
                 + "'" + justification + "', "
-                + "'" + getDataSourceKey(target) + "',"
-                + "'" + booleanIntoQuery(isTransitive) + "')";
+                + "'" + getDataSourceKey(target) + "')";
         Statement statement = createStatement();
         try {
             statement.executeUpdate(query);
@@ -205,6 +209,38 @@ public class SQLListener implements MappingListener{
         lastUpdate = new Date().getTime();
         logger.info("Registered new Mappingset " + autoinc + " from " + getDataSourceKey(source) + " to " + getDataSourceKey(target));
         return autoinc;
+    }
+
+    private void registerVia(int mappingSetId, Set<String> viaLabels) throws BridgeDBException {
+        if (viaLabels == null || viaLabels.isEmpty() ){
+            return;
+        }
+        Iterator<String> labels = viaLabels.iterator(); 
+        StringBuilder insert = new StringBuilder("INSERT INTO ");
+        insert.append(VIA_TABLE_NAME);
+        insert.append(" (");
+        insert.append(MAPPING_SET_ID_COLUMN_NAME);
+        insert.append(", ");
+        insert.append(VIA_DATASOURCE_COLUMN_NAME);
+        insert.append(") VALUES ");
+        insert.append("('");
+        insert.append(mappingSetId);
+        insert.append("', '");
+        insert.append(labels.next());
+        insert.append("')");
+        while (labels.hasNext()){
+            insert.append(", ('");
+            insert.append(mappingSetId);
+            insert.append("', '");
+            insert.append(labels.next());
+            insert.append("')");        
+        }
+        Statement statement = createStatement();
+        try {
+            statement.executeUpdate(insert.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException ("Error inserting via with " +  insert, ex);
+        }
     }
 
     @Override
@@ -309,6 +345,7 @@ public class SQLListener implements MappingListener{
  		dropTable(MAPPING_TABLE_NAME);
  		dropTable(MAPPING_SET_TABLE_NAME);
  		dropTable(PROPERTIES_TABLE_NAME);
+        dropTable(VIA_TABLE_NAME);
      }
     
     /**
@@ -360,6 +397,7 @@ public class SQLListener implements MappingListener{
 	protected void createSQLTables() throws BridgeDBException
 	{
         //"IF NOT EXISTS " is not supported
+        String query = "";
 		try 
 		{
 			Statement sh = createStatement();
@@ -369,18 +407,7 @@ public class SQLListener implements MappingListener{
                     + ")");
   			sh.execute( //Add compatibility version of GDB
 					"INSERT INTO " + INFO_TABLE_NAME + " VALUES ( " + SQL_COMPAT_VERSION + ")");
-            //TODO add organism as required
-            /*sh.execute("CREATE TABLE " + DATASOURCE_TABLE_NAME 
-                    + "  (  " + SYSCODE_COLUMN_NAME     + " VARBINARY(" + SYSCODE_LENGTH + ") NOT NULL,   "
-                    + "     " + IS_PRIMARY_COLUMN_NAME  + " SMALLINT,                                  "
-                    + "     " + FULL_NAME_COLUMN_NAME   + " VARCHAR(" + FULLNAME_LENGTH + "),      "
-                    + "     " + MAIN_URL_COLUMN_NAME    + " VARCHAR(" + MAINURL_LENGTH + "),        "
-                    + "     " + URL_PATTERN_COLUMN_NAME + " VARCHAR(" + URLPATTERN_LENGTH + "),  "
-                    + "     " + ID_EXAMPLE_COLUMN_NAME  + " VARCHAR(" + ID_LENGTH + "),           "
-                    + "     " + TYPE_COLUMN_NAME        + " VARCHAR(" + TYPE_LENGTH + "),              "
-                    + "     " + URN_BASE_COLUMN_NAME    + " VARCHAR(" + URNBASE_LENGTH + ")         "
-                    + "  ) ");*/
-            String query = "CREATE TABLE " + MAPPING_TABLE_NAME 
+            query = "CREATE TABLE " + MAPPING_TABLE_NAME 
                     + "( " + ID_COLUMN_NAME             + " INT " + autoIncrement + " PRIMARY KEY, " 
                     + "  " + SOURCE_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, "
         			+ "  " + TARGET_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
@@ -395,7 +422,6 @@ public class SQLListener implements MappingListener{
                     + "     " + PREDICATE_COLUMN_NAME         + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
                     + "     " + JUSTIFICATION_COLUMN_NAME     + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
                     + "     " + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
-                    + "     " + IS_TRANSITIVE_COLUMN_NAME     + " SMALLINT, "
                     + "     " + MAPPING_COUNT_COLUMN_NAME     + " INT "
 					+ " ) "; 
             sh.execute(query);
@@ -405,12 +431,14 @@ public class SQLListener implements MappingListener{
                     + "    " + PROPERTY_COLUMN_NAME + "    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
                     + "    " + IS_PUBLIC_COLUMN_NAME + "    SMALLINT "
 					+ " ) "); 
+         	query =	"CREATE TABLE " + VIA_TABLE_NAME 
+                    + " (" + MAPPING_SET_ID_COLUMN_NAME + " INT(" + LINK_SET_ID_LENGTH + ") NOT NULL, "
+                    + "     " + VIA_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL "
+					+ " ) "; 
+            sh.execute(query);
             sh.close();
-		} catch (SQLException e)
-		{
-            System.err.println(e);
-            e.printStackTrace();
-			throw new BridgeDBException ("Error creating the tables ", e);
+		} catch (SQLException e){
+ 			throw new BridgeDBException ("Error creating the tables using " + query, e);
 		}
 	}
      
