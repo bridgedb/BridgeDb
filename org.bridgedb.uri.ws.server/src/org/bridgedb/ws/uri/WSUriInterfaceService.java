@@ -35,7 +35,6 @@ import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.linkset.LinksetInterfaceMinimal;
 import org.bridgedb.linkset.LinksetLoader;
-import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.sql.SQLUriMapper;
@@ -120,10 +119,10 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 logger.debug("   uri = " + uri);             
             }
             logger.debug("   profileUri = " + profileUri);
-            if (targetCodes!= null || !targetCodes.isEmpty()){
+            if (targetCodes!= null && !targetCodes.isEmpty()){
                 logger.debug("   targetCodes = " + targetCodes);
             }
-            if (targetUriPatterns!= null || !targetUriPatterns.isEmpty()){
+            if (targetUriPatterns!= null && !targetUriPatterns.isEmpty()){
                 logger.debug("   targetUriPatterns = " + targetUriPatterns);
             }
         }
@@ -165,7 +164,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 logger.debug("   uri = " + uri);             
             }
             logger.debug("   profileUri = " + profileUri);
-            if (targetUriPattern!= null || !targetUriPattern.isEmpty()){
+            if (targetUriPattern!= null && !targetUriPattern.isEmpty()){
                 logger.debug("   targetUriPatterns = " + targetUriPattern);
             }
         }

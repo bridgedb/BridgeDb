@@ -77,6 +77,8 @@ public class TestRemoteVoidsAndLinksets {
     
     public TestRemoteVoidsAndLinksets() throws IDMapperException{
         loader.clearExistingData(StoreType.TEST);
+        checkVoid("ftp://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBL-RDF/15.5/void.ttl.gz");
+        
         loadVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi93_void.ttl");
         loadVoid("https://github.com/openphacts/ops-platform-setup/blob/master/void/drugbank_void.ttl");
         loadVoid("https://github.com/openphacts/Documentation/blob/master/datadesc/examples/chembl-rdf-void.ttl");
