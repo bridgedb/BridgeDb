@@ -113,7 +113,7 @@
 			<classpath refid="test.classpath"/>
 		</javac>		
 		<junit printsummary="on" haltonfailure="true" fork="true">
-			<formatter type="brief" usefile="false"/>
+			<formatter type="xml" usefile="true"/>
 			<classpath refid="test.classpath"/>
 			<batchtest>
 				<fileset dir="test">
