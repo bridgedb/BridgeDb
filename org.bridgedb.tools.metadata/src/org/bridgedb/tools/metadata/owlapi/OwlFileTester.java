@@ -144,7 +144,7 @@ public class OwlFileTester
         // Delete individuals representing countries
         OWLOntologyManager m = create();
         OWLOntology o = m.loadOntologyFromOntologyDocument(pizza_iri);
-        // Ontologies don’t directly contain entities but axioms
+        // Ontologies do not directly contain entities but axioms
         // OWLEntityRemover will remove an entity
         // from a set of ontologies by removing all referencing axioms
         OWLEntityRemover remover = new OWLEntityRemover(m, Collections.singleton(o));
