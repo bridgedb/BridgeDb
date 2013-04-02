@@ -13,12 +13,12 @@ import java.util.TreeSet;
  *
  * @author Christian
  */
-public class TransativeFinder {
+public class TransativeFinderToy {
     
     TreeSet<Link> links;
     int nextLink = 1;
     
-    TransativeFinder (){
+    TransativeFinderToy (){
         links = new TreeSet<Link>();
         addLinks("A","B");
         addLinks("C","B");
@@ -131,7 +131,7 @@ public class TransativeFinder {
     }
     
     public static void main(String[] args){
-        TransativeFinder test = new TransativeFinder();
+        TransativeFinderToy test = new TransativeFinderToy();
         test.showLinks();
     }
 }
