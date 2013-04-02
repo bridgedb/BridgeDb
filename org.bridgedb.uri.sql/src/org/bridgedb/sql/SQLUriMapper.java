@@ -176,7 +176,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             }
         }
     }
-    
+
     @Override
     public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource... tgtDataSource) throws BridgeDBException {
         if (tgtDataSource == null || tgtDataSource.length == 0){
@@ -283,6 +283,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public Set<String> mapUri (String sourceUri, String profileUri, UriPattern... tgtUriPatterns) 
             throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
             return mapUri (sourceUri, profileUri);
         }
@@ -296,6 +297,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public Set<String> mapUri (String sourceUri, String profileUri, UriPattern tgtUriPattern) 
             throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
         if (tgtUriPattern == null){
             logger.warn("mapUri called with a null tgtDatasource and " + sourceUri);
@@ -313,6 +315,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public Set<String> mapUri (String sourceUri, String profileUri) 
             throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
         Set<Xref> targetXrefs = mapID(sourceXref, profileUri);
         HashSet<String> results = new HashSet<String>();
@@ -350,6 +353,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     
     @Override
     public Set<Mapping> mapFull(String sourceUri, String profileUri) throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri);
         for (Mapping result:results){
@@ -439,6 +443,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern... tgtUriPatterns) throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtUriPatterns);
         for (Mapping result:results){
@@ -449,6 +454,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtUriPattern);
         for (Mapping result:results){
@@ -459,6 +465,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource... tgtDataSources) throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtDataSources);
         for (Mapping result:results){
@@ -469,6 +476,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
         Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtDataSource);
         for (Mapping result:results){
@@ -545,6 +553,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @throws BridgeDbSqlException if the profile does not exist
      */
     private void appendProfileClause(StringBuilder query, String profileUri) throws BridgeDBException {
+        profileUri = scrubUri(profileUri);
         if (profileUri == null){
             profileUri = Profile.getDefaultProfile();
         }
@@ -583,6 +592,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public boolean uriExists(String uri) throws BridgeDBException {
+        uri = scrubUri(uri);
         Xref xref = toXref(uri);
         if (xref == null){
             return false;
@@ -944,6 +954,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     
     @Override
     public ProfileInfo getProfile(String profileURI) throws BridgeDBException {
+        profileURI = scrubUri(profileURI);
         if (profileURI.equals(Profile.getAllProfile())){
             return getAllProfile();
         }
@@ -1370,14 +1381,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void createDefaultProfiles() throws BridgeDBException {
         String name = ProfileInfo.DEFAULT_PROFILE_NAME;
         URI createdBy = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.uri.sql/src/org/bridgedb/sql/SQLUrlMapper.java");
-        URI justification = new URIImpl(Profile.getDefaultJustifictaion());
-        String uri = registerProfile(name, createdBy, justification);
+        URI[] justifications = Profile.getDefaultJustifictaions();
+        
+        String uri = registerProfile(name, createdBy, justifications);
         if (!uri.equals(Profile.getDefaultProfile())){
             throw new BridgeDBException("Incorrect Default Profile URI created. Created " + uri + " but should have been "
                     + Profile.getDefaultProfile());
         }
         name = ProfileInfo.TEST_PROFILE_NAME;
-        justification = new URIImpl(Profile.getTestJustifictaion());
+        URI justification = new URIImpl(Profile.getTestJustifictaion());
         uri = registerProfile(name, createdBy, justification);
         if (!uri.equals(Profile.getTestProfile())){
             throw new BridgeDBException("Incorrect Test Profile URI created. Created " + uri + " but should have been "
@@ -1580,6 +1592,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         ConfigReader.logToConsole();
         BridgeDBRdfHandler.init();
         SQLUriMapper test = new SQLUriMapper(false, StoreType.LOAD);
-    }
+   }
+   
+   public final static String scrubUri(String original){
+       if (original == null){
+           return null;
+       }
+       String result = original.trim();
+       if (original.startsWith("<")){
+           original = original.substring(1);
+       }
+       if (original.endsWith(">")){
+           original = original.substring(0, original.length()-1);
+       }
+       return result;
+   }
+   
 }
  

@@ -3353,7 +3353,7 @@ bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
 	bridgeDB:hasPrimaryUrlPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
 	bridgeDB:hasPrimaryIdentifiersOrgPattern <http://identifiers.org/pdb/$id> ;
 	bridgeDB:hasPrimaryWikiPathwaysPattern <http://www.rcsb.org/pdb/explore/explore.do?structureId=$id> ;
-	bridgeDB:hasPrimaryUriPattern <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> , <http://purl.uniprot.org/pdb/$id> .
+	bridgeDB:hasPrimaryUriPattern <http://purl.uniprot.org/pdb/$id> , <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> .
 
 bridgeDB:DataSource_PeptideAtlas a bridgeDB:DataSource ;
 	bridgeDB:fullName "PeptideAtlas" ;

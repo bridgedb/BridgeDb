@@ -21,6 +21,8 @@ package org.bridgedb.uri;
 
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  * This is just a Utils class to provide any default Profiles as well as a single Javadocs point.
@@ -67,8 +69,16 @@ public class Profile {
         return getProfileBaseURI() + profileId;  
     }
   
-    public static String getDefaultJustifictaion() throws BridgeDBException{
-        return "http://www.w3.org/2000/01/rdf-schema#isDefinedBy";
+    public static String getDefaultJustifictaionString() throws BridgeDBException{
+       return "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"; 
+    }
+    
+    public static URI[] getDefaultJustifictaions() throws BridgeDBException{
+        URI[] result = new URI[3];
+        result[0] = new URIImpl(getDefaultJustifictaionString());
+        result[1] = new URIImpl("http://semanticscience.org/resource/CHEMINF_000059");
+        result[2] = new URIImpl("http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#Accession_Number");
+        return result;
     }
 
     public static String getTestJustifictaion() throws BridgeDBException{
