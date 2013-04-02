@@ -1,6 +1,0 @@
-#This is an example IP Configuration File.
-#To set your own file copy this file for example to $CATALINA_HOME/conf/OPS-IMS and edit it there.
-#Ideally point Environment variable OPS-IMS-CONFIG to the folder containing your config files.
-
-#Local Host always OK
-127.0.0.1   LocalHost          

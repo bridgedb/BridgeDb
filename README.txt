@@ -1,6 +1,6 @@
 Configuration
 -------------
-BridgeDB looks for the configuration file in the following locations. Once it 
+BridgeDB looks for the configuration file config.txt in the following locations. Once it 
 finds a configuration file the other locations are ignored. 
 * Directly in the run directory  (Mainly for java *.jar runs)
 * Environment Variable OPS-IMS-CONFIG: can be used to point to any location
@@ -12,7 +12,7 @@ finds a configuration file the other locations are ignored.
 * The jar/war file using getClass().getResource(name)
 * The jar/war by unzipping it
 
-The default configuration files can be found at
+The default configuration config.txt file can be found at
 	$BRIDGEDB_HOME/org.bridgedb.utils/resources
 		
 The default configuration files will always be found by the ../org.bridgedb.utils/resources step during testing
@@ -28,7 +28,7 @@ MySQL version 5 or above must be installed and running
 MySQL databases and users must be created with CREATE, DROP, INDEX, INSERT, 
 UPDATE, DELETE, and SELECT permissions.
 
-Consult the sqlConfig file for the defaults, or copy and amend the configuration file
+Consult the Config.txt file for the defaults, or copy and amend the configuration file
 to your own setup.
 
 If you are using the default accounts and databases then execute the file 
@@ -40,11 +40,9 @@ point of failure, if any of the user accounts or databases already exist.
 
 RDF Repository Dependency
 -------------------------
-See: rdfConfig.txt
 SailNativeStore(s) will be created automatically as long as loader can 
 create/find the directory, 
 
-See: DirectoriesConfig.txt
 We recommend changing the relative directories to absolute directories.
 Please ensure the parent directories exist and have the correct permissions. 
 
@@ -53,18 +51,29 @@ The settings for testing (and therefor compilation) can be left as is.
 The BaseURI variable in the RDF configuration file should be the base of the 
 Webserver you will drop the web service into.
 
-IP_Register.txt
+IP_Register
 --------------
 If you plan on using the WS to allow uploading of voids and linksets 
 the sending machines will have to be added to this list.
 The Sending machine can be added at runtime without the need to restart the service.
 
-accounts.txt
+Accounts
 ------------
 List a number of Uris http or ftp
 For which a user name and password are required.
 If you wish to read from any of these sites you will have to copy and edit this file.
 Otherwise you will not be able to read from these Uris.
+
+--------------------------------------------------------------------------
+SANDBOX:
+-------
+ConfigReader.java in the Utils package includes a SANDBOX option.
+This is only required if you want to run two versions of the system on the same machine.
+This will read the SandboxConfig.txt file which contains some different settings.
+Should you see unexpected SANDBOX message set SANDBOX to false as the files it expects are not included! 
+
+--------------------------------------------------------------------------
+Other Configuration files
 
 log4j.properties
 ---------------
@@ -84,12 +93,6 @@ Included for reference only.
 LinkSet,owl
 Ontology used by the Validator.
 Changes to this file will affect the Validator.
-
-----
-SANDBOX:
-ConfigReader.java in the Utils package includes a SANDBOX option.
-Sandbox should be not be enabled in the Master branch.
-Should you see unexpected SANDBOX message set SANDBOX to false as the files it expects are not included! 
 
 -------------------------------------------------------------------------------
 

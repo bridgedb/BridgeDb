@@ -67,7 +67,7 @@ public class DirectoriesConfig {
     }
     
     public static File getTestDirectory() throws BridgeDBException {
-        return getDirectory(TEST_DIRECTORY_PROPERTY, "Test");
+        return getDirectory(TEST_DIRECTORY_PROPERTY, "TestDirectory");
     }
 
     public static void useTestDirectory() throws BridgeDBException{
@@ -77,6 +77,7 @@ public class DirectoriesConfig {
         } else {
             useTest = true;
             File testDir = getTestDirectory();
+            System.out.println(testDir);
             deleteChildren(testDir);
         }        
     }
@@ -90,13 +91,13 @@ public class DirectoriesConfig {
         File file = new File(fileName);
         if (!file.exists()){
             File parent = file.getParentFile();
-            if (parent != null && parent.isDirectory()){
+            if (parent == null || parent.isDirectory()){
                 boolean made = file.mkdir();
                 if (!made){
                     throw new BridgeDBException("Unable to create " + type + " directory " + file.getAbsolutePath());
                 }
             } else {
-                throw new BridgeDBException("No parent found for " + type + " directory " + file.getAbsolutePath());
+                throw new BridgeDBException("No parent (" + parent.getAbsolutePath() + ")found for " + type + " directory " + file.getAbsolutePath());
             }
         }
         if (!file.isDirectory()){
@@ -107,7 +108,7 @@ public class DirectoriesConfig {
      
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getDIRECTORIESProperties();
+            properties = ConfigReader.getProperties();
         }
         return properties;
     }
