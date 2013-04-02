@@ -215,7 +215,6 @@ public class SqlFactory {
         if (properties == null){
             properties = ConfigReader.getProperties();
         }
-        System.out.println(properties);
         return properties;
     }
 

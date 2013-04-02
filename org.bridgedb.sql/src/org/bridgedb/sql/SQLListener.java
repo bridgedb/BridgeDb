@@ -44,7 +44,7 @@ import org.bridgedb.utils.StoreType;
  * 
  * @author Christian
  */
-public class SQLListener implements MappingListener{
+public class SQLListener extends SQLBase implements MappingListener{
 
     //Numbering should not clash with any GDB_COMPAT_VERSION;
 	public static final int SQL_COMPAT_VERSION = 22;
@@ -61,22 +61,21 @@ public class SQLListener implements MappingListener{
     private static final int LINK_SET_ID_LENGTH = 100;
     private static final int KEY_LENGTH= 100; 
     private static final int PROPERTY_LENGTH = 100;
-    private static final int SQL_TIMEOUT = 2;
     private static final int MAX_BLOCK_SIZE = 1000;
     
     //static final String DATASOURCE_TABLE_NAME = "DataSource";
     static final String INFO_TABLE_NAME = "info";  //Do not change as used by RDG packages as well
     static final String MAPPING_TABLE_NAME = "mapping";
-    static final String MAPPING_SET_TABLE_NAME = "mappingSet";
+    public static final String MAPPING_SET_TABLE_NAME = "mappingSet";
     static final String PROPERTIES_TABLE_NAME = "properties";
     static final String VIA_TABLE_NAME = "via";
 
     //static final String FULL_NAME_COLUMN_NAME = "fullName";
-    static final String ID_COLUMN_NAME = "id";
+    public static final String ID_COLUMN_NAME = "id";
     //static final String ID_EXAMPLE_COLUMN_NAME = "idExample";
     //static final String IS_PRIMARY_COLUMN_NAME = "isPrimary";
     static final String IS_PUBLIC_COLUMN_NAME = "isPublic";
-    static final String JUSTIFICATION_COLUMN_NAME = "justification";
+    public static final String JUSTIFICATION_COLUMN_NAME = "justification";
     static final String KEY_COLUMN_NAME = "theKey";
     //static final String MAIN_URL_COLUMN_NAME = "mainUrl";
     static final String MAPPING_COUNT_COLUMN_NAME = "mappingCount";
@@ -98,14 +97,11 @@ public class SQLListener implements MappingListener{
     
     static final String FULL_NAME_PREFIX = "_";
     
-    protected SQLAccess sqlAccess;
-    protected Connection possibleOpenConnection;
     private final int blockSize;
     private int blockCount = 0;
     private int insertCount = 0;
     private int doubleCount = 0;  
     private StringBuilder insertQuery;
-    private final boolean supportsIsValid;
     protected final String autoIncrement;
     private final static long REPORT_DELAY = 10000;
     private long lastUpdate = 0;
@@ -113,10 +109,9 @@ public class SQLListener implements MappingListener{
     static final Logger logger = Logger.getLogger(SQLListener.class);
 
     public SQLListener(boolean dropTables, StoreType storeType) throws BridgeDBException{
+        super(storeType);
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.init();
-        this.sqlAccess = SqlFactory.createTheSQLAccess(storeType);
-        this.supportsIsValid = SqlFactory.supportsIsValid();
         this.autoIncrement = SqlFactory.getAutoIncrementCommand();
         if (dropTables){
             this.dropSQLTables();
@@ -476,66 +471,7 @@ public class SQLListener implements MappingListener{
 					"version of this software and databases");
 		}		
 	}
-	
-	private void checkConnection() throws BridgeDBException, SQLException {
-		if (possibleOpenConnection == null){
-			possibleOpenConnection = sqlAccess.getConnection();
-		} else if (possibleOpenConnection.isClosed()){
-			possibleOpenConnection = sqlAccess.getConnection();
-		}    else if (supportsIsValid && !possibleOpenConnection.isValid(SQL_TIMEOUT)){
-			possibleOpenConnection.close();
-			possibleOpenConnection = sqlAccess.getConnection();
-		}
-	}
-  
-    /**
-     * 
-     * @return
-     * @throws BridgeDBException 
-     */
-    protected Statement createStatement() throws BridgeDBException{
-        try {
-            checkConnection();  
-            return possibleOpenConnection.createStatement();
-        } catch (SQLException ex) {
-            throw new BridgeDBException ("Error creating a new statement ", ex);
-        }
-    }
-    
-    protected PreparedStatement createPreparedStatement(String sql) throws BridgeDBException {
-    	try {
-    		checkConnection();
-    		return possibleOpenConnection.prepareStatement(sql);
-    	} catch (SQLException ex) {
-    		throw new BridgeDBException ("Error creating a new prepared statement " + sql, ex);
-    	}
-    }
-    
-    protected void startTransaction() throws BridgeDBException {
-    	try {
-			checkConnection();
-			possibleOpenConnection.setAutoCommit(false);
-		} catch (SQLException ex) {
-			throw new BridgeDBException("Error starting transaction.", ex);
-		}
-    }
-    
-    protected void commitTransaction() throws BridgeDBException {
-    	try {
-			possibleOpenConnection.commit();
-		} catch (SQLException ex) {
-			throw new BridgeDBException("Error commiting transaction.", ex);
-		}
-    }
-    
-    protected void rollbackTransaction() throws BridgeDBException {
-    	try {
-    		possibleOpenConnection.rollback();    		
-    	} catch (SQLException ex) {
-    		throw new BridgeDBException("Error rolling back transaction.", ex);
-    	}
-    }
-    
+	   
     /*
      * Verifies that the Data Source is saved in the database.
      * Updating or adding the Data Source as required.
@@ -916,13 +852,5 @@ public class SQLListener implements MappingListener{
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }
     }
-
-   String insertEscpaeCharacters(String original) {
-       String result = original.replaceAll("\\\\", "\\\\\\\\");
-       result = result.replaceAll("'", "\\\\'");
-       result = result.replaceAll("\"", "\\\\\"");
-       return result;
-    }
-
 
 }
