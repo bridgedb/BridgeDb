@@ -45,7 +45,7 @@ public abstract class TestSqlFactory {
             logger.fatal("SKIPPPING tests due to Connection error.");
             System.err.println("**** SKIPPPING tests due to Connection error.");
             System.err.println("To run these test you must have the following:");
-            System.err.println("1. A SQL server running as configured in " + ConfigReader.SQL_CONFIG_FILE_NAME);
+            System.err.println("1. A SQL server running as configured in " + ConfigReader.CONFIG_FILE_NAME);
             org.junit.Assume.assumeTrue(false);        
          }
     } 
@@ -60,7 +60,7 @@ public abstract class TestSqlFactory {
             logger.fatal("SKIPPPING tests due to Connection error.");
             System.err.println("**** SKIPPPING tests due to Connection error.");
             System.err.println("To run these test you must have the following:");
-            System.err.println("1. A Virtusos server running as configured in " + ConfigReader.SQL_CONFIG_FILE_NAME);
+            System.err.println("1. A Virtusos server running as configured in " + ConfigReader.CONFIG_FILE_NAME);
             org.junit.Assume.assumeTrue(false);        
          }
     }
@@ -75,7 +75,7 @@ public abstract class TestSqlFactory {
             logger.fatal("SKIPPPING tests due to Connection error.");
             System.err.println("**** SKIPPPING tests due to Connection error.");
             System.err.println("To run these test you must have the following:");
-            System.err.println("1. A MYSQL server running as configured in " + ConfigReader.SQL_CONFIG_FILE_NAME);
+            System.err.println("1. A MYSQL server running as configured in " + ConfigReader.CONFIG_FILE_NAME);
             org.junit.Assume.assumeTrue(false);        
          }
     }

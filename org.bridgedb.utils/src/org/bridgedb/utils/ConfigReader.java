@@ -48,19 +48,12 @@ public class ConfigReader {
      * Warning in SANDBOX mode the system will not build without builder provided config files.
      * If SANDBOX is true in the MASTER branch this is an ERROR. Please fix and contact developer team ASAP!
      */
-    public static boolean SANDBOX = true;
-    public static final String ACCOUNTS_FILE_NAME = "accounts.txt";
-    public static final String IP_CONFIG_FILE_NAME = "IP_Register.txt";
-    public static final String DIRECTORIES_CONFIG_FILE_NAME = "DirectoriesConfig.txt";
-    public static final String RDF_CONFIG_FILE_NAME = "rdfConfig.txt";
-    public static final String SQL_CONFIG_FILE_NAME = "sqlConfig.txt";
+    public static boolean SANDBOX = false;
+    public static final String CONFIG_FILE_NAME = "Config.txt";
+    public static final String SANDBOX_CONFIG_FILE_NAME = "SandboxConfig.txt";
+
     public static final String VOID_OWL_FILE = "VoidInfo.owl";
     
-    //SANDBOX config files MUST be provided 
-    public static final String SANDBOX_DIRECTORIES_CONFIG_FILE_NAME = "sandboxDirectoriesConfig.txt";
-    public static final String SANDBOX_RDF_CONFIG_FILE_NAME = "sandboxRdfConfig.txt";
-    public static final String SANDBOX_SQL_CONFIG_FILE_NAME = "sandboxSqlConfig.txt";
-
     public static final String CONFIG_FILE_PATH_PROPERTY = "ConfigPath";
     public static final String CONFIG_FILE_PATH_SOURCE_PROPERTY = "ConfigPathSource";
     public static final String LOG_PROPERTIES_FILE = "log4j.properties";
@@ -71,61 +64,34 @@ public class ConfigReader {
     private String findMethod;
     private String foundAt;
     private String error = null;
-    private Properties properties;
+    private Properties properties = null;
     private static boolean loggerSetup = false;
+    private static ConfigReader propertyReader = null;
     
     static final Logger logger = Logger.getLogger(ConfigReader.class);
     
-    public static Properties getAccountsProperties() throws BridgeDBException{
-        //No reason for a seperate sandbox file as external passwords are not sandbox dependent
-        return getProperties(ACCOUNTS_FILE_NAME);            
-    }
-    
-    public static Properties getDIRECTORIESProperties() throws BridgeDBException{
-        if (SANDBOX){
-            return getProperties(SANDBOX_DIRECTORIES_CONFIG_FILE_NAME);
-        } else {
-            return getProperties(DIRECTORIES_CONFIG_FILE_NAME);            
+    public static Properties getProperties() throws BridgeDBException{
+        if (propertyReader == null){
+            if (SANDBOX){
+                propertyReader = new ConfigReader(SANDBOX_CONFIG_FILE_NAME);
+            } else {
+                propertyReader = new ConfigReader(CONFIG_FILE_NAME);            
+            }
+            configureLogger();
         }
+        return propertyReader.readProperties();
     }
- 
-    public static Properties getIPConfigProperties() throws BridgeDBException{
-        //SANDBOX could be added if required. However please warn all using sandbox
-        return getProperties(IP_CONFIG_FILE_NAME);            
-    }
-    
-    public static Properties getRDFProperties() throws BridgeDBException{
-        if (SANDBOX){
-            return getProperties(SANDBOX_RDF_CONFIG_FILE_NAME);
-        } else {
-            return getProperties(RDF_CONFIG_FILE_NAME);            
-        }
-    }
- 
-    public static Properties getSQLProperties() throws BridgeDBException{
-        if (SANDBOX){
-            return getProperties(SANDBOX_SQL_CONFIG_FILE_NAME);
-        } else {
-            return getProperties(SQL_CONFIG_FILE_NAME);            
-        }
-    }
- 
+  
     public static InputStream getInputStream(String fileName) throws BridgeDBException{
         ConfigReader finder = new ConfigReader(fileName);
         configureLogger();
         return finder.getInputStream();
     }
-    
-    private static Properties getProperties(String fileName) throws BridgeDBException{
-        ConfigReader finder = new ConfigReader(fileName);
-        configureLogger();
-        return finder.getProperties();
-    }
-    
+        
     public static synchronized void configureLogger() throws BridgeDBException{
         if (!loggerSetup){
             ConfigReader finder = new ConfigReader(LOG_PROPERTIES_FILE);
-            Properties props = finder.getProperties();
+            Properties props = finder.readProperties();
             PropertyConfigurator.configure(props);
             logger.info("Logger configured from " + finder.foundAt + " by " + finder.findMethod);
             loggerSetup = true;
@@ -174,7 +140,7 @@ public class ConfigReader {
         return inputStream;
     }
     
-    private Properties getProperties() throws BridgeDBException{
+    private Properties readProperties() throws BridgeDBException{
         if (properties == null){
             properties = new Properties();           
             try {

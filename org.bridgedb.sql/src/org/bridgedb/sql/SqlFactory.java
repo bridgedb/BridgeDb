@@ -213,8 +213,9 @@ public class SqlFactory {
      */
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getSQLProperties();
+            properties = ConfigReader.getProperties();
         }
+        System.out.println(properties);
         return properties;
     }
 

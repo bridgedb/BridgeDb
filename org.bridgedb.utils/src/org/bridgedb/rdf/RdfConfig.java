@@ -99,7 +99,7 @@ public class RdfConfig {
  
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getRDFProperties();
+            properties = ConfigReader.getProperties();
         }
         return properties;
     }

@@ -35,7 +35,7 @@ public class IpConfig {
     public static boolean isAdminIPAddress(String ipAddress) throws BridgeDBException {
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){
-            properties = ConfigReader.getIPConfigProperties();
+            properties = ConfigReader.getProperties();
             owner = properties.getProperty(ipAddress);
         }
         return owner != null;
@@ -44,7 +44,7 @@ public class IpConfig {
     public static String checkIPAddress(String ipAddress) throws BridgeDBException{
         String owner = getProperties().getProperty(ipAddress);
         if (owner == null){
-            properties = ConfigReader.getIPConfigProperties();
+            properties = ConfigReader.getProperties();
             owner = properties.getProperty(ipAddress);
             if (owner == null){
                 logger.warn("Attempt to check IP address " + ipAddress);
@@ -55,7 +55,7 @@ public class IpConfig {
     
     private static Properties getProperties() throws BridgeDBException{
         if (properties == null){
-            properties = ConfigReader.getIPConfigProperties();
+            properties = ConfigReader.getProperties();
         }
         return properties;
     }

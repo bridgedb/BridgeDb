@@ -1,0 +1,112 @@
+#This is an example SandboxConfig.txt file with the default values in it.
+#ALL the values recommended to be different to config.txt are or include sandbox.
+
+#To set your own file copy this file for example to $CATALINA_HOME/conf/OPS-IMS and edit it there.
+#Ideally point Environment variable OPS-IMS-CONFIG to the folder containing your config files.
+
+###########Main SQL Database and user settings #######################
+SqlPort             jdbc:mysql://localhost:3306
+SqlDatabase         sandbox
+SqlUser             ims
+SqlPassword         ims
+
+#Load SQL Database (OPTIONAL)
+#This give the option of having a separate load database to reload all data while the service stays live.
+#Note: You will have to stop start the service (or drop in a new war) after swapping load and production servers
+LoadSqlDatabase     sandbox
+     #Defaults to SqlDatabase if not set
+#Load Database should have the same user as production database so they can be swapped.
+
+#Test Database (REQUIRED)
+#Test Database MUST NOT be the main or load Database as tests drops and recreates all tables!
+#Test user may be the same but having a different users adds security
+
+TestSqlDatabase     imstest
+TestSqlUser         imstest
+TestSqlPassword     imstest
+#Directories configuration
+#WARNING leaving the default relative links is not recommended.
+#Relative links will fail if loading and running is not done from the same directory.
+#Remember that the parent directories (in the defaults ../***) MUST exist.
+#Remember to grant READ and WRITE ACCESS to all users running any bridgedb programs including tomcat.
+
+#BaseURI should match the localing the war will be propped to or links will not work.
+BaseURI                 http://localhost:8080/OPS-IMS/
+
+#WARNING leaving the default relative links is not recommeneded!
+#Relative links will fail if loading and running is not done from the same directory.
+#Remember that these directies (in the defaults ../rdf/linksets and ../rdf/testLinksets) MUST exist, 
+#Remember to grant READ and WRITE ACCESS to all users running any BridgeDB programs including tomcat.
+
+############ RDF Repository ##############
+#Main RDF store
+SailNativeStore         ../rdf/sandbox/linksets
+
+#Load RDF Store
+#This give the option of having a seperate load database to reload all data while he service stays live.
+#Note: You will have to stop start the service (or drop in a new war) after swapping load and production servers
+LoadSailNativeStore     ../rdf/sandbox/linksets
+#Defaults to SailNativeStore if not set
+
+#Test and temporary RDF store
+#This folder MUST exist as for non admins to save data in and is therefor used in validation.
+#WARNING do not set the test store to be the same as the production store as many of the tests erases the store!
+#the default relative directory will use the RDF directory directly below $BridgeDB
+TestSailNativeStore     ../rdf/testLinksets
+
+##### Directories ############
+#Directory where void files uploaded by any method except direct local file reads are stored
+VoidDirectory           ../sandbox/voids
+
+#Directory where linkset files uploaded by any method except direct local file reads are stored
+LinksetDirectory        ../sandbox/linksets
+ 
+#Directory where transative linksets that are created are written
+TransativeDirectory     ../sandbox/transatives
+
+#Directory where Export files are placed directory or indirectly
+ExportDirectory         ../sandbox/export
+
+#Directory used during tests where files are placed directory or indirectly
+TestDirectory           ../TestDirectory
+
+######## IP Address configuration ########
+#Local Host always OK
+127.0.0.1   LocalHost
+
+####### Accounts ###########
+#Use this file to add logins and passwords to read uris.
+#For example to read uris from remote sites.
+
+#This information is exposed through the AccountsReader.java which returns an AccountsInfo object
+
+#It is REQUIRED that you make a copy of this file and save it in a higher priority location
+#Please see the README.txt file in the BridgeDB root directory.
+#Do not put real passwords directly in this file.
+#Do add uris for which passwords could be obtained
+#This file is updated to a PUBLIC github repository
+
+#All Properties keys should be in a two part format separated by a full stop.
+#First part is a group identifier
+#Second part is the account settings
+    #uri   : first part of the uri.
+           # key for finding the account settings
+    #login : or user name
+    #password
+#To add second parts please edit the Java classes AccountInfo and AccountsReader
+
+#Additional property groups can be added without any code change.
+#Just use a unique first part
+
+#The ops github repository includes a Read Only account.
+#Please ask Christian for the password of that account
+opsgithub.uri            https://raw.github.com/openphacts/
+opsgithub.login          OpsReadOnly
+opsgithub.password       askChrisian
+
+#The rsc has a FTP account.
+#Please contact them directly if you require the user name and password.
+#OpenPhacts members can also ask Christian
+chemspiderftp.uri        ftp://ftp.rsc-us.org
+chemspiderftp.login      askRSC
+chemspiderftp.password   askRSC

@@ -28,7 +28,7 @@ public class AccountsReader {
         if (infos != null){
             return;
         }
-        Properties properties = ConfigReader.getAccountsProperties();
+        Properties properties = ConfigReader.getProperties();
         infos = new HashSet<AccountInfo>();
         Set<String> names = properties.stringPropertyNames();
         for (String name:names){
@@ -51,11 +51,11 @@ public class AccountsReader {
                     } else if (parts[1].equals(PASSWORD)){
                         info.setPassword(properties.getProperty(name));
                     } else {
-                        throw new BridgeDBException ("Unexpected property " + name + " in " + ConfigReader.ACCOUNTS_FILE_NAME);                    
+                        throw new BridgeDBException ("Unexpected property with a . in it." + name );                    
                     }
                     infos.add(info);
                 } else {
-                    throw new BridgeDBException ("Unexpected property " + name + " in " + ConfigReader.ACCOUNTS_FILE_NAME);
+                    //do nothing not an account property
                 }
             }
         }
