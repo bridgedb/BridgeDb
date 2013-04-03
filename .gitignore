@@ -43,7 +43,7 @@ org.bridgedb.tools.transitive/test-data/linkset2To3.ttl
 #these are created by tests which end in an error so will be empty
 org.bridgedb.tools.transitive/test-data/empty1.ttl
 org.bridgedb.tools.transitive/test-data/empty2.ttl
-
+TestDirectory
 
 #ignore default rdf directories
 rdf/linksets
