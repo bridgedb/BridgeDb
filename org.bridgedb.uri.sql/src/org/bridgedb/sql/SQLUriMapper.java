@@ -159,9 +159,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void checkDataSources(String columnName) throws BridgeDBException{
         Set<String> toCheckNames = getPatternDataSources(columnName);
         for (String toCheckName:toCheckNames){
-            System.out.println(toCheckName);
             UriPattern pattern = UriPattern.existingByPattern(toCheckName);
-            System.out.println("  " + pattern);
             if (pattern != null){
                 DataSource ds = pattern.getDataSource();
                 String code;
@@ -170,8 +168,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 } else {
                     code = ds.getSystemCode();
                 }
-                System.out.println("      " + ds);
-                System.out.println("      " + code);
                 replaceSysCode (toCheckName, code);
             }
         }
@@ -1243,16 +1239,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @return
      * @throws BridgeDBException
      */
-    private List<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs ) throws BridgeDBException{
+    public static List<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs ) throws BridgeDBException{
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
         try {
             while (rs.next()){
                 Integer count = rs.getInt(MAPPING_COUNT_COLUMN_NAME);
                 String id = rs.getString(ID_COLUMN_NAME);
                 Set<String> viaSysCodes = new HashSet<String>();
-                results.add(new MappingSetInfo(id, rs.getString(SOURCE_DATASOURCE_COLUMN_NAME), 
-                        rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), count, 
-                        viaSysCodes));
+                results.add(new MappingSetInfo(id, rs.getString(SOURCE_DATASOURCE_COLUMN_NAME),  
+                        rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), 
+                        rs.getString(JUSTIFICATION_COLUMN_NAME), rs.getInt(SYMMETRIC_COLUMN_NAME), viaSysCodes ,count));
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);

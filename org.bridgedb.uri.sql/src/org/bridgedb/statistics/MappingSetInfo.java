@@ -19,6 +19,7 @@
 //
 package org.bridgedb.statistics;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -32,19 +33,35 @@ public class MappingSetInfo {
     private final String sourceSysCode;
     private final String predicate;
     private final String targetSysCode;
+    private final String justification;
+    private final boolean symmetric;
     private Set<String> viaSystemCode;
     private Integer numberOfLinks;
 
-    public MappingSetInfo(String id, String sourceSysCode, String predicate, String targetSysCode, 
-            Integer numberOfLinks, Set<String> viaSystemCodes){
+    public MappingSetInfo(String id, String sourceSysCode, String predicate, String targetSysCode, String justification,
+            int symmetric, Set<String> viaSystemCodes,  Integer numberOfLinks){
         this.id = id;
         this.predicate = predicate;
         this.sourceSysCode = sourceSysCode;
         this.targetSysCode = targetSysCode;
+        this.justification = justification;
+        this.symmetric = symmetric > 0;
+        setViaSystemCode(viaSystemCodes);
         this.numberOfLinks = numberOfLinks;
-        viaSystemCode = viaSystemCodes;
     }
     
+    public MappingSetInfo(String id, String sourceSysCode, String predicate, String targetSysCode, String justification, 
+            boolean symmetric, Set<String> viaSystemCodes, Integer numberOfLinks){
+        this.id = id;
+        this.predicate = predicate;
+        this.sourceSysCode = sourceSysCode;
+        this.targetSysCode = targetSysCode;
+        this.justification = justification;
+        this.symmetric = symmetric;
+        this.numberOfLinks = numberOfLinks;
+        setViaSystemCode(viaSystemCodes);
+    }
+
     /**
      * @return the id
      */
@@ -75,6 +92,13 @@ public class MappingSetInfo {
      */
     public String getTargetSysCode() {
         return targetSysCode;
+    }
+
+    /**
+     * @return the symmetric
+     */
+    public boolean isSymmetric() {
+        return symmetric;
     }
 
     /**
@@ -114,7 +138,18 @@ public class MappingSetInfo {
      * @param viaSystemCode the viaSystemCode to set
      */
     public void setViaSystemCode(Set<String> viaSystemCode) {
-        this.viaSystemCode = viaSystemCode;
+        if (viaSystemCode == null){
+            this.viaSystemCode = new HashSet<String>();
+        } else {
+            this.viaSystemCode = viaSystemCode;
+        }
+    }
+
+    /**
+     * @return the justification
+     */
+    public String getJustification() {
+        return justification;
     }
 
 

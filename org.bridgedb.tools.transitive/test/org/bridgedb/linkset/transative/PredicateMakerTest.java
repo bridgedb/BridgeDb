@@ -26,11 +26,13 @@ import org.bridgedb.tools.metadata.constants.SkosConstants;
 import org.bridgedb.utils.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
+@Ignore
 public class PredicateMakerTest extends TestUtils{
     
     private static ArrayList<URI> equivelentPredicates;

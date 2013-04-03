@@ -41,8 +41,8 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static UriListener listener;
     protected static final String TEST_PREDICATE = "http://www.w3.org/2004/02/skos/core#exactMatch";
         
-    private static final boolean SYMETRIC = true;
-    private static final Set<String> NO_VIA = null;
+    public static final boolean SYMETRIC = true;
+    public static final Set<String> NO_VIA = null;
 
     protected static final int mappingSet2_3 = 3;
  

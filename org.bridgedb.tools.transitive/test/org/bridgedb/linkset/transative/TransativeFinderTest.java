@@ -19,37 +19,31 @@
 //
 package org.bridgedb.linkset.transative;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.uri.Profile;
+import org.bridgedb.uri.UriListenerTest;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
 import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
  *
  * @author Christian
  */
-@Ignore
-public class TransativeCreatorTest extends TestUtils {
-    
-    private static StoreType VALIDATE_ONLY = null;
-    private static URI GENERATE_PREDICATE = null;
-    private static URI USE_EXISTING_LICENSES = null;
-    private static URI NO_DERIVED_BY = null;
-    private static boolean LOAD = true;
-    private static boolean DO_NOT_LOAD = false;
-    
+public class TransativeFinderTest extends TestUtils  {
+ 
     @BeforeClass
     public static void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
@@ -60,32 +54,14 @@ public class TransativeCreatorTest extends TestUtils {
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
-    
-    @Test(expected =  BridgeDBException.class)
-    public void testNoLinkToSelf() throws RDFHandlerException, IOException, BridgeDBException {
-        report("NoLinkToSelf");
-        String fileName = "test-data/empty1.ttl";
-        File file = new File(fileName);
-        TransativeCreator.createTransative(1, 2, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-    }
 
-    @Test(expected =  BridgeDBException.class)
-    public void testNoLink() throws RDFHandlerException, IOException, BridgeDBException {
-        report("NoLink");
-        String fileName = "test-data/empty2.ttl";
-        File file = new File(fileName);
-        TransativeCreator.createTransative(1, 3, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-    }
-
-    //TODO cleanup this test!
     @Test
-    public void testCreateTransative() throws RDFHandlerException, IOException, BridgeDBException {
-        report("CreateTransative");
-        String fileName = "../org.bridgedb.tools.transitive/test-data/linkset2To3.ttl";
-        File file = new File(fileName);
-        TransativeCreator.createTransative(2, 3, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-        LinksetLoader linksetLoader = new LinksetLoader();
-        linksetLoader.load(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
-    }
+	public void testFinder() throws BridgeDBException, RDFHandlerException, IOException {	
+        report("testFinder");
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
+        transativeFinder.UpdateTransative();
+        report("testFinderDone");
+	}
+	
 
 }

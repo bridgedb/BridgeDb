@@ -82,7 +82,7 @@ public class ResourceMetaData extends HasChildrenMetaData implements MetaData{
         super.loadValues(data, errors);
         Set<URI> predicates = getUsedPredicates(data);
         for (URI predicate:predicates){
-            PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(predicate, type);
+            PropertyMetaData metaData = PropertyMetaData.getUnspecifiedProperty(id, predicate, type);
             metaData.loadValues(data, errors);
             childMetaData.add(metaData);
         }

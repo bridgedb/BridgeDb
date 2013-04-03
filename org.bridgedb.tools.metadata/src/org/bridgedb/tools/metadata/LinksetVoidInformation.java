@@ -19,6 +19,7 @@
 //
 package org.bridgedb.tools.metadata;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.bridgedb.rdf.UriPattern;
@@ -45,12 +46,13 @@ public class LinksetVoidInformation implements MetaData {
   
     private MetaDataCollection collection;
     private Resource linksetResource = null;
-    private boolean transative; 
-    private String predicate = null;
-    private boolean isSymmetric;
-    private String subjectUriSpace = null;
-    private String targetUriSpace = null;
-    private String linksetJustification = null;
+    private final boolean transative; 
+    private final String predicate;
+    private final boolean isSymmetric;
+    private final String subjectUriSpace;
+    private final String targetUriSpace;
+    private final String linksetJustification;
+    private final Set<String> viaLabels;
     private String error = "";
     private int correctLinks = 0;
     private int wrongSubject = 0;
@@ -72,6 +74,7 @@ public class LinksetVoidInformation implements MetaData {
         linksetJustification = extractSingleStringByPredicate(linkset, DulConstants.EXPRESSES);  
         isSymmetric = checkIsSymmetric();
         transative =  checkIsTransative(linkset);
+        viaLabels = readViaLabels(linkset);
         ResourceMetaData resourceMetaData = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.SUBJECTSTARGET);
         subjectUriSpace = extractSingleStringByPredicate(resourceMetaData, VoidConstants.URI_SPACE_URI);
         ResourceMetaData target = extractSingletonResourceMetaDataBypredicate(linkset, VoidConstants.OBJECTSTARGET);
@@ -224,6 +227,19 @@ public class LinksetVoidInformation implements MetaData {
         return true;
     }
    
+    private Set<String> readViaLabels(ResourceMetaData linkset){
+        System.out.println(linkset);
+        Set<Value> values =  linkset.getValuesByPredicate(BridgeDBConstants.VIA_URI); 
+        HashSet<String> results = new HashSet<String>();
+        if (values != null){
+            for (Value value:values){
+                results.add(value.stringValue());
+            }
+        }
+        System.out.println(results);
+        return results;
+    }
+    
     @Override
     public void validate() throws BridgeDBException {
         String report = collection.validityReport(false);
@@ -271,7 +287,7 @@ public class LinksetVoidInformation implements MetaData {
     }
 
     public Set<String> getViaLabels(){
-        return null; //TODO      
+        return this.viaLabels;
     }
     
     // **** MetaData methdos  ***

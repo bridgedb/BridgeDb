@@ -66,8 +66,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         this.cardinality = cardinality;
     }
 
-    public static PropertyMetaData getUnspecifiedProperty(URI predicate, String type){
-        PropertyMetaData result = new PropertyMetaData(predicate, type);
+    public static PropertyMetaData getUnspecifiedProperty(Resource id, URI predicate, String type){
+        PropertyMetaData result = new PropertyMetaData(id, predicate, type);
         return result;
     }
     
@@ -89,8 +89,8 @@ public class PropertyMetaData extends MetaDataBase implements MetaData, LeafMeta
         this.cardinality = other.cardinality;
     }
     
-    private PropertyMetaData(URI predicate, String type){
-        super(predicate.getLocalName(), type, RequirementLevel.UNSPECIFIED);
+    private PropertyMetaData(Resource id, URI predicate, String type){
+        super(id, predicate.getLocalName(), type, RequirementLevel.UNSPECIFIED);
         this.predicate = predicate;
         metaDataType = null;
         this.cardinality = this.NO_CARDINALITY;

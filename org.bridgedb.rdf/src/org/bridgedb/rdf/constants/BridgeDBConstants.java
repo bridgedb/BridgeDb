@@ -28,7 +28,7 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class BridgeDBConstants {
 
-    public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#";
+    public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#";
     public static final String PREFIX_NAME1 = "bridgeDB";
     public static final String PRIMARY = "Primary";
 
@@ -109,4 +109,5 @@ public class BridgeDBConstants {
     private static final String bdb = "http://www.bridgedb.org/test#";	
 	public static final URI TEST_PREDICATE = new URIImpl(bdb + "testPredicate");
 
+    public static final URI VIA_URI = new URIImpl(PREFIX + "isTransativeVia");
 }

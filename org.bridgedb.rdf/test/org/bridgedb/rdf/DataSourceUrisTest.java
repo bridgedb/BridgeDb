@@ -68,7 +68,7 @@ public class DataSourceUrisTest extends TestUtils{
     public void testGetResourceId() {
         report("getResourceId");
         DataSource dataSource = DataSource.getByFullName("DataSourceUrisTest_testGetResourceId");
-        URI expResult = new URIImpl("http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#DataSource_DataSourceUrisTest_testGetResourceId");
+        URI expResult = new URIImpl("http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#DataSource_DataSourceUrisTest_testGetResourceId");
         URI result = DataSourceUris.getResourceId(dataSource);
         assertEquals(expResult, result);
     }

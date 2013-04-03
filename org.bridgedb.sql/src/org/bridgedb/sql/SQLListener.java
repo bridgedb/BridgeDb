@@ -86,6 +86,7 @@ public class SQLListener extends SQLBase implements MappingListener{
     static final String SCHEMA_VERSION_COLUMN_NAME = "schemaversion"; //Do not change as used by RDG packages as well
     static final String SOURCE_DATASOURCE_COLUMN_NAME = "sourceDataSource";
     static final String SOURCE_ID_COLUMN_NAME = "sourceId";
+    static final String SYMMETRIC_COLUMN_NAME = "symmetric";
     static final String SYSCODE_COLUMN_NAME = "sysCode";
     static final String TARGET_ID_COLUMN_NAME = "targetId";
     static final String TARGET_DATASOURCE_COLUMN_NAME = "targetDataSource";
@@ -138,10 +139,10 @@ public class SQLListener extends SQLBase implements MappingListener{
             boolean symetric, Set<String> viaLabels) throws BridgeDBException {
         //checkDataSourceInDatabase(source);
         //checkDataSourceInDatabase(target);
-        int forwardId = registerMappingSet(source, target, predicate, justification);
+        int forwardId = registerMappingSet(source, target, predicate, justification, symetric);
         registerVia(forwardId, viaLabels);
         if (symetric){
-            int symetricId = registerMappingSet(target, source, predicate, justification);
+            int symetricId = registerMappingSet(target, source, predicate, justification, true);
             registerVia(symetricId, viaLabels);
         }
         return forwardId;
@@ -169,18 +170,20 @@ public class SQLListener extends SQLBase implements MappingListener{
      * @param justification 
      * 
      */
-    private int registerMappingSet(DataSource source, DataSource target, String predicate, String justification) 
-            throws BridgeDBException {
+    private int registerMappingSet(DataSource source, DataSource target, String predicate, String justification, 
+            boolean symmetric) throws BridgeDBException {
         String query = "INSERT INTO " + MAPPING_SET_TABLE_NAME
                 + " (" + SOURCE_DATASOURCE_COLUMN_NAME + ", " 
                     + PREDICATE_COLUMN_NAME + ", " 
                     + JUSTIFICATION_COLUMN_NAME + ", "
-                    + TARGET_DATASOURCE_COLUMN_NAME + ") " 
+                    + TARGET_DATASOURCE_COLUMN_NAME + ", "
+                    + SYMMETRIC_COLUMN_NAME + ") " 
                 + " VALUES (" 
                 + "'" + getDataSourceKey(source) + "', " 
                 + "'" + predicate + "', " 
                 + "'" + justification + "', "
-                + "'" + getDataSourceKey(target) + "')";
+                + "'" + getDataSourceKey(target) + "', "
+                + booleanIntoQuery(symmetric) + ")";
         Statement statement = createStatement();
         try {
             statement.executeUpdate(query);
@@ -413,11 +416,12 @@ public class SQLListener extends SQLBase implements MappingListener{
             sh.execute("CREATE INDEX sourceMappingSetFind ON " + MAPPING_TABLE_NAME + " (" + MAPPING_SET_ID_COLUMN_NAME + ", " + SOURCE_ID_COLUMN_NAME + ") ");
          	query =	"CREATE TABLE " + MAPPING_SET_TABLE_NAME 
                     + " (" + ID_COLUMN_NAME                   + " INT " + autoIncrement + " PRIMARY KEY, " 
-                    + "     " + SOURCE_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
-                    + "     " + PREDICATE_COLUMN_NAME         + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
-                    + "     " + JUSTIFICATION_COLUMN_NAME     + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
-                    + "     " + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
-                    + "     " + MAPPING_COUNT_COLUMN_NAME     + " INT "
+                        + SOURCE_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
+                        + PREDICATE_COLUMN_NAME         + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
+                        + JUSTIFICATION_COLUMN_NAME     + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL, "
+                        + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL, "
+                        + SYMMETRIC_COLUMN_NAME + " INT, "
+                        + MAPPING_COUNT_COLUMN_NAME     + " INT "
 					+ " ) "; 
             sh.execute(query);
             sh.execute ("CREATE TABLE  "

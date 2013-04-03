@@ -33,6 +33,8 @@ public class MappingSetInfoBean {
     private String sourceSysCode;
     private String predicate;
     private String targetSysCode;
+    private String justification;
+    private boolean symmetric;
     private Integer numberOfLinks;
     private Set<String> viaSystemCode;
 
@@ -44,7 +46,7 @@ public class MappingSetInfoBean {
     
     public static MappingSetInfo asMappingSetInfo(MappingSetInfoBean bean){
         return new MappingSetInfo(bean.getId(), bean.getSourceSysCode(), bean.getPredicate(), bean.getTargetSysCode(), 
-            bean.getNumberOfLinks(), bean.getViaSystemCode());
+            bean.getJustification(), bean.isSymmetric(), bean.getViaSystemCode(), bean.getNumberOfLinks());
     }
 
     public static MappingSetInfoBean asBean(MappingSetInfo info) {
@@ -53,6 +55,8 @@ public class MappingSetInfoBean {
         bean.sourceSysCode = info.getSourceSysCode();
         bean.predicate = info.getPredicate();
         bean.targetSysCode = info.getTargetSysCode();
+        bean.justification = info.getJustification();
+        bean.symmetric = info.isSymmetric();
         bean.numberOfLinks = info.getNumberOfLinks();
         bean.viaSystemCode = info.getViaSystemCode();
         return bean;
@@ -148,6 +152,34 @@ public class MappingSetInfoBean {
      */
     public void setViaSystemCode(Set<String> viaSystemCode) {
         this.viaSystemCode = viaSystemCode;
+    }
+
+    /**
+     * @return the symmetric
+     */
+    public boolean isSymmetric() {
+        return symmetric;
+    }
+
+    /**
+     * @param symmetric the symmetric to set
+     */
+    public void setSymmetric(boolean symmetric) {
+        this.symmetric = symmetric;
+    }
+
+    /**
+     * @return the justification
+     */
+    public String getJustification() {
+        return justification;
+    }
+
+    /**
+     * @param justification the justification to set
+     */
+    public void setJustification(String justification) {
+        this.justification = justification;
     }
     
 }

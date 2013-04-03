@@ -115,7 +115,7 @@ public class DirectoriesConfig {
 
     private static void deleteChildren(File testFile) throws BridgeDBException {
         if (testFile.isFile()){
-            checkOkToDelete(testFile.getName());
+            checkOkToDelete(testFile);
             boolean check = testFile.delete();
             if (!check){
                 logger.warn("Unable to delete test file "+ testFile);
@@ -129,12 +129,13 @@ public class DirectoriesConfig {
         }
     }
 
-    private static void checkOkToDelete(String name) throws BridgeDBException {
+    private static void checkOkToDelete(File file) throws BridgeDBException {
+        String name = file.getName();
         if (name.endsWith(".ttl")) return ;
         if (name.endsWith(".n3")) return ;
         if (name.endsWith(".xml")) return ;
         if (name.endsWith(".txt")) return ;
-        throw new BridgeDBException("Unexpected file being deleted" + name);
+        throw new BridgeDBException("Unexpected file being deleted " + file.getAbsolutePath());
     }
 
 }
