@@ -168,7 +168,7 @@
 					<fileset dir="build"/>
 				</classfiles>
 				<sourcefiles encoding="UTF-8">
-					<fileset dir="test"/>
+					<fileset dir="src"/>
 				</sourcefiles>
 			</structure>
 			<html destdir="build/jacoco"/>
