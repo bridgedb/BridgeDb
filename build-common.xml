@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="BridgeDb-common" basedir=".">
+<project name="BridgeDb-common" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
 
 	<property name="checkstyle.output.file" value="warnings.txt"/>
 
@@ -7,6 +7,10 @@
 
 	<!-- Override this to put the jars in a different target directory -->
 	<property name="bundle.dest" value="../dist"/>
+
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="../org.bridgedb/build-lib/jacocoant.jar"/>
+	</taskdef>
 
 	<target name="prepare-jar-name">
 		<!-- the name of the plug-in jar is the project name of the calling build file with '.jar' appended -->
@@ -98,6 +102,12 @@
 
 	<!-- run all junit tests found in the test directory -->
 	<target name="test" depends="build" if="test.dir.exists">
+		<echo message="Run Jacoco: $runJacoco"/>
+		<antcall target="test-withoutJacoco"/>
+		<antcall target="test-withJacoco"/>
+	</target>
+	
+	<target name="test-withoutJacoco" if="runWithoutJacoco">
 		<path id="test.classpath">
 			<path refid="absolute.deps"/>
 			<path refid="transient.deps"/>
@@ -111,7 +121,7 @@
 					destdir="build"
 					source="1.5">
 			<classpath refid="test.classpath"/>
-		</javac>		
+		</javac>
 		<junit printsummary="on" haltonfailure="false" fork="true">
 			<formatter type="xml" usefile="true"/>
 			<classpath refid="test.classpath"/>
@@ -121,6 +131,50 @@
 				</fileset>
 			</batchtest>
 		</junit>
+	</target>
+	
+	<target name="test-withJacoco" unless="runWithoutJacoco">
+		<path id="test.classpath">
+			<path refid="absolute.deps"/>
+			<path refid="transient.deps"/>
+			<path refid="test.deps"/>
+			<pathelement location="resources"/>
+			<pathelement location="build"/>
+			<pathelement location="test"/>
+		</path>
+		<javac srcdir="test" debug="true" 
+					includes="**"
+					destdir="build"
+					source="1.5">
+			<classpath refid="test.classpath"/>
+		</javac>
+		<jacoco:coverage destfile="build/jacoco.exec">
+			<junit printsummary="on" haltonfailure="false" fork="true">
+				<formatter type="xml" usefile="true"/>
+				<classpath refid="test.classpath"/>
+				<batchtest>
+					<fileset dir="test">
+						<include name="**/*Test*.java"/>
+					</fileset>
+				</batchtest>
+			</junit>
+		</jacoco:coverage>
+		<jacoco:report>
+			<executiondata>
+				<file file="build/jacoco.exec"/>
+			</executiondata>
+			<structure name="JaCoCo Code Coverage Report">
+				<classfiles>
+					<fileset dir="build"/>
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="test"/>
+				</sourcefiles>
+			</structure>
+			<html destdir="build/jacoco"/>
+			<csv destfile="build/report.csv"/>
+			<xml destfile="build/report.xml"/>
+		</jacoco:report>
 	</target>
 	
 	<target name="checkstyle">
