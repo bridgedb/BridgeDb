@@ -228,7 +228,6 @@ public class LinksetVoidInformation implements MetaData {
     }
    
     private Set<String> readViaLabels(ResourceMetaData linkset){
-        System.out.println(linkset);
         Set<Value> values =  linkset.getValuesByPredicate(BridgeDBConstants.VIA_URI); 
         HashSet<String> results = new HashSet<String>();
         if (values != null){
@@ -236,7 +235,6 @@ public class LinksetVoidInformation implements MetaData {
                 results.add(value.stringValue());
             }
         }
-        System.out.println(results);
         return results;
     }
     

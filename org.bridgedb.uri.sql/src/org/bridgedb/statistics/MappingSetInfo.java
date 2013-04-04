@@ -116,8 +116,9 @@ public class MappingSetInfo {
     }
     
     public String toString(){
-        return this.id + "\n\tsourceSysCode:" + this.sourceSysCode + "\n\tpredicate:" + this.predicate + 
-                "\n\ttargetSysCode:" +this.targetSysCode + "\n\tnumberOfLinks:" + this.numberOfLinks + "\n";
+        return this.id + "\n\tsourceSysCode:" + this.sourceSysCode + "\n\tpredicate:" + this.predicate 
+                + "\n\ttargetSysCode:" + this.targetSysCode + "\n\tviaSystemCodes: " + this.viaSystemCode 
+                + "\n\tnumberOfLinks:" + this.numberOfLinks + "\n";
     }
 
     /**

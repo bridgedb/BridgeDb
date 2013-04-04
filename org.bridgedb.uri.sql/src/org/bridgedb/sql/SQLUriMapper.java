@@ -83,7 +83,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String NAME_COLUMN_NAME = "name";
     
     static final Logger logger = Logger.getLogger(SQLListener.class);
-    
+
     /**
      * Creates a new UriMapper including BridgeDB implementation based on a connection to the SQL Database.
      *
@@ -1153,6 +1153,23 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
     }
 
+    private Set<String> getViaCodes(String id) throws BridgeDBException {
+        String query = ("SELECT " + VIA_DATASOURCE_COLUMN_NAME
+                + " FROM " + VIA_TABLE_NAME 
+                + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = \"" + id + "\"");
+    	Statement statement = this.createStatement();
+        HashSet<String> results = new HashSet<String>();
+		try {
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                results.add(rs.getString(VIA_DATASOURCE_COLUMN_NAME));
+            }
+            return results;
+		} catch (SQLException e) {
+			throw new BridgeDBException("Unable to retrieve profiles.", e);
+		}
+    }
+    
     /**
      * Generates a set of Uri from a ResultSet.
      *
@@ -1239,13 +1256,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @return
      * @throws BridgeDBException
      */
-    public static List<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs ) throws BridgeDBException{
+    public List<MappingSetInfo> resultSetToMappingSetInfos(ResultSet rs ) throws BridgeDBException{
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
         try {
             while (rs.next()){
                 Integer count = rs.getInt(MAPPING_COUNT_COLUMN_NAME);
                 String id = rs.getString(ID_COLUMN_NAME);
-                Set<String> viaSysCodes = new HashSet<String>();
+                Set<String> viaSysCodes = getViaCodes(id);
                 results.add(new MappingSetInfo(id, rs.getString(SOURCE_DATASOURCE_COLUMN_NAME),  
                         rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), 
                         rs.getString(JUSTIFICATION_COLUMN_NAME), rs.getInt(SYMMETRIC_COLUMN_NAME), viaSysCodes ,count));

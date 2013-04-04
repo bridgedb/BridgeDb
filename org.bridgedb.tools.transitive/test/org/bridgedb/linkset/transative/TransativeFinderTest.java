@@ -52,7 +52,9 @@ public class TransativeFinderTest extends TestUtils  {
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData( StoreType.TEST);        
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample5To4.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To4.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
 
     @Test
@@ -60,7 +62,7 @@ public class TransativeFinderTest extends TestUtils  {
         report("testFinder");
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
         transativeFinder.UpdateTransative();
-        report("testFinderDone");
+       report("testFinderDone");
 	}
 	
 
