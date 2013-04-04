@@ -28,6 +28,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 
 import buildsystem.Measure;
 
@@ -44,6 +45,7 @@ public class Test {
 	}
 
 	@org.junit.Test
+        @Ignore
 	public void testDerbyClient() throws IDMapperException, ClassNotFoundException
 	{
 		long start, end, delta;
