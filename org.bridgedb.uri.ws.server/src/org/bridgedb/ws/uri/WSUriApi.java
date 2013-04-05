@@ -156,11 +156,11 @@ public class WSUriApi extends WSCoreApi {
         sb.append("<dd>Returns the DataSource and associated UriSpace(s) with a specific id</dd>");
     }
     
-    protected final void describe_UriMapper(StringBuilder sb, String sourceUri1, String sourceUri2, String targetUriSpace2, 
-            String text, int mappingId, String sysCode, boolean freeSearchSupported) 
+    protected final void describe_UriMapper(StringBuilder sb, Xref sourceXref1, String sourceUri1, Xref sourceXref2, 
+            String sourceUri2, String targetUriSpace2, String text, int mappingId, String sysCode, boolean freeSearchSupported) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h2>URI based methods</h2>");
-        describe_map(sb, sourceUri1, sourceUri2, targetUriSpace2);
+        describe_map(sb, sourceXref1, sourceUri1, sourceXref2, sourceUri2, targetUriSpace2);
         describe_mapUri(sb, sourceUri1, sourceUri2, targetUriSpace2);
         describe_uriExists(sb, sourceUri1);
         if (freeSearchSupported) {
@@ -170,8 +170,8 @@ public class WSUriApi extends WSCoreApi {
         describe_dataSource(sb, sysCode);
     }
         
-    private void describe_map(StringBuilder sb, String sourceUri1, String sourceUri2, String targetUriSpace2) 
-            throws UnsupportedEncodingException, BridgeDBException{
+    private void describe_map(StringBuilder sb, Xref sourceXref1, String sourceUri1, Xref sourceXref2, 
+            String sourceUri2, String targetUriSpace2) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.MAP);
                 sb.append("\">");
@@ -258,6 +258,31 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(targetUriSpace2);
                 sb.append("</a></li>");    
                 sb.append("<li>There is currently no Profile Example as there in no Profile Data Loaded. </li>");
+            sb.append("<li>Example: <a href=\"");
+                sb.append(RdfConfig.getTheBaseURI());
+                    StringBuilder front = new StringBuilder(WsConstants.MAP_ID);
+                    StringBuilder sbInnerPure = new StringBuilder(WsConstants.MAP_ID);
+                    StringBuilder sbInnerEncoded = new StringBuilder(WsConstants.MAP_ID);
+                    sbInnerPure.append(FIRST_ID_PARAMETER);
+                    sbInnerEncoded.append(FIRST_ID_PARAMETER);
+                    sbInnerPure.append(sourceXref1.getId());
+                    sbInnerEncoded.append(sourceXref1.getId());
+                    sbInnerPure.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sbInnerEncoded.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sbInnerPure.append(sourceXref1.getDataSource().getSystemCode());
+                    sbInnerEncoded.append(URLEncoder.encode(sourceXref1.getDataSource().getSystemCode(), "UTF-8"));
+                    sbInnerPure.append(ID_PARAMETER);
+                    sbInnerEncoded.append(ID_PARAMETER);
+                    sbInnerPure.append(sourceXref2.getId());
+                    sbInnerEncoded.append(URLEncoder.encode(sourceXref2.getId(), "UTF-8"));
+                    sbInnerPure.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sbInnerEncoded.append(DATASOURCE_SYSTEM_CODE_PARAMETER);
+                    sbInnerPure.append(sourceXref2.getDataSource().getSystemCode());
+                    sbInnerEncoded.append(URLEncoder.encode(sourceXref2.getDataSource().getSystemCode(), "UTF-8"));
+                    sb.append(sbInnerEncoded.toString());
+                    sb.append("\">");
+                    sb.append(sbInnerPure.toString());
+                    sb.append("</a></li>");    
             sb.append("</ul>");
     }
     

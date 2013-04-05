@@ -57,10 +57,12 @@ public class TransativeFinder extends SQLBase{
         }
         for (int i = lastTranstativeLoaded + 1; i <= maxMappingSet; i++){
             MappingSetInfo info = mapper.getMappingSetInfo(i);
-            if (info.isSymmetric()){
-                i++;
+            //if (info.isSymmetric()){
+            //    i++;
+            //}
+            if (!info.isTransitive()){
+                computeTransative(info, true);
             }
-            computeTransative(info);
         }
         mapper.putProperty(LAST_TRANSATIVEL_LOADED_KEY, "" + maxMappingSet);
         int newMaxMappingSet = getMaxMappingSet();
@@ -69,16 +71,16 @@ public class TransativeFinder extends SQLBase{
         }
     }
    
-    private void computeTransative(MappingSetInfo info) throws BridgeDBException, RDFHandlerException, IOException {
+    private void computeTransative(MappingSetInfo info, boolean beforeAndAfter) throws BridgeDBException, RDFHandlerException, IOException {
         System.out.println ("Do transtaive mappingset " + info.getId());
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
-            System.out.println("checking " + possibleInfo.getId());
+            //ystem.out.println("checking " + possibleInfo.getId());
             if (checkValidTransative(possibleInfo, info)){
                 doTransative(possibleInfo, info);
             }
-            System.out.println("checking inverse " + possibleInfo.getId());
+            //ystem.out.println("checking inverse " + possibleInfo.getId());
             if (checkValidTransative(info, possibleInfo)){
                 doTransative(info, possibleInfo);
             }
@@ -101,16 +103,16 @@ public class TransativeFinder extends SQLBase{
     }
     
     private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right) {
+        //Left dource must be less than right source
+        if (left.getSourceSysCode().compareTo(right.getTargetSysCode()) >= 0){
+            //ystem.out.println ("Loop " + left.getId() + " -> " + right.getId());
+            //ystem.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
+            return false;
+        }
         //Must match in the middle
         if (!left.getTargetSysCode().equals(right.getSourceSysCode())){
             //ystem.out.println ("No match " + left.getId() + " -> " + right.getId());
             //stem.out.println ("    " + left.getTargetSysCode() + " != " + right.getSourceSysCode());
-            return false;
-        }
-        //Chain must not start and end with the same thing
-        if (left.getSourceSysCode().equals(right.getTargetSysCode())){
-            //ystem.out.println ("Loop " + left.getId() + " -> " + right.getId());
-            //ystem.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
             return false;
         }
         //If Either is transantive only connect if left is a lower number
@@ -164,9 +166,13 @@ public class TransativeFinder extends SQLBase{
         Reporter.println("Creating tranasative from " + leftId + " to " + rightId);
         System.out.println(left);
         System.out.println(right);
-        File fileName = TransativeCreator.createTransative(left, right, storeType);
-        Reporter.println("Created " + fileName);
-        linksetLoader.load(fileName.getAbsolutePath(), storeType, ValidationType.LINKSMINIMAL);
+        File fileName = TransativeCreator.doTransativeIfPossible(left, right, storeType);
+        if (fileName == null){
+            Reporter.println ("No transative links found");
+        } else {
+            Reporter.println("Created " + fileName);
+            linksetLoader.load(fileName.getAbsolutePath(), storeType, ValidationType.LINKSMINIMAL);
+        }
     }
 
     private int getMaxMappingSet() throws BridgeDBException {

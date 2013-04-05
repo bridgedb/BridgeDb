@@ -676,7 +676,7 @@ bridgeDB:DataSource_Chembl_Old_Molecule a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> ;
-	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/molecule/m$id> , <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> .
+	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> , <http://linkedchemistry.info/chembl/molecule/m$id> .
 
 bridgeDB:DataSource_Chembl_Old_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Old Target" ;

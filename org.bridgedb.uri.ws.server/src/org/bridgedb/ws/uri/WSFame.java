@@ -149,7 +149,8 @@ public class WSFame extends WSUriInterfaceService {
         
         api.describe_IDMapper(sb, sourceXref1, tragetSysCode1, sourceXref2, freeSearchSupported);
         api.describe_IDMapperCapabilities(sb, sourceXref1, tragetSysCode1, keys, freeSearchSupported);
-        api.describe_UriMapper(sb, sourceUri1, sourceUri2, targetUriSpace2, text1, 1, sourceSysCode1, freeSearchSupported);
+        api.describe_UriMapper(sb, sourceXref1, sourceUri1, sourceXref2, sourceUri2, targetUriSpace2, 
+                text1, 1, sourceSysCode1, freeSearchSupported);
         api.describe_Info(sb, sourceXref1, sourceSysCode1, tragetSysCode1);
         api.describe_Graphviz(sb);
         

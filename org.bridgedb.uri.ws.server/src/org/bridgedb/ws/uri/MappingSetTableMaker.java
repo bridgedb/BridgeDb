@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -378,12 +379,17 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             sb.append("</td>\n");
    }
 
-    private void addTransative(StringBuilder sb, int i) {
+    private void addTransative(StringBuilder sb, int i) throws BridgeDBException {
         sb.append("\t\t<td>");
-        if (infos[i].isTransitive()){
-            sb.append("true");
-        } else {
-            sb.append("false");            
+        Set<String> viaSet = infos[i].getViaSystemCode();
+        int size = viaSet.size();
+        int count = 0;
+        for (String sysCode:viaSet){
+            addDataSourceLink(sb, sysCode);
+            count++;
+            if (count < size){
+                sb.append(", ");
+            }
         }
         sb.append("</td>\n");
         sb.append("\t</tr>\n");

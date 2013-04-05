@@ -38,9 +38,9 @@ public class WSCoreApi {
     }
             
     static final String ID_CODE = "id_code";
-    private static final String FIRST_ID_PARAMETER = "?" + WsConstants.ID + "=";
-    private static final String ID_PARAMETER = "&" + WsConstants.ID + "=";
-    private static final String DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsConstants.DATASOURCE_SYSTEM_CODE + "=";
+    static final String FIRST_ID_PARAMETER = "?" + WsConstants.ID + "=";
+    static final String ID_PARAMETER = "&" + WsConstants.ID + "=";
+    static final String DATASOURCE_SYSTEM_CODE_PARAMETER = "&" + WsConstants.DATASOURCE_SYSTEM_CODE + "=";
     final static String FIRST_SOURCE_PARAMETER = "?" + WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE + "=";
     final static String TARGET_PARAMETER = "&" + WsConstants.TARGET_DATASOURCE_SYSTEM_CODE + "=";
     final static String FIRST_TEXT_PARAMETER = "?" + WsConstants.TEXT + "=";

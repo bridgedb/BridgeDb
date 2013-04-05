@@ -52,7 +52,7 @@ public class WSVoidService extends WSFame{
             
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/getMappingInfo")
+    @Path("/" + WsUriConstants.GET_MAPPING_INFO)
     public Response getMappingInfo(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
             @Context HttpServletRequest httpServletRequest) 

@@ -116,13 +116,17 @@ public class TransativeCreator {
         System.out.println(rightContext);
     }
             
-    public static File createTransative(MappingSetInfo left, MappingSetInfo right, StoreType storeType) 
+    public static File doTransativeIfPossible(MappingSetInfo left, MappingSetInfo right, StoreType storeType) 
             throws RDFHandlerException, IOException, BridgeDBException {
         File parent = DirectoriesConfig.getTransativeDirectory();
         File file = new File(parent, "TransativeLinkset" + left.getId() + "and" + right.getId() + ".ttl");
-        Reporter.println(createTransative(left, right, file,  storeType, 
-                GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY));
-        return file;
+        boolean result = doTransative(left, right, file,  storeType, 
+                GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        if (result){
+            return file;    
+        } else {
+            return null;
+        }
     }
  
     public static String createTransative(int leftId, int rightId, File file, StoreType storeType) 
@@ -153,6 +157,18 @@ public class TransativeCreator {
         return message;
     }
  
+    private static boolean doTransative(MappingSetInfo left, MappingSetInfo right, File file, StoreType storeType, 
+            URI predicate, URI license, URI derivedBy) 
+            throws RDFHandlerException, IOException, BridgeDBException{
+        if (license != null && derivedBy == null){
+            throw new BridgeDBException("To change the " + LICENSE + " you must declare who you are using the " + 
+                    DERIVED_BY + " parameter.");
+        }
+        TransativeCreator creator = new TransativeCreator(left, right, file, storeType);
+        predicate = creator.getVoid(predicate, license, derivedBy);
+        return creator.getSQL(predicate);
+    }
+
     private synchronized URI getVoid(URI predicate, URI license, URI derivedBy) 
             throws RDFHandlerException, IOException, BridgeDBException{
         checkMappable();
@@ -358,7 +374,8 @@ public class TransativeCreator {
         }
     }
        
-    private void getSQL(URI newPredicate) throws BridgeDBException, IOException {
+    private boolean getSQL(URI newPredicate) throws BridgeDBException, IOException {
+        boolean found = false;
         buffer.newLine();
         StringBuilder query = new StringBuilder(
                 "SELECT mapping1.sourceId, mapping2.targetId ");
@@ -383,6 +400,7 @@ public class TransativeCreator {
             ResultSet rs = statement.executeQuery(query.toString());
             logger.info("processing results");
             while (rs.next()){
+                found = true;
                 String sourceId = rs.getString("mapping1.sourceId");
                 String targetId = rs.getString("mapping2.targetId");
                 buffer.write("<");
@@ -402,6 +420,7 @@ public class TransativeCreator {
         }
         buffer.flush();
         buffer.close();
+        return found;
     }
     
     public static void usage(String issue) {
