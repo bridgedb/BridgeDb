@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.linkset.transative.TransativeCreator;
+import org.bridgedb.linkset.transative.TransativeFinder;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -43,22 +44,37 @@ public class RunLoader {
 
         LinksetLoader linksetLoader = new LinksetLoader();
 
-        String root = "C:/Dropbox/linksets/";
-        //String root = "/var/local/ops/linksets/";
         linksetLoader.clearExistingData(StoreType.LOAD);
-        linksetLoader.load(root + "originals/ConceptWiki-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/ConceptWiki-DrugbankTargets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/ConceptWiki-GO.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/ConceptWiki-MSH.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/ConceptWiki-NCIM.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/ConceptWiki-Pdb.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/ConceptWiki-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/Chembl13Id-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/Chembl13Molecule-Chembl13Id_nov12.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/Chembl13Targets-Enzyme.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/Chembl13Targets-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/ChemSpider-DrugBankDrugs.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load(root + "originals/Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);        
+        
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/0BCh1lgh5Y/ChemblOldMolecule-ChemblOldId.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/o0uW19eXTP/ChemblOldTargets-Enzyme.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/XUg5S95NCN/ChemblOldTargets-Swissprot.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/rIGy-VEUZz/ChembOldTargets-ChemblOldId.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);        
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/W-nCm0Hnng/ConceptWiki-ChemSpider.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/-R2Lk9v6LR/Chembl13Id-ChemSpider.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/kSw8IvOeoG/ConceptWiki-DrugbankTargets.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/DC2-xLuP17/ConceptWiki-GO.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/b_Z9uhjI4q/ConceptWiki-MSH.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/047fIfSYK_/ConceptWiki-NCIM.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/07u4Id54ax/ConceptWiki-Pdb.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/yONUjfxBcQ/ConceptWiki-Swissprot.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/8RQlU-RH7m/ChemSpider-DrugBankDrugs.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.LOAD);
+        transativeFinder.UpdateTransative();
+
     }
 
 }
