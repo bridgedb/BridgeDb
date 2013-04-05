@@ -1139,8 +1139,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     logger.error("  sql has " + keyToDataSource(storedKey) + " obtained from " + storedKey);
                 }
 			} else {
-                System.out.println(query);
-                throw new BridgeDBException("Unregistered pattern. " + pattern);
+               throw new BridgeDBException("Unregistered pattern. " + pattern);
             }
 		} catch (SQLException e) {
 			throw new BridgeDBException("Unable to check pattern. " + query, e);
@@ -1150,25 +1149,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public void insertUriMapping(String sourceUri, String targetUri, int mappingSet, boolean symetric) throws BridgeDBException {
         Xref sourceXref = toXref(sourceUri);
-        System.out.println(sourceUri);
-        System.out.println(sourceXref);
-        if (sourceXref == null){
+       if (sourceXref == null){
             throw new BridgeDBException("Unable to convert sourceUri " + sourceUri);
         }
         String sourceId = sourceXref.getId();
-        if (sourceId.startsWith("m")){
-            System.out.println(sourceUri);
-            int error = 1/0;
-        }
         Xref targetXref = toXref(targetUri);
         if (targetXref == null){
             throw new BridgeDBException("Unable to convert targetUri " + targetUri);
         }
         String targetId = targetXref.getId();
-        if (targetId.startsWith("m")){
-            System.out.println(targetUri);
-            int error = 1/0;
-        }
         this.insertLink(sourceId, targetId, mappingSet, symetric);
     }
 

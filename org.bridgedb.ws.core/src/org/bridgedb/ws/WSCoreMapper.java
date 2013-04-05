@@ -71,7 +71,6 @@ public class WSCoreMapper implements IDMapper, IDMapperCapabilities {
             Xref source = null;
             Set<Xref> targets = null;
             if (bean.getSource() != null){
-                System.out.println(bean.getSource());
                 source = XrefBean.asXref(bean.getSource());
                 targets = results.get(source);
             }
