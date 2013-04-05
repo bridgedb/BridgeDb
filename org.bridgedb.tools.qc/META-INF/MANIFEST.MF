@@ -7,4 +7,5 @@ Export-Package: org.bridgedb.tools.qc
 Require-Bundle: org.bridgedb;bundle-version="1.1.0",
  org.bridgedb.bio;bundle-version="1.1.0",
  org.bridgedb.rdb;bundle-version="1.1.0",
- org.bridgedb.rdb.construct;bundle-version="1.1.0"
+ org.bridgedb.rdb.construct;bundle-version="1.1.0",
+ com.google.collect;bundle-version="1.0.0"
