@@ -52,7 +52,7 @@ public class WSOpsServer extends WSLinksetService{
     	sb.append("<form method=\"get\" action=\"/");
         sb.append(getServiceName());
     	sb.append("/");
-    	sb.append(WsUriConstants.MAP);
+    	sb.append(WsUriConstants.MAP_URI);
     	sb.append("\">");
     	sb.append("<fieldset>");
     	sb.append("<legend>Mapper</legend>");
@@ -133,13 +133,22 @@ public class WSOpsServer extends WSLinksetService{
         uriMappingForm(sb);
         
         sb.append("<h2>Usage Information</h2>");
-        sb.append("\n<p>The Main OPS method is <a href=\"/");
+        sb.append("\n<p>The Main OPS method are: <ul>");
+        sb.append("\n<dt><a href=\"/");
+        sb.append(getServiceName());
+        sb.append("/api/#");
+        sb.append(WsUriConstants.MAP_URI);
+        sb.append("\">");
+        sb.append(WsUriConstants.MAP_URI);
+        sb.append("<dt><dd>List the URIs that map to this/these URI(s)</dd>");
+        sb.append("\n<dt><a href=\"/");
         sb.append(getServiceName());
         sb.append("/api/#");
         sb.append(WsUriConstants.MAP);
         sb.append("\">");
         sb.append(WsUriConstants.MAP);
-        sb.append("<dd>List the URIs that map to this URI</dd>");
+        sb.append("<dt><dd>List the full Mappings to this URI/Xref</dd>");
+        sb.append("</ul>");
         sb.append("\n<p><a href=\"/");
         sb.append(getServiceName());
         sb.append("/api\">API Page</a></p>");

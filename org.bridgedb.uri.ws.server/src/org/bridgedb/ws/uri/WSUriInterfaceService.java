@@ -171,7 +171,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
        for(String single:uris){
            results.addAll(uriMapper.mapUri(single, profileUri, targetPatterns));
        }
-       return UriMappings.asBean(uris, results);
+       return UriMappings.asBean(results);
     }
 
     /**

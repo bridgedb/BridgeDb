@@ -38,7 +38,6 @@ import org.bridgedb.uri.Mapping;
 @XmlRootElement(name="Mapping")
 public class UriMappings {
  
-    private Set<String> sourceUri;
     private Set<String> targetUri;
     
     /**
@@ -47,34 +46,12 @@ public class UriMappings {
     public UriMappings(){
     }
     
-    public static UriMappings asBean(List<String> sources, Set<String> targets){
+    public static UriMappings asBean(Set<String> targets){
         UriMappings bean = new UriMappings();
-        bean.setSourceUri(sources);
         bean.setTargetUri(targets);
         return bean;
     }
 
-    /**
-     * @return the sourceUri
-     */
-    public Set<String> getSourceUri() {
-        return sourceUri;
-    }
-
-    /**
-     * @param sourceUri the sourceUri to set
-     */
-    public void setSourceUri(Set<String> sourceUri) {
-        this.sourceUri = sourceUri;
-    }
-
-    /**
-     * @param sourceUri the sourceUri to set
-     */
-    public void setSourceUri(List<String> sourceUri) {
-        this.sourceUri = new HashSet(sourceUri);
-    }
-    
     /**
      * @return the targetUri
      */
