@@ -155,25 +155,35 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.MAP_URI)
     public UriMappings mapUri(
-    		@QueryParam(WsUriConstants.URI) List<String> uri,
+    		@QueryParam(WsUriConstants.URI) List<String> uris,
      		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
-            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) String targetUriPattern) throws BridgeDBException {
+            @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
        if (logger.isDebugEnabled()){
             logger.debug("map called! ");
-            if (uri != null){
-                logger.debug("   uri = " + uri);             
-            }
+            logger.debug("   uri = " + uris);             
             logger.debug("   profileUri = " + profileUri);
-            if (targetUriPattern!= null && !targetUriPattern.isEmpty()){
-                logger.debug("   targetUriPatterns = " + targetUriPattern);
+            if (targetUriPatterns!= null && !targetUriPatterns.isEmpty()){
+                logger.debug("   targetUriPatterns = " + targetUriPatterns);
             }
-        }
-       Set<String> results = new HashSet<String>();
-       UriPattern pattern = UriPattern.existingByPattern(targetUriPattern);
-       for(String single:uri){
-           results.addAll(uriMapper.mapUri(profileUri, profileUri, pattern));
        }
-       return UriMappings.asBean(uri, results);
+       Set<String> results = new HashSet<String>();
+       UriPattern[] targetPatterns = getUriPatterns(targetUriPatterns);
+       for(String single:uris){
+           results.addAll(uriMapper.mapUri(single, profileUri, targetPatterns));
+       }
+       return UriMappings.asBean(uris, results);
+    }
+
+    /**
+     * @deprecated
+     */
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.MAP_URL)
+    public List<MappingBean> mapUrl(
+    		@QueryParam(WsUriConstants.URL) String url,
+            @QueryParam(WsUriConstants.TARGET_URI_SPACE) List<String> targetUriPatterns) throws BridgeDBException {
+        return this.map(null, null, url, null, null, targetUriPatterns);
     }
 
     private List<MappingBean> map(String uri, String profileUri, DataSource[] targetDataSources, 

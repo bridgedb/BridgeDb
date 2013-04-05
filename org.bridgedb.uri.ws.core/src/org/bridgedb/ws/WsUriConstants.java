@@ -25,10 +25,6 @@ package org.bridgedb.ws;
  */
 public class WsUriConstants extends WsConstants{
     
-    public static final String TARGET_URI_PATTERN = "targetUriPattern";
-    public static final String PROFILE_URI = "profileUri";
-    public static final String URI = "Uri";
-    public static final String XML = "XML";
     
     public static final String DATA_SOURCE = "dataSource";
     public static final String GET_MAPPING_INFO = "getMappingInfo";
@@ -38,8 +34,17 @@ public class WsUriConstants extends WsConstants{
     public static final String MAPPING = "mapping";
     public static final String MAP = "map";
     public static final String MAP_URI = "mapUri";
+    public static final String MAP_URL = "mapURL";
+    public static final String PROFILE_URI = "profileUri";
     public static final String SQL_COMPAT_VERSION = "SqlCompatVersion";
+    public static final String TARGET_URI_PATTERN = "targetUriPattern";
+    /** @deprecated */
+    public static final String TARGET_URI_SPACE = "targetURISpace";
     public static final String TO_XREF = "toXref";
+    public static final String URI = "Uri";
+    /** @deprecated */
+    public static final String URL = "Url";
     public static final String URI_EXISTS = "UriExists";
     public static final String URI_SEARCH = "UriSearch";
+    public static final String XML = "XML";
 }

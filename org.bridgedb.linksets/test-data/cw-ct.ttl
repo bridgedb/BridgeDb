@@ -25,7 +25,7 @@
     void:uriSpace <http://www.conceptwiki.org/concept/> .
 :chembl13_targets a void:Dataset ;
 	dcterms:title "ChEMBL Targets"^^xsd:string ;
-    void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/target/> .
+    void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/target/t> .
    
 <http://www.conceptwiki.org/concept/516c9a26-885c-4920-9a13-d0a68cf99084> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/target/t11063> .
 <http://www.conceptwiki.org/concept/ccd4a66b-c18c-48d3-947e-6845360c024b> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/target/t10712> .
