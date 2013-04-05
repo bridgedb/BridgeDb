@@ -52,6 +52,6 @@
     void:triples "1073967"^^xsd:integer ;
     .
 
-chembl:CHEMBL1236438 skos:exactMatch <http://rdf.chemspider.com/43> .
-chembl:CHEMBL144103 skos:exactMatch <http://rdf.chemspider.com/60> .
+<http://linkedchemistry.info/chembl/molecule/m1236438> skos:exactMatch <http://rdf.chemspider.com/43> .
+<http://linkedchemistry.info/chembl/molecule/m144103> skos:exactMatch <http://rdf.chemspider.com/60> .
 #...

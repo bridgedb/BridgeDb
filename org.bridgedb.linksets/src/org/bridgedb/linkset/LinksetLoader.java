@@ -257,7 +257,7 @@ public class LinksetLoader implements LinksetInterface{
         }
         RdfFactory.clear(storeType);
         logger.info(storeType + " RDF cleared");
-        UriListener listener = new SQLUriMapper(true, storeType);
+        UriListener listener = SQLUriMapper.factory(true, storeType);
         logger.info(storeType + " SQL cleared");                
     }
 

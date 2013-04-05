@@ -102,7 +102,7 @@ public class TransativeCreator {
     private TransativeCreator(MappingSetInfo left, MappingSetInfo right, File file, StoreType storeType) 
             throws BridgeDBException, IOException{
         sqlAccess = SqlFactory.createTheSQLAccess(storeType);
-        mapper = new SQLUriMapper(false, storeType);
+        mapper = SQLUriMapper.factory(false, storeType);
         this.storeType = storeType;
         leftInfo = left;
         rightInfo = right;

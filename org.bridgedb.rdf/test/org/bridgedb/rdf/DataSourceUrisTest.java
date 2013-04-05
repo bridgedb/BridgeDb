@@ -212,8 +212,10 @@ public class DataSourceUrisTest extends TestUtils{
     public void testGetUriPatterns() throws BridgeDBException{
         BridgeDBRdfHandler.parseRdfFile(file1);
         DataSource dataSource =  DataSource.getBySystemCode("Cs");
+        System.out.println(dataSource);
         DataSourceUris dataSourceUris = DataSourceUris.byDataSource(dataSource);
         Set<UriPattern> result = dataSourceUris.getUriPatterns();
+        System.out.println(result);
         UriPattern pattern = UriPattern.byPattern("http://www.chemspider.com/Chemical-Structure.$id.html");
         assertThat (result, hasItem(pattern));
         pattern = UriPattern.byPattern("http://identifiers.org/chemspider/$id");

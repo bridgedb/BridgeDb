@@ -27,7 +27,7 @@
    void:uriSpace <http://rdf.chemspider.com/> .
 :chemblMolecule a void:Dataset ;
 	dcterms:title "ChEMBL Molecule"^^xsd:string ;
-    void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/molecule/> .
+    void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/molecule/m> .
    
 <http://rdf.chemspider.com/187440> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m276734> .
 <http://rdf.chemspider.com/18> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m370186> .

@@ -186,7 +186,7 @@ public class LinksetLoaderImplentation{
     }
     
     private void linksetLoad() throws BridgeDBException{
-        UriListener urlListener = new SQLUriMapper(false, storeType);
+        UriListener urlListener = SQLUriMapper.factory(false, storeType);
         getLinksetContexts(urlListener);
         resetBaseURI();
         loadVoid();

@@ -85,7 +85,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected WSUriInterfaceService() throws BridgeDBException {
         super();
         this.linksetInterface = new LinksetLoader();
-        uriMapper = new SQLUriMapper(false, StoreType.LIVE);
+        uriMapper = SQLUriMapper.factory(false, StoreType.LIVE);
         idMapper = uriMapper;
     }
 

@@ -36,7 +36,7 @@
     dcterms:license "unknown" ;
     dcterms:subject "unknown" ;
     pav:version "unknown" ;
-    void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/molecule/> .
+    void:uriSpace <http://data.kasabi.com/dataset/chembl-rdf/molecule/m> .
    
 <http://www.conceptwiki.org/concept/38932552-111f-4a4e-a46a-4ed1d7bdf9d5> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m276734> .
 <http://www.conceptwiki.org/concept/bd42675d-9966-48f5-b42e-f6a0c5ec6794> skos:exactMatch <http://data.kasabi.com/dataset/chembl-rdf/molecule/m370186> .

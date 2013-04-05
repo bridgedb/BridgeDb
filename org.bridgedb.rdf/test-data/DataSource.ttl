@@ -649,53 +649,6 @@ bridgeDB:DataSource_ChemBank a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembank/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id> .
 
-bridgeDB:DataSource_Chembl_13_Internal a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl 13 Internal" ;
-	bridgeDB:systemCode "Chembl13Internal" ;
-	bridgeDB:idExample "CHEMBL6329" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id> .
-
-bridgeDB:DataSource_Chembl_13_Molecule a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl 13 Molecule" ;
-	bridgeDB:systemCode "Chembl13Molecule" ;
-	bridgeDB:idExample "m1" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/$id> ;
-	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/molecule/$id> .
-
-bridgeDB:DataSource_Chembl_13_Target a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl 13 Target" ;
-	bridgeDB:systemCode "Chembl13Target" ;
-	bridgeDB:idExample "t1" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/target/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/target/$id> ;
-	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/target/$id> .
-
-bridgeDB:DataSource_Chembl_2_Compound a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl 2 Compound" ;
-	bridgeDB:systemCode "Chembl2Compound" ;
-	bridgeDB:idExample "698788" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> .
-
-bridgeDB:DataSource_Chembl_2_Target a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl 2 Target" ;
-	bridgeDB:systemCode "Chembl2Target" ;
-	bridgeDB:idExample "698788" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> .
-
 bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL compound" ;
 	bridgeDB:mainUrl "https://www.ebi.ac.uk/chembldb/" ;
@@ -705,6 +658,35 @@ bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> ;
 	bridgeDB:hasWikiPathwaysPattern <https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> .
+
+bridgeDB:DataSource_Chembl_Old_Internal a bridgeDB:DataSource ;
+	bridgeDB:fullName "Chembl Old Internal" ;
+	bridgeDB:systemCode "ChemblOldInternal" ;
+	bridgeDB:idExample "CHEMBL6329" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id> .
+
+bridgeDB:DataSource_Chembl_Old_Molecule a bridgeDB:DataSource ;
+	bridgeDB:fullName "Chembl Old Molecule" ;
+	bridgeDB:systemCode "ChemblOldMolecule" ;
+	bridgeDB:idExample "1" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> ;
+	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> , <http://linkedchemistry.info/chembl/molecule/m$id> .
+
+bridgeDB:DataSource_Chembl_Old_Target a bridgeDB:DataSource ;
+	bridgeDB:fullName "Chembl Old Target" ;
+	bridgeDB:systemCode "ChemblOldTarget" ;
+	bridgeDB:idExample "1" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/target/t$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/target/t$id> ;
+	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/target/t$id> , <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> .
 
 bridgeDB:DataSource_ChEMBL_target a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL target" ;
@@ -5034,11 +5016,11 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://chem2bio2rdf.org/chembl/resource/chembl_compounds/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_2_Compound .
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_Old_Molecule .
 
 <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://chem2bio2rdf.org/chembl/resource/chembl_targets/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_2_Target .
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_Old_Target .
 
 <http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=" ;
@@ -5103,15 +5085,15 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/chemblid/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_13_Internal .
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_Old_Internal .
 
-<http://data.kasabi.com/dataset/chembl-rdf/molecule/$id> a bridgeDB:uriPattern ;
-	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/molecule/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_13_Molecule .
+<http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/molecule/m" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_Old_Molecule .
 
-<http://data.kasabi.com/dataset/chembl-rdf/target/$id> a bridgeDB:uriPattern ;
-	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/target/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_13_Target .
+<http://data.kasabi.com/dataset/chembl-rdf/target/t$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://data.kasabi.com/dataset/chembl-rdf/target/t" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_Old_Target .
 
 <https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/Summarize_Peptide?query=QUERY&searchForThis=" ;
@@ -6721,13 +6703,13 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:postfix "&operation=ccid" ;
 	bridgeDB:isUriPatternOf bridgeDB:DataSource_Ligand_Expo .
 
-<http://linkedchemistry.info/chembl/molecule/$id> a bridgeDB:uriPattern ;
-	<http://rdfs.org/ns/void#uriSpace> "http://linkedchemistry.info/chembl/molecule/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_13_Molecule .
+<http://linkedchemistry.info/chembl/molecule/m$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://linkedchemistry.info/chembl/molecule/m" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_Old_Molecule .
 
-<http://linkedchemistry.info/chembl/target/$id> a bridgeDB:uriPattern ;
-	<http://rdfs.org/ns/void#uriSpace> "http://linkedchemistry.info/chembl/target/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_13_Target .
+<http://linkedchemistry.info/chembl/target/t$id> a bridgeDB:uriPattern ;
+	<http://rdfs.org/ns/void#uriSpace> "http://linkedchemistry.info/chembl/target/t" ;
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Chembl_Old_Target .
 
 <http://lipidbank.jp/cgi-bin/detail.cgi?id=$id> a bridgeDB:uriPattern ;
 	<http://rdfs.org/ns/void#uriSpace> "http://lipidbank.jp/cgi-bin/detail.cgi?id=" ;

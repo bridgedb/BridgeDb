@@ -676,8 +676,8 @@ bridgeDB:DataSource_Chembl_13_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl 13 Target" ;
     bridgeDB:systemCode "Chembl 13 Target" ;
     bridgeDB:idExample "t1";
-	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/target/$id> ;
-    bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/target/$id> .
+	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/target/t$id> ;
+    bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/target/t$id> .
 
 bridgeDB:DataSource_ConceptWiki a bridgeDB:DataSource ;
 	bridgeDB:fullName "ConceptWiki" ;

@@ -65,6 +65,9 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
             
     private UriPattern(String namespace){
         this.nameSpace = namespace;
+        if (nameSpace.contentEquals("http://data.kasabi.com/dataset/chembl-rdf/molecule/")){
+            int error = 1/0;
+        }
         this.postfix = "";
         byNameSpaceOnly.put(namespace, this);
         register.put(getResourceId(), this);

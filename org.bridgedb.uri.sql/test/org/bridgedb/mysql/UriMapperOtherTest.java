@@ -42,9 +42,9 @@ public class UriMapperOtherTest extends org.bridgedb.uri.UriMapperOtherTest {
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
-        listener = new SQLUriMapper(true, StoreType.TEST);
+        listener = SQLUriMapper.factory(true, StoreType.TEST);
         loadData();
-        uriMapper =new SQLUriMapper(false, StoreType.TEST);
+        uriMapper = SQLUriMapper.factory(false, StoreType.TEST);
     }
             
 }

@@ -265,6 +265,9 @@ public class SQLListener extends SQLBase implements MappingListener{
     
     @Override
     public void insertLink(String sourceId, String targetId, int mappingSet, boolean symetric) throws BridgeDBException {
+        if (sourceId.startsWith("m")){
+            int error = 1/0;
+        }
         insertLink(sourceId, targetId, mappingSet);
         if (symetric){
             insertLink(targetId, sourceId, mappingSet + 1);

@@ -123,16 +123,16 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         map1Axref3 = new Xref(ds3Id1+"_A", DataSource3);
         map2Axref1 = new Xref("bd42675d-9966-48f5-b42e-f6a0c5ec6794_A", DataSource1);
         map2Axref2 = new Xref(ds2Id2+"_A", DataSource2);
-        map2Axref3 = new Xref("m370186_A", DataSource3);
+        map2Axref3 = new Xref("370186_A", DataSource3);
         map3Axref1 = new Xref("9d4a6a08-6757-4ff2-98c1-e3c8b3e095cc_A", DataSource1);
         map3Axref2 = new Xref(ds2Id3+"_A" , DataSource2);
-        map3Axref3 = new Xref("m520018_A", DataSource3);
+        map3Axref3 = new Xref("520018_A", DataSource3);
 
         uriSpace1 = "http://www.conceptwiki.org/concept/";
         uriSpace2 = "http://www.chemspider.com/";
         uriSpace2a = "http://rdf.chemspider.com/";
-        uriSpace3 = "http://data.kasabi.com/dataset/chembl-rdf/molecule/";
-        uriSpace3a = "http://linkedchemistry.info/chembl/molecule/";
+        uriSpace3 = "http://data.kasabi.com/dataset/chembl-rdf/molecule/m";
+        uriSpace3a = "http://linkedchemistry.info/chembl/molecule/m";
          
         link1to2 = uriSpace1 + "->" + uriSpace2;
         link1to3 = uriSpace1 + "->" + uriSpace3;

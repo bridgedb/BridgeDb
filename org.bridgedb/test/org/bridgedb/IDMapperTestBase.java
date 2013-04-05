@@ -82,8 +82,8 @@ public abstract class IDMapperTestBase {
                 .idExample("33a28bb2-35ed-4d94-adfd-3c96053cbaaf").asDataSource();
         DataSource2 = DataSource.register("Cs", "Chemspider").urlPattern("http://www.chemspider.com/Chemical-Structure.$id.html")
                 .idExample("56586").asDataSource();
-        DataSource3 = DataSource.register("Chembl13Molecule", "Chembl 13 Molecule").urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/$id")
-                .idExample("m1").asDataSource();
+        DataSource3 = DataSource.register("ChemblOldMolecule", "Chembl Old Molecule").urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id")
+                .idExample("1").asDataSource();
         //This DataSource MUST not be supported
         DataSourceBad = DataSource.register("TestDSBad", null)
                 .urlPattern("www.NotInTheURlMapper.com#$id").asDataSource();
@@ -94,19 +94,19 @@ public abstract class IDMapperTestBase {
         map1xref1 = new Xref(ds1Id1, DataSource1);
         ds2Id1 = "187440";
         map1xref2 = new Xref(ds2Id1, DataSource2);
-        ds3Id1 = "m276734";
+        ds3Id1 = "276734";
         map1xref3 = new Xref(ds3Id1, DataSource3);
         //Second set of Xrefs that are expected to map together.
         //But these are not expected NOT to map to the first set
         map2xref1 = new Xref("bd42675d-9966-48f5-b42e-f6a0c5ec6794", DataSource1);
         ds2Id2 = "18";
         map2xref2 = new Xref(ds2Id2, DataSource2);
-        map2xref3 = new Xref("m370186", DataSource3);
+        map2xref3 = new Xref("370186", DataSource3);
         //Third Set of Xref which again should map to eachothe but not the above
         map3xref1 = new Xref("9d4a6a08-6757-4ff2-98c1-e3c8b3e095cc", DataSource1);
         ds2Id3 = "50";
         map3xref2 = new Xref(ds2Id3 , DataSource2);
-        map3xref3 = new Xref("m520018", DataSource3);
+        map3xref3 = new Xref("520018", DataSource3);
         //Add an id that does not exist and can not be used in freesearch
         //Or null if all Strings can be used.
         badID = "ThisIdIsNotinTheSystem";

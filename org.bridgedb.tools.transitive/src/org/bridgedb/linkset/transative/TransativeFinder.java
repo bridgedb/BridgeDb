@@ -34,7 +34,7 @@ public class TransativeFinder extends SQLBase{
     public TransativeFinder(StoreType storeType) throws BridgeDBException{
         super(storeType);
         this.storeType = storeType;
-        mapper = new SQLUriMapper(false, storeType);  
+        mapper = SQLUriMapper.factory(false, storeType);  
         linksetLoader = new LinksetLoader();
     }
     

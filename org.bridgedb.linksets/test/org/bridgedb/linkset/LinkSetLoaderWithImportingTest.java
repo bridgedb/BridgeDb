@@ -21,6 +21,7 @@ package org.bridgedb.linkset;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.bridgedb.DataSource;
 import org.bridgedb.linkset.rdf.RdfReader;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
@@ -46,7 +47,8 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
     public static void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.checkSQLAccess();
-        
+        SQLUriMapper mapper = SQLUriMapper.factory(false, StoreType.TEST);
+
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.VOID);
@@ -67,10 +69,10 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
     public void testMappingInfo() throws BridgeDBException {
         report("MappingInfo");
         TestSqlFactory.checkSQLAccess();
-        SQLUriMapper sqlUriMapper = new SQLUriMapper(false, StoreType.TEST);
+        SQLUriMapper sqlUriMapper = SQLUriMapper.factory(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUriMapper.getMappingSetInfo(1);
-        assertEquals ("Chembl13Molecule", info.getSourceSysCode());
+        assertEquals ("ChemblOldMolecule", info.getSourceSysCode());
         assertEquals ("Cs", info.getTargetSysCode());
         assertEquals ("http://www.w3.org/2004/02/skos/core#exactMatch", info.getPredicate());
         //ystem.out.println(info);

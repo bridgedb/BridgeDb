@@ -85,9 +85,9 @@
     a void:Dataset ;
     dcterms:title "ChEMBL Molecules"@en;
     dcterms:description "The subset of ChEMBL data relating to molecules."@en;
-    void:uriSpace "http://linkedchemistry.info/chembl/molecule/"^^xsd:string ;
+    void:uriSpace "http://linkedchemistry.info/chembl/molecule/m"^^xsd:string ;
     dcterms:subject <http://dbpedia.org/resource/Molecule> ;
-    void:exampleResource <http://linkedchemistry.info/chembl/molecule/M1>;	
+    void:exampleResource <http://linkedchemistry.info/chembl/molecule/m1>;	
     void:dataDump <http://semantics.bigcat.unimaas.nl/chembl/v13_ops/compounds.nt.gz> ;
     .
   

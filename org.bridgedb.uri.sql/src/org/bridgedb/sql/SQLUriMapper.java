@@ -28,6 +28,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -82,8 +83,34 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String MIMETYPE_COLUMN_NAME = "mimetype";
     private static final String NAME_COLUMN_NAME = "name";
     
+    private static HashMap<StoreType,SQLUriMapper> register = null;
+    
     static final Logger logger = Logger.getLogger(SQLListener.class);
 
+    public static SQLUriMapper factory(boolean dropTables, StoreType storeType) throws BridgeDBException{
+        SQLUriMapper result;
+        if (dropTables){
+            result =  new SQLUriMapper(dropTables, storeType);
+            getRegister().put(storeType, result);
+            return result;
+        };
+        result = getRegister().get(storeType);
+        if (result == null){
+            result =  new SQLUriMapper(dropTables, storeType);
+            getRegister().put(storeType, result);
+            return result;
+        }
+        return result;
+    }
+    
+    private static HashMap<StoreType,SQLUriMapper> getRegister() throws BridgeDBException{
+        if (register == null){
+            BridgeDBRdfHandler.init();
+            register = new HashMap<StoreType,SQLUriMapper>();
+        }
+        return register;
+    }
+    
     /**
      * Creates a new UriMapper including BridgeDB implementation based on a connection to the SQL Database.
      *
@@ -93,7 +120,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @param specific Code to hold the things that are different between different SQL implementaions.
      * @throws BridgeDBException
      */
-     public SQLUriMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
+     private SQLUriMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
         super(dropTables, storeType);
         if (dropTables){
             createDefaultProfiles();
@@ -626,10 +653,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         //First try splitting the uri follwoing normal rules
         //This avoids the more expensive like
-        String prefix = getUriSpace(uri);
-        String id = getId(uri);
+        String prefix = splitUriSpace(uri);
         UriPattern pattern = UriPattern.existingByNameSpace(prefix);
         if (pattern != null){
+            String id = splitId(uri);
             DataSource dataSource = pattern.getDataSource();
             return new Xref(id, dataSource);
         }
@@ -1084,15 +1111,64 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public int registerMappingSet(UriPattern sourceUriPattern, String predicate, String justification, 
             UriPattern targetUriPattern, boolean symetric, Set<String> viaLabels) throws BridgeDBException {
+        checkUriPattern(sourceUriPattern);
+        checkUriPattern(targetUriPattern);
         DataSource source = sourceUriPattern.getDataSource();
         DataSource target = targetUriPattern.getDataSource();      
         return registerMappingSet(source, predicate, justification, target, symetric, viaLabels);
     }
 
+    private void checkUriPattern(UriPattern pattern) throws BridgeDBException{
+        String postfix = pattern.getPostfix();
+        if (postfix == null){
+            postfix = "";
+        }
+    	String query = "SELECT " + DATASOURCE_COLUMN_NAME  
+    			+ " FROM " + URI_TABLE_NAME
+                + " WHERE " + PREFIX_COLUMN_NAME + " ='" + pattern.getPrefix()
+                + "' AND " + POSTFIX_COLUMN_NAME + " ='" + postfix + "'";
+    	Statement statement = this.createStatement();
+    	try {
+			ResultSet rs = statement.executeQuery(query);
+			if (rs.next()) {
+				String storedKey = rs.getString(DATASOURCE_COLUMN_NAME);
+                String newKey = getDataSourceKey(pattern.getDataSource());
+                if (!storedKey.equals(newKey)){
+                    logger.error("WARNING " + pattern + " has a different Datasource to what was registered.");
+                    logger.error("  pattern has " + pattern.getDataSource() + " with key " + newKey);
+                    logger.error("  sql has " + keyToDataSource(storedKey) + " obtained from " + storedKey);
+                }
+			} else {
+                System.out.println(query);
+                throw new BridgeDBException("Unregistered pattern. " + pattern);
+            }
+		} catch (SQLException e) {
+			throw new BridgeDBException("Unable to check pattern. " + query, e);
+		}        
+    }
+    
     @Override
     public void insertUriMapping(String sourceUri, String targetUri, int mappingSet, boolean symetric) throws BridgeDBException {
-        String sourceId = getId(sourceUri);
-        String targetId = getId(targetUri);
+        Xref sourceXref = toXref(sourceUri);
+        System.out.println(sourceUri);
+        System.out.println(sourceXref);
+        if (sourceXref == null){
+            throw new BridgeDBException("Unable to convert sourceUri " + sourceUri);
+        }
+        String sourceId = sourceXref.getId();
+        if (sourceId.startsWith("m")){
+            System.out.println(sourceUri);
+            int error = 1/0;
+        }
+        Xref targetXref = toXref(targetUri);
+        if (targetXref == null){
+            throw new BridgeDBException("Unable to convert targetUri " + targetUri);
+        }
+        String targetId = targetXref.getId();
+        if (targetId.startsWith("m")){
+            System.out.println(targetUri);
+            int error = 1/0;
+        }
         this.insertLink(sourceId, targetId, mappingSet, symetric);
     }
 
@@ -1107,7 +1183,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @param uri Uri to split
      * @return The URISpace of the Uri
      */
-    public final static String getUriSpace(String uri){
+    private final static String splitUriSpace(String uri){
         String prefix = null;
         uri = uri.trim();
         if (uri.contains("#")){
@@ -1139,7 +1215,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @param uri Uri to split
      * @return The URISpace of the Uri
      */
-    public final static String getId(String uri){
+    private final static String splitId(String uri){
         uri = uri.trim();
         if (uri.contains("#")){
             return uri.substring(uri.lastIndexOf("#")+1, uri.length());

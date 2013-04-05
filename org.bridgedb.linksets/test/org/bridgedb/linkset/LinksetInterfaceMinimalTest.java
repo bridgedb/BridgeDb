@@ -23,8 +23,12 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Set;
 import javax.xml.datatype.DatatypeConfigurationException;
+import org.bridgedb.DataSource;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.sql.SQLUriMapper;
+import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.tools.metadata.MetaDataTestBase;
 import org.bridgedb.tools.metadata.rdf.StringOutputStream;
 import org.bridgedb.tools.metadata.validator.ValidationType;
@@ -47,7 +51,14 @@ public abstract class LinksetInterfaceMinimalTest extends MetaDataTestBase{
     
     public LinksetInterfaceMinimalTest(LinksetInterfaceMinimal instance) 
             throws DatatypeConfigurationException, BridgeDBException {
+        //Check database is running and settup correctly or kill the test. 
+        TestSqlFactory.checkSQLAccess();
         this.linksetInterfaceMinimal = instance;
+        SQLUriMapper mapper = SQLUriMapper.factory(false, StoreType.TEST);
+        DataSource foo = DataSource.register("foo", "foo").asDataSource();
+        mapper.registerUriPattern(foo, "http://www.foo.com/$id");
+        DataSource example = DataSource.register("example.com", "example.com").asDataSource();
+        mapper.registerUriPattern(example, "http://www.example.com/$id");
     }
 
     String getRDF(Set<Statement> statements) throws BridgeDBException {

@@ -46,7 +46,7 @@ public class ProfileTest extends org.bridgedb.uri.UriListenerTest {
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
-        sqlUriMapper = new SQLUriMapper(true, StoreType.TEST);
+        sqlUriMapper = SQLUriMapper.factory(true, StoreType.TEST);
         listener = sqlUriMapper;
         loadData();
         uriMapper = sqlUriMapper;;

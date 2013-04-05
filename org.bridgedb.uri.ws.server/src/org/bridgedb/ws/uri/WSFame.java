@@ -123,13 +123,13 @@ public class WSFame extends WSUriInterfaceService {
         String sourceSysCode1 = sourceXref1.getDataSource().getSystemCode();
         String sourceUri1 = mapping1.getSourceUri().iterator().next();
         String tragetSysCode1 = mapping1.getTarget().getDataSource().getSystemCode();
-        String text1 = SQLUriMapper.getId(sourceUri1);
+        String text1 = sourceXref1.getId();
 
         Mapping mapping2 = uriMapper.getMapping(2);
         Xref sourceXref2 =  mapping2.getSource();
         String sourceUri2 = mapping2.getSourceUri().iterator().next();
-        String targetUri2 = mapping2.getTargetUri().iterator().next();      
-        String targetUriSpace2 = SQLUriMapper.getUriSpace(targetUri2);
+        String targetUri2 = mapping2.getTargetUri().iterator().next();    
+        String targetUriSpace2 = targetUri2.substring(0, targetUri2.length()-sourceXref2.getId().length());
                 
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
         Set<String> keys = idMapper.getCapabilities().getKeys();

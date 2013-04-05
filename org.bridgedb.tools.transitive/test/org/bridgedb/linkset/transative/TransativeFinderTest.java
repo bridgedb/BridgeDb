@@ -21,6 +21,7 @@ package org.bridgedb.linkset.transative;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.bridgedb.DataSource;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
@@ -50,7 +51,20 @@ public class TransativeFinderTest extends TestUtils  {
         TestSqlFactory.checkSQLAccess();
         
         LinksetLoader linksetLoader = new LinksetLoader();
-        linksetLoader.clearExistingData( StoreType.TEST);        
+        linksetLoader.clearExistingData( StoreType.TEST);  
+        
+        SQLUriMapper mapper = SQLUriMapper.factory(false, StoreType.TEST);
+        DataSource transativeTest1 = DataSource.register("TransativeTest1", "TransativeTest1").asDataSource();
+        mapper.registerUriPattern(transativeTest1, "http://www.example.com/DS1/$id");
+        DataSource transativeTest2 = DataSource.register("TransativeTest2", "TransativeTest2").asDataSource();
+        mapper.registerUriPattern(transativeTest1, "http://www.example.com/DS2/$id");
+        DataSource transativeTest3 = DataSource.register("TransativeTest3", "TransativeTest3").asDataSource();
+        mapper.registerUriPattern(transativeTest1, "http://www.example.com/DS3/$id");
+        DataSource transativeTest4 = DataSource.register("TransativeTest4", "TransativeTest4").asDataSource();
+        mapper.registerUriPattern(transativeTest1, "http://www.example.com/DS4/$id");
+        DataSource transativeTest5 = DataSource.register("TransativeTest5", "TransativeTest5").asDataSource();
+        mapper.registerUriPattern(transativeTest1, "http://www.example.com/DS5/$id");
+
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample5To4.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);

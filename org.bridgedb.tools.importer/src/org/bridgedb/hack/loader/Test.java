@@ -86,7 +86,7 @@ public class Test {
      * @param mapper MUST implement XrefIterator
      */
     public static void printLinksetLines(IDMapper mapper) throws BridgeDBException{
-        SQLUriMapper sqlMapper = new SQLUriMapper(false, StoreType.TEST);
+        SQLUriMapper sqlMapper = SQLUriMapper.factory(false, StoreType.TEST);
 
         XrefIterator iterator = (XrefIterator)mapper;
         Set<DataSource> srcDataSources;

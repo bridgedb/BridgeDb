@@ -46,9 +46,9 @@ public class UriMapperAllProfileTest extends org.bridgedb.uri.UriMapperAllProfil
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
-        listener = new SQLUriMapper(true, StoreType.TEST);
+        listener = SQLUriMapper.factory(true, StoreType.TEST);
         loadData();
-        uriMapper =new SQLUriMapper(false, StoreType.TEST);
+        uriMapper = SQLUriMapper.factory(false, StoreType.TEST);
     }
             
 }

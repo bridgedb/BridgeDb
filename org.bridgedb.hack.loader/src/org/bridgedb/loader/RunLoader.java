@@ -46,79 +46,19 @@ public class RunLoader {
         String root = "C:/Dropbox/linksets/";
         //String root = "/var/local/ops/linksets/";
         linksetLoader.clearExistingData(StoreType.LOAD);
-        //1-2
-        linksetLoader.load(root + "originals/ConceptWiki-Chembl2Targets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //3-4
         linksetLoader.load(root + "originals/ConceptWiki-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //5-6
         linksetLoader.load(root + "originals/ConceptWiki-DrugbankTargets.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //7-8
         linksetLoader.load(root + "originals/ConceptWiki-GO.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //9-10
         linksetLoader.load(root + "originals/ConceptWiki-MSH.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //11-12
         linksetLoader.load(root + "originals/ConceptWiki-NCIM.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //13-14
         linksetLoader.load(root + "originals/ConceptWiki-Pdb.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //15-16 
         linksetLoader.load(root + "originals/ConceptWiki-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //17-18 
         linksetLoader.load(root + "originals/Chembl13Id-ChemSpider.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //19-20 
         linksetLoader.load(root + "originals/Chembl13Molecule-Chembl13Id_nov12.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //21-22
         linksetLoader.load(root + "originals/Chembl13Targets-Enzyme.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //23-24 
         linksetLoader.load(root + "originals/Chembl13Targets-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //25-26 
-        linksetLoader.load(root + "originals/ChemSpider-Chembl2Compounds.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //27-28
         linksetLoader.load(root + "originals/ChemSpider-DrugBankDrugs.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-    
-        //29-30 
-        File transative = new File(root + "transitive/ChemSpider-Chembl13Molecule-via-Chembl13Id.ttl");
-        TransativeCreator.createTransative(18,20, transative,  StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //31-33
-        transative = new File(root + "transitive/ConceptWiki-Chembl13Molecule-via-ChemSpider.ttl");
-        TransativeCreator.createTransative(3,29, transative, StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //33-34
-        transative = new File(root + "transitive/ConceptWiki-Chembl13Targets-via-Swissprot.ttl");
-        TransativeCreator.createTransative(15,24, transative, StoreType.LOAD);
-        linksetLoader.load(root + "transitive/ConceptWiki-Chembl13Targets-via-Swissprot.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //35-36
-        transative = new File(root + "transitive/ConceptWiki-Chembl2Compounds-via-ChemSpider.ttl");
-        TransativeCreator.createTransative(3,25, transative, StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //37-38
-        transative = new File(root + "transitive/ConceptWiki-DrugBankDrugs-via-ChemSpider.ttl");
-        TransativeCreator.createTransative(3,27, transative, StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        
-        //39-40  //Inserted in place of Junk
-        transative = new File(root + "transitive/ConceptWiki-Chembl13Id-via-ChemSpider.ttl");
-        TransativeCreator.createTransative(3,18, transative, StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-      
-        //41-42
-        linksetLoader.load(root + "originals/Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        
-        //43-44
-        transative = new File(root + "transitive/Swissprot-Chembl13id-via-Chembl13Targets.ttl");
-        TransativeCreator.createTransative(24,41, transative, StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        
-        //45-46
-        transative = new File(root + "transitive/ConceptWiki-Chembl13id-via-Chembl13Targets.ttl");
-        TransativeCreator.createTransative(33,41, transative, StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        
-        //47-48
-        transative = new File(root + "transitive/Enzyme-Chembl13id-via-Chembl13Targets.ttl");
-        TransativeCreator.createTransative(22,41, transative, StoreType.LOAD);
-        linksetLoader.load(transative.getAbsolutePath(), StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        
+        linksetLoader.load(root + "originals/Chemb13Targets-Chembl13id.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);        
     }
 
 }

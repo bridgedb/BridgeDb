@@ -60,7 +60,7 @@ public class LinksetLoaderTest {
     @Test
     public void testMappingInfo() throws BridgeDBException {
         TestSqlFactory.checkSQLAccess();
-        SQLUriMapper sqlUriMapper = new SQLUriMapper(false, StoreType.TEST);
+        SQLUriMapper sqlUriMapper = SQLUriMapper.factory(false, StoreType.TEST);
         
         MappingSetInfo info = sqlUriMapper.getMappingSetInfo(1);
         assertEquals ("ConceptWiki", info.getSourceSysCode());
