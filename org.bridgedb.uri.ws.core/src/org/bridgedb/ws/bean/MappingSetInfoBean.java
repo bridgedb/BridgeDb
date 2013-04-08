@@ -29,7 +29,7 @@ import org.bridgedb.statistics.MappingSetInfo;
  */
 @XmlRootElement(name="MappingSetInfo")
 public class MappingSetInfoBean {
-    private String id;
+    private Integer id;
     private String sourceSysCode;
     private String predicate;
     private String targetSysCode;
@@ -51,7 +51,7 @@ public class MappingSetInfoBean {
 
     public static MappingSetInfoBean asBean(MappingSetInfo info) {
         MappingSetInfoBean bean = new MappingSetInfoBean();
-        bean.id = info.getId();
+        bean.id = info.getIntId();
         bean.sourceSysCode = info.getSourceSysCode();
         bean.predicate = info.getPredicate();
         bean.targetSysCode = info.getTargetSysCode();
@@ -66,14 +66,14 @@ public class MappingSetInfoBean {
     /**
      * @return the id
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -110,16 +110,16 @@ public class TransativeCreator {
         FileWriter writer = new FileWriter(outputFile);
         buffer = new BufferedWriter(writer);
         buffer.flush();
-        leftContext = RdfFactory.getLinksetUri(leftInfo.getId());
+        leftContext = RdfFactory.getLinksetUri(leftInfo.getIntId());
         System.out.println(leftContext);
-        rightContext = RdfFactory.getLinksetUri(rightInfo.getId());
+        rightContext = RdfFactory.getLinksetUri(rightInfo.getIntId());
         System.out.println(rightContext);
     }
             
     public static File doTransativeIfPossible(MappingSetInfo left, MappingSetInfo right, StoreType storeType) 
             throws RDFHandlerException, IOException, BridgeDBException {
         File parent = DirectoriesConfig.getTransativeDirectory();
-        File file = new File(parent, "TransativeLinkset" + left.getId() + "and" + right.getId() + ".ttl");
+        File file = new File(parent, "TransativeLinkset" + left.getStringId() + "and" + right.getStringId() + ".ttl");
         boolean result = doTransative(left, right, file,  storeType, 
                 GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         if (result){
@@ -151,7 +151,7 @@ public class TransativeCreator {
         TransativeCreator creator = new TransativeCreator(left, right, file, storeType);
         predicate = creator.getVoid(predicate, license, derivedBy);
         creator.getSQL(predicate);
-        String message = "Finishing creating transative mapping from " + left.getId() + " to " + right.getId() + "\n"
+        String message = "Finishing creating transative mapping from " + left.getIntId() + " to " + right.getIntId() + "\n"
                 + "Result saved at " + creator.getOutputPath();
         logger.info(message);
         return message;
@@ -179,7 +179,7 @@ public class TransativeCreator {
         sourceDataSet = rdfWrapper.getTheSingeltonObject(leftLinkSet, VoidConstants.SUBJECTSTARGET, leftContext);
         targetDataSet = rdfWrapper.getTheSingeltonObject(rightLinkSet, VoidConstants.OBJECTSTARGET, rightContext);
         
-        String linksetURI = ":linkset" + leftInfo.getId() + "Transitive" + rightInfo.getId();
+        String linksetURI = ":linkset" + leftInfo.getStringId() + "Transitive" + rightInfo.getStringId();
         
         registerVoIDDescription(linksetURI);
         predicate = registerNewLinkset(rdfWrapper, linksetURI, predicate, license, derivedBy);
@@ -198,12 +198,12 @@ public class TransativeCreator {
     
     private void checkMappable() throws BridgeDBException{
         if (!leftInfo.getTargetSysCode().equals(rightInfo.getSourceSysCode())){
-            throw new BridgeDBException ("Target of mappingSet " + leftInfo.getId()  + " is " + leftInfo.getTargetSysCode() 
-                + " Which is not the same as the Source of " + rightInfo.getId() + " which is " + rightInfo.getSourceSysCode());
+            throw new BridgeDBException ("Target of mappingSet " + leftInfo.getStringId()  + " is " + leftInfo.getTargetSysCode() 
+                + " Which is not the same as the Source of " + rightInfo.getStringId() + " which is " + rightInfo.getSourceSysCode());
         }
         if (leftInfo.getSourceSysCode().equals(rightInfo.getTargetSysCode())){
-            throw new BridgeDBException ("Source of mappingSet " + leftInfo.getId()  + "(" + leftInfo.getTargetSysCode() +")"
-                + " is the same as the Target of " + rightInfo.getId() + ". No need for a transative mapping");
+            throw new BridgeDBException ("Source of mappingSet " + leftInfo.getStringId()  + "(" + leftInfo.getTargetSysCode() +")"
+                + " is the same as the Target of " + rightInfo.getStringId() + ". No need for a transative mapping");
         }
     }
     
@@ -382,10 +382,10 @@ public class TransativeCreator {
         query.append("FROM mapping as mapping1, mapping as mapping2 ");
         query.append("WHERE mapping1.targetId = mapping2.sourceId ");
         query.append("AND mapping1.mappingSetId = ");
-            query.append(leftInfo.getId());
+            query.append(leftInfo.getIntId());
             query.append(" ");
         query.append("AND mapping2.mappingSetId = ");
-            query.append(rightInfo.getId());
+            query.append(rightInfo.getIntId());
             query.append(" ");
         System.out.println(query);
         Connection connection = sqlAccess.getConnection();

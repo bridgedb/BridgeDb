@@ -1218,7 +1218,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
     }
 
-    private Set<String> getViaCodes(String id) throws BridgeDBException {
+    private Set<String> getViaCodes(int id) throws BridgeDBException {
         String query = ("SELECT " + VIA_DATASOURCE_COLUMN_NAME
                 + " FROM " + VIA_TABLE_NAME 
                 + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = \"" + id + "\"");
@@ -1326,11 +1326,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         try {
             while (rs.next()){
                 Integer count = rs.getInt(MAPPING_COUNT_COLUMN_NAME);
-                String id = rs.getString(ID_COLUMN_NAME);
+                int id = rs.getInt(ID_COLUMN_NAME);
                 Set<String> viaSysCodes = getViaCodes(id);
                 results.add(new MappingSetInfo(id, rs.getString(SOURCE_DATASOURCE_COLUMN_NAME),  
                         rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), 
-                        rs.getString(JUSTIFICATION_COLUMN_NAME), rs.getInt(SYMMETRIC_COLUMN_NAME), viaSysCodes ,count));
+                        rs.getString(JUSTIFICATION_COLUMN_NAME), rs.getInt(SYMMETRIC_COLUMN_NAME)>0, viaSysCodes ,count));
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);

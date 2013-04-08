@@ -29,7 +29,8 @@ import java.util.Set;
  * @author Christian
  */
 public class MappingSetInfo {
-    private String id;
+    private String stringId;
+    private final int intId;
     private final String sourceSysCode;
     private final String predicate;
     private final String targetSysCode;
@@ -38,39 +39,38 @@ public class MappingSetInfo {
     private Set<String> viaSystemCode;
     private Integer numberOfLinks;
 
-    public MappingSetInfo(String id, String sourceSysCode, String predicate, String targetSysCode, String justification,
-            int symmetric, Set<String> viaSystemCodes,  Integer numberOfLinks){
-        this.id = id;
-        this.predicate = predicate;
-        this.sourceSysCode = sourceSysCode;
-        this.targetSysCode = targetSysCode;
-        this.justification = justification;
-        this.symmetric = symmetric > 0;
-        setViaSystemCode(viaSystemCodes);
-        this.numberOfLinks = numberOfLinks;
-    }
-    
-    public MappingSetInfo(String id, String sourceSysCode, String predicate, String targetSysCode, String justification, 
-            boolean symmetric, Set<String> viaSystemCodes, Integer numberOfLinks){
-        this.id = id;
+    public MappingSetInfo(int id, String sourceSysCode, String predicate, String targetSysCode, String justification,
+            boolean symmetric, Set<String> viaSystemCodes,  Integer numberOfLinks){
+        intId = id;
+        stringId = null;
         this.predicate = predicate;
         this.sourceSysCode = sourceSysCode;
         this.targetSysCode = targetSysCode;
         this.justification = justification;
         this.symmetric = symmetric;
-        this.numberOfLinks = numberOfLinks;
         setViaSystemCode(viaSystemCodes);
+        this.numberOfLinks = numberOfLinks;
+    }
+    
+    /**
+     * @return the id
+     */
+    public String getStringId() {
+        if (stringId == null){
+            return "" + intId;
+        }
+        return stringId;
     }
 
     /**
      * @return the id
      */
-    public String getId() {
-        return id;
+    public int getIntId() {
+        return intId;
     }
 
     public void multipleIds(){
-        id = "various";
+        stringId = "various";
     }
     
     /**
@@ -116,7 +116,7 @@ public class MappingSetInfo {
     }
     
     public String toString(){
-        return this.id + "\n\tsourceSysCode:" + this.sourceSysCode + "\n\tpredicate:" + this.predicate 
+        return this.getStringId() + "\n\tsourceSysCode:" + this.sourceSysCode + "\n\tpredicate:" + this.predicate 
                 + "\n\ttargetSysCode:" + this.targetSysCode + "\n\tviaSystemCodes: " + this.viaSystemCode 
                 + "\n\tnumberOfLinks:" + this.numberOfLinks + "\n";
     }

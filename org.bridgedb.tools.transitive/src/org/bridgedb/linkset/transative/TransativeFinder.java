@@ -64,7 +64,7 @@ public class TransativeFinder extends SQLBase{
                 i++;
             }
             if (!info.isTransitive()){
-                computeTransative(info, Integer.parseInt(info.getId()));
+                computeTransative(info, info.getIntId());
             }
         }
         HashMap<Integer,Integer> oldTransatives = (HashMap<Integer,Integer>)newTransatives.clone();
@@ -81,14 +81,14 @@ public class TransativeFinder extends SQLBase{
     }
    
     private void computeTransative(MappingSetInfo info, int checkTo) throws BridgeDBException, RDFHandlerException, IOException {
-        System.out.println ("compute transtaive mappingset " + info.getId());
+        System.out.println ("compute transtaive mappingset " + info.getIntId());
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info, checkTo);
         for (MappingSetInfo possibleInfo:possibleInfos) {
             if (checkValidTransative(possibleInfo, info)){
                 int result = doTransative(possibleInfo, info);
                 if (result >0) {
-                   newTransatives.put(result, Integer.parseInt(info.getId()));
+                   newTransatives.put(result, info.getIntId());
                 }
             }
             if (checkValidTransative(info, possibleInfo)){
@@ -128,8 +128,8 @@ public class TransativeFinder extends SQLBase{
         //If Either is transantive only connect if left is a lower number
         //This makes sure the same chain is not connected in many differet ways
         if (!left.getViaSystemCode().isEmpty() || !right.getViaSystemCode().isEmpty()){
-            int leftId = Integer.parseInt(left.getId());
-            int rightId = Integer.parseInt(right.getId());
+            int leftId = left.getIntId();
+            int rightId = right.getIntId();
             if (leftId > rightId){
                 //ystem.out.println("Skipping Alternative chain with " + left.getId() + " -> " + right.getId());
                 return false;
@@ -171,8 +171,8 @@ public class TransativeFinder extends SQLBase{
 
     private int doTransative(MappingSetInfo left, MappingSetInfo right) 
             throws RDFHandlerException, IOException, BridgeDBException {
-        int leftId = Integer.parseInt(left.getId());
-        int rightId = Integer.parseInt(right.getId());
+        int leftId = left.getIntId();
+        int rightId = right.getIntId();
         Reporter.println("Creating tranasative from " + leftId + " to " + rightId);
         System.out.println(left);
         System.out.println(right);
