@@ -33,8 +33,7 @@ public class TransativeFinder extends SQLBase{
     private SQLUriMapper mapper;
     private final StoreType storeType;
     private final LinksetLoader linksetLoader;
-    private HashMap<Integer,Integer> newTransatives = new HashMap<Integer,Integer>();
-    
+   
     private final static String LAST_TRANSATIVEL_LOADED_KEY = "LastMappingLoadedTransatively";
     
     public TransativeFinder(StoreType storeType) throws BridgeDBException{
@@ -64,16 +63,8 @@ public class TransativeFinder extends SQLBase{
         for (int i = lastTranstativeLoaded + 1; i <= maxMappingSet; i++){
             MappingSetInfo info = mapper.getMappingSetInfo(i);
             if (!info.isSymmetric()){
-                if (!info.isTransitive()){
-                    computeTransative(info, info.getIntId());
-                }
+                computeTransative(info);
             }
-        }
-        HashMap<Integer,Integer> oldTransatives = (HashMap<Integer,Integer>)newTransatives.clone();
-        newTransatives.clear();
-        for (int transative:oldTransatives.keySet()){
-            MappingSetInfo info = mapper.getMappingSetInfo(transative);
-            computeTransative(info, oldTransatives.get(transative));            
         }
         int newMaxMappingSet = getMaxMappingSet();
         mapper.putProperty(LAST_TRANSATIVEL_LOADED_KEY, "" + maxMappingSet);
@@ -82,18 +73,15 @@ public class TransativeFinder extends SQLBase{
         }
     }
    
-    private void computeTransative(MappingSetInfo info, int checkTo) throws BridgeDBException, RDFHandlerException, IOException {
-        System.out.println ("compute transtaive mappingset " + info.getIntId() + " up to " + checkTo);
+    private void computeTransative(MappingSetInfo info) throws BridgeDBException, RDFHandlerException, IOException {
+        System.out.println ("compute transtaive mappingset " + info.getIntId());
         System.out.println (info);
 //        lastTranstativeLoaded = mappingSetId;
-        List<MappingSetInfo> possibleInfos = findTransativeCandidates(info, checkTo);
+        List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
             HashSet<Integer> chainIds = this.getChain(possibleInfo, info);
             if (checkValidTransative(possibleInfo, info, chainIds)){
                 int result = doTransative(possibleInfo, info, chainIds);
-                if (result >0) {
-                   newTransatives.put(result, info.getIntId());
-                }
             }
             if (checkValidTransative(info, possibleInfo, chainIds)){
                 doTransative(info, possibleInfo, chainIds);
@@ -101,11 +89,11 @@ public class TransativeFinder extends SQLBase{
          }
     }
  
-    private List<MappingSetInfo> findTransativeCandidates(MappingSetInfo info, int checkTo) throws BridgeDBException {
+    private List<MappingSetInfo> findTransativeCandidates(MappingSetInfo info) throws BridgeDBException {
         Statement statement = mapper.createStatement();
         String query = "SELECT *"
                 + " FROM " + SQLUriMapper.MAPPING_SET_TABLE_NAME
-                + " WHERE "+ SQLUriMapper.ID_COLUMN_NAME + " < " + checkTo
+                + " WHERE "+ SQLUriMapper.ID_COLUMN_NAME + " < " + info.getIntId()
                 + " AND " + SQLUriMapper.JUSTIFICATION_COLUMN_NAME + " = '" + info.getJustification() +"'";
         ResultSet rs;
         try {
