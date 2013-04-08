@@ -18,6 +18,7 @@ apidoc/
 dist/
 bridgedb-*.zip
 bridgedb-*.gz
+transatives/
 
 # ignore log files #
 logs/
