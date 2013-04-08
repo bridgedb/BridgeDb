@@ -34,7 +34,7 @@ public class MappingSetInfoBean {
     private String predicate;
     private String targetSysCode;
     private String justification;
-    private int symmetric;
+    private Integer symmetric;
     private Integer numberOfLinks;
     private Set<String> viaSystemCode;
     private Set<Integer> chainId;
@@ -46,7 +46,7 @@ public class MappingSetInfoBean {
     }
     
     public static MappingSetInfo asMappingSetInfo(MappingSetInfoBean bean){
-        return new MappingSetInfo(bean.getId(), bean.getSourceSysCode(), bean.getPredicate(), bean.getTargetSysCode(), 
+       return new MappingSetInfo(bean.getId(), bean.getSourceSysCode(), bean.getPredicate(), bean.getTargetSysCode(), 
             bean.getJustification(), bean.getSymmetric(), bean.getViaSystemCode(), bean.getChainId(), bean.getNumberOfLinks());
     }
 
@@ -75,7 +75,7 @@ public class MappingSetInfoBean {
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -187,14 +187,14 @@ public class MappingSetInfoBean {
     /**
      * @return the symmetric
      */
-    public int getSymmetric() {
+    public Integer getSymmetric() {
         return symmetric;
     }
 
     /**
      * @param symmetric the symmetric to set
      */
-    public void setSymmetric(int symmetric) {
+    public void setSymmetric(Integer symmetric) {
         this.symmetric = symmetric;
     }
     
