@@ -34,9 +34,10 @@ public class MappingSetInfoBean {
     private String predicate;
     private String targetSysCode;
     private String justification;
-    private boolean symmetric;
+    private int symmetric;
     private Integer numberOfLinks;
     private Set<String> viaSystemCode;
+    private Set<Integer> chainId;
 
     /**
      * WS Constructor
@@ -46,7 +47,7 @@ public class MappingSetInfoBean {
     
     public static MappingSetInfo asMappingSetInfo(MappingSetInfoBean bean){
         return new MappingSetInfo(bean.getId(), bean.getSourceSysCode(), bean.getPredicate(), bean.getTargetSysCode(), 
-            bean.getJustification(), bean.isSymmetric(), bean.getViaSystemCode(), bean.getNumberOfLinks());
+            bean.getJustification(), bean.getSymmetric(), bean.getViaSystemCode(), bean.getChainId(), bean.getNumberOfLinks());
     }
 
     public static MappingSetInfoBean asBean(MappingSetInfo info) {
@@ -56,9 +57,10 @@ public class MappingSetInfoBean {
         bean.predicate = info.getPredicate();
         bean.targetSysCode = info.getTargetSysCode();
         bean.justification = info.getJustification();
-        bean.symmetric = info.isSymmetric();
+        bean.symmetric = info.getSymmetric();
         bean.numberOfLinks = info.getNumberOfLinks();
         bean.viaSystemCode = info.getViaSystemCode();
+        bean.chainId = info.getChainIds();
         return bean;
     }
     
@@ -155,20 +157,6 @@ public class MappingSetInfoBean {
     }
 
     /**
-     * @return the symmetric
-     */
-    public boolean isSymmetric() {
-        return symmetric;
-    }
-
-    /**
-     * @param symmetric the symmetric to set
-     */
-    public void setSymmetric(boolean symmetric) {
-        this.symmetric = symmetric;
-    }
-
-    /**
      * @return the justification
      */
     public String getJustification() {
@@ -180,6 +168,34 @@ public class MappingSetInfoBean {
      */
     public void setJustification(String justification) {
         this.justification = justification;
+    }
+
+    /**
+     * @return the chainId
+     */
+    public Set<Integer> getChainId() {
+        return chainId;
+    }
+
+    /**
+     * @param chainId the chainId to set
+     */
+    public void setChainId(Set<Integer> chainId) {
+        this.chainId = chainId;
+    }
+
+    /**
+     * @return the symmetric
+     */
+    public int getSymmetric() {
+        return symmetric;
+    }
+
+    /**
+     * @param symmetric the symmetric to set
+     */
+    public void setSymmetric(int symmetric) {
+        this.symmetric = symmetric;
     }
     
 }

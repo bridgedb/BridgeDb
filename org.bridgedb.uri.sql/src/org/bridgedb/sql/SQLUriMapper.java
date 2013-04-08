@@ -1110,12 +1110,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public int registerMappingSet(UriPattern sourceUriPattern, String predicate, String justification, 
-            UriPattern targetUriPattern, boolean symetric, Set<String> viaLabels) throws BridgeDBException {
+            UriPattern targetUriPattern, boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets) 
+            throws BridgeDBException {
         checkUriPattern(sourceUriPattern);
         checkUriPattern(targetUriPattern);
         DataSource source = sourceUriPattern.getDataSource();
         DataSource target = targetUriPattern.getDataSource();      
-        return registerMappingSet(source, predicate, justification, target, symetric, viaLabels);
+        return registerMappingSet(source, predicate, justification, target, symetric, viaLabels, chainedLinkSets);
     }
 
     private void checkUriPattern(UriPattern pattern) throws BridgeDBException{
@@ -1235,6 +1236,23 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 		}
     }
     
+    private Set<Integer> getChainIds(int id) throws BridgeDBException {
+        String query = ("SELECT " + CHAIN_ID_COLUMN_NAME
+                + " FROM " + CHAIN_TABLE_NAME 
+                + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = \"" + id + "\"");
+    	Statement statement = this.createStatement();
+        HashSet<Integer> results = new HashSet<Integer>();
+		try {
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()){
+                results.add(rs.getInt(CHAIN_ID_COLUMN_NAME));
+            }
+            return results;
+		} catch (SQLException e) {
+			throw new BridgeDBException("Unable to retrieve profiles.", e);
+		}
+    }
+
     /**
      * Generates a set of Uri from a ResultSet.
      *
@@ -1328,9 +1346,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 Integer count = rs.getInt(MAPPING_COUNT_COLUMN_NAME);
                 int id = rs.getInt(ID_COLUMN_NAME);
                 Set<String> viaSysCodes = getViaCodes(id);
+                Set<Integer> chainIds = getChainIds(id);
                 results.add(new MappingSetInfo(id, rs.getString(SOURCE_DATASOURCE_COLUMN_NAME),  
                         rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), 
-                        rs.getString(JUSTIFICATION_COLUMN_NAME), rs.getInt(SYMMETRIC_COLUMN_NAME)>0, viaSysCodes ,count));
+                        rs.getString(JUSTIFICATION_COLUMN_NAME), rs.getInt(SYMMETRIC_COLUMN_NAME), 
+                        viaSysCodes, chainIds, count));
             }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to parse results.", ex);

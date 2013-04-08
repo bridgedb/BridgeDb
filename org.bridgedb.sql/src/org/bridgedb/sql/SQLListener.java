@@ -19,14 +19,11 @@
 //
 package org.bridgedb.sql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
@@ -64,12 +61,14 @@ public class SQLListener extends SQLBase implements MappingListener{
     private static final int MAX_BLOCK_SIZE = 1000;
     
     //static final String DATASOURCE_TABLE_NAME = "DataSource";
+    public static final String CHAIN_TABLE_NAME = "chain";
     static final String INFO_TABLE_NAME = "info";  //Do not change as used by RDG packages as well
     static final String MAPPING_TABLE_NAME = "mapping";
     public static final String MAPPING_SET_TABLE_NAME = "mappingSet";
     static final String PROPERTIES_TABLE_NAME = "properties";
     static final String VIA_TABLE_NAME = "via";
 
+    public static final String CHAIN_ID_COLUMN_NAME = "chainId";
     //static final String FULL_NAME_COLUMN_NAME = "fullName";
     public static final String ID_COLUMN_NAME = "id";
     //static final String ID_EXAMPLE_COLUMN_NAME = "idExample";
@@ -79,7 +78,7 @@ public class SQLListener extends SQLBase implements MappingListener{
     static final String KEY_COLUMN_NAME = "theKey";
     //static final String MAIN_URL_COLUMN_NAME = "mainUrl";
     static final String MAPPING_COUNT_COLUMN_NAME = "mappingCount";
-    static final String MAPPING_SET_ID_COLUMN_NAME = "mappingSetId";
+    public static final String MAPPING_SET_ID_COLUMN_NAME = "mappingSetId";
     static final String MAPPING_SET_DOT_ID_COLUMN_NAME = MAPPING_SET_TABLE_NAME + "." + ID_COLUMN_NAME;
     static final String PREDICATE_COLUMN_NAME = "predicate";
     static final String PROPERTY_COLUMN_NAME = "property";
@@ -115,8 +114,8 @@ public class SQLListener extends SQLBase implements MappingListener{
         BridgeDBRdfHandler.init();
         this.autoIncrement = SqlFactory.getAutoIncrementCommand();
         if (dropTables){
-            this.dropSQLTables();
-            this.createSQLTables();
+            dropSQLTables();
+            createSQLTables();
             logger.info("Recreated all tables!");
         } else {
             checkVersion();
@@ -134,16 +133,17 @@ public class SQLListener extends SQLBase implements MappingListener{
     }
         
     @Override
-    public synchronized int registerMappingSet(DataSource source, String predicate, 
-    		String justification, DataSource target, 
-            boolean symetric, Set<String> viaLabels) throws BridgeDBException {
+    public synchronized int registerMappingSet(DataSource source, String predicate, String justification, DataSource target, 
+            boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets) throws BridgeDBException {
         //checkDataSourceInDatabase(source);
         //checkDataSourceInDatabase(target);
-        int forwardId = registerMappingSet(source, target, predicate, justification, symetric);
+        int forwardId = registerMappingSet(source, target, predicate, justification, 0);
         registerVia(forwardId, viaLabels);
+        registerChain(forwardId, chainedLinkSets);
         if (symetric){
-            int symetricId = registerMappingSet(target, source, predicate, justification, true);
+            int symetricId = registerMappingSet(target, source, predicate, justification, forwardId);
             registerVia(symetricId, viaLabels);
+            registerChain(symetricId, chainedLinkSets);
         }
         return forwardId;
     }
@@ -171,7 +171,7 @@ public class SQLListener extends SQLBase implements MappingListener{
      * 
      */
     private int registerMappingSet(DataSource source, DataSource target, String predicate, String justification, 
-            boolean symmetric) throws BridgeDBException {
+            int symmetric) throws BridgeDBException {
         String query = "INSERT INTO " + MAPPING_SET_TABLE_NAME
                 + " (" + SOURCE_DATASOURCE_COLUMN_NAME + ", " 
                     + PREDICATE_COLUMN_NAME + ", " 
@@ -183,7 +183,7 @@ public class SQLListener extends SQLBase implements MappingListener{
                 + "'" + predicate + "', " 
                 + "'" + justification + "', "
                 + "'" + getDataSourceKey(target) + "', "
-                + booleanIntoQuery(symmetric) + ")";
+                + symmetric + ")";
         Statement statement = createStatement();
         try {
             statement.executeUpdate(query);
@@ -232,6 +232,39 @@ public class SQLListener extends SQLBase implements MappingListener{
             insert.append("', '");
             insert.append(labels.next());
             insert.append("')");        
+        }
+        Statement statement = createStatement();
+        try {
+            statement.executeUpdate(insert.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException ("Error inserting via with " +  insert, ex);
+        }
+    }
+
+    
+    private void registerChain(int mappingSetId, Set<Integer> chainedLinkSets) throws BridgeDBException {
+        if (chainedLinkSets == null || chainedLinkSets.isEmpty() ){
+            return;
+        }
+        Iterator<Integer> chainLinkSetId = chainedLinkSets.iterator(); 
+        StringBuilder insert = new StringBuilder("INSERT INTO ");
+        insert.append(CHAIN_TABLE_NAME);
+        insert.append(" (");
+        insert.append(MAPPING_SET_ID_COLUMN_NAME);
+        insert.append(", ");
+        insert.append(CHAIN_ID_COLUMN_NAME);
+        insert.append(") VALUES ");
+        insert.append("('");
+        insert.append(mappingSetId);
+        insert.append("', ");
+        insert.append(chainLinkSetId.next());
+        insert.append(")");
+        while (chainLinkSetId.hasNext()){
+            insert.append(", ('");
+            insert.append(mappingSetId);
+            insert.append("', ");
+            insert.append(chainLinkSetId.next());
+            insert.append(")");        
         }
         Statement statement = createStatement();
         try {
@@ -344,6 +377,7 @@ public class SQLListener extends SQLBase implements MappingListener{
  		dropTable(MAPPING_SET_TABLE_NAME);
  		dropTable(PROPERTIES_TABLE_NAME);
         dropTable(VIA_TABLE_NAME);
+        dropTable(CHAIN_TABLE_NAME);
      }
     
     /**
@@ -433,6 +467,11 @@ public class SQLListener extends SQLBase implements MappingListener{
          	query =	"CREATE TABLE " + VIA_TABLE_NAME 
                     + " (" + MAPPING_SET_ID_COLUMN_NAME + " INT(" + LINK_SET_ID_LENGTH + ") NOT NULL, "
                     + "     " + VIA_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL "
+					+ " ) "; 
+            sh.execute(query);
+         	query =	"CREATE TABLE " + CHAIN_TABLE_NAME 
+                    + " (" + MAPPING_SET_ID_COLUMN_NAME + " INT(" + LINK_SET_ID_LENGTH + ") NOT NULL, "
+                    + "     " + CHAIN_ID_COLUMN_NAME + " INT(" + LINK_SET_ID_LENGTH + ") NOT NULL"
 					+ " ) "; 
             sh.execute(query);
             sh.close();

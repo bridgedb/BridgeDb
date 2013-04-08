@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.Set;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfFactory;
@@ -162,6 +163,23 @@ public class LinksetLoader implements LinksetInterface{
             LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
             loader.validate();
             return loader.load();
+        }
+    }
+
+    public static int loadLinkset(String fileName, StoreType storeType, ValidationType validationType, 
+            Set<Integer> chainIds) throws BridgeDBException {
+        if (storeType == null){
+            throw new BridgeDBException ("Can not load if no storeType set");
+        }
+        File file = new File(fileName);
+    	if (!file.exists()) {
+    		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
+    	} else if (file.isDirectory()){
+    		throw new BridgeDBException("File is a directory: " + file.getAbsolutePath());            
+        } else { 
+            LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
+            loader.validate();
+            return loader.linksetLoad(chainIds);
         }
     }
 

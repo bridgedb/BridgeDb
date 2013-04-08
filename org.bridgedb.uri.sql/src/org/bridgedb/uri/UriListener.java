@@ -78,8 +78,9 @@ public interface UriListener {
      * @return Id of the forward mappingSet.
      * @throws BridgeDBException Thrown if either UriSpace has not previously been registered using registerUriSpace
      */
-   public int registerMappingSet(UriPattern sourceUriPattern, String predicate,  String justification, 
-           UriPattern targetUriPattern, boolean symetric, Set<String> viaLabels) throws  BridgeDBException;
+   public int registerMappingSet(UriPattern sourceUriPattern, String predicate, String justification, 
+           UriPattern targetUriPattern, boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets) 
+           throws  BridgeDBException;
 
     /**
      * Inserts a mapping into the system.

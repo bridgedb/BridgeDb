@@ -35,12 +35,13 @@ public class MappingSetInfo {
     private final String predicate;
     private final String targetSysCode;
     private final String justification;
-    private final boolean symmetric;
+    private final int symmetric;
     private Set<String> viaSystemCode;
+    private Set<Integer> chainIds;
     private Integer numberOfLinks;
 
     public MappingSetInfo(int id, String sourceSysCode, String predicate, String targetSysCode, String justification,
-            boolean symmetric, Set<String> viaSystemCodes,  Integer numberOfLinks){
+            int symmetric, Set<String> viaSystemCodes,  Set<Integer> chainIds, Integer numberOfLinks){
         intId = id;
         stringId = null;
         this.predicate = predicate;
@@ -49,6 +50,7 @@ public class MappingSetInfo {
         this.justification = justification;
         this.symmetric = symmetric;
         setViaSystemCode(viaSystemCodes);
+        this.chainIds = chainIds;
         this.numberOfLinks = numberOfLinks;
     }
     
@@ -98,7 +100,7 @@ public class MappingSetInfo {
      * @return the symmetric
      */
     public boolean isSymmetric() {
-        return symmetric;
+        return getSymmetric() > 0;
     }
 
     /**
@@ -117,8 +119,11 @@ public class MappingSetInfo {
     
     public String toString(){
         return this.getStringId() + "\n\tsourceSysCode:" + this.sourceSysCode + "\n\tpredicate:" + this.predicate 
-                + "\n\ttargetSysCode:" + this.targetSysCode + "\n\tviaSystemCodes: " + this.viaSystemCode 
-                + "\n\tnumberOfLinks:" + this.numberOfLinks + "\n";
+                + "\n\ttargetSysCode: " + this.targetSysCode 
+                + "\n\tsymetric: " + this.symmetric
+                + "\n\tviaSystemCodes: " + this.viaSystemCode 
+                + "\n\tchainIds: " + this.chainIds
+                + "\n\tnumberOfLinks: " + this.numberOfLinks + "\n";
     }
 
     /**
@@ -151,6 +156,27 @@ public class MappingSetInfo {
      */
     public String getJustification() {
         return justification;
+    }
+
+    /**
+     * @return the chainIds
+     */
+    public Set<Integer> getChainIds() {
+        return chainIds;
+    }
+
+    /**
+     * @param chainIds the chainIds to set
+     */
+    public void setChainIds(Set<Integer> chainIds) {
+        this.chainIds = chainIds;
+    }
+
+    /**
+     * @return the symmetric
+     */
+    public int getSymmetric() {
+        return symmetric;
     }
 
 

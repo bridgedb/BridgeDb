@@ -22,13 +22,11 @@ package org.bridgedb.uri;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.Xref;
-import org.bridgedb.uri.UriListener;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.IDMapperTestBase;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  * Base class of all Test using Uris
@@ -43,6 +41,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         
     public static final boolean SYMETRIC = true;
     public static final Set<String> NO_VIA = null;
+    public static final Set<Integer> NO_CHAIN = null;
 
     protected static final int mappingSet2_3 = 3;
  
@@ -194,26 +193,26 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.registerUriPattern(DataSource3, uriSpace3a + "$id");
 
         int mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-                Profile.getDefaultJustifictaionString(), uriPattern2, SYMETRIC, NO_VIA);
+                Profile.getDefaultJustifictaionString(), uriPattern2, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
-                Profile.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA);
+                Profile.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
         assertEquals(mappingSet2_3, mappingSet);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3Uri3, mappingSet2_3, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-                Profile.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA);
+                Profile.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri1, map1Uri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getTestJustifictaion(), uriPattern2, SYMETRIC, NO_VIA);
+        		Profile.getTestJustifictaion(), uriPattern2, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
@@ -222,7 +221,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map3AUri1, map3Uri2, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
-        		Profile.getTestJustifictaion(), uriPattern3, SYMETRIC, NO_VIA);
+        		Profile.getTestJustifictaion(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);
@@ -232,8 +231,11 @@ public abstract class UriListenerTest extends IDMapperTestBase{
 
         HashSet<String> via = new HashSet<String>();
         via.add("test via");
+        HashSet<Integer> chain = new HashSet<Integer>();
+        chain.add(1);
+        chain.add(2);
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getTestProfile(), uriPattern3, SYMETRIC, via);
+        		Profile.getTestProfile(), uriPattern3, SYMETRIC, via, chain);
         listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);

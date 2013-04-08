@@ -53,6 +53,7 @@ public class TransativeFinderTest extends TestUtils  {
  
     
     @Before
+    @Ignore
     public void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.checkSQLAccess();
@@ -70,12 +71,9 @@ public class TransativeFinderTest extends TestUtils  {
         mapper.registerUriPattern(transativeTestD, "http://www.example.com/DS_D/$id");
         DataSource transativeTestE = DataSource.register("TransativeTestE", "TransativeTestE").asDataSource();
         mapper.registerUriPattern(transativeTestE, "http://www.example.com/DS_E/$id");
-
-        
 	}
 
     @Test
-    @Ignore
 	public void testFinder1() throws BridgeDBException, RDFHandlerException, IOException {	
         report("testFinder");
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
@@ -92,7 +90,6 @@ public class TransativeFinderTest extends TestUtils  {
 	}
 	
     @Test
-    @Ignore
  	public void testFinder2() throws BridgeDBException, RDFHandlerException, IOException {	
         report("testFinder2");
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);

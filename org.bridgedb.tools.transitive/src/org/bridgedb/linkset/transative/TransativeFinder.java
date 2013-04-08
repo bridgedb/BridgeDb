@@ -11,7 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SQLUriMapper;
@@ -60,11 +63,10 @@ public class TransativeFinder extends SQLBase{
         }
         for (int i = lastTranstativeLoaded + 1; i <= maxMappingSet; i++){
             MappingSetInfo info = mapper.getMappingSetInfo(i);
-            if (info.isSymmetric()){
-                i++;
-            }
-            if (!info.isTransitive()){
-                computeTransative(info, info.getIntId());
+            if (!info.isSymmetric()){
+                if (!info.isTransitive()){
+                    computeTransative(info, info.getIntId());
+                }
             }
         }
         HashMap<Integer,Integer> oldTransatives = (HashMap<Integer,Integer>)newTransatives.clone();
@@ -86,14 +88,15 @@ public class TransativeFinder extends SQLBase{
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info, checkTo);
         for (MappingSetInfo possibleInfo:possibleInfos) {
-            if (checkValidTransative(possibleInfo, info)){
-                int result = doTransative(possibleInfo, info);
+            HashSet<Integer> chainIds = this.getChain(possibleInfo, info);
+            if (checkValidTransative(possibleInfo, info, chainIds)){
+                int result = doTransative(possibleInfo, info, chainIds);
                 if (result >0) {
                    newTransatives.put(result, info.getIntId());
                 }
             }
-            if (checkValidTransative(info, possibleInfo)){
-                doTransative(info, possibleInfo);
+            if (checkValidTransative(info, possibleInfo, chainIds)){
+                doTransative(info, possibleInfo, chainIds);
             }
          }
     }
@@ -113,7 +116,7 @@ public class TransativeFinder extends SQLBase{
         }
     }
     
-    private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right) {
+    private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         //Left dource must be less than right source
         if (left.getSourceSysCode().equals(right.getTargetSysCode())){
             System.out.println ("Loop " + left.getStringId() + " -> " + right.getStringId());
@@ -167,26 +170,74 @@ public class TransativeFinder extends SQLBase{
                 }
             }
         }
+        if (chainAlreadyExists(chainIds)){
+            System.out.println("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
+            System.out.println("    " + chainIds);
+            return false;        
+        }
         return true; 
     }
 
-    private int doTransative(MappingSetInfo left, MappingSetInfo right) 
+    private boolean chainAlreadyExists(Set<Integer> chainIds) throws BridgeDBException{
+        if (chainIds.size() < 2){
+            return false;
+        }
+        Set<Integer> possibles = null;
+        for (Integer chainId:chainIds){
+            Set<Integer> newPossibles = getTransativesThatUseId(chainId);
+            if (possibles == null){
+                possibles = newPossibles;
+            } else {
+                possibles = setIntersection(possibles, newPossibles);
+            }
+            if (possibles.isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private int doTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) 
             throws RDFHandlerException, IOException, BridgeDBException {
         int leftId = left.getIntId();
         int rightId = right.getIntId();
         Reporter.println("Creating tranasative from " + leftId + " to " + rightId);
         System.out.println(left);
         System.out.println(right);
+        System.out.println(chainIds);
         File fileName = TransativeCreator.doTransativeIfPossible(left, right, storeType);
         if (fileName == null){
             Reporter.println ("No transative links found");
             return -1;
         } else {
             Reporter.println("Created " + fileName);
-            return linksetLoader.load(fileName.getAbsolutePath(), storeType, ValidationType.LINKSMINIMAL);
+            return linksetLoader.loadLinkset(fileName.getAbsolutePath(), storeType, ValidationType.LINKSMINIMAL, chainIds);
         }
     }
 
+    private HashSet<Integer> getChain(MappingSetInfo left, MappingSetInfo right){
+        HashSet<Integer> chainIds = new HashSet<Integer>();
+        if (left.getChainIds().isEmpty()){
+            if (left.isSymmetric()){
+                chainIds.add(left.getSymmetric());
+            } else {
+                chainIds.add(left.getIntId());
+            }
+        } else {
+            chainIds.addAll(left.getChainIds());
+        }
+        if (right.getChainIds().isEmpty()){
+            if (right.isSymmetric()){
+                chainIds.add(right.getSymmetric());
+            } else {
+                chainIds.add(right.getIntId());
+            }
+        } else {
+            chainIds.addAll(right.getChainIds());
+        }
+        return chainIds;
+    }
+    
     private int getMaxMappingSet() throws BridgeDBException {
         StringBuilder query = new StringBuilder();
         query.append("SELECT MAX(");
@@ -204,6 +255,45 @@ public class TransativeFinder extends SQLBase{
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
+    }
+
+    private Set<Integer> getTransativesThatUseId(Integer chainId) throws BridgeDBException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(SQLUriMapper.MAPPING_SET_ID_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(SQLUriMapper.CHAIN_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(SQLUriMapper.CHAIN_ID_COLUMN_NAME);
+        query.append(" = ");
+        query.append(chainId);
+        
+        Statement statement = this.createStatement();
+        HashSet results = new HashSet<Integer>();
+        try {
+            ResultSet rs = statement.executeQuery(query.toString());
+            while (rs.next()){
+                results.add(rs.getInt(SQLUriMapper.MAPPING_SET_ID_COLUMN_NAME));
+            }
+            return results;
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }    
+    }
+
+    private Set<Integer> setIntersection(Set<Integer> possibles, Set<Integer> newPossibles) {
+        if (possibles.size() > newPossibles.size()){
+            return setIntersection(newPossibles, possibles);
+        }
+        //ystem.out.println(possibles);
+        //ystem.out.println(newPossibles);
+        Iterator<Integer> check = possibles.iterator();
+        while (check.hasNext()){
+            if (!newPossibles.contains(check.next())){
+                check.remove();
+            }
+        }
+        return possibles;
     }
 
 

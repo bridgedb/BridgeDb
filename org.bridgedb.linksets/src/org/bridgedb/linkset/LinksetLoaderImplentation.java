@@ -176,7 +176,7 @@ public class LinksetLoaderImplentation{
             throw new BridgeDBException ("Illegal call to load() with StoreType == null");
         }
         if (validationType.isLinkset()){
-            return linksetLoad();
+            return linksetLoad(null);
         } else {
             linksetContext = getVoidContext();
             linksetResource = linksetContext;
@@ -186,9 +186,9 @@ public class LinksetLoaderImplentation{
         }
     }
     
-    private int linksetLoad() throws BridgeDBException{
+    protected int linksetLoad(Set<Integer> chainIds) throws BridgeDBException{
         UriListener urlListener = SQLUriMapper.factory(false, storeType);
-        getLinksetContexts(urlListener);
+        getLinksetContexts(urlListener, chainIds);
         resetBaseURI();
         loadVoid();
         int result = loadSQL(urlListener);
@@ -200,8 +200,8 @@ public class LinksetLoaderImplentation{
         }
         return result;
     }
-    
-    private void getLinksetContexts(UriListener urlListener) throws BridgeDBException {
+
+    private void getLinksetContexts(UriListener urlListener, Set<Integer> chainIds) throws BridgeDBException {
         LinksetVoidInformation information = (LinksetVoidInformation)metaData;
         UriPattern subjectUriPattern = information.getSubjectUriPattern();
         UriPattern targetUriPattern = information.getTargetUriPattern();
@@ -211,7 +211,7 @@ public class LinksetLoaderImplentation{
         Set<String> vaiLabels = information.getViaLabels();
         String justification = information.getJustification();
         mappingId = urlListener.registerMappingSet(subjectUriPattern, predicate, justification, targetUriPattern, 
-                symmetric, vaiLabels);   
+                symmetric, vaiLabels, chainIds);   
         linksetContext = RdfFactory.getLinksetUri(mappingId);
         linksetResource = information.getLinksetResource();
         if (symmetric) {
