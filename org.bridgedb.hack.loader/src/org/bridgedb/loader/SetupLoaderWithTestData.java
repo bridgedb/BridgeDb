@@ -39,10 +39,9 @@ public class SetupLoaderWithTestData {
         ConfigReader.logToConsole();
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.LOAD);
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.LOAD);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cs-cm.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        TransativeFinder transativeFinder = new TransativeFinder(StoreType.LOAD);
-        transativeFinder.UpdateTransative();
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", StoreType.LOAD, ValidationType.VOID);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chembl-rdf-void.ttl", StoreType.LOAD, ValidationType.VOID);
         //linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cs_test_profile.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
@@ -50,10 +49,11 @@ public class SetupLoaderWithTestData {
         //linksetLoader.load("../org.bridgedb.linksets/test-data/cs-cm_test_profile.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         //transativeFinder.UpdateTransative();
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-ct.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        transativeFinder.UpdateTransative();
+        //transativeFinder.UpdateTransative();
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-dd.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        transativeFinder.UpdateTransative();
+        //transativeFinder.UpdateTransative();
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-dt.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        //transativeFinder.UpdateTransative();
         transativeFinder.UpdateTransative();
 	}
 

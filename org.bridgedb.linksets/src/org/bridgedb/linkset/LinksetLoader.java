@@ -143,7 +143,7 @@ public class LinksetLoader implements LinksetInterface{
         }
     }
 
-    private static void loadFile(File file, StoreType storeType, ValidationType validationType) 
+    private static int loadFile(File file, StoreType storeType, ValidationType validationType) 
     		throws BridgeDBException {
         if (storeType == null){
             throw new BridgeDBException ("Can not load if no storeType set");
@@ -152,43 +152,41 @@ public class LinksetLoader implements LinksetInterface{
     		throw new BridgeDBException("File not found: " + file.getAbsolutePath());
     	} else if (file.isDirectory()){
             File[] children = file.listFiles();
+            int lastMappingsetID = 0;
             for (File child:children){
-                loadFile(child, storeType, validationType);
+                lastMappingsetID = loadFile(child, storeType, validationType);
             }
+            return lastMappingsetID;
         } else { 
             LinksetLoaderImplentation loader = new LinksetLoaderImplentation(file, validationType, storeType);
             loader.validate();
-            loader.load();
+            return loader.load();
         }
     }
 
-    private void loadURI(String address, StoreType storeType, ValidationType validationType) 
+    private int loadURI(String address, StoreType storeType, ValidationType validationType) 
     		throws BridgeDBException {
         if (storeType == null){
             throw new BridgeDBException ("Can not load if no storeType set");
         }
         LinksetLoaderImplentation loader = new LinksetLoaderImplentation(address, validationType, storeType);
         loader.validate();
-        loader.load();
-    }
-
-    private void loadUri(java.net.URI uri, StoreType storeType, ValidationType type) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return loader.load();
     }
 
     @Override
-    public void load(String path, StoreType storeType, ValidationType validationType) throws BridgeDBException {
+    public int load(String path, StoreType storeType, ValidationType validationType) throws BridgeDBException {
         path = path.trim();
         File file;
         try {
             java.net.URL url = new java.net.URL(path);
             RDFFormat format = null;
-            loadURI(path, storeType, validationType);
+            return loadURI(path, storeType, validationType);
         } catch (IOException ex) {
             //ok not a uri so try as a file
             //No cleaner way to do this known
             file = new File(path);
-            loadFile(file, storeType, validationType);
+            return loadFile(file, storeType, validationType);
         }
     }
     

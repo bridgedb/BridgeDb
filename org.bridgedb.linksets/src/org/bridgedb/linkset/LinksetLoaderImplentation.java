@@ -171,32 +171,34 @@ public class LinksetLoaderImplentation{
         metaData.validate();
     }
     
-    protected synchronized void load() throws BridgeDBException{
+    protected synchronized int load() throws BridgeDBException{
         if (storeType == null){
             throw new BridgeDBException ("Illegal call to load() with StoreType == null");
         }
         if (validationType.isLinkset()){
-            linksetLoad();
+            return linksetLoad();
         } else {
             linksetContext = getVoidContext();
             linksetResource = linksetContext;
             inverseContext = null;
             loadVoid();
+            return -1;
         }
     }
     
-    private void linksetLoad() throws BridgeDBException{
+    private int linksetLoad() throws BridgeDBException{
         UriListener urlListener = SQLUriMapper.factory(false, storeType);
         getLinksetContexts(urlListener);
         resetBaseURI();
         loadVoid();
-        loadSQL(urlListener);
+        int result = loadSQL(urlListener);
         urlListener.closeInput();    
         if (accessedFrom == null){
             logger.info("Load finished. ");
         } else {
             logger.info("Load finished for " + accessedFrom);            
         }
+        return result;
     }
     
     private void getLinksetContexts(UriListener urlListener) throws BridgeDBException {
@@ -296,13 +298,14 @@ public class LinksetLoaderImplentation{
         }
     }
 
-    private void loadSQL(UriListener urlListener) throws BridgeDBException {
+    private int loadSQL(UriListener urlListener) throws BridgeDBException {
         LinksetStatements linksetStatements = (LinksetStatements) statements;
         for (Statement st:linksetStatements.getLinkStatements()){
             String sourceURL = st.getSubject().stringValue();
             String targetURL = st.getObject().stringValue();
             urlListener.insertUriMapping(sourceURL, targetURL, mappingId, symmetric);
         }
+        return mappingId;
     }
         
     private synchronized URI getVoidContext() throws BridgeDBException {

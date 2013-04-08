@@ -45,7 +45,7 @@ public interface LinksetInterface extends LinksetInterfaceMinimal{
     public String loadString(String source, String info, RDFFormat format, StoreType storeType, 
             ValidationType validationType) throws BridgeDBException;
     
-    public void load(String path, StoreType storeType, ValidationType type) throws BridgeDBException;
+    public int load(String path, StoreType storeType, ValidationType type) throws BridgeDBException;
     
     @Override
     public String loadInputStream(String source, InputStream inputStream, RDFFormat format, StoreType storeType, 
