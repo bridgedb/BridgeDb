@@ -81,7 +81,8 @@ public class TransativeFinder extends SQLBase{
     }
    
     private void computeTransative(MappingSetInfo info, int checkTo) throws BridgeDBException, RDFHandlerException, IOException {
-        System.out.println ("compute transtaive mappingset " + info.getIntId());
+        System.out.println ("compute transtaive mappingset " + info.getIntId() + " up to " + checkTo);
+        System.out.println (info);
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info, checkTo);
         for (MappingSetInfo possibleInfo:possibleInfos) {
@@ -115,53 +116,53 @@ public class TransativeFinder extends SQLBase{
     private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right) {
         //Left dource must be less than right source
         if (left.getSourceSysCode().equals(right.getTargetSysCode())){
-            //ystem.out.println ("Loop " + left.getId() + " -> " + right.getId());
-            //ystem.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
+            System.out.println ("Loop " + left.getStringId() + " -> " + right.getStringId());
+            System.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
             return false;
         }
         //Must match in the middle
         if (!left.getTargetSysCode().equals(right.getSourceSysCode())){
-            //ystem.out.println ("No match " + left.getId() + " -> " + right.getId());
-            //stem.out.println ("    " + left.getTargetSysCode() + " != " + right.getSourceSysCode());
+            System.out.println ("No match " + left.getStringId() + " -> " + right.getStringId());
+            System.out.println ("    " + left.getTargetSysCode() + " != " + right.getSourceSysCode());
             return false;
         }
         //If Either is transantive only connect if left is a lower number
         //This makes sure the same chain is not connected in many differet ways
-        if (!left.getViaSystemCode().isEmpty() || !right.getViaSystemCode().isEmpty()){
+        /*if (!left.getViaSystemCode().isEmpty() || !right.getViaSystemCode().isEmpty()){
             int leftId = left.getIntId();
             int rightId = right.getIntId();
             if (leftId > rightId){
-                //ystem.out.println("Skipping Alternative chain with " + left.getId() + " -> " + right.getId());
+                System.out.println("Skipping Alternative chain with " + left.getStringId() + " -> " + right.getStringId());
                 return false;
             }
-        }
+        }*/
         for (String via:left.getViaSystemCode()){
             if (right.getTargetSysCode().equals(via)){
-                //ystem.out.println("Target in Via with " + left.getId() + " -> " + right.getId());
-                //ystem.out.println ("    " + via + " == " + right.getTargetSysCode());            
+                System.out.println("Target in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via + " == " + right.getTargetSysCode());            
                 return false;
             }
             if (left.getTargetSysCode().equals(via)){
-                //ystem.out.println("Middle in Via with " + left.getId() + " -> " + right.getId());
-                //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
+                System.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via + " == " + left.getTargetSysCode());            
                 return false;
             }
         }
         for (String via:right.getViaSystemCode()){
             if (left.getSourceSysCode().equals(via)){
-                //ystem.out.println("Source in Via with " + left.getId() + " -> " + right.getId());
-                //ystem.out.println ("    " + via + " == " + left.getSourceSysCode());            
+                System.out.println("Source in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via + " == " + left.getSourceSysCode());            
                 return false;
             }
             if (left.getTargetSysCode().equals(via)){
-                //ystem.out.println("Middle in Via with " + left.getId() + " -> " + right.getId());
-                //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
+                System.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via + " == " + left.getTargetSysCode());            
                 return false;
             }
             for (String via2:left.getViaSystemCode()){
                 if (via.equals(via2)){
-                    //ystem.out.println("Similar via with " + left.getId() + " -> " + right.getId());
-                    //ystem.out.println("    " + via);
+                    System.out.println("Similar via with " + left.getStringId() + " -> " + right.getStringId());
+                    System.out.println("    " + via);
                     return false;
                 }
             }

@@ -7,29 +7,29 @@
 @prefix pav: <http://purl.org/pav/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix DS1: <http://www.example.com/DS1/> .
-@prefix DS3: <http://www.example.com/DS3/> .
+@prefix DS_B: <http://www.example.com/DS_B/> .
+@prefix DS_C: <http://www.example.com/DS_C/> .
 
 <> a void:DatasetDescription ;
     dcterms:title "Dataset Description Title"^^xsd:string ;
     dcterms:description """Dataset description description"""^^xsd:string;
     pav:createdBy <http://www.foo.com/> ;
     pav:createdOn "2012-08-06"^^xsd:date;
-    foaf:primaryTopic :Test1_3 .
+    foaf:primaryTopic :TestB_C .
 
-:TestDS1 a void:Dataset  ;
-    void:uriSpace DS1:.
-:TestDS3 a void:Dataset ;
-    void:uriSpace DS3:.
-:Test1_3 a void:Linkset  ;
-    void:subjectsTarget :TestDS1 ;
-    void:objectsTarget :TestDS3 ;
+:TestDS_B a void:Dataset  ;
+    void:uriSpace DS_B:.
+:TestDS_C a void:Dataset ;
+    void:uriSpace DS_C:.
+:TestB_C a void:Linkset  ;
+    void:subjectsTarget :TestDS_B ;
+    void:objectsTarget :TestDS_C ;
     dcterms:license "Who cares this is a test" ;
     void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
     dul:expresses <http://www.bridgedb.org/test#justification1> ;
     dcterms:created "2012-02-22"^^xsd:date ;
     dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
  
-DS1:123 <http://www.bridgedb.org/test#testPredicate> DS3:123 .
-DS1:456 <http://www.bridgedb.org/test#testPredicate> DS3:456 .
-DS1:789 <http://www.bridgedb.org/test#testPredicate> DS3:789 .
+DS_B:123 <http://www.bridgedb.org/test#testPredicate> DS_C:123 .
+DS_B:456 <http://www.bridgedb.org/test#testPredicate> DS_C:456 .
+DS_B:789 <http://www.bridgedb.org/test#testPredicate> DS_C:789 .

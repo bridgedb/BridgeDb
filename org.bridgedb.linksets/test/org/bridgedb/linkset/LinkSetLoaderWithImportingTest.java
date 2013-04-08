@@ -42,7 +42,6 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         
     private static final boolean LOAD_DATA = true;
     
-    //Unsure if this is still needed or even desirable!
     @BeforeClass
     public static void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 

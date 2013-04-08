@@ -29,6 +29,7 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfFactory;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.tools.metadata.validator.Validator;
@@ -253,6 +254,7 @@ public class LinksetLoader implements LinksetInterface{
         if (storeType == null){
             throw new BridgeDBException ("unable to clear mapping of unspecified storeType");
         }
+        UriPattern.refreshUriPatterns();
         RdfFactory.clear(storeType);
         logger.info(storeType + " RDF cleared");
         UriListener listener = SQLUriMapper.factory(true, storeType);

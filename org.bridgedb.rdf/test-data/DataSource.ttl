@@ -686,7 +686,7 @@ bridgeDB:DataSource_Chembl_Old_Target a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/target/t$id> ;
 	bridgeDB:hasWikiPathwaysPattern <http://data.kasabi.com/dataset/chembl-rdf/target/t$id> ;
-	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> , <http://linkedchemistry.info/chembl/target/t$id> .
+	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/target/t$id> , <http://chem2bio2rdf.org/chembl/resource/chembl_targets/$id> .
 
 bridgeDB:DataSource_ChEMBL_target a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL target" ;

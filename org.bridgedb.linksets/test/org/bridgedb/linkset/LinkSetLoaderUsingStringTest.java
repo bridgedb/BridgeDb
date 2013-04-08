@@ -20,8 +20,12 @@
 package org.bridgedb.linkset;
 
 import java.io.File;
+import javax.xml.datatype.DatatypeConfigurationException;
+import org.bridgedb.DataSource;
 import org.bridgedb.rdf.LinksetStatementReaderTest;
 import org.bridgedb.rdf.reader.StatementReader;
+import org.bridgedb.sql.SQLUriMapper;
+import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -36,6 +40,18 @@ import org.openrdf.rio.RDFFormat;
  */
 public class LinkSetLoaderUsingStringTest extends TestUtils{
        
+    public LinkSetLoaderUsingStringTest() 
+            throws DatatypeConfigurationException, BridgeDBException {
+        //Check database is running and settup correctly or kill the test. 
+        TestSqlFactory.checkSQLAccess();
+  
+        SQLUriMapper mapper = SQLUriMapper.factory(false, StoreType.TEST);
+        DataSource foo = DataSource.register("foo", "foo").asDataSource();
+        mapper.registerUriPattern(foo, "http://www.foo.com/$id");
+        DataSource example = DataSource.register("example.com", "example.com").asDataSource();
+        mapper.registerUriPattern(example, "http://www.example.com/$id");
+    }
+    
     @Test
     public void testcheckStringValid() throws BridgeDBException {
         report("CheckStringValid");

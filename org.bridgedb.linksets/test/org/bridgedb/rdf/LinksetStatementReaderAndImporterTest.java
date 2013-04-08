@@ -20,10 +20,14 @@
 package org.bridgedb.rdf;
 
 import java.util.Set;
+import javax.xml.datatype.DatatypeConfigurationException;
+import org.bridgedb.DataSource;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.linkset.rdf.LinksetStatementReaderAndImporter;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import org.junit.After;
@@ -39,9 +43,6 @@ import org.junit.Test;
  */
 public class LinksetStatementReaderAndImporterTest extends TestUtils{
     
-    public LinksetStatementReaderAndImporterTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws Exception {
         //Check database is running and settup correctly or kill the test. 
@@ -84,6 +85,11 @@ public class LinksetStatementReaderAndImporterTest extends TestUtils{
         report("LoadFromRDFWithOtherTest");
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData(StoreType.TEST);
+        SQLUriMapper mapper = SQLUriMapper.factory(false, StoreType.TEST);
+        DataSource foo = DataSource.register("foo", "foo").asDataSource();
+        mapper.registerUriPattern(foo, "http://www.foo.com/$id");
+        DataSource example = DataSource.register("example.com", "example.com").asDataSource();
+        mapper.registerUriPattern(example, "http://www.example.com/$id");
         ValidationType validationType = ValidationType.LINKSMINIMAL;
         linksetLoader.load("../org.bridgedb.linksets/test-data/testPart1.ttl", StoreType.TEST, validationType);
         LinksetStatementReaderAndImporter instance = new LinksetStatementReaderAndImporter("test-data/testPart2.ttl", StoreType.TEST);

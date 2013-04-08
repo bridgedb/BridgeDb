@@ -99,6 +99,11 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         return !postfix.isEmpty();
     }
     
+    public static void refreshUriPatterns() throws BridgeDBException{
+        register.clear();
+        BridgeDBRdfHandler.init();
+    }
+    
     public static Set<UriPattern> getUriPatterns() {
         return new HashSet(register.values());
     }
