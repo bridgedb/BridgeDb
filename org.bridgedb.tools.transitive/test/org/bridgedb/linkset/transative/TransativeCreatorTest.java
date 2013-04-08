@@ -22,7 +22,9 @@ package org.bridgedb.linkset.transative;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.bridgedb.DataSource;
 import org.bridgedb.linkset.LinksetLoader;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
@@ -40,7 +42,6 @@ import org.openrdf.rio.RDFHandlerException;
  *
  * @author Christian
  */
-@Ignore
 public class TransativeCreatorTest extends TestUtils {
     
     private static StoreType VALIDATE_ONLY = null;
@@ -57,8 +58,15 @@ public class TransativeCreatorTest extends TestUtils {
         
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData( StoreType.TEST);        
-        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To2.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
-        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sample1To3.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        SQLUriMapper mapper = SQLUriMapper.factory(false, StoreType.TEST);
+        DataSource transativeTestA = DataSource.register("TransativeTestA", "TransativeTestA").asDataSource();
+        mapper.registerUriPattern(transativeTestA, "http://www.example.com/DS_A/$id");
+        DataSource transativeTestB = DataSource.register("TransativeTestB", "TransativeTestB").asDataSource();
+        mapper.registerUriPattern(transativeTestB, "http://www.example.com/DS_B/$id");
+        DataSource transativeTestC = DataSource.register("TransativeTest_C", "TransativeTest_C").asDataSource();
+        mapper.registerUriPattern(transativeTestC, "http://www.example.com/DS_C/$id");
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleBToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
     
     @Test(expected =  BridgeDBException.class)
@@ -74,7 +82,7 @@ public class TransativeCreatorTest extends TestUtils {
         report("NoLink");
         String fileName = "test-data/empty2.ttl";
         File file = new File(fileName);
-        TransativeCreator.createTransative(1, 3, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        TransativeCreator.createTransative(2, 3, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
     }
 
     //TODO cleanup this test!
@@ -83,7 +91,7 @@ public class TransativeCreatorTest extends TestUtils {
         report("CreateTransative");
         String fileName = "../org.bridgedb.tools.transitive/test-data/linkset2To3.ttl";
         File file = new File(fileName);
-        TransativeCreator.createTransative(2, 3, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+        TransativeCreator.createTransative(1, 3, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
         LinksetLoader linksetLoader = new LinksetLoader();
         linksetLoader.load(fileName, StoreType.TEST, ValidationType.LINKSMINIMAL);
     }

@@ -10,7 +10,6 @@ import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
-@Ignore
 public class JustificationMakerTest {
 
 	@Test

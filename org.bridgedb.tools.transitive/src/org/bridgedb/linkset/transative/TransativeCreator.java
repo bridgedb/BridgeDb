@@ -138,7 +138,14 @@ public class TransativeCreator {
     public static String createTransative(int leftId, int rightId, File file, StoreType storeType, 
             URI predicate, URI license, URI derivedBy) 
             throws RDFHandlerException, IOException, BridgeDBException{
-        return "todo";
+        SQLUriMapper mapper = SQLUriMapper.factory(false, storeType);
+        MappingSetInfo left = mapper.getMappingSetInfo(leftId);
+        MappingSetInfo right = mapper.getMappingSetInfo(rightId);
+        boolean result = doTransative(left, right, file, storeType, predicate, license, derivedBy); 
+        if (result){
+            return "Successfully created Transative from " + leftId + " to " + rightId;
+        }
+        return "No Data found creating Transative from " + leftId + " to " + rightId;
     }
     
     public static String createTransative(MappingSetInfo left, MappingSetInfo right, File file, StoreType storeType, 

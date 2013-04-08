@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -74,8 +72,8 @@ public class TransativeFinder extends SQLBase{
     }
    
     private void computeTransative(MappingSetInfo info) throws BridgeDBException, RDFHandlerException, IOException {
-        System.out.println ("compute transtaive mappingset " + info.getIntId());
-        System.out.println (info);
+        //ystem.out.println ("compute transtaive mappingset " + info.getIntId());
+        //ystem.out.println (info);
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
@@ -107,60 +105,50 @@ public class TransativeFinder extends SQLBase{
     private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         //Left dource must be less than right source
         if (left.getSourceSysCode().equals(right.getTargetSysCode())){
-            System.out.println ("Loop " + left.getStringId() + " -> " + right.getStringId());
-            System.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
+            //ystem.out.println ("Loop " + left.getStringId() + " -> " + right.getStringId());
+            //ystem.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
             return false;
         }
         //Must match in the middle
         if (!left.getTargetSysCode().equals(right.getSourceSysCode())){
-            System.out.println ("No match " + left.getStringId() + " -> " + right.getStringId());
-            System.out.println ("    " + left.getTargetSysCode() + " != " + right.getSourceSysCode());
+            //ystem.out.println ("No match " + left.getStringId() + " -> " + right.getStringId());
+            //ystem.out.println ("    " + left.getTargetSysCode() + " != " + right.getSourceSysCode());
             return false;
         }
-        //If Either is transantive only connect if left is a lower number
-        //This makes sure the same chain is not connected in many differet ways
-        /*if (!left.getViaSystemCode().isEmpty() || !right.getViaSystemCode().isEmpty()){
-            int leftId = left.getIntId();
-            int rightId = right.getIntId();
-            if (leftId > rightId){
-                System.out.println("Skipping Alternative chain with " + left.getStringId() + " -> " + right.getStringId());
-                return false;
-            }
-        }*/
         for (String via:left.getViaSystemCode()){
             if (right.getTargetSysCode().equals(via)){
-                System.out.println("Target in Via with " + left.getStringId() + " -> " + right.getStringId());
-                System.out.println ("    " + via + " == " + right.getTargetSysCode());            
+                //ystem.out.println("Target in Via with " + left.getStringId() + " -> " + right.getStringId());
+                //ystem.out.println ("    " + via + " == " + right.getTargetSysCode());            
                 return false;
             }
             if (left.getTargetSysCode().equals(via)){
-                System.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
-                System.out.println ("    " + via + " == " + left.getTargetSysCode());            
+                //ystem.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
+                //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
                 return false;
             }
         }
         for (String via:right.getViaSystemCode()){
             if (left.getSourceSysCode().equals(via)){
-                System.out.println("Source in Via with " + left.getStringId() + " -> " + right.getStringId());
-                System.out.println ("    " + via + " == " + left.getSourceSysCode());            
+                //ystem.out.println("Source in Via with " + left.getStringId() + " -> " + right.getStringId());
+                //ystem.out.println ("    " + via + " == " + left.getSourceSysCode());            
                 return false;
             }
             if (left.getTargetSysCode().equals(via)){
-                System.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
-                System.out.println ("    " + via + " == " + left.getTargetSysCode());            
+                //ystem.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
+                //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
                 return false;
             }
             for (String via2:left.getViaSystemCode()){
                 if (via.equals(via2)){
-                    System.out.println("Similar via with " + left.getStringId() + " -> " + right.getStringId());
-                    System.out.println("    " + via);
+                    //ystem.out.println("Similar via with " + left.getStringId() + " -> " + right.getStringId());
+                    //ystem.out.println("    " + via);
                     return false;
                 }
             }
         }
         if (chainAlreadyExists(chainIds)){
-            System.out.println("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
-            System.out.println("    " + chainIds);
+            //ystem.out.println("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
+            //stem.out.println("    " + chainIds);
             return false;        
         }
         return true; 
@@ -190,9 +178,9 @@ public class TransativeFinder extends SQLBase{
         int leftId = left.getIntId();
         int rightId = right.getIntId();
         Reporter.println("Creating tranasative from " + leftId + " to " + rightId);
-        System.out.println(left);
-        System.out.println(right);
-        System.out.println(chainIds);
+        //ystem.out.println(left);
+        //ystem.out.println(right);
+        //ystem.out.println(chainIds);
         File fileName = TransativeCreator.doTransativeIfPossible(left, right, storeType);
         if (fileName == null){
             Reporter.println ("No transative links found");

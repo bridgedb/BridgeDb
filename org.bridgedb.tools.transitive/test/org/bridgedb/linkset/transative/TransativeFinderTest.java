@@ -60,7 +60,6 @@ public class TransativeFinderTest extends TestUtils  {
         mapper = SQLUriMapper.factory(false, StoreType.TEST);
         linksetLoader = new LinksetLoader();
         linksetLoader.clearExistingData( StoreType.TEST);  
-        System.out.println("cleared data");
         DataSource transativeTestA = DataSource.register("TransativeTestA", "TransativeTestA").asDataSource();
         mapper.registerUriPattern(transativeTestA, "http://www.example.com/DS_A/$id");
         DataSource transativeTestB = DataSource.register("TransativeTestB", "TransativeTestB").asDataSource();
@@ -71,6 +70,8 @@ public class TransativeFinderTest extends TestUtils  {
         mapper.registerUriPattern(transativeTestD, "http://www.example.com/DS_D/$id");
         DataSource transativeTestE = DataSource.register("TransativeTestE", "TransativeTestE").asDataSource();
         mapper.registerUriPattern(transativeTestE, "http://www.example.com/DS_E/$id");
+        DataSource transativeTestF = DataSource.register("TransativeTestF", "TransativeTestF").asDataSource();
+        mapper.registerUriPattern(transativeTestE, "http://www.example.com/DS_F/$id");
 	}
 
     @Test
@@ -106,12 +107,29 @@ public class TransativeFinderTest extends TestUtils  {
         report("testFinder3");
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleBToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
-        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleCToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleEToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleCToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
+        transativeFinder.UpdateTransative();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics();
         assertEquals(20, results.getNumberOfMappingSets());
+        report("testFinder3Done");
+	}
+
+    @Test
+ 	public void testFinder4() throws BridgeDBException, RDFHandlerException, IOException {	
+        report("testFinder4");
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleBToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleEToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleEToF.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
+        transativeFinder.UpdateTransative();
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleCToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        transativeFinder.UpdateTransative();
+        OverallStatistics results = mapper.getOverallStatistics();
+        assertEquals(30, results.getNumberOfMappingSets());
         report("testFinder3Done");
 	}
 
