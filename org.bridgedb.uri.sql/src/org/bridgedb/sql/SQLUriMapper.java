@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.BridgeDBRdfHandler;
+import org.bridgedb.rdf.DataSourceUris;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -84,7 +85,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private static final String NAME_COLUMN_NAME = "name";
     
     private static HashMap<StoreType,SQLUriMapper> register = null;
-    
+    private HashMap<Integer,UriPattern> subjectUriPatterns;
+    private HashMap<Integer,UriPattern> targetUriPatterns;
     static final Logger logger = Logger.getLogger(SQLListener.class);
 
     public static SQLUriMapper factory(boolean dropTables, StoreType storeType) throws BridgeDBException{
@@ -131,6 +133,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             this.registerUriPattern(pattern);
         }
         checkDataSources();
+        subjectUriPatterns = new HashMap<Integer,UriPattern>();
+        targetUriPatterns = new HashMap<Integer,UriPattern>();
     }   
     
     @Override
@@ -1116,7 +1120,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         checkUriPattern(targetUriPattern);
         DataSource source = sourceUriPattern.getDataSource();
         DataSource target = targetUriPattern.getDataSource();      
-        return registerMappingSet(source, predicate, justification, target, symetric, viaLabels, chainedLinkSets);
+        int mappingSetId = registerMappingSet(source, predicate, justification, target, symetric, viaLabels, chainedLinkSets);
+        subjectUriPatterns.put(mappingSetId, sourceUriPattern);
+        targetUriPatterns.put(mappingSetId, targetUriPattern);
+        return mappingSetId;
     }
 
     private void checkUriPattern(UriPattern pattern) throws BridgeDBException{
@@ -1148,21 +1155,40 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public void insertUriMapping(String sourceUri, String targetUri, int mappingSet, boolean symetric) throws BridgeDBException {
-        Xref sourceXref = toXref(sourceUri);
-       if (sourceXref == null){
-            throw new BridgeDBException("Unable to convert sourceUri " + sourceUri);
+    public void insertUriMapping(String sourceUri, String targetUri, int mappingSetId, boolean symetric) throws BridgeDBException {
+        UriPattern uriPattern = subjectUriPatterns.get(mappingSetId);
+        if (uriPattern == null){
+            throw new BridgeDBException("No SourceURIPattern regstered for mappingSetId " + mappingSetId);
         }
-        String sourceId = sourceXref.getId();
-        Xref targetXref = toXref(targetUri);
-        if (targetXref == null){
-            throw new BridgeDBException("Unable to convert targetUri " + targetUri);
+        int end =  sourceUri.length()-uriPattern.getPostfix().length();
+        if (!sourceUri.startsWith(uriPattern.getPrefix())){
+            throw new BridgeDBException("SourceUri: " + sourceUri + " does not mathc the registered pattern "+uriPattern);
         }
-        String targetId = targetXref.getId();
-        this.insertLink(sourceId, targetId, mappingSet, symetric);
+        if (!sourceUri.endsWith(uriPattern.getPostfix())){
+            throw new BridgeDBException("SourceUri: " + sourceUri + " does not mathc the registered pattern "+uriPattern);
+        }
+        String sourceId = sourceUri.substring(uriPattern.getPrefix().length(), end);
+        uriPattern = targetUriPatterns.get(mappingSetId);
+        if (uriPattern == null){
+            throw new BridgeDBException("No TargetURIPattern regstered for mappingSetId " + mappingSetId);
+        }
+        if (!targetUri.startsWith(uriPattern.getPrefix())){
+            throw new BridgeDBException("TargetUri: " + targetUri + " does not mathc the registered pattern "+uriPattern);
+        }
+        if (!targetUri.endsWith(uriPattern.getPostfix())){
+            throw new BridgeDBException("TargetUri: " + targetUri + " does not mathc the registered pattern "+uriPattern);
+        }
+        end = targetUri.length()-uriPattern.getPostfix().length();
+        String targetId = targetUri.substring(uriPattern.getPrefix().length(), end);
+        this.insertLink(sourceId, targetId, mappingSetId, symetric);
     }
 
-
+    @Override
+    public void closeInput() throws BridgeDBException {
+        super.closeInput();
+        subjectUriPatterns.clear();
+        targetUriPatterns.clear();
+    }
     /**
      * Method to split a Uri into an URISpace and an ID.
      *
