@@ -9,7 +9,7 @@ public class BridgeDBConstants {
 	
 	public static final URI TEST_PREDICATE = new URIImpl(bdb + "testPredicate");
 	
-    public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#";
+    public static final String PREFIX = "http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#";
 
     public static final String DATA_SOURCE = "DataSource";
     public static final URI DATA_SOURCE_URI = new URIImpl(PREFIX + DATA_SOURCE);

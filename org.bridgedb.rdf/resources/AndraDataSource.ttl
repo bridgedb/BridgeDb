@@ -1,5 +1,5 @@
 @prefix : <> .
-@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .
+@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 :DataSource_2D-PAGE_protein a bridgeDB:DataSource; 

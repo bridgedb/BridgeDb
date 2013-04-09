@@ -1,4 +1,4 @@
-@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090//ontology/DataSource.owl#> .
+@prefix bridgeDB: <http://openphacts.cs.man.ac.uk:9090/ontology/DataSource.owl#> .
 @prefix : <http://no/BaseURI/Set/> .
 
 
