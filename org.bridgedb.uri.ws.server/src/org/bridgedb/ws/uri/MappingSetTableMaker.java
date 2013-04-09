@@ -79,17 +79,30 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("</table>");
     }
     
-    String TABLE_HEADER = "<table border=\"1\">\n"
+    private final String TABLE_HEADER = "<table border=\"1\">\n"
             + "\t<tr>\n"
             + "\t\t<th></th>\n"
             + "\t\t<th></th>\n"
             + "\t\t<th>Source Data Source</th>\n"
             + "\t\t<th>Targets</th>\n"
             + "\t\t<th>Sum of Mappings</th>\n"
-            + "\t\t<th>Id</th>\n"
+            + "\t\t<th colspan=\"2\"> Id</th>\n"
             + "\t\t<th>Predicate</th>\n"
             + "\t\t<th>Justification</th>\n"
-            + "\t\t<th>Transative</th>\n"
+            + "\t\t<th colspan=\"2\"> Transative</th>\n"
+            + "\t</tr>\n"
+            + "\t<tr>\n"
+            + "\t\t<th></th>\n"
+            + "\t\t<th></th>\n"
+            + "\t\t<th></th>\n" //Source Data Source
+            + "\t\t<th></th>\n" //Targets
+            + "\t\t<th></th>\n" //Sum of Mappings
+            + "\t\t<th>Summary</th>\n"
+            + "\t\t<th>Rdf</th>\n"
+            + "\t\t<th></th>\n" //Predicate
+            + "\t\t<th></th>\n" //Justification
+            + "\t\t<th>SysCodes</th>\n"
+            + "\t\t<th>Ids</th>\n"
             + "\t</tr>\n";
 
     String SCRIPT = "<script language=\"javascript\">\n"
@@ -224,10 +237,10 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         addDataSourceCell(sb, infos[i].getSourceSysCode());
         addDataSourceCell(sb, infos[i].getTargetSysCode());
         addNumberOfLinksCell(sb, infos[i].getNumberOfLinks());
-        addMappingSetCell(sb, infos[i].getStringId());
+        addMappingSetCells(sb, infos[i].getStringId());
         addPredicateCell(sb, i);
         addJustificationCell(sb,i);
-        addTransative(sb, i);
+        addTransatives(sb, i);
     }
 
     private void addSingleTarget(StringBuilder sb, int i) throws BridgeDBException {
@@ -317,11 +330,14 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("\t\t<td align=\"right\">");
             sb.append(mappingCount);
             sb.append(" Mappings</td>\n");
+        //rdf    
+        sb.append("\t\t<td>&nbsp</td>\n");
         //predicate    
         sb.append("\t\t<td>&nbsp</td>\n");
         //Justification
         sb.append("\t\t<td>&nbsp</td>\n");
         //Transative
+        sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t</tr>\n");
     }
@@ -365,15 +381,25 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("</a>");
    }
 
-    private void addMappingSetCell(StringBuilder sb, String id) throws BridgeDBException {
-        String idUri = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
+    private void addMappingSetCells(StringBuilder sb, String id) throws BridgeDBException {
+        sb.append("\t\t<td>");
+        addMappingInfoLink(sb, id);
+        sb.append("</td>\n");        
+        String rdfUri = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
         sb.append("\t\t<td><a href=\"");
-            sb.append(idUri);
-            sb.append("\">");
-            sb.append(idUri);
-            sb.append("</a></td>\n");
+            sb.append(rdfUri);
+            sb.append("\">RDF</a></td>\n");
     }
 
+    private void addMappingInfoLink(StringBuilder sb, String id) throws BridgeDBException{
+        String summaryUri = RdfConfig.getTheBaseURI() + "getMappingInfo/" + id;
+        sb.append("<a href=\"");
+            sb.append(summaryUri);
+            sb.append("\">");
+            sb.append(id);
+            sb.append("</a>");        
+    }
+    
     private void addNumberOfLinksCell(StringBuilder sb, int numberOfLinks) {
         sb.append("\t\t<td align=\"right\">");
             sb.append(formatter.format(numberOfLinks));
@@ -392,13 +418,25 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             sb.append("</td>\n");
     }
 
-    private void addTransative(StringBuilder sb, int i) throws BridgeDBException {
+    private void addTransatives(StringBuilder sb, int i) throws BridgeDBException {
         sb.append("\t\t<td>");
         Set<String> viaSet = infos[i].getViaSystemCode();
         int size = viaSet.size();
         int count = 0;
         for (String sysCode:viaSet){
             addDataSourceLink(sb, sysCode);
+            count++;
+            if (count < size){
+                sb.append(", ");
+            }
+        }
+        sb.append("</td>\n");
+        sb.append("\t\t<td>");
+        Set<Integer> chainSet = infos[i].getChainIds();
+        size = chainSet.size();
+        count = 0;
+        for (Integer chain:chainSet){
+            addMappingInfoLink(sb, chain.toString());
             count++;
             if (count < size){
                 sb.append(", ");
