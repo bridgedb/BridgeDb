@@ -88,6 +88,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             + "\t\t<th>Sum of Mappings</th>\n"
             + "\t\t<th>Id</th>\n"
             + "\t\t<th>Predicate</th>\n"
+            + "\t\t<th>Justification</th>\n"
             + "\t\t<th>Transative</th>\n"
             + "\t</tr>\n";
 
@@ -202,8 +203,9 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             j++;
             mappingCount++;
             numberOfLinks+= infos[j].getNumberOfLinks();
-        } while ((j < last) && 
-                (infos[j].getSourceSysCode().equals(infos[j+1].getSourceSysCode()))); 
+        } while ((j < last) 
+                && (infos[j].getSourceSysCode().equals(infos[j+1].getSourceSysCode()))
+                && (infos[j].getTargetSysCode().equals(infos[j+1].getTargetSysCode()))); 
         addTargetSummary(sb, infos[i].getSourceSysCode(), infos[i].getTargetSysCode(), numberOfLinks, mappingCount); 
         addTargetDetail(sb, infos[i].getSourceSysCode(), infos[i].getTargetSysCode(), numberOfLinks, mappingCount); 
         AddMappingSet(sb, i);
@@ -224,6 +226,7 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         addNumberOfLinksCell(sb, infos[i].getNumberOfLinks());
         addMappingSetCell(sb, infos[i].getStringId());
         addPredicateCell(sb, i);
+        addJustificationCell(sb,i);
         addTransative(sb, i);
     }
 
@@ -314,7 +317,11 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("\t\t<td align=\"right\">");
             sb.append(mappingCount);
             sb.append(" Mappings</td>\n");
+        //predicate    
         sb.append("\t\t<td>&nbsp</td>\n");
+        //Justification
+        sb.append("\t\t<td>&nbsp</td>\n");
+        //Transative
         sb.append("\t\t<td>&nbsp</td>\n");
         sb.append("\t</tr>\n");
     }
@@ -378,6 +385,12 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             sb.append(infos[i].getPredicate());
             sb.append("</td>\n");
    }
+
+    private void addJustificationCell(StringBuilder sb, int i) {
+        sb.append("\t\t<td>");
+            sb.append(infos[i].getJustification());
+            sb.append("</td>\n");
+    }
 
     private void addTransative(StringBuilder sb, int i) throws BridgeDBException {
         sb.append("\t\t<td>");
