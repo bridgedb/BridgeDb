@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.BridgeDBException;
 
@@ -406,16 +407,20 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
             sb.append("</td>\n");
    }
 
-    private void addPredicateCell(StringBuilder sb, int i) {
-        sb.append("\t\t<td>");
-            sb.append(infos[i].getPredicate());
-            sb.append("</td>\n");
+    private void addLinkCell(StringBuilder sb, String uri) {
+        sb.append("\t\t<td><a href=\"");
+        sb.append(uri);
+        sb.append("\"</a>");
+        sb.append(SQLUriMapper.splitId(uri));
+        sb.append("</a></td>\n");
    }
 
+    private void addPredicateCell(StringBuilder sb, int i) {
+        addLinkCell(sb, infos[i].getPredicate());
+    }
+    
     private void addJustificationCell(StringBuilder sb, int i) {
-        sb.append("\t\t<td>");
-            sb.append(infos[i].getJustification());
-            sb.append("</td>\n");
+        addLinkCell(sb, infos[i].getJustification());
     }
 
     private void addTransatives(StringBuilder sb, int i) throws BridgeDBException {

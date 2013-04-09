@@ -1231,7 +1231,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @param uri Uri to split
      * @return The URISpace of the Uri
      */
-    private final static String splitId(String uri){
+    public final static String splitId(String uri){
         uri = uri.trim();
         if (uri.contains("#")){
             return uri.substring(uri.lastIndexOf("#")+1, uri.length());
