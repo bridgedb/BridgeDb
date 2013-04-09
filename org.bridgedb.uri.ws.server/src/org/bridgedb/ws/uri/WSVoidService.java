@@ -142,12 +142,11 @@ public class WSVoidService extends WSFame{
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/linkset/{id}/{resource}")
     public String linksetSet(@PathParam("id") String idString, @PathParam("resource") String resource) throws BridgeDBException {
-        throw new BridgeDBException("id= "+ idString + " resource = " + resource);
-        //if (idString == null || idString.isEmpty()){
-       //     throw new BridgeDBException("Parameter id is missing!");
-        //}
-        //Integer id = Integer.parseInt(idString);
-        //return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
+        if (idString == null || idString.isEmpty()){
+            throw new BridgeDBException("Parameter id is missing!");
+        }
+        Integer id = Integer.parseInt(idString);
+        return new RdfReader(StoreType.LIVE).getLinksetRDF(id);
     }
 
     @GET

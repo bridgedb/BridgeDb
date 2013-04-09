@@ -224,9 +224,18 @@ public class LinksetLoaderImplentation{
     }
    
     private Resource invertResource(Resource resource){
+        //ystem.out.println("inverting " + resource);
         if (resource instanceof URI){
-            return new URIImpl(resource.toString()+"_Symmetric");
-        }
+            String uri = resource.toString();
+            String forward = "linkset/" + mappingId + "/";
+            if (uri.contains(forward)){
+                //ystem.out.println("    " + forward);
+                String inverse = "linkset/" + (mappingId + 1) + "/";
+                uri = uri.replace(forward, inverse);
+            }
+            //stem.out.println("    " + uri);
+            return new URIImpl(uri + "_Symmetric");
+        } 
         return resource;
     }
     
