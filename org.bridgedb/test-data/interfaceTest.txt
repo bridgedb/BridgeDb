@@ -1,4 +1,4 @@
-ConceptWiki	Chemspider	Chembl Old Molecule
+ConceptWiki	Chemspider	Chembl Molecule
 38932552-111f-4a4e-a46a-4ed1d7bdf9d5	187440	276734
 bd42675d-9966-48f5-b42e-f6a0c5ec6794	18	370186
 9d4a6a08-6757-4ff2-98c1-e3c8b3e095cc	50	520018
