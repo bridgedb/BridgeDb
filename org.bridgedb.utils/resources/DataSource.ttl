@@ -4295,7 +4295,8 @@ bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
 	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/enzyme/$id> .
 
 bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
-	bridgeDB:fullName "Uniprot/TrEMBL" ;
+	bridgeDB:fullName "Uniprot" ;
+	#bridgeDB:fullName "Uniprot/TrEMBL" ;
 	bridgeDB:systemCode "S" ;
 	bridgeDB:mainUrl "http://www.ebi.uniprot.org/" ;
 	bridgeDB:idExample "P62158" ;
