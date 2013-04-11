@@ -23,13 +23,12 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.bridgedb.statistics.DataSetInfo;
-import org.bridgedb.statistics.MappingSetInfo;
 
 /**
  *
  * @author Christian
  */
-@XmlRootElement(name="MappingSetInfo")
+@XmlRootElement(name="DataSetInfo")
 public class DataSetInfoBean {
     private String sysCode;
     private String fullName;
@@ -53,16 +52,20 @@ public class DataSetInfoBean {
 
     public static Set<DataSetInfoBean> asBeans(Set<DataSetInfo> infos){
         HashSet<DataSetInfoBean> results = new HashSet<DataSetInfoBean>();
-        for (DataSetInfo info:infos){
-            results.add(asBean(info)); 
+        if (results != null){
+            for (DataSetInfo info:infos){
+                results.add(asBean(info)); 
+            }
         }
         return results;
     }
     
     public static Set<DataSetInfo> asDataSetInfos(Set<DataSetInfoBean> beans){
         HashSet<DataSetInfo> results = new HashSet<DataSetInfo>();
-        for (DataSetInfoBean bean:beans){
-            results.add(asDataSetInfo(bean)); 
+        if (beans!= null){
+            for (DataSetInfoBean bean:beans){
+                results.add(asDataSetInfo(bean)); 
+            }
         }
         return results;
     }
