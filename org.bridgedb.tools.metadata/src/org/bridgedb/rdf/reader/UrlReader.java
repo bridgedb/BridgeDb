@@ -57,10 +57,10 @@ public class UrlReader {
             String host = tempUri.getHost();
             int hostEnd = address.indexOf(host) + host.length();
             if (path.isEmpty()){
-                base = address.substring(0, hostEnd);
+                base = address.substring(0, hostEnd) + "#";
             } else {
                 int pathEnd = address.indexOf(path, hostEnd) + path.length();
-                base = address.substring(0, pathEnd);
+                base = address.substring(0, pathEnd) + "#";
             }
         } catch (URISyntaxException ex) {
            throw new BridgeDBException("Unable to convert " + address + " to a URI");
