@@ -40,6 +40,7 @@ import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.sql.SQLAccess;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.SqlFactory;
+import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.tools.metadata.constants.DctermsConstants;
 import org.bridgedb.tools.metadata.constants.DulConstants;
@@ -204,12 +205,12 @@ public class TransativeCreator {
     }
     
     private void checkMappable() throws BridgeDBException{
-        if (!leftInfo.getTargetSysCode().equals(rightInfo.getSourceSysCode())){
-            throw new BridgeDBException ("Target of mappingSet " + leftInfo.getStringId()  + " is " + leftInfo.getTargetSysCode() 
-                + " Which is not the same as the Source of " + rightInfo.getStringId() + " which is " + rightInfo.getSourceSysCode());
+        if (!leftInfo.getTarget().getSysCode().equals(rightInfo.getSource().getSysCode())){
+            throw new BridgeDBException ("Target of mappingSet " + leftInfo.getStringId()  + " is " + leftInfo.getTarget().getSysCode() 
+                + " Which is not the same as the Source of " + rightInfo.getStringId() + " which is " + rightInfo.getSource().getSysCode());
         }
-        if (leftInfo.getSourceSysCode().equals(rightInfo.getTargetSysCode())){
-            throw new BridgeDBException ("Source of mappingSet " + leftInfo.getStringId()  + "(" + leftInfo.getTargetSysCode() +")"
+        if (leftInfo.getSource().getSysCode().equals(rightInfo.getTarget().getSysCode())){
+            throw new BridgeDBException ("Source of mappingSet " + leftInfo.getStringId()  + "(" + leftInfo.getTarget().getSysCode() +")"
                 + " is the same as the Target of " + rightInfo.getStringId() + ". No need for a transative mapping");
         }
     }
@@ -320,12 +321,12 @@ public class TransativeCreator {
     }
     
     private void addVia() throws IOException{
-        addVia(leftInfo.getTargetSysCode());
-        for (String sysCode:leftInfo.getViaSystemCode()){
-            addVia(sysCode);
+        addVia(leftInfo.getTarget().getSysCode());
+        for (DataSetInfo dsInfo:leftInfo.getViaDataSets()){
+            addVia(dsInfo.getSysCode());
         }
-        for (String sysCode:rightInfo.getViaSystemCode()){
-            addVia(sysCode);
+        for (DataSetInfo dsInfo:rightInfo.getViaDataSets()){
+            addVia(dsInfo.getSysCode());
         }
     }
     

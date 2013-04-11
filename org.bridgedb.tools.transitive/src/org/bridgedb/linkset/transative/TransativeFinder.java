@@ -16,6 +16,7 @@ import java.util.Set;
 import org.bridgedb.linkset.LinksetLoader;
 import org.bridgedb.sql.SQLBase;
 import org.bridgedb.sql.SQLUriMapper;
+import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.utils.BridgeDBException;
@@ -104,41 +105,41 @@ public class TransativeFinder extends SQLBase{
     
     private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         //Left dource must be less than right source
-        if (left.getSourceSysCode().equals(right.getTargetSysCode())){
+        if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
             //ystem.out.println ("Loop " + left.getStringId() + " -> " + right.getStringId());
             //ystem.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
             return false;
         }
         //Must match in the middle
-        if (!left.getTargetSysCode().equals(right.getSourceSysCode())){
+        if (!left.getTarget().getSysCode().equals(right.getSource().getSysCode())){
             //ystem.out.println ("No match " + left.getStringId() + " -> " + right.getStringId());
             //ystem.out.println ("    " + left.getTargetSysCode() + " != " + right.getSourceSysCode());
             return false;
         }
-        for (String via:left.getViaSystemCode()){
-            if (right.getTargetSysCode().equals(via)){
+        for (DataSetInfo via:left.getViaDataSets()){
+            if (right.getTarget().getSysCode().equals(via.getSysCode())){
                 //ystem.out.println("Target in Via with " + left.getStringId() + " -> " + right.getStringId());
                 //ystem.out.println ("    " + via + " == " + right.getTargetSysCode());            
                 return false;
             }
-            if (left.getTargetSysCode().equals(via)){
+            if (left.getTarget().getSysCode().equals(via.getSysCode())){
                 //ystem.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
                 //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
                 return false;
             }
         }
-        for (String via:right.getViaSystemCode()){
-            if (left.getSourceSysCode().equals(via)){
+        for (DataSetInfo via:right.getViaDataSets()){
+            if (left.getSource().getSysCode().equals(via.getSysCode())){
                 //ystem.out.println("Source in Via with " + left.getStringId() + " -> " + right.getStringId());
                 //ystem.out.println ("    " + via + " == " + left.getSourceSysCode());            
                 return false;
             }
-            if (left.getTargetSysCode().equals(via)){
+            if (left.getTarget().getSysCode().equals(via.getSysCode())){
                 //ystem.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
                 //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
                 return false;
             }
-            for (String via2:left.getViaSystemCode()){
+            for (DataSetInfo via2:left.getViaDataSets()){           
                 if (via.equals(via2)){
                     //ystem.out.println("Similar via with " + left.getStringId() + " -> " + right.getStringId());
                     //ystem.out.println("    " + via);
@@ -187,7 +188,9 @@ public class TransativeFinder extends SQLBase{
             return -1;
         } else {
             Reporter.println("Created " + fileName);
-            return linksetLoader.loadLinkset(fileName.getAbsolutePath(), storeType, ValidationType.LINKSMINIMAL, chainIds);
+            int dataSet =  linksetLoader.loadLinkset(fileName.getAbsolutePath(), storeType, ValidationType.LINKSMINIMAL, chainIds);
+            System.out.println("Loaded " + dataSet);
+            return dataSet;
         }
     }
 

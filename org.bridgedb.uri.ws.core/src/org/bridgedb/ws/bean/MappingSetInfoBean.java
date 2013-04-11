@@ -30,13 +30,13 @@ import org.bridgedb.statistics.MappingSetInfo;
 @XmlRootElement(name="MappingSetInfo")
 public class MappingSetInfoBean {
     private Integer id;
-    private String sourceSysCode;
+    private DataSetInfoBean source;
     private String predicate;
-    private String targetSysCode;
+    private DataSetInfoBean target;
     private String justification;
     private Integer symmetric;
     private Integer numberOfLinks;
-    private Set<String> viaSystemCode;
+    private Set<DataSetInfoBean> viaDataSets;
     private Set<Integer> chainId;
 
     /**
@@ -46,20 +46,21 @@ public class MappingSetInfoBean {
     }
     
     public static MappingSetInfo asMappingSetInfo(MappingSetInfoBean bean){
-       return new MappingSetInfo(bean.getId(), bean.getSourceSysCode(), bean.getPredicate(), bean.getTargetSysCode(), 
-            bean.getJustification(), bean.getSymmetric(), bean.getViaSystemCode(), bean.getChainId(), bean.getNumberOfLinks());
+       return new MappingSetInfo(bean.getId(), DataSetInfoBean.asDataSetInfo(bean.getSource()), bean.getPredicate(), 
+               DataSetInfoBean.asDataSetInfo(bean.getTarget()), bean.getJustification(), bean.getSymmetric(), 
+               DataSetInfoBean.asDataSetInfos(bean.getViaDataSets()), bean.getChainId(), bean.getNumberOfLinks());
     }
 
     public static MappingSetInfoBean asBean(MappingSetInfo info) {
         MappingSetInfoBean bean = new MappingSetInfoBean();
         bean.id = info.getIntId();
-        bean.sourceSysCode = info.getSourceSysCode();
+        bean.source = DataSetInfoBean.asBean(info.getSource());
         bean.predicate = info.getPredicate();
-        bean.targetSysCode = info.getTargetSysCode();
+        bean.target = DataSetInfoBean.asBean(info.getTarget());
         bean.justification = info.getJustification();
         bean.symmetric = info.getSymmetric();
         bean.numberOfLinks = info.getNumberOfLinks();
-        bean.viaSystemCode = info.getViaSystemCode();
+        bean.viaDataSets = DataSetInfoBean.asBeans(info.getViaDataSets());
         bean.chainId = info.getChainIds();
         return bean;
     }
@@ -79,21 +80,7 @@ public class MappingSetInfoBean {
         this.id = id;
     }
 
-    /**
-     * @return the sourceSysCode
-     */
-    public String getSourceSysCode() {
-        return sourceSysCode;
-    }
-
-    /**
-     * @param sourceSysCode the sourceSysCode to set
-     */
-    public void setSourceSysCode(String sourceSysCode) {
-        this.sourceSysCode = sourceSysCode;
-    }
-
-    /**
+   /**
      * @return the predicate
      */
     public String getPredicate() {
@@ -107,21 +94,7 @@ public class MappingSetInfoBean {
         this.predicate = predicate;
     }
 
-    /**
-     * @return the targetSysCode
-     */
-    public String getTargetSysCode() {
-        return targetSysCode;
-    }
-
-    /**
-     * @param targetSysCode the targetSysCode to set
-     */
-    public void setTargetSysCode(String targetSysCode) {
-        this.targetSysCode = targetSysCode;
-    }
-
-    /**
+     /**
      * @return the numberOfLinks
      */
     public Integer getNumberOfLinks() {
@@ -133,27 +106,6 @@ public class MappingSetInfoBean {
      */
     public void setNumberOfLinks(Integer numberOfLinks) {
         this.numberOfLinks = numberOfLinks;
-    }
-
-    /**
-     * @return the isTransitive
-     */
-    public boolean isIsTransitive() {
-        return !viaSystemCode.isEmpty();
-    }
-
-    /**
-     * @return the viaSystemCode
-     */
-    public Set<String> getViaSystemCode() {
-        return viaSystemCode;
-    }
-
-    /**
-     * @param viaSystemCode the viaSystemCode to set
-     */
-    public void setViaSystemCode(Set<String> viaSystemCode) {
-        this.viaSystemCode = viaSystemCode;
     }
 
     /**
@@ -196,6 +148,48 @@ public class MappingSetInfoBean {
      */
     public void setSymmetric(Integer symmetric) {
         this.symmetric = symmetric;
+    }
+
+    /**
+     * @return the source
+     */
+    public DataSetInfoBean getSource() {
+        return source;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(DataSetInfoBean source) {
+        this.source = source;
+    }
+
+    /**
+     * @return the target
+     */
+    public DataSetInfoBean getTarget() {
+        return target;
+    }
+
+    /**
+     * @param target the target to set
+     */
+    public void setTarget(DataSetInfoBean target) {
+        this.target = target;
+    }
+
+    /**
+     * @return the viaDataSets
+     */
+    public Set<DataSetInfoBean> getViaDataSets() {
+        return viaDataSets;
+    }
+
+    /**
+     * @param viaDataSets the viaDataSets to set
+     */
+    public void setViaDataSets(Set<DataSetInfoBean> viaDataSets) {
+        this.viaDataSets = viaDataSets;
     }
     
 }

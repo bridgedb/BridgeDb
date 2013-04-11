@@ -33,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfReader;
+import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
@@ -61,9 +62,9 @@ public class WSVoidService extends WSFame{
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
         if (mappingSetInfos.isEmpty()){
             sb.append("\n<h1> No mapping found between ");
-            MappingSetTableMaker.addDataSourceLink(sb, scrCode);
+            MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(scrCode,scrCode));
             sb.append(" and ");
-            MappingSetTableMaker.addDataSourceLink(sb, targetCode);
+            MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(targetCode,targetCode));
             sb.append("</h1>");
         } else {
             sb.append("\n<p>Warning summary lines are just a sum of the mappings from all mapping files.");
@@ -84,13 +85,13 @@ public class WSVoidService extends WSFame{
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
         sb.append("digraph G {");
         for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){
-            if (info.getSourceSysCode().compareTo(info.getTargetSysCode()) < 0 ){
+            if (info.getSource().compareTo(info.getTarget()) < 0 ){
                 sb.append("\"");
-                sb.append(info.getSourceSysCode());
+                sb.append(info.getSource().getFullName());
                 sb.append("\" -> \"");
-                sb.append(info.getTargetSysCode());
+                sb.append(info.getTarget().getFullName());
                 sb.append("\" [dir = both, label=\"");
-                sb.append(formatter.format(info.getNumberOfLinks())); 
+                sb.append(formatter.format(info.getNumberOfLinks()) + "(" + info.getStringId() + ")"); 
                 sb.append("\"");
                 if (info.isTransitive()){
                     sb.append(", style=dashed");
