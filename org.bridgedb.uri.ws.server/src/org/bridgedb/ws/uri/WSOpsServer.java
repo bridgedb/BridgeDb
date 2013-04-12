@@ -70,20 +70,6 @@ public class WSOpsServer extends WSLinksetService{
     	sb.append("</fieldset></form>\n");
     }
 
-	private void generateProfileSelector(StringBuilder sb) throws BridgeDBException {
-		List<ProfileInfo> profiles = uriMapper.getProfiles();
-        sb.append("<p><select name=\"");
-    	sb.append(WsUriConstants.PROFILE_URI);
-    	sb.append("\">");
-		for (ProfileInfo profile : profiles) {
-			sb.append("<option value=\"");
-			sb.append(profile.getUri());
-			sb.append("\">");
-			sb.append(profile.getName());
-			sb.append("</option>");
-		}
-    	sb.append("</select>\n");
-	}
            
     /**
      * Welcome page for the Serivce.
