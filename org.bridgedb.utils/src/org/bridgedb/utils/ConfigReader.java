@@ -48,7 +48,7 @@ public class ConfigReader {
      * Warning in SANDBOX mode the system will not build without builder provided config files.
      * If SANDBOX is true in the MASTER branch this is an ERROR. Please fix and contact developer team ASAP!
      */
-    public static boolean SANDBOX = false;
+    public static boolean SANDBOX = true;
     public static final String CONFIG_FILE_NAME = "Config.txt";
     public static final String SANDBOX_CONFIG_FILE_NAME = "SandboxConfig.txt";
 
@@ -57,6 +57,7 @@ public class ConfigReader {
     public static final String CONFIG_FILE_PATH_PROPERTY = "ConfigPath";
     public static final String CONFIG_FILE_PATH_SOURCE_PROPERTY = "ConfigPathSource";
     public static final String LOG_PROPERTIES_FILE = "log4j.properties";
+    public static final String SANDBOX_LOG_PROPERTIES_FILE = "sandboxLog4j.properties";
     public static final String[] CONFIG_PROPERTIES_ARRAY = new String[] {CONFIG_FILE_PATH_PROPERTY, CONFIG_FILE_PATH_SOURCE_PROPERTY};
     public static final Set<String> CONFIG_PROPERTIES = new HashSet<String>(Arrays.asList(CONFIG_PROPERTIES_ARRAY));
     
@@ -90,7 +91,12 @@ public class ConfigReader {
         
     public static synchronized void configureLogger() throws BridgeDBException{
         if (!loggerSetup){
-            ConfigReader finder = new ConfigReader(LOG_PROPERTIES_FILE);
+            ConfigReader finder;
+            if (SANDBOX){
+                finder = new ConfigReader(LOG_PROPERTIES_FILE);
+            } else { 
+                finder = new ConfigReader(SANDBOX_LOG_PROPERTIES_FILE);
+            }
             Properties props = finder.readProperties();
             PropertyConfigurator.configure(props);
             logger.info("Logger configured from " + finder.foundAt + " by " + finder.findMethod);
