@@ -184,6 +184,43 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
    public static UriPattern existingByNameSpace(String nameSpace) {
         return byNameSpaceOnly.get(nameSpace);
     }
+   
+   /** 
+    * Returns the UriPattern known for this URI if it can be found using the simple Split
+    * It looks for a "#" then an "=" then a "/" and finally a ":"
+    * Once it finds one it then looks for the last instance of that one.
+    *     So if there is for example an ab#12=45 it will split after the # 
+    * It then attempts to find a uri pattern based on that prefix.
+    * 
+    * If no pattern is known it will return null.
+    * 
+    * UriPatterns which included postfixes will typically not be found this way.
+    * Also null may be returned because two or more known UriPatterns have are known to start in the same way
+    * 
+    */ 
+    public final static UriPattern existingByUri(String uri){
+        String prefix = null;
+        uri = uri.trim();
+        if (uri.contains("#")){
+            prefix = uri.substring(0, uri.lastIndexOf("#")+1);
+        } else if (uri.contains("=")){
+            prefix = uri.substring(0, uri.lastIndexOf("=")+1);
+        } else if (uri.contains("/")){
+            prefix = uri.substring(0, uri.lastIndexOf("/")+1);
+        } else if (uri.contains(":")){
+            prefix = uri.substring(0, uri.lastIndexOf(":")+1);
+        }
+        //ystem.out.println(lookupPrefix);
+        if (prefix == null){
+            //Opps not a uri as they all start with http:// similar
+            throw new IllegalArgumentException("Uri should have a '#', '=', /, or a ':' in it.");
+        }
+        if (prefix.isEmpty()){
+            throw new IllegalArgumentException("Uri should not start with the only '#', '=', /, or ':'.");            
+        }
+        return byNameSpaceOnly.get(prefix);
+    }
+
 
     public static UriPattern byNameSpaceAndPostFix(String nameSpace, String postfix) throws BridgeDBException{
         if (postfix.isEmpty() || postfix.equals("NULL")){
@@ -469,5 +506,17 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     public String getUri(String id) {
         return nameSpace + id + postfix;
     }
+
+    public String getIdFromUri(String uri) throws BridgeDBException {
+        if (!uri.startsWith(nameSpace)){
+            throw new BridgeDBException("Uri " + uri + " does not match UriPattern " + this);
+        }
+        if (!uri.endsWith(postfix)){
+            throw new BridgeDBException("Uri " + uri + " does not match UriPattern " + this);
+        }
+        return uri.substring(nameSpace.length(), uri.length() - postfix.length());
+    }
     
+  
+
  }

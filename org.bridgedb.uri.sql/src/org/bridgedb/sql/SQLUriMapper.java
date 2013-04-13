@@ -657,10 +657,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         //First try splitting the uri follwoing normal rules
         //This avoids the more expensive like
-        String prefix = splitUriSpace(uri);
-        UriPattern pattern = UriPattern.existingByNameSpace(prefix);
+        UriPattern pattern = UriPattern.existingByUri(uri);
         if (pattern != null){
             String id = splitId(uri);
+            String id2 = pattern.getIdFromUri(uri);
+            if (!id.equals(id2)){
+                throw new BridgeDBException("opps: " + uri + " -> " + id + "£" + id2);            
+            }
             DataSource dataSource = pattern.getDataSource();
             return new Xref(id, dataSource);
         }
