@@ -35,7 +35,6 @@ public class DataSourceLoaderTest extends TestUtils{
     
     private File utilsFile = new File("../org.bridgedb.utils/resources/DataSource.ttl");
     private static File renameFile = new File("test-data/DataSource.ttl");
-    private static File primaryFile = new File("test-data/DataSourceWithPrimaries.ttl");
 
     /**
      * Test of writeRdfToFile method, of class BridgeDBRdfHandler.
@@ -44,10 +43,8 @@ public class DataSourceLoaderTest extends TestUtils{
     public void testRdfFileInputOutput() throws Exception {
         report("RdfFileInputOutput");
         BridgeDBRdfHandler.parseRdfFile(utilsFile);
-        BridgeDBRdfHandler.writeRdfToFile(renameFile, false);
+        BridgeDBRdfHandler.writeRdfToFile(renameFile);
         BridgeDBRdfHandler.parseRdfFile(renameFile);
-        BridgeDBRdfHandler.writeRdfToFile(primaryFile, true);
-        BridgeDBRdfHandler.parseRdfFile(primaryFile);
     }
     
     @Test

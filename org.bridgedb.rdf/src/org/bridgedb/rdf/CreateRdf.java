@@ -52,7 +52,7 @@ public class CreateRdf {
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.CONTROLLED);
         BioDataSource.init();
         File biofile = new File("../org.bridgedb.utils/resources/BioDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(biofile, false);
+        BridgeDBRdfHandler.writeRdfToFile(biofile);
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(biofile);        
         
@@ -61,14 +61,7 @@ public class CreateRdf {
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(dsfile);             
         System.out.println("Parsing finished");
-        
-        //Write a file marking the primary URIs as currently set
-        File primaryfile = new File("../org.bridgedb.utils/resources/PrimaryDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(primaryfile, true);
-        
-        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
-        BridgeDBRdfHandler.parseRdfFile(primaryfile);
-        
+                
      }
 
 }

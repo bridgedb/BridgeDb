@@ -58,17 +58,10 @@ public class MergedSourceCreateRdf {
         
         System.out.println(DataSource.getDataSources());
         File mergedFile = new File("../org.bridgedb.rdf/resources/MergedDataSource.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(mergedFile, false);
+        BridgeDBRdfHandler.writeRdfToFile(mergedFile);
         DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
         BridgeDBRdfHandler.parseRdfFile(mergedFile);        
                 
-        //Write a file marking the primary URIs as currently set
-        File primaryfile = new File("../org.bridgedb.rdf/resources/MergedDataSourceWithPrimary.ttl");
-        BridgeDBRdfHandler.writeRdfToFile(primaryfile, true);
-        
-        DataSource.setOverwriteLevel(DataSourceOverwriteLevel.STRICT);
-        BridgeDBRdfHandler.parseRdfFile(primaryfile);
-       
      }
 
 }

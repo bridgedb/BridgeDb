@@ -302,39 +302,26 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         }
     }
 
-    public static void addAll(RepositoryConnection repositoryConnection, boolean addPrimaries) 
+    public static void addAll(RepositoryConnection repositoryConnection) 
             throws IOException, RepositoryException, BridgeDBException {
         TreeSet<UriPattern> all = new TreeSet(register.values());
         for (UriPattern uriPattern:all){
-            uriPattern.add(repositoryConnection, addPrimaries);
+            uriPattern.add(repositoryConnection);
         }        
     }
     
-    public void add(RepositoryConnection repositoryConnection, boolean addPrimaries) throws RepositoryException{
+    public void add(RepositoryConnection repositoryConnection) throws RepositoryException{
         URI id = getResourceId();
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI);
         repositoryConnection.add(id, BridgeDBConstants.HAS_PREFIX_URI,  new LiteralImpl(prefix));
         if (!postfix.isEmpty()){
             repositoryConnection.add(id, BridgeDBConstants.HAS_POSTFIX_URI,  new LiteralImpl(postfix));
         }
-        if (addPrimaries){
-            DataSourceUris primary = getMainDataSourceUris();
-            if (primary != null){
-                repositoryConnection.add(id, BridgeDBConstants.HAS_DATA_SOURCE,  this.getMainDataSourceUris().getResourceId());            
-            }        
-            for (DataSourceUris dsu:isUriPatternOf){
-                if (!dsu.equals(primary)){
-                    repositoryConnection.add(id, BridgeDBConstants.IS_URI_PATTERN_OF,  dsu.getResourceId()); 
-                }
-            }
-            
-        } else {
-            if (dataSourceUris != null){
-                repositoryConnection.add(id, BridgeDBConstants.HAS_DATA_SOURCE,  dataSourceUris.getResourceId());            
-            }
-            for (DataSourceUris dsu:isUriPatternOf){
-                 repositoryConnection.add(id, BridgeDBConstants.IS_URI_PATTERN_OF,  dsu.getResourceId()); 
-            }
+        if (dataSourceUris != null){
+            repositoryConnection.add(id, BridgeDBConstants.HAS_DATA_SOURCE,  dataSourceUris.getResourceId());            
+        }
+        for (DataSourceUris dsu:isUriPatternOf){
+                repositoryConnection.add(id, BridgeDBConstants.IS_URI_PATTERN_OF,  dsu.getResourceId()); 
         }
     }        
     

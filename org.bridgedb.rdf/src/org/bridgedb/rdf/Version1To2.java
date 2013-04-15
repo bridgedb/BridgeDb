@@ -43,7 +43,7 @@ public class Version1To2 {
         //BridgeDBRdfHandler.parseRdfFile(v1File);
         
         
-        BridgeDBRdfHandler.writeRdfToFile(bioFile, false);
+        BridgeDBRdfHandler.writeRdfToFile(bioFile);
         BridgeDBRdfHandler.parseRdfFile(bioFile);
 
         
