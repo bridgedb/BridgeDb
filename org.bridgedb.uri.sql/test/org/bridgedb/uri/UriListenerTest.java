@@ -173,10 +173,10 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     public static void setupUriPatterns() throws BridgeDBException{
         setupUris();
         connectionOk = true;
-        uriPattern1 = UriPattern.byNameSpace(uriSpace1);
-        uriPattern2 = UriPattern.byNameSpace(uriSpace2);
-        uriPattern3 = UriPattern.byNameSpace(uriSpace3);
-        uriPatternBad = UriPattern.byNameSpace("http://www.example.com/UriMapperTest/Bad");
+        uriPattern1 = UriPattern.byPrefixOrNameSpace(uriSpace1);
+        uriPattern2 = UriPattern.byPrefixOrNameSpace(uriSpace2);
+        uriPattern3 = UriPattern.byPrefixOrNameSpace(uriSpace3);
+        uriPatternBad = UriPattern.byPrefixOrNameSpace("http://www.example.com/UriMapperTest/Bad");
     }
         
     /**

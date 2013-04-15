@@ -325,7 +325,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
                 BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI, BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI);
         if (identifiersOrgPattern != null){
             try {
-                inner.setIdentifiersOrgUriBase(identifiersOrgPattern.getUriSpace());
+                inner.setIdentifiersOrgUriBase(identifiersOrgPattern.getPrefix());
             } catch (IDMapperException ex) {
                 throw new BridgeDBException(ex);
             }

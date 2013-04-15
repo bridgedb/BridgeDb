@@ -21,7 +21,6 @@ package org.bridgedb.rdf;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +28,6 @@ import java.util.TreeSet;
 import org.bridgedb.DataSource;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
-import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -46,49 +44,50 @@ import org.openrdf.repository.RepositoryResult;
  */
 public class UriPattern extends RdfBase implements Comparable<UriPattern>{
 
-    private final String nameSpace;
+    private final String prefix;
     private final String postfix;
     private DataSourceUris dataSourceUris;
     private TreeSet<DataSourceUris> isUriPatternOf = new TreeSet<DataSourceUris>();
     
     private static HashMap<Resource, UriPattern> register = new HashMap<Resource, UriPattern>();
-    private static HashMap<String,UriPattern> byNameSpaceOnly = new HashMap<String,UriPattern>();
-    private static HashMap<String,HashMap<String,UriPattern>> byNameSpaceAndPostFix = 
+    private static HashMap<String,UriPattern> byPrefixOrNameSpaceOnly = new HashMap<String,UriPattern>();
+    private static HashMap<String,HashMap<String,UriPattern>> byPrefixAndPostFix = 
             new HashMap<String,HashMap<String,UriPattern>> ();  
+    
     private static HashSet<URI> expectedPredicates = new HashSet<URI>(Arrays.asList(new URI[] {
-        BridgeDBConstants.POSTFIX_URI,
-        VoidConstants.URI_SPACE_URI,
+        BridgeDBConstants.HAS_POSTFIX_URI,
+        BridgeDBConstants.HAS_PREFIX_URI,
         RdfConstants.TYPE_URI,
         BridgeDBConstants.HAS_DATA_SOURCE,
         BridgeDBConstants.IS_URI_PATTERN_OF
     }));
             
-    private UriPattern(String namespace){
-        this.nameSpace = namespace;
+    private UriPattern(String start){
+        prefix = start;
         this.postfix = "";
-        byNameSpaceOnly.put(namespace, this);
+        registerByPrefixAndNameSpace();
         register.put(getResourceId(), this);
     } 
     
-    private UriPattern(String namespace, String postfix){
-        this.nameSpace = namespace;
+    private UriPattern(String prefix, String postfix){
+        this.prefix= prefix;
         if (postfix == null || postfix.isEmpty()){
             this.postfix = "";
-            byNameSpaceOnly.put(namespace, this);    
+            registerByPrefixAndNameSpace();
         } else {
             this.postfix = postfix;
-            HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(namespace);
+            HashMap<String,UriPattern> postFixMap = byPrefixAndPostFix.get(prefix);
             if (postFixMap == null){
                 postFixMap = new HashMap<String,UriPattern>();
             }
             postFixMap.put(postfix, this);
-            byNameSpaceAndPostFix.put(namespace, postFixMap);
+            byPrefixAndPostFix.put(prefix, postFixMap);
         }
         register.put(getResourceId(), this);
     }
-   
+  
     public String getPrefix(){
-        return nameSpace;
+        return prefix;
     }
     
     public String getPostfix(){
@@ -108,15 +107,21 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         return new HashSet(register.values());
     }
 
-    public static UriPattern byNameSpace(String nameSpace){
-        UriPattern result = byNameSpaceOnly.get(nameSpace);
-        if (result == null){
-            result = new UriPattern(nameSpace);
+    /**
+     * 
+     * @param start
+     * @return UriPattern or null if more than one UriPattern starts this way,
+     */
+    public static UriPattern byPrefixOrNameSpace(String start){
+        if (byPrefixOrNameSpaceOnly.containsKey(start)) {
+            return byPrefixOrNameSpaceOnly.get(start);
+        } else {
+            return new UriPattern(start);            
         }
-        return result;
-    }
-    private static UriPattern byNameSpaceAndPostfix(String nameSpace, String postfix) {
-        HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(nameSpace);
+   }
+    
+    private static UriPattern byPrefixAndPostfix(String nameSpace, String postfix) {
+        HashMap<String,UriPattern> postFixMap = byPrefixAndPostFix.get(nameSpace);
         if (postFixMap == null){
             return new UriPattern(nameSpace, postfix);
         }
@@ -134,31 +139,31 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         }
         String nameSpace = urlPattern.substring(0, pos);
         String postfix = urlPattern.substring(pos + 3);
-        return byNameSpaceAndPostFix(nameSpace, postfix);
+        return byPrefixAndPostFix(nameSpace, postfix);
     }
 
     public static UriPattern existingByPattern(String uriPattern) {
         if (uriPattern == null || uriPattern.isEmpty()){
             return null;
         }
-        String nameSpace;
+        String prefixOrNameSpace;
         String postfix;
         String cleanPattern = uriPattern.trim();
         if (cleanPattern.startsWith("<") && cleanPattern.endsWith(">")){
             cleanPattern = cleanPattern.substring(1, cleanPattern.length()-1);
         }
-        int pos = cleanPattern.indexOf("$id");
-        if (pos == -1) {
-            nameSpace = cleanPattern;
+        int idPos = cleanPattern.indexOf("$id");
+        if (idPos == -1) {
+            prefixOrNameSpace = cleanPattern;
             postfix = "";
         } else {
-            nameSpace = cleanPattern.substring(0, pos);
-            postfix = cleanPattern.substring(pos + 3);
+            prefixOrNameSpace = cleanPattern.substring(0, idPos);
+            postfix = cleanPattern.substring(idPos + 3);
         } 
         if (postfix.isEmpty()){
-            return byNameSpaceOnly.get(nameSpace);
+            return byPrefixOrNameSpaceOnly.get(prefixOrNameSpace);
         } else {
-            HashMap<String,UriPattern> postFixMap = byNameSpaceAndPostFix.get(nameSpace);
+            HashMap<String,UriPattern> postFixMap = byPrefixAndPostFix.get(prefixOrNameSpace);
             if (postFixMap == null){
                 return null;
             }
@@ -166,7 +171,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         }
     }
 
-    public static UriPattern existingByNameSpaceandPrefix(String nameSpace, String postfix) {
+    /*public static UriPattern existingByNameSpaceandPrefix(String nameSpace, String postfix) {
         if (nameSpace == null || nameSpace.isEmpty()){
             return null;
         }
@@ -179,12 +184,35 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
             }
             return postFixMap.get(postfix);
         }
-    }
+    }*/
 
-   public static UriPattern existingByNameSpace(String nameSpace) {
-        return byNameSpaceOnly.get(nameSpace);
-    }
+   //public static UriPattern existingByNameSpace(String nameSpace) {
+   //     return byNameSpaceOnly.get(nameSpace);
+   // }
    
+    private static String getNameSpace(String uri){
+        String nameSpace = null;
+        uri = uri.trim();
+        if (uri.contains("#")){
+            nameSpace = uri.substring(0, uri.lastIndexOf("#")+1);
+        } else if (uri.contains("=")){
+            nameSpace = uri.substring(0, uri.lastIndexOf("=")+1);
+        } else if (uri.contains("/")){
+            nameSpace = uri.substring(0, uri.lastIndexOf("/")+1);
+        } else if (uri.contains(":")){
+            nameSpace = uri.substring(0, uri.lastIndexOf(":")+1);
+        }
+        //ystem.out.println(lookupPrefix);
+        if (nameSpace == null){
+            //Opps not a uri as they all start with http:// similar
+            throw new IllegalArgumentException("Uri should have a '#', '=', /, or a ':' in it.");
+        }
+        if (nameSpace.isEmpty()){
+            throw new IllegalArgumentException("Uri should not start with the only '#', '=', /, or ':'.");            
+        }
+        return nameSpace;
+    }
+    
    /** 
     * Returns the UriPattern known for this URI if it can be found using the simple Split
     * It looks for a "#" then an "=" then a "/" and finally a ":"
@@ -199,34 +227,16 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     * 
     */ 
     public final static UriPattern existingByUri(String uri){
-        String prefix = null;
-        uri = uri.trim();
-        if (uri.contains("#")){
-            prefix = uri.substring(0, uri.lastIndexOf("#")+1);
-        } else if (uri.contains("=")){
-            prefix = uri.substring(0, uri.lastIndexOf("=")+1);
-        } else if (uri.contains("/")){
-            prefix = uri.substring(0, uri.lastIndexOf("/")+1);
-        } else if (uri.contains(":")){
-            prefix = uri.substring(0, uri.lastIndexOf(":")+1);
-        }
-        //ystem.out.println(lookupPrefix);
-        if (prefix == null){
-            //Opps not a uri as they all start with http:// similar
-            throw new IllegalArgumentException("Uri should have a '#', '=', /, or a ':' in it.");
-        }
-        if (prefix.isEmpty()){
-            throw new IllegalArgumentException("Uri should not start with the only '#', '=', /, or ':'.");            
-        }
-        return byNameSpaceOnly.get(prefix);
+        String nameSpace = getNameSpace(uri);
+        return byPrefixOrNameSpaceOnly.get(nameSpace);
     }
 
 
-    public static UriPattern byNameSpaceAndPostFix(String nameSpace, String postfix) throws BridgeDBException{
+    private static UriPattern byPrefixAndPostFix(String nameSpace, String postfix) throws BridgeDBException{
         if (postfix.isEmpty() || postfix.equals("NULL")){
-            return byNameSpace(nameSpace);
+            return byPrefixOrNameSpace(nameSpace);
         } else {
-            return byNameSpaceAndPostfix(nameSpace, postfix);
+            return byPrefixAndPostfix(nameSpace, postfix);
         }
     }
     
@@ -286,9 +296,9 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     
     public String getUriPattern() {
         if (postfix == null){
-            return nameSpace + "$id";
+            return prefix + "$id";
         } else {
-            return nameSpace + "$id" + postfix;
+            return prefix + "$id" + postfix;
         }
     }
 
@@ -303,9 +313,9 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     public void add(RepositoryConnection repositoryConnection, boolean addPrimaries) throws RepositoryException{
         URI id = getResourceId();
         repositoryConnection.add(id, RdfConstants.TYPE_URI, BridgeDBConstants.URI_PATTERN_URI);
-        repositoryConnection.add(id, VoidConstants.URI_SPACE_URI,  new LiteralImpl(nameSpace));
+        repositoryConnection.add(id, BridgeDBConstants.HAS_PREFIX_URI,  new LiteralImpl(prefix));
         if (!postfix.isEmpty()){
-            repositoryConnection.add(id, BridgeDBConstants.POSTFIX_URI,  new LiteralImpl(postfix));
+            repositoryConnection.add(id, BridgeDBConstants.HAS_POSTFIX_URI,  new LiteralImpl(postfix));
         }
         if (addPrimaries){
             DataSourceUris primary = getMainDataSourceUris();
@@ -402,15 +412,15 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
             throws BridgeDBException, RepositoryException{
         checkStatements(repositoryConnection, uriPatternId);
         UriPattern pattern;      
-        String uriSpace = getPossibleSingletonString(repositoryConnection, uriPatternId, VoidConstants.URI_SPACE_URI);
-        if (uriSpace == null){
+        String prefix = getPossibleSingletonString(repositoryConnection, uriPatternId, BridgeDBConstants.HAS_PREFIX_URI);
+        if (prefix == null){
             pattern = byPattern(uriPatternId.stringValue());
         } else {
-            String postfix = getPossibleSingletonString(repositoryConnection, uriPatternId, BridgeDBConstants.POSTFIX_URI);
+            String postfix = getPossibleSingletonString(repositoryConnection, uriPatternId, BridgeDBConstants.HAS_POSTFIX_URI);
             if (postfix == null){
-                pattern = UriPattern.byNameSpace(uriSpace);
+                pattern = UriPattern.byPrefixOrNameSpace(prefix);
             } else {
-                pattern = UriPattern.byNameSpaceAndPostFix(uriSpace, postfix);
+                pattern = UriPattern.byPrefixAndPostFix(prefix, postfix);
             }
         }
         //Constructor registers with standard recource this register with used resource
@@ -449,13 +459,6 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     @Override
     public String toString(){
         return getUriPattern();      
-    }
-
-    public String getUriSpace() throws BridgeDBException {
-        if (hasPostfix()){
-            throw new BridgeDBException("UriPattern " + this + " has a postfix");
-        }
-        return nameSpace;
     }
 
     public static void checkAllDataSourceUris() throws BridgeDBException{
@@ -504,19 +507,36 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
      }
 
     public String getUri(String id) {
-        return nameSpace + id + postfix;
+        return prefix + id + postfix;
     }
 
     public String getIdFromUri(String uri) throws BridgeDBException {
-        if (!uri.startsWith(nameSpace)){
+        if (!uri.startsWith(prefix)){
             throw new BridgeDBException("Uri " + uri + " does not match UriPattern " + this);
         }
         if (!uri.endsWith(postfix)){
             throw new BridgeDBException("Uri " + uri + " does not match UriPattern " + this);
         }
-        return uri.substring(nameSpace.length(), uri.length() - postfix.length());
+        return uri.substring(prefix.length(), uri.length() - postfix.length());
+    }
+
+    private void registerByPrefixAndNameSpace() {
+        registerByPrefixOrNameSpace(prefix);
+        String nameSpace = getNameSpace(prefix);
+        if (!nameSpace.equals(prefix)){
+            registerByPrefixOrNameSpace(nameSpace);
+        }
     }
     
+    private void registerByPrefixOrNameSpace(String start) {
+        if (byPrefixOrNameSpaceOnly.containsKey(start)){
+            //Multiple UriPatterns with the same nameSpace and or prefix
+            //for example http://bio2rdf.org/biocyc:$id and http://bio2rdf.org/omim:$id
+           byPrefixOrNameSpaceOnly.put(start, null);
+        } else {
+           byPrefixOrNameSpaceOnly.put(start, this);
+        }
+    }
   
 
  }

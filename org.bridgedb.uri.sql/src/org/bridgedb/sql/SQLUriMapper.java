@@ -659,11 +659,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         //This avoids the more expensive like
         UriPattern pattern = UriPattern.existingByUri(uri);
         if (pattern != null){
-            String id = splitId(uri);
-            String id2 = pattern.getIdFromUri(uri);
-            if (!id.equals(id2)){
-                throw new BridgeDBException("opps: " + uri + " -> " + id + "£" + id2);            
-            }
+            String id = pattern.getIdFromUri(uri);
             DataSource dataSource = pattern.getDataSource();
             return new Xref(id, dataSource);
         }
@@ -1222,30 +1218,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throw new IllegalArgumentException("Uri should not start with a '#', '/, or a ':'.");            
         }
         return prefix;
-    }
-
-    /**
-     * Method to split a Uri into an URISpace and an ID.
-     *
-     * Based on OPENRDF version with ":" added as and extra splitter.
-     *
-     * Ideally this would be replaced by a method from Identifiers.org
-     *    based on their knowledge or ULI/URLs
-     * @param uri Uri to split
-     * @return The URISpace of the Uri
-     */
-    public final static String splitId(String uri){
-        uri = uri.trim();
-        if (uri.contains("#")){
-            return uri.substring(uri.lastIndexOf("#")+1, uri.length());
-        } else if (uri.contains("=")){
-            return uri.substring(uri.lastIndexOf("=")+1, uri.length());
-        } else if (uri.contains("/")){
-            return uri.substring(uri.lastIndexOf("/")+1, uri.length());
-        } else if (uri.contains(":")){
-            return uri.substring(uri.lastIndexOf(":")+1, uri.length());
-        }
-        throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
     }
 
     private Set<String> getViaCodes(int id) throws BridgeDBException {

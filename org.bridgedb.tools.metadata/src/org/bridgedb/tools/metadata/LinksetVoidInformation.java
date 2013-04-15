@@ -260,14 +260,14 @@ public class LinksetVoidInformation implements MetaData {
         if (subjectUriSpace == null) {
             throw new BridgeDBException(error);
         }
-        return UriPattern.byNameSpace(subjectUriSpace);
+        return UriPattern.byPrefixOrNameSpace(subjectUriSpace);
     }
 
     public UriPattern getTargetUriPattern() throws BridgeDBException {
         if (targetUriSpace == null) {
             throw new BridgeDBException(error);
         }
-        return UriPattern.byNameSpace(targetUriSpace);
+        return UriPattern.byPrefixOrNameSpace(targetUriSpace);
     }
 
     public String getPredicate() throws BridgeDBException {

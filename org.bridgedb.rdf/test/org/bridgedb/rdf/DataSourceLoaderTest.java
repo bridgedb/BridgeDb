@@ -23,12 +23,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import org.bridgedb.utils.TestUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * NOTE: This test will fail if any previous tests have called BioDataSource.init()
  * @author Christian
  */
+@Ignore
 public class DataSourceLoaderTest extends TestUtils{
     
     private File utilsFile = new File("../org.bridgedb.utils/resources/DataSource.ttl");

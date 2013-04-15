@@ -79,8 +79,10 @@ public class BridgeDBConstants {
     public static final URI LATIN_NAME_URI = new URIImpl(PREFIX + LATIN_NAME);
 
     //UriPatternFields    
-    private static final String POSTFIX = "postfix";
-    public static final URI POSTFIX_URI = new URIImpl(PREFIX + POSTFIX);
+    private static final String HAS_PREFIX = "hasPrefix";
+    public static final URI HAS_PREFIX_URI = new URIImpl(PREFIX + HAS_PREFIX);
+    private static final String HAS_POSTFIX = "hasPostfix";
+    public static final URI HAS_POSTFIX_URI = new URIImpl(PREFIX + HAS_POSTFIX);
 
     private static final String IDENTIFERS_ORG_PATTERN = "IdentifiersOrgPattern";
     public static final URI IDENTIFERS_ORG_BASE = new URIImpl(PREFIX + "identifiers_org_base");

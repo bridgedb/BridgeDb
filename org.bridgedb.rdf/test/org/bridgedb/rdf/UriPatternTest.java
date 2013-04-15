@@ -328,9 +328,9 @@ public class UriPatternTest extends TestUtils{
     @Test
     public void testCompareTo() {
         report("compareTo");
-        UriPattern pattern1 = UriPattern.byNameSpace("http://www.example.com/UriPatternTest/testCompareTo/1");
-        UriPattern pattern1s = UriPattern.byNameSpace("https://www.example.com/UriPatternTest/testCompareTo/1");
-        UriPattern pattern2 = UriPattern.byNameSpace("http://www.example.com/UriPatternTest/testCompareTo/2");
+        UriPattern pattern1 = UriPattern.byPrefixOrNameSpace("http://www.example.com/UriPatternTest/testCompareTo/1");
+        UriPattern pattern1s = UriPattern.byPrefixOrNameSpace("https://www.example.com/UriPatternTest/testCompareTo/1");
+        UriPattern pattern2 = UriPattern.byPrefixOrNameSpace("http://www.example.com/UriPatternTest/testCompareTo/2");
         assertThat(pattern2.compareTo(pattern1), greaterThan(0));
         assertThat(pattern1.compareTo(pattern2), lessThan(0));
         assertThat(pattern2.compareTo(pattern1s), greaterThan(0));

@@ -163,7 +163,7 @@ public class LinksetExporter {
         if (pattern == null){
             throw new BridgeDBException ("No WikiPathways pattern found for " + dataSource);
         }
-        return pattern.getUriSpace();
+        return pattern.getPrefix();
     }
     
     private void writeVoidHeader (DataSource srcDataSource, DataSource tgtDataSource) throws IOException, BridgeDBException{
