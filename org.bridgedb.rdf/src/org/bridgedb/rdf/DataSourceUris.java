@@ -73,6 +73,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         BridgeDBConstants.IDENTIFERS_ORG_BASE,
         BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI,
         BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI,
+        BridgeDBConstants.HAS_OUTPUT_IDENTIFERS_ORG_PATTERN_URI,
         BridgeDBConstants.MAIN_URL_URI,
         BridgeDBConstants.ORGANISM_URI,
         BridgeDBConstants.PRIMAY_URI,
@@ -83,9 +84,13 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         BridgeDBConstants.TYPE_URI,
         BridgeDBConstants.HAS_URI_PATTERN_URI,
         BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI,
-        //No need for old version
+        BridgeDBConstants.HAS_OUTPUT_URI_PATTERN_URI,
+        BridgeDBConstants.HAS_REGEX_URI_PATTERN_URI,
+        BridgeDBConstants.IS_DEPRICATED_BY_URI,
         BridgeDBConstants.HAS_URL_PATTERN_URI,
+        BridgeDBConstants.HAS_REGEX_URL_PATTERN_URI,
         BridgeDBConstants.HAS_PRIMARY_URL_PATTERN_URI,
+        BridgeDBConstants.HAS_OUTPUT_URL_PATTERN_URI,
         BridgeDBConstants.URL_PATTERN_URI, //Old version
         BridgeDBConstants.URN_BASE_URI,
         BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI,
@@ -276,8 +281,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
             DataSource.Builder builder) throws BridgeDBException, RepositoryException{
         DataSourceUris dsu = byDataSource(builder.asDataSource());
         UriPattern uriPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, dsu, 
-                BridgeDBConstants.HAS_PRIMARY_URL_PATTERN_URI, BridgeDBConstants.HAS_URL_PATTERN_URI, 
-                BridgeDBConstants.URL_PATTERN_URI);
+                BridgeDBConstants.HAS_URL_PATTERN_URI);
         if (uriPattern != null){
             builder.urlPattern(uriPattern.getUriPattern());
         }       
@@ -295,7 +299,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         }
         
         UriPattern identifiersOrgPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
-                BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI, BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI);
+                BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI);
         if (identifiersOrgPattern != null){
             try {
                 inner.setIdentifiersOrgUriBase(identifiersOrgPattern.getPrefix());
@@ -305,16 +309,12 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         }
          
         bio2RdfPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this,
-                BridgeDBConstants.HAS_PRIMARY_BIO2RDF_PATTERN_URI, BridgeDBConstants.HAS_BIO2RDF_PATTERN_URI, 
-                BridgeDBConstants.BIO2RDF_PATTERN_URI);
+                BridgeDBConstants.HAS_BIO2RDF_PATTERN_URI);
         sourceRdfPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
-                BridgeDBConstants.HAS_PRIMARY_SOURCE_RDF_PATTERN_URI, BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI, 
-                BridgeDBConstants.SOURCE_RDF_PATTERN_URI); 
+                BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI); 
         wikiPathwaysPattern = UriPattern.readUriPattern(repositoryConnection, dataSourceId, this, 
-                BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI, BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI);  
+                BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI);  
         
-        this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, this,
-                BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI));
         this.otherUriPatterns.addAll(UriPattern.readUriPatterns(repositoryConnection, dataSourceId, this,
                 BridgeDBConstants.HAS_URI_PATTERN_URI));
         
@@ -338,6 +338,7 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
             try{
                 if (!expectedPredicates.contains(statement.getPredicate())){
                     System.err.println("unexpected predicate in statement " + statement);
+                    throw new BridgeDBException("unexpected predicate in statement " + statement);
                 }
             } catch (Exception e){
                 throw new BridgeDBException ("Error processing statement " + statement, e);

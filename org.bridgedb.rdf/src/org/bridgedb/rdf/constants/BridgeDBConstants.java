@@ -62,9 +62,15 @@ public class BridgeDBConstants {
     private static final String TYPE = "type";
     public static final URI TYPE_URI = new URIImpl(PREFIX + TYPE);
     public static final URI HAS_URL_PATTERN_URI = new URIImpl(PREFIX + "hasUrlPattern");
+    public static final URI HAS_OUTPUT_URL_PATTERN_URI = new URIImpl(PREFIX + "hasOutputUrlPattern");
     public static final URI HAS_PRIMARY_URL_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + "UrlPattern");
+    public static final URI HAS_REGEX_URL_PATTERN_URI = new URIImpl(PREFIX + "hasRegexUrlPattern");
     public static final URI HAS_URI_PATTERN_URI = new URIImpl(PREFIX + "hasUriPattern");
     public static final URI HAS_PRIMARY_URI_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + "UriPattern");
+    public static final URI HAS_OUTPUT_URI_PATTERN_URI = new URIImpl(PREFIX + "hasOutputUriPattern");
+    public static final URI HAS_REGEX_URI_PATTERN_URI = new URIImpl(PREFIX + "hasRegexUriPattern");
+    public static final URI IS_DEPRICATED_BY_URI = new URIImpl(PREFIX + "isDepricatedBy");
+    
     //old verions
     public static final URI URL_PATTERN_URI = new URIImpl(PREFIX + "urlPattern");
     private static final String URN_BASE = "urnBase";
@@ -88,6 +94,7 @@ public class BridgeDBConstants {
     public static final URI IDENTIFERS_ORG_BASE = new URIImpl(PREFIX + "identifiers_org_base");
     public static final URI HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + IDENTIFERS_ORG_PATTERN);
     public static final URI HAS_IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + "has" + IDENTIFERS_ORG_PATTERN);
+    public static final URI HAS_OUTPUT_IDENTIFERS_ORG_PATTERN_URI = new URIImpl(PREFIX + "hasOutput" + IDENTIFERS_ORG_PATTERN);
 
     private static final String WIKIPATHWAYS_PATTERN = "WikiPathwaysPattern";
     public static final URI HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI = new URIImpl(PREFIX + "has" + PRIMARY + WIKIPATHWAYS_PATTERN);

@@ -241,13 +241,16 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     }
     
     public void setPrimaryDataSource(DataSourceUris dsu) throws BridgeDBException{
+        if (dsu == null){
+            return;
+        }
         if (dataSourceUris ==  null) {       
             dataSourceUris = dsu;
             isUriPatternOf.remove(dsu);
         } else if (dataSourceUris.equals(dsu)){
             //Do nothing;
         } else {
-            throw new BridgeDBException("Illegal attempt to set primary DataSource of " + this + " to " + dsu 
+            throw new BridgeDBException("Illegal attempt to set Primary DataSource of " + this + " to " + dsu 
                     + " has it was already set to " + dataSourceUris);
         }  
     }
@@ -333,54 +336,16 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
             UriPattern pattern = readUriPattern(repositoryConnection, statement.getSubject());
         }
     }
-
+   
     public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource dataSourceId, DataSourceUris parent, 
-            URI primary, URI shared) throws RepositoryException, BridgeDBException{
-        return readUriPattern(repositoryConnection, dataSourceId, parent, primary, shared, null, null);
-    }
-    
-    public static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource dataSourceId, DataSourceUris parent, 
-            URI primary, URI shared, URI old) throws RepositoryException, BridgeDBException{
-        String oldString = getPossibleSingletonString(repositoryConnection, dataSourceId, old);
-        return readUriPattern(repositoryConnection, dataSourceId, parent, primary, shared, old, oldString);
-    }
-    
-    private static UriPattern readUriPattern(RepositoryConnection repositoryConnection, Resource dataSourceId, DataSourceUris parent, 
-            URI primary, URI shared, URI old, String oldString) throws RepositoryException, BridgeDBException{
-        Resource primaryId = getPossibleSingletonResource(repositoryConnection, dataSourceId, primary);
-        Resource sharedId = getPossibleSingletonResource(repositoryConnection, dataSourceId, shared);
-        if (primaryId == null){
-            if (sharedId == null){
-                if (oldString == null){
-                    //nothing found
-                    return null;
-                } else {
-                    UriPattern result = UriPattern.byPattern(oldString);
-                    result.setDataSource(parent);
-                    return result;
-                }
-            } else {
-                if (oldString != null){
-                    throw new BridgeDBException(parent.getResourceId() + " can not have both a " 
-                        + old + " and a " + shared + " predicate.");
-                }
-                UriPattern result = readUriPattern(repositoryConnection, sharedId);
-                result.setDataSource(parent);
-                return result;
-            } 
-        } else { 
-            if (oldString != null){
-                throw new BridgeDBException(parent.getResourceId() + " can not have both a " 
-                    + old + " and a " + primary + " predicate.");
-            }
-            if (sharedId != null){
-                throw new BridgeDBException(parent.getResourceId() + " can not have both a " 
-                        + primary + " and a " + shared + " predicate.");
-            }
-            UriPattern result = readUriPattern(repositoryConnection, primaryId);
+            URI predicate) throws RepositoryException, BridgeDBException{
+        Resource id = getPossibleSingletonResource(repositoryConnection, dataSourceId, predicate);
+        if (id != null){
+            UriPattern result = readUriPattern(repositoryConnection, id);
             result.setPrimaryDataSource(parent);
             return result;
-        }        
+        }
+        return null;
     }
     
     public static Set<UriPattern> readUriPatterns(RepositoryConnection repositoryConnection, Resource dataSourceId, 
