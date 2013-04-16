@@ -628,11 +628,21 @@ bridgeDB:DataSource_ChEBI a bridgeDB:DataSource ;
 	bridgeDB:idExample "CHEBI:36927" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
-	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/obo.chebi/$id> ;
+    bridgeDB:isDepricatedBy bridgeDB:DataSource_Chebi ; #depricated to allow place CHEBI: in the prefix
+	bridgeDB:hasOutputUrlPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id> ;
+	bridgeDB:hasOutputIdentifiersOrgPattern <http://identifiers.org/obo.chebi/$id> .
+
+bridgeDB:DataSource_Chebi a bridgeDB:DataSource ;
+	bridgeDB:fullName "Chebi" ;
+	bridgeDB:systemCode "Chebi" ;
+	bridgeDB:mainUrl "http://www.ebi.ac.uk/chebi/" ;
+	bridgeDB:idExample "36927" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "metabolite" ;
+	bridgeDB:hasUrlPattern <http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/obo.chebi/CHEBI:$id> ;
 	bridgeDB:hasBio2RdfPattern <http://bio2rdf.org/chebi:$id> ;
-    bridgeDB:hasUriPattern <http://purl.obolibrary.org/obo/CHEBI_$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://bio2rdf.org/chebi:$id> .
+    bridgeDB:hasUriPattern <http://purl.obolibrary.org/obo/CHEBI_$id>  .
 
 bridgeDB:DataSource_ChemBank a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChemBank" ;
