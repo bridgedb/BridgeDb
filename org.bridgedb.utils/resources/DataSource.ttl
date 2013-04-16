@@ -4249,16 +4249,17 @@ bridgeDB:DataSource_Uniprot_Enzyme a bridgeDB:DataSource ;
 	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/enzyme/$id> .
 
 bridgeDB:DataSource_Uniprot_TrEMBL a bridgeDB:DataSource ;
-	bridgeDB:fullName "Uniprot/TrEMBL" ;
+	bridgeDB:fullName "Uniprot" ;
+	bridgeDB:alternativeFullName "Uniprot/TrEMBL" ;
 	bridgeDB:systemCode "S" ;
 	bridgeDB:mainUrl "http://www.ebi.uniprot.org/" ;
 	bridgeDB:idExample "P62158" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "protein" ;
 	bridgeDB:hasUrlPattern <http://www.ebi.uniprot.org/entry/$id> ;
-	bridgeDB:hasPrimaryIdentifiersOrgPattern <http://identifiers.org/uniprot/$id> ;
-	bridgeDB:hasPrimarySourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasPrimaryWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/uniprot/$id> ;
+	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
+	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> ;
 	bridgeDB:hasUriPattern <http://www.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_UNIPROT_ID a bridgeDB:DataSource ;
@@ -4266,8 +4267,8 @@ bridgeDB:DataSource_UNIPROT_ID a bridgeDB:DataSource ;
 	bridgeDB:systemCode "Sid" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasSourceRdfPattern <http://purl.uniprot.org/uniprot/$id> ;
-	bridgeDB:hasWikiPathwaysPattern <http://purl.uniprot.org/uniprot/$id> .
+    bridgeDB:isDepricatedBy bridgeDB:DataSource_Uniprot_TrEMBL;
+	bridgeDB:hasOutputUrlPattern <http://purl.uniprot.org/uniprot/$id> .
 
 bridgeDB:DataSource_UniSTS a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniSTS" ;
@@ -6895,7 +6896,7 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://purl.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://purl.uniprot.org/uniprot/" ;
-	bridgeDB:isUriPatternOf bridgeDB:DataSource_UniProt , bridgeDB:DataSource_Uniprot_TrEMBL , bridgeDB:DataSource_UNIPROT_ID .
+	bridgeDB:isUriPatternOf bridgeDB:DataSource_Uniprot_TrEMBL .
 
 <http://rdf.chemspider.com/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://rdf.chemspider.com/" ;

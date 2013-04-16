@@ -64,7 +64,6 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         BridgeDBConstants.FULL_NAME_URI,
         RdfConstants.TYPE_URI,
         BridgeDBConstants.ALTERNATIVE_FULL_NAME_URI,
-        BridgeDBConstants.HAS_PRIMARY_BIO2RDF_PATTERN_URI,
         BridgeDBConstants.HAS_BIO2RDF_PATTERN_URI,
         BridgeDBConstants.BIO2RDF_PATTERN_URI, //old version
         BridgeDBConstants.FULL_NAME_URI,
@@ -72,28 +71,22 @@ public class DataSourceUris extends RdfBase implements Comparable<DataSourceUris
         BridgeDBConstants.ID_EXAMPLE_URI,
         BridgeDBConstants.IDENTIFERS_ORG_BASE,
         BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI,
-        BridgeDBConstants.HAS_PRIMARY_IDENTIFERS_ORG_PATTERN_URI,
         BridgeDBConstants.HAS_OUTPUT_IDENTIFERS_ORG_PATTERN_URI,
         BridgeDBConstants.MAIN_URL_URI,
         BridgeDBConstants.ORGANISM_URI,
         BridgeDBConstants.PRIMAY_URI,
-        BridgeDBConstants.HAS_PRIMARY_SOURCE_RDF_PATTERN_URI,
         BridgeDBConstants.HAS_SOURCE_RDF_PATTERN_URI,
         BridgeDBConstants.SOURCE_RDF_PATTERN_URI, //Old version
         BridgeDBConstants.SYSTEM_CODE_URI,
         BridgeDBConstants.TYPE_URI,
         BridgeDBConstants.HAS_URI_PATTERN_URI,
-        BridgeDBConstants.HAS_PRIMARY_URI_PATTERN_URI,
         BridgeDBConstants.HAS_OUTPUT_URI_PATTERN_URI,
         BridgeDBConstants.HAS_REGEX_URI_PATTERN_URI,
         BridgeDBConstants.IS_DEPRICATED_BY_URI,
         BridgeDBConstants.HAS_URL_PATTERN_URI,
         BridgeDBConstants.HAS_REGEX_URL_PATTERN_URI,
-        BridgeDBConstants.HAS_PRIMARY_URL_PATTERN_URI,
         BridgeDBConstants.HAS_OUTPUT_URL_PATTERN_URI,
-        BridgeDBConstants.URL_PATTERN_URI, //Old version
         BridgeDBConstants.URN_BASE_URI,
-        BridgeDBConstants.HAS_PRIMARY_WIKIPATHWAYS_PATTERN_URI,
         BridgeDBConstants.HAS_WIKIPATHWAYS_PATTERN_URI,
         new URIImpl(BridgeDBConstants.PREFIX + "wikipathways_id_base")
     }));
