@@ -34,10 +34,10 @@ public class JustificationMaker {
             return left;
         }
         if (left.equals(ChemInf.INCHI_KEY)) {
-        	if (right.equals(OboConstants.HAS_PART)) return OboConstants.HAS_PART;
+            if (right.stringValue().startsWith(OboConstants.PREFIX)) return right;
         }
-        if (left.equals(OboConstants.HAS_PART)) {
-        	if (right.equals(ChemInf.INCHI_KEY)) return OboConstants.HAS_PART;
+        if (left.stringValue().startsWith(OboConstants.PREFIX)) {
+         	if (right.equals(ChemInf.INCHI_KEY)) return left;
         }
         throw new RDFHandlerException("unable to combine " + left + " with " + right);
     }

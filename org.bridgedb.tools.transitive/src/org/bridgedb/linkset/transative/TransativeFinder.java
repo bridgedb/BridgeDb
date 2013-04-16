@@ -194,7 +194,7 @@ public class TransativeFinder extends SQLBase{
         }
     }
 
-    private HashSet<Integer> getChain(MappingSetInfo left, MappingSetInfo right){
+    public static HashSet<Integer> getChain(MappingSetInfo left, MappingSetInfo right){
         HashSet<Integer> chainIds = new HashSet<Integer>();
         if (left.getChainIds().isEmpty()){
             if (left.isSymmetric()){

@@ -69,13 +69,13 @@ public class TransativeCreatorTest extends TestUtils {
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleBToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
 	}
     
-    @Test(expected =  BridgeDBException.class)
-    public void testNoLinkToSelf() throws RDFHandlerException, IOException, BridgeDBException {
-        report("NoLinkToSelf");
-        String fileName = "test-data/empty1.ttl";
-        File file = new File(fileName);
-        TransativeCreator.createTransative(1, 2, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
-    }
+    //@Test(expected =  BridgeDBException.class)
+    //public void testNoLinkToSelf() throws RDFHandlerException, IOException, BridgeDBException {
+    //    report("NoLinkToSelf");
+    //    String fileName = "test-data/empty1.ttl";
+    //    File file = new File(fileName);
+    //    TransativeCreator.createTransative(1, 2, file, StoreType.TEST, GENERATE_PREDICATE, USE_EXISTING_LICENSES, NO_DERIVED_BY);
+    //}
 
     @Test(expected =  BridgeDBException.class)
     public void testNoLink() throws RDFHandlerException, IOException, BridgeDBException {

@@ -34,6 +34,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfFactory;
 import org.bridgedb.linkset.rdf.RdfWrapper;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
@@ -75,8 +76,8 @@ public class TransativeCreator {
     private Resource rightLinkSet;
     private Value sourceDataSet;
     private Value targetDataSet;
-    private Value sourceUriSpace;
-    private Value targetUriSpace;
+    private UriPattern sourceUriPattern;
+    private UriPattern targetUriPattern;
     private final BufferedWriter buffer;
     private final File outputFile;
     private final MappingSetInfo leftInfo;
@@ -193,8 +194,10 @@ public class TransativeCreator {
         predicate = registerNewLinkset(rdfWrapper, linksetURI, predicate, license, derivedBy);
         registerDataSet(rdfWrapper, sourceDataSet, leftContext);
         registerDataSet(rdfWrapper, targetDataSet, rightContext);
-        sourceUriSpace = rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE_URI, leftContext);
-        targetUriSpace = rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE_URI, rightContext);
+        Value sourceUriSpace = rdfWrapper.getTheSingeltonObject(sourceDataSet, VoidConstants.URI_SPACE_URI, leftContext);
+        sourceUriPattern = UriPattern.byPrefixOrNameSpace(sourceUriSpace.stringValue());
+        Value targetUriSpace = rdfWrapper.getTheSingeltonObject(targetDataSet, VoidConstants.URI_SPACE_URI, rightContext);
+        targetUriPattern = UriPattern.byPrefixOrNameSpace(targetUriSpace.stringValue());
 
         rdfWrapper.shutdown();
         return predicate;
@@ -209,10 +212,10 @@ public class TransativeCreator {
             throw new BridgeDBException ("Target of mappingSet " + leftInfo.getStringId()  + " is " + leftInfo.getTarget().getSysCode() 
                 + " Which is not the same as the Source of " + rightInfo.getStringId() + " which is " + rightInfo.getSource().getSysCode());
         }
-        if (leftInfo.getSource().getSysCode().equals(rightInfo.getTarget().getSysCode())){
-            throw new BridgeDBException ("Source of mappingSet " + leftInfo.getStringId()  + "(" + leftInfo.getTarget().getSysCode() +")"
-                + " is the same as the Target of " + rightInfo.getStringId() + ". No need for a transative mapping");
-        }
+        //if (leftInfo.getSource().getSysCode().equals(rightInfo.getTarget().getSysCode())){
+        //    throw new BridgeDBException ("Source of mappingSet " + leftInfo.getStringId()  + "(" + leftInfo.getTarget().getSysCode() +")"
+        //        + " is the same as the Target of " + rightInfo.getStringId() + ". No need for a transative mapping");
+        //}
     }
     
     private void registerVoIDDescription(String linksetURI) throws RDFHandlerException, IOException {
@@ -411,16 +414,18 @@ public class TransativeCreator {
                 found = true;
                 String sourceId = rs.getString("mapping1.sourceId");
                 String targetId = rs.getString("mapping2.targetId");
-                buffer.write("<");
-                    buffer.write(sourceUriSpace.stringValue());
-                    buffer.write(sourceId);
-                buffer.write("> <");
-                    buffer.write(newPredicate.stringValue());
-                buffer.write( "> <");
-                    buffer.write(targetUriSpace.stringValue());
-                    buffer.write(targetId);
-                buffer.write("> . "); 
-                buffer.newLine();
+                String sourceUri = sourceUriPattern.getPrefix() + sourceId + sourceUriPattern.getPostfix();
+                String targetUri = targetUriPattern.getPrefix() + targetId + targetUriPattern.getPostfix();
+                if (!sourceUri.equals(targetUri)){
+                    buffer.write("<");
+                        buffer.write(sourceUri);
+                    buffer.write("> <");
+                        buffer.write(newPredicate.stringValue());
+                    buffer.write( "> <");
+                        buffer.write(targetUri);
+                    buffer.write("> . "); 
+                    buffer.newLine();
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
