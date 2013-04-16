@@ -40,6 +40,7 @@ import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.DataSourceUris;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.UriPattern;
+import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.ProfileInfo;
@@ -1220,21 +1221,53 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return prefix;
     }
 
-    private Set<String> getViaCodes(int id) throws BridgeDBException {
+/*    private Set<String> getViaCodes(int id) throws BridgeDBException {
+
+    /**
+     * Method to split a Uri into an URISpace and an ID.
+     *
+     * Based on OPENRDF version with ":" added as and extra splitter.
+     *
+     * Ideally this would be replaced by a method from Identifiers.org
+     *    based on their knowledge or ULI/URLs
+     * @param uri Uri to split
+     * @return The URISpace of the Uri
+     * /
+    public final static String splitId(String uri){
+        uri = uri.trim();
+        if (uri.contains("#")){
+            return uri.substring(uri.lastIndexOf("#")+1, uri.length());
+        } else if (uri.contains("=")){
+            return uri.substring(uri.lastIndexOf("=")+1, uri.length());
+        } else if (uri.contains("/")){
+            return uri.substring(uri.lastIndexOf("/")+1, uri.length());
+        } else if (uri.contains(":")){
+            return uri.substring(uri.lastIndexOf(":")+1, uri.length());
+        }
+        throw new IllegalArgumentException("Uri should have a '#', '/, or a ':' in it.");
+    }
+*/
+    private Set<DataSetInfo> getViaCodes(int id) throws BridgeDBException {
         String query = ("SELECT " + VIA_DATASOURCE_COLUMN_NAME
                 + " FROM " + VIA_TABLE_NAME 
                 + " WHERE " + MAPPING_SET_ID_COLUMN_NAME + " = \"" + id + "\"");
     	Statement statement = this.createStatement();
-        HashSet<String> results = new HashSet<String>();
+        HashSet<DataSetInfo> results = new HashSet<DataSetInfo>();
 		try {
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()){
-                results.add(rs.getString(VIA_DATASOURCE_COLUMN_NAME));
+                String sysCode = rs.getString(VIA_DATASOURCE_COLUMN_NAME);
+                results.add(findDataSetInfo(sysCode));
             }
             return results;
 		} catch (SQLException e) {
 			throw new BridgeDBException("Unable to retrieve profiles.", e);
 		}
+    }
+    
+    private DataSetInfo findDataSetInfo(String sysCode){
+        DataSource ds = this.findDataSource(sysCode);
+        return new DataSetInfo(sysCode, ds.getFullName());
     }
     
     private Set<Integer> getChainIds(int id) throws BridgeDBException {
@@ -1346,10 +1379,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             while (rs.next()){
                 Integer count = rs.getInt(MAPPING_COUNT_COLUMN_NAME);
                 int id = rs.getInt(ID_COLUMN_NAME);
-                Set<String> viaSysCodes = getViaCodes(id);
+                Set<DataSetInfo> viaSysCodes = getViaCodes(id);
                 Set<Integer> chainIds = getChainIds(id);
-                results.add(new MappingSetInfo(id, rs.getString(SOURCE_DATASOURCE_COLUMN_NAME),  
-                        rs.getString(PREDICATE_COLUMN_NAME), rs.getString(TARGET_DATASOURCE_COLUMN_NAME), 
+                DataSetInfo sourceInfo = findDataSetInfo(rs.getString(SOURCE_DATASOURCE_COLUMN_NAME));
+                DataSetInfo targetInfo = findDataSetInfo(rs.getString(TARGET_DATASOURCE_COLUMN_NAME));
+                results.add(new MappingSetInfo(id, sourceInfo, rs.getString(PREDICATE_COLUMN_NAME), targetInfo, 
                         rs.getString(JUSTIFICATION_COLUMN_NAME), rs.getInt(SYMMETRIC_COLUMN_NAME), 
                         viaSysCodes, chainIds, count));
             }

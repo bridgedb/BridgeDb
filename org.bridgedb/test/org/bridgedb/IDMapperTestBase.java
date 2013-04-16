@@ -82,7 +82,7 @@ public abstract class IDMapperTestBase {
                 .idExample("33a28bb2-35ed-4d94-adfd-3c96053cbaaf").asDataSource();
         DataSource2 = DataSource.register("Cs", "Chemspider").urlPattern("http://www.chemspider.com/Chemical-Structure.$id.html")
                 .idExample("56586").asDataSource();
-        DataSource3 = DataSource.register("ChemblOldMolecule", "Chembl Old Molecule").urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id")
+        DataSource3 = DataSource.register("ChemblMolecule", "Chembl Molecule").urlPattern("http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id")
                 .idExample("1").asDataSource();
         //This DataSource MUST not be supported
         DataSourceBad = DataSource.register("TestDSBad", null)

@@ -53,7 +53,6 @@ public class TransativeFinderTest extends TestUtils  {
  
     
     @Before
-    @Ignore
     public void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
         //Check database is running and settup correctly or kill the test. 
         TestSqlFactory.checkSQLAccess();

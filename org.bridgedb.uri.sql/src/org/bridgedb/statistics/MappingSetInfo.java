@@ -31,26 +31,26 @@ import java.util.Set;
 public class MappingSetInfo {
     private String stringId;
     private final int intId;
-    private final String sourceSysCode;
+    private final DataSetInfo source;
     private final String predicate;
-    private final String targetSysCode;
+    private final DataSetInfo target;
     private final String justification;
     private final int symmetric;
-    private Set<String> viaSystemCode;
+    private Set<DataSetInfo> viaDataSets;
     private Set<Integer> chainIds;
     private Integer numberOfLinks;
 
-    public MappingSetInfo(int id, String sourceSysCode, String predicate, String targetSysCode, String justification,
-            int symmetric, Set<String> viaSystemCodes,  Set<Integer> chainIds, Integer numberOfLinks){
+    public MappingSetInfo(int id, DataSetInfo source, String predicate, DataSetInfo target, String justification,
+            int symmetric, Set<DataSetInfo> viaDataSets,  Set<Integer> chainIds, Integer numberOfLinks){
         intId = id;
         stringId = null;
         this.predicate = predicate;
-        this.sourceSysCode = sourceSysCode;
-        this.targetSysCode = targetSysCode;
+        this.source = source;
+        this.target = target;
         this.justification = justification;
         this.symmetric = symmetric;
-        setViaSystemCode(viaSystemCodes);
-        this.chainIds = chainIds;
+        setViaDataSets(viaDataSets);
+        setChainIds(chainIds);
         this.numberOfLinks = numberOfLinks;
     }
     
@@ -71,8 +71,8 @@ public class MappingSetInfo {
         return intId;
     }
 
-    public void multipleIds(){
-        stringId = "various";
+    public void combineIds(MappingSetInfo other){
+        stringId = this.getStringId() + "," + other.getStringId();
     }
     
     /**
@@ -80,20 +80,6 @@ public class MappingSetInfo {
      */
     public String getPredicate() {
         return predicate;
-    }
-
-    /**
-     * @return the sourceURISpace
-     */
-    public String getSourceSysCode() {
-        return sourceSysCode;
-    }
-
-    /**
-     * @return the targetURISpace
-     */
-    public String getTargetSysCode() {
-        return targetSysCode;
     }
 
     /**
@@ -117,38 +103,16 @@ public class MappingSetInfo {
         this.numberOfLinks = numberOfLinks;
     }
     
+    @Override
     public String toString(){
-        return this.getStringId() + "\n\tsourceSysCode:" + this.sourceSysCode + "\n\tpredicate:" + this.predicate 
-                + "\n\ttargetSysCode: " + this.targetSysCode 
+        return this.getStringId()  
+                + "\n\tsource:" + this.getSource()
+                + "\n\tpredicate:" + this.predicate 
+                + "\n\ttarget: " + this.getTarget() 
                 + "\n\tsymetric: " + this.symmetric
-                + "\n\tviaSystemCodes: " + this.viaSystemCode 
+                + "\n\tviaDataSets: " + this.getViaDataSets()
                 + "\n\tchainIds: " + this.chainIds
                 + "\n\tnumberOfLinks: " + this.numberOfLinks + "\n";
-    }
-
-    /**
-     * @return the isTransitive
-     */
-    public boolean isTransitive() {
-        return !viaSystemCode.isEmpty();
-    }
-
-    /**
-     * @return the viaSystemCode
-     */
-    public Set<String> getViaSystemCode() {
-        return viaSystemCode;
-    }
-
-    /**
-     * @param viaSystemCode the viaSystemCode to set
-     */
-    public void setViaSystemCode(Set<String> viaSystemCode) {
-        if (viaSystemCode == null){
-            this.viaSystemCode = new HashSet<String>();
-        } else {
-            this.viaSystemCode = viaSystemCode;
-        }
     }
 
     /**
@@ -169,7 +133,11 @@ public class MappingSetInfo {
      * @param chainIds the chainIds to set
      */
     public void setChainIds(Set<Integer> chainIds) {
-        this.chainIds = chainIds;
+        if (chainIds != null){
+            this.chainIds = chainIds;
+        } else {
+            chainIds = new HashSet<Integer>();
+        }
     }
 
     /**
@@ -179,5 +147,40 @@ public class MappingSetInfo {
         return symmetric;
     }
 
+    /**
+     * @return the source
+     */
+    public DataSetInfo getSource() {
+        return source;
+    }
 
- }
+    /**
+     * @return the target
+     */
+    public DataSetInfo getTarget() {
+        return target;
+    }
+
+    /**
+     * @return the viaDataSets
+     */
+    public Set<DataSetInfo> getViaDataSets() {
+        return viaDataSets;
+    }
+
+    /**
+     * @param viaDataSets the viaDataSets to set
+     */
+    public void setViaDataSets(Set<DataSetInfo> viaDataSets) {
+        if (viaDataSets != null){
+            this.viaDataSets = viaDataSets;
+        } else {
+            this.viaDataSets = new HashSet<DataSetInfo>();
+        }
+    }
+
+    public boolean isTransitive() {
+        return (viaDataSets != null && !viaDataSets.isEmpty());
+    }
+
+  }

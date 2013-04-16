@@ -43,8 +43,10 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.ProfileInfo;
 import org.bridgedb.uri.Mapping;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.ws.WsUriConstants;
 
 /**
  * This class provides the Reposnse Frame including Top and Sidebar 
@@ -335,6 +337,22 @@ public class WSFame extends WSUriInterfaceService {
         sb.append("\n<div></body></html>");
     }
 
+	public void generateProfileSelector(StringBuilder sb) throws BridgeDBException {
+		List<ProfileInfo> profiles = uriMapper.getProfiles();
+        sb.append("<p>");
+    	sb.append(WsUriConstants.PROFILE_URI);
+        sb.append("<select name=\"");
+    	sb.append(WsUriConstants.PROFILE_URI);
+    	sb.append("\">");
+		for (ProfileInfo profile : profiles) {
+			sb.append("<option value=\"");
+			sb.append(profile.getUri());
+			sb.append("\">");
+			sb.append(profile.getName());
+			sb.append("</option>");
+		}
+    	sb.append("</select>\n");
+	}
 
 
 }

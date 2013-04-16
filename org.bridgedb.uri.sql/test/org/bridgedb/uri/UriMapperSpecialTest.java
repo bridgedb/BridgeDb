@@ -193,13 +193,13 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testGetMappingSetInfo() throws BridgeDBException {
         report("GetMappingSetInfo");
         MappingSetInfo result = uriMapper.getMappingSetInfo(mappingSet2_3);
-        assertEquals(DataSource2.getSystemCode(), result.getSourceSysCode());
-        assertEquals(DataSource3.getSystemCode(), result.getTargetSysCode());
+        assertEquals(DataSource2.getSystemCode(), result.getSource().getSysCode());
+        assertEquals(DataSource3.getSystemCode(), result.getTarget().getSysCode());
         System.out.println(result);
         assertFalse(result.isSymmetric());
         result = uriMapper.getMappingSetInfo(mappingSet2_3+1);
-        assertEquals(DataSource3.getSystemCode(), result.getSourceSysCode());
-        assertEquals(DataSource2.getSystemCode(), result.getTargetSysCode());
+        assertEquals(DataSource3.getSystemCode(), result.getSource().getSysCode());
+        assertEquals(DataSource2.getSystemCode(), result.getTarget().getSysCode());
         assertTrue(result.isSymmetric());
     }
 
@@ -217,8 +217,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
                 uriMapper.getMappingSetInfos(DataSource2.getSystemCode(), DataSource1.getSystemCode());
         assertThat (results.size(), greaterThanOrEqualTo(1));
         for (MappingSetInfo info:results){
-            assertEquals(DataSource2.getSystemCode(), info.getSourceSysCode());
-            assertEquals(DataSource1.getSystemCode(), info.getTargetSysCode());
+            assertEquals(DataSource2.getSystemCode(), info.getSource().getSysCode());
+            assertEquals(DataSource1.getSystemCode(), info.getTarget().getSysCode());
         }
     }
 
@@ -229,7 +229,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
                 uriMapper.getMappingSetInfos(null, DataSource3.getSystemCode());
         assertThat (results.size(), greaterThanOrEqualTo(2));
         for (MappingSetInfo info:results){
-            assertEquals(DataSource3.getSystemCode(), info.getTargetSysCode());
+            assertEquals(DataSource3.getSystemCode(), info.getTarget().getSysCode());
         }
     }
     @Test
@@ -239,7 +239,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
                 uriMapper.getMappingSetInfos(DataSource1.getSystemCode(), null);
         assertThat (results.size(), greaterThanOrEqualTo(2));
         for (MappingSetInfo info:results){
-            assertEquals(DataSource1.getSystemCode(), info.getSourceSysCode());
+            assertEquals(DataSource1.getSystemCode(), info.getSource().getSysCode());
         }
     }
     

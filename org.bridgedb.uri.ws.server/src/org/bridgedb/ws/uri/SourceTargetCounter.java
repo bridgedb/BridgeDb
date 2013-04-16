@@ -44,15 +44,15 @@ public class SourceTargetCounter implements Comparator<MappingSetInfo>{
 
     private void addin(MappingSetInfo mappingSetInfo) {
         for (MappingSetInfo collectedInfo:collectedInfos){
-            boolean equals = mappingSetInfo.getSourceSysCode().equals(collectedInfo.getSourceSysCode());
+            boolean equals = mappingSetInfo.getSource().equals(collectedInfo.getSource());
             if (equals) {
-                equals = mappingSetInfo.getTargetSysCode().equals(collectedInfo.getTargetSysCode());
+                equals = mappingSetInfo.getTarget().equals(collectedInfo.getTarget());
             }
             if (equals){
-                collectedInfo.multipleIds();
+                collectedInfo.combineIds(mappingSetInfo);
                 collectedInfo.setNumberOfLinks(collectedInfo.getNumberOfLinks() + mappingSetInfo.getNumberOfLinks());
-                if (mappingSetInfo.getViaSystemCode() == null || mappingSetInfo.getViaSystemCode().isEmpty()){
-                    collectedInfo.setViaSystemCode(null);
+                if (mappingSetInfo.getViaDataSets() == null || mappingSetInfo.getViaDataSets().isEmpty()){
+                    collectedInfo.setViaDataSets(null);
                 }
                 return;
             }
@@ -66,9 +66,9 @@ public class SourceTargetCounter implements Comparator<MappingSetInfo>{
 
     @Override
     public int compare(MappingSetInfo o1, MappingSetInfo o2) {
-        int test = o1.getSourceSysCode().compareTo(o2.getSourceSysCode());
+        int test = o1.getSource().compareTo(o2.getSource());
         if (test != 0) return test;
-        return o1.getTargetSysCode().compareTo(o2.getTargetSysCode());
+        return o1.getTarget().compareTo(o2.getTarget());
     }
 }
     
