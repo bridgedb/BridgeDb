@@ -27,20 +27,20 @@ public class JustificationMakerTest {
 
 	@Test
 	public void testCombine_inchi() throws RDFHandlerException {
-		assertEquals(ChemInf.INCHI_KEY, 
-				JustificationMaker.combine(ChemInf.INCHI_KEY, ChemInf.INCHI_KEY));
+		assertEquals(ChemInf.INCHI_KEY_URI, 
+				JustificationMaker.combine(ChemInf.INCHI_KEY_URI, ChemInf.INCHI_KEY_URI));
 	}
 
 	@Test
 	public void testCombine_inchi_oboHasParts() throws RDFHandlerException {
 		assertEquals(OboConstants.HAS_PART, 
-				JustificationMaker.combine(ChemInf.INCHI_KEY, OboConstants.HAS_PART));
+				JustificationMaker.combine(ChemInf.INCHI_KEY_URI, OboConstants.HAS_PART));
 	}
 
 	@Test
 	public void testCombine_oboHasParts_inchi() throws RDFHandlerException {
 		assertEquals(OboConstants.HAS_PART, 
-				JustificationMaker.combine(OboConstants.HAS_PART, ChemInf.INCHI_KEY));
+				JustificationMaker.combine(OboConstants.HAS_PART, ChemInf.INCHI_KEY_URI));
 	}
 	
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -73,7 +74,7 @@ public class TransativeFinder extends SQLBase{
     }
    
     private void computeTransative(MappingSetInfo info) throws BridgeDBException, RDFHandlerException, IOException {
-        //ystem.out.println ("compute transtaive mappingset " + info.getIntId());
+        System.out.println ("compute transtaive mappingset " + info.getIntId());
         //ystem.out.println (info);
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
@@ -92,6 +93,28 @@ public class TransativeFinder extends SQLBase{
         Statement statement = mapper.createStatement();
         String query = "SELECT *"
                 + " FROM " + SQLUriMapper.MAPPING_SET_TABLE_NAME
+                + " WHERE "+ SQLUriMapper.ID_COLUMN_NAME + " < " + info.getIntId();
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query);   
+            List<MappingSetInfo> possibles = mapper.resultSetToMappingSetInfos(rs);
+            List<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
+            for (MappingSetInfo possible:possibles){
+                String combine = JustificationMaker.possibleCombine(possible.getJustification(), info.getJustification());
+                if (combine != null){
+                    results.add(possible);
+                }
+            }
+            return results;
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        }
+    }
+    
+    private List<MappingSetInfo> findTransativeCandidatesOld(MappingSetInfo info) throws BridgeDBException {
+        Statement statement = mapper.createStatement();
+        String query = "SELECT *"
+                + " FROM " + SQLUriMapper.MAPPING_SET_TABLE_NAME
                 + " WHERE "+ SQLUriMapper.ID_COLUMN_NAME + " < " + info.getIntId()
                 + " AND " + SQLUriMapper.JUSTIFICATION_COLUMN_NAME + " = '" + info.getJustification() +"'";
         ResultSet rs;
@@ -104,53 +127,91 @@ public class TransativeFinder extends SQLBase{
     }
     
     private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
-        //Left dource must be less than right source
-        if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
-            //ystem.out.println ("Loop " + left.getStringId() + " -> " + right.getStringId());
-            //ystem.out.println ("    " + left.getSourceSysCode() + " == " + right.getTargetSysCode());
-            return false;
-        }
         //Must match in the middle
         if (!left.getTarget().getSysCode().equals(right.getSource().getSysCode())){
-            //ystem.out.println ("No match " + left.getStringId() + " -> " + right.getStringId());
-            //ystem.out.println ("    " + left.getTargetSysCode() + " != " + right.getSourceSysCode());
+            System.out.println ("No match " + left.getStringId() + " -> " + right.getStringId());
+            System.out.println ("    " + left.getTarget().getSysCode() + " != " + right.getSource().getSysCode());
             return false;
         }
+        if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
+            return checkValidLoopTransative(left, right, chainIds);
+        } else {
+            return checkValidNoLoopTransative(left, right, chainIds);
+        }
+    }
+    
+    private boolean checkValidNoLoopTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         for (DataSetInfo via:left.getViaDataSets()){
             if (right.getTarget().getSysCode().equals(via.getSysCode())){
-                //ystem.out.println("Target in Via with " + left.getStringId() + " -> " + right.getStringId());
-                //ystem.out.println ("    " + via + " == " + right.getTargetSysCode());            
+                System.out.println("Target in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via.getSysCode() + " == " + right.getTarget().getSysCode());            
                 return false;
             }
             if (left.getTarget().getSysCode().equals(via.getSysCode())){
-                //ystem.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
-                //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
+                System.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via.getSysCode() + " == " + left.getTarget().getSysCode());            
                 return false;
             }
         }
         for (DataSetInfo via:right.getViaDataSets()){
             if (left.getSource().getSysCode().equals(via.getSysCode())){
-                //ystem.out.println("Source in Via with " + left.getStringId() + " -> " + right.getStringId());
-                //ystem.out.println ("    " + via + " == " + left.getSourceSysCode());            
+                System.out.println("Source in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via.getSysCode() + " == " + left.getSource().getSysCode());            
                 return false;
             }
             if (left.getTarget().getSysCode().equals(via.getSysCode())){
-                //ystem.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
-                //ystem.out.println ("    " + via + " == " + left.getTargetSysCode());            
+                System.out.println("Middle in Via with " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via.getSysCode() + " == " + left.getTarget().getSysCode());            
                 return false;
             }
             for (DataSetInfo via2:left.getViaDataSets()){           
                 if (via.equals(via2)){
-                    //ystem.out.println("Similar via with " + left.getStringId() + " -> " + right.getStringId());
-                    //ystem.out.println("    " + via);
+                    System.out.println("Similar via with " + left.getStringId() + " -> " + right.getStringId());
+                    System.out.println("    " + via);
                     return false;
                 }
             }
         }
         if (chainAlreadyExists(chainIds)){
-            //ystem.out.println("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
-            //stem.out.println("    " + chainIds);
+            System.out.println("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
+            System.out.println("    " + chainIds);
             return false;        
+        }
+        return true; 
+    }
+
+    private boolean checkValidLoopTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
+        if (left.getSource().getSysCode().equals(right.getSource().getSysCode())){
+            System.out.println ("Loop with self in middle" + left.getStringId() + " -> " + right.getStringId());
+            System.out.println ("    " + left.getSource().getSysCode()+ " == " + right.getSource().getSysCode() + " == " + right.getTarget().getSysCode());
+            return false;
+        }
+        if ((left.getViaDataSets().size() + right.getViaDataSets().size()) > 1){
+            System.out.println ("Loop with too many vias: " + left.getStringId() + " -> " + right.getStringId());
+            System.out.println ("    " + left.getViaDataSets().size() + " + " + right.getViaDataSets().size() + " > 1");
+            return false;
+            
+        }
+        for (DataSetInfo via:left.getViaDataSets()){
+             if (!left.getTarget().getSysCode().equals(via.getSysCode())){
+                System.out.println("Via different to middle " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via.getSysCode() + " != " + left.getTarget().getSysCode());            
+                return false;
+            }
+        }
+        for (DataSetInfo via:right.getViaDataSets()){
+            if (!left.getTarget().getSysCode().equals(via.getSysCode())){
+                System.out.println("Via different to Via " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println ("    " + via.getSysCode() + " != " + left.getTarget().getSysCode());            
+                return false;
+            }
+            for (DataSetInfo via2:left.getViaDataSets()){           
+                if (!via.equals(via2)){
+                    System.out.println("Different via with " + left.getStringId() + " -> " + right.getStringId());
+                    System.out.println("    " + via.getSysCode() + " != " + via2.getSysCode());
+                    return false;
+                }
+            }
         }
         return true; 
     }

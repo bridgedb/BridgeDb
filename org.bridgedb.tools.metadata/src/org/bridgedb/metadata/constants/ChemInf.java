@@ -7,6 +7,7 @@ public class ChemInf {
 
 	private static final String cheminfns = "http://semanticscience.org/resource/";
 	
-	public static final URI INCHI_KEY = new URIImpl(cheminfns + "CHEMINF_000059");
+	public static final String INCHI_KEY = cheminfns + "CHEMINF_000059";
+	public static final URI INCHI_KEY_URI = new URIImpl(INCHI_KEY);
 	
 }

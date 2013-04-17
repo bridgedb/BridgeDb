@@ -21,6 +21,7 @@ package org.bridgedb.linkset.transative;
 import org.bridgedb.metadata.constants.ChemInf;
 import org.bridgedb.metadata.constants.OboConstants;
 import org.openrdf.model.Value;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -30,16 +31,30 @@ import org.openrdf.rio.RDFHandlerException;
 public class JustificationMaker {
 
     public static Value combine(Value left, Value right) throws RDFHandlerException{
-        if (left.equals(right)){
-            return left;
-        }
-        if (left.equals(ChemInf.INCHI_KEY)) {
-            if (right.stringValue().startsWith(OboConstants.PREFIX)) return right;
-        }
-        if (left.stringValue().startsWith(OboConstants.PREFIX)) {
-         	if (right.equals(ChemInf.INCHI_KEY)) return left;
+        String result = possibleCombine(left.stringValue(), right.stringValue());
+        if (result != null){
+            if (result.equals(left.stringValue())){
+                return left;
+            }
+            if (result.equals(right.stringValue())){
+                return right;
+            }
+            return new URIImpl(result);
         }
         throw new RDFHandlerException("unable to combine " + left + " with " + right);
     }
     
+    public static String possibleCombine(String left, String right) {
+        if (left.equals(right)){
+            return left;
+        }
+        if (left.equals(ChemInf.INCHI_KEY)) {
+            if (right.startsWith(OboConstants.PREFIX)) return right;
+        }
+        if (left.startsWith(OboConstants.PREFIX)) {
+         	if (right.equals(ChemInf.INCHI_KEY)) return left;
+            if (right.startsWith(OboConstants.PREFIX)) return OboConstants.PREFIX + "combined";
+        }
+        return null;
+    }
 }

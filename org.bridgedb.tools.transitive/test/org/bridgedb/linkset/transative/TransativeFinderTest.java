@@ -129,7 +129,46 @@ public class TransativeFinderTest extends TestUtils  {
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics();
         assertEquals(30, results.getNumberOfMappingSets());
-        report("testFinder3Done");
+        report("testFinder4Done");
 	}
 
+    @Test
+ 	public void testFinder5() throws BridgeDBException, RDFHandlerException, IOException {	
+        report("testFinder5");
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
+        transativeFinder.UpdateTransative();
+        OverallStatistics results = mapper.getOverallStatistics();
+        assertEquals(8, results.getNumberOfMappingSets());
+        report("testFinder5Done");
+	}
+
+    @Test
+ 	public void testFinder6() throws BridgeDBException, RDFHandlerException, IOException {	
+        report("testFinder6");
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
+        transativeFinder.UpdateTransative();
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        transativeFinder.UpdateTransative();
+        OverallStatistics results = mapper.getOverallStatistics();
+        assertEquals(16, results.getNumberOfMappingSets());
+        report("testFinder6Done");
+	}
+
+    @Test
+ 	public void testFinder7() throws BridgeDBException, RDFHandlerException, IOException {	
+        report("testFinder7");
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
+        transativeFinder.UpdateTransative();
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleBToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        transativeFinder.UpdateTransative();
+        OverallStatistics results = mapper.getOverallStatistics();
+        assertEquals(14, results.getNumberOfMappingSets()); //14 is correct as coded but should we do C -> C'?
+        report("testFinder7Done");
+	}
 }

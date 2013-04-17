@@ -33,3 +33,6 @@
 DS_B:123 <http://www.bridgedb.org/test#testPredicate> DS_C:123 .
 DS_B:456 <http://www.bridgedb.org/test#testPredicate> DS_C:456 .
 DS_B:789 <http://www.bridgedb.org/test#testPredicate> DS_C:789 .
+DS_B:123a <http://www.bridgedb.org/test#testPredicate> DS_C:123a .
+DS_B:456a <http://www.bridgedb.org/test#testPredicate> DS_C:456a .
+DS_B:789a <http://www.bridgedb.org/test#testPredicate> DS_C:789a .
