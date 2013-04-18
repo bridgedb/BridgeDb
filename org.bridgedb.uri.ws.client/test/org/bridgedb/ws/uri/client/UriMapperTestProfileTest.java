@@ -33,7 +33,7 @@ import org.junit.Ignore;
  * @author Christian
  */
 //@Ignore
-public class UriMapperTestProfileTest extends org.bridgedb.uri.UriMapperTestProfileTest {
+public class UriMapperTestProfileTest extends org.bridgedb.uri.UriMapperTestLensTest {
 
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException{

@@ -406,7 +406,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Path("/profile/{id}")
 	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDBException {
-		LensInfo profile = uriMapper.getProfile(Lens.getLensURI(Integer.parseInt(id)));
+		LensInfo profile = uriMapper.getLens(Lens.getLensURI(Integer.parseInt(id)));
 		ProfileBean result = ProfileBean.asBean(profile);
 		return result;
 	}
@@ -416,7 +416,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/profile") 
 	public List<ProfileBean> getProfiles() throws BridgeDBException {
-		List<LensInfo> profiles = uriMapper.getProfiles();
+		List<LensInfo> profiles = uriMapper.getLens();
 		List<ProfileBean> results = new ArrayList<ProfileBean>();
 		for (LensInfo profile:profiles) {
 			results.add(ProfileBean.asBean(profile));

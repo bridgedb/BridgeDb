@@ -29,17 +29,17 @@ public class OverallStatistics {
     private int numberOfSourceDataSources;
     private int numberOfPredicates;
     private int numberOfTargetDataSources;
-    private int numberOfProfiles;
+    private int numberOfLenses;
     
     public OverallStatistics(int numberOfMappings, int numberOfMappingSets, 
             int numberOfSourceDataSources, int numberOfPredicates, 
-            int numberOfTargetDataSources, int numberOfProfiles) {
+            int numberOfTargetDataSources, int numberOfLens) {
         this.numberOfMappings = numberOfMappings;
         this.numberOfMappingSets = numberOfMappingSets;
         this.numberOfSourceDataSources = numberOfSourceDataSources;
         this.numberOfPredicates = numberOfPredicates;
         this.numberOfTargetDataSources = numberOfTargetDataSources;
-        this.numberOfProfiles = numberOfProfiles;
+        this.numberOfLenses = numberOfLens;
     }
 
     /**
@@ -78,11 +78,11 @@ public class OverallStatistics {
     }
 
     /**
-     * Returns the number of profiles that have been registered
-     * @return the number of profiles
+     * Returns the number of Lenses that have been registered
+     * @return the number of Lenses
      */
-    public int getNumberOfProfiles() {
-    	return numberOfProfiles;
+    public int getNumberOfLenses() {
+    	return numberOfLenses;
     }
     
     /**
@@ -121,10 +121,10 @@ public class OverallStatistics {
     }
     
     /**
-     * @param numberOfProfiles the number of profiles to set
+     * @param numberOfLenses the number of Lenses to set
      */
-    public void setNumberOfProfiles(int numberOfProfiles) {
-    	this.numberOfProfiles = numberOfProfiles;
+    public void setNumberOfLenses(int numberOfLenses) {
+    	this.numberOfLenses = numberOfLenses;
     }
     
     @Override
@@ -145,8 +145,8 @@ public class OverallStatistics {
         builder.append("numberOfTargetDataSources: ");
         builder.append(numberOfTargetDataSources);
         builder.append("\n");
-        builder.append("numberOfProfiles: ");
-        builder.append(numberOfProfiles);
+        builder.append("numberOfLenses: ");
+        builder.append(numberOfLenses);
         builder.append("\n");
         return builder.toString();
     }

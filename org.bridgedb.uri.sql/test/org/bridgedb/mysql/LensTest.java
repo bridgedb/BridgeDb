@@ -19,40 +19,44 @@
 //
 package org.bridgedb.mysql;
 
-import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.uri.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.Test;
+import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
 /**
- * Runs the UriMapper interface tests over SQLUriMapper class
- * 
- * Creates the mapper, loads in the test data and then runs the tests.
  *
  * @author Christian
  */
-public class UriMapperTestProfileTest extends org.bridgedb.uri.UriMapperTestProfileTest {
+public class LensTest extends org.bridgedb.uri.UriListenerTest {
     
-    private static final String CREATOR1 = "testCreator";
-    private static final String PREDICATE1 = "testMapping";
-    private static final long CREATION1 = new Date().getTime();
-
+    static SQLUriMapper sqlUriMapper;
+    
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
-        SQLUriMapper mapper = SQLUriMapper.factory(true, StoreType.TEST);
-        listener = mapper;
+        sqlUriMapper = SQLUriMapper.factory(true, StoreType.TEST);
+        listener = sqlUriMapper;
         loadData();
-        uriMapper = mapper;
-        
+        uriMapper = sqlUriMapper;;
     }
             
+    @Test
+    public void testRegisterLens() throws Exception {
+        report("RegisterLens");
+        String name = "LensTest1";
+        URI createdBy = new URIImpl("http://example.com/LensTest");
+        URI[] justificationUris = new URI[2];
+        justificationUris[0] = new URIImpl("http://example.com/Justifictaion1"); 
+        justificationUris[1] = new URIImpl("http://example.com/Justifictaion2"); 
+        String uri = sqlUriMapper.registerLens(name, createdBy,justificationUris);
+    }
+
 }

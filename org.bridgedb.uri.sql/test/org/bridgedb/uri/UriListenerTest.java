@@ -83,7 +83,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static String map1Uri1;
     protected static String map1Uri2;
     protected static String map1Uri3;
-    //Second version of third Set of Uris which again should map to each in one profile and above in allProfile
+    //Second version of third Set of Uris which again should map to each in one Lens and above in allLens
     protected static String map1AUri1;
     protected static String map1AUri2;
     protected static String map1AUri3;
@@ -92,7 +92,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static String map2Uri1;
     protected static String map2Uri2;
     protected static String map2Uri3;
-    //Second version of third Set of Uris which again should map to each in one profile and above in allProfile
+    //Second version of third Set of Uris which again should map to each in one Lens and above in allLens
     protected static String map2AUri1;
     protected static String map2AUri2;
     protected static String map2AUri3;
@@ -102,7 +102,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static String map3Uri2;
     protected static String map3Uri2a;
     protected static String map3Uri3;
-    //Second version of third Set of Uris which again should map to each in one profile and above in allProfile
+    //Second version of third Set of Uris which again should map to each in one Lens and above in allLens
     protected static String map3AUri1;
     protected static String map3AUri2;
     protected static String map3AUri2a;
@@ -246,13 +246,13 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.closeInput();
     }
 
-    protected void checkForNoOtherProfileXrefs(Set results){
+    protected void checkForNoOtherLensXrefs(Set results){
         assertFalse(results.contains(map2Axref1));
         assertFalse(results.contains(map2Axref2));
         assertFalse(results.contains(map2Axref3));        
     }
 
-    protected void checkForNoOtherProfileUri(Set results){
+    protected void checkForNoOtherLensUri(Set results){
         assertFalse(results.contains(map3AUri1));
         assertFalse(results.contains(map3AUri2));
         assertFalse(results.contains(map3AUri2a));

@@ -19,25 +19,18 @@
 //
 package org.bridgedb.uri;
 
-import java.net.URLEncoder;
 import org.bridgedb.uri.Mapping;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.tools.metadata.constants.OwlConstants;
-import org.bridgedb.tools.metadata.constants.SkosConstants;
 import org.bridgedb.utils.BridgeDBException;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 

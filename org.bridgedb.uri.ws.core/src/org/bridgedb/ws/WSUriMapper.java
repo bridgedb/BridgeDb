@@ -355,7 +355,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
 
 	@Override
-	public List<LensInfo> getProfiles() throws BridgeDBException {
+	public List<LensInfo> getLens() throws BridgeDBException {
 		List<ProfileBean> beans = uriService.getProfiles();
 		List<LensInfo> results = new ArrayList<LensInfo>();
 		for (ProfileBean bean:beans) {
@@ -365,7 +365,7 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
 	}
 
 	@Override
-	public LensInfo getProfile(String profileURI)
+	public LensInfo getLens(String profileURI)
 			throws BridgeDBException {
 		ProfileBean profile = uriService.getProfile(profileURI);
 		LensInfo result = ProfileBean.asProfileInfo(profile);

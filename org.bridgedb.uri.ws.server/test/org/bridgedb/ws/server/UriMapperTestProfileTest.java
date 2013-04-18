@@ -35,7 +35,7 @@ import org.openrdf.model.impl.URIImpl;
  * @author Christian
  */
 //@Ignore
-public class UriMapperTestProfileTest extends org.bridgedb.uri.UriMapperTestProfileTest {
+public class UriMapperTestProfileTest extends org.bridgedb.uri.UriMapperTestLensTest {
 
     private static final String CREATOR1 = "testCreator";
     private static final String PREDICATE1 = "testMapping";

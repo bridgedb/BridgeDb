@@ -34,7 +34,7 @@ import org.junit.Ignore;
  *
  * @author Christian
  */
-public class UriMapperAllProfileTest extends org.bridgedb.uri.UriMapperAllProfileTest {
+public class UriMapperAllLensTest extends org.bridgedb.uri.UriMapperAllLensTest {
     
     private static final String CREATOR1 = "testCreator";
     private static final String PREDICATE1 = "testMapping";

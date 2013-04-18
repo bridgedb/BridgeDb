@@ -66,21 +66,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private static final int PREFIX_LENGTH = 400;
     private static final int POSTFIX_LENGTH = 100;
-    private static final int PROFILE_URI_LENGTH = 100;
+    private static final int LENS_URI_LENGTH = 100;
     private static final int MIMETYPE_LENGTH = 50;
     private static final int CREATED_BY_LENGTH = 150;
     
     private static final String URI_TABLE_NAME = "uri";
     private static final String MIMETYPE_TABLE_NAME = "mimeType";
-    private static final String PROFILE_JUSTIFICATIONS_TABLE_NAME = "profileJustifications";
-    private static final String PROFILE_TABLE_NAME = "profile";
+    private static final String LENS_JUSTIFICATIONS_TABLE_NAME = "lensJustifications";
+    private static final String LENS_TABLE_NAME = "lens";
     
     private static final String CREATED_BY_COLUMN_NAME = "createdBy";
     private static final String CREATED_ON_COLUMN_NAME = "createdOn";
     private static final String DATASOURCE_COLUMN_NAME = "dataSource";
     private static final String PREFIX_COLUMN_NAME = "prefix";
-    private static final String PROFILE_ID_COLUMN_NAME = "profileId";
-    private static final String PROFILE_URI_COLUMN_NAME = "profileUri";
+    private static final String LENS_ID_COLUMN_NAME = "lensId";
+    private static final String LENS_URI_COLUMN_NAME = "lensUri";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
     private static final String MIMETYPE_COLUMN_NAME = "mimetype";
     private static final String NAME_COLUMN_NAME = "name";
@@ -126,7 +126,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      private SQLUriMapper(boolean dropTables, StoreType storeType) throws BridgeDBException{
         super(dropTables, storeType);
         if (dropTables){
-            createDefaultProfiles();
+            createDefaultLenses();
         }
         clearUriPatterns();
         Collection<UriPattern> patterns = UriPattern.getUriPatterns();
@@ -144,8 +144,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         super.dropSQLTables();
  		dropTable(URI_TABLE_NAME);
  		dropTable(MIMETYPE_TABLE_NAME);
- 		dropTable(PROFILE_TABLE_NAME);
- 		dropTable(PROFILE_JUSTIFICATIONS_TABLE_NAME);
+ 		dropTable(LENS_TABLE_NAME);
+ 		dropTable(LENS_JUSTIFICATIONS_TABLE_NAME);
     }
  
     @Override
@@ -165,15 +165,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL, "
                     + "     mimeType VARCHAR(" + MIMETYPE_LENGTH + ") NOT NULL "
                     + "  ) ");
-            sh.execute("CREATE TABLE " + PROFILE_TABLE_NAME + " ( " 
-            		+ PROFILE_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " 
-                    + PROFILE_URI_COLUMN_NAME + " VARCHAR(" + PROFILE_URI_LENGTH + "), "
+            sh.execute("CREATE TABLE " + LENS_TABLE_NAME + " ( " 
+            		+ LENS_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " 
+                    + LENS_URI_COLUMN_NAME + " VARCHAR(" + LENS_URI_LENGTH + "), "
             		+ NAME_COLUMN_NAME + " VARCHAR(" + FULLNAME_LENGTH + ") NOT NULL, " 
             		+ CREATED_ON_COLUMN_NAME + " DATETIME, " 
             		+ CREATED_BY_COLUMN_NAME + " VARCHAR(" + CREATED_BY_LENGTH + ") "
             		+ ")");
-            sh.execute("CREATE TABLE " + PROFILE_JUSTIFICATIONS_TABLE_NAME + " ( " 
-                    + PROFILE_URI_COLUMN_NAME + " VARCHAR(" + PROFILE_URI_LENGTH + ") NOT NULL, "
+            sh.execute("CREATE TABLE " + LENS_JUSTIFICATIONS_TABLE_NAME + " ( " 
+                    + LENS_URI_COLUMN_NAME + " VARCHAR(" + LENS_URI_LENGTH + ") NOT NULL, "
             		+ JUSTIFICATION_COLUMN_NAME + " VARCHAR(" + PREDICATE_LENGTH + ") NOT NULL " 
             		+ ")");
             sh.close();
@@ -206,22 +206,22 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource... tgtDataSource) throws BridgeDBException {
+    public Set<Xref> mapID(Xref sourceXref, String lensUri, DataSource... tgtDataSource) throws BridgeDBException {
         if (tgtDataSource == null || tgtDataSource.length == 0){
-            return mapID(sourceXref, profileUri);
+            return mapID(sourceXref, lensUri);
         }
         if (tgtDataSource.length == 1){
-            return mapID(sourceXref, profileUri, tgtDataSource[0]);
+            return mapID(sourceXref, lensUri, tgtDataSource[0]);
         }
         HashSet<Xref> results = new HashSet<Xref>();
         for (DataSource dataSource: tgtDataSource){
-            results.addAll(mapID(sourceXref, profileUri, dataSource));
+            results.addAll(mapID(sourceXref, lensUri, dataSource));
         }
         return results;
     }
     
     @Override
-    public Set<Xref> mapID(Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
+    public Set<Xref> mapID(Xref sourceXref, String lensUri, DataSource tgtDataSource) throws BridgeDBException {
         if (badXref(sourceXref)) {
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Xref>();
@@ -231,7 +231,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return new HashSet<Xref>();
         }
         StringBuilder query = startMappingQuery();
-        appendMappingFromAndWhere(query, sourceXref, profileUri, tgtDataSource);
+        appendMappingFromAndWhere(query, sourceXref, lensUri, tgtDataSource);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -248,13 +248,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public Set<Xref> mapID(Xref sourceXref, String profileUri) throws BridgeDBException {
+    public Set<Xref> mapID(Xref sourceXref, String lensUri) throws BridgeDBException {
         if (badXref(sourceXref)) {
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Xref>();
         }
         StringBuilder query = startMappingQuery();
-        appendMappingFromAndWhere(query, sourceXref, profileUri, null);
+        appendMappingFromAndWhere(query, sourceXref, lensUri, null);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -269,27 +269,27 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public Set<String> mapUri (Xref sourceXref, String profileUri, UriPattern... tgtUriPatterns) 
+    public Set<String> mapUri (Xref sourceXref, String lensUri, UriPattern... tgtUriPatterns) 
             throws BridgeDBException {
         if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-            return mapUri (sourceXref, profileUri);
+            return mapUri (sourceXref, lensUri);
         }
         Set<String> results = new HashSet<String>();
         for (UriPattern tgtUriPattern:tgtUriPatterns){
-            results.addAll(mapUri (sourceXref, profileUri, tgtUriPattern));
+            results.addAll(mapUri (sourceXref, lensUri, tgtUriPattern));
         }
         return results;
     }
  
     @Override
-    public Set<String> mapUri (Xref sourceXref, String profileUri, UriPattern tgtUriPattern) 
+    public Set<String> mapUri (Xref sourceXref, String lensUri, UriPattern tgtUriPattern) 
             throws BridgeDBException {
         if (tgtUriPattern == null){
             logger.warn("mapUri called with a null tgtDatasource and " + sourceXref);
             return new HashSet<String>();
         }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
-        Set<Xref> targetXrefs = mapID(sourceXref, profileUri, tgtDataSource);
+        Set<Xref> targetXrefs = mapID(sourceXref, lensUri, tgtDataSource);
         HashSet<String> results = new HashSet<String>();
         for (Xref target:targetXrefs){
             results.add (tgtUriPattern.getUri(target.getId()));
@@ -298,9 +298,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public Set<String> mapUri (Xref sourceXref, String profileUri) 
+    public Set<String> mapUri (Xref sourceXref, String lensUri) 
             throws BridgeDBException {
-        Set<Xref> targetXrefs = mapID(sourceXref, profileUri);
+        Set<Xref> targetXrefs = mapID(sourceXref, lensUri);
         HashSet<String> results = new HashSet<String>();
         for (Xref target:targetXrefs){
             results.addAll (toUris(target));
@@ -309,21 +309,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public Set<String> mapUri (String sourceUri, String profileUri, UriPattern... tgtUriPatterns) 
+    public Set<String> mapUri (String sourceUri, String lensUri, UriPattern... tgtUriPatterns) 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-            return mapUri (sourceUri, profileUri);
+            return mapUri (sourceUri, lensUri);
         }
         Set<String> results = new HashSet<String>();
         for (UriPattern tgtUriPattern:tgtUriPatterns){
-            results.addAll(mapUri (sourceUri, profileUri, tgtUriPattern));
+            results.addAll(mapUri (sourceUri, lensUri, tgtUriPattern));
         }
         return results;
     }
  
     @Override
-    public Set<String> mapUri (String sourceUri, String profileUri, UriPattern tgtUriPattern) 
+    public Set<String> mapUri (String sourceUri, String lensUri, UriPattern tgtUriPattern) 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
@@ -332,7 +332,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return new HashSet<String>();
         }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
-        Set<Xref> targetXrefs = mapID(sourceXref, profileUri, tgtDataSource);
+        Set<Xref> targetXrefs = mapID(sourceXref, lensUri, tgtDataSource);
         HashSet<String> results = new HashSet<String>();
         for (Xref target:targetXrefs){
             results.add (tgtUriPattern.getUri(target.getId()));
@@ -341,11 +341,11 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public Set<String> mapUri (String sourceUri, String profileUri) 
+    public Set<String> mapUri (String sourceUri, String lensUri) 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
-        Set<Xref> targetXrefs = mapID(sourceXref, profileUri);
+        Set<Xref> targetXrefs = mapID(sourceXref, lensUri);
         HashSet<String> results = new HashSet<String>();
         for (Xref target:targetXrefs){
             results.addAll (toUris(target));
@@ -354,14 +354,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public Set<Mapping> mapFull (Xref sourceXref, String profileUri) throws BridgeDBException{
+    public Set<Mapping> mapFull (Xref sourceXref, String lensUri) throws BridgeDBException{
         if (badXref(sourceXref)) {
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Mapping>();
         }
         StringBuilder query = startMappingQuery();
         appendMappingInfo(query);
-        appendMappingFromAndWhere(query, sourceXref, profileUri, null);
+        appendMappingFromAndWhere(query, sourceXref, lensUri, null);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -380,10 +380,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public Set<Mapping> mapFull(String sourceUri, String profileUri) throws BridgeDBException {
+    public Set<Mapping> mapFull(String sourceUri, String lensUri) throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
-        Set<Mapping> results = mapFull(sourceXref,  profileUri);
+        Set<Mapping> results = mapFull(sourceXref,  lensUri);
         for (Mapping result:results){
             result.addSourceUri(sourceUri);
         }
@@ -391,8 +391,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-	public Set<Mapping> mapFull (Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException{
-        Set<Mapping> results = mapPart(sourceXref, profileUri, tgtDataSource);
+	public Set<Mapping> mapFull (Xref sourceXref, String lensUri, DataSource tgtDataSource) throws BridgeDBException{
+        Set<Mapping> results = mapPart(sourceXref, lensUri, tgtDataSource);
         //Add targetUris
         for (Mapping mapping: results){
             mapping.addTargetUris(toUris(mapping.getTarget()));
@@ -400,7 +400,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
  
-	private Set<Mapping> mapPart (Xref sourceXref, String profileUri, DataSource tgtDataSource) throws BridgeDBException{
+	private Set<Mapping> mapPart (Xref sourceXref, String lensUri, DataSource tgtDataSource) throws BridgeDBException{
         if (badXref(sourceXref)) {
             logger.warn("mapId called with a badXref " + sourceXref);
             return new HashSet<Mapping>();
@@ -411,7 +411,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         StringBuilder query = startMappingQuery();
         appendMappingInfo(query);
-        appendMappingFromAndWhere(query, sourceXref, profileUri, tgtDataSource);
+        appendMappingFromAndWhere(query, sourceXref, lensUri, tgtDataSource);
         Statement statement = this.createStatement();
         ResultSet rs;
         try {
@@ -428,27 +428,27 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<Mapping> mapFull (Xref ref, String profileUri, DataSource... tgtDataSources) 
+    public Set<Mapping> mapFull (Xref ref, String lensUri, DataSource... tgtDataSources) 
             throws BridgeDBException{
         if (tgtDataSources == null || tgtDataSources.length == 0){
-            return mapFull (ref, profileUri);
+            return mapFull (ref, lensUri);
         } else {
             Set<Mapping> results = new HashSet<Mapping>();
             for (DataSource tgtDataSource: tgtDataSources){
-                results.addAll(mapFull(ref, profileUri, tgtDataSource));
+                results.addAll(mapFull(ref, lensUri, tgtDataSource));
             }
             return results;
         }
     }
 
     @Override
-	public Set<Mapping> mapFull (Xref sourceXref, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
+	public Set<Mapping> mapFull (Xref sourceXref, String lensUri, UriPattern tgtUriPattern) throws BridgeDBException {
         if (tgtUriPattern == null){
             logger.warn("mapFull called with a null tgtDatasource and " + sourceXref);
             return new HashSet<Mapping>();
         }
         DataSource tgtDataSource = tgtUriPattern.getDataSource();
-        Set<Mapping> results = mapPart(sourceXref, profileUri, tgtDataSource);
+        Set<Mapping> results = mapPart(sourceXref, lensUri, tgtDataSource);
         for (Mapping result:results){
             result.addTargetUri(tgtUriPattern.getUri(result.getTarget().getId()));
         }
@@ -456,24 +456,24 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<Mapping> mapFull (Xref sourceXref, String profileUri, UriPattern... tgtUriPatterns) 
+    public Set<Mapping> mapFull (Xref sourceXref, String lensUri, UriPattern... tgtUriPatterns) 
             throws BridgeDBException{
         if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-            return mapFull (sourceXref, profileUri);
+            return mapFull (sourceXref, lensUri);
         } else {
             Set<Mapping> results = new HashSet<Mapping>();
             for (UriPattern tgtUriPattern: tgtUriPatterns){
-                results.addAll(mapFull(sourceXref, profileUri, tgtUriPattern));
+                results.addAll(mapFull(sourceXref, lensUri, tgtUriPattern));
             }
             return results;
         }
     }
 
     @Override
-    public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern... tgtUriPatterns) throws BridgeDBException {
+    public Set<Mapping> mapFull(String sourceUri, String lensUri, UriPattern... tgtUriPatterns) throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
-        Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtUriPatterns);
+        Set<Mapping> results = mapFull(sourceXref,  lensUri, tgtUriPatterns);
         for (Mapping result:results){
             result.addSourceUri(sourceUri);
         }
@@ -481,10 +481,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<Mapping> mapFull(String sourceUri, String profileUri, UriPattern tgtUriPattern) throws BridgeDBException {
+    public Set<Mapping> mapFull(String sourceUri, String lensUri, UriPattern tgtUriPattern) throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
-        Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtUriPattern);
+        Set<Mapping> results = mapFull(sourceXref,  lensUri, tgtUriPattern);
         for (Mapping result:results){
             result.addSourceUri(sourceUri);
         }
@@ -492,10 +492,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource... tgtDataSources) throws BridgeDBException {
+    public Set<Mapping> mapFull(String sourceUri, String lensUri, DataSource... tgtDataSources) throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
-        Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtDataSources);
+        Set<Mapping> results = mapFull(sourceXref,  lensUri, tgtDataSources);
         for (Mapping result:results){
             result.addSourceUri(sourceUri);
         }
@@ -503,10 +503,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<Mapping> mapFull(String sourceUri, String profileUri, DataSource tgtDataSource) throws BridgeDBException {
+    public Set<Mapping> mapFull(String sourceUri, String lensUri, DataSource tgtDataSource) throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         Xref sourceXref = toXref(sourceUri);
-        Set<Mapping> results = mapFull(sourceXref,  profileUri, tgtDataSource);
+        Set<Mapping> results = mapFull(sourceXref,  lensUri, tgtDataSource);
         for (Mapping result:results){
             result.addSourceUri(sourceUri);
         }
@@ -539,7 +539,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(SOURCE_DATASOURCE_COLUMN_NAME);
     }
     
-    private void appendMappingFromAndWhere(StringBuilder query, Xref ref, String profileUri, DataSource tgtDataSource) 
+    private void appendMappingFromAndWhere(StringBuilder query, Xref ref, String lensUri, DataSource tgtDataSource) 
             throws BridgeDBException {
         appendMappingFromJoinMapping(query);
         appendSourceXref(query, ref);
@@ -550,7 +550,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 query.append(getDataSourceKey(tgtDataSource));
                 query.append("' ");   
         }
-        appendProfileClause(query, profileUri);
+        appendLensClause(query, lensUri);
     }
 
     private void appendMappingFromJoinMapping(StringBuilder query){ 
@@ -577,22 +577,22 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * are from active linksets.
      * 
      * @param query Query with WHERE clause started
-     * @param profileUri Uri of the profile to use
-     * @throws BridgeDbSqlException if the profile does not exist
+     * @param lensUri Uri of the lens to use
+     * @throws BridgeDbSqlException if the lens does not exist
      */
-    private void appendProfileClause(StringBuilder query, String profileUri) throws BridgeDBException {
-        profileUri = scrubUri(profileUri);
-        if (profileUri == null){
-            profileUri = Lens.getDefaultLens();
+    private void appendLensClause(StringBuilder query, String lensUri) throws BridgeDBException {
+        lensUri = scrubUri(lensUri);
+        if (lensUri == null){
+            lensUri = Lens.getDefaultLens();
         }
-        if (!profileUri.equals(Lens.getAllLens())) {
-            String profileJustificationQuery = "SELECT " + JUSTIFICATION_COLUMN_NAME
-                    + " FROM " + PROFILE_JUSTIFICATIONS_TABLE_NAME 
-                    + " WHERE " + PROFILE_URI_COLUMN_NAME + " = ";
+        if (!lensUri.equals(Lens.getAllLens())) {
+            String lensJustificationQuery = "SELECT " + JUSTIFICATION_COLUMN_NAME
+                    + " FROM " + LENS_JUSTIFICATIONS_TABLE_NAME 
+                    + " WHERE " + LENS_URI_COLUMN_NAME + " = ";
             try {
         		Statement statement = this.createStatement();    		
-        		ResultSet rs = statement.executeQuery(profileJustificationQuery + "'" + profileUri + "'");
-        		if (!rs.next()) throw new BridgeDBException("Unknown profile identifier " + profileUri);
+        		ResultSet rs = statement.executeQuery(lensJustificationQuery + "'" + lensUri + "'");
+        		if (!rs.next()) throw new BridgeDBException("Unknown lens identifier " + lensUri);
         		query.append(" AND mappingSet.justification IN (");
         		do {
         			query.append("'").append(rs.getString(JUSTIFICATION_COLUMN_NAME)).append("'");
@@ -600,21 +600,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         		} while (rs.next());
         		query.append(")");
         	} catch (SQLException ex) {
-        		throw new BridgeDBException("Error retrieving profile justifications for profileId " + profileUri, ex);
+        		throw new BridgeDBException("Error retrieving lens justifications for lensId " + lensUri, ex);
         	}
         }
 	}
 
-	private int extractIDFromURI(String profileUri) throws BridgeDBException {
+	private int extractIDFromURI(String lens) throws BridgeDBException {
 		try {
-			URI profileURI = new URIImpl(profileUri);
-			if (!profileURI.getNamespace().equals(Lens.getLensBaseURI())) {
- 				throw new BridgeDBException("Invalid namespace for profile URI: " + profileUri);
+			URI lensUri = new URIImpl(lens);
+			if (!lensUri.getNamespace().equals(Lens.getLensBaseURI())) {
+ 				throw new BridgeDBException("Invalid namespace for lens URI: " + lensUri);
 			}
-			int profileID = Integer.parseInt(profileURI.getLocalName());
-			return profileID;
+			int lensID = Integer.parseInt(lensUri.getLocalName());
+			return lensID;
 		} catch (IllegalArgumentException e) {
-			throw new BridgeDBException("Invalid URI form for a profileUri: " + profileUri);
+			throw new BridgeDBException("Invalid URI form for a lensUri: " + lens);
 		}
 	}
 
@@ -838,7 +838,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public OverallStatistics getOverallStatistics() throws BridgeDBException {
         int numberOfMappings = getMappingsCount();
-        int numberOfProfiles = getNumberOfProfiles();
+        int numberOfLenses = getNumberOfLenses();
         StringBuilder query = new StringBuilder("SELECT count(distinct(");
         query.append(ID_COLUMN_NAME);
         query.append(")) as numberOfMappingSets, ");
@@ -863,7 +863,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 int numberOfTargetDataSources = rs.getInt("numberOfTargetDataSources");
                 return new OverallStatistics(numberOfMappings, numberOfMappingSets, 
                 		numberOfSourceDataSources, numberOfPredicates, 
-                		numberOfTargetDataSources, numberOfProfiles);
+                		numberOfTargetDataSources, numberOfLenses);
             } else {
                 System.err.println(query.toString());
                 throw new BridgeDBException("no Results for query. " + query.toString());
@@ -874,21 +874,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    private int getNumberOfProfiles() throws BridgeDBException {
-    	String profileCountQuery = "SELECT count(*) as numberOfProfiles " +
-    			"FROM profile";
+    private int getNumberOfLenses() throws BridgeDBException {
+    	String lensCountQuery = "SELECT count(*) as number " +
+    			"FROM " + LENS_TABLE_NAME;
     	Statement statement = this.createStatement();
     	try {
-    		ResultSet rs = statement.executeQuery(profileCountQuery);
+    		ResultSet rs = statement.executeQuery(lensCountQuery);
     		if (rs.next()) {
-    			return rs.getInt("numberOfProfiles");
+    			return rs.getInt("number");
     		} else {
-    			System.err.println(profileCountQuery);
-                throw new BridgeDBException("No Results for query. " + profileCountQuery);
+    			System.err.println(lensCountQuery);
+                throw new BridgeDBException("No Results for query. " + lensCountQuery);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            throw new BridgeDBException("Unable to run query. " + profileCountQuery, ex);
+            throw new BridgeDBException("Unable to run query. " + lensCountQuery, ex);
         }      
 	}
 
@@ -963,45 +963,45 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public List<LensInfo> getProfiles() throws BridgeDBException {
+    public List<LensInfo> getLens() throws BridgeDBException {
     	String query = ("SELECT * " 
-    			+ " FROM " + PROFILE_TABLE_NAME);
+    			+ " FROM " + LENS_TABLE_NAME);
     	Statement statement = this.createStatement();
-    	List<LensInfo> profiles = new ArrayList<LensInfo>();
+    	List<LensInfo> lenses = new ArrayList<LensInfo>();
         ResultSet rs;
     	try {
 			rs = statement.executeQuery(query);
 		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to retrieve profiles.", e);
+			throw new BridgeDBException("Unable to retrieve lenses.", e);
 		}
-        List<LensInfo> results = resultSetToProfileInfos(rs);
-        results.add(getAllProfile());
+        List<LensInfo> results = resultSetToLensInfos(rs);
+        results.add(getAllLenses());
         return results;
     }
     
     @Override
-    public LensInfo getProfile(String profileURI) throws BridgeDBException {
-        profileURI = scrubUri(profileURI);
-        if (profileURI.equals(Lens.getAllLens())){
-            return getAllProfile();
+    public LensInfo getLens(String lensUri) throws BridgeDBException {
+        lensUri = scrubUri(lensUri);
+        if (lensUri.equals(Lens.getAllLens())){
+            return getAllLenses();
         }
     	String query = ("SELECT * " +
-    			"FROM " + PROFILE_TABLE_NAME + " WHERE " + PROFILE_URI_COLUMN_NAME + " = \"" + profileURI + "\"");
+    			"FROM " + LENS_TABLE_NAME + " WHERE " + LENS_URI_COLUMN_NAME + " = \"" + lensUri + "\"");
     	Statement statement = this.createStatement();
         ResultSet rs;
 		try {
 			rs = statement.executeQuery(query);
 		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to retrieve profiles.", e);
+			throw new BridgeDBException("Unable to retrieve lens.", e);
 		}
-        List<LensInfo> profiles = resultSetToProfileInfos(rs);
-        if (profiles.isEmpty()) {
-            throw new BridgeDBException("No profile with the URI " + profileURI);
+        List<LensInfo> lens = resultSetToLensInfos(rs);
+        if (lens.isEmpty()) {
+            throw new BridgeDBException("No lens with the URI " + lensUri);
         }
-        if (profiles.isEmpty()) {
-            throw new BridgeDBException("More than one profile found with the URI " + profileURI);
+        if (lens.isEmpty()) {
+            throw new BridgeDBException("More than one lens found with the URI " + lensUri);
         }
-    	return profiles.get(0);
+    	return lens.get(0);
     }
 
     @Override
@@ -1022,10 +1022,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     // **** UriListener Methods
     
-    private Set<String> getJustificationsForProfile(String profileUri) throws BridgeDBException {
+    private Set<String> getJustificationsForLens(String lensUri) throws BridgeDBException {
     	String query = ("SELECT " + JUSTIFICATION_COLUMN_NAME 
-    			+ " FROM " + PROFILE_JUSTIFICATIONS_TABLE_NAME
-    			+ " WHERE " + PROFILE_URI_COLUMN_NAME + " = \"" + profileUri + "\"");
+    			+ " FROM " + LENS_JUSTIFICATIONS_TABLE_NAME
+    			+ " WHERE " + LENS_URI_COLUMN_NAME + " = \"" + lensUri + "\"");
     	Statement statement = this.createStatement();
     	Set<String> justifications = new HashSet<String>();
     	try {
@@ -1035,7 +1035,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 				justifications.add(justification);
 			}
 		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to retrieve profile justifications. " + query, e);
+			throw new BridgeDBException("Unable to retrieve lens justifications. " + query, e);
 		}
     	return justifications;
 	}
@@ -1052,7 +1052,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 				justifications.add(justification);
 			}
 		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to retrieve profile justifications. " + query, e);
+			throw new BridgeDBException("Unable to retrieve lens justifications. " + query, e);
 		}
     	return justifications;
 	}
@@ -1261,7 +1261,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             }
             return results;
 		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to retrieve profiles.", e);
+			throw new BridgeDBException("Unable to retrieve lenses.", e);
 		}
     }
     
@@ -1283,7 +1283,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             }
             return results;
 		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to retrieve profiles.", e);
+			throw new BridgeDBException("Unable to retrieve lenses.", e);
 		}
     }
 
@@ -1393,31 +1393,31 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
-    private List<LensInfo> resultSetToProfileInfos(ResultSet rs ) throws BridgeDBException{
-     	List<LensInfo> profiles = new ArrayList<LensInfo>();
+    private List<LensInfo> resultSetToLensInfos(ResultSet rs ) throws BridgeDBException{
+     	List<LensInfo> lenses = new ArrayList<LensInfo>();
     	try {
 			while (rs.next()) {
-				int profileId = rs.getInt(PROFILE_ID_COLUMN_NAME);
+				int lensId = rs.getInt(LENS_ID_COLUMN_NAME);
 				String name = rs.getString(NAME_COLUMN_NAME);
 				String createdOn = rs.getString(CREATED_ON_COLUMN_NAME);
 				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
-				String profileUri = rs.getString(PROFILE_URI_COLUMN_NAME);
-				Set<String> justifications = getJustificationsForProfile(profileUri);
-				profiles.add(new LensInfo(profileUri, name, createdOn, createdBy, justifications));
+				String lensUri = rs.getString(LENS_URI_COLUMN_NAME);
+				Set<String> justifications = getJustificationsForLens(lensUri);
+				lenses.add(new LensInfo(lensUri, name, createdOn, createdBy, justifications));
 			}
 		} catch (SQLException e) {
-			throw new BridgeDBException("Unable to retrieve profiles.", e);
+			throw new BridgeDBException("Unable to retrieve lenses.", e);
 		}
-    	return profiles;
+    	return lenses;
     }
 
-    private LensInfo getAllProfile() throws BridgeDBException{
+    private LensInfo getAllLenses() throws BridgeDBException{
         String name = LensInfo.ALL_LENS_NAME;
         String createdOn = getProperty(LAST_UDPATES);
         String createdBy = this.getClass().getName();
-        String profileUri = Lens.getAllLens();
+        String lensUri = Lens.getAllLens();
         Set<String> justifications = getAllJustifications();
-		return new LensInfo(profileUri, name, createdOn, createdBy, justifications);
+		return new LensInfo(lensUri, name, createdOn, createdBy, justifications);
         
     }
     /**
@@ -1506,93 +1506,93 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
        }
     }
 
-    public String registerProfile(String name, URI createdBy, URI... justificationUris) 
+    public String registerLens(String name, URI createdBy, URI... justificationUris) 
             throws BridgeDBException {
-        return registerProfile(name, new Date(), createdBy, justificationUris); 
+        return registerLens(name, new Date(), createdBy, justificationUris); 
     }
     
-    private void createDefaultProfiles() throws BridgeDBException {
+    private void createDefaultLenses() throws BridgeDBException {
         String name = LensInfo.DEFAULT_LENS_NAME;
         URI createdBy = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.uri.sql/src/org/bridgedb/sql/SQLUrlMapper.java");
         URI[] justifications = Lens.getDefaultJustifictaions();
         
-        String uri = registerProfile(name, createdBy, justifications);
+        String uri = registerLens(name, createdBy, justifications);
         if (!uri.equals(Lens.getDefaultLens())){
-            throw new BridgeDBException("Incorrect Default Profile URI created. Created " + uri + " but should have been "
+            throw new BridgeDBException("Incorrect Default Lens URI created. Created " + uri + " but should have been "
                     + Lens.getDefaultLens());
         }
         name = LensInfo.TEST_LENS_NAME;
         URI justification = new URIImpl(Lens.getTestJustifictaion());
-        uri = registerProfile(name, createdBy, justification);
+        uri = registerLens(name, createdBy, justification);
         if (!uri.equals(Lens.getTestLens())){
-            throw new BridgeDBException("Incorrect Test Profile URI created. Created " + uri + " but should have been "
+            throw new BridgeDBException("Incorrect Test Lens URI created. Created " + uri + " but should have been "
                     + Lens.getDefaultLens());
         }
     }
 
-    public String registerProfile(String name, Date createdOn, URI createdBy, URI... justificationUris) 
+    public String registerLens(String name, Date createdOn, URI createdBy, URI... justificationUris) 
             throws BridgeDBException {
     	startTransaction();
-    	String profileUri = createProfile(name, createdOn, createdBy);
-    	insertJustifications(profileUri, justificationUris);
+    	String lensUri = createLens(name, createdOn, createdBy);
+    	insertJustifications(lensUri, justificationUris);
     	commitTransaction();
-    	return profileUri;
+    	return lensUri;
     }
 
-	private String createProfile(String name, Date createdOn, URI createdBy)
+	private String createLens(String name, Date createdOn, URI createdBy)
 			throws BridgeDBException {
         Timestamp timestamp = new Timestamp(createdOn.getTime());
-		String insertStatement = "INSERT INTO " + PROFILE_TABLE_NAME
+		String insertStatement = "INSERT INTO " + LENS_TABLE_NAME
                     + "(" + NAME_COLUMN_NAME + ", " + CREATED_ON_COLUMN_NAME + ", " + CREATED_BY_COLUMN_NAME + ") " 
                     + "VALUES (" 
                     + "'" + name + "', "
                     + "'" + timestamp + "', " 
                     + "'" + createdBy + "')";
-		int profileId = 0;
+		int lensId = 0;
         try {
         	Statement statement = createStatement();
             statement.executeUpdate(insertStatement, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = statement.getGeneratedKeys();
             if (rs.next())
             {
-            	profileId = rs.getInt(1);
+            	lensId = rs.getInt(1);
             } else {
             	rollbackTransaction();
-            	throw new BridgeDBException ("No result registering new profile " + insertStatement);
+            	throw new BridgeDBException ("No result registering new lens " + insertStatement);
             }            
         } catch (BridgeDBException ex) {
         	rollbackTransaction();
         	throw ex;
         } catch (SQLException ex) {
         	rollbackTransaction();
-            throw new BridgeDBException ("Error registering new profile " + insertStatement, ex);
+            throw new BridgeDBException ("Error registering new lens " + insertStatement, ex);
         }
-        return createProfileUri(profileId);
+        return createLensUri(lensId);
 	}
 	
-	private String createProfileUri(int profileId) throws BridgeDBException {
-        String uri = Lens .getLensURI(profileId);
-		String updateStatement = "UPDATE " + PROFILE_TABLE_NAME
-                + " SET " + PROFILE_URI_COLUMN_NAME + "=\"" + uri + "\" "
-                + " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileId;
+	private String createLensUri(int lensId) throws BridgeDBException {
+        String uri = Lens .getLensURI(lensId);
+		String updateStatement = "UPDATE " + LENS_TABLE_NAME
+                + " SET " + LENS_URI_COLUMN_NAME + "=\"" + uri + "\" "
+                + " WHERE " + LENS_ID_COLUMN_NAME + " = " + lensId;
         try {
         	Statement statement = createStatement();
             int updates = statement.executeUpdate(updateStatement);
             if (updates != 1){
-                throw new BridgeDBException ("Unexpected " + updates + " number of profiles updated.");
+                throw new BridgeDBException ("Unexpected " + updates + " number of lens updated.");
             }
         } catch (SQLException ex) {
         	rollbackTransaction();
-            throw new BridgeDBException ("Error adding profile uri " + updateStatement, ex);
+            throw new BridgeDBException ("Error adding lens uri " + updateStatement, ex);
         }
         return uri;
 	}
 
-    private void insertJustifications(String profileUri, URI... justificationUris) throws BridgeDBException {
-		String sql = "INSERT INTO " + PROFILE_JUSTIFICATIONS_TABLE_NAME  +
+    private void insertJustifications(String lensUri, URI... justificationUris) throws BridgeDBException {
+		String sql = "INSERT INTO " + LENS_JUSTIFICATIONS_TABLE_NAME  +
                                                        
-				"( " + PROFILE_URI_COLUMN_NAME + ", " + JUSTIFICATION_COLUMN_NAME + ") " +
-				"VALUES ( \"" + profileUri + "\", " + "?)";
+				"( " + LENS_URI_COLUMN_NAME + ", " + JUSTIFICATION_COLUMN_NAME + ") " +
+				"VALUES ( \"" + lensUri + "\", " + "?)";
         PreparedStatement statement = createPreparedStatement(sql);
         for (URI uri : justificationUris) {
             try {

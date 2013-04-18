@@ -19,48 +19,37 @@
 //
 package org.bridgedb.mysql;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
 
 /**
+ * Runs the UriMapper interface tests over SQLUriMapper class
+ * 
+ * Creates the mapper, loads in the test data and then runs the tests.
  *
  * @author Christian
  */
-public class ProfileTest extends org.bridgedb.uri.UriListenerTest {
+public class UriMapperTestLensTest extends org.bridgedb.uri.UriMapperTestLensTest {
     
-    static SQLUriMapper sqlUriMapper;
-    
+    private static final String CREATOR1 = "testCreator";
+    private static final String PREDICATE1 = "testMapping";
+    private static final long CREATION1 = new Date().getTime();
+
     @BeforeClass
     public static void setupIDMapper() throws BridgeDBException{
 
         connectionOk = false;
         TestSqlFactory.checkSQLAccess();
         connectionOk = true;
-        sqlUriMapper = SQLUriMapper.factory(true, StoreType.TEST);
-        listener = sqlUriMapper;
+        SQLUriMapper mapper = SQLUriMapper.factory(true, StoreType.TEST);
+        listener = mapper;
         loadData();
-        uriMapper = sqlUriMapper;;
+        uriMapper = mapper;
+        
     }
             
-    @Test
-    public void testRegisterProfile() throws Exception {
-        report("RegisterProfile");
-        String name = "ProfileTest1";
-        URI createdBy = new URIImpl("http://example.com/ProfileTest");
-        URI[] justificationUris = new URI[2];
-        justificationUris[0] = new URIImpl("http://example.com/Justifictaion1"); 
-        justificationUris[1] = new URIImpl("http://example.com/Justifictaion2"); 
-        String uri = sqlUriMapper.registerProfile(name, createdBy,justificationUris);
-    }
-
 }

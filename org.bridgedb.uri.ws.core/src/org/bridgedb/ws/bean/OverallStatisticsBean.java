@@ -51,7 +51,7 @@ public class OverallStatisticsBean {
         bean.numberOfSourceDataSources = stats.getNumberOfSourceDataSources();
         bean.numberOfPredicates = stats.getNumberOfPredicates();
         bean.numberOfTargetDataSources = stats.getNumberOfTargetDataSources();
-        bean.numberOfProfiles = stats.getNumberOfProfiles();      
+        bean.numberOfProfiles = stats.getNumberOfLenses();      
         return bean;
     }
     

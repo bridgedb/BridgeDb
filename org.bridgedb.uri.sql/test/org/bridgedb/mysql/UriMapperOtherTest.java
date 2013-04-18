@@ -19,13 +19,11 @@
 //
 package org.bridgedb.mysql;
 
-import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 
 /**
  * Runs the UriMapper interface tests over SQLUriMapper class

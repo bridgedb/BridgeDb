@@ -6,10 +6,10 @@ package org.bridgedb.uri;
 
 import java.util.List;
 import org.bridgedb.statistics.LensInfo;
-import org.junit.Test;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *
@@ -22,9 +22,9 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    public void testGetProfiles() throws Exception {
-        report("getProfiles");
-        List<LensInfo> results = uriMapper.getProfiles();
+    public void testGetLenss() throws Exception {
+        report("getLenss");
+        List<LensInfo> results = uriMapper.getLens();
         assertThat(results.size(), greaterThanOrEqualTo(2));
      }
 
@@ -32,9 +32,9 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    public void testGetDefaultProfile() throws Exception {
-        report("GetDefaultProfile");
-        LensInfo result = uriMapper.getProfile(Lens.getDefaultLens());
+    public void testGetDefaultLens() throws Exception {
+        report("GetDefaultLens");
+        LensInfo result = uriMapper.getLens(Lens.getDefaultLens());
         assertEquals(Lens.getDefaultLens(), result.getUri());
         assertNotNull(result.getCreatedBy());
         assertNotNull(result.getCreatedOn());
@@ -46,9 +46,9 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
      * Test of mapFull method, of class UriMapper.
      */
     @Test
-    public void testGetAllProfile() throws Exception {
-        report("GetAllProfile");
-        LensInfo result = uriMapper.getProfile(Lens.getAllLens());
+    public void testGetAllLens() throws Exception {
+        report("GetAllLens");
+        LensInfo result = uriMapper.getLens(Lens.getAllLens());
         assertEquals(Lens.getAllLens(), result.getUri());
         assertNotNull(result.getCreatedBy());
         assertNotNull(result.getCreatedOn());
