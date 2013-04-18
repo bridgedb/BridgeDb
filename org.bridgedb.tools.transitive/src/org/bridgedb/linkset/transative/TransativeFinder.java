@@ -133,11 +133,32 @@ public class TransativeFinder extends SQLBase{
             System.out.println ("    " + left.getTarget().getSysCode() + " != " + right.getSource().getSysCode());
             return false;
         }
-        if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
-            return checkValidLoopTransative(left, right, chainIds);
-        } else {
-            return checkValidNoLoopTransative(left, right, chainIds);
+        boolean repeatFound = false;
+        for (Integer id:chainIds){
+            if (id < 0){
+                if (repeatFound){
+                    System.out.println("Multiple linksets used repeatedly with " + left.getStringId() + " -> " + right.getStringId());
+                    System.out.println("    " + chainIds);
+                    return false;
+                }
+                repeatFound = true;
+            }
         }
+        if (!checkValidNoLoopTransative(left, right, chainIds)){
+            if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
+                if (!checkValidLoopTransative(left, right, chainIds)){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        if (chainAlreadyExists(chainIds)){
+            System.out.println("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
+            System.out.println("    " + chainIds);
+            return false;        
+        }
+        return true;
     }
     
     private boolean checkValidNoLoopTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
@@ -172,48 +193,28 @@ public class TransativeFinder extends SQLBase{
                 }
             }
         }
-        if (chainAlreadyExists(chainIds)){
-            System.out.println("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
-            System.out.println("    " + chainIds);
-            return false;        
-        }
         return true; 
     }
 
     private boolean checkValidLoopTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
+        System.out.println ("Checkin loop " + left.getStringId() + " -> " + right.getStringId());
         if (left.getSource().getSysCode().equals(right.getSource().getSysCode())){
-            System.out.println ("Loop with self in middle" + left.getStringId() + " -> " + right.getStringId());
+            System.out.println ("Loop with self in middle " + left.getStringId() + " -> " + right.getStringId());
             System.out.println ("    " + left.getSource().getSysCode()+ " == " + right.getSource().getSysCode() + " == " + right.getTarget().getSysCode());
             return false;
         }
-        if ((left.getViaDataSets().size() + right.getViaDataSets().size()) > 1){
-            System.out.println ("Loop with too many vias: " + left.getStringId() + " -> " + right.getStringId());
-            System.out.println ("    " + left.getViaDataSets().size() + " + " + right.getViaDataSets().size() + " > 1");
-            return false;
-            
+        Set<Integer> leftChain = getChain(left);
+        Set<Integer> rightChain = getChain(right);
+        if (leftChain.size() == rightChain.size() -1){
+            return compareChains(left, right, rightChain, leftChain);
         }
-        for (DataSetInfo via:left.getViaDataSets()){
-             if (!left.getTarget().getSysCode().equals(via.getSysCode())){
-                System.out.println("Via different to middle " + left.getStringId() + " -> " + right.getStringId());
-                System.out.println ("    " + via.getSysCode() + " != " + left.getTarget().getSysCode());            
-                return false;
-            }
+        if (leftChain.size()-1 == rightChain.size()){
+            return compareChains(left, right, leftChain, rightChain);
         }
-        for (DataSetInfo via:right.getViaDataSets()){
-            if (!left.getTarget().getSysCode().equals(via.getSysCode())){
-                System.out.println("Via different to Via " + left.getStringId() + " -> " + right.getStringId());
-                System.out.println ("    " + via.getSysCode() + " != " + left.getTarget().getSysCode());            
-                return false;
-            }
-            for (DataSetInfo via2:left.getViaDataSets()){           
-                if (!via.equals(via2)){
-                    System.out.println("Different via with " + left.getStringId() + " -> " + right.getStringId());
-                    System.out.println("    " + via.getSysCode() + " != " + via2.getSysCode());
-                    return false;
-                }
-            }
-        }
-        return true; 
+        System.out.println ("chain size mismatch " + left.getStringId() + " -> " + right.getStringId());
+        System.out.println ("    " + leftChain + " / " + rightChain );
+        return false;
+        
     }
 
     private boolean chainAlreadyExists(Set<Integer> chainIds) throws BridgeDBException{
@@ -240,9 +241,9 @@ public class TransativeFinder extends SQLBase{
         int leftId = left.getIntId();
         int rightId = right.getIntId();
         Reporter.println("Creating tranasative from " + leftId + " to " + rightId);
-        //ystem.out.println(left);
-        //ystem.out.println(right);
-        //ystem.out.println(chainIds);
+        System.out.println(left);
+        System.out.println(right);
+        System.out.println(chainIds);
         File fileName = TransativeCreator.doTransativeIfPossible(left, right, storeType);
         if (fileName == null){
             Reporter.println ("No transative links found");
@@ -256,25 +257,27 @@ public class TransativeFinder extends SQLBase{
     }
 
     public static HashSet<Integer> getChain(MappingSetInfo left, MappingSetInfo right){
+        HashSet<Integer> chainIds = getChain(left);
+        for (Integer id:getChain(right)){
+            if (chainIds.contains(id)){
+                chainIds.add(0-id);
+            } else{
+                chainIds.add(id);            
+            }
+        }
+        return chainIds;
+    }
+    
+    private static HashSet<Integer> getChain(MappingSetInfo info){
         HashSet<Integer> chainIds = new HashSet<Integer>();
-        if (left.getChainIds().isEmpty()){
-            if (left.isSymmetric()){
-                chainIds.add(left.getSymmetric());
+        if (info.getChainIds().isEmpty()){
+            if (info.isSymmetric()){
+                chainIds.add(info.getSymmetric());
             } else {
-                chainIds.add(left.getIntId());
+                chainIds.add(info.getIntId());
             }
-        } else {
-            chainIds.addAll(left.getChainIds());
         }
-        if (right.getChainIds().isEmpty()){
-            if (right.isSymmetric()){
-                chainIds.add(right.getSymmetric());
-            } else {
-                chainIds.add(right.getIntId());
-            }
-        } else {
-            chainIds.addAll(right.getChainIds());
-        }
+        chainIds.addAll(info.getChainIds());
         return chainIds;
     }
     
@@ -336,5 +339,22 @@ public class TransativeFinder extends SQLBase{
         return possibles;
     }
 
+    private boolean compareChains(MappingSetInfo left, MappingSetInfo right, Set<Integer> bigChain, Set<Integer> smallChain) throws BridgeDBException {
+        System.out.println(bigChain + " -> " + smallChain);
+        bigChain.removeAll(smallChain);
+        if (bigChain.size() != 1){
+           System.out.println ("Chain too different " + left.getStringId() + " -> " + right.getStringId());
+           System.out.println ("    " + bigChain);
+           return false;
+        }
+        Integer id = bigChain.iterator().next();
+        MappingSetInfo info = mapper.getMappingSetInfo(id);
+        if (!info.getSource().equals(info.getTarget())){
+           System.out.println ("Diffrent is not loop " + left.getStringId() + " -> " + right.getStringId());
+           System.out.println ("    " + info);
+           return false;            
+        }
+        return true;
+    }
 
 }

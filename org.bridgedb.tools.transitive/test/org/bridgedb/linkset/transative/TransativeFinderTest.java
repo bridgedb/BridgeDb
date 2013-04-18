@@ -27,19 +27,14 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.tools.metadata.validator.ValidationType;
-import org.bridgedb.uri.Profile;
-import org.bridgedb.uri.UriListenerTest;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -50,7 +45,6 @@ public class TransativeFinderTest extends TestUtils  {
  
     SQLUriMapper mapper;
     LinksetLoader linksetLoader;
- 
     
     @Before
     public void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
@@ -145,7 +139,7 @@ public class TransativeFinderTest extends TestUtils  {
 	}
 
     @Test
- 	public void testFinder6() throws BridgeDBException, RDFHandlerException, IOException {	
+    public void testFinder6() throws BridgeDBException, RDFHandlerException, IOException {	
         report("testFinder6");
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
@@ -168,7 +162,7 @@ public class TransativeFinderTest extends TestUtils  {
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleBToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics();
-        assertEquals(14, results.getNumberOfMappingSets()); //14 is correct as coded but should we do C -> C'?
+        assertEquals(16, results.getNumberOfMappingSets()); //14 is correct as coded but should we do C -> C'?
         report("testFinder7Done");
 	}
 }

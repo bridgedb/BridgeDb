@@ -62,4 +62,12 @@ public class DataSetInfo {
     public int compareTo(DataSetInfo other){
         return this.sysCode.compareTo(other.sysCode);
     }
+    
+    public String toString(){
+        if (sysCode == null || sysCode.isEmpty()){
+            return fullName;
+        } else {
+            return sysCode;
+        }
+    }
  }
