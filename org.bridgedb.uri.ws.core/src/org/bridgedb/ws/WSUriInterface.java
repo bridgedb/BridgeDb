@@ -25,7 +25,7 @@ import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.ProfileBean;
+import org.bridgedb.ws.bean.LensBean;
 import org.bridgedb.ws.bean.UriExistsBean;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -57,9 +57,9 @@ public interface WSUriInterface extends WSCoreInterface{
 
     public DataSourceUriPatternBean getDataSource(String dataSource) throws BridgeDBException;
     
-    public List<ProfileBean> getProfiles() throws BridgeDBException;
+    public List<LensBean> getLenses() throws BridgeDBException;
     
-    public ProfileBean getProfile(String id) throws BridgeDBException;
+    public LensBean getLens(String id) throws BridgeDBException;
     
     //public ValidationBean validateString(String info, String mimeTypee, String storeType, String validationType, 
     //        String includeWarnings) throws BridgeDBException;

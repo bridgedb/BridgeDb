@@ -27,8 +27,8 @@ import org.bridgedb.statistics.LensInfo;
  *
  * @author Alasdair
  */
-@XmlRootElement(name="Profile")
-public class ProfileBean {
+@XmlRootElement(name="Lens")
+public class LensBean {
 
 	String uri;
     String name;
@@ -37,16 +37,16 @@ public class ProfileBean {
     Set<String> justification;
     
     //Webservice constructor
-    public ProfileBean(){
+    public LensBean(){
     }
 
-    public static LensInfo asProfileInfo(ProfileBean bean){
+    public static LensInfo asLensInfo(LensBean bean){
         return new LensInfo(bean.getUri(), bean.getName(), bean.getCreatedOn(), 
         		bean.getCreatedBy(), bean.getJustification());
     }
 
-    public static ProfileBean asBean(LensInfo info) {
-        ProfileBean bean = new ProfileBean();
+    public static LensBean asBean(LensInfo info) {
+        LensBean bean = new LensBean();
     	bean.uri = info.getUri();
         bean.name = info.getName();
         bean.createdBy = info.getCreatedBy();
@@ -56,7 +56,7 @@ public class ProfileBean {
     }
     
     public String toString(){
-           return  "Profile URI: " + this.getUri() + 
+           return  "Lens URI: " + this.getUri() + 
         		   " Name: " + this.getName() +
         		   " Created By: " + this.getCreatedBy() +
         		   " Created On: " + this.getCreatedOn() +

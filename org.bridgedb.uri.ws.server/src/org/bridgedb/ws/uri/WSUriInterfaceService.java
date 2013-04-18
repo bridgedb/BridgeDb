@@ -55,7 +55,7 @@ import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.ProfileBean;
+import org.bridgedb.ws.bean.LensBean;
 import org.bridgedb.ws.bean.UriExistsBean;
 import org.bridgedb.ws.bean.UriMappings;
 import org.bridgedb.ws.bean.UriSearchBean;
@@ -405,9 +405,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@GET
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Path("/profile/{id}")
-	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDBException {
+	public LensBean getLens(@PathParam("id") String id) throws BridgeDBException {
 		LensInfo profile = uriMapper.getLens(Lens.getLensURI(Integer.parseInt(id)));
-		ProfileBean result = ProfileBean.asBean(profile);
+		LensBean result = LensBean.asBean(profile);
 		return result;
 	}
     
@@ -415,11 +415,11 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/profile") 
-	public List<ProfileBean> getProfiles() throws BridgeDBException {
+	public List<LensBean> getLenses() throws BridgeDBException {
 		List<LensInfo> profiles = uriMapper.getLens();
-		List<ProfileBean> results = new ArrayList<ProfileBean>();
+		List<LensBean> results = new ArrayList<LensBean>();
 		for (LensInfo profile:profiles) {
-			results.add(ProfileBean.asBean(profile));
+			results.add(LensBean.asBean(profile));
 		}
 		return results;
 	}

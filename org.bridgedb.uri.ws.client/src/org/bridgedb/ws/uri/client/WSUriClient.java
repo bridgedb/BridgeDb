@@ -38,7 +38,7 @@ import org.bridgedb.ws.bean.DataSourceUriPatternBean;
 import org.bridgedb.ws.bean.MappingBean;
 import org.bridgedb.ws.bean.MappingSetInfoBean;
 import org.bridgedb.ws.bean.OverallStatisticsBean;
-import org.bridgedb.ws.bean.ProfileBean;
+import org.bridgedb.ws.bean.LensBean;
 import org.bridgedb.ws.bean.UriExistsBean;
 import org.bridgedb.ws.bean.UriSearchBean;
 import org.bridgedb.ws.bean.XrefBean;
@@ -213,22 +213,22 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }*/
 
 	@Override
-	public List<ProfileBean> getProfiles() {
-		List<ProfileBean> result = 
+	public List<LensBean> getLenses() {
+		List<LensBean> result = 
 				webResource.path("profile")
 				.accept(MediaType.APPLICATION_XML_TYPE)
-				.get(new GenericType<List<ProfileBean>>() {});
+				.get(new GenericType<List<LensBean>>() {});
 		return result;
 	}
 
 	@Override
-	public ProfileBean getProfile(String id) throws BridgeDBException {
+	public LensBean getLens(String id) throws BridgeDBException {
         if (id.startsWith(Lens.getLensBaseURI())){
             id = id.substring(Lens.getLensBaseURI().length());
         }
-		ProfileBean result = webResource.path("profile/" + id)
+		LensBean result = webResource.path("profile/" + id)
 		.accept(MediaType.APPLICATION_XML_TYPE)
-		.get(new GenericType<ProfileBean>() {});
+		.get(new GenericType<LensBean>() {});
 		return result;
 	}
         
