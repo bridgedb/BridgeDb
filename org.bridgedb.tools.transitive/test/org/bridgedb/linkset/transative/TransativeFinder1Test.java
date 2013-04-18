@@ -27,19 +27,14 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.tools.metadata.validator.ValidationType;
-import org.bridgedb.uri.Profile;
-import org.bridgedb.uri.UriListenerTest;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.OpenRDFException;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
@@ -74,15 +69,7 @@ public class TransativeFinder1Test extends TestUtils  {
 	}
 
     @Test
- 	public void testFinder5() throws BridgeDBException, RDFHandlerException, IOException {	
-        report("testFinder5");
-        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
-        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
-        TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
-        transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
-        assertEquals(8, results.getNumberOfMappingSets());
-        report("testFinder5Done");
-	}
-
-}
+	public void testEmpty() throws BridgeDBException, RDFHandlerException, IOException {	
+    }
+    
+ }

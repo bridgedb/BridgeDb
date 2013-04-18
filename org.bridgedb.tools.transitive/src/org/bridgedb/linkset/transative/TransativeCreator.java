@@ -411,12 +411,12 @@ public class TransativeCreator {
             ResultSet rs = statement.executeQuery(query.toString());
             logger.info("processing results");
             while (rs.next()){
-                found = true;
                 String sourceId = rs.getString("mapping1.sourceId");
                 String targetId = rs.getString("mapping2.targetId");
                 String sourceUri = sourceUriPattern.getPrefix() + sourceId + sourceUriPattern.getPostfix();
                 String targetUri = targetUriPattern.getPrefix() + targetId + targetUriPattern.getPostfix();
                 if (!sourceUri.equals(targetUri)){
+                    found = true;
                     buffer.write("<");
                         buffer.write(sourceUri);
                     buffer.write("> <");

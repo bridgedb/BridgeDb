@@ -165,4 +165,18 @@ public class TransativeFinderTest extends TestUtils  {
         assertEquals(16, results.getNumberOfMappingSets()); //14 is correct as coded but should we do C -> C'?
         report("testFinder7Done");
 	}
+    
+    @Test
+ 	public void testFinder8() throws BridgeDBException, RDFHandlerException, IOException {	
+        report("testFinder8");
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToB.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA_1.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
+        transativeFinder.UpdateTransative();
+        OverallStatistics results = mapper.getOverallStatistics();
+        assertEquals(14, results.getNumberOfMappingSets());
+        report("testFinder8Done");
+	}
+
 }

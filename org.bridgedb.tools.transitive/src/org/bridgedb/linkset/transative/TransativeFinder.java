@@ -62,9 +62,9 @@ public class TransativeFinder extends SQLBase{
         }
         for (int i = lastTranstativeLoaded + 1; i <= maxMappingSet; i++){
             MappingSetInfo info = mapper.getMappingSetInfo(i);
-            if (!info.isSymmetric()){
+            //if (!info.isSymmetric()){
                 computeTransative(info);
-            }
+            //}
         }
         int newMaxMappingSet = getMaxMappingSet();
         mapper.putProperty(LAST_TRANSATIVEL_LOADED_KEY, "" + maxMappingSet);
@@ -133,7 +133,22 @@ public class TransativeFinder extends SQLBase{
             System.out.println ("    " + left.getTarget().getSysCode() + " != " + right.getSource().getSysCode());
             return false;
         }
+        if (left.isSymmetric()){
+            if (left.getSymmetric() == right.getIntId()){
+                System.out.println ("Symmetric " + left.getStringId() + " -> " + right.getStringId());
+                return false;
+                
+            }
+        }
+        if (right.isSymmetric()){
+            if (right.getSymmetric() == left.getIntId()){
+                System.out.println ("Symmetric " + left.getStringId() + " -> " + right.getStringId());
+                return false;              
+            }
+        }
+     
         boolean repeatFound = false;
+        Integer loopFound = null;
         for (Integer id:chainIds){
             if (id < 0){
                 if (repeatFound){
@@ -142,6 +157,18 @@ public class TransativeFinder extends SQLBase{
                     return false;
                 }
                 repeatFound = true;
+            }
+            if (id > 0){
+                MappingSetInfo info = mapper.getMappingSetInfo(id);
+                if (info.getSource().equals(info.getTarget())){
+                    if (loopFound != null){
+                        System.out.println ("Two Loops found: " + left.getStringId() + " -> " + right.getStringId());
+                        System.out.println ("    " + id + " and " + loopFound);
+                        return false;            
+                    }  else {
+                        loopFound = id;
+                    }
+                }
             }
         }
         if (!checkValidNoLoopTransative(left, right, chainIds)){
@@ -354,6 +381,12 @@ public class TransativeFinder extends SQLBase{
            System.out.println ("    " + info);
            return false;            
         }
+        if (info.getSource().equals(left.getSource())){
+           System.out.println ("Loop same source " + left.getStringId() + " -> " + right.getStringId());
+           System.out.println ("    " + left.getSource() + " == " + info.getSource());
+           return false;            
+        }
+        
         return true;
     }
 
