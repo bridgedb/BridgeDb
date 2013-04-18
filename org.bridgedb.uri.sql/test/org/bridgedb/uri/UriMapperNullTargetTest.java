@@ -26,7 +26,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapID_sourceXref_profileUri_tgtDataSources_first_null() throws Exception {
         report("MapID_sourceXref_profileUri_tgtDataSources_first_null");
         Xref sourceXref = map2xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[2];
         targets[0] = null;
         targets[1] = DataSource3;
@@ -47,7 +47,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapID_sourceXref_profileUri_tgtDataSources_second_null() throws Exception {
         report("MapID_sourceXref_profileUri_tgtDataSources_second_null");
         Xref sourceXref = map2xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[2];
         targets[0] = DataSource2;
         targets[1] = null;
@@ -68,7 +68,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapID_sourceXref_profileUri_tgtDataSource() throws Exception {
         report("MapID_sourceXref_profileUri_tgtDataSource");
         Xref sourceXref = map2xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource tgtDataSource = null;
         Set results = uriMapper.mapID(sourceXref, profileUri, tgtDataSource);
         assertTrue(results.isEmpty());
@@ -81,7 +81,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapID_sourceXref_profileUri_null_array() throws Exception {
         report("MapID_sourceXref_profileUri_null_array");
         Xref sourceXref = map2xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] tragets = null;
         Set results = uriMapper.mapID(sourceXref, profileUri, tragets);
         assertTrue(results.contains(map2xref1));
@@ -100,7 +100,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapID_sourceXref_profileUri_empty_array() throws Exception {
         report("MapID_sourceXref_profileUri_empty_array");
         Xref sourceXref = map2xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] tragets = new DataSource[0];
         Set results = uriMapper.mapID(sourceXref, profileUri, tragets);
         assertTrue(results.contains(map2xref1));
@@ -119,7 +119,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceUri_profileUri_tgtUriPatterns_first_null() throws Exception {
         report("MapUri_sourceUri_profileUri_tgtUriPatterns_first_null");
         String sourceUri = map3Uri3;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = null;
         tgtUriPatterns[1] = uriPattern3;
@@ -140,7 +140,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceUri_profileUri_tgtUriPatterns_second_null() throws Exception {
         report("MapUri_sourceUri_profileUri_tgtUriPatterns_second_null");
         String sourceUri = map3Uri3;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = uriPattern2;
         tgtUriPatterns[1] = null;
@@ -161,7 +161,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceXref_profileUri_tgtUriPattern() throws Exception {
         report("MapUri_sourceXref_profileUri_tgtUriPattern");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern tgtUriPattern = null;
         Set results = uriMapper.mapUri(sourceXref, profileUri, tgtUriPattern);
         assertTrue(results.isEmpty());
@@ -174,7 +174,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceXref_profileUri_null_pattern() throws Exception {
         report("MapUri_sourceXref_profileUri_null_pattern");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = null;
         Set results = uriMapper.mapUri(sourceXref, profileUri, targets);
         assertTrue(results.contains(map3Uri1));
@@ -193,7 +193,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceXref_profileUri_empty_pattern() throws Exception {
         report("MapUri_sourceXref_profileUri");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = new UriPattern[0];
         Set results = uriMapper.mapUri(sourceXref, profileUri, targets);
         assertTrue(results.contains(map3Uri1));
@@ -212,7 +212,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceXref_profileUri_tgtUriPatterns_second__null() throws Exception {
         report("MapUri_sourceXref_profileUri_tgtUriPatterns_second_null");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = uriPattern2;
         tgtUriPatterns[1] = null;
@@ -233,7 +233,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceXref_profileUri_tgtUriPatterns_first_null() throws Exception {
         report("MapUri_sourceXref_profileUri_tgtUriPatterns_first_null");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = null;
         tgtUriPatterns[1] = uriPattern3;
@@ -254,7 +254,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceUri_profileUri_tgtUriPattern() throws Exception {
         report("MapUri_sourceUri_profileUri_tgtUriPattern");
         String sourceUri = map3Uri2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern tgtUriPattern = null;
         Set results = uriMapper.mapUri(sourceUri, profileUri, tgtUriPattern);
         assertTrue(results.isEmpty());
@@ -267,7 +267,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceUri_profileUri_null_target() throws Exception {
         report("MapUri_sourceUri_profileUri_null_target");
         String sourceUri = map3Uri2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = null;
         Set results = uriMapper.mapUri(sourceUri, profileUri, targets);
         assertTrue(results.contains(map3Uri1));
@@ -286,7 +286,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapUri_sourceUri_profileUri_empty_targets() throws Exception {
         report("MapUri_sourceUri_profileUri_empty_targets");
         String sourceUri = map3Uri2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = new UriPattern[0];
         Set results = uriMapper.mapUri(sourceUri, profileUri, targets);
         assertTrue(results.contains(map3Uri1));
@@ -305,7 +305,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_tgtDataSources_first_null() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtDataSources_first_null");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[2];
         targets[0] = null;
         targets[1] = DataSource3;
@@ -348,7 +348,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_tgtDataSources_second_null() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtDataSources_second_null");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[2];
         targets[0] = DataSource2;
         targets[1] = null;
@@ -391,7 +391,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_tgtDataSource() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtDataSources");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource tgtDataSource = null;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, tgtDataSource);
         assertTrue(results.isEmpty());
@@ -404,7 +404,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_null_tgtDataSources() throws Exception {
         report("MapFull_sourceXref_profileUri_null_tgtDataSources");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = null;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -445,7 +445,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_empty_tgtDataSources() throws Exception {
         report("MapFull_sourceXref_profileUri_empty_tgtDataSources");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[0];
         Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -486,7 +486,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_null_UriPatterns() throws Exception {
         report("MapFull_sourceXref_profileUri_null_UriPatterns");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = null;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -527,7 +527,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_empty_UriPatterns() throws Exception {
         report("MapFull_sourceXref_profileUri_empty_UriPatterns");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = new UriPattern[0];
         Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -568,7 +568,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_tgtUriPatterns_first_null() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtUriPatterns_first_null");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = null;
         tgtUriPatterns[1] = uriPattern3;
@@ -611,7 +611,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_tgtUriPatterns_second_null() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtUriPatterns_second_null");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = uriPattern2;
         tgtUriPatterns[1] = null;
@@ -654,7 +654,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
     public void testMapFull_sourceXref_profileUri_tgtUriPattern() throws Exception {
         report("MapFull_sourceXref_profileUri_tgtUriPattern");
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern tgtUriPattern = null;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, profileUri, tgtUriPattern);
         assertTrue(results.isEmpty());
@@ -668,7 +668,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_tgtDataSources_first_null");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[2];
         targets[0] = null;
         targets[1] = DataSource3;
@@ -714,7 +714,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_tgtDataSources_second_null");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[2];
         targets[0] = DataSource2;
         targets[1] = null;
@@ -760,7 +760,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_tgtDataSource");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource tgtDataSource = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, tgtDataSource);
         assertTrue(results.isEmpty());
@@ -774,7 +774,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_null_DataSources");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -818,7 +818,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_empty_dataSources");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         DataSource[] targets = new DataSource[0];
         Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -862,7 +862,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_null_patterns");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -906,7 +906,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_empty_patterns");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] targets = new UriPattern[0];
         Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, targets);
         Set<String> targetUris = new HashSet<String>();
@@ -950,7 +950,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_tgtUriPattern");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern tgtUriPattern = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, profileUri, tgtUriPattern);
         assertTrue(results.isEmpty());
@@ -964,7 +964,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_tgtUriPatterns_first_null");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = null;
         tgtUriPatterns[1] = uriPattern3;
@@ -1010,7 +1010,7 @@ public abstract class UriMapperNullTargetTest extends UriListenerTest{
         report("MapFull_sourceUri_profileUri_tgtUriPatterns_second_null");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String profileUri = Profile.getDefaultProfile();
+        String profileUri = Lens.getDefaultLens();
         UriPattern[] tgtUriPatterns = new UriPattern[2];
         tgtUriPatterns[0] = uriPattern2;
         tgtUriPatterns[1] = null;

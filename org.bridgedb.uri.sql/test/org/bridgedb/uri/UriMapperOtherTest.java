@@ -34,8 +34,8 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetDefaultProfile() throws Exception {
         report("GetDefaultProfile");
-        LensInfo result = uriMapper.getProfile(Profile.getDefaultProfile());
-        assertEquals(Profile.getDefaultProfile(), result.getUri());
+        LensInfo result = uriMapper.getProfile(Lens.getDefaultLens());
+        assertEquals(Lens.getDefaultLens(), result.getUri());
         assertNotNull(result.getCreatedBy());
         assertNotNull(result.getCreatedOn());
         assertNotNull(result.getName());
@@ -48,8 +48,8 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetAllProfile() throws Exception {
         report("GetAllProfile");
-        LensInfo result = uriMapper.getProfile(Profile.getAllProfile());
-        assertEquals(Profile.getAllProfile(), result.getUri());
+        LensInfo result = uriMapper.getProfile(Lens.getAllLens());
+        assertEquals(Lens.getAllLens(), result.getUri());
         assertNotNull(result.getCreatedBy());
         assertNotNull(result.getCreatedOn());
         assertNotNull(result.getName());

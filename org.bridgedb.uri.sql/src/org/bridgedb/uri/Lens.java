@@ -25,15 +25,15 @@ import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
 
 /**
- * This is just a Utils class to provide any default Profiles as well as a single Javadocs point.
+ * This is just a Utils class to provide any default lens as well as a single Javadocs point.
  * <p>
  * 
  * @author Christian
  */
-public class Profile {
+public class Lens {
     
     /**
-     * The Default profile is the one that should be used whenever profileUri is null.
+     * The Default lens is the one that should be used whenever lensUri is null.
      * <p>
      * The suggestion behaviour is that the default will the mappings that 
      *   are generally considered to apply in most situations, much as the Mappings in Version 1
@@ -44,29 +44,29 @@ public class Profile {
      * @return the DefaultUri as a String
      * @throws BridgeDBException 
      */
-    public static String getDefaultProfile() throws BridgeDBException{
-        return getProfileURI(1);
+    public static String getDefaultLens() throws BridgeDBException{
+        return getLensURI(1);
     }
     
-    public static String getTestProfile() throws BridgeDBException{
-        return getProfileURI(2);
+    public static String getTestLens() throws BridgeDBException{
+        return getLensURI(2);
     }
     /**
-     * The profile used to indicate that all mappings should be returned.
+     * The lens used to indicate that all mappings should be returned.
      * <p>
-     * @return A Profile that asks for all mappings to be returned.
+     * @return A lens that asks for all mappings to be returned.
      * @throws BridgeDBException 
      */
-    public static String getAllProfile() throws BridgeDBException{
-        return getProfileURI(0);
+    public static String getAllLens() throws BridgeDBException{
+        return getLensURI(0);
     }
     
-    public static String getProfileBaseURI() throws BridgeDBException{
-        return RdfConfig.getTheBaseURI() + "profile/";  
+    public static String getLensBaseURI() throws BridgeDBException{
+        return RdfConfig.getTheBaseURI() + "lens/";  
     }
 
-    public static String getProfileURI(int profileId) throws BridgeDBException{
-        return getProfileBaseURI() + profileId;  
+    public static String getLensURI(int lensId) throws BridgeDBException{
+        return getLensBaseURI() + lensId;  
     }
   
     public static String getDefaultJustifictaionString() throws BridgeDBException{

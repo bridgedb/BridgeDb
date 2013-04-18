@@ -45,7 +45,7 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.uri.Mapping;
-import org.bridgedb.uri.Profile;
+import org.bridgedb.uri.Lens;
 import org.bridgedb.uri.UriListener;
 import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
@@ -583,9 +583,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void appendProfileClause(StringBuilder query, String profileUri) throws BridgeDBException {
         profileUri = scrubUri(profileUri);
         if (profileUri == null){
-            profileUri = Profile.getDefaultProfile();
+            profileUri = Lens.getDefaultLens();
         }
-        if (!profileUri.equals(Profile.getAllProfile())) {
+        if (!profileUri.equals(Lens.getAllLens())) {
             String profileJustificationQuery = "SELECT " + JUSTIFICATION_COLUMN_NAME
                     + " FROM " + PROFILE_JUSTIFICATIONS_TABLE_NAME 
                     + " WHERE " + PROFILE_URI_COLUMN_NAME + " = ";
@@ -608,7 +608,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 	private int extractIDFromURI(String profileUri) throws BridgeDBException {
 		try {
 			URI profileURI = new URIImpl(profileUri);
-			if (!profileURI.getNamespace().equals(Profile.getProfileBaseURI())) {
+			if (!profileURI.getNamespace().equals(Lens.getLensBaseURI())) {
  				throw new BridgeDBException("Invalid namespace for profile URI: " + profileUri);
 			}
 			int profileID = Integer.parseInt(profileURI.getLocalName());
@@ -982,7 +982,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public LensInfo getProfile(String profileURI) throws BridgeDBException {
         profileURI = scrubUri(profileURI);
-        if (profileURI.equals(Profile.getAllProfile())){
+        if (profileURI.equals(Lens.getAllLens())){
             return getAllProfile();
         }
     	String query = ("SELECT * " +
@@ -1415,7 +1415,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         String name = LensInfo.ALL_LENS_NAME;
         String createdOn = getProperty(LAST_UDPATES);
         String createdBy = this.getClass().getName();
-        String profileUri = Profile.getAllProfile();
+        String profileUri = Lens.getAllLens();
         Set<String> justifications = getAllJustifications();
 		return new LensInfo(profileUri, name, createdOn, createdBy, justifications);
         
@@ -1514,19 +1514,19 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void createDefaultProfiles() throws BridgeDBException {
         String name = LensInfo.DEFAULT_LENS_NAME;
         URI createdBy = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.uri.sql/src/org/bridgedb/sql/SQLUrlMapper.java");
-        URI[] justifications = Profile.getDefaultJustifictaions();
+        URI[] justifications = Lens.getDefaultJustifictaions();
         
         String uri = registerProfile(name, createdBy, justifications);
-        if (!uri.equals(Profile.getDefaultProfile())){
+        if (!uri.equals(Lens.getDefaultLens())){
             throw new BridgeDBException("Incorrect Default Profile URI created. Created " + uri + " but should have been "
-                    + Profile.getDefaultProfile());
+                    + Lens.getDefaultLens());
         }
         name = LensInfo.TEST_LENS_NAME;
-        URI justification = new URIImpl(Profile.getTestJustifictaion());
+        URI justification = new URIImpl(Lens.getTestJustifictaion());
         uri = registerProfile(name, createdBy, justification);
-        if (!uri.equals(Profile.getTestProfile())){
+        if (!uri.equals(Lens.getTestLens())){
             throw new BridgeDBException("Incorrect Test Profile URI created. Created " + uri + " but should have been "
-                    + Profile.getDefaultProfile());
+                    + Lens.getDefaultLens());
         }
     }
 
@@ -1571,7 +1571,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 	}
 	
 	private String createProfileUri(int profileId) throws BridgeDBException {
-        String uri = Profile .getProfileURI(profileId);
+        String uri = Lens .getLensURI(profileId);
 		String updateStatement = "UPDATE " + PROFILE_TABLE_NAME
                 + " SET " + PROFILE_URI_COLUMN_NAME + "=\"" + uri + "\" "
                 + " WHERE " + PROFILE_ID_COLUMN_NAME + " = " + profileId;

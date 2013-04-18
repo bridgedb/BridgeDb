@@ -22,7 +22,7 @@ package org.bridgedb.ws.server;
 import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.uri.Profile;
+import org.bridgedb.uri.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.uri.WSUriInterfaceService;

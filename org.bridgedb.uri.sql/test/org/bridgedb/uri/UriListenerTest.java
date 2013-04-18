@@ -193,26 +193,26 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.registerUriPattern(DataSource3, uriSpace3a + "$id");
 
         int mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-                Profile.getDefaultJustifictaionString(), uriPattern2, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), uriPattern2, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri1, map1Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri2, mappingSet, SYMETRIC);
         
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
-                Profile.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
         assertEquals(mappingSet2_3, mappingSet);
         listener.insertUriMapping(map1Uri2, map1Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2Uri3, mappingSet2_3, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3Uri3, mappingSet2_3, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-                Profile.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
+                Lens.getDefaultJustifictaionString(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri1, map1Uri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2Uri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3Uri3, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getTestJustifictaion(), uriPattern2, SYMETRIC, NO_VIA, NO_CHAIN);
+        		Lens.getTestJustifictaion(), uriPattern2, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri1, map1AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri2, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri2, mappingSet, SYMETRIC);
@@ -221,7 +221,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         listener.insertUriMapping(map3AUri1, map3Uri2, mappingSet, SYMETRIC);
 
         mappingSet = listener.registerMappingSet(uriPattern2, TEST_PREDICATE, 
-        		Profile.getTestJustifictaion(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
+        		Lens.getTestJustifictaion(), uriPattern3, SYMETRIC, NO_VIA, NO_CHAIN);
         listener.insertUriMapping(map1Uri2, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri2, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri2, map3AUri3, mappingSet, SYMETRIC);
@@ -235,7 +235,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         chain.add(1);
         chain.add(2);
         mappingSet = listener.registerMappingSet(uriPattern1, TEST_PREDICATE, 
-        		Profile.getTestProfile(), uriPattern3, SYMETRIC, via, chain);
+        		Lens.getTestLens(), uriPattern3, SYMETRIC, via, chain);
         listener.insertUriMapping(map1Uri1, map1AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map2Uri1, map2AUri3, mappingSet, SYMETRIC);
         listener.insertUriMapping(map3Uri1, map3AUri3, mappingSet, SYMETRIC);
