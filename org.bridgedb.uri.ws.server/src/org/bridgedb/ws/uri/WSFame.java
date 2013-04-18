@@ -340,9 +340,9 @@ public class WSFame extends WSUriInterfaceService {
 	public void generateProfileSelector(StringBuilder sb) throws BridgeDBException {
 		List<LensInfo> profiles = uriMapper.getLens();
         sb.append("<p>");
-    	sb.append(WsUriConstants.PROFILE_URI);
+    	sb.append(WsUriConstants.LENS_URI);
         sb.append("<select name=\"");
-    	sb.append(WsUriConstants.PROFILE_URI);
+    	sb.append(WsUriConstants.LENS_URI);
     	sb.append("\">");
 		for (LensInfo profile : profiles) {
 			sb.append("<option value=\"");

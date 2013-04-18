@@ -104,7 +104,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
     		@QueryParam(WsUriConstants.URI) String uri,
-     		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
+     		@QueryParam(WsUriConstants.LENS_URI) String profileUri,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
        if (logger.isDebugEnabled()){
@@ -156,7 +156,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.MAP_URI)
     public UriMappings mapUri(
     		@QueryParam(WsUriConstants.URI) List<String> uris,
-     		@QueryParam(WsUriConstants.PROFILE_URI) String profileUri,
+     		@QueryParam(WsUriConstants.LENS_URI) String profileUri,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
        if (logger.isDebugEnabled()){
             logger.debug("map called! ");

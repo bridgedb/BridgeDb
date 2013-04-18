@@ -62,9 +62,9 @@ public class WSUriApi extends WSCoreApi {
                     sb.append(" parameters is supported.</li>");
             sb.append("</ul>");
         sb.append("<dt><a name=\"");
-                sb.append(WsUriConstants.PROFILE_URI);
+                sb.append(WsUriConstants.LENS_URI);
                 sb.append("\">");
-                sb.append(WsUriConstants.PROFILE_URI);
+                sb.append(WsUriConstants.LENS_URI);
                 sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>If not provided the default profile is used.</li>");
@@ -216,9 +216,9 @@ public class WSUriApi extends WSCoreApi {
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsUriConstants.PROFILE_URI);
+                        sb.append(WsUriConstants.LENS_URI);
                         sb.append("\">");
-                        sb.append(WsUriConstants.PROFILE_URI);
+                        sb.append(WsUriConstants.LENS_URI);
                         sb.append("</a></li> ");
                 sb.append("<li><a href=\"#");
                         sb.append(WsUriConstants.TARGET_URI_PATTERN);
@@ -308,9 +308,9 @@ public class WSUriApi extends WSCoreApi {
             sb.append("<li>Optional arguments</li>");
                 sb.append("<ul>");
                 sb.append("<li><a href=\"#");
-                        sb.append(WsUriConstants.PROFILE_URI);
+                        sb.append(WsUriConstants.LENS_URI);
                         sb.append("\">");
-                        sb.append(WsUriConstants.PROFILE_URI);
+                        sb.append(WsUriConstants.LENS_URI);
                         sb.append("</a></li> ");
                 sb.append("<li><a href=\"#");
                         sb.append(WsUriConstants.TARGET_URI_PATTERN);
