@@ -59,7 +59,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
     
     @Override
-    public List<MappingBean> map(String id, String scrCode, String uri, String profileUri, List<String> targetCodes, List<String> targetUriPattern) throws BridgeDBException {
+    public List<MappingBean> map(String id, String scrCode, String uri, String lensUri, List<String> targetCodes, List<String> targetUriPattern) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         if (id != null){
             params.add(WsConstants.ID, id);
@@ -70,8 +70,8 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         if (uri != null){
             params.add(WsUriConstants.URI, uri);            
         }
-        if (profileUri != null){
-            params.add(WsUriConstants.LENS_URI, profileUri);        
+        if (lensUri != null){
+            params.add(WsUriConstants.LENS_URI, lensUri);        
         }
         if (targetCodes != null){
             for (String target:targetCodes){
@@ -215,7 +215,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
 	@Override
 	public List<LensBean> getLenses() {
 		List<LensBean> result = 
-				webResource.path("profile")
+				webResource.path("lens")
 				.accept(MediaType.APPLICATION_XML_TYPE)
 				.get(new GenericType<List<LensBean>>() {});
 		return result;
@@ -226,7 +226,7 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         if (id.startsWith(Lens.getLensBaseURI())){
             id = id.substring(Lens.getLensBaseURI().length());
         }
-		LensBean result = webResource.path("profile/" + id)
+		LensBean result = webResource.path("lens/" + id)
 		.accept(MediaType.APPLICATION_XML_TYPE)
 		.get(new GenericType<LensBean>() {});
 		return result;

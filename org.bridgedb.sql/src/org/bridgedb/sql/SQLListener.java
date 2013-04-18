@@ -419,7 +419,7 @@ public class SQLListener extends SQLBase implements MappingListener{
       * The Ops version will also map SysCodes to UriSpace(s).
       * "predicate" is purely for provenace. (but could be used for Ops Profiles)
       * "isTransitive" is a flag set at the time of loading to identify mappinSet generated using transativity of other sets.
-      *     Currently only used by OPS to draw a different line in the graphviz but could be used by profiles.
+      *     Currently only used by OPS to draw a different line in the graphviz but could be used by lenses.
       * "mappingCount" is a precomputed value @see countLinks() method.
       * <p>
       * Table "properties" underpins bridgeDB properties methods.

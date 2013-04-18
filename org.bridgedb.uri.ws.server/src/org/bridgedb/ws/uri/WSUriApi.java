@@ -67,8 +67,8 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(WsUriConstants.LENS_URI);
                 sb.append("</a></dt>");
             sb.append("<ul>");
-            sb.append("<li>If not provided the default profile is used.</li>");
-            sb.append("<li>While the current API includes this parameter there is not yet any profiled based data.</li>");
+            sb.append("<li>If not provided the default lens is used.</li>");
+            sb.append("<li>While the current API includes this parameter there is not yet any lens based data.</li>");
             sb.append("<li>It it not recommended to use this parameter except for testing until farther notice.</li>");
             sb.append("</ul>");        
         sb.append("<dt><a name=\"");

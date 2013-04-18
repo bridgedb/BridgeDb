@@ -104,7 +104,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             @QueryParam(WsConstants.ID) String id,
             @QueryParam(WsConstants.DATASOURCE_SYSTEM_CODE) String scrCode,
     		@QueryParam(WsUriConstants.URI) String uri,
-     		@QueryParam(WsUriConstants.LENS_URI) String profileUri,
+     		@QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @QueryParam(WsConstants.TARGET_DATASOURCE_SYSTEM_CODE) List<String> targetCodes,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
        if (logger.isDebugEnabled()){
@@ -118,7 +118,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             if (uri != null){
                 logger.debug("   uri = " + uri);             
             }
-            logger.debug("   profileUri = " + profileUri);
+            logger.debug("   lensUri = " + lensUri);
             if (targetCodes!= null && !targetCodes.isEmpty()){
                 logger.debug("   targetCodes = " + targetCodes);
             }
@@ -137,7 +137,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                 throw new BridgeDBException ("Please provide either a " + WsConstants.ID + " or a "
                         + WsUriConstants.URI + " parameter.");                 
             }  
-            return map(uri, profileUri, targetDataSources, targetPatterns);
+            return map(uri, lensUri, targetDataSources, targetPatterns);
         } else {
             if (uri != null){
                 throw new BridgeDBException ("Please provide either a " + WsConstants.ID + " or a "
@@ -148,7 +148,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
                         + WsConstants.DATASOURCE_SYSTEM_CODE + " parameter."); 
             }
         }
-        return map(id, scrCode, profileUri, targetDataSources, targetPatterns);
+        return map(id, scrCode, lensUri, targetDataSources, targetPatterns);
     }
 
     @GET
@@ -156,12 +156,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Path("/" + WsUriConstants.MAP_URI)
     public UriMappings mapUri(
     		@QueryParam(WsUriConstants.URI) List<String> uris,
-     		@QueryParam(WsUriConstants.LENS_URI) String profileUri,
+     		@QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @QueryParam(WsUriConstants.TARGET_URI_PATTERN) List<String> targetUriPatterns) throws BridgeDBException {
        if (logger.isDebugEnabled()){
             logger.debug("map called! ");
             logger.debug("   uri = " + uris);             
-            logger.debug("   profileUri = " + profileUri);
+            logger.debug("   lensUri = " + lensUri);
             if (targetUriPatterns!= null && !targetUriPatterns.isEmpty()){
                 logger.debug("   targetUriPatterns = " + targetUriPatterns);
             }
@@ -169,7 +169,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
        Set<String> results = new HashSet<String>();
        UriPattern[] targetPatterns = getUriPatterns(targetUriPatterns);
        for(String single:uris){
-           results.addAll(uriMapper.mapUri(single, profileUri, targetPatterns));
+           results.addAll(uriMapper.mapUri(single, lensUri, targetPatterns));
        }
        return UriMappings.asBean(results);
     }
@@ -186,19 +186,19 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return this.map(null, null, url, null, null, targetUriPatterns);
     }
 
-    private List<MappingBean> map(String uri, String profileUri, DataSource[] targetDataSources, 
+    private List<MappingBean> map(String uri, String lensUri, DataSource[] targetDataSources, 
             UriPattern[] targetPatterns) throws BridgeDBException {
         Set<Mapping> mappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
-                mappings = uriMapper.mapFull(uri, profileUri);
+                mappings = uriMapper.mapFull(uri, lensUri);
             } else {
-                mappings = mapByTargetUriPattern(uri, profileUri, targetPatterns);
+                mappings = mapByTargetUriPattern(uri, lensUri, targetPatterns);
             }
         } else {
-            mappings = mapByTargetDataSource (uri, profileUri, targetDataSources);
+            mappings = mapByTargetDataSource (uri, lensUri, targetDataSources);
             if (targetPatterns != null){
-                mappings.addAll(mapByTargetUriPattern(uri, profileUri, targetPatterns));                
+                mappings.addAll(mapByTargetUriPattern(uri, lensUri, targetPatterns));                
             } 
         }
         ArrayList<MappingBean> results = new ArrayList<MappingBean>();
@@ -208,21 +208,21 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return results; 
     }
     
-    private List<MappingBean> map(String id, String scrCode, String profileUri, DataSource[] targetDataSources, 
+    private List<MappingBean> map(String id, String scrCode, String lensUri, DataSource[] targetDataSources, 
             UriPattern[] targetPatterns) throws BridgeDBException {
         DataSource dataSource = DataSource.getBySystemCode(scrCode);
         Xref sourceXref = new Xref(id, dataSource);
         Set<Mapping> mappings;
         if (targetDataSources == null){
             if (targetPatterns == null){
-                mappings = uriMapper.mapFull(sourceXref, profileUri);
+                mappings = uriMapper.mapFull(sourceXref, lensUri);
             } else {
-                mappings = mapByTargetUriPattern(sourceXref, profileUri, targetPatterns);
+                mappings = mapByTargetUriPattern(sourceXref, lensUri, targetPatterns);
             }
         } else {
-            mappings = mapByTargetDataSource (sourceXref, profileUri, targetDataSources);
+            mappings = mapByTargetDataSource (sourceXref, lensUri, targetDataSources);
             if (targetPatterns != null){
-                mappings.addAll(mapByTargetUriPattern(sourceXref, profileUri, targetPatterns));                
+                mappings.addAll(mapByTargetUriPattern(sourceXref, lensUri, targetPatterns));                
             } 
         }
         ArrayList<MappingBean> results = new ArrayList<MappingBean>();
@@ -265,33 +265,33 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return targets.toArray(new UriPattern[0]);        
     }
     
-    private Set<Mapping> mapByTargetDataSource(String sourceUri, String profileUri, DataSource[] targetDataSources) throws BridgeDBException{
+    private Set<Mapping> mapByTargetDataSource(String sourceUri, String lensUri, DataSource[] targetDataSources) throws BridgeDBException{
         if (targetDataSources.length > 0){
-            return uriMapper.mapFull(sourceUri, profileUri, targetDataSources);
+            return uriMapper.mapFull(sourceUri, lensUri, targetDataSources);
         } else {
             return  new HashSet<Mapping>();
         }    
     }
     
-    private Set<Mapping> mapByTargetDataSource(Xref sourceXref, String profileUri, DataSource[] targetDataSources) throws BridgeDBException{
+    private Set<Mapping> mapByTargetDataSource(Xref sourceXref, String lensUri, DataSource[] targetDataSources) throws BridgeDBException{
         if (targetDataSources.length > 0){
-            return uriMapper.mapFull(sourceXref, profileUri, targetDataSources);
+            return uriMapper.mapFull(sourceXref, lensUri, targetDataSources);
         } else {
             return  new HashSet<Mapping>();
         }    
     }
     
-    private Set<Mapping> mapByTargetUriPattern(String sourceUri, String profileUri, UriPattern[] targetUriPattern) throws BridgeDBException{
+    private Set<Mapping> mapByTargetUriPattern(String sourceUri, String lensUri, UriPattern[] targetUriPattern) throws BridgeDBException{
         if (targetUriPattern.length > 0){
-            return uriMapper.mapFull(sourceUri, profileUri, targetUriPattern);
+            return uriMapper.mapFull(sourceUri, lensUri, targetUriPattern);
         } else {
             return  new HashSet<Mapping>();
         }    
     }
     
-    private Set<Mapping> mapByTargetUriPattern(Xref sourceXref, String profileUri, UriPattern[] targetUriPattern) throws BridgeDBException{
+    private Set<Mapping> mapByTargetUriPattern(Xref sourceXref, String lensUri, UriPattern[] targetUriPattern) throws BridgeDBException{
         if (targetUriPattern.length > 0){
-            return uriMapper.mapFull(sourceXref, profileUri, targetUriPattern);
+            return uriMapper.mapFull(sourceXref, lensUri, targetUriPattern);
         } else {
             return  new HashSet<Mapping>();
         }    
@@ -404,22 +404,22 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Override
 	@GET
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@Path("/profile/{id}")
+	@Path("/lens/{id}")
 	public LensBean getLens(@PathParam("id") String id) throws BridgeDBException {
-		LensInfo profile = uriMapper.getLens(Lens.getLensURI(Integer.parseInt(id)));
-		LensBean result = LensBean.asBean(profile);
+		LensInfo lens = uriMapper.getLens(Lens.getLensURI(Integer.parseInt(id)));
+		LensBean result = LensBean.asBean(lens);
 		return result;
 	}
     
 	@Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/profile") 
+    @Path("/lens") 
 	public List<LensBean> getLenses() throws BridgeDBException {
-		List<LensInfo> profiles = uriMapper.getLens();
+		List<LensInfo> lenses = uriMapper.getLens();
 		List<LensBean> results = new ArrayList<LensBean>();
-		for (LensInfo profile:profiles) {
-			results.add(LensBean.asBean(profile));
+		for (LensInfo lens:lenses) {
+			results.add(LensBean.asBean(lens));
 		}
 		return results;
 	}
