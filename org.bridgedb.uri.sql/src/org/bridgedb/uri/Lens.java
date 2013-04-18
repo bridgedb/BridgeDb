@@ -32,6 +32,9 @@ import org.openrdf.model.impl.URIImpl;
  */
 public class Lens {
     
+    public static String METHOD_MIDDLE = "lens";
+    public static String ID_PREFIX = "l";
+    
     /**
      * The Default lens is the one that should be used whenever lensUri is null.
      * <p>
@@ -62,10 +65,14 @@ public class Lens {
     }
     
     public static String getLensBaseURI() throws BridgeDBException{
-        return RdfConfig.getTheBaseURI() + "lens/";  
+        return RdfConfig.getTheBaseURI() + METHOD_MIDDLE + "/" ;  
     }
 
     public static String getLensURI(int lensId) throws BridgeDBException{
+        return getLensURI(ID_PREFIX + lensId);
+    }
+    
+    public static String getLensURI(String lensId) throws BridgeDBException{
         return getLensBaseURI() + lensId;  
     }
   

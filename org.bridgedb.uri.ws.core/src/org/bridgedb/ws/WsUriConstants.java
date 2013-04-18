@@ -19,6 +19,8 @@
 //
 package org.bridgedb.ws;
 
+import org.bridgedb.uri.Lens;
+
 /**
  *
  * @author Christian
@@ -35,6 +37,7 @@ public class WsUriConstants extends WsConstants{
     public static final String MAP = "map";
     public static final String MAP_URI = "mapUri";
     public static final String MAP_URL = "mapURL";
+    public static final String LENS = "lens";
     public static final String LENS_URI = "lensUri";
     public static final String SQL_COMPAT_VERSION = "SqlCompatVersion";
     public static final String TARGET_URI_PATTERN = "targetUriPattern";

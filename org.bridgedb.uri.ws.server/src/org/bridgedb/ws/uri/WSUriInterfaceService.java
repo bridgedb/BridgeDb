@@ -404,9 +404,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Override
 	@GET
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@Path("/lens/{id}")
+	@Path("/" + WsUriConstants.LENS + "/{id}")
 	public LensBean getLens(@PathParam("id") String id) throws BridgeDBException {
-		LensInfo lens = uriMapper.getLens(Lens.getLensURI(Integer.parseInt(id)));
+ 		LensInfo lens = uriMapper.getLens(Lens.getLensURI(id));
 		LensBean result = LensBean.asBean(lens);
 		return result;
 	}
