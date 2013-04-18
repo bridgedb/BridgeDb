@@ -31,7 +31,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsUriConstants;
 

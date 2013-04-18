@@ -5,7 +5,7 @@
 package org.bridgedb.uri;
 
 import java.util.List;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,7 +24,7 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetProfiles() throws Exception {
         report("getProfiles");
-        List<ProfileInfo> results = uriMapper.getProfiles();
+        List<LensInfo> results = uriMapper.getProfiles();
         assertThat(results.size(), greaterThanOrEqualTo(2));
      }
 
@@ -34,7 +34,7 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetDefaultProfile() throws Exception {
         report("GetDefaultProfile");
-        ProfileInfo result = uriMapper.getProfile(Profile.getDefaultProfile());
+        LensInfo result = uriMapper.getProfile(Profile.getDefaultProfile());
         assertEquals(Profile.getDefaultProfile(), result.getUri());
         assertNotNull(result.getCreatedBy());
         assertNotNull(result.getCreatedOn());
@@ -48,7 +48,7 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetAllProfile() throws Exception {
         report("GetAllProfile");
-        ProfileInfo result = uriMapper.getProfile(Profile.getAllProfile());
+        LensInfo result = uriMapper.getProfile(Profile.getAllProfile());
         assertEquals(Profile.getAllProfile(), result.getUri());
         assertNotNull(result.getCreatedBy());
         assertNotNull(result.getCreatedOn());

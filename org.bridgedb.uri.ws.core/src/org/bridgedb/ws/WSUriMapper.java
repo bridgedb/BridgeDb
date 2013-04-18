@@ -29,7 +29,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.uri.Mapping;
 import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
@@ -355,9 +355,9 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
 
 	@Override
-	public List<ProfileInfo> getProfiles() throws BridgeDBException {
+	public List<LensInfo> getProfiles() throws BridgeDBException {
 		List<ProfileBean> beans = uriService.getProfiles();
-		List<ProfileInfo> results = new ArrayList<ProfileInfo>();
+		List<LensInfo> results = new ArrayList<LensInfo>();
 		for (ProfileBean bean:beans) {
 			results.add(ProfileBean.asProfileInfo(bean));
 		}
@@ -365,10 +365,10 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
 	}
 
 	@Override
-	public ProfileInfo getProfile(String profileURI)
+	public LensInfo getProfile(String profileURI)
 			throws BridgeDBException {
 		ProfileBean profile = uriService.getProfile(profileURI);
-		ProfileInfo result = ProfileBean.asProfileInfo(profile);
+		LensInfo result = ProfileBean.asProfileInfo(profile);
 		return result;
 	}
     

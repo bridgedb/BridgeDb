@@ -40,7 +40,7 @@ import org.bridgedb.rdf.reader.StatementReader;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.tools.metadata.validator.ValidationType;
 import org.bridgedb.uri.Mapping;
 import org.bridgedb.uri.Profile;
@@ -406,7 +406,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@Path("/profile/{id}")
 	public ProfileBean getProfile(@PathParam("id") String id) throws BridgeDBException {
-		ProfileInfo profile = uriMapper.getProfile(Profile.getProfileURI(Integer.parseInt(id)));
+		LensInfo profile = uriMapper.getProfile(Profile.getProfileURI(Integer.parseInt(id)));
 		ProfileBean result = ProfileBean.asBean(profile);
 		return result;
 	}
@@ -416,9 +416,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
     @Path("/profile") 
 	public List<ProfileBean> getProfiles() throws BridgeDBException {
-		List<ProfileInfo> profiles = uriMapper.getProfiles();
+		List<LensInfo> profiles = uriMapper.getProfiles();
 		List<ProfileBean> results = new ArrayList<ProfileBean>();
-		for (ProfileInfo profile:profiles) {
+		for (LensInfo profile:profiles) {
 			results.add(ProfileBean.asBean(profile));
 		}
 		return results;

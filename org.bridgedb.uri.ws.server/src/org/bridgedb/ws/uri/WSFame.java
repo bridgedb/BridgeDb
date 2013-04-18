@@ -43,7 +43,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.uri.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsUriConstants;
@@ -338,13 +338,13 @@ public class WSFame extends WSUriInterfaceService {
     }
 
 	public void generateProfileSelector(StringBuilder sb) throws BridgeDBException {
-		List<ProfileInfo> profiles = uriMapper.getProfiles();
+		List<LensInfo> profiles = uriMapper.getProfiles();
         sb.append("<p>");
     	sb.append(WsUriConstants.PROFILE_URI);
         sb.append("<select name=\"");
     	sb.append(WsUriConstants.PROFILE_URI);
     	sb.append("\">");
-		for (ProfileInfo profile : profiles) {
+		for (LensInfo profile : profiles) {
 			sb.append("<option value=\"");
 			sb.append(profile.getUri());
 			sb.append("\">");

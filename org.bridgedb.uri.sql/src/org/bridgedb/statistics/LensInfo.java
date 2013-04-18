@@ -25,7 +25,7 @@ import java.util.Set;
  *
  * @author Alasdair
  */
-public class ProfileInfo {
+public class LensInfo {
 
 	String uri;
     String name;
@@ -33,11 +33,11 @@ public class ProfileInfo {
     String createdOn;
     Set<String> justification;
     
-    public static final String DEFAULT_PROFILE_NAME = "Default";
-    public static final String TEST_PROFILE_NAME = "Test";
-    public static final String ALL_PROFILE_NAME = "All";
+    public static final String DEFAULT_LENS_NAME = "Default";
+    public static final String TEST_LENS_NAME = "Test";
+    public static final String ALL_LENS_NAME = "All";
     
-    public ProfileInfo(String uri, String name,  String createdOn, String createdBy, Set<String> justifications) {
+    public LensInfo(String uri, String name,  String createdOn, String createdBy, Set<String> justifications) {
         this.uri = uri;
         this.name = name;
         this.createdBy = createdBy;
@@ -46,7 +46,7 @@ public class ProfileInfo {
     }
     
     public String toString(){
-           return  "Profile URI: " + this.getUri() + 
+           return  "Lens URI: " + this.getUri() + 
         		   " Name: " + this.getName() +
         		   " Created By: " + this.getCreatedBy() +
         		   " Created On: " + this.getCreatedOn() +

@@ -21,7 +21,7 @@ package org.bridgedb.ws.bean;
 
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 
 /**
  *
@@ -40,12 +40,12 @@ public class ProfileBean {
     public ProfileBean(){
     }
 
-    public static ProfileInfo asProfileInfo(ProfileBean bean){
-        return new ProfileInfo(bean.getUri(), bean.getName(), bean.getCreatedOn(), 
+    public static LensInfo asProfileInfo(ProfileBean bean){
+        return new LensInfo(bean.getUri(), bean.getName(), bean.getCreatedOn(), 
         		bean.getCreatedBy(), bean.getJustification());
     }
 
-    public static ProfileBean asBean(ProfileInfo info) {
+    public static ProfileBean asBean(LensInfo info) {
         ProfileBean bean = new ProfileBean();
     	bean.uri = info.getUri();
         bean.name = info.getName();

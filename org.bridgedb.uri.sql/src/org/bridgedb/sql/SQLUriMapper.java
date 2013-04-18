@@ -43,7 +43,7 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.uri.Mapping;
 import org.bridgedb.uri.Profile;
 import org.bridgedb.uri.UriListener;
@@ -963,24 +963,24 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public List<ProfileInfo> getProfiles() throws BridgeDBException {
+    public List<LensInfo> getProfiles() throws BridgeDBException {
     	String query = ("SELECT * " 
     			+ " FROM " + PROFILE_TABLE_NAME);
     	Statement statement = this.createStatement();
-    	List<ProfileInfo> profiles = new ArrayList<ProfileInfo>();
+    	List<LensInfo> profiles = new ArrayList<LensInfo>();
         ResultSet rs;
     	try {
 			rs = statement.executeQuery(query);
 		} catch (SQLException e) {
 			throw new BridgeDBException("Unable to retrieve profiles.", e);
 		}
-        List<ProfileInfo> results = resultSetToProfileInfos(rs);
+        List<LensInfo> results = resultSetToProfileInfos(rs);
         results.add(getAllProfile());
         return results;
     }
     
     @Override
-    public ProfileInfo getProfile(String profileURI) throws BridgeDBException {
+    public LensInfo getProfile(String profileURI) throws BridgeDBException {
         profileURI = scrubUri(profileURI);
         if (profileURI.equals(Profile.getAllProfile())){
             return getAllProfile();
@@ -994,7 +994,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 		} catch (SQLException e) {
 			throw new BridgeDBException("Unable to retrieve profiles.", e);
 		}
-        List<ProfileInfo> profiles = resultSetToProfileInfos(rs);
+        List<LensInfo> profiles = resultSetToProfileInfos(rs);
         if (profiles.isEmpty()) {
             throw new BridgeDBException("No profile with the URI " + profileURI);
         }
@@ -1393,8 +1393,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
-    private List<ProfileInfo> resultSetToProfileInfos(ResultSet rs ) throws BridgeDBException{
-     	List<ProfileInfo> profiles = new ArrayList<ProfileInfo>();
+    private List<LensInfo> resultSetToProfileInfos(ResultSet rs ) throws BridgeDBException{
+     	List<LensInfo> profiles = new ArrayList<LensInfo>();
     	try {
 			while (rs.next()) {
 				int profileId = rs.getInt(PROFILE_ID_COLUMN_NAME);
@@ -1403,7 +1403,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 				String createdBy = rs.getString(CREATED_BY_COLUMN_NAME);
 				String profileUri = rs.getString(PROFILE_URI_COLUMN_NAME);
 				Set<String> justifications = getJustificationsForProfile(profileUri);
-				profiles.add(new ProfileInfo(profileUri, name, createdOn, createdBy, justifications));
+				profiles.add(new LensInfo(profileUri, name, createdOn, createdBy, justifications));
 			}
 		} catch (SQLException e) {
 			throw new BridgeDBException("Unable to retrieve profiles.", e);
@@ -1411,13 +1411,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     	return profiles;
     }
 
-    private ProfileInfo getAllProfile() throws BridgeDBException{
-        String name = ProfileInfo.ALL_PROFILE_NAME;
+    private LensInfo getAllProfile() throws BridgeDBException{
+        String name = LensInfo.ALL_LENS_NAME;
         String createdOn = getProperty(LAST_UDPATES);
         String createdBy = this.getClass().getName();
         String profileUri = Profile.getAllProfile();
         Set<String> justifications = getAllJustifications();
-		return new ProfileInfo(profileUri, name, createdOn, createdBy, justifications);
+		return new LensInfo(profileUri, name, createdOn, createdBy, justifications);
         
     }
     /**
@@ -1512,7 +1512,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     private void createDefaultProfiles() throws BridgeDBException {
-        String name = ProfileInfo.DEFAULT_PROFILE_NAME;
+        String name = LensInfo.DEFAULT_LENS_NAME;
         URI createdBy = new URIImpl("https://github.com/openphacts/BridgeDb/blob/master/org.bridgedb.uri.sql/src/org/bridgedb/sql/SQLUrlMapper.java");
         URI[] justifications = Profile.getDefaultJustifictaions();
         
@@ -1521,7 +1521,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throw new BridgeDBException("Incorrect Default Profile URI created. Created " + uri + " but should have been "
                     + Profile.getDefaultProfile());
         }
-        name = ProfileInfo.TEST_PROFILE_NAME;
+        name = LensInfo.TEST_LENS_NAME;
         URI justification = new URIImpl(Profile.getTestJustifictaion());
         uri = registerProfile(name, createdBy, justification);
         if (!uri.equals(Profile.getTestProfile())){

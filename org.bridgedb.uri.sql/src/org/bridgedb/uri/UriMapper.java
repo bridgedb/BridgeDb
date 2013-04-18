@@ -29,7 +29,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
-import org.bridgedb.statistics.ProfileInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -475,7 +475,7 @@ public interface UriMapper extends IDMapper{
 	 * @return Information for each Profile
 	 * @throws BridgeDbSqlException 
 	 */
-	public List<ProfileInfo> getProfiles() throws BridgeDBException;
+	public List<LensInfo> getProfiles() throws BridgeDBException;
 
 	/**
 	 * Obtains the information about a specific profile.
@@ -484,7 +484,7 @@ public interface UriMapper extends IDMapper{
 	 * @return Information about the specified profile
 	 * @throws BridgeDbSqlException
 	 */
-	public ProfileInfo getProfile(String profileURI) throws BridgeDBException;
+	public LensInfo getProfile(String profileURI) throws BridgeDBException;
 
     /**
      * Returns the SQL_COMPAT_VERSION.
