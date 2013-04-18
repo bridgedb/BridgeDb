@@ -37,7 +37,7 @@ public class SetupLoaderWithTestData {
         linksetLoader.clearExistingData(StoreType.LOAD);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cs.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cs-cm.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        //linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", StoreType.LOAD, ValidationType.VOID);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chembl-rdf-void.ttl", StoreType.LOAD, ValidationType.VOID);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cs_test_lens.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
