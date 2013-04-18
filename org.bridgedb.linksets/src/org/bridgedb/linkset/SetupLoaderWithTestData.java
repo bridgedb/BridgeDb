@@ -40,9 +40,9 @@ public class SetupLoaderWithTestData {
         //linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cm.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", StoreType.LOAD, ValidationType.VOID);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chembl-rdf-void.ttl", StoreType.LOAD, ValidationType.VOID);
-        linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cs_test_profile.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load("../org.bridgedb.linksets/test-data/cs-cm_test_profile.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cm_test_profile.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cs_test_lens.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/cs-cm_test_lens.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("../org.bridgedb.linksets/test-data/cw-cm_test_lens.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-ct.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-dd.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("../org.bridgedb.linksets/test-data/cw-dt.ttl", StoreType.LOAD, ValidationType.LINKSMINIMAL);

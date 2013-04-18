@@ -52,7 +52,7 @@ public class LinkSetLoaderWithImportingTest extends TestUtils{
         linksetLoader.clearExistingData(StoreType.TEST);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chemspider-void.ttl", StoreType.TEST, ValidationType.VOID);
         linksetLoader.load("../org.bridgedb.tools.metadata/test-data/chembl-rdf-void.ttl", StoreType.TEST, ValidationType.VOID);
-        //CB Jan 15 2013 Line below is different to none profile test
+        //CB Jan 15 2013 Line below is different to none lens test
         linksetLoader.load("test-data/chemspider2chemblrdf-linkset.ttl", StoreType.TEST, ValidationType.LINKS);
 	}
 
