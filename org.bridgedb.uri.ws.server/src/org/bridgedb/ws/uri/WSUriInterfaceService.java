@@ -373,8 +373,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_OVERALL_STATISTICS) 
-    public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {
-        OverallStatistics overallStatistics = uriMapper.getOverallStatistics();
+    public OverallStatisticsBean getOverallStatistics(@QueryParam(WsUriConstants.LENS_URI) String lensUri) 
+            throws BridgeDBException {
+        OverallStatistics overallStatistics = uriMapper.getOverallStatistics(lensUri);
         OverallStatisticsBean bean = OverallStatisticsBean.asBean(overallStatistics);
         return bean;
     }
@@ -383,8 +384,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO + WsUriConstants.XML) 
     public List<MappingSetInfoBean> getMappingSetInfosXML(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws BridgeDBException {
-        return getMappingSetInfos(scrCode, targetCode);
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
+     		@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
+        return getMappingSetInfos(scrCode, targetCode, lensUri);
     }
     
     @Override
@@ -392,8 +394,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/" + WsUriConstants.GET_MAPPING_INFO) 
     public List<MappingSetInfoBean> getMappingSetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode) throws BridgeDBException {
-        List<MappingSetInfo> infos = uriMapper.getMappingSetInfos(scrCode, targetCode);
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
+     		@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
+        List<MappingSetInfo> infos = uriMapper.getMappingSetInfos(scrCode, targetCode, lensUri);
         ArrayList<MappingSetInfoBean> results = new ArrayList<MappingSetInfoBean>();
         for (MappingSetInfo info:infos){
             results.add(MappingSetInfoBean.asBean(info));

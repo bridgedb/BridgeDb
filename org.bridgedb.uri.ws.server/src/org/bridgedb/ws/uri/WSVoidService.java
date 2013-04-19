@@ -56,15 +56,18 @@ public class WSVoidService extends WSFame{
     @Path("/" + WsUriConstants.GET_MAPPING_INFO)
     public Response getMappingInfo(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
+            @QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
-        List<MappingSetInfo> mappingSetInfos = uriMapper.getMappingSetInfos(scrCode, targetCode);
+        List<MappingSetInfo> mappingSetInfos = uriMapper.getMappingSetInfos(scrCode, targetCode, lensUri);
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
         if (mappingSetInfos.isEmpty()){
             sb.append("\n<h1> No mapping found between ");
             MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(scrCode,scrCode), httpServletRequest);
             sb.append(" and ");
             MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(targetCode,targetCode), httpServletRequest);
+            sb.append(" using lens ");
+            sb.append(lensUri);
             sb.append("</h1>");
         } else {
             sb.append("\n<p>Warning summary lines are just a sum of the mappings from all mapping files.");
@@ -79,9 +82,10 @@ public class WSVoidService extends WSFame{
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + WsUriConstants.GRAPHVIZ)
-    public Response graphvizDot() throws BridgeDBException, UnsupportedEncodingException {
+    public Response graphvizDot(@QueryParam(WsUriConstants.LENS_URI) String lensUri) 
+            throws BridgeDBException, UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
-        List<MappingSetInfo> rawProvenaceinfos = uriMapper.getMappingSetInfos(null, null);
+        List<MappingSetInfo> rawProvenaceinfos = uriMapper.getMappingSetInfos(null, null, lensUri);
         SourceTargetCounter sourceTargetCounter = new SourceTargetCounter(rawProvenaceinfos);
         sb.append("digraph G {");
         for (MappingSetInfo info:sourceTargetCounter.getSummaryInfos()){

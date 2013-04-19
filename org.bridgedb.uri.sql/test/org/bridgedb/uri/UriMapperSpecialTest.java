@@ -43,7 +43,7 @@ import org.junit.Test;
  */
 @Ignore
 public abstract class UriMapperSpecialTest extends UriListenerTest{
-                    
+           
     @Test 
     public void testMapIDOneBad() throws BridgeDBException{
         report("MapIDOneBad");
@@ -174,7 +174,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetOverallStatistics() throws BridgeDBException {
         report("GetOverallStatistics()");
-        OverallStatistics results = uriMapper.getOverallStatistics();
+        OverallStatistics results = uriMapper.getOverallStatistics(Lens.getDefaultLens());
         assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
         assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(6));
         assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
@@ -199,7 +199,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetMappingSetInfos() throws BridgeDBException {
         report("GetMappingSetInfo All");
-        List<MappingSetInfo> results = uriMapper.getMappingSetInfos(null, null);
+        List<MappingSetInfo> results = uriMapper.getMappingSetInfos(null, null, Lens.getDefaultLens());
         assertThat (results.size(), greaterThanOrEqualTo(6));
     }
 
@@ -207,7 +207,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testGetMappingSetInfosBySourceAndTarget() throws BridgeDBException {
         report("GetMappingSetInfos source and target");
         List<MappingSetInfo> results = 
-                uriMapper.getMappingSetInfos(DataSource2.getSystemCode(), DataSource1.getSystemCode());
+                uriMapper.getMappingSetInfos(DataSource2.getSystemCode(), DataSource1.getSystemCode(), Lens.getDefaultLens());
         assertThat (results.size(), greaterThanOrEqualTo(1));
         for (MappingSetInfo info:results){
             assertEquals(DataSource2.getSystemCode(), info.getSource().getSysCode());
@@ -219,7 +219,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testGetMappingSetInfosByTarget() throws BridgeDBException {
         report("GetMappingSetInfos target");
         List<MappingSetInfo> results = 
-                uriMapper.getMappingSetInfos(null, DataSource3.getSystemCode());
+                uriMapper.getMappingSetInfos(null, DataSource3.getSystemCode(), Lens.getDefaultLens());
         assertThat (results.size(), greaterThanOrEqualTo(2));
         for (MappingSetInfo info:results){
             assertEquals(DataSource3.getSystemCode(), info.getTarget().getSysCode());
@@ -229,7 +229,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testGetMappingSetInfosBySource() throws BridgeDBException {
         report("GetMappingSetInfos source");
         List<MappingSetInfo> results = 
-                uriMapper.getMappingSetInfos(DataSource1.getSystemCode(), null);
+                uriMapper.getMappingSetInfos(DataSource1.getSystemCode(), null, Lens.getDefaultLens());
         assertThat (results.size(), greaterThanOrEqualTo(2));
         for (MappingSetInfo info:results){
             assertEquals(DataSource1.getSystemCode(), info.getSource().getSysCode());

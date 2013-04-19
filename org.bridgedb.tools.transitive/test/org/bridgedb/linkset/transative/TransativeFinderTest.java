@@ -27,6 +27,7 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.tools.metadata.validator.ValidationType;
+import org.bridgedb.uri.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.utils.TestUtils;
@@ -76,7 +77,7 @@ public class TransativeFinderTest extends TestUtils  {
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(20, results.getNumberOfMappingSets());
         report("testFinder Done");
 	}
@@ -90,7 +91,7 @@ public class TransativeFinderTest extends TestUtils  {
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleEToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(20, results.getNumberOfMappingSets());
         report("testFinder2 Done");
 	}
@@ -105,7 +106,7 @@ public class TransativeFinderTest extends TestUtils  {
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
         transativeFinder.UpdateTransative();
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(20, results.getNumberOfMappingSets());
         report("testFinder3Done");
 	}
@@ -121,7 +122,7 @@ public class TransativeFinderTest extends TestUtils  {
         transativeFinder.UpdateTransative();
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleCToD.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(30, results.getNumberOfMappingSets());
         report("testFinder4Done");
 	}
@@ -133,7 +134,7 @@ public class TransativeFinderTest extends TestUtils  {
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(8, results.getNumberOfMappingSets());
         report("testFinder5Done");
 	}
@@ -147,7 +148,7 @@ public class TransativeFinderTest extends TestUtils  {
         transativeFinder.UpdateTransative();
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(16, results.getNumberOfMappingSets());
         report("testFinder6Done");
 	}
@@ -161,7 +162,7 @@ public class TransativeFinderTest extends TestUtils  {
         transativeFinder.UpdateTransative();
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleBToC.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(16, results.getNumberOfMappingSets()); //14 is correct as coded but should we do C -> C'?
         report("testFinder7Done");
 	}
@@ -174,7 +175,7 @@ public class TransativeFinderTest extends TestUtils  {
         linksetLoader.load("../org.bridgedb.tools.transitive/test-data/sampleAToA_1.ttl", StoreType.TEST, ValidationType.LINKSMINIMAL);
         TransativeFinder transativeFinder = new TransativeFinder(StoreType.TEST);
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics();
+        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
         assertEquals(14, results.getNumberOfMappingSets());
         report("testFinder8Done");
 	}

@@ -438,7 +438,7 @@ public interface UriMapper extends IDMapper{
      * @return high level statistics
      * @throws BridgeDBException 
      */
-    public OverallStatistics getOverallStatistics() throws BridgeDBException;
+    public OverallStatistics getOverallStatistics(String lensUri) throws BridgeDBException;
 
     /*
      * Obtains some statistics for one MappingSet in the data.
@@ -459,7 +459,7 @@ public interface UriMapper extends IDMapper{
      * @return Information for each Mapping Set
      * @throws BridgeDBException 
      */
-     public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException;
+     public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) throws BridgeDBException;
     
     /**
      * Obtains the Set of one or more UriPatterns that are considered valid(have been registered) for this DataSource.

@@ -155,9 +155,10 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }*/
 
     @Override
-    public OverallStatisticsBean getOverallStatistics() throws BridgeDBException {
+    public OverallStatisticsBean getOverallStatistics(String lensUri) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
-        //Make service call
+        params.add(WsUriConstants.LENS_URI, encode(lensUri));
+         //Make service call
         OverallStatisticsBean result = 
                 webResource.path(WsUriConstants.GET_OVERALL_STATISTICS)
                 .queryParams(params)
@@ -176,10 +177,11 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
         
     @Override
-    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException {
+    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) throws BridgeDBException {
         MultivaluedMap<String, String> params = new MultivaluedMapImpl();
         params.add(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE, sourceSysCode);
         params.add(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE, targetSysCode);
+        params.add(WsUriConstants.LENS_URI, encode(lensUri));
         //Make service call
         List<MappingSetInfoBean> result = 
                 webResource.path(WsUriConstants.GET_MAPPING_INFO)

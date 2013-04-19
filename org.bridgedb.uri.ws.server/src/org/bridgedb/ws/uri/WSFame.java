@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.Xref;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.statistics.LensInfo;
+import org.bridgedb.uri.Lens;
 import org.bridgedb.uri.Mapping;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsUriConstants;
@@ -251,8 +252,12 @@ public class WSFame extends WSUriInterfaceService {
     protected void addSideBarIMS(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("<div class=\"menugroup\">OPS Identity Mapping Service</div>");
         addSideBarItem(sb, "ims-home", "Home", httpServletRequest);
-        addSideBarItem(sb, "getMappingInfo", "Mappings Summary", httpServletRequest);
-        addSideBarItem(sb, "graphviz", "Mappings Summary in Graphviz format",  httpServletRequest);
+        String allMappingInfo = WsUriConstants.GET_MAPPING_INFO + "?" + WsUriConstants.LENS_URI + "=" + Lens.getDefaultLens();
+        addSideBarItem(sb, allMappingInfo,"All Mappings Summary", httpServletRequest);
+        addSideBarItem(sb,  WsUriConstants.GET_MAPPING_INFO, "Default Mappings Summary", httpServletRequest);
+        String allGraphwiz = WsUriConstants.GRAPHVIZ + "?" + WsUriConstants.LENS_URI + "=" + Lens.getDefaultLens();
+        addSideBarItem(sb, allGraphwiz, "All Mappings Summary in Graphviz format",  httpServletRequest);
+        addSideBarItem(sb, WsUriConstants.GRAPHVIZ, "Default Mappings Summary in Graphviz format",  httpServletRequest);
         addSideBarItem(sb, "ims-api", "IMS API", httpServletRequest);
     }
 
@@ -260,8 +265,8 @@ public class WSFame extends WSUriInterfaceService {
      * Allows Super classes to add to the side bar
      */
     protected void addSideBarStatisitics(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
-        OverallStatistics statistics = uriMapper.getOverallStatistics();
-        sb.append("\n<div class=\"menugroup\">Statisitics</div>");
+        OverallStatistics statistics = uriMapper.getOverallStatistics(Lens.getDefaultLens());
+        sb.append("\n<div class=\"menugroup\">Default Statisitics</div>");
         addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
         addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
         addSideBarItem(sb, "getSupportedSrcDataSources", formatter.format(statistics.getNumberOfSourceDataSources()) 
@@ -269,6 +274,17 @@ public class WSFame extends WSUriInterfaceService {
         addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfPredicates()) + " Predicates", httpServletRequest);
         addSideBarItem(sb, "getSupportedTgtDataSources", formatter.format(statistics.getNumberOfTargetDataSources()) 
                 + " Target Data Sources ", httpServletRequest);
+        statistics = uriMapper.getOverallStatistics(Lens.getAllLens());
+        sb.append("\n<div class=\"menugroup\">All Statisitics</div>");
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
+        addSideBarItem(sb, "getSupportedSrcDataSources", formatter.format(statistics.getNumberOfSourceDataSources()) 
+                + " Source Data Sources", httpServletRequest);
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfPredicates()) + " Predicates", httpServletRequest);
+        addSideBarItem(sb, "getSupportedTgtDataSources", formatter.format(statistics.getNumberOfTargetDataSources()) 
+                + " Target Data Sources ", httpServletRequest);
+        addSideBarItem(sb, WsUriConstants.LENS, formatter.format(statistics.getNumberOfLenses()) 
+                + " Lenses ", httpServletRequest);
     }
     
     /**

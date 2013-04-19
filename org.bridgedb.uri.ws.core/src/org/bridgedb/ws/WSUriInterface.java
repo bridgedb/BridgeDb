@@ -49,9 +49,10 @@ public interface WSUriInterface extends WSCoreInterface{
 
     //public List<Mapping> getSampleMappings() throws BridgeDBException;
 
-    public OverallStatisticsBean getOverallStatistics() throws BridgeDBException;
+    public OverallStatisticsBean getOverallStatistics(String lensUri) throws BridgeDBException;
 
-    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException;
+    public List<MappingSetInfoBean> getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) 
+            throws BridgeDBException;
 
     public MappingSetInfoBean getMappingSetInfo(String mappingSetId) throws BridgeDBException;
 

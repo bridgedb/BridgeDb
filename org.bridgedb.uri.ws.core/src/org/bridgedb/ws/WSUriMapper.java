@@ -323,8 +323,8 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     //}
     
     @Override
-    public OverallStatistics getOverallStatistics() throws BridgeDBException {
-        OverallStatisticsBean bean = uriService.getOverallStatistics();
+    public OverallStatistics getOverallStatistics(String lensUri) throws BridgeDBException {
+        OverallStatisticsBean bean = uriService.getOverallStatistics(lensUri);
         return OverallStatisticsBean.asOverallStatistics(bean);
     }
 
@@ -335,8 +335,8 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     }
 
     @Override
-    public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode) throws BridgeDBException {
-        List<MappingSetInfoBean> beans = uriService.getMappingSetInfos(sourceSysCode, targetSysCode);
+    public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) throws BridgeDBException {
+        List<MappingSetInfoBean> beans = uriService.getMappingSetInfos(sourceSysCode, targetSysCode, lensUri);
         ArrayList<MappingSetInfo> results = new ArrayList<MappingSetInfo>(); 
         for (MappingSetInfoBean bean:beans){
             results.add(MappingSetInfoBean.asMappingSetInfo(bean));
