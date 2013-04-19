@@ -21,6 +21,7 @@ package org.bridgedb.ws.uri;
 
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -34,10 +35,12 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.linkset.rdf.RdfReader;
 import org.bridgedb.statistics.DataSetInfo;
+import org.bridgedb.statistics.LensInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.StoreType;
 import org.bridgedb.ws.WsUriConstants;
+import org.bridgedb.ws.bean.LensBean;
 
 /**
  * This class adds the html versions of the SQLUrlMapper methods
@@ -60,7 +63,14 @@ public class WSVoidService extends WSFame{
             @Context HttpServletRequest httpServletRequest) 
             throws BridgeDBException, UnsupportedEncodingException {
         List<MappingSetInfo> mappingSetInfos = uriMapper.getMappingSetInfos(scrCode, targetCode, lensUri);
-        StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
+        String lensName;
+        if (lensUri != null && !lensUri.isEmpty()){
+            LensInfo lensInfo = uriMapper.getLens(lensUri);
+            lensName = lensInfo.getName();
+        } else {
+            lensName = "Default";
+        }
+        StringBuilder sb = topAndSide("IMS Mapping Summary for " + lensName + " Lens",  httpServletRequest);
         if (mappingSetInfos.isEmpty()){
             sb.append("\n<h1> No mapping found between ");
             MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(scrCode,scrCode), httpServletRequest);
@@ -78,6 +88,38 @@ public class WSVoidService extends WSFame{
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
+    
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.LENS) 
+	public Response getLenses(@Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+		List<LensInfo> lenses = uriMapper.getLens();
+        StringBuilder sb = topAndSide("Lens Summary",  httpServletRequest);
+        sb.append("<table border=\"1\">");
+        sb.append("<tr>");
+        sb.append("<th>Name</th>");
+        sb.append("<th>URI</th>");
+		for (LensInfo lens:lenses) {
+            sb.append("<tr><td>");
+            sb.append(lens.getName());
+            sb.append("</td><td><a href=\"");
+            sb.append(lens.getUri());
+            sb.append("\">");
+            sb.append(lens.getUri());
+            sb.append("</a></td>");        
+		}
+        sb.append("</tr></table>");
+        sb.append("<p><a href=\"");
+        sb.append(httpServletRequest.getContextPath());
+        sb.append("/");
+        sb.append(WsUriConstants.LENS);
+        sb.append(WsUriConstants.XML);
+        sb.append("\">");
+        sb.append("XML Format");
+        sb.append("</a></p>");        
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+	}
     
     @GET
     @Produces(MediaType.TEXT_HTML)

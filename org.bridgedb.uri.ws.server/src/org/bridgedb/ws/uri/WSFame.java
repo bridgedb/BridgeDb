@@ -252,12 +252,13 @@ public class WSFame extends WSUriInterfaceService {
     protected void addSideBarIMS(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("<div class=\"menugroup\">OPS Identity Mapping Service</div>");
         addSideBarItem(sb, "ims-home", "Home", httpServletRequest);
-        String allMappingInfo = WsUriConstants.GET_MAPPING_INFO + "?" + WsUriConstants.LENS_URI + "=" + Lens.getDefaultLens();
+        String allMappingInfo = WsUriConstants.GET_MAPPING_INFO + "?" + WsUriConstants.LENS_URI + "=" + Lens.getAllLens();
         addSideBarItem(sb, allMappingInfo,"All Mappings Summary", httpServletRequest);
         addSideBarItem(sb,  WsUriConstants.GET_MAPPING_INFO, "Default Mappings Summary", httpServletRequest);
-        String allGraphwiz = WsUriConstants.GRAPHVIZ + "?" + WsUriConstants.LENS_URI + "=" + Lens.getDefaultLens();
-        addSideBarItem(sb, allGraphwiz, "All Mappings Summary in Graphviz format",  httpServletRequest);
-        addSideBarItem(sb, WsUriConstants.GRAPHVIZ, "Default Mappings Summary in Graphviz format",  httpServletRequest);
+        String allGraphwiz = WsUriConstants.GRAPHVIZ + "?" + WsUriConstants.LENS_URI + "=" + Lens.getAllLens();
+        addSideBarItem(sb, allGraphwiz, "All Mappings Graphviz",  httpServletRequest);
+        addSideBarItem(sb, WsUriConstants.GRAPHVIZ, "Default Mappings Graphviz",  httpServletRequest);
+        addSideBarItem(sb, WsUriConstants.LENS, "Lens",  httpServletRequest);
         addSideBarItem(sb, "ims-api", "IMS API", httpServletRequest);
     }
 

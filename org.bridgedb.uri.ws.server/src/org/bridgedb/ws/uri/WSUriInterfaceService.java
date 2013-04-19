@@ -414,10 +414,17 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 		return result;
 	}
     
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+   @Path("/" + WsUriConstants.LENS + WsUriConstants.XML) 
+    public List<LensBean> getLensesXML() throws BridgeDBException {
+        return getLenses();
+    }
+    
 	@Override
     @GET
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    @Path("/lens") 
+    @Path("/" + WsUriConstants.LENS) 
 	public List<LensBean> getLenses() throws BridgeDBException {
 		List<LensInfo> lenses = uriMapper.getLens();
 		List<LensBean> results = new ArrayList<LensBean>();

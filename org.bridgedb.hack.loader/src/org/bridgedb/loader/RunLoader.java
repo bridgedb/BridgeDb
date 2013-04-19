@@ -43,8 +43,9 @@ public class RunLoader {
         ConfigReader.logToConsole();
 
         LinksetLoader linksetLoader = new LinksetLoader();
+        TransativeFinder transativeFinder = new TransativeFinder(StoreType.LOAD);
 
-        linksetLoader.clearExistingData(StoreType.LOAD);
+/*        linksetLoader.clearExistingData(StoreType.LOAD);
         
         linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/0BCh1lgh5Y/ChemblOldMolecule-ChemblOldId.ttl", 
                 StoreType.LOAD, ValidationType.LINKSMINIMAL);
@@ -72,7 +73,30 @@ public class RunLoader {
                 StoreType.LOAD, ValidationType.LINKSMINIMAL);
         linksetLoader.load("https://www.dropbox.com/sh/6dov4e3drd2nvs7/8RQlU-RH7m/ChemSpider-DrugBankDrugs.ttl", 
                 StoreType.LOAD, ValidationType.LINKSMINIMAL);
-        TransativeFinder transativeFinder = new TransativeFinder(StoreType.LOAD);
+        transativeFinder.UpdateTransative();
+
+        linksetLoader.load("https://www.dropbox.com/s/0w7tgw4zyou5aqs/LINKSET_EXACTMATCH_CHEBI20121023.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        transativeFinder.UpdateTransative();
+        //Chebi -> chebi
+*/        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/ChEBI102VoID.ttl", 
+                StoreType.LOAD, ValidationType.VOID);
+/*        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/has_functional_parentChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/has_parent_hydrideChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/has_partChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/has_roleChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);        
+*/        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/is_conjugate_acid_ofChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/is_conjugate_base_ofChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/is_enantiomer_ofChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
+        linksetLoader.load("https://github.com/openphacts/ops-platform-setup/blob/master/void/chebi/chebi102/is_tautomer_ofChEBI102Linkset.ttl", 
+                StoreType.LOAD, ValidationType.LINKSMINIMAL);
         transativeFinder.UpdateTransative();
 
     }
