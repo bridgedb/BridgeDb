@@ -259,7 +259,7 @@ public class WSLinksetService extends WSVoidService{
             report = readException(e);
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
-        addValidationForm(sb, validationType, info, report);
+        addValidationForm(sb, validationType, info, report, httpServletRequest);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -661,7 +661,7 @@ public class WSLinksetService extends WSVoidService{
             report = readException(e);
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Validator", httpServletRequest);
-        addValidateForm(sb, validationType, report);
+        addValidateForm(sb, validationType, report, httpServletRequest);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -857,7 +857,7 @@ public class WSLinksetService extends WSVoidService{
                 report = readException(e);
             }
             StringBuilder sb = topAndSide("Welcome Admin! Load a " + validationType.getName(), httpServletRequest);
-            addLoadForm(sb, validationType, info, report);
+            addLoadForm(sb, validationType, info, report, httpServletRequest);
             footerAndEnd(sb);
             return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
         } else {
@@ -1263,7 +1263,7 @@ public class WSLinksetService extends WSVoidService{
                 report = readException(e);
             }
             StringBuilder sb = topAndSide(validationType.getName() + " Loader", httpServletRequest);
-            addLoadForm(sb, validationType, report);
+            addLoadForm(sb, validationType, report, httpServletRequest);
             footerAndEnd(sb);
             return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
         } else {
@@ -1461,7 +1461,7 @@ public class WSLinksetService extends WSVoidService{
             report = readException(e);
         }
         StringBuilder sb = topAndSide("Save but not Load: " + validationType.getName(), httpServletRequest);
-        addSaveForm(sb, validationType, info, report);
+        addSaveForm(sb, validationType, info, report, httpServletRequest);
         sb.append("<h1>WARNING Data not Loaded</h1>");
         sb.append("<h2>Please contact an Admin to Load this data</h2>");
         footerAndEnd(sb);
@@ -1865,7 +1865,7 @@ public class WSLinksetService extends WSVoidService{
             report = readException(e);
         }
         StringBuilder sb = topAndSide(validationType.getName() + " Saver (Load to be done later by admin)", httpServletRequest);
-        addSaveForm(sb, validationType, report);
+        addSaveForm(sb, validationType, report, httpServletRequest);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -1883,25 +1883,25 @@ public class WSLinksetService extends WSVoidService{
         StringBuilder sb = topAndSide("Validators Index", httpServletRequest);
         sb.append("\n<h1>Validate as a Void Description.</h1>");
         addValidateString(sb, ValidationType.VOID);
-        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
-        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
-        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
+        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE, httpServletRequest);
+        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML, httpServletRequest);
+        addValidateFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES, httpServletRequest);
         sb.append("\n<h1>Validate as a Linkset.</h1>");
         addValidateString(sb, ValidationType.LINKS);
-        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
-        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
-        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
+        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE, httpServletRequest);
+        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML, httpServletRequest);
+        addValidateFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES, httpServletRequest);
         //if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
             sb.append("\n<h1>Validate a File as the minimum to load a linkset.</h1>");
             addValidateString(sb, ValidationType.LINKSMINIMAL);
-            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
-            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
-            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE, httpServletRequest);
+            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML, httpServletRequest);
+            addValidateFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES, httpServletRequest);
             sb.append("\n<h1>Validate a File as RDF.</h1>");
             addValidateString(sb, ValidationType.ANY_RDF);
-            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
-            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
-            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
+            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE, httpServletRequest);
+            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML, httpServletRequest);
+            addValidateFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES, httpServletRequest);
         //}
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -1926,25 +1926,25 @@ public class WSLinksetService extends WSVoidService{
         StringBuilder sb = topAndSide(title, httpServletRequest);
         sb.append("\n<h1>Save as a Void Description.</h1>");
         addSaveString(sb, ValidationType.VOID);
-        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
-        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
-        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
+        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE, httpServletRequest);
+        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML, httpServletRequest);
+        addSaveFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES, httpServletRequest);
         sb.append("\n<h1>Save as a Linkset.</h1>");
         addSaveString(sb, ValidationType.LINKS);
-        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
-        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
-        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
+        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE, httpServletRequest);
+        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML, httpServletRequest);
+        addSaveFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES, httpServletRequest);
         //if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
             sb.append("\n<h1>Save a File as the minimum to load a linkset.</h1>");
             addSaveString(sb, ValidationType.LINKSMINIMAL);
-            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
-            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
-            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE, httpServletRequest);
+            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML, httpServletRequest);
+            addSaveFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES, httpServletRequest);
             sb.append("\n<h1>Save a File as RDF.</h1>");
             addSaveString(sb, ValidationType.LINKSMINIMAL);
-            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
-            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
-            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
+            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE, httpServletRequest);
+            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML, httpServletRequest);
+            addSaveFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES, httpServletRequest);
         //}
         footerAndEnd(sb);
        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -1966,25 +1966,25 @@ public class WSLinksetService extends WSVoidService{
         StringBuilder sb = topAndSide("Loaders Index", httpServletRequest);
         sb.append("\n<h1>Load as a Void Description.</h1>");
         addLoadString(sb, ValidationType.VOID);
-        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE);
-        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML);
-        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES);
+        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.TURTLE, httpServletRequest);
+        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.RDFXML, httpServletRequest);
+        addLoadFileLine(sb,  ValidationType.VOID, RDFFormat.NTRIPLES, httpServletRequest);
         sb.append("\n<h1>Load as a Linkset.</h1>");
         addLoadString(sb, ValidationType.LINKS);
-        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE);
-        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML);
-        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES);
+        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.TURTLE, httpServletRequest);
+        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.RDFXML, httpServletRequest);
+        addLoadFileLine(sb,  ValidationType.LINKS, RDFFormat.NTRIPLES, httpServletRequest);
         //if (IpConfig.isAdminIPAddress(hsr.getRemoteAddr())){
             sb.append("\n<h1>Load a File as the minimum to load a linkset.</h1>");
             addLoadString(sb, ValidationType.LINKSMINIMAL);
-            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE);
-            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML);
-            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES);
+            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.TURTLE, httpServletRequest);
+            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.RDFXML, httpServletRequest);
+            addLoadFileLine(sb,  ValidationType.LINKSMINIMAL, RDFFormat.NTRIPLES, httpServletRequest);
             sb.append("\n<h1>Load a File as RDF.</h1>");
             addLoadString(sb, ValidationType.LINKSMINIMAL);
-            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE);
-            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML);
-            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES);
+            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.TURTLE, httpServletRequest);
+            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.RDFXML, httpServletRequest);
+            addLoadFileLine(sb,  ValidationType.ANY_RDF, RDFFormat.NTRIPLES, httpServletRequest);
         //}
         footerAndEnd(sb);
        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
@@ -1994,20 +1994,20 @@ public class WSLinksetService extends WSVoidService{
      * Allows Super classes to add to the side bar
      */
     protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
-        addSideBarIMS(sb);
-        addSideBarItem(sb, "validate", "Validate");
-        addSideBarItem(sb, "save", "Save");
+        addSideBarIMS(sb, httpServletRequest);
+        addSideBarItem(sb, "validate", "Validate", httpServletRequest);
+        addSideBarItem(sb, "save", "Save", httpServletRequest);
         if (httpServletRequest != null && IpConfig.isAdminIPAddress(httpServletRequest.getRemoteAddr())){
-            addSideBarItem(sb, "load", "Load");
+            addSideBarItem(sb, "load", "Load", httpServletRequest);
         }
-        addSideBarStatisitics(sb);
+        addSideBarStatisitics(sb, httpServletRequest);
     }
     
     //Support methods 
-    private void addValidationForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
+    private void addValidationForm(StringBuilder sb, ValidationType validationType, String info, String report, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("\n<p>Use this page to validate a ");
         addValidationTypeExplanation(sb, validationType);
-        addValidationFormStart(sb,  validationType);
+        addValidationFormStart(sb,  validationType, httpServletRequest);
         if (report != null){
             addReport(sb, validationType, report);
         }
@@ -2025,10 +2025,11 @@ public class WSLinksetService extends WSVoidService{
         sb.append("</p>");
     }
     
-    private void addSaveForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
+    private void addSaveForm(StringBuilder sb, ValidationType validationType, String info, String report,
+            HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("\n<p>Use this page to save a ");
         addValidationTypeExplanation(sb, validationType);
-        addSaveFormStart(sb,  validationType);
+        addSaveFormStart(sb,  validationType, httpServletRequest);
         if (report != null){
             addReport(sb, validationType, report);
         }
@@ -2045,9 +2046,10 @@ public class WSLinksetService extends WSVoidService{
         sb.append("</p>");
     }
 
-    private void addLoadForm(StringBuilder sb, ValidationType validationType, String info, String report) throws BridgeDBException{
+    private void addLoadForm(StringBuilder sb, ValidationType validationType, String info, String report, 
+            HttpServletRequest httpServletRequest) throws BridgeDBException{
         addValidationTypeExplanation(sb, validationType);
-        addLoadFormStart(sb,  validationType);
+        addLoadFormStart(sb,  validationType, httpServletRequest);
         if (report != null){
             addReport(sb, validationType, report);
         }
@@ -2064,37 +2066,37 @@ public class WSLinksetService extends WSVoidService{
         sb.append("</p>");
     }
 
-    private void addValidateForm(StringBuilder sb, ValidationType validationType, String report) throws BridgeDBException{
+    private void addValidateForm(StringBuilder sb, ValidationType validationType, String report, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("\n<p>Use this page to validate a ");
         addValidationTypeExplanation(sb, validationType);
         if (report != null){
             addReport(sb, validationType, report);
         }
-        addValidateFileLine(sb,  validationType, RDFFormat.TURTLE);
-        addValidateFileLine(sb,  validationType, RDFFormat.RDFXML);
-        addValidateFileLine(sb,  validationType, RDFFormat.NTRIPLES);
+        addValidateFileLine(sb,  validationType, RDFFormat.TURTLE, httpServletRequest);
+        addValidateFileLine(sb,  validationType, RDFFormat.RDFXML, httpServletRequest);
+        addValidateFileLine(sb,  validationType, RDFFormat.NTRIPLES, httpServletRequest);
     }
 
-    private void addSaveForm(StringBuilder sb, ValidationType validationType, String report) throws BridgeDBException{
+    private void addSaveForm(StringBuilder sb, ValidationType validationType, String report, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("\n<p>Use this page to save (but not load) a ");
         addValidationTypeExplanation(sb, validationType);
         if (report != null){
             addReport(sb, validationType, report);
         }
-        addSaveFileLine(sb,  validationType, RDFFormat.TURTLE);
-        addSaveFileLine(sb,  validationType, RDFFormat.RDFXML);
-        addSaveFileLine(sb,  validationType, RDFFormat.NTRIPLES);
+        addSaveFileLine(sb,  validationType, RDFFormat.TURTLE, httpServletRequest);
+        addSaveFileLine(sb,  validationType, RDFFormat.RDFXML, httpServletRequest);
+        addSaveFileLine(sb,  validationType, RDFFormat.NTRIPLES, httpServletRequest);
     }
     
-    private void addLoadForm(StringBuilder sb, ValidationType validationType, String report) throws BridgeDBException{
+    private void addLoadForm(StringBuilder sb, ValidationType validationType, String report, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("\n<p>Use this page to Load a ");
         addValidationTypeExplanation(sb, validationType);
         if (report != null){
             addReport(sb, validationType, report);
         }
-        addLoadFileLine(sb,  validationType, RDFFormat.TURTLE);
-        addLoadFileLine(sb,  validationType, RDFFormat.RDFXML);
-        addLoadFileLine(sb,  validationType, RDFFormat.NTRIPLES);
+        addLoadFileLine(sb,  validationType, RDFFormat.TURTLE, httpServletRequest);
+        addLoadFileLine(sb,  validationType, RDFFormat.RDFXML, httpServletRequest);
+        addLoadFileLine(sb,  validationType, RDFFormat.NTRIPLES, httpServletRequest);
     }
 
     private void addValidationTypeExplanation(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
@@ -2123,32 +2125,32 @@ public class WSLinksetService extends WSVoidService{
         sb.append(".</p>");       
     }
 
-    private void addValidationFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/");
-        sb.append(getServiceName());
+    private void addValidationFormStart(StringBuilder sb, ValidationType validationType, HttpServletRequest httpServletRequest) throws BridgeDBException{
+        sb.append("<form method=\"post\" action=\"");
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/validate");
         sb.append(validationType.getName());
         sb.append("\">");        
     }
     
-    private void addSaveFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/");
-        sb.append(getServiceName());
+    private void addSaveFormStart(StringBuilder sb, ValidationType validationType, HttpServletRequest httpServletRequest) throws BridgeDBException{
+        sb.append("<form method=\"post\" action=\"");
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/save");
         sb.append(validationType.getName());
         sb.append("\">");        
     }
     
-    private void addLoadFormStart(StringBuilder sb, ValidationType validationType) throws BridgeDBException{
-        sb.append("<form method=\"post\" action=\"/");
-        sb.append(getServiceName());
+    private void addLoadFormStart(StringBuilder sb, ValidationType validationType, HttpServletRequest httpServletRequest) throws BridgeDBException{
+        sb.append("<form method=\"post\" action=\"");
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/load");
         sb.append(validationType.getName());
         sb.append("\">");        
     }
 
-    private void addValidateFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
-        addFormStart(sb, validationType, format, "validate");
+    private void addValidateFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format, HttpServletRequest httpServletRequest) throws BridgeDBException{
+        addFormStart(sb, validationType, format, "validate", httpServletRequest);
         sb.append("Select ");
         sb.append(format.getName());
         sb.append(" File to validate as a ");
@@ -2158,8 +2160,8 @@ public class WSLinksetService extends WSVoidService{
         sb.append("<br>");
     }
     
-    private void addSaveFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
-        addFormStart(sb, validationType, format, "save");
+    private void addSaveFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format, HttpServletRequest httpServletRequest) throws BridgeDBException{
+        addFormStart(sb, validationType, format, "save", httpServletRequest);
         sb.append("Select ");
         sb.append(format.getName());
         sb.append(" File to Save as a ");
@@ -2169,8 +2171,8 @@ public class WSLinksetService extends WSVoidService{
         sb.append("<br>");
     }
 
-    private void addLoadFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format) throws BridgeDBException{
-        addFormStart(sb, validationType, format, "load");
+    private void addLoadFileLine(StringBuilder sb, ValidationType validationType, RDFFormat format, HttpServletRequest httpServletRequest) throws BridgeDBException{
+        addFormStart(sb, validationType, format, "load", httpServletRequest);
         sb.append("Select ");
         sb.append(format.getName());
         sb.append(" File to Load as a ");
@@ -2180,7 +2182,7 @@ public class WSLinksetService extends WSVoidService{
         sb.append("<br>");
     }
 
-    private void addFormStart(StringBuilder sb, ValidationType validationType, RDFFormat format, String action) throws BridgeDBException{
+    private void addFormStart(StringBuilder sb, ValidationType validationType, RDFFormat format, String action, HttpServletRequest httpServletRequest) throws BridgeDBException{
         String formatSt;
         if (format == RDFFormat.TURTLE){
             formatSt = "Turtle";
@@ -2191,8 +2193,8 @@ public class WSLinksetService extends WSVoidService{
         } else {
             throw new BridgeDBException("Unexpected format" + format);
         }
-        sb.append("\n<form method=\"post\" action=\"/");
-        sb.append(getServiceName());
+        sb.append("\n<form method=\"post\" action=\"");
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/");
         sb.append(action);
         sb.append(formatSt);
@@ -2253,7 +2255,7 @@ public class WSLinksetService extends WSVoidService{
     private final String FORM_SUBMIT_TO_SAVE = " <input type=\"submit\" value=\"Save (for Admin to Load later!)\"></input></form>";
     private final String FORM_NOTE ="    Note: If the new page does not open click on the address and press enter</p>"
             + "</form>";
-    private final String URI_MAPPING_FORM = "<form method=\"get\" action=\"/QueryExpander/mapURI\">"
+    private final String URI_MAPPING_FORMX = "<form method=\"get\" action=\"/QueryExpander/mapURI\">"
             + " \n<p>Input URI (URI to be looked up in Identity Mapping Service.)"
             + "     (see <a href=\"/QueryExpander/api#inputURI\">API</a>)</p>"
             + " \n<p><input type=\"text\" name=\"inputURI\" style=\"width:100%\"/></p>"

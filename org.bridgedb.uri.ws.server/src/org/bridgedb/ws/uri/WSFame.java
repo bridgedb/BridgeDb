@@ -53,12 +53,9 @@ public class WSFame extends WSUriInterfaceService {
         
     static final Logger logger = Logger.getLogger(WSFame.class);
 
-    private final String serviceName1;
-    
     public WSFame()  throws BridgeDBException   {
         super();
         URL resource = this.getClass().getClassLoader().getResource(""); 
-        serviceName1 = getResourceName();
         formatter = NumberFormat.getInstance();
         if (formatter instanceof DecimalFormat) {
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -67,35 +64,6 @@ public class WSFame extends WSUriInterfaceService {
         }
     }
         
-    private String getResourceName(){
-        URL resource = this.getClass().getClassLoader().getResource(""); 
-        String path = resource.toString();
-        if (path.contains("/webapps/") && path.contains("/WEB-INF/")){
-            int start = path.lastIndexOf("/webapps/") + 9;
-            String name = path.substring(start, path.lastIndexOf("/WEB-INF/"));
-            logger.info("ResourceName = " + name);
-            return name;
-        }
-        if (!path.endsWith("/test-classes/")){
-            logger.warn("Unable to get resource name from " + path);
-        }
-        return getDefaultResourceName();
-    }
-    
-    public final String getServiceName(){
-        return serviceName1;
-    }
-    
-    /**
-     * Backup in case getResourceName fails.
-     * 
-     * Super classes will need to insert their own war name.
-     * @return war name.
-     */
-    public String getDefaultResourceName(){
-        return "OPS-IMS";
-    }
-    
     /**
      * API page for the IMS methods.
      * 
@@ -273,40 +241,40 @@ public class WSFame extends WSUriInterfaceService {
      * Allows Super classes to add to the side bar
      */
     protected void addSideBarMiddle(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
-        addSideBarIMS(sb);
-        addSideBarStatisitics(sb);
+        addSideBarIMS(sb, httpServletRequest);
+        addSideBarStatisitics(sb, httpServletRequest);
     }
     
     /**
      * Allows Super classes to add to the side bar
      */
-    protected void addSideBarIMS(StringBuilder sb) throws BridgeDBException{
+    protected void addSideBarIMS(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("<div class=\"menugroup\">OPS Identity Mapping Service</div>");
-        addSideBarItem(sb, "ims-home", "Home");
-        addSideBarItem(sb, "getMappingInfo", "Mappings Summary");
-        addSideBarItem(sb, "graphviz", "Mappings Summary in Graphviz format");
-        addSideBarItem(sb, "ims-api", "IMS API");
+        addSideBarItem(sb, "ims-home", "Home", httpServletRequest);
+        addSideBarItem(sb, "getMappingInfo", "Mappings Summary", httpServletRequest);
+        addSideBarItem(sb, "graphviz", "Mappings Summary in Graphviz format",  httpServletRequest);
+        addSideBarItem(sb, "ims-api", "IMS API", httpServletRequest);
     }
 
     /**
      * Allows Super classes to add to the side bar
      */
-    protected void addSideBarStatisitics(StringBuilder sb) throws BridgeDBException{
+    protected void addSideBarStatisitics(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException{
         OverallStatistics statistics = uriMapper.getOverallStatistics();
         sb.append("\n<div class=\"menugroup\">Statisitics</div>");
-        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings");
-        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets");
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
         addSideBarItem(sb, "getSupportedSrcDataSources", formatter.format(statistics.getNumberOfSourceDataSources()) 
-                + " Source Data Sources");
-        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfPredicates()) + " Predicates");
+                + " Source Data Sources", httpServletRequest);
+        addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfPredicates()) + " Predicates", httpServletRequest);
         addSideBarItem(sb, "getSupportedTgtDataSources", formatter.format(statistics.getNumberOfTargetDataSources()) 
-                + " Target Data Sources ");
+                + " Target Data Sources ", httpServletRequest);
     }
     
     /**
      * Adds an item to the SideBar for this service
      */
-    protected void addSideBarItem(StringBuilder sb, String page, String name) throws BridgeDBException{
+    protected void addSideBarItem(StringBuilder sb, String page, String name, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("\n<div id=\"menu");
         sb.append(page);
         sb.append("_text\" class=\"texthotlink\" ");
@@ -316,8 +284,8 @@ public class WSFame extends WSUriInterfaceService {
         sb.append("onmouseover=\"DHTML_TextHilight('menu");
         sb.append(page);
         sb.append("_text'); return true; \" ");
-        sb.append("onclick=\"document.location = &quot;/");
-        sb.append(getServiceName());
+        sb.append("onclick=\"document.location = &quot;");
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/");
         sb.append(page);
         sb.append("&quot;;\">");
@@ -331,7 +299,7 @@ public class WSFame extends WSUriInterfaceService {
         sb.append("\n<div></body></html>");
     }
 
-	public void generateProfileSelector(StringBuilder sb) throws BridgeDBException {
+	public void generateLensSelector(StringBuilder sb) throws BridgeDBException {
 		List<LensInfo> lenses = uriMapper.getLens();
         sb.append("<p>");
     	sb.append(WsUriConstants.LENS_URI);

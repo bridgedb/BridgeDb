@@ -62,15 +62,15 @@ public class WSVoidService extends WSFame{
         StringBuilder sb = topAndSide("IMS Mapping Service",  httpServletRequest);
         if (mappingSetInfos.isEmpty()){
             sb.append("\n<h1> No mapping found between ");
-            MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(scrCode,scrCode));
+            MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(scrCode,scrCode), httpServletRequest);
             sb.append(" and ");
-            MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(targetCode,targetCode));
+            MappingSetTableMaker.addDataSourceLink(sb, new DataSetInfo(targetCode,targetCode), httpServletRequest);
             sb.append("</h1>");
         } else {
             sb.append("\n<p>Warning summary lines are just a sum of the mappings from all mapping files.");
             sb.append("So if various sources include the same mapping it will be counted multiple times. </p>");
             sb.append("\n<p>Click on the arrows in the first column to expand or contract the table.</p>");
-            MappingSetTableMaker.addTable(sb, mappingSetInfos);
+            MappingSetTableMaker.addTable(sb, mappingSetInfos, httpServletRequest);
         }
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();

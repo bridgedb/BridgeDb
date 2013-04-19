@@ -48,9 +48,9 @@ public class WSOpsServer extends WSLinksetService{
         logger.info("WsOpsServer setup");        
     }
     
-    private final void uriMappingForm(StringBuilder sb) throws BridgeDBException {
+    private final void uriMappingForm(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException {
     	sb.append("<form method=\"get\" action=\"/");
-        sb.append(getServiceName());
+        sb.append(httpServletRequest.getContextPath());
     	sb.append("/");
     	sb.append(WsUriConstants.MAP_URI);
     	sb.append("\">");
@@ -64,7 +64,7 @@ public class WSOpsServer extends WSLinksetService{
     	sb.append("\" name=\"");
     	sb.append(WsUriConstants.URI);
     	sb.append("\" style=\"width:80%\"/></p>");
-    	generateProfileSelector(sb);
+    	generateLensSelector(sb);
     	sb.append("<p><input type=\"submit\" value=\"Submit\"/></p>");
     	sb.append("<p>Note: If the new page does not open click on the address bar and press enter</p>");
     	sb.append("</fieldset></form>\n");
@@ -113,22 +113,22 @@ public class WSOpsServer extends WSLinksetService{
                 
         sb.append("\n<p>A List of which mappings we current have can be found at ");
         sb.append("<a href=\"/");
-        sb.append(getServiceName());
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/getMappingInfo\">Mapping Info Page</a></p>");
         
-        uriMappingForm(sb);
+        uriMappingForm(sb, httpServletRequest);
         
         sb.append("<h2>Usage Information</h2>");
         sb.append("\n<p>The Main OPS method are: <ul>");
         sb.append("\n<dt><a href=\"/");
-        sb.append(getServiceName());
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/api/#");
         sb.append(WsUriConstants.MAP_URI);
         sb.append("\">");
         sb.append(WsUriConstants.MAP_URI);
         sb.append("<dt><dd>List the URIs that map to this/these URI(s)</dd>");
         sb.append("\n<dt><a href=\"/");
-        sb.append(getServiceName());
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/api/#");
         sb.append(WsUriConstants.MAP);
         sb.append("\">");
@@ -136,7 +136,7 @@ public class WSOpsServer extends WSLinksetService{
         sb.append("<dt><dd>List the full Mappings to this URI/Xref</dd>");
         sb.append("</ul>");
         sb.append("\n<p><a href=\"/");
-        sb.append(getServiceName());
+        sb.append(httpServletRequest.getContextPath());
         sb.append("/api\">API Page</a></p>");
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();

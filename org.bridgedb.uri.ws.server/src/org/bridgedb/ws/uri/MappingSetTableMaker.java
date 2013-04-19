@@ -22,18 +22,17 @@ package org.bridgedb.ws.uri;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import org.bridgedb.rdf.RdfConfig;
 import org.bridgedb.rdf.UriPattern;
-import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.utils.BridgeDBException;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  *
@@ -43,17 +42,20 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
     
     private MappingSetInfo[] infos = new MappingSetInfo[0];
     private MappingSetInfo previous;
+    private final HttpServletRequest httpServletRequest;
     
     protected final NumberFormat formatter;
     
     static final Logger logger = Logger.getLogger(MappingSetTableMaker.class);
 
-    public static void addTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos) throws BridgeDBException{
-        MappingSetTableMaker maker = new MappingSetTableMaker(mappingSetInfos);
+    public static void addTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos, 
+            HttpServletRequest httpServletRequest) throws BridgeDBException{
+        MappingSetTableMaker maker = new MappingSetTableMaker(mappingSetInfos, httpServletRequest);
         maker.tableMaker(sb);
     }
     
-    private MappingSetTableMaker(List<MappingSetInfo> mappingSetInfos){
+    private MappingSetTableMaker(List<MappingSetInfo> mappingSetInfos, HttpServletRequest httpServletRequest){
+        this.httpServletRequest = httpServletRequest;
         infos = mappingSetInfos.toArray(infos);
         Arrays.sort(infos, this);
         formatter = NumberFormat.getInstance();
@@ -374,10 +376,14 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("</td>\n");
     }
    
-   public final static void addDataSourceLink(StringBuilder sb, DataSetInfo info) throws BridgeDBException{
+   private void addDataSourceLink(StringBuilder sb, DataSetInfo info) throws BridgeDBException{
+       addDataSourceLink(sb, info, httpServletRequest);
+   }
+   
+   public final static void addDataSourceLink(StringBuilder sb, DataSetInfo info, HttpServletRequest httpServletRequest) throws BridgeDBException{
         sb.append("<a href=\"");
-        sb.append(RdfConfig.getTheBaseURI());
-        sb.append("dataSource/");
+        sb.append(httpServletRequest.getContextPath());
+        sb.append("/dataSource/");
         sb.append(info.getSysCode());
         sb.append("\">");
         sb.append(info.getFullName());
@@ -388,14 +394,14 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("\t\t<td>");
         addMappingInfoLink(sb, id);
         sb.append("</td>\n");        
-        String rdfUri = RdfConfig.getTheBaseURI() + "mappingSet/" + id;
+        String rdfUri = httpServletRequest.getContextPath() + "/mappingSet/" + id;
         sb.append("\t\t<td><a href=\"");
             sb.append(rdfUri);
             sb.append("\">RDF</a></td>\n");
     }
 
     private void addMappingInfoLink(StringBuilder sb, String id) throws BridgeDBException{
-        String summaryUri = RdfConfig.getTheBaseURI() + "getMappingInfo/" + id;
+        String summaryUri = httpServletRequest.getContextPath() + "/getMappingInfo/" + id;
         sb.append("<a href=\"");
             sb.append(summaryUri);
             sb.append("\">");
@@ -413,7 +419,17 @@ public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
         sb.append("\t\t<td><a href=\"");
         sb.append(uri);
         sb.append("\"</a>");
-        sb.append(UriPattern.existingByUri(uri).getIdFromUri(uri));
+        if (uri == null){
+            sb.append("null"); 
+        } else {
+            UriPattern pattern = UriPattern.existingByUri(uri);
+            if (pattern == null){
+                URIImpl impl = new URIImpl(uri); 
+                sb.append(impl.getLocalName());
+            } else {
+                sb.append(UriPattern.existingByUri(uri).getIdFromUri(uri));        
+            }
+        }
         sb.append("</a></td>\n");
    }
 
