@@ -46,7 +46,7 @@ public class WSCoreApi {
     final static String FIRST_TEXT_PARAMETER = "?" + WsConstants.TEXT + "=";
     final static String LIMIT5_PARAMETER = "&" + WsConstants.LIMIT + "=5";
 
-    protected void describeParameter(StringBuilder sb){
+    protected void describeParameter(StringBuilder sb) throws BridgeDBException {
         sb.append("<h2>Parameters </h2>");
         sb.append("The following parametes may be applicable to the methods. ");
         sb.append("See the indiviual method description for which are required and which are optional.");

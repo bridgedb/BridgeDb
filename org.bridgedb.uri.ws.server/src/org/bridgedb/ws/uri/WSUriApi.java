@@ -25,6 +25,7 @@ import java.net.URLEncoder;
 import java.util.Set;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.RdfConfig;
+import org.bridgedb.uri.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WsConstants;
 import org.bridgedb.ws.WsUriConstants;
@@ -43,7 +44,7 @@ public class WSUriApi extends WSCoreApi {
     }
             
     @Override
-    protected void describeParameter(StringBuilder sb){
+    protected void describeParameter(StringBuilder sb) throws BridgeDBException{
         super.describeParameter(sb);
 
         sb.append("<h3>Ops Exstension Parameters</h3>");
@@ -68,6 +69,15 @@ public class WSUriApi extends WSCoreApi {
                 sb.append("</a></dt>");
             sb.append("<ul>");
             sb.append("<li>If not provided the default lens is used.</li>");
+            sb.append("<li>To See a list and description of all lenses visit.</li>");
+                sb.append("<ul>");
+                sb.append("<li><a href=\"");
+                    sb.append(RdfConfig.getTheBaseURI());
+                    sb.append(WsUriConstants.LENS);
+                    sb.append("\">");
+                    sb.append(WsUriConstants.LENS);
+                    sb.append("</a></li>");    
+                sb.append("</ul>");
             sb.append("<li>While the current API includes this parameter there is not yet any lens based data.</li>");
             sb.append("<li>It it not recommended to use this parameter except for testing until farther notice.</li>");
             sb.append("</ul>");        
@@ -257,7 +267,6 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(TARGET_URI_PATTERN_PARAMETER);
                 sb.append(targetUriSpace2);
                 sb.append("</a></li>");    
-                sb.append("<li>There is currently no Profile Example as there in no Profile Data Loaded. </li>");
             sb.append("<li>Example: <a href=\"");
                 sb.append(RdfConfig.getTheBaseURI());
                     StringBuilder front = new StringBuilder(WsConstants.MAP_ID);
@@ -283,6 +292,25 @@ public class WSUriApi extends WSCoreApi {
                     sb.append("\">");
                     sb.append(sbInnerPure.toString());
                     sb.append("</a></li>");    
+            sb.append("<li>Default Lens: <a href=\"");
+                sb.append(RdfConfig.getTheBaseURI());
+                sb.append(WsUriConstants.MAP);
+                sb.append(FIRST_URI_PARAMETER);
+                sb.append(URLEncoder.encode(sourceUri1, "UTF-8"));
+                sb.append("&");
+                sb.append(WsUriConstants.LENS_URI);
+                sb.append("=");
+                sb.append(Lens.getDefaultLens());
+                sb.append("\">");
+                sb.append(RdfConfig.getTheBaseURI());
+                sb.append(WsUriConstants.MAP);
+                sb.append(FIRST_URI_PARAMETER);
+                sb.append(sourceUri1);
+                sb.append("&");
+                sb.append(WsUriConstants.LENS_URI);
+                sb.append("=");
+                sb.append(Lens.getDefaultLens());
+                sb.append("</a></li>");    
             sb.append("</ul>");
     }
     
@@ -363,9 +391,30 @@ public class WSUriApi extends WSCoreApi {
                 sb.append(TARGET_URI_PATTERN_PARAMETER);
                 sb.append(targetUriSpace2);
                 sb.append("</a></li>");    
-                sb.append("<li>There is currently no Profile Example as there in no Profile Data Loaded. </li>");
+            sb.append("<li>Default Lens: <a href=\"");
+                sb.append(RdfConfig.getTheBaseURI());
+                sb.append(WsUriConstants.MAP_URI);
+                sb.append(FIRST_URI_PARAMETER);
+                sb.append(URLEncoder.encode(sourceUri1, "UTF-8"));
+                sb.append("&");
+                sb.append(WsUriConstants.LENS_URI);
+                sb.append("=");
+                sb.append(Lens.getDefaultLens());
+                sb.append("\">");
+                sb.append("\">");
+                sb.append(RdfConfig.getTheBaseURI());
+                sb.append(WsUriConstants.MAP_URI);
+                sb.append(FIRST_URI_PARAMETER);
+                sb.append(sourceUri1);
+                sb.append("&");
+                sb.append(WsUriConstants.LENS_URI);
+                sb.append("=");
+                sb.append(Lens.getDefaultLens());
+                sb.append("\">");
+                sb.append("</a></li>");    
             sb.append("</ul>");
-    }
+    }           
+
     private void describe_uriExists(StringBuilder sb, String uri) throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<h3><a name=\"");
                 sb.append(WsUriConstants.URI_EXISTS);
