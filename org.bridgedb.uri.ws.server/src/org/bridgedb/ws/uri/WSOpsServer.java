@@ -49,7 +49,7 @@ public class WSOpsServer extends WSLinksetService{
     }
     
     private final void uriMappingForm(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException {
-    	sb.append("<form method=\"get\" action=\"/");
+    	sb.append("<form method=\"get\" action=\"");
         sb.append(httpServletRequest.getContextPath());
     	sb.append("/");
     	sb.append(WsUriConstants.MAP_URI);
