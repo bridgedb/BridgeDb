@@ -49,6 +49,9 @@ public abstract class LinksetInterfaceTest extends LinksetInterfaceMinimalTest{
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        LinksetLoader loader = new LinksetLoader();
+        loader.clearExistingData(StoreType.TEST);
+
     }
 
     @AfterClass
