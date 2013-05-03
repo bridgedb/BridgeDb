@@ -101,6 +101,23 @@ LinkSet,owl
 Ontology used by the Validator.
 Changes to this file will affect the Validator.
 
+------------------------------------------------------------------------------
+Data Loading
+
+Current Data loading is still a hack.
+
+1. Create an empty folder (optional but cleaner) 
+2. go to drop
+https://www.dropbox.com/sh/mlbzsgqd9n8a8bc/VeBTGKlC3W
+3. Copy in the whole originals folder
+4. Create the transitive folder
+    No Need to copy in the files as they are recreated.
+5. Drop into the parent folder of original and transitive the org.bridgedb.hack.loader-2.0.0.one-jar.jar
+6. Copy any config file(s) you changed above into the same folder.
+7. java -jar org.bridgedb.hack.loader-2.0.0.one-jar.jar
+
+** Development version can read directly from URIs but not this version sorry.
+
 -------------------------------------------------------------------------------
 
 Compilation
