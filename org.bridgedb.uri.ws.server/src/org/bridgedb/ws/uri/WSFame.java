@@ -336,7 +336,7 @@ public class WSFame extends WSUriInterfaceService {
             + "			<td style=\"background-color: white;\">"
             + "				<a href=\"http://www.cs.manchester.ac.uk//\">"
             + "                 <img style=\"border: none; padding: 0px; margin: 0px;\" align=\"right\" "
-            + "                     src=\"http://www.manchester.ac.uk/media/corporate/theuniversityofmanchester/assets/images/logomanchester.gif\" "
+            + "                     src=\"http://assets.manchester.ac.uk/logos/university-1.png\" "
             + "                    alt=\"The University of Manchester\" height=\"50\">"
             + "                 </img>"
             + "             </a>"
