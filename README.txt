@@ -1,14 +1,14 @@
-Configuration
+Configuration - This file is out of date.
 -------------
 BridgeDB looks for the configuration file config.txt in the following locations. Once it 
 finds a configuration file the other locations are ignored. 
 * Directly in the run directory  (Mainly for java *.jar runs)
 * Environment Variable OPS-IMS-CONFIG: can be used to point to any location
 * Tomcat configuration folder: $CATALINA_HOME/conf/OPS-IMS
-* ../org.bridgedb.utils/resources
-* ../conf/OPS-IMS
-* conf/OPS-IMS
-* ../../BridgeDb/org.bridgedb.utils/resources
+* ../org.bridgedb.utils/resources  #Main used by the build and tests
+* ../conf/OPS-IMS                  #Allows tomcat to pick up $CATALINA_HOME/conf/OPS-IMS even if it can not get $CATALINA_HOME
+* conf/OPS-IMS                     #Second attempt to tomcat
+* ../../BridgeDb/org.bridgedb.utils/resources  #Allows other projects to pick it up if at the same level as BridgeDB
 * The jar/war file using getClass().getResource(name)
 * The jar/war by unzipping it
 
@@ -40,8 +40,13 @@ point of failure, if any of the user accounts or databases already exist.
 
 RDF Repository Dependency
 -------------------------
+=======
+WARNING: All directories MUST exists and the (linux) user running tomcat MUST have REEAD/WRITE permission set!
+Some of the OpenRDF error message are unclear if this is not the case.
+
+See: rdfConfig.txt
 SailNativeStore(s) will be created automatically as long as loader can 
-create/find the directory, 
+create/find the directory,
 
 We recommend changing the relative directories to absolute directories.
 Please ensure the parent directories exist and have the correct permissions. 
@@ -54,8 +59,9 @@ Webserver you will drop the web service into.
 IP_Register
 --------------
 If you plan on using the WS to allow uploading of voids and linksets 
-the sending machines will have to be added to this list.
+The sending machines will have to be added to this list.
 The Sending machine can be added at runtime without the need to restart the service.
+Note: Should not be required for OpenPhacts 1.1
 
 Accounts
 ------------
@@ -63,6 +69,7 @@ List a number of Uris http or ftp
 For which a user name and password are required.
 If you wish to read from any of these sites you will have to copy and edit this file.
 Otherwise you will not be able to read from these Uris.
+Note: Should not be required for OpenPhacts 1.1
 
 --------------------------------------------------------------------------
 SANDBOX:
@@ -100,11 +107,7 @@ Compilation
 -----------
 
 If you've obtained the source code of BridgeDb, you should be
-able to compile with a simple: (Ant build is broken in OPS branches)
-
-	ant
-	
-or (experimental, makes not all jars) - 
+able to compile with a simple: 
 
 	mvn clean install
 	
@@ -113,6 +116,9 @@ Note that for the maven build to run all tests
 2) http://localhost:8080/OPS-IMS to be running and include the test data
 3) http://localhost:8080/BridgeDb to be running and include the test data
   3 is optional as all Core client tests are repeated in OPS Client
+
+Note: There is an ant build but it may not work in the OpenPhacts branch(es)
+	
 
 OPS Webservice Setup.
 --------------------
@@ -124,19 +130,19 @@ To setup databases and add test data run org.bridgedb.linkset.SetupLoaderWithTes
 (Optional) Depoly $BridgeDb/org.bridgedb.ws.service/target/BridgeDb.war
    Both wars share the same SQL data.
 
+Note: If Installing the OpenPhacts QueryExpander the OPS-IMS.war is not required and QueryExpander extends OPS-OMS.war
+
 OPS Load Linksets
 -----------------
 Make sure config files, SQL database and rdf parent directory are setup (and accessible) as above.
 
-To load a linkset:
-Run $BridgeDb\org.bridgedb.linksets\target\org.bridgedb.linksets-2.0.0-SNAPSHOT.one-jar.jar
-   (Run without parameters for usage information)
-
-(OPTIONAL) To create a transative linkset:
-Run $BridgeDB\BridgeDb\org.bridgedb.tools.transitive\target\org.bridgedb.tools.transitive-2.0.0-SNAPSHOT.one-jar.jar
+To load a linksets:
+Run $BridgeDb\org.bridgedb.hack.loader\target\org.bridgedb.hack.loader-2.0.0-SNAPSHOT.one-jar
 
 Library dependencies 
 --------------------
+Note: For OpenPhacts Ops-IMS.war none of the below as required!
+
 If you don't use all mappers, you do not need to include all
 libraries in the dist directory in your project.
 
@@ -161,6 +167,9 @@ respective mappers to find clues which libraries are needed by which service.
 Contact
 -------
 
+For OpenPhacts specific please contact Christian and ue the OPS Jira.
+
+For geneneral BridgeDB:
 Website, wiki and bug tracker: http://www.bridgedb.org
 Mailing list: http://groups.google.com/group/bridgedb-discuss/
 Source code can be obtained from http://svn.bigcat.unimaas.nl/bridgedb
