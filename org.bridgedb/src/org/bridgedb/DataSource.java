@@ -136,7 +136,7 @@ public final class DataSource
 
 	/**
 	 * @return type of entity that this DataSource describes, for example
-	 *   "metabolite", "gene", "protein" or "probe" 
+	 *   "metabolite", "gene", "protein", "interaction" or "probe" 
 	 */
 	public String getType()
 	{

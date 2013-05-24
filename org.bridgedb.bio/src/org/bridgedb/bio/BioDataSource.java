@@ -17,6 +17,8 @@
 package org.bridgedb.bio;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -240,6 +242,12 @@ public class BioDataSource
 		"X", "Affy").asDataSource();
 	public static final DataSource ZFIN = DataSource.register (
 		"Z", "ZFIN").asDataSource();
+	public static final DataSource RHEA = DataSource.register (
+			"Rh", "RHEA").asDataSource();
+	public static final DataSource MACIE = DataSource.register (
+			"Ma", "MACIE").asDataSource();
+	public static final DataSource UNIPATHWAY = DataSource.register (
+			"Up", "UNIPATHWAY").asDataSource();
 
 	/* 
 	 * Make patterns of regular expressions for matching 
@@ -522,7 +530,19 @@ public class BioDataSource
 		DataSourcePatterns.registerPattern(
 				BioDataSource.TUBERCULIST,
 				Pattern.compile("Rv\\d{4}(A|B|c|\\.\\d)?")
-		);		
+		);	
+		DataSourcePatterns.registerPattern(
+				BioDataSource.RHEA, 
+				Pattern.compile("^\\d{5}$")
+		);
+		DataSourcePatterns.registerPattern(
+				BioDataSource.MACIE, 
+				Pattern.compile("^M\\d{4}$")
+		);
+		DataSourcePatterns.registerPattern(
+				BioDataSource.UNIPATHWAY, 
+				Pattern.compile("^UPA\\d{5}$")
+		);
 		
 		ensemblBySpecies.put (Organism.BacillusSubtilis, ENSEMBL_BSUBTILIS);
 		ensemblBySpecies.put (Organism.CaenorhabditisElegans, ENSEMBL_CELEGANS);
