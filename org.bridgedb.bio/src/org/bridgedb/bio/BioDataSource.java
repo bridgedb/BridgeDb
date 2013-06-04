@@ -35,6 +35,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
+ * @deprecated use datasources.txt instead
+ * 
  * Definition of many common biological DataSources.
  * Meta data about these Data Sources, such as URL templates,
  * are read from a bundled text file. Call the init() method
@@ -50,8 +52,6 @@ public class BioDataSource
 		"Bg", "BioGrid").asDataSource();
 	public static final DataSource BIOCYC = DataSource.register (
 		"Bc", "BioCyc").asDataSource();
-	public static final DataSource CINT = DataSource.register (
-		"C", "Cint").asDataSource();
 	public static final DataSource CCDS = DataSource.register (
 		"Cc", "CCDS").asDataSource();
 	public static final DataSource CAS = DataSource.register (
@@ -61,10 +61,7 @@ public class BioDataSource
 	public static final DataSource HMDB = DataSource.register (
 		"Ch", "HMDB").asDataSource();
 	public static final DataSource KEGG_COMPOUND = DataSource.register (
-		"Ck", "Kegg Compound").asDataSource();
-	/** @deprecated use one of the organism-specific system codes instead */ 
-	public static final DataSource PUBCHEM = DataSource.register (
-		"Cp", "PubChem").asDataSource();
+		"Kc", "Kegg Compound").asDataSource();
 	public static final DataSource PUBCHEM_SUBSTANCE = DataSource.register (
 		"Cps", "PubChem-substance").asDataSource();
 	public static final DataSource PUBCHEM_COMPOUND = DataSource.register (
@@ -138,8 +135,6 @@ public class BioDataSource
 	/** @deprecated use ENSEMBL instead */
 	public static final DataSource ENSEMBL_XENOPUS = DataSource.register (
 		"EnXt", "Ensembl Xenopus").asDataSource();
-	public static final DataSource ENSEMBL_PLANTS = DataSource.register (
-		"EP", "Ensembl Plants").asDataSource();
 	public static final DataSource FLYBASE = DataSource.register (
 		"F", "FlyBase").asDataSource();
 	public static final DataSource GENBANK = DataSource.register (
@@ -203,15 +198,15 @@ public class BioDataSource
 	public static final DataSource REACTOME = DataSource.register (
 		"Re", "Reactome").asDataSource();
 	public static final DataSource KEGG_REACTION = DataSource.register (
-		"Rk", "Kegg Reaction").asDataSource();
+		"Kr", "Kegg Reaction").asDataSource();
 	public static final DataSource RFAM = DataSource.register (
 		"Rf", "Rfam").asDataSource();
 	/** NB the UNIPROT datasource is for Uniprot accession numbers like P12345 */
 	public static final DataSource UNIPROT = DataSource.register (
-		"S", "Uniprot/TrEMBL").asDataSource(); 
-	/** THE UNIPROT_ID datasource is for id's like P53_HUMAN */
-	public static final DataSource UNIPROT_ID = DataSource.register (
-		"Sid", "UNIPROT_ID").asDataSource();
+		"S", "UniProtKB").asDataSource(); 
+	/** THE UNIPROT_SWISSPROT datasource is for id's like P53_HUMAN */
+	public static final DataSource UNIPROT_SWISSPROT = DataSource.register (
+		"Sp", "UNIPROT_SWISSPROT").asDataSource();
 	public static final DataSource SNP = DataSource.register (
 		"Sn", "dbSNP").asDataSource();
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
@@ -232,8 +227,6 @@ public class BioDataSource
 		"Wi", "Wikipedia").asDataSource();
 	public static final DataSource WIKIPATHWAYS = DataSource.register (
 		"Wp", "Wikipathways").asDataSource();
-	public static final DataSource WHEAT_GENE_CATALOG = DataSource.register (
-		"Wc", "Wheat gene catalog").asDataSource(); 
 	public static final DataSource WHEAT_GENE_NAMES = DataSource.register (
 		"Wn", "Wheat gene names").asDataSource();
 	public static final DataSource WHEAT_GENE_REFERENCES= DataSource.register (
@@ -258,9 +251,12 @@ public class BioDataSource
 	private static final Map<Organism, DataSource> ensemblBySpecies = new HashMap<Organism, DataSource>();
 
 	static {
+		//sgd
 		DataSourcePatterns.registerPattern(
 			BioDataSource.SGD, 
 			Pattern.compile("S\\d{9}"));
+		
+		//flybase
 		DataSourcePatterns.registerPattern(
 			BioDataSource.FLYBASE, 
 			Pattern.compile("(C[RG]\\d{4,5}|FBgn\\d{7})")
@@ -324,15 +320,15 @@ public class BioDataSource
 				Pattern.compile("RGD:\\d+")
 		);
 
-		//Swiss Prot (http://expasy.org/sprot/userman.html#AC_line)
+		//UniProtKB/TrEMBL
 		DataSourcePatterns.registerPattern(
 				BioDataSource.UNIPROT, 
 				Pattern.compile("([A-N,R-][0-9][A-Z][A-Z,0-9][A-Z,0-9][0-9])|([O,P,Q][0-9][A-Z,0-9][A-Z,0-9][A-Z,0-9][0-9])")
 		);
 
-		//Swiss Prot (http://expasy.org/sprot/userman.html#ID_line)
+		//UniProtKB/Swiss-Prot
 		DataSourcePatterns.registerPattern(
-				BioDataSource.UNIPROT_ID, 
+				BioDataSource.UNIPROT_SWISSPROT, 
 				Pattern.compile("[A-Z0-9]+_[A-Z]+")
 		);
 
@@ -525,7 +521,7 @@ public class BioDataSource
 		);
 		DataSourcePatterns.registerPattern(
 				BioDataSource.BIOCYC,
-				Pattern.compile("(Meta|Eco)Cyc:.+")
+				Pattern.compile("^\\w+\\:[A-Za-z0-9-]+$")
 		);		
 		DataSourcePatterns.registerPattern(
 				BioDataSource.TUBERCULIST,
