@@ -35,8 +35,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * @deprecated use datasources.txt instead
- * 
  * Definition of many common biological DataSources.
  * Meta data about these Data Sources, such as URL templates,
  * are read from a bundled text file. Call the init() method
@@ -250,6 +248,9 @@ public class BioDataSource
 	 */	
 	private static final Map<Organism, DataSource> ensemblBySpecies = new HashMap<Organism, DataSource>();
 
+	/**
+	 *  @deprecated use datasources.txt instead
+	 */
 	static {
 		//sgd
 		DataSourcePatterns.registerPattern(
