@@ -201,10 +201,10 @@ public class BioDataSource
 		"Rf", "Rfam").asDataSource();
 	/** NB the UNIPROT datasource is for Uniprot accession numbers like P12345 */
 	public static final DataSource UNIPROT = DataSource.register (
-		"S", "UniProtKB").asDataSource(); 
+		"S", "Uniprot-TrEMBL").asDataSource(); 
 	/** THE UNIPROT_SWISSPROT datasource is for id's like P53_HUMAN */
 	public static final DataSource UNIPROT_SWISSPROT = DataSource.register (
-		"Sp", "UNIPROT_SWISSPROT").asDataSource();
+		"Sp", "Uniprot-SwissProt").asDataSource();
 	public static final DataSource SNP = DataSource.register (
 		"Sn", "dbSNP").asDataSource();
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
@@ -212,7 +212,7 @@ public class BioDataSource
 	public static final DataSource TIGR = DataSource.register (
 		"Ti", "TIGR").asDataSource(); 
 	public static final DataSource TUBERCULIST = DataSource.register (
-		"Tb", "TUBERCULIST").asDataSource(); 
+		"Tb", "TubercuList").asDataSource(); 
 	public static final DataSource UNIGENE = DataSource.register (
 		"U", "UniGene").asDataSource();
 	public static final DataSource UCSC = DataSource.register (
@@ -234,11 +234,11 @@ public class BioDataSource
 	public static final DataSource ZFIN = DataSource.register (
 		"Z", "ZFIN").asDataSource();
 	public static final DataSource RHEA = DataSource.register (
-			"Rh", "RHEA").asDataSource();
+			"Rh", "Rhea").asDataSource();
 	public static final DataSource MACIE = DataSource.register (
-			"Ma", "MACIE").asDataSource();
+			"Ma", "MACiE").asDataSource();
 	public static final DataSource UNIPATHWAY = DataSource.register (
-			"Up", "UNIPATHWAY").asDataSource();
+			"Up", "Unipathway").asDataSource();
 
 	/* 
 	 * Make patterns of regular expressions for matching 
