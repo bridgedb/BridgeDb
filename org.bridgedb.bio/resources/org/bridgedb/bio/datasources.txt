@@ -36,7 +36,7 @@ Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus
 Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id	ENSXETG00000029448	gene	Xenopus tropicalis	1	EnXt	ENSXETG\d{11}	Ensembl
 Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id	YGR147C	gene	Saccharomyces cerevisiae	1	EnSc	Y[A-Z][RL]\d{3}[WC](?:\-[A-Z])?	Ensembl
 Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio/Gene/Summary?g=$id	ENSDARG00000024771	gene	Danio rerio	1	EnDr	ENSDARG\d{11}	Ensembl
-Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	NCBI Gene
+Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene
 Enzyme Nomenclature	E	http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature
 FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase
 GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	G	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank
