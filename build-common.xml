@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <project name="BridgeDb-common" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
 
+	<property name="ant.build.javac.target" value="1.6"/>
+	<property name="ant.build.javac.source" value="1.6"/>
+
 	<property name="checkstyle.output.file" value="warnings.txt"/>
 
 	<property file="version.props"/>
@@ -37,6 +40,7 @@
 		<javac srcdir="src"
 			   includes="**"
 			   debug="true"
+			   source="1.6"
 			   destdir="build">
 			   <classpath refid="absolute.and.libs"/>
 		</javac>
