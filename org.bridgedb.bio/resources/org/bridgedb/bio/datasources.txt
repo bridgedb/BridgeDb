@@ -32,6 +32,7 @@ Ensembl M. tuberculosis	EnMx	http://www.ensembl.org	http://bacteria.ensembl.org/
 Ensembl Mosquito	EnAg	http://www.ensembl.org	http://www.ensembl.org/Anopheles_gambiae/Gene/Summary?_q=$id	AGAP006864	gene	Anopheles gambiae	1	EnAg	AGAP\d{6}	Ensembl
 Ensembl Mouse	EnMm	http://www.ensembl.org	http://www.ensembl.org/Mus_musculus/Gene/Summary?g=$id	ENSMUSG00000017167	gene	Mus musculus	1	EnMm	ENSMUSG\d{11}	Ensembl
 Ensembl Pig	EnSs	http://www.ensembl.org	http://www.ensembl.org/Sus_scrofa/Gene/Summary?g=$id	ENSSSCG00000004244	gene	Sus scrofa	1	EnSs	ENSSSCG\d{11}	Ensembl
+Ensembl Plants	EP	http://plants.ensembl.org/	http://plants.ensembl.org/id/$id	AT1G73965	gene		1	urn:miriam:ensembl.plant	^\w+$	Ensembl Plants
 Ensembl Rat	EnRn	http://www.ensembl.org	http://www.ensembl.org/Rattus_norvegicus/Gene/Summary?g=$id	ENSRNOG00000016648	gene	Rattus norvegicus	1	EnRn	ENSRNOG\d{11}	Ensembl
 Ensembl Xenopus	EnXt	http://www.ensembl.org	http://www.ensembl.org/Xenopus_tropicalis/Gene/Summary?g=$id	ENSXETG00000029448	gene	Xenopus tropicalis	1	EnXt	ENSXETG\d{11}	Ensembl
 Ensembl Yeast	EnSc	http://www.ensembl.org	http://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=$id	YGR147C	gene	Saccharomyces cerevisiae	1	EnSc	Y[A-Z][RL]\d{3}[WC](?:\-[A-Z])?	Ensembl
@@ -58,12 +59,14 @@ IntAct	Ia	http://www.ebi.ac.uk/intact/	http://www.ebi.ac.uk/intact/pages/details
 InterPro	I	http://www.ebi.ac.uk/interpro/	http://www.ebi.ac.uk/interpro/DisplayIproEntry?ac=$id	IPR000100	protein		1	urn:miriam:interpro	^IPR\d{6}$	InterPro
 IPI	Ip	http://www.ebi.ac.uk/IPI	http://www.ebi.ac.uk/cgi-bin/dbfetch?db=IPI&id=$id&format=default	IPI00000001	protein		1	urn:miriam:ipi	^IPI\d{8}$	IPI
 IRGSP Gene	Ir	http://rgp.dna.affrc.go.jp/IRGSP/		Os12g0561000	gene		1	Ir	Os\d{2}g\d+	IRGSP Gene
-Kegg Compound	Kc	http://www.genome.jp/kegg/ligand.html	http://www.genome.jp/dbget-bin/www_bget?cpd:$id	C12345	metabolite		1	urn:miriam:kegg.compound	^C\d+$	KEGG Compound
+Kegg Compound	Ck	http://www.genome.jp/kegg/ligand.html	http://www.genome.jp/dbget-bin/www_bget?cpd:$id	C12345	metabolite		1	urn:miriam:kegg.compound	^C\d+$	KEGG Compound
 KEGG Drug	Kd	http://www.genome.jp/kegg/drug/	http://www.genome.jp/dbget-bin/www_bget?dr:$id	D00123	metabolite		1	urn:miriam:kegg.drug	^D\d+$	KEGG Drug
 KEGG Genes	Kg	http://www.genome.jp/kegg/genes.html	http://www.genome.jp/dbget-bin/www_bget?$id	syn:ssr3451	gene		1	urn:miriam:kegg.genes	^\w+:[\w\d\.-]*$	KEGG Genes
 KEGG Glycan	Kgl	http://www.genome.jp/kegg/glycan/	http://www.genome.jp/dbget-bin/www_bget?gl:$id	G00123	metabolite		1	urn:miriam:kegg.glycan	^G\d+$	KEGG Glycan
 KEGG Pathway	Kp	http://www.genome.jp/kegg/pathway.html	http://www.genome.jp/dbget-bin/www_bget?pathway+$id	hsa00620	pathway		1	urn:miriam:kegg.pathway	^\w{2,4}\d{5}$	KEGG Pathway
 KEGG Reaction	Kr	http://www.genome.jp/kegg/reaction/	http://www.genome.jp/dbget-bin/www_bget?rn:$id	R00100	protein		1	urn:miriam:kegg.reaction	^R\d+$	KEGG Reaction
+LIPID MAPS	Lm	http://www.lipidmaps.org	http://www.lipidmaps.org/data/get_lm_lipids_dbgif.php?LM_ID=$id	LMPR0102010012	metabolite		1	urn:miriam:lipidmaps	^LM(FA|GL|GP|SP|ST|PR|SL|PK)[0-9]{4}([0-9a-zA-Z]{4,6})?$	LIPID MAPS
+LipidBank	Lb	http://lipidbank.jp/index.html	http://lipidbank.jp/cgi-bin/detail.cgi?id=$id	BBA0001	metabolite		1	urn:miriam:lipidbank	^\w+\d+$	LipidBank
 MACiE	Ma	http://www.ebi.ac.uk/thornton-srv/databases/MACiE/index.html	http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/MACiE/entry/getPage.pl?id=$id	M0001	protein		1	urn:miriam:macie	^M\d{4}$	MACiE
 MaizeGDB	Mg		http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id	acc1	gene	Zea mays	1	Mg		MaizeGDB
 MatrixDB	Md	http://matrixdb.ibcp.fr/	http://matrixdb.ibcp.fr/cgi-bin/model/report/default?name=$id&class=Association	P00747_P07355	interaction		1	urn:miriam:matrixdb.association	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])_.*|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9]_.*)|(GAG_.*)|(MULT_.*)|(PFRAG_.*)|(LIP_.*)|(CAT_.*)$	MatrixDB

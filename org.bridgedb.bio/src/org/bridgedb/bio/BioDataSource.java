@@ -59,7 +59,7 @@ public class BioDataSource
 	public static final DataSource HMDB = DataSource.register (
 		"Ch", "HMDB").asDataSource();
 	public static final DataSource KEGG_COMPOUND = DataSource.register (
-		"Kc", "Kegg Compound").asDataSource();
+		"Ck", "Kegg Compound").asDataSource();
 	public static final DataSource PUBCHEM_SUBSTANCE = DataSource.register (
 		"Cps", "PubChem-substance").asDataSource();
 	public static final DataSource PUBCHEM_COMPOUND = DataSource.register (
