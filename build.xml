@@ -3,7 +3,7 @@
   
   <property file="org.bridgedb/version.props"/>
   <property name="svn.exec.svnversion" value="svnversion"/>
-
+  
    <macrodef name="iterate">
 		<attribute name="target"/>
 		<sequential>

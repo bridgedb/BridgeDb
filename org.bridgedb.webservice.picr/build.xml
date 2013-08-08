@@ -2,7 +2,6 @@
 <project name="org.bridgedb.webservice.picr" default="dist" basedir=".">
 
 	<import file="../build-common.xml" />
-	<property name="runWithoutJacoco" value="true" />
 
 	<!-- absolute deps are used for building, testing and in the manifest classpath -->
 	<path id="absolute.deps">
