@@ -42,7 +42,10 @@ public class Test
 		{
 			assertNotNull(ds);
 			assertNotNull(ds.getFullName());
-			assertNotNull(ds.getSystemCode());
+			assertNotNull(
+				"Unexpected null system code for " + ds.getFullName(),
+				ds.getSystemCode()
+			);
 		}
 	}
 	
