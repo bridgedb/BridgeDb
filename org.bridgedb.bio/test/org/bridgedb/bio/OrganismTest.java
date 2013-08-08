@@ -16,15 +16,12 @@
 //
 package org.bridgedb.bio;
 
+import java.util.HashSet;
 import java.util.Set;
-import static org.junit.Assert.*;
 
-import org.bridgedb.DataSource;
-import org.bridgedb.DataSourcePatterns;
-import org.bridgedb.Xref;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 public class OrganismTest
 {
@@ -72,4 +69,24 @@ public class OrganismTest
         Assert.assertNotNull(codes);
         Assert.assertNotSame(0, codes.length);
     }
+
+   @Test
+   public void testUniqueLatinNames() {
+	   Organism[] organisms = Organism.values();
+	   Set<String> latinNames = new HashSet<String>();
+	   for (Organism organism : organisms) {
+		   latinNames.add(organism.latinName());
+	   }
+	   Assert.assertEquals(organisms.length, latinNames.size());
+   }
+
+   @Test
+   public void testUniqueCodes() {
+	   Organism[] organisms = Organism.values();
+	   Set<String> codes = new HashSet<String>();
+	   for (Organism organism : organisms) {
+		   codes.add(organism.code());
+	   }
+	   Assert.assertEquals(organisms.length, codes.size());
+   }
 }
