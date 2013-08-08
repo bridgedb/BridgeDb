@@ -42,10 +42,13 @@ public class Test
 		{
 			assertNotNull(ds);
 			assertNotNull(ds.getFullName());
-			assertNotNull(
-				"Unexpected null system code for " + ds.getFullName(),
-				ds.getSystemCode()
-			);
+			// test for all but a test case in testFromUrn()
+			if (!"blahblahblah".equals(ds.getFullName())) {
+				assertNotNull(
+					"Unexpected null system code for " + ds.getFullName(),
+					ds.getSystemCode()
+				);
+			}
 		}
 	}
 	
