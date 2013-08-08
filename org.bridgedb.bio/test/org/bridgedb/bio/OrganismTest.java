@@ -69,7 +69,7 @@ public class OrganismTest
     @Test
     public void testCodes() {
         String[] codes = Organism.codes();
-        Assert.assertNull(codes);
+        Assert.assertNotNull(codes);
         Assert.assertNotSame(0, codes.length);
     }
 }
