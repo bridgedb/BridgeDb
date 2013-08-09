@@ -16,12 +16,20 @@
 //
 package org.bridgedb.bio;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
 import java.util.Set;
-import static org.junit.Assert.*;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.Xref;
+import org.junit.Assert;
 import org.junit.Before;
 
 public class Test
@@ -162,5 +170,16 @@ public class Test
 		assertEquals (BioDataSource.GENE_ONTOLOGY, ref.getDataSource());
 		assertEquals ("GO:00001234", ref.getId());
 	}
-	
+
+	@org.junit.Test
+	public void testUniqueSystemCodes() {
+		BioDataSource.init();
+		Set<String> codes = new HashSet<String>();
+		Set<DataSource> sources = DataSource.getDataSources();
+		Assert.assertNotSame(0, sources.size());
+		for (DataSource source : sources) {
+			codes.add(source.getSystemCode());
+		}
+		Assert.assertEquals(sources.size(), codes.size());
+	}
 }
