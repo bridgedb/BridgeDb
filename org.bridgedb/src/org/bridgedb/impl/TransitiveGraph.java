@@ -12,10 +12,11 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
+import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 
 /**
- * Helper for caluclating paths in IDMapperStack in transitive mode
+ * Helper for calculating paths in {@link IDMapperStack} in transitive mode.
  */
 public class TransitiveGraph
 {
@@ -25,7 +26,7 @@ public class TransitiveGraph
 	/** all possible paths indexed by their target (end node) */
 	private Map<DataSource, Set<Path> > targetMap = new HashMap<DataSource, Set<Path>>(); 
 	
-	/** Constructor: immediately starts calculating paths */
+	/** Constructor: immediately starts calculating paths. */
 	public TransitiveGraph(List<IDMapper> gdbs) throws IDMapperException
 	{
 		Set<Path> openSet = getDirectPaths(gdbs); // initialize map
@@ -69,7 +70,7 @@ public class TransitiveGraph
 	}
 
 	/**
-	 * Update the target and source maps with the given set of new, valid paths
+	 * Update the target and source maps with the given set of new, valid paths.
 	 */
 	private void indexPaths(Set<Path> set)
 	{
@@ -84,7 +85,7 @@ public class TransitiveGraph
 	}
 
 	/**
-	 * find valid extensions of a given path. This looks up 
+	 * Find valid extensions of a given path. This looks up 
 	 * all paths that have a source that matches the current target,
 	 * and filters out the ones that introduce a cycle. 
 	 */
@@ -105,7 +106,7 @@ public class TransitiveGraph
 
 
 	/** 
-	 * This is for testing. May be removed in the future
+	 * This is for testing. May be removed in the future.
 	 */
 	public void printMap(Map<DataSource, Set<Path> > map) 
 	{
@@ -167,7 +168,7 @@ public class TransitiveGraph
 	}
 	
 	/**
-	 *  A Path is a vector of Edges in the graph that describe the relationships between the
+	 *  A Path is a vector of {@link Edge}s in the graph that describe the relationships between the
 	 *  (transitive) maps supported by the IDMapperStack. 
 	 */
 	private class Path

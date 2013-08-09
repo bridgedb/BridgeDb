@@ -26,22 +26,22 @@ import java.util.Map;
 import java.util.Set;
 
 /**
-contains information about a certain DataSource, such as
+Contains information about a certain DataSource. This includes:
 <ul>
 <li>It's full name ("Ensembl")
 <li>It's system code ("En")
 <li>It's main url ("http://www.ensembl.org")
 <li>Id-specific url's ("http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + id)
 </ul>
-The DataSource class uses the extensible enum pattern.
-You can't instantiate DataSources directly, instead you have to use one of
+The DataSource class uses the extensible <code>enum</code> pattern.
+You cannot instantiate DataSources directly, instead you have to use one of
 the constants from the org.bridgedb.bio module such as BioDataSource.ENSEMBL, 
-or the "getBySystemcode" or "getByFullname" methods.
+or the <code>getBySystemcode</code> or "getByFullname" methods.
 These methods return a predefined DataSource object if it exists.
 If a predefined DataSource for a requested SystemCode doesn't exists,
 a new one springs to life automatically. This can be used 
 when the user requests new, unknown data sources. If you call
-getBySystemCode twice with the same argument, it is guaranteed
+<code>getBySystemCode</code> twice with the same argument, it is guaranteed
 that you get the same return object. However, there is no way
 to combine a new DataSource with a new FullName unless you use 
 the "register" method.
