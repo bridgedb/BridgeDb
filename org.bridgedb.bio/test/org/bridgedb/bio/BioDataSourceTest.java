@@ -32,7 +32,7 @@ import org.bridgedb.Xref;
 import org.junit.Assert;
 import org.junit.Before;
 
-public class Test
+public class BioDataSourceTest
 {
 	boolean eventReceived = false;
 
