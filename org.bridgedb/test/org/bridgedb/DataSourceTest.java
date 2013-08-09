@@ -105,7 +105,7 @@ public class DataSourceTest {
 
 	@Test
 	public void testDefaultNoDeprecatedBy() {
-		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
+		DataSource source = DataSource.register("Cps", "PubChem-substance")
 			.asDataSource();
 		Assert.assertNull(source.isDeprecatedBy());
 	}
