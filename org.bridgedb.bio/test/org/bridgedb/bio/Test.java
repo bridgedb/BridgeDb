@@ -182,4 +182,18 @@ public class Test
 		}
 		Assert.assertEquals(sources.size(), codes.size());
 	}
+
+	@org.junit.Test
+	public void systemCodesDoNotHaveWhitespace() {
+		BioDataSource.init();
+		Set<DataSource> sources = DataSource.getDataSources();
+		Assert.assertNotSame(0, sources.size());
+		for (DataSource source : sources) {
+			String sysCode = source.getSystemCode();
+			if (sysCode != null) {
+				Assert.assertEquals(sysCode.length(), sysCode.trim().length());
+				Assert.assertFalse(sysCode.contains(" "));
+			}
+		}
+	}
 }
