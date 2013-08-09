@@ -75,4 +75,20 @@ public class DataSourceTest {
 		Assert.assertTrue(source.isMetabolite());
 	}
 
+	@Test
+	public void testDeprecated() {
+		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
+		    .deprecated(true).asDataSource();
+		Assert.assertTrue(source.isDeprecated());
+	}
+
+	/**
+	 * By default, all new data sources are not deprecated.
+	 */
+	@Test
+	public void testDefaultNotDeprecated() {
+		DataSource source = DataSource.register("F", "MetaboLoci")
+		    .asDataSource();
+		Assert.assertFalse(source.isDeprecated());
+	}
 }

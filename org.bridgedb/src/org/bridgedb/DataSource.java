@@ -69,6 +69,7 @@ public final class DataSource
 	private Object organism = null;
 	private String idExample = null;
 	private boolean isPrimary = true;
+	private boolean isDeprecated = false;
 	private String type = "unknown";
 	private String urnBase = "";
 	
@@ -247,6 +248,16 @@ public final class DataSource
 		public Builder primary (boolean isPrimary)
 		{
 			current.isPrimary = isPrimary;
+			return this;
+		}
+		
+		/**
+		 * @param isDeprecated a boolean indicating this DataSource should no longer be used
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder deprecated(boolean isDeprecated)
+		{
+			current.isDeprecated = isDeprecated;
 			return this;
 		}
 		
@@ -453,6 +464,17 @@ public final class DataSource
 	public boolean isPrimary()
 	{
 		return isPrimary;
+	}
+	
+	/**
+	 * A DataSource is deprecated if it is replaced by another data source
+	 * which should be used instead.
+	 * 
+	 * @return true if this DataSource is deprecated
+	 */
+	public boolean isDeprecated()
+	{
+		return isDeprecated;
 	}
 	
 	/**
