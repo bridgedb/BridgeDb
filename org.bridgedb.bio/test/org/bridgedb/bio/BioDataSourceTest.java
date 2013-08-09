@@ -31,6 +31,7 @@ import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.Xref;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 
 public class BioDataSourceTest
 {
@@ -43,7 +44,7 @@ public class BioDataSourceTest
 		BioDataSource.init();
 	}
 
-	@org.junit.Test
+	@Test
 	public void testInit()
 	{
 		for (DataSource ds : DataSource.getDataSources())
@@ -60,7 +61,7 @@ public class BioDataSourceTest
 		}
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testURN()
 	{
 		Xref ref = new Xref ("3643", BioDataSource.ENTREZ_GENE);
@@ -70,14 +71,14 @@ public class BioDataSourceTest
 		
 	}
 
-	@org.junit.Test
+	@Test
 	public void testSpeciesSpecificEnsembl()
 	{
 		assertEquals (BioDataSource.ENSEMBL_COW, BioDataSource.getSpeciesSpecificEnsembl(Organism.BosTaurus));
 		assertEquals (BioDataSource.ENSEMBL_MOSQUITO, BioDataSource.getSpeciesSpecificEnsembl(Organism.AnophelesGambiae));
 	}
 
-	@org.junit.Test
+	@Test
 	public void testBioDataSources()
 	{
 		assertEquals (Organism.CaenorhabditisElegans, BioDataSource.WORMBASE.getOrganism());
@@ -85,7 +86,7 @@ public class BioDataSourceTest
 		assertEquals ("metabolite", BioDataSource.CAS.getType());
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testPatterns()
 	{
 		assertTrue (DataSourcePatterns.getDataSourceMatches("1.1.1.1").contains(BioDataSource.ENZYME_CODE));
@@ -95,7 +96,7 @@ public class BioDataSourceTest
 		assertTrue (DataSourcePatterns.getDataSourceMatches("CHEBI:17925").contains(BioDataSource.CHEBI));
 	}
 
-	@org.junit.Test
+	@Test
 	public void testBasCASNumbers()
 	{
 		assertFalse(DataSourcePatterns.getDataSourceMatches("50-99-77").contains(BioDataSource.CAS));
@@ -104,7 +105,7 @@ public class BioDataSourceTest
 		assertFalse(DataSourcePatterns.getDataSourceMatches("50-333-7").contains(BioDataSource.CAS));
 	}
 
-	@org.junit.Test
+	@Test
 	public void testDataSource()
 	{
 		DataSource ds = BioDataSource.ENSEMBL;
@@ -118,7 +119,7 @@ public class BioDataSourceTest
 		assertEquals (BioDataSource.ENTREZ_GENE, ds5);
 	}
 
-	@org.junit.Test
+	@Test
 	public void testDataSourceFilter ()
 	{
 		// ensembl is primary, affy isn't
@@ -146,14 +147,14 @@ public class BioDataSourceTest
 		assertFalse (f4.contains(BioDataSource.HMDB));
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testAlias()
 	{
 		DataSource ds = DataSource.getByAlias("ensembl_gene_id");
 		assertSame(BioDataSource.ENSEMBL, ds);
 	}
 
-	@org.junit.Test
+	@Test
 	public void testFromUrn()
 	{
 		Xref ref = Xref.fromUrn("urn:miriam:ncbigene:3643");
@@ -171,7 +172,7 @@ public class BioDataSourceTest
 		assertEquals ("GO:00001234", ref.getId());
 	}
 
-	@org.junit.Test
+	@Test
 	public void testUniqueSystemCodes() {
 		BioDataSource.init();
 		Set<String> codes = new HashSet<String>();
@@ -183,7 +184,7 @@ public class BioDataSourceTest
 		Assert.assertEquals(sources.size(), codes.size());
 	}
 
-	@org.junit.Test
+	@Test
 	public void systemCodesDoNotHaveWhitespace() {
 		BioDataSource.init();
 		Set<DataSource> sources = DataSource.getDataSources();
