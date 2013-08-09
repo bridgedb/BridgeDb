@@ -80,9 +80,9 @@ public class Test
 	@org.junit.Test
 	public void testBioDataSources()
 	{
-		assertEquals (BioDataSource.WORMBASE.getOrganism(), Organism.CaenorhabditisElegans);
-		assertEquals (BioDataSource.ENSEMBL_CHICKEN.getOrganism(), Organism.GallusGallus);
-		assertEquals (BioDataSource.CAS.getType(), "metabolite");
+		assertEquals (Organism.CaenorhabditisElegans, BioDataSource.WORMBASE.getOrganism());
+		assertEquals (Organism.GallusGallus, BioDataSource.ENSEMBL_CHICKEN.getOrganism());
+		assertEquals ("metabolite", BioDataSource.CAS.getType());
 	}
 	
 	@org.junit.Test
@@ -108,14 +108,14 @@ public class Test
 	public void testDataSource()
 	{
 		DataSource ds = BioDataSource.ENSEMBL;
-		assertEquals (ds.getFullName(), "Ensembl");
-		assertEquals (ds.getSystemCode(), "En");
+		assertEquals ("Ensembl", ds.getFullName());
+		assertEquals ("En", ds.getSystemCode());
 				
 		DataSource ds4 = DataSource.getBySystemCode ("En");
 		assertEquals (ds, ds4);
 		
 		DataSource ds5 = DataSource.getByFullName ("Entrez Gene");
-		assertEquals (ds5, BioDataSource.ENTREZ_GENE);
+		assertEquals (BioDataSource.ENTREZ_GENE, ds5);
 	}
 
 	@org.junit.Test
@@ -150,7 +150,7 @@ public class Test
 	public void testAlias()
 	{
 		DataSource ds = DataSource.getByAlias("ensembl_gene_id");
-		assertSame(ds, BioDataSource.ENSEMBL);
+		assertSame(BioDataSource.ENSEMBL, ds);
 	}
 
 	@org.junit.Test
