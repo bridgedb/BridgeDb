@@ -91,4 +91,22 @@ public class DataSourceTest {
 		    .asDataSource();
 		Assert.assertFalse(source.isDeprecated());
 	}
+
+	@Test
+	public void testDeprecatedBy() {
+		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
+		    .deprecatedBy(
+		    	DataSource.register("En", "Ensembl").asDataSource()
+		    ).asDataSource();
+		Assert.assertTrue(source.isDeprecated());
+		Assert.assertNotNull(source.isDeprecatedBy());
+		Assert.assertEquals("En", source.isDeprecatedBy().getSystemCode());
+	}
+
+	@Test
+	public void testDefaultNoDeprecatedBy() {
+		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
+			.asDataSource();
+		Assert.assertNull(source.isDeprecatedBy());
+	}
 }

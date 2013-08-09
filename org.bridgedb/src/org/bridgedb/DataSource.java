@@ -70,6 +70,7 @@ public final class DataSource
 	private String idExample = null;
 	private boolean isPrimary = true;
 	private boolean isDeprecated = false;
+	private DataSource isDeprecatedBy = null;
 	private String type = "unknown";
 	private String urnBase = "";
 	
@@ -258,6 +259,21 @@ public final class DataSource
 		public Builder deprecated(boolean isDeprecated)
 		{
 			current.isDeprecated = isDeprecated;
+			return this;
+		}
+		
+		/**
+		 * Sets the DataSource which should be used instead of this deprecated one. It 
+		 * automatically sets <code>isDeprecated</code> to true.
+		 * 
+		 * @param sourceToUseInstead the {@link DataSource} that should be used instead of this
+		 *                           deprecated one
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder deprecatedBy(DataSource sourceToUseInstead)
+		{
+			current.isDeprecated = true;
+			current.isDeprecatedBy = sourceToUseInstead;
 			return this;
 		}
 		
@@ -468,15 +484,29 @@ public final class DataSource
 	
 	/**
 	 * A DataSource is deprecated if it is replaced by another data source
-	 * which should be used instead.
+	 * which should be used instead. Even if this DataSource is deprecated,
+	 * it does not imply it says what it is deprecated by.
 	 * 
 	 * @return true if this DataSource is deprecated
+	 * @see         
 	 */
 	public boolean isDeprecated()
 	{
 		return isDeprecated;
 	}
 	
+	/**
+	 * Returns the DataSource that should be used instead if this DataSource
+	 * is deprecated. This method may return null even if this DataSource is
+	 * deprecated.
+	 * 
+	 * @return if defined, the DataSource that should be used instead of this one
+	 */
+	public DataSource isDeprecatedBy()
+	{
+		return isDeprecatedBy;
+	}
+
 	/**
 	 * @return if this DataSource describes metabolites or not.
 	 */
