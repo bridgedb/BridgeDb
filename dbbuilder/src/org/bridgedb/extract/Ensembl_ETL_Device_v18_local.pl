@@ -1772,8 +1772,12 @@ sub parse_DBEntries {
                   my $acc = $dbe_primary_id;
                   $acc =~ s/\'//g; # strip single quotes to use as variable
                   my $term = $go_adaptor->fetch_by_accession($acc);
-                  my $name = mysql_quotes($term->name()); #e.g., plasma membrane
-                  my $namespace = mysql_quotes($term->namespace()); # e.g., cellular_component
+                  my $name = mysql_quotes(''); #catch null
+		  my $namespace = mysql_quotes(''); #catch null
+		  if ($term){ 
+			$name = mysql_quotes($term->name()); #e.g., plasma membrane
+			$namespace = mysql_quotes($term->namespace()); # e.g., cellular_component
+		  }
 		  $dbe_description = $name unless ($name eq "" || !$name);
 		}
 		$$GeneTables{GeneOntology}{$count.$dot.$subcount{GeneOntology}} = [$dbe_primary_id, $dbe_description, $namespace];
@@ -1789,8 +1793,12 @@ sub parse_DBEntries {
 		# Get GO term annotations using $go_adaptor
 		if ($go_adaptor){
                   my $term = $go_adaptor->fetch_by_accession($acc);
-                  my $name = mysql_quotes($term->name()); #e.g., plasma membrane
-               	  my $namespace = mysql_quotes($term->namespace()); # e.g., cellular_component
+		  my $name = mysql_quotes(''); #catch null
+                  my $namespace = mysql_quotes(''); #catch null
+                  if ($term){
+                        $name = mysql_quotes($term->name()); #e.g., plasma membrane
+                        $namespace = mysql_quotes($term->namespace()); # e.g., cellular_component
+                  }
 		  if ($namespace =~ /\'biological_process\'/){
 		    if (!${$seen{GOslimBP}{$dbe_primary_id}}++){
 			$$GeneTables{GOslimBP}{$count.$dot.$subcount{GOslimBP}} = [$dbe_primary_id, $name];
