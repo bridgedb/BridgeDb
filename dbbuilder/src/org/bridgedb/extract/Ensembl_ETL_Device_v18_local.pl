@@ -1735,7 +1735,7 @@ sub parse_DBEntries {
             }
 
 	}
-  	elsif ($dbe_dbname =~ /^\'Uniprot/i){ #catch all types
+  	elsif ($dbe_dbname =~ /^\'Uniprot\/S/i){ #catch UniProt/SWISSPROT and UniProt/SPTREMBL only
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
 	    if (!${$seen{UniProt}{$dbe_primary_id}}++){
 		$$GeneTables{UniProt}{$count.$dot.$subcount{UniProt}} = [$dbe_primary_id, $dbe_display_id, $dbe_dbname, $dbe_description, $dbe_syns];
