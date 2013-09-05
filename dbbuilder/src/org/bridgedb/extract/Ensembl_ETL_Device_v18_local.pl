@@ -2289,6 +2289,9 @@ print "probe count= $pcount\n";
 	  } else {
 		next;
 	  } 
+	  if (!$gene) { ## catch nulls
+		next;
+	  }	
 	  $gene_stable_id = mysql_quotes($gene->stable_id());
 	  if (${$seen{Gene}{$gene_stable_id}}++){ 
 		next;
