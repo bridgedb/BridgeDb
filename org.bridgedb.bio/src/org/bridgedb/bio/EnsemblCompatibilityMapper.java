@@ -14,6 +14,9 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.impl.InternalUtils;
 
+/**
+ * @deprecated this class is no longer needed for recent Ensembl id mapping databases
+ */
 public class EnsemblCompatibilityMapper implements IDMapper
 {
 	@Override
