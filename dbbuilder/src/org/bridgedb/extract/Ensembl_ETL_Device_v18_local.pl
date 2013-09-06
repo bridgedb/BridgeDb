@@ -2030,16 +2030,17 @@ sub parse_DBEntries {
 		++$subcount{FlyBase}; 
 	    }
   	}
+	## NOTE: Using Ensembl IDs and attrs here instead of provided WBGene IDs, per WormBase preference
   	elsif ($dbe_dbname =~ /^\'wormbase_gene\'$/i){ #catch only gene IDs  
 	    $ADMIN_Xrefs{$dbe_dbname}[10] = "\'Y\'"; # collected
-	    if (!${$seen{WormBase}{$dbe_primary_id}}++){
-		$$GeneTables{WormBase}{$count.$dot.$subcount{WormBase}} = [$dbe_primary_id, $dbe_display_id, $dbe_description]; 
-		$$Ensembl_GeneTables{WormBase}{$count.$dot.$subcount{WormBase}} = [$gene_stable_id, $dbe_primary_id];
+	    if (!${$seen{WormBase}{$gene_stable_id}}++){
+		$$GeneTables{WormBase}{$count.$dot.$subcount{WormBase}} = [$gene_stable_id, $gene_symbol, $gene_description];
+		$$Ensembl_GeneTables{WormBase}{$count.$dot.$subcount{WormBase}} = [$gene_stable_id, $gene_stable_id];
                 #process Attributes
-                unless ($dbe_primary_id eq $dbe_display_id){
-                	$$Attributes{WormBase}{ $count.$dot.$subcount{WormBase}.$dot.'1'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{WormBase}{'NAME'}[1]), mysql_quotes('Symbol'), $dbe_display_id];
+                unless ($gene_stable_id eq $gene_symbol){
+                	$$Attributes{WormBase}{ $count.$dot.$subcount{WormBase}.$dot.'1'} = [$gene_stable_id, mysql_quotes( $$GeneTables{WormBase}{'NAME'}[1]), mysql_quotes('Symbol'), $gene_symbol];
 		}
-                $$Attributes{WormBase}{$count.$dot.$subcount{WormBase}.$dot.'2'} = [$dbe_primary_id, mysql_quotes( $$GeneTables{WormBase}{'NAME'}[1]), mysql_quotes('Description'), $dbe_description];
+                $$Attributes{WormBase}{$count.$dot.$subcount{WormBase}.$dot.'2'} = [$gene_stable_id, mysql_quotes( $$GeneTables{WormBase}{'NAME'}[1]), mysql_quotes('Description'), $gene_description];
 		++$subcount{WormBase}; 
 	    }
   	}
