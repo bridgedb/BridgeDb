@@ -1,17 +1,21 @@
->>bacteria
-bacillus_collection
-escherichia_shigella_collection
-mycobacterium_collection
+#>>bacteria ##NOTE: bacteria collection format changed after release 16!
+#bacillus_collection
+#escherichia_shigella_collection
+#mycobacterium_collection
 >>plants
 arabidopsis_thaliana
 oryza_sativa
+oryza_indica
 populus_trichocarpa
-sorghum_bicolor
 vitis_vinifera
 zea_mays
+glycine_max
+solanum_lycopersicum
+#sorghum_bicolor
 >>metazoa
 anopheles_gambiae
 drosophila_melanogaster
 caenorhabditis_elegans
 >>fungi
 aspergillus_niger
+gibberella_zeae

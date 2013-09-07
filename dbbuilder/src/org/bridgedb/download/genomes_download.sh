@@ -2,7 +2,7 @@
 # Update release-#
 ##!!!!!!!!!!!
 
-release='9'
+release='19'
 
 ftp_site=ftp.ensemblgenomes.org
 site="null"
