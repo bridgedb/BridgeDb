@@ -418,13 +418,13 @@ my $temp_species = $species;
 if ($gs =~ /(Y|Yes)/i){
 	$species = $genus_species;
 	if ($twoLetterSpecies eq 'Ec'){
-		$species = 'Escherichia coli K12';
+		$species = 'escherichia_coli_str_k_12_substr_mg1655'; 
 	}
 	elsif ($twoLetterSpecies eq 'Bs' ){
-		$species = 'Bacillus subtilis';
+		$species = 'bacillus_subtilis_bsn5';
 	}
 	elsif ($twoLetterSpecies eq 'Mx'){
-		$species = 'Mycobacterium tuberculosis H37Rv';
+		$species = 'mycobacterium_tuberculosis_h37rv';
 	}	
 }
 print "$species\n";
