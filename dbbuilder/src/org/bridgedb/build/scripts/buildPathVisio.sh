@@ -79,8 +79,11 @@ gzip ${DatabaseDb}.sql.dump
 #Run qc.sh
 (
 cd ${ScriptsDir}
-./qc.sh ${DatabaseSpecies} ${PriorDatabaseDate} ${DatabaseDate} > ../temp.${DatabaseSpecies}.${DatabaseDate}.qc
+./qc.sh ${DatabaseSpecies} ${PriorDatabaseDate} ${DatabaseDate} > ../report.${DatabaseSpecies}.${DatabaseDate}.qc
 )
+
+#Print ADMIN_Xrefs
+${mysql} -e "select * from ${DatabaseCS}.ADMIN_Xrefs order by collected, xref_dbname" > report.${DatabaseSpecies}.${DatabaseDate}.xrefs
 
 # report on products (check size > 1.9M)
 ls -lh ${DatabaseDb}.bridge | echo

@@ -12,10 +12,10 @@ do
   cd /home/socr/c/users2/apico/EnsemblAPI
   perl Ensembl_ETL_Device_v18_local.pl $x $y $z $w 
   ) 
-  bash -x scripts/buildPathVisio.sh $x $y $v > temp.$x.$y 2> temp.$x.$y.err
+  bash -x scripts/buildPathVisio.sh $x $y $v > report.$x.$y 2> report.$x.$y.err
 done
 
-# report from temp.err files
-grep -n ERROR temp.*.err
+# report from report.err files
+grep -n ERROR report.*.err
 
 
