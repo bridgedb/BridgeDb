@@ -6,6 +6,10 @@ into MySQL to overwrite SGD primary IDs.  Ensembl only provides the symbol redun
 device has collect both and included symbol in the attribute table. So, by overwriting the primary_id in the 'gene' and 'attr'
 tables, the databases will be fixed.  The proper SGD IDs are important to support the majority of yeast pathways already in WikiPathways.
 
+* For copying derby and sql files to bridgedb.org, you can use the following command to copy just the last 5 (adapt as necessary) created databases:
+ scp `ls -lht *bridge | head -5 | awk '{print $9}'` bridgedb@bridgedb.org:data/gene_database/pre-release/.
+ scp `ls -lht *sql.dump.gz | head -5 | awk '{print $9}'` bridgedb@bridgedb.org:data/gene_database/sql/.
+
 * For copying derby files to wikipathways.org, you can use the following command to copy just the last 5 (adapt as necessary) created databases:
  scp `ls -lht *bridge | head -5 | awk '{print $9}'` wikipathways@www.wikipathways.org:database/. 
 
