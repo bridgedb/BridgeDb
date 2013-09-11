@@ -108,7 +108,7 @@ SPIKE	Sk	http://www.cs.tau.ac.il/~spike/	http://www.cs.tau.ac.il/~spike/maps/$id
 SPRINT	Spr	http://www.bioinf.manchester.ac.uk/dbbrowser/sprint/	http://www.bioinf.manchester.ac.uk/cgi-bin/dbbrowser/sprint/searchprintss.cgi?prints_accn=$id&display_opts=Prints&category=None&queryform=false&regexpr=off	PR00001	protein		1	urn:miriam:sprint	^PR\d{5}$	SPRINT
 STRING	Str	http://string.embl.de/	http://string.embl.de/interactions/$id	P53350	protein		1	urn:miriam:string	^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])|([0-9][A-Za-z0-9]{3})$	STRING
 SubstrateDB	Sdb	http://substrate.burnham.org/	http://substrate.burnham.org/protein/annotation/$id/html	1915	protein		0	urn:miriam:pmap.substratedb	^\d+$	SubstrateDB
-SubtiWiki	Sw	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/Main_Page	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/$id	BSU29180	gene	Bacillus subtilis	1	urn:miriam:subtiwiki	^BSU\d{5}$	SubtiWiki
+SubtiWiki	Bsu	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/Main_Page	http://www.subtiwiki.uni-goettingen.de/wiki/index.php/$id	BSU29180	gene	Bacillus subtilis	1	urn:miriam:subtiwiki	^BSU\d{5}$	SubtiWiki
 SUPFAM	Sf	http://supfam.org/SUPERFAMILY/	http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi?ipid=$id	SSF57615	protein		1	urn:miriam:supfam	^\w+$	SUPFAM
 SWISS-MODEL	Sw	http://swissmodel.expasy.org/	http://swissmodel.expasy.org/repository/smr.php?sptr_ac=$id	P23298	protein		1	urn:miriam:swiss-model	^\w+$	SWISS-MODEL
 Systems Biology Ontology	Sbo	http://www.ebi.ac.uk/sbo/	http://www.ebi.ac.uk/sbo/main/$id	SBO:0000262	ontology		1	urn:miriam:biomodels.sbo	^SBO:\d{7}$	Systems Biology Ontology
