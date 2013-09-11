@@ -35,6 +35,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
+ * @deprecated use resources.org.bridgedb.bio.datasources.txt instead 
+ *
  * Definition of many common biological DataSources.
  * Meta data about these Data Sources, such as URL templates,
  * are read from a bundled text file. Call the init() method
@@ -69,9 +71,9 @@ public class BioDataSource
 	public static final DataSource SGD = DataSource.register (
 		"D", "SGD").asDataSource();
 	public static final DataSource ENZYME_CODE = DataSource.register (
-		"E", "EC Number").asDataSource();
+		"E", "Enzyme Nomenclature").asDataSource();
 	public static final DataSource ECOLI = DataSource.register (
-		"Ec", "Ecoli").asDataSource();
+		"Ec", "EcoGene").asDataSource();
 	public static final DataSource EMBL = DataSource.register (
 		"Em", "EMBL").asDataSource();
 	public static final DataSource ENSEMBL = DataSource.register (
@@ -166,7 +168,7 @@ public class BioDataSource
 	public static final DataSource MGI = DataSource.register (
 		"M", "MGI").asDataSource();
 	public static final DataSource MIRBASE = DataSource.register (
-		"Mb", "miRBase").asDataSource();
+		"Mb", "miRBase Sequence").asDataSource();
 	public static final DataSource MIRBASE_MATURE = DataSource.register (
 		"Mbm", "miRBase mature sequence").asDataSource();
 	public static final DataSource MAIZE_GDB = DataSource.register (
@@ -196,7 +198,7 @@ public class BioDataSource
 	public static final DataSource REACTOME = DataSource.register (
 		"Re", "Reactome").asDataSource();
 	public static final DataSource KEGG_REACTION = DataSource.register (
-		"Kr", "Kegg Reaction").asDataSource();
+		"Rk", "Kegg Reaction").asDataSource();
 	public static final DataSource RFAM = DataSource.register (
 		"Rf", "Rfam").asDataSource();
 	/** NB the UNIPROT datasource is for Uniprot accession numbers like P12345 */
@@ -224,7 +226,7 @@ public class BioDataSource
 	public static final DataSource WIKIPEDIA = DataSource.register (
 		"Wi", "Wikipedia").asDataSource();
 	public static final DataSource WIKIPATHWAYS = DataSource.register (
-		"Wp", "Wikipathways").asDataSource();
+		"Wp", "WikiPathways").asDataSource();
 	public static final DataSource WHEAT_GENE_NAMES = DataSource.register (
 		"Wn", "Wheat gene names").asDataSource();
 	public static final DataSource WHEAT_GENE_REFERENCES= DataSource.register (
