@@ -3,11 +3,14 @@
 .project
 .settings/
 *.~java
+*~
 
 # ignore target files #
 target/
 bin/
 build/
+dist/
+apidoc/
 /dbbuilder/output
 
 # ignore log files #
