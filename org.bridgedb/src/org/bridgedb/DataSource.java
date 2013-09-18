@@ -488,7 +488,6 @@ public final class DataSource
 	 * it does not imply it says what it is deprecated by.
 	 * 
 	 * @return true if this DataSource is deprecated
-	 * @see         
 	 */
 	public boolean isDeprecated()
 	{
@@ -525,7 +524,7 @@ public final class DataSource
 
 	/**
 	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
-	 * @returns the DataSource for a given urn base, or null if the base is invalid.
+	 * @return the DataSource for a given urn base, or null if the base is invalid.
 	 * If the given urn base is unknown, a new DataSource will be created with the full name equal to the urn base without "urn.miriam."  
 	 */
 	public static DataSource getByUrnBase(String base)

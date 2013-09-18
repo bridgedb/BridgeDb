@@ -28,7 +28,6 @@ public interface GdbConstruct
 	/**
 	 * Add a biological entity to the database.
 	 * @param ref entity to add
-	 * @param bpText html-formatted description
 	 * @return 1 if addition was successful, 0 otherwise. 
 	 */
 	public int addGene(Xref ref);
