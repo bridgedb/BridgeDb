@@ -4,6 +4,8 @@
 .settings/
 *.~java
 *~
+*.bak
+*.patch
 
 # ignore target files #
 target/
@@ -12,6 +14,8 @@ build/
 dist/
 apidoc/
 /dbbuilder/output
+bridgedb-*.zip
+bridgedb-*.gz
 
 # ignore log files #
 */TEST*.xml
