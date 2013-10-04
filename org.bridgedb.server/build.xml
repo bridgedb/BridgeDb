@@ -19,7 +19,10 @@
 
 	<!-- embedded jars are embedded in the resulting bundle -->
 	<path id="embed.jars">
-		<!-- None -->
+		<pathelement location="lib/commons-cli-1.2.jar"/>
+		<pathelement location="lib/mysql-connector-java-5.1.7-bin.jar"/>
+		<pathelement location="lib/org.restlet.ext.servlet.jar"/>
+		<pathelement location="lib/org.restlet.jar"/>
 	</path>
 
 	<!-- test deps are only used for testing -->
