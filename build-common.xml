@@ -86,6 +86,7 @@
 	<!-- just removes class files -->
 	<target name="clean">
 		<delete dir="build"/>
+		<delete dir="target"/>
 	</target>
 
 	<!-- removes class files and generated jar -->
