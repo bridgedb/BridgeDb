@@ -64,6 +64,7 @@
 			<include name="README.txt"/>
 			<include name="apidoc"/>
 			<include name="org.bridgedb/version.props"/>
+			<include name="build-common.xml"/>
 			<include name="**/build.xml"/>
 			<include name="org.bridgedb.webservice.biomart/src/org/bridgedb/webservice/biomart/util/filterconversion.txt"/>
 			<include name="org.bridgedb.bio/resources/**/*"/>
