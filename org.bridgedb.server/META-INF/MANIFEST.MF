@@ -3,11 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Server
 Bundle-SymbolicName: org.bridgedb.server
 Bundle-Version: 1.2.0.qualifier
-Bundle-ClassPath: server.jar,
- lib/mysql-connector-java-5.1.7-bin.jar,
- lib/commons-cli-1.2.jar,
- lib/org.restlet.ext.servlet.jar,
- lib/org.restlet.jar
 Export-Package: com.mysql.jdbc,
  com.mysql.jdbc.configs,
  com.mysql.jdbc.exceptions,
@@ -47,4 +42,8 @@ Export-Package: com.mysql.jdbc,
  org.restlet.service,
  org.restlet.util
 Require-Bundle: org.bridgedb,
- org.bridgedb.bio
+ org.bridgedb.bio,
+ commons-cli-1.2.jar,
+ org.restlet.ext.servlet.jar,
+ org.restlet.jar
+
