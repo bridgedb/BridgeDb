@@ -98,6 +98,7 @@
 	<target name="dist" depends="jar">
 		<copy todir="${bundle.dest}">
 			<path refid="absolute.deps"/>
+			<path refid="transient.deps"/>
 		</copy>
 	</target>
 
