@@ -14,15 +14,16 @@
 
 	<!-- transient deps are optional, they are used only in the manifest classpath -->
 	<path id="transient.deps">
-		<!-- None -->
+		<fileset dir="lib">
+			<include name="commons-cli-1.2.jar"/>
+			<include name="org.restlet.ext.servlet.jar"/>
+			<include name="org.restlet.jar"/>
+		</fileset>
 	</path>
 
 	<!-- embedded jars are embedded in the resulting bundle -->
 	<path id="embed.jars">
-		<pathelement location="lib/commons-cli-1.2.jar"/>
 		<pathelement location="lib/mysql-connector-java-5.1.7-bin.jar"/>
-		<pathelement location="lib/org.restlet.ext.servlet.jar"/>
-		<pathelement location="lib/org.restlet.jar"/>
 	</path>
 
 	<!-- test deps are only used for testing -->
