@@ -97,7 +97,7 @@ public class BioDataSourceTest
 	}
 
 	@Test
-	public void testBasCASNumbers()
+	public void testBadCASNumbers()
 	{
 		assertFalse(DataSourcePatterns.getDataSourceMatches("50-99-77").contains(BioDataSource.CAS));
 		assertFalse(DataSourcePatterns.getDataSourceMatches("1-99-77").contains(BioDataSource.CAS));
