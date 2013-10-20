@@ -258,6 +258,7 @@ public final class DataSource
 		 */
 		public Builder deprecated(boolean isDeprecated)
 		{
+			if (!isDeprecated) current.isDeprecatedBy = null;
 			current.isDeprecated = isDeprecated;
 			return this;
 		}
@@ -270,8 +271,9 @@ public final class DataSource
 		 *                           deprecated one
 		 * @return the same Builder object so you can chain setters
 		 */
-		public Builder deprecatedBy(DataSource sourceToUseInstead)
-		{
+		public Builder deprecatedBy(DataSource sourceToUseInstead) {
+			if (sourceToUseInstead == null)
+				throw new IllegalArgumentException("DataSource cannot be null.");
 			current.isDeprecated = true;
 			current.isDeprecatedBy = sourceToUseInstead;
 			return this;

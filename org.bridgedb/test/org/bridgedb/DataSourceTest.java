@@ -82,6 +82,13 @@ public class DataSourceTest {
 		Assert.assertTrue(source.isDeprecated());
 	}
 
+	@Test
+	public void testDeprecated_False() {
+		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
+		    .deprecated(true).deprecated(false).asDataSource();
+		Assert.assertFalse(source.isDeprecated());
+	}
+
 	/**
 	 * By default, all new data sources are not deprecated.
 	 */
@@ -101,6 +108,22 @@ public class DataSourceTest {
 		Assert.assertTrue(source.isDeprecated());
 		Assert.assertNotNull(source.isDeprecatedBy());
 		Assert.assertEquals("En", source.isDeprecatedBy().getSystemCode());
+	}
+
+	@Test
+	public void testDeprecatedByUndoneByDeprecatedFalse() {
+		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
+		    .deprecatedBy(
+		    	DataSource.register("En", "Ensembl").asDataSource()
+		    ).deprecated(false).asDataSource();
+		Assert.assertFalse(source.isDeprecated());
+		Assert.assertNull(source.isDeprecatedBy());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testDeprecatedByNullCausesException() {
+		DataSource.register("EnAg", "Ensembl Mosquito")
+		    .deprecatedBy(null).asDataSource();
 	}
 
 	@Test
