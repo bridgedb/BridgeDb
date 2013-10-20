@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bridgedb.Xref;
+
 /**
  * enum representing organisms understood by PathVisio.
  * Handles conversion from full bionominal name to common name and short code.
@@ -33,79 +35,100 @@ import java.util.Map;
  */
 public enum Organism 
 {
-	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito"),
-	ArabidopsisThaliana("Arabidopsis thaliana", "At"),
-	Aspergillusniger("Aspergillus niger", "An", "Black mold"),
-	BacillusSubtilis("Bacillus subtilis", "Bs"),
-	BosTaurus("Bos taurus", "Bt", "Cow"),
-	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm"),
-	CanisFamiliaris("Canis familiaris", "Cf", "Dog"),
-	CionaIntestinalis("Ciona intestinalis", "Ci", "Sea Squirt"),
-	Clostridiumthermocellum("Clostridium thermocellum", "Ct", "Cthe"),
-	DanioRerio("Danio rerio", "Dr", "Zebra fish"),
-	DasypusNovemcinctus("Dasypus novemcinctus", "Dn", "Armadillo"),
-	DrosophilaMelanogaster("Drosophila melanogaster", "Dm", "Fruit fly"),
-	EscherichiaColi("Escherichia coli", "Ec"),	
-	EchinposTelfairi ("Echinops telfairi", "Et", "Hedgehog"),
+	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito", 7165),
+	ArabidopsisThaliana("Arabidopsis thaliana", "At", 3702),
+	Aspergillusniger("Aspergillus niger", "An", "Black mold", 5061),
+	BacillusSubtilis("Bacillus subtilis", "Bs", 1423),
+	BosTaurus("Bos taurus", "Bt", "Cow", 9913),
+	CaenorhabditisElegans("Caenorhabditis elegans", "Ce", "Worm", 6239),
+	CanisFamiliaris("Canis familiaris", "Cf", "Dog", 9615),
+	CionaIntestinalis("Ciona intestinalis", "Ci", "Sea Squirt", 7719),
+	Clostridiumthermocellum("Clostridium thermocellum", "Ct", "Cthe", 1515),
+	DanioRerio("Danio rerio", "Dr", "Zebra fish", 7955),
+	DasypusNovemcinctus("Dasypus novemcinctus", "Dn", "Armadillo", 9361),
+	DrosophilaMelanogaster("Drosophila melanogaster", "Dm", "Fruit fly", 7227),
+	EscherichiaColi("Escherichia coli", "Ec", 562),	
+	EchinposTelfairi ("Echinops telfairi", "Et", "Hedgehog", 9371),
 
 	//NB: two-letter code is Qc to disambiguate from E. coli	
-	EquusCaballus("Equus caballus", "Qc", "Horse"),
+	EquusCaballus("Equus caballus", "Qc", "Horse", 9796),
 	
-	GallusGallus("Gallus gallus", "Gg", "Chicken"),
-	GlycineMax("Glycine max", "Gm", "Soybean"),
-	GibberellaZeae("Gibberella zeae", "Gz", "Fusarium graminearum"),
-	HomoSapiens("Homo sapiens", "Hs", "Human"),
-	LoxodontaAfricana ("Loxodonta africana", "La", "Elephant"),
-	MacacaMulatta ("Macaca mulatta", "Ml", "Rhesus Monkey"),
-	MusMusculus("Mus musculus", "Mm", "Mouse"),
-	MonodelphisDomestica  ("Monodelphis domestica", "Md", "Opossum"),
-	MycobacteriumTuberculosis ("Mycobacterium tuberculosis", "Mx", "Tuberculosis"),
-	OrnithorhynchusAnatinus	("Ornithorhynchus anatinus", "Oa", "Platypus"),
-	OryzaSativa("Oryza sativa", "Os", "Rice"),
+	GallusGallus("Gallus gallus", "Gg", "Chicken", 9031),
+	GlycineMax("Glycine max", "Gm", "Soybean", 3847),
+	GibberellaZeae("Gibberella zeae", "Gz", "Fusarium graminearum", 5518),
+	HomoSapiens("Homo sapiens", "Hs", "Human", 9606),
+	LoxodontaAfricana ("Loxodonta africana", "La", "Elephant", 9785),
+	MacacaMulatta ("Macaca mulatta", "Ml", "Rhesus Monkey", 9544),
+	MusMusculus("Mus musculus", "Mm", "Mouse", 10090),
+	MonodelphisDomestica  ("Monodelphis domestica", "Md", "Opossum", 13616),
+	MycobacteriumTuberculosis ("Mycobacterium tuberculosis", "Mx", "Tuberculosis", 1773),
+	OrnithorhynchusAnatinus	("Ornithorhynchus anatinus", "Oa", "Platypus", 9258),
+	OryzaSativa("Oryza sativa", "Os", "Rice", 4530),
 	OryzaJaponica("Oryza japonica", "Oj", "Rice"),
-	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish"),
-	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit"),
-	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee"),
-	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato"),
-	SusScrofa("Sus scrofa", "Ss", "Pig"),
+	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish", 8090),
+	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit", 9986),
+	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee", 9598),
+	SolanumLycopersicum("Solanum lycopersicum", "Sl", "Tomato", 4081),
+	SusScrofa("Sus scrofa", "Ss", "Pig", 9823),
 	
 	//NB: two-letter code is Pi to disambiguate from Pan troglodytes	
-	PopulusTrichocarpa("Populus trichocarpa", "Pi", "Western Balsam Poplar"),
-	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat"),
-	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast"),
-	SorexAraneus ("Sorex araneus", "Sa", "Shrew"),
-	SorghumBicolor ("Sorghum bicolor", "Sb", "Sorghum"),
-	TetraodonNigroviridis ("Tetraodon nigroviridis", "Tn", "Pufferfish"),
-	TriticumAestivum ("Triticum aestivum", "Ta", "Wheat"),
-	XenopusTropicalis("Xenopus tropicalis", "Xt", "Frog"),
-	VitisVinifera ("Vitis vinifera", "Vv", "Wine Grape"),
-	ZeaMays ("Zea mays", "Zm", "Maize"),
+	PopulusTrichocarpa("Populus trichocarpa", "Pi", "Western Balsam Poplar", 3694),
+	RattusNorvegicus("Rattus norvegicus", "Rn", "Rat", 10116),
+	SaccharomycesCerevisiae("Saccharomyces cerevisiae", "Sc", "Yeast", 4932),
+	SorexAraneus ("Sorex araneus", "Sa", "Shrew", 42254),
+	SorghumBicolor ("Sorghum bicolor", "Sb", "Sorghum", 4558),
+	TetraodonNigroviridis ("Tetraodon nigroviridis", "Tn", "Pufferfish", 99883),
+	TriticumAestivum ("Triticum aestivum", "Ta", "Wheat", 4565),
+	XenopusTropicalis("Xenopus tropicalis", "Xt", "Frog", 8364),
+	VitisVinifera ("Vitis vinifera", "Vv", "Wine Grape", 29760),
+	ZeaMays ("Zea mays", "Zm", "Maize", 4577),
 	;
 	
 	private String latinName;
 	private String code;
 	private String shortName;
+	private Xref   taxonomyID;
 	
 	Organism(String latinName, String code) {
 		this(latinName, code, latinName);
 	}
-	
+
 	Organism(String latinName, String code, String shortName) {
 		this.latinName = latinName;
 		this.code = code;
 		this.shortName = shortName;
 	}
-	
+
+	Organism(String latinName, String code, int taxonomyRef) {
+		this.latinName = latinName;
+		this.code = code;
+		this.taxonomyID = new Xref("" + taxonomyRef, BioDataSource.TAXONOMY_NCBI);
+	}
+
+	Organism(String latinName, String code, String shortName, int taxonomyRef) {
+		this.latinName = latinName;
+		this.code = code;
+		this.shortName = shortName;
+		this.taxonomyID = new Xref("" + taxonomyRef, BioDataSource.TAXONOMY_NCBI);
+	}
+
 	public String code() { return code; }
 	public String latinName() { return latinName; }
 	public String shortName() { return shortName; }
-	
+	public Xref taxonomyID() { return taxonomyID; }
+
+	private static Map<Integer, Organism> byTaxonomyID;
 	private static Map<String, Organism> byCode;
 	private static Map<String, Organism> byLatinName;
 	private static Map<String, Organism> byShortName;
 	private static List<String> latinNames;
 	private static String[] codes;
-	
+
+	public static Organism fromTaxonomyId(int taxid) {
+		if(byTaxonomyID == null) initMappings();
+		return byTaxonomyID.get(taxid);
+	};
+
 	public static Organism fromCode(String code) {
 		if(byCode == null) initMappings();
 		return byCode.get(code);
@@ -137,10 +160,14 @@ public enum Organism
 	}
 	
 	private static void initMappings() {
+		byTaxonomyID = new HashMap<Integer, Organism>();
 		byCode = new HashMap<String, Organism>();
 		byLatinName = new HashMap<String, Organism>();
 		byShortName = new HashMap<String, Organism>();
 		for(Organism o : values()) {
+			if (o.taxonomyID() != null) {
+				byTaxonomyID.put(Integer.valueOf(o.taxonomyID().getId()), o);
+			}
 			byCode.put(o.code, o);
 			byLatinName.put(o.latinName, o);
 			byShortName.put(o.shortName, o);

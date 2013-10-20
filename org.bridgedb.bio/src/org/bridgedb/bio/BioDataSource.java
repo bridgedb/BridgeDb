@@ -17,8 +17,6 @@
 package org.bridgedb.bio;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -211,6 +209,8 @@ public class BioDataSource
 		"Sn", "dbSNP").asDataSource();
 	public static final DataSource GENE_ONTOLOGY = DataSource.register (
 		"T", "GeneOntology").asDataSource();
+	public static final DataSource TAXONOMY_NCBI = DataSource.register (
+		"Tn", "NCBI Taxonomy Database").asDataSource(); 
 	public static final DataSource TIGR = DataSource.register (
 		"Ti", "TIGR").asDataSource(); 
 	public static final DataSource TUBERCULIST = DataSource.register (
@@ -254,6 +254,11 @@ public class BioDataSource
 	 *  @deprecated use datasources.txt instead
 	 */
 	static {
+		//sgd
+		DataSourcePatterns.registerPattern(
+			BioDataSource.TAXONOMY_NCBI, 
+			Pattern.compile("\\d+"));
+
 		//sgd
 		DataSourcePatterns.registerPattern(
 			BioDataSource.SGD, 

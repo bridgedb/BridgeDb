@@ -58,6 +58,13 @@ public class OrganismTest
     }
 
     @Test
+    public void testFromTaxonomyID() {
+        Organism org = Organism.fromTaxonomyId(9606);
+        Assert.assertNotNull(org);
+        Assert.assertEquals("Homo sapiens", org.latinName());
+    }
+
+    @Test
     public void testFromNullShortName() {
         Organism org = Organism.fromShortName("Null");
         Assert.assertNull(org);
@@ -88,5 +95,12 @@ public class OrganismTest
 		   codes.add(organism.code());
 	   }
 	   Assert.assertEquals(organisms.length, codes.size());
+   }
+
+   @Test
+   public void tasteHuman() {
+       Organism wine = Organism.HomoSapiens;
+       Assert.assertEquals("Homo sapiens", wine.latinName());
+       Assert.assertEquals("9606", wine.taxonomyID().getId());
    }
 }
