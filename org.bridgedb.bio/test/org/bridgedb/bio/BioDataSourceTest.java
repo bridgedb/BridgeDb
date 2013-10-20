@@ -85,7 +85,14 @@ public class BioDataSourceTest
 		assertEquals (Organism.GallusGallus, BioDataSource.ENSEMBL_CHICKEN.getOrganism());
 		assertEquals ("metabolite", BioDataSource.CAS.getType());
 	}
-	
+
+	@Test
+	public void testUniprotPatterns()
+	{
+		assertTrue (DataSourcePatterns.getDataSourceMatches("Q8JH47").contains(BioDataSource.UNIPROT));
+		assertTrue (DataSourcePatterns.getDataSourceMatches("F6X8M0").contains(BioDataSource.UNIPROT));
+	}
+
 	@Test
 	public void testPatterns()
 	{
