@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 
 /**
@@ -34,7 +35,7 @@ import org.bridgedb.Xref;
  * TODO: link to taxonomy, e.g., using int constructor arg.; and new method: public Xref getTaxonomy(){...}
  */
 public enum Organism 
-{
+{	
 	AnophelesGambiae("Anopheles gambiae", "Ag", "Mosquito", 7165),
 	ArabidopsisThaliana("Arabidopsis thaliana", "At", 3702),
 	Aspergillusniger("Aspergillus niger", "An", "Black mold", 5061),
@@ -88,28 +89,32 @@ public enum Organism
 	private String code;
 	private String shortName;
 	private Xref   taxonomyID;
-	
+
 	Organism(String latinName, String code) {
 		this(latinName, code, latinName);
 	}
 
 	Organism(String latinName, String code, String shortName) {
-		this.latinName = latinName;
-		this.code = code;
-		this.shortName = shortName;
+		this(latinName, code, shortName, -1);
 	}
 
 	Organism(String latinName, String code, int taxonomyRef) {
-		this.latinName = latinName;
-		this.code = code;
-		this.taxonomyID = new Xref("" + taxonomyRef, BioDataSource.TAXONOMY_NCBI);
+		this(latinName, code, null, taxonomyRef);
 	}
 
 	Organism(String latinName, String code, String shortName, int taxonomyRef) {
 		this.latinName = latinName;
 		this.code = code;
 		this.shortName = shortName;
-		this.taxonomyID = new Xref("" + taxonomyRef, BioDataSource.TAXONOMY_NCBI);
+		if (taxonomyRef > 0) {
+			DataSource taxonomyDS = DataSource.getByFullName("NCBI Taxonomy Database");
+			if (taxonomyDS == null) {
+				taxonomyDS = DataSource.register(
+					"Tn", "NCBI Taxonomy Database"
+				).asDataSource();
+			}
+			this.taxonomyID = new Xref("" + taxonomyRef, taxonomyDS);
+		}
 	}
 
 	public String code() { return code; }
