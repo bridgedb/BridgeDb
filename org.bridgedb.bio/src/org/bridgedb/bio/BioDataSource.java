@@ -580,6 +580,7 @@ public class BioDataSource
 	/**
 	 * @return the species-specific Ensembl DataSource corresponding to a given organism, or null if there isn't one known.
 	 * @param org an organism
+	 * @deprecated
 	 */
 	public static DataSource getSpeciesSpecificEnsembl(Organism org)
 	{
