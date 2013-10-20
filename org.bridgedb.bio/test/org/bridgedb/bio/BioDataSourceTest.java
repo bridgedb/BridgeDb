@@ -87,6 +87,13 @@ public class BioDataSourceTest
 	}
 
 	@Test
+	public void testNCBITaxonomy() {
+		assertNotNull(BioDataSource.TAXONOMY_NCBI.getFullName());
+		assertNotNull(BioDataSource.TAXONOMY_NCBI.getSystemCode());
+		assertTrue(DataSourcePatterns.getDataSourceMatches("9606").contains(BioDataSource.TAXONOMY_NCBI));
+	}
+
+	@Test
 	public void testUniprotPatterns()
 	{
 		assertTrue (DataSourcePatterns.getDataSourceMatches("Q8JH47").contains(BioDataSource.UNIPROT));
