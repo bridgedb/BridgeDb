@@ -101,6 +101,13 @@ public class BioDataSourceTest
 	}
 
 	@Test
+	public void testWikiPathwayPatterns()
+	{
+		assertTrue (DataSourcePatterns.getDataSourceMatches("WP784").contains(BioDataSource.WIKIPATHWAYS));
+		assertTrue (DataSourcePatterns.getDataSourceMatches("WP784_r48306").contains(BioDataSource.WIKIPATHWAYS));
+	}
+
+	@Test
 	public void testPatterns()
 	{
 		assertTrue (DataSourcePatterns.getDataSourceMatches("1.1.1.1").contains(BioDataSource.ENZYME_CODE));
