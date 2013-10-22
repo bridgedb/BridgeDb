@@ -66,6 +66,7 @@ public enum Organism
 	OrnithorhynchusAnatinus	("Ornithorhynchus anatinus", "Oa", "Platypus", 9258),
 	OryzaSativa("Oryza sativa", "Os", "Rice", 4530),
 	OryzaJaponica("Oryza japonica", "Oj", "Rice"),
+	OryzaSativaJaponica("Oryza sativa Japonica Group", "Osj", "Rice", 39947),
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish", 8090),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit", 9986),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee", 9598),
