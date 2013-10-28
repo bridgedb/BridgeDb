@@ -132,4 +132,22 @@ public class DataSourceTest {
 			.asDataSource();
 		Assert.assertNull(source.isDeprecatedBy());
 	}
+
+	@Test
+	public void testEquals() {
+		DataSource source = DataSource.register("Cps", "PubChem-substance")
+			.asDataSource();
+		DataSource source2 = DataSource.register("Cps", "PubChem-substance")
+			.asDataSource();
+		Assert.assertEquals(source, source2);
+	}
+
+	@Test
+	public void testEqualsToo() {
+		DataSource source = DataSource.register("Cpc", "PubChem-compound")
+			.asDataSource();
+		DataSource source2 = DataSource.register("Cpc", "PubChem compound")
+			.asDataSource();
+		Assert.assertEquals(source, source2);
+	}
 }
