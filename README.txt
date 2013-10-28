@@ -6,14 +6,14 @@ able to compile with a simple:
 
 	ant
 	
-or (experimental, makes not all jars) - 
+or (experimental; does not compile all jars) - 
 
 	mvn clean install
 
 Library dependencies
 --------------------
 
-If you don't use all mappers, you do not need to include all
+If you do not use all mappers, you do not need to include all
 libraries in the dist directory in your project.
 
 Here is a brief overview that will help you to find out
@@ -44,17 +44,21 @@ Source code can be obtained from http://svn.bigcat.unimaas.nl/bridgedb
 Authors
 -------
 
-BridgeDb and related tools are developed by
+BridgeDb and related tools are developed by (alphabetic order):
 
+Christian Brenninkmeijer
 Jianjiong Gao
+Alasdair Gray
 Isaac Ho
 Martijn van Iersel
 Alex Pico
-
-Open PHACTS BridgeDB Team:
-Christian Brenninkmeijer
-Alasdair Gray
 Egon Willighagen
+
+The lead teams at this moment are (alphabetic order):
+
+Gladstone Institutes
+Maastricht University
+Manchester University
 
 License
 -------
