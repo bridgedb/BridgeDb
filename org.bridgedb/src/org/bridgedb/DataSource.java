@@ -55,8 +55,11 @@ Definitions for common DataSources can be found in {@link org.bridgedb.bio.BioDa
 */
 public final class DataSource
 {
+    private static final String URN_PREFIX = "urn:miriam:";
+    private static final String IDENTIFIERS_ORG_PREFIX = "http://identifiers.org/";
     public static final String UNKOWN = "unknown";
-	private static Map<String, DataSource> bySysCode = new HashMap<String, DataSource>();
+
+    private static Map<String, DataSource> bySysCode = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byFullName = new HashMap<String, DataSource>();
 	private static Set<DataSource> registry = new HashSet<DataSource>();
 	private static Map<String, DataSource> byAlias = new HashMap<String, DataSource>();
@@ -73,7 +76,7 @@ public final class DataSource
 	private boolean isDeprecated = false;
 	private DataSource isDeprecatedBy = null;
 	private String type = UNKOWN;
-	private String urnBase = "";
+	private String miriamBase = null;
     private String alternative = null;
     private String description = null;
 	
@@ -194,19 +197,60 @@ public final class DataSource
 	 * to create a MIRIAM URI like "urn:miriam:uniprot:P12345", 
 	 * or if this DataSource is not included
 	 * in the MIRIAM data types list, a bridgedb URI.
+     * Since version 2 if no Miriam base is known this method will use the system code.
+     * Use of this method is discouraged as a non standard urn was returned if no Miriam Base was known
 	 * @param id Id to generate URN from.
+     * @deprecated use getMiriamURN
 	 * @return the URN. 
 	 */
 	public String getURN(String id)
 	{
-		String idPart = "";
+		String idPart;
 		try
 		{
 			idPart = URLEncoder.encode(id, "UTF-8");
-		} catch (UnsupportedEncodingException ex) { idPart = id; }
-		return urnBase + ":" + idPart;
+		} catch (UnsupportedEncodingException ex) { 
+            idPart = id; 
+        }
+        if (miriamBase == null){
+            return sysCode + ":" + id;
+        }
+		return URN_PREFIX + miriamBase + ":" + idPart;
 	}
 	
+	/**
+	 * Creates a global identifier. 
+	 * It uses the MIRIAM data type list
+	 * to create a MIRIAM URI like "urn:miriam:uniprot:P12345", 
+	 * or if this DataSource is not included
+	 * in the MIRIAM data types list, a bridgedb URI.
+     * @since Version 2.0.0
+     * 
+	 * @param id Id to generate URN from.
+	 * @return the URN. 
+	 */
+	public String getMiriamURN(String id)
+	{
+        if (miriamBase == null){
+            return null;
+        }
+		String idPart;
+		try
+		{
+			idPart = URLEncoder.encode(id, "UTF-8");
+		} catch (UnsupportedEncodingException ex) { 
+            idPart = id; 
+        }
+		return URN_PREFIX + miriamBase + ":" + idPart;
+	}
+
+    public String getIdentifiersOrgUri(String id) {
+        if (miriamBase == null){
+            return null;
+        }
+		return this.IDENTIFIERS_ORG_PREFIX + miriamBase + "/" + id;
+    }
+    
     /**
      * Retrieves any saved alternative name.
      * 
@@ -411,14 +455,79 @@ public final class DataSource
 		}
 		
 		/**
+         * This adds a miriam base to the DataSource.
+         * 
+         * Note: Since version 2 
+         *    The base must start with urn:miriam:.
+         *    The urnBase and identifiersOrgBase methods share the same miriam base.
+         *    If the SystemCode is used as the urnBase this is just ignored!
+         *       (As the default to use the sysCode as the urnbase)
+         * 
 		 * @param base for urn generation, for example "urn:miriam:uniprot"
 		 * @return the same Builder object so you can chain setters
 		 */
 		public Builder urnBase (String base)
 		{
-			current.urnBase = base;
-			return this;
+            if (base == null){
+                return this;
+            }
+            if (base.equals(current.sysCode)){
+                return this;
+            }
+            base = base.trim();
+            if (base.isEmpty()){
+                return this;
+            }            
+            if (base.startsWith(URN_PREFIX)){
+                return miriamBase(base.substring(URN_PREFIX.length()));
+            } else {
+                throw new IllegalArgumentException("UrnBase must start with " + URN_PREFIX + " so can not accept " + base);
+            }
 		}
+	
+		/**
+        * Note: Since version 2 
+         *    The base must start with urn:miriam:.
+         *    The urnBase and identifiersOrgBase methods share the same miriam basee.
+         *    It is no longer allowed to change a none null miriam Base
+		 * @param base for identifiersOrg generation, for example "http://www.identifiers.org/uniprot"
+         *    It will also accept an identifiersOrg Pattern such as "http://www.identifiers.org/uniprot/$id"
+		 * @return the same Builder object so you can chain setters
+		 */
+		public Builder identifiersOrgBase (String base)
+		{
+            if (base == null){
+                return this;
+            }
+            base = base.trim();
+            if (base.isEmpty()){
+                return this;
+            }            
+            if (base.startsWith(IDENTIFIERS_ORG_PREFIX)){
+                if (base.endsWith("/$id")){
+                    base = base.substring(0, base.length()-4);
+                } else if (base.endsWith("/")){
+                    base = base.substring(0, base.length()-1);
+                }
+                return miriamBase(base.substring(IDENTIFIERS_ORG_PREFIX.length()));
+            } else {
+                throw new IllegalArgumentException("identifiers.org base must start with " + IDENTIFIERS_ORG_PREFIX + " so can not accept " + base);
+            }
+			
+		}
+        
+        private Builder miriamBase(String base){
+            if (current.miriamBase == null){
+                current.miriamBase = base;
+                byMiriamBase.put(base, current);
+            } else {
+                if (!current.miriamBase.equals(base)){
+                    throw new IllegalArgumentException("Illegal attempt to change miriam base for " + current 
+                            + " from " + current.miriamBase + " to " + base);
+                }
+            }           
+			return this;            
+        }
         
         /**
          * Allow the setting but not changing of an alternative name
@@ -463,8 +572,8 @@ public final class DataSource
             } 
             return this;
         }
-	}
-	
+    }
+    
     /** 
 	 * Register a new DataSource with (optional) detailed information.
 	 * This can be used by other modules to define new DataSources.
@@ -527,11 +636,6 @@ public final class DataSource
 		{
 			current = new DataSource (sysCode, fullName);
 			registry.add (current);
-		}
-		
-		if (current.urnBase != null)
-		{
-			byMiriamBase.put (current.urnBase, current);
 		}
 		
 		return new Builder(current);
@@ -761,29 +865,59 @@ public final class DataSource
 	}
 
 	/**
+     * Since version 2.0 this method will return null if no DataSource is known
 	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
-	 * @return the DataSource for a given urn base, or null if the base is invalid.
-	 * If the given urn base is unknown, a new DataSource will be created with the full name equal to the urn base without "urn.miriam."  
+	 * @returns the DataSource for a given urn base, or null if the base is invalid or unknown.
+     * @deprecated 
 	 */
 	public static DataSource getByUrnBase(String base)
 	{
-		if (!base.startsWith ("urn:miriam:"))
+		if (base == null || !base.startsWith (URN_PREFIX))
+		{
+			return null;
+		}
+        String key = base.substring(URN_PREFIX.length());      
+        if (byMiriamBase.containsKey(key)){
+            return byMiriamBase.get(key);
+        }
+        DataSource current = getByFullName(key);
+        current.miriamBase = key;
+        byMiriamBase.put (key, current);
+        return current;
+	}
+
+	/**
+     * Since version 2.0 this method will return null if no DataSource is known
+	 * @param base the base urn, which must start with "urn:miriam:". It it isn't, null is returned.
+	 * @returns the DataSource for a given urn base, or null if the base is invalid or unknown.
+	 */
+	public static DataSource getByMiriamBase(String base)
+	{
+		if (base == null || !base.startsWith (URN_PREFIX))
+		{
+			return null;
+		}
+        String key = base.substring(URN_PREFIX.length());      
+        return byMiriamBase.get(key);
+	}
+
+    /**
+     * Since version 2.0 this method will return null if no DataSource is known
+	 * @param base the base urn, which must start with "http://identifiers.org/". It it isn't, null is returned.
+	 * @returns the DataSource for a given base, or null if the base is invalid or unknown.
+	 */
+    public static DataSource getByIdentiferOrgBase(String base) {
+		if (base == null || !base.startsWith (IDENTIFIERS_ORG_PREFIX))
 		{
 			return null;
 		}
 		DataSource current = null;
 		
-		if (byMiriamBase.containsKey(base))
-		{
-			current = byMiriamBase.get(base);
-		}
-		else
-		{
-			current = getByFullName(base.substring("urn:miriam:".length()));
-			current.urnBase = base;
-			byMiriamBase.put (base, current);
-		}
-		return current;
-	}
-
+        String key = base.substring(IDENTIFIERS_ORG_PREFIX.length());
+        if (key.endsWith("/")){
+            key = key.substring(0, key.length()-1);
+        }
+        return byMiriamBase.get(key);
+    }
+	
 }
