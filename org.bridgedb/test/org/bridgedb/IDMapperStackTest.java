@@ -1,5 +1,7 @@
 package org.bridgedb;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +20,7 @@ public class IDMapperStackTest {
 	private static DataSource dsW, dsX, dsY, dsZ, dsA, dsE, dsB, dsC, dsD;
 	
 	@Before
-	public void setUp() throws ClassNotFoundException, IDMapperException
+	public void setUp() throws ClassNotFoundException, IDMapperException, MalformedURLException
 	{
 		Class.forName("org.bridgedb.file.IDMapperText");
 			
@@ -28,9 +30,8 @@ public class IDMapperStackTest {
 		
 		for (String fileName : FILENAMES) 
 		{   // Load all IDMappers for test data files
-			String fullName = "/org/bridgedb/" + fileName + ".csv";
-			URL url = IDMapperStackTest.class.getResource(fullName);
-			Assert.assertNotNull("Could not find resource in classpath: " + fullName, url);
+            File file = new File("test-data/" + fileName + ".csv");
+            URL url = file.toURI().toURL();
 			IDMapper m = BridgeDb.connect("idmapper-text:" + url);
 			mappers.put(fileName, m);
 			stack.addIDMapper(m);
