@@ -195,7 +195,7 @@ public class BioDataSourceTest
 
 	@Test
 	public void testUniqueSystemCodes() {
-		BioDataSource.init();
+		DataSourceTxt.init();
 		Set<String> codes = new HashSet<String>();
 		Set<DataSource> sources = DataSource.getDataSources();
 		Assert.assertNotSame(0, sources.size());
@@ -207,7 +207,7 @@ public class BioDataSourceTest
 
 	@Test
 	public void systemCodesDoNotHaveWhitespace() {
-		BioDataSource.init();
+		DataSourceTxt.init();
 		Set<DataSource> sources = DataSource.getDataSources();
 		Assert.assertNotSame(0, sources.size());
 		for (DataSource source : sources) {

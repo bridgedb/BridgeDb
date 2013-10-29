@@ -3,11 +3,10 @@ package org.bridgedb.examples;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.DataSourceTxt;
 
 public class ExGuessing 
 {
@@ -18,7 +17,7 @@ public class ExGuessing
 		
 		// We have to initialize DataSource information,
 		// but we don't need a driver
-		BioDataSource.init();
+		DataSourceTxt.init();
 		
 		String query = "NP_036430";
 		System.out.println ("Which patterns match " + query + "?");
