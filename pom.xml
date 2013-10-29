@@ -12,7 +12,7 @@
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
-  	<module>org.bridgedb.webservice.cronos</module>
+  	<!--module>org.bridgedb.webservice.cronos</module-->
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
   	<module>examples</module>

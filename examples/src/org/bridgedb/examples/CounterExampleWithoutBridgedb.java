@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.xml.rpc.ServiceException;
 
 import org.bridgedb.webservice.cronos.CronosWS;
-import org.bridgedb.webservice.cronos.CronosWSService;
-import org.bridgedb.webservice.cronos.CronosWSServiceLocator;
+//CB import org.bridgedb.webservice.cronos.CronosWSService;
+//CB import org.bridgedb.webservice.cronos.CronosWSServiceLocator;
 
 //import org.json.JSONException;
 //import synergizer.SynergizerClient;
@@ -26,7 +26,7 @@ import org.bridgedb.webservice.cronos.CronosWSServiceLocator;
  * Note that you first need to run Apache Axis wsdl2java on the Cronos wsdl
  * (http://mips.helmholtz-muenchen.de/CronosWSService/CronosWS?WSDL) to generate
  * the required classes. You also have to include synergizer-client.jar
- */
+ * /
 public class CounterExampleWithoutBridgedb
 {
 	public void mapCronos(String id) throws ServiceException, IOException
@@ -71,7 +71,7 @@ public class CounterExampleWithoutBridgedb
          	System.out.println ("  " + dest);
          }
 	}
-	*/
+	
 	
 	public static void main(String args[]) throws Exception
 	{
@@ -81,4 +81,4 @@ public class CounterExampleWithoutBridgedb
 		main.mapCronos(id);
 		//main.mapSynergizer(id);
 	}
-}
+}*/
