@@ -124,17 +124,18 @@ public class IDMapperCronos extends IDMapperWebservice
 		try 
 		{ 	// Call Web Service Operation
 
-			CronosWSServiceLocator locator = new CronosWSServiceLocator();
-			port = locator.getCronosWSPort();
-			info.put("WSPortAddress", locator.getCronosWSPortAddress());
-			info.put("WSDDServiceName", locator.getCronosWSPortWSDDServiceName());
-			info.put("WSDLDocumentLocation", "" + locator.getWSDLDocumentLocation());
+			//CronosWSServiceLocator locator = new CronosWSServiceLocator();
+			//port = locator.getCronosWSPort();
+			//info.put("WSPortAddress", locator.getCronosWSPortAddress());
+			//info.put("WSDDServiceName", locator.getCronosWSPortWSDDServiceName());
+			//info.put("WSDLDocumentLocation", "" + locator.getWSDLDocumentLocation());
 
-//			CronosWSService service = new CronosWSService();
-//			port = service.getCronosWSPort(); 
-//			info.put("WSPortAddress", service.WSDL_LOCATION.toString());
-//			info.put("WSDDServiceName", service.getServiceName().toString());
-//			info.put("WSDLDocumentLocation", service.WSDL_LOCATION.toString());
+            
+			CronosWSService service = new CronosWSService();
+			port = service.getCronosWSPort(); 
+			info.put("WSPortAddress", service.WSDL_LOCATION.toString());
+			info.put("WSDDServiceName", service.getServiceName().toString());
+			info.put("WSDLDocumentLocation", service.WSDL_LOCATION.toString());
 		}
 		catch (Exception ex)
 		{
