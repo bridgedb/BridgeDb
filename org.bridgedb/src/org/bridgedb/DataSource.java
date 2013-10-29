@@ -64,7 +64,7 @@ public final class DataSource
 	private String sysCode = null;
 	private String fullName = null;
 	private String mainUrl = null;
-	private String prefix = "";
+	private String prefix = null;
 	private String postfix = "";
 	private Object organism = null;
 	private String idExample = null;
@@ -96,14 +96,45 @@ public final class DataSource
 	
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
+     * 
+     * This method will return just the id if no pattern is known so its use is discouraged.
+     * 
 	 * @param id identifier to use in url
 	 * @return Url
+     * @deprecated as could return just the id which is not a valid uri
 	 */
 	public String getUrl(String id)
 	{
+        if (prefix == null){
+            return id;
+        }
 		return prefix + id + postfix;
 	}
 				
+	/** 
+	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
+     * 
+     * Since version 2 this will return null if no pattern has been set.
+	 * @param id identifier to use in url
+	 * @return Url
+	 */
+	public String getKnownUrl(String id)
+	{
+        if (prefix == null){
+            return null;
+        }
+		return prefix + id + postfix;
+	}
+			
+    /**
+     * Check if a Url pattern is know for this DataSource.
+     * 
+     * @return True if and only if a Url pattern is known/ has been registered
+     */
+    public boolean urlPatternKnown(){
+        return prefix != null;
+    }
+    
 	/** 
 	 * returns full name of DataSource e.g. "Ensembl". 
 	 * May return null if only the system code is known. 
