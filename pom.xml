@@ -8,6 +8,7 @@
   <modules>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
+  	<module>org.bridgedb.utils</module>
 
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
