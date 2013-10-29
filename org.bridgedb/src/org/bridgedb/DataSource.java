@@ -57,6 +57,7 @@ public final class DataSource
 {
     private static final String URN_PREFIX = "urn:miriam:";
     private static final String IDENTIFIERS_ORG_PREFIX = "http://identifiers.org/";
+    public static final String UNKOWN = "unknown";
 
     private static Map<String, DataSource> bySysCode = new HashMap<String, DataSource>();
 	private static Map<String, DataSource> byFullName = new HashMap<String, DataSource>();
@@ -74,7 +75,7 @@ public final class DataSource
 	private boolean isPrimary = true;
 	private boolean isDeprecated = false;
 	private DataSource isDeprecatedBy = null;
-	private String type = "unknown";
+	private String type = UNKOWN;
 	private String miriamBase = null;
     private String alternative = null;
     private String description = null;
@@ -304,39 +305,61 @@ public final class DataSource
 		}
 		
 		/**
-		 * 
 		 * @param urlPattern is a template for generating valid URL's for identifiers. 
 		 * 	The pattern should contain the substring "$ID", which will be replaced by the actual identifier.
+         * 
+         * Since version 2.0.0 it is no longer allowed to change the urlPattern once set.
 		 * @return the same Builder object so you can chain setters
 		 */
 		public Builder urlPattern (String urlPattern)
 		{
-			if (urlPattern == null || "".equals (urlPattern))
-			{
-				current.prefix = "";
-				current.postfix = "";
+			if (urlPattern == null || "".equals (urlPattern)) {
+				return this;
 			}
-			else
-			{
-				int pos = urlPattern.indexOf("$id");
-				if (pos == -1) throw new IllegalArgumentException("Url maker pattern for " + current + "' should have $id in it");
-				current.prefix = urlPattern.substring(0, pos);
-				current.postfix = urlPattern.substring(pos + 3);
-			}
+            String oldUrlPattern = current.getKnownUrl("$id");
+            if (oldUrlPattern != null){
+                if (oldUrlPattern.equals(urlPattern)){
+                    return this;
+                }
+                throw new IllegalArgumentException("DataSource " + current + " already has a URl Pattern of " 
+                        + oldUrlPattern + " so unable to set to " + urlPattern);
+            }
+            int pos = urlPattern.indexOf("$id");
+            if (pos == -1) {
+                throw new IllegalArgumentException("Url maker pattern for " + current + "' should have $id in it");
+            }
+            current.prefix = urlPattern.substring(0, pos);
+			current.postfix = urlPattern.substring(pos + 3);
 			return this;
 		}
 		
 		/**
+         * Note: Since version 2 this method no longer allows changing a mainUrl once set.
 		 * @param mainUrl url of homepage
 		 * @return the same Builder object so you can chain setters
+         * @throws IllegalArgumentException is a none null mainUrl is changed to a different value. 
 		 */
 		public Builder mainUrl (String mainUrl)
 		{
-			current.mainUrl = mainUrl;
-			return this;
+            if (mainUrl == null || mainUrl.isEmpty()){
+                return this;
+            }
+            if (current.mainUrl == null){
+                current.mainUrl = mainUrl;
+                return this;
+            }
+            if (current.mainUrl.equals(mainUrl)){
+                return this;
+            }
+            throw new IllegalArgumentException("Illegal attempt to change mainUrl for " + current + " from " 
+                    + current.mainUrl + " to " + mainUrl);
 		}
 
+
 		/**
+         * Note: Unlike most builder methods this one does allow the idExample to be change even if already set.
+         *     There may be good reasons why a specific example works better in a specific case then the original one set.
+         *     However there is no known case that replies on this flexibility to change.
 		 * @param idExample an example id from this system
 		 * @return the same Builder object so you can chain setters
 		 */
@@ -347,12 +370,16 @@ public final class DataSource
 		}
 		
 		/**
+         * Note: Unlike most builder methods this one does allow the idPrimary to be change even if already set.
+         *     There may be good reasons why a specific DataSource's primary status is different in different applications.
+         *     However there is no known case that replies this on flexibility to change.
 		 * @param isPrimary secondary id's such as EC numbers, Gene Ontology or vendor-specific systems occur in data or linkouts,
 		 * 	but their use in pathways is discouraged
 		 * @return the same Builder object so you can chain setters
 		 */
 		public Builder primary (boolean isPrimary)
 		{
+            //To change this method to check if previously set the type would have to be changed to Boolean and default to null
 			current.isPrimary = isPrimary;
 			return this;
 		}
@@ -385,23 +412,46 @@ public final class DataSource
 		}
 		
 		/**
+         * Since version 2 This method no longer allow changing the type of a DataSource once set.
 		 * @param type the type of datasource, for example "protein", "gene", "metabolite" 
 		 * @return the same Builder object so you can chain setters
 		 */
 		public Builder type (String type)
 		{
-			current.type = type;
-			return this;
+            if (type == null || type.isEmpty()){
+                return this;
+            }
+            if (current.type.equals(UNKOWN)){
+                current.type = type;
+                return this;
+            }
+            if (current.type.equals(type)){
+                return this;
+            }
+            throw new IllegalArgumentException("Illegal attempt to change the type of DataSource " + current + " from "
+                    + current.type + " to " + type);  
 		}
 		
 		/**
+         * Since version 2 This method no longer allows you to change the Organism of a DataSource once set.
+         * 
 		 * @param organism organism for which this system code is suitable, or null for any / not applicable
 		 * @return the same Builder object so you can chain setters
 		 */
 		public Builder organism (Object organism)
 		{
-			current.organism = organism;
-			return this;
+           if (organism == null ){
+                return this;
+            }
+            if (current.organism == null){
+                current.organism = organism;
+                return this;
+            }
+            if (current.organism.equals(organism)){
+                return this;
+            }
+            throw new IllegalArgumentException("Illegal attempt to change the organism of DataSource " + current + " from "
+                    + current.organism + " to " + organism);  
 		}
 		
 		/**
