@@ -412,32 +412,87 @@ public final class DataSource
 	 * @param systemCode short unique code to query for
 	 * @return pre-existing DataSource object by system code, 
 	 * 	if it exists, or creates a new one. 
+     * @deprecated As could return a non existing DataSource with a null fullName
 	 */
 	public static DataSource getBySystemCode(String systemCode)
 	{
 		if (!bySysCode.containsKey(systemCode) && isSuitableKey(systemCode))
 		{
+            System.err.println("Warning creating a new DataSource with systemCode " + systemCode 
+                    + " and null fullName!");
 			findOrRegister (systemCode, null);
 		}
 		return bySysCode.get(systemCode);
 	}
 	
 	/** 
+	 * @param systemCode short unique code to query for
+	 * @return pre-existing DataSource object by system code if it exists
+     * @throws IllegalArgumentException if no DataSource is known with this systemCode
+	 */
+	public static DataSource getExistingBySystemCode(String systemCode)
+	{
+		if (bySysCode.containsKey(systemCode)){
+    		return bySysCode.get(systemCode);
+		}
+        throw new IllegalArgumentException("No DataSource known for " + systemCode);
+	}
+
+    /**
+     * Check if a DataSoucre with this systemCode has been registered
+     * 
+     * @param systemCode to check
+     * @return True if and only if a DataSource has been registered with this systemCode.
+     * @Since Version 2.0.0
+     */
+    public static boolean systemCodeExists(String systemCode){
+        return bySysCode.containsKey(systemCode);
+    }
+    
+    /** 
 	 * returns pre-existing DataSource object by 
 	 * full name, if it exists, 
 	 * or creates a new one. 
 	 * @param fullName full name to query for
 	 * @return DataSource
+     * @deprecated As could return a non existing DataSource with a null sysCode
 	 */
 	public static DataSource getByFullName(String fullName)
 	{
 		if (!byFullName.containsKey(fullName) && isSuitableKey(fullName))
 		{
+            System.err.println("Warning creating a new DataSource with fullName " + fullName 
+                    + " and null systemCode!");
 			findOrRegister (null, fullName);
 		}
 		return byFullName.get(fullName);
 	}
 	
+	/** 
+	 * returns pre-existing DataSource object 
+	 * @param fullName full name to query for
+	 * @return DataSource
+     * @throws IllegalArgumentException if no DataSource is known with this systemCode
+	 */
+	public static DataSource getExistingByFullName(String fullName)
+	{
+		if (byFullName.containsKey(fullName)){
+    		return byFullName.get(fullName);
+        }
+        throw new IllegalArgumentException ("No DataSource known for " + fullName);
+	}
+
+    /**
+     * Check if a DataSoucre with this sfullName has been registered
+     * 
+     * @param fullName to check
+     * @return True if and only if a DataSource has been registered with this systemCode.
+     * @Since Version 2.0.0
+     */
+    public static boolean fullNameExists(String fullName){
+        return byFullName.containsKey(fullName);
+    }
+    
 	public static DataSource getByAlias(String alias)
 	{
 		return byAlias.get(alias);
