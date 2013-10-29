@@ -142,7 +142,8 @@ public class DataSourceTest {
 		Assert.assertEquals(source, source2);
 	}
 
-	@Test
+    //Since Version 2.0.09 this is no longer allowed!
+	@Test (expected =  IllegalArgumentException.class)
 	public void testEqualsToo() {
 		DataSource source = DataSource.register("Cpc", "PubChem-compound")
 			.asDataSource();
