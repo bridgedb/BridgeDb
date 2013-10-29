@@ -84,7 +84,16 @@ public final class DataSource
 	 * {@link getByFullName} or {@link getBySystemCode}. Information about
 	 * DataSources can be added with {@link register}
 	 */
-	private DataSource () {}
+    private DataSource (String sysCode, String fullName) {
+        this.sysCode = sysCode;
+        this.fullName = fullName;
+		if (isSuitableKey(sysCode)) {
+            bySysCode.put(sysCode, this);
+        }
+		if (isSuitableKey(fullName)) {
+            byFullName.put(fullName, this);
+        }
+    }
 	
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
@@ -419,47 +428,73 @@ public final class DataSource
         }
     }
     
-	/** 
+    /** 
 	 * Register a new DataSource with (optional) detailed information.
 	 * This can be used by other modules to define new DataSources.
+     * 
+     * Note: Since version 2 this method is stricter. 
+     * It will no longer allow an existing dataSource to have either its full name of sysCode changed.
+     * 
 	 * @param sysCode short unique code between 1-4 letters, originally used by GenMAPP
-	 * @param fullName full name used in GPML. Must be 20 or less characters
+	 * @param fullName full name used in GPML.
 	 * @return Builder that can be used for adding detailed information.
 	 */
-	public static Builder register(String sysCode, String fullName)
+	public static Builder register(String sysCode, String fullName){
+        if (!isSuitableKey(sysCode)) {
+            throw new IllegalArgumentException ("Unsuitable sysCode " + sysCode + " with " + fullName);
+        }
+		if (!isSuitableKey(fullName)) {
+            throw new IllegalArgumentException ("Unsuitable fullName " + fullName + " with " + sysCode);
+        }
+        return findOrRegister(sysCode, fullName);
+    }
+            
+    private static Builder findOrRegister(String sysCode, String fullName)
 	{
-		DataSource current = null;
+ 		DataSource current = null;
 		if (fullName == null && sysCode == null) throw new NullPointerException();
-//		if (fullName != null && fullName.length() > 20) 
-//		{ 
-//			throw new IllegalArgumentException("full Name '" + fullName + "' must be 20 or less characters"); 
-//		}
 		
 		if (byFullName.containsKey(fullName))
 		{
 			current = byFullName.get(fullName);
+            if (sysCode ==null){
+                if (current.getSystemCode() != null){
+                    throw new IllegalArgumentException ("System code does not match for DataSource " + fullName 
+                            + " was " + current.getSystemCode() + " so it can not be changed to null.");
+                }
+            } else {
+                if (!sysCode.equals(current.getSystemCode())){
+                    throw new IllegalArgumentException ("System code does not match for DataSource " + fullName 
+                            + " was " + current.getSystemCode() + " so it can not be changed to " + sysCode);
+                }
+                
+            }
 		}
 		else if (bySysCode.containsKey(sysCode))
 		{
-			current = bySysCode.get(sysCode);
+            current = bySysCode.get(sysCode);
+            if (fullName ==null){
+                if (current.getFullName() != null){
+                    throw new IllegalArgumentException ("Full name does not match for DataSource " + sysCode 
+                            + " was " + current.getFullName() + " so it can not be changed to " + null);
+                }
+            } else {
+                if (!fullName.equals(current.getFullName())){
+                    throw new IllegalArgumentException ("Full name does not match for DataSource " + sysCode 
+                            + " was " + current.getFullName() + " so it can not be changed to " + fullName);
+                }
+                
+            }
 		}
 		else
 		{
-			current = new DataSource ();
+			current = new DataSource (sysCode, fullName);
 			registry.add (current);
 		}
 		
-		current.sysCode = sysCode;
-		current.fullName = fullName;
-
-		if (isSuitableKey(sysCode))
-			bySysCode.put(sysCode, current);
-		if (isSuitableKey(fullName))
-			byFullName.put(fullName, current);
-		
 		return new Builder(current);
 	}
-	
+    
 	public void registerAlias(String alias)
 	{
 		byAlias.put (alias, this);
@@ -486,7 +521,7 @@ public final class DataSource
 	{
 		if (!bySysCode.containsKey(systemCode) && isSuitableKey(systemCode))
 		{
-			register (systemCode, null);
+			findOrRegister (systemCode, null);
 		}
 		return bySysCode.get(systemCode);
 	}
@@ -502,7 +537,7 @@ public final class DataSource
 	{
 		if (!byFullName.containsKey(fullName) && isSuitableKey(fullName))
 		{
-			register (null, fullName);
+			findOrRegister (null, fullName);
 		}
 		return byFullName.get(fullName);
 	}
