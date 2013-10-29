@@ -76,6 +76,8 @@ public final class DataSource
 	private DataSource isDeprecatedBy = null;
 	private String type = "unknown";
 	private String miriamBase = null;
+    private String alternative = null;
+    private String description = null;
 	
 	/**
 	 * Constructor is private, so that we don't
@@ -248,6 +250,26 @@ public final class DataSource
 		return this.IDENTIFIERS_ORG_PREFIX + miriamBase + "/" + id;
     }
     
+    /**
+     * Retrieves any saved alternative name.
+     * 
+     * @return Saved alternative name or null if none is known
+     * @since version 2.0.0
+     */
+    public String getAlternative(){
+        return alternative;
+    }
+     
+    /**
+     * Retrieves any saved description.
+     * 
+     * @return Saved description or null if none is known
+     * @since version 2.0.0
+     */
+    public String getDescription(){
+        return description;
+    }
+    
 	/**
 	 * Uses builder pattern to set optional attributes for a DataSource. For example, this allows you to use the 
 	 * following code:
@@ -313,7 +335,6 @@ public final class DataSource
 			current.mainUrl = mainUrl;
 			return this;
 		}
-
 
 		/**
 		 * @param idExample an example id from this system
@@ -457,8 +478,52 @@ public final class DataSource
             }           
 			return this;            
         }
-    }
-    
+        
+        /**
+         * Allow the setting but not changing of an alternative name
+         * 
+         * @param alternative
+ 		 * @return the same Builder object so you can chain setters
+         * @since version 2.0.0
+        */
+        public Builder alternative(String alternative){
+            if (alternative == null || alternative.isEmpty()){
+                return this;
+            }
+            if (current.alternative == null){
+                current.alternative = alternative;
+            } else {
+                if (!current.alternative.equals(alternative)){
+                    throw new IllegalArgumentException("Illegal attempt to change alternative for " + current 
+                            + " from " + current.alternative + " to " + alternative);
+                }
+            } 
+            return this;
+        }
+
+         /**
+         * Allow the setting but not changing of a description
+         * 
+         * @param alternative
+ 		 * @return the same Builder object so you can chain setters
+         * @since version 2.0.0
+        */
+       public Builder description(String description){
+            if (description == null || description.isEmpty()){
+                return this;
+            }
+            if (current.description == null){
+                current.description = description;
+            } else {
+                if (!current.description.equals(description)){
+                    throw new IllegalArgumentException("Illegal attempt to change description for " + current 
+                            + " from " + current.description + " to " + description);
+                }
+            } 
+            return this;
+        }
+	}
+  
     /** 
 	 * Register a new DataSource with (optional) detailed information.
 	 * This can be used by other modules to define new DataSources.
