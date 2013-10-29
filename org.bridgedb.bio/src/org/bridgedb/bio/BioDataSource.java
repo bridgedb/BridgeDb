@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -598,37 +600,9 @@ public class BioDataSource
 	public static void init() 
 	{
 		InputStream is = BioDataSource.class.getClassLoader().getResourceAsStream("org/bridgedb/bio/datasources.txt");
-		BufferedReader reader = new BufferedReader (
-				new InputStreamReader (is));
-		String line;
 		try
 		{
-			while ((line = reader.readLine()) != null)
-			{
-				String[] fields = line.split ("\\t");
-				DataSource.Builder builder = DataSource.register
-					(fields[1], // system code 
-					fields[0]); // gpml name
-				if (fields.length > 2 && fields[2].length() > 0) builder.mainUrl(fields[2]);
-				if (fields.length > 3 && fields[3].length() > 0) builder.urlPattern(fields[3]);
-				if (fields.length > 4 && fields[4].length() > 0) builder.idExample(fields[4]);
-				if (fields.length > 5 && fields[5].length() > 0) builder.type(fields[5]);
-				if (fields.length > 6 && fields[6].length() > 0) builder.organism(Organism.fromLatinName(fields[6]));					      
-				if (fields.length > 7 && fields[7].length() > 0) builder.primary (fields[7].equals ("1"));					      
-				if (fields.length > 8) builder.urnBase(fields[8]);
-				if (fields.length > 9) {
-					try {
-						Pattern pattern = Pattern.compile(fields[9]);
-						DataSourcePatterns.registerPattern(
-							builder.asDataSource(), pattern
-						);
-					} catch (Exception patternExpression) {
-						// ignore
-						System.out.println("Invalid regex for " + fields[1] + ": " + patternExpression.getMessage());
-					}
-				}
-			}
-			
+            DataSourceTxt.loadInputStream(is);
 			InternalUtils.readXmlConfig(
 					new InputSource(
 							BioDataSource.class.getClassLoader().getResourceAsStream(
