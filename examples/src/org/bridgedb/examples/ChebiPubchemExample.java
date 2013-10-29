@@ -21,6 +21,7 @@ public class ChebiPubchemExample
 		Xref src = new Xref("16811", BioDataSource.CHEBI);		
 		
 		// the method returns a set, but in actual fact there is only one result
+        //Oct 29 2013 Christian: Had to add  BioDataSource.PUBCHEM back in to get this to work!
 		for (Xref dest : mapper.mapID(src, BioDataSource.PUBCHEM))
 		{
 			// this should print 6137, the pubchem identifier for Methionine.

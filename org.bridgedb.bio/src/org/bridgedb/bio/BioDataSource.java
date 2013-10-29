@@ -60,6 +60,10 @@ public class BioDataSource
 		"Ch", "HMDB").asDataSource();
 	public static final DataSource KEGG_COMPOUND = DataSource.register (
 		"Ck", "KEGG Compound").asDataSource();
+    /** @deprecated use one of the organism-specific system codes instead */ 
+    //Oct 29 2013 Christian: Had to add this back in for Examples/ChebiPubchemExample.java to work!
+	public static final DataSource PUBCHEM = DataSource.register (
+		"Cp", "PubChem").asDataSource();
 	public static final DataSource PUBCHEM_SUBSTANCE = DataSource.register (
 		"Cps", "PubChem-substance").asDataSource();
 	public static final DataSource PUBCHEM_COMPOUND = DataSource.register (
