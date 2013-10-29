@@ -99,5 +99,73 @@ public class DataSourceTxt
         if (fields.length > 10) builder.alternative(fields[10]);
     }		
 
+    /** 
+     * Writes all currently loaded DataSources to a writer
+     * 
+     * @see DataSourceTxtTest.testWriteRead() for a working example
+     * 
+     * @param writer
+     * @throws IOException 
+     */
+    public static void writeToBuffer(BufferedWriter writer) throws IOException {
+        TreeSet sorted = new TreeSet<DataSource>(new DataSourceComparator());
+        sorted.addAll(DataSource.getDataSources());
+        writeToBuffer(writer, sorted);
+    }
+    
+	public static void writeToBuffer(BufferedWriter writer, SortedSet<DataSource> dataSources) throws IOException 
+	{
+        for (DataSource dataSource:dataSources){
+            //Ignore invalid test DataSources
+            if (dataSource.getSystemCode() != null && dataSource.getFullName() != null){
+                writer.write(dataSource.getFullName());//[0]
+                writer.write("\t");
+                writer.write(dataSource.getSystemCode());//[1]
+                writer.write("\t");
+                if (dataSource.getMainUrl() != null){
+                    writer.write(dataSource.getMainUrl());//[2]
+                }
+                writer.write("\t");
+                if (dataSource.getKnownUrl("$id") != null){
+                    writer.write(dataSource.getKnownUrl("$id"));//[3]
+                }
+                writer.write("\t");
+                if (dataSource.getExample().getId() != null){
+                    writer.write(dataSource.getExample().getId());//[4]
+                }
+                writer.write("\t");
+                if (dataSource.getType() != null){
+                    writer.write(dataSource.getType());//[5]
+                }
+                writer.write("\t");
+                if (dataSource.getOrganism() instanceof Organism){
+                    writer.write(((Organism)dataSource.getOrganism()).latinName());//[6]
+                }
+                writer.write("\t");
+                if (dataSource.isPrimary()){
+                    writer.write("1");//[7]
+                } else {
+                    writer.write("0");//[7]
+                }
+                writer.write("\t");
+                String base = dataSource.getMiriamURN("");
+                if (base != null){
+                    writer.write(base.substring(0, base.length()-1));//[8]
+                }
+                writer.write("\t");
+                if (DataSourcePatterns.getPatterns().containsKey(dataSource)){
+                    writer.write(DataSourcePatterns.getPatterns().get(dataSource).pattern());//[9]
+                }
+                writer.write("\t");
+                if (dataSource.getAlternative() != null){
+                    writer.write(dataSource.getAlternative());//[10]
+                }
+                writer.newLine();
+            }   
+        }
+        writer.flush();
+        writer.close();
+	}
+    
 }
 

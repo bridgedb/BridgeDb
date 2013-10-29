@@ -16,20 +16,16 @@
 //
 package org.bridgedb.bio;
 
+import java.util.Set;
+import org.bridgedb.DataSource;
+import org.bridgedb.DataSourcePatterns;
+import org.bridgedb.Xref;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import org.bridgedb.DataSource;
-import org.bridgedb.DataSourcePatterns;
-import org.bridgedb.Xref;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -193,29 +189,4 @@ public class BioDataSourceTest
 		assertEquals ("GO:00001234", ref.getId());
 	}
 
-	@Test
-	public void testUniqueSystemCodes() {
-		DataSourceTxt.init();
-		Set<String> codes = new HashSet<String>();
-		Set<DataSource> sources = DataSource.getDataSources();
-		Assert.assertNotSame(0, sources.size());
-		for (DataSource source : sources) {
-			codes.add(source.getSystemCode());
-		}
-		Assert.assertEquals(sources.size(), codes.size());
-	}
-
-	@Test
-	public void systemCodesDoNotHaveWhitespace() {
-		DataSourceTxt.init();
-		Set<DataSource> sources = DataSource.getDataSources();
-		Assert.assertNotSame(0, sources.size());
-		for (DataSource source : sources) {
-			String sysCode = source.getSystemCode();
-			if (sysCode != null) {
-				Assert.assertEquals(sysCode.length(), sysCode.trim().length());
-				Assert.assertFalse(sysCode.contains(" "));
-			}
-		}
-	}
 }
