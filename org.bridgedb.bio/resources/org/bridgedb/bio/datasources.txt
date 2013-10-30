@@ -40,8 +40,8 @@ Ensembl Zebrafish	EnDr	http://www.ensembl.org	http://www.ensembl.org/Danio_rerio
 Entrez Gene	L	http://www.ncbi.nlm.nih.gov/gene	http://www.ncbi.nlm.nih.gov/gene/$id	100010	gene		1	urn:miriam:ncbigene	^\d+$	Entrez Gene
 Enzyme Nomenclature	E	http://www.ebi.ac.uk/intenz/	http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=$id	1.1.1.1	gene		1	urn:miriam:ec-code	^\d+\.-\.-\.-|\d+\.\d+\.-\.-|\d+\.\d+\.\d+\.-|\d+\.\d+\.\d+\.(n)?\d+$	Enzyme Nomenclature
 FlyBase	F	http://flybase.org/	http://flybase.org/reports/$id.html	FBgn0011293	gene	Drosophila melanogaster	1	urn:miriam:flybase	^FB\w{2}\d{7}$	FlyBase
-GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	G	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank
-Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	Gw	\d+	Gene Wiki
+GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	(\w\d{5})|(\w{2}\d{6})|(\w{3}\d{5})	GenBank
+Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	\d+	Gene Wiki
 GeneOntology	T	http://www.ebi.ac.uk/QuickGO/	http://www.ebi.ac.uk/QuickGO/GTerm?id=$id	GO:0006915	ontology		0	urn:miriam:go	^GO:\d{7}$	Gene Ontology
 Gramene Arabidopsis	EnAt	http://www.gramene.org/	http://www.gramene.org/Arabidopsis_thaliana/Gene/Summary?g=$id	ATMG01360-TAIR-G	gene	Arabidopsis thaliana	1	EnAt	AT[\dCM]G\d{5}\-TAIR\-G	Grameen Arabidopsis
 Gramene Genes DB	Gg	http://www.gramene.org/	http://www.gramene.org/db/genes/search_gene?acc=$id	GR:0060184	gene		1	Gg	GR:\d+	Gramene Genes
@@ -116,7 +116,7 @@ TAIR	A	http://arabidopsis.org/index.jsp	http://arabidopsis.org/servlets/TairObje
 TIGR	Ti	http://www.jcvi.org/		12012.t00308	gene		1	Ti		TIGR
 TTD Drug	Td	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDRUG.asp?ID=$id	DAP000773	metabolite		1	urn:miriam:ttd.drug	^DAP\d+$	TTD Drug
 TTD Target	Tt	http://bidd.nus.edu.sg/group/cjttd/TTD_HOME.asp	http://bidd.nus.edu.sg/group/cjttd/ZFTTDDetail.asp?ID=$id	TTDS00056	protein		1	urn:miriam:ttd.target	^TTDS\d+$	TTD Target
-TubercuList	Tb	http://tuberculist.epfl.ch	http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id	Rv0064	gene	Mycobacterium tuberculosis	1	Tb	Rv\d{4}(A|B|c|\.\d)?	TubercuList
+TubercuList	Tb	http://tuberculist.epfl.ch	http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id	Rv0064	gene	Mycobacterium tuberculosis	1	urn:miriam:myco.tuber	Rv\d{4}(A|B|c|\.\d)?	TubercuList
 UCSC Genome Browser	Uc	http://genome.ucsc.edu/	http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id	uc001tyh.1	gene		1	Uc	uc\d{3}[a-z]{3}\.\d	UCSC Genome Browser
 UniGene	U	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$id	Hs.553708	gene		1	U	[A-Z][a-z][a-z]?\.\d+	UniGene
 Unipathway	Up	http://www.grenoble.prabi.fr/obiwarehouse/unipathway	http://www.grenoble.prabi.fr/obiwarehouse/unipathway/upa?upid=$id	UPA00206	pathway		1	urn:miriam:unipathway	^UPA\d{5}$	Unipathway
@@ -124,8 +124,8 @@ Uniprot-TrEMBL	S	http://www.uniprot.org/	http://www.uniprot.org/uniprot/$id	P621
 Uniprot-SwissProt	Sp	http://www.uniprot.org/	http://www.uniprot.org/uniprot/$id	CALM_HUMAN	protein		1	Sp	^[A-Z0-9]+_[A-Z]+$	UniProtKB/Swiss-Prot
 Wheat gene names	Wn	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/report?class=gene;name=$id	5S-Rrna-D1_(Triticum)	gene	Triticum aestivum	1	Wn		Wheat gene names
 Wheat gene refs	Wr	http://wheat.pw.usda.gov/	http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id	WGS-95-1333	probe	Triticum aestivum	0	Wr		Wheat gene refs
-WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	Wg		WikiGenes
+WikiGenes	Wg	http://www.wikigenes.org/	http://www.wikigenes.org/e/gene/e/$id.html	7157	gene		0	urn:miriam:wikigenes		WikiGenes
 WikiPathways	Wp	http://www.wikipathways.org/	http://www.wikipathways.org/index.php/Pathway:$id	WP100	pathway		1	urn:miriam:wikipathways	WP\d{1,5}(_r\d+)?	WikiPathways
-Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	Wi		Wikipedia
+Wikipedia	Wi	http://www.wikipedia.org	http://en.wikipedia.org/wiki/$id	Acetate	metabolite		0	urn:miriam:wikipedia.en		Wikipedia
 WormBase	W	http://www.wormbase.org/	http://www.wormbase.org/db/gene/gene?name=$id;class=Gene	WBGene00000001	gene	Caenorhabditis elegans	1	urn:miriam:wormbase	^WBGene\d{8}$	WormBase
 ZFIN	Z	http://zfin.org	http://zfin.org/action/marker/view/$id	ZDB-GENE-041118-11	gene	Danio rerio	1	urn:miriam:zfin	ZDB\-GENE\-\d+\-\d+	ZFIN Gene
