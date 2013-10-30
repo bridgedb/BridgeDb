@@ -17,22 +17,23 @@
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
   	<module>examples</module>
-        <module>org.bridgedb.server</module>
+    <module>org.bridgedb.server</module>
   </modules>
   
     <properties>
+        <commons-cli.version>1.2</commons-cli.version>
         <cxf.version>2.4.3</cxf.version>
         <hamcrest.version>1.2</hamcrest.version>
         <jersey.version>1.10</jersey.version>
+        <log4j.version>1.2.16</log4j.version> <!-- Version used in MetaData -->
         <mysql.version>5.1.20</mysql.version>
-        <sesame.version>2.7.1</sesame.version>
-        <servlet.version>2.5</servlet.version>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <owlapi-api.version>3.4</owlapi-api.version>
+        <sesame.version>2.7.1</sesame.version>
+        <servlet.version>2.5</servlet.version>
         <slf4j.version>1.6.4</slf4j.version>
-        <log4j.version>1.2.16</log4j.version> <!-- Version used in MetaData -->
-    </properties>
-    
+   </properties>
+   
   	<build>
 		<pluginManagement>
 			<plugins>
