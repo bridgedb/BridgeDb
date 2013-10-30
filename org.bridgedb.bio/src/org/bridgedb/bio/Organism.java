@@ -100,7 +100,7 @@ public enum Organism
 	}
 
 	Organism(String latinName, String code, int taxonomyRef) {
-		this(latinName, code, null, taxonomyRef);
+		this(latinName, code, latinName, taxonomyRef);
 	}
 
 	Organism(String latinName, String code, String shortName, int taxonomyRef) {
@@ -108,8 +108,10 @@ public enum Organism
 		this.code = code;
 		this.shortName = shortName;
 		if (taxonomyRef > 0) {
-			DataSource taxonomyDS = DataSource.getByFullName("NCBI Taxonomy Database");
-			if (taxonomyDS == null) {
+            DataSource taxonomyDS;
+            if (DataSource.fullNameExists("NCBI Taxonomy Database")){
+                taxonomyDS = DataSource.getExistingByFullName("NCBI Taxonomy Database");
+            } else {
 				taxonomyDS = DataSource.register(
 					"Tn", "NCBI Taxonomy Database"
 				).asDataSource();
