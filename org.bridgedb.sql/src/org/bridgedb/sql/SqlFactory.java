@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import org.bridgedb.mysql.MySQLAccess;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-//import org.bridgedb.virtuoso.VirtuosoAccess;
+import org.bridgedb.virtuoso.VirtuosoAccess;
 
 /**
  * Finds the SQL Configuration file and uses it to open the database with the correct database name, user name and password.
@@ -58,7 +58,7 @@ public class SqlFactory extends ConfigReader{
      */
     public static SQLAccess createTheSQLAccess() throws BridgeDBException {
         SQLAccess sqlAccess;
-//        if (useMySQL){
+        if (useMySQL){
             if (useTest){
                 sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlTestDatabase(), testSqlUser(), testSqlPassword());
                 logger.info("Connecting to test MYSQL database " + sqlTestDatabase());
@@ -66,10 +66,10 @@ public class SqlFactory extends ConfigReader{
                 sqlAccess = new MySQLAccess(sqlPort() + "/" + sqlDatabase(), sqlUser(), sqlPassword());
                 logger.info("Connecting to Live MYSQL database " + sqlDatabase());
             }
-//        } else {       
-//            sqlAccess = new VirtuosoAccess();;
-//            logger.info("Connecting to hardcoded Virtuoso database. Ignoring StoreType");
-//        }
+        } else {       
+            sqlAccess = new VirtuosoAccess();;
+            logger.info("Connecting to hardcoded Virtuoso database. Ignoring StoreType");
+        }
         sqlAccess.getConnection();
         return sqlAccess;
     }
