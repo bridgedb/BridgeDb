@@ -8,6 +8,7 @@
   <modules>
   	<module>org.bridgedb</module>
   	<module>org.bridgedb.bio</module>
+  	<module>org.bridgedb.utils</module>
 
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
@@ -19,6 +20,19 @@
         <module>org.bridgedb.server</module>
   </modules>
   
+    <properties>
+        <cxf.version>2.4.3</cxf.version>
+        <hamcrest.version>1.2</hamcrest.version>
+        <jersey.version>1.10</jersey.version>
+        <mysql.version>5.1.20</mysql.version>
+        <sesame.version>2.7.1</sesame.version>
+        <servlet.version>2.5</servlet.version>
+        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+        <owlapi-api.version>3.4</owlapi-api.version>
+        <slf4j.version>1.6.4</slf4j.version>
+        <log4j.version>1.2.16</log4j.version> <!-- Version used in MetaData -->
+    </properties>
+    
   	<build>
 		<pluginManagement>
 			<plugins>
