@@ -43,7 +43,7 @@ Export-Package: com.mysql.jdbc,
  org.restlet.util
 Require-Bundle: org.bridgedb,
  org.bridgedb.bio,
- commons-cli-1.2.jar,
- org.restlet.ext.servlet.jar,
- org.restlet.jar
+ org.apache.commons.cli,
+ org.restlet.ext.servlet,
+ org.restlet
 
