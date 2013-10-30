@@ -16,9 +16,13 @@
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
   	<module>examples</module>
-        <module>org.bridgedb.server</module>
+    <module>org.bridgedb.server</module>
   </modules>
   
+   <properties>
+        <commons-cli.version>1.2</commons-cli.version>
+   </properties>
+   
   	<build>
 		<pluginManagement>
 			<plugins>
