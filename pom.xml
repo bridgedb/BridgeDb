@@ -11,6 +11,7 @@
   	<module>org.bridgedb.utils</module>
   	<module>org.bridgedb.sql</module>
   	<module>org.bridgedb.ws.core</module>
+  	<module>org.bridgedb.ws.server</module>
 
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
