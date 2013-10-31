@@ -1,0 +1,32 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/2.0/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "ConceptWiki to DrugBank targets Linkset"^^xsd:string ;
+    dcterms:description """A linkset connecting ConceptWiki concepts 
+    	with DrugBank targets."""^^xsd:string;
+    foaf:primaryTopic :conceptwiki_drugbank_targets .
+
+:conceptwiki_drugbank_targets a void:Linkset ;
+    void:subjectsTarget :conceptwiki ;
+    void:objectsTarget :drugbank_targets ;
+    void:linkPredicate skos:exactMatch ;
+    dul:expresses rdfs:isDefinedBy ;
+    dcterms:creator <http://www.conceptwiki.org> .
+:conceptwiki a void:Dataset ;
+	dcterms:title "ConceptWiki"^^xsd:string ;
+    void:uriSpace <http://www.conceptwiki.org/concept/> .
+:drugbank_targets a void:Dataset ;
+	dcterms:title "DrugBank Targets"^^xsd:string ;
+    void:uriSpace <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/> .
+
+<http://www.conceptwiki.org/concept/516c9a26-885c-4920-9a13-d0a68cf99084> skos:exactMatch <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/6131>.
+<http://www.conceptwiki.org/concept/ccd4a66b-c18c-48d3-947e-6845360c024b> skos:exactMatch <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/5455>.
+<http://www.conceptwiki.org/concept/4be70bb8-444f-470b-b7a5-85e185a63885> skos:exactMatch <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/346>.
