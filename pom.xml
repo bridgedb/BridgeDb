@@ -17,7 +17,8 @@
     <module>org.bridgedb.uri.sql</module>
     <module>org.bridgedb.uri.ws.core</module>
     <module>org.bridgedb.uri.ws.server</module>
-
+    <module>org.bridgedb.uri.ws.client</module>
+ 
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>
