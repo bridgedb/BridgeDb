@@ -12,6 +12,7 @@
   	<module>org.bridgedb.sql</module>
     <module>org.bridgedb.rdf</module>
     <module>org.bridgedb.uri.sql</module>
+    <module>org.bridgedb.uri.loader</module>
 
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
