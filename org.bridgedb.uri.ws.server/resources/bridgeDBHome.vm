@@ -1,0 +1,22 @@
+<p>Welcome to the BridgeDB. </p>
+<p>A List of which mappings we current have can be found at <a href="$contextPath/$getMappingInfo">Mapping Info Page</a></p>
+$mapUriForm
+<h2>Usage Information</h2>
+<p>The Main OPS method are: 
+    <ul>
+        <dt>
+            <a href="$contextPath/$api/#$mapURI">$mapURI</a>
+            <dt>
+                <dd>List the URIs that map to this/these URI(s)</dd>
+                <dt>
+                    <a href="$contextPath/$api/#$map">$map</a>
+                    <dt>
+                        <dd>List the full Mappings to this URI/Xref</dd>
+					</dt>
+				</dt>
+			</dt>
+	</ul>
+<p>
+    <a href="$contextPath/$api">API Page</a>
+</p>
+

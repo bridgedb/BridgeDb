@@ -1,0 +1,92 @@
+		var mitems=new Array(
+#foreach( $targetUriPattern in $targetUriPatterns)
+    "$targetUriPattern"#if( $foreach.hasNext ),#end
+#end);
+
+		function loadAll(){
+			list=document.getElementById('pattern');
+			list.options.length=mitems.length;
+			countAll=document.getElementById('countAll');
+			countAll.innerHTML=mitems.length;
+			for(var i=0;i<mitems.length;i++)
+			{
+				list.options[i].text=mitems[i];
+				list.options[i].value=mitems[i];
+			}
+		}
+
+		function populate(o)
+		{
+			list=document.getElementById('pattern');
+			if(!list){return;}
+			var allowed = new Array();
+			if (o.value.length > 0){
+				for(var i=0;i<mitems.length;i++)
+				{
+					if (mitems[i].indexOf(o.value) >= 0) {
+						allowed.push(mitems[i]);
+					}
+				}
+			} else {
+				allowed = mitems;
+			}
+
+			list.options.length=allowed.length;
+			countAll=document.getElementById('countAll');
+			countAll.innerHTML=allowed.length;
+			for(var i=0;i<allowed.length;i++)
+			{
+				list.options[i].text=allowed[i];
+				list.options[i].value=allowed[i];
+				list.options[i].selected = false;
+			}
+			count(list);
+		}
+
+		function count(list){
+			var cnt = 0;
+			for (var i = 0; i < list.options.length; i++) {
+			    if (list.options[i].selected) {
+			        cnt++;
+			    }
+			}
+			l=document.getElementById('countSelected');
+			l.innerHTML=cnt;
+			button=document.getElementById('getButton');
+            if(button){
+                if (cnt > 10){
+                    button.disabled = true;
+                    button.value = "Too many parameters"
+                } else {
+                    button.disabled = false;
+                    button.value = "Submit using get"
+                }
+             }
+		}
+
+		function pickAll(){
+			list = document.getElementById('pattern');
+			for (var i = 0; i < list.options.length; i++) {
+			    list.options[i].selected = true;
+			}
+			count(list);
+		}
+
+		function pickNone(){
+			list = document.getElementById('pattern');
+			for (var i = 0; i < list.options.length; i++) {
+			    list.options[i].selected = false;
+			}
+			count(list);
+		}
+
+		var lensDescriptions=new Array();
+        #foreach($lens in $lenses)
+            lensDescriptions["$lens.toUri($context)"]=["$lens.getDescription()"];
+        #end 
+ 
+		function addLensDescriptions(o)
+		{
+			area =document.getElementById('lensDescriptionArea');
+			area.value = lensDescriptions[o.options[o.selectedIndex].value];
+		}
