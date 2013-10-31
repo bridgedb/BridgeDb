@@ -356,7 +356,7 @@ public class BridgeDBRdfHandler extends RdfBase{
         Pattern regex = DataSourcePatterns.getPatterns().get(dataSource);
         String url = dataSource.getKnownUrl("$id");
         UriPattern urlPattern = UriPattern.byPattern(url);
-        if (url != null){
+        if (urlPattern != null){
             repositoryConnection.add(id, BridgeDBConstants.HAS_URL_PATTERN_URI, urlPattern.getResourceId());
         }
 
