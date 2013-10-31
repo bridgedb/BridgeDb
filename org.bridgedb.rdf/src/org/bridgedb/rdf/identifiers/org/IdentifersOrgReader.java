@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -60,6 +61,8 @@ import org.openrdf.sail.memory.MemoryStore;
  * @author Christian
  */
 public class IdentifersOrgReader extends RdfBase {
+    
+    public static final String UNABLE_TO_CONNECT = "Unable to connect to miriam";
     
     private static final Logger logger = Logger.getLogger(IdentifersOrgReader.class);  
     
@@ -108,6 +111,8 @@ public class IdentifersOrgReader extends RdfBase {
             reader.doParseRdfInputStream(stream);
             stream.close();        
             initRun = true;
+        } catch (UnknownHostException ex) {
+            throw new BridgeDBException (UNABLE_TO_CONNECT, ex);
         } catch (MalformedURLException ex) {
             throw new BridgeDBException ("Error reading miriam registry.", ex);
         } catch (IOException ex) {

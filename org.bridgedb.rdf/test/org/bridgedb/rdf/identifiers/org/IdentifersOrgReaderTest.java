@@ -19,6 +19,7 @@
 //
 package org.bridgedb.rdf.identifiers.org;
 
+import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.junit.Test;
 
@@ -33,7 +34,17 @@ public class IdentifersOrgReaderTest {
     @Test
     public void testInit() throws Exception {
         Reporter.println("init");
-        IdentifersOrgReader.init();
+        try { 
+            IdentifersOrgReader.init();
+        } catch (BridgeDBException ex) {
+            if (ex.getMessage().equals(IdentifersOrgReader.UNABLE_TO_CONNECT)){
+                Reporter.error("**** ERROR CONNECTING TO MIRIAM ****");
+                Reporter.error("IdentifersOrgReader Test abanndoned.");
+                Reporter.error("Check Miriam RDF URI is still correct.");
+            } else {
+                throw ex;
+            }
+        }
     }
 
 }
