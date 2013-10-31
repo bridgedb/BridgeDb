@@ -15,6 +15,7 @@
   	<module>org.bridgedb.ws.client</module>
     <module>org.bridgedb.rdf</module>
     <module>org.bridgedb.uri.sql</module>
+    <module>org.bridgedb.uri.ws.core</module>
 
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
