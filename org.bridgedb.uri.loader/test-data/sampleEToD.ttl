@@ -1,0 +1,36 @@
+@prefix : <#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix DS_E: <http://www.example.com/DS_E/> .
+@prefix DS_D: <http://www.example.com/DS_D/> .
+
+<> a void:DatasetDescription ;
+    dcterms:title "Dataset Description Title"^^xsd:string ;
+    dcterms:description """Dataset description description"""^^xsd:string;
+    pav:createdBy <http://www.foo.com/> ;
+    pav:createdOn "2012-08-06"^^xsd:date;
+    foaf:primaryTopic :TestE_D .
+
+:TestDS_E a void:Dataset  ;
+    void:uriSpace DS_E:.
+:TestDS_D a void:Dataset ;
+    void:uriSpace DS_D:.
+:TestE_D a void:Linkset  ;
+    void:subjectsTarget :TestDS_E ;
+    void:objectsTarget :TestDS_D ;
+    dcterms:license "Who cares this is a test" ;
+    void:linkPredicate <http://www.bridgedb.org/test#testPredicate> ;
+    dul:expresses <http://www.bridgedb.org/test#justification1> ;
+    dcterms:created "2012-02-22"^^xsd:date ;
+    dcterms:creator <http://www.cs.man.ac.uk/~brenninc> .
+ 
+DS_E:123 <http://www.bridgedb.org/test#testPredicate> DS_D:123 .
+DS_E:456 <http://www.bridgedb.org/test#testPredicate> DS_D:456 .
+DS_E:456 <http://www.bridgedb.org/test#testPredicate> DS_D:789 .
+DS_E:789 <http://www.bridgedb.org/test#testPredicate> DS_D:789 .
