@@ -7,7 +7,7 @@
     <groupId>org.bridgedb</groupId>
     <artifactId>org.bridgedb.ws.core</artifactId>
     <packaging>jar</packaging>
-    <name>OPS BridgeDb Websever Core</name>
+    <name>BridgeDb Websever Core</name>
 
     <parent>
         <artifactId>bridgedb-bundle</artifactId>
