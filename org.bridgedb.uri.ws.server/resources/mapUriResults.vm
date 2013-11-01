@@ -1,0 +1,66 @@
+<h2>Uri Mapping results</h2>
+#if ($exception)
+    <h4>Unable to process your request</h4>
+    <h3>$exception</h3>
+    <p>Warning: XML and JSON versions will throw an Exception with these parameters</p>
+#else 
+    #if( $MappingsBySysCodeId.isEmpty())
+        <h4>No Target Uris found</h4>
+        <p>
+        Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
+        </p>
+    #else
+        #foreach ( $resultSysCode in $MappingsBySysCodeId.getSysCodes())
+            <ul>
+                <li>$MappingsBySysCodeId.getDataSourceName($resultSysCode)</li>
+                #foreach ( $resultId in $MappingsBySysCodeId.getIds($resultSysCode))
+                    <ul>
+                        <li>$resultId</li>
+                        <ul>
+                            #foreach ( $resultUri in $MappingsBySysCodeId.getUris($resultSysCode, $resultId))
+                                <li><a href=$resultUri>$resultUri</a></li>
+                            #end
+                        </ul>
+                    </ul>
+                #end
+            </ul>
+        #end
+    #end
+#end
+<h2>Parameters</h2>
+#if( $sourceUris.isEmpty())
+    <h4>No (or only empty) $URI parameter(s) provided! So no data can be returned<h4>
+#else
+    <h4>$URI</h4>
+    #foreach( $sourceUri in $sourceUris)
+        <a href=$sourceUri">$sourceUri</a><br>
+    #end
+#end
+#if ( $lensURI.isEmpty())
+    <h4>No $lensURIName parameter so using $defaultLensName</h4>
+#else
+    <h4>${lensURIName}: $lensURI</h4>
+#end
+#if ( $targetUriPatterns.isEmpty())
+    #if ( $graph)
+        #if ( $graph.isEmpty())
+            <h4>NO ${targetUriPatternName}(s) or ${graphName} parameter so returning all mapped URIs.</h4>
+        #else    
+            <h4>${graphName}: $graph</h4>
+        #end
+    #else    
+        <h4>NO ${targetUriPatternName}(s) so returning all mapped URIs.</h4>
+    #end
+#else
+    <h4>${targetUriPatternName}(s)</h4>
+    #foreach( $targetUriPattern in $targetUriPatterns)
+        <br>$targetUriPattern
+    #end
+    #if ( $graph)
+        #if ( $graph.isEmpty())
+        #else
+            <h4>Unioned with ${graphName}: $graph</h4>
+        #end
+    #end
+#end
+

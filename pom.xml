@@ -10,10 +10,15 @@
   	<module>org.bridgedb.bio</module>
   	<module>org.bridgedb.utils</module>
   	<module>org.bridgedb.sql</module>
+  	<module>org.bridgedb.ws.core</module>
+  	<module>org.bridgedb.ws.server</module>
+  	<module>org.bridgedb.ws.client</module>
     <module>org.bridgedb.rdf</module>
     <module>org.bridgedb.uri.sql</module>
     <module>org.bridgedb.uri.loader</module>
-
+    <module>org.bridgedb.uri.ws.core</module>
+    <module>org.bridgedb.uri.ws.server</module>
+    <module>org.bridgedb.uri.ws.client</module>
     <module>org.bridgedb.rdb</module>
   	<module>org.bridgedb.webservice.bridgerest</module>
   	<module>org.bridgedb.webservice.biomart</module>

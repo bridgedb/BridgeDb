@@ -1,0 +1,54 @@
+<form method="post" action="$contextPath/$mapURI">
+    <fieldset>
+        <legend>Mapper</legend>
+        <p>
+            <label for="$URI">$URI</label>
+            <input type="text\" id="$URI" name="$URI" style="width:80%"/>
+        </p>
+         <p>$lensURIName
+			<select name="$lensURIName" onchange="addLensDescriptions(this)" value="$defaultLens.toUri($context)">
+                #foreach( $lens in $lenses)
+                    <option value="$lens.toUri($context)">$lens.getName()</option>
+                #end
+			</select>
+        <p>
+        </p>
+            <textarea rows="2" cols="50" id="lensDescriptionArea">$defaultLens.getDescription()</textarea>
+        </p>
+        <p>
+            ${targetUriPatternName}(s) (If none is selected results will not be filtered by $targetUriPatternName)
+        	<select multiple name="$targetUriPatternName" id="pattern" width="600" style="width: 600px" onchange="count(this)"></select>
+        </p>
+        <p>
+        	Number of patterns selected: <label id="countSelected">0</label> out of <label id="countAll">0</label>
+        </p>
+        <p>
+            $targetUriPatternName Filter <input type="text" id="filter" name="Pattern Filter" value="" onkeyup="populate(this)">
+            <button type='button' onclick="pickAll()">Select all showing</button>
+            <button type='button' onclick="pickNone()">Select none</button>
+        </p>       
+        #if ( $graphName)
+            <p>$graphName (Note: These are OpenPHACTS specific semantic sugar for $targetUriPatternName)
+            </p>
+            <p>
+                <select name="$graphName">
+                    <option value="">Do not filter by $graphName</option>
+                    #foreach( $graph in $graphs)
+                        <option value="$graph">$graph</option>
+                    #end
+                </select>
+            </p>
+        #end
+        <p>
+            <input type="radio" name=$formatName value="application/xml">XML Output
+            <input type="radio" name=$formatName value="application/json">JSON Output
+            <input type="radio" name=$formatName value="text/html" checked>HTML Output<br>
+       </p>
+       <p>
+            <input id="getButton" type="submit" value="Submit using get" onclick="form.method='get'"/>
+            <input type="Submit" value="Submit using post" onclick="form.method='post'"/>
+        </p>
+        <p>Note: If the new page does not open click on the address bar and press enter</p>
+	</fieldset>
+</form>
+

@@ -1,0 +1,5 @@
+org.bridgedb.ws.client
+----------------------
+
+Functionality to set up a BridgeDB webservice client, to simplify
+talking to org.bridgedb.ws.server.
