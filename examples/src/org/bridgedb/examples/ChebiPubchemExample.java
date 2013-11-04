@@ -21,7 +21,7 @@ public class ChebiPubchemExample
 		Xref src = new Xref("16811", BioDataSource.CHEBI);		
 		
 		// the method returns a set, but in actual fact there is only one result
-		for (Xref dest : mapper.mapID(src, BioDataSource.PUBCHEM))
+		for (Xref dest : mapper.mapID(src, BioDataSource.PUBCHEM_COMPOUND))
 		{
 			// this should print 6137, the pubchem identifier for Methionine.
 			System.out.println ("" + dest.getId());
