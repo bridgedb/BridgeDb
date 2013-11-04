@@ -29,7 +29,7 @@ public class IDMapperStackTest extends TestCase
 			String fullName = fileName + ".csv";
 			ClassLoader classLoader = this.getClass().getClassLoader();
 			URL url = classLoader.getResource(fullName);
-			Assert.assertNotNull("Could not find resource in classpath: " + fullName, url);
+			assertNotNull("Could not find resource in classpath: " + fullName, url);
 			IDMapper m = BridgeDb.connect("idmapper-text:" + url);
 			mappers.put(fileName, m);
 			stack.addIDMapper(m);
