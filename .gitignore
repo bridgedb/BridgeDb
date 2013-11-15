@@ -20,6 +20,7 @@ bridgedb-*.gz
 # ignore log files #
 */TEST*.xml
 *.log
+/logs/*
 
 # generated checkstyle warnings
 /org.bridgedb/warnings.txt
