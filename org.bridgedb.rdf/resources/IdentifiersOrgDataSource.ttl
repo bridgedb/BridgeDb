@@ -4904,7 +4904,7 @@ bridgeDB:DataSource_Protein_Data_Bank_Ligand a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.rcsb.org/pdb/ligand/ligandsummary.do?hetId=$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pdb.ligand/$id> ;
 	bridgeDB:hasRegexPattern "^[A-Za-z0-9]+$" ;
-	bridgeDB:hasUriPattern <http://www.rcsb.org/pdb/ligand/ligandsummary.do?hetId=$id> .
+	bridgeDB:hasUriPattern <http://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/$id> , <http://www.rcsb.org/pdb/ligand/ligandsummary.do?hetId=$id> .
 
 bridgeDB:DataSource_Protein_Model_Database a bridgeDB:DataSource ;
 	bridgeDB:fullName "Protein Model Database" ;

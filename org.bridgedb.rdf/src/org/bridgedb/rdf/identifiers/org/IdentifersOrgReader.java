@@ -19,12 +19,14 @@
 //
 package org.bridgedb.rdf.identifiers.org;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -44,6 +46,7 @@ import org.bridgedb.rdf.constants.DCatConstants;
 import org.bridgedb.rdf.constants.IdenitifiersOrgConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.utils.BridgeDBException;
+import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -63,6 +66,8 @@ import org.openrdf.sail.memory.MemoryStore;
 public class IdentifersOrgReader extends RdfBase {
     
     public static final String UNABLE_TO_CONNECT = "Unable to connect to miriam";
+    public static final String LOCAL_MIRAM_REGISTRY = "MiriamRegistry.ttl";
+    public static final String MIRAM_REGISTRY_URI = "http://www.ebi.ac.uk/miriam/main/export/registry.ttl";
     
     private static final Logger logger = Logger.getLogger(IdentifersOrgReader.class);  
     
@@ -104,9 +109,25 @@ public class IdentifersOrgReader extends RdfBase {
             return;
         }
         try {
-            URL url = new URL("http://www.ebi.ac.uk/miriam/main/export/registry.ttl");
+            URL url = new URL(MIRAM_REGISTRY_URI);
             Reporter.println("Readng " + url);
             InputStream stream = url.openStream();
+            IdentifersOrgReader reader = new IdentifersOrgReader();
+            reader.doParseRdfInputStream(stream);
+            stream.close();        
+            initRun = true;
+        } catch (Exception ex) {
+            Reporter.error("Error accessing " + MIRAM_REGISTRY_URI + ". Using local copy", ex);
+            localInit();
+        }
+    }
+    
+    public static void localInit() throws BridgeDBException{
+        if (initRun){
+            return;
+        }
+        try {
+            InputStream stream = ConfigReader.getInputStream(LOCAL_MIRAM_REGISTRY);
             IdentifersOrgReader reader = new IdentifersOrgReader();
             reader.doParseRdfInputStream(stream);
             stream.close();        
@@ -119,8 +140,33 @@ public class IdentifersOrgReader extends RdfBase {
             throw new BridgeDBException ("Error reading miriam registry.", ex);
         }
     }
-    
+
+    public static void saveRegister() throws BridgeDBException {
+        try {
+            URL url = new URL(MIRAM_REGISTRY_URI);
+            Reporter.println("Readng " + url);
+            InputStream inputStream = url.openStream();
+            InputStreamReader inputReader = new InputStreamReader(inputStream);
+            BufferedReader inputBuffer = new BufferedReader(inputReader);
+            File outputFile = new File ("resources/" + LOCAL_MIRAM_REGISTRY);
+            FileWriter outputWriter = new FileWriter(outputFile);
+            BufferedWriter outputBuffer = new BufferedWriter(outputWriter);
+            String line;
+            while ((line = inputBuffer.readLine()) != null) {
+                outputBuffer.write(line + "\n");
+            }
+            inputBuffer.close();
+            outputBuffer.flush();
+            outputBuffer.close();
+            inputStream.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new BridgeDBException("Error saving miriam regisrty ", ex);
+        }
+    }
+
     public static void main(String[] args) throws Exception {
+        saveRegister();
         DataSourceTxt.init();
         UriPattern.registerUriPatterns();
         BridgeDBRdfHandler.init();
