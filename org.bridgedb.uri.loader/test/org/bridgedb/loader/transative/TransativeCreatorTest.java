@@ -20,6 +20,9 @@
 package org.bridgedb.loader.transative;
 
 import java.io.File;
+import org.bridgedb.bio.DataSourceTxt;
+import org.bridgedb.rdf.BridgeDBRdfHandler;
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -57,6 +60,9 @@ public class TransativeCreatorTest {
     public static void setUpClass() throws BridgeDBException {
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
+        DataSourceTxt.init();
+        BridgeDBRdfHandler.init();
+        UriPattern.registerUriPatterns();
         uriListener = SQLUriMapper.createNew();
         instance = new LinksetListener(uriListener);
     }
@@ -94,7 +100,10 @@ public class TransativeCreatorTest {
         Reporter.println("LoadTestData");
         loadFile("../org.bridgedb.uri.loader/test-data/cw-cs.ttl", Lens.getDefaultJustifictaionString());
         loadFile("../org.bridgedb.uri.loader/test-data/cs-cm.ttl", Lens.getDefaultJustifictaionString());
+        loadFile("../org.bridgedb.uri.loader/test-data/cs-chebi.ttl", Lens.getDefaultJustifictaionString());
         File transative = TransativeCreator.doTransativeIfPossible(1, 3);
+        loadFile(transative.getAbsolutePath(), Lens.getDefaultJustifictaionString());
+        File transative2 = TransativeCreator.doTransativeIfPossible(1, 5);
         //assertTrue(transative.exists());
         //loadFile(transative, MAIN_JUSTIFCATION);
     }

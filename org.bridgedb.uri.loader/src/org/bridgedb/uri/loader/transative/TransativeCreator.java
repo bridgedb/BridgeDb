@@ -19,6 +19,7 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.SqlFactory;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
+import org.bridgedb.uri.RegexUriPattern;
 import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -43,8 +44,8 @@ public class TransativeCreator {
     protected final MappingSetInfo rightInfo;
     protected final URI predicate;
     protected final String justification;
-    private final UriPattern sourceUriPattern;
-    private final UriPattern targetUriPattern;
+    private final RegexUriPattern sourceRegexUriPattern;
+    private final RegexUriPattern targetRegexUriPattern;
     private final boolean reflexive;
     
     private static URI GENERATE_PREDICATE = null;
@@ -75,8 +76,13 @@ public class TransativeCreator {
         predicate = new URIImpl(PredicateMaker.combine(left.getPredicate(), right.getPredicate()));
         justification = JustificationMaker.combine(left.getJustification(), right.getJustification());
         reflexive = left.getSource().getSysCode().equals(right.getTarget().getSysCode());
-        sourceUriPattern = getUriPattern(left.getSource());
-        targetUriPattern = getUriPattern(right.getTarget());
+        UriPattern sourceUriPattern = getUriPattern(left.getSource());
+        sourceRegexUriPattern = RegexUriPattern.factory(sourceUriPattern, left.getSource().getSysCode());
+        //ystem.out.println(sourceRegexUriPattern);
+        UriPattern targetUriPattern = getUriPattern(right.getTarget());
+        targetRegexUriPattern = RegexUriPattern.factory(targetUriPattern, right.getTarget().getSysCode());
+        //ystem.out.println(targetRegexUriPattern);
+        //ystem.out.println(targetRegexUriPattern.getUri("1234"));
         checkTransativeLegal(left, right);
     }
     
@@ -138,9 +144,9 @@ public class TransativeCreator {
                 if (reflexive && sourceId.equals(targetId)){
                     //do nothing as same uri;
                 } else {
-                    String sourceUri = sourceUriPattern.getPrefix() + sourceId + sourceUriPattern.getPostfix();
+                    String sourceUri = sourceRegexUriPattern.getUri(sourceId);
                     URI sourceURI = new URIImpl(sourceUri);
-                    String targetUri = targetUriPattern.getPrefix() + targetId + targetUriPattern.getPostfix();
+                    String targetUri = targetRegexUriPattern.getUri(targetId);
                     URI targetURI = new URIImpl(targetUri);
                     Statement statment = new StatementImpl(sourceURI, predicate, targetURI);
                     rdfwriter.handleStatement(statment);
