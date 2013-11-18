@@ -166,6 +166,20 @@ public class TransativeFinder extends SQLBase{
             }
             return false;
         }
+        //must not to double map to self
+        if (left.getTarget().getSysCode().equals(left.getSource().getSysCode())){
+            if (right.getTarget().getSysCode().equals(right.getSource().getSysCode())){
+                if (logger.isDebugEnabled()){
+                    logger.debug("Double macth to self " + left.getStringId() + " -> " + right.getStringId());
+                    logger.debug ("    " + right.getSource().getSysCode() + " == " + right.getTarget().getSysCode() 
+                            + " == " + left.getSource().getSysCode() + "== " + left.getTarget().getSysCode());
+                }
+                System.out.println("Double macth to self " + left.getStringId() + " -> " + right.getStringId());
+                System.out.println("    " + right.getSource().getSysCode() + " == " + right.getTarget().getSysCode() 
+                            + " == " + left.getSource().getSysCode() + "== " + left.getTarget().getSysCode());
+                return false;
+            }
+        }
         if (left.isSymmetric()){
             if (left.getSymmetric() == right.getIntId()){
                 if (logger.isDebugEnabled()){

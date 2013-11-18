@@ -190,7 +190,7 @@ public class TransativeFinderTest {
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
-        assertEquals(16, results.getNumberOfMappingSets());
+        assertEquals(14, results.getNumberOfMappingSets());
         Reporter.println("testFinder8Done");
 	}
 
