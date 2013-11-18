@@ -19,6 +19,7 @@
 //
 package org.bridgedb.rdf.identifiers.org;
 
+import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class IdentifersOrgReaderTest {
     public void testInit() throws Exception {
         Reporter.println("init");
         try { 
-            IdentifersOrgReader.init();
+            UriPattern.refreshUriPatterns();
         } catch (BridgeDBException ex) {
             if (ex.getMessage().equals(IdentifersOrgReader.UNABLE_TO_CONNECT)){
                 Reporter.error("**** ERROR CONNECTING TO MIRIAM ****");

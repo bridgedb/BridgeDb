@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
@@ -46,7 +45,7 @@ public class GraphResolver {
     
     public static GraphResolver getInstance() throws BridgeDBException{
         if (instance == null){
-            BridgeDBRdfHandler.init();
+            RegexUriPattern.refreshUriPatterns();
             instance = new GraphResolver();
         }
         return instance;

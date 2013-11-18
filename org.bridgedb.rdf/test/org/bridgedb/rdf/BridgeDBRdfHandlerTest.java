@@ -42,10 +42,9 @@ public class BridgeDBRdfHandlerTest {
     public void testInit() throws Exception {
         Reporter.println("init");
         DataSourceTxt.init();
-        UriPattern.registerUriPatterns();
-        UriPattern.refreshUriPatterns(); 
         BridgeDBRdfHandler.init();
-        
+        UriPattern.registerUriPatterns();
+         
         SortedSet<UriPattern> result = UriPattern.byCodeAndType("M", UriPatternType.mainUrlPattern);
         UriPattern expected = UriPattern.byPattern("http://www.informatics.jax.org/marker/$id");
         assertThat(result, hasItem(expected));

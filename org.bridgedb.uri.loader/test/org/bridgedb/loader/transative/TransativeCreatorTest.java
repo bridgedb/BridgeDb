@@ -27,6 +27,7 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.Lens;
+import org.bridgedb.uri.RegexUriPattern;
 import org.bridgedb.uri.loader.LinksetListener;
 import org.bridgedb.uri.loader.RdfParser;
 import org.bridgedb.uri.loader.transative.TransativeCreator;
@@ -60,9 +61,7 @@ public class TransativeCreatorTest {
     public static void setUpClass() throws BridgeDBException {
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
-        DataSourceTxt.init();
-        BridgeDBRdfHandler.init();
-        UriPattern.registerUriPatterns();
+        RegexUriPattern.refreshUriPatterns();
         uriListener = SQLUriMapper.createNew();
         instance = new LinksetListener(uriListener);
     }

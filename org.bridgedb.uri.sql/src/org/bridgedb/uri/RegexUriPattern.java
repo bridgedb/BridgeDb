@@ -27,11 +27,8 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
-import org.bridgedb.bio.DataSourceTxt;
-import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
-import org.bridgedb.rdf.identifiers.org.IdentifersOrgReader;
 import org.bridgedb.rdf.pairs.RdfBasedCodeMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
@@ -48,6 +45,7 @@ public class RegexUriPattern {
     private final Pattern regex;
     
     private static HashMap<String, Set<RegexUriPattern>> byShortNames = new HashMap<String, Set<RegexUriPattern>>();
+    static boolean initialized = false;
     
     private RegexUriPattern(String prefix, String postfix, String sysCode, Pattern regex) throws BridgeDBException{
         if (prefix == null || prefix.isEmpty()){
@@ -214,13 +212,16 @@ public class RegexUriPattern {
         if (withoutStart.startsWith("www.")){
             withoutStart = withoutStart.substring(4);
         } 
-        return withoutStart.substring(0, withoutStart.indexOf("/"));
+        if (withoutStart.indexOf("/") > 0){
+            return withoutStart.substring(0, withoutStart.indexOf("/"));
+        } else {
+            return withoutStart;
+        }
     }
 
     public static HashMap<String, Integer> getUriGroups() throws BridgeDBException {
         Set<UriPattern> patterns = UriPattern.getUriPatterns();
         HashMap<String, Integer> results = new HashMap<String, Integer>();
-        System.out.println (patterns.size() + " patterns found");
         for (UriPattern pattern:UriPattern.getUriPatterns()){
             String mid = extractShortName(pattern.getUriPattern());
             Integer count = results.get(mid);
@@ -232,6 +233,16 @@ public class RegexUriPattern {
             results.put(mid, count);
          }
         return results;
+    }
+
+    public static void refreshUriPatterns() throws BridgeDBException{
+       if (initialized){
+            return;
+        }
+        UriPattern.refreshUriPatterns();
+        init();
+        initialized = true;
+            
     }
 
     public static void init() throws BridgeDBException {
@@ -249,45 +260,6 @@ public class RegexUriPattern {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        DataSourceTxt.init();
-        UriPattern.registerUriPatterns();
-        BridgeDBRdfHandler.init();
-        IdentifersOrgReader.init();
-        init();
-
-/*        HashMap<String, Integer> mappings = getUriGroups();
-        Set<String> groups = mappings.keySet();
-        int count = 0;
-        for (String group:groups){
-            if (mappings.get(group) > 1){
-                System.out.println(group);
-//                for (RegexUriPattern pattern:byShortNames.get(group)){
-//                    System.out.println("\t" + pattern);
-//                }
-                count++;
-            }
-        }
-        System.out.println(groups.size());
-        System.out.println(count++);
-
-        System.out.println("by short name");
-        for (RegexUriPattern pattern:byShortNames.get("bio2rdf.org")){
-            System.out.println(pattern);
-            for (UriPattern mapped:pattern.mapsTo()){
-                System.out.println("\t" + mapped);
-            }
-        }        
-*/
-        TreeSet<String> values = new TreeSet<String>();
-        for (RegexUriPattern pattern:getUriPatterns()){
-            values.add("\t\t'" + pattern.getUriPattern() + "',");
-        }
-        for (String value:values){
-            System.out.println(value);
-        }
-    }
-    
     @Override
     public boolean equals(Object otherObject){
         if (!(otherObject instanceof RegexUriPattern)){

@@ -29,9 +29,11 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 import org.bridgedb.DataSource;
 import org.bridgedb.DataSourcePatterns;
+import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.IdenitifiersOrgConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
+import org.bridgedb.rdf.identifiers.org.IdentifersOrgReader;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
@@ -55,6 +57,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     
     private static HashMap<String,UriPattern> byPattern = new HashMap<String,UriPattern>();
     private static HashMap<String,Set<UriPattern>> byCode = new HashMap<String,Set<UriPattern>>();
+    static boolean initialized = false;
     
     private static HashSet<URI> expectedPredicates = new HashSet<URI>(Arrays.asList(new URI[] {
         BridgeDBConstants.HAS_POSTFIX_URI,
@@ -90,8 +93,14 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
     }
     
     public static void refreshUriPatterns() throws BridgeDBException{
+        if (initialized){
+            return;
+        }
+        DataSourceTxt.init();
         BridgeDBRdfHandler.init();
+        IdentifersOrgReader.init();
         registerUriPatterns();
+        initialized = true;
     }
 
     public static void registerUriPatterns() throws BridgeDBException{
