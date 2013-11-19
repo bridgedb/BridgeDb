@@ -77,6 +77,7 @@ public class IdentifersOrgReader extends RdfBase {
     static {
         multiples = new HashSet();
         multiples.add("http://linkedchemistry.info/chembl/chemblid/$id");
+        multiples.add("http://www.ebi.ac.uk/ena/data/view/$id");
      }
  
     private void doParseRdfInputStream(InputStream stream) throws BridgeDBException {
