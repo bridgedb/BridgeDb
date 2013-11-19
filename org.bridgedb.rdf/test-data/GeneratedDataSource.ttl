@@ -1993,6 +1993,16 @@ bridgeDB:Organism_Osj a bridgeDB:Organism ;
 	bridgeDB:shortName "Rice" ;
 	bridgeDB:latinName "Oryza sativa Japonica Group" .
 
+bridgeDB:Organism_Oi a bridgeDB:Organism ;
+	bridgeDB:code "Oi" ;
+	bridgeDB:shortName "Indian Rice" ;
+	bridgeDB:latinName "Oryza indica" .
+
+bridgeDB:Organism_Osi a bridgeDB:Organism ;
+	bridgeDB:code "Osi" ;
+	bridgeDB:shortName "Indian Rice" ;
+	bridgeDB:latinName "Oryza sativa Indica Group" .
+
 bridgeDB:Organism_Ol a bridgeDB:Organism ;
 	bridgeDB:code "Ol" ;
 	bridgeDB:shortName "Medaka Fish" ;
