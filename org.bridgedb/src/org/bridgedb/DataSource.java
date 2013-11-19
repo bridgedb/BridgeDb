@@ -110,7 +110,7 @@ public final class DataSource
 	public String getUrl(String id)
 	{
         if (prefix == null){
-            return id;
+            return id + postfix;
         }
 		return prefix + id + postfix;
 	}
@@ -572,8 +572,8 @@ public final class DataSource
             } 
             return this;
         }
-	}
-  
+    }
+    
     /** 
 	 * Register a new DataSource with (optional) detailed information.
 	 * This can be used by other modules to define new DataSources.

@@ -31,7 +31,7 @@
 		</testResources>
 
 		<plugins>
-			<!--plugin>
+			<!-- plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-codegen-plugin</artifactId>
 				<version>2.2.6</version>
@@ -56,7 +56,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin-->
+			</plugin -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
