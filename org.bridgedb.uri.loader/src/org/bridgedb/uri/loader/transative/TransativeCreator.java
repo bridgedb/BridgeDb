@@ -167,7 +167,10 @@ public class TransativeCreator {
     
     private UriPattern getUriPattern(DataSetInfo info) throws BridgeDBException {
         DataSource dataSource = info.getDataSource();
-        String pattern = dataSource.getKnownUrl("$id");
+        String pattern = dataSource.getIdentifiersOrgUri("$id");
+        if (pattern == null){
+            pattern = dataSource.getKnownUrl("$id");
+        }
         return UriPattern.existingByPattern(pattern);
     }
 
