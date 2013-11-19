@@ -64,4 +64,17 @@ public class IdSysCodePair {
         return sysCode;
     }
 
+    @Override
+    public boolean equals(Object other){
+        if (other instanceof IdSysCodePair){
+            IdSysCodePair pair = (IdSysCodePair)other;
+            return (id.equals(pair.id) && sysCode.equals(pair.sysCode));
+        }
+        return false;
+    }
+    
+    @Override
+    public String toString(){
+        return "id: " + id + " sysCode: " + sysCode;
+    }
 }

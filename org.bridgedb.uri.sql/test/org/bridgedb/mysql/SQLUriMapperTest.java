@@ -23,12 +23,15 @@ import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
+import org.bridgedb.uri.RegexUriPattern;
 import org.bridgedb.uri.UriListenerTest;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.bridgedb.utils.Reporter;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -38,7 +41,7 @@ import org.junit.Test;
  * 
  * @author Christian
  */
-public abstract class SQLUriMapperTest extends UriListenerTest{
+public class SQLUriMapperTest extends UriListenerTest{
    
     private static SQLUriMapper sqlUriMapper;
     
@@ -61,15 +64,16 @@ public abstract class SQLUriMapperTest extends UriListenerTest{
     public void testToUriPatternUsingLike() throws BridgeDBException{
         report("ToUriPatternUsingLike");
         IdSysCodePair result = sqlUriMapper.toIdSysCodePair("http://bio2rdf.org/chebi:1234");
-        IdSysCodePair expected = new IdSysCodePair ("Chebi", dataSource1Code); //will be "Ce"
-       assertEquals(expected, result);
+        IdSysCodePair expected = new IdSysCodePair ("1234", "Ce"); //will be "Ce"
+        assertEquals(expected, result);
     }
-    
-    @Test 
-    public void testGetJustifications() throws BridgeDBException{
-        report("GetJustifications");
-        Set<String> results = sqlUriMapper.getJustifications();
-        assertThat (results.size(), greaterThanOrEqualTo(2));
+      
+    @Test
+    public void testBugInsdc() throws Exception {http://identifiers.org/ena.embl/DAAA02036360
+        report("LoadBugInsdc");
+        RegexUriPattern pattern = sqlUriMapper.toUriPattern("http://identifiers.org/ena.embl/AAG52984");
+        assertNotNull(pattern);
+        System.out.println(pattern.toString());
     }
-   
+
 }
