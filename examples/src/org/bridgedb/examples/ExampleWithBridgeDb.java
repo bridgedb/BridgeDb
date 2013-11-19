@@ -6,6 +6,7 @@ import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.DataSourceTxt;
 
 /*
  * This is a simple example script to demonstrate 
@@ -33,7 +34,7 @@ public class ExampleWithBridgeDb
 	
 	private void run() throws ClassNotFoundException, IDMapperException
 	{
-		BioDataSource.init();		
+		DataSourceTxt.init();		
 
 		// Entrez gene id for INSR.
 		String id = "3643";

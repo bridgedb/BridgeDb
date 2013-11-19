@@ -67,6 +67,8 @@ public enum Organism
 	OryzaSativa("Oryza sativa", "Os", "Rice", 4530),
 	OryzaJaponica("Oryza japonica", "Oj", "Rice"),
 	OryzaSativaJaponica("Oryza sativa Japonica Group", "Osj", "Rice", 39947),
+	OryzaIndica("Oryza indica", "Oi", "Indian Rice"),
+	OryzaSativaIndica("Oryza sativa Indica Group", "Osi", "Indian Rice", 39946),
 	OryziasLatipes ("Oryzias latipes", "Ol", "Medaka Fish", 8090),
 	OryctolagusCuniculus  ("Oryctolagus cuniculus", "Oc", "Rabbit", 9986),
 	PanTroglodytes("Pan troglodytes", "Pt", "Chimpanzee", 9598),
@@ -100,7 +102,7 @@ public enum Organism
 	}
 
 	Organism(String latinName, String code, int taxonomyRef) {
-		this(latinName, code, null, taxonomyRef);
+		this(latinName, code, latinName, taxonomyRef);
 	}
 
 	Organism(String latinName, String code, String shortName, int taxonomyRef) {
@@ -108,8 +110,10 @@ public enum Organism
 		this.code = code;
 		this.shortName = shortName;
 		if (taxonomyRef > 0) {
-			DataSource taxonomyDS = DataSource.getByFullName("NCBI Taxonomy Database");
-			if (taxonomyDS == null) {
+            DataSource taxonomyDS;
+            if (DataSource.fullNameExists("NCBI Taxonomy Database")){
+                taxonomyDS = DataSource.getExistingByFullName("NCBI Taxonomy Database");
+            } else {
 				taxonomyDS = DataSource.register(
 					"Tn", "NCBI Taxonomy Database"
 				).asDataSource();

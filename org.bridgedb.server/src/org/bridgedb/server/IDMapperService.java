@@ -18,12 +18,11 @@ package org.bridgedb.server;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.bridgedb.AttributeMapper;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperCapabilities;
 import org.bridgedb.IDMapperException;
-import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.rdb.GdbProvider;
 import org.restlet.Application;
 import org.restlet.Restlet;
@@ -225,7 +224,7 @@ public class IDMapperService extends Application {
 
 	public synchronized void start() throws Exception {
 		super.start();
-		BioDataSource.init();
+		DataSourceTxt.init();
 		connectGdbs();
 	}
 

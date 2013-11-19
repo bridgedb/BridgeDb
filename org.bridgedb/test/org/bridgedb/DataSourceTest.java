@@ -2,6 +2,7 @@
 // An abstraction layer for identifier mapping services, both local and online.
 //
 // Copyright      2012  Egon Willighagen <egonw@users.sf.net>
+// Copyright      2013  Christian Brenninkmeijer
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -45,6 +46,16 @@ public class DataSourceTest {
 		Assert.assertEquals("http://www.affymetrix.com", source.getMainUrl());
 	}
 
+    @Test (expected =  IllegalArgumentException.class)
+	public void testChangeMainUrl() {
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .mainUrl("http://www.affymetrix.com")
+		    .asDataSource();
+		source = DataSource.register("X", "Affymetrix")
+		    .mainUrl("http://www.affymetrix.com/A")
+		    .asDataSource();
+	}
+    
 	@Test
 	public void testBuildingType() {
 		DataSource source = DataSource.register("X", "Affymetrix")
@@ -53,7 +64,16 @@ public class DataSourceTest {
 		Assert.assertEquals("probe", source.getType());
 		Assert.assertFalse(source.isMetabolite());
 	}
+    
+	public void testBuildingType1() {
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .type("metabolite")
+		    .asDataSource();
+		Assert.assertEquals("metabolite", source.getType());
+		Assert.assertTrue(source.isMetabolite());
+	}
 
+    //TODO check if changing primary is a needed functionality   
 	@Test
 	public void testBuildingPrimary() {
 		DataSource source = DataSource.register("X", "Affymetrix")
@@ -99,7 +119,7 @@ public class DataSourceTest {
 		Assert.assertFalse(source.isDeprecated());
 	}
 
-	@Test
+ 	@Test
 	public void testDeprecatedBy() {
 		DataSource source = DataSource.register("EnAg", "Ensembl Mosquito")
 		    .deprecatedBy(
@@ -142,7 +162,8 @@ public class DataSourceTest {
 		Assert.assertEquals(source, source2);
 	}
 
-	@Test
+    //Since Version 2.0.09 this is no longer allowed!
+	@Test (expected =  IllegalArgumentException.class)
 	public void testEqualsToo() {
 		DataSource source = DataSource.register("Cpc", "PubChem-compound")
 			.asDataSource();
@@ -150,4 +171,35 @@ public class DataSourceTest {
 			.asDataSource();
 		Assert.assertEquals(source, source2);
 	}
+    
+    //    @Test (expected =  IllegalArgumentException.class)
+	public void testChangeType() {
+		DataSource source = DataSource.register("X", "Affymetrix")
+		    .type("metabolite")
+		    .asDataSource();
+		Assert.assertEquals("metabolite", source.getType());
+		Assert.assertTrue(source.isMetabolite());
+		source = DataSource.register("X", "Affymetrix")
+		    .type("probe")
+		    .asDataSource();
+		Assert.assertEquals("probe", source.getType());
+		Assert.assertFalse(source.isMetabolite());
+	}
+
+ 	@Test
+	public void testBuildingAlternative() {
+		DataSource source = DataSource.register("F", "MetaboLoci")
+		    .alternative("MetaboLoci Alternative")
+		    .asDataSource();
+		Assert.assertEquals("MetaboLoci Alternative", source.getAlternative());
+	}
+    
+	@Test
+	public void testBuildingDescription() {
+		DataSource source = DataSource.register("F", "MetaboLoci")
+		    .description("MetaboLoci description")
+		    .asDataSource();
+		Assert.assertEquals("MetaboLoci description", source.getDescription());
+	}
+
 }

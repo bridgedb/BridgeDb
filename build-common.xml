@@ -111,6 +111,7 @@
 			<pathelement location="resources"/>
 			<pathelement location="build"/>
 			<pathelement location="test"/>
+                        <pathelement location="test-data"/>
 		</path>
 		<javac srcdir="test" debug="true" 
 					includes="**"

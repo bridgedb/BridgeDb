@@ -1,12 +1,11 @@
 package org.bridgedb.examples;
 
 import java.util.Set;
-
 import org.bridgedb.BridgeDb;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.BioDataSource;
+import org.bridgedb.bio.DataSourceTxt;
 
 public class ExIDSearch 
 {
@@ -18,7 +17,7 @@ public class ExIDSearch
 		// first we have to load the driver
 		// and initialize information about DataSources
 		Class.forName("org.bridgedb.webservice.bridgerest.BridgeRest");
-		BioDataSource.init();
+		DataSourceTxt.init();
 		
 		// now we connect to the driver and create a IDMapper instance.
 		IDMapper mapper = BridgeDb.connect ("idmapper-bridgerest:http://webservice.bridgedb.org/Human");
