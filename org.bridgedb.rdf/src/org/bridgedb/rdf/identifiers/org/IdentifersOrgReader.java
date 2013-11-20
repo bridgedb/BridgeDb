@@ -108,29 +108,10 @@ public class IdentifersOrgReader extends RdfBase {
     public static void fullInit(){
         if (initRun){
             return;
-        }
-        
+        }     
     }
     
     public static void init() throws BridgeDBException{
-        if (initRun){
-            return;
-        }
-        try {
-            URL url = new URL(MIRAM_REGISTRY_URI);
-            Reporter.println("Readng " + url);
-            InputStream stream = url.openStream();
-            IdentifersOrgReader reader = new IdentifersOrgReader();
-            reader.doParseRdfInputStream(stream);
-            stream.close();
-            initRun = true;
-        } catch (Exception ex) {
-            Reporter.error("Error accessing " + MIRAM_REGISTRY_URI + ". Using local copy", ex);
-            localInit();
-        }
-    }
-    
-    public static void localInit() throws BridgeDBException{
         if (initRun){
             return;
         }
@@ -175,6 +156,8 @@ public class IdentifersOrgReader extends RdfBase {
 
     public static void main(String[] args) throws Exception {
         saveRegister();
+        UriPattern.refreshUriPatterns();
+        init();
         UriPattern.refreshUriPatterns();
         
         File mergedFile = new File("resources/IdentifiersOrgDataSource.ttl");

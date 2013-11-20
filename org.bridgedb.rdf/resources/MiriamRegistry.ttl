@@ -1660,7 +1660,7 @@ Each page contains information about a particular group, with pages linked one t
       dcat:landingPage <http://www.viprbrc.org/brc/home.do?decorator=vipr> .
 
 <http://identifiers.org/miriam.resource/MIR:00100487#application/xhtml+xml>
-      a       dcat:Distribution ;http://identifiers.org/miriam.resource/MIR:00100487
+      a       dcat:Distribution ;
       dcat:accessURL <http://www.ebi.ac.uk/ena/data/view/$id> ;
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100487> .
@@ -1793,7 +1793,7 @@ Each page contains information about a particular group, with pages linked one t
       dcat:landingPage <http://www.proteinatlas.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100529>
-      idot:reliability "91"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "92"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "EPD through EBI (SRS)"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -2366,7 +2366,7 @@ The interactions include direct (physical) and indirect (functional) association
 
 <http://identifiers.org/miriam.resource/MIR:00100435>
       idot:reliability "89"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
-      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "TarBase at IMIS Institute"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
               "Greece"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -2679,7 +2679,7 @@ The interactions include direct (physical) and indirect (functional) association
       dcat:landingPage <http://www.nbrc.nite.go.jp/e/index.html> .
 
 <http://identifiers.org/miriam.resource/MIR:00100378>
-      idot:reliability "84"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "83"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "COGs at NCBI"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -2743,7 +2743,7 @@ The interactions include direct (physical) and indirect (functional) association
       dcat:title "UM-BBD Enzyme"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100336>
-      idot:reliability "74"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "75"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "CABRI Cell Lines catalogue in Paris (SRS)"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -3598,7 +3598,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://identifiers.org/miriam.resource/MIR:00100372>
       idot:reliability "91"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
-      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "PGN at Cornell University"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -3662,7 +3662,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000159>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^BP\\d+(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^[A-Z]\\d+(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "dbest"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:alternative "Database of Expressed Sequence Tags"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
@@ -3670,11 +3670,11 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
       void:inDataset <http://identifiers.org/registry/> ;
       void:uriSpace <http://identifiers.org/dbest/> ;
       dcat:description "The dbEST contains sequence data and other information on \"single-pass\" cDNA sequences, or \"Expressed Sequence Tags\", from a number of organisms."^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100331#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100204#application/xhtml+xml> ;
+      dcat:distribution <http://identifiers.org/miriam.resource/MIR:00100331#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100204#application/xhtml+xml> , <http://identifiers.org/miriam.resource/MIR:00100651#application/xhtml+xml> ;
       dcat:identifier "MIR:00000159"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:issued "2011-07-08T14:18:07+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:keyword "gene"^^<http://www.w3.org/2001/XMLSchema#string> , "expression"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:modified "2013-01-14T11:51:13+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      dcat:modified "2013-11-18T13:20:37+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:title "dbEST"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100076>
@@ -3793,12 +3793,6 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
       dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100101> .
 
-<http://identifiers.org/miriam.resource/MIR:00100420#application/xhtml+xml>
-      a       dcat:Distribution ;
-      dcat:accessURL <http://umbbd.ethz.ch/servlets/pageservlet?ptype=p&pathway_abbr=$id> ;
-      dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100420> .
-
 <http://identifiers.org/miriam.resource/MIR:00100044>
       idot:reliability "89"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -3808,6 +3802,12 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
               "Karolinska Institutet"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:landingPage <http://pfam.sbc.su.se/> .
+
+<http://identifiers.org/miriam.resource/MIR:00100420#application/xhtml+xml>
+      a       dcat:Distribution ;
+      dcat:accessURL <http://umbbd.ethz.ch/servlets/pageservlet?ptype=p&pathway_abbr=$id> ;
+      dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100420> .
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000411>
       a       dcat:CatalogRecord ;
@@ -6094,7 +6094,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
       dcat:landingPage <http://www.wikipathways.org/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100482>
-      idot:reliability "93"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "94"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "GXA Gene at EBI"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -7334,7 +7334,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
       dcat:landingPage <http://gabi.rzpd.de/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100363>
-      idot:reliability "98"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "97"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "AceView Worm at NCBI"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -8626,6 +8626,12 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
               "Kyoto University Bioinformatics Center"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:landingPage <http://www.genome.jp/kegg/drug/> .
 
+<http://identifiers.org/miriam.resource/MIR:00100651#application/xhtml+xml>
+      a       dcat:Distribution ;
+      dcat:accessURL <http://getentry.ddbj.nig.ac.jp/getentry/na/$id> ;
+      dcat:mediaType "application/xhtml+xml"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100651> .
+
 <http://identifiers.org/miriam.resource/MIR:00100368#application/xhtml+xml>
       a       dcat:Distribution ;
       dcat:accessURL <http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-id+1fmSL1g8Xvs+-e+%5BIMGTLIGM%3A%27$id%27%5D> ;
@@ -9886,7 +9892,7 @@ PharmGKB Pathways are drug centric, gene based, interactive pathways which focus
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
               "Japan"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
-              "DNA Data Bank of Japan"^^<http://www.w3.org/2001/XMLSchema#string> ;
+              "DNA Data Bank of Japan, Mishima, Shizuoka"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:landingPage <http://www.ddbj.nig.ac.jp/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100565>
@@ -10318,7 +10324,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 
 <http://identifiers.org/miriam.resource/MIR:00100062>
       idot:reliability "99"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
-      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "Mouse Genome Informatics Database"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
               "USA"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -10345,7 +10351,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000029>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^[A-Z]+\\d+(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^([A-Z]\\d{5}|[A-Z]{2}\\d{6}|[A-Z]{4}\\d{8}|[A-J][A-Z]{2}\\d{5})(\\.\\d+)?$"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "insdc"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:alternative "INSDC"^^<http://www.w3.org/2001/XMLSchema#string> , "International Nucleotide Sequence Database Collaboration"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
@@ -10357,7 +10363,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
       dcat:identifier "MIR:00000029"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:issued "2006-08-14T19:38:06+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:keyword "nucleotide"^^<http://www.w3.org/2001/XMLSchema#string> , "sequence"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:modified "2013-04-05T11:19:12+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      dcat:modified "2013-11-18T16:53:44+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:title "Nucleotide Sequence Database"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100013#application/xhtml+xml>
@@ -10545,7 +10551,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 
 <http://identifiers.org/miriam.resource/MIR:00100170>
       idot:reliability "90"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
-      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "JWS Online Model Repository at Manchester"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -11167,7 +11173,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000243>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^[SED]R\\w\\d{6}"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^[SED]R[APRSXZ]\\d{6}"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "insdc.sra"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "SRX000007"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -11178,7 +11184,7 @@ Note: Currently, direct access to RNA products is restricted. This is expected t
       dcat:identifier "MIR:00000243"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:issued "2012-03-13T14:26:17+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:keyword "sequence"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:modified "2012-07-26T11:42:36+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      dcat:modified "2013-11-18T13:41:31+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:title "Sequence Read Archive"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100459>
@@ -12690,7 +12696,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       dcat:identifier "MIR:00000069"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:issued "2009-05-20T12:05:16+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:keyword "genome"^^<http://www.w3.org/2001/XMLSchema#string> , "gene"^^<http://www.w3.org/2001/XMLSchema#string> , "sequence"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:modified "2012-07-26T11:42:36+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      dcat:modified "2013-11-18T11:23:27+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:title "NCBI Gene"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100314>
@@ -12700,7 +12706,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
               "Japan"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
-              "DNA Data Bank of Japan, Shizuoka"^^<http://www.w3.org/2001/XMLSchema#string> ;
+              "DNA Data Bank of Japan, Mishima, Shizuoka"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:landingPage <http://trace.ddbj.nig.ac.jp/dra/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100092>
@@ -13211,7 +13217,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100435> .
 
 <http://identifiers.org/miriam.resource/MIR:00100282>
-      idot:reliability "97"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "96"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "PhylomeDB at Centro de Investigación Príncipe Felipe"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -13376,7 +13382,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       a       dcat:Catalog ;
       dcterms:description "Identifiers.org is a system providing resolvable persistent URIs used to identify data for the scientific community. It relies on the information stored in the Registry (a list of data collections and the physical locations where information can be accessed)."^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:license "TBD"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcterms:modified "2013-11-15T17:05:46+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      dcterms:modified "2013-11-18T16:53:44+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcterms:publisher <http://identifiers.org/> ;
       dcterms:title "Identifiers.org's Registry"^^<http://www.w3.org/2001/XMLSchema#string> .
 
@@ -14492,7 +14498,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       dcat:title "TEDDY"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100579>
-      idot:reliability "71"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "72"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "UBERON through bioPortal"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -15885,7 +15891,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
 
 <http://www.ebi.ac.uk/miriam/main/collections/MIR:00000349>
       a       dcat:CatalogRecord ;
-      idot:idRegexPattern "^PRJ(DB|NA)\\d+$"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:idRegexPattern "^PRJ[DEN][A-Z]\\d+$"^^<http://www.w3.org/2001/XMLSchema#string> ;
       idot:namespace "bioproject"^^<http://www.w3.org/2001/XMLSchema#string> ;
       void:exampleResource
               "PRJDB3"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -15896,7 +15902,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       dcat:identifier "MIR:00000349"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:issued "2012-06-11T11:27:00+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:keyword "annotation"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      dcat:modified "2013-07-12T13:11:43+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      dcat:modified "2013-11-18T13:38:31+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       dcat:title "BioProject"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100466>
@@ -15975,7 +15981,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100424> .
 
 <http://identifiers.org/miriam.resource/MIR:00100572>
-      idot:reliability "13"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "12"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "COGs Function at NCBI"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -16393,7 +16399,7 @@ SubtiList provides a complete dataset of DNA and protein sequences derived from 
       dcat:title "Wikipedia (En)"^^<http://www.w3.org/2001/XMLSchema#string> .
 
 <http://identifiers.org/miriam.resource/MIR:00100238>
-      idot:reliability "96"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "95"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "down"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "PATO through BioPortal"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -16610,7 +16616,7 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100359> .
 
 <http://identifiers.org/miriam.resource/MIR:00100168>
-      idot:reliability "98"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "97"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "JWS Online Model Repository at Stellenbosch"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
@@ -17543,6 +17549,16 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
               "Unité de Recherche en Génomique Végétale, Evry"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcat:landingPage <http://urgi.versailles.inra.fr/Genefarm/> .
 
+<http://identifiers.org/miriam.resource/MIR:00100651>
+      idot:reliability "100"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      dcterms:title "dbEST through DNA Data Bank of Japan (DDBJ)"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://www.w3.org/2001/vcard-rdf/3.0#Country>
+              "Japan"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://www.w3.org/2001/vcard-rdf/3.0#Orgname>
+              "DNA Data Bank of Japan, Mishima, Shizuoka"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      dcat:landingPage <http://www.ddbj.nig.ac.jp/> .
+
 <http://identifiers.org/miriam.resource/MIR:00100624#application/xhtml+xml>
       a       dcat:Distribution ;
       dcat:accessURL <http://pax-db.org/#!species/$id> ;
@@ -17640,8 +17656,8 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
       dcat:landingPage <http://www.gpcr.org/7tm/> .
 
 <http://identifiers.org/miriam.resource/MIR:00100650>
-      idot:reliability "0"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
-      idot:state "unknown"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      idot:reliability "100"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "PDB Ligand at Protein Databank in Europe (PDBe)"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>
               "UK"^^<http://www.w3.org/2001/XMLSchema#string> ;
@@ -17662,7 +17678,7 @@ All content is under the Creative Commons Attribution 3.0 Unported license."""^^
       dcat:publisher <http://identifiers.org/miriam.resource/MIR:00100588> .
 
 <http://identifiers.org/miriam.resource/MIR:00100569>
-      idot:reliability "97"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
+      idot:reliability "96"^^<http://www.w3.org/2001/XMLSchema#decimal> ;
       idot:state "up"^^<http://www.w3.org/2001/XMLSchema#string> ;
       dcterms:title "Broad Fungal Genome Initiative at Broad Institute"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://www.w3.org/2001/vcard-rdf/3.0#Country>

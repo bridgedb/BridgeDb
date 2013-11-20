@@ -50,7 +50,7 @@ BioNumbers	bionumbers		http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&
 Bioontology MESH	MSH		http://purl.bioontology.org/ontology/MSH/$id	C536282	unknown		1			
 Bioontology UMLS NCIM	NCIM		http://purl.bioontology.org/ontology/NCIM/$id	C3203102	unknown		1			
 BioPortal	bioportal		http://bioportal.bioontology.org/ontologies/$id	1046	unknown		1	urn:miriam:bioportal	^\d+$	
-BioProject	bioproject		http://www.ncbi.nlm.nih.gov/bioproject?term=$id	PRJDB3	unknown		1	urn:miriam:bioproject	^PRJ(DB|NA)\d+$	
+BioProject	bioproject		http://www.ncbi.nlm.nih.gov/bioproject?term=$id	PRJDB3	unknown		1	urn:miriam:bioproject	^PRJ[DEN][A-Z]\d+$	
 BioSample	biosample		http://www.ebi.ac.uk/biosamples/browse.html?keywords=$id	SAMEG70402	unknown		1	urn:miriam:biosample	^\w{3}[NE](\w)?\d+$	
 BioSharing	biosharing		http://www.biosharing.org/$id	bsg-000052	unknown		1	urn:miriam:biosharing	^bsg-\d{6}$	
 BioSystems	Bs	http://www.ncbi.nlm.nih.gov/biosystems/	http://www.ncbi.nlm.nih.gov/biosystems/$id	001	pathway		1	urn:miriam:biosystems	^\d+$	BioSystems
@@ -122,7 +122,7 @@ Database of Quantitative Cellular Signaling: Model	doqcs.model		http://doqcs.ncb
 Database of Quantitative Cellular Signaling: Pathway	doqcs.pathway		http://doqcs.ncbs.res.in/template.php?y=pathwaydetails&pn=$id	131	unknown		1	urn:miriam:doqcs.pathway	^\d+$	
 DATF	datf		http://datf.cbi.pku.edu.cn/entry-display.php?id=$id	AT1G01030.1	unknown		1	urn:miriam:datf	^AT[1-5]G\d{5}(\.\d+)?$	
 DBD	dbd		http://www.transcriptionfactor.org/index.cgi?Search%2FDomain+domain%3A$id+cat%3ADBD	0045310	unknown		1	urn:miriam:dbd	^\d+$	
-dbEST	dbest		http://www.ebi.ac.uk/ena/data/view/$id	BP100000	unknown		1	urn:miriam:dbest	^BP\d+(\.\d+)?$	
+dbEST	dbest		http://www.ncbi.nlm.nih.gov/nucest/$id	BP100000	unknown		1	urn:miriam:dbest	^[A-Z]\d+(\.\d+)?$	
 DBG2 Introns	dbg2introns		http://webapps2.ucalgary.ca/~groupii/cgi-bin/intron.cgi?name=$id	Cu.me.I1	unknown		1	urn:miriam:dbg2introns	^\w{1,2}\.(\w{1,2}\.)?[A-Za-z0-9]+$	
 dbProbe	dbprobe		http://www.ncbi.nlm.nih.gov/probe/?term=$id	1000000	unknown		1	urn:miriam:dbprobe	^\d+$	
 dbSNP	Sn	http://www.ncbi.nlm.nih.gov/sites/entrez?db=snp	http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$id	121909098	gene		1	urn:miriam:dbsnp	^\d+$	dbSNP
@@ -193,7 +193,7 @@ Fungal Barcode	fbol		http://www.fungalbarcoding.org/BioloMICS.aspx?Table=Fungal+
 FungiDB	fungidb		http://fungidb.org/gene/$id	CNBG_0001	unknown		1	urn:miriam:fungidb	^[A-Za-z_0-9]+$	
 GABI	gabi		http://gabi.rzpd.de/database/cgi-bin/GreenCards.pl.cgi?BioObjectId=$id&Mode=ShowBioObject	2679240	unknown		1	urn:miriam:gabi	^\w+$	
 Genatlas	genatlas		http://genatlas.medecine.univ-paris5.fr/fiche.php?symbol=$id	HBB	unknown		1	urn:miriam:genatlas	^\w+$	
-GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	^[A-Z]+\d+(\.\d+)?$	GenBank
+GenBank	G	http://www.ncbi.nlm.nih.gov/genbank/	http://www.ncbi.nlm.nih.gov/nuccore/$id	NW_004190323	gene		0	urn:miriam:insdc	^([A-Z]\d{5}|[A-Z]{2}\d{6}|[A-Z]{4}\d{8}|[A-J][A-Z]{2}\d{5})(\.\d+)?$	GenBank
 Gene Ontology Reference	go.ref		http://www.geneontology.org/cgi-bin/references.cgi#$id	GO_REF:0000041	unknown		1	urn:miriam:go.ref	^GO_REF:\d{7}$	
 Gene Wiki	Gw	http://en.wikipedia.org/wiki/Portal:Gene_Wiki	http://plugins.biogps.org/cgi-bin/wp.cgi?id=$id	1017	gene		0	urn:miriam:genewiki	^\d+$	Gene Wiki
 GeneCards	genecards		http://bioinformatics.mdanderson.org/genecards/cgi-bin/carddisp.pl?gene=$id	ABL1	unknown		1	urn:miriam:genecards	^\w+$	
@@ -473,7 +473,7 @@ Science Signaling Pathway-Dependent Component	sciencesignaling.pdc		http://stke.
 Science Signaling Pathway-Independent Component	sciencesignaling.pic		http://stke.sciencemag.org/cgi/cm/stkecm;$id	CMC_15493	unknown		1	urn:miriam:sciencesignaling.pic	^CMC_\d+$	
 SCOP	scop		http://scop.bic.nus.edu.sg/search.cgi?sunid=$id	47419	unknown		1	urn:miriam:scop	^\d+$	
 Sequence Ontology	so		http://purl.bioontology.org/ontology/SO/$id	SO:0000704	unknown		1	urn:miriam:so	^SO:\d{7}$	
-Sequence Read Archive	insdc.sra		http://www.ebi.ac.uk/ena/data/view/$id	SRX000007	unknown		1	urn:miriam:insdc.sra	^[SED]R\w\d{6}	
+Sequence Read Archive	insdc.sra		http://trace.ddbj.nig.ac.jp/DRASearch/experiment?acc=$id	SRX000007	unknown		1	urn:miriam:insdc.sra	^[SED]R[APRSXZ]\d{6}	
 SGD	D	http://www.yeastgenome.org/	http://www.yeastgenome.org/cgi-bin/locus.fpl?dbid=$id	S000028457	gene	Saccharomyces cerevisiae	1	urn:miriam:sgd	^((S\d+$)|(Y[A-Z]{2}\d{3}[a-zA-Z](\-[A-Z])?))$	SGD
 SIDER Drug	sider.drug		http://sideeffects.embl.de/drugs/$id/	2244	unknown		1	urn:miriam:sider.drug	^\d+$	
 SIDER Side Effect	sider.effect		http://sideeffects.embl.de/se/$id/	C0017565	unknown		1	urn:miriam:sider.effect	^C\d+$	
