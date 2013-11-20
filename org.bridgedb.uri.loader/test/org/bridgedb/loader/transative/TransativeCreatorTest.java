@@ -61,7 +61,7 @@ public class TransativeCreatorTest {
     public static void setUpClass() throws BridgeDBException {
         TestSqlFactory.checkSQLAccess();
         ConfigReader.useTest();
-        RegexUriPattern.refreshUriPatterns();
+        UriPattern.refreshUriPatterns();
         uriListener = SQLUriMapper.createNew();
         instance = new LinksetListener(uriListener);
     }

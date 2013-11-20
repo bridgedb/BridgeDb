@@ -20,7 +20,6 @@
 package org.bridgedb.uri;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -31,7 +30,6 @@ import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
 import org.bridgedb.rdf.pairs.RdfBasedCodeMapper;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.Reporter;
 
 /**
  *
@@ -44,7 +42,6 @@ public class RegexUriPattern {
     private final String sysCode;
     private final Pattern regex;
     
-    private static HashMap<String, Set<RegexUriPattern>> byShortNames = new HashMap<String, Set<RegexUriPattern>>();
     static boolean initialized = false;
     
     private RegexUriPattern(String prefix, String postfix, String sysCode, Pattern regex) throws BridgeDBException{
@@ -186,14 +183,7 @@ public class RegexUriPattern {
         return results;
     }
  
-    /**
-     * @return the byShortNames
-     */
-    public static HashMap<String, Set<RegexUriPattern>> getByShortNames() throws BridgeDBException {
-        return byShortNames;
-    }
-
-    private static String extractShortName (String full) throws BridgeDBException {
+    /*private static String extractShortName (String full) throws BridgeDBException {
         String withoutStart;
         if (full.startsWith("ftp://")){
             withoutStart = full.substring(6);
@@ -218,9 +208,9 @@ public class RegexUriPattern {
         } else {
             return withoutStart;
         }
-    }
+    }*/
 
-    public static HashMap<String, Integer> getUriGroups() throws BridgeDBException {
+    /*public static HashMap<String, Integer> getUriGroups() throws BridgeDBException {
         Set<UriPattern> patterns = UriPattern.getUriPatterns();
         HashMap<String, Integer> results = new HashMap<String, Integer>();
         for (UriPattern pattern:UriPattern.getUriPatterns()){
@@ -234,9 +224,9 @@ public class RegexUriPattern {
             results.put(mid, count);
          }
         return results;
-    }
+    }*/
 
-    public static void refreshUriPatterns() throws BridgeDBException{
+    /*public static void refreshUriPatterns() throws BridgeDBException{
        if (initialized){
             return;
         }
@@ -244,9 +234,9 @@ public class RegexUriPattern {
         init();
         initialized = true;
             
-    }
+    }*/
 
-    public static void init() throws BridgeDBException {
+    /*public static void init() throws BridgeDBException {
         Reporter.println("RegexUriPattern init");
         Set<UriPattern> patterns = UriPattern.getUriPatterns();
         HashMap<String, Integer> results = new HashMap<String, Integer>();
@@ -259,7 +249,7 @@ public class RegexUriPattern {
             byShortName.addAll(byPattern(pattern));
             getByShortNames().put(mid, byShortName);
         }
-    }
+    }*/
 
     @Override
     public boolean equals(Object otherObject){

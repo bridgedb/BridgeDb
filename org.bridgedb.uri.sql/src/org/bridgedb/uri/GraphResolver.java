@@ -45,7 +45,7 @@ public class GraphResolver {
     
     public static GraphResolver getInstance() throws BridgeDBException{
         if (instance == null){
-            RegexUriPattern.refreshUriPatterns();
+            UriPattern.refreshUriPatterns();
             instance = new GraphResolver();
         }
         return instance;

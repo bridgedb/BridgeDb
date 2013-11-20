@@ -140,7 +140,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
      private SQLUriMapper(boolean dropTables, CodeMapper codeMapper) throws BridgeDBException{
         super(dropTables, codeMapper);
-        RegexUriPattern.refreshUriPatterns();
+        UriPattern.refreshUriPatterns();
         clearUriPatterns();
         Collection<RegexUriPattern> patterns = RegexUriPattern.getUriPatterns();
         for (RegexUriPattern pattern:patterns){
@@ -1786,13 +1786,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
            return null;
        }
        String result = original.trim();
-       if (original.startsWith("<")){
-           original = original.substring(1);
+       if (result.startsWith("<")){
+           result = result.substring(1);
        }
-       if (original.endsWith(">")){
-           original = original.substring(0, original.length()-1);
+       if (result.endsWith(">")){
+           result = result.substring(0, result.length()-1);
        }
-       return result;
+       return result.trim();
    }
 
     @Override
