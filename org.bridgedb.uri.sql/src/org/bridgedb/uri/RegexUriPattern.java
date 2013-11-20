@@ -163,8 +163,9 @@ public class RegexUriPattern {
     public static Collection<RegexUriPattern> getUriPatterns() throws BridgeDBException {
         HashSet<RegexUriPattern> results = new HashSet<RegexUriPattern>();
         for (UriPattern pattern:UriPattern.getUriPatterns()){
-            for (String sysCode:pattern.getSysCodes()){
-                results.add(factory(pattern, sysCode));
+             for (String sysCode:pattern.getSysCodes()){
+                RegexUriPattern regexPattern = factory(pattern, sysCode);
+                results.add(regexPattern);
             }
         }
         return results;
@@ -246,7 +247,7 @@ public class RegexUriPattern {
     }
 
     public static void init() throws BridgeDBException {
-        Reporter.println("RegesUriPattern init");
+        Reporter.println("RegexUriPattern init");
         Set<UriPattern> patterns = UriPattern.getUriPatterns();
         HashMap<String, Integer> results = new HashMap<String, Integer>();
         for (UriPattern pattern:UriPattern.getUriPatterns()){
@@ -277,7 +278,7 @@ public class RegexUriPattern {
                 return false;
             }
         } else {
-            if (!other.postfix.equals(other.postfix)){
+            if (!other.postfix.equals(postfix)){
                 return false;
             }
         }
