@@ -324,4 +324,7 @@ public interface UriMapper extends IDMapper{
      * @return The SQL_COMPAT_VERSION version. But more importantly a positive integer.
      */
     public int getSqlCompatVersion() throws BridgeDBException;
+    
+    public Set<String> getJustifications() throws BridgeDBException;
+
 }

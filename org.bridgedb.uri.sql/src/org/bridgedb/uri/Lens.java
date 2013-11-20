@@ -298,13 +298,13 @@ public class Lens {
         init();      
         Lens all = byId(Lens.getAllLens());
         //Code currently not used but allows lens per justifcation if turned back on
-            //Collection<String> justifications = mapper.getJustifications();
-            //for (String justification:justifications){
-            //    all.addJustification(justification);
+        Collection<String> justifications = mapper.getJustifications();
+        for (String justification:justifications){
+            all.addJustification(justification);
             //    Lens byName = findOrCreatedByName(justification);
             //    byName.setDescription("Lens with just the single jusification: " + justification);
             //    byName.addJustification(justification);
-            //}
+        }
         Lens defaultLens =  byId(Lens.getDefaultLens());
         if (defaultLens.getJustifications().isEmpty()){
             defaultLens.addJustifications(all.getJustifications());

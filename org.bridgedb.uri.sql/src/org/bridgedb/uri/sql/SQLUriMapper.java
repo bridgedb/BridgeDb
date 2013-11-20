@@ -1795,6 +1795,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
        return result;
    }
 
+    @Override
     public Set<String> getJustifications() throws BridgeDBException {
         HashSet<String> justifications = new HashSet<String>();
         String lensQuery = "SELECT DISTINCT " + JUSTIFICATION_COLUMN_NAME

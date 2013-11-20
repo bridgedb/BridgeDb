@@ -381,4 +381,9 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public Set<String> getJustifications() throws BridgeDBException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }
