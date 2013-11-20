@@ -73,7 +73,6 @@ public class SQLUriMapperTest extends UriListenerTest{
         report("LoadBugInsdc");
         RegexUriPattern pattern = sqlUriMapper.toUriPattern("http://identifiers.org/ena.embl/AAG52984");
         assertNotNull(pattern);
-        System.out.println(pattern.toString());
     }
 
 }

@@ -190,7 +190,6 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         regexUriPattern1 = RegexUriPattern.factory(uriPattern1, dataSource1Code);
         regexUriPattern2 = RegexUriPattern.factory(uriPattern2, dataSource2Code);
         regexUriPattern3 = RegexUriPattern.factory(uriPattern3, dataSource3Code);
-        System.out.println(regexUriPattern2);
     }
         
     /**
