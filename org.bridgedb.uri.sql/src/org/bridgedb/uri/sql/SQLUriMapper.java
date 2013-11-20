@@ -263,7 +263,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private Set<IdSysCodePair> mapID(IdSysCodePair sourceRef, String lensUri) throws BridgeDBException {
         if (sourceRef == null) {
-            logger.warn("mapId called with a badXref " + sourceRef);
             return new HashSet<IdSysCodePair>();
         }
         StringBuilder query = startMappingQuery();
@@ -435,11 +434,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void mapBySet(String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-        String tgtSysCode = tgtUriPattern.getSysCode();
-        ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, tgtSysCode);       
-        resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet, tgtUriPattern);           
-        if (sourceRef.getSysCode().equals(tgtSysCode)){
-            mappingsBySet.addMapping(sourceUri, tgtUriPattern.getUri(sourceRef.getId())); 
+        if (sourceRef != null){
+            String tgtSysCode = tgtUriPattern.getSysCode();
+            ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, tgtSysCode);       
+            resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet, tgtUriPattern);           
+            if (sourceRef.getSysCode().equals(tgtSysCode)){
+                mappingsBySet.addMapping(sourceUri, tgtUriPattern.getUri(sourceRef.getId())); 
+            }
         }
     }
 
@@ -464,9 +465,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-        ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, null);
-        resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet);
-        mappingsBySet.addMapping(sourceUri, toUris(sourceRef));
+        if (sourceRef != null){
+            ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, null);
+            resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet);
+            mappingsBySet.addMapping(sourceUri, toUris(sourceRef));
+        } else {
+            mappingsBySet.addMapping(sourceUri, sourceUri);
+        }
         return mappingsBySet;
     }
 
@@ -822,20 +827,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 }
             }
                 //Should do some checking here but until there is a reason
-            if (result != null){
+            //if (result != null){
                 return result;
-            }
-            if (prefix == null){
-                throw new BridgeDBException("Unknown uri " + uri);
-            } else if (postfix == null || postfix.isEmpty()){
-                throw new BridgeDBException("Unknown uri " + uri + ". " + id + " does not match the regex pattern " + regex 
-                        + " with prefix: " + prefix);                
-            } else {
-                throw new BridgeDBException("Unknown uri " + uri + ". " + id + " does not match the regex pattern " + regex 
-                        + " with prefix: " + prefix + " and postfix " + postfix);                
-            }
+            //}
+            //if (prefix == null){
+            //    throw new BridgeDBException("Unknown uri " + uri);
+            //} else if (postfix == null || postfix.isEmpty()){
+            //    throw new BridgeDBException("Unknown uri " + uri + ". " + id + " does not match the regex pattern " + regex 
+            //            + " with prefix: " + prefix);                
+            //} else {
+            //    throw new BridgeDBException("Unknown uri " + uri + ". " + id + " does not match the regex pattern " + regex 
+            //            + " with prefix: " + prefix + " and postfix " + postfix);                
+            //}
         } catch (SQLException ex) {
-            throw new BridgeDBException("Unable to get IdSysCodePair. " + query, ex);
+            throw new BridgeDBException("Error getting IdSysCodePair using. " + query, ex);
         }    
     }
 
