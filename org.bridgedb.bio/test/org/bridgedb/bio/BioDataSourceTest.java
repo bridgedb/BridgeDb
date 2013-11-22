@@ -137,6 +137,14 @@ public class BioDataSourceTest
 	}
 
 	@Test
+	public void testUniprotIDs() {
+		assertTrue(DataSourcePatterns.getDataSourceMatches("P62158").contains(BioDataSource.UNIPROT));
+		assertFalse(DataSourcePatterns.getDataSourceMatches("PA2158").contains(BioDataSource.UNIPROT));
+		assertTrue(DataSourcePatterns.getDataSourceMatches("G4XXL9").contains(BioDataSource.UNIPROT));
+		assertTrue(DataSourcePatterns.getDataSourceMatches("G4XXL9XXL9").contains(BioDataSource.UNIPROT));
+	}
+
+	@Test
 	public void testDataSource()
 	{
 		DataSource ds = BioDataSource.ENSEMBL;
