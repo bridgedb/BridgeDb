@@ -177,6 +177,9 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
         if (pattern == null || pattern.isEmpty()){
             return null;
         }
+        if (!pattern.contains("$id")){
+            pattern = pattern + "$id";
+        }
         return byPattern.get(pattern);
     }
 

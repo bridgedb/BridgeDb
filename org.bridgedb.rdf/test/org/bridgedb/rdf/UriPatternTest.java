@@ -54,6 +54,13 @@ public class UriPatternTest {
     public void tearDown() {
     }
 
+    @Test 
+    public void testByPatternNoId() throws BridgeDBException{
+        Reporter.println("ByPatternNoId");
+        UriPattern result = UriPattern.byPattern("http://rdf.ebi.ac.uk/resource/chembl/molecule/");
+        assertNotNull(result);
+    }
+    
     /**
      * Test of compareTo method, of class UriPattern.
      */
