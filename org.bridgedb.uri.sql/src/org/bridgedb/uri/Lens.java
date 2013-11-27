@@ -316,7 +316,11 @@ public class Lens {
 
     public static List<Lens> getLens() throws BridgeDBException {
         init();
-        return new ArrayList<Lens> (register.values());
+        List results = new ArrayList<Lens> (register.values());
+        Lens defaultLens = byId(Lens.getDefaultLens());
+        results.remove(defaultLens);
+        results.add(0, defaultLens);
+        return results;
     }
 
     private void setCreatedBy(String createdBy) {
