@@ -21,10 +21,7 @@ package org.bridgedb.uri;
 
 import java.util.List;
 import java.util.Set;
-import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.bridgedb.rdf.UriPattern;
-import org.bridgedb.rdf.identifiers.org.IdentifersOrgReader;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -137,10 +134,28 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     }
 
     @Test
+    public void testConceptWiki1() throws BridgeDBException {
+        report("ConceptWiki1");
+        Set<String> results= uriMapper.mapUri("http://www.conceptwiki.org/concept/f665ee1f-dcdd-467e-8fa2-81d800c385d4", null, null);
+        assertThat(results.size(), greaterThanOrEqualTo(3));
+        assertThat(results, hasItem("http://www.conceptwiki.org/concept/index/f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
+        assertThat(results, hasItem("http://www.conceptwiki.org/web-ws/concept/get?uuid=f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
+    }
+    
+    @Test
+    public void testConceptWiki2() throws BridgeDBException {
+        report("ConceptWiki2");
+        Set<String> results= uriMapper.mapUri("http://www.conceptwiki.org/concept/index/f665ee1f-dcdd-467e-8fa2-81d800c385d4", null, null);
+        assertThat(results.size(), greaterThanOrEqualTo(3));
+        assertThat(results, hasItem("http://www.conceptwiki.org/concept/f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
+        assertThat(results, hasItem("http://www.conceptwiki.org/web-ws/concept/get?uuid=f665ee1f-dcdd-467e-8fa2-81d800c385d4"));
+    }
+
+    @Test
     public void testGetOverallStatistics() throws BridgeDBException {
         report("GetOverallStatistics()");
         OverallStatistics results = uriMapper.getOverallStatistics(Lens.getDefaultLens());
-       assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
+        assertThat (results.getNumberOfMappings(), greaterThanOrEqualTo(18));
         assertThat (results.getNumberOfMappingSets(), greaterThanOrEqualTo(6));
         assertThat (results.getNumberOfSourceDataSources(), greaterThanOrEqualTo(3));
         assertThat (results.getNumberOfTargetDataSources(), greaterThanOrEqualTo(3));
@@ -241,7 +256,15 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         //ystem.out.println(end.getTime()-start.getTime());
         
     }
-        
+
+    @Test
+    public void testUniprot() throws Exception {
+        //Date start = new Date();
+        report("Uniprot");
+        String uri = "http://www.uniprot.org/uniprot/P50250";
+        Set<String> result = uriMapper.mapUri(uri, null, null);        
+    }
+    
  /*       @Test
     public void testFrequency() throws IDMapperException{
         report("Frequency");

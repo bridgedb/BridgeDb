@@ -802,26 +802,31 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }    
         try {
             String prefix = null;
+            String oldPrefix = "";
             String postfix = null;
             String regex = null;
             String id = null;
             IdSysCodePair result = null;
             while(rs.next()){
                 String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                if (result == null || DataSourceMetaDataProvidor.compare(result.getSysCode(), sysCode) > 0){
-                    prefix = rs.getString(PREFIX_COLUMN_NAME);
-                    postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                    regex = rs.getString (REGEX_COLUMN_NAME);
-                    id = uri.substring(prefix.length(), uri.length()-postfix.length());
-                    if (regex == null){
-                        result = new IdSysCodePair(id, sysCode);                    
-                    } else {
-                        Pattern pattern = Pattern.compile(regex);
-                        Matcher matcher = pattern.matcher(id);
-                        if (matcher.matches()){
-                            result = new IdSysCodePair(id, sysCode);
-                        //} else {
-                            //ystem.out.println("no match " + uri + " -> " + prefix);
+                prefix = rs.getString(PREFIX_COLUMN_NAME);
+                postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                regex = rs.getString (REGEX_COLUMN_NAME);
+                if (result == null || DataSourceMetaDataProvidor.compare(result.getSysCode(), sysCode) >= 0){
+                    if (oldPrefix.length() < prefix.length()){
+                        id = uri.substring(prefix.length(), uri.length()-postfix.length());
+                        if (regex == null){
+                            result = new IdSysCodePair(id, sysCode);                    
+                            oldPrefix = prefix;
+                        } else {
+                            Pattern pattern = Pattern.compile(regex);
+                            Matcher matcher = pattern.matcher(id);
+                            if (matcher.matches()){
+                                result = new IdSysCodePair(id, sysCode);
+                                oldPrefix = prefix;
+                            //} else {
+                                //ystem.out.println("no match " + uri + " -> " + prefix);
+                            }
                         }
                     }
                 }

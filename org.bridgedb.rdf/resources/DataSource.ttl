@@ -221,7 +221,8 @@ bridgeDB:DataSource_ConceptWiki a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.conceptwiki.org/concept/$id> ;
-    bridgeDB:hasUriPattern <http://ops.conceptwiki.org/concept/index/$id> .
+    bridgeDB:hasUriPattern <http://www.conceptwiki.org/concept/index/$id> ;
+    bridgeDB:hasUriPattern <http://www.conceptwiki.org/web-ws/concept/get?uuid=$id> .
 
 bridgeDB:DataSource_CTD_Gene a bridgeDB:DataSource ;
 	bridgeDB:fullName "CTD Gene" ;

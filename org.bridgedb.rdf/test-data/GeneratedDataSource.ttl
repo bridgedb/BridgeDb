@@ -266,7 +266,7 @@ bridgeDB:DataSource_ConceptWiki a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.conceptwiki.org/concept/$id> ;
-	bridgeDB:hasUriPattern <http://ops.conceptwiki.org/concept/index/$id> .
+	bridgeDB:hasUriPattern <http://www.conceptwiki.org/concept/index/$id> , <http://www.conceptwiki.org/web-ws/concept/get?uuid=$id> .
 
 bridgeDB:DataSource_CTD_Gene a bridgeDB:DataSource ;
 	bridgeDB:fullName "CTD Gene" ;
@@ -2571,9 +2571,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://omim.org/entry/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://omim.org/entry/" .
 
-<http://ops.conceptwiki.org/concept/index/$id> a bridgeDB:uriPattern ;
-	bridgeDB:hasPrefix "http://ops.conceptwiki.org/concept/index/" .
-
 <http://ops.rsc-us.org/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://ops.rsc-us.org/" .
 
@@ -2779,6 +2776,12 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.conceptwiki.org/concept/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.conceptwiki.org/concept/" .
+
+<http://www.conceptwiki.org/concept/index/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://www.conceptwiki.org/concept/index/" .
+
+<http://www.conceptwiki.org/web-ws/concept/get?uuid=$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://www.conceptwiki.org/web-ws/concept/get?uuid=" .
 
 <http://www.cs.tau.ac.il/~spike/maps/$id.html> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.cs.tau.ac.il/~spike/maps/" ;
