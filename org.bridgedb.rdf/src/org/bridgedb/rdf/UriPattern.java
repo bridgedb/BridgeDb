@@ -97,6 +97,7 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
             return;
         }
         DataSourceTxt.init();
+        DataSourceMetaDataProvidor.assumeUnknownsAreBio();
         BridgeDBRdfHandler.init();
         IdentifersOrgReader.init();
         registerUriPatterns();

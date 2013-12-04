@@ -5,6 +5,7 @@
 package org.bridgedb.rdf;
 
 import java.util.HashMap;
+import org.bridgedb.DataSource;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -13,11 +14,20 @@ import org.bridgedb.utils.BridgeDBException;
  */
 public enum DataSourceMetaDataProvidor {
     
-    BIO, RDF, MIRIAM_CHANGES, MIRIAM_ONLY;
+    BIO, RDF, MIRIAM_ONLY;
     
     private static HashMap<String, DataSourceMetaDataProvidor> register = 
             new HashMap<String, DataSourceMetaDataProvidor>();
     
+    public static void assumeUnknownsAreBio(){
+        for (DataSource dataSource:DataSource.getDataSources()){
+            DataSourceMetaDataProvidor old = register.get(dataSource.getSystemCode());
+            if (old == null){
+                register.put(dataSource.getSystemCode(), BIO);
+            }  
+        }
+    }
+
     public static void setProvidor (String sysCode, DataSourceMetaDataProvidor providor){
         DataSourceMetaDataProvidor old = register.get(sysCode);
         if (old!= null && old.compareTo(providor) <= 0){
