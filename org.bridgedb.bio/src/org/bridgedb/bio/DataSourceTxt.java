@@ -46,20 +46,22 @@ public class DataSourceTxt
 			throw new Error(ex);
 		}
 	}
-      
-    public static void loadInputStream(InputStream is) throws IOException{
-        new DataSourceTxt().loadAnInputStream(is);
-    }
 
-    protected void loadAnInputStream(InputStream is) throws IOException 
-	{
+	public static String datasourcesTxt = "";
+      
+	public static void loadInputStream(InputStream is) throws IOException{
+		new DataSourceTxt().loadAnInputStream(is);
+	}
+
+	protected void loadAnInputStream(InputStream is) throws IOException {
 		BufferedReader reader = new BufferedReader (
 				new InputStreamReader (is));
 		String line;
-        while ((line = reader.readLine()) != null) {
-            String[] fields = line.split ("\\t");
-            loadLine(fields);
-        }		
+   		while ((line = reader.readLine()) != null) {
+			datasourcesTxt = datasourcesTxt + line + "\n";
+            		String[] fields = line.split ("\\t");
+            		loadLine(fields);
+        	}		
 	}
 
 	protected void loadLine(String[] fields) throws IOException 
