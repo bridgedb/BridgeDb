@@ -42,11 +42,20 @@ public class RdfBasedCodeMapper implements CodeMapper {
     }
     
     @Override
-    public IdSysCodePair toIdSysCodePair(Xref xref) {
+    public IdSysCodePair toIdSysCodePair(Xref xref) throws BridgeDBException {
         String sysCode = xref.getDataSource().getSystemCode();
         String id;
         if (xrefPrefixes.containsKey(sysCode)){
-            id = xref.getId().substring(xrefPrefixes.get(sysCode).length());
+            String xrefPrefix = xrefPrefixes.get(sysCode);
+            if (xrefPrefix.length() <= 0){
+                throw new BridgeDBException ("Xref prefix for " + sysCode + " " + xrefPrefix +  " is to short.");
+            }
+            try {
+                id = xref.getId().substring(xrefPrefix.length());
+            } catch (Exception ex){
+                throw new BridgeDBException ("Unexpected xrefID " + xref.getId() + " Excepted it to start with " 
+                        + xrefPrefix + " with sycCode " + sysCode, ex);
+            }
         } else {
             id = xref.getId();
         }
