@@ -1583,11 +1583,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throws BridgeDBException {
         try {
             while (rs.next()){
-                String targetId = rs.getString(TARGET_ID_COLUMN_NAME);
-                String targetKey = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
-                DataSource targetDatasource = keyToDataSource(targetKey);
-                Xref target = new Xref(targetId, targetDatasource);
-                Set<String> targetUris = toUris(target);
+                String id = rs.getString(TARGET_ID_COLUMN_NAME);
+                String sysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                IdSysCodePair pair = new IdSysCodePair(id, sysCode);
+                Set<String> targetUris = toUris(pair);
                 Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
                 String justification = rs.getString(JUSTIFICATION_COLUMN_NAME);
