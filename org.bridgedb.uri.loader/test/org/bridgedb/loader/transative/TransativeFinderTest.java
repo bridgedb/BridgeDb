@@ -143,7 +143,6 @@ public class TransativeFinderTest {
 	}
 
     @Test
-    @Ignore
  	public void testFinder5() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder5");
         load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
@@ -151,7 +150,7 @@ public class TransativeFinderTest {
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
-        assertEquals(100, results.getNumberOfMappingSets());
+        assertEquals(3, results.getNumberOfMappingSets());
         Reporter.println("testFinder5Done");
 	}
 

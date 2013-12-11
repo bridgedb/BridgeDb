@@ -46,15 +46,15 @@ public class LinksetListener {
     
     public int parse(File file, Resource mappingResource, Resource mappingSource, URI linkPredicate, String justification, 
             Set<String> viaLabels, Set<Integer> chainedLinkSets) throws BridgeDBException{
-        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, mappingSource, true, 
-                viaLabels, chainedLinkSets);
+        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, 
+                mappingSource, viaLabels, chainedLinkSets);
         RdfParser parser = getParser(handler);
         parser.parse(mappingSource.stringValue(), file);
         return handler.getMappingsetId();
     }
     
     public int parse(String uri, Resource mappingResource, Resource  mappingSource, URI linkPredicate, String justification) throws BridgeDBException{
-        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, mappingSource, true);
+        LinksetHandler handler = new LinksetHandler(uriListener, linkPredicate, justification, mappingResource, mappingSource);
         RdfParser parser = getParser(handler);
         parser.parse(uri);
         return handler.getMappingsetId();

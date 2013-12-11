@@ -21,7 +21,6 @@ package org.bridgedb.uri.loader;
 
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.RegexUriPattern;
 import org.bridgedb.uri.UriListener;
 import org.bridgedb.utils.BridgeDBException;
@@ -48,7 +47,7 @@ public class LinksetHandler extends RDFHandlerBase{
     private final String justification;
     private final Resource mappingResource;
     private final Resource mappingSource;
-    private final boolean symetric;
+    private Boolean symetric;
     private final UriListener uriListener;
     private final Set<String> viaLabels;
     private final Set<Integer> chainedLinkSets;
@@ -56,8 +55,8 @@ public class LinksetHandler extends RDFHandlerBase{
     private int mappingSet;
     private int noneLinkStatements;
     
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
+    private LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
+            Resource mappingSource, Boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
         this.uriListener = uriListener;
         this.linkPredicate = linkPredicate;
         this.justification = justification;
@@ -69,15 +68,13 @@ public class LinksetHandler extends RDFHandlerBase{
     }
     
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, boolean symetric){
-        this.uriListener = uriListener;
-        this.linkPredicate = linkPredicate;
-        this.justification = justification;
-        this.mappingResource = mappingResource;
-        this.mappingSource = mappingSource;
-        this.symetric = symetric;
-        this.viaLabels = null;
-        this.chainedLinkSets = null;
+            Resource mappingSource, Set<String> viaLabels, Set<Integer> chainedLinkSets){
+        this(uriListener, linkPredicate, justification, mappingResource, mappingSource, null, viaLabels, chainedLinkSets);
+    }
+
+    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
+            Resource mappingSource){
+        this(uriListener, linkPredicate, justification, mappingResource, mappingSource, null, null, null);
     }
 
     static final Logger logger = Logger.getLogger(LinksetHandler.class);
@@ -125,6 +122,10 @@ public class LinksetHandler extends RDFHandlerBase{
                 RegexUriPattern targetPattern = uriListener.toUriPattern(object.stringValue());
                 if (targetPattern == null){
                     throw new RDFHandlerException("Unable to get a pattern for " + object.stringValue());
+                }
+                if (symetric == null){
+                    //If symetric is undefined assume map to self is not symetric
+                    symetric = (!(sourcePattern.getSysCode().equals(targetPattern.getSysCode())));
                 }
                 mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, targetPattern, 
                         mappingResource, mappingSource, symetric, this.viaLabels, this.chainedLinkSets);
