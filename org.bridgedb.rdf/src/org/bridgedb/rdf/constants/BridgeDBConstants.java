@@ -103,5 +103,5 @@ public class BridgeDBConstants {
 	public static final URI TEST_PREDICATE = new URIImpl(bdb + "testPredicate");
 
     public static final URI VIA_URI = new URIImpl(PREFIX + "isTransativeVia");
-    public static final URI IS_SEMETRIC = new URIImpl(PREFIX + "isSemetric");
+    public static final URI IS_SYMETRIC = new URIImpl(PREFIX + "isSymetric");
 }
