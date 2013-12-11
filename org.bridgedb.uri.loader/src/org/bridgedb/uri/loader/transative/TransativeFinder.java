@@ -77,9 +77,16 @@ public class TransativeFinder extends SQLBase{
                     if (logger.isDebugEnabled()){
                         logger.debug("Match to self " + info.getStringId());
                         logger.debug ("    " + info.getSource().getSysCode() + " == " + info.getTarget().getSysCode());
-                    }
+                    }    
                 } else {
-                    computeTransative(info);
+                    LinksetType type = getLinksetType(info);
+                    if (type == LinksetType.ORIDINARY){
+                        computeTransative(info);
+                    } else {
+                        if (logger.isDebugEnabled()){
+                            logger.debug("Skipping  " + info.getStringId() + " as it has type " + type);
+                        }    
+                    }
                 }
             }
             mapper.putProperty(LAST_TRANSATIVE_LOADED_KEY, "" + i); 
@@ -102,12 +109,11 @@ public class TransativeFinder extends SQLBase{
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
-            //must not match to self
-            if (possibleInfo.getTarget().getSysCode().equals(possibleInfo.getSource().getSysCode())){
+            LinksetType type = getLinksetType(possibleInfo);
+            if (type != LinksetType.ORIDINARY){
                 if (logger.isDebugEnabled()){
-                    logger.debug("Match to self " + possibleInfo.getStringId());
-                    logger.debug ("    " + possibleInfo.getSource().getSysCode() + " == " + possibleInfo.getTarget().getSysCode());
-                }
+                    logger.debug("Skipping  " + possibleInfo.getStringId() + " as it has type " + type);
+                }    
             } else {
                 HashSet<Integer> chainIds = this.mergeChain(possibleInfo, info);
                 //if chainIds == null the same id is used twice
@@ -413,6 +419,23 @@ public class TransativeFinder extends SQLBase{
         }
         chainIds.addAll(info.getChainIds());
         return chainIds;
+    }
+    
+    private LinksetType getLinksetType(MappingSetInfo info) throws BridgeDBException{
+        if (info.getSource().getSysCode().equals(info.getTarget().getSysCode())){
+            if (info.getChainIds().isEmpty()){
+                return LinksetType.MAP_TO_SELF;
+            } else {
+                return LinksetType.CHAIN_WITH_MAP_TO_SELF;
+            }
+        }
+        for (Integer chainId:info.getChainIds()){
+            MappingSetInfo chainInfo = mapper.getMappingSetInfo(chainId);
+            if (chainInfo.getSource().getSysCode().equals(chainInfo.getTarget().getSysCode())){
+                return LinksetType.CHAIN_WITH_MAP_TO_SELF;
+            }
+        }
+        return LinksetType.ORIDINARY;
     }
     
     private int getMaxMappingSet() throws BridgeDBException {
