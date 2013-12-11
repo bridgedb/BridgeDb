@@ -72,7 +72,15 @@ public class TransativeFinder extends SQLBase{
         for (int i = lastTranstativeLoaded + 1; i <= maxMappingSet; i++){
             MappingSetInfo info = mapper.getMappingSetInfo(i);
             if (info != null){
-                computeTransative(info);
+                //must not to map to self
+                if (info.getTarget().getSysCode().equals(info.getSource().getSysCode())){
+                    if (logger.isDebugEnabled()){
+                        logger.debug("Match to self " + info.getStringId());
+                        logger.debug ("    " + info.getSource().getSysCode() + " == " + info.getTarget().getSysCode());
+                    }
+                } else {
+                    computeTransative(info);
+                }
             }
             mapper.putProperty(LAST_TRANSATIVE_LOADED_KEY, "" + i); 
             //See if this recovers some memory.
@@ -94,14 +102,22 @@ public class TransativeFinder extends SQLBase{
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
-            HashSet<Integer> chainIds = this.mergeChain(possibleInfo, info);
-            //if chainIds == null the same id is used three times
-            if (chainIds != null){
-                if (checkValidTransative(possibleInfo, info, chainIds)){
-                    int result = doTransative(possibleInfo, info, chainIds);
+            //must not match to self
+            if (possibleInfo.getTarget().getSysCode().equals(possibleInfo.getSource().getSysCode())){
+                if (logger.isDebugEnabled()){
+                    logger.debug("Match to self " + possibleInfo.getStringId());
+                    logger.debug ("    " + possibleInfo.getSource().getSysCode() + " == " + possibleInfo.getTarget().getSysCode());
                 }
-                if (checkValidTransative(info, possibleInfo, chainIds)){
-                    doTransative(info, possibleInfo, chainIds);
+            } else {
+                HashSet<Integer> chainIds = this.mergeChain(possibleInfo, info);
+                //if chainIds == null the same id is used twice
+                if (chainIds != null){
+                    if (checkValidTransative(possibleInfo, info, chainIds)){
+                        int result = doTransative(possibleInfo, info, chainIds);
+                    }
+                    if (checkValidTransative(info, possibleInfo, chainIds)){
+                        doTransative(info, possibleInfo, chainIds);
+                    }
                 }
             }
          }
@@ -150,6 +166,7 @@ public class TransativeFinder extends SQLBase{
     
     private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         if(LIMITED_VIA){
+            //Only some datasource are used transitively
             if (!getLimited().contains(left.getTarget().getSysCode())){
                 if (logger.isDebugEnabled()){
                     logger.debug("Not allowed middle " + left.getStringId() + " -> " + right.getStringId());
@@ -166,74 +183,18 @@ public class TransativeFinder extends SQLBase{
             }
             return false;
         }
-        //must not to double map to self
-        if (left.getTarget().getSysCode().equals(left.getSource().getSysCode())){
-            if (right.getTarget().getSysCode().equals(right.getSource().getSysCode())){
-                if (logger.isDebugEnabled()){
-                    logger.debug("Double macth to self " + left.getStringId() + " -> " + right.getStringId());
-                    logger.debug ("    " + right.getSource().getSysCode() + " == " + right.getTarget().getSysCode() 
-                            + " == " + left.getSource().getSysCode() + "== " + left.getTarget().getSysCode());
-                }
-                System.out.println("Double macth to self " + left.getStringId() + " -> " + right.getStringId());
-                System.out.println("    " + right.getSource().getSysCode() + " == " + right.getTarget().getSysCode() 
-                            + " == " + left.getSource().getSysCode() + "== " + left.getTarget().getSysCode());
-                return false;
+        //Must not create a mapping back to same source.
+        //This will also catch using a linksets and its transitive
+        if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
+            if (logger.isDebugEnabled()){
+                logger.debug("Match back to same DataSource" + left.getStringId() + " -> " + right.getStringId());
+                logger.debug ("    " + left.getSource().getSysCode() + " != " + right.getTarget().getSysCode());
             }
-        }
-        if (left.isSymmetric()){
-            if (left.getSymmetric() == right.getIntId()){
-                if (logger.isDebugEnabled()){
-                    logger.debug("Symmetric " + left.getStringId() + " -> " + right.getStringId());
-                }
-                return false;
-                
-            }
-        }
-        if (right.isSymmetric()){
-            if (right.getSymmetric() == left.getIntId()){
-                if (logger.isDebugEnabled()){
-                    logger.debug("Symmetric " + left.getStringId() + " -> " + right.getStringId());
-                }
-                return false;              
-            }
+            return false;
         }
      
-       /*boolean repeatFound = false;
-        Integer loopFound = null;
-        for (Integer id:chainIds){
-            if (id < 0){
-                if (repeatFound){
-                    if (logger.isDebugEnabled()){
-                        logger.debug("Multiple linksets used repeatedly with " + left.getStringId() + " -> " + right.getStringId());
-                        logger.debug("    " + chainIds);
-                    }
-                    return false;
-                }
-                repeatFound = true;
-            }
-            if (id > 0){
-                MappingSetInfo info = mapper.getMappingSetInfo(id);
-                if (info != null && info.getSource().equals(info.getTarget())){
-                    if (loopFound != null){
-                        if (logger.isDebugEnabled()){
-                            logger.debug("Two Loops found: " + left.getStringId() + " -> " + right.getStringId());
-                            logger.debug("    " + id + " and " + loopFound);
-                        }
-                        return false;            
-                    }  else {
-                        loopFound = id;
-                    }
-                }
-            }
-        }
-       */ if (!checkValidNoLoopTransative(left, right, chainIds)){
-            if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
-                if (!checkValidLoopTransative(left, right, chainIds)){
-                    return false;
-                }
-            } else {
-                return false;
-            }
+        if (!checkValidNoLoopTransative(left, right, chainIds)){
+            return false;
         }
         if (chainAlreadyExists(chainIds)){
             if (logger.isDebugEnabled()){
@@ -313,8 +274,7 @@ public class TransativeFinder extends SQLBase{
             logger.debug("chain size mismatch " + left.getStringId() + " -> " + right.getStringId());
             logger.debug("    " + leftChain + " / " + rightChain );
         }
-        return false;
-        
+        return false;    
     }
 
     private boolean chainAlreadyExists(Set<Integer> chainIds) throws BridgeDBException{
@@ -394,6 +354,22 @@ public class TransativeFinder extends SQLBase{
         HashSet<Integer> rightChain = getChain(right);
         for (Integer id:rightChain){
             if (leftChain.contains(id)){
+                if (logger.isDebugEnabled()){
+                    logger.debug("Same linksetset (" + id + ") used twice in " + leftChain + rightChain);
+                }
+                return null;
+            } else{
+                leftChain.add(id);            
+            }
+        }
+        return leftChain;
+    }
+    
+/*    public static HashSet<Integer> mergeChainDouble(MappingSetInfo left, MappingSetInfo right){
+        HashSet<Integer> leftChain = getChain(left);
+        HashSet<Integer> rightChain = getChain(right);
+        for (Integer id:rightChain){
+            if (leftChain.contains(id)){
                 if (leftChain.contains(0-id)){
                     if (logger.isDebugEnabled()){
                         logger.debug("Same set used three times " + leftChain + rightChain);
@@ -407,7 +383,7 @@ public class TransativeFinder extends SQLBase{
         }
         return leftChain;
     }
-    
+
     public static HashSet<Integer> getChainOld(MappingSetInfo left, MappingSetInfo right){
         HashSet<Integer> chainIds = getChain(left);
         for (Integer id:getChain(right)){
@@ -419,7 +395,7 @@ public class TransativeFinder extends SQLBase{
         }
         return chainIds;
     }
- 
+*/ 
      private static HashSet<Integer> getChain(MappingSetInfo info){
         HashSet<Integer> chainIds = new HashSet<Integer>();
         if (info.getChainIds().isEmpty()){
