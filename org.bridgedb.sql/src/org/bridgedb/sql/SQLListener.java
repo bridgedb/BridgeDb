@@ -70,7 +70,6 @@ public class SQLListener extends SQLBase implements MappingListener{
     static final String SCHEMA_VERSION_COLUMN_NAME = "schemaversion"; //Do not change as used by RDG packages as well
     static final String SOURCE_DATASOURCE_COLUMN_NAME = "sourceDataSource";
     static final String SOURCE_ID_COLUMN_NAME = "sourceId";
-    static final String SYMMETRIC_COLUMN_NAME = "symmetric";
     static final String SYSCODE_COLUMN_NAME = "sysCode";
     static final String TARGET_ID_COLUMN_NAME = "targetId";
     static final String TARGET_DATASOURCE_COLUMN_NAME = "targetDataSource";
@@ -115,8 +114,6 @@ public class SQLListener extends SQLBase implements MappingListener{
     @Override
     public int registerMappingSet(DataSource source, String predicate, String justification, 
             DataSource target, String mappingName, boolean symetric) throws BridgeDBException {
-        //checkDataSourceInDatabase(source);
-        //checkDataSourceInDatabase(target);
         int forwardId = registerMappingSet(source, target, 0);
         if (symetric){
             int symetricId = registerMappingSet(target, source, forwardId);

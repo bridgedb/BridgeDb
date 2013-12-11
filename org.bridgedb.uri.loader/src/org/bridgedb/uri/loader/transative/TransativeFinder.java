@@ -336,7 +336,13 @@ public class TransativeFinder extends SQLBase{
             return -1;
         } else {
             Reporter.println("Created " + fileName);
-            int dataSet =  loadLinkset(fileName.getAbsolutePath(), predicate, justification, viaLabels, chainIds);
+            Boolean symetric;
+            if (left.hasOrIsSymmetric() && right.hasOrIsSymmetric()){
+                symetric = Boolean.TRUE;
+            } else {
+                symetric = Boolean.FALSE;
+            }
+            int dataSet =  loadLinkset(fileName.getAbsolutePath(), predicate, justification, symetric, viaLabels, chainIds);
             if (logger.isDebugEnabled()){
                 logger.debug("Loaded " + dataSet);
             }
@@ -501,15 +507,15 @@ public class TransativeFinder extends SQLBase{
         return true;
     }
 
-    protected int loadLinkset(String absolutePath, String predicate, String justification, Set<String> viaLabels, 
-            HashSet<Integer> chainIds) throws BridgeDBException {
+    protected int loadLinkset(String absolutePath, String predicate, String justification, Boolean symetric, 
+            Set<String> viaLabels, HashSet<Integer> chainIds) throws BridgeDBException {
         UriListener uriListener = SQLUriMapper.getExisting();
         LinksetListener loader = new LinksetListener(uriListener);
         //(File file, String mappingSource, URI linkPredicate, String justification)
         File file = new File(absolutePath);
         URI mappingUri = RdfParser.fileToURL(file);
         URI linkPredicate = new URIImpl(predicate);
-        return loader.parse(file, mappingUri, mappingUri, linkPredicate, justification, viaLabels, chainIds);
+        return loader.parse(file, mappingUri, mappingUri, linkPredicate, justification, symetric, viaLabels, chainIds);
     }
 
     /**

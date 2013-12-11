@@ -101,6 +101,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     static final String MAPPING_RESOURCE_COLUMN_NAME = "resource";
     static final String MAPPING_SOURCE_COLUMN_NAME = "source";
     static final String MAPPING_SOURCE_COUNT_COLUMN_NAME = "mappingSourceCount";
+    static final String SYMMETRIC_COLUMN_NAME = "symmetric";
     static final String MAPPING_TARGET_COUNT_COLUMN_NAME = "mappingTargetCount";
     private static final String MIMETYPE_COLUMN_NAME = "mimetype";
     private static final String NAME_COLUMN_NAME = "name";
@@ -1137,6 +1138,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             int symetricId = registerMappingSet(target, source, predicate, justification, mappingResource, mappingSource, mappingSetId);
             registerVia(symetricId, viaLabels);
             registerChain(symetricId, chainedLinkSets);
+            setSymmetric(mappingSetId, symetricId);
         }
         subjectUriPatterns.put(mappingSetId, sourceUriPattern);
         targetUriPatterns.put(mappingSetId, targetUriPattern);
@@ -1184,6 +1186,26 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         int autoinc = registerMappingSet(query.toString());
         logger.info("Registered new Mapping " + autoinc + " from " + getDataSourceKey(source) + " to " + getDataSourceKey(target));
         return autoinc;
+    }
+
+    private void setSymmetric(int mappingSetId, int symetricId) throws BridgeDBException {
+        String mappingUri = null;
+        StringBuilder query = new StringBuilder("UPDATE ");
+        query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" SET "); 
+        query.append(SYMMETRIC_COLUMN_NAME);
+        query.append(" =  ? WHERE ");
+        query.append(ID_COLUMN_NAME); 
+        query.append(" = ?"); 
+        try {
+            PreparedStatement statement = createPreparedStatement(query.toString());
+            statement.setInt(1, 0- symetricId);
+            statement.setInt(2, mappingSetId);
+            statement.executeUpdate();
+            System.out.println(statement.toString());
+        } catch (SQLException ex) {
+            throw new BridgeDBException ("Error inserting symmetric with " + query.toString(), ex);
+        }
     }
 
     private void checkUriPattern(RegexUriPattern pattern) throws BridgeDBException{

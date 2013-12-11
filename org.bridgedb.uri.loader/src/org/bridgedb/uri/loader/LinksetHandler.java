@@ -55,7 +55,7 @@ public class LinksetHandler extends RDFHandlerBase{
     private int mappingSet;
     private int noneLinkStatements;
     
-    private LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
+    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
             Resource mappingSource, Boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
         this.uriListener = uriListener;
         this.linkPredicate = linkPredicate;
@@ -67,11 +67,6 @@ public class LinksetHandler extends RDFHandlerBase{
         this.chainedLinkSets = chainedLinkSets;
     }
     
-    public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, Set<String> viaLabels, Set<Integer> chainedLinkSets){
-        this(uriListener, linkPredicate, justification, mappingResource, mappingSource, null, viaLabels, chainedLinkSets);
-    }
-
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
             Resource mappingSource){
         this(uriListener, linkPredicate, justification, mappingResource, mappingSource, null, null, null);

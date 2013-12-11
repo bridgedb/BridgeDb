@@ -103,10 +103,17 @@ public class MappingSetInfo {
     }
 
     /**
-     * @return the symmetric
+     * @return true if this is the symmetric. Will return false if this was the original linkset
      */
     public boolean isSymmetric() {
         return getSymmetric() > 0;
+    }
+
+    /**
+     * @return true is this has a symmetric even if this was the original
+     */
+    public boolean hasOrIsSymmetric() {
+        return getSymmetric() != 0;
     }
 
     /**
