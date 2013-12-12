@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +24,6 @@ import org.bridgedb.uri.UriListener;
 import org.bridgedb.uri.loader.LinksetListener;
 import org.bridgedb.uri.loader.RdfParser;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.URIImpl;
@@ -70,6 +68,7 @@ public class TransativeFinder extends SQLBase{
         }
         updateInfos();
         computeTransatives(lastId);
+        computeTransativesLeftSelf();
     }
     
     private void computeTransatives(int lastTranstativeLoaded) throws BridgeDBException, RDFHandlerException, IOException{
@@ -117,17 +116,64 @@ public class TransativeFinder extends SQLBase{
                 HashSet<Integer> chainIds = this.mergeChain(possibleInfo, info);
                 //if chainIds == null the same id is used twice
                 if (chainIds != null){
-                    if (checkValidTransative(possibleInfo, info, chainIds)){
-                        int result = doTransative(possibleInfo, info, chainIds);
+                    if (checkAllowedTransative(possibleInfo, info, chainIds)){
+                        if (checkValidNoSelfTransative(possibleInfo, info)){
+                            doTransative(possibleInfo, info, chainIds);
+                        }
                     }
-                    if (checkValidTransative(info, possibleInfo, chainIds)){
-                        doTransative(info, possibleInfo, chainIds);
+                    if (checkAllowedTransative(info, possibleInfo, chainIds)){
+                        if (checkValidNoSelfTransative(info, possibleInfo)){
+                            doTransative(info, possibleInfo, chainIds);
+                        }
                     }
                 }
             }
          }
     }
  
+    private void computeTransativesLeftSelf() throws BridgeDBException, RDFHandlerException, IOException{
+        int maxMappingSet = getMaxMappingSet();
+        for (int i = 1; i <= maxMappingSet; i++){
+            MappingSetInfo info = infos.get(i);
+            if (info != null){
+                if (types.get(i) == LinksetType.MAP_TO_SELF){
+                    computeTransativeLeftSelf(info);
+                } else {
+                    if (logger.isDebugEnabled()){
+                        logger.debug("Skipping  " + info.getStringId() + " as it has type " + types.get(i));
+                    }    
+                }
+            }
+            //See if this recovers some memory.
+            //Connection will automatically be reopened later.
+            mapper.closeConnection();
+        }
+    }
+   
+    private void computeTransativeLeftSelf(MappingSetInfo info) throws BridgeDBException, RDFHandlerException, IOException {
+        if (logger.isDebugEnabled()){
+            logger.debug("compute transtative with self mappingset " + info.getIntId());
+        }
+        //ystem.out.println (info);
+//        lastTranstativeLoaded = mappingSetId;
+        List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
+        for (MappingSetInfo possibleInfo:possibleInfos) {
+            if (types.get(possibleInfo.getIntId()) != LinksetType.ORIDINARY){
+                if (logger.isDebugEnabled()){
+                    logger.debug("Skipping  " + possibleInfo.getStringId() + " as it has type " + types.get(possibleInfo.getIntId()));
+                }    
+            } else {
+                HashSet<Integer> chainIds = this.mergeChain(possibleInfo, info);
+                //if chainIds == null the same id is used twice
+                if (chainIds != null){
+                    if (checkAllowedTransative(possibleInfo, info, chainIds)){
+                        doTransative(possibleInfo, info, chainIds);
+                    }
+                }
+            }
+         }
+    }
+
     private List<MappingSetInfo> findTransativeCandidates(MappingSetInfo info) throws BridgeDBException {
         List<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
         for (int i = 1; i< infos.size(); i++){
@@ -208,7 +254,7 @@ public class TransativeFinder extends SQLBase{
         }
     }
     
-    private boolean checkValidTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
+    private boolean checkAllowedTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         if(LIMITED_VIA){
             //Only some datasource are used transitively
             if (!getLimited().contains(left.getTarget().getSysCode())){
@@ -236,10 +282,6 @@ public class TransativeFinder extends SQLBase{
             }
             return false;
         }
-     
-        if (!checkValidNoLoopTransative(left, right, chainIds)){
-            return false;
-        }
         if (chainAlreadyExists(chainIds)){
             if (logger.isDebugEnabled()){
                 logger.debug("Chain already exists with " + left.getStringId() + " -> " + right.getStringId());
@@ -249,8 +291,8 @@ public class TransativeFinder extends SQLBase{
         }
         return true;
     }
-    
-    private boolean checkValidNoLoopTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
+   
+    private boolean checkValidNoSelfTransative(MappingSetInfo left, MappingSetInfo right) throws BridgeDBException {
         for (DataSetInfo via:left.getViaDataSets()){
             if (right.getTarget().getSysCode().equals(via.getSysCode())){
                 if (logger.isDebugEnabled()){
