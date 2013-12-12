@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -46,9 +47,16 @@ public class TransativeFinder extends SQLBase{
     
     static final Logger logger = Logger.getLogger(TransativeFinder.class);
 
+    private final ArrayList<MappingSetInfo> infos;
+    private final ArrayList<LinksetType> types;
+    
     public TransativeFinder() throws BridgeDBException{
         super();
-        mapper = SQLUriMapper.getExisting();  
+        mapper = SQLUriMapper.getExisting(); 
+        infos = new ArrayList<MappingSetInfo>();
+        loadInfos();
+        types = new ArrayList<LinksetType>();
+        loadTypes();
         getLimited();
      }
     
@@ -60,6 +68,7 @@ public class TransativeFinder extends SQLBase{
         } else {
             lastId = Integer.parseInt(lastIdString);
         }
+        updateInfos();
         computeTransatives(lastId);
     }
     
@@ -70,23 +79,14 @@ public class TransativeFinder extends SQLBase{
             return;
         }
         for (int i = lastTranstativeLoaded + 1; i <= maxMappingSet; i++){
-            MappingSetInfo info = mapper.getMappingSetInfo(i);
+            MappingSetInfo info = infos.get(i);
             if (info != null){
-                //must not to map to self
-                if (info.getTarget().getSysCode().equals(info.getSource().getSysCode())){
-                    if (logger.isDebugEnabled()){
-                        logger.debug("Match to self " + info.getStringId());
-                        logger.debug ("    " + info.getSource().getSysCode() + " == " + info.getTarget().getSysCode());
-                    }    
+                if (types.get(i) == LinksetType.ORIDINARY){
+                    computeTransative(info);
                 } else {
-                    LinksetType type = getLinksetType(info);
-                    if (type == LinksetType.ORIDINARY){
-                        computeTransative(info);
-                    } else {
-                        if (logger.isDebugEnabled()){
-                            logger.debug("Skipping  " + info.getStringId() + " as it has type " + type);
-                        }    
-                    }
+                    if (logger.isDebugEnabled()){
+                        logger.debug("Skipping  " + info.getStringId() + " as it has type " + types.get(i));
+                    }    
                 }
             }
             mapper.putProperty(LAST_TRANSATIVE_LOADED_KEY, "" + i); 
@@ -109,10 +109,9 @@ public class TransativeFinder extends SQLBase{
 //        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
-            LinksetType type = getLinksetType(possibleInfo);
-            if (type != LinksetType.ORIDINARY){
+            if (types.get(possibleInfo.getIntId()) != LinksetType.ORIDINARY){
                 if (logger.isDebugEnabled()){
-                    logger.debug("Skipping  " + possibleInfo.getStringId() + " as it has type " + type);
+                    logger.debug("Skipping  " + possibleInfo.getStringId() + " as it has type " + types.get(possibleInfo.getIntId()));
                 }    
             } else {
                 HashSet<Integer> chainIds = this.mergeChain(possibleInfo, info);
@@ -130,31 +129,70 @@ public class TransativeFinder extends SQLBase{
     }
  
     private List<MappingSetInfo> findTransativeCandidates(MappingSetInfo info) throws BridgeDBException {
-        Statement statement = mapper.createStatement();
-        StringBuilder query = new StringBuilder("SELECT *");
-        query.append(" FROM ");
-        query.append(SQLUriMapper.MAPPING_SET_TABLE_NAME);
-        query.append(" WHERE ");
-        query.append(SQLUriMapper.ID_COLUMN_NAME);
-        query.append(" < ");
-        query.append(info.getIntId());
-        ResultSet rs;
-        try {
-            rs = statement.executeQuery(query.toString());   
-            List<MappingSetInfo> possibles = mapper.resultSetToMappingSetInfos(rs);
-            List<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
-            for (MappingSetInfo possible:possibles){
+        List<MappingSetInfo> results = new ArrayList<MappingSetInfo>();
+        for (int i = 1; i< infos.size(); i++){
+            MappingSetInfo possible = infos.get(i);
+            if (possible != null){
                 String combine = JustificationMaker.possibleCombine(possible.getJustification(), info.getJustification());
                 if (combine != null){
                     results.add(possible);
                 }
             }
-            return results;
+        }
+        return results;
+    }
+    
+    private void loadInfos() throws BridgeDBException {
+        Statement statement = mapper.createStatement();
+        StringBuilder query = new StringBuilder("SELECT *");
+        query.append(" FROM ");
+        query.append(SQLUriMapper.MAPPING_SET_TABLE_NAME);
+        ResultSet rs;
+        try {
+            rs = statement.executeQuery(query.toString());   
+            List<MappingSetInfo> allInfos = mapper.resultSetToMappingSetInfos(rs);
+            for (MappingSetInfo info:allInfos){
+                addInfo(info);
+            }
         } catch (SQLException ex) {
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }
     }
+
+    private void addInfo(MappingSetInfo info){
+        for (int i = infos.size(); i < info.getIntId(); i++){
+            infos.add(i, null);
+        }
+        infos.add(info.getIntId(), info);
+    }
     
+    private void loadTypes() throws BridgeDBException{
+        for (int i = 1; i < infos.size();i++){
+            MappingSetInfo info = infos.get(i);
+            if (info != null){
+                addType(i, this.getLinksetType(info));
+            }
+        }
+    }
+    
+    private void updateInfos() throws BridgeDBException{
+        int maxId = getMaxMappingSet();
+        for (int id = infos.size(); id <= maxId; id++){
+            MappingSetInfo info = mapper.getMappingSetInfo(id);
+            if (info != null){
+                addInfo(info);
+                addType(id, this.getLinksetType(info));
+            }
+        }
+    }
+    
+    private void addType(int id, LinksetType type){
+        for (int i = types.size(); i < id; i++){
+            types.add(i, null);
+        }
+        types.add(id, type);
+    }
+
     private List<MappingSetInfo> findTransativeCandidatesOld(MappingSetInfo info) throws BridgeDBException {
         Statement statement = mapper.createStatement();
         String query = "SELECT *"
@@ -303,7 +341,7 @@ public class TransativeFinder extends SQLBase{
         }
         //ystem.out.println(possibles);
         for (Integer possible:possibles){
-            MappingSetInfo possibleInfo = mapper.getMappingSetInfo(possible);
+            MappingSetInfo possibleInfo = infos.get(possible);
             Set<Integer> check = getChain(possibleInfo);
             if (check.size() == chainIds.size()){
                 return true;
@@ -352,6 +390,7 @@ public class TransativeFinder extends SQLBase{
             if (logger.isDebugEnabled()){
                 logger.debug("Loaded " + dataSet);
             }
+            updateInfos();
             return dataSet;
         }
     }
@@ -430,7 +469,7 @@ public class TransativeFinder extends SQLBase{
             }
         }
         for (Integer chainId:info.getChainIds()){
-            MappingSetInfo chainInfo = mapper.getMappingSetInfo(chainId);
+            MappingSetInfo chainInfo = infos.get(chainId);
             if (chainInfo.getSource().getSysCode().equals(chainInfo.getTarget().getSysCode())){
                 return LinksetType.CHAIN_WITH_MAP_TO_SELF;
             }
@@ -509,7 +548,7 @@ public class TransativeFinder extends SQLBase{
            return false;
         }
         Integer id = bigChain.iterator().next();
-        MappingSetInfo info = mapper.getMappingSetInfo(id);
+        MappingSetInfo info =infos.get(id);
         if (info == null){
             return false;
         }
