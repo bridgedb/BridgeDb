@@ -69,6 +69,7 @@ public class TransativeFinder extends SQLBase{
         updateInfos();
         computeTransatives(lastId);
         computeTransativesLeftSelf();
+        computeTransativesRightSelf();
     }
     
     private void computeTransatives(int lastTranstativeLoaded) throws BridgeDBException, RDFHandlerException, IOException{
@@ -154,11 +155,10 @@ public class TransativeFinder extends SQLBase{
         if (logger.isDebugEnabled()){
             logger.debug("compute transtative with self mappingset " + info.getIntId());
         }
-        //ystem.out.println (info);
-//        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
-            if (types.get(possibleInfo.getIntId()) != LinksetType.ORIDINARY){
+            LinksetType type = types.get(possibleInfo.getIntId());
+            if (type != LinksetType.ORIDINARY){
                 if (logger.isDebugEnabled()){
                     logger.debug("Skipping  " + possibleInfo.getStringId() + " as it has type " + types.get(possibleInfo.getIntId()));
                 }    
@@ -168,6 +168,52 @@ public class TransativeFinder extends SQLBase{
                 if (chainIds != null){
                     if (checkAllowedTransative(possibleInfo, info, chainIds)){
                         doTransative(possibleInfo, info, chainIds);
+                    }
+                }
+            }
+         }
+    }
+
+    private void computeTransativesRightSelf() throws BridgeDBException, RDFHandlerException, IOException{
+        int maxMappingSet = getMaxMappingSet();
+        for (int i = 1; i <= maxMappingSet; i++){
+            MappingSetInfo info = infos.get(i);
+            //ystem.out.println(info);
+            //ystem.out.println(types.get(i));
+            if (info != null){
+                if (types.get(i) == LinksetType.MAP_TO_SELF || 
+                        types.get(i) == LinksetType.CHAIN_LEFT_ONLY_WITH_MAP_TO_SELF){
+                    computeTransativeRightSelf(info);
+                } else {
+                    if (logger.isDebugEnabled()){ 
+                        logger.debug("Skipping  " + info.getStringId() + " as it has type " + types.get(i));
+                    }    
+                }
+            }
+            //See if this recovers some memory.
+            //Connection will automatically be reopened later.
+            mapper.closeConnection();
+        }
+    }
+   
+    private void computeTransativeRightSelf(MappingSetInfo info) throws BridgeDBException, RDFHandlerException, IOException {
+        if (logger.isDebugEnabled()){
+            logger.debug("compute right transtative with self mappingset " + info.getIntId());
+        }
+        System.out.println (info);
+//        lastTranstativeLoaded = mappingSetId;
+        List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
+        for (MappingSetInfo possibleInfo:possibleInfos) {
+            if (types.get(possibleInfo.getIntId()) != LinksetType.ORIDINARY){
+                if (logger.isDebugEnabled()){
+                    logger.debug("Skipping  " + possibleInfo.getStringId() + " as it has type " + types.get(possibleInfo.getIntId()));
+                 }    
+            } else {
+                HashSet<Integer> chainIds = this.mergeChainRightNegative(info, possibleInfo);
+                //if chainIds == null the same id is used twice
+                if (chainIds != null){
+                    if (checkAllowedTransativeWithSelf(info, possibleInfo, chainIds)){
+                        doTransative(info, possibleInfo, chainIds);
                     }
                 }
             }
@@ -255,6 +301,19 @@ public class TransativeFinder extends SQLBase{
     }
     
     private boolean checkAllowedTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
+        //Must not create a mapping back to same source.
+        //This will also catch using a linksets and its transitive
+        if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
+            if (logger.isDebugEnabled()){
+                logger.debug("Match back to same DataSource" + left.getStringId() + " -> " + right.getStringId());
+                logger.debug ("    " + left.getSource().getSysCode() + " != " + right.getTarget().getSysCode());
+            }
+            return false;
+        }
+        return checkAllowedTransativeWithSelf(left, right, chainIds);
+    }
+        
+    private boolean checkAllowedTransativeWithSelf(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         if(LIMITED_VIA){
             //Only some datasource are used transitively
             if (!getLimited().contains(left.getTarget().getSysCode())){
@@ -270,15 +329,6 @@ public class TransativeFinder extends SQLBase{
             if (logger.isDebugEnabled()){
                 logger.debug("No match " + left.getStringId() + " -> " + right.getStringId());
                 logger.debug ("    " + left.getTarget().getSysCode() + " != " + right.getSource().getSysCode());
-            }
-            return false;
-        }
-        //Must not create a mapping back to same source.
-        //This will also catch using a linksets and its transitive
-        if (left.getSource().getSysCode().equals(right.getTarget().getSysCode())){
-            if (logger.isDebugEnabled()){
-                logger.debug("Match back to same DataSource" + left.getStringId() + " -> " + right.getStringId());
-                logger.debug ("    " + left.getSource().getSysCode() + " != " + right.getTarget().getSysCode());
             }
             return false;
         }
@@ -421,7 +471,6 @@ public class TransativeFinder extends SQLBase{
             Reporter.println ("No transative links found");
             return -1;
         } else {
-            Reporter.println("Created " + fileName);
             Boolean symetric;
             if (left.hasOrIsSymmetric() && right.hasOrIsSymmetric()){
                 symetric = Boolean.TRUE;
@@ -432,6 +481,7 @@ public class TransativeFinder extends SQLBase{
             if (logger.isDebugEnabled()){
                 logger.debug("Loaded " + dataSet);
             }
+            Reporter.println("Created " + dataSet + " as " + fileName);
             updateInfos();
             return dataSet;
         }
@@ -458,7 +508,16 @@ public class TransativeFinder extends SQLBase{
         return leftChain;
     }
     
-/*    public static HashSet<Integer> mergeChainDouble(MappingSetInfo left, MappingSetInfo right){
+    public static HashSet<Integer> mergeChainRightNegative(MappingSetInfo left, MappingSetInfo right){
+        HashSet<Integer> result = getChain(left);
+        HashSet<Integer> rightChain = getChain(right);
+        for (Integer id:rightChain){
+            result.add(0-id);            
+        }
+        return result;
+    }
+
+    /*    public static HashSet<Integer> mergeChainDouble(MappingSetInfo left, MappingSetInfo right){
         HashSet<Integer> leftChain = getChain(left);
         HashSet<Integer> rightChain = getChain(right);
         for (Integer id:rightChain){
@@ -506,14 +565,17 @@ public class TransativeFinder extends SQLBase{
         if (info.getSource().getSysCode().equals(info.getTarget().getSysCode())){
             if (info.getChainIds().isEmpty()){
                 return LinksetType.MAP_TO_SELF;
-            } else {
-                return LinksetType.CHAIN_WITH_MAP_TO_SELF;
+            }
+        }
+        for (Integer chainId:info.getChainIds()){
+            if (chainId < 0){
+                return LinksetType.CHAIN_RIGHT_WITH_MAP_TO_SELF;
             }
         }
         for (Integer chainId:info.getChainIds()){
             MappingSetInfo chainInfo = infos.get(chainId);
             if (chainInfo.getSource().getSysCode().equals(chainInfo.getTarget().getSysCode())){
-                return LinksetType.CHAIN_WITH_MAP_TO_SELF;
+                return LinksetType.CHAIN_LEFT_ONLY_WITH_MAP_TO_SELF;
             }
         }
         return LinksetType.ORIDINARY;
@@ -640,6 +702,7 @@ public class TransativeFinder extends SQLBase{
             limitedSysCodes.add(DataSource.getExistingByFullName("Ensembl").getSystemCode());
             limitedSysCodes.add(DataSource.getExistingByFullName("DrugBank").getSystemCode());
             limitedSysCodes.add(DataSource.getExistingByFullName("HMDB").getSystemCode());
+            limitedSysCodes.add(DataSource.getExistingByFullName("HGNC").getSystemCode());
         }
         return limitedSysCodes;
     }

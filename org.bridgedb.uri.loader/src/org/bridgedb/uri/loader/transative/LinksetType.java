@@ -9,5 +9,5 @@ package org.bridgedb.uri.loader.transative;
  * @author Christian
  */
 public enum LinksetType {
-    ORIDINARY, MAP_TO_SELF, CHAIN_WITH_MAP_TO_SELF;
+    ORIDINARY, MAP_TO_SELF, CHAIN_LEFT_ONLY_WITH_MAP_TO_SELF, CHAIN_RIGHT_WITH_MAP_TO_SELF;
 }

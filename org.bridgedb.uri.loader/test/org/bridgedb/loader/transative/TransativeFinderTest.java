@@ -150,9 +150,11 @@ public class TransativeFinderTest {
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
-        //A <-> B / A -> A' 
-        // B-> A -> A'  
-        assertEquals(4, results.getNumberOfMappingSets());
+        //A <-> B (2) / A -> A' (3) 
+        // B -> A -> A' (4) 
+        // A -> A' -> B (3)
+        // B -> A -> A' -> B
+        assertEquals(6, results.getNumberOfMappingSets());
         Reporter.println("testFinder5Done");
 	}
 
@@ -166,15 +168,18 @@ public class TransativeFinderTest {
         load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl");
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
-        //A <-> B / A <-> C / A -> A' 
-        //B <-> A <-> C 
-        // B -> A -> A' / C -> A -> A' 
-        assertEquals(9, results.getNumberOfMappingSets());
+        //A <-> B (2) / A <-> C (8)  / A -> A' (3) 
+        //B <-> A <-> C (10)
+        // B -> A -> A' (4) / C -> A -> A' (11)
+        // A -> A' -> B (5) / A -> A' -> C (12) 
+        // B -> A -> A' -> B (6) / B -> A -> A' -> C (13) / B -> A -> A' / C -> A -> A' -> B (14) / C -> A -> A' -> C
+        System.out.print(results);
+        assertEquals(15, results.getNumberOfMappingSets());
         Reporter.println("testFinder6Done");
 	}
 
     @Test
- 	public void testFinder7() throws BridgeDBException, RDFHandlerException, IOException {	
+    public void testFinder7() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder7");
         load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
         load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl");
@@ -183,14 +188,17 @@ public class TransativeFinderTest {
         load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl");
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
-        //A <-> B / B <-> C / A -> A' 
-        // A <-> B <-> C 
-        // B -> A -> A' / C -> B -> A -> A'
-        assertEquals(9, results.getNumberOfMappingSets()); //14 is correct as coded but should we do C -> C'?
+        //A <-> B (2) / B <-> C (8) / A -> A' (3) 
+        // A <-> B <-> C (10)
+        // B -> A -> A' (4) / C -> B -> A -> A' (11)
+        // A -> A' -> B (5) / A -> A' -> B -> C (12) 
+        // B-> A -> A' -> B (6) / B-> A -> A' -> B -> C (13) / C -> B -> A -> A' -> B (14) / C -> B-> A -> A' -> B -> C (15) 
+        assertEquals(15, results.getNumberOfMappingSets()); //14 is correct as coded but should we do C -> C'?
         Reporter.println("testFinder7Done");
 	}
     
     @Test
+    @Ignore
  	public void testFinder8() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder8");
         load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
@@ -202,7 +210,8 @@ public class TransativeFinderTest {
         // A <-> B / A -> A' / A -> A''
         // none
         // B -> A -> A' / B -> A -> A''
-        assertEquals(6, results.getNumberOfMappingSets());
+        // B -> A -> A' -> B / B -> A -> A'' -> B
+        assertEquals(8, results.getNumberOfMappingSets());
         Reporter.println("testFinder8Done");
 	}
 
