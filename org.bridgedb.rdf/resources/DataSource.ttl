@@ -83,6 +83,7 @@ bridgeDB:DataSource_Bioontology_UMLS_NCIM a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/NCIM/$id> .
+    #bridgeDB:DataSource_UMLS
 
 bridgeDB:DataSource_CAS a bridgeDB:DataSource ;
 	bridgeDB:fullName "CAS" ;
@@ -495,6 +496,16 @@ bridgeDB:DataSource_HsGene a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:Organism bridgeDB:Organism_Hs .
 
+bridgeDB:DataSource_Human_Disease_Ontology a bridgeDB:DataSource ;
+	bridgeDB:fullName "Human Disease Ontology" ;
+	bridgeDB:systemCode "doid" ;
+	bridgeDB:idExample "DOID:11337" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/doid/$id> ;
+	bridgeDB:hasUriPattern <http://identifiers.org/obo.do/$id> .
+#Note this is an incomplete record to add an Obsolete URI. The rest should come from miriam.
+
 bridgeDB:DataSource_Illumina a bridgeDB:DataSource ;
 	bridgeDB:fullName "Illumina" ;
 	bridgeDB:systemCode "Il" ;
@@ -736,6 +747,22 @@ bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
     bridgeDB:hasUrlPattern <http://ops.rsc.org/$id> ;
 	bridgeDB:hasUriPattern <http://ops.rsc-us.org/$id> .
 
+bridgeDB:DataSource_OPS_GVK a bridgeDB:DataSource ;
+    bridgeDB:systemCode "OPS-GVK" ;
+	bridgeDB:fullName "OPS Internal URIS for GVK" ;
+	bridgeDB:idExample "t58221" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+    bridgeDB:hasUrlPattern <http://gvk.pharma.openphacts.com/targets/$id> .
+
+bridgeDB:DataSource_OPS_TGR a bridgeDB:DataSource ;
+    bridgeDB:systemCode "OPS-TGR" ;
+	bridgeDB:fullName "OPS Internal URIS for TGR" ;
+	bridgeDB:idExample "t2000005" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+    bridgeDB:hasUrlPattern <http://tgr.pharma.openphacts.com/target/$id> .
+
 bridgeDB:DataSource_Oryzabase a bridgeDB:DataSource ;
 	bridgeDB:fullName "Oryzabase" ;
 	bridgeDB:systemCode "Ob" ;
@@ -782,6 +809,13 @@ bridgeDB:DataSource_PDB a bridgeDB:DataSource ;
     bridgeDB:hasUriPattern <http://rdf.wwpdb.org/pdb/$id> ;
     bridgeDB:hasUriPattern <http://purl.uniprot.org/pdb/$id> ;
 	bridgeDB:hasUriPattern <http://www.pdb.org/pdb/explore/explore.do?pdbId=$id> .
+
+#Note incomplete record as the rest can be read from miriam registry
+bridgeDB:DataSource_Protein_Data_Bank_Ligand a bridgeDB:DataSource ;
+	bridgeDB:fullName "Protein Data Bank Ligand" ;
+	bridgeDB:systemCode "pdb.ligand" ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/pdb.ligand/$id> ;
+	bridgeDB:hasUriPattern <http://www.pdb.org/pdb/ligand/ligandsummary.do?hetId=$id> .
 
 bridgeDB:DataSource_Pfam a bridgeDB:DataSource ;
 	bridgeDB:fullName "Pfam" ;
@@ -949,6 +983,15 @@ bridgeDB:DataSource_UCSC_Genome_Browser a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id> .
+
+bridgeDB:DataSource_UMLS a bridgeDB:DataSource ;
+	bridgeDB:fullName "umls" ;
+	bridgeDB:systemCode "umls" ;
+	bridgeDB:idExample "C0011860" ;
+	#bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	#bridgeDB:type "gene" ;
+	bridgeDB:hasUrlPattern <http://linkedlifedata.com/resource/umls/id/$id> .
+#Could also be:bridgeDB:DataSource_Bioontology_UMLS_NCIM
 
 bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniGene" ;
