@@ -527,6 +527,7 @@ UM-BBD Compound	umbbd.compound		http://umbbd.ethz.ch/servlets/pageservlet?ptype=
 UM-BBD Enzyme	umbbd.enzyme		http://umbbd.ethz.ch/servlets/pageservlet?ptype=ep&enzymeID=$id	e0333	unknown		1	urn:miriam:umbbd.enzyme	^e\d+$	
 UM-BBD Pathway	umbbd.pathway		http://umbbd.ethz.ch/servlets/pageservlet?ptype=p&pathway_abbr=$id	ala	unknown		1	urn:miriam:umbbd.pathway	^\w+$	
 UM-BBD Reaction	umbbd.reaction		http://umbbd.ethz.ch/servlets/pageservlet?ptype=r&reacID=$id	r0001	unknown		1	urn:miriam:umbbd.reaction	^r\d+$	
+umls	umls		http://linkedlifedata.com/resource/umls/id/$id	C0011860	unknown		1			
 UniGene	U	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$id	Hs.553708	gene		1		[A-Z][a-z][a-z]?\.\d+	UniGene
 UniGene number	unigene	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/unigene?term=$id	1548618	gene		1	urn:miriam:unigene	^\d+$	
 Unimod	unimod		http://www.unimod.org/modifications_view.php?editid1=$id	1200	unknown		1	urn:miriam:unimod	^\d+$	

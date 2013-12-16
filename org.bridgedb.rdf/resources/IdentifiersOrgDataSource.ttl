@@ -1077,7 +1077,7 @@ bridgeDB:DataSource_ConceptWiki a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.conceptwiki.org/concept/$id> ;
-	bridgeDB:hasUriPattern <http://ops.conceptwiki.org/concept/index/$id> .
+	bridgeDB:hasUriPattern <http://www.conceptwiki.org/concept/index/$id> , <http://www.conceptwiki.org/web-ws/concept/get?uuid=$id> .
 
 bridgeDB:DataSource_Conoserver a bridgeDB:DataSource ;
 	bridgeDB:fullName "Conoserver" ;
@@ -5607,6 +5607,14 @@ bridgeDB:DataSource_UM_BBD_Reaction a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/umbbd.reaction/$id> ;
 	bridgeDB:hasRegexPattern "^r\\d+$" .
 
+bridgeDB:DataSource_umls a bridgeDB:DataSource ;
+	bridgeDB:fullName "umls" ;
+	bridgeDB:systemCode "umls" ;
+	bridgeDB:idExample "C0011860" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://linkedlifedata.com/resource/umls/id/$id> .
+
 bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniGene" ;
 	bridgeDB:systemCode "U" ;
@@ -8420,6 +8428,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://linkedchemistry.info/chembl/target/t$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://linkedchemistry.info/chembl/target/t" .
 
+<http://linkedlifedata.com/resource/umls/id/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://linkedlifedata.com/resource/umls/id/" .
+
 <http://lipidbank.jp/cgi-bin/detail.cgi?id=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://lipidbank.jp/cgi-bin/detail.cgi?id=" .
 
@@ -8524,9 +8535,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://opm.phar.umich.edu/protein.php?pdbid=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://opm.phar.umich.edu/protein.php?pdbid=" .
-
-<http://ops.conceptwiki.org/concept/index/$id> a bridgeDB:uriPattern ;
-	bridgeDB:hasPrefix "http://ops.conceptwiki.org/concept/index/" .
 
 <http://ops.rsc-us.org/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://ops.rsc-us.org/" .
@@ -9192,6 +9200,12 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.conceptwiki.org/concept/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.conceptwiki.org/concept/" .
+
+<http://www.conceptwiki.org/concept/index/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://www.conceptwiki.org/concept/index/" .
+
+<http://www.conceptwiki.org/web-ws/concept/get?uuid=$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://www.conceptwiki.org/web-ws/concept/get?uuid=" .
 
 <http://www.conoserver.org/?page=card&table=protein&id=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.conoserver.org/?page=card&table=protein&id=" .

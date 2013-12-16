@@ -177,13 +177,24 @@ public class BridgeDBRdfHandler extends RdfBase{
             builder.urnBase(urnBase);
         }
         
-        Value identifiersOrgValue = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI);
-        if (identifiersOrgValue != null){
-            UriPattern identifiersOrgPattern = getUriPattern(repositoryConnection, (Resource)identifiersOrgValue, 
-                    systemCode, UriPatternType.identifiersOrgPattern);
-            builder.identifiersOrgBase(identifiersOrgPattern.getUriPattern());
+        Value identifiersOrgSimpleValue = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI);
+        if (identifiersOrgSimpleValue != null){
+            UriPattern identifiersOrgSimplePattern = getUriPattern(repositoryConnection, (Resource)identifiersOrgSimpleValue, 
+                    systemCode, UriPatternType.identifiersOrgPatternSimple);
+            String identifiersOrgInfo = identifiersOrgSimplePattern.getUriPattern().replace("identifiers.org","info.identifiers.org");
+            UriPattern identifiersOrgInfoPattern  = UriPattern.register(identifiersOrgInfo, systemCode, UriPatternType.identifiersOrgPatternInfo);
+            builder.identifiersOrgBase(identifiersOrgSimplePattern.getUriPattern());
         }
         
+        Value identifiersOrgInfoValue = getPossibleSingleton(repositoryConnection, dataSourceId, BridgeDBConstants.HAS_IDENTIFERS_ORG_INFO_PATTERN_URI);
+        if (identifiersOrgInfoValue != null){
+            UriPattern identifiersOrgInfoPattern = getUriPattern(repositoryConnection, (Resource)identifiersOrgInfoValue, 
+                    systemCode, UriPatternType.identifiersOrgPatternInfo);
+            String identifiersOrgSimple = identifiersOrgInfoPattern.getUriPattern().replace("info.identifiers.org","identifiers.org");
+            UriPattern identifiersOrgSimplePattern  = UriPattern.register(identifiersOrgSimple, systemCode, UriPatternType.identifiersOrgPatternSimple);            
+            builder.identifiersOrgBase(identifiersOrgSimplePattern.getUriPattern());
+        }
+
         String alternative = getPossibleSingletonString(repositoryConnection, dataSourceId, DCTermsConstants.ALTERNATIVE_URI);
         if (alternative != null){
             builder.alternative(alternative);
@@ -360,10 +371,15 @@ public class BridgeDBRdfHandler extends RdfBase{
             repositoryConnection.add(id, BridgeDBConstants.HAS_URL_PATTERN_URI, urlPattern.getResourceId());
         }
 
-        String identifersOrg = dataSource.getIdentifiersOrgUri("$id");
-        UriPattern identifersOrgPattern = UriPattern.byPattern(identifersOrg);
-        if (identifersOrgPattern != null){
-            repositoryConnection.add(id, BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI, identifersOrgPattern.getResourceId());
+        String identifersOrgSimple = dataSource.getIdentifiersOrgUri("$id");
+        UriPattern identifersOrgSimplePattern = UriPattern.byPattern(identifersOrgSimple);
+        if (identifersOrgSimplePattern != null){
+            repositoryConnection.add(id, BridgeDBConstants.HAS_IDENTIFERS_ORG_PATTERN_URI, identifersOrgSimplePattern.getResourceId());
+            String identifersOrgInfo = identifersOrgSimple.replace("identifiers.org","info.identifiers.org");
+            UriPattern identifersOrgInfoPattern = UriPattern.byPattern(identifersOrgInfo);
+            if (identifersOrgInfoPattern != null){
+                repositoryConnection.add(id, BridgeDBConstants.HAS_IDENTIFERS_ORG_INFO_PATTERN_URI, identifersOrgInfoPattern.getResourceId());
+            }
         }
 
         if (dataSource.getOrganism() != null){

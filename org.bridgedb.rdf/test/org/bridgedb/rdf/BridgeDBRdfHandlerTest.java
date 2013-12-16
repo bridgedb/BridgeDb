@@ -50,7 +50,7 @@ public class BridgeDBRdfHandlerTest {
         assertThat(result, hasItem(expected));
         assertEquals(1, result.size());
         
-        result = UriPattern.byCodeAndType("M", UriPatternType.identifiersOrgPattern);
+        result = UriPattern.byCodeAndType("M", UriPatternType.identifiersOrgPatternSimple);
         expected = UriPattern.byPattern("http://identifiers.org/mgd/$id");
         assertThat(result, hasItem(expected));
         assertEquals(1, result.size());

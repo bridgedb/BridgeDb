@@ -199,7 +199,9 @@ public class IdentifersOrgReader extends RdfBase {
             fullName = "UniGene number";
         }
         UriPattern identifiersOrgPattern = 
-            UriPattern.register(identiferOrgBase + "$id", sysCode, UriPatternType.identifiersOrgPattern);
+            UriPattern.register(identiferOrgBase + "$id", sysCode, UriPatternType.identifiersOrgPatternSimple);
+        String identifersOrgInfoBase = identiferOrgBase.replace("identifiers.org","info.identifiers.org");
+        UriPattern.register(identifersOrgInfoBase + "$id", sysCode, UriPatternType.identifiersOrgPatternInfo);
              
         DataSource ds = DataSource.register(sysCode, fullName)
                 .identifiersOrgBase(identiferOrgBase)

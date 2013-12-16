@@ -24,5 +24,5 @@ package org.bridgedb.rdf;
  * @author Christian
  */
 public enum UriPatternType {
-    mainUrlPattern, identifiersOrgPattern, dataSourceUriPattern, codeMapperPattern
+    mainUrlPattern, identifiersOrgPatternSimple, identifiersOrgPatternInfo, dataSourceUriPattern, codeMapperPattern
 }

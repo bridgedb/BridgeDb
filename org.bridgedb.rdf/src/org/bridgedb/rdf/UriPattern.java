@@ -112,7 +112,9 @@ public class UriPattern extends RdfBase implements Comparable<UriPattern>{
             }
             String identifersOrgUrl = dataSource.getIdentifiersOrgUri("$id");
             if (identifersOrgUrl != null){
-                register(identifersOrgUrl, dataSource.getSystemCode(), UriPatternType.identifiersOrgPattern);
+                register(identifersOrgUrl, dataSource.getSystemCode(), UriPatternType.identifiersOrgPatternSimple);
+                String identifersOrgInfoUrl = identifersOrgUrl.replace("identifiers.org","info.identifiers.org");
+                register(identifersOrgInfoUrl, dataSource.getSystemCode(), UriPatternType.identifiersOrgPatternInfo);
             }
         }
     }
