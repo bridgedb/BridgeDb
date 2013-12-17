@@ -46,8 +46,10 @@ Neisseria collection	Neisseria			Nx
 Pyrococcus collection	Pytococcus			Px
 Staphylococcus collection	Staphylococcus			Sx
 Streptococcus collection	Streptococcus			Tx
-Aspergillus niger	Black mold	5061	ani	An
+Aspergillus niger	Black Mold	5061	ani	An
 Clostridium thermocellum	Cthe		cth	Ct
-Gibberella zeae	Fusarium gramaninearum	5518		Gz
+Gibberella zeae	Fusarium graminearum	5518		Gz
 Solanum lycopersicum	Tomato	4081		Sl
 Glycine max	Soybean	3847		Gm	
+Beta vulgaris   Sugar Beet  3555  bvu Bv
+Hordeum vulgare Barley  4513  hvu Hv
