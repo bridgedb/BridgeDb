@@ -2,6 +2,7 @@ Anopheles	gambiae	Mosquito_Ag	Ag
 Arabidopsis	thaliana	Arabidopsis	At
 Aspergillus	niger	Black mold	An
 Bacillus	subtilis	Bsubtilis	Bs
+Beta vulgaris Sugar Beet  Bv
 Bos	taurus	Cow	Bt
 Caenorhabditis	elegans	Celegans	Ce
 Canis	familiaris	Dog	Cf
@@ -17,6 +18,7 @@ Gallus	gallus	Chicken	Gg
 Glycine	max	Soybean	Gm
 Gibberella	zeae	Fusarium graminearum	Gz
 Homo	sapiens	Human	Hs
+Hordeum vulgare Barley  Hv
 Loxodonta	africana	Elephant	La
 Macaca	mulatta	Rhesus Monkey	Ml
 Monodelphis	domestica	Opossum	Md
