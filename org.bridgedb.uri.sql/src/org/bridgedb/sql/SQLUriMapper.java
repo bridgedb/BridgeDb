@@ -1202,7 +1202,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             statement.setInt(1, 0- symetricId);
             statement.setInt(2, mappingSetId);
             statement.executeUpdate();
-            System.out.println(statement.toString());
         } catch (SQLException ex) {
             throw new BridgeDBException ("Error inserting symmetric with " + query.toString(), ex);
         }
