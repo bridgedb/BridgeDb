@@ -200,6 +200,7 @@ bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chemspider/$id> ;
 	bridgeDB:hasUriPattern <http://rdf.chemspider.com/$id> ;
     bridgeDB:hasUriPattern <http://www.chemspider.com/Chemical-Structure.$id.rdf> ;
+    bridgeDB:hasUriPattern <http://www.chemspider.com/Chemical-Structure.$id> ;
 	bridgeDB:hasUriPattern <http://www.chemspider.com/$id> .
 
 bridgeDB:DataSource_Cint a bridgeDB:DataSource ;

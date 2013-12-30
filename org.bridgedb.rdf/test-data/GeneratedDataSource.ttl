@@ -255,7 +255,7 @@ bridgeDB:DataSource_Chemspider a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/chemspider/$id> ;
 	bridgeDB:hasRegexPattern "^\\d+$" ;
 	dcterms:alternative "ChemSpider" ;
-	bridgeDB:hasUriPattern <http://rdf.chemspider.com/$id> , <http://www.chemspider.com/$id> , <http://www.chemspider.com/Chemical-Structure.$id.rdf> .
+	bridgeDB:hasUriPattern <http://rdf.chemspider.com/$id> , <http://www.chemspider.com/$id> , <http://www.chemspider.com/Chemical-Structure.$id> , <http://www.chemspider.com/Chemical-Structure.$id.rdf> .
 
 bridgeDB:DataSource_Cint a bridgeDB:DataSource ;
 	bridgeDB:fullName "Cint" ;
@@ -3236,6 +3236,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.chemspider.com/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.chemspider.com/" .
+
+<http://www.chemspider.com/Chemical-Structure.$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://www.chemspider.com/Chemical-Structure." .
 
 <http://www.chemspider.com/Chemical-Structure.$id.html> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.chemspider.com/Chemical-Structure." ;
