@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.ws.server;
+package org.bridgedb.uri.ws.uri;
 
 import java.util.Date;
 import org.bridgedb.sql.SQLUriMapper;
@@ -25,7 +25,7 @@ import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.uri.ws.WSUriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-import org.bridgedb.uri.ws.server.WSUriInterfaceService;
+import org.bridgedb.ws.uri.WSUriInterfaceService;
 import org.junit.BeforeClass;
 
 /**

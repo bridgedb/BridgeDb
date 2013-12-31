@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.bridgedb.uri.ws.server;
+package org.bridgedb.uri.ws.uri;
 
 import java.io.UnsupportedEncodingException;
 import javax.ws.rs.core.Response;
@@ -10,7 +10,7 @@ import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
-import org.bridgedb.uri.ws.server.WSUriServer;
+import org.bridgedb.ws.uri.WSUriServer;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;

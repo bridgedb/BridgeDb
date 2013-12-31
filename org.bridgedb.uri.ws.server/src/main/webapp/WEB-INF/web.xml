@@ -15,7 +15,7 @@
         </listener-class>
     </listener>
     <listener>
-		<listener-class>org.bridgedb.ws.uri.WSOtherservices</listener-class>
+		<listener-class>org.bridgedb.ws.uri.WSUriServer</listener-class>
 	</listener>
     <servlet>
         <servlet-name>CXFServlet</servlet-name>
