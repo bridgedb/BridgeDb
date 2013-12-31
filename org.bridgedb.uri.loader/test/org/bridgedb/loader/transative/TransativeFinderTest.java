@@ -173,7 +173,6 @@ public class TransativeFinderTest {
         // B -> A -> A' (4) / C -> A -> A' (11)
         // A -> A' -> B (5) / A -> A' -> C (12) 
         // B -> A -> A' -> B (6) / B -> A -> A' -> C (13) / B -> A -> A' / C -> A -> A' -> B (14) / C -> A -> A' -> C
-        System.out.print(results);
         assertEquals(15, results.getNumberOfMappingSets());
         Reporter.println("testFinder6Done");
 	}

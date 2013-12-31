@@ -200,8 +200,6 @@ public class TransativeFinder extends SQLBase{
         if (logger.isDebugEnabled()){
             logger.debug("compute right transtative with self mappingset " + info.getIntId());
         }
-        System.out.println (info);
-//        lastTranstativeLoaded = mappingSetId;
         List<MappingSetInfo> possibleInfos = findTransativeCandidates(info);
         for (MappingSetInfo possibleInfo:possibleInfos) {
             if (types.get(possibleInfo.getIntId()) != LinksetType.ORIDINARY){
@@ -317,11 +315,15 @@ public class TransativeFinder extends SQLBase{
         if(LIMITED_VIA){
             //Only some datasource are used transitively
             if (!getLimited().contains(left.getTarget().getSysCode())){
-                if (logger.isDebugEnabled()){
-                    logger.debug("Not allowed middle " + left.getStringId() + " -> " + right.getStringId());
-                    logger.debug ("    " + left.getTarget());
+                if (left.getTarget().getSysCode().equals("ConceptWiki") && left.getSource().getSysCode().equals("drugbankTarget")) {
+                    //ok allow this one
+                } else {
+                    if (logger.isDebugEnabled()){
+                        logger.debug("Not allowed middle " + left.getStringId() + " -> " + right.getStringId());
+                        logger.debug ("    " + left.getTarget());
+                    }
+                    return false;
                 }
-                return false;
             }
         }
         //Must match in the middle
@@ -706,4 +708,5 @@ public class TransativeFinder extends SQLBase{
         }
         return limitedSysCodes;
     }
+    
  }
