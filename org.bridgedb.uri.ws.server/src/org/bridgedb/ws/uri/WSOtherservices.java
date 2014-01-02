@@ -20,6 +20,7 @@
 package org.bridgedb.ws.uri;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -59,6 +60,8 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
             
     private static boolean EXCLUDE_GRAPH = false;
     private static boolean INCLUDE_GRAPH = true;
+    
+    private static final HashMap<String,Response> setMappings = new HashMap<String,Response>();
     
     private static final Logger logger = Logger.getLogger(WSOtherservices.class);
 	private ServletContext context;
@@ -163,6 +166,23 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + SetMappings.METHOD_NAME)
     public Response getSetMapping(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
+            @QueryParam(WsUriConstants.LENS_URI) String lensUri,
+            @Context HttpServletRequest httpServletRequest) 
+            throws BridgeDBException, UnsupportedEncodingException {
+            String key = scrCode + targetCode + lensUri;
+            Response result = setMappings.get(key);
+            if (result == null){
+                result = getSetMappingNew(scrCode, targetCode, lensUri, httpServletRequest);
+                setMappings.put(key, result);
+            }
+            return result;
+    }
+        
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + SetMappings.METHOD_NAME)
+    public Response getSetMappingNew(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
             @QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @Context HttpServletRequest httpServletRequest) 
