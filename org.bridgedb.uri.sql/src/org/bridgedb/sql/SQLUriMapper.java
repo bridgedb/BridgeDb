@@ -2012,7 +2012,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      * @throws BridgeDBException 
      */
     private void countFrequency (int mappingSetId) throws BridgeDBException{
-        float mappingsF = 0;
+        float numberOfsource = 0;
         //ystem.out.println ("Updating frequency count for " + mappingSetId + ". Please Wait!");
         logger.info ("Updating frequency count for " + mappingSetId + ". Please Wait!");
         Statement countStatement = this.createStatement();
@@ -2036,10 +2036,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             rs = countStatement.executeQuery(query.toString());    
             logger.info ("Count query run. Updating link count now");
             while (rs.next()){
-                mappingsF++;
+                int frequency = rs.getInt("frequency");
+                numberOfsource+= frequency;
             }
-            rs.first();
-            int frequencyCount = 0;
+            //ystem.out.println("numberOfsource = " + numberOfsource);
+            rs.beforeFirst();
+            int sourceCount = 0;
             int freqMedium = -1;
             int freq75 = -1;
             int freq90 = -1;
@@ -2048,15 +2050,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             while (rs.next()){
                 targetFrequency = rs.getInt("targetFrequency");
                 int frequency = rs.getInt("frequency");
-                frequencyCount++;
-                float frequencyPercent = frequencyCount/ mappingsF;
-                if (frequencyPercent >= 0.5){
-                    if (frequencyPercent >= 0.75){
-                        if (frequencyPercent >= 0.90){
-                            if (frequencyPercent >= 0.99){
+                //ystem.out.println("targetFrequency: " + targetFrequency + "   frequency: " + frequency);
+                sourceCount+= frequency;
+                if (sourceCount >=  numberOfsource * 0.50){
+                    if (sourceCount >=  numberOfsource * 0.75){
+                        if (sourceCount >=  numberOfsource * 0.90){
+                            if (sourceCount >=  numberOfsource * 0.99){
                                 if (freq99 < 0){
                                     freq99 = targetFrequency;
-                                }
+                                    //ystem.out.println("Set 99 = " + targetFrequency);
+                                }                               
                             } else {
                                 if (freq90 < 0){
                                     freq90 = targetFrequency;
