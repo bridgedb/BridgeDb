@@ -108,6 +108,10 @@
             <id>openRDF</id>
             <url>http://repo.aduna-software.org/maven2</url>
         </repository>
+        <repository>
+            <id>Maven.org</id>
+            <url>repo1.maven.org/maven2</url>
+        </repository>
     </repositories>
   
 
