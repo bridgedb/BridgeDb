@@ -19,8 +19,6 @@
 //
 package org.bridgedb.statistics;
 
-import java.util.HashSet;
-import java.util.Set;
 import org.bridgedb.DataSource;
 
 /**

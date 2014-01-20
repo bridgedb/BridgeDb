@@ -20,8 +20,6 @@
 package org.bridgedb.uri;
 
 import java.util.Set;
-import org.bridgedb.DataSource;
-import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 

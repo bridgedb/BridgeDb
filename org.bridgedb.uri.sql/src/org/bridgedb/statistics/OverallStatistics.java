@@ -20,7 +20,7 @@
 package org.bridgedb.statistics;
 
 /**
- * Holder class for all the gloabl MetaData held by the SQL
+ * Holder class for all the global MetaData held by the SQL
  * @author Christian
  */
 public class OverallStatistics {

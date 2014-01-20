@@ -36,13 +36,10 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.bridgedb.bio.DataSourceTxt;
 import org.bridgedb.pairs.CodeMapper;
 import org.bridgedb.pairs.IdSysCodePair;
-import org.bridgedb.rdf.BridgeDBRdfHandler;
 import org.bridgedb.rdf.DataSourceMetaDataProvidor;
 import org.bridgedb.rdf.UriPattern;
-import org.bridgedb.rdf.identifiers.org.IdentifersOrgReader;
 import org.bridgedb.rdf.pairs.RdfBasedCodeMapper;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -56,8 +53,6 @@ import org.bridgedb.uri.RegexUriPattern;
 import org.bridgedb.uri.UriListener;
 import org.bridgedb.uri.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.ConfigReader;
-import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Resource;
 
 /**
@@ -89,8 +84,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     public static final String JUSTIFICATION_COLUMN_NAME = "justification";
     private static final String PREDICATE_COLUMN_NAME = "predicate";
     private static final String PREFIX_COLUMN_NAME = "prefix";
- //   private static final String LENS_ID_COLUMN_NAME = "lensId";
-//    private static final String LENS_URI_COLUMN_NAME = "lensUri";
     private static final String POSTFIX_COLUMN_NAME = "postfix";
     static final String MAPPING_75_PERCENT_FREQUENCY_COLUMN_NAME = "mapping75Frequency";
     static final String MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME = "mapping90Frequency";
@@ -110,8 +103,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     static final String VIA_DATASOURCE_COLUMN_NAME = "viaDataSource";
     
     private static SQLUriMapper mapper = null;
-    private HashMap<Integer,RegexUriPattern> subjectUriPatterns;
-    private HashMap<Integer,RegexUriPattern> targetUriPatterns;
+    private final HashMap<Integer,RegexUriPattern> subjectUriPatterns;
+    private final HashMap<Integer,RegexUriPattern> targetUriPatterns;
     private boolean processingRawLinkset = true;
             
     static final Logger logger = Logger.getLogger(SQLListener.class);

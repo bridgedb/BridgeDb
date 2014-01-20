@@ -19,10 +19,6 @@
 //
 package org.bridgedb.uri;
 
-import java.util.Set;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-
 public class UriMapping {
  
     private final String sourceUri;
