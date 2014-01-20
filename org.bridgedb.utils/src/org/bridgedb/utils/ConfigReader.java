@@ -178,7 +178,7 @@ public class ConfigReader {
     private boolean loadDirectly(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
         if (!file.exists()) {
-            Reporter.println("Unable to find " + fileName + " in local Directory ");    
+            Reporter.println("Unable to find " + file.getAbsolutePath() + " in local Directory ");    
             return false;
         }
         inputStream = new FileInputStream(file);
