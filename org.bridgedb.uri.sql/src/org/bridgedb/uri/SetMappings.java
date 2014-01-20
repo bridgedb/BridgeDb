@@ -128,7 +128,7 @@ public class SetMappings {
         }
     }
     
-    Set<Statement> asRDF(String lens) throws BridgeDBException {
+    Set<Statement> asRDF(String lens, String contextPath) throws BridgeDBException {
         HashSet<Statement> statements = new HashSet<Statement>();
         URI setUri = new URIImpl(getMappingResource());
         URI predicateURI = toURI(predicate);
@@ -142,7 +142,7 @@ public class SetMappings {
         statements.add(statement);
         if (lens != null){
             Lens theLens = Lens.byId(lens);
-            URI lensUri = new URIImpl(theLens.toUri());
+            URI lensUri = new URIImpl(theLens.toUri(contextPath));
             URI hasLensUri = new URIImpl(HAS_LENS);
             statement = new StatementImpl(setUri, hasLensUri, lensUri);
             statements.add(statement);

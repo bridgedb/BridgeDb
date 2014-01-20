@@ -37,7 +37,7 @@ import org.bridgedb.utils.ConfigReader;
  */
 public class Lens {
 
-	private final String id;
+    private final String id;
     private String name;
     private String createdBy;
     private String createdOn;
@@ -64,6 +64,9 @@ public class Lens {
     private static final String TEST_LENS_NAME = "Test";
     private static final String ALL_LENS_NAME = "All";
       
+    public static String defaultBaseUri;
+    public static final String DEFAULT_BAE_URI_KEY = "defaultLensBaseUri";
+    
     static final Logger logger = Logger.getLogger(Lens.class);
 
     /**
@@ -194,14 +197,10 @@ public class Lens {
         if (contextPath != null){
             return contextPath + URI_PREFIX + getId();
         } else {
-            return RdfBase.DEFAULT_BASE_URI + URI_PREFIX + getId();
+            return defaultBaseUri + URI_PREFIX + getId();
         }
     }
     
-    public String toUri(){
-        return RdfBase.DEFAULT_BASE_URI + URI_PREFIX + getId();
-    }
-
     /**
 	 * @return the name
 	 */
@@ -291,6 +290,7 @@ public class Lens {
                 defaultLens.addJustifications(all.getJustifications());
             }
             testLens.addJustification(getTestJustifictaion());
+            defaultBaseUri = properties.getProperty(DEFAULT_BAE_URI_KEY);
         }
      }
 
