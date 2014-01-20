@@ -1536,17 +1536,17 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         try {
             while (rs.next()){
                 String targetId = rs.getString(TARGET_ID_COLUMN_NAME);
-                String targetKey = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
-                DataSource targetDatasource = keyToDataSource(targetKey);
-                Xref target = new Xref(targetId, targetDatasource);
+                String targetSysCode = rs.getString(TARGET_DATASOURCE_COLUMN_NAME);
+                IdSysCodePair targetPair = new IdSysCodePair(targetId, targetSysCode);
+                Xref target = codeMapper1.toXref(targetPair);
                 Integer mappingSetId = rs.getInt(MAPPING_SET_ID_COLUMN_NAME);
                 String predicate = rs.getString(PREDICATE_COLUMN_NAME);
                 Xref source;
                 if (sourceRef == null){
                     String sourceId = rs.getString(SOURCE_ID_COLUMN_NAME);
                     String sourceSysCode = rs.getString(SOURCE_DATASOURCE_COLUMN_NAME);
-                    IdSysCodePair pair = new IdSysCodePair(sourceId, sourceSysCode);
-                    source = codeMapper1.toXref(pair);
+                    IdSysCodePair sourcePair = new IdSysCodePair(sourceId, sourceSysCode);
+                    source = codeMapper1.toXref(sourcePair);
                 } else {
                     source = codeMapper1.toXref(sourceRef);
                 }
