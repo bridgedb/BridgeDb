@@ -127,6 +127,9 @@ public class ConfigReader {
             if (loadByCatalinaHomeConfigs(fileName)) {
                 return;
             }
+            if (loadFromDirectory(fileName, "conf/BridgeDb")) {
+                return;
+            }
             if (loadFromDirectory(fileName, "../conf/BridgeDb")) {
                 return;
             }
@@ -283,7 +286,7 @@ public class ConfigReader {
     private boolean loadFromDirectory(String fileName, String directoryName) throws FileNotFoundException {
         File directory = new File (directoryName);
         if (!directory.exists()) {
-            Reporter.warn("No directory found at: " + directoryName);
+            Reporter.warn("No directory found at: " + directoryName+ " at " + directory.getAbsolutePath());
             return false;
         }
         if (!directory.isDirectory()){

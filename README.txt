@@ -91,7 +91,8 @@ higher priority than 2 etc). Once it finds a configuration file the other locati
 1. Directly in the run directory  (Mainly for java *.jar runs)  
 2. Environment Variable `BRIDGEDB_CONFIG` : can be used to point to any location  
 3. Tomcat configuration folder : `$CATALINA_HOME/conf/BridgeDb`  
-4. ../conf/BridgeDb : Allows tomcat to pick up `$CATALINA_HOME/conf/BridgeDb` even if it can not get `$CATALINA_HOME`  
+4. conf/BridgeDb : Allows tomcat 7 to pick up `$CATALINA_HOME/conf/BridgeDb` even if it can not get `$CATALINA_HOME`  
+4. ../conf/BridgeDb : Allows tomcat 6 to pick up `$CATALINA_HOME/../conf/BridgeDb` even if it can not get `$CATALINA_HOME`  
 5. Using classLoader getResource : This will pick up the files included in Jars and Wars.  
 
 
