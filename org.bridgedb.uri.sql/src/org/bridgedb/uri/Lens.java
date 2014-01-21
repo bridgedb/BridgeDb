@@ -37,6 +37,7 @@ import org.bridgedb.rdf.constants.PavConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.impl.CalendarLiteralImpl;
@@ -92,31 +93,22 @@ public class Lens {
      * @param createdOn
      * @param createdBy
      * @param justifications 
-     * /
+     */
     public Lens(String id, String name, String createdOn, String createdBy, String description, Collection<String> justifications) {
         this.id = id;
         this.name = name;
         this.createdBy = createdBy;
-        this.createdOn = createdOn;
+        this.setCreatedOn(createdOn);
         this.description = description;
         this.justifications = new  ArrayList<String>(justifications);
-    }*/
+    }
 
     private Lens(String id, String name) throws BridgeDBException {
         this.name = name;
         this.id = id;
         this.justifications = new  ArrayList<String>();
         this.description = name + " lens";
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        DatatypeFactory datatypeFactory;
-        try {
-            datatypeFactory = DatatypeFactory.newInstance();
-            XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
-            setCreatedOn(now);
-        } catch (DatatypeConfigurationException ex) {
-            throw new BridgeDBException ("Error with setting createdOn to now", ex);
-        }
-
+        this.setCreatedOnNow();
         createdBy = "constructor";
         register(this);
         logger.info("Register " + this);
@@ -376,11 +368,12 @@ public class Lens {
         this.createdOn = createdOn;
     }
 
-    private void setCreatedOn(String createdOnString) throws BridgeDBException {
+    private void setCreatedOn(String createdOnString) {
         try { 
             this.createdOn = DatatypeFactory.newInstance().newXMLGregorianCalendar(createdOnString);
         } catch (DatatypeConfigurationException ex) {
-            throw new BridgeDBException ("Unable to convert " + createdOnString,ex);
+            Reporter.error("Unable to convert " + createdOnString,ex);
+            setCreatedOnNow();
         }
     }
 
@@ -406,6 +399,18 @@ public class Lens {
     public String getDescription() {
         return description;
     }
+
+    private void setCreatedOnNow() {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        DatatypeFactory datatypeFactory;
+        try {
+            datatypeFactory = DatatypeFactory.newInstance();
+            XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
+            setCreatedOn(now);
+        } catch (DatatypeConfigurationException ex) {
+            Reporter.error("Unable to set createdBy now! ", ex);
+        }
+   }
 
   
 }

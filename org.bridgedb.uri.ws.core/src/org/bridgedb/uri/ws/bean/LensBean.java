@@ -26,12 +26,12 @@ import org.bridgedb.uri.Lens;
 
 /**
  *
- * @author Alasdair
+ * @author Alasdair and Christian
  */
 @XmlRootElement(name="Lens")
 public class LensBean {
 
-	private String uri;
+    private String uri;
     private String name;
     private String createdBy;
     private String createdOn;
@@ -46,7 +46,7 @@ public class LensBean {
     	uri = lens.toUri(contextPath);
         name = lens.getName();
         createdBy = lens.getCreatedBy();
-        createdOn = lens.getCreatedOn();
+        createdOn = lens.getCreatedOn().toString();
         description = lens.getDescription();
         justification = new HashSet<String>(lens.getJustifications());
     }
