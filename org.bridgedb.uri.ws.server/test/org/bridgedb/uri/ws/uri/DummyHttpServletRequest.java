@@ -105,7 +105,7 @@ public class DummyHttpServletRequest implements HttpServletRequest{
 
     @Override
     public String getRequestURI() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "/BridgeDb";
     }
 
     @Override
@@ -115,7 +115,7 @@ public class DummyHttpServletRequest implements HttpServletRequest{
 
     @Override
     public String getServletPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "test";
     }
 
     @Override
@@ -210,17 +210,17 @@ public class DummyHttpServletRequest implements HttpServletRequest{
 
     @Override
     public String getScheme() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "http";
     }
 
     @Override
     public String getServerName() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "localhost";
     }
 
     @Override
     public int getServerPort() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 8080; //test
     }
 
     @Override

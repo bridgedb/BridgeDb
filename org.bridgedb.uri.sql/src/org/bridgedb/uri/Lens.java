@@ -23,13 +23,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.bridgedb.rdf.RdfBase;
+import org.bridgedb.rdf.constants.BridgeDBConstants;
+import org.bridgedb.rdf.constants.DCTermsConstants;
+import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
+import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.LiteralImpl;
+import org.openrdf.model.impl.StatementImpl;
+import org.openrdf.model.impl.URIImpl;
 
 /**
  *
@@ -45,6 +54,7 @@ public class Lens {
     private final List<String> justifications;
     
     private static final String PROPERTIES_FILE = "lens.properties";
+    public static final String DEFAULT_BAE_URI_KEY = "defaultLensBaseUri";
     
     private static HashMap<String,Lens> register = null;
     private static int nextNumber = -0; 
@@ -65,7 +75,6 @@ public class Lens {
     private static final String ALL_LENS_NAME = "All";
       
     public static String defaultBaseUri;
-    public static final String DEFAULT_BAE_URI_KEY = "defaultLensBaseUri";
     
     static final Logger logger = Logger.getLogger(Lens.class);
 
@@ -186,19 +195,18 @@ public class Lens {
     }
     
 
-	/**
-	 * @return the Id
-	 */
-	public String getId() {
-		return id;
-	}
+    /**
+     * @return the Id
+     */
+    public String getId() {
+        return id;
+    }
     
-    public String toUri(String contextPath){
-        if (contextPath != null){
-            return contextPath + URI_PREFIX + getId();
-        } else {
+    public String toUri(String baseUri){
+        if (baseUri == null){
             return defaultBaseUri + URI_PREFIX + getId();
         }
+        return baseUri + URI_PREFIX + getId();
     }
     
     /**

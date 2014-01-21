@@ -164,10 +164,10 @@ public class MappingsBySet {
         return mappings;
     }
     
-    public Set<Statement> asRDF(String contextPath) throws BridgeDBException{
+    public Set<Statement> asRDF(String lensBaseUri) throws BridgeDBException{
         HashSet<Statement> statements = new HashSet<Statement>();
         for (SetMappings setMapping: getSetMappings()){
-            Set<Statement> more = setMapping.asRDF(lens, contextPath);
+            Set<Statement> more = setMapping.asRDF(lens, lensBaseUri);
             statements.addAll(more);          
         }
         for (UriMapping mapping:mappings){
@@ -227,8 +227,8 @@ public class MappingsBySet {
         }
     }
     
-    public String toRDF(String formatName, String contextPath) throws BridgeDBException{
-            Set<Statement> statements = asRDF(contextPath);
+    public String toRDF(String formatName, String lensBaseUri) throws BridgeDBException{
+            Set<Statement> statements = asRDF(lensBaseUri);
             StringWriter writer = new StringWriter();
             if (formatName == null){
                 formatName = "TriX";

@@ -103,8 +103,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         velocityContext.put("mapURI", WsUriConstants.MAP_URI);
         velocityContext.put("mapUriForm", mapUriForm);
         sb.append( WebTemplates.getForm(velocityContext, WebTemplates.BRIDGEDB_HOME));
-
-        footerAndEnd(sb);
+         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
@@ -295,7 +294,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         if (mappingsBySet.isEmpty()){
             return Response.noContent().build();
         } else {
-            String rdf = mappingsBySet.toRDF(formatName, httpServletRequest.getContextPath());     
+             String rdf = mappingsBySet.toRDF(formatName, getBaseUri(httpServletRequest));     
             return Response.ok(rdf, MediaType.TEXT_PLAIN_TYPE).build();
         }
     }
@@ -327,7 +326,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         sb.append(" this method does not include any protential mapping to self.</h2>");
         sb.append("<h4>Use MediaType.TEXT_PLAIN to remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
-        generateTextarea(sb, "RDF", mappingsBySet.toRDF(formatName, httpServletRequest.getContextPath()));
+        generateTextarea(sb, "RDF", mappingsBySet.toRDF(formatName, getBaseUri(httpServletRequest)));
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
@@ -370,7 +369,9 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
    }
 
-
+    private String getBaseUri(HttpServletRequest httpServletRequest) {
+        return httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getServerPort() + httpServletRequest.getRequestURI();
+    }
 }
 
 
