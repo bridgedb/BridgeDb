@@ -55,7 +55,7 @@ public class TransativeConfig extends ConfigReader{
     private static File getTestDirectory() throws BridgeDBException {
         if (testDir == null){
             testDir = getDirectory(TEST_DIRECTORY_PROPERTY, "TestDirectory");
-            deleteChildren(testDir);
+            //deleteChildren(testDir);
             if (!testDir.exists()){
                 boolean made = testDir.mkdir();
                 if (made == false){
