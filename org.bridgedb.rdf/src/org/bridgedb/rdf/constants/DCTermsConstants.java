@@ -18,5 +18,9 @@ public class DCTermsConstants {
     public static final String ALTERNATIVE = "alternative";
     public static final URI ALTERNATIVE_URI = new URIImpl(voidns + ALTERNATIVE);
     
+    public static final String DESCRIPTION = "description";
+    public static final URI DESCRIPTION_URI = new URIImpl(voidns + DESCRIPTION);
   
+    public static final String TITLE = "title";
+    public static final URI TITLE_URI = new URIImpl(voidns + TITLE);
 }

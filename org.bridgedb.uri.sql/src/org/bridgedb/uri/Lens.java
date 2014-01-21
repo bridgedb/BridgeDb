@@ -21,21 +21,25 @@ package org.bridgedb.uri;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.log4j.Logger;
-import org.bridgedb.rdf.RdfBase;
 import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DCTermsConstants;
+import org.bridgedb.rdf.constants.PavConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
+import org.openrdf.model.impl.CalendarLiteralImpl;
 import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
@@ -49,7 +53,7 @@ public class Lens {
     private final String id;
     private String name;
     private String createdBy;
-    private String createdOn;
+    private XMLGregorianCalendar createdOn;
     private String description;
     private final List<String> justifications;
     
@@ -88,7 +92,7 @@ public class Lens {
      * @param createdOn
      * @param createdBy
      * @param justifications 
-     */
+     * /
     public Lens(String id, String name, String createdOn, String createdBy, String description, Collection<String> justifications) {
         this.id = id;
         this.name = name;
@@ -96,13 +100,24 @@ public class Lens {
         this.createdOn = createdOn;
         this.description = description;
         this.justifications = new  ArrayList<String>(justifications);
-    }
+    }*/
 
-    private Lens(String id, String name) {
+    private Lens(String id, String name) throws BridgeDBException {
         this.name = name;
         this.id = id;
         this.justifications = new  ArrayList<String>();
         this.description = name + " lens";
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        DatatypeFactory datatypeFactory;
+        try {
+            datatypeFactory = DatatypeFactory.newInstance();
+            XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
+            setCreatedOn(now);
+        } catch (DatatypeConfigurationException ex) {
+            throw new BridgeDBException ("Error with setting createdOn to now", ex);
+        }
+
+        createdBy = "constructor";
         register(this);
         logger.info("Register " + this);
     }
@@ -210,32 +225,32 @@ public class Lens {
     }
     
     /**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @return the createdBy
-	 */
-	public String getCreatedBy() {
-		return createdBy;
-	}
+    /**
+     * @return the createdBy
+     */
+    public String getCreatedBy() {
+        return createdBy;
+    }
 
-	/**
-	 * @return the createdOn
-	 */
-	public String getCreatedOn() {
-		return createdOn;
-	}
+    /**
+      * @return the createdOn
+      */
+    public XMLGregorianCalendar getCreatedOn() {
+        return createdOn;
+    }
 
-	/**
-	 * @return the justification
-	 */
-	public List<String> getJustifications() {
-		return justifications;
-	}
+    /**
+      * @return the justification
+      */
+    public List<String> getJustifications() {
+        return justifications;
+    }
 
     public static String getDefaultJustifictaionString() {
        return "http://semanticscience.org/resource/CHEMINF_000059"; 
@@ -285,7 +300,6 @@ public class Lens {
                     }
                 }
             }
-            all.setCreatedOn(new Date().toString());
             for (Lens lens:getLens()){
                 all.addJustifications(lens.getJustifications());
             }
@@ -331,12 +345,43 @@ public class Lens {
         return results;
     }
 
+    public static Set<Statement> getLensAsRdf(String baseUri) {
+        HashSet<Statement> results = new HashSet<Statement>();
+        for (Lens lens:register.values()){
+            results.addAll(lens.asRdf(baseUri));
+        }
+        return results;
+    }
+    
+    public Set<Statement> asRdf(String baseUri) {
+        HashSet<Statement> results = new HashSet<Statement>();
+        URI subject = new URIImpl(this.toUri(baseUri));
+        results.add(new StatementImpl(subject, RdfConstants.TYPE_URI, BridgeDBConstants.LENS_URI));
+        results.add(new StatementImpl(subject, DCTermsConstants.TITLE_URI, new LiteralImpl(name)));
+        results.add(new StatementImpl(subject, DCTermsConstants.DESCRIPTION_URI, new LiteralImpl(description)));
+        results.add(new StatementImpl(subject, PavConstants.CREATED_BY, new LiteralImpl(createdBy)));
+        CalendarLiteralImpl createdOnLiteral = new CalendarLiteralImpl(createdOn);
+        results.add(new StatementImpl(subject, PavConstants.CREATED_ON, createdOnLiteral));
+        for (String justification:justifications){
+            results.add(new StatementImpl(subject, BridgeDBConstants.LINKSET_JUSTIFICATION, new URIImpl(justification)));
+        }
+        return results;
+    }
+
     private void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
-    private void setCreatedOn(String createdOn) {
+    private void setCreatedOn(XMLGregorianCalendar createdOn) {
         this.createdOn = createdOn;
+    }
+
+    private void setCreatedOn(String createdOnString) throws BridgeDBException {
+        try { 
+            this.createdOn = DatatypeFactory.newInstance().newXMLGregorianCalendar(createdOnString);
+        } catch (DatatypeConfigurationException ex) {
+            throw new BridgeDBException ("Unable to convert " + createdOnString,ex);
+        }
     }
 
     private void setDescription(String description) {

@@ -102,9 +102,12 @@ public class BridgeDBConstants {
     public static final URI IS_URI_PATTERN_OF = new URIImpl(PREFIX + "isUriPatternOf");
     
     private static final String bdb = "http://www.bridgedb.org/test#";	
-	public static final URI TEST_PREDICATE = new URIImpl(bdb + "testPredicate");
+    public static final URI TEST_PREDICATE = new URIImpl(bdb + "testPredicate");
 
     public static final URI VIA_URI = new URIImpl(PREFIX + "isTransativeVia");
     public static final URI IS_SYMETRIC = new URIImpl(PREFIX + "isSymetric");
     public static final URI LINKSET_JUSTIFICATION = new URIImpl(PREFIX + "linksetJustification");
+    
+    public static final URI LENS_URI = new URIImpl(PREFIX + "lens");
+    
 }
