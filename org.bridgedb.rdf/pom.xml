@@ -75,6 +75,30 @@
             <artifactId>sesame-rio-rdfxml</artifactId>
             <version>${sesame.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-rio-compliance</artifactId>
+            <version>${sesame.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-rio-trig</artifactId>
+            <version>${sesame.version}</version>
+            <type>jar</type>
+	 </dependency>
+	 <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-rio-n3</artifactId>
+            <version>${sesame.version}</version>
+            <type>jar</type>
+	 </dependency>
+	 <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-rio-trix</artifactId>
+            <version>${sesame.version}</version>
+            <type>jar</type>
+	 </dependency>
         <!--dependency>
             <groupId>org.openrdf.sesame</groupId>
             <artifactId>sesame-rio-N3</artifactId>
@@ -85,39 +109,39 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.6.4</version>
-			<scope>runtime</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.4</version>
-			<scope>runtime</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.utils</artifactId>
-			<version>${project.version}</version>
+            <groupId>org.bridgedb</groupId>
+            <artifactId>org.bridgedb.utils</artifactId>
+            <version>${project.version}</version>
             <type>test-jar</type>
-			<scope>test</scope>
- 		</dependency>
+            <scope>test</scope>
+        </dependency>
         <dependency>
-			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb</artifactId>
-			<version>${project.version}</version>
+            <groupId>org.bridgedb</groupId>
+            <artifactId>org.bridgedb</artifactId>
+            <version>${project.version}</version>
             <type>test-jar</type>
-			<scope>test</scope>
- 		</dependency>
-         <dependency>
-        	<groupId>org.hamcrest</groupId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <version>${hamcrest.version}</version>
-			<scope>test</scope>
+            <scope>test</scope>
         </dependency>    
         <dependency>
-        	<groupId>org.hamcrest</groupId>
+            <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <version>${hamcrest.version}</version>
-			<scope>test</scope>
+            <scope>test</scope>
         </dependency>    
      </dependencies>
     <repositories>

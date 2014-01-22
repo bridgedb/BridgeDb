@@ -22,6 +22,7 @@ package org.bridgedb.ws.uri;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -37,6 +38,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
+import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -47,6 +49,7 @@ import org.bridgedb.uri.SetMappings;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.templates.WebTemplates;
+import org.openrdf.model.Statement;
 
 
 /**
@@ -331,19 +334,52 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
-	@Override
-	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        // TODO Auto-generated method stub	
+    }
+    
+    @GET
+    @Produces({MediaType.TEXT_PLAIN})
+    @Path("/" + Lens.METHOD_NAME + WsUriConstants.RDF) 
+    public Response lensRdfText(@QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+        Set<Statement> statements = Lens.getLensAsRdf(getBaseUri(httpServletRequest));
+        if (statements.isEmpty()){
+            return Response.noContent().build();
+        } else {
+            String rdf = BridgeDbRdfTools.writeRDF(statements, formatName);     
+            return Response.ok(rdf, MediaType.TEXT_PLAIN_TYPE).build();
+        }
+    }
+
+    @GET
+    @Produces({MediaType.TEXT_HTML})
+    @Path("/" + Lens.METHOD_NAME + WsUriConstants.RDF) 
+    public Response lensRdfHtml(@QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
+            @Context HttpServletRequest httpServletRequest
+            ) throws BridgeDBException {
+        Set<Statement> statements = Lens.getLensAsRdf(getBaseUri(httpServletRequest));
+        StringBuilder sb = topAndSide("HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output",  httpServletRequest);
+        sb.append("<h2>Warning unlike ");
+        sb.append(WsUriConstants.MAP_BY_SET);
+        sb.append(" this method does not include any protential mapping to self.</h2>");
+        sb.append("<h4>Use MediaType.TEXT_PLAIN to remove HTML stuff</h4>");
+        sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
+        String rdf = BridgeDbRdfTools.writeRDF(statements, formatName);   
+        generateTextarea(sb, "RDF", rdf);
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
     /**
      * Listen for servlet initialization in web.xml and set the context for use in
      * the velocity templates
      */
-	@Override
-	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		this.context = servletContextEvent.getServletContext();
-	}
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+        this.context = servletContextEvent.getServletContext();
+    }
 
     @GET
     @Produces({MediaType.TEXT_HTML})

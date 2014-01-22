@@ -33,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.bridgedb.Xref;
+import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.uri.GraphResolver;
 import org.bridgedb.uri.Lens;
 import org.bridgedb.uri.Mapping;
@@ -174,8 +175,10 @@ public class WSAPI extends WSUriInterfaceService {
         describe_UriMapper(sb, contextPath, sourceXref1, tragetSysCode1, sourceUri1, sourceXref2, sourceUri2, 1, targetUriSpace2, 
                 text1, 1, sourceSysCode1, freeSearchSupported);
         describe_MappingSet(sb, contextPath, sourceXref1, sourceSysCode1, tragetSysCode1);
-        describe_Graphviz(sb, contextPath);      
-    }
+        describe_Graphviz(sb, contextPath);   
+        describe_Lens(sb, contextPath);
+        describe_LensRdf(sb, contextPath);
+     }
     
     protected void describeParameter(StringBuilder sb, String contextPath) throws BridgeDBException  {
         describeCoreParameter(sb);
@@ -378,7 +381,7 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("</ul>");
             sb.append("<li>String Format</li>");
             sb.append("<li>Legal values are:</li><ul>");
-                for (String formatName:MappingsBySet.getAvaiableWriters()){
+                for (String formatName:BridgeDbRdfTools.getAvaiableWriters()){
                     sb.append("<li>");
                     sb.append(formatName);
                     sb.append("</li>");
@@ -954,11 +957,11 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append(" and ");
                 refMapBySet(sb);
                 sb.append("</li>");
-            sb.append("<li>Plus Optional argument</li><ul>");
+            sb.append("<li>Plus </li><ul>");
                 parameterRdfFormat(sb);
                 sb.append("</li></ul>");
             mapExamplesUriBased(sb, contextPath, WsUriConstants.MAP_BY_SET + WsUriConstants.RDF, sourceUri1, sourceUri2, targetUriSpace2);
-            for (String formatName:MappingsBySet.getAvaiableWriters()){
+            for (String formatName:BridgeDbRdfTools.getAvaiableWriters()){
                 mapExamplesUriBasedFormatted(sb, contextPath, WsUriConstants.MAP_BY_SET + WsUriConstants.RDF, sourceUri1, formatName);
             }
             sb.append("</ul>\n");
@@ -1034,6 +1037,16 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("</a></dt>");
         sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>\n");           
+        sb.append("<dt>");
+                lens(sb);
+                sb.append("</dt>");
+        sb.append("<dd>Brings up a list of the Supported Lens</dd>\n");           
+        sb.append("<dt><a href=\"#");
+                sb.append(Lens.METHOD_NAME + WsUriConstants.RDF);
+                sb.append("\">");
+                sb.append(Lens.METHOD_NAME + WsUriConstants.RDF);
+                sb.append("</a></dt>");
+        sb.append("<dd>Brings up the supported Lens in RDF format</dd>\n");           
     }
 
     private final void describe_MappingSet(StringBuilder sb, String contextPath, Xref first, String sourceSysCode, String targetSysCode) 
@@ -1183,6 +1196,57 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append("</ul>\n");        
     }
 
+    private void describe_Lens(StringBuilder sb, String contextPath)
+            throws UnsupportedEncodingException, BridgeDBException{
+        sb.append("<h3><a name=\"");
+        sb.append(Lens.METHOD_NAME);
+        sb.append("\">");
+        sb.append(Lens.METHOD_NAME);
+        sb.append("</a></h3>");
+        sb.append("<ul>");
+            sb.append("<li>Brings up a list of the Supported Lens");
+            sb.append("<li>Example: <a href=\"");
+                sb.append(contextPath);
+                sb.append(Lens.METHOD_NAME);
+                sb.append("\">");
+                sb.append(Lens.METHOD_NAME);
+                sb.append("</a></li>");    
+        sb.append("</ul>\n");
+    }        
+
+    private void describe_LensRdf(StringBuilder sb, String contextPath)
+            throws UnsupportedEncodingException, BridgeDBException{
+        sb.append("<h3><a name=\"");
+        sb.append(Lens.METHOD_NAME + WsUriConstants.RDF);
+        sb.append("\">");
+        sb.append(Lens.METHOD_NAME +  WsUriConstants.RDF);
+        sb.append("</a></h3>");
+        sb.append("<ul>");
+            sb.append("<li>Same data as ");
+                lens(sb);
+                sb.append(" but presented at RDF.</dd>");
+            sb.append("<li>Argument</li><ul>");
+                parameterRdfFormat(sb);
+                sb.append("</li></ul>");
+            for (String formatName:BridgeDbRdfTools.getAvaiableWriters()){
+                sb.append("<li>Example: <a href=\"");
+                sb.append(contextPath);
+                sb.append(Lens.METHOD_NAME +  WsUriConstants.RDF);
+                sb.append("?");
+                sb.append(WsUriConstants.RDF_FORMAT);
+                sb.append("=");
+                sb.append(formatName);
+                sb.append("\">");
+                sb.append(Lens.METHOD_NAME+  WsUriConstants.RDF);
+                sb.append("?");
+                sb.append(WsUriConstants.RDF_FORMAT);
+                sb.append("=");
+                sb.append(formatName);                
+                sb.append("</a></li>");    
+            }
+        sb.append("</ul>\n");
+    }        
+    
     private void parameterID_CODE(StringBuilder sb){
         sb.append("<li><a href=\"#");
             sb.append(ID_CODE);
@@ -1273,6 +1337,14 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("</a>");
     }
 
+    private void lens(StringBuilder sb){
+        sb.append("<a href=\"#");
+        sb.append(Lens.METHOD_NAME);
+        sb.append("\">");
+        sb.append(Lens.METHOD_NAME);
+        sb.append("</a>");
+    }
+    
     private void mapExamplesXrefbased(StringBuilder sb, String contextPath, String methodName, Xref sourceXref1, String tragetSysCode1, Xref sourceXref2) 
             throws UnsupportedEncodingException, BridgeDBException{
         sb.append("<li>Example: <a href=\"");
