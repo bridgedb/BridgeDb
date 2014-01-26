@@ -85,7 +85,7 @@ SELECT DISTINCT genmapp_XXXXXX_CS_YYYYYY.attr.ID, genmapp_XXXXXX_CS_YYYYYY.attr.
 genmapp_XXXXXX_CS_YYYYYY.attr.Name, genmapp_XXXXXX_CS_YYYYYY.attr.Value
 FROM genmapp_XXXXXX_CS_YYYYYY.attr
 WHERE genmapp_XXXXXX_CS_YYYYYY.attr.Value != ''
-AND genmapp_XXXXXX_CS_YYYYYY.attr.Code IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
+AND genmapp_XXXXXX_CS_YYYYYY.attr.Code IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Sp","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
 
 ## Fill 'datanode'
 ## From CS Database
@@ -93,14 +93,14 @@ INSERT INTO datanode
 SELECT genmapp_XXXXXX_CS_YYYYYY.gene.ID, genmapp_XXXXXX_CS_YYYYYY.gene.Code
 FROM genmapp_XXXXXX_CS_YYYYYY.gene
 WHERE genmapp_XXXXXX_CS_YYYYYY.gene.ID != '' 
-AND genmapp_XXXXXX_CS_YYYYYY.gene.Code IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
+AND genmapp_XXXXXX_CS_YYYYYY.gene.Code IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Sp","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
 
 ## Fill 'link'
 ## From CS Databases
 INSERT INTO link
 SELECT DISTINCT *
 FROM genmapp_XXXXXX_CS_YYYYYY.link
-WHERE genmapp_XXXXXX_CS_YYYYYY.link.Code_Right IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
+WHERE genmapp_XXXXXX_CS_YYYYYY.link.Code_Right IN ("En","Mb","L","X","Il","Ag","Q","Om","U","Rf","S","Sp","Ip","T","Pd","H","M","R","D","Z","F","W","Gg","A","Ti","Ir","N","Uc","Pl","Gm","Bg","Ec","Wg","Gw","Kg","Bc","Tb");
 
 ##Add Ensembl IDs to right side of 'link' table
 INSERT INTO link
