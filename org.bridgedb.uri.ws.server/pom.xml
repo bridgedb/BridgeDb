@@ -115,19 +115,28 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+            <scope>compile</scope>
+        </dependency>  
+        <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
             <version>${cxf.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${jersey.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
             <version>${jersey.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -174,11 +183,6 @@
             <artifactId>hamcrest-library</artifactId>
             <version>${hamcrest.version}</version>
             <scope>test</scope>
-        </dependency>  
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
         </dependency>  
      </dependencies>
 </project>

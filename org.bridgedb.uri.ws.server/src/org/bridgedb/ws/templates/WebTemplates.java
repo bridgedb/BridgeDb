@@ -2,9 +2,11 @@ package org.bridgedb.ws.templates;
 
 import java.io.StringWriter;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
 
 public class WebTemplates 
 {
@@ -17,11 +19,17 @@ public class WebTemplates
     
     private static VelocityEngine velocityEngine = initialize();
     
+    static final Logger logger = Logger.getLogger(WebTemplates.class.toString());
+    
     private static VelocityEngine initialize(){
         Properties props = new Properties();
     	props.put("resource.loader", "class");
     	props.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
     	VelocityEngine ve = new VelocityEngine();
+        ve.setProperty( RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
+            "org.apache.velocity.runtime.log.Log4JLogChute" );
+        ve.setProperty("runtime.log.logsystem.log4j.logger",
+                        WebTemplates.class.toString());
     	ve.init(props);  
         return ve;
     }
