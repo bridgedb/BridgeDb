@@ -162,11 +162,12 @@ public class WSAPI extends WSUriInterfaceService {
         String targetUriSpace2;
         if (uriListener != null){
             RegexUriPattern pattern = uriListener.toUriPattern(targetUri2);
+            GraphResolver.addMapping(EXAMPLE_GRAPH, pattern);
             targetUriSpace2 = pattern.getUriPattern();
         } else {
             targetUriSpace2 = targetUri2.substring(0, targetUri2.length()- targetXref2.getId().length());
+            GraphResolver.addMapping(EXAMPLE_GRAPH, targetUriSpace2);
         }
-        GraphResolver.addMapping(EXAMPLE_GRAPH, targetUriSpace2);
         boolean freeSearchSupported = idMapper.getCapabilities().isFreeSearchSupported(); 
         Set<String> keys = idMapper.getCapabilities().getKeys();
 

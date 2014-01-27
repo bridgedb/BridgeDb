@@ -92,6 +92,15 @@ public class GraphResolver {
         allowedUriPattern.put(graph, patterns);
     }
 
+    private void addPattern(String graph, RegexUriPattern uriPattern) throws BridgeDBException{
+        Set<RegexUriPattern> patterns = allowedUriPattern.get(graph);
+        if (patterns == null){
+            patterns = new HashSet<RegexUriPattern>();
+        }
+        patterns.add(uriPattern);
+        allowedUriPattern.put(graph, patterns);
+    }
+
     public static Set<String> knownGraphs() throws BridgeDBException{
         return getInstance().allowedUriPattern.keySet();
     }
@@ -115,6 +124,11 @@ public class GraphResolver {
         gr.addPatterns(graph, RegexUriPattern.byPattern(uriPattern));        
     }
     
+    public static void addMapping(String graph, RegexUriPattern uriPattern) throws BridgeDBException{
+        GraphResolver gr = getInstance();
+        gr.addPattern(graph, uriPattern);        
+    }
+
     public static void addTestMappings() throws BridgeDBException{
         GraphResolver gr = getInstance();
         gr.addPatterns("http://www.conceptwiki.org", "http://www.conceptwiki.org/concept/$id");
