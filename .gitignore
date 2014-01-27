@@ -21,6 +21,7 @@ bridgedb-*.gz
 */TEST*.xml
 *.log
 /logs/*
+*/logs/*
 
 # generated checkstyle warnings
 /org.bridgedb/warnings.txt
