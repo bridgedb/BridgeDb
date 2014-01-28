@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: bridgedb-benchmarking
 Bundle-SymbolicName: bridgedb-benchmarking
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Export-Package: org.bridgedb.benchmarking
 Require-Bundle: org.bridgedb,
  org.bridgedb.bio,
