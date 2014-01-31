@@ -43,6 +43,7 @@
 			<include name="batchmapper.bat"/>
 			<include name="start-server.sh"/>
 			<include name="dist/*.jar"/>
+			<exclude name="dist/org.bridgedb.tests.metabolites.jar"/>
 			<include name="LICENSE-2.0.txt"/>
 			<include name="README.txt"/>
 			<include name="apidoc"/>
