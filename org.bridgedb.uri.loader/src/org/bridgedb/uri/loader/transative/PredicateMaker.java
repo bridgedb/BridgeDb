@@ -30,7 +30,8 @@ import org.bridgedb.utils.BridgeDBException;
  * @author Christian
  */
 public class PredicateMaker {
-
+//Broaawed + narrow = error
+    
     public static String combine(String left, String right) throws BridgeDBException {
         if (left.equals(right)){
             return left;
@@ -66,7 +67,7 @@ public class PredicateMaker {
             if (right.equals(SkosConstants.BROAD_MATCH)) return SkosConstants.BROAD_MATCH; 
             if (right.equals(OboConstants.HAS_PART)) return OboConstants.HAS_PART;
         }
-        if (left.equals(SkosConstants.EXACT_MATCH)) {
+        if (left.equals(SkosConstants.EXACT_MATCH)) { //TODO keep other
             if (right.equals(OwlConstants.EQUIVALENT_CLASS)) return SkosConstants.EXACT_MATCH;
             if (right.equals(OwlConstants.SAME_AS)) return SkosConstants.EXACT_MATCH;
             if (right.equals(SkosConstants.CLOSE_MATCH)) return SkosConstants.CLOSE_MATCH;
