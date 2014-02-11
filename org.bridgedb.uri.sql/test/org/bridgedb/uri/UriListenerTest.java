@@ -27,7 +27,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.rdf.UriPatternType;
 import org.bridgedb.uri.api.UriMapper;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;

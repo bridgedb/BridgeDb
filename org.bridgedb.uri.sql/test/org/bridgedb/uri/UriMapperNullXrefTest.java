@@ -9,7 +9,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.Mapping;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapID_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Xref> results = uriMapper.mapID(sourceXref, lensId, DataSource2, DataSource3);
         assertTrue(results.isEmpty());
     }
@@ -40,7 +40,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapID_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSource");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
         Set results = uriMapper.mapID(sourceXref, lensId, tgtDataSource);
         assertTrue(results.isEmpty());
@@ -53,7 +53,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapID_sourceXref_lensId() throws Exception {
         report("MapID_sourceXref_lensId");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapID(sourceXref, lensId);
         assertTrue(results.isEmpty());
     }
@@ -65,7 +65,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapUri_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceUri, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         assertTrue(results.isEmpty());
     }
@@ -77,7 +77,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapUri_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceXref, lensId, NULL_GRAPH, stringPattern3);
         assertTrue(results.isEmpty());
     }
@@ -89,7 +89,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapUri_sourceXref_lensId() throws Exception {
         report("MapUri_sourceXref_lensId");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceXref, lensId, NULL_GRAPH);
         assertTrue(results.isEmpty());
     }
@@ -101,7 +101,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapUri_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceXref, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         assertTrue(results.isEmpty());
     }
@@ -113,7 +113,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapUri_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPattern");
         String sourceUri = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceUri, lensId, NULL_GRAPH, stringPattern3);
         assertTrue(results.isEmpty());
     }
@@ -125,7 +125,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapUri_sourceUri_lensId() throws Exception {
         report("MapUri_sourceUri_lensId");
         String sourceUri = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceUri, lensId, NULL_GRAPH);
         assertTrue(results.isEmpty());
     }
@@ -137,7 +137,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource[] tgtDataSources = null;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, DataSource2, DataSource3);
         assertTrue(results.isEmpty());
@@ -150,7 +150,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, tgtDataSource);
         assertTrue(results.isEmpty());
@@ -163,7 +163,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId);
         assertTrue(results.isEmpty());
     }
@@ -175,7 +175,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         assertTrue(results.isEmpty());
     }
@@ -187,7 +187,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, NULL_GRAPH, stringPattern3);
         assertTrue(results.isEmpty());
     }
@@ -200,7 +200,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtDataSources");
         String sourceUri = null;
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource[] tgtDataSources = null;
         Set expResult = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, DataSource2, DataSource3);
@@ -215,7 +215,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtDataSource");
         String sourceUri = null;
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, tgtDataSource);
         assertTrue(results.isEmpty());
@@ -229,7 +229,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId");
         String sourceUri = null;
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId);
         assertTrue(results.isEmpty());
     }
@@ -242,7 +242,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtUriPattern");
         String sourceUri = null;
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, NULL_GRAPH, stringPattern3);
         assertTrue(results.isEmpty());
     }
@@ -255,7 +255,7 @@ public abstract class UriMapperNullXrefTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = null;
         Xref sourceXref = null;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         UriPattern[] tgtUriPatterns = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         assertTrue(results.isEmpty());

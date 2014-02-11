@@ -24,7 +24,7 @@ import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.uri.UriListenerTest;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import static org.junit.Assert.*;
@@ -52,11 +52,11 @@ public class UriMapperRecoverTest extends UriListenerTest {
         listener = SQLUriMapper.createNew();
         loadDataPart1();
         uriMapper = SQLUriMapper.getExisting();
-        OverallStatistics stats = uriMapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         stats.getNumberOfMappings();
         assertEquals(10, stats.getNumberOfMappingSets());
         listener.recover();
-        stats = uriMapper.getOverallStatistics(Lens.getAllLens());
+        stats = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(6, stats.getNumberOfMappingSets());
         Resource resource = new URIImpl("http://example.com/1to2Another");
         int mappingSet = listener.registerMappingSet(regexUriPattern1, TEST_PREDICATE, 

@@ -37,7 +37,7 @@ import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.tools.GraphResolver;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
@@ -1096,13 +1096,13 @@ public class WSAPI extends WSUriInterfaceService {
                     sb.append("?");
                     sb.append(WsUriConstants.LENS_URI);
                     sb.append("=");
-                    sb.append(URLEncoder.encode(Lens.getDefaultLens(), "UTF-8")); 
+                    sb.append(URLEncoder.encode(Lens.DEFAULT_LENS_NAME, "UTF-8")); 
                     sb.append("\">");
                     sb.append(SetMappings.METHOD_NAME);
                     sb.append("?");
                     sb.append(WsUriConstants.LENS_URI);
                     sb.append("=");
-                    sb.append(Lens.getDefaultLens());                    
+                    sb.append(Lens.DEFAULT_LENS_NAME);                    
                     sb.append("</a></li>");    
             sb.append("<li>XML Example: <a href=\"");
                     sb.append(contextPath);
@@ -1481,7 +1481,7 @@ public class WSAPI extends WSUriInterfaceService {
         sb.append("&");
         sb.append(WsUriConstants.LENS_URI);
         sb.append("=");
-        sb.append(Lens.getDefaultLens());
+        sb.append(Lens.DEFAULT_LENS_NAME);
     }
     
     private void mapExamplesUriBased4(StringBuilder sb, String contextPath, String methodName, String sourceUri1) 

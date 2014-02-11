@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri.tools;
+package org.bridgedb.uri.lens;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,15 +50,8 @@ import org.openrdf.model.impl.URIImpl;
  *
  * @author Alasdair and Christian
  */
-public class Lens {
+public class LensTools {
 
-    private final String id;
-    private String name;
-    private String createdBy;
-    private XMLGregorianCalendar createdOn;
-    private String description;
-    private final List<String> justifications;
-    
     private static final String PROPERTIES_FILE = "lens.properties";
     public static final String DEFAULT_BAE_URI_KEY = "defaultLensBaseUri";
     
@@ -66,58 +59,27 @@ public class Lens {
     private static int nextNumber = -0; 
     
     private static final String ID_PREFIX = "L";
-    public static final String METHOD_NAME = "Lens";
-    public static final String URI_PREFIX = "/" + METHOD_NAME + "/";
     private static final String PROPERTY_PREFIX = "lens";
-    
+   
     private static final String CREATED_BY = "createdBy";
     private static final String CREATED_ON = "createdOn";
     private static final String DESCRIPTION = "description";
     private static final String JUSTIFICATION = "justification";
     private static final String NAME = "name";
     
-    private static final String DEFAULT_LENS_NAME = "Default";
-    private static final String TEST_LENS_NAME = "Test";
-    private static final String ALL_LENS_NAME = "All";
-      
-    public static String defaultBaseUri;
     
-    static final Logger logger = Logger.getLogger(Lens.class);
+    static final Logger logger = Logger.getLogger(LensTools.class);
 
-    /**
-     * This methods should only be called by WS Clients as it Does not register the Lens 
-     * 
-     * Use factory method instead.
-     * 
-     * @param id
-     * @param name
-     * @param createdOn
-     * @param createdBy
-     * @param justifications 
-     */
-    public Lens(String id, String name, String createdOn, String createdBy, String description, Collection<String> justifications) {
-        this.id = id;
-        this.name = name;
-        this.createdBy = createdBy;
-        this.setCreatedOn(createdOn);
-        this.description = description;
-        this.justifications = new  ArrayList<String>(justifications);
-    }
-
-    private Lens(String id, String name) throws BridgeDBException {
-        this.name = name;
-        this.id = id;
-        this.justifications = new  ArrayList<String>();
-        this.description = name + " lens";
-        this.setCreatedOnNow();
-        createdBy = "constructor";
-        register(this);
-        logger.info("Register " + this);
+    private static Lens lensFactory(String id, String name) throws BridgeDBException {
+        Lens lens = new Lens(id, name);
+        register(lens);
+        logger.info("Register " + lens);
+        return lens;
     }
  
      public static Lens byId(String id) throws BridgeDBException{
-        if (id.contains(URI_PREFIX)){
-            id = id.substring(id.indexOf(URI_PREFIX)+URI_PREFIX.length());
+        if (id.contains(Lens.URI_PREFIX)){
+            id = id.substring(id.indexOf(Lens.URI_PREFIX)+Lens.URI_PREFIX.length());
         }
         Lens result = lookupById(id);
         if (result == null){
@@ -129,7 +91,7 @@ public class Lens {
     private static Lens findOrCreatedById(String id) throws BridgeDBException{
         Lens result = lookupById(id);
         if (result == null){
-            result = new Lens(id, id);
+            result = lensFactory(id, id);
         }
         return result;       
     }
@@ -148,7 +110,7 @@ public class Lens {
             nextNumber++;
             check = lookupById(id.toLowerCase());
         } while (check != null);
-        return new Lens(id, name);
+        return lensFactory(id, name);
     }
 
     public static List<String> getJustificationsbyId(String id) throws BridgeDBException{
@@ -156,93 +118,9 @@ public class Lens {
         return lens.getJustifications();
     }
     
-    @Override
-    public String toString(){
-           return  "Lens Id: " + this.getId() + 
-        		   " Name: " + this.getName() +
-        		   " Created By: " + this.getCreatedBy() +
-        		   " Created On: " + this.getCreatedOn() +
-                   " Description: " + this.getDescription() + 
-        		   " Justifications: " + this.getJustifications();
-    }
-    
     public static int getNumberOfLenses() throws BridgeDBException{
         init();
         return register.size();
-    }
-
-    /**
-     * The Default lens is the one that should be used whenever lensUri is null.
-     * <p>
-     * The suggestion behaviour is that the default will the mappings that 
-     *   are generally considered to apply in most situations, much as the Mappings in Version 1
-     * This is not to say that these will only be Owl:sameAs mappings (as almost none are.)
-     * <p>
-     * However the default should not return mappings in catagories such as broader than, narrower than, 
-     *    or where only the first half of the inch Strings match.
-     * @return the DefaultUri as a String
-     * @throws BridgeDBException 
-     */
-    public static String getDefaultLens() {
-        return DEFAULT_LENS_NAME;
-    }
-    
-    
-    public static String getTestLens() throws BridgeDBException{
-        return TEST_LENS_NAME;
-    }
-    
-    /**
-     * The lens used to indicate that all mappings should be returned.
-     * <p>
-     * @return A lens that asks for all mappings to be returned.
-     * @throws BridgeDBException 
-     */
-    public static String getAllLens() throws BridgeDBException{
-        return ALL_LENS_NAME;
-    }
-    
-
-    /**
-     * @return the Id
-     */
-    public String getId() {
-        return id;
-    }
-    
-    public String toUri(String baseUri){
-        if (baseUri == null){
-            return defaultBaseUri + URI_PREFIX + getId();
-        }
-        return baseUri + URI_PREFIX + getId();
-    }
-    
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return the createdBy
-     */
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-      * @return the createdOn
-      */
-    public XMLGregorianCalendar getCreatedOn() {
-        return createdOn;
-    }
-
-    /**
-      * @return the justification
-      */
-    public List<String> getJustifications() {
-        return justifications;
     }
 
     public static String getDefaultJustifictaionString() {
@@ -260,8 +138,8 @@ public class Lens {
         return register.get(id.toLowerCase());
     }
     
-    private void register(Lens lens){
-        register.put(id.toLowerCase(), lens);
+    private static void register(Lens lens){
+        register.put(lens.getId().toLowerCase(), lens);
     }
     
     public static void init() throws BridgeDBException {
@@ -269,9 +147,9 @@ public class Lens {
             logger.info("init");
             register = new HashMap<String,Lens>();
             //Create the all, default and test lens
-            Lens all = findOrCreatedById(ALL_LENS_NAME);
-            Lens defaultLens = findOrCreatedById(DEFAULT_LENS_NAME);
-            Lens testLens = findOrCreatedById(TEST_LENS_NAME);
+            Lens all = findOrCreatedById(Lens.ALL_LENS_NAME);
+            Lens defaultLens = findOrCreatedById(Lens.DEFAULT_LENS_NAME);
+            Lens testLens = findOrCreatedById(Lens.TEST_LENS_NAME);
             Properties properties = ConfigReader.getProperties(PROPERTIES_FILE);
             Set<String> keys = properties.stringPropertyNames();
             for (String key:keys){
@@ -283,7 +161,7 @@ public class Lens {
                     } else if (parts[2].equals(CREATED_ON)){
                         lens.setCreatedOn(properties.getProperty(key));
                     } else if (parts[2].equals(NAME)){
-                        lens.name = properties.getProperty(key);
+                        lens.setName(properties.getProperty(key));
                     } else if (parts[2].equals(DESCRIPTION)){
                         lens.setDescription(properties.getProperty(key));
                     } else if (parts[2].equals(JUSTIFICATION)){
@@ -305,13 +183,13 @@ public class Lens {
                 defaultLens.addJustifications(all.getJustifications());
             }
             testLens.addJustification(getTestJustifictaion());
-            defaultBaseUri = properties.getProperty(DEFAULT_BAE_URI_KEY);
+            Lens.setDefaultBaseUri(properties.getProperty(DEFAULT_BAE_URI_KEY));
         }
      }
 
   public static void init(UriMapper mapper) throws BridgeDBException {
         init();      
-        Lens all = byId(Lens.getAllLens());
+        Lens all = byId(Lens.ALL_LENS_NAME);
         //Code currently not used but allows lens per justifcation if turned back on
         Collection<String> justifications = mapper.getJustifications();
         for (String justification:justifications){
@@ -320,7 +198,7 @@ public class Lens {
             //    byName.setDescription("Lens with just the single jusification: " + justification);
             //    byName.addJustification(justification);
         }
-        Lens defaultLens =  byId(Lens.getDefaultLens());
+        Lens defaultLens =  byId(Lens.DEFAULT_LENS_NAME);
         if (defaultLens.getJustifications().isEmpty()){
             defaultLens.addJustifications(all.getJustifications());
         }
@@ -332,7 +210,7 @@ public class Lens {
     public static List<Lens> getLens() throws BridgeDBException {
         init();
         List results = new ArrayList<Lens> (register.values());
-        Lens defaultLens = byId(Lens.getDefaultLens());
+        Lens defaultLens = byId(Lens.DEFAULT_LENS_NAME);
         results.remove(defaultLens);
         results.add(0, defaultLens);
         return results;
@@ -341,77 +219,23 @@ public class Lens {
     public static Set<Statement> getLensAsRdf(String baseUri) {
         HashSet<Statement> results = new HashSet<Statement>();
         for (Lens lens:register.values()){
-            results.addAll(lens.asRdf(baseUri));
+            results.addAll(asRdf(lens, baseUri));
         }
         return results;
     }
     
-    public Set<Statement> asRdf(String baseUri) {
+    public static Set<Statement> asRdf(Lens lens, String baseUri) {
         HashSet<Statement> results = new HashSet<Statement>();
-        URI subject = new URIImpl(this.toUri(baseUri));
+        URI subject = new URIImpl(lens.toUri(baseUri));
         results.add(new StatementImpl(subject, RdfConstants.TYPE_URI, BridgeDBConstants.LENS_URI));
-        results.add(new StatementImpl(subject, DCTermsConstants.TITLE_URI, new LiteralImpl(name)));
-        results.add(new StatementImpl(subject, DCTermsConstants.DESCRIPTION_URI, new LiteralImpl(description)));
-        results.add(new StatementImpl(subject, PavConstants.CREATED_BY, new LiteralImpl(createdBy)));
-        CalendarLiteralImpl createdOnLiteral = new CalendarLiteralImpl(createdOn);
+        results.add(new StatementImpl(subject, DCTermsConstants.TITLE_URI, new LiteralImpl(lens.getName())));
+        results.add(new StatementImpl(subject, DCTermsConstants.DESCRIPTION_URI, new LiteralImpl(lens.getDescription())));
+        results.add(new StatementImpl(subject, PavConstants.CREATED_BY, new LiteralImpl(lens.getCreatedBy())));
+        CalendarLiteralImpl createdOnLiteral = new CalendarLiteralImpl(lens.getCreatedOn());
         results.add(new StatementImpl(subject, PavConstants.CREATED_ON, createdOnLiteral));
-        for (String justification:justifications){
+        for (String justification:lens.getJustifications()){
             results.add(new StatementImpl(subject, BridgeDBConstants.LINKSET_JUSTIFICATION, new URIImpl(justification)));
         }
         return results;
     }
-
-    private void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    private void setCreatedOn(XMLGregorianCalendar createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    private void setCreatedOn(String createdOnString) {
-        try { 
-            this.createdOn = DatatypeFactory.newInstance().newXMLGregorianCalendar(createdOnString);
-        } catch (DatatypeConfigurationException ex) {
-            Reporter.error("Unable to convert " + createdOnString,ex);
-            setCreatedOnNow();
-        }
-    }
-
-    private void setDescription(String description) {
-        this.description = description;
-    }
-
-    private void addJustification(String justification) {
-        if (!this.justifications.contains(justification)){
-            this.justifications.add(justification);
-        }
-    }
-
-    private void addJustifications(Collection<String> justifications) {
-        for (String justification:justifications){
-            addJustification(justification);
-        }
-    }
-
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    private void setCreatedOnNow() {
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        DatatypeFactory datatypeFactory;
-        try {
-            datatypeFactory = DatatypeFactory.newInstance();
-            XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
-            setCreatedOn(now);
-        } catch (DatatypeConfigurationException ex) {
-            Reporter.error("Unable to set createdBy now! ", ex);
-        }
-   }
-
-  
 }

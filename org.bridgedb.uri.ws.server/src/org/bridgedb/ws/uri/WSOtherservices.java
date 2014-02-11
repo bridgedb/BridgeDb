@@ -45,7 +45,8 @@ import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.tools.GraphResolver;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.UriResultsAsRDF;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
@@ -94,7 +95,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
-        velocityContext.put("lenses", Lens.getLens());
+        velocityContext.put("lenses", LensTools.getLens());
         String mapUriScripts = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS);
         StringBuilder sb = topAndSide ("Home page for BridgeDB WebServer", mapUriScripts, httpServletRequest);
         
@@ -121,7 +122,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
-        velocityContext.put("lenses", Lens.getLens());
+        velocityContext.put("lenses", LensTools.getLens());
         String mapUriScripts = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS);
         StringBuilder sb = topAndSide ("mapURI Service", mapUriScripts, httpServletRequest);
         sb.append(mapUriForm(INCLUDE_GRAPH, httpServletRequest));
@@ -133,15 +134,15 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
-        velocityContext.put("lenses", Lens.getLens());        
+        velocityContext.put("lenses", LensTools.getLens());        
         velocityContext.put("contextPath", httpServletRequest.getContextPath());
-        velocityContext.put("defaultLens", Lens.byId(Lens.getDefaultLens()));
+        velocityContext.put("defaultLens", LensTools.byId(Lens.DEFAULT_LENS_NAME));
         velocityContext.put("formatName", WsUriConstants.FORMAT);
         if (includeGraph){
             velocityContext.put("graphName", WsUriConstants.GRAPH); 
             velocityContext.put("graphs", GraphResolver.knownGraphs());
         }
-        velocityContext.put("lenses", Lens.getLens());
+        velocityContext.put("lenses", LensTools.getLens());
         velocityContext.put("lensURIName", WsUriConstants.LENS_URI);
         velocityContext.put("mapURI", WsUriConstants.MAP_URI);
         velocityContext.put("targetUriPatternName", WsUriConstants.TARGET_URI_PATTERN);
@@ -193,7 +194,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         List<MappingSetInfo> mappingSetInfos = uriMapper.getMappingSetInfos(scrCode, targetCode, lensUri);
         String lensName;
         if (lensUri != null && !lensUri.isEmpty()){
-            Lens lensInfo = Lens.byId(lensUri);
+            Lens lensInfo = LensTools.byId(lensUri);
             lensName = lensInfo.getName();
         } else {
             lensName = "Default";
@@ -345,7 +346,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
     @Path("/" + Lens.METHOD_NAME + WsUriConstants.RDF) 
     public Response lensRdfText(@QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
-        Set<Statement> statements = Lens.getLensAsRdf(getBaseUri(httpServletRequest));
+        Set<Statement> statements = LensTools.getLensAsRdf(getBaseUri(httpServletRequest));
         if (statements.isEmpty()){
             return Response.noContent().build();
         } else {
@@ -360,7 +361,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
     public Response lensRdfHtml(@QueryParam(WsUriConstants.RDF_FORMAT) String formatName,
             @Context HttpServletRequest httpServletRequest
             ) throws BridgeDBException {
-        Set<Statement> statements = Lens.getLensAsRdf(getBaseUri(httpServletRequest));
+        Set<Statement> statements = LensTools.getLensAsRdf(getBaseUri(httpServletRequest));
         StringBuilder sb = topAndSide("HTML friendly " + WsUriConstants.MAP_BY_SET + WsUriConstants.RDF + " Output",  httpServletRequest);
         sb.append("<h2>Warning unlike ");
         sb.append(WsUriConstants.MAP_BY_SET);

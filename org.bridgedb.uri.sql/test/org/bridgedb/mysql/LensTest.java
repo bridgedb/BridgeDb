@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Set;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import static org.hamcrest.Matchers.*;
@@ -55,9 +56,9 @@ public class LensTest extends org.bridgedb.uri.UriListenerTest {
     @Test
     public void testDefaultAndAllLens() throws Exception {
         report("DefaultAndAllLens");
-        Lens defaultLens = Lens.byId(Lens.getDefaultLens());
+        Lens defaultLens = LensTools.byId(Lens.DEFAULT_LENS_NAME);
         assertThat (defaultLens.getJustifications().size(), greaterThanOrEqualTo(1));
-        Lens allLens = Lens.byId(Lens.getAllLens());
+        Lens allLens = LensTools.byId(Lens.ALL_LENS_NAME);
         assertThat (allLens.getJustifications().size(), greaterThanOrEqualTo(defaultLens.getJustifications().size()));
         Set<String> justifications = sqlUriMapper.getJustifications();
         assertThat (allLens.getJustifications().size(), greaterThanOrEqualTo(justifications.size()));       
@@ -66,8 +67,8 @@ public class LensTest extends org.bridgedb.uri.UriListenerTest {
     @Test
     public void testRDF() throws Exception {
         report("RDF");
-        Set<Statement> statements = Lens.getLensAsRdf(null);
-        List<Lens> lens = Lens.getLens();
+        Set<Statement> statements = LensTools.getLensAsRdf(null);
+        List<Lens> lens = LensTools.getLens();
         assertThat(statements.size(), greaterThanOrEqualTo(lens.size() * 6));
     }
  }

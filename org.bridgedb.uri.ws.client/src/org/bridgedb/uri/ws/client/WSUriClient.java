@@ -28,7 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.SetMappings;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.ws.WSUriInterface;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.uri.ws.bean.DataSourceUriPatternBean;

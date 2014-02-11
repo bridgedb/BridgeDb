@@ -6,6 +6,7 @@
 
 package org.bridgedb.uri.tools;
 
+import org.bridgedb.uri.lens.Lens;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.rdf.BridgeDbRdfTools;
@@ -16,6 +17,7 @@ import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
 import static org.bridgedb.uri.api.SetMappings.HAS_LENS;
 import org.bridgedb.uri.api.UriMapping;
+import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -49,7 +51,7 @@ public class UriResultsAsRDF {
         statement = new StatementImpl(setUri, VoidConstants.DATA_DUMP, mappingSourceURI);
         statements.add(statement);
         if (lens != null){
-            Lens theLens = Lens.byId(lens);
+            Lens theLens = LensTools.byId(lens);
             URI lensUri = new URIImpl(theLens.toUri(lensBaseUri));
             URI hasLensUri = new URIImpl(HAS_LENS);
             statement = new StatementImpl(setUri, hasLensUri, lensUri);

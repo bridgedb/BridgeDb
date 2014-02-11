@@ -11,7 +11,7 @@ import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapID_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map2xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Xref> results = uriMapper.mapID(sourceXref, lensId, DataSource2, DataSource3);
         assertFalse(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
@@ -49,7 +49,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapID_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapID_sourceXref_lensId_tgtDataSource");
         Xref sourceXref = map2xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
         Set results = uriMapper.mapID(sourceXref, lensId, tgtDataSource);
         assertFalse(results.contains(map2xref1));
@@ -68,7 +68,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapID_sourceXref_lensId() throws Exception {
         report("MapID_sourceXref_lensId");
         Xref sourceXref = map2xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapID(sourceXref, lensId);
         assertTrue(results.contains(map2xref1));
         assertTrue(results.contains(map2xref2));
@@ -88,7 +88,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapUri_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri3;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceUri, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         assertFalse(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
@@ -106,7 +106,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapBySet_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri3;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUri, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
         assertFalse(results.contains(map3Uri1));
@@ -124,7 +124,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         Set<String> sourceUris = new HashSet<String>();
         sourceUris.add(map3Uri3);
         sourceUris.add(map1Uri1);
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
         assertFalse(results.contains(map3Uri1));
@@ -142,7 +142,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         Set<String> sourceUris = new HashSet<String>();
         sourceUris.add(map3Uri3);
         sourceUris.add(map3Uri1);
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
         assertFalse(results.contains(map3Uri1));
@@ -161,7 +161,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapUri_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceXref, lensId, NULL_GRAPH, stringPattern3);
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
@@ -179,7 +179,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapUri_sourceXref_lensId() throws Exception {
         report("MapUri_sourceXref_lensId");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceXref, lensId, NULL_GRAPH);
         assertTrue(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
@@ -197,7 +197,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapUri_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceXref, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         assertFalse(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
@@ -215,7 +215,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapUri_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceUri, lensId, NULL_GRAPH, stringPattern3);
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
@@ -230,7 +230,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapBySet_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapBySet_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUri, lensId, NULL_GRAPH, stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
         assertFalse(results.contains(map3Uri1));
@@ -249,7 +249,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapUri_sourceUri_lensId() throws Exception {
         report("MapUri_sourceUri_lensId");
         String sourceUri = map3Uri2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set results = uriMapper.mapUri(sourceUri, lensId, NULL_GRAPH);
         assertTrue(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
@@ -267,7 +267,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapBySet_sourceUri_lensId() throws Exception {
         report("MapBySeti_sourceUri_lensId");
         String sourceUri = map3Uri2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUri, lensId, NULL_GRAPH);
         Set<String> results = lensMapping.getTargetUris();
         assertTrue(results.contains(map3Uri1));
@@ -286,7 +286,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtDataSources() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource[] tgtDataSources = null;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, DataSource2, DataSource3);
         Set<String> targetUris = new HashSet<String>();
@@ -323,7 +323,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtDataSource() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, tgtDataSource);
         Set<String> targetUris = new HashSet<String>();
@@ -361,7 +361,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId() throws Exception {
         report("MapFull_sourceXref_lensId_tgtDataSources");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
@@ -397,7 +397,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtUriPatterns() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPatterns");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         UriPattern[] tgtUriPatterns = null;
         Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> targetUris = new HashSet<String>();
@@ -434,7 +434,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapFull_sourceXref_lensId_tgtUriPattern() throws Exception {
         report("MapFull_sourceXref_lensId_tgtUriPattern");
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
        Set<Mapping> results = uriMapper.mapFull(sourceXref, lensId, NULL_GRAPH, stringPattern3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
@@ -471,7 +471,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtDataSources");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource[] tgtDataSources = null;
         Set expResult = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, DataSource2, DataSource3);
@@ -512,7 +512,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtDataSource");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         DataSource tgtDataSource = DataSource3;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, tgtDataSource);
         Set<String> targetUris = new HashSet<String>();
@@ -552,7 +552,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
@@ -591,7 +591,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
          Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, NULL_GRAPH, stringPattern3);
         Set<String> targetUris = new HashSet<String>();
         Set<Xref> targetXrefs = new HashSet<Xref>();
@@ -630,7 +630,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         report("MapFull_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri2;
         Xref sourceXref = map3xref2;
-        String lensId = Lens.getDefaultLens();
+        String lensId = Lens.DEFAULT_LENS_NAME;
         UriPattern[] tgtUriPatterns = null;
         Set<Mapping> results = uriMapper.mapFull(sourceUri, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> targetUris = new HashSet<String>();

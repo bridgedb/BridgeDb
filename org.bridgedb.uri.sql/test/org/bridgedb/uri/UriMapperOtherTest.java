@@ -5,7 +5,8 @@
 package org.bridgedb.uri;
 
 import java.util.List;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.lens.LensTools;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -24,7 +25,7 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetLenss() throws Exception {
         report("getLenss");
-        List<Lens> results = Lens.getLens();
+        List<Lens> results = LensTools.getLens();
         assertThat(results.size(), greaterThanOrEqualTo(2));
      }
 
@@ -34,8 +35,8 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetDefaultLens() throws Exception {
         report("GetDefaultLens");
-        Lens result = Lens.byId(Lens.getDefaultLens());
-        assertEquals(Lens.getDefaultLens(), result.getId());
+        Lens result = LensTools.byId(Lens.DEFAULT_LENS_NAME);
+        assertEquals(Lens.DEFAULT_LENS_NAME, result.getId());
         assertNotNull(result.getCreatedBy());
         assertNotNull(result.getCreatedOn());
         assertNotNull(result.getName());
@@ -48,8 +49,8 @@ public abstract class UriMapperOtherTest extends UriListenerTest{
     @Test
     public void testGetAllLens() throws Exception {
         report("GetAllLens");
-        Lens result = Lens.byId(Lens.getAllLens());
-        assertEquals(Lens.getAllLens(), result.getId());
+        Lens result = LensTools.byId(Lens.ALL_LENS_NAME);
+        assertEquals(Lens.ALL_LENS_NAME, result.getId());
         //assertNotNull(result.getCreatedBy());
         assertNotNull(result.getDescription());
         assertNotNull(result.getName());

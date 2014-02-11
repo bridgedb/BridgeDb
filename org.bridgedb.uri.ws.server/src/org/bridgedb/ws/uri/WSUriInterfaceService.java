@@ -50,7 +50,8 @@ import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.api.UriMapper;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.uri.ws.WSUriInterface;
 import org.bridgedb.uri.ws.WsUriConstants;
@@ -333,7 +334,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         velocityContext.put("URI", WsUriConstants.URI);
         velocityContext.put("lensURI", lensUri);
         velocityContext.put("lensURIName", WsUriConstants.LENS_URI);
-        velocityContext.put("defaultLensName", Lens.getDefaultLens()); 
+        velocityContext.put("defaultLensName", Lens.DEFAULT_LENS_NAME); 
         velocityContext.put("targetUriPatterns", targetUriPatterns);
         velocityContext.put("targetUriPatternName", WsUriConstants.TARGET_URI_PATTERN);
         velocityContext.put("graph", graph);
@@ -615,7 +616,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
 	private LensBean getLensInner(String id) throws BridgeDBException {
- 		Lens lens = Lens.byId(id);
+ 		Lens lens = LensTools.byId(id);
 		return new LensBean(lens, null);
   	}
 
@@ -663,9 +664,9 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 
     protected List<Lens> getTheLens(String lensUri) throws BridgeDBException{
         if (lensUri == null || lensUri.isEmpty()){
-            return  Lens.getLens();
+            return  LensTools.getLens();
         } else {
-            Lens lens = Lens.byId(lensUri);
+            Lens lens = LensTools.byId(lensUri);
             List<Lens> lenses = new ArrayList<Lens>();
             lenses.add(lens);  
             return lenses;
@@ -982,19 +983,11 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected void addSideBarBridgeDb(StringBuilder sb, HttpServletRequest httpServletRequest) {
         sb.append("<div class=\"menugroup\">BridgeDb Service</div>");
         addSideBarItem(sb, WsUriConstants.BRIDGEDB_HOME, "Home", httpServletRequest);
-        try {
-            String allMappingInfo = SetMappings.METHOD_NAME + "?" + WsUriConstants.LENS_URI + "=" + Lens.getAllLens();
+            String allMappingInfo = SetMappings.METHOD_NAME + "?" + WsUriConstants.LENS_URI + "=" + Lens.ALL_LENS_NAME;
             addSideBarItem(sb, allMappingInfo,"All Mappings Summary", httpServletRequest);
-        } catch (BridgeDBException ex) {
-            logger.error("Error getting getAllLens", ex);
-        }
         addSideBarItem(sb,  SetMappings.METHOD_NAME, "Default Mappings Summary", httpServletRequest);
-        try {
-            String allGraphwiz = WsUriConstants.GRAPHVIZ + "?" + WsUriConstants.LENS_URI + "=" + Lens.getAllLens();
-            addSideBarItem(sb, allGraphwiz, "All Mappings Graphviz",  httpServletRequest);
-        } catch (BridgeDBException ex) {
-            logger.error("Error getting getAllLens", ex);
-        }
+        String allGraphwiz = WsUriConstants.GRAPHVIZ + "?" + WsUriConstants.LENS_URI + "=" + Lens.ALL_LENS_NAME;
+        addSideBarItem(sb, allGraphwiz, "All Mappings Graphviz",  httpServletRequest);
         addSideBarItem(sb, WsUriConstants.GRAPHVIZ, "Default Mappings Graphviz",  httpServletRequest);
         addSideBarItem(sb, Lens.METHOD_NAME, Lens.METHOD_NAME,  httpServletRequest);
         addSideBarItem(sb, WsUriConstants.BRIDGEDB_API, "Api", httpServletRequest);
@@ -1005,7 +998,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
      */
     protected void addSideBarStatisitics(StringBuilder sb, HttpServletRequest httpServletRequest) {
         try {
-            OverallStatistics statistics = uriMapper.getOverallStatistics(Lens.getDefaultLens());
+            OverallStatistics statistics = uriMapper.getOverallStatistics(Lens.DEFAULT_LENS_NAME);
             //sb.append("\n<div class=\"menugroup\">Default Statisitics</div>");
             //addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
             //addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappingSets()) + " Mapping Sets", httpServletRequest);
@@ -1014,7 +1007,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
             //addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfPredicates()) + " Predicates", httpServletRequest);
             //addSideBarItem(sb, "getSupportedTgtDataSources", formatter.format(statistics.getNumberOfTargetDataSources()) 
              //       + " Target Data Sources ", httpServletRequest);
-            statistics = uriMapper.getOverallStatistics(Lens.getAllLens());
+            statistics = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
             //sb.append("\n<div class=\"menugroup\">All Statisitics</div>");
             sb.append("\n<div class=\"menugroup\">Statisitics</div>");
             addSideBarItem(sb, "getMappingInfo", formatter.format(statistics.getNumberOfMappings()) + " Mappings", httpServletRequest);
@@ -1060,7 +1053,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
 	public void generateLensSelector(StringBuilder sb, HttpServletRequest httpServletRequest) throws BridgeDBException {
-		List<Lens> lenses = Lens.getLens();
+		List<Lens> lenses = LensTools.getLens();
         sb.append("<p>");
     	sb.append(WsUriConstants.LENS_URI);
         sb.append("<select name=\"");

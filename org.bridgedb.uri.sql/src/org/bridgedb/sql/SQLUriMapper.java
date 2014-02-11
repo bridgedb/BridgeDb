@@ -49,7 +49,8 @@ import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.uri.tools.GraphResolver;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.lens.LensTools;
 import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
@@ -142,7 +143,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         subjectUriPatterns = new HashMap<Integer,RegexUriPattern>();
         targetUriPatterns = new HashMap<Integer,RegexUriPattern>();
-        Lens.init(this);
+        LensTools.init(this);
     }   
     
     @Override
@@ -703,10 +704,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
      */
     private void appendLensClause(StringBuilder query, String lensId, boolean whereAdded) throws BridgeDBException {
         if (lensId == null){
-            lensId = Lens.getDefaultLens();
+            lensId = Lens.DEFAULT_LENS_NAME;
         }
-        if (!lensId.equals(Lens.getAllLens())) {
-            List<String> justifications = Lens.getJustificationsbyId(lensId);
+        if (!lensId.equals(Lens.ALL_LENS_NAME)) {
+            List<String> justifications = LensTools.getJustificationsbyId(lensId);
             if (justifications.isEmpty()){
                 throw new BridgeDBException ("No  justifications found for Lens " + lensId);
             }
@@ -934,8 +935,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public OverallStatistics getOverallStatistics(String lensId) throws BridgeDBException {
         int numberOfLenses;
-        if (Lens.getAllLens().equals(lensId)){
-            numberOfLenses = Lens.getNumberOfLenses();
+        if (Lens.ALL_LENS_NAME.equals(lensId)){
+            numberOfLenses = LensTools.getNumberOfLenses();
         } else {
             numberOfLenses = 1;
         }

@@ -30,7 +30,7 @@ import org.bridgedb.sql.TestSqlFactory;
 import org.bridgedb.statistics.OverallStatistics;
 import org.bridgedb.uri.loader.LinksetListener;
 import org.bridgedb.uri.loader.transative.TransativeFinder;
-import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;
@@ -92,7 +92,7 @@ public class TransativeFinderTest {
         load("../org.bridgedb.uri.loader/test-data/sampleAToD.ttl");
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(20, results.getNumberOfMappingSets());
         Reporter.println("testFinder Done");
 	}
@@ -106,7 +106,7 @@ public class TransativeFinderTest {
         load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl");
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(20, results.getNumberOfMappingSets());
         Reporter.println("testFinder2 Done");
 	}
@@ -121,7 +121,7 @@ public class TransativeFinderTest {
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(20, results.getNumberOfMappingSets());
         Reporter.println("testFinder3Done");
 	}
@@ -137,7 +137,7 @@ public class TransativeFinderTest {
         transativeFinder.UpdateTransative();
         load("../org.bridgedb.uri.loader/test-data/sampleCToD.ttl");
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(30, results.getNumberOfMappingSets());
         Reporter.println("testFinder4Done");
 	}
@@ -149,7 +149,7 @@ public class TransativeFinderTest {
         load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl");
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         //A <-> B (2) / A -> A' (3) 
         // B -> A -> A' (4) 
         // A -> A' -> B (3)
@@ -167,7 +167,7 @@ public class TransativeFinderTest {
         transativeFinder.UpdateTransative();
         load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl");
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         //A <-> B (2) / A <-> C (8)  / A -> A' (3) 
         //B <-> A <-> C (10)
         // B -> A -> A' (4) / C -> A -> A' (11)
@@ -186,7 +186,7 @@ public class TransativeFinderTest {
         transativeFinder.UpdateTransative();
         load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl");
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         //A <-> B (2) / B <-> C (8) / A -> A' (3) 
         // A <-> B <-> C (10)
         // B -> A -> A' (4) / C -> B -> A -> A' (11)
@@ -205,7 +205,7 @@ public class TransativeFinderTest {
         load("../org.bridgedb.uri.loader/test-data/sampleAToA_1.ttl");
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
-        OverallStatistics results = mapper.getOverallStatistics(Lens.getAllLens());
+        OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         // A <-> B / A -> A' / A -> A''
         // none
         // B -> A -> A' / B -> A -> A''
