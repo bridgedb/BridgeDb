@@ -21,12 +21,6 @@ package org.bridgedb.uri.api;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.bridgedb.rdf.RdfBase;
-import org.bridgedb.rdf.constants.DulConstants;
-import org.bridgedb.rdf.constants.VoidConstants;
-import org.bridgedb.uri.tools.Lens;
-import org.bridgedb.utils.BridgeDBException;
-import org.bridgedb.utils.Reporter;
 
 /**
  * Holder class for the main Meta Data of the relevant mappings in a single Set plus some set data.

@@ -22,9 +22,6 @@ package org.bridgedb.uri.api;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.bridgedb.rdf.BridgeDbRdfTools;
-import org.bridgedb.rdf.constants.OWLConstants;
-import org.bridgedb.utils.BridgeDBException;
 
 /**
  * Holder class for the main Meta Data of MappingSet.

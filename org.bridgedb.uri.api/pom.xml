@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bridgedb</groupId>
-  <artifactId>org.bridgedb.uri.sql</artifactId>
-  <name>BridgeDb URI SQL</name>
+  <artifactId>org.bridgedb.uri.api</artifactId>
+  <name>BridgeDb URI API</name>
   
   <parent>
   	<artifactId>bridgedb-bundle</artifactId>
@@ -17,27 +17,8 @@
 	<dependencies>
             <dependency>
                 <groupId>org.bridgedb</groupId>
-                <artifactId>org.bridgedb.sql</artifactId>
+                <artifactId>org.bridgedb.utils</artifactId>
                 <version>${project.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.bridgedb</groupId>
-                <artifactId>org.bridgedb.rdf</artifactId>
-                <version>${project.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.bridgedb</groupId>
-                <artifactId>org.bridgedb.uri.api</artifactId>
-                <version>${project.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql.version}</version>
-                <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
@@ -50,13 +31,6 @@
             <dependency>
                 <groupId>org.bridgedb</groupId>
                 <artifactId>org.bridgedb.utils</artifactId>
-                <version>${project.version}</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.bridgedb</groupId>
-                <artifactId>org.bridgedb.sql</artifactId>
                 <version>${project.version}</version>
                 <type>test-jar</type>
                 <scope>test</scope>
