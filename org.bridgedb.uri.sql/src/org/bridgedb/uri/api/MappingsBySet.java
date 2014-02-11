@@ -25,9 +25,6 @@ import org.apache.log4j.Logger;
 import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.rdf.constants.OWLConstants;
 import org.bridgedb.utils.BridgeDBException;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.StatementImpl;
 
 /**
  * Holder class for the main Meta Data of MappingSet.
@@ -144,29 +141,6 @@ public class MappingsBySet {
      */
     public Set<UriMapping> getMappings() {
         return mappings;
-    }
-    
-    public Set<Statement> asRDF(String lensBaseUri) throws BridgeDBException{
-        HashSet<Statement> statements = new HashSet<Statement>();
-        for (SetMappings setMapping: getSetMappings()){
-            Set<Statement> more = setMapping.asRDF(lens, lensBaseUri);
-            statements.addAll(more);          
-        }
-        for (UriMapping mapping:mappings){
-            if (!mapping.getSourceUri().equals(mapping.getTargetUri())){
-                URI sourceURI = SetMappings.toURI(mapping.getSourceUri());
-                URI targetURI = SetMappings.toURI(mapping.getTargetUri());
-                Statement statement =  new StatementImpl(sourceURI, OWLConstants.SAMEAS_URI, targetURI);
-                statements.add(statement);
-            }
-        }
-
-       return statements;
-    }
-    
-    public String toRDF(String formatName, String lensBaseUri) throws BridgeDBException{
-        Set<Statement> statements = asRDF(lensBaseUri);
-        return BridgeDbRdfTools.writeRDF(statements, formatName);
     }
     
     public boolean isEmpty(){

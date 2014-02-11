@@ -27,11 +27,6 @@ import org.bridgedb.rdf.constants.VoidConstants;
 import org.bridgedb.uri.tools.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.ContextStatementImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
 
 /**
  * Holder class for the main Meta Data of the relevant mappings in a single Set plus some set data.
@@ -119,47 +114,6 @@ public class SetMappings {
         for (UriMapping mapping:mappings){
             mapping.append(sb);
         }
-    }
-
-    protected static URI toURI(String text){
-        try {
-            return new URIImpl(text);
-        } catch (IllegalArgumentException ex){
-            return new URIImpl("<" + text + ">");
-        }
-    }
-    
-    Set<Statement> asRDF(String lens, String lensBaseUri) throws BridgeDBException {
-        HashSet<Statement> statements = new HashSet<Statement>();
-        URI setUri = new URIImpl(getMappingResource());
-        URI predicateURI = toURI(predicate);
-        Statement statement = new StatementImpl(setUri, VoidConstants.LINK_PREDICATE, predicateURI);
-        statements.add(statement);
-        URI justifcationURI = toURI(this.justification);
-        statement = new StatementImpl(setUri, DulConstants.EXPRESSES, justifcationURI);
-        statements.add(statement);
-        URI mappingSourceURI = toURI(this.mappingSource);
-        statement = new StatementImpl(setUri, VoidConstants.DATA_DUMP, mappingSourceURI);
-        statements.add(statement);
-        if (lens != null){
-            Lens theLens = Lens.byId(lens);
-            URI lensUri = new URIImpl(theLens.toUri(lensBaseUri));
-            URI hasLensUri = new URIImpl(HAS_LENS);
-            statement = new StatementImpl(setUri, hasLensUri, lensUri);
-            statements.add(statement);
-        }
-        for (UriMapping mapping:mappings){
-            URI sourceURI = toURI(mapping.getSourceUri());
-            URI targetURI = toURI(mapping.getTargetUri());
-            statement =  new ContextStatementImpl(sourceURI, predicateURI, targetURI, setUri);
-            statements.add(statement);
-        }
-        return statements;
-    }
-    
-    public static void main(String[] args) {
-        String contextPath = RdfBase.DEFAULT_BASE_URI;
-        Reporter.println(toURI("test").toString());
     }
 
     /**

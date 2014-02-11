@@ -46,6 +46,7 @@ import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.tools.GraphResolver;
 import org.bridgedb.uri.tools.Lens;
+import org.bridgedb.uri.tools.UriResultsAsRDF;
 import org.bridgedb.uri.ws.WsUriConstants;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.templates.WebTemplates;
@@ -297,7 +298,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         if (mappingsBySet.isEmpty()){
             return Response.noContent().build();
         } else {
-             String rdf = mappingsBySet.toRDF(formatName, getBaseUri(httpServletRequest));     
+            String rdf = UriResultsAsRDF.toRDF(mappingsBySet, formatName, getBaseUri(httpServletRequest));     
             return Response.ok(rdf, MediaType.TEXT_PLAIN_TYPE).build();
         }
     }
@@ -329,7 +330,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         sb.append(" this method does not include any protential mapping to self.</h2>");
         sb.append("<h4>Use MediaType.TEXT_PLAIN to remove HTML stuff</h4>");
         sb.append("<p>Warning MediaType.TEXT_PLAIN version returns status 204 if no mappings found.</p>");
-        generateTextarea(sb, "RDF", mappingsBySet.toRDF(formatName, getBaseUri(httpServletRequest)));
+        generateTextarea(sb, "RDF", UriResultsAsRDF.toRDF(mappingsBySet, formatName, getBaseUri(httpServletRequest)));
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
