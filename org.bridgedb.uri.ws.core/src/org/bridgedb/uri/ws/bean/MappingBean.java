@@ -21,7 +21,7 @@ package org.bridgedb.uri.ws.bean;
 
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.ws.bean.XrefBean;
 
 /**

@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri;
+package org.bridgedb.uri.tools;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +35,7 @@ import org.bridgedb.rdf.constants.BridgeDBConstants;
 import org.bridgedb.rdf.constants.DCTermsConstants;
 import org.bridgedb.rdf.constants.PavConstants;
 import org.bridgedb.rdf.constants.RdfConstants;
+import org.bridgedb.uri.api.UriMapper;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import org.bridgedb.utils.Reporter;

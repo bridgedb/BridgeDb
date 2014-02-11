@@ -26,6 +26,8 @@ import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.uri.api.Mapping;
+import org.bridgedb.uri.tools.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

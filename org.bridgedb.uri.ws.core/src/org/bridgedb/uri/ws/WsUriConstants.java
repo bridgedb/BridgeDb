@@ -19,7 +19,6 @@
 //
 package org.bridgedb.uri.ws;
 
-import org.bridgedb.uri.SetMappings;
 import org.bridgedb.ws.WsConstants;
 
 /**

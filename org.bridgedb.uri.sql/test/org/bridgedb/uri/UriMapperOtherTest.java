@@ -5,6 +5,7 @@
 package org.bridgedb.uri;
 
 import java.util.List;
+import org.bridgedb.uri.tools.Lens;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

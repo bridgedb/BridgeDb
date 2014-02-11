@@ -17,13 +17,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri;
+package org.bridgedb.uri.api;
 
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.rdf.RdfBase;
 import org.bridgedb.rdf.constants.DulConstants;
 import org.bridgedb.rdf.constants.VoidConstants;
+import org.bridgedb.uri.tools.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.Reporter;
 import org.openrdf.model.Statement;

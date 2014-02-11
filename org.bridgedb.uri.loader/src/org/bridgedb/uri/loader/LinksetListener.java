@@ -22,7 +22,7 @@ package org.bridgedb.uri.loader;
 import java.io.File;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import org.bridgedb.uri.UriListener;
+import org.bridgedb.uri.tools.UriListener;
 import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;

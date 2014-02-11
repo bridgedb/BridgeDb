@@ -20,7 +20,7 @@
 package org.bridgedb.uri.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.uri.UriMapping;
+import org.bridgedb.uri.api.UriMapping;
 
 /**
  * Contains the information held for a particular mapping.

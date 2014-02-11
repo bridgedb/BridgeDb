@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.uri.Mapping;
+import org.bridgedb.uri.api.Mapping;
 
 /**
  * Contains the information held for a particular mapping.

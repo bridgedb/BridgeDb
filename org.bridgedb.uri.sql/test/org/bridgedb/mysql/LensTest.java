@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.uri.Lens;
+import org.bridgedb.uri.tools.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import static org.hamcrest.Matchers.*;

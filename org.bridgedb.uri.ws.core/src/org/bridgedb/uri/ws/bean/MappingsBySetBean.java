@@ -22,9 +22,9 @@ package org.bridgedb.uri.ws.bean;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.uri.MappingsBySet;
-import org.bridgedb.uri.SetMappings;
-import org.bridgedb.uri.UriMapping;
+import org.bridgedb.uri.api.MappingsBySet;
+import org.bridgedb.uri.api.SetMappings;
+import org.bridgedb.uri.api.UriMapping;
 
 /**
  *

@@ -19,19 +19,15 @@
 //
 package org.bridgedb.mysql;
 
-import java.util.Set;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.sql.TestSqlFactory;
-import org.bridgedb.uri.RegexUriPattern;
 import org.bridgedb.uri.UriListenerTest;
+import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
-import org.bridgedb.utils.Reporter;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**

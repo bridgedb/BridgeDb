@@ -7,6 +7,7 @@ package org.bridgedb.uri;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.rdf.UriPattern;
+import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;

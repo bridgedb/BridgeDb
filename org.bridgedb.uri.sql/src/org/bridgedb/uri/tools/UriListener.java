@@ -17,7 +17,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package org.bridgedb.uri;
+package org.bridgedb.uri.tools;
 
 import java.util.Set;
 import org.bridgedb.utils.BridgeDBException;

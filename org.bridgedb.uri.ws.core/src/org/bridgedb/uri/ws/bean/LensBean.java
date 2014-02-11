@@ -22,7 +22,7 @@ package org.bridgedb.uri.ws.bean;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.bridgedb.uri.Lens;
+import org.bridgedb.uri.tools.Lens;
 
 /**
  *

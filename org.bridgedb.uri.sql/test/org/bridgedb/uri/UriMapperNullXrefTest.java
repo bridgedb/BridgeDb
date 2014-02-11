@@ -8,6 +8,8 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
+import org.bridgedb.uri.api.Mapping;
+import org.bridgedb.uri.tools.Lens;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
