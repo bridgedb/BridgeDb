@@ -23,7 +23,7 @@
 	<dependencies>
  		<dependency>
 			<groupId>org.bridgedb</groupId>
-			<artifactId>org.bridgedb.uri.sql</artifactId>
+			<artifactId>org.bridgedb.uri.api</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -45,7 +45,13 @@
             <type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
- 		<dependency>
+  		<dependency>
+			<groupId>org.bridgedb</groupId>
+			<artifactId>org.bridgedb.uri.sql</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.bridgedb</groupId>
 			<artifactId>org.bridgedb.sql</artifactId>
 			<version>${project.version}</version>

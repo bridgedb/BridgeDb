@@ -26,7 +26,6 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.uri.api.SetMappings;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.ws.WSUriInterface;
@@ -58,7 +57,6 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     
     public WSUriClient(String serviceAddress) throws BridgeDBException {
         super(serviceAddress);
-        UriPattern.refreshUriPatterns();
     }
     
     @Override
