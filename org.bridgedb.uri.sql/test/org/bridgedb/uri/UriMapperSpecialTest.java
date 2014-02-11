@@ -70,7 +70,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testMapFullOneBadOneNameSpace(){
         report("MapFullOneBadOneNameSpace");
         try {
-            Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Lens.getDefaultLens(), NULL_GRAPH, regexUriPattern2);
+            Set<Mapping> results = uriMapper.mapFull(mapBadUri1, Lens.getDefaultLens(), NULL_GRAPH, stringPattern2);
             //if no exception there should be an empty result
             assertTrue(results.isEmpty());
         } catch (BridgeDBException ex){

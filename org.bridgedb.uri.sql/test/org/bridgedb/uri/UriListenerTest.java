@@ -57,6 +57,10 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     protected static RegexUriPattern regexUriPattern2;
     protected static RegexUriPattern regexUriPattern3;
     
+    protected static String stringPattern1;
+    protected static String stringPattern2;
+    protected static String stringPattern3;
+    
     //Must be instantiated by implementation of these tests.
     protected static UriMapper uriMapper;
 
@@ -190,6 +194,11 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         regexUriPattern1 = RegexUriPattern.factory(uriPattern1, dataSource1Code);
         regexUriPattern2 = RegexUriPattern.factory(uriPattern2, dataSource2Code);
         regexUriPattern3 = RegexUriPattern.factory(uriPattern3, dataSource3Code);
+        
+        stringPattern1 = uriSpace1 + "$id";
+        stringPattern2 = uriSpace2 + "$id";
+        stringPattern3 = uriSpace3 + "$id";
+        
     }
         
     /**

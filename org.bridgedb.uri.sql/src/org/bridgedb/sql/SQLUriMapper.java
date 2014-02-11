@@ -323,9 +323,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
     
-    private Set<String> mapUri (IdSysCodePair sourceRef, String lensUri, String graph, RegexUriPattern[] tgtUriPatterns) 
+    private Set<String> mapUri (IdSysCodePair sourceRef, String lensUri, String graph, String[] tgtUriPatterns) 
             throws BridgeDBException {
-        Set<RegexUriPattern> targetUriPatterns = mergeGraphAndTargets(graph, tgtUriPatterns);
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
             return mapUri (sourceRef, lensUri);
         }
@@ -337,14 +337,14 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
  
     @Override
-    public Set<String> mapUri (Xref sourceXref, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) 
+    public Set<String> mapUri (Xref sourceXref, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException {
         IdSysCodePair sourceRef = toIdSysCodePair(sourceXref);
         return mapUri(sourceRef, lensUri, graph, tgtUriPatterns);
     }
         
     @Override
-    public Set<String> mapUri (String sourceUri, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) 
+    public Set<String> mapUri (String sourceUri, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
@@ -352,7 +352,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
  
     @Override
-    public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUris, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) 
+    public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException {
         if (sourceUris.size() == 1){
             return mapUriBySysCodeId(sourceUris.iterator().next(), lensUri, graph, tgtUriPatterns);
@@ -369,16 +369,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
     
     @Override
-    public MappingsBySysCodeId mapUriBySysCodeId (String sourceUri, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) 
+    public MappingsBySysCodeId mapUriBySysCodeId (String sourceUri, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
         return mapUriBySysCodeId(sourceRef, lensUri, graph, tgtUriPatterns);
     }
 
-    private MappingsBySysCodeId mapUriBySysCodeId (IdSysCodePair sourceRef, String lensUri, String graph, RegexUriPattern[] tgtUriPatterns) 
+    private MappingsBySysCodeId mapUriBySysCodeId (IdSysCodePair sourceRef, String lensUri, String graph, String[] tgtUriPatterns) 
             throws BridgeDBException {
-        Set<RegexUriPattern> targetUriPatterns = mergeGraphAndTargets(graph, tgtUriPatterns);
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
             return mapUriBySysCodeId (sourceRef, lensUri);
         }
@@ -413,8 +413,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public MappingsBySet mapBySet(String sourceUri, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) throws BridgeDBException {
-        Set<RegexUriPattern> targetUriPatterns = mergeGraphAndTargets(graph, tgtUriPatterns);
+    public MappingsBySet mapBySet(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
            return mapBySet (sourceUri, mappingsBySet, lensUri);
@@ -439,9 +439,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public MappingsBySet mapBySet(Set<String> sourceUris, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) 
+    public MappingsBySet mapBySet(Set<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
            throws BridgeDBException{
-        Set<RegexUriPattern> targetUriPatterns = mergeGraphAndTargets(graph, tgtUriPatterns);
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
         for (String sourceUri:sourceUris) {
             if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
@@ -553,7 +553,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-	private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
+    private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
         if (tgtUriPattern == null){
            return new HashSet<Mapping>();
         }
@@ -565,9 +565,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
-    private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) 
+    private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException{
-        Set<RegexUriPattern> targetUriPatterns = mergeGraphAndTargets(graph, tgtUriPatterns);
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
             return mapFull (sourceRef, lensUri);
         } else {
@@ -587,7 +587,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public Set<Mapping> mapFull (Xref sourceXref, String lensUri, String graph, RegexUriPattern... tgtUriPatterns) 
+    public Set<Mapping> mapFull (Xref sourceXref, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException{
         IdSysCodePair sourceRef = toIdSysCodePair(sourceXref);
         return mapFull(sourceRef, lensUri, graph, tgtUriPatterns);
@@ -595,7 +595,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public Set<Mapping> mapFull(String sourceUri, String lensUri, String graph, 
-            RegexUriPattern... tgtUriPatterns) throws BridgeDBException {
+            String... tgtUriPatterns) throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
         Set<Mapping> results = mapFull(sourceRef, lensUri, graph, tgtUriPatterns);
@@ -2132,5 +2132,24 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
     }
 
+    private Set<RegexUriPattern> findRegexPatterns(String graph, String[] tgtUriPatterns) throws BridgeDBException {
+        if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+            return GraphResolver.getUriPatternsForGraph(graph);
+        }
+        if (graph == null || graph.trim().isEmpty()){  
+            HashSet<RegexUriPattern> results = new HashSet<RegexUriPattern>();
+            for (int i = 0; i < tgtUriPatterns.length; i++){
+                if (tgtUriPatterns[i] != null){
+                    Set<RegexUriPattern> patterns = RegexUriPattern.byPattern(tgtUriPatterns[i]);
+                    results.addAll(patterns);
+                } else {
+                    results.add(null);
+                }
+            }
+            return results;
+        }
+        throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
+    }
+       
 }
  

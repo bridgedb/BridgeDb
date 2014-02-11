@@ -7,7 +7,6 @@ package org.bridgedb.uri;
 import java.util.HashSet;
 import java.util.Set;
 import org.bridgedb.rdf.UriPattern;
-import static org.hamcrest.CoreMatchers.not;
 import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
@@ -31,7 +30,7 @@ public abstract class UriMapperBySysCodeIdTest extends UriListenerTest{
         String sourceUri = map3Uri3;
         String lensId = null;
         UriPattern[] tgtUriPatterns = null;
-        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUri, lensId, EMPTY_GRAPH, regexUriPattern2, regexUriPattern3);
+        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUri, lensId, EMPTY_GRAPH, stringPattern2, stringPattern3);
 
         Set<String> sysCodes = results.getSysCodes();
         assertThat(sysCodes, not(hasItem(DataSource1.getSystemCode())));
@@ -63,7 +62,7 @@ public abstract class UriMapperBySysCodeIdTest extends UriListenerTest{
         sourceUris.add(map1Uri3);
         String lensId = null;
         UriPattern[] tgtUriPatterns = null;
-        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUris, lensId, EMPTY_GRAPH, regexUriPattern2);
+        MappingsBySysCodeId results = uriMapper.mapUriBySysCodeId(sourceUris, lensId, EMPTY_GRAPH, stringPattern2);
 
         Set<String> sysCodes = results.getSysCodes();
         assertThat(sysCodes, not(hasItem(DataSource1.getSystemCode())));
