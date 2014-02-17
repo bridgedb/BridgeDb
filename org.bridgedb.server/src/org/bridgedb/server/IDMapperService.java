@@ -37,6 +37,7 @@ public class IDMapperService extends Application {
 	public static final String PAR_ID = "id";
 	public static final String PAR_SYSTEM = "system";
 	public static final String PAR_QUERY = "query";
+	public static final String PAR_DATASOURCES = "datasources";
 
 	public static final String PAR_TARGET_SYSTEM = "dataSource";
 	public static final String PAR_TARGET_ATTR_NAME = "attrName";
@@ -220,6 +221,11 @@ public class IDMapperService extends Application {
 	public static final String URL_BACK_PAGE_TEXT = "/{" + PAR_ORGANISM + "}/backPageText/{" + PAR_SYSTEM + "}/{" + 
 		PAR_ID + "}";
 
+	/**
+	 * URL pattern for getting the datasources.txt file
+	 */
+	public static final String URL_DATASOURCES = "/" + PAR_DATASOURCES;
+
 	private GdbProvider gdbProvider;
 
 	public synchronized void start() throws Exception {
@@ -234,6 +240,7 @@ public class IDMapperService extends Application {
 		//router.setDefaultMatchingMode(Router.BEST);		
 		//System.out.println("MatchingMode: "+ router.getDefaultMatchingMode() + " : "+ router.getRequiredScore());
 
+		router.attach(URL_DATASOURCES, DataSources.class);
 
 		//Register the route for the home page url pattern
 		String target = "http://bridgedb.org/wiki/BridgeWebservice";
