@@ -123,6 +123,20 @@ public class BioDataSourceTest
 	}
 
 	@Test
+	public void testXMetDB_Regex() {
+		assertTrue(DataSourcePatterns.getDataSourceMatches("XMETDB175").contains(
+			DataSource.getBySystemCode("Xm")
+		));
+	}
+
+	@Test
+	public void testXMetDB() {
+		DataSource xmetdb = DataSource.getBySystemCode("Xm");
+		assertNotNull(xmetdb);
+		assertEquals("XMetDB", xmetdb.getFullName());
+	}
+
+	@Test
 	public void testDataSource()
 	{
 		DataSource ds = BioDataSource.ENSEMBL;
