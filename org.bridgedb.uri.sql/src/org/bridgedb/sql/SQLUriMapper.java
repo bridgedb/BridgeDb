@@ -669,6 +669,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 query.append("' ");   
         }
         appendLensClause(query, lensUri, true);
+        logger.error(query.toString());
     }
 
     private void appendMappingFromJoinMapping(StringBuilder query){ 
@@ -706,7 +707,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (lensId == null){
             lensId = Lens.DEFAULT_LENS_NAME;
         }
-        if (!lensId.equals(Lens.ALL_LENS_NAME)) {
+        if (!LensTools.isAllLens(lensId)) {
             List<String> justifications = LensTools.getJustificationsbyId(lensId);
             if (justifications.isEmpty()){
                 throw new BridgeDBException ("No  justifications found for Lens " + lensId);
@@ -772,6 +773,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return codeMapper1.toXref(pair);
     }
 
+    private IdSysCodePair getValidPair(String uri, String sysCode, String prefix, String postfix, String regex){
+        String id = uri.substring(prefix.length(), uri.length()-postfix.length());
+        if (regex == null){
+            return new IdSysCodePair(id, sysCode);                    
+        } else {
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(id);
+            if (matcher.matches()){
+                return new IdSysCodePair(id, sysCode);
+            }
+        }
+        return null;
+    }
+ 
     @Override
     public IdSysCodePair toIdSysCodePair(String uri) throws BridgeDBException {
         if (uri == null || uri.isEmpty()){
@@ -809,18 +824,19 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 regex = rs.getString (REGEX_COLUMN_NAME);
                 if (result == null || DataSourceMetaDataProvidor.compare(result.getSysCode(), sysCode) >= 0){
                     if (oldPrefix.length() < prefix.length()){
-                        id = uri.substring(prefix.length(), uri.length()-postfix.length());
-                        if (regex == null){
-                            result = new IdSysCodePair(id, sysCode);                    
+                        result = this.getValidPair(uri, sysCode, prefix, postfix, regex);
+                        if (result != null){
                             oldPrefix = prefix;
-                        } else {
-                            Pattern pattern = Pattern.compile(regex);
-                            Matcher matcher = pattern.matcher(id);
-                            if (matcher.matches()){
-                                result = new IdSysCodePair(id, sysCode);
-                                oldPrefix = prefix;
-                            //} else {
-                                //ystem.out.println("no match " + uri + " -> " + prefix);
+                        }
+                    } else if (oldPrefix.length() > prefix.length()){
+                        //ignore this one
+                    } else {  //same length prefix
+                        IdSysCodePair second = this.getValidPair(uri, sysCode, prefix, postfix, regex);
+                        if (second != null){
+                            DataSourceMetaDataProvidor originalProvider = DataSourceMetaDataProvidor.getProvider(result.getSysCode());
+                            DataSourceMetaDataProvidor secondProvider = DataSourceMetaDataProvidor.getProvider(second.getSysCode());
+                            if (secondProvider.compareTo(originalProvider) < 0){
+                                result = second;
                             }
                         }
                     }
@@ -935,7 +951,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public OverallStatistics getOverallStatistics(String lensId) throws BridgeDBException {
         int numberOfLenses;
-        if (Lens.ALL_LENS_NAME.equals(lensId)){
+        if (LensTools.isAllLens(lensId)){
             numberOfLenses = LensTools.getNumberOfLenses();
         } else {
             numberOfLenses = 1;

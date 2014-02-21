@@ -77,15 +77,25 @@ public class LensTools {
         return lens;
     }
  
-     public static Lens byId(String id) throws BridgeDBException{
+    private static String cleanId(String id){
         if (id.contains(Lens.URI_PREFIX)){
-            id = id.substring(id.indexOf(Lens.URI_PREFIX)+Lens.URI_PREFIX.length());
-        }
+            return id.substring(id.indexOf(Lens.URI_PREFIX)+Lens.URI_PREFIX.length());
+        }        
+        return id;
+    }
+    
+    public static Lens byId(String id) throws BridgeDBException{
+        id = cleanId(id);
         Lens result = lookupById(id);
         if (result == null){
             throw new BridgeDBException("No Lens known with Id " + id);
         }
         return result;
+    }
+    
+    public static boolean isAllLens(String id){
+        id = cleanId(id);
+        return (Lens.ALL_LENS_NAME.equals(id));
     }
     
     private static Lens findOrCreatedById(String id) throws BridgeDBException{

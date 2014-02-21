@@ -22,6 +22,7 @@ package org.bridgedb.uri;
 import java.util.List;
 import java.util.Set;
 import org.bridgedb.Xref;
+import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
@@ -266,6 +267,29 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         String uri = "http://www.uniprot.org/uniprot/P50250";
         Set<String> result = uriMapper.mapUri(uri, null, null);        
     }
+    
+    @Test
+    public void testUniprotPair() throws Exception {
+        if (uriMapper instanceof SQLUriMapper){
+            //Date start = new Date();
+            report("Uniprot pair");
+            String uri = "http://www.uniprot.org/uniprot/P50250";
+            IdSysCodePair result = uriMapper.toIdSysCodePair(uri);
+            assertEquals("S", result.getSysCode());
+        }
+    }
+    
+    @Test
+    public void testUniprotPair2() throws Exception {
+        if (uriMapper instanceof SQLUriMapper){
+            //Date start = new Date();
+            report("Uniprot pair 2");
+            String uri = "http://purl.uniprot.org/uniprot/A0MJA4";
+            IdSysCodePair result = uriMapper.toIdSysCodePair(uri);
+            assertEquals("S", result.getSysCode());
+        }
+    }
+    
     
  /*       @Test
     public void testFrequency() throws IDMapperException{

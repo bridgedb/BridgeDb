@@ -2017,6 +2017,11 @@ bridgeDB:Organism_Bs a bridgeDB:Organism ;
 	bridgeDB:shortName "Bacillus subtilis" ;
 	bridgeDB:latinName "Bacillus subtilis" .
 
+bridgeDB:Organism_Bv a bridgeDB:Organism ;
+	bridgeDB:code "Bv" ;
+	bridgeDB:shortName "Sugar Beet" ;
+	bridgeDB:latinName "Beta vulgaris" .
+
 bridgeDB:Organism_Bt a bridgeDB:Organism ;
 	bridgeDB:code "Bt" ;
 	bridgeDB:shortName "Cow" ;
@@ -2091,6 +2096,11 @@ bridgeDB:Organism_Hs a bridgeDB:Organism ;
 	bridgeDB:code "Hs" ;
 	bridgeDB:shortName "Human" ;
 	bridgeDB:latinName "Homo sapiens" .
+
+bridgeDB:Organism_Hv a bridgeDB:Organism ;
+	bridgeDB:code "Hv" ;
+	bridgeDB:shortName "Barley" ;
+	bridgeDB:latinName "Hordeum vulgare" .
 
 bridgeDB:Organism_La a bridgeDB:Organism ;
 	bridgeDB:code "La" ;
