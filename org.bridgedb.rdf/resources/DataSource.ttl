@@ -74,16 +74,20 @@ bridgeDB:DataSource_Bioontology_MESH a bridgeDB:DataSource ;
 	bridgeDB:idExample "C536282" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/MSH/$id> .
+	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/MSH/$id> ;
+	bridgeDB:mainUrl "http://bioportal.bioontology.org/" ;
+	bridgeDB:hasUriPattern <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mesh/$id> ;
+	bridgeDB:hasUriPattern <http://bio2rdf.org/mesh:$id> .
 
 bridgeDB:DataSource_Bioontology_UMLS_NCIM a bridgeDB:DataSource ;
 	bridgeDB:fullName "Bioontology UMLS NCIM" ;
 	bridgeDB:systemCode "NCIM" ;
 	bridgeDB:idExample "C3203102" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/NCIM/$id> .
-    #bridgeDB:DataSource_UMLS
+	bridgeDB:hasUriPattern <http://purl.bioontology.org/ontology/NCIM/$id> ;
+	#bridgeDB:type "gene" ;
+	bridgeDB:hasUrlPattern <http://linkedlifedata.com/resource/umls/id/$id> .
 
 bridgeDB:DataSource_CAS a bridgeDB:DataSource ;
 	bridgeDB:fullName "CAS" ;
@@ -662,17 +666,6 @@ bridgeDB:DataSource_MaizeGDB a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.maizegdb.org/cgi-bin/displaylocusresults.cgi?term=$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Zm .
 
-bridgeDB:DataSource_MeSH a bridgeDB:DataSource ;
-	bridgeDB:fullName "MeSH" ;
-    bridgeDB:systemCode "mesh" ;
-	bridgeDB:mainUrl "http://bioportal.bioontology.org/" ;
-    bridgeDB:idExample "D018377" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mesh/$id> ;
-	bridgeDB:hasUriPattern <http://bio2rdf.org/mesh:$id> .
-
 bridgeDB:DataSource_MGI a bridgeDB:DataSource ;
  	bridgeDB:fullName "MGI" ;
  	bridgeDB:systemCode "M" ;
@@ -745,8 +738,10 @@ bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
 	bridgeDB:idExample "OPS21009" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-    bridgeDB:hasUrlPattern <http://ops.rsc.org/$id> ;
-	bridgeDB:hasUriPattern <http://ops.rsc-us.org/$id> .
+        bridgeDB:hasUrlPattern <http://ops.rsc.org/OPS$id> ;
+        bridgeDB:hasUriPattern <http://ops.rsc.org/OPS$id/rdf> ;
+        bridgeDB:hasUriPattern < http://ops.rsc.org/Compounds/Get/$id> ;
+	bridgeDB:hasUriPattern <http://ops.rsc-us.org/OPS$id> .
 
 bridgeDB:DataSource_OPS_GVK a bridgeDB:DataSource ;
     bridgeDB:systemCode "OPS-GVK" ;
@@ -984,15 +979,6 @@ bridgeDB:DataSource_UCSC_Genome_Browser a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://genome.ucsc.edu/cgi-bin/hgTracks?position=$id> .
-
-bridgeDB:DataSource_UMLS a bridgeDB:DataSource ;
-	bridgeDB:fullName "umls" ;
-	bridgeDB:systemCode "umls" ;
-	bridgeDB:idExample "C0011860" ;
-	#bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	#bridgeDB:type "gene" ;
-	bridgeDB:hasUrlPattern <http://linkedlifedata.com/resource/umls/id/$id> .
-#Could also be:bridgeDB:DataSource_Bioontology_UMLS_NCIM
 
 bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniGene" ;

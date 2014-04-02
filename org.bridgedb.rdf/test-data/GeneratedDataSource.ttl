@@ -93,10 +93,14 @@ bridgeDB:DataSource_BioModels_Database a bridgeDB:DataSource ;
 bridgeDB:DataSource_Bioontology_MESH a bridgeDB:DataSource ;
 	bridgeDB:fullName "Bioontology MESH" ;
 	bridgeDB:systemCode "MSH" ;
+	bridgeDB:mainUrl "http://bioportal.bioontology.org/" ;
 	bridgeDB:idExample "C536282" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/MSH/$id> .
+	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/MSH/$id> ;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mesh/$id> ;
+	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/mesh/$id> ;
+	bridgeDB:hasUriPattern <http://bio2rdf.org/mesh:$id> , <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> .
 
 bridgeDB:DataSource_Bioontology_UMLS_NCIM a bridgeDB:DataSource ;
 	bridgeDB:fullName "Bioontology UMLS NCIM" ;
@@ -104,7 +108,8 @@ bridgeDB:DataSource_Bioontology_UMLS_NCIM a bridgeDB:DataSource ;
 	bridgeDB:idExample "C3203102" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://purl.bioontology.org/ontology/NCIM/$id> .
+	bridgeDB:hasUrlPattern <http://linkedlifedata.com/resource/umls/id/$id> ;
+	bridgeDB:hasUriPattern <http://purl.bioontology.org/ontology/NCIM/$id> .
 
 bridgeDB:DataSource_BioSystems a bridgeDB:DataSource ;
 	bridgeDB:fullName "BioSystems" ;
@@ -1120,18 +1125,6 @@ bridgeDB:DataSource_MatrixDB a bridgeDB:DataSource ;
 	bridgeDB:hasRegexPattern "^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])_.*|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9]_.*)|(GAG_.*)|(MULT_.*)|(PFRAG_.*)|(LIP_.*)|(CAT_.*)$" ;
 	dcterms:alternative "MatrixDB" .
 
-bridgeDB:DataSource_MeSH a bridgeDB:DataSource ;
-	bridgeDB:fullName "MeSH" ;
-	bridgeDB:systemCode "mesh" ;
-	bridgeDB:mainUrl "http://bioportal.bioontology.org/" ;
-	bridgeDB:idExample "D018377" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/mesh/$id> ;
-	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/mesh/$id> ;
-	bridgeDB:hasUriPattern <http://bio2rdf.org/mesh:$id> .
-
 bridgeDB:DataSource_MetaCyc a bridgeDB:DataSource ;
 	bridgeDB:fullName "MetaCyc" ;
 	bridgeDB:systemCode "Mc" ;
@@ -1274,8 +1267,8 @@ bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
 	bridgeDB:idExample "OPS21009" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://ops.rsc.org/$id> ;
-	bridgeDB:hasUriPattern <http://ops.rsc-us.org/$id> .
+	bridgeDB:hasUrlPattern <http://ops.rsc.org/OPS$id> ;
+	bridgeDB:hasUriPattern < http://ops.rsc.org/Compounds/Get/$id> , <http://ops.rsc-us.org/OPS$id> , <http://ops.rsc.org/OPS$id/rdf> .
 
 bridgeDB:DataSource_OPS_Internal_URIS_for_GVK a bridgeDB:DataSource ;
 	bridgeDB:fullName "OPS Internal URIS for GVK" ;
@@ -1821,14 +1814,6 @@ bridgeDB:DataSource_UCSC_Genome_Browser a bridgeDB:DataSource ;
 	bridgeDB:hasRegexPattern "uc\\d{3}[a-z]{3}\\.\\d" ;
 	dcterms:alternative "UCSC Genome Browser" .
 
-bridgeDB:DataSource_umls a bridgeDB:DataSource ;
-	bridgeDB:fullName "umls" ;
-	bridgeDB:systemCode "umls" ;
-	bridgeDB:idExample "C0011860" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://linkedlifedata.com/resource/umls/id/$id> .
-
 bridgeDB:DataSource_UniGene a bridgeDB:DataSource ;
 	bridgeDB:fullName "UniGene" ;
 	bridgeDB:systemCode "U" ;
@@ -2231,6 +2216,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:code "Zm" ;
 	bridgeDB:shortName "Maize" ;
 	bridgeDB:latinName "Zea mays" .
+
+< http://ops.rsc.org/Compounds/Get/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix " http://ops.rsc.org/Compounds/Get/" .
 
 <ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$id.xml> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "ftp://ftp.ebi.ac.uk/pub/databases/lrgex/" ;
@@ -3049,11 +3037,15 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://omim.org/entry/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://omim.org/entry/" .
 
-<http://ops.rsc-us.org/$id> a bridgeDB:uriPattern ;
-	bridgeDB:hasPrefix "http://ops.rsc-us.org/" .
+<http://ops.rsc-us.org/OPS$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://ops.rsc-us.org/OPS" .
 
-<http://ops.rsc.org/$id> a bridgeDB:uriPattern ;
-	bridgeDB:hasPrefix "http://ops.rsc.org/" .
+<http://ops.rsc.org/OPS$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://ops.rsc.org/OPS" .
+
+<http://ops.rsc.org/OPS$id/rdf> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://ops.rsc.org/OPS" ;
+	bridgeDB:hasPostfix "/rdf" .
 
 <http://pathman.smpdb.ca/pathways/$id/pathway> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://pathman.smpdb.ca/pathways/" ;
