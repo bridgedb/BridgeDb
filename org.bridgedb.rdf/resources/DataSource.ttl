@@ -735,12 +735,12 @@ bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
     bridgeDB:systemCode "OPS-CRS" ;
 	bridgeDB:fullName "OPS Chemical Registry Service" ;
 	bridgeDB:mainUrl "http://www.rsc.org/" ;
-	bridgeDB:idExample "OPS21009" ;
+	bridgeDB:idExample "21009" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
         bridgeDB:hasUrlPattern <http://ops.rsc.org/OPS$id> ;
         bridgeDB:hasUriPattern <http://ops.rsc.org/OPS$id/rdf> ;
-        bridgeDB:hasUriPattern < http://ops.rsc.org/Compounds/Get/$id> ;
+        bridgeDB:hasUriPattern <http://ops.rsc.org/Compounds/Get/$id> ;
 	bridgeDB:hasUriPattern <http://ops.rsc-us.org/OPS$id> .
 
 bridgeDB:DataSource_OPS_GVK a bridgeDB:DataSource ;
@@ -1093,6 +1093,7 @@ bridgeDB:DataSource_WormBase a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "gene" ;
 	bridgeDB:hasUrlPattern <http://www.wormbase.org/db/gene/gene?name=$id;class=Gene> ;
+	bridgeDB:hasUriPattern <http://purl.uniprot.org/wormbase/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/wormbase/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Ce .
 

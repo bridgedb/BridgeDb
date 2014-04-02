@@ -1264,11 +1264,11 @@ bridgeDB:DataSource_OPS_Chemical_Registry_Service a bridgeDB:DataSource ;
 	bridgeDB:fullName "OPS Chemical Registry Service" ;
 	bridgeDB:systemCode "OPS-CRS" ;
 	bridgeDB:mainUrl "http://www.rsc.org/" ;
-	bridgeDB:idExample "OPS21009" ;
+	bridgeDB:idExample "21009" ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://ops.rsc.org/OPS$id> ;
-	bridgeDB:hasUriPattern < http://ops.rsc.org/Compounds/Get/$id> , <http://ops.rsc-us.org/OPS$id> , <http://ops.rsc.org/OPS$id/rdf> .
+	bridgeDB:hasUriPattern <http://ops.rsc-us.org/OPS$id> , <http://ops.rsc.org/Compounds/Get/$id> , <http://ops.rsc.org/OPS$id/rdf> .
 
 bridgeDB:DataSource_OPS_Internal_URIS_for_GVK a bridgeDB:DataSource ;
 	bridgeDB:fullName "OPS Internal URIS for GVK" ;
@@ -1965,7 +1965,8 @@ bridgeDB:DataSource_WormBase a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/wormbase/$id> ;
 	bridgeDB:Organism bridgeDB:Organism_Ce ;
 	bridgeDB:hasRegexPattern "^WBGene\\d{8}$" ;
-	dcterms:alternative "WormBase" .
+	dcterms:alternative "WormBase" ;
+	bridgeDB:hasUriPattern <http://purl.uniprot.org/wormbase/$id> .
 
 bridgeDB:DataSource_ZFIN a bridgeDB:DataSource ;
 	bridgeDB:fullName "ZFIN" ;
@@ -2216,9 +2217,6 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:code "Zm" ;
 	bridgeDB:shortName "Maize" ;
 	bridgeDB:latinName "Zea mays" .
-
-< http://ops.rsc.org/Compounds/Get/$id> a bridgeDB:uriPattern ;
-	bridgeDB:hasPrefix " http://ops.rsc.org/Compounds/Get/" .
 
 <ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$id.xml> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "ftp://ftp.ebi.ac.uk/pub/databases/lrgex/" ;
@@ -3040,6 +3038,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://ops.rsc-us.org/OPS$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://ops.rsc-us.org/OPS" .
 
+<http://ops.rsc.org/Compounds/Get/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://ops.rsc.org/Compounds/Get/" .
+
 <http://ops.rsc.org/OPS$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://ops.rsc.org/OPS" .
 
@@ -3135,6 +3136,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://purl.uniprot.org/uniprot/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://purl.uniprot.org/uniprot/" .
+
+<http://purl.uniprot.org/wormbase/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://purl.uniprot.org/wormbase/" .
 
 <http://purl.uniprot.org/zfin/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://purl.uniprot.org/zfin/" .
