@@ -21,9 +21,9 @@ package org.bridgedb.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.utils.BridgeDBException;
 
@@ -124,5 +124,23 @@ public class SQLBase {
        result = result.replaceAll("\"", "\\\\\"");
        return result;
     }
+
+    protected final void close(Statement statement, ResultSet rs){
+        if (rs != null){
+            try {
+                rs.close();
+            } catch (SQLException ex) {
+                logger.error("Error closing resultSet", ex);
+            }
+        }
+        if (statement != null){
+            try {
+                statement.close();
+            } catch (SQLException ex) {
+                logger.error("Error closing statment", ex);
+            }
+        }
+    }
+    
 
 }

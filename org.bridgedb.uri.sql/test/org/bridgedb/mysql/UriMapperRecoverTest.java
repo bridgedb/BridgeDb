@@ -28,6 +28,7 @@ import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.utils.ConfigReader;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openrdf.model.Resource;
 import org.openrdf.model.impl.URIImpl;

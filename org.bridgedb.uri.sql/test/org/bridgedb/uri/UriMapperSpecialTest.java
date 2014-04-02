@@ -290,6 +290,29 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         }
     }
     
+    @Test
+    public void testWormabsePair() throws Exception {
+        if (uriMapper instanceof SQLUriMapper){
+            //Date start = new Date();
+            report("testWormabsePair");
+            String uri = "http://purl.uniprot.org/wormbase/Y38F1A.6";
+            IdSysCodePair result = uriMapper.toIdSysCodePair(uri);
+            assertEquals("W", result.getSysCode());
+        }
+    }
+    
+    @Test
+    public void testRscGet() throws Exception {
+        if (uriMapper instanceof SQLUriMapper){
+            //Date start = new Date();
+            report("testRscGet");
+            String uri = "http://ops.rsc.org/Compounds/Get/1553842";
+            IdSysCodePair result = uriMapper.toIdSysCodePair(uri);
+            assertEquals("OPS-CRS", result.getSysCode());
+            assertEquals("1553842", result.getId());
+        }
+    }
+
     
  /*       @Test
     public void testFrequency() throws IDMapperException{

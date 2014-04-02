@@ -171,17 +171,21 @@ public class SQLListener extends SQLBase implements MappingListener{
         statement = createStatement();
         int autoinc = 0;
         String getId = "SELECT @@identity";
+        ResultSet rs = null;
         try {
-            ResultSet rs = statement.executeQuery(getId);
+            rs = statement.executeQuery(getId);
             if (rs.next())
             {
                 autoinc = rs.getInt(1);
             } else {
+                close(statement, rs);
                 throw new BridgeDBException ("No result getting new indetity with " + getId);
             }
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException ("Error getting new indetity with " + getId, ex);
         }
+        close(statement, rs);
         return autoinc;
     }
 
@@ -268,8 +272,9 @@ public class SQLListener extends SQLBase implements MappingListener{
      */
     private void runInsert() throws BridgeDBException{
         if (insertQuery != null) {
+           Statement statement = null;
            try {
-                Statement statement = createStatement();
+                statement = createStatement();
                 //long start = new Date().getTime();
                 int changed = statement.executeUpdate(insertQuery.toString());
                 //Reporter.report("insertTook " + (new Date().getTime() - start));
@@ -278,7 +283,9 @@ public class SQLListener extends SQLBase implements MappingListener{
            } catch (SQLException ex) {
                 System.err.println(ex);
                 throw new BridgeDBException ("Error inserting link ", ex, insertQuery.toString());
-            }
+           } finally {
+               close (statement, null);
+           }
         }   
         insertQuery = null;
         blockCount = 0;
@@ -305,13 +312,15 @@ public class SQLListener extends SQLBase implements MappingListener{
      */
     protected void dropTable(String name) throws BridgeDBException{
         //"IF NOT EXISTS" is unsupported 
-       Statement sh = createStatement();
+       Statement statement = createStatement();
         try 
         {
-            sh.execute("DROP TABLE " + name);
-            sh.close();
+            statement.execute("DROP TABLE " + name);
+            statement.close();
         } catch (SQLException e) {
             System.err.println("Unable to drop table " + name + " assuming it does not exist");
+        } finally {
+            close (statement, null);
         }
     }
  
@@ -342,19 +351,18 @@ public class SQLListener extends SQLBase implements MappingListener{
       * "isPublic" field dettermines if the key will be returned by the getKeys() method.
 	  * @throws BridgeDBException 
 	  */
-	protected void createSQLTables() throws BridgeDBException
-	{
+    protected void createSQLTables() throws BridgeDBException {
         //"IF NOT EXISTS " is not supported
         String query = "";
-		try 
-		{
-			Statement sh = createStatement();
- 			sh.execute("CREATE TABLE                            "
-					+ INFO_TABLE_NAME 
-					+ " (    " + SCHEMA_VERSION_COLUMN_NAME + " INTEGER PRIMARY KEY	"
+        Statement statement = null;
+        try {
+            statement = createStatement();
+            statement.execute("CREATE TABLE                            "
+                    + INFO_TABLE_NAME 
+                    + " (    " + SCHEMA_VERSION_COLUMN_NAME + " INTEGER PRIMARY KEY	"
                     + ")");
-  			sh.execute( //Add compatibility version of GDB
-					"INSERT INTO " + INFO_TABLE_NAME + " VALUES ( " + SQL_COMPAT_VERSION + ")");
+            statement.execute( //Add compatibility version of GDB
+                    "INSERT INTO " + INFO_TABLE_NAME + " VALUES ( " + SQL_COMPAT_VERSION + ")");
             query = "CREATE TABLE " + MAPPING_TABLE_NAME 
                     + "( " + SOURCE_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, "
         			+ "  " + TARGET_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
@@ -363,74 +371,72 @@ public class SQLListener extends SQLBase implements MappingListener{
                     + "INDEX `sourceFind` (" + SOURCE_ID_COLUMN_NAME + "), " 
                     + "INDEX `sourceMappingSetFind` (" + MAPPING_SET_ID_COLUMN_NAME + ", " + SOURCE_ID_COLUMN_NAME + ") "
                     + " ) " ;
-			sh.execute(query);
-            sh.execute ("CREATE TABLE  "
+            statement.execute(query);
+            statement.execute ("CREATE TABLE  "
                     + "    " + PROPERTIES_TABLE_NAME
                     + "(   " + KEY_COLUMN_NAME +   "      VARCHAR(" + KEY_LENGTH + ") NOT NULL, "
                     + "    " + PROPERTY_COLUMN_NAME + "    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
                     + "    " + IS_PUBLIC_COLUMN_NAME + "    SMALLINT "
 					+ " ) "); 
-            sh.close();
-		} catch (SQLException e){
- 			throw new BridgeDBException ("Error creating the tables using " + query, e);
-		}
+            statement.close();
+        } catch (SQLException e){
+            throw new BridgeDBException ("Error creating the tables using " + query, e);
+        } finally {
+            close (statement, null);
+        }
         createMappingSetTable();
-	}
+    }
      
-	protected void createMappingSetTable() throws BridgeDBException
-	{
+    protected void createMappingSetTable() throws BridgeDBException {
         //"IF NOT EXISTS " is not supported
         String query = "";
-		try 
-		{
-			Statement sh = createStatement();
-        	query =	"CREATE TABLE " + MAPPING_SET_TABLE_NAME 
+        Statement statement = null;
+        try {
+            statement = createStatement();
+            query =	"CREATE TABLE " + MAPPING_SET_TABLE_NAME 
                     + " (" + ID_COLUMN_NAME                   + " INT " + autoIncrement + " PRIMARY KEY, " 
-                        + SOURCE_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
-                        + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL "
- 					+ " ) "; 
-            sh.execute(query);
-            sh.close();
-		} catch (SQLException e){
- 			throw new BridgeDBException ("Error creating the MappingSet table using " + query, e);
-		}
-	}
+                    + SOURCE_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
+                    + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL "
+                    + " ) "; 
+            statement.execute(query);
+            statement.close();
+        } catch (SQLException e){
+            throw new BridgeDBException ("Error creating the MappingSet table using " + query, e);
+       } finally {
+            close (statement, null);
+        }
+    }
        
     /**
      * Checks that the schema is for this version.
      * 
      * @throws BridgeDBException If the schema version is not the expected one.
      */
-	private void checkVersion() throws BridgeDBException
-	{
-        Statement stmt = createStatement();
-        ResultSet r = null;
+    private void checkVersion() throws BridgeDBException {
+        Statement statement = createStatement();
+        ResultSet rs = null;
         int version = 0;
         try {
-            r = stmt.executeQuery("SELECT schemaversion FROM info");
-            if(r.next()) version = r.getInt(1);
+            rs = statement.executeQuery("SELECT schemaversion FROM info");
+            if(rs.next()) version = rs.getInt(1);
         } catch (SQLException ex) {
             throw new BridgeDBException("Error checking the version. ", ex);
+        } finally {
+            close (statement, rs);
         }
-		finally
-		{
-            if (r != null) try { r.close(); } catch (SQLException ignore) {}
-            if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
-		}
         if (version == SQL_COMPAT_VERSION) return;
- 		switch (version)
-		{
-    		case 2:
-        		throw new BridgeDBException("Please use the SimpleGdbFactory in the org.bridgedb.rdb package");
+        switch (version) {
+            case 2:
+                throw new BridgeDBException("Please use the SimpleGdbFactory in the org.bridgedb.rdb package");
             case 3:
                 throw new BridgeDBException("Please use the SimpleGdbFactory in the org.bridgedb.rdb package");
             //NB add future schema versions here
             default:
                 throw new BridgeDBException ("Unrecognized schema version '" + version + "', expected " 
-                        + SQL_COMPAT_VERSION + " Please make sure you have the latest " +
-					"version of this software and databases");
-		}		
-	}
+                        + SQL_COMPAT_VERSION + " Please make sure you have the latest " 
+                        + "version of this software and databases");
+        }		
+    }
 	   
     /*
      * Verifies that the Data Source is saved in the database.
@@ -723,6 +729,8 @@ public class SQLListener extends SQLBase implements MappingListener{
             statement.executeUpdate(update.toString());
         } catch (SQLException ex) {
             throw new BridgeDBException("Error inserting Property " + update, ex);
+       } finally {
+            close (statement, null);
         }
     }
 

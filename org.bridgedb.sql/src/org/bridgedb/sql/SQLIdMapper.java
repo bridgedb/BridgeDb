@@ -121,12 +121,13 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append(")");
         }
         Statement statement = this.createStatement();
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
-        }    
+        }     
         Set<IdSysCodePair> results = resultSetToIdSysCodePairSet(rs);
         if (tgtSysCodes.length == 0){
            results.add(ref); 
@@ -153,6 +154,7 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         } else {
             logger.info("Mapped " + ref + " to " + results.size() + " results");
         }
+        close(statement, rs);
         return results;
     }
 
@@ -198,16 +200,18 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append("' ");
 
         Statement statement = this.createStatement();
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
         Set<IdSysCodePair> pairs = resultSetToIdSysCodePairSet(rs);
         if (ref.getSysCode().equals(tgtSysCode)){
             pairs.add(ref);
         }
+        close(statement, rs);
         return pairs;
     }
 
@@ -236,15 +240,17 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         appendSourceIdSysCodePair(query, ref);
         appendLimitConditions(query,0, 1);
         Statement statement = this.createStatement();
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = statement.executeQuery(query.toString());
             boolean result = rs.next();
             if (logger.isDebugEnabled()){
                 logger.debug(ref + " exists = " + result);
             }
+            close(statement, rs);
             return result;
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
    }
@@ -276,16 +282,18 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append("' ");
         appendLimitConditions(query,0, limit);
         Statement statement = this.createStatement();
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
         Set<IdSysCodePair> pairs = resultSetToIdSysCodePairSet(rs);
         if (logger.isDebugEnabled()){
             logger.debug("Freesearch for " + text + " gave " + pairs.size() + " results");
         }
+        close(statement, rs);
         return toXrefs(pairs);
     }
 
@@ -340,16 +348,18 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         query.append(" FROM ");
         query.append(MAPPING_SET_TABLE_NAME);
         Statement statement = this.createStatement();
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
         Set<DataSource> results = resultSetToDataSourceSet(rs);
         if (logger.isDebugEnabled()){
             logger.debug("getSupportedSrcDataSources() returned " + results.size() + " results");
         }
+        close(statement, rs);
         return results;        
     }
 
@@ -363,16 +373,18 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         query.append(" FROM ");
         query.append(MAPPING_SET_TABLE_NAME);
         Statement statement = this.createStatement();
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = statement.executeQuery(query.toString());
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
         Set<DataSource> results = resultSetToDataSourceSet(rs);
         if (logger.isDebugEnabled()){
             logger.debug("getSupportedTgtDataSources() returned " + results.size() + " results");
         }
+        close(statement, rs);
         return results;        
     }
 
@@ -395,15 +407,17 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
             query.append("' ");        
         
         Statement statement = this.createStatement();
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = statement.executeQuery(query.toString());
             boolean result = rs.next();
             if (logger.isDebugEnabled()){
                 logger.debug("isMappingSupported " + src + " to " + tgt + " is " + result);
             }
+            close(statement, rs);
             return result;
         } catch (SQLException ex) {
+            close(statement, rs);
             throw new BridgeDBException("Unable to run query. " + query, ex);
         }    
     }
@@ -413,23 +427,27 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         String query = "SELECT DISTINCT " + PROPERTY_COLUMN_NAME 
                 + " FROM " + PROPERTIES_TABLE_NAME 
                 + " WHERE " + KEY_COLUMN_NAME + " = '" + key + "'";
+        Statement statement = null;
+        ResultSet rs = null;
         try {
-            Statement statement = this.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+            statement = this.createStatement();
+            rs = statement.executeQuery(query);
             if (rs.next()){
                 String result = rs.getString("property");
                 if (logger.isDebugEnabled()){
                     logger.debug("property " + key + " is " + result);
                 }
+                close(statement, rs);
                 return result;
             } else {
                 if (logger.isDebugEnabled()){
                     logger.warn("No property " + key + " found! ");
                 }
+                close(statement, rs);
                 return null;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            close(statement, rs);
             return null;
         }
     }
@@ -440,17 +458,21 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         String query = "SELECT " + KEY_COLUMN_NAME
                 + " FROM " + PROPERTIES_TABLE_NAME
                 + " WHERE " + IS_PUBLIC_COLUMN_NAME + " = 1"; //one works where isPublic is a boolean
+        Statement statement = null;
+        ResultSet rs = null;
         try {
-            Statement statement = this.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+            statement = this.createStatement();
+            rs = statement.executeQuery(query);
             while (rs.next()){
                 results.add(rs.getString(KEY_COLUMN_NAME));
             }
             if (logger.isDebugEnabled()){
                 logger.warn("getKeys() returned " + results.size() + " keys! ");
             }
+            close(statement, rs);
             return results;
         } catch (Exception ex) {
+            close(statement, rs);
             logger.error("Error getting keys ", ex);
             return null;
         }
@@ -629,5 +651,4 @@ public class SQLIdMapper extends SQLListener implements IDMapper, IDMapperCapabi
         return tgtDataSource.getSystemCode();
     }
 
- 
 }
