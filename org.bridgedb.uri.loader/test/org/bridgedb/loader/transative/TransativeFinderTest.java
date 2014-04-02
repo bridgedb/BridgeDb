@@ -206,11 +206,13 @@ public class TransativeFinderTest {
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+        assertEquals(8, results.getNumberOfMappingSets());
         // A <-> B / A -> A' / A -> A''
         // none
         // B -> A -> A' / B -> A -> A''
         // B -> A -> A' -> B / B -> A -> A'' -> B
-        assertEquals(8, results.getNumberOfMappingSets());
+        transativeFinder.UpdateTransative();
+        results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         Reporter.println("testFinder8Done");
 	}
 
