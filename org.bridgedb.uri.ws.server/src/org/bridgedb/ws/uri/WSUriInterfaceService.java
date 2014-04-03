@@ -45,6 +45,8 @@ import org.bridgedb.Xref;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.SourceInfo;
+import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
@@ -63,6 +65,8 @@ import org.bridgedb.uri.ws.bean.MappingSetInfosBean;
 import org.bridgedb.uri.ws.bean.MappingsBean;
 import org.bridgedb.uri.ws.bean.MappingsBySetBean;
 import org.bridgedb.uri.ws.bean.OverallStatisticsBean;
+import org.bridgedb.uri.ws.bean.SourceInfosBean;
+import org.bridgedb.uri.ws.bean.SourceTargetInfosBean;
 import org.bridgedb.uri.ws.bean.UriExistsBean;
 import org.bridgedb.uri.ws.bean.UriMappings;
 import org.bridgedb.uri.ws.bean.UriSearchBean;
@@ -556,6 +560,72 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
     }
     
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_XML})
+    @Path("/" + WsUriConstants.SOURCE_INFOS) 
+    public Response getSourceInfos(@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
+        SourceInfosBean bean = getSourceInfosInner(lensUri);
+        if (noConentOnEmpty & bean.isEmpty()){
+            return Response.noContent().build();
+        } 
+        return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.SOURCE_INFOS) 
+    public Response getSourceInfosJson(@QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
+        SourceInfosBean bean = getSourceInfosInner(lensUri);
+        if (noConentOnEmpty & bean.isEmpty()){
+            return Response.noContent().build();
+        } 
+        return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    private SourceInfosBean getSourceInfosInner(String lensUri) throws BridgeDBException {
+        List<SourceInfo> infos = uriMapper.getSourceInfos(lensUri);
+        SourceInfosBean bean = new SourceInfosBean();
+        for (SourceInfo info:infos){
+            bean.addSourceInfo(info);
+        }
+        return bean;
+    }
+
+    @Override
+    @GET
+    @Produces({MediaType.APPLICATION_XML})
+    @Path("/" + WsUriConstants.SOURCE_TARGET_INFOS) 
+    public Response getSourceTargetInfos(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
+        SourceTargetInfosBean bean = getSourceTargetInfosInner(scrCode, lensUri);
+        if (noConentOnEmpty & bean.isEmpty()){
+            return Response.noContent().build();
+        } 
+        return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/" + WsUriConstants.SOURCE_TARGET_INFOS) 
+    public Response getSourceTargetInfosJson(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.LENS_URI) String lensUri) throws BridgeDBException {
+        SourceTargetInfosBean bean = getSourceTargetInfosInner(scrCode, lensUri);
+        if (noConentOnEmpty & bean.isEmpty()){
+            return Response.noContent().build();
+        } 
+        return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    private SourceTargetInfosBean getSourceTargetInfosInner(String scrCode, String lensUri) throws BridgeDBException {
+        List<SourceTargetInfo> infos = uriMapper.getSourceTargetInfos(scrCode, lensUri);
+        SourceTargetInfosBean bean = new SourceTargetInfosBean();
+        for (SourceTargetInfo info:infos){
+            bean.addSourceTargetInfo(info);
+        }
+        return bean;
+    }
+
     @GET
     @Produces({MediaType.APPLICATION_XML})
     @Path("/" + SetMappings.METHOD_NAME + WsUriConstants.XML) 
@@ -573,7 +643,7 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         }
         return bean;
     }
-
+    
     @Override
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -1068,6 +1138,5 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
 		}
     	sb.append("</select>\n");
 	}
-
 
 }

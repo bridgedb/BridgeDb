@@ -31,18 +31,13 @@ import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.SourceInfo;
+import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.bridgedb.uri.api.UriMapper;
-import org.bridgedb.uri.ws.bean.DataSourceUriPatternBean;
-import org.bridgedb.uri.ws.bean.MappingSetInfoBean;
-import org.bridgedb.uri.ws.bean.MappingSetInfosBean;
-import org.bridgedb.uri.ws.bean.MappingsBean;
-import org.bridgedb.uri.ws.bean.MappingsBySetBean;
-import org.bridgedb.uri.ws.bean.OverallStatisticsBean;
-import org.bridgedb.uri.ws.bean.UriExistsBean;
-import org.bridgedb.uri.ws.bean.UriSearchBean;
+import org.bridgedb.uri.ws.bean.*;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreMapper;
 import org.bridgedb.ws.bean.XrefBean;
@@ -346,6 +341,26 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
         return bean.getMappingSetInfos();
     }
    
+    @Override
+    public List<SourceInfo> getSourceInfos(String lensUri) throws BridgeDBException {
+        Response response = uriService.getSourceInfos(lensUri);
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
+            throw new BridgeDBException("Unable to get Source for lens: " + lensUri + " Server returned no context");
+        }
+        SourceInfosBean bean = (SourceInfosBean)response.getEntity(); 
+        return bean.getSourceInfos();
+    }
+
+    @Override
+    public List<SourceTargetInfo> getSourceTargetInfos(String sourceSysCode, String lensUri) throws BridgeDBException {
+        Response response = uriService.getSourceTargetInfos(sourceSysCode, lensUri);
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
+            throw new BridgeDBException("Unable to get Source for lens: " + lensUri + " Server returned no context");
+        }
+        SourceTargetInfosBean bean = (SourceTargetInfosBean)response.getEntity(); 
+        return bean.getSourceTargetInfos();
+    }
+
     @Override
     public Set<String> getUriPatterns(String dataSource) throws BridgeDBException {
         Response response = uriService.getDataSource(dataSource);

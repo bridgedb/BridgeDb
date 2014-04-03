@@ -102,6 +102,10 @@ public interface WSUriInterface extends WSCoreInterface{
     public Response getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) 
             throws BridgeDBException;
 
+    public Response getSourceInfos(String lensUri)throws BridgeDBException;
+
+    public Response getSourceTargetInfos(String sourceSysCode, String lensUri) throws BridgeDBException;
+
     /**
      *
      * @param mappingSetId
@@ -155,5 +159,6 @@ public interface WSUriInterface extends WSCoreInterface{
      * @throws BridgeDBException
      */
     public Response getLenses(String lensUri) throws BridgeDBException;
+
 
  }

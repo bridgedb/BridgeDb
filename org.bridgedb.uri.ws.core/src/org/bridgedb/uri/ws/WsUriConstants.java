@@ -49,4 +49,8 @@ public class WsUriConstants extends WsConstants{
     public static final String URI_EXISTS = "UriExists";
     public static final String URI_SEARCH = "UriSearch";
     public static final String XML = "XML";
+    
+    public static final String SOURCE_INFOS = "SourceInfos";
+    public static final String SOURCE_TARGET_INFOS = "SourceTargetInfos";
+    
 }
