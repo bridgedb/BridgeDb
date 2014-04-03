@@ -30,6 +30,8 @@ import org.bridgedb.Xref;
 import org.bridgedb.pairs.IdSysCodePair;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.SourceInfo;
+import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.utils.BridgeDBException;
 
 /**
@@ -192,7 +194,7 @@ public interface UriMapper extends IDMapper{
     /**
 	 * Get the set of mappings based the parameters supplied.
      * 
-	 * @param sourceUri @see Class java docs. 
+     * @param sourceUri @see Class java docs. 
      * @param LensUri @see Class java docs. 
      * @param graph  @see Class java docs. 
      * @param tgtUriPatterns @see Class java docs. 
@@ -280,6 +282,7 @@ public interface UriMapper extends IDMapper{
      * Obtains some general high level statistics about the data held.
      * 
      * @See OverallStatistics for an exact description of what is returned.
+     * @param lensUri  @see Class java docs.
      * @return high level statistics
      * @throws BridgeDBException 
      */
@@ -299,12 +302,34 @@ public interface UriMapper extends IDMapper{
      * Obtains some statistics for each MappingSet in the data from the source to the target
      * <p>
      * @See MappingSetInfo for details of exactly what is returned
-     * @param sourceSysCode System Code of the Source DataSource
+     * @param sourceSysCode  @see Class java docs.
      * @param targetSysCode System Code of the Target DataSource
+     * @param lensUri (optional) Uri for the Lens (may be just the Id part of the URI
      * @return Information for each Mapping Set
      * @throws BridgeDBException 
      */
      public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) throws BridgeDBException;
+    
+    /*
+     * Obtains some statistics for each Source in the data 
+     * <p>
+     * @See MappingSourceInfo for details of exactly what is returned
+     * @param lensUri (optional) Uri for the Lens (may be just the Id part of the URI
+     * @return Information for each Mapping Set
+     * @throws BridgeDBException 
+     */
+    public List<SourceInfo> getSourceInfos(String lensUri) throws BridgeDBException;
+    
+    /*
+     * Obtains some statistics for each Target that this Source maps to in the data 
+     * <p>
+     * @See MappingSourceInfo for details of exactly what is returned
+     * @param sourceSysCode System Code of the Source DataSource
+     * @param lensUri (optional) Uri for the Lens (may be just the Id part of the URI
+     * @return Information for each Mapping Set
+     * @throws BridgeDBException 
+     */
+    public List<SourceTargetInfo> getSourceTargetInfos(String sourceSysCode, String lensUri) throws BridgeDBException;
     
     /**
      * Obtains the Set of one or more UriPatterns that are considered valid(have been registered) for this DataSource.

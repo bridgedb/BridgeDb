@@ -27,6 +27,8 @@ import org.bridgedb.sql.SQLListener;
 import org.bridgedb.sql.SQLUriMapper;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.SourceInfo;
+import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
@@ -218,6 +220,20 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         }
     }
     
+    @Test
+    public void testGetSourceInfos() throws BridgeDBException {
+        report("GetSourceInfos");
+        List<SourceInfo> results = uriMapper.getSourceInfos(Lens.DEFAULT_LENS_NAME);
+        assertThat (results.size(), greaterThanOrEqualTo(3));
+    }
+
+    @Test
+    public void testGetSourceTargetInfos() throws BridgeDBException {
+        report("GetSourceTargetInfos");
+        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource1.getSystemCode(), Lens.DEFAULT_LENS_NAME);
+        assertThat (results.size(), greaterThanOrEqualTo(2));
+    }
+
     @Test
     public void testGetUriSpaces() throws BridgeDBException {
         report("GetUriSpaces");

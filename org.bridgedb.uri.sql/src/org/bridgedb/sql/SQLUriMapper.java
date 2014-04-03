@@ -45,6 +45,8 @@ import org.bridgedb.rdf.pairs.RdfBasedCodeMapper;
 import org.bridgedb.statistics.DataSetInfo;
 import org.bridgedb.statistics.MappingSetInfo;
 import org.bridgedb.statistics.OverallStatistics;
+import org.bridgedb.statistics.SourceInfo;
+import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
@@ -1093,6 +1095,65 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
+    public List<SourceInfo> getSourceInfos(String lensUri) throws BridgeDBException {
+        StringBuilder query = new StringBuilder("select ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);
+        query.append(", count(*) as linksets, count(distinct(");
+        query.append (TARGET_DATASOURCE_COLUMN_NAME);
+        query.append(")) AS targets, sum(");
+        query.append (MAPPING_LINK_COUNT_COLUMN_NAME);
+        query.append(") AS links FROM ");
+        query.append(MAPPING_SET_TABLE_NAME);
+        appendLensClause(query, lensUri, false);   
+        query.append("GROUP BY ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME);        
+        Statement statement = this.createStatement();
+        ResultSet rs = null;
+                
+        List<SourceInfo> results;
+        try {
+            rs = statement.executeQuery(query.toString());
+            results = resultSetToSourceInfos(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        } finally {
+            close(statement, rs);
+        }
+        return results;
+    }
+
+    @Override
+    public List<SourceTargetInfo> getSourceTargetInfos(String sourceSysCode, String lensUri) throws BridgeDBException {
+        StringBuilder query = new StringBuilder("select ");
+        query.append(TARGET_DATASOURCE_COLUMN_NAME);
+        query.append(", count(*) as linksets, sum(");
+        query.append (MAPPING_LINK_COUNT_COLUMN_NAME);
+        query.append(") AS links FROM ");
+        query.append(MAPPING_SET_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(SOURCE_DATASOURCE_COLUMN_NAME); 
+        query.append(" = ? ");
+        appendLensClause(query, lensUri, true);   
+        query.append("GROUP BY ");
+        query.append(TARGET_DATASOURCE_COLUMN_NAME); 
+        PreparedStatement statement = createPreparedStatement(query.toString());
+        ResultSet rs = null;
+        List<SourceTargetInfo> results;
+        try {
+            statement.setString(1, sourceSysCode);
+            rs = statement.executeQuery();
+            results = resultSetToSourceTargetInfos(sourceSysCode, rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new BridgeDBException("Unable to run query. " + query, ex);
+        } finally {
+            close(statement, rs);
+        }
+        return results;
+    }
+
+    @Override
     public Set<String> getUriPatterns(String dataSource) throws BridgeDBException {
         String query = ("SELECT " + PREFIX_COLUMN_NAME + ", " + POSTFIX_COLUMN_NAME + " FROM " + URI_TABLE_NAME
                 + " WHERE " + DATASOURCE_COLUMN_NAME + " = '" + dataSource + "'");
@@ -1664,6 +1725,46 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
+   /**
+     * Generates the meta info from the result of a query
+     * @param rs
+     * @return
+     * @throws BridgeDBException
+     */
+    public List<SourceInfo> resultSetToSourceInfos(ResultSet rs ) throws BridgeDBException{
+        ArrayList<SourceInfo> results = new ArrayList<SourceInfo>();
+        try {
+            while (rs.next()){
+                DataSetInfo sourceInfo = findDataSetInfo(rs.getString(SOURCE_DATASOURCE_COLUMN_NAME));
+                System.out.println(sourceInfo.getFullName());
+                results.add(new SourceInfo(sourceInfo, rs.getInt("targets"), rs.getInt("linksets"), rs.getInt("links")));
+            }
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+    
+    /**
+     * Generates the meta info from the result of a query
+     * @param rs
+     * @return
+     * @throws BridgeDBException
+     */
+    public List<SourceTargetInfo> resultSetToSourceTargetInfos(String sourceSysCode, ResultSet rs ) throws BridgeDBException{
+        ArrayList<SourceTargetInfo> results = new ArrayList<SourceTargetInfo>();
+        DataSetInfo sourceInfo = findDataSetInfo(sourceSysCode);
+        try {
+            while (rs.next()){
+                DataSetInfo targetInfo = findDataSetInfo(rs.getString(TARGET_DATASOURCE_COLUMN_NAME));
+                results.add(new SourceTargetInfo(sourceInfo, targetInfo, rs.getInt("linksets"), rs.getInt("links")));
+            }
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Unable to parse results.", ex);
+        }
+        return results;
+    }
+ 
     private void resultSetAddToMappingsBySet(ResultSet rs, String sourceUri, MappingsBySet mappingsBySet) 
             throws BridgeDBException {
         try {
