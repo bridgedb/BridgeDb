@@ -38,6 +38,8 @@ import org.bridgedb.uri.ws.bean.MappingSetInfosBean;
 import org.bridgedb.uri.ws.bean.MappingsBean;
 import org.bridgedb.uri.ws.bean.MappingsBySetBean;
 import org.bridgedb.uri.ws.bean.OverallStatisticsBean;
+import org.bridgedb.uri.ws.bean.SourceInfoBean;
+import org.bridgedb.uri.ws.bean.SourceTargetInfoBean;
 import org.bridgedb.uri.ws.bean.UriExistsBean;
 import org.bridgedb.uri.ws.bean.UriMappings;
 import org.bridgedb.uri.ws.bean.UriSearchBean;
@@ -217,6 +219,32 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
     }
 
     @Override
+    public Response getSourceInfos(String lensUri) throws BridgeDBException {
+       try {
+            SourceInfoBean result = 
+                    webResource.path(WsUriConstants.SOURCE_INFOS)
+                    .accept(MediaType.APPLICATION_XML_TYPE)
+                    .get(new GenericType<SourceInfoBean>() {});
+            return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
+        } catch (UniformInterfaceException ex){
+            return Response.noContent().build();
+        }
+    }
+
+    @Override
+    public Response getSourceTargetInfos(String sourceSysCode, String lensUri) throws BridgeDBException {
+       try {
+            SourceTargetInfoBean result = 
+                    webResource.path(WsUriConstants.SOURCE_TARGET_INFOS)
+                    .accept(MediaType.APPLICATION_XML_TYPE)
+                    .get(new GenericType<SourceTargetInfoBean>() {});
+            return Response.ok(result, MediaType.APPLICATION_XML_TYPE).build();
+        } catch (UniformInterfaceException ex){
+            return Response.noContent().build();
+        }
+    }
+
+   @Override
     public Response getMappingSetInfo(String mappingSetId) throws BridgeDBException {
         try {
             MappingSetInfoBean result = 
@@ -364,4 +392,4 @@ public class WSUriClient extends WSCoreClient implements WSUriInterface{
         }
     }
 
-}
+ }
