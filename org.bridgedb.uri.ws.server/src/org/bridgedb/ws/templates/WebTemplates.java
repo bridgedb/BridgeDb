@@ -16,6 +16,7 @@ public class WebTemplates
     public static final String MAP_URI_FORM = "mapUriForm.vm";
     public static final String MAP_URI_RESULTS = "mapUriResults.vm";
     public static final String SELECTORS_SCRIPTS = "selectorsScripts.vm";
+    public static final String SOURCE_INFO_SCRIPT = "sourceInfos.vm";
     
     private static VelocityEngine velocityEngine = initialize();
     

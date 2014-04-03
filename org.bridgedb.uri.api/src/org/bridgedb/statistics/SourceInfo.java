@@ -74,5 +74,9 @@ public class SourceInfo {
                 + "\n\tnumberOfLinks: " + this.getNumberOfLinks()
                  + "\n";
     }
+    
+    public String getSourceDataSourceName(){
+        return getSource().getFullName();
+    }
 
  }

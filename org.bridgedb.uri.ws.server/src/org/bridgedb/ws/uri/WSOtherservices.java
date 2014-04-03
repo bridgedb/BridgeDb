@@ -130,7 +130,25 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.SOURCE_INFOS) 
+    public Response getSourceInfosHtml(@QueryParam(WsUriConstants.LENS_URI) String lensUri,
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+        if (logger.isDebugEnabled()){
+            logger.debug("getSourceInfosHtml called");
+        }
 
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("SourceInfos", uriMapper.getSourceInfos(lensUri));
+        velocityContext.put("lens", lensUri);
+        String sourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_INFO_SCRIPT);
+        StringBuilder sb = topAndSide ("Data Source Summary", httpServletRequest);
+        sb.append(sourceInfo);
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
