@@ -1,4 +1,13 @@
-<h2>Mapping Data Sources</h2>
+<h2>Mapping Data Sources
+    #if ($lens)
+        for Lens $lens
+    #end    
+    </h2>
+#if ($message)
+    <p>$message</p>
+#end
+<p>Click on Source Name to drill down.</p>
+<p>Note: Number of Links could include duplicates</p>
 #if ($exception)
     <h4>Unable to process your request</h4>
     <h3>$exception</h3>
@@ -19,7 +28,7 @@
             </tr>
             #foreach ( $sourceInfo in $SourceInfos)
                 <tr>
-                    <td>$sourceInfo.getSourceDataSourceName()</td>
+                    <td><a href="$contextPath/SourceTargetInfos?sourceCode=$sourceInfo.getSource().getSysCode()">$sourceInfo.getSourceDataSourceName()</a></td>
                     <td>$sourceInfo.getNumberOfTargets()</td>
                     <td>$sourceInfo.getNumberOfLinksets()</td>
                     <td>$sourceInfo.getNumberOfLinks()</td>

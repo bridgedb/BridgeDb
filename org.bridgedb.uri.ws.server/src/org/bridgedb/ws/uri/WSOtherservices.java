@@ -142,6 +142,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("SourceInfos", uriMapper.getSourceInfos(lensUri));
         velocityContext.put("lens", lensUri);
+        velocityContext.put("contextPath", httpServletRequest.getContextPath() );
         String sourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_INFO_SCRIPT);
         StringBuilder sb = topAndSide ("Data Source Summary", httpServletRequest);
         sb.append(sourceInfo);
@@ -149,6 +150,28 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
     
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/" + WsUriConstants.SOURCE_TARGET_INFOS) 
+    public Response getSourceInfosHtml(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.LENS_URI) String lensUri,
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+        if (logger.isDebugEnabled()){
+            logger.debug("getSourceTargetInfosHtml called with " + scrCode);
+        }
+        
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("SourceTargetInfos", uriMapper.getSourceTargetInfos(scrCode, lensUri));
+        velocityContext.put("scrCode", scrCode);
+        velocityContext.put("contextPath", httpServletRequest.getContextPath() );
+        velocityContext.put("lens", lensUri);
+        String sourceTargetInfo = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_TARGET_INFO_SCRIPT);
+        StringBuilder sb = topAndSide ("Data Source Summary for " + scrCode, httpServletRequest);
+        sb.append(sourceTargetInfo);
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());

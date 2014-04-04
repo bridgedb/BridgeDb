@@ -1,0 +1,41 @@
+#if ($exception)
+    <h2>Mapping Data Targets by Source $scrCode</h2>
+    <h4>Unable to process your request</h4>
+    <h3>$exception</h3>
+    <p>Warning: XML and JSON versions will throw an Exception with these parameters</p>
+#else 
+    #if( $SourceTargetInfos.isEmpty())
+        <h2>No Data Sources $scrCode found</h2>     
+        <p>
+        Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
+        </p>
+    #else
+        <h2>Mapping Data Targets for Source $SourceTargetInfos.get(0).getSourceDataSourceName()
+            #if ($lens)
+                for Lens $lens
+            #end    
+        </h2>
+        #if ($message)
+            <p>$message</p>
+        #end
+        <p>Click on Source Name to drill down.</p>
+        <p>Note: Number of Links could include duplicates</p>
+        <p><a href="$contextPath/SourceInfos">Up to Summary of all sources</a></p>
+        <table border="1" >
+            <tr>
+                <th>Target</th>
+                <th>Number of Linksets</th>
+                <th>Number of Links</th>
+            </tr>
+            #foreach ( $sourceTargetInfo in $SourceTargetInfos)
+                <tr>
+                    <td>$sourceTargetInfo.getTargetDataSourceName()</td>
+                    <td>$sourceTargetInfo.getNumberOfLinksets()</td>
+                    <td>$sourceTargetInfo.getNumberOfLinks()</td>
+                </tr>
+            #end
+        </table>
+    #end
+#end
+
+

@@ -75,4 +75,11 @@ public class SourceTargetInfo {
                  + "\n";
     }
 
+    public String getSourceDataSourceName(){
+        return getSource().getFullName();
+    }
+
+    public String getTargetDataSourceName(){
+        return getTarget().getFullName();
+    }
  }
