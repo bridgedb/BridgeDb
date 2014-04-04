@@ -856,18 +856,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
     
     @GET
-    @Produces({MediaType.TEXT_HTML})
-    @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
-    public Response getDataSourceHtml(@PathParam("id") String id,
-            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
-        DataSourceUriPatternBean bean = getDataSourceInner(id);
-        if (noConentOnEmpty & bean.isEmpty()){
-            return noContentWrapper(httpServletRequest);
-        } 
-        return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
-    }
-    
-    @GET
     @Produces({MediaType.TEXT_PLAIN})
     @Override
     @Path("/" + WsUriConstants.SQL_COMPAT_VERSION)

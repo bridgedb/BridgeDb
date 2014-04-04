@@ -30,6 +30,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -38,6 +39,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
+import org.bridgedb.DataSource;
 import org.bridgedb.rdf.BridgeDbRdfTools;
 import org.bridgedb.rdf.UriPattern;
 import org.bridgedb.statistics.DataSetInfo;
@@ -126,6 +128,26 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         String mapUriScripts = WebTemplates.getForm(velocityContext, WebTemplates.SELECTORS_SCRIPTS);
         StringBuilder sb = topAndSide ("mapURI Service", mapUriScripts, httpServletRequest);
         sb.append(mapUriForm(INCLUDE_GRAPH, httpServletRequest));
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
+    @GET
+    @Produces({MediaType.TEXT_HTML})
+    @Path("/" + WsUriConstants.DATA_SOURCE + "/{id}")
+    public Response getDataSourceHtml(@PathParam("id") String id,
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+        DataSource ds = DataSource.getExistingBySystemCode(id);
+        if (noConentOnEmpty & ds == null){
+            return noContentWrapper(httpServletRequest);
+        } 
+        Set<String> uriPatterns = uriMapper.getUriPatterns(id);
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("dataSource", ds);
+        velocityContext.put("Patterns", uriPatterns);
+        String dataSourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.DATA_SET_SCRIPT);
+        StringBuilder sb = topAndSide ("Data Source " + id + " Summary", httpServletRequest);
+        sb.append(dataSourceInfo);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }

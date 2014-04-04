@@ -37,10 +37,4 @@ public class HtmlTest {
         assertEquals(200, result.getStatus());
     }
 
-    @Test 
-    public void testGetMappingInfo() throws BridgeDBException, UnsupportedEncodingException{
-        Reporter.println("GetMappingInfo");
-        Response result = server.getSetMapping(null, null, null, new DummyHttpServletRequest());
-        assertEquals(200, result.getStatus());
-    }
-}
+ }
