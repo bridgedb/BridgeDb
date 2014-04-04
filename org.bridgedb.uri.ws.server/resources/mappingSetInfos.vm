@@ -1,0 +1,65 @@
+#if ($exception)
+    <h2>Mapping Data for Source $scrCode and Target $targetCode</h2>
+    <h4>Unable to process your request</h4>
+    <h3>$exception</h3>
+    <p>Warning: XML and JSON versions will throw an Exception with these parameters</p>
+#else 
+    #if( $MappingSetInfos.isEmpty())
+        <h2>No Mapping data found for Source $scrCode and Target $targetCode</h2>     
+        <p>
+        Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
+        </p>
+    #else
+        <h2>Mapping Data for 
+            Source $MappingSetInfos.get(0).getSource().getFullName() and 
+            Target $MappingSetInfos.get(0).getTarget().getFullName() 
+            #if ($lens)
+                with Lens $lens
+            #end    
+        </h2>
+        #if ($message)
+            <p>$message</p>
+        #end
+        <p><a href="$contextPath/SourceInfos">Up to Summary of all sources</a>
+        <br/><a href="$contextPath/SourceTargetInfos?sourceCode=$MappingSetInfos.get(0).getSource().getSysCode()">
+            Up to Summary of Source $MappingSetInfos.get(0).getSource().getFullName()</a></p>
+        <table border="1" >
+            <tr>
+                 <th>Id</th>
+                 <th>Number of Links</th>
+                 <th>Mapping Resource</th>
+                 <th>Mapping Source</th>
+                 <th>Source Count</th>
+                 <th>Target Count</th>
+                 <th>Predicate</th>
+                 <th>Justification</th>
+                 <th>Transitive Sources</th>
+                 <th>Transitive Ids</th>
+            </tr>
+            #foreach ( $mappingSetInfo in $MappingSetInfos)
+                <tr>
+                    <td><a href="$contextPath/mappingSet/$mappingSetInfo.getIntId()">$mappingSetInfo.getIntId()</a></td>
+                    <td>$mappingSetInfo.getNumberOfLinks()</td>
+                    <td><a href="$mappingSetInfo.getMappingResource()">$mappingSetInfo.resourceLocalName()</td>
+                    <td><a href="$mappingSetInfo.getMappingSource()">$mappingSetInfo.sourceLocalName()</td>
+                    <td>$mappingSetInfo.getNumberOfSources()</td>
+                    <td>$mappingSetInfo.getNumberOfTargets()</td>
+                    <td><a href="$mappingSetInfo.getPredicate()">$mappingSetInfo.predicateLocalName()</td>
+                    <td><a href="$mappingSetInfo.getJustification()">$mappingSetInfo.justificationLocalName()</td>
+                    <td>
+                        #foreach ($dataSetInfo $mappingSetInfo.getViaDataSets())
+                            <a href="$contextPath/dataSource/$dataSetInfo.getSysCode()">$dataSetInfo.getFullName()</a></td>
+                        #end
+                    </td>
+                    <td>
+                        #foreach ($chainId $mappingSetInfo.getChainIds())
+                            <td><a href="$contextPath/mappingSet/$chainId">$chainId</a></td>
+                        #end
+                    </td>
+                </tr>
+            #end
+        </table>
+    #end
+#end
+
+

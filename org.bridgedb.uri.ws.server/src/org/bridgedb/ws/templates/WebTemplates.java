@@ -18,6 +18,7 @@ public class WebTemplates
     public static final String SELECTORS_SCRIPTS = "selectorsScripts.vm";
     public static final String SOURCE_INFO_SCRIPT = "sourceInfos.vm";
     public static final String SOURCE_TARGET_INFO_SCRIPT = "sourceTargetInfos.vm";
+    public static final String MAPPING_SET_INFO_SCRIPT = "mappingSetInfos.vm";
     
     private static VelocityEngine velocityEngine = initialize();
     

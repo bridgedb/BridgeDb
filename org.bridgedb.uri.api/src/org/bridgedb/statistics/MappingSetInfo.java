@@ -103,6 +103,13 @@ public class MappingSetInfo {
     }
 
     /**
+     * @return the local name of the predicate
+     */
+    public String predicateLocalName() {
+        return localName(predicate);
+    }
+
+    /**
      * @return true if this is the symmetric. Will return false if this was the original linkset
      */
     public boolean isSymmetric() {
@@ -150,6 +157,13 @@ public class MappingSetInfo {
      */
     public String getJustification() {
         return justification;
+    }
+
+    /**
+     * @return the local name of the predicate
+     */
+    public String justificationLocalName() {
+        return localName(justification);
     }
 
     /**
@@ -214,10 +228,27 @@ public class MappingSetInfo {
     }
 
     /**
-     * @return the mappingSource
+     * @return the mappingResource
      */
     public String getMappingResource() {
         return mappingResource;
+    }
+
+    /**
+     * @return the local name of the mappingResource
+     */
+    public String resourceLocalName() {
+        return localName(mappingResource);
+    }
+
+    private String localName(String uri) {
+        if (uri.contains("#")){
+            return uri.substring(uri.indexOf("#")+1);
+        }
+        if (uri.contains("/")){
+            return uri.substring(uri.lastIndexOf("/")+1);
+        }
+        return uri.substring(uri.lastIndexOf(".")+1);
     }
 
     /**
@@ -225,6 +256,13 @@ public class MappingSetInfo {
      */
     public String getMappingSource() {
         return mappingSource;
+    }
+
+    /**
+     * @return the mappingUri
+     */
+    public String sourceLocalName() {
+        return localName(mappingSource);
     }
 
     /**

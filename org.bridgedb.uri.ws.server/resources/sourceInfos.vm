@@ -6,8 +6,9 @@
 #if ($message)
     <p>$message</p>
 #end
-<p>Click on Source Name to drill down.</p>
-<p>Note: Number of Links could include duplicates</p>
+<p>Click on Source Name for more information about the Source.
+<br/>Click on Link Count to Drill down.
+<br/>Note: Number of Links could include duplicates</p>
 #if ($exception)
     <h4>Unable to process your request</h4>
     <h3>$exception</h3>
@@ -28,8 +29,8 @@
             </tr>
             #foreach ( $sourceInfo in $SourceInfos)
                 <tr>
-                    <td><a href="$contextPath/SourceTargetInfos?sourceCode=$sourceInfo.getSource().getSysCode()">$sourceInfo.getSourceDataSourceName()</a></td>
-                    <td>$sourceInfo.getNumberOfTargets()</td>
+                    <td><a href="$contextPath/dataSource/$sourceInfo.getSource().getSysCode()">$sourceInfo.getSourceDataSourceName()</a></td>
+                    <td><a href="$contextPath/SourceTargetInfos?sourceCode=$sourceInfo.getSource().getSysCode()">$sourceInfo.getNumberOfTargets()</a></td>
                     <td>$sourceInfo.getNumberOfLinksets()</td>
                     <td>$sourceInfo.getNumberOfLinks()</td>
                 </tr>

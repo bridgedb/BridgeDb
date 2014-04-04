@@ -671,20 +671,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
         return Response.ok(bean, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-    @GET
-    @Produces({MediaType.TEXT_HTML})
-    @Path("/" + SetMappings.METHOD_NAME) 
-    public Response getMappingSetInfosHtml(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
-            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
-     		@QueryParam(WsUriConstants.LENS_URI) String lensUri,
-            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
-        MappingSetInfosBean bean = getMappingSetInfosInner(scrCode, targetCode, lensUri);
-        if (noConentOnEmpty & bean.isEmpty()){
-            return noContentWrapper(httpServletRequest);
-        } 
-        return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
-    }
-
 	private LensBean getLensInner(String id) throws BridgeDBException {
  		Lens lens = LensTools.byId(id);
 		return new LensBean(lens, null);

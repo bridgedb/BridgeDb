@@ -18,9 +18,11 @@
         #if ($message)
             <p>$message</p>
         #end
-        <p>Click on Source Name to drill down.</p>
-        <p>Note: Number of Links could include duplicates</p>
-        <p><a href="$contextPath/SourceInfos">Up to Summary of all sources</a></p>
+        <p>Details for: <a href="$contextPath/dataSource/$SourceTargetInfos.get(0).getSource().getSysCode()">$SourceTargetInfos.get(0).getSourceDataSourceName()</a></td>
+        <br/Click on Target Name for more information about the Target.
+        <br/>Click on Linksets Count to Drill down.
+        <br/>Note: Number of Links could include duplicates.
+        <br/><a href="$contextPath/SourceInfos">Up to Summary of all sources</a>
         <table border="1" >
             <tr>
                 <th>Target</th>
@@ -29,8 +31,9 @@
             </tr>
             #foreach ( $sourceTargetInfo in $SourceTargetInfos)
                 <tr>
-                    <td>$sourceTargetInfo.getTargetDataSourceName()</td>
-                    <td>$sourceTargetInfo.getNumberOfLinksets()</td>
+                    <td><a href="$contextPath/dataSource/$sourceTargetInfo.getTarget().getSysCode()">$sourceTargetInfo.getTargetDataSourceName()</a></td>
+                    <td><a href="$contextPath/mappingSet?sourceCode=$sourceTargetInfo.getSource().getSysCode()&targetCode=$sourceTargetInfo.getTarget().getSysCode()">
+                        $sourceTargetInfo.getNumberOfLinksets()</a></td>
                     <td>$sourceTargetInfo.getNumberOfLinks()</td>
                 </tr>
             #end

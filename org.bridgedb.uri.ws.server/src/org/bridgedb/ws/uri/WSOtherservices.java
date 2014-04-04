@@ -172,6 +172,29 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
+    @GET
+    @Produces({MediaType.TEXT_HTML})
+    @Path("/" + SetMappings.METHOD_NAME) 
+    public Response getMappingSetInfosHtml(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+            @QueryParam(WsUriConstants.TARGET_DATASOURCE_SYSTEM_CODE) String targetCode,
+            @QueryParam(WsUriConstants.LENS_URI) String lensUri,
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
+        if (logger.isDebugEnabled()){
+            logger.debug("getMappingSetInfosHtml called with " + scrCode);
+        }
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("MappingSetInfos", uriMapper.getMappingSetInfos(scrCode, targetCode, lensUri));
+        velocityContext.put("scrCode", scrCode);
+        velocityContext.put("targetCode", targetCode);
+        velocityContext.put("contextPath", httpServletRequest.getContextPath() );
+        velocityContext.put("lens", lensUri);
+        String mappingSetInfo = WebTemplates.getForm(velocityContext, WebTemplates.MAPPING_SET_INFO_SCRIPT);
+        StringBuilder sb = topAndSide ("Mapping Summary for " + scrCode + " -> " + targetCode, httpServletRequest);
+        sb.append(mappingSetInfo);
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
@@ -207,7 +230,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return imsApiPage(httpServletRequest);
     }
     
-    @GET
+    /*@GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + SetMappings.METHOD_NAME)
     public Response getSetMapping(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
@@ -257,7 +280,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         }
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
-    }
+    }*/
     
     protected void addMappingTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos, HttpServletRequest httpServletRequest) 
             throws BridgeDBException{
