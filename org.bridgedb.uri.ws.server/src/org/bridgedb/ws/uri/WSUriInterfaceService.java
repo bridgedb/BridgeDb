@@ -1039,12 +1039,12 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     protected void addSideBarBridgeDb(StringBuilder sb, HttpServletRequest httpServletRequest) {
         sb.append("<div class=\"menugroup\">BridgeDb Service</div>");
         addSideBarItem(sb, WsUriConstants.BRIDGEDB_HOME, "Home", httpServletRequest);
-            String allMappingInfo = SetMappings.METHOD_NAME + "?" + WsUriConstants.LENS_URI + "=" + Lens.ALL_LENS_NAME;
-            addSideBarItem(sb, allMappingInfo,"All Mappings Summary", httpServletRequest);
-        addSideBarItem(sb,  SetMappings.METHOD_NAME, "Default Mappings Summary", httpServletRequest);
-        String allGraphwiz = WsUriConstants.GRAPHVIZ + "?" + WsUriConstants.LENS_URI + "=" + Lens.ALL_LENS_NAME;
-        addSideBarItem(sb, allGraphwiz, "All Mappings Graphviz",  httpServletRequest);
-        addSideBarItem(sb, WsUriConstants.GRAPHVIZ, "Default Mappings Graphviz",  httpServletRequest);
+        String allMappingInfo = WsUriConstants.SOURCE_INFOS + "?" + WsUriConstants.LENS_URI + "=" + Lens.ALL_LENS_NAME;
+        addSideBarItem(sb, allMappingInfo,"All Mappings Summary", httpServletRequest);
+        addSideBarItem(sb,  WsUriConstants.SOURCE_INFOS, "Default Mappings Summary", httpServletRequest);
+        //String allGraphwiz = WsUriConstants.GRAPHVIZ + "?" + WsUriConstants.LENS_URI + "=" + Lens.ALL_LENS_NAME;
+        //addSideBarItem(sb, allGraphwiz, "All Mappings Graphviz",  httpServletRequest);
+        //addSideBarItem(sb, WsUriConstants.GRAPHVIZ, "Default Mappings Graphviz",  httpServletRequest);
         addSideBarItem(sb, Lens.METHOD_NAME, Lens.METHOD_NAME,  httpServletRequest);
         addSideBarItem(sb, WsUriConstants.BRIDGEDB_API, "Api", httpServletRequest);
     }

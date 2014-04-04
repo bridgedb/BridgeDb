@@ -138,33 +138,46 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         if (logger.isDebugEnabled()){
             logger.debug("getSourceInfosHtml called");
         }
-
+        return getSourceInfosHtml(lensUri, httpServletRequest, null);
+    }
+    
+    private Response getSourceInfosHtml(String lensUri, HttpServletRequest httpServletRequest, String message) throws BridgeDBException {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("SourceInfos", uriMapper.getSourceInfos(lensUri));
         velocityContext.put("lens", lensUri);
         velocityContext.put("contextPath", httpServletRequest.getContextPath() );
+        velocityContext.put("message", message);
         String sourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_INFO_SCRIPT);
         StringBuilder sb = topAndSide ("Data Source Summary", httpServletRequest);
         sb.append(sourceInfo);
         footerAndEnd(sb);
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
-    
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + WsUriConstants.SOURCE_TARGET_INFOS) 
-    public Response getSourceInfosHtml(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
+    public Response getSourceTargetInfosHtml(@QueryParam(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE) String scrCode,
             @QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         if (logger.isDebugEnabled()){
             logger.debug("getSourceTargetInfosHtml called with " + scrCode);
         }
-        
+        if (scrCode == null || scrCode.isEmpty()){
+            return getSourceInfosHtml(lensUri, httpServletRequest, 
+                    "Due to the size of your request only a summary by source is being shown");
+        }
+        return getSourceTargetInfosHtml(scrCode, lensUri, httpServletRequest, null);
+    }
+
+    private Response getSourceTargetInfosHtml(String scrCode, String lensUri,
+            HttpServletRequest httpServletRequest, String message) throws BridgeDBException {        
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("SourceTargetInfos", uriMapper.getSourceTargetInfos(scrCode, lensUri));
         velocityContext.put("scrCode", scrCode);
         velocityContext.put("contextPath", httpServletRequest.getContextPath() );
         velocityContext.put("lens", lensUri);
+        velocityContext.put("message", message);
         String sourceTargetInfo = WebTemplates.getForm(velocityContext, WebTemplates.SOURCE_TARGET_INFO_SCRIPT);
         StringBuilder sb = topAndSide ("Data Source Summary for " + scrCode, httpServletRequest);
         sb.append(sourceTargetInfo);
@@ -180,7 +193,14 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
             @QueryParam(WsUriConstants.LENS_URI) String lensUri,
             @Context HttpServletRequest httpServletRequest) throws BridgeDBException {
         if (logger.isDebugEnabled()){
-            logger.debug("getMappingSetInfosHtml called with " + scrCode);
+            logger.debug("getMappingSetInfosHtml called with " + scrCode + " and " + targetCode);
+        }
+        if (scrCode == null || scrCode.isEmpty()){
+            return getSourceInfosHtml(lensUri, httpServletRequest, "Due to the size of your request only a summary by source is being shown");
+        }
+        if (targetCode == null || targetCode.isEmpty()){
+            return getSourceTargetInfosHtml(scrCode, lensUri, httpServletRequest, 
+                    "Due to the size of your request only a summary by target is being shown");
         }
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("MappingSetInfos", uriMapper.getMappingSetInfos(scrCode, targetCode, lensUri));
@@ -322,6 +342,10 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
 	}
     
+    /**
+     * Not longer works as it did not scale
+     * @deprecated Will now always throw an Exception
+     */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/" + WsUriConstants.GRAPHVIZ)

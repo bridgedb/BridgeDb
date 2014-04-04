@@ -35,7 +35,7 @@ import org.bridgedb.utils.BridgeDBException;
 import org.openrdf.model.impl.URIImpl;
 
 /**
- *
+ * @deprecated Take to long with lots of data
  * @author Christian
  */
 public class MappingSetTableMaker implements Comparator<MappingSetInfo>{
