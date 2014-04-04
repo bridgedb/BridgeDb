@@ -1073,7 +1073,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     }
 
     @Override
-    public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode,String lensUri) throws BridgeDBException {
+    public List<MappingSetInfo> getMappingSetInfos(String sourceSysCode, String targetSysCode, String lensUri) throws BridgeDBException {
+        if (sourceSysCode == null || sourceSysCode.isEmpty()){
+            throw new BridgeDBException ("MappingSetInfos is no longer supported with supplying a sourceSysCOde due to data size.");
+        }
+        if (targetSysCode == null || targetSysCode.isEmpty()){
+            throw new BridgeDBException ("MappingSetInfos is no longer supported with supplying a targetSysCode due to data size.");
+        }
         StringBuilder query = new StringBuilder("select *");
         query.append(" FROM ");
         query.append(MAPPING_SET_TABLE_NAME);
@@ -1105,7 +1111,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(") AS links FROM ");
         query.append(MAPPING_SET_TABLE_NAME);
         appendLensClause(query, lensUri, false);   
-        query.append("GROUP BY ");
+        query.append(" GROUP BY ");
         query.append(SOURCE_DATASOURCE_COLUMN_NAME);        
         Statement statement = this.createStatement();
         ResultSet rs = null;
@@ -1135,7 +1141,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(SOURCE_DATASOURCE_COLUMN_NAME); 
         query.append(" = ? ");
         appendLensClause(query, lensUri, true);   
-        query.append("GROUP BY ");
+        query.append(" GROUP BY ");
         query.append(TARGET_DATASOURCE_COLUMN_NAME); 
         PreparedStatement statement = createPreparedStatement(query.toString());
         ResultSet rs = null;

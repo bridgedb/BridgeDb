@@ -183,8 +183,8 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     @Test
     public void testGetMappingSetInfos() throws BridgeDBException {
         report("GetMappingSetInfo All");
-        List<MappingSetInfo> results = uriMapper.getMappingSetInfos(null, null, Lens.DEFAULT_LENS_NAME);
-        assertThat (results.size(), greaterThanOrEqualTo(6));
+        List<MappingSetInfo> results = uriMapper.getMappingSetInfos(DataSource2.getSystemCode(), DataSource1.getSystemCode(), Lens.DEFAULT_LENS_NAME);
+        assertThat (results.size(), greaterThanOrEqualTo(1));
     }
 
     @Test
@@ -200,27 +200,6 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     }
 
     @Test
-    public void testGetMappingSetInfosByTarget() throws BridgeDBException {
-        report("GetMappingSetInfos target");
-        List<MappingSetInfo> results = 
-                uriMapper.getMappingSetInfos(null, DataSource3.getSystemCode(), Lens.DEFAULT_LENS_NAME);
-        assertThat (results.size(), greaterThanOrEqualTo(2));
-        for (MappingSetInfo info:results){
-            assertEquals(DataSource3.getSystemCode(), info.getTarget().getSysCode());
-        }
-    }
-    @Test
-    public void testGetMappingSetInfosBySource() throws BridgeDBException {
-        report("GetMappingSetInfos source");
-        List<MappingSetInfo> results = 
-                uriMapper.getMappingSetInfos(DataSource1.getSystemCode(), null, Lens.DEFAULT_LENS_NAME);
-        assertThat (results.size(), greaterThanOrEqualTo(2));
-        for (MappingSetInfo info:results){
-            assertEquals(DataSource1.getSystemCode(), info.getSource().getSysCode());
-        }
-    }
-    
-    @Test
     public void testGetSourceInfos() throws BridgeDBException {
         report("GetSourceInfos");
         List<SourceInfo> results = uriMapper.getSourceInfos(Lens.DEFAULT_LENS_NAME);
@@ -231,6 +210,20 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
     public void testGetSourceTargetInfos() throws BridgeDBException {
         report("GetSourceTargetInfos");
         List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource1.getSystemCode(), Lens.DEFAULT_LENS_NAME);
+        assertThat (results.size(), greaterThanOrEqualTo(2));
+    }
+
+    @Test
+    public void testGetSourceInfosAll() throws BridgeDBException {
+        report("GetSourceInfosAll");
+        List<SourceInfo> results = uriMapper.getSourceInfos(Lens.ALL_LENS_NAME);
+        assertThat (results.size(), greaterThanOrEqualTo(3));
+    }
+
+    @Test
+    public void testGetSourceTargetInfosAll() throws BridgeDBException {
+        report("GetSourceTargetInfosAll");
+        List<SourceTargetInfo> results = uriMapper.getSourceTargetInfos(DataSource1.getSystemCode(), Lens.ALL_LENS_NAME);
         assertThat (results.size(), greaterThanOrEqualTo(2));
     }
 
