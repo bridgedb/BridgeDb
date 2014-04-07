@@ -174,6 +174,10 @@ public class WSAPI extends WSUriInterfaceService {
         describe_IDMapperCapabilities(sb, contextPath, sourceXref1, tragetSysCode1, keys, freeSearchSupported);
         describe_UriMapper(sb, contextPath, sourceXref1, tragetSysCode1, sourceUri1, sourceXref2, sourceUri2, 1, targetUriSpace2, 
                 text1, 1, sourceSysCode1, freeSearchSupported);
+//       dddd;
+        sb.append("<h2>Support methods");
+        describe_SourceInfos(sb, contextPath);
+        describe_SourceTargetInfos(sb, contextPath, sourceSysCode1);
         describe_MappingSet(sb, contextPath, sourceXref1, sourceSysCode1, tragetSysCode1);
         describe_Graphviz(sb, contextPath);   
         describe_Lens(sb, contextPath);
@@ -687,11 +691,7 @@ public class WSAPI extends WSUriInterfaceService {
             appendXmlJson(sb); 
             sb.append("<li>Required arguements: (One of each)</li>");
                 sb.append("<ul>");
-                sb.append("<li><a href=\"#");
-                        sb.append(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
-                        sb.append("\">");
-                        sb.append(WsConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
-                        sb.append("</a></li> ");
+                parameterSourceCode(sb);
                 parameterTargetCode(sb);
                 sb.append("</ul>");
             sb.append("<li>Example: <a href=\"");
@@ -1026,17 +1026,29 @@ public class WSAPI extends WSUriInterfaceService {
        
     private final void introduce_Info(StringBuilder sb) {
         sb.append("<dt><a href=\"#");
-                sb.append(SetMappings.METHOD_NAME);
+                sb.append(WsUriConstants.SOURCE_INFOS);
                 sb.append("\">");
-                sb.append(SetMappings.METHOD_NAME);
+                sb.append(WsUriConstants.SOURCE_INFOS);
                 sb.append("</a></dt>");
-        sb.append("<dd>Brings up a table of all the mappings in the system by URISpace</dd>");
+        sb.append("<dd>Brings up a table of all the Sources in the system.</dd>");
         sb.append("<dt><a href=\"#");
-                sb.append(WsUriConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
                 sb.append("\">");
-                sb.append(WsUriConstants.GRAPHVIZ);
+                sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
                 sb.append("</a></dt>");
-        sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>\n");           
+        sb.append("<dd>Brings up a table of all the Targets for a particular Source.</dd>");
+        sb.append("<dt><a href=\"#");
+                sb.append(SetMappings.METHOD_NAME);
+                sb.append("\">");
+                sb.append(SetMappings.METHOD_NAME);
+                sb.append("</a></dt>");
+        sb.append("<dd>Brings up a table of all the mappings in the system for a particular Source and Target.</dd>");
+        //sb.append("<dt><a href=\"#");
+        //        sb.append(WsUriConstants.GRAPHVIZ);
+        //        sb.append("\">");
+        //        sb.append(WsUriConstants.GRAPHVIZ);
+        //        sb.append("</a></dt>");
+        //sb.append("<dd>Brings up the getMappingInfo as graphviz input</dd>\n");           
         sb.append("<dt>");
                 lens(sb);
                 sb.append("</dt>");
@@ -1046,80 +1058,197 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("\">");
                 sb.append(Lens.METHOD_NAME + WsUriConstants.RDF);
                 sb.append("</a></dt>");
-        sb.append("<dd>Brings up the supported Lens in RDF format</dd>\n");           
+        sb.append("<ul>");
+            sb.append("<li>Brings up the supported Lens in RDF format</li>\n");           
+    }
+    
+    private final void describe_SourceInfos(StringBuilder sb, String contextPath) 
+            throws BridgeDBException, UnsupportedEncodingException {
+        sb.append("<h3><a name=\"#");
+            sb.append(WsUriConstants.SOURCE_INFOS);
+            sb.append("\">");
+            sb.append(WsUriConstants.SOURCE_INFOS);
+            sb.append("</a></dt>");
+        sb.append("<ul>");
+            sb.append("<li>Brings up a table of all the Sources in the system.</li>");
+             sb.append("<li>Optional arguments</li>");
+            sb.append("<ul>");
+                parameterLens(sb);
+            sb.append("</ul>");           
+            addSourceExample(sb, contextPath, "Default Lens", false, false); 
+            addSourceExample(sb, contextPath, "All Lens", false, true); 
+            //addSourceExample(sb, contextPath, "XML version", true, false); 
+        sb.append("</ul>");           
+    }
+   /*         sb.append("<dt><a href=\"#");
+                sb.append(WsUriConstants.SOURCE_INFOS);
+                sb.append("\">");
+                sb.append(WsUriConstants.SOURCE_INFOS);
+                sb.append("</a></dt>");
+        sb.append("<dd>Brings up a table of all the Sources in the system.</dd>");
+*/
+    
+    private void addSourceExample(StringBuilder sb, String contextPath, String exampleName, boolean xml, boolean lens) throws UnsupportedEncodingException{
+        sb.append("<li>Example (");
+        sb.append(exampleName);
+        sb.append("): <a href=\"");
+        sb.append(contextPath);
+        sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+        if (xml){
+            sb.append(WsUriConstants.XML);
+        }
+        if (lens){
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.ALL_LENS_NAME);                    
+        }
+        sb.append("\">");
+        sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+        if (xml){
+            sb.append(WsUriConstants.XML);
+        }
+        if (lens){
+            sb.append("?");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.ALL_LENS_NAME);                    
+        }
+        sb.append("</a></li>");    
+    }
+            
+    private final void describe_SourceTargetInfos(StringBuilder sb, String contextPath, String sourceSysCode) 
+            throws BridgeDBException, UnsupportedEncodingException {
+        sb.append("<h3><a name=\"#");
+            sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+            sb.append("\">");
+            sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+            sb.append("</a></dt>");
+        sb.append("<ul>");
+            sb.append("<li>Brings up a table of all the Targets for a particular Source.</li>");
+            sb.append("<li>Required arguement:</li>");
+            sb.append("<ul>");
+                parameterSourceCode(sb);
+            sb.append("</ul>");           
+            sb.append("<li>Optional arguments</li>");
+            sb.append("<ul>");
+                parameterLens(sb);
+            sb.append("</ul>");           
+            addSourceTargetExample(sb, contextPath, "Default Lens", false, false, sourceSysCode); 
+            addSourceTargetExample(sb, contextPath, "All Lens", false, true, sourceSysCode); 
+            //addSourceTargetExample(sb, contextPath, "XML version", true, false, sourceSysCode); 
+        sb.append("</ul>");           
+    }
+     
+    private void addSourceTargetExample(StringBuilder sb, String contextPath, String exampleName, boolean xml, boolean lens, String sourceSysCode) throws UnsupportedEncodingException{
+        sb.append("<li>Example (");
+        sb.append(exampleName);
+        sb.append("): <a href=\"");
+        sb.append(contextPath);
+        sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+        if (xml){
+            sb.append(WsUriConstants.XML);
+        }
+        sb.append(FIRST_SOURCE_PARAMETER);
+        sb.append(URLEncoder.encode(sourceSysCode, "UTF-8"));
+        if (lens){
+            sb.append("&");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.ALL_LENS_NAME);                    
+        }
+        sb.append("\">");
+        sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
+        if (xml){
+            sb.append(WsUriConstants.XML);
+        }
+        sb.append(FIRST_SOURCE_PARAMETER);
+        sb.append(sourceSysCode);
+        if (lens){
+            sb.append("&");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.ALL_LENS_NAME);                    
+        }
+        sb.append("</a></li>");    
     }
 
     private final void describe_MappingSet(StringBuilder sb, String contextPath, Xref first, String sourceSysCode, String targetSysCode) 
             throws BridgeDBException, UnsupportedEncodingException {
-        sb.append("<h2>Support methods");
         sb.append("<h3><a name=\"");
                 sb.append(SetMappings.METHOD_NAME);
                 sb.append("\">");
                 sb.append(SetMappings.METHOD_NAME);
                 sb.append("</h3>");
-                sb.append("<ul>");
-            sb.append("<li>Brings up a table/List of mappings in the system by URISpaces</li>");
+        sb.append("<ul>");
+            sb.append("<li>Brings up a table of all the mappings in the system for a particular Source and Target.</li>");
+            sb.append("<li>Or Brings up the information for one mapping.</li>");
             appendXmlJsonHtml(sb);
-            sb.append("<li>Optional arguments</li>");
-                sb.append("<ul>");
-                sb.append("<li><a href=\"#");
-                        sb.append(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
-                        sb.append("\">");
-                        sb.append(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
-                        sb.append("</a></li>");
-                parameterTargetCode(sb);
-                parameterLens(sb);
-                sb.append("</ul>");           
-            sb.append("<li>Example: <a href=\"");
-                    sb.append(contextPath);
-                    sb.append(SetMappings.METHOD_NAME);
-                    sb.append("\">");
-                    sb.append(SetMappings.METHOD_NAME);
-                    sb.append("</a></li>");    
-            sb.append("<li>Example (one Source): <a href=\"");
-                    sb.append(contextPath);
-                    sb.append(SetMappings.METHOD_NAME);
-                    sb.append(FIRST_SOURCE_PARAMETER);
-                    sb.append(URLEncoder.encode(sourceSysCode, "UTF-8"));
-                    sb.append(TARGET_PARAMETER);
-                    sb.append(URLEncoder.encode(targetSysCode, "UTF-8"));
-                    sb.append("\">");
-                    sb.append(SetMappings.METHOD_NAME);
-                    sb.append(FIRST_SOURCE_PARAMETER);
-                    sb.append(sourceSysCode);
-                    sb.append(TARGET_PARAMETER);
-                    sb.append(targetSysCode);
-                    sb.append("</a></li>");    
-            sb.append("<li>Example (one Lens): <a href=\"");
-                    sb.append(contextPath);
-                    sb.append(SetMappings.METHOD_NAME); 
-                    sb.append("?");
-                    sb.append(WsUriConstants.LENS_URI);
-                    sb.append("=");
-                    sb.append(URLEncoder.encode(Lens.DEFAULT_LENS_NAME, "UTF-8")); 
-                    sb.append("\">");
-                    sb.append(SetMappings.METHOD_NAME);
-                    sb.append("?");
-                    sb.append(WsUriConstants.LENS_URI);
-                    sb.append("=");
-                    sb.append(Lens.DEFAULT_LENS_NAME);                    
-                    sb.append("</a></li>");    
-            sb.append("<li>XML Example: <a href=\"");
-                    sb.append(contextPath);
-                    sb.append(SetMappings.METHOD_NAME);
-                    sb.append(WsUriConstants.XML);
-                    sb.append("\">");
-                    sb.append(SetMappings.METHOD_NAME);
-                    sb.append(WsUriConstants.XML);
-                    sb.append("</a></li>");    
-            sb.append("<li>Example (one Set): <a href=\"");
+            sb.append("<li>For a Single Mapping set append /Id.</li>");
+            sb.append("<ul>");
+                sb.append("<li>Example (one Set): <a href=\"");
                     sb.append(contextPath);
                     sb.append(SetMappings.METHOD_NAME);
                     sb.append("/1\">");
                     sb.append(SetMappings.METHOD_NAME);
                     sb.append("/1</a></li>");    
-            sb.append("</ul>\n");
+            sb.append("</ul>");
+            sb.append("<li>For a Summary table for a Source Target pair.</li>");
+            sb.append("<ul>");
+                sb.append("<li>Required arguements:</li>");
+                sb.append("<ul>");
+                    parameterSourceCode(sb);
+                    parameterTargetCode(sb);
+                    sb.append("<li>Note: These are required arguements Since April 2014 as this method did not scale well</li>");
+                sb.append("</ul>");           
+                sb.append("<li>Optional arguments</li>");
+                sb.append("<ul>");
+                    parameterLens(sb);
+                sb.append("</ul>");           
+                addMappingSetExample(sb, contextPath, "Default Lens", false, false, sourceSysCode, targetSysCode); 
+                addMappingSetExample(sb, contextPath, "All Lens", false, true, sourceSysCode, targetSysCode); 
+                addMappingSetExample(sb, contextPath, "XML version", true, false, sourceSysCode, targetSysCode); 
+                addMappingSetExample(sb, contextPath, "All Lens XML version", true, false, sourceSysCode, targetSysCode); 
+            sb.append("</ul>");
+        sb.append("</ul>\n");
     }  
+
+    private void addMappingSetExample(StringBuilder sb, String contextPath, String exampleName, boolean xml, boolean lens, String sourceSysCode, String targetSysCode) throws UnsupportedEncodingException{
+        sb.append("<li>Example (");
+        sb.append(exampleName);
+        sb.append("): <a href=\"");
+        sb.append(contextPath);
+        sb.append(SetMappings.METHOD_NAME);
+        if (xml){
+            sb.append(WsUriConstants.XML);
+        }
+        sb.append(FIRST_SOURCE_PARAMETER);
+        sb.append(URLEncoder.encode(sourceSysCode, "UTF-8"));
+        sb.append(TARGET_PARAMETER);
+        sb.append(URLEncoder.encode(targetSysCode, "UTF-8"));
+        if (lens){
+            sb.append("&");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.ALL_LENS_NAME);                    
+        }
+        sb.append("\">");
+        sb.append(SetMappings.METHOD_NAME);
+        if (xml){
+            sb.append(WsUriConstants.XML);
+        }
+        sb.append(FIRST_SOURCE_PARAMETER);
+        sb.append(sourceSysCode);
+        sb.append(TARGET_PARAMETER);
+        sb.append(targetSysCode);
+        if (lens){
+            sb.append("&");
+            sb.append(WsUriConstants.LENS_URI);
+            sb.append("=");
+            sb.append(Lens.ALL_LENS_NAME);                    
+        }
+        sb.append("</a></li>");    
+    }
             
     private final void describe_Graphviz(StringBuilder sb, String contextPath) throws BridgeDBException, UnsupportedEncodingException {
         sb.append("<h3><a name=\"");
@@ -1258,6 +1387,14 @@ public class WSAPI extends WSUriInterfaceService {
             sb.append("\">");
             sb.append(WsConstants.DATASOURCE_SYSTEM_CODE);
             sb.append("</a></li>");
+    }
+    
+    private void parameterSourceCode(StringBuilder sb){
+        sb.append("<li><a href=\"#");
+        sb.append(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+        sb.append("\">");
+        sb.append(WsUriConstants.SOURCE_DATASOURCE_SYSTEM_CODE);
+        sb.append("</a></li>");
     }
     
     private void parameterTargetCode(StringBuilder sb){
