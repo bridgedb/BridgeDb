@@ -73,12 +73,13 @@ public class UriResultsAsRDF {
             statements.addAll(more);          
         }
         for (UriMapping mapping:mappingsBySet.getMappings()){
-            if (!mapping.getSourceUri().equals(mapping.getTargetUri())){
+            //Inclusion of mapping to self at Antonis request April 2014
+            //if (!mapping.getSourceUri().equals(mapping.getTargetUri())){
                 URI sourceURI = toURI(mapping.getSourceUri());
                 URI targetURI = toURI(mapping.getTargetUri());
                 Statement statement =  new StatementImpl(sourceURI, OWLConstants.SAMEAS_URI, targetURI);
                 statements.add(statement);
-            }
+            //}
         }
 
        return statements;
