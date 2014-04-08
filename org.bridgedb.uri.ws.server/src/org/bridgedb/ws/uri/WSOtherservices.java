@@ -146,7 +146,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         velocityContext.put("dataSource", ds);
         velocityContext.put("id", "$id");
         velocityContext.put("Patterns", uriPatterns);
-        String dataSourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.DATA_SET_SCRIPT);
+        String dataSourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.DATA_SOURCE_SCRIPT);
         StringBuilder sb = topAndSide ("Data Source " + id + " Summary", httpServletRequest);
         sb.append(dataSourceInfo);
         footerAndEnd(sb);
