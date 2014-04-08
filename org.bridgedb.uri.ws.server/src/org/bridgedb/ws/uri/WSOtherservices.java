@@ -144,6 +144,7 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         Set<String> uriPatterns = uriMapper.getUriPatterns(id);
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("dataSource", ds);
+        velocityContext.put("id", "$id");
         velocityContext.put("Patterns", uriPatterns);
         String dataSourceInfo = WebTemplates.getForm(velocityContext, WebTemplates.DATA_SET_SCRIPT);
         StringBuilder sb = topAndSide ("Data Source " + id + " Summary", httpServletRequest);
@@ -324,6 +325,13 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }*/
     
+    /**
+     * @deprecated 
+     * @param sb
+     * @param mappingSetInfos
+     * @param httpServletRequest
+     * @throws BridgeDBException 
+     */
     protected void addMappingTable(StringBuilder sb, List<MappingSetInfo> mappingSetInfos, HttpServletRequest httpServletRequest) 
             throws BridgeDBException{
         MappingSetTableMaker maker = new MappingSetTableMaker(mappingSetInfos, httpServletRequest);

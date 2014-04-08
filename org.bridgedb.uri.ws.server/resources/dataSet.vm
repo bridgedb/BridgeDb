@@ -4,17 +4,21 @@
         <dd>$dataSource.getFullName()</dd>
     <dt>sysCode</dt>
         <dd>$dataSource.getSystemCode()</dd>
+    #set ($uriPattern = $dataSource.getKnownUrl($id))
     <dt>primary UriPattern</dt>
-        <dd>$dataSource.getKnownUrl($id)</dd>
+        <dd>$uriPattern</dd>
+    #set ($identifiersOrgUri = $dataSource.getIdentifiersOrgUri($id))
+    #if ($identifiersOrgUri)
+        <dt>Identifiers.Org Uri Pattern</dt>
+            <dd>$identifiersOrgUri</dd>
+    #end
     #foreach ( $pattern in $Patterns)
-        #if ($pattern != $dataSource.getKnownUrl($id))
+        #if ($pattern == $uriPattern)
+        #elseif ($pattern == $identifiersOrgUri)
+        #else
             <dt>URI Pattern</dt>
                 <dd>$pattern</dd>
         #end
-    #end
-    #if ($dataSource.getIdentifiersOrgUri($id))
-        <dt>Identifiers.Org Uri PAttern</dt>
-            <dd>$dataSource.getIdentifiersOrgUri($id)</dd>
     #end
     <dt>idExample</dt>
         <dd>$dataSource.getExample().getId()</dd>

@@ -1064,7 +1064,7 @@ public class WSAPI extends WSUriInterfaceService {
     
     private final void describe_SourceInfos(StringBuilder sb, String contextPath) 
             throws BridgeDBException, UnsupportedEncodingException {
-        sb.append("<h3><a name=\"#");
+        sb.append("<h3><a name=\"");
             sb.append(WsUriConstants.SOURCE_INFOS);
             sb.append("\">");
             sb.append(WsUriConstants.SOURCE_INFOS);
@@ -1119,7 +1119,7 @@ public class WSAPI extends WSUriInterfaceService {
             
     private final void describe_SourceTargetInfos(StringBuilder sb, String contextPath, String sourceSysCode) 
             throws BridgeDBException, UnsupportedEncodingException {
-        sb.append("<h3><a name=\"#");
+        sb.append("<h3><a name=\"");
             sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
             sb.append("\">");
             sb.append(WsUriConstants.SOURCE_TARGET_INFOS);
@@ -1256,25 +1256,26 @@ public class WSAPI extends WSUriInterfaceService {
                 sb.append("\">");
                 sb.append(WsUriConstants.GRAPHVIZ);
                 sb.append("</h3>");
-            sb.append("<ul>");
-            sb.append("<li>Brings up the getMappingInfo as graphviz input.</li>");
-            sb.append("<li>This method is underdevelopment. Formatting suggestions from Graphviz exports highly welcome.</li>");
-            sb.append("<li>This output can then used to create an image of the URISpaces mapped.</li>");
-                sb.append("<ul>");
-                sb.append("<li>Requires graphviz to be installed on your machine</li>");
-                sb.append("<li>Save the output in a file. (ex imsMappings.dot)</li>");
-                sb.append("<li>Call graphviz (ex dot -Tgif imsMappings.dot -o imsMappings.gif)</li>");
-                sb.append("<li>Open output in your favourite viewer</li>");
-                sb.append("</ul>");
-            sb.append("<li>This method is only for media type HTML. But output is plain text.</li>");
-            sb.append("<li>No arguements</li>");
-            sb.append("<li>Example: <a href=\"");
-                    sb.append(contextPath);
-                sb.append(WsUriConstants.GRAPHVIZ);
-                sb.append("\">");
-                sb.append(WsUriConstants.GRAPHVIZ);
-                sb.append("</a></li>");    
-            sb.append("</ul>\n");        
+            sb.append("<h4>This method will now always throw an Exception! It did not scale.</h4>");  
+            //sb.append("<ul>");
+            //sb.append("<li>Brings up the getMappingInfo as graphviz input.</li>");
+            //sb.append("<li>This method is underdevelopment. Formatting suggestions from Graphviz exports highly welcome.</li>");
+            //sb.append("<li>This output can then used to create an image of the URISpaces mapped.</li>");
+            //    sb.append("<ul>");
+            //    sb.append("<li>Requires graphviz to be installed on your machine</li>");
+            //    sb.append("<li>Save the output in a file. (ex imsMappings.dot)</li>");
+            //    sb.append("<li>Call graphviz (ex dot -Tgif imsMappings.dot -o imsMappings.gif)</li>");
+            //    sb.append("<li>Open output in your favourite viewer</li>");
+            //    sb.append("</ul>");
+            //sb.append("<li>This method is only for media type HTML. But output is plain text.</li>");
+            //sb.append("<li>No arguements</li>");
+            //sb.append("<li>Example: <a href=\"");
+            //        sb.append(contextPath);
+            //    sb.append(WsUriConstants.GRAPHVIZ);
+            //    sb.append("\">");
+            //    sb.append(WsUriConstants.GRAPHVIZ);
+            //    sb.append("</a></li>");    
+            //sb.append("</ul>\n");        
     }
    
     private void describe_dataSource(StringBuilder sb, String contextPath, String sysCode) 

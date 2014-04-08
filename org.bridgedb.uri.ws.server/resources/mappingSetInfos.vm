@@ -40,20 +40,20 @@
                 <tr>
                     <td><a href="$contextPath/mappingSet/$mappingSetInfo.getIntId()">$mappingSetInfo.getIntId()</a></td>
                     <td>$mappingSetInfo.getNumberOfLinks()</td>
-                    <td><a href="$mappingSetInfo.getMappingResource()">$mappingSetInfo.resourceLocalName()</td>
-                    <td><a href="$mappingSetInfo.getMappingSource()">$mappingSetInfo.sourceLocalName()</td>
+                    <td><a href="$mappingSetInfo.getMappingResource()">$mappingSetInfo.resourceLocalName()</a></td>
+                    <td><a href="$mappingSetInfo.getMappingSource()">$mappingSetInfo.sourceLocalName()</a></td>
                     <td>$mappingSetInfo.getNumberOfSources()</td>
                     <td>$mappingSetInfo.getNumberOfTargets()</td>
-                    <td><a href="$mappingSetInfo.getPredicate()">$mappingSetInfo.predicateLocalName()</td>
-                    <td><a href="$mappingSetInfo.getJustification()">$mappingSetInfo.justificationLocalName()</td>
+                    <td><a href="$mappingSetInfo.getPredicate()">$mappingSetInfo.predicateLocalName()</a></td>
+                    <td><a href="$mappingSetInfo.getJustification()">$mappingSetInfo.justificationLocalName()</a></td>
                     <td>
-                        #foreach ($dataSetInfo $mappingSetInfo.getViaDataSets())
-                            <a href="$contextPath/dataSource/$dataSetInfo.getSysCode()">$dataSetInfo.getFullName()</a></td>
+                        #foreach ($dataSetInfo in $mappingSetInfo.getViaDataSets())
+                            <a href="$contextPath/dataSource/$dataSetInfo.getSysCode()">$dataSetInfo.getFullName()</a>
                         #end
                     </td>
                     <td>
-                        #foreach ($chainId $mappingSetInfo.getChainIds())
-                            <td><a href="$contextPath/mappingSet/$chainId">$chainId</a></td>
+                        #foreach ($chainId in $mappingSetInfo.getChainIds())
+                            <a href="$contextPath/mappingSet/$chainId">$chainId</a>
                         #end
                     </td>
                 </tr>
