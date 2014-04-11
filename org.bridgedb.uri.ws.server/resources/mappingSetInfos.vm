@@ -11,8 +11,8 @@
         </p>
     #else
         <h2>Mapping Data for 
-            Source $MappingSetInfos.get(0).getSource().getFullName() and 
-            Target $MappingSetInfos.get(0).getTarget().getFullName() 
+            Source <a href="$contextPath/dataSource/$MappingSetInfos.get(0).getSource().getSysCode()">$MappingSetInfos.get(0).getSource().getFullName()</a>
+            Target <a href="$contextPath/dataSource/$MappingSetInfos.get(0).getTarget().getSysCode()">$MappingSetInfos.get(0).getTarget().getFullName()</a>
             #if ($lens)
                 with Lens $lens
             #end    

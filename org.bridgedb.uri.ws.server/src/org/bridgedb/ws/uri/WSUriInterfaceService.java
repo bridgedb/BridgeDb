@@ -803,18 +803,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
     }
 
     @GET
-    @Produces({MediaType.TEXT_HTML})
-    @Path("/" + SetMappings.METHOD_NAME + "/{id}")
-    public Response getMappingSetInfo(@PathParam("id") String idString,
-            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {  
-        MappingSetInfoBean bean = getMappingSetInfoInner(idString);
-        if (noConentOnEmpty & bean.isEmpty()){
-            return noContentWrapper(httpServletRequest);
-        } 
-        return Response.ok(bean, MediaType.APPLICATION_XML_TYPE).build();
-    }
-    
-    @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
     @Path("/" + WsUriConstants.DATA_SOURCE)
     public Response getDataSource() throws BridgeDBException {

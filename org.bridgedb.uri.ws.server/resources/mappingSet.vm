@@ -1,0 +1,38 @@
+<h2>Mapping Set $mappingSetInfo.getIntId()</h2>
+<dl>
+    <dt>ID</dt>
+        <dd>$mappingSetInfo.getIntId()</dd>
+
+    <dt>Source</dt>
+        <dd><a href="$contextPath/dataSource/$mappingSetInfo.getSource().getSysCode()">$mappingSetInfo.getSource().getFullName()</a></dd>
+    <dt>Target</dt>
+        <dd><a href="$contextPath/dataSource/$mappingSetInfo.getTarget().getSysCode()">$mappingSetInfo.getTarget().getFullName()</a></dd>
+    <dt>Number of Links</dt>
+        <dd>$mappingSetInfo.getNumberOfLinks()</dd>
+    <dt>Predicate</dt>
+        <dd><a href="$mappingSetInfo.getPredicate()">$mappingSetInfo.predicateLocalName()</a></dd>
+    <dt>Justification</dt>
+        <dd><a href="$mappingSetInfo.getJustification()">$mappingSetInfo.justificationLocalName()</a></dd>
+    <dt>Mapping Resource</dt>
+        <dd><a href="$mappingSetInfo.getMappingResource()">$mappingSetInfo.resourceLocalName()</a></dd>
+    <dt>Mapping Source</dt>
+        <dd><a href="$mappingSetInfo.getMappingSource()">$mappingSetInfo.sourceLocalName()</a></dd>
+    <dt>Number of Distinct Source URIs</dt>
+        <dd>$mappingSetInfo.getNumberOfSources()</dd>
+    <dt>Number of Distinct Target URIs</dt>
+        <dd>$mappingSetInfo.getNumberOfTargets()</dd>      
+    <dt>Via Data Sets</dt>
+        <dd><ul>
+            #foreach ($dataSetInfo in $mappingSetInfo.getViaDataSets())
+                <li><a href="$contextPath/dataSource/$dataSetInfo.getSysCode()">$dataSetInfo.getFullName()</a></li>
+            #end
+        </ul></dd>
+    <dt>Via Mapping Sets</dt>
+        <dd><ul>
+            #foreach ($chainId in $mappingSetInfo.getChainIds())
+                <li><a href="$contextPath/mappingSet/$chainId">$chainId</a></li>
+            #end
+        </ul></dd>
+</dl>
+
+

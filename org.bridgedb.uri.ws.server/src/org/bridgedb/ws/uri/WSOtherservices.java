@@ -238,6 +238,28 @@ public class WSOtherservices extends WSAPI implements ServletContextListener {
         return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
     }
 
+    @GET
+    @Produces({MediaType.TEXT_HTML})
+    @Path("/" + SetMappings.METHOD_NAME + "/{id}")
+    public Response getMappingSetInfo(@PathParam("id") String idString,
+            @Context HttpServletRequest httpServletRequest) throws BridgeDBException {  
+        if (idString == null) {
+            throw new BridgeDBException("Path parameter missing.");
+        }
+        if (idString.isEmpty()) {
+            throw new BridgeDBException("Path parameter may not be null.");
+        }
+        int id = Integer.parseInt(idString);
+        MappingSetInfo info = uriMapper.getMappingSetInfo(id);
+        VelocityContext velocityContext = new VelocityContext();
+        velocityContext.put("mappingSetInfo", info);
+        String mappingSetInfo = WebTemplates.getForm(velocityContext, WebTemplates.MAPPING_SET_SCRIPT);
+        StringBuilder sb = topAndSide ("Mapping Set " + id, httpServletRequest);
+        sb.append(mappingSetInfo);
+        footerAndEnd(sb);
+        return Response.ok(sb.toString(), MediaType.TEXT_HTML).build();
+    }
+    
     private String mapUriForm(boolean includeGraph, HttpServletRequest httpServletRequest) throws BridgeDBException{
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("targetUriPatterns", UriPattern.getUriPatterns());
