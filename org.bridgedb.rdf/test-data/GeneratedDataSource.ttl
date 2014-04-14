@@ -335,7 +335,7 @@ bridgeDB:DataSource_DrugBank a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/drugbank/$id> ;
 	bridgeDB:hasRegexPattern "^DB\\d{5}$" ;
 	dcterms:alternative "DrugBank" ;
-	bridgeDB:hasUriPattern <http://bio2rdf.org/drugbank:$id> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/$id> .
+	bridgeDB:hasUriPattern <http://bio2rdf.org/drugbank:$id> , <http://drugbank.ca/drugs/$id> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/$id> .
 
 bridgeDB:DataSource_Dugbank_Enzymes a bridgeDB:DataSource ;
 	bridgeDB:fullName "Dugbank Enzymes" ;
@@ -2354,6 +2354,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://dip.doe-mbi.ucla.edu/dip/DIPview.cgi?ID=" .
+
+<http://drugbank.ca/drugs/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://drugbank.ca/drugs/" .
 
 <http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=" .

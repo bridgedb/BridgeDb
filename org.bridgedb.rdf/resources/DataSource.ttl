@@ -270,6 +270,7 @@ bridgeDB:DataSource_drugbankDrugs a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <http://www.drugbank.ca/drugs/$id> ;
+	bridgeDB:hasUriPattern <http://drugbank.ca/drugs/$id> ;
 	bridgeDB:hasUriPattern <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/drugbank:$id> .
