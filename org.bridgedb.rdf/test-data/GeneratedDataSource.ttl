@@ -349,7 +349,7 @@ bridgeDB:DataSource_Dugbank_Target a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.drugbank.ca/molecules/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank.target/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/drugbank.target/$id> ;
-	bridgeDB:hasUriPattern <http://www.drugbank.ca/molecules/$id?as=target> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
+	bridgeDB:hasUriPattern <http://drugbank.ca/molecules/$id> , <http://drugbank.ca/molecules/$id?as=target> , <http://www.drugbank.ca/molecules/$id?as=target> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
 
 bridgeDB:DataSource_EcoCyc a bridgeDB:DataSource ;
 	bridgeDB:fullName "EcoCyc" ;
@@ -2350,6 +2350,13 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://drugbank.ca/drugs/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://drugbank.ca/drugs/" .
+
+<http://drugbank.ca/molecules/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://drugbank.ca/molecules/" .
+
+<http://drugbank.ca/molecules/$id?as=target> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://drugbank.ca/molecules/" ;
+	bridgeDB:hasPostfix "?as=target" .
 
 <http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=" .

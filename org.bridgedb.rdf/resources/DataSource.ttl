@@ -144,9 +144,8 @@ bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> ;
-	#WAS bridgeDB:systemCode "Chembl16Molecule" ;
-	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> .
+	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id>;
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> .
 
 bridgeDB:DataSource_Chembl_Id a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Id" ;
@@ -252,8 +251,10 @@ bridgeDB:DataSource_drugbankTarget a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www.drugbank.ca/molecules/$id> ;
-    bridgeDB:hasUriPattern <http://www.drugbank.ca/molecules/$id?as=target> ;
-    bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank.target/$id> ;
+        bridgeDB:hasUriPattern <http://www.drugbank.ca/molecules/$id?as=target> ;
+	bridgeDB:hasUriPattern <http://drugbank.ca/molecules/$id> ;
+        bridgeDB:hasUriPattern <http://drugbank.ca/molecules/$id?as=target> ;
+        bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank.target/$id> ;
 	bridgeDB:hasUriPattern <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
 
 bridgeDB:DataSource_drugbankDrugs a bridgeDB:DataSource ;
