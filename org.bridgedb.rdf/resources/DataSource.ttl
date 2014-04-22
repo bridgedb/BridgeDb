@@ -144,7 +144,9 @@ bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> ;
-	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> .
+	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> ;
+	#WAS bridgeDB:systemCode "Chembl16Molecule" ;
+	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> .
 
 bridgeDB:DataSource_Chembl_Id a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Id" ;
@@ -164,14 +166,6 @@ bridgeDB:DataSource_Chembl_Molecule a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> ;
 	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> ;
 	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/molecule/m$id> .
-
-bridgeDB:DataSource_Chembl_16_Molecule a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl 16 Molecule" ;
-	bridgeDB:systemCode "Chembl16Molecule" ;
-	bridgeDB:idExample "CHEMBL1625375" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> .
 
 bridgeDB:DataSource_Chembl_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Target" ;
