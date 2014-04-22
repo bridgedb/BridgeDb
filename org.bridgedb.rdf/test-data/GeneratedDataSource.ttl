@@ -182,14 +182,6 @@ bridgeDB:CodeMapper_ChEBI a bridgeDB:CodeMapper ;
 	bridgeDB:xrefPrefix "CHEBI:" ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/chebi:$id> , <http://purl.obolibrary.org/obo/CHEBI_$id> , <http://purl.org/obo/owl/CHEBI#CHEBI_$id> .
 
-bridgeDB:DataSource_Chembl_16_Molecule a bridgeDB:DataSource ;
-	bridgeDB:fullName "Chembl 16 Molecule" ;
-	bridgeDB:systemCode "Chembl16Molecule" ;
-	bridgeDB:idExample "CHEMBL1625375" ;
-	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
-	bridgeDB:type "unknown" ;
-	bridgeDB:hasUrlPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> .
-
 bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:fullName "ChEMBL compound" ;
 	bridgeDB:systemCode "ChEMBLCompound" ;
@@ -199,7 +191,8 @@ bridgeDB:DataSource_ChEMBL_compound a bridgeDB:DataSource ;
 	bridgeDB:type "metabolite" ;
 	bridgeDB:hasUrlPattern <https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/chembl.compound/$id> ;
-	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/chembl.compound/$id> .
+	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/chembl.compound/$id> ;
+	bridgeDB:hasUriPattern <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> .
 
 bridgeDB:DataSource_Chembl_Id a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Id" ;
@@ -356,7 +349,7 @@ bridgeDB:DataSource_Dugbank_Target a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.drugbank.ca/molecules/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank.target/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/drugbank.target/$id> ;
-	bridgeDB:hasUriPattern <http://www.drugbank.ca/molecules/$id?as=target> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
+	bridgeDB:hasUriPattern <http://drugbank.ca/molecules/$id> , <http://drugbank.ca/molecules/$id?as=target> , <http://www.drugbank.ca/molecules/$id?as=target> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
 
 bridgeDB:DataSource_EcoCyc a bridgeDB:DataSource ;
 	bridgeDB:fullName "EcoCyc" ;
@@ -2357,6 +2350,13 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://drugbank.ca/drugs/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://drugbank.ca/drugs/" .
+
+<http://drugbank.ca/molecules/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://drugbank.ca/molecules/" .
+
+<http://drugbank.ca/molecules/$id?as=target> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://drugbank.ca/molecules/" ;
+	bridgeDB:hasPostfix "?as=target" .
 
 <http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=" .
