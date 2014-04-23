@@ -244,7 +244,7 @@ bridgeDB:DataSource_dbSNP a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/dbsnp/$id> .
 
 bridgeDB:DataSource_drugbankTarget a bridgeDB:DataSource ;
-	bridgeDB:fullName "Dugbank Target" ;
+	bridgeDB:fullName "Drugbank Target" ;
 	bridgeDB:systemCode "drugbankTarget" ;
 	bridgeDB:idExample "6511" ;
 	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
@@ -271,7 +271,7 @@ bridgeDB:DataSource_drugbankDrugs a bridgeDB:DataSource ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/drugbank:$id> .
 
 bridgeDB:DataSource_drugbankEnzyme a bridgeDB:DataSource ;
-	bridgeDB:fullName "Dugbank Enzymes" ;
+	bridgeDB:fullName "Drugbank Enzymes" ;
 	bridgeDB:systemCode "drugbankEnzymes" ;
 	bridgeDB:idExample "1" ;
 	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
