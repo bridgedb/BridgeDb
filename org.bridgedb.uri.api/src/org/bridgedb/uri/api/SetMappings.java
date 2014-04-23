@@ -38,7 +38,7 @@ public class SetMappings {
     
     public static final String METHOD_NAME = "mappingSet";
     public static final String URI_PREFIX = "/" + METHOD_NAME + "/";
-    public static final String HAS_LENS = "http:www.bridgedb.org/rdf/fulfillsLens" ;
+    public static final String HAS_LENS = "http://www.bridgedb.org/rdf/fulfillsLens" ;
     
     public SetMappings(int id, String predicate, String justification, String mappingSource, String mappingResource){
         this.id = id;
