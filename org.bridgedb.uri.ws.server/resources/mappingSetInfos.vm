@@ -14,14 +14,14 @@
             Source <a href="$contextPath/dataSource/$MappingSetInfos.get(0).getSource().getSysCode()">$MappingSetInfos.get(0).getSource().getFullName()</a>
             Target <a href="$contextPath/dataSource/$MappingSetInfos.get(0).getTarget().getSysCode()">$MappingSetInfos.get(0).getTarget().getFullName()</a>
             #if ($lens)
-                with Lens $lens
+                using Lens $lens
             #end    
         </h2>
         #if ($message)
             <p>$message</p>
         #end
-        <p><a href="$contextPath/SourceInfos">Up to Summary of all sources</a>
-        <br/><a href="$contextPath/SourceTargetInfos?sourceCode=$MappingSetInfos.get(0).getSource().getSysCode()">
+        <p><a href="$contextPath/SourceInfos#if($lens)?lensUri=$lens#end"">Up to Summary of all sources</a>
+        <br/><a href="$contextPath/SourceTargetInfos?sourceCode=$MappingSetInfos.get(0).getSource().getSysCode()#if($lens)&lensUri=$lens#end"">
             Up to Summary of Source $MappingSetInfos.get(0).getSource().getFullName()</a></p>
         <table border="1" >
             <tr>

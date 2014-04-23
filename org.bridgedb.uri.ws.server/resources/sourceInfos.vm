@@ -1,6 +1,6 @@
 <h2>Mapping Data Sources
     #if ($lens)
-        for Lens $lens
+        using Lens $lens
     #end    
     </h2>
 #if ($message)
@@ -30,7 +30,7 @@
             #foreach ( $sourceInfo in $SourceInfos)
                 <tr>
                     <td><a href="$contextPath/dataSource/$sourceInfo.getSource().getSysCode()">$sourceInfo.getSourceDataSourceName()</a></td>
-                    <td><a href="$contextPath/SourceTargetInfos?sourceCode=$sourceInfo.getSource().getSysCode()">$sourceInfo.getNumberOfTargets()</a></td>
+                    <td><a href="$contextPath/SourceTargetInfos?sourceCode=$sourceInfo.getSource().getSysCode()#if($lens)&lensUri=$lens#end">$sourceInfo.getNumberOfTargets()</a></td>
                     <td>$sourceInfo.getNumberOfLinksets()</td>
                     <td>$sourceInfo.getNumberOfLinks()</td>
                 </tr>

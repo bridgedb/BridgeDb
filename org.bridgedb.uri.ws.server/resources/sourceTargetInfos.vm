@@ -10,10 +10,7 @@
         Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
         </p>
     #else
-        <h2>Mapping Data Targets for Source $SourceTargetInfos.get(0).getSourceDataSourceName()
-            #if ($lens)
-                for Lens $lens
-            #end    
+        <h2>Mapping Data Targets for Source $SourceTargetInfos.get(0).getSourceDataSourceName()#if ($lens)using Lens $lens#end    
         </h2>
         #if ($message)
             <p>$message</p>
@@ -22,7 +19,7 @@
         <br/Click on Target Name for more information about the Target.
         <br/>Click on Linksets Count to Drill down.
         <br/>Note: Number of Links could include duplicates.
-        <br/><a href="$contextPath/SourceInfos">Up to Summary of all sources</a>
+        <br/><a href="$contextPath/SourceInfos#if($lens)?lensUri=$lens#end">Up to Summary of all sources</a>
         <table border="1" >
             <tr>
                 <th>Target</th>
@@ -32,7 +29,7 @@
             #foreach ( $sourceTargetInfo in $SourceTargetInfos)
                 <tr>
                     <td><a href="$contextPath/dataSource/$sourceTargetInfo.getTarget().getSysCode()">$sourceTargetInfo.getTargetDataSourceName()</a></td>
-                    <td><a href="$contextPath/mappingSet?sourceCode=$sourceTargetInfo.getSource().getSysCode()&targetCode=$sourceTargetInfo.getTarget().getSysCode()">
+                    <td><a href="$contextPath/mappingSet?sourceCode=$sourceTargetInfo.getSource().getSysCode()&targetCode=$sourceTargetInfo.getTarget().getSysCode()#if($lens)&lensUri=$lens#end">
                         $sourceTargetInfo.getNumberOfLinksets()</a></td>
                     <td>$sourceTargetInfo.getNumberOfLinks()</td>
                 </tr>
