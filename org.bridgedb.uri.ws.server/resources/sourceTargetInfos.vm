@@ -10,7 +10,10 @@
         Warning if accepts header is set to "application/xml" or "application/json" this methods returns status 204 if no results are found.
         </p>
     #else
-        <h2>Mapping Data Targets for Source $SourceTargetInfos.get(0).getSourceDataSourceName()#if ($lens)using Lens $lens#end    
+        <h2>Mapping Data Targets for Source $SourceTargetInfos.get(0).getSourceDataSourceName()
+            #if ($lens)
+                using Lens $lens
+            #end    
         </h2>
         #if ($message)
             <p>$message</p>
