@@ -330,8 +330,8 @@ bridgeDB:DataSource_DrugBank a bridgeDB:DataSource ;
 	dcterms:alternative "DrugBank" ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/drugbank:$id> , <http://drugbank.ca/drugs/$id> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugs/$id> .
 
-bridgeDB:DataSource_Dugbank_Enzymes a bridgeDB:DataSource ;
-	bridgeDB:fullName "Dugbank Enzymes" ;
+bridgeDB:DataSource_Drugbank_Enzymes a bridgeDB:DataSource ;
+	bridgeDB:fullName "Drugbank Enzymes" ;
 	bridgeDB:systemCode "drugbankEnzymes" ;
 	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
 	bridgeDB:idExample "1" ;
@@ -339,8 +339,8 @@ bridgeDB:DataSource_Dugbank_Enzymes a bridgeDB:DataSource ;
 	bridgeDB:type "unknown" ;
 	bridgeDB:hasUrlPattern <http://www4.wiwiss.fu-berlin.de/drugbank/resource/enzymes/$id> .
 
-bridgeDB:DataSource_Dugbank_Target a bridgeDB:DataSource ;
-	bridgeDB:fullName "Dugbank Target" ;
+bridgeDB:DataSource_Drugbank_Target a bridgeDB:DataSource ;
+	bridgeDB:fullName "Drugbank Target" ;
 	bridgeDB:systemCode "drugbankTarget" ;
 	bridgeDB:mainUrl "http://www.drugbank.ca/" ;
 	bridgeDB:idExample "6511" ;
