@@ -1266,6 +1266,22 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         targetUriPatterns.put(mappingSetId, targetUriPattern);
         return mappingSetId;
     }
+    
+    @Override
+    public int registerMappingSet(RegexUriPattern sourceUriPattern, String predicate, String forwardJustification, String backwardJustification, 
+            RegexUriPattern targetUriPattern, Resource mappingResource, Resource mappingSource) throws BridgeDBException {
+        checkUriPattern(sourceUriPattern);
+        checkUriPattern(targetUriPattern);
+        DataSource source = DataSource.getExistingBySystemCode(sourceUriPattern.getSysCode());
+        DataSource target = DataSource.getExistingBySystemCode(targetUriPattern.getSysCode());        
+        int mappingSetId = registerMappingSet(source, target, predicate, forwardJustification, mappingResource, mappingSource, 0);
+        int symetricId = registerMappingSet(target, source, predicate, backwardJustification, mappingResource, mappingSource, mappingSetId);
+        subjectUriPatterns.put(mappingSetId, sourceUriPattern);
+        targetUriPatterns.put(mappingSetId, targetUriPattern);
+        //Two linksets are NOT symmetric
+        return mappingSetId;
+    }
+      
 
     /**
      * One way registration of Mapping Set.
@@ -1742,7 +1758,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         try {
             while (rs.next()){
                 DataSetInfo sourceInfo = findDataSetInfo(rs.getString(SOURCE_DATASOURCE_COLUMN_NAME));
-                System.out.println(sourceInfo.getFullName());
                 results.add(new SourceInfo(sourceInfo, rs.getInt("targets"), rs.getInt("linksets"), rs.getInt("links")));
             }
         } catch (SQLException ex) {
@@ -2356,6 +2371,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
         throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
     }
-       
+ 
 }
  

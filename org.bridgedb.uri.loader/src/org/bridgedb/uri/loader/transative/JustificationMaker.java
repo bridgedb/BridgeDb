@@ -21,6 +21,7 @@ package org.bridgedb.uri.loader.transative;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.uri.loader.transative.constant.ChemInf;
 import org.bridgedb.uri.loader.transative.constant.OboConstants;
 import org.bridgedb.utils.BridgeDBException;
@@ -50,7 +51,7 @@ public class JustificationMaker {
     
     private static String CW_GENE_HACK = "http://example.com/ConceptWikiGene";
     private static String CW_PROTEIN_HACK = "http://example.com/ConceptWikiProtein";
-    
+
     public static String combine(String left, String right) throws BridgeDBException{
         String result = possibleCombine(left, right);
         if (result != null){
@@ -142,6 +143,18 @@ public class JustificationMaker {
                 return CW_PROTEIN_HACK;
             } else if (right.equals(ChemInf.PROTEIN_CODING_GENE)) {
                 return CW_PROTEIN_HACK;
+            } else {
+                return null;
+            }
+        } else if (left.equals(Lens.getTestJustifictaion())){
+            if (right.startsWith(Lens.getTestJustifictaion())){
+                return right;
+            } else {
+                return null;
+            }
+        } else if (left.startsWith(Lens.getTestJustifictaion())){
+            if (right.equals(Lens.getTestJustifictaion())){
+                return left;
             } else {
                 return null;
             }

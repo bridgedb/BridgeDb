@@ -81,7 +81,7 @@ public class TransativeCreatorTest {
     
     protected void loadFile(File file, String justification) throws BridgeDBException{
         Reporter.println("parsing " + file.getAbsolutePath());
-        int mappingSetId = instance.parse(file, linkPredicate, justification);
+        int mappingSetId = instance.parse(file, linkPredicate, justification, true);
         MappingSetInfo mapping = uriListener.getMappingSetInfo(mappingSetId);
         int numberOfLinks = mapping.getNumberOfLinks();
         assertThat(numberOfLinks, greaterThanOrEqualTo(3));      

@@ -31,7 +31,7 @@ public class SetupWithTestData {
     private void loadFile(String fileName, String justification) throws BridgeDBException{
         Reporter.println("parsing " + fileName);
         File file = new File(fileName);
-        int mappingSetId = instance.parse(file, linkPredicate, justification);
+        int mappingSetId = instance.parse(file, linkPredicate, justification, true);
         Reporter.println("       Loaded as mappingSet " + mappingSetId);
      }
     /**

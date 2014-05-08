@@ -50,6 +50,7 @@ import org.openrdf.rio.RDFHandlerException;
 public class TransativeFinderTest {
  
     SQLUriMapper mapper;
+    static final boolean SYMETRIC = true;
    
     @Before
     public void testLoader() throws BridgeDBException, IOException, OpenRDFException, FileNotFoundException {
@@ -75,21 +76,21 @@ public class TransativeFinderTest {
         UriPattern uriPattern = UriPattern.register(pattern, name, UriPatternType.dataSourceUriPattern);
     }
     
-    protected void load(String path) throws BridgeDBException{
+    protected void load(String path, boolean symetric) throws BridgeDBException{
         LinksetListener listener = new LinksetListener(mapper);
         File file = new File(path);
         URI predicate = new URIImpl("http://www.bridgedb.org/test#testPredicate");
         String justification = "http://www.bridgedb.org/test#justification1";
-        listener.parse(file, predicate, justification);
+        listener.parse(file, predicate, justification, symetric);
     }
     
     @Test
 	public void testFinder1() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder1");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToD.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToD.ttl",SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
@@ -100,10 +101,10 @@ public class TransativeFinderTest {
     @Test
  	public void testFinder2() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder2");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToD.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToD.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl",SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
@@ -114,10 +115,10 @@ public class TransativeFinderTest {
     @Test
  	public void testFinder3() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder3");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleCToD.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleCToD.ttl",SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         transativeFinder.UpdateTransative();
@@ -129,13 +130,13 @@ public class TransativeFinderTest {
     @Test
  	public void testFinder4() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder4");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleEToF.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleEToD.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleEToF.ttl",SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
-        load("../org.bridgedb.uri.loader/test-data/sampleCToD.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleCToD.ttl",SYMETRIC);
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         assertEquals(30, results.getNumberOfMappingSets());
@@ -145,8 +146,8 @@ public class TransativeFinderTest {
     @Test
  	public void testFinder5() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder5");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl", !SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
@@ -161,11 +162,11 @@ public class TransativeFinderTest {
     @Test
     public void testFinder6() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder6");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl",!SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
-        load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToC.ttl",SYMETRIC);
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         //A <-> B (2) / A <-> C (8)  / A -> A' (3) 
@@ -180,11 +181,11 @@ public class TransativeFinderTest {
     @Test
     public void testFinder7() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder7");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl",!SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
-        load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleBToC.ttl",SYMETRIC);
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);
         //A <-> B (2) / B <-> C (8) / A -> A' (3) 
@@ -200,9 +201,9 @@ public class TransativeFinderTest {
     @Ignore
  	public void testFinder8() throws BridgeDBException, RDFHandlerException, IOException {	
         Reporter.println("testFinder8");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl");
-        load("../org.bridgedb.uri.loader/test-data/sampleAToA_1.ttl");
+        load("../org.bridgedb.uri.loader/test-data/sampleAToB.ttl",SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToA.ttl",!SYMETRIC);
+        load("../org.bridgedb.uri.loader/test-data/sampleAToA_1.ttl",!SYMETRIC);
         TransativeFinder transativeFinder = new TransativeFinder();
         transativeFinder.UpdateTransative();
         OverallStatistics results = mapper.getOverallStatistics(Lens.ALL_LENS_NAME);

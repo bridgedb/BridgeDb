@@ -45,9 +45,10 @@ public class LinksetHandler extends RDFHandlerBase{
     boolean processingFirstStatement = true;
     private final URI linkPredicate;
     private final String justification;
+    private final String backwardJustification;
     private final Resource mappingResource;
     private final Resource mappingSource;
-    private Boolean symetric;
+    private boolean symetric;
     private final UriListener uriListener;
     private final Set<String> viaLabels;
     private final Set<Integer> chainedLinkSets;
@@ -56,10 +57,11 @@ public class LinksetHandler extends RDFHandlerBase{
     private int noneLinkStatements;
     
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource, Boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
+            Resource mappingSource, boolean symetric, Set<String> viaLabels, Set<Integer> chainedLinkSets){
         this.uriListener = uriListener;
         this.linkPredicate = linkPredicate;
         this.justification = justification;
+        this.backwardJustification = null;
         this.mappingResource = mappingResource;
         this.mappingSource = mappingSource;
         this.symetric = symetric;
@@ -67,9 +69,22 @@ public class LinksetHandler extends RDFHandlerBase{
         this.chainedLinkSets = chainedLinkSets;
     }
     
+    public LinksetHandler(UriListener uriListener, URI linkPredicate, String forwardJustification, String backwardJustification, 
+            Resource mappingResource, Resource mappingSource){
+        this.uriListener = uriListener;
+        this.linkPredicate = linkPredicate;
+        this.justification = forwardJustification;
+        this.backwardJustification = backwardJustification;
+        this.mappingResource = mappingResource;
+        this.mappingSource = mappingSource;
+        this.symetric = true;
+        this.viaLabels = null;
+        this.chainedLinkSets = null;
+    }
+
     public LinksetHandler(UriListener uriListener, URI linkPredicate, String justification, Resource mappingResource, 
-            Resource mappingSource){
-        this(uriListener, linkPredicate, justification, mappingResource, mappingSource, null, null, null);
+            Resource mappingSource, boolean symetric){
+        this(uriListener, linkPredicate, justification, mappingResource, mappingSource, symetric, null, null);
     }
 
     static final Logger logger = Logger.getLogger(LinksetHandler.class);
@@ -118,12 +133,18 @@ public class LinksetHandler extends RDFHandlerBase{
                 if (targetPattern == null){
                     throw new RDFHandlerException("Unable to get a pattern for " + object.stringValue());
                 }
-                if (symetric == null){
-                    //If symetric is undefined assume map to self is not symetric
-                    symetric = (!(sourcePattern.getSysCode().equals(targetPattern.getSysCode())));
-                }
-                mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, targetPattern, 
+                if (backwardJustification == null){
+                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, targetPattern, 
                         mappingResource, mappingSource, symetric, this.viaLabels, this.chainedLinkSets);
+                } else {
+                    mappingSet = uriListener.registerMappingSet(sourcePattern, linkPredicate.stringValue(), justification, backwardJustification, 
+                        targetPattern, mappingResource, mappingSource);
+                }
+//                if (symetric == null){
+//                    //If symetric is undefined assume map to self is not symetric
+//                    symetric = (!(sourcePattern.getSysCode().equals(targetPattern.getSysCode())));
+//                }
+                
             } catch (BridgeDBException ex) {
                 throw new RDFHandlerException("Error registering mappingset from " + st, ex);
             }

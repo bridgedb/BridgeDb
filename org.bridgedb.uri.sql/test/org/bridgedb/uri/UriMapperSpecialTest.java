@@ -34,6 +34,7 @@ import org.bridgedb.uri.lens.Lens;
 import org.bridgedb.utils.BridgeDBException;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -46,6 +47,16 @@ import org.junit.Test;
 public abstract class UriMapperSpecialTest extends UriListenerTest{
            
     public static  final String NULL_GRAPH = null;
+
+    @Test 
+    public void testMap2Way() throws BridgeDBException {
+        report("testMap2Way");
+        OverallStatistics stats1 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+        loadData2Way();
+        OverallStatistics stats2 = uriMapper.getOverallStatistics(Lens.ALL_LENS_NAME);
+        assertTrue(stats2.getNumberOfMappings() == stats1.getNumberOfMappings() + 6);
+        assertTrue(stats2.getNumberOfMappingSets() == stats1.getNumberOfMappingSets() + 2);
+    }
 
     @Test 
     public void testMapIDOneBad() {
