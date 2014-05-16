@@ -26,6 +26,14 @@ public interface GdbConstruct
 {
 
 	/**
+	 * Returns the most recent {@link Exception} caused by a {@link #addGene(Xref)},
+	 * {@link #addAttribute(Xref, String, String)}, or {@link #addLink(Xref, Xref)} call.
+	 * It returns null if no such recent call was made and if that
+	 * recent call returned <code>0</code>.
+	 */
+	public Exception recentException();
+	
+	/**
 	 * Add a biological entity to the database.
 	 * @param ref entity to add
 	 * @return 1 if addition was successful, 0 otherwise. 

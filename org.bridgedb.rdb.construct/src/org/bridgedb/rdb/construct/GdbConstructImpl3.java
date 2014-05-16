@@ -15,6 +15,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 	private final Connection con; //TODO: initialize
 	private final DBConnector dbConnector; //TODO
 	private String dbName; //TODO
+	private Exception recentException = null;
 	
 	public GdbConstructImpl3(String dbName, DBConnector dbConnector, int props) throws IDMapperException
 	{
@@ -43,6 +44,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 		dbConnector.closeConnection(con, DBConnector.PROP_FINALIZE);
 		String newDb = dbConnector.finalizeNewDatabase(dbName);
 		dbName = newDb;
+		recentException = null;
 	}
 
     private PreparedStatement pstGene = null;
@@ -52,6 +54,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 	/** {@inheritDoc} */
 	public int addGene(Xref ref)
 	{
+		recentException = null;
 		//TODO: bpText is unused
     	if (pstGene == null) throw new NullPointerException();
 		try 
@@ -62,6 +65,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 		} 
 		catch (SQLException e) 
 		{
+			recentException = e;
 			return 1;
 		}
 		return 0;
@@ -70,6 +74,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 	/** {@inheritDoc} */
     public int addAttribute(Xref ref, String attr, String val)
     {
+    	recentException = null;
     	try {
     		pstAttr.setString(1, attr);
 			pstAttr.setString(2, val);
@@ -77,6 +82,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 			pstAttr.setString(4, ref.getDataSource().getSystemCode());
 			pstAttr.executeUpdate();
 		} catch (SQLException e) {
+			recentException = e;
 			return 1;
 		}
 		return 0;
@@ -86,6 +92,7 @@ public class GdbConstructImpl3 implements GdbConstruct
     public int addLink(Xref left, Xref right) 
     {
     	if (pstLink == null) throw new NullPointerException();
+    	recentException = null;
     	try 
     	{
 			pstLink.setString(1, left.getId());
@@ -96,6 +103,7 @@ public class GdbConstructImpl3 implements GdbConstruct
 		} 
     	catch (SQLException e) 
 		{
+    		recentException = e;
 			return 1;
 		}
 		return 0;
@@ -306,6 +314,11 @@ public class GdbConstructImpl3 implements GdbConstruct
 		{
 			throw new IDMapperException (e);
 		}		
+	}
+
+	@Override
+	public Exception recentException() {
+		return recentException;
 	}
 
 }
