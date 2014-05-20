@@ -44,15 +44,17 @@ public class JustificationMaker {
             OboConstants.HAS_FUNCTIONAL_PARENT
             ));
 
+    private static final String CW_GENE_HACK = "http://example.com/ConceptWikiGene";
+    private static final String CW_PROTEIN_HACK = "http://example.com/ConceptWikiProtein";
+    private static final String ENEMBL_BASED_PROTIEN_GENE_HACK = "http://example.com/EnsemblBasedProteinGene";
+
     public static Set<String> CROSS_TYPE = new HashSet<String>(Arrays.asList(
             ChemInf.PROTEIN_CODING_GENE,
-            ChemInf.FUNCTIONAL_RNA_CODING_GENE
+            ChemInf.FUNCTIONAL_RNA_CODING_GENE,
+            ENEMBL_BASED_PROTIEN_GENE_HACK
             ));
     
-    private static String CW_GENE_HACK = "http://example.com/ConceptWikiGene";
-    private static String CW_PROTEIN_HACK = "http://example.com/ConceptWikiProtein";
-
-    public static String combine(String left, String right) throws BridgeDBException{
+   public static String combine(String left, String right) throws BridgeDBException{
         String result = possibleCombine(left, right);
         if (result != null){
             return result;
@@ -87,6 +89,8 @@ public class JustificationMaker {
                 return ChemInf.PROTEIN_CODING_GENE;
             } else if (right.equals(ChemInf.FUNCTIONAL_RNA_CODING_GENE)) {
                 return ChemInf.FUNCTIONAL_RNA_CODING_GENE;
+            } else if (right.equals(ENEMBL_BASED_PROTIEN_GENE_HACK)) {
+                return ENEMBL_BASED_PROTIEN_GENE_HACK;    
             } else {
                 return null;
             }
@@ -107,6 +111,8 @@ public class JustificationMaker {
                 return CW_GENE_HACK;
             } else if (right.equals(CW_PROTEIN_HACK)) {
                 return CW_PROTEIN_HACK;
+            } else if (right.equals(ENEMBL_BASED_PROTIEN_GENE_HACK)) {
+                return ENEMBL_BASED_PROTIEN_GENE_HACK;      
             } else {
                 return null;
             }
@@ -122,6 +128,16 @@ public class JustificationMaker {
             } else {
                 return null;
             }
+            //NOT as we dont link two protein coding gene ENEMBL_BASED_PROTIEN_GENE_HACK
+        } else if (left.equals(ENEMBL_BASED_PROTIEN_GENE_HACK)) {
+            if (right.equals(ChemInf.PROTEIN)) {
+                return ENEMBL_BASED_PROTIEN_GENE_HACK;
+            } else if (right.equals(ENEMBL_BASED_PROTIEN_GENE_HACK)) {
+                return ENEMBL_BASED_PROTIEN_GENE_HACK;
+            } else {
+                return null;
+            }
+            //Not CW HACK as we don't link CW and Enemble based transitively
          } else if (PARENT_CHILD.contains(left)) {
          	if (right.equals(ChemInf.INCHI_KEY)) {
                 return left;
@@ -138,6 +154,7 @@ public class JustificationMaker {
             } else {
                 return null;
             }
+            //Not ENEMBL_BASED_PROTIEN_GENE_HACK as we don't link CW and Enemble based transitively
         } else if (left.equals(CW_PROTEIN_HACK)){
             if (right.equals(ChemInf.PROTEIN)) {
                 return CW_PROTEIN_HACK;
