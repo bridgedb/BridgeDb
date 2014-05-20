@@ -360,24 +360,24 @@ public class SQLListener extends SQLBase implements MappingListener{
             statement.execute("CREATE TABLE                            "
                     + INFO_TABLE_NAME 
                     + " (    " + SCHEMA_VERSION_COLUMN_NAME + " INTEGER PRIMARY KEY	"
-                    + ")");
+                    + ")" + SqlFactory.engineSetting());
             statement.execute( //Add compatibility version of GDB
                     "INSERT INTO " + INFO_TABLE_NAME + " VALUES ( " + SQL_COMPAT_VERSION + ")");
             query = "CREATE TABLE " + MAPPING_TABLE_NAME 
                     + "( " + SOURCE_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, "
-        			+ "  " + TARGET_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
+        	    + "  " + TARGET_ID_COLUMN_NAME      + " VARCHAR(" + ID_LENGTH + ") NOT NULL, " 
                     + "  " + MAPPING_SET_ID_COLUMN_NAME + " INT, "
                     + "INDEX `setFind` (" + MAPPING_SET_ID_COLUMN_NAME + "), " 
                     + "INDEX `sourceFind` (" + SOURCE_ID_COLUMN_NAME + "), " 
                     + "INDEX `sourceMappingSetFind` (" + MAPPING_SET_ID_COLUMN_NAME + ", " + SOURCE_ID_COLUMN_NAME + ") "
-                    + " ) " ;
+                    + " ) "  + SqlFactory.engineSetting();
             statement.execute(query);
             statement.execute ("CREATE TABLE  "
                     + "    " + PROPERTIES_TABLE_NAME
                     + "(   " + KEY_COLUMN_NAME +   "      VARCHAR(" + KEY_LENGTH + ") NOT NULL, "
                     + "    " + PROPERTY_COLUMN_NAME + "    VARCHAR(" + PROPERTY_LENGTH + ") NOT NULL, "
                     + "    " + IS_PUBLIC_COLUMN_NAME + "    SMALLINT "
-					+ " ) "); 
+					+ " ) " + SqlFactory.engineSetting()); 
             statement.close();
         } catch (SQLException e){
             throw new BridgeDBException ("Error creating the tables using " + query, e);
@@ -397,7 +397,7 @@ public class SQLListener extends SQLBase implements MappingListener{
                     + " (" + ID_COLUMN_NAME                   + " INT " + autoIncrement + " PRIMARY KEY, " 
                     + SOURCE_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ") NOT NULL, "
                     + TARGET_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL "
-                    + " ) "; 
+                    + " ) " + SqlFactory.engineSetting(); 
             statement.execute(query);
             statement.close();
         } catch (SQLException e){

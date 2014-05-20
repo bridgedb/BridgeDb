@@ -19,6 +19,7 @@
 //
 package org.bridgedb.sql;
 
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.mysql.MySQLAccess;
 import org.bridgedb.utils.BridgeDBException;
@@ -44,6 +45,8 @@ public class SqlFactory extends ConfigReader{
     public static final String TEST_SQL_DATABASE_PROPERTY = "TestSqlDatabase";
     public static final String TEST_SQL_USER_PROPERTY = "TestSqlUser";
     public static final String TEST_SQL_PASSWORD_PROPERTY = "TestSqlPassword";
+    public static final String MYSQL_ENGINE_PROPERTY = "mysql.engine";
+    
             
     //TODO get from properties
     private static boolean useMySQL = true;
@@ -241,4 +244,23 @@ public class SqlFactory extends ConfigReader{
     static boolean inSQLMode() {
         return useMySQL;
     }
+    
+    public static String engineSetting(){
+        if (useTest){
+            try {
+                String engine = getProperties().getProperty(MYSQL_ENGINE_PROPERTY);
+                if (engine == null || engine.isEmpty()){
+                     return "";
+                } 
+                return " ENGINE = " + engine;            
+            } catch (BridgeDBException ex) {
+                //Ignore the property and use defualt
+                return "";
+            }
+        } else {
+            return "";
+        }
+        
+    }
+    
 }

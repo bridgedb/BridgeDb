@@ -172,20 +172,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + "     " + PREFIX_COLUMN_NAME + " VARCHAR(" + PREFIX_LENGTH + ") NOT NULL, "
                     + "     " + REGEX_COLUMN_NAME + " VARCHAR(" + REGEX_LENGTH + "), "
                     + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL "
-                    + "  ) ");
+                    + "  ) "  + SqlFactory.engineSetting());
             sh.execute("CREATE TABLE " + MIMETYPE_TABLE_NAME
                     + "  (  " + PREFIX_COLUMN_NAME + " VARCHAR(" + PREFIX_LENGTH + ") NOT NULL, "
                     + "     " + POSTFIX_COLUMN_NAME + " VARCHAR(" + POSTFIX_LENGTH + ") NOT NULL, "
                     + "     mimeType VARCHAR(" + MIMETYPE_LENGTH + ") NOT NULL "
-                    + "  ) ");
+                    + "  ) "  + SqlFactory.engineSetting());
             sh.execute("CREATE TABLE " + VIA_TABLE_NAME 
                     + " (" + MAPPING_SET_ID_COLUMN_NAME + " INT NOT NULL, "
                     + "     " + VIA_DATASOURCE_COLUMN_NAME + " VARCHAR(" + SYSCODE_LENGTH + ")  NOT NULL "
-                    + " ) "); 
+                    + " ) "  + SqlFactory.engineSetting()); 
             sh.execute("CREATE TABLE " + CHAIN_TABLE_NAME 
                     + " (" + MAPPING_SET_ID_COLUMN_NAME + " INT NOT NULL, "
                     + "     " + CHAIN_ID_COLUMN_NAME + " INT NOT NULL"
-                    + " ) "); 
+                    + " ) "  + SqlFactory.engineSetting()); 
  /*            sh.execute("CREATE TABLE " + LENS_TABLE_NAME + " ( " 
             		+ LENS_ID_COLUMN_NAME + " INT " + autoIncrement + " PRIMARY KEY, " 
                     + LENS_URI_COLUMN_NAME + " VARCHAR(" + LENS_URI_LENGTH + "), "
@@ -229,7 +229,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     + MAPPING_90_PERCENT_FREQUENCY_COLUMN_NAME     + " INT, "
                     + MAPPING_99_PERCENT_FREQUENCY_COLUMN_NAME     + " INT, "
                     + MAPPING_MAX_FREQUENCY_COLUMN_NAME     + " INT"
-                    + " ) "; 
+                    + " ) " + SqlFactory.engineSetting(); 
             sh.execute(query);
         } catch (SQLException e){
             throw new BridgeDBException ("Error creating the MappingSet table using " + query, e);
