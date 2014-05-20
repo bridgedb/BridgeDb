@@ -704,7 +704,7 @@ public class TransativeFinder extends SQLBase{
             limitedSysCodes.add(DataSource.getExistingByFullName("Ensembl").getSystemCode());
             limitedSysCodes.add(DataSource.getExistingByFullName("DrugBank").getSystemCode());
             limitedSysCodes.add(DataSource.getExistingByFullName("HMDB").getSystemCode());
-            limitedSysCodes.add(DataSource.getExistingByFullName("HGNC").getSystemCode());
+            limitedSysCodes.add(DataSource.getExistingByFullName("HGNC Accession number").getSystemCode());
         }
         return limitedSysCodes;
     }
