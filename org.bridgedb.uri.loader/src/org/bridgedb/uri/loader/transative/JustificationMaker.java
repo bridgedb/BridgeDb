@@ -51,7 +51,8 @@ public class JustificationMaker {
     public static Set<String> CROSS_TYPE = new HashSet<String>(Arrays.asList(
             ChemInf.PROTEIN_CODING_GENE,
             ChemInf.FUNCTIONAL_RNA_CODING_GENE,
-            ENEMBL_BASED_PROTIEN_GENE_HACK
+            ENEMBL_BASED_PROTIEN_GENE_HACK,
+            ChemInf.DATABASE_CROSS_REFERENCE
             ));
     
    public static String combine(String left, String right) throws BridgeDBException{
