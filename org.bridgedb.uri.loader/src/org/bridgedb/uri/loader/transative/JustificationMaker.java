@@ -131,9 +131,9 @@ public class JustificationMaker {
             }
             //NOT as we dont link two protein coding gene ENEMBL_BASED_PROTIEN_GENE_HACK
         } else if (left.equals(ENEMBL_BASED_PROTIEN_GENE_HACK)) {
-            if (right.equals(ChemInf.PROTEIN)) {
+             if (right.equals(ChemInf.PROTEIN)) {
                 return ENEMBL_BASED_PROTIEN_GENE_HACK;
-            } else if (right.equals(ENEMBL_BASED_PROTIEN_GENE_HACK)) {
+            } else if (right.equals(ChemInf.GENE)) {
                 return ENEMBL_BASED_PROTIEN_GENE_HACK;
             } else {
                 return null;
@@ -177,6 +177,7 @@ public class JustificationMaker {
                 return null;
             }
         }
+        System.out.println("not found " + left);
         return null;
     }
 }

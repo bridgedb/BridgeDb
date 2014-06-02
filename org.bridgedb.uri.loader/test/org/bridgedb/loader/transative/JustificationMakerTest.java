@@ -27,6 +27,20 @@ public class JustificationMakerTest {
 	}	
 
 	@Test
+	public void testCombine_hack1() throws BridgeDBException {		
+		String justification1 = "http://example.com/EnsemblBasedProteinGene";
+		String justification2 = "http://semanticscience.org/resource/SIO_010035";
+		JustificationMaker.combine(justification1, justification2);
+	}
+        
+	@Test
+	public void testCombine_hack2() throws BridgeDBException {		
+		String justification1 = "http://semanticscience.org/resource/SIO_010035";
+		String justification2 = "http://example.com/EnsemblBasedProteinGene";
+		JustificationMaker.combine(justification1, justification2);
+	}	
+
+        @Test
 	public void testCombine_inchi() throws BridgeDBException {
 		assertEquals(ChemInf.INCHI_KEY, 
 				JustificationMaker.combine(ChemInf.INCHI_KEY, ChemInf.INCHI_KEY));
