@@ -77,6 +77,17 @@ public class SqlFactory extends ConfigReader{
         return sqlAccess;
     }
 
+    /**
+     * Create a wrapper around the live SQL Database, 
+     *     using the database name, user name and password found in the config file.
+     * @return 
+     * @throws BridgeDBException 
+     */
+    public static SQLAccess createASQLAccess(String database) throws BridgeDBException {
+        SQLAccess sqlAccess=  new MySQLAccess(sqlPort() + "/" + database, sqlUser(), sqlPassword());
+        return sqlAccess;
+    }
+
     public static void setUseMySQL(boolean forceMySQL){
         useMySQL = forceMySQL;
     }
