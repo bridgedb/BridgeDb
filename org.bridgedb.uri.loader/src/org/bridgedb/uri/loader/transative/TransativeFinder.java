@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.bridgedb.DataSource;
 import org.bridgedb.sql.SQLBase;
@@ -444,8 +445,7 @@ public class TransativeFinder extends SQLBase{
         return false;
     }
     
-    private int doTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) 
-            throws RDFHandlerException, IOException, BridgeDBException {
+    private int doTransative(MappingSetInfo left, MappingSetInfo right, HashSet<Integer> chainIds) throws BridgeDBException {
         int leftId = left.getIntId();
         int rightId = right.getIntId();
         Reporter.println("Creating tranasative from " + leftId + " to " + rightId + " chain: " + chainIds);
@@ -465,10 +465,22 @@ public class TransativeFinder extends SQLBase{
         if (logger.isDebugEnabled()){
             logger.debug(viaLabels);
         }
-        String predicate = PredicateMaker.combine(left.getPredicate(), right.getPredicate());
-        String justification = JustificationMaker.combine(left.getJustification(), right.getJustification());
-
-        File fileName = doTransativeIfPossible(left, right);
+        String predicate;
+        String justification;
+        File fileName;
+        try {
+           predicate = PredicateMaker.combine(left.getPredicate(), right.getPredicate());
+           justification = JustificationMaker.combine(left.getJustification(), right.getJustification());
+           fileName = doTransativeIfPossible(left, right);
+        } catch (IOException ex) {
+           ex.printStackTrace();
+           Reporter.error("SKIPPING tranasative from " + leftId + " to " + rightId);
+           return -1;
+        } catch (BridgeDBException ex) {        
+            ex.printStackTrace();
+            Reporter.error("SKIPPING tranasative from " + leftId + " to " + rightId);
+            return -1;
+        }        
         if (fileName == null){
             Reporter.println ("No transative links found");
             return -1;
