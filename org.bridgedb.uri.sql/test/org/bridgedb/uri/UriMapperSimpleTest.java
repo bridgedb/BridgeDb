@@ -176,6 +176,24 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
      * Test of mapUri method, of class UriMapper.
      */
     @Test
+    public void testMapUri_sourceXref_lensId_parttgtUriPattern() throws Exception {
+        report("MapUri_sourceXref_lensId_parttgtUriPattern");
+        Xref sourceXref = map3xref2;
+        String lensId = Lens.DEFAULT_LENS_NAME;
+        Set results = uriMapper.mapUri(sourceXref, lensId, NULL_GRAPH, stringPattern3.substring(0, stringPattern3.length()-5));
+        assertFalse(results.contains(map3Uri1));
+        assertFalse(results.contains(map3Uri2));
+        assertFalse(results.contains(map3Uri2a));
+        assertTrue(results.contains(map3Uri3));
+        assertFalse(results.contains(map2Uri2));
+        assertFalse(results.contains(map1Uri3));
+        checkForNoOtherlensId(results);
+    }
+
+    /**
+     * Test of mapUri method, of class UriMapper.
+     */
+    @Test
     public void testMapUri_sourceXref_lensId() throws Exception {
         report("MapUri_sourceXref_lensId");
         Xref sourceXref = map3xref2;

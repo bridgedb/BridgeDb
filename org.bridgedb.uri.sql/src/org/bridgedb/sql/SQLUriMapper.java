@@ -2360,16 +2360,57 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (graph == null || graph.trim().isEmpty()){  
             HashSet<RegexUriPattern> results = new HashSet<RegexUriPattern>();
             for (int i = 0; i < tgtUriPatterns.length; i++){
-                if (tgtUriPatterns[i] != null){
+                if (tgtUriPatterns[i] == null){
+                    results.add(null);
+                } else if (tgtUriPatterns[i].contains("$id")){
                     Set<RegexUriPattern> patterns = RegexUriPattern.byPattern(tgtUriPatterns[i]);
                     results.addAll(patterns);
                 } else {
-                    results.add(null);
+                    List<String> withIds = getFullPrefix(tgtUriPatterns[i]);
+                    for (String withId:withIds){
+                        Set<RegexUriPattern> patterns = RegexUriPattern.byPattern(withId);
+                        results.addAll(patterns);                
+                    }
                 }
             }
             return results;
         }
         throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
+    }
+
+    private List<String> getFullPrefix(String partPrefix) throws BridgeDBException {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(" FROM ");
+        query.append(URI_TABLE_NAME);
+        query.append(" WHERE ");
+        query.append(PREFIX_COLUMN_NAME);
+        query.append(" LIKE CONCAT(?, '%')");
+        
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            statement = this.createPreparedStatement(query.toString());
+            statement.setString(1, partPrefix);
+            rs = statement.executeQuery();
+        } catch (SQLException ex) {
+            System.err.println(statement.toString());
+            close(statement, rs);
+            statement.toString();
+            throw new BridgeDBException("Unable to run query. " + query + " with " + partPrefix, ex);
+        }    
+        try {
+            ArrayList<String> results = new ArrayList<String>(); 
+            while(rs.next()){
+                results.add(rs.getString(PREFIX_COLUMN_NAME) + "$id");
+            }
+            return results;
+        } catch (SQLException ex) {
+            throw new BridgeDBException("Error getting prefixr using. " + query, ex);
+        } finally {
+            close(statement, rs);
+        }  
     }
  
 }
