@@ -2353,7 +2353,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
     }
 
-    private Set<RegexUriPattern> findRegexPatterns(String graph, String[] tgtUriPatterns) throws BridgeDBException {
+    public final Set<RegexUriPattern> findRegexPatterns(String graph, String[] tgtUriPatterns) throws BridgeDBException {
         if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
             return GraphResolver.getUriPatternsForGraph(graph);
         }
@@ -2366,11 +2366,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                     Set<RegexUriPattern> patterns = RegexUriPattern.byPattern(tgtUriPatterns[i]);
                     results.addAll(patterns);
                 } else {
-                    List<String> withIds = getFullPrefix(tgtUriPatterns[i]);
-                    for (String withId:withIds){
-                        Set<RegexUriPattern> patterns = RegexUriPattern.byPattern(withId);
-                        results.addAll(patterns);                
-                    }
+                    results.addAll(getRegexByPartialPrefix(tgtUriPatterns[i]));
                 }
             }
             return results;
@@ -2378,11 +2374,9 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
     }
 
-    private List<String> getFullPrefix(String partPrefix) throws BridgeDBException {
+    private List<RegexUriPattern> getRegexByPartialPrefix(String partPrefix) throws BridgeDBException {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT ");
-        query.append(PREFIX_COLUMN_NAME);
-        query.append(" FROM ");
+        query.append("SELECT * FROM ");
         query.append(URI_TABLE_NAME);
         query.append(" WHERE ");
         query.append(PREFIX_COLUMN_NAME);
@@ -2401,9 +2395,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throw new BridgeDBException("Unable to run query. " + query + " with " + partPrefix, ex);
         }    
         try {
-            ArrayList<String> results = new ArrayList<String>(); 
+            ArrayList<RegexUriPattern> results = new ArrayList<RegexUriPattern>(); 
             while(rs.next()){
-                results.add(rs.getString(PREFIX_COLUMN_NAME) + "$id");
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String regex = rs.getString(REGEX_COLUMN_NAME);
+                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                results.add(RegexUriPattern.factory(prefix, postfix, sysCode));
             }
             return results;
         } catch (SQLException ex) {

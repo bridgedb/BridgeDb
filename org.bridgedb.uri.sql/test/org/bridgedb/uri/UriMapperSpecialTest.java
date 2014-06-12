@@ -31,6 +31,7 @@ import org.bridgedb.statistics.SourceInfo;
 import org.bridgedb.statistics.SourceTargetInfo;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.lens.Lens;
+import org.bridgedb.uri.tools.RegexUriPattern;
 import org.bridgedb.utils.BridgeDBException;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -333,6 +334,18 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         }
     }
 
+    @Test
+    public void testIdentifiersOrgPattern() throws Exception {
+        if (uriMapper instanceof SQLUriMapper){
+            report("testIdentifiersOrgPattern");
+            String uri = "http://identifiers.org/";
+            String graph = null;
+            String[] tgtUriPatterns = new String[1];
+            tgtUriPatterns[0] = uri;
+            Set<RegexUriPattern> results = ((SQLUriMapper)uriMapper).findRegexPatterns(graph, tgtUriPatterns);
+            assertThat (results.size(), greaterThanOrEqualTo(100));
+        }
+    }
     
  /*       @Test
     public void testFrequency() throws IDMapperException{
