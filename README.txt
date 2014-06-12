@@ -10,6 +10,9 @@ or (experimental; does not compile all jars) -
 
 	mvn clean install
 
+(If you want to ignore failing tests, e.g. because you are not online,
+add this option: -Dmaven.test.failure.ignore=true)
+
 Library dependencies
 --------------------
 
