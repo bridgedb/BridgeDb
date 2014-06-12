@@ -15,6 +15,7 @@
   	<module>org.bridgedb.webservice.cronos</module>
   	<module>org.bridgedb.webservice.picr</module>
   	<module>org.bridgedb.webservice.synergizer</module>
+        <module>org.bridgedb.tools.qc</module>
   	<module>examples</module>
   	<module>org.bridgedb.server</module>
   </modules>
