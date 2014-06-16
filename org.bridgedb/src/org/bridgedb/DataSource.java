@@ -111,7 +111,10 @@ public final class DataSource
      * 
      * @param checkDataSources False, if you want BridgeDb 1.x Derby files to work, ignoring
      *   inconsistencies and contradictions
+     * @deprecated This method will be removed in the future and is here now for backwards compatibility
+     *   until all tools have migrated
      */
+    @Deprecated
     public static void setStrictDataSourceChecking(boolean checkDataSources) {
     	strictDataSourceChecking = checkDataSources;
     }
