@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar dist/org.bridgedb.tools.qc.jar "$@"
+java -DstrictDataSourceChecking=false -jar dist/org.bridgedb.tools.qc.jar "$@"
