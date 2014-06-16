@@ -349,7 +349,7 @@ bridgeDB:DataSource_Drugbank_Target a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://www.drugbank.ca/molecules/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/drugbank.target/$id> ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/drugbank.target/$id> ;
-	bridgeDB:hasUriPattern <http://drugbank.ca/molecules/$id> , <http://drugbank.ca/molecules/$id?as=target> , <http://www.drugbank.ca/molecules/$id?as=target> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
+	bridgeDB:hasUriPattern <http://drugbank.ca/molecules/$id> , <http://drugbank.ca/molecules/$id?as=target> , <http://v3.drugbank.ca/molecules/$id> , <http://www.drugbank.ca/molecules/$id?as=target> , <http://www4.wiwiss.fu-berlin.de/drugbank/resource/targets/$id> .
 
 bridgeDB:DataSource_EcoCyc a bridgeDB:DataSource ;
 	bridgeDB:fullName "EcoCyc" ;
@@ -3217,6 +3217,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://tuberculist.epfl.ch/quicksearch.php?gene+name=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://tuberculist.epfl.ch/quicksearch.php?gene+name=" .
+
+<http://v3.drugbank.ca/molecules/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://v3.drugbank.ca/molecules/" .
 
 <http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://wheat.pw.usda.gov/cgi-bin/graingenes/report.cgi?class=reference&name=" .

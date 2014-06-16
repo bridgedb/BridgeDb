@@ -47,8 +47,8 @@ BioCyc	Bc	http://biocyc.org	http://biocyc.org/getid?id=$id	ECOLI:CYT-D-UBIOX-CPL
 BioGrid	Bg	http://thebiogrid.org/	http://thebiogrid.org/$id	31623	interaction		1	urn:miriam:biogrid	^\d+$	BioGRID
 BioModels Database	Bm	http://www.ebi.ac.uk/biomodels/	http://www.ebi.ac.uk/biomodels-main/$id	BIOMD0000000048	pathway		1	urn:miriam:biomodels.db	^((BIOMD|MODEL)\d{10})|(BMID\d{12})$	BioModels Database
 BioNumbers	bionumbers		http://www.bionumbers.hms.harvard.edu/bionumber.aspx?s=y&id=$id&ver=1	104674	unknown		1	urn:miriam:bionumbers	^\d+$	
-Bioontology MESH	MSH		http://purl.bioontology.org/ontology/MSH/$id	C536282	unknown		1			
-Bioontology UMLS NCIM	NCIM		http://purl.bioontology.org/ontology/NCIM/$id	C3203102	unknown		1			
+Bioontology MESH	MSH	http://bioportal.bioontology.org/	http://purl.bioontology.org/ontology/MSH/$id	C536282	unknown		1	urn:miriam:mesh		
+Bioontology UMLS NCIM	NCIM		http://linkedlifedata.com/resource/umls/id/$id	C3203102	unknown		1			
 BioPortal	bioportal		http://bioportal.bioontology.org/ontologies/$id	1046	unknown		1	urn:miriam:bioportal	^\d+$	
 BioProject	bioproject		http://www.ncbi.nlm.nih.gov/bioproject?term=$id	PRJDB3	unknown		1	urn:miriam:bioproject	^PRJ[DEN][A-Z]\d+$	
 BioSample	biosample		http://www.ebi.ac.uk/biosamples/browse.html?keywords=$id	SAMEG70402	unknown		1	urn:miriam:biosample	^\w{3}[NE](\w)?\d+$	
@@ -81,7 +81,6 @@ CGSC Strain	cgsc		http://cgsc.biology.yale.edu/Strain.php?ID=$id	11042	unknown		
 CharProt	charprot		http://www.jcvi.org/charprotdb/index.cgi/view/$id	CH_001923	unknown		1	urn:miriam:charprot	^CH_\d+$	
 ChEBI	Ce	http://www.ebi.ac.uk/chebi/	http://www.ebi.ac.uk/chebi/searchId.do?chebiId=$id	CHEBI:36927	metabolite		1	urn:miriam:chebi	^CHEBI:\d+$	ChEBI
 ChemBank	chembank		http://chembank.broadinstitute.org/chemistry/viewMolecule.htm?cbid=$id	1000000	unknown		1	urn:miriam:chembank	^\d+$	
-Chembl 16 Molecule	Chembl16Molecule		http://rdf.ebi.ac.uk/resource/chembl/molecule/$id	CHEMBL1625375	unknown		1			
 ChEMBL compound	ChEMBLCompound	https://www.ebi.ac.uk/chembldb/	https://www.ebi.ac.uk/chembldb/index.php/compound/inspect/$id	CHEMBL308052	metabolite		1	urn:miriam:chembl.compound	^CHEMBL\d+$	
 Chembl Id	ChemblId		http://data.kasabi.com/dataset/chembl-rdf/chemblid/$id	CHEMBL6329	unknown		1			
 Chembl Molecule	ChemblMolecule		http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id	1	unknown		1			
@@ -141,8 +140,8 @@ DragonDB Locus	dragondb.locus		http://antirrhinum.net/cgi-bin/ace/generic/tree/D
 DragonDB Protein	dragondb.protein		http://antirrhinum.net/cgi-bin/ace/generic/tree/DragonDB?name=$id%3Bclass%3DPeptide	AMDEFA	unknown		1	urn:miriam:dragondb.protein	^\w+$	
 DRSC	drsc		http://www.flyrnai.org/cgi-bin/RNAi_gene_lookup_public.pl?gname=$id	DRSC05221	unknown		1	urn:miriam:drsc	^DRSC\d+$	
 DrugBank	Dr	http://www.drugbank.ca/	http://www.drugbank.ca/drugs/$id	DB00001	metabolite		1	urn:miriam:drugbank	^DB\d{5}$	DrugBank
-Dugbank Enzymes	drugbankEnzymes	http://www.drugbank.ca/	http://www4.wiwiss.fu-berlin.de/drugbank/resource/enzymes/$id	1	unknown		1			
-Dugbank Target	drugbankTarget	http://www.drugbank.ca/	http://www.drugbank.ca/molecules/$id	6511	unknown		1	urn:miriam:drugbank.target	^\d+$	
+Drugbank Enzymes	drugbankEnzymes	http://www.drugbank.ca/	http://www4.wiwiss.fu-berlin.de/drugbank/resource/enzymes/$id	1	unknown		1			
+Drugbank Target	drugbankTarget	http://www.drugbank.ca/	http://www.drugbank.ca/molecules/$id	6511	unknown		1	urn:miriam:drugbank.target	^\d+$	
 EchoBASE	echobase		http://www.york.ac.uk/res/thomas/Gene.cfm?recordID=$id	EB0170	unknown		1	urn:miriam:echobase	^EB\d+$	
 EcoCyc	Eco	http://ecocyc.org/	http://ecocyc.org/ECOLI/NEW-IMAGE?type=NIL&object=$id	325-BISPHOSPHATE-NUCLEOTIDASE-RXN	interaction	Escherichia coli	1			EcoCyc
 EcoGene	Ec	http://ecogene.org/	http://ecogene.org/geneInfo.php?eg_id=$id	EG10173	gene	Escherichia coli	1	urn:miriam:ecogene	^EG\d+$	EcoGene
@@ -315,7 +314,6 @@ Melanoma Molecular Map Project Biomaps	mmmp:biomaps		http://www.mmmp.org/MMMP/pu
 MEROPS	merops		http://merops.sanger.ac.uk/cgi-bin/pepsum?mid=$id	S01.001	unknown		1	urn:miriam:merops	^[SCTAGMNU]\d{2}\.\d{3}$	
 MEROPS Family	merops.family		http://merops.sanger.ac.uk/cgi-bin/famsum?family=$id	S1	unknown		1	urn:miriam:merops.family	^[SCTAGMNU]\d+$	
 MEROPS Inhibitor	merops.inhibitor		http://merops.sanger.ac.uk/cgi-bin/pepsum?id=$id	I31.952	unknown		1	urn:miriam:merops.inhibitor	^I\d{2}\.\d{3}$	
-MeSH	mesh	http://bioportal.bioontology.org/	http://bioportal.bioontology.org/ontologies/1351?p=terms&conceptid=$id	D018377	unknown		1	urn:miriam:mesh		
 MeSH 2012	mesh.2012		http://www.nlm.nih.gov/cgi/mesh/2012/MB_cgi?mode=&index=$id&view=expanded	D018377	unknown		1	urn:miriam:mesh.2012	^[A-Za-z0-9]+$	
 MeSH 2013	mesh.2013		http://www.nlm.nih.gov/cgi/mesh/2013/MB_cgi?mode=&index=$id&view=expanded	17165	unknown		1	urn:miriam:mesh.2013	^[A-Za-z0-9]+$	
 MetaboLights	metabolights		http://www.ebi.ac.uk/metabolights/$id	MTBLS1	unknown		1	urn:miriam:metabolights	^MTBLS\d+$	
@@ -377,7 +375,9 @@ OMIM	Om	http://omim.org/	http://omim.org/entry/$id	603903	gene		1	urn:miriam:omi
 Ontology for Biomedical Investigations	obi		http://purl.bioontology.org/ontology/OBI/obo:$id	OBI_0000225	unknown		1	urn:miriam:obi	^OBI_\d{7}$	
 Ontology of Physics for Biology	opb		http://purl.bioontology.org/ontology/OPB/$id	OPB_00573	unknown		1	urn:miriam:opb	^OPB_\d+$	
 OPM	opm		http://opm.phar.umich.edu/protein.php?pdbid=$id	1h68	unknown		1	urn:miriam:opm	^[0-9][A-Za-z0-9]{3}$	
-OPS Chemical Registry Service	OPS-CRS	http://www.rsc.org/	http://ops.rsc.org/$id	OPS21009	unknown		1			
+OPS Chemical Registry Service	OPS-CRS	http://www.rsc.org/	http://ops.rsc.org/OPS$id	21009	unknown		1			
+OPS Internal URIS for GVK	OPS-GVK		http://gvk.pharma.openphacts.com/targets/$id	t58221	unknown		1			
+OPS Internal URIS for TGR	OPS-TGR		http://tgr.pharma.openphacts.com/target/$id	t2000005	unknown		1			
 ORCID	orcid		https://orcid.org/$id	0000-0002-6309-7327	unknown		1	urn:miriam:orcid	^\d{4}-\d{4}-\d{4}-\d{3}(\d|X)$	
 OriDB Saccharomyces	oridb.sacch		http://cerevisiae.oridb.org/details.php?id=$id	1	unknown		1	urn:miriam:oridb.sacch	^\d+$	
 OriDB Schizosaccharomyces	oridb.schizo		http://pombe.oridb.org/details.php?id=$id	1	unknown		1	urn:miriam:oridb.schizo	^\d+$	
@@ -527,7 +527,6 @@ UM-BBD Compound	umbbd.compound		http://umbbd.ethz.ch/servlets/pageservlet?ptype=
 UM-BBD Enzyme	umbbd.enzyme		http://umbbd.ethz.ch/servlets/pageservlet?ptype=ep&enzymeID=$id	e0333	unknown		1	urn:miriam:umbbd.enzyme	^e\d+$	
 UM-BBD Pathway	umbbd.pathway		http://umbbd.ethz.ch/servlets/pageservlet?ptype=p&pathway_abbr=$id	ala	unknown		1	urn:miriam:umbbd.pathway	^\w+$	
 UM-BBD Reaction	umbbd.reaction		http://umbbd.ethz.ch/servlets/pageservlet?ptype=r&reacID=$id	r0001	unknown		1	urn:miriam:umbbd.reaction	^r\d+$	
-umls	umls		http://linkedlifedata.com/resource/umls/id/$id	C0011860	unknown		1			
 UniGene	U	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/UniGene/clust.cgi?UGID=1548618&SEARCH=$id	Hs.553708	gene		1		[A-Z][a-z][a-z]?\.\d+	UniGene
 UniGene number	unigene	http://www.ncbi.nlm.nih.gov/unigene	http://www.ncbi.nlm.nih.gov/unigene?term=$id	1548618	gene		1	urn:miriam:unigene	^\d+$	
 Unimod	unimod		http://www.unimod.org/modifications_view.php?editid1=$id	1200	unknown		1	urn:miriam:unimod	^\d+$	
