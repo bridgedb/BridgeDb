@@ -79,6 +79,12 @@ public final class DataSource
 	private String miriamBase = null;
     private String alternative = null;
     private String description = null;
+
+    private static boolean strictDataSourceChecking = true;
+    static {
+    	strictDataSourceChecking =
+    		"true".equalsIgnoreCase(System.getProperty("strictDataSourceChecking", "true"));
+    }
 	
 	/**
 	 * Constructor is private, so that we don't
@@ -97,7 +103,19 @@ public final class DataSource
             byFullName.put(fullName, this);
         }
     }
-	
+
+    /**
+     * Compatibility mode with BridgeDb 1.x data sources, where frequently data source information
+     * is incomplete and sometimes contradiction. Setting this flag to false introduces that this
+     * version will not complain about such issues.
+     * 
+     * @param checkDataSources False, if you want BridgeDb 1.x Derby files to work, ignoring
+     *   inconsistencies and contradictions
+     */
+    public static void setStrictDataSourceChecking(boolean checkDataSources) {
+    	strictDataSourceChecking = checkDataSources;
+    }
+    
 	/** 
 	 * Turn id into url pointing to info page on the web, e.g. "http://www.ensembl.org/get?id=ENSG..."
      * 
@@ -603,33 +621,36 @@ public final class DataSource
 		if (byFullName.containsKey(fullName))
 		{
 			current = byFullName.get(fullName);
-            if (sysCode ==null){
-                if (current.getSystemCode() != null){
-                    throw new IllegalArgumentException ("System code does not match for DataSource " + fullName 
-                            + " was " + current.getSystemCode() + " so it can not be changed to null.");
-                }
-            } else {
-                if (!sysCode.equals(current.getSystemCode())){
-                    throw new IllegalArgumentException ("System code does not match for DataSource " + fullName 
-                            + " was " + current.getSystemCode() + " so it can not be changed to " + sysCode);
-                }
-                
-            }
+			if (strictDataSourceChecking) {
+				if (sysCode ==null){
+					if (current.getSystemCode() != null){
+						throw new IllegalArgumentException ("System code does not match for DataSource " + fullName 
+								+ " was " + current.getSystemCode() + " so it can not be changed to null.");
+					}
+				} else {
+					if (!sysCode.equals(current.getSystemCode())){
+						throw new IllegalArgumentException ("System code does not match for DataSource " + fullName 
+								+ " was " + current.getSystemCode() + " so it can not be changed to " + sysCode);
+					}
+
+				}
+			}
 		}
 		else if (bySysCode.containsKey(sysCode))
 		{
             current = bySysCode.get(sysCode);
-            if (fullName ==null){
-                if (current.getFullName() != null){
-                    throw new IllegalArgumentException ("Full name does not match for DataSource " + sysCode 
-                            + " was " + current.getFullName() + " so it can not be changed to " + null);
-                }
-            } else {
-                if (!fullName.equals(current.getFullName())){
-                    throw new IllegalArgumentException ("Full name does not match for DataSource " + sysCode 
-                            + " was " + current.getFullName() + " so it can not be changed to " + fullName);
-                }
-                
+            if (strictDataSourceChecking) {
+            	if (fullName ==null){
+            		if (current.getFullName() != null){
+            			throw new IllegalArgumentException ("Full name does not match for DataSource " + sysCode 
+            					+ " was " + current.getFullName() + " so it can not be changed to " + null);
+            		}
+            	} else {
+            		if (!fullName.equals(current.getFullName())){
+            			throw new IllegalArgumentException ("Full name does not match for DataSource " + sysCode 
+            					+ " was " + current.getFullName() + " so it can not be changed to " + fullName);
+            		}
+            	}
             }
 		}
 		else
