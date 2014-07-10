@@ -644,7 +644,7 @@ bridgeDB:DataSource_Entrez_Gene a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/ncbigene/$id> ;
 	bridgeDB:hasRegexPattern "^\\d+$" ;
 	dcterms:alternative "Entrez Gene" ;
-	bridgeDB:hasUriPattern <http://bio2rdf.org/geneid:$id> , <http://purl.uniprot.org/geneid/$id> .
+	bridgeDB:hasUriPattern <http://bio2rdf.org/geneid:$id> , <http://identifiers.org/entrez.gene/$id> , <http://info.identifiers.org/entrez.gene/%24id/$id> , <http://purl.uniprot.org/geneid/$id> .
 
 bridgeDB:DataSource_Enzyme_Nomenclature a bridgeDB:DataSource ;
 	bridgeDB:fullName "Enzyme Nomenclature" ;
@@ -1228,6 +1228,16 @@ bridgeDB:DataSource_NCI_Pathway_Interaction_Database a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/pid.pathway/$id> ;
 	bridgeDB:hasRegexPattern "^\\w+$" ;
 	dcterms:alternative "NCI Pathway Interaction Database" .
+
+bridgeDB:DataSource_Nextprot_Term a bridgeDB:DataSource ;
+	bridgeDB:fullName "Nextprot Term" ;
+	bridgeDB:systemCode "Nextprot_term" ;
+	bridgeDB:idExample "TS-0564" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://www.nextprot.org/db/term/$id> ;
+	bridgeDB:hasRegexPattern "^TS\\-[0-9]+" ;
+	bridgeDB:hasUriPattern <ftp://ftp.nextprot.org/pub/current_release/controlled_vocabularies/caloha.obo#$id> .
 
 bridgeDB:DataSource_NuGO_wiki a bridgeDB:DataSource ;
 	bridgeDB:fullName "NuGO wiki" ;
@@ -2215,6 +2225,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 	bridgeDB:hasPrefix "ftp://ftp.ebi.ac.uk/pub/databases/lrgex/" ;
 	bridgeDB:hasPostfix ".xml" .
 
+<ftp://ftp.nextprot.org/pub/current_release/controlled_vocabularies/caloha.obo#$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "ftp://ftp.nextprot.org/pub/current_release/controlled_vocabularies/caloha.obo#" .
+
 <http://aers.data2semantics.org/resource/drug/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://aers.data2semantics.org/resource/drug/" .
 
@@ -2454,6 +2467,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://identifiers.org/ensembl/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/ensembl/" .
+
+<http://identifiers.org/entrez.gene/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://identifiers.org/entrez.gene/" .
 
 <http://identifiers.org/flybase/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://identifiers.org/flybase/" .
@@ -2775,6 +2791,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://info.identifiers.org/ensembl/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/ensembl/" .
+
+<http://info.identifiers.org/entrez.gene/%24id/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://info.identifiers.org/entrez.gene/%24id/" .
 
 <http://info.identifiers.org/flybase/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/flybase/" .
@@ -3475,6 +3494,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://www.ncbi.nlm.nih.gov/unigene?term=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.ncbi.nlm.nih.gov/unigene?term=" .
+
+<http://www.nextprot.org/db/term/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://www.nextprot.org/db/term/" .
 
 <http://www.pathwaycommons.org/pc/record2.do?id=$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://www.pathwaycommons.org/pc/record2.do?id=" .

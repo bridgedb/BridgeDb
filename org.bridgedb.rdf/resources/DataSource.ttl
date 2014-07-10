@@ -710,6 +710,15 @@ bridgeDB:DataSource_NASC_Gene a bridgeDB:DataSource ;
 	bridgeDB:type "gene" ;
 	bridgeDB:Organism bridgeDB:Organism_At .
 
+bridgeDB:DataSource_Nextprot a bridgeDB:DataSource ;
+	bridgeDB:fullName "Nextprot Term" ;
+	bridgeDB:systemCode "Nextprot_term" ;
+	bridgeDB:idExample "TS-0564" ;
+	bridgeDB:primary "false"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:hasUrlPattern <http://www.nextprot.org/db/term/$id>;
+	bridgeDB:hasUriPattern <ftp://ftp.nextprot.org/pub/current_release/controlled_vocabularies/caloha.obo#$id>;
+	bridgeDB:hasRegexPattern "^TS\\-[0-9]+" .
+
 bridgeDB:DataSource_NuGO_wiki a bridgeDB:DataSource ;
 	bridgeDB:fullName "NuGO wiki" ;
 	bridgeDB:systemCode "Nw" ;
