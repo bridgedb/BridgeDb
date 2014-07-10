@@ -1275,7 +1275,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         DataSource source = DataSource.getExistingBySystemCode(sourceUriPattern.getSysCode());
         DataSource target = DataSource.getExistingBySystemCode(targetUriPattern.getSysCode());        
         int mappingSetId = registerMappingSet(source, target, predicate, forwardJustification, mappingResource, mappingSource, 0);
-        int symetricId = registerMappingSet(target, source, predicate, backwardJustification, mappingResource, mappingSource, mappingSetId);
+        int symetricId = registerMappingSet(target, source, predicate, backwardJustification, mappingResource, mappingSource, 0);
         subjectUriPatterns.put(mappingSetId, sourceUriPattern);
         targetUriPatterns.put(mappingSetId, targetUriPattern);
         //Two linksets are NOT symmetric
@@ -1492,21 +1492,12 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             if (sourceUriPattern.getRegex() != null){
                 Matcher matcher = sourceUriPattern.getRegex().matcher(sourceId);
                 if (!matcher.matches()){
-                    if (!sourceUri.endsWith("-201")){
-                        System.err.println(sourceUri + '"' + sourceId + '"');
-                        System.err.println(sourceUriPattern.getRegex().pattern());
-                    }
                     ok = false;
                 } 
             }
             if (targetUriPattern.getRegex() != null){
                 Matcher matcher = targetUriPattern.getRegex().matcher(targetId);
                 if (!matcher.matches()){
-                    if (!targetUri.endsWith("-201")){
-                        System.err.println(targetUri + '"' + targetId + '"');
-                        System.err.println(targetUriPattern.getRegex().pattern());
-                        System.err.println(targetUriPattern.getSysCode());
-                    }
                     ok = false;
                 } 
             }
