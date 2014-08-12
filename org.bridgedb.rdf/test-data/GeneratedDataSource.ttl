@@ -644,7 +644,7 @@ bridgeDB:DataSource_Entrez_Gene a bridgeDB:DataSource ;
 	bridgeDB:hasIdentifiersOrgInfoPattern <http://info.identifiers.org/ncbigene/$id> ;
 	bridgeDB:hasRegexPattern "^\\d+$" ;
 	dcterms:alternative "Entrez Gene" ;
-	bridgeDB:hasUriPattern <http://bio2rdf.org/geneid:$id> , <http://identifiers.org/entrez.gene/$id> , <http://info.identifiers.org/entrez.gene/%24id/$id> , <http://purl.uniprot.org/geneid/$id> .
+	bridgeDB:hasUriPattern <http://bio2rdf.org/geneid:$id> , <http://identifiers.org/entrez.gene/$id> , <http://info.identifiers.org/entrez.gene/id/$id> , <http://purl.uniprot.org/geneid/$id> .
 
 bridgeDB:DataSource_Enzyme_Nomenclature a bridgeDB:DataSource ;
 	bridgeDB:fullName "Enzyme Nomenclature" ;
@@ -2792,8 +2792,8 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 <http://info.identifiers.org/ensembl/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/ensembl/" .
 
-<http://info.identifiers.org/entrez.gene/%24id/$id> a bridgeDB:uriPattern ;
-	bridgeDB:hasPrefix "http://info.identifiers.org/entrez.gene/%24id/" .
+<http://info.identifiers.org/entrez.gene/id/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://info.identifiers.org/entrez.gene/id/" .
 
 <http://info.identifiers.org/flybase/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://info.identifiers.org/flybase/" .

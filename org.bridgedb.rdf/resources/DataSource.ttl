@@ -321,7 +321,7 @@ bridgeDB:DataSource_Entrez_Gene a bridgeDB:DataSource ;
     	bridgeDB:hasUrlPattern <http://www.ncbi.nlm.nih.gov/gene/$id> ;
         bridgeDB:hasUriPattern  <http://purl.uniprot.org/geneid/$id> ;
         bridgeDB:hasUriPattern  <http://identifiers.org/entrez.gene/$id> ;
-        bridgeDB:hasUriPattern  <http://info.identifiers.org/entrez.gene/%24id/$id> ;
+        bridgeDB:hasUriPattern  <http://info.identifiers.org/entrez.gene/id/$id> ;
 	bridgeDB:hasIdentifiersOrgPattern <http://identifiers.org/ncbigene/$id> ;
 	bridgeDB:hasUriPattern <http://bio2rdf.org/geneid:$id> .
 
