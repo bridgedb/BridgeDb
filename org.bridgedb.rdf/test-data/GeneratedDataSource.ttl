@@ -718,7 +718,7 @@ bridgeDB:DataSource_GeneOntology a bridgeDB:DataSource ;
 bridgeDB:CodeMapper_GeneOntology a bridgeDB:CodeMapper ;
 	bridgeDB:systemCode "T" ;
 	bridgeDB:xrefPrefix "GO:" ;
-	bridgeDB:hasUriPattern <http://identifiers.org/obo.go/GO:$id> , <http://purl.org/obo/owl/GO#GO_$id> .
+	bridgeDB:hasUriPattern <http://identifiers.org/obo.go/GO:$id> , <http://purl.org/obo/owl/GO#GO_$id> , <http://purl.uniprot.org/go/$id> .
 
 bridgeDB:DataSource_GOA a bridgeDB:DataSource ;
 	bridgeDB:fullName "GOA" ;
@@ -3131,6 +3131,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://purl.uniprot.org/geneid/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://purl.uniprot.org/geneid/" .
+
+<http://purl.uniprot.org/go/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://purl.uniprot.org/go/" .
 
 <http://purl.uniprot.org/ipi/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://purl.uniprot.org/ipi/" .
