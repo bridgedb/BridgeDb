@@ -166,6 +166,15 @@ bridgeDB:DataSource_Chembl_Molecule a bridgeDB:DataSource ;
 	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> ;
 	bridgeDB:hasUriPattern <http://linkedchemistry.info/chembl/molecule/m$id> .
 
+bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
+	bridgeDB:fullName "Chembl Protclass" ;
+	bridgeDB:systemCode "ChemblProtclass" ;
+	bridgeDB:idExample "CHEMBL_PC_1000" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://rdf.ebi.ac.uk/resource/chembl/protclass/$id> ;
+        bridgeDB:hasRegexPattern "^CHEMBL_PC_\\d+$" .
+
 bridgeDB:DataSource_Chembl_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Target" ;
 	bridgeDB:systemCode "ChemblTarget" ;

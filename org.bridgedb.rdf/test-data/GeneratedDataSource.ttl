@@ -212,6 +212,15 @@ bridgeDB:DataSource_Chembl_Molecule a bridgeDB:DataSource ;
 	bridgeDB:hasUrlPattern <http://data.kasabi.com/dataset/chembl-rdf/molecule/m$id> ;
 	bridgeDB:hasUriPattern <http://chem2bio2rdf.org/chembl/resource/chembl_compounds/$id> , <http://linkedchemistry.info/chembl/molecule/m$id> .
 
+bridgeDB:DataSource_Chembl_Protclass a bridgeDB:DataSource ;
+	bridgeDB:fullName "Chembl Protclass" ;
+	bridgeDB:systemCode "ChemblProtclass" ;
+	bridgeDB:idExample "CHEMBL_PC_1000" ;
+	bridgeDB:primary "true"^^<http://www.w3.org/2001/XMLSchema#boolean> ;
+	bridgeDB:type "unknown" ;
+	bridgeDB:hasUrlPattern <http://rdf.ebi.ac.uk/resource/chembl/protclass/$id> ;
+	bridgeDB:hasRegexPattern "^CHEMBL_PC_\\d+$" .
+
 bridgeDB:DataSource_Chembl_Target a bridgeDB:DataSource ;
 	bridgeDB:fullName "Chembl Target" ;
 	bridgeDB:systemCode "ChemblTarget" ;
@@ -3173,6 +3182,9 @@ bridgeDB:Organism_Zm a bridgeDB:Organism ;
 
 <http://rdf.ebi.ac.uk/resource/chembl/molecule/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/chembl/molecule/" .
+
+<http://rdf.ebi.ac.uk/resource/chembl/protclass/$id> a bridgeDB:uriPattern ;
+	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/chembl/protclass/" .
 
 <http://rdf.ebi.ac.uk/resource/chembl/target/$id> a bridgeDB:uriPattern ;
 	bridgeDB:hasPrefix "http://rdf.ebi.ac.uk/resource/chembl/target/" .
