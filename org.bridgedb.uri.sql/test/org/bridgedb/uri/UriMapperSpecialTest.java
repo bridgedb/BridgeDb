@@ -384,4 +384,80 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
      }
  */     
 
+    @Test
+    public void testChemblProtclass() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclass");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        Set<String> results = uriMapper.mapUri(uri, null, null);        
+        assertThat(results, hasItem(uri));
+    }
+    
+    @Test
+    public void testChemblProtclass2() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclass2");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        Set<String> results = uriMapper.mapUri(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/");        
+        assertThat(results, hasItem(uri));
+    }
+    
+    @Test
+    public void testChemblProtclass3() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclass3");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        Set<String> results = uriMapper.mapUri(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/", "http://www.example.com/protclass/");        
+        assertThat(results, hasItem(uri));
+    }
+    
+    @Test
+    public void testChemblProtclass4() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclass4");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        System.out.println(uriMapper.getClass());
+        Set<String> results = uriMapper.mapUri(uri, null, null, "http://www.example.com/protclass/");        
+        assertEquals (0, results.size());
+    }
+    
+    @Test
+    public void testChemblProtclassFull() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclassFull");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        System.out.println(uriMapper.getClass());
+        Set<Mapping> results = uriMapper.mapFull(uri, null, null);        
+        assertEquals (1, results.size());
+    }
+    
+    @Test
+    public void testChemblProtclass2Full() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclass2Full");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        System.out.println(uriMapper.getClass());
+        Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/");        
+        assertEquals (1, results.size());
+    }
+    
+    @Test
+    public void testChemblProtclass3Full() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclass3Full");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        System.out.println(uriMapper.getClass());
+        Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://rdf.ebi.ac.uk/resource/chembl/protclass/", "http://www.example.com/protclass/");        
+        assertEquals (1, results.size());
+    }
+    
+    @Test
+    public void testChemblProtclass4Full() throws Exception {
+        //Date start = new Date();
+        report("ChemblProtclass4Full");
+        String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
+        System.out.println(uriMapper.getClass());
+        Set<Mapping> results = uriMapper.mapFull(uri, null, null, "http://www.example.com/protclass/");        
+        assertEquals (0, results.size());
+    }
 }
