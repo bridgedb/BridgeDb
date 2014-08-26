@@ -111,6 +111,9 @@ public class GraphResolver {
         }
         GraphResolver resolver = getInstance();
         Set<RegexUriPattern> results = resolver.getAllowedPatterns(graph);
+        if (results == null){
+            throw new BridgeDBException ("Unkown Graph " + graph);
+        }
         return results;
     }
 
