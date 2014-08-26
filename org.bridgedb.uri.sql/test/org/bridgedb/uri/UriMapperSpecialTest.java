@@ -427,7 +427,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
         report("ChemblProtclassFull");
         String uri = "http://rdf.ebi.ac.uk/resource/chembl/protclass/CHEMBL_PC_1000";
         System.out.println(uriMapper.getClass());
-        Set<Mapping> results = uriMapper.mapFull(uri, null, null);        
+        Set<Mapping> results = uriMapper.mapFull(uri, null, null, null);        
         assertEquals (1, results.size());
     }
     

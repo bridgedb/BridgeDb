@@ -54,9 +54,6 @@ public class RegexUriPattern {
         } else {
             this.postfix = "";
         }
-        if (sysCode == null || sysCode.isEmpty()){
-            throw new BridgeDBException ("Illegal sysCode " + sysCode);
-        }
         this.sysCode = sysCode;
         this.regex = regex;
     }
@@ -127,6 +124,10 @@ public class RegexUriPattern {
             throw new BridgeDBException ("Unable to convert Pattern " + regex.pattern() + " for code " + sysCode 
                     + " based on xrefprefix " + xrefPrefix);
         }
+    }
+
+    public static RegexUriPattern factory(String prefix) throws BridgeDBException {
+        return factory(prefix, "", null);
     }
 
     public static RegexUriPattern factory(String prefix, String postfix, String sysCode) throws BridgeDBException {

@@ -528,7 +528,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         return results;
     }
 
-	private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, String tgtSysCode) throws BridgeDBException{
+    private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, String tgtSysCode) throws BridgeDBException{
         if (sourceRef == null) {
             return new HashSet<Mapping>();
         }
@@ -2393,12 +2393,16 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }    
         try {
             ArrayList<RegexUriPattern> results = new ArrayList<RegexUriPattern>(); 
-            while(rs.next()){
-                String prefix = rs.getString(PREFIX_COLUMN_NAME);
-                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                String regex = rs.getString(REGEX_COLUMN_NAME);
-                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                results.add(RegexUriPattern.factory(prefix, postfix, sysCode));
+            if (rs.next()){
+                do {
+                    String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                    String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                    String regex = rs.getString(REGEX_COLUMN_NAME);
+                    String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                    results.add(RegexUriPattern.factory(prefix, postfix, sysCode));
+                } while(rs.next());
+            } else {
+                results.add(RegexUriPattern.factory(partPrefix));
             }
             return results;
         } catch (SQLException ex) {
