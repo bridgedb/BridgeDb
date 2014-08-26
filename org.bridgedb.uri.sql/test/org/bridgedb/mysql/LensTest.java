@@ -65,6 +65,15 @@ public class LensTest extends org.bridgedb.uri.UriListenerTest {
     }
 
     @Test
+    public void testCHEMINF_000514() throws Exception {
+        report("CHEMINF_000514");
+        Lens defaultLens = LensTools.byId(Lens.DEFAULT_LENS_NAME);
+        Lens SpecialLens = LensTools.byId("CHEMINF_000514");
+        //Note if test is for a special lens which loads defauls not this specific lens.
+        assertThat (SpecialLens.getJustifications().size(), greaterThan(defaultLens.getJustifications().size()));
+    }
+
+    @Test
     public void testRDF() throws Exception {
         report("RDF");
         Set<Statement> statements = LensTools.getLensAsRdf(null);

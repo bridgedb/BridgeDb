@@ -65,6 +65,7 @@ public class LensTools {
     private static final String CREATED_ON = "createdOn";
     private static final String DESCRIPTION = "description";
     private static final String JUSTIFICATION = "justification";
+    private static final String DEFAULT = "default";
     private static final String NAME = "name";
     
     
@@ -152,6 +153,38 @@ public class LensTools {
         register.put(lens.getId().toLowerCase(), lens);
     }
     
+    private static void processKey(Properties properties, String key, boolean processDefault) throws BridgeDBException{
+        if (key.startsWith(PROPERTY_PREFIX)){
+            String[] parts = key.split("\\.");
+            if (processDefault){
+                if (!parts[1].equals(Lens.DEFAULT_LENS_NAME)){
+                    return;
+                }
+            } else {
+                if (parts[1].equals(Lens.DEFAULT_LENS_NAME)){
+                    return;
+                }                
+            }
+            Lens lens = findOrCreatedById(parts[1]);
+            if (parts[2].equals(CREATED_BY)){
+                lens.setCreatedBy(properties.getProperty(key));
+            } else if (parts[2].equals(CREATED_ON)){
+                lens.setCreatedOn(properties.getProperty(key));
+            } else if (parts[2].equals(NAME)){
+                lens.setName(properties.getProperty(key));
+            } else if (parts[2].equals(DESCRIPTION)){
+                lens.setDescription(properties.getProperty(key));
+            } else if (parts[2].equals(DEFAULT)){
+                Lens defaultLens = findOrCreatedById(Lens.DEFAULT_LENS_NAME);
+                lens.addJustifications(defaultLens.getJustifications());
+            } else if (parts[2].equals(JUSTIFICATION)){
+                lens.addJustification(properties.getProperty(key));
+            } else {
+                logger.error("Found unexpected property " + key);
+            }
+        }        
+    }
+    
     public static void init() throws BridgeDBException {
         if (register == null){
             logger.info("init");
@@ -163,23 +196,12 @@ public class LensTools {
             Properties properties = ConfigReader.getProperties(PROPERTIES_FILE);
             Set<String> keys = properties.stringPropertyNames();
             for (String key:keys){
-                if (key.startsWith(PROPERTY_PREFIX)){
-                    String[] parts = key.split("\\.");
-                    Lens lens = findOrCreatedById(parts[1]);
-                    if (parts[2].equals(CREATED_BY)){
-                        lens.setCreatedBy(properties.getProperty(key));
-                    } else if (parts[2].equals(CREATED_ON)){
-                        lens.setCreatedOn(properties.getProperty(key));
-                    } else if (parts[2].equals(NAME)){
-                        lens.setName(properties.getProperty(key));
-                    } else if (parts[2].equals(DESCRIPTION)){
-                        lens.setDescription(properties.getProperty(key));
-                    } else if (parts[2].equals(JUSTIFICATION)){
-                        lens.addJustification(properties.getProperty(key));
-                    } else {
-                        logger.error("Found unexpected property " + key);
-                    }
-                }
+                //process the default lens
+                processKey(properties, key, true);
+            }
+            for (String key:keys){
+                //process the other lens
+                processKey(properties, key, false);
             }
             for (Lens lens:getLens()){
                 all.addJustifications(lens.getJustifications());
