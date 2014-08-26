@@ -340,10 +340,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     
     private Set<String> mapUri (IdSysCodePair sourceRef, String lensUri, String graph, String[] tgtUriPatterns) 
             throws BridgeDBException {
-        System.out.println(graph);
-        System.out.println(tgtUriPatterns);
+        //ystem.out.println(graph);
+        //ystem.out.println(tgtUriPatterns);
         if ((graph == null || graph.isEmpty()) && (tgtUriPatterns == null || tgtUriPatterns.length == 0)){
-            System.out.println("XXX");
+            //ystem.out.println("XXX");
             return mapUri (sourceRef, lensUri);
         }        
         Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
@@ -592,10 +592,10 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException{
-        System.out.println(graph);
-        System.out.println(tgtUriPatterns);
+        //ystem.out.println(graph);
+        //ystem.out.println(tgtUriPatterns);
         if ((graph == null || graph.isEmpty()) && (tgtUriPatterns == null || tgtUriPatterns.length == 0)){
-            System.out.println("YYY");
+            //ystem.out.println("YYY");
             return mapFull (sourceRef, lensUri);
         } else {
             Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
