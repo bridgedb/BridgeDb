@@ -347,6 +347,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             return mapUri (sourceRef, lensUri);
         }        
         Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
+        System.out.println(targetUriPatterns);
         Set<String> results = new HashSet<String>();
         for (RegexUriPattern tgtUriPattern:targetUriPatterns){
             results.addAll(mapUri(sourceRef, lensUri, tgtUriPattern));
@@ -366,9 +367,55 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
+        if (sourceRef == null){
+            return mapUnkownUri(sourceUri, graph, tgtUriPatterns);
+        }
+        System.out.println(sourceRef);
         return mapUri(sourceRef, lensUri, graph, tgtUriPatterns);
     }
- 
+             
+    private Set<String> mapUnkownUri(String sourceUri, String graph, String... tgtUriPatterns) throws BridgeDBException{
+        Set<String> results = new HashSet<String>();
+        if (sourceUri == null){
+            return results;
+        }
+        if (graph != null && !graph.isEmpty()){
+            if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+                return results;
+            } else {
+                throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
+            }
+        } else {
+            if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+                results.add(sourceUri);
+                return results;
+            } else {
+                for(String tgtUriPattern:tgtUriPatterns){
+                    if (patternMatch(sourceUri, tgtUriPattern)){
+                        results.add(sourceUri);
+                        return results;        
+                    }
+                }
+                return results;        
+            }    
+        }
+    }
+    
+    protected final boolean patternMatch(String uri, String pattern){
+        if (pattern.contains("$id")){
+            if (pattern.endsWith("$id")){
+                pattern = pattern.substring(0, pattern.length()-3);
+            } else {
+                String postfix = pattern.substring(pattern.indexOf("$id")+3);
+                if (!uri.endsWith(postfix)){
+                    return false;
+                }
+                pattern = pattern.substring(0,pattern.indexOf("$id"));
+            }
+        }
+        return uri.startsWith(pattern);
+    }
+    
     @Override
     public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException {
@@ -595,7 +642,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         //ystem.out.println(graph);
         //ystem.out.println(tgtUriPatterns);
         if ((graph == null || graph.isEmpty()) && (tgtUriPatterns == null || tgtUriPatterns.length == 0)){
-            //ystem.out.println("YYY");
+            //stem.out.println("YYY");
             return mapFull (sourceRef, lensUri);
         } else {
             Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
@@ -2393,17 +2440,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }    
         try {
             ArrayList<RegexUriPattern> results = new ArrayList<RegexUriPattern>(); 
-            if (rs.next()){
-                do {
-                    String prefix = rs.getString(PREFIX_COLUMN_NAME);
-                    String postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                    String regex = rs.getString(REGEX_COLUMN_NAME);
-                    String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                    results.add(RegexUriPattern.factory(prefix, postfix, sysCode));
-                } while(rs.next());
-            } else {
-                results.add(RegexUriPattern.factory(partPrefix));
-            }
+             while(rs.next()) {
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String regex = rs.getString(REGEX_COLUMN_NAME);
+                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                results.add(RegexUriPattern.factory(prefix, postfix, sysCode));
+            } 
             return results;
         } catch (SQLException ex) {
             throw new BridgeDBException("Error getting prefixr using. " + query, ex);

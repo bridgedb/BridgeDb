@@ -126,10 +126,6 @@ public class RegexUriPattern {
         }
     }
 
-    public static RegexUriPattern factory(String prefix) throws BridgeDBException {
-        return factory(prefix, "", null);
-    }
-
     public static RegexUriPattern factory(String prefix, String postfix, String sysCode) throws BridgeDBException {
         return new RegexUriPattern(prefix, postfix, sysCode, null);
     }
