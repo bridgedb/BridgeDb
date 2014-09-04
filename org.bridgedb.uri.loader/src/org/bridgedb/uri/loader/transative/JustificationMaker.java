@@ -32,22 +32,37 @@ import org.bridgedb.utils.BridgeDBException;
  */
 public class JustificationMaker {
 
-    public static Set<String> PARENT_CHILD = new HashSet<String>(Arrays.asList(
-            ChemInf.hasStereoundefinedParent, 
+    public static Set<String> CHEMICAL_LENS = new HashSet<String>(Arrays.asList(
+            //Child-Child
+            ChemInf.isIsotopologueOf,
+            ChemInf.isStereoisomerOf,
+            OboConstants.IS_TAUTOMER_OF,
+            ChemInf.isCounterpartWithDifferentChargeOf,
+            ChemInf.sharesOPSNormalizedParentWith,
+            //Parent-Child
+            ChemInf.hasChemAxonCanonicalisedTautomer,
+            ChemInf.isChemAxonCanonicalisedTtautomerOf,
             ChemInf.hasOPSNormalizedCounterpart, 
+            ChemInf.isOPSNormalizedCounterpartOf,
+            ChemInf.hasStereoundefinedParent, 
+            ChemInf.isStereoundefinedParentOf,
             ChemInf.hasIsotopicallyUnspecifiedParent,
+            ChemInf.isIsotopicallyUnspecifiedParentOf,
             ChemInf.hasUnchargedCounterpart,
+            ChemInf.isUnchargedCounterpartOf,
             ChemInf.hasComponentWithUnchargedCounterpart,
+            ChemInf.isComponentWithUnchargedCounterpartOf,
+            //Other not in version 1_4_2
             ChemInf.hasMajorTautomerAtpH7point4,
             OboConstants.HAS_PART,
-            OboConstants.IS_TAUTOMER_OF,
             OboConstants.HAS_FUNCTIONAL_PARENT
             ));
 
     private static final String CW_GENE_HACK = "http://example.com/ConceptWikiGene";
     private static final String CW_PROTEIN_HACK = "http://example.com/ConceptWikiProtein";
     private static final String ENEMBL_BASED_PROTIEN_GENE_HACK = "http://example.com/EnsemblBasedProteinGene";
-
+    public static final String  PROTEIN_CODING_GENE = "http://semanticscience.org/resource/SIO_000985";
+    
     public static Set<String> CROSS_TYPE = new HashSet<String>(Arrays.asList(
             ChemInf.PROTEIN_CODING_GENE,
             ChemInf.FUNCTIONAL_RNA_CODING_GENE,
@@ -72,7 +87,7 @@ public class JustificationMaker {
         } else if (left.equals(ChemInf.CHEMICAL_ENTITY)) {
             if (right.equals(ChemInf.INCHI_KEY)) {
                 return ChemInf.CHEMICAL_ENTITY;
-            } else if (PARENT_CHILD.contains(right)){
+            } else if (CHEMICAL_LENS.contains(right)){
                 return right;
             } else {
                 return null;
@@ -98,7 +113,7 @@ public class JustificationMaker {
         } else if (left.equals(ChemInf.INCHI_KEY)) {
             if (right.equals(ChemInf.CHEMICAL_ENTITY)) {
                 return ChemInf.CHEMICAL_ENTITY;
-            } else if (PARENT_CHILD.contains(right)){
+            } else if (CHEMICAL_LENS.contains(right)){
                 return right;
             } else {
                 return null;
@@ -139,7 +154,7 @@ public class JustificationMaker {
                 return null;
             }
             //Not CW HACK as we don't link CW and Enemble based transitively
-         } else if (PARENT_CHILD.contains(left)) {
+         } else if (CHEMICAL_LENS.contains(left)) {
          	if (right.equals(ChemInf.INCHI_KEY)) {
                 return left;
             } else if (right.equals(ChemInf.CHEMICAL_ENTITY)) {
@@ -180,4 +195,61 @@ public class JustificationMaker {
         System.out.println("not found " + left);
         return null;
     }
+    
+    public static String getInverse(String justification) {
+        if (justification.equals(ChemInf.isUnchargedCounterpartOf)){
+            return ChemInf.hasUnchargedCounterpart;
+        }
+        if (justification.equals(ChemInf.hasUnchargedCounterpart)){
+            return ChemInf.isUnchargedCounterpartOf;
+        }
+        if (justification.equals(ChemInf.hasIsotopicallyUnspecifiedParent)){
+            return ChemInf.isIsotopicallyUnspecifiedParentOf;
+        }
+        if (justification.equals(ChemInf.isIsotopicallyUnspecifiedParentOf)){
+            return ChemInf.hasIsotopicallyUnspecifiedParent;
+        }
+        if (justification.equals(ChemInf.hasStereoundefinedParent)){
+            return ChemInf.isStereoundefinedParentOf;
+        }
+        if (justification.equals(ChemInf.isStereoundefinedParentOf)){
+            return ChemInf.hasStereoundefinedParent;
+        }
+        if (justification.equals(ChemInf.hasOPSNormalizedCounterpart)){
+            return ChemInf.isOPSNormalizedCounterpartOf;
+        }
+        if (justification.equals(ChemInf.isOPSNormalizedCounterpartOf)){
+            return ChemInf.hasOPSNormalizedCounterpart;
+        }
+        if (justification.equals(OboConstants.HAS_PART)){
+            return OboConstants.PART_OF;
+        }
+        if (justification.equals(OboConstants.HAS_PART)){
+            return OboConstants.PART_OF;
+        }
+        //if (justification.equals("http://example.com/ConceptWikiGene")){
+        //    return PROTEIN_CODING_GENE;
+        //}
+        //if (justification.equals("http://example.com/ConceptWikiProtein")){
+        //    return PROTEIN_CODING_GENE;
+        //}
+        if (justification.equals(Lens.getTestJustifictaion() + "Forward")){
+            return Lens.getTestJustifictaion() + "BackWard";
+        }
+        if (justification.equals(Lens.getTestJustifictaion() + "BackWard")){
+            return Lens.getTestJustifictaion() + "Forward";
+        }
+        return justification;
+    }
+    
+    public static String getForward(String justification) {
+        if (justification.equals("http://example.com/ConceptWikiGene")){
+            return PROTEIN_CODING_GENE;
+        }
+        if (justification.equals("http://example.com/ConceptWikiProtein")){
+            return PROTEIN_CODING_GENE;
+        }
+        return justification;
+    }
+
 }
