@@ -126,6 +126,7 @@ public abstract class UriListenerTest extends IDMapperTestBase{
     //Or null if all Strings can be used.
     protected static String badID;
     //And a few Uris also not used
+    protected static String badUriPrefix;
     protected static String mapBadUri1;
     protected static String mapBadUri2;
     protected static String mapBadUri3;
@@ -178,9 +179,10 @@ public abstract class UriListenerTest extends IDMapperTestBase{
         map3AUri2a = uriSpace2a + ds2Id3+"000001";
         map3AUri3 = map3Axref3.getUrl();
          //And a few Uris also not used
-        mapBadUri1 = "www.notInUriMapper.com#" + ds1Id1;
+        badUriPrefix = "www.notInUriMapper.com#";
+        mapBadUri1 = badUriPrefix + ds1Id1;
         mapBadUri2 = uriSpace2 + badID;
-        mapBadUri3 = "www.notInUriMapper.com#789";
+        mapBadUri3 = badUriPrefix + "#789";
         
     }
     

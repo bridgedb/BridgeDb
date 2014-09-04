@@ -379,26 +379,34 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         if (sourceUri == null){
             return results;
         }
+        if (patternMatch(sourceUri, graph, tgtUriPatterns)){
+            results.add(sourceUri);
+        }
+        return results;
+    }
+    
+    protected final boolean patternMatch(String sourceUri, String graph, String... tgtUriPatterns) throws BridgeDBException{
         if (graph != null && !graph.isEmpty()){
             if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-                return results;
+                //graphs only contain known patterns
+                return false;
             } else {
                 throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
             }
         } else {
             if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
-                results.add(sourceUri);
-                return results;
+                //No graph and no pattern so mapto Self
+                return true;
             } else {
                 for(String tgtUriPattern:tgtUriPatterns){
                     if (patternMatch(sourceUri, tgtUriPattern)){
-                        results.add(sourceUri);
-                        return results;        
+                        return true;
                     }
                 }
-                return results;        
+                //No match found
+                return false;        
             }    
-        }
+        }        
     }
     
     protected final boolean patternMatch(String uri, String pattern){
@@ -479,20 +487,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     @Override
     public MappingsBySet mapBySet(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
+        sourceUri = scrubUri(sourceUri);
+        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
         Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
         if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
            return mapBySet (sourceUri, mappingsBySet, lensUri);
         }
         for (RegexUriPattern tgtUriPattern:targetUriPatterns){
-            mapBySet(sourceUri, mappingsBySet, lensUri, tgtUriPattern);
+            mapBySet(sourceRef, sourceUri, mappingsBySet, lensUri, tgtUriPattern);
         }
         return mappingsBySet;
     }
 
-    private void mapBySet(String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
-        sourceUri = scrubUri(sourceUri);
-        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
+    private void mapBySet(IdSysCodePair sourceRef, String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
         if (sourceRef != null){
             String tgtSysCode = tgtUriPattern.getSysCode();
             ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, tgtSysCode);       
@@ -510,18 +518,20 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
         for (String sourceUri:sourceUris) {
+            sourceUri = scrubUri(sourceUri);
+            IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
             if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
                 mapBySet(sourceUri, mappingsBySet, lensUri);
             } else {
                 for (RegexUriPattern tgtUriPattern:targetUriPatterns) {
-                    mapBySet(sourceUri, mappingsBySet, lensUri, tgtUriPattern);
+                    mapBySet(sourceRef, sourceUri, mappingsBySet, lensUri, tgtUriPattern);
                 }
             }
         }
         return mappingsBySet;           
     }
        
-    public MappingsBySet mapBySet(String sourceUri, MappingsBySet mappingsBySet, String lensUri) 
+    private MappingsBySet mapBySet(String sourceUri, MappingsBySet mappingsBySet, String lensUri) 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
@@ -2425,7 +2435,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(" WHERE ");
         query.append(PREFIX_COLUMN_NAME);
         query.append(" LIKE CONCAT(?, '%')");
-        
         PreparedStatement statement = null;
         ResultSet rs = null;
         try {
