@@ -37,6 +37,7 @@ import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.api.MappingsBySysCodeId;
 import org.bridgedb.uri.api.UriMapper;
+import org.bridgedb.uri.api.UriMapping;
 import org.bridgedb.uri.ws.bean.*;
 import org.bridgedb.utils.BridgeDBException;
 import org.bridgedb.ws.WSCoreMapper;
@@ -79,9 +80,22 @@ public class WSUriMapper extends WSCoreMapper implements UriMapper{
     
     @Override
     public Set<String> mapUri(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
-        Collection<Mapping> beans = mapFull(sourceUri, lensUri, graph, tgtUriPatterns);
-        return extractUris(beans);
-     }
+        List<String> uris = new ArrayList<String>();
+        uris.add(sourceUri);
+        List<String> targetUriPatterns  = new ArrayList<String>();
+        if (tgtUriPatterns != null){
+            for (String tgtUriPattern:tgtUriPatterns){
+                targetUriPatterns.add(tgtUriPattern);
+            }
+        }
+        Response response = uriService.mapUri(uris, lensUri, graph, targetUriPatterns);
+        if (response.getStatus() == Response.Status.NO_CONTENT.getStatusCode()){
+            return new HashSet<String> ();
+        } else {
+            UriMappings beans = (UriMappings)response.getEntity();
+            return beans.getTargetUri();
+        }
+    }
 
     private Set<String> extractUris(Collection<Mapping> beans){
         HashSet<String> results = new HashSet<String>();
