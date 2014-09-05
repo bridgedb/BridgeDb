@@ -391,7 +391,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 //graphs only contain known patterns
                 return false;
             } else {
-                throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
+                throw new BridgeDBException ("Illegal call with both graph " + graph + " and tgtUriPatterns parameters " + tgtUriPatterns);
             }
         } else {
             if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
@@ -515,16 +515,22 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public MappingsBySet mapBySet(Set<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
            throws BridgeDBException{
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
         for (String sourceUri:sourceUris) {
             sourceUri = scrubUri(sourceUri);
             IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-            if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
-                mapBySet(sourceUri, mappingsBySet, lensUri);
+            if (sourceRef == null){
+                if (patternMatch(sourceUri, graph, tgtUriPatterns)){
+                    mappingsBySet.addMapping(sourceUri, sourceUri);
+                }
             } else {
-                for (RegexUriPattern tgtUriPattern:targetUriPatterns) {
-                    mapBySet(sourceRef, sourceUri, mappingsBySet, lensUri, tgtUriPattern);
+                Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
+                if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
+                    mapBySet(sourceUri, mappingsBySet, lensUri);
+                } else {
+                    for (RegexUriPattern tgtUriPattern:targetUriPatterns) {
+                        mapBySet(sourceRef, sourceUri, mappingsBySet, lensUri, tgtUriPattern);
+                    }
                 }
             }
         }

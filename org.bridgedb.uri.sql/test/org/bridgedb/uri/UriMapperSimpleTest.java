@@ -16,7 +16,6 @@ import org.bridgedb.uri.lens.Lens;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -171,7 +170,6 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     }
     
     @Test
-@Ignore    
     public void testMapBySet_badUriMapWithMatchingPattern1() throws Exception {
         report("MapBySet_badUriMapWithMatchingPattern1");
         Set<String> sourceUris = new HashSet<String>();
@@ -185,7 +183,6 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     }
     
     @Test
-@Ignore    
     public void testMapBySet_badUriMapWithMatchingPattern2() throws Exception {
         report("MapBySet_badUriMapWithMatchingPattern2");
         Set<String> sourceUris = new HashSet<String>();
@@ -194,7 +191,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, badUriPrefix+"$id", stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
         System.out.println(results);
-        assertEquals(0, results.size());
+        assertEquals(1, results.size());
     }
 
     @Test
@@ -208,6 +205,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         System.out.println(results);
         assertEquals(0, results.size());
     }
+    
     /**
      * Test of mapUri method, of class UriMapper.
      */
