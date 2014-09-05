@@ -338,7 +338,7 @@ public abstract class UriMapperSpecialTest extends UriListenerTest{
             String graph = null;
             String[] tgtUriPatterns = new String[1];
             tgtUriPatterns[0] = uri;
-            Set<RegexUriPattern> results = ((SQLUriMapper)uriMapper).findRegexPatterns(graph, tgtUriPatterns);
+            Set<RegexUriPattern> results = ((SQLUriMapper)uriMapper).findRegexPatternsWithNulls(graph, tgtUriPatterns);
             assertThat (results.size(), greaterThanOrEqualTo(100));
         }
     }

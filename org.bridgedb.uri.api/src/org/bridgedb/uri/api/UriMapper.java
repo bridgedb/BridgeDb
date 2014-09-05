@@ -144,8 +144,6 @@ public interface UriMapper extends IDMapper{
     public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUri, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException;
 
-    public MappingsBySet mapBySet(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException;
-   
     public MappingsBySet mapBySet(Set<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
            throws BridgeDBException;
    /**
