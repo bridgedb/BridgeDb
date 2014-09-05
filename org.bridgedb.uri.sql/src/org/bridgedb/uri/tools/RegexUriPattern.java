@@ -126,10 +126,6 @@ public class RegexUriPattern {
         }
     }
 
-    public static RegexUriPattern factory(String prefix) throws BridgeDBException {
-        return factory(prefix, "", null);
-    }
-
     public static RegexUriPattern factory(String prefix, String postfix, String sysCode) throws BridgeDBException {
         return new RegexUriPattern(prefix, postfix, sysCode, null);
     }
@@ -169,7 +165,16 @@ public class RegexUriPattern {
         return results;
     }
 
-    public static Set<RegexUriPattern> byPattern(String pattern) throws BridgeDBException {
+    public static Set<RegexUriPattern> byPatternOrEmpty(String pattern) throws BridgeDBException {
+        //todo regex in pattern
+        UriPattern uriPattern = UriPattern.byPattern(pattern);
+        if (uriPattern == null){
+            return new HashSet<RegexUriPattern>();
+        }
+        return byPattern(uriPattern);
+    }
+
+    public static Set<RegexUriPattern> existingByPattern(String pattern) throws BridgeDBException {
         //todo regex in pattern
         UriPattern uriPattern = UriPattern.existingByPattern(pattern);
         return byPattern(uriPattern);

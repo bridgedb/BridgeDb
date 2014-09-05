@@ -326,7 +326,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private Set<String> mapUri (IdSysCodePair sourceRef, String lensUri, RegexUriPattern tgtUriPattern) 
             throws BridgeDBException {
         if (tgtUriPattern == null){
-            logger.warn("mapUri called with a null tgtDatasource");
             return new HashSet<String>();
         }
         String tgtSysCode = tgtUriPattern.getSysCode();
@@ -346,7 +345,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             //ystem.out.println("XXX");
             return mapUri (sourceRef, lensUri);
         }        
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
         Set<String> results = new HashSet<String>();
         for (RegexUriPattern tgtUriPattern:targetUriPatterns){
             results.addAll(mapUri(sourceRef, lensUri, tgtUriPattern));
@@ -366,9 +365,62 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
+        if (sourceRef == null){
+            return mapUnkownUri(sourceUri, graph, tgtUriPatterns);
+        }
         return mapUri(sourceRef, lensUri, graph, tgtUriPatterns);
     }
- 
+             
+    private Set<String> mapUnkownUri(String sourceUri, String graph, String... tgtUriPatterns) throws BridgeDBException{
+        Set<String> results = new HashSet<String>();
+        if (sourceUri == null){
+            return results;
+        }
+        if (patternMatch(sourceUri, graph, tgtUriPatterns)){
+            results.add(sourceUri);
+        }
+        return results;
+    }
+    
+    protected final boolean patternMatch(String sourceUri, String graph, String... tgtUriPatterns) throws BridgeDBException{
+        if (graph != null && !graph.isEmpty()){
+            if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+                //graphs only contain known patterns
+                return false;
+            } else {
+                throw new BridgeDBException ("Illegal call with both graph " + graph + " and tgtUriPatterns parameters " + tgtUriPatterns);
+            }
+        } else {
+            if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
+                //No graph and no pattern so mapto Self
+                return true;
+            } else {
+                for(String tgtUriPattern:tgtUriPatterns){
+                    if (patternMatch(sourceUri, tgtUriPattern)){
+                        return true;
+                    }
+                }
+                //No match found
+                return false;        
+            }    
+        }        
+    }
+    
+    protected final boolean patternMatch(String uri, String pattern){
+        if (pattern.contains("$id")){
+            if (pattern.endsWith("$id")){
+                pattern = pattern.substring(0, pattern.length()-3);
+            } else {
+                String postfix = pattern.substring(pattern.indexOf("$id")+3);
+                if (!uri.endsWith(postfix)){
+                    return false;
+                }
+                pattern = pattern.substring(0,pattern.indexOf("$id"));
+            }
+        }
+        return uri.startsWith(pattern);
+    }
+    
     @Override
     public MappingsBySysCodeId mapUriBySysCodeId (Collection<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
             throws BridgeDBException {
@@ -396,8 +448,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
 
     private MappingsBySysCodeId mapUriBySysCodeId (IdSysCodePair sourceRef, String lensUri, String graph, String[] tgtUriPatterns) 
             throws BridgeDBException {
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
-        if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
+        Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
+        if (targetUriPatterns.isEmpty()){
             return mapUriBySysCodeId (sourceRef, lensUri);
         }
         MappingsBySysCodeId results = new MappingsBySysCodeId();
@@ -420,7 +472,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     private void mapUriBySysCodeId (MappingsBySysCodeId results, IdSysCodePair sourceRef, String lensUri, RegexUriPattern tgtUriPattern) 
             throws BridgeDBException {
         if (tgtUriPattern == null){
-            logger.warn("mapUri called with a null tgtDatasource");
             return;
         }
         String tgtSysCode = tgtUriPattern.getSysCode();
@@ -430,23 +481,8 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
-    @Override
-    public MappingsBySet mapBySet(String sourceUri, String lensUri, String graph, String... tgtUriPatterns) throws BridgeDBException {
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
-        MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
-        if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
-           return mapBySet (sourceUri, mappingsBySet, lensUri);
-        }
-        for (RegexUriPattern tgtUriPattern:targetUriPatterns){
-            mapBySet(sourceUri, mappingsBySet, lensUri, tgtUriPattern);
-        }
-        return mappingsBySet;
-    }
-
-    private void mapBySet(String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
-        sourceUri = scrubUri(sourceUri);
-        IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
-        if (sourceRef != null){
+    private void mapBySet(IdSysCodePair sourceRef, String sourceUri, MappingsBySet mappingsBySet, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
+        if (tgtUriPattern != null){
             String tgtSysCode = tgtUriPattern.getSysCode();
             ResultSet rs = mapBySetOnly(sourceRef, sourceUri, lensUri, tgtSysCode);       
             resultSetAddToMappingsBySet(rs, sourceUri, mappingsBySet, tgtUriPattern);           
@@ -460,21 +496,29 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
     @Override
     public MappingsBySet mapBySet(Set<String> sourceUris, String lensUri, String graph, String... tgtUriPatterns) 
            throws BridgeDBException{
-        Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
         MappingsBySet mappingsBySet = new MappingsBySet(lensUri);
         for (String sourceUri:sourceUris) {
-            if (targetUriPatterns == null || targetUriPatterns.isEmpty()){
-                mapBySet(sourceUri, mappingsBySet, lensUri);
+            sourceUri = scrubUri(sourceUri);
+            IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
+            if (sourceRef == null){
+                if (patternMatch(sourceUri, graph, tgtUriPatterns)){
+                    mappingsBySet.addMapping(sourceUri, sourceUri);
+                }
             } else {
-                for (RegexUriPattern tgtUriPattern:targetUriPatterns) {
-                    mapBySet(sourceUri, mappingsBySet, lensUri, tgtUriPattern);
+                Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
+                if (targetUriPatterns.isEmpty()){
+                    mapBySet(sourceUri, mappingsBySet, lensUri);
+                } else {
+                    for (RegexUriPattern tgtUriPattern:targetUriPatterns) {
+                        mapBySet(sourceRef, sourceUri, mappingsBySet, lensUri, tgtUriPattern);
+                    }
                 }
             }
         }
         return mappingsBySet;           
     }
        
-    public MappingsBySet mapBySet(String sourceUri, MappingsBySet mappingsBySet, String lensUri) 
+    private MappingsBySet mapBySet(String sourceUri, MappingsBySet mappingsBySet, String lensUri) 
             throws BridgeDBException {
         sourceUri = scrubUri(sourceUri);
         IdSysCodePair sourceRef = toIdSysCodePair(sourceUri);
@@ -578,10 +622,15 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }
     }
 
+    /**
+     * 
+     * @param sourceRef
+     * @param lensUri
+     * @param tgtUriPattern Unlike similar methods this can not be null
+     * @return
+     * @throws BridgeDBException 
+     */
     private Set<Mapping> mapFull (IdSysCodePair sourceRef, String lensUri, RegexUriPattern tgtUriPattern) throws BridgeDBException {
-        if (tgtUriPattern == null){
-           return new HashSet<Mapping>();
-        }
         String tgtSysCode = tgtUriPattern.getSysCode();
         Set<Mapping> results = mapFull(sourceRef, lensUri, tgtSysCode);
         for (Mapping result:results){
@@ -595,15 +644,21 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         //ystem.out.println(graph);
         //ystem.out.println(tgtUriPatterns);
         if ((graph == null || graph.isEmpty()) && (tgtUriPatterns == null || tgtUriPatterns.length == 0)){
-            //ystem.out.println("YYY");
+            //stem.out.println("YYY");
             return mapFull (sourceRef, lensUri);
         } else {
-            Set<RegexUriPattern> targetUriPatterns = findRegexPatterns(graph, tgtUriPatterns);
-            Set<Mapping> results = new HashSet<Mapping>();
-            for (RegexUriPattern tgtUriPattern: targetUriPatterns){
-                results.addAll(mapFull(sourceRef, lensUri, tgtUriPattern));
+            Set<RegexUriPattern> targetUriPatterns = findRegexPatternsWithNulls(graph, tgtUriPatterns);
+            if (targetUriPatterns.isEmpty()){
+                return mapFull(sourceRef, lensUri);
+            } else {
+                Set<Mapping> results = new HashSet<Mapping>();
+                for (RegexUriPattern tgtUriPattern: targetUriPatterns){
+                    if (tgtUriPattern != null){
+                        results.addAll(mapFull(sourceRef, lensUri, tgtUriPattern));
+                    }
+                }
+                return results;
             }
-            return results;
         }
     }
 
@@ -2350,7 +2405,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         throw new BridgeDBException ("Illegal call with both graph and tgtUriPatterns parameters");
     }
 
-    public final Set<RegexUriPattern> findRegexPatterns(String graph, String[] tgtUriPatterns) throws BridgeDBException {
+    public final Set<RegexUriPattern> findRegexPatternsWithNulls(String graph, String[] tgtUriPatterns) throws BridgeDBException {
         if (tgtUriPatterns == null || tgtUriPatterns.length == 0){
             return GraphResolver.getUriPatternsForGraph(graph);
         }
@@ -2360,7 +2415,7 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
                 if (tgtUriPatterns[i] == null){
                     results.add(null);
                 } else if (tgtUriPatterns[i].contains("$id")){
-                    Set<RegexUriPattern> patterns = RegexUriPattern.byPattern(tgtUriPatterns[i]);
+                    Set<RegexUriPattern> patterns = RegexUriPattern.byPatternOrEmpty(tgtUriPatterns[i]);
                     results.addAll(patterns);
                 } else {
                     results.addAll(getRegexByPartialPrefix(tgtUriPatterns[i]));
@@ -2378,7 +2433,6 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         query.append(" WHERE ");
         query.append(PREFIX_COLUMN_NAME);
         query.append(" LIKE CONCAT(?, '%')");
-        
         PreparedStatement statement = null;
         ResultSet rs = null;
         try {
@@ -2393,17 +2447,13 @@ public class SQLUriMapper extends SQLIdMapper implements UriMapper, UriListener 
         }    
         try {
             ArrayList<RegexUriPattern> results = new ArrayList<RegexUriPattern>(); 
-            if (rs.next()){
-                do {
-                    String prefix = rs.getString(PREFIX_COLUMN_NAME);
-                    String postfix = rs.getString(POSTFIX_COLUMN_NAME);
-                    String regex = rs.getString(REGEX_COLUMN_NAME);
-                    String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
-                    results.add(RegexUriPattern.factory(prefix, postfix, sysCode));
-                } while(rs.next());
-            } else {
-                results.add(RegexUriPattern.factory(partPrefix));
-            }
+             while(rs.next()) {
+                String prefix = rs.getString(PREFIX_COLUMN_NAME);
+                String postfix = rs.getString(POSTFIX_COLUMN_NAME);
+                String regex = rs.getString(REGEX_COLUMN_NAME);
+                String sysCode = rs.getString(DATASOURCE_COLUMN_NAME);
+                results.add(RegexUriPattern.factory(prefix, postfix, sysCode));
+            } 
             return results;
         } catch (SQLException ex) {
             throw new BridgeDBException("Error getting prefixr using. " + query, ex);

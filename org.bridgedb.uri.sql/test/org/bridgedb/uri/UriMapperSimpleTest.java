@@ -9,10 +9,12 @@ import java.util.Set;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.rdf.UriPattern;
+import static org.bridgedb.uri.UriListenerTest.mapBadUri1;
 import org.bridgedb.uri.api.Mapping;
 import org.bridgedb.uri.api.MappingsBySet;
 import org.bridgedb.uri.lens.Lens;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -106,8 +108,10 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapBySet_sourceUri_lensId_tgtUriPatterns() throws Exception {
         report("MapUri_sourceUri_lensId_tgtUriPatterns");
         String sourceUri = map3Uri3;
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(sourceUri);
         String lensId = Lens.DEFAULT_LENS_NAME;
-        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUri, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
         assertFalse(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));
@@ -120,7 +124,7 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
 
     @Test
     public void testMapBySet_sourceUris_lensId_tgtUriPatterns() throws Exception {
-        report("MapUri_sourceUris_lensId_tgtUriPatterns");
+        report("MapBySet_sourceUris_lensId_tgtUriPatterns");
         Set<String> sourceUris = new HashSet<String>();
         sourceUris.add(map3Uri3);
         sourceUris.add(map1Uri1);
@@ -137,8 +141,8 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     }
     
     @Test
-    public void testMapBySet_sourceUrisB_lensId_tgtUriPatterns() throws Exception {
-        report("MapUri_sourceUrisB_lensId_tgtUriPatterns");
+    public void testMapBySet_sourceUrisB_lensId_tgtUriPatterns1() throws Exception {
+        report("MapBySet_sourceUrisB_lensId_tgtUriPatterns1");
         Set<String> sourceUris = new HashSet<String>();
         sourceUris.add(map3Uri3);
         sourceUris.add(map3Uri1);
@@ -154,6 +158,70 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
         checkForNoOtherlensId(results);
     }
 
+    @Test
+    public void testMapBySet_sourceUrisB_lensId_tgtUriPatterns2() throws Exception {
+        report("MapBySet_sourceUrisB_lensId_tgtUriPatterns2");
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(map3Uri3);
+        sourceUris.add(map3Uri1);
+        String lensId = Lens.DEFAULT_LENS_NAME;
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, stringPattern2, badUriPrefix+"$id", stringPattern3, badUriPrefix+"$id" + ".html");
+        Set<String> results = lensMapping.getTargetUris();
+        assertFalse(results.contains(map3Uri1));
+        assertTrue(results.contains(map3Uri2));
+        assertFalse(results.contains(map3Uri2a));
+        assertTrue(results.contains(map3Uri3));
+        assertFalse(results.contains(map2Uri2));
+        assertFalse(results.contains(map1Uri3));
+        checkForNoOtherlensId(results);
+    }
+
+    @Test
+    public void testMapBySet_badUriMapNoPattern() throws Exception {
+        report("MapBySet_badUriMapNoPattern");
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(mapBadUri1);
+        String lensId = Lens.DEFAULT_LENS_NAME;
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH);
+        Set<String> results = lensMapping.getTargetUris();
+        assertThat(results, hasItem(mapBadUri1));
+        assertEquals(1, results.size());
+    }
+    
+    @Test
+    public void testMapBySet_badUriMapWithMatchingPattern1() throws Exception {
+        report("MapBySet_badUriMapWithMatchingPattern1");
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(mapBadUri1);
+        String lensId = Lens.DEFAULT_LENS_NAME;
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, badUriPrefix+"$id");
+        Set<String> results = lensMapping.getTargetUris();
+        assertThat(results, hasItem(mapBadUri1));
+        assertEquals(1, results.size());
+    }
+    
+    @Test
+    public void testMapBySet_badUriMapWithMatchingPattern2() throws Exception {
+        report("MapBySet_badUriMapWithMatchingPattern2");
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(mapBadUri1);
+        String lensId = Lens.DEFAULT_LENS_NAME;
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, badUriPrefix+"$id", stringPattern3);
+        Set<String> results = lensMapping.getTargetUris();
+        assertEquals(1, results.size());
+    }
+
+    @Test
+    public void testMapBySet_badUriMapNoMatchPattern() throws Exception {
+        report("MapBySet_badUriMapNoMatchPattern");
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(mapBadUri1);
+        String lensId = Lens.DEFAULT_LENS_NAME;
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, stringPattern2, stringPattern3);
+        Set<String> results = lensMapping.getTargetUris();
+        assertEquals(0, results.size());
+    }
+    
     /**
      * Test of mapUri method, of class UriMapper.
      */
@@ -248,8 +316,10 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapBySet_sourceUri_lensId_tgtUriPattern() throws Exception {
         report("MapBySet_sourceUri_lensId_tgtUriPattern");
         String sourceUri = map3Uri2;
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(sourceUri);
         String lensId = Lens.DEFAULT_LENS_NAME;
-        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUri, lensId, NULL_GRAPH, stringPattern3);
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH, stringPattern3);
         Set<String> results = lensMapping.getTargetUris();
         assertFalse(results.contains(map3Uri1));
         assertFalse(results.contains(map3Uri2));
@@ -285,8 +355,10 @@ public abstract class UriMapperSimpleTest extends UriListenerTest{
     public void testMapBySet_sourceUri_lensId() throws Exception {
         report("MapBySeti_sourceUri_lensId");
         String sourceUri = map3Uri2;
+        Set<String> sourceUris = new HashSet<String>();
+        sourceUris.add(sourceUri);
         String lensId = Lens.DEFAULT_LENS_NAME;
-        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUri, lensId, NULL_GRAPH);
+        MappingsBySet lensMapping = uriMapper.mapBySet(sourceUris, lensId, NULL_GRAPH);
         Set<String> results = lensMapping.getTargetUris();
         assertTrue(results.contains(map3Uri1));
         assertTrue(results.contains(map3Uri2));

@@ -240,7 +240,6 @@ public class WSUriInterfaceService extends WSCoreService implements WSUriInterfa
        Set<String> results = new HashSet<String>();
        String[] targetPatterns = getUriPatterns(targetUriPatterns);
        for(String single:uris){
-           System.out.println("mapUriInner");
            results.addAll(uriMapper.mapUri(single, lensUri, graph, targetPatterns));
        }
        return UriMappings.asBean(results);

@@ -61,7 +61,7 @@ public class GraphResolverTest {
         GraphResolver.addTestMappings();
         String graph = "http://www.conceptwiki.org";
         Set<RegexUriPattern> expResult = new HashSet<RegexUriPattern>();
-        expResult.addAll(RegexUriPattern.byPattern("http://www.conceptwiki.org/concept/$id"));
+        expResult.addAll(RegexUriPattern.existingByPattern("http://www.conceptwiki.org/concept/$id"));
         Set result = GraphResolver.getUriPatternsForGraph(graph);
         assertEquals(expResult, result);
     }
